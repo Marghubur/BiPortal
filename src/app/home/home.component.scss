@@ -1,0 +1,95 @@
+/* Dashboard */
+
+.card-statistics {
+  .highlight-icon {
+    height: 53px;
+    width: 53px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+
+    i {
+      font-size: 27px;
+      line-height: 1;
+    }
+  }
+
+  i {
+    line-height: 1;
+  }
+}
+
+.home-top {
+  position: relative;
+  display: block;
+  height: var(--home-img-height) !important;
+  width: 100%;
+  background: url("../../assets/images/samples/lockscreen-bg.jpg") no-repeat
+    center;
+  background-size: 100% 150%;
+  top: -2px !important;
+  //background: url("../../assets/images/samples/weather.svg") no-repeat center;
+
+  .li-content {
+    margin-top: -18px;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    font-size: 1rem;
+    font-family: Poppins, sans-serif;
+  }
+
+  .left-icon {
+    font-size: 28px;
+    position: relative;
+    top: 5px;
+  }
+
+  li.list-group-item {
+    border: none !important;
+    border-left: 1px solid #eee !important;
+    border-radius: unset !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+
+  .baseline {
+    height: var(--home-img-height) !important;
+  }
+
+  .tbl-section {
+    margin-bottom: 25px;
+  }
+
+  .customgrid {
+    position: absolute;
+    right: 2%;
+    bottom: 4%;
+    margin: auto;
+    width: 500px;
+    text-align: right;
+  }
+
+  .moveleft {
+    left: 2% !important;
+    text-align: left !important;
+    margin: unset !important;
+  }
+}
+
+.content-body {
+  margin-top: -2px;
+}
+
+.content-divider {
+  position: relative;
+  top: -12px;
+}
+
+.home-card-divider {
+  width: calc(100% + 50px);
+  margin-left: -30px;
+  color: #444;
+  padding: 14px 0px 4px 0px;
+}

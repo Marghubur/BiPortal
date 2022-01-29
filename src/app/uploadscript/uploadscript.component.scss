@@ -1,0 +1,57 @@
+.ifilezone {
+  background-image: url("../../assets/img/drop-back.png") !important;
+  background-size: 100% 100%;
+  cursor: pointer;
+  border: 2px dashed #bbb;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 25px;
+  text-align: center;
+  background-color: #f8f7f7;
+  min-height: 310px;
+}
+
+.show-case-dv {
+  height: 74px;
+  overflow-y: hidden;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.show-case-dv img {
+  height: 100px;
+}
+
+.show-case {
+  width: 100%;
+  margin-top: 0px;
+}
+
+.solid-bg {
+  background-color: #f8f7f7;
+}
+
+.filetitle {
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #d9d9d9;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.downloadanc {
+  position: absolute;
+  right: 0%;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.downloadIcon {
+  width: 12%;
+  z-index: 100;
+}
+
+.no-box {
+  box-shadow: none !important;
+}

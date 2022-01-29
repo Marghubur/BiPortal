@@ -1,0 +1,105 @@
+<div class="container-fluid mt-5">
+    <div class="col-md-12">
+        <div class="x_panel">
+            <div class="x_header">
+                <div class="x_header_title">
+                    <h2>Client detail <small>Add or update details</small>
+                    </h2>
+                    <div class="float-end d-inline create-link">
+                        <div class="btn-group me-4" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" (change)="LoadAllActiveOnly()" name="btnradio"
+                                id="btnradio1" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="btnradio1">Active</label>
+
+                            <input type="radio" class="btn-check" (change)="LoadAllInActiveOnly()" name="btnradio"
+                                id="btnradio2" autocomplete="off">
+                            <label class="btn btn-outline-dark" for="btnradio2">InActive</label>
+
+                            <input type="radio" class="btn-check" (change)="LoadAll()" name="btnradio" id="btnradio3"
+                                autocomplete="off">
+                            <label class="btn btn-outline-success" for="btnradio3">All</label>
+                        </div>
+                        <button class="btn btn-outline-primary" [routerLink]="['/' + manageEmployeeRouteName]"
+                            routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o me-1"
+                                aria-hidden="true"></i>Add Employee</button>
+                    </div>
+                </div>
+            </div>
+            <div class="x_content">
+                <!-- <app-dynamic-table [config]="tableConfiguration" (clicked)="ClickEvents($event)"></app-dynamic-table> -->
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Index</th>
+                      <th>Full Name</th>
+                      <th>Mobile Number</th>
+                      <th>Email Id</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let user of employeeDetail">
+                      <td>{{user.Index}}</td>
+                      <td>
+                        <a (click)="ViewFiles(user)" >{{user.FirstName}} {{user.LastName}}</a>
+                        <div class="float-end">
+                          <a><span class="badge bg-primary fa fa-building-o"> &nbsp; 5</span></a>
+                          <span class="badge bg-danger ms-3">2</span>
+                          <span class="badge bg-success ms-3">3</span>
+                        </div>
+                      </td>
+                      <td>{{user.Mobile}}</td>
+                      <td>{{user.Email}}</td>
+                      <td>
+                        <div class="d-flex flex-row justify-content-around">
+                          <i class="fa fa-pencil-square-o" aria-hidden="true" (click)="EditCurrent(user)"></i>
+                          <i class="fa fa-trash-o" aria-hidden="true" (click)="DeleteCurrent(user.FileUid)"></i>
+                          <i class="fa fa-file-o" aria-hidden="true" (click)="ViewFiles(user)"></i>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- add update detail modal -->
+
+    <div class="modal" id="addupdateModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Or Update</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body f-12">
+                    <div class="col-md-12">
+                        <div [formGroup]="documentForm" class="col-md-12 row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="">Entry Name</label>
+                                    <input type="text" name="Title" formControlName="Title" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Description</label>
+                                    <textarea name="Description" rows="3" name="Description"
+                                        formControlName="Description" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                    <button class="btn btn-primary" [disabled]="isLoading" (click)="CreateDocument()">
+                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+                        {{ isLoading ? 'Processing' : 'Submit' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

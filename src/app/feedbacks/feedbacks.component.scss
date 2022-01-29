@@ -1,0 +1,16 @@
+.replaycard {
+  &__action {
+    position: absolute;
+    bottom: 0px;
+    text-decoration: none;
+  }
+
+  &__action:hover {
+    cursor: pointer;
+    color: lightblue !important;
+  }
+}
+
+.invalid-field {
+  border: 1px solid red !important;
+}

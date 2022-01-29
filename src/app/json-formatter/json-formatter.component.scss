@@ -1,0 +1,189 @@
+.textarea-inlet {
+  resize: none;
+  height: calc(100% - 40px);
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.json-action-btn {
+  font-size: 12px;
+}
+
+.div-outlet {
+  height: calc(100% - 40px);
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border: 1px solid #bbaeae;
+}
+
+.div-outlet-content {
+  height: 100%;
+}
+
+.content-header {
+  display: block;
+  width: 100%;
+  height: 40px;
+  border: 1px solid #bbaeae;
+  border-bottom: none;
+  background-color: whitesmoke;
+  padding: 6px;
+}
+
+.pan {
+  height: auto;
+}
+
+.page-wrap {
+  display: -webkit-box;
+  /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;
+  /* OLD - Firefox 19- (doesn't work very well) */
+  display: -ms-flexbox;
+  /* TWEENER - IE 10 */
+  display: -webkit-flex;
+  /* NEW - Chrome */
+  display: flex;
+  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  min-height: 465px;
+  margin: 10px;
+}
+
+.right-panel {
+  -webkit-box-ordinal-group: 3;
+  /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-ordinal-group: 3;
+  /* OLD - Firefox 19- */
+  -ms-flex-order: 3;
+  /* TWEENER - IE 10 */
+  -webkit-order: 3;
+  /* NEW - Chrome */
+  order: 3;
+  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+
+  width: 45%;
+  /* No flex here, other cols take up remaining space */
+
+  -moz-box-flex: 1;
+  /* Without this, Firefox 19- expands to widest paragraph, overrides width */
+
+  background: white;
+}
+
+.left-panel {
+  -webkit-box-ordinal-group: 1;
+  /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-ordinal-group: 1;
+  /* OLD - Firefox 19- */
+  -ms-flex-order: 1;
+  /* TWEENER - IE 10 */
+  -webkit-order: 1;
+  /* NEW - Chrome */
+  order: 1;
+  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+
+  -webkit-box-flex: 1;
+  /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-flex: 1;
+  /* OLD - Firefox 19- */
+  width: 45%;
+  /* For old syntax, otherwise collapses. */
+  -webkit-flex: 1;
+  /* Chrome */
+  -ms-flex: 1;
+  /* IE 10 */
+  flex: 1;
+  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+
+  background: #fff;
+}
+
+.separator {
+  -webkit-box-ordinal-group: 2;
+  /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-ordinal-group: 2;
+  /* OLD - Firefox 19- */
+  -ms-flex-order: 2;
+  /* TWEENER - IE 10 */
+  -webkit-order: 2;
+  /* NEW - Chrome */
+  order: 2;
+  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+
+  width: 10%;
+  padding: 10px;
+  background: #eee;
+  position: relative;
+  border-top: 1px solid #bbaeae;
+  border-bottom: 1px solid #bbaeae;
+}
+
+.separator-content {
+  padding-top: 42px;
+}
+
+.smaple-dv-section {
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.smaple-dv-section>input {
+  position: relative;
+  top: 2px;
+}
+
+a.btn-box {
+  font-size: 18px;
+  margin: 6px;
+  border: 1px solid #d9d9d9;
+  padding: 2px 6px;
+  background-color: #fff;
+}
+
+a.btn-box:hover {
+  cursor: pointer;
+}
+
+.nostyle-dd {
+
+  button,
+  [type="button"],
+  [type="reset"],
+  [type="submit"] {
+    -webkit-appearance: none;
+  }
+}
+
+.dd-content {
+  background-color: aliceblue;
+  border: 1px solid #d9d9d9;
+}
+
+.dropdown-item:hover {
+  cursor: pointer;
+  background-color: blueviolet;
+  color: white !important;
+}
+
+.sample-text-span {
+  font-size: 14px;
+  position: relative;
+  top: -2px;
+}
+
+.numbered-sidebar {
+  width: 50px;
+  height: 100%;
+}
+
+
+.expand-content {
+  position: absolute !important;
+  width: 98%;
+  height: calc(100% - 80px);
+}

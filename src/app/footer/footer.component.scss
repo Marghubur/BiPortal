@@ -1,0 +1,29 @@
+@import "../../assets/styles/variable";
+
+:host {
+  width: 100%;
+}
+
+.footer {
+  margin-top: 16px !important;
+  background: $footer-bg;
+  color: $footer-color;
+  padding: 20px 1.8rem;
+  border-top: 1px solid #b5b2b2;
+  font-size: calc(#{$default-font-size} - 0.05rem);
+  font-family: $type-1;
+
+  a {
+    color: theme-color(success);
+    font-size: inherit;
+  }
+
+  &__set-font {
+    font-size: 12px;
+  }
+
+  @media (max-width: 991px) {
+    margin-left: 0;
+    width: 100%;
+  }
+}

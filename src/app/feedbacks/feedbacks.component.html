@@ -1,0 +1,92 @@
+<div>
+  <div class="col-12 grid-margin d-flex">
+    <div class="col-md-8 col-sm-12 col-xs-12">
+      <div class="">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Post Comments</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let item of CommentsData">
+              <input type="hidden" name="commentUid" />
+              <div class="fluid-container">
+                <div class="row ticket-card mt-3 pb-2 pb-3 mb-3">
+                  <div class="col-md-1">
+                    <img class="img-sm rounded-circle mb-4 mb-md-0" src="assets/images/faces/face1.jpg"
+                      alt="profile image">
+                  </div>
+                  <div class="ticket-details col-md-10">
+                    <div class="d-flex">
+                      <p class="text-dark font-weight-semibold mr-2 mb-0 no-wrap">Name:&nbsp; {{item.USERNAME}}</p>
+                    </div>
+                    <p class="text-gray word-wrap mb-2">
+                      {{item.COMMENTS}}
+                    </p>
+                    <div class="row text-gray d-md-flex d-none">
+                      <div class="col-12 d-flex">
+                        <small class="mb-0 mr-2 text-muted">Last updated: </small>
+                        <small class="mr-2 mb-0 text-muted">{{item.CREATEDON | date}}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-1 p-0 m-0 d-none">
+                    <a href="javascript:void(0)" (click)="ReplyThisComment()"
+                      class="text-muted text-muted replaycard__action d-flex" data-toggle="collapse"
+                      href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                      <i class="mdi mdi-message-text pr-1"></i>
+                      Reply
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <form [formGroup]="FeedbackForm" (keydown.enter)="$event.preventDefault()">
+        <div class="container border-top w-100 p-0 d-flex">
+          <div class="fluid-container w-100">
+            <div class="row ticket-card mt-3 pb-2 pb-3 mb-3">
+              <div class="col-md-1">
+                <img class="img-sm rounded-circle mb-4 mb-md-0" src="assets/images/faces/face1.jpg" alt="profile image">
+              </div>
+              <div class="ticket-details col-md-10">
+                <textarea id="comments" class="form-control text-muted mt-2" formControlName="Comments"
+                  (focus)="EnableAreaColor($event)" (blur)="DisableAreaColor($event)"
+                  placeholder="Enter your valuable comments here (*)" rows="8"></textarea>
+                <div class="col-md-12 p-0 d-flex mt-2">
+                  <div class="col-md-4 pl-0">
+                    <input id="email" (focus)="RemoveInvalidLines($event)" class="form-control" type="text"
+                      formControlName="Email" placeholder="Your email id (optional)">
+                  </div>
+                  <div class="col-md-8 pr-0">
+                    <input id="company" class="form-control" type="text" formControlName="Company"
+                      placeholder="Company name (optional)">
+                  </div>
+                </div>
+                <input id="username" (focus)="RemoveInvalidLines($event)" class="form-control mt-2" type="text"
+                  formControlName="UserName" placeholder="Your full name (*)">
+                <button class="mt-3 btn btn-block btn-dark" (click)="SubmitCommetform()">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-4 col-sm-12 col-xs-12">
+      <div class="">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Recent action(s)</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="fluid-container">
+                <div class="row ticket-card mt-3 pb-2 pb-3 mb-3">
+
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

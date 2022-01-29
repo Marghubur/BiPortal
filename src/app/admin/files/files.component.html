@@ -1,0 +1,192 @@
+<div class="container-fluid mt-5">
+    <div class="col-md-12">
+        <div class="x_panel">
+            <div class="x_header">
+                <div class="x_header_title">
+                    <h2 *ngIf="fileLoaded">
+                        <b>[ {{currentEmployeeDetail.FirstName}} {{currentEmployeeDetail.LastName}} ]</b> Files
+                        <small>All file detail to view and modify.</small>
+                        <div class="mt-2 h6">
+                            <span>Mobile No.: {{employee.Mobile}}</span>
+                            <span class="ms-5">Email: {{employee.Email}}</span>
+                        </div>
+                    </h2>
+                    <div class="float-end d-inline create-link">
+                        <div class="btn-group me-4" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off"
+                                checked>
+                            <label class="btn btn-outline-primary" for="btnradio1">Active</label>
+
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                            <label class="btn btn-outline-dark" for="btnradio2">InActive</label>
+
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                            <label class="btn btn-outline-success" for="btnradio3">All</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pdf viewer modal -->
+            <div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
+                <div class="text-end">
+                    <a (click)="closePdfViewer()" class="close_view">
+                        <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+            </div>
+
+            <div class="x_content">
+                <!-- <app-dynamic-table [config]="tableConfiguration" (clicked)="ClickEvents($event)"></app-dynamic-table> -->
+                <!-- <div>Use below input fields textbox to customize column name</div> -->
+                <table class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Client Name</th>
+                      <th>Bill No.#</th>
+                      <th>Salary Month</th>
+                      <th>Amount Status</th>
+                      <th>Paid On</th>
+                      <th>Generated On</th>
+                      <th>Billed Amount</th>
+                      <th>Received Amount</th>
+                      <th>Salary Amount</th>
+                      <th>GST Amount</th>
+                      <th>GST Status</th>
+                      <th>TDS Amount (10%)</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let user of billDetails">
+                      <td>{{user.FileUid}}</td>
+                      <td>{{user.ClientName}}</td>
+                      <td>{{user.BillNo}}</td>
+                      <td>{{user.Month}}</td>
+                      <td>{{user.Status}}</td>
+                      <td>{{user.PaidOn}}</td>
+                      <td>{{user.GeneratedOn}}</td>
+                      <td>{{user.BilledAmount | number}}</td>
+                      <td>{{user.ReceivedAmount | number}}</td>
+                      <td>{{user.SalaryAmount | number}}</td>
+                      <td>{{user.GSTAmount | number}}</td>
+                      <td>Pending</td>
+                      <td>{{user.TDS | number}}</td>
+                      <td>
+                        <div class="d-flex flex-row justify-content-around">
+                          <i class="fa fa-cogs" aria-hidden="true" (click)="UpdateCurrent(user.FileUid)"></i>
+                          <i class="fa fa-pencil" aria-hidden="true" (click)="EditCurrentDocument(user)"></i>
+                          <i class="fa fa-file-pdf-o" aria-hidden="true" (click)="viewPdfFile(user)"></i>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+
+
+            <!-- <div class="x_content">
+                <div class="col-md-12 row">
+                    <div class="col-md-4">
+                        <div class="x_panel">
+                            user detail
+                        </div>
+                    </div>
+                    <div class="col-md 8">
+                        <div class="x_panel row">
+                            <div class="border border-info rounded text-center img_container"
+                                *ngFor="let item of userFiles">
+                                <div class="col-md-12">
+                                    <div>
+                                        <img src="assets/img/pdf.png" class="employee_images" alt="user">
+                                    </div>
+                                    <div class="text-center action_container pt-1">
+                                        <a href="javascript:void(0)" (click)="editFile(item.FileUid)">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="javascript:void(0)">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="javascript:void(0)" (click)="deleteFile(item.FileUid)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text_size">
+                                    {{item.FileName}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <!-- add update detail modal -->
+    <div class="modal fade" id="addupdateModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Or Update</h5>
+                    <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body f-12">
+                    <div class="col-md-12">
+                        <div [formGroup]="documentForm" class="col-md-12 popup-form">
+                            <div class="col-md-12 row m-0">
+                                <div class="col-6 form-group">
+                                    <label for="">File Status</label>
+                                    <select formControlName="StatusId" name="StatusId" class="form-control">
+                                        <option value="0">File Status Type</option>
+                                        <option value="1">Completed</option>
+                                        <option value="2">Pending</option>
+                                        <option value="3">Canceled</option>
+                                        <option value="4">Not Generated</option>
+                                        <option value="5">Rejected</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label for="">Updated On</label>
+                                    <form class="form-inline">
+                                        <div class="form-group w-100">
+                                            <div class="input-group w-100">
+                                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                                                    [(ngModel)]="model" (dateSelect)="onDateSelection($event)"
+                                                    ngbDatepicker #d="ngbDatepicker">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary calendar"
+                                                        (click)="d.toggle()" type="button"><i class="fa fa-calendar"
+                                                            aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-12 row m-0">
+                                <div class="form-group mt-4">
+                                    <label for="">Notes</label>
+                                    <textarea name="Notes" rows="3" formControlName="Notes"
+                                        class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
+
+                    <button class="btn btn-primary" [disabled]="isLoading" (click)="updateRecord()">
+                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+                        {{ isLoading ? 'Processing' : 'Submit' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

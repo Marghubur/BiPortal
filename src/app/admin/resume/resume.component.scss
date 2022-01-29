@@ -1,0 +1,145 @@
+.ifilezone {
+    background-image: url('/assets/img/drop-back.png') !important;
+    background-size: 100% 100%;
+    cursor: pointer;
+    border: 2px dashed #bbb;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    background-color: #f8f7f7;
+    min-height: 310px;
+  }
+  
+  .show-case-dv {
+    height: 74px;
+    overflow-y: hidden;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #d9d9d9;
+  }
+  
+  .show-case-dv img {
+    height: 100px;
+  }
+  
+  .show-case {
+    width: 100%;
+    margin-top: 0px;
+  }
+  
+  .solid-bg {
+    background-color: #f8f7f7;
+  }
+  
+  .filetitle {
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #d9d9d9;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .downloadanc {
+    position: absolute;
+    right: 0%;
+    z-index: 100;
+    cursor: pointer;
+  }
+  
+  .downloadIcon {
+    width: 12%;
+    z-index: 100;
+  }
+  
+  .no-box {
+    box-shadow: none !important;
+  }
+  
+  ul.bar_tabs > li a {
+    padding: 10px 17px;
+    background: #f5f7fa;
+    margin: 0;
+    border-top-right-radius: 0;
+  }
+  
+  ul.bar_tabs {
+    overflow: visible;
+    background: #f5f7fa;
+    height: 25px;
+    margin: 21px 0 14px;
+    padding-left: 14px;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    border-bottom: 1px solid #e6e9ed;
+  }
+  
+  .nav-tabs {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .nav {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+  }
+  
+  ul.bar_tabs > li.active {
+    border-right: 6px solid #d3d6da;
+    margin-top: -15px;
+  }
+  
+  ul.bar_tabs > li {
+    border: 1px solid #e6e9ed;
+    color: #333 !important;
+    margin-top: -17px;
+    margin-left: 8px;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  .nav-tabs > li {
+    float: left;
+    margin-bottom: -1px;
+  }
+  
+  .nav > li {
+    position: relative;
+    display: block;
+  }
+  
+  .nav > li > a {
+    position: relative;
+    display: block;
+    padding: 9px 16px 10px;
+  }
+  
+  a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+  }
+  
+  ul.bar_tabs > li {
+    flex: 1 1 0px;
+  }
+  
+  ul.bar_tabs > li:last-child {
+    margin-right: 20px;
+  }
+  
+  ul.bar_tabs > li > a.active {
+    border-right: 6px solid #d3d6da;
+    color: #444 !important;
+    background: #fff !important;
+    height: 100%;
+    border-radius: 4px 0px 0px 0px;
+  }
+  
+  .download-excel-link {
+    position: absolute;
+    right: 40px;
+    top: 10px;
+  }
+  

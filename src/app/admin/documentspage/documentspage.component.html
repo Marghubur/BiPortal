@@ -1,0 +1,354 @@
+<div class="col-md-12 col-sm-12 mt-5 icard" name="grid">
+    <div class="panel">
+        <div class="x_header">
+            <h2>
+                Uploaded File Detail
+            </h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="col-12 row p-0">
+                <ng-container *ngIf="isReady">
+                    <div [formGroup]="DocForm" class="col-6">
+                        <div class="">
+                            <div class="section-card p-2">
+                                <div class="form-group row mb-0">
+                                    <label class="col-3 col-form-label text-right pt-0 pb-0" for="Title">
+                                        Title
+                                    </label>
+                                    <div class="col-9">
+                                        <label class="col-form-label d-label s-f pt-0 pb-0" for="Title">
+                                            {{DocForm.get('Title').value}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <label class="col-3 col-form-label text-right pt-0 pb-0" for="CreatedOn">
+                                        Created On
+                                    </label>
+                                    <div class="col-9">
+                                        <label class="col-form-label d-label s-f pt-0 pb-0" for="CreatedOn">
+                                            {{DocForm.get('CreatedOn').value}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <label class="col-3 col-form-label text-right pt-0 pb-0">Description</label>
+                                    <div class="col-9">
+                                        <label class="col-form-label d-label s-f pt-0 pb-0" for="Description">
+                                            {{DocForm.get('Description').value}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group btn-grp row mt-4 d-none">
+                                    <div class="col-6">
+                                        <button class="btn btn-primary btn-block form-control" (click)="UploadDocuments()">
+                                            Update
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-dark btn-block form-control" (click)="EditCurrent()">
+                                            Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="upload-doc-btn">
+                            <button class="btn btn-outline-danger btn-block" (click)="OpenUploadFileDialog()">
+                                Upload More Files
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>                
+                <div class="col-12 mt-4">
+                    <div class="upload-doc-dv">
+                        <div class="x_header">
+                            Your files or documents
+                        </div>
+                        <div>
+                            <table datatable [dtOptions]="config" [dtTrigger]="dtTrigger" class="table table-bordered compact">
+                                <thead>
+                                    <tr>
+                                        <th>Bill No#</th>
+                                        <th>File Name</th>
+                                        <th>File Extension</th>
+                                        <th>Status</th>
+                                        <th>Paid On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="documentFiles?.length != 0">
+                                    <tr *ngFor="let file of documentFiles">
+                                        <td>{{ file.FileUid }}</td>
+                                        <td>{{ file.FileName }}</td>
+                                        <td>{{ file.FileExtension }}</td>
+                                        <td>{{ file.Status }}</td>
+                                        <td>{{ file.PaidOn | date: 'MMM d, y' }}  {{ file.PaidOn | date: 'h:mm a' }}</td>
+                                        <td class="text-center anc-action">
+                                            <a (click)="ViewFile(file.FileUid)">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </a>
+                                            <a (click)="EditFile(file.FileUid)">
+                                                <i class="fa fa-pencil ml-2 mr-2" aria-hidden="true"></i>
+                                            </a>
+                                            <a (click)="DeleteFile(file.FileUid)">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="documentFiles?.length == 0">
+                                    <tr>
+                                        <td colspan="3" class="no-data-available">No data!</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete confirmation modal -->
+
+    <div class="modal" id="confirmationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body f-12" *ngIf="isDeleteConfirmed">
+                <div class="form-group row mb-0">
+                    <label class="col-3 col-form-label text-right pt-0 pb-0" for="Title">
+                        Document:
+                    </label>
+                    <div class="col-9">
+                        <label class="col-form-label d-label s-f pt-0 pb-0" for="Title">
+                            {{DocForm.get('Title').value}}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row mb-0">
+                    <label class="col-3 col-form-label text-right pt-0 pb-0" for="Title">
+                        File Name:
+                    </label>
+                    <div class="col-9">
+                        <label class="col-form-label d-label s-f pt-0 pb-0" for="Title">
+                            {{currentFile.FileName}} [{{currentFile.FileExtension}}]
+                        </label>
+                    </div>
+                </div>
+                <div class="delete-text">
+                    *Please verify your delete your file. Once the file got deleted you can't recover it back.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" *ngIf="!isExecuting" (click)="ExecuteFileDelete()" class="btn btn-primary">Delete Now</button>
+                <button *ngIf="isExecuting" class="btn btn-primary" type="submit">
+                    Wait deleting 
+                    <div class="spinner">
+                      <div class="bounce1"></div>
+                      <div class="bounce2"></div>
+                      <div class="bounce3"></div>
+                    </div>
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- File edit modal -->
+
+    <div class="modal" id="fileEditModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body f-12" *ngIf="isEdit">
+                <div class="col-12 row">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <div class="form-group row mb-0">
+                                <label class="col-3 col-form-label text-right pt-0 pb-0" for="Title">
+                                    Document:
+                                </label>
+                                <div class="col-9">
+                                    <input type="text" class="form-control" value="{{DocForm.get('Title').value}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div class="form-group row mb-0">
+                                <label class="col-3 col-form-label text-right pt-0 pb-0" for="FileName">
+                                    File Name:
+                                </label>
+                                <div class="col-9">
+                                    <input type="text" class="form-control" [(ngModel)]="currentFile.FileName">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="col-md-12">
+                            <div class="form-group row mb-0">
+                                <label class="col-3 col-form-label text-right pt-0 pb-0" for="FileUid">
+                                    Bill No#:
+                                </label>
+                                <div class="col-9">
+                                    <input type="text" class="form-control" [(ngModel)]="currentFile.FileUid">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div class="form-group row mb-0">
+                                <label class="col-3 col-form-label text-right pt-0 pb-0" for="PaidOn">
+                                    Paid On:
+                                </label>
+                                <div class="col-9">
+                                    <!-- <input type="text" class="form-control" [(ngModel)]="currentFile.PaidOn"> -->
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                            <input class="form-control" placeholder="yyyy-mm-dd"
+                                                    name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" *ngIf="isEdit" (click)="SaveModifiedChanges()" class="btn btn-primary">Save Changes</button>
+                <button *ngIf="isExecuting" class="btn btn-primary" type="submit">
+                    Wait saving 
+                    <div class="spinner">
+                      <div class="bounce1"></div>
+                      <div class="bounce2"></div>
+                      <div class="bounce3"></div>
+                    </div>
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ng-container *ngIf="editModule">
+                    <div class="col-12 row">
+                        <div [formGroup]="DocForm" class="col-6">
+                            <div class="section-card p-4">
+                                <div class="form-group row">
+                                    <label class="col-3 col-form-label text-right" for="Title">
+                                        Title <span class="required">*</span>
+                                    </label>
+                                    <div class="col-9">
+                                        <input type="text" id="Title" name="Title" class="form-control"
+                                            formControlName="Title" placeholder="Title" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-3 col-form-label text-right" for="Title">
+                                        Created On <span class="required">*</span>
+                                    </label>
+                                    <div class="col-9">
+                                        <input type="text" name="CreatedOn" class="form-control" formControlName="CreatedOn"
+                                            placeholder="CreatedOn" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-3 col-form-label text-right">Description</label>
+                                    <div class="col-9">
+                                        <textarea name="Description" class="form-control" rows="4"
+                                            formControlName="Description" placeholder="Description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group btn-grp row mt-4 d-none">
+                                    <div class="col-6">
+                                        <button class="btn btn-primary btn-block form-control" (click)="UploadDocuments()">
+                                            Update
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-dark btn-block form-control" (click)="EditCurrent()">
+                                            Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 border-left">
+                            <div class="uploading-files">
+                                <div class="col-12 row p-0 ml-0 border-bottom mb-4">
+                                    <div class="col-8">
+                                        File Name
+                                    </div>
+                                    <div class="col-4">
+                                        File Size
+                                    </div>
+                                </div>
+                                <ng-container *ngFor="let file of DocumentImageObjects;let even=even;let odd=odd;">
+                                    <div class="col-12 row p-0 ml-0 table-row table" [ngClass]="{evenrow: even}">
+                                        <div class="col-8">{{file.FileName}}</div>
+                                        <div class="col-4">
+                                            {{file.FileSize}}
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div class="upload-doc-btn">
+                                <button type="button" class="btn btn-outline-dark mr-2" (click)="ResetSeletedFiles()">Reset</button>
+                                <button class="btn btn-outline-danger" (click)="GetImage()">
+                                    Browse File
+                                </button>
+                                <input type="file" id="browsfile" multiple class="d-none"
+                                    (change)="GetDocumentFile($event)" />
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="UploadDocuments()">Save & Upload</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="false">
+        <ngx-doc-viewer
+            [viewerUrl]="GoogleDocUrl"
+            [url]="FileUrl"
+            viewer="url"
+            style="width:100%;height:50vh;"
+        ></ngx-doc-viewer>
+    </ng-container>
+</div>

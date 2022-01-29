@@ -1,0 +1,153 @@
+<div class="container-fluid mt-5">
+    <div class="col-md-12">
+        <div class="x_panel">
+            <div class="x_header">
+                <div class="x_header_title">
+                    <h2>Upload Files <small>Add files</small>
+                    </h2>
+                    <div class="float-end d-inline create-link">
+                        <button class="btn btn-outline-success"> <i class="fa fa-plus-square-o me-1"
+                                aria-hidden="true"></i>Add File</button>
+                        <button class="btn btn-outline-primary ms-2"><i class="fa fa-upload me-2"
+                                aria-hidden="true"></i>Upload bulk files</button>
+                    </div>
+                </div>
+            </div>
+            <div class="" role="tabpanel" data-example-id="togglable-tabs" class="mt-5">
+                <div class="x_content fade show" id="upload-container">
+                    <div class="">
+                        <input type="file" id="uploadexcel" (change)="readExcelData($event)" class="d-none"
+                            accept=".xlx, .xlsx" />
+                        <div class="page-card pb-4">
+                            <div class="card">
+                                <div class="col-md-6 p-0">
+                                    <div class="table-responsive">
+                                        <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                            aria-labelledby="home-tab">
+                                            <div role="tabpanel" class="active in mt-4" id="tab_content1"
+                                                aria-labelledby="home-tab">
+                                                <div id="classmasterdata" class="col-md-12 col-sm-12 col-xs-12">
+                                                    <div name="ifilezone" class="ifilezone mb-4"
+                                                        (click)="fireBrowserFile()">
+                                                        <div *ngIf="!isFileReady">
+                                                            <span
+                                                                style="color: darkgray;margin-top: 30px;display: block;">
+                                                                Drop files here.
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-md-12 col-sm-12 col-xs-12 solid-bg"
+                                                            *ngIf="isFileReady" name="uploading">
+                                                            <img src="assets/img/ExcelFile.png" />
+                                                            <div class="filetitle">
+                                                                File:
+                                                                <div name="filename"
+                                                                    style="display: inline-block !important;">
+                                                                    {{ fileName }}
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div>
+                                                                    File size: &nbsp;
+                                                                    <div name="filesize"
+                                                                        style="display: inline-block !important;">
+                                                                        {{ fileSize }}
+                                                                    </div>
+                                                                    KB
+                                                                </div>
+                                                                <div>
+                                                                    No. of record(s): &nbsp;
+                                                                    <div name="noofrecords"
+                                                                        style="display: inline-block !important;">
+                                                                        {{ noOfRecords }}
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    File name: &nbsp;
+                                                                    <div name="uploadingdatetime"
+                                                                        style="display: inline-block !important;">
+                                                                        {{ fileName }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-4">
+                                                                <button type="button" class="btn btn-primary me-2"
+                                                                    (click)="uploadExcelSheet($event)">
+                                                                    <i class="fa fa-upload pe-2" aria-hidden="true"></i>
+                                                                    Upload
+                                                                    selected
+                                                                    excel data
+                                                                </button>
+                                                                <button type="button" class="btn btn-outline-info"
+                                                                    (click)="cleanFileHandler()">
+                                                                    <i class="fa fa-eraser pe-2"></i> Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 p-0">
+                    <div class="x_content">
+                        <div class="x_header_title">
+                            <h5>Uploaded Files</h5>
+                        </div>
+                        <!-- <div id='calendar'>
+                            <div class="card mt-4">
+                                <div class="card-body">
+                                    <ng-container *ngIf="ExcelTableHeader.length > 0">
+                                        <app-dynamic-table [config]="tableConfiguration"
+                                            (clicked)="EditCurrent($event)">
+                                        </app-dynamic-table>
+                                    </ng-container>
+                                    <ng-container *ngIf="ExcelTableHeader.length === 0">
+                                        <div>
+                                            No data uploaded.
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div *ngIf="isAvailable">
+                            <table class="table table-striped table-bordered table-hover">
+                                <tbody>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Mb No</th>
+                                        <th>Email</th>
+                                        <th>Location</th>
+                                        <th>Exp (yr)</th>
+                                        <th>Speciality</th>
+                                        <th>Status</th>
+                                        <th>Package</th>
+                                        <th>Designation</th>
+                                    </tr>
+                                    <ng-container *ngFor="let item of resumeFiles">
+                                        <tr>
+                                            <td>{{item.Name}}</td>
+                                            <td>{{item.Phone_Number}}</td>
+                                            <td>{{item.Email_ID}}</td>
+                                            <td>{{item.Current_Location}}</td>
+                                            <td>{{item.Total_Experience}}</td>
+                                            <td>{{item.Key_Skills}}</td>
+                                            <td>{{item.Feedback}}</td>
+                                            <td>{{item.Annual_Salary}}</td>
+                                            <td>{{item.Role}}</td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

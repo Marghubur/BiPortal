@@ -1,0 +1,90 @@
+:root {
+  --bg: #2d2d37;
+  --primary: #fd6b21;
+}
+
+:host {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.body-wrapper {
+  display: table;
+  width: 100% !important;
+  height: 100vh !important;
+}
+
+.main-panel {
+  width: 100%;
+  display: flex();
+  flex-direction: column;
+
+  @media (max-width: 991px) {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+.content-wrapper {
+  padding-bottom: 0px !important;
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+
+.fadeout-screen {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 999999;
+  background: rgb(117 100 100 / 59%);
+}
+
+.mb-6 {
+  margin-bottom: 56px !important;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+*:-moz-full-screen,
+*:-webkit-full-screen,
+*:fullscreen *:-ms-fullscreen {
+  overflow: auto !important;
+}
+
+.page-body-wrapper {
+  margin-top: 63px !important;
+
+  &.full-page-wrapper {
+    width: 100%;
+    min-height: 100vh;
+  }
+}
+
+.scroll-container {
+  position: relative;
+
+  &.horizontally {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  &.vertically {
+    overflow-y: hidden;
+    height: 100%;
+    max-height: 100%;
+  }
+}
+
+pre {
+  //background: color(gray-lighter);
+  padding: 15px;
+  font-size: 14px;
+}

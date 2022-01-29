@@ -1,0 +1,662 @@
+import { Component, OnInit } from '@angular/core';
+import { AjaxService } from 'src/providers/ajax.service';
+import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CommonService, Toast } from 'src/providers/common-service/common.service';
+import { EmployeeDetail } from '../manageemployee/manageemployee.component';
+import { ResopnseModel } from 'src/auth/jwtService';
+import { ThisReceiver } from '@angular/compiler';
+import { iNavigation } from 'src/providers/iNavigation';
+
+@Component({
+  selector: 'app-build-pdf',
+  templateUrl: './build-pdf.component.html',
+  styleUrls: ['./build-pdf.component.scss']
+})
+export class BuildPdfComponent implements OnInit {
+  model: NgbDateStruct;
+  selectedDate: any = null;
+  submitted: boolean = false;
+  pdfForm: FormGroup = null;
+  pdfModal: PdfModal = null;
+  employees: Array<EmployeeDetail> = [];
+  grandTotalAmount: number = 0;
+  packageAmount: number = 0;
+  isDeveloperSelected: boolean = false;
+  cgstAmount: number = 0;
+  sgstAmount: number = 0;
+  igstAmount: number = 0;
+  months: Array<any> = null;
+  applicationData: ApplicationData = new ApplicationData();
+  currentOrganization: any = null;
+  days: Array<number> = [];
+  currentEmployee: EmployeeDetail = null;
+  isLoading: boolean = false;
+  assignedClients: Array<any> = [];
+  clientDetail: any = null;
+  isClientSelected: boolean = false;
+  pageDataIsReady: boolean = false;
+  originalBillingMonth: number = 1;
+  isEdit: boolean = false;
+  editMode: boolean = false;
+
+  constructor(private http: AjaxService,
+    private fb: FormBuilder,
+    private common: CommonService,
+    private calendar: NgbCalendar,
+    private nav: iNavigation
+  ) { }
+
+  ngOnInit(): void {
+    let data = this.nav.getValue();
+    this.editMode = false;
+    //----- edit mode -----
+    if (data) {
+      this.editMode = true;
+      this.model = this.calendar.getToday();
+      this.initMonths();
+      this.editBillDetail(data);
+    } else {
+      this.getNewForm()
+    }
+  }
+
+  getNewForm() {
+    this.initMonths();
+    this.model = this.calendar.getToday();
+    this.pdfModal = new PdfModal();
+    this.pdfModal.billNo = "";
+    this.pdfModal.workingDay = this.daysInMonth((new Date()).getMonth() + 1);
+    this.pdfModal.actualDaysBurned = this.pdfModal.workingDay;
+    this.originalBillingMonth = this.model.month;
+    this.manageBillDates();
+    this.employees = [];
+    this.loadPageLevelData();
+    this.generateDaysCount();
+  }
+
+  manageBillDates() {
+    let items = this.months.filter(x => x.sno === this.model.month);
+    if (items.length > 0) {
+      this.selectedDate = items[0];
+      this.pdfModal.billingMonth = new Date(this.model.year, this.originalBillingMonth - 1, 1)
+    }
+
+    var now = new Date(this.model.year, this.originalBillingMonth - 1, 1);
+    this.pdfModal.billForMonth = (now).toLocaleString('default', { month: 'long' });
+  }
+
+  generateDaysCount() {
+    this.days = [];
+    let i = 0;
+    while (i < this.pdfModal.workingDay) {
+      this.days.push(i + 1);
+      i++;
+    }
+  }
+
+  editBillDetail(billDetail: any) {
+    // "EditEmployeeBillDetail" => post
+    let FileId = Number(billDetail.FileUid);
+    if (isNaN(FileId)) {
+      Toast("Invalid FileUid.");
+      return;
+    } else {
+      let employeeBillDetail = {
+        "EmployeeId": billDetail.FileOwnerId,
+        "ClientId": billDetail.ClientId,
+        "FileId": FileId
+      };
+
+      this.http.post("FileMaker/EditEmployeeBillDetail", employeeBillDetail).then((response: ResopnseModel) => {
+        let fileDetail: any = null;
+        if (response.ResponseBody) {
+          this.applicationData = response.ResponseBody as ApplicationData;
+          this.employees = this.applicationData.employees;
+          let company: any = this.applicationData.clients.filter(x => x.ClientId === 1);
+          this.pdfModal = new PdfModal();
+          if (company.length > 0) {
+            this.currentOrganization = company[0];
+            this.pdfModal.senderCompanyName = this.currentOrganization.ClientName;
+            this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
+            this.pdfModal.senderFirstAddress = this.currentOrganization.FirstAddress;
+            this.pdfModal.senderSecondAddress = this.currentOrganization.SecondAddress + " " + this.currentOrganization.ThirdAddress;
+            this.pdfModal.senderPrimaryContactNo = this.currentOrganization.PrimaryPhoneNo;
+            this.pdfModal.senderEmail = this.currentOrganization.Email;
+            this.pdfModal.senderClientId = this.currentOrganization.ClientId;
+          }
+
+          if (this.applicationData.fileDetail.length > 0) {
+            fileDetail = this.applicationData.fileDetail[0];
+            this.pdfModal.receiverCompanyId = fileDetail.ClientId;
+            this.pdfModal.developerId = fileDetail.EmployeeUid;
+            this.pdfModal.cGST = fileDetail.CGST;
+            this.pdfModal.sGST = fileDetail.SGST;
+            this.pdfModal.iGST = fileDetail.IGST;
+            this.pdfModal.daysAbsent = fileDetail.NoOfDaysAbsent;
+            this.pdfModal.actualDaysBurned = (fileDetail.NoOfDays - fileDetail.NoOfDaysAbsent);
+            this.pdfModal.workingDay = fileDetail.NoOfDays;
+            this.pdfModal.billNo = fileDetail.BillNo.replace("#", "");
+            this.pdfModal.packageAmount = fileDetail.PaidAmount;
+            this.pdfModal.billId = fileDetail.BillDetailUid;
+            this.pdfModal.FileId = fileDetail.FileDetailId;
+            this.pdfModal.dateOfBilling = fileDetail.BillUpdatedOn;
+            this.pdfModal.UpdateSeqNo = fileDetail.UpdateSeqNo;
+            this.pdfModal.StatusId = fileDetail.BillStatusId;
+            this.pdfModal.PaidOn = fileDetail.PaidOn;
+            this.generateDaysCount();
+          }
+        } else {
+          this.common.ShowToast("Not able to load page data. Please do re-login");
+        }
+
+        if (fileDetail) {
+          let billingDate = new Date(fileDetail.BillUpdatedOn)
+          this.model.day = billingDate.getDate();
+          this.model.month = billingDate.getMonth() + 1;
+          this.model.year = billingDate.getFullYear();
+        }
+        this.originalBillingMonth = fileDetail.BillForMonth;
+        this.generateDaysCount();
+        this.manageBillDates();
+        this.initForm();
+        this.findEmployeeById(this.pdfModal.developerId);
+        this.bindClientDetail(this.pdfModal.receiverCompanyId);
+        this.packageAmount = fileDetail.PaidAmount;
+
+        let gst: number = 0;
+        if (this.pdfModal.cGST > 0)
+          gst += this.pdfModal.cGST;
+        if (this.pdfModal.sGST > 0)
+          gst += this.pdfModal.sGST
+        if (this.pdfModal.iGST > 0)
+          gst += this.pdfModal.iGST
+
+        this.calculateGSTAmount(gst);
+        this.pageDataIsReady = true;
+      });
+    }
+  }
+
+  loadPageLevelData() {
+    this.http.get("OnlineDocument/LoadApplicationData").then((response: ResopnseModel) => {
+      if (response.ResponseBody !== null) {
+        this.applicationData = response.ResponseBody as ApplicationData;
+        this.employees = this.applicationData.employees;
+        let company: any = this.applicationData.clients.filter(x => x.ClientId === 1);
+        if (company.length > 0) {
+          this.currentOrganization = company[0];
+          this.pdfModal.senderCompanyName = this.currentOrganization.ClientName;
+          this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
+          this.pdfModal.senderFirstAddress = this.currentOrganization.FirstAddress;
+          this.pdfModal.senderSecondAddress = this.currentOrganization.SecondAddress + " " + this.currentOrganization.ThirdAddress;
+          this.pdfModal.senderPrimaryContactNo = this.currentOrganization.PrimaryPhoneNo;
+          this.pdfModal.senderEmail = this.currentOrganization.Email;
+          this.pdfModal.senderClientId = this.currentOrganization.ClientId;
+          this.pdfModal.receiverCompanyId = 0;
+          this.pdfModal.developerId = 0;
+          this.pdfModal.StatusId = 2;
+          this.pdfModal.PaidOn = null;
+        }
+      } else {
+        this.common.ShowToast("Not able to load page data. Please do re-login");
+      }
+      this.initForm();
+      this.pageDataIsReady = true;
+    });
+  }
+
+  onDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.pdfForm.controls["dateOfBilling"].setValue(date);
+  }
+
+  initMonths() {
+    this.months = [
+      { "sno": 1, "name": "January", "days": this.daysInMonth(1) },
+      { "sno": 2, "name": "February", "days": this.daysInMonth(2) },
+      { "sno": 3, "name": "March", "days": this.daysInMonth(3) },
+      { "sno": 4, "name": "April", "days": this.daysInMonth(4) },
+      { "sno": 5, "name": "May", "days": this.daysInMonth(5) },
+      { "sno": 6, "name": "June", "days": this.daysInMonth(6) },
+      { "sno": 7, "name": "July", "days": this.daysInMonth(7) },
+      { "sno": 8, "name": "August", "days": this.daysInMonth(8) },
+      { "sno": 9, "name": "September", "days": this.daysInMonth(9) },
+      { "sno": 10, "name": "Octuber", "days": this.daysInMonth(10) },
+      { "sno": 11, "name": "November", "days": this.daysInMonth(11) },
+      { "sno": 12, "name": "December", "days": this.daysInMonth(12) }
+    ];
+  }
+
+  daysInMonth(monthNumber: number) {
+    var now = new Date();
+    return new Date(now.getFullYear(), monthNumber, 0).getDate();
+  }
+
+  checkGST(e: any) {
+    if ((e.which >= 48 && e.which <= 57) || e.key == ".") {
+      document.getElementById("cgst").classList.remove('error');
+      document.getElementById("sgst").classList.remove('error');
+      document.getElementById("igst").classList.remove('error');
+    } else if (e.which !== 8 && e.which !== 46 && e.which !== 37 && e.which !== 39) {
+      e.preventDefault();
+    }
+  }
+
+  checkCGST(e: any) {
+    if (e.target.value !== "") {
+      let gst = parseFloat(e.target.value);
+      this.calculateGSTAmount(gst);
+    } else {
+      this.cgstAmount = 0;
+    }
+  }
+
+  checkSGST(e: any) {
+    if (e.target.value !== "") {
+      let gst = parseFloat(e.target.value);
+      this.calculateGSTAmount(gst);
+    } else {
+      this.sgstAmount = 0;
+    }
+  }
+
+  checkIGST(e: any) {
+    if (e.target.value !== "") {
+      let gst = parseFloat(e.target.value);
+      this.calculateGSTAmount(gst);
+    } else {
+      this.igstAmount = 0;
+    }
+  }
+
+  calculateGSTAmount(value: number) {
+    if (value > 0) {
+      this.igstAmount = Number(((this.packageAmount * value) / 100).toFixed(2));
+      this.calculateGrandTotal();
+    } else {
+      this.igstAmount = 0;
+      this.calculateGrandTotal();
+    }
+  }
+
+  calculateGrandTotal() {
+    this.grandTotalAmount = Number((this.packageAmount + this.cgstAmount + this.sgstAmount + this.igstAmount).toFixed(2));
+    this.pdfForm.controls["grandTotalAmount"].setValue(this.grandTotalAmount);
+  }
+
+  calculateSpecificDays(e: any) {
+    if (e.target.value !== "") {
+      let items: any = this.months.filter(x => x.name === e.target.value);
+      if (items.length > 0) {
+        this.selectedDate = items[0];
+        this.originalBillingMonth = this.selectedDate.sno;
+        this.pdfModal.actualDaysBurned = this.selectedDate.days;
+        this.pdfModal.workingDay = this.selectedDate.days;
+        this.pdfForm.get("workingDay").setValue(this.selectedDate.days);
+        this.generateDaysCount();
+        this._calculateAmount(this.pdfModal.actualDaysBurned);
+      }
+    }
+  }
+
+  validateInput($e: any) {
+    if ($e.target.value !== "") {
+      let e: any = event;
+      e.target.classList.remove('error')
+    }
+  }
+
+  calculateAmount(e: any) {
+    let workinDays = e.target.value;
+    if (workinDays !== null) {
+      this._calculateAmount(Number(workinDays));
+    } else {
+      this.common.ShowToast("Total working days is selected null.")
+    }
+  }
+
+  _calculateAmount(days: number) {
+    let totalMonthDays = this.pdfModal.actualDaysBurned
+    this.packageAmount = this.clientDetail.ActualPackage;
+    if (totalMonthDays !== days)
+      this.packageAmount = this.packageAmount / totalMonthDays * days;
+
+    this.packageAmount = Number(this.packageAmount.toFixed(2));
+    let cgst = this.pdfForm.controls["cGST"].value;
+    this.cgstAmount = Number(((this.packageAmount * Number(cgst)) / 100).toFixed(2));
+
+    let sgst = this.pdfForm.controls["sGST"].value;
+    this.sgstAmount = Number(((this.packageAmount * Number(sgst)) / 100).toFixed(2));
+
+    let igst = this.pdfForm.controls["iGST"].value;
+    this.igstAmount = Number(((this.packageAmount * Number(igst)) / 100).toFixed(2));
+
+    this.grandTotalAmount = this.packageAmount + this.cgstAmount + this.sgstAmount + this.igstAmount;
+    this.grandTotalAmount = Number(this.grandTotalAmount.toFixed(2));
+
+    this.pdfForm.get("actualDaysBurned").setValue(days);
+    this.pdfForm.controls["grandTotalAmount"].setValue(this.grandTotalAmount);
+    this.pdfForm.controls["packageAmount"].setValue(this.packageAmount);
+  }
+
+  get f() {
+    let data = this.pdfForm.controls;
+    return data;
+  }
+
+  initForm() {
+    this.pdfForm = this.fb.group({
+      header: new FormControl(this.pdfModal.header, [Validators.required]),
+      billForMonth: new FormControl(this.pdfModal.billForMonth, [Validators.required]),
+      billNo: new FormControl(this.pdfModal.billNo),
+      cGST: new FormControl(this.pdfModal.cGST),
+      sGST: new FormControl(this.pdfModal.sGST),
+      iGST: new FormControl(this.pdfModal.iGST),
+      cGstAmount: new FormControl(this.pdfModal.cGSTAmount),
+      sGstAmount: new FormControl(this.pdfModal.sGSTAmount),
+      igstAmount: new FormControl(this.pdfModal.iGSTAmount),
+      workingDay: new FormControl(this.pdfModal.workingDay),
+      actualDaysBurned: new FormControl(this.pdfModal.actualDaysBurned),
+      packageAmount: new FormControl(this.pdfModal.packageAmount, [Validators.required]),
+      grandTotalAmount: new FormControl(this.pdfModal.grandTotalAmount),
+      senderCompanyName: new FormControl(this.pdfModal.senderCompanyName, [Validators.required]),
+      receiverCompanyId: new FormControl(this.pdfModal.receiverCompanyId, [Validators.required]),
+      senderClientId: new FormControl(this.pdfModal.senderClientId, [Validators.required]),
+      receiverFirstAddress: new FormControl(this.pdfModal.receiverFirstAddress, [Validators.required]),
+      receiverCompanyName: new FormControl(this.pdfModal.receiverCompanyName, [Validators.required]),
+      receiverGSTNo: new FormControl(this.pdfModal.receiverGSTNo, [Validators.required]),
+      receiverSecondAddress: new FormControl(this.pdfModal.receiverSecondAddress, [Validators.required]),
+      receiverThirdAddress: new FormControl(this.pdfModal.receiverThirdAddress, [Validators.required]),
+      receiverPincode: new FormControl(this.pdfModal.receiverPincode, [Validators.required]),
+      receiverPrimaryContactNo: new FormControl(this.pdfModal.receiverPrimaryContactNo, [Validators.required]),
+      ClientId: new FormControl(this.pdfModal.ClientId),
+      receiverEmail: new FormControl(this.pdfModal.receiverEmail, [Validators.required]),
+      developerName: new FormControl(this.pdfModal.developerName, [Validators.required]),
+      developerId: new FormControl(this.pdfModal.developerId),
+      dateOfBilling: new FormControl(this.pdfModal.dateOfBilling, [Validators.required]),
+      billingMonth: new FormControl(new Date(this.model.year, this.originalBillingMonth - 1, 1)),
+      senderFirstAddress: new FormControl(this.pdfModal.senderFirstAddress, [Validators.required]),
+      senderSecondAddress: new FormControl(this.pdfModal.senderSecondAddress, [Validators.required]),
+      senderThirdAddress: new FormControl(this.pdfModal.senderThirdAddress),
+      senderGSTNo: new FormControl(this.pdfModal.senderGSTNo, [Validators.required]),
+      senderPrimaryContactNo: new FormControl(this.pdfModal.senderPrimaryContactNo, [Validators.required]),
+      senderEmail: new FormControl(this.pdfModal.senderEmail, [Validators.required]),
+      daysAbsent: new FormControl(this.pdfModal.daysAbsent, [Validators.required]),
+      EmployeeId: new FormControl(this.pdfModal.EmployeeId),
+      billId: new FormControl(this.pdfModal.billId),
+      FileId: new FormControl(this.pdfModal.FileId),
+      StatusId: new FormControl(this.pdfModal.StatusId),
+      PaidOn: new FormControl(this.pdfModal.PaidOn),
+      UpdateSeqNo: new FormControl(this.pdfModal.UpdateSeqNo)
+    });
+  }
+
+  findEmployee(e: any) {
+    this.findEmployeeById(e.target.value);
+  }
+
+  findEmployeeById(employeeId: any) {
+    if (employeeId) {
+      let employeeList = this.employees.filter(x => x.EmployeeUid === parseInt(employeeId));
+      if (employeeList.length > 0) {
+        this.currentEmployee = employeeList[0];
+        this.assignedClients = this.applicationData.allocatedClients.filter(x => x.EmployeeUid == this.currentEmployee.EmployeeUid);
+        this.pdfForm.controls["developerName"].setValue(this.currentEmployee.FirstName + " " + this.currentEmployee.LastName);
+        if (!this.editMode) {
+          this.pdfForm.controls["packageAmount"].setValue(this.currentEmployee.FinalPackage);
+          this.pdfForm.controls["grandTotalAmount"].setValue(this.currentEmployee.FinalPackage);
+          this.grandTotalAmount = this.currentEmployee.FinalPackage;
+        }
+        this.pdfForm.controls["EmployeeId"].setValue(this.currentEmployee.EmployeeUid);
+        this.isDeveloperSelected = true;
+        this.packageAmount = this.currentEmployee.FinalPackage;
+      }
+    } else {
+      this.isDeveloperSelected = false;
+      this.grandTotalAmount = 0;
+      this.pdfForm.controls["grandTotalAmount"].setValue(0);
+      this.pdfForm.controls["packageAmount"].setValue(0);
+      this.pdfForm.controls["cGST"].setValue(0);
+      this.pdfForm.controls["sGST"].setValue(0);
+      this.pdfForm.controls["iGST"].setValue(0);
+    }
+  }
+
+  reset() {
+    this.pdfForm.reset();
+    this.initForm();
+    this.submitted = false;
+    this.common.ShowToast("Form is reset.");
+  }
+
+  generate() {
+    this.isLoading = true;
+    this.submitted = true;
+    let errroCounter = 0;
+
+    if (this.pdfForm.get('billForMonth').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('packageAmount').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('senderCompanyName').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('developerName').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('dateOfBilling').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('senderFirstAddress').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('senderSecondAddress').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('senderGSTNo').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('senderPrimaryContactNo').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('senderEmail').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('receiverFirstAddress').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('receiverCompanyName').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('receiverGSTNo').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('receiverSecondAddress').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('receiverPrimaryContactNo').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('EmployeeId').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('workingDay').errors !== null)
+      errroCounter++;
+    if (this.pdfForm.get('actualDaysBurned').errors !== null)
+      errroCounter++;
+
+    var worksDays = Number(this.pdfForm.get('workingDay').value);
+    var burnDays = this.pdfForm.get('actualDaysBurned').value;
+
+    if (isNaN(worksDays)) {
+      Toast("Invalid No of days");
+    }
+    if (isNaN(burnDays)) {
+      Toast("Invalid Total working days");
+    }
+
+    this.pdfForm.get('cGstAmount').setValue(this.cgstAmount);
+    this.pdfForm.get('sGstAmount').setValue(this.sgstAmount);
+    this.pdfForm.get('igstAmount').setValue(this.igstAmount);
+    this.pdfForm.get('grandTotalAmount').setValue(this.grandTotalAmount);
+    this.pdfForm.get("billingMonth").setValue(new Date(this.model.year, this.originalBillingMonth - 1, 1));
+
+    if (errroCounter === 0) {
+      // "daysAbsent" = a - b
+      this.pdfForm.get("daysAbsent").setValue(worksDays - burnDays);
+      let request: PdfModal = this.pdfForm.value;
+      this.http.post("FileMaker/GeneratePdf", request).then((response: ResopnseModel) => {
+        if (response.ResponseBody.Status !== null && response.ResponseBody.Status !== "") {
+          this.common.ShowToast(response.ResponseBody.Status);
+        }
+        else {
+          this.common.ShowToast("Failed to generated, Please contact to admin.");
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      });
+    } else {
+      this.isLoading = false;
+      this.common.ShowToast("All read marked fields are mandatory.");
+    }
+  }
+
+  replaceWithOriginalValues() {
+
+  }
+
+  findSenderClientDetail(e: any) {
+    let Id = e.target.value;
+    if (Id !== null) {
+      let clientId: number = Number(Id);
+      let clients = this.applicationData.clients.find(x => x.ClientId === clientId);
+      if (clients.length > 0) {
+        let client = clients[0];
+        let lastAddress = '';
+        if (client.ThirdAddress === null || client.ThirdAddress === "") {
+          lastAddress = "Pin: " + client.Pincode;
+        } else {
+          lastAddress = client.ThirdAddress + "  Pin: " + client.Pincode;
+        }
+        this.pdfForm.get('senderFirstAddress').setValue(client.FirstAddress);
+        this.pdfForm.get('senderCompanyName').setValue(client.ClientName);
+        this.pdfForm.get('senderGSTNo').setValue(client.GSTNO);
+        this.pdfForm.get('senderSecondAddress').setValue(client.SecondAddress + " " + lastAddress);
+        this.pdfForm.get('senderThirdAddress').setValue(lastAddress);
+        this.pdfForm.get('senderPrimaryContactNo').setValue(client.PrimaryPhoneNo);
+        this.pdfForm.get('senderEmail').setValue(client.Email);
+      }
+    }
+  }
+
+  findReceiverClientDetail(e: any) {
+    this.bindClientDetail(e.target.value);
+  }
+
+  bindClientDetail(Id: any) {
+    if (Id !== null) {
+      let clientId: number = Number(Id);
+      let client = this.applicationData.clients.find(x => x.ClientId === clientId);
+      this.clientDetail = this.applicationData.allocatedClients.find(x => x.ClientUid === clientId && x.EmployeeUid == this.currentEmployee.EmployeeUid);
+      if (client && this.clientDetail) {
+        let lastAddress = '';
+        if (client.ThirdAddress === null || client.ThirdAddress === "") {
+          lastAddress = "Pin: " + client.Pincode;
+        } else {
+          lastAddress = client.ThirdAddress + "  Pin: " + client.Pincode;
+        }
+        this.pdfForm.get('receiverFirstAddress').setValue(client.FirstAddress);
+        this.pdfForm.get('receiverCompanyName').setValue(client.ClientName);
+        this.pdfForm.get('receiverGSTNo').setValue(client.GSTNO);
+        this.pdfForm.get('receiverSecondAddress').setValue(client.SecondAddress + " " + lastAddress);
+        this.pdfForm.get('receiverThirdAddress').setValue(lastAddress);
+        this.pdfForm.get('receiverPrimaryContactNo').setValue(client.PrimaryPhoneNo);
+        this.pdfForm.get('receiverEmail').setValue(client.Email);
+        this.pdfForm.get('ClientId').setValue(client.ClientId);
+
+        if (!this.editMode) {
+          this.packageAmount = this.clientDetail.ActualPackage;
+          this.pdfForm.get('packageAmount').setValue(this.clientDetail.ActualPackage);
+          this.pdfForm.get('grandTotalAmount').setValue(this.clientDetail.ActualPackage);
+        }
+
+        this.isClientSelected = true;
+      }
+    }
+  }
+
+  changeWorkingDays(e: any) {
+    let value = e.target.value;
+    if (value) {
+      this.pdfModal.actualDaysBurned = Number(value);
+      this.pdfModal.workingDay = this.pdfModal.actualDaysBurned;
+      this.pdfForm.get("workingDay").setValue(this.pdfModal.actualDaysBurned);
+    } else {
+      this.pdfModal.actualDaysBurned = Number(value);
+      this.pdfModal.workingDay = this.pdfModal.actualDaysBurned;
+      this.pdfForm.get("workingDay").setValue(this.pdfModal.actualDaysBurned);
+    }
+
+    this.generateDaysCount();
+    this._calculateAmount(this.pdfModal.actualDaysBurned);
+  }
+
+  onEdit(e: any) {
+    if (e.target.checked) {
+      this.pdfModal.actualDaysBurned = 1;
+      this.pdfModal.workingDay = this.pdfModal.actualDaysBurned;
+      this.pdfForm.get("workingDay").setValue(1);
+    } else {
+      this.pdfForm.get("workingDay").setValue(this.pdfModal.workingDay);
+    }
+    this.isEdit = e.target.checked;
+  }
+
+  getFixedAmount($e: any) {
+    let amount = Number($e.target.value);
+    if (!isNaN(amount)) {
+      this.packageAmount = amount;
+      this.pdfForm.get("grandTotalAmount").setValue(amount);
+    }
+  }
+}
+
+class PdfModal {
+  header: string = 'Staffing Bill';
+  UpdateSeqNo: number = 0;
+  billForMonth: string = null;
+  billNo: string = null;
+  dateOfBilling: Date = new Date();
+  daysAbsent: number = 0;
+  cGST: number = 0;
+  sGST: number = 0;
+  iGST: number = 0;
+  cGSTAmount: number = 0;
+  sGSTAmount: number = 0;
+  iGSTAmount: number = 0;
+  workingDay: number = 0;
+  actualDaysBurned: number = 0;
+  packageAmount: number = 0;
+  grandTotalAmount: number = 0;
+  receiverFirstAddress: string = null;
+  receiverGSTNo: string = null;
+  receiverSecondAddress: string = null;
+  receiverPrimaryContactNo: string = null;
+  receiverEmail: string = null;
+  receiverCompanyName: string = null;
+  receiverCompanyId: number = null;
+  developerName: string = "NA";
+  developerId: number = 0;
+  senderCompanyName: string = null;
+  senderClientId: number = 0;
+  senderGSTNo: string = null;
+  senderFirstAddress: string = null;
+  senderSecondAddress: string = null;
+  senderPrimaryContactNo: string = null;
+  senderEmail: string = null;
+  ClientId: number = 0;
+  receiverThirdAddress: string = "";
+  senderThirdAddress: string = "";
+  receiverPincode: number = 0;
+  billingMonth: Date = null;
+  EmployeeId: number = 0;
+  billId: number = 0;
+  FileId: number = 0;
+  StatusId: number = 2;
+  PaidOn: Date = null;
+}
+
+class ApplicationData {
+  fileDetail: Array<any> = [];
+  clients: Array<any> = [];
+  employees: Array<EmployeeDetail> = [];
+  allocatedClients: Array<any> = [];
+}

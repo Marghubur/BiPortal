@@ -1,0 +1,23 @@
+<div class="container m-0 p-0 auto-dd" name="autofill-container">
+  <div id="iautofill-searchfield">
+    <a class="anc-remove d-none" (click)="AddToAutoFillList()" name="remove-pointer">&#x2716;</a>
+    <input type="text" class="biginput simple-field form-control" [ngClass]="ClassName" [attr.tabindex]="Tabindex"
+      name="iautofill-textfield" (click)="ShowAutofillDropdown()" (focus)="ShowAutofillDropdown()"
+      [placeholder]="placeholder" [attr.value]="InitValue" [attr.data]="InitData" />
+    <div class="iautofill-suggestion-dv d-none" name="suggestionBox-dv">
+      <input type="text" (keyup)="onKeyUp($event)" (keydown)="onKeyPress($event)" (keydown.shift.tab)="NoAction()"
+        class="biginput nb simple-field form-control" name="autocomplete" (blur)="onBlur()" />
+      <div *ngIf="!isShowEmptyRow" class="autocomplete-suggestions w-100" name="iautofill-div"
+        style="position: relative; max-height: 300px; z-index: 9999;">
+        <div class="autocomplete-suggestion" *ngFor="let item of BindingData; let index = index" data="index"
+          (mousedown)="select(index, true)">
+          {{item.value}}
+        </div>
+      </div>
+      <div *ngIf="isShowEmptyRow" class="autocomplete-suggestions w-100" name="iautofill-div"
+        style="position: relative; max-height: 300px; z-index: 9999;">
+        <div class="autocomplete-suggestion empty-row" (click)="onBlur()">Not available</div>
+      </div>
+    </div>
+  </div>
+</div>

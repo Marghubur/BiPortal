@@ -1,0 +1,172 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
+import { ResopnseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
+import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
+import { DocumentsPage, RegisterClient } from 'src/providers/constants';
+import { iNavigation } from 'src/providers/iNavigation';
+import { Filter, UserService } from 'src/providers/userService';
+
+@Component({
+  selector: 'app-clients',
+  templateUrl: './clients.component.html',
+  styleUrls: ['./clients.component.scss']
+})
+export class ClientsComponent implements OnInit {
+  documentForm: FormGroup = null;
+  user: UserDetail = null;
+  documents: Array<OnlineDocModel> = [];
+  tableConfiguration: tableConfig = null;
+  openModal: string = 'hide';
+  isLoading: boolean = false;
+  RegisterNewClient: string = RegisterClient;
+
+  constructor(private fb: FormBuilder,
+    private http: AjaxService,
+    private userService: UserService,
+    private nav: iNavigation,
+    private common: CommonService
+  ) { }
+
+  ngOnInit(): void {
+    this.documentForm = this.fb.group({
+      "Title": new FormControl(""),
+      "Description": new FormControl(""),
+      "CreatedOn": new FormControl(new Date()),
+      "PageLink": new FormControl("")
+    });
+
+    this.user = this.userService.getInstance();
+    if (this.user !== undefined && this.user !== null)
+      this.LoadData();
+  }
+
+  LoadData() {
+    let filter: Filter = new Filter();
+    let Mobile = '';
+    let Email = '';
+    if (this.user.Mobile !== null)
+      Mobile = this.user.Mobile;
+
+    if (this.user.EmailId !== null)
+      Email = this.user.EmailId;
+
+    if (Mobile !== "" || Email !== "") {
+      filter.SearchString = `1 `;
+      this.http.post("Clients/GetClients", filter).then((response: ResopnseModel) => {
+        let result = response.ResponseBody;
+        this.BuildDocumentTable(result);
+      });
+    }
+  }
+
+  BuildDocumentTable(result: any) {
+    if (result !== null && result.length > 0) {
+      this.tableConfiguration = new tableConfig();
+      this.tableConfiguration.totalRecords = 1;
+      this.tableConfiguration.data = result;
+      this.tableConfiguration.isEnableAction = true;
+      this.tableConfiguration.header = [
+        { DisplayName: 'S.No#', ColumnName: 'Index' },
+        { DisplayName: 'ClientId', ColumnName: null, IsHidden: true },
+        { DisplayName: 'Organization Name', ColumnName: 'ClientName' },
+        { DisplayName: 'Primary Contact No.#', ColumnName: 'PrimaryPhoneNo' },
+        { DisplayName: 'Email', ColumnName: 'Email' },
+        { DisplayName: 'City', ColumnName: 'City' },
+        { DisplayName: 'FirstAddress', ColumnName: 'FirstAddress' }
+      ];
+      this.tableConfiguration.link = [
+        { iconName: 'fa fa-pencil-square-o' },
+        { iconName: 'fa fa-trash-o' }
+      ]
+    }
+  }
+
+  EditCurrent(data: any) {
+    if (data !== null) {
+      data = data.item;
+      let ClientId = data.ClientId;
+      if (ClientId !== null && ClientId !== "") {
+        this.http.get(`Clients/GetClientById/${ClientId}/${data.IsActive}`).then((response: ResopnseModel) => {
+          if (response.ResponseBody !== null) {
+            this.nav.navigate(RegisterClient, response.ResponseBody);
+          }
+        }).catch(e => {
+          this.common.ShowToast("Got error to get data. Please contact to admin.");
+        })
+      }
+    }
+  }
+
+  CreateDocument() {
+    if (this.documentForm.valid) {
+      if (this.documentForm.controls['Title'].value !== "" &&
+        this.documentForm.controls['Description'].value !== "") {
+        this.isLoading = true;
+        let filter: Filter = new Filter();
+        filter.SearchString = `1=1 AND UD.MOBILENO = '${this.user.Mobile}' OR UD.EMAILID = '${this.user.EmailId}'`;
+        filter["OnlineDocumentModel"] = this.documentForm.value;
+        filter["Mobile"] = this.user.Mobile;
+        filter["Email"] = this.user.EmailId;
+        this.http.post('OnlineDocument/CreateDocument', filter)
+          .then((response: ResopnseModel) => {
+            let data = response.ResponseBody;
+            if (data !== null) {
+              this.BuildDocumentTable(data);
+              this.toggelAddUpdateModal();
+            } else {
+              this.toggelAddUpdateModal();
+            }
+            this.isLoading = true;
+          }).catch(e => {
+            this.isLoading = true;
+          });
+      } else {
+        alert("Entry name is required field.");
+      }
+    }
+  }
+
+  openDocument(path: OnlineDocModel) {
+    this.nav.navigate(DocumentsPage, path);
+  }
+
+  loadDocumentPage(value: any) {
+    if (value !== null) {
+      let doc: OnlineDocModel = JSON.parse(value);
+      if (doc !== null) {
+        this.nav.navigate(DocumentsPage, doc);
+      }
+    }
+  }
+
+  toggelAddUpdateModal() {
+    // if(this.openModal === 'showmodal')
+    //   this.openModal = 'hide';
+    // else
+    //   this.openModal = 'showmodal';
+    // $('#addupdateModal').modal(this.openModal)
+
+  }
+}
+
+export class OnlineDocModel {
+  constructor(data: any) {
+    this.DocumentId = data['DocumentId'];
+    this.Title = data['Title'];
+    this.Description = data['Description'];
+    this.UserId = data['UserId'];
+    this.DocPath = data['DocPath'];
+    this.CreatedOn = data['CreatedOn'];
+    this.UpdatedOn = data['UpdatedOn'];
+  }
+  DocumentId: number = 0;
+  Title: string = null;
+  Description: string = null;
+  UserId: string = null;
+  DocPath: string = null;
+  TotalRows: number = 0;
+  CreatedOn: string = null;
+  UpdatedOn: string = null;
+}

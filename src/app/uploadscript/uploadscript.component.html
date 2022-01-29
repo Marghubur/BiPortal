@@ -1,0 +1,129 @@
+<div class="container-body">
+  <div class="col-md-12 col-xs-12 p-0 mb-0">
+    <div class="x_header_title" panel="grid" name="section-1" id="section-1">
+      <div class="x_header rel-tbl__header w-100 m-0 p-0">
+        <i class="mdi mdi-cloud-upload"></i>
+        <h5 class="text-capitalize rel-tbl__inner-text">Upload your excel, mssql or mysql script or json file.</h5>
+        <input type="file" id="uploadexcel" (change)="readExcelData($event)" class="d-none" />
+      </div>
+      <div class="clearfix"></div>
+      <div class="mt-3 col-md-12 col-xs-12 p-0 mb-0">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+              aria-selected="true">Excel Sheet</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+              aria-selected="false">MSSql Script file</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade showmodal active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div role="tabpanel" class="active in mt-4" id="tab_content1" aria-labelledby="home-tab">
+              <div id="classmasterdata" class="col-md-12 col-sm-12 col-xs-12">
+                <div name="imgdv" class="show-case-dv">
+                  <img src="assets/img/Stocks.png" class="show-case" />
+                </div>
+                <div name="ifilezone" class="ifilezone" (click)="fireBrowserFile()">
+                  <div *ngIf="!isFileReady">
+                    <span style="color: darkgray;margin-top: 30px;display: block;">
+                      Drop files here.
+                    </span>
+                  </div>
+                  <div class="col-md-12 col-sm-12 col-xs-12 solid-bg" *ngIf="isFileReady" name="uploading">
+                    <img src="assets/img/ExcelFile.png" />
+                    <div class="filetitle">
+                      File:
+                      <div name="filename" style="display: inline-block !important;">
+                        {{ fileName }}
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        File size: &nbsp;
+                        <div name="filesize" style="display: inline-block !important;">
+                          {{ fileSize }}
+                        </div>
+                        KB
+                      </div>
+                      <div>
+                        No. of record(s): &nbsp;
+                        <div name="noofrecords" style="display: inline-block !important;">
+                          {{ noOfRecords }}
+                        </div>
+                      </div>
+                      <div>
+                        File name: &nbsp;
+                        <div name="uploadingdatetime" style="display: inline-block !important;">
+                          {{ fileName }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-4">
+                      <button type="button" class="btn btn-primary mr-2" (click)="uploadExcelSheet()">
+                        <i class="fas fa-upload pr-2"></i> Upload selected
+                        excel data
+                      </button>
+                      <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()">
+                        <i class="fas fa-eraser pr-2"></i> Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div role="tabpanel" class="active in mt-4" id="tab_content1" aria-labelledby="home-tab">
+              <div id="classmasterdata" class="col-md-12 col-sm-12 col-xs-12">
+                <div name="imgdv" class="show-case-dv">
+                  <img src="assets/img/customer.png" class="show-case" />
+                </div>
+                <div name="ifilezone" class="ifilezone" (click)="fireBrowserFile()">
+                  <span style="color: darkgray;margin-top: 30px;display: block;">
+                    Drop files here.
+                  </span>
+                  <div class="col-md-12 col-sm-12 col-xs-12" style="display: none;" name="uploading">
+                    <img src="assets/img/ExcelFile.png" />
+                    <div class="filetitle">
+                      File:
+                      <div name="filename" style="display: inline-block !important;"></div>
+                    </div>
+                    <div>
+                      <div>
+                        File size: &nbsp;
+                        <div name="filesize" style="display: inline-block !important;"></div>
+                        KB
+                      </div>
+                      <div>
+                        No. of record(s): &nbsp;
+                        <div name="noofrecords" style="display: inline-block !important;"></div>
+                      </div>
+                      <div>
+                        Uploading date: &nbsp;
+                        <div name="uploadingdatetime" style="display: inline-block !important;"></div>
+                      </div>
+                    </div>
+                    <div>
+                      <button type="button" class="btn btn-primary" style="margin-top: 20px;"
+                        ng-click="uploadExcelSheet()">
+                        Upload
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="IsResultGenerated">
+        <app-generatedresult [GeneratedScriptFileName]="ScriptFileName" [ResultSet]="DynamicTableResult"
+          (ClosePopup)="CloseGeneratePopup()">
+        </app-generatedresult>
+      </div>
+    </div>
+  </div>
+</div>

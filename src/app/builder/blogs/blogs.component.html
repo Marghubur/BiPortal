@@ -1,0 +1,133 @@
+<div class="col-md-12 container-box mb-4">
+  <div class="col-md-12 row">
+    <div class="col-md-3 blog-panel">
+      <div class="blog-panel__features mt-4">
+        <h2>Featured Blogs</h2>
+        <ul>
+          <li>
+            <h3><a href="https://weblogs.asp.net/scottgu">ScottGu's Blog</a></h3>
+            <p>Scott Guthrie lives in Seattle and builds a few products for Microsoft</p>
+            <p>by <a href="https://forums.asp.net/members/scottgu.aspx">Scott Guthrie</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/ricardoperes">Development With A Dot</a></h3>
+            <p>Blog on development in general, and specifically on .NET. Created and maintained by Ricardo Peres.</p>
+            <p>by <a href="https://forums.asp.net/members/ricardoperes.aspx">Ricardo Peres</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/bleroy">Tales from the Evil Empire</a></h3>
+            <p>Bertrand Le Roy's blog</p>
+            <p>by <a href="https://forums.asp.net/members/bleroy.aspx">Bertrand LeRoy</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/imranbaloch">Imran Baloch's Blog</a></h3>
+            <p></p>
+            <p>by <a href="https://forums.asp.net/members/imran_ku07.aspx">Imran Baloch</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/sreejukg">K. G. Sreeju Nair's Blog</a></h3>
+            <p>Knowledge has to be improved, challenged, and increased constantly, or it vanishes.</p>
+            <p>by <a href="https://forums.asp.net/members/sreejukg.aspx">K. G. Sreeju Nair</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/dixin">Dixin's Blog</a></h3>
+            <p>Dixin is a UI designer and knows a little bit about programming.</p>
+            <p>by <a href="https://forums.asp.net/members/dixin.aspx">Dixin</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/dotnetstories">Nikolaos Kantzelis ASP.Net Blog</a></h3>
+            <p>This blog will focus on ASP.NET Framework</p>
+            <p>by <a href="https://forums.asp.net/members/nikolaosk.aspx">Nikolaos Kantzelis</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/fbouma">Frans Bouma's Blog</a></h3>
+            <p>The blog of Frans Bouma, creator and lead developer of LLBLGen Pro and ORM Profiler.</p>
+            <p>by <a href="https://forums.asp.net/members/fransbouma.aspx">Frans Bouma</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/rternier">Ryan Ternier's Blog</a></h3>
+            <p>Killer ASP.NET ninja coding monkeys do exist!</p>
+            <p>by <a href="https://forums.asp.net/members/rternier.aspx">Ryan Ternier</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/bipinjoshi">Thoughts on .Net &amp; Coding</a></h3>
+            <p>.Net Articles, tutorials, reviews, code and more...</p>
+            <p>by <a href="https://forums.asp.net/members/bipinjoshi.aspx">Bipin Joshi</a></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-6 mt-5">
+      <div class="mt-5">
+        <div class="text-center mb-5">
+          <h3 class="text-success">Blog & Resources</h3>
+          <p>The place to where you can get or share your knowladge.</p>
+        </div>
+        <h5 class="card-title mb-4">Recent Blog Posts</h5>
+        <ng-container *ngIf="BlogDetailEntries.length > 0">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let item of BlogDetailEntries">
+              <input type="hidden" name="commentUid" />
+              <div class="fluid-container">
+                <div class="ticket-card mt-3 pb-2 pb-3 mb-3 post">
+                  <a class="float-left">
+                    <img class="img-sm rounded-circle mb-4 mb-md-0" src="assets/images/faces/face1.jpg"
+                      alt="profile image">
+                  </a>
+                  <h2 class="mb-0 no-wrap anc-title-detail">
+                    <a [routerLink]="['/api/blogs/article', ArticleId]">
+                      {{item.BlogTitle}}
+                    </a>
+                  </h2>
+                  <p class="mb-0">
+                    <small class="details"><span class="pr-2">{{item.CreatedOn}}</span> by {{item.UserName}}</small>
+                  </p>
+  
+                  <p class="word-wrap mb-2">
+                    JSON is a preferred format for transferring data over the wire in modern web apps. However, at times
+                    you need to deal with XML data format. Moreover, you might want to handle JSON and XML in the sa...
+                  </p>
+                  <div class="col-md-1 p-0 m-0 d-none">
+                    <a href="javascript:void(0)" class="text-muted text-muted replaycard__action d-flex"
+                      data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+                      aria-controls="collapseExample">
+                      <i class="mdi mdi-message-text pr-1"></i>
+                      Reply
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </ng-container>
+      </div>
+    </div>
+    <div class="col-md-3 blog-panel mt-5">
+      <div class="blog-panel__recent">
+        <h2>Featured Blogs</h2>
+        <ul>
+          <li>
+            <h3><a href="https://weblogs.asp.net/scottgu">ScottGu's Blog</a></h3>
+            <p>Scott Guthrie lives in Seattle and builds a few products for Microsoft</p>
+            <p>by <a href="https://forums.asp.net/members/scottgu.aspx">Scott Guthrie</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/ricardoperes">Development With A Dot</a></h3>
+            <p>Blog on development in general, and specifically on .NET. Created and maintained by Ricardo Peres.</p>
+            <p>by <a href="https://forums.asp.net/members/ricardoperes.aspx">Ricardo Peres</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/rternier">Ryan Ternier's Blog</a></h3>
+            <p>Killer ASP.NET ninja coding monkeys do exist!</p>
+            <p>by <a href="https://forums.asp.net/members/rternier.aspx">Ryan Ternier</a></p>
+          </li>
+          <li>
+            <h3><a href="https://weblogs.asp.net/bipinjoshi">Thoughts on .Net &amp; Coding</a></h3>
+            <p>.Net Articles, tutorials, reviews, code and more...</p>
+            <p>by <a href="https://forums.asp.net/members/bipinjoshi.aspx">Bipin Joshi</a></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

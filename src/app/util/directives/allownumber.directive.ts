@@ -1,0 +1,49 @@
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+
+@Directive({
+  selector: '[OnlyNumber]'
+})
+export class AllownumberDirective {
+  input: number = 0;
+  constructor(private el: ElementRef) { }
+
+  @Input()
+  set OnlyNumber(value: string) {
+    if (value !== null && value !== "") {
+      this.input = parseInt(value);
+    } else {
+      this.input = 0;
+    }
+  }
+
+  @HostListener('keydown', ['$event']) onKeyDown(e) {
+    if (this.input) {
+      var keyCode = (e.which) ? e.which : keyCode;
+      if ([46, 9, 8, 37, 38, 39, 40].indexOf(keyCode) !== -1) {
+        return;
+      }
+
+      if (e.target.value.length >= this.input) {
+        e.preventDefault();
+      }
+
+      if (// Allow: Ctrl+A
+        (keyCode === 65 && (e.ctrlKey || e.metaKey)) ||
+        // Allow: Ctrl+C
+        (keyCode === 67 && (e.ctrlKey || e.metaKey)) ||
+        // Allow: Ctrl+V
+        (keyCode === 86 && (e.ctrlKey || e.metaKey)) ||
+        // Allow: Ctrl+X
+        (keyCode === 88 && (e.ctrlKey || e.metaKey)) ||
+        // Allow: home, end, left, right
+        (keyCode >= 35 && keyCode <= 39)) {
+        // let it happen, don't do anything
+        return;
+      }
+      // Ensure that it is a number and stop the keypress
+      if ((e.shiftKey || (keyCode < 48 || keyCode > 57)) && (keyCode < 96 || keyCode > 105)) {
+        e.preventDefault();
+      }
+    }
+  }
+}

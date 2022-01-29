@@ -1,0 +1,94 @@
+<div class="page-wrap" id="container-dv">
+  <div class="left-panel position-relative pan" id="left-pane">
+    <div class="editor-header content-header col-md-12">
+      <div class="col-md-8 d-inline-block pl-0 pr-0">
+        <div class="d-inline-block dropdown showmodal nostyle-dd">
+          <a class="bg-transparent dropdown-toggle" type="button" id="sample-text-selector" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="mdi mdi-format-text"></i>
+            <span class="pl-2 sample-text-span">Generate Sample</span>
+          </a>
+
+          <div class="dropdown-menu dd-content" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" (click)="GenerateSampleJson('10')">10 line's</a>
+            <a class="dropdown-item" (click)="GenerateSampleJson('100')">100 line's</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-inline-block text-right">
+        <a class="btn-box ml-2" (click)="CopyTextareaToClipboard()" title="copy to clipboard">
+          <i class="mdi mdi-arrange-send-backward"></i>
+        </a>
+
+        <a class="btn-box ml-2" (click)="StringifyObject()" title="stringify given text">
+          <i class="mdi mdi-json"></i>
+        </a>
+      </div>
+    </div>
+    <textarea class="textarea-inlet" id="inputdata" placeholder="Your json stringify paste/write here ..."></textarea>
+  </div>
+  <div class="separator pan" id="panes-separator">
+    <div class="text-center font-weight-bold">Converter</div>
+    <div class="card pt-4 pb-4 pl-2 pr-2 mt-4">
+      <button class="btn btn-block btn-outline-secondary json-action-btn" (click)="ConvertoParsedTreeviewJsonObject()">
+        Convert
+      </button>
+      <button class="btn btn-block btn-info json-action-btn" (click)="BeautifyCurrentJson()">
+        Beautify
+      </button>
+      <div class="container text-center mt-4">
+        <p>
+          Convert data into different format. <b><i>COMING SOON</i></b>
+        </p>
+      </div>
+      <button class="btn btn-block json-action-btn btn-warning pr-2 pl-2 disabled" disabled title="coming soon">
+        Convert into xml format
+      </button>
+      <button class="btn btn-block json-action-btn btn-danger pr-2 pl-2 disabled" disabled title="coming soon">
+        Convert into json format
+      </button>
+    </div>
+  </div>
+  <div class="right-panel position-relative pan" id="right-pane" [ngClass]="{'expand-content': IsExpandedResult}">
+    <div class="output-header content-header">
+      <div class="col-md-12 d-inline-block p-0">
+        <div class="col-md-8 d-inline-block p-0">
+          <a class="btn-box" (click)="ClearBox()" title="clear result window">
+            <i class="mdi mdi-reload"></i>
+          </a>
+
+          <a class="btn-box ml-2" (click)="CopyDivToClipboard('div-outlet')" title="copy to clipboard">
+            <i class="mdi mdi-arrange-send-backward"></i>
+          </a>
+
+          <a class="btn-box ml-2" (click)="wraptext()" title="wrap your result">
+            <i class="mdi mdi-wrap"></i>
+          </a>
+
+          <div class="ml-2 d-inline-block bg-transparent dropdown showmodal nostyle-dd">
+            <a class="bg-transparent dropdown-toggle" type="button" id="code-type" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              {{ ActionType }}
+            </a>
+
+            <div class="dropdown-menu dd-content" id="action-dropdown" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" (click)="BindActionName('Code')">Code</a>
+              <a class="dropdown-item" (click)="BindActionName('Tree')">Tree</a>
+              <!-- <a class="dropdown-item" (click)="BindActionName('Text')">Text</a> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 d-inline-block p-0 text-right">
+          <a class="btn-box ml-2" (click)="ExpandResult()" title="expand or collapse result">
+            <i [ngClass]="{'d-none': IsExpandedResult}" class="mdi mdi-arrow-expand-all"></i>
+            <i [ngClass]="{'d-none': !IsExpandedResult}" class="mdi mdi-animation"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="div-outlet d-flex">
+      <div class="div-outlet dynamic-content div-outlet-content" id="div-outlet"></div>
+    </div>
+  </div>
+</div>

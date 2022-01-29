@@ -1,0 +1,21 @@
+<div class="container-fluid mt-5">
+    <div class="col-md-12">
+        <div class="x_panel">
+            <div class="x_header">
+                <div class="x_header_title">
+                    <h2>Client detail <small>Add or update details</small>
+                    </h2>
+                    <div class="float-end d-inline create-link">
+                        <button class="btn btn-outline-primary" [routerLink]="['/' + RegisterNewClient]"
+                            routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o me-1"
+                                aria-hidden="true"></i>Add Client</button>
+                    </div>
+                </div>
+            </div>
+            <div class="x_content">
+                <app-dynamic-table [config]="tableConfiguration" (clicked)="EditCurrent($event)">
+                </app-dynamic-table>
+            </div>
+        </div>
+    </div>
+</div>
