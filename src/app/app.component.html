@@ -8,7 +8,7 @@
 
 
        <div class="container-scroller">
-        <app-navbar *ngIf="enableAuth" (authentication)="doAuthentication()"></app-navbar>
+        <app-navbar *ngIf="!enableAuth" (authentication)="doAuthentication()"></app-navbar>
         <div *ngIf="enableAuth" class="content-wrapper">
           <router-outlet></router-outlet>
         </div>

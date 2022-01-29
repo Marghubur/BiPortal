@@ -1,0 +1,7 @@
+version: '3.4'
+
+services:
+  portal:
+    image: biportal
+    ports:
+      -  8081:80      

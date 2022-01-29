@@ -6,8 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import {
-  GoogleLoginProvider,
-  FacebookLoginProvider
+  GoogleLoginProvider
 } from 'angularx-social-login';
 
 // Pipe
@@ -48,7 +47,6 @@ import { UtilModule } from './util/util.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
 import { NgChartsModule } from 'ng2-charts';
-import { IndexComponent } from './index/index.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 
 @NgModule({
@@ -68,7 +66,8 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
     UploadscriptComponent,
     UserprofileComponent,
     CodegeneratorComponent,
-    LiveurlComponent, BreadcrumsComponent, IndexComponent
+    LiveurlComponent, 
+    BreadcrumsComponent
   ],
   imports: [
     BrowserModule,

@@ -4,7 +4,6 @@ import { CodeGenerator, Doclist, DocumentsPage, Employees, Home, JsonFormatter, 
 
 import { CodegeneratorComponent } from './codegenerator/codegenerator.component';
 import { HomeComponent } from './home/home.component';
-import { IndexComponent } from './index/index.component';
 import { JsonFormatterComponent } from './json-formatter/json-formatter.component';
 import { LiveurlComponent } from './liveurl/liveurl.component';
 import { LoginComponent } from './login/login.component';
@@ -15,7 +14,7 @@ import { UserprofileComponent } from './userprofile/userprofile.component';
 
 
 const routes: Routes = [
-  { path: "", component: IndexComponent },
+  { path: "", component: HomeComponent },
   { path: JsonFormatter, component: JsonFormatterComponent },
   { path: Home, component: HomeComponent },
   { path: TableSampleData, component: TabledsampledataComponent },
