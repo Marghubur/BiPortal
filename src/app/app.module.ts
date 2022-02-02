@@ -48,6 +48,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
 import { NgChartsModule } from 'ng2-charts';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { SidemenuComponent } from './sidemenu/sidemenu.component';
+import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,8 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
     UserprofileComponent,
     CodegeneratorComponent,
     LiveurlComponent, 
-    BreadcrumsComponent
+    BreadcrumsComponent,
+    SidemenuComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,24 @@
+<!-- <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav> -->
+
+  <nav aria-label="page navigation example">  
+    <ul class="pagination">  
+      <li class="page-item" (click)="onClickPage(activePage - 1)"><a class="page-link" href="javascript:void(0);">«  
+          Previous</a></li>  
+      <li class="page-item" [ngClass]="{'active': activePage === item}" *ngFor="let item of pages"  
+        (click)="onClickPage(item)"><a class="page-link" href="javascript:void(0);">{{item}}</a></li>  
+      <li class="page-item" (click)="onClickPage(activePage + 1)"><a class="page-link" href="javascript:void(0);">Next  
+          »</a></li>  
+    </ul>  
+  </nav> 

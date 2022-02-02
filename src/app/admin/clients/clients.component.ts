@@ -21,6 +21,12 @@ export class ClientsComponent implements OnInit {
   openModal: string = 'hide';
   isLoading: boolean = false;
   RegisterNewClient: string = RegisterClient;
+  clients: Array<any> = [];
+  activePage:number = 0;  
+  
+  displayActivePage(activePageNumber:number){  
+    this.activePage = activePageNumber  
+  }
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -55,37 +61,15 @@ export class ClientsComponent implements OnInit {
     if (Mobile !== "" || Email !== "") {
       filter.SearchString = `1 `;
       this.http.post("Clients/GetClients", filter).then((response: ResopnseModel) => {
-        let result = response.ResponseBody;
-        this.BuildDocumentTable(result);
+        this.clients = response.ResponseBody;
       });
     }
   }
 
-  BuildDocumentTable(result: any) {
-    if (result !== null && result.length > 0) {
-      this.tableConfiguration = new tableConfig();
-      this.tableConfiguration.totalRecords = 1;
-      this.tableConfiguration.data = result;
-      this.tableConfiguration.isEnableAction = true;
-      this.tableConfiguration.header = [
-        { DisplayName: 'S.No#', ColumnName: 'Index' },
-        { DisplayName: 'ClientId', ColumnName: null, IsHidden: true },
-        { DisplayName: 'Organization Name', ColumnName: 'ClientName' },
-        { DisplayName: 'Primary Contact No.#', ColumnName: 'PrimaryPhoneNo' },
-        { DisplayName: 'Email', ColumnName: 'Email' },
-        { DisplayName: 'City', ColumnName: 'City' },
-        { DisplayName: 'FirstAddress', ColumnName: 'FirstAddress' }
-      ];
-      this.tableConfiguration.link = [
-        { iconName: 'fa fa-pencil-square-o' },
-        { iconName: 'fa fa-trash-o' }
-      ]
-    }
-  }
 
   EditCurrent(data: any) {
     if (data !== null) {
-      data = data.item;
+      //data = data.item;
       let ClientId = data.ClientId;
       if (ClientId !== null && ClientId !== "") {
         this.http.get(`Clients/GetClientById/${ClientId}/${data.IsActive}`).then((response: ResopnseModel) => {
@@ -113,7 +97,7 @@ export class ClientsComponent implements OnInit {
           .then((response: ResopnseModel) => {
             let data = response.ResponseBody;
             if (data !== null) {
-              this.BuildDocumentTable(data);
+              this.clients = data;;
               this.toggelAddUpdateModal();
             } else {
               this.toggelAddUpdateModal();

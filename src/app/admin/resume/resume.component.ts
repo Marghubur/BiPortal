@@ -6,7 +6,7 @@ import { Resume } from 'src/providers/constants';
 import { ResopnseModel } from 'src/auth/jwtService';
 import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
 import { iNavigation } from 'src/providers/iNavigation';
-import { UserService } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 import { read, utils, WorkBook, write } from 'xlsx';
 
 @Component({
@@ -37,13 +37,28 @@ export class ResumeComponent implements OnInit {
   tableConfiguration: tableConfig = null;
   isAvailable: boolean = false;
   resumeFiles: Array<ResumeFiles> = [];
+  filterModal: ResumeFiles = null;
+  filter: Filter = new Filter();
+  anyFilter: string = "";
+  isRecordAvailable: boolean = false;
+  columns: Array<any> = [];
+  expandedTable: boolean = true;
+  isDiasble: boolean = true;
+  isUploadFile: boolean = true;
+  activePage:number = 0;  
+  
+  displayActivePage(activePageNumber:number){  
+    this.activePage = activePageNumber  
+  }
 
   constructor(
     private http: AjaxService,
     private userService: UserService,
     private common: CommonService,
     private nav: iNavigation
-  ) { }
+  ) { 
+    this.columns = this.GetMappedColumns();
+  }
 
   s2ab(s) {
     const buf = new ArrayBuffer(s.length);
@@ -53,10 +68,14 @@ export class ResumeComponent implements OnInit {
     }
     return buf;
   }
+
   ngOnInit() {
+    this.filterModal = new ResumeFiles();
     this.baseUrl = this.http.GetImageBasePath();
     this.ExcelTableHeader = [];
     this.ExcelTableData = [];
+    this.filter.SearchString = `1=1`;
+    this.getUploadedDetails();
   }
 
   fireBrowserFile() {
@@ -100,6 +119,8 @@ export class ResumeComponent implements OnInit {
           this.fileName = this.file.name;
           this.noOfRecords = this.recordToUpload.length;
           this.isFileReady = true;
+          this.isDiasble = false;
+          this.isUploadFile = false;
           let excelData = data.mapTable[0];
           let rows: any = excelData;
           if (excelData) {
@@ -117,6 +138,82 @@ export class ResumeComponent implements OnInit {
         }
       });
     }
+  }
+
+  GetMappedColumns() {
+    return [
+      { "Title": "Name", "DbName": "Name" },
+      { "Title": "Email", "DbName": "Email_ID" },
+      { "Title": "Mobile", "DbName": "Phone_Number" },
+      { "Title": "Alternet No.#", "DbName": "Alternet_Number" },
+      { "Title": "Source of Application", "DbName": "Source_Of-Application" },
+      { "Title": "Job Title", "DbName": "Job_Title" },
+      { "Title": "Date of Application", "DbName": "Date_of_Application" },
+      { "Title": "Total Experience", "DbName": "Total_Experience" },
+      { "Title": "Annual Salary", "DbName": "Annual_Salary" },
+      { "Title": "Notice Period", "DbName": "Notice_Period" },
+      { "Title": "Expected CTC", "DbName": "Expected_CTC" },
+      { "Title": "Feedback", "DbName": "Feedback"},
+      { "Title": "Current Location", "DbName": "Current_Location" },
+      { "Title": "Preferred Location", "DbName": "Preferred_Location" },
+      { "Title": "Current Company Name", "DbName": "Current_Company_name" },
+      { "Title": "Current Company Designation", "DbName": "Current_Company_Designation" },
+      { "Title": "Functional Area", "DbName": "Functional_Area" },
+      { "Title": "Role", "DbName": "Role" },
+      { "Title": "Industry", "DbName": "Industry" },
+      { "Title": "Key Skills", "DbName": "Key_Skills" },
+      { "Title": "Resume Headline", "DbName": "Resume_Headline" },
+      { "Title": "Summary", "DbName": "Summary" },
+      { "Title": "Under Graduation Degree", "DbName": "Under_Graduation_degree" },
+      { "Title": "Ug Specialization", "DbName": "UG_Specialization" },
+      { "Title": "Ug University/ Institute Name", "DbName": "UG_University_institute_Name" },
+      { "Title": "Ug Graduation Year", "DbName": "UG_Graduation_Year" },
+      { "Title": "Post Graduation Degree", "DbName": "Post_graduation_degree" },
+      { "Title": "Pg Specialization", "DbName": "PG_specialization" },
+      { "Title": "Pg university/ Institution Name", "DbName": "PG_university_institute_name" },
+      { "Title": "Pg Graduation Year", "DbName": "PG_graduation_Year" },
+      { "Title": "Doctorate Degree", "DbName": "Doctorate_degree" },
+      { "Title": "Doctorate Specialization", "DbName": "Doctirate_specialization" },
+      { "Title": "Doctorate University/ Institution Name", "DbName": "Doctorate_university_institution_name" },
+      { "Title": "Doctorate Graduation Year", "DbName": "Doctorate_graduation_year" },
+      { "Title": "Gender", "DbName": "Gender" },
+      { "Title": "Marital Status", "DbName": "Marital_Status" },
+      { "Title": "Hone Town/ City", "DbName": "Home_Town_City" },
+      { "Title": "Pin Code", "DbName": "Pin_Code" },
+      { "Title": "Work permit for USA", "DbName": "Work_permit_for_USA" },
+      { "Title": "Current Location", "DbName": "Current_Location" },
+      { "Title": "Date of Birth", "DbName": "Date_of_Birth" },
+      { "Title": "Last Workflow Activity", "DbName": "Last_Workflow_activity" },
+      { "Title": "Last Workflow Activity By", "DbName": "Last_Workflow_activity_by" },
+      { "Title": "Time of Last Workflow Activity Update", "DbName": "Time_of_Last_Workflow_activity_Update" },
+      { "Title": "Pipeline Status Updated By", "DbName": "Pipeline_Status_Updated_By" },
+      { "Title": "Time When Stage Updated", "DbName": "Time_when_Stage_updated" },
+      { "Title": "Latest Star Rating", "DbName": "Latest_Star_Rating" },
+      { "Title": "Viewed", "DbName": "Viewed" },
+      { "Title": "Viewed By", "DbName": "Viewed_By" },
+      { "Title": "Time of View", "DbName": "Time_Of_Email" },
+      { "Title": "Emailed", "DbName": "Emailed" },
+      { "Title": "Emailed By", "DbName": "Emailed_By" },
+      { "Title": "Time of Email", "DbName": "Time_Of_Emailed" },
+      { "Title": "Calling Status", "DbName": "Calling_Status"},
+      { "Title": "Calling Status Updated By", "DbName": "Calling_Status_Updated_By" },
+      { "Title": "Time of Calling Activity Update", "DbName": "Time_oF_Calling_activity_update" },
+      { "Title": "Comment 1", "DbName": "Comment_1" },
+      { "Title": "Comment 1 By", "DbName": "Comment_1_By" },
+      { "Title": "Time Comment 1 Posted", "DbName": "Time_Comment_1_posted" },
+      { "Title": "Comment 2", "DbName": "Comment_2" },
+      { "Title": "Comment 2 By", "DbName": "Comment_2_By" },
+      { "Title": "Time Comment 2 Posted", "DbName": "Time_Comment_2_posted" },
+      { "Title": "Comment 3", "DbName": "Comment_3" },
+      { "Title": "Comment 3 By", "DbName": "Comment_3_By" },
+      { "Title": "Time Comment 3 Posted", "DbName": "Time_Comment_3_posted" },
+      { "Title": "Comment 4", "DbName": "Comment_4" },
+      { "Title": "Comment 4 By", "DbName": "Comment_4_By" },
+      { "Title": "Time Comment 4 Posted", "DbName": "Time_Comment_4_posted" },
+      { "Title": "Comment 5", "DbName": "Comment_5" },
+      { "Title": "Comment 5 By", "DbName": "Comment_5_By" },
+      { "Title": "Time Comment 5 Posted", "DbName": "Time_Comment_5_posted" }
+    ];
   }
 
   ValidateHeader() {
@@ -465,6 +562,9 @@ export class ResumeComponent implements OnInit {
     this.noOfRecords = 0;
     event.stopPropagation();
     event.preventDefault();
+    this.isAvailable=false;
+    this.isDiasble = true;
+    this.isUploadFile = true;
   }
 
   convertToJson(onlyHeader: boolean = true): Promise<any> {
@@ -533,6 +633,84 @@ export class ResumeComponent implements OnInit {
           this.common.ShowToast("Unable to upload the data");
         }
       });
+  }
+
+  getUploadedDetails() {
+    this.resumeFiles = [];
+    this.http.post("OnlineDocument/GetUploadedRecords", this.filter)
+    .then((response: ResopnseModel) => {
+      if (response.ResponseBody != null) {
+        this.resumeFiles = response.ResponseBody.Table;
+        this.common.ShowToast("Records found");
+        this.isRecordAvailable = true;
+      } else {
+        this.common.ShowToast("No records found");
+      }
+    })
+  }
+
+  filterRecords() {
+    let searchQuery = "";
+    if(this.filterModal.Name !== null && this.filterModal.Name !== "") {
+      searchQuery += ` Name like '${this.filterModal.Name}%' `;
+    }
+
+    if(this.filterModal.Email_ID !== null && this.filterModal.Email_ID !== "") {
+      searchQuery += ` Email_ID like '%${this.filterModal.Email_ID}%' `;
+    }
+    if(this.filterModal.Phone_Number !== null && this.filterModal.Phone_Number !== "") {
+      searchQuery += ` Phone_Number like '${this.filterModal.Phone_Number}%' `;
+    }
+    if(this.filterModal.Job_Title !== null && this.filterModal.Job_Title !== "") {
+      searchQuery += ` Job_Title like '%${this.filterModal.Job_Title}%' `;
+    }
+    if(this.filterModal.Preferred_Locations !== null && this.filterModal.Preferred_Locations !== "") {
+      searchQuery += ` Preferred_Locations like '${this.filterModal.Preferred_Locations}%' `;
+    }
+    if(this.filterModal.Total_Experience !== null && this.filterModal.Total_Experience !== 0) {
+      searchQuery += ` Total_Experience = '${this.filterModal.Total_Experience}%' `;
+    }
+    if(this.filterModal.Notice_Period !== null && this.filterModal.Notice_Period !== 0) {
+      searchQuery += ` Notice_Period like '${this.filterModal.Notice_Period}%' `;
+    }
+
+    if(searchQuery !== "") {
+      this.filter.SearchString = `1=1 And ${searchQuery}`;
+    }
+
+    this.getUploadedDetails();
+  }
+
+  globalFilter() {
+    let searchQuery = "";
+    searchQuery = ` Name like '${this.anyFilter}%' OR Email_ID like '%${this.anyFilter}%' OR Phone_Number like '${this.anyFilter}%' OR Job_Title like '%${this.anyFilter}%' `;
+    if(searchQuery !== "") {
+      this.filter.SearchString = `1=1 And ${searchQuery}`;
+    }
+
+    this.getUploadedDetails();
+  }
+  resetFilter() {
+    this.filter = new Filter();
+    this.getUploadedDetails();
+    this.filterModal.Name="";
+    this.filterModal.Phone_Number = "";
+    this.filterModal.Email_ID="";
+    this.filterModal.Job_Title="";
+    this.filterModal.Preferred_Locations="";
+    this.filterModal.Total_Experience = 0;
+    this.filterModal.Notice_Period=0;
+    this.anyFilter = "";
+  }
+
+  expandTable() {
+    this.expandedTable = false;
+  }
+  closeExpandModel(){
+    this.expandedTable = true;
+  }
+  closeModal(){
+    this.cleanFileHandler();
   }
 
   OnEdit(data: any) { }
@@ -646,6 +824,8 @@ function saveAs(arg0: Blob, arg1: string) {
 }
 
 export class ResumeFiles {
+  Total: number = 0;
+  Index: number = 0;
   Source_Of_Application: string = "";
   Job_Title: string = "";
   Date_of_application: Date = null;
@@ -653,9 +833,9 @@ export class ResumeFiles {
   Email_ID: string = "";
   Phone_Number: string = "";
   Alternet_Numbers: string = "";
-  Total_Experience: number = 0;
+  Total_Experience: number = null;
   Annual_Salary: number = 0;
-  Notice_Period: number = 0;
+  Notice_Period: number = null;
   Expeceted_CTC: number = 0;
   Feedback: string = "";
   Current_Location: string = "";

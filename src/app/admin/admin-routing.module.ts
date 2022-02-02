@@ -11,7 +11,6 @@ import { FilesComponent } from './files/files.component';
 import { ManageemployeeComponent } from './manageemployee/manageemployee.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';
 import { ResumeComponent } from './resume/resume.component';
-import { SidemenuComponent } from './sidemenu/sidemenu.component';
 
 const routes: Routes = [
   { path: '', component: AdminComponent },
@@ -24,7 +23,6 @@ const routes: Routes = [
   { path: BuildPdf, component: BuildPdfComponent },
   { path: Files, component: FilesComponent },
   { path: Resume, component: ResumeComponent },
-  { path: SideMenu, component: SidemenuComponent}
 ];
 
 @NgModule({

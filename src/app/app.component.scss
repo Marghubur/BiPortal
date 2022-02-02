@@ -12,7 +12,8 @@
 .body-wrapper {
   display: table;
   width: 100% !important;
-  height: 100vh !important;
+  height: calc(100vh - 65px) !important;
+  margin-top: 65px !important;
 }
 
 .main-panel {

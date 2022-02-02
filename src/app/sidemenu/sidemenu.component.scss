@@ -8,7 +8,8 @@
   }
   a {
     text-decoration: none;
-    font-size: 15px;
+    font-size: 13px;
+    font-weight: 600;
     color: #222;
     margin-left: 10px;
     display: block;
@@ -18,6 +19,12 @@
     max-height: 430px;
   }
   .accordion-header button {
-    font-size: 15px !important;
+    font-size: 14px !important;
     font-weight: 700 !important;
+  }
+
+  .side-panel {
+    position: fixed;
+    width: 16rem;
+    background: white;
   }

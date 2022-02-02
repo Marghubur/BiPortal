@@ -34,7 +34,7 @@ export class UserService {
 }
 
 export class Filter {
-    SearchString: string = "";
+    SearchString: string = "1=1";
     PageIndex: number = 1;
     PageSize: number = 10;
     SortBy: string = "";

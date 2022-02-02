@@ -7,6 +7,7 @@ import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
 import { ToastComponent } from './toast/toast.component';
 import { AllownumberDirective } from './directives/allownumber.directive';
 import { TransformDirective } from './directives/transform.directive';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { TransformDirective } from './directives/transform.directive';
     DynamicTableComponent,
     ToastComponent,
     AllownumberDirective,
-    TransformDirective
+    TransformDirective,
+    PaginationComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { TransformDirective } from './directives/transform.directive';
     DynamicTableComponent,
     ToastComponent,
     AllownumberDirective,
-    TransformDirective
+    TransformDirective,
+    PaginationComponent
   ]
 })
 export class UtilModule { }

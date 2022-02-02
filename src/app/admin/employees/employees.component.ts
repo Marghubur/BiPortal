@@ -24,6 +24,11 @@ export class EmployeesComponent implements OnInit {
   manageEmployeeRouteName: string = ManageEmployee;
   isLoading: boolean = false;
   employeeDetail: Array<any> = [];
+  activePage:number = 0;  
+  
+  displayActivePage(activePageNumber:number){  
+    this.activePage = activePageNumber  
+  }
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,

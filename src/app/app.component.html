@@ -5,8 +5,6 @@
       </button>
        -->
 
-
-
        <div class="container-scroller">
         <app-navbar *ngIf="!enableAuth" (authentication)="doAuthentication()"></app-navbar>
         <div *ngIf="enableAuth" class="content-wrapper">
@@ -14,9 +12,11 @@
         </div>
         <div *ngIf="!enableAuth" class="body-wrapper" id="main-scroller">
           <div class="container-fluid p-0">
-            <!-- <app-sidebar></app-sidebar> -->
-            <div class="main-panel">
-              <div class="content-wrapper">
+            <div class="col-12 row m-0 p-0">
+              <div class="col-md-2 p-0">
+                <app-sidemenu></app-sidemenu>
+              </div>
+              <div class="col-md-10 pr-0 mt-2">
                 <router-outlet></router-outlet>
               </div>
             </div>

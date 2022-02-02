@@ -1,4 +1,4 @@
-<div class="container-fluid mt-5">
+<div class="container-fluid">
     <div class="col-md-12">
         <div class="x_panel">
             <div class="x_header">
@@ -60,6 +60,16 @@
                     </tr>
                   </tbody>
                 </table>
+            </div>
+            <div class="mt-3">  
+                <div class="d-inline">  
+                    <span><strong>Current Active Page = </strong> {{activePage}}</span>  
+                </div>  
+                <div class="float-end">  
+                    <div class="float-right"> 
+                        <app-pagination [totalRecords]="10" [recordsPerPage]="10" (onPageChange)="displayActivePage($event)"></app-pagination> 
+                    </div>     
+                </div>  
             </div>
         </div>
     </div>

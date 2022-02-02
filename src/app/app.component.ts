@@ -20,6 +20,11 @@ export class AppComponent implements OnInit {
   title = "star-admin-angular";
   enableAuth: boolean = false;
   pageName: string = "";
+  activePage:number = 0;  
+  
+  displayActivePage(activePageNumber:number){  
+    this.activePage = activePageNumber  
+  }
 
   constructor(
     private tokenHelper: JwtService,

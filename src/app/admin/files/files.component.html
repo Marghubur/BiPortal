@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="x_panel">
             <div class="x_header">
-                <div class="x_header_title">
+                <div class="x_header_title mt-3">
                     <h2 *ngIf="fileLoaded">
                         <b>[ {{currentEmployeeDetail.FirstName}} {{currentEmployeeDetail.LastName}} ]</b> Files
                         <small>All file detail to view and modify.</small>
@@ -76,9 +76,9 @@
                       <td>{{user.TDS | number}}</td>
                       <td>
                         <div class="d-flex flex-row justify-content-around">
-                          <i class="fa fa-cogs" aria-hidden="true" (click)="UpdateCurrent(user.FileUid)"></i>
-                          <i class="fa fa-pencil" aria-hidden="true" (click)="EditCurrentDocument(user)"></i>
-                          <i class="fa fa-file-pdf-o" aria-hidden="true" (click)="viewPdfFile(user)"></i>
+                            <span class="badge bg-primary ms-1 me-1"><i class="fa fa-cogs" aria-hidden="true" (click)="UpdateCurrent(user.FileUid)"></i></span>
+                            <span class="badge bg-success ms-1 me-1"> <i class="fa fa-pencil" aria-hidden="true" (click)="EditCurrentDocument(user)"></i></span>
+                            <span class="badge bg-dark ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true" (click)="viewPdfFile(user)"></i></span>
                         </div>
                       </td>
                     </tr>

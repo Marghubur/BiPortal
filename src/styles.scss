@@ -57,6 +57,7 @@ pre {
   --btn-input-default-height: 34px;
   --orange: #e6791e;
   --light: #eee;
+  --bg-color: #f9eeee;
 }
 
 .container-box {
@@ -724,4 +725,21 @@ body {
 
 .w-10 {
   width: 10% !important;
+}
+
+::-webkit-scrollbar {
+  width: auto;
+  max-width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey; 
+  border-radius: 10px;
 }

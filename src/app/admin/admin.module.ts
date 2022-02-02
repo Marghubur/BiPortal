@@ -12,14 +12,13 @@ import { DataTablesModule } from "angular-datatables";
 import { UtilModule } from '../util/util.module';
 import { BuildPdfComponent } from './build-pdf/build-pdf.component';
 //Datepicker
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReplaceEmpty } from 'src/pipes/ReplaceEmpty';
 import { EmployeesComponent } from './employees/employees.component';
 import { ClientsComponent } from './clients/clients.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';
 import { FilesComponent } from './files/files.component';
 import { ResumeComponent } from './resume/resume.component';
-import { SidemenuComponent } from './sidemenu/sidemenu.component';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 
 
@@ -35,8 +34,7 @@ import { SidemenuComponent } from './sidemenu/sidemenu.component';
     ClientsComponent,
     RegisterclientComponent,
     FilesComponent,
-    ResumeComponent,
-    SidemenuComponent
+    ResumeComponent
   ],
   imports: [
     CommonModule,

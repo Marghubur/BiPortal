@@ -1,4 +1,4 @@
-<div class="col-sm-2 card-body vh-100 shadow-lg me-4">
+<div class="card-body vh-100 shadow-lg side-panel">
     <div class="col-sm-12">
         <a href=""><img src="assets/images/logo.png" class="img-fluid" alt="logo"></a>
     </div>
@@ -11,10 +11,16 @@
             </h4>
             <div id="panelsStayOpen-collapseOne" class=" mb-0 accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
             <div class="accordion-body">
-                <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active"><i class="fa fa-bars me-3 pb-2" aria-hidden="true"></i>Roadmap</a>
+                <a class="nav-link a-font" (click)="GoBlogsPage()">
+                    <i class="mdi mdi-bookmark-plus-outline"></i>Blogs
+                </a>
+                <a *ngFor="let item of Menu" [routerLink]="['/' + item.Link]" class="nav-link a-font">
+                <i class="{{item.Icon}} me-2"></i>{{item.Catagory}}
+                </a>
+                <!-- <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active"><i class="fa fa-bars me-3 pb-2" aria-hidden="true"></i>Roadmap</a>
                 <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active" class="mt-2"><i class="fa fa-shopping-basket me-3 pb-2" aria-hidden="true"></i>Backloq</a>
                 <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active" class="mt-2"><i class="fa fa-industry me-3 pb-2" aria-hidden="true"></i>Board</a>
-                <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active" class="mt-2"><i class="fa fa-ticket me-3" aria-hidden="true"></i>Issues</a>
+                <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active" class="mt-2"><i class="fa fa-ticket me-3" aria-hidden="true"></i>Issues</a> -->
             </div>
             </div>
         </div>
