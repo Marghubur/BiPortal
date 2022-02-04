@@ -56,6 +56,14 @@ export const FlatFile = "assets/file.png";
 export const Zip = "assets/zip.png";
 export const Excel = "assets/excel.png";
 export const Ppt = "assets/ppt.png";
+export const MaxAllowedFileSize = 2048
+
+export enum UserType {
+  Employee = 1,
+  Client = 2,
+  Candidate = 3,
+  Other = 4
+}
 
 export const UsersColumn = [
   { column: "StudentFirstName", header: "First Name", width: 10 },

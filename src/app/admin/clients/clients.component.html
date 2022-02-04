@@ -1,5 +1,6 @@
 <div class="container-fluid">
     <div class="col-md-12">
+      <ng-container *ngIf="isClientFound">
         <div class="x_panel">
             <div class="x_header">
                 <div class="x_header_title">
@@ -35,24 +36,22 @@
                         <td>{{clients.FirstAddress}}</td>
                         <td>
                             <div class="d-flex flex-row justify-content-around">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true" (click)="EditCurrent(clients)"></i>
-                                <i class="fa fa-trash-o" aria-hidden="true" (click)="DeleteCurrent(clients.FileUid)"></i>
-                              </div>
+                              <a href="javascript:void(0)">
+                                <span class="badge bg-success"><i class="fa fa-pencil-square-o" aria-hidden="true" (click)="EditCurrent(clients)"></i></span>
+                              </a>
+                              <a href="javascript:void(0)">
+                                <span class="badge bg-dark"><i class="fa fa-trash-o" aria-hidden="true" (click)="DeleteCurrent(clients.FileUid)"></i></span>
+                              </a>
+                            </div>
                         </td>
                       </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="mt-3">  
-                <div class="d-inline">  
-                    <span><strong>Current Active Page = </strong> {{activePage}}</span>  
-                </div>  
-                <div class="float-end">  
-                    <div class="float-right"> 
-                        <app-pagination [totalRecords]="10" [recordsPerPage]="10" (onPageChange)="displayActivePage($event)"></app-pagination> 
-                    </div>     
-                </div>  
+            <div class="mt-3">
+              <app-pagination [pagination]="candidatesData" (onPageChange)="GetFilterResult($event)"></app-pagination>
             </div>
         </div>
+      </ng-container>
     </div>
 </div>

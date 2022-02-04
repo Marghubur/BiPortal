@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { ResopnseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, PlaceEmpty, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -69,7 +69,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   loadData(employeeId: number) {
-    this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResopnseModel) => {
+    this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.clients = res.ResponseBody.Clients;
         if (res.ResponseBody.Employee.length > 0)
@@ -172,7 +172,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.TakeHomeByCandidate = 0;
 
     if (errroCounter == 0) {
-      this.http.post("login/employeeregistration", this.employeeForm.value).then((response: ResopnseModel) => {
+      this.http.post("login/employeeregistration", this.employeeForm.value).then((response: ResponseModel) => {
         if (response.ResponseBody !== null && response.ResponseBody !== "expired") {
           Toast(response.ResponseBody);
         } else {
@@ -205,7 +205,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.isInsertingNewClient = true;
       if (this.assignedActiveClientUid > 0)
         this.isInsertingNewClient = false;
-      this.http.post(`employee/UpdateEmployeeDetail/${!this.isInsertingNewClient}`, updateClientRequest).then((response: ResopnseModel) => {
+      this.http.post(`employee/UpdateEmployeeDetail/${!this.isInsertingNewClient}`, updateClientRequest).then((response: ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody != {}) {
           if (this.isInsertingNewClient) {
             this.allocatedClients.push(response.ResponseBody.Table[0]);

@@ -1,18 +1,18 @@
 .ifilezone {
-    background-image: url('/assets/img/drop-back.png') !important;
-    background-size: 100% 73%;
-    cursor: pointer;
-    border: 2px dashed #bbb;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    padding: 25px;
-    text-align: center;
-    background-color: #f8f7f7;
-    min-height: 310px;
-    background-repeat: no-repeat;
-  }
-  
+  background-image: url("/assets/img/drop-back.png") !important;
+  background-size: 100% 73%;
+  cursor: pointer;
+  border: 2px dashed #bbb;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 25px;
+  text-align: center;
+  background-color: #f8f7f7;
+  min-height: 310px;
+  background-repeat: no-repeat;
+}
+
 .show-case-dv {
   height: 74px;
   overflow-y: hidden;
@@ -164,16 +164,16 @@ ul.bar_tabs > li > a.active {
 }
 .tb-scroll {
   overflow: auto;
-  height: 450px;
+  height: 58vh;
 }
 .uploada-data-scroll {
   overflow: auto;
-  height: 33rem;
+  height: 72vh;
 }
 
 .expand-modal-scroll {
   overflow: auto;
-  height: 37rem;
+  height: 78vh;
 }
 
 .filter-btn-grp {
@@ -185,7 +185,7 @@ ul.bar_tabs > li > a.active {
   font-size: 13px !important;
 }
 
-.col-min-width{
+.col-min-width {
   min-width: 12rem !important;
 }
 
@@ -199,4 +199,12 @@ ul.bar_tabs > li > a.active {
 .sample-note {
   margin-left: 1rem;
   display: inline;
+}
+
+.wrap-content {
+  max-height: 5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 12rem !important;
 }

@@ -5,7 +5,7 @@ import { FormControl } from "@angular/forms";
 import { FormGroup } from "@angular/forms";
 import { Component, OnInit } from "@angular/core";
 import { UserService } from "src/providers/userService";
-import { ResopnseModel } from "src/auth/jwtService";
+import { ResponseModel } from "src/auth/jwtService";
 declare var $: any;
 
 @Component({
@@ -42,7 +42,7 @@ export class FeedbacksComponent implements OnInit {
     let emailId = "zaid2292@gmail.com";
     this.http
       .get("ManageUserComments/GetComments?EmailId=", false)
-      .then((result: ResopnseModel) => {
+      .then((result: ResponseModel) => {
         if (this.commonService.IsValid(result.ResponseBody)) {
           if (
             typeof result.ResponseBody["Comments"] !== "undefined"

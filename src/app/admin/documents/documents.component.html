@@ -1,0 +1,130 @@
+<div class="container-fluid px-5 bg-light">
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="x_header_title row">
+        <div class="col-md-3">
+          <h2>Header<small>small description</small></h2>
+        </div>
+      </div>
+    </div>
+    <div class="x_content mt-4">
+      <!-- <form [formGroup]="documentForm" id="gpdfform" class="col-md-12 row"> -->
+        <form action="" [formGroup]="documentForm" id="resumefform" class="col-md-12 row">
+          <div class="col-md-12 m-0 row">
+            <div class="col-md-4">
+              <label class="form-label">Type *</label>
+              <select class="form-select" aria-label="Default select example" formControlName="userId"
+              [ngClass]="{'error': submitted && f.userId.errors !== null && f.userId.errors.required}">
+                <option selected>Type</option>
+                <option value="1">Employee</option>
+                <option value="2">Client</option>
+                <option value="3">Candidate</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="" class="form-label">Search by Email/ Mobile Number</label>
+              <input class="form-control table-filter-control" placeholder="Search by Email" formControlName="search"
+              [ngClass]="{'error': submitted && f.search.errors !== null && f.search.errors.required}">
+            </div>
+            <div class="col-md-4">
+              <label for="" class="form-label">Name</label>
+              <input class="form-control table-filter-control" placeholder="Search by Mobile Number" formControlName="name"
+              [ngClass]="{'error': submitted && f.name.errors !== null && f.name.errors.required}">
+            </div>
+          </div>
+        </form>
+
+        <div class="col-12 row m-0">
+          <div class="col-md-4 mt-4 me-2">
+            <div class="x_panel">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <div class="">
+                    <input type="file" id="uploadocument" class="d-none" multiple (change)="GetDocumentFile($event)" *ngIf="uploading"/>
+                    <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                aria-labelledby="home-tab">
+                                <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
+                                    aria-labelledby="home-tab">
+                                    <div id="classmasterdata" class="col-md-12">
+                                        <div name="ifilezone" class="ifilezone mb-4"
+                                            (click)="fireBrowserFile()">
+                                            <div *ngIf="uploading">
+                                                <span
+                                                    style="color:darkgray;display: block;margin-top: 10rem;">
+                                                    Drop files here.
+                                                </span>
+                                            </div>
+                                            <div class="col-md-12 solid-bg justify-content-center" *ngIf="!uploading" name="uploading">
+                                              <img src="assets/img/ExcelFile.png" />
+                                              <div class="filetitle">
+                                                  File:
+                                                  <div name="filename" style="display: inline-block !important;">
+                                                      {{ fileName }}
+                                                  </div>
+                                              </div>
+                                              <div>
+                                                  File size: &nbsp;
+                                                  <div name="filesize" style="display: inline-block !important;">
+                                                      {{ fileSize }}
+                                                  </div>
+                                                  KB
+                                              </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="mt-4">
+                <button type="button" class="btn btn-primary me-2" (click)="SubmitFiles()" [disabled]="btnDisable">
+                    <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
+                </button>
+                <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()" [disabled]="btnDisable">
+                    <i class="fa fa-eraser pe-2"></i> Cancel
+                </button>
+            </div>
+            </div>
+          </div>
+        </div>
+          <div class="col-md-7 mt-4" style="height: 52vh;overflow: auto;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th width="8%">#</th>
+                  <th>File Name</th>
+                  <th width="15%">File Size (KB)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of FilesCollection">
+                  <td class="counterCell"></td>
+                  <td>{{item.name}}</td>
+                  <td>{{item.size/1024}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <!-- </form> -->
+    </div>
+    <div>
+      <h4>Your Drive</h4>
+      <button class="btn btn-primary" (click)="RefreshDocuments()">Refresh</button>
+    </div>
+    <div class="col-md-12 row" *ngIf="isDocumentReady">
+      <div class="card card-cont align-items-center ms-3" *ngFor="let item of fileData">
+        <div>
+          <img class="upload-img" src="assets/img/file.png" alt="document_image">
+        </div>
+        <div class="file-name">
+          {{item.FileName}} Type: {{item.FileExtension}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

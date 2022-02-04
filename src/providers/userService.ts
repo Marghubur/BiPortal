@@ -36,7 +36,11 @@ export class UserService {
 export class Filter {
     SearchString: string = "1=1";
     PageIndex: number = 1;
+    StartIndex: number = 0;
+    EndIndex: number = 0;
     PageSize: number = 10;
     SortBy: string = "";
+    TotalRecords: number = 0;
+    ShowPageNo: number = 5;
     isReUseSame: boolean = false;
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
-import { ResopnseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService } from 'src/providers/common-service/common.service';
 
@@ -37,11 +37,11 @@ export class LiveurlComponent implements OnInit {
   }
 
   SaveUrl() {
-    this.http.post("LiveUrl/saveliveUrl", this.currentSavedUrlItem).then((res: ResopnseModel) => {
+    this.http.post("LiveUrl/saveliveUrl", this.currentSavedUrlItem).then((res: ResponseModel) => {
       let result = res.ResponseBody;
       if(result['Table'] !== null){
         this.savedUrl = result['Table'];
-      }      
+      }
     });
   }
 
@@ -65,22 +65,22 @@ export class LiveurlComponent implements OnInit {
       title: "users",
       url: "",
       pageSize: 100,
-      description: "get users json data contains name, address, mobile, email etc"      
+      description: "get users json data contains name, address, mobile, email etc"
     },{
       title: "sports",
       url: "",
       pageSize: 100,
-      description: "sprorts related json data e.g player name, matches year etc"      
+      description: "sprorts related json data e.g player name, matches year etc"
     },{
       title: "books",
       url: "",
       pageSize: 100,
-      description: "book and their auther data in json"      
+      description: "book and their auther data in json"
     },{
       title: "students",
       url: "",
       pageSize: 100,
-      description: "some useful studnet related json data"      
+      description: "some useful studnet related json data"
     })
   }
 
@@ -89,49 +89,49 @@ export class LiveurlComponent implements OnInit {
       title: "GET",
       url: "",
       pageSize: 100,
-      description: "/student"      
+      description: "/student"
     },{
       title: "GET",
       url: "",
       pageSize: 100,
-      description: "/users"      
+      description: "/users"
     },{
       title: "GET",
       url: "",
       pageSize: 100,
-      description: "/books_and_authors"      
+      description: "/books_and_authors"
     },{
       title: "POST",
       url: "",
       pageSize: 100,
-      description: "/students"      
+      description: "/students"
     },{
       title: "POST",
       url: "",
       pageSize: 100,
-      description: "/users"      
+      description: "/users"
     },{
       title: "PUT",
       url: "",
       pageSize: 100,
-      description: "/student"      
+      description: "/student"
     },{
       title: "DELETE",
       url: "",
       pageSize: 100,
-      description: "/book_and_authors"      
+      description: "/book_and_authors"
     },{
       title: "DELETE",
       url: "",
       pageSize: 100,
-      description: "/users"      
+      description: "/users"
     });
   }
 
   getCurrentUrl(itemId: number) {
     let currentSavedItem = this.savedUrl.filter(x=>x.savedUrlId === itemId);
     if(currentSavedItem.length > 0) {
-      this.currentSavedUrlItem = currentSavedItem[0];      
+      this.currentSavedUrlItem = currentSavedItem[0];
     }
   }
 
@@ -143,12 +143,12 @@ export class LiveurlComponent implements OnInit {
       SortBy: ""
     };
 
-    this.http.post("liveurl/loadpagedata", searchModal).then((res: ResopnseModel) => {
+    this.http.post("liveurl/loadpagedata", searchModal).then((res: ResponseModel) => {
       let result = res.ResponseBody;
       if(result['Table'] !== null){
         this.savedUrl = result['Table'];
       }
-    });    
+    });
   }
 
   ReloadPage(){

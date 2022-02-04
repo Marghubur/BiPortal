@@ -8,7 +8,7 @@ import {
   Txt,
   FlatFile,
 } from "src/providers/constants";
-import { ResopnseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Filter, UserService } from 'src/providers/userService';
@@ -225,7 +225,7 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
     formData.append("fileDetail", JSON.stringify(files));
 
     this.isHttpCallPerformed = true;
-    this.http.upload("OnlineDocument/UploadDocumentDetail", formData).then((response: ResopnseModel) => {
+    this.http.upload("OnlineDocument/UploadDocumentDetail", formData).then((response: ResponseModel) => {
       if (response.ResponseBody != null && response.ResponseBody !== "") {
         this.reRenderTable();
         //this.BindLoadedData(response.ResponseBody);
@@ -293,7 +293,7 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
     this.isExecuting = true;
     this.isHttpCallPerformed = true;
     let request = { DocumentId: this.onlineDocModel.DocumentId, FileUid: this.currentFile.FileUid };
-    this.http.post("OnlineDocument/DeleteFiles", [request]).then((res: ResopnseModel) => {
+    this.http.post("OnlineDocument/DeleteFiles", [request]).then((res: ResponseModel) => {
       if(res.ResponseBody !== null) {
         this.common.ShowToast("Deleted successfully");
         this.reRenderTable();
@@ -306,7 +306,7 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
   SaveModifiedChanges() {
     this.currentFile.Status = "Paid";
     this.currentFile.PaidOn = new Date();
-    this.http.post("OnlineDocument/EditCurrentFile", this.currentFile).then((res: ResopnseModel) => {
+    this.http.post("OnlineDocument/EditCurrentFile", this.currentFile).then((res: ResponseModel) => {
       if(res.ResponseBody !== null) {
         this.common.ShowToast("Updated successfully");
         this.reRenderTable();
@@ -322,7 +322,7 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
       pageLength: 10,
       serverSide: true,
       processing: true,
-      
+
       ajax: (tableParameter: any, callBack) => {
        // if(!this.isHttpCallPerformed) {
           if(!this.tableFilter.isReUseSame) {
@@ -337,13 +337,13 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
         //     recordsTotal: this.TotalRecords,
         //     recordsFiltered: this.TotalRecords,
         //     data: this.documentFiles
-        //   });  
+        //   });
         // }
       },
       columns: [
         { data: 'FileUid', name: 'File Id' },
         { data: 'FileName', name: 'File Name' },
-        { data: 'FileExtension', name: 'File Type' }, 
+        { data: 'FileExtension', name: 'File Type' },
         { data: 'Status', name: 'Status' },
         { data: 'PaidOn', name: 'Paid On' },
         { data: 'FileUid', name: 'Action' },
@@ -377,7 +377,7 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
   }
 
   LoadData(filter: any, callBack) {
-    this.http.post("OnlineDocument/GetOnlineDocumentsWithFiles", filter).then((response: ResopnseModel) => {
+    this.http.post("OnlineDocument/GetOnlineDocumentsWithFiles", filter).then((response: ResponseModel) => {
       if(response.ResponseBody !== null) {
         this.BindLoadedData(response.ResponseBody);
         this.BindRenderedTable(callBack);
@@ -409,7 +409,7 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
   //------------- Delete confirmation -----------
 
   ToggleDeleteConfirmation(state: boolean){
-    if(state) 
+    if(state)
       $('#confirmationModal').modal('showmodal');
     else
       $('#confirmationModal').modal('hide');
@@ -418,7 +418,7 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
   //------------- File Edit modal confirmation -----------
 
     ToggleFileEdit(state: boolean){
-      if(state) 
+      if(state)
         $('#fileEditModal').modal('showmodal');
       else
         $('#fileEditModal').modal('hide');

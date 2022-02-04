@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonService, Toast } from 'src/providers/common-service/common.service';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
-import { ResopnseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 import { ThisReceiver } from '@angular/compiler';
 import { iNavigation } from 'src/providers/iNavigation';
 
@@ -108,7 +108,7 @@ export class BuildPdfComponent implements OnInit {
         "FileId": FileId
       };
 
-      this.http.post("FileMaker/EditEmployeeBillDetail", employeeBillDetail).then((response: ResopnseModel) => {
+      this.http.post("FileMaker/EditEmployeeBillDetail", employeeBillDetail).then((response: ResponseModel) => {
         let fileDetail: any = null;
         if (response.ResponseBody) {
           this.applicationData = response.ResponseBody as ApplicationData;
@@ -179,7 +179,7 @@ export class BuildPdfComponent implements OnInit {
   }
 
   loadPageLevelData() {
-    this.http.get("OnlineDocument/LoadApplicationData").then((response: ResopnseModel) => {
+    this.http.get("OnlineDocument/LoadApplicationData").then((response: ResponseModel) => {
       if (response.ResponseBody !== null) {
         this.applicationData = response.ResponseBody as ApplicationData;
         this.employees = this.applicationData.employees;
@@ -492,7 +492,7 @@ export class BuildPdfComponent implements OnInit {
       // "daysAbsent" = a - b
       this.pdfForm.get("daysAbsent").setValue(worksDays - burnDays);
       let request: PdfModal = this.pdfForm.value;
-      this.http.post("FileMaker/GeneratePdf", request).then((response: ResopnseModel) => {
+      this.http.post("FileMaker/GeneratePdf", request).then((response: ResponseModel) => {
         if (response.ResponseBody.Status !== null && response.ResponseBody.Status !== "") {
           this.common.ShowToast(response.ResponseBody.Status);
         }

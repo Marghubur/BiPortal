@@ -3,7 +3,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
-import { ResopnseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 
 @Component({
   selector: 'app-registerclient',
@@ -96,7 +96,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
 
     if (errroCounter === 0) {
       let request: clientModal = this.clientForm.value;
-      this.http.post("Clients/RegisterClient", request).then((response: ResopnseModel) => {
+      this.http.post("Clients/RegisterClient", request).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.nav.replaceValue(this.clientForm.value);
           this.common.ShowToast(response.ResponseBody);

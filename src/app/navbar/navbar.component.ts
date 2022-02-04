@@ -5,7 +5,7 @@ import { AccessTokenExpiredOn, Blogs, BuildPdf, Doclist, Employees, Login } from
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { AutoPlayService } from "src/providers/AutoPlayService";
-import { JwtService, ResopnseModel } from "src/auth/jwtService";
+import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { UserService } from "src/providers/userService";
 
 @Component({
@@ -52,14 +52,14 @@ export class NavbarComponent implements OnInit {
     this.IsLoggedIn = false;
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
-    if(expiredOn === null || expiredOn === "") 
+    if(expiredOn === null || expiredOn === "")
       this.userDetail["TokenExpiryDuration"] = new Date();
     else
       this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-    
+
     if(this.userDetail.TokenExpiryDuration.getTime() - (new Date()).getTime() <= 0 && expiredOn !== null) {
       this.http.post("login/AuthenticateUser", this.userDetail).then(
-        (response: ResopnseModel) => {
+        (response: ResponseModel) => {
           if(response.ResponseBody !== null) {
             this.IsLoggedIn = true;
             this.userDetail = response.ResponseBody["UserDetail"];
@@ -106,11 +106,11 @@ export class NavbarComponent implements OnInit {
   }
 
   CleanUpDetail() {
-    
+
   }
 
   LogoutUser() {
-    
+
     this.nav.logout();
     this.commonService.ShowToast("Log out successfully");
     window.location.reload();

@@ -2,7 +2,7 @@ import { fn } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
-import { ResopnseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
 import { DocumentsPage, Employees, Files, ManageEmployee } from 'src/providers/constants';
@@ -23,11 +23,15 @@ export class EmployeesComponent implements OnInit {
   openModal: string = 'hide';
   manageEmployeeRouteName: string = ManageEmployee;
   isLoading: boolean = false;
-  employeeDetail: Array<any> = [];
-  activePage:number = 0;  
-  
-  displayActivePage(activePageNumber:number){  
-    this.activePage = activePageNumber  
+  employeeDetail: Array<employeeModel> = [];
+  activePage:number = 0;
+  employeeData: Filter = null;
+  isEmpPageReady: boolean = false;
+  anyFilter: string = "";
+  employeeDetails: employeeModel = null;
+
+  displayActivePage(activePageNumber:number){
+    this.activePage = activePageNumber
   }
 
   constructor(private fb: FormBuilder,
@@ -38,6 +42,14 @@ export class EmployeesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    //this.paginationData = new Filter();
+    // this.paginationData.PageIndex = 1;
+    // this.paginationData.PageSize = 10;
+    // this.paginationData.TotalRecords = 95;
+    this.employeeData = new Filter();
+    this.employeeDetails = new employeeModel();
+
+
     this.documentForm = this.fb.group({
       "Title": new FormControl(""),
       "Description": new FormControl(""),
@@ -65,17 +77,23 @@ export class EmployeesComponent implements OnInit {
   LoadData(IsActive: number) {
     let filter: Filter = new Filter();
     filter.SearchString = `1=1 And IsActive = ${IsActive}`;
-    this.http.post("Employee/GetEmployees", filter).then((response: ResopnseModel) => {
+    this.http.post("Employee/GetEmployees", this.employeeData).then((response: ResponseModel) => {
       this.employeeDetail = response.ResponseBody;
-      this.BuildDocumentTable(this.employeeDetail);
+      if (this.employeeDetail.length > 0) {
+        this.employeeData.TotalRecords = this.employeeDetail[0].Total;
+        this.isEmpPageReady = true;
+      } else {
+        this.employeeData.TotalRecords = 0;
+      }
+      // this.BuildDocumentTable(this.employeeDetail);
     });
   }
 
-  BuildDocumentTable(result: any) {
-    let rows: any = result;
-    if (result === null || result.length === 0) {
-      rows = [];
-    }
+  // BuildDocumentTable(result: any) {
+  //   let rows: any = result;
+  //   if (result === null || result.length === 0) {
+  //     rows = [];
+  //   }
 
     // this.tableConfiguration = new tableConfig();
     // this.tableConfiguration.totalRecords = 1;
@@ -87,6 +105,49 @@ export class EmployeesComponent implements OnInit {
     //   { iconName: 'fa fa-trash-o', fn: this.DeleteCurrent },
     //   { iconName: 'fa fa-file-o', fn: this.ViewFiles }
     // ]
+  // }
+
+  filterRecords() {
+    let searchQuery = "";
+    if(this.employeeDetails.Name !== null && this.employeeDetails.Name !== "") {
+        searchQuery += ` FirstName like '${this.employeeDetails.Name}%' `;
+      }
+
+    if(this.employeeDetails.Email !== null && this.employeeDetails.Email !== "") {
+      searchQuery += ` Email like '%${this.employeeDetails.Email}%' `;
+    }
+    if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile !== 0) {
+      searchQuery += ` Mobile like '${this.employeeDetails.Mobile}%' `;
+    }
+    if(searchQuery !== "") {
+      this.employeeData.SearchString = `1=1 And ${searchQuery}`;
+    }
+
+    this.LoadData(1);
+  }
+
+  globalFilter() {
+    let searchQuery = "";
+    searchQuery = ` FirstName like '${this.anyFilter}%' OR LastName like '${this.anyFilter}%' OR Email like '%${this.anyFilter}%' OR Mobile like '${this.anyFilter}%'`;
+    if(searchQuery !== "") {
+      this.employeeData.SearchString = `1=1 And ${searchQuery}`;
+    }
+
+    this.LoadData(1);
+  }
+
+  resetFilter() {
+    this.employeeData.SearchString = "1=1";
+    this.employeeData.PageIndex = 1;
+    this.employeeData.PageSize = 10;
+    this.employeeData.StartIndex = 1;
+    this.employeeData.EndIndex = (this.employeeData.PageSize * this.employeeData.PageIndex);
+
+    this.LoadData(1);
+    this.employeeDetails.Name="";
+    this.employeeDetails.Mobile = null;
+    this.employeeDetails.Email="";
+    this.anyFilter = "";
   }
 
   DeleteCurrent() {
@@ -101,7 +162,7 @@ export class EmployeesComponent implements OnInit {
     if (item !== null) {
       let EmpId = item.EmployeeUid;
       if (EmpId !== null && EmpId !== "") {
-        this.http.get(`Employee/GetEmployeeById/${EmpId}/${item.IsActive}`).then((response: ResopnseModel) => {
+        this.http.get(`Employee/GetEmployeeById/${EmpId}/${item.IsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             this.nav.navigate(ManageEmployee, response.ResponseBody);
           }
@@ -129,11 +190,12 @@ export class EmployeesComponent implements OnInit {
         filter["Mobile"] = this.user.Mobile;
         filter["Email"] = this.user.EmailId;
         this.http.post('OnlineDocument/CreateDocument', filter)
-          .then((response: ResopnseModel) => {
+          .then((response: ResponseModel) => {
             let data = response.ResponseBody;
             if (data !== null) {
-              this.BuildDocumentTable(data);
+              // this.BuildDocumentTable(data);
               this.toggelAddUpdateModal();
+              this.LoadData(1);
             } else {
               this.toggelAddUpdateModal();
             }
@@ -146,6 +208,14 @@ export class EmployeesComponent implements OnInit {
       }
     }
   }
+
+  GetFilterResult(e: Filter) {
+    if(e != null) {
+      this.employeeData = e;
+      this.LoadData(1);
+    }
+  }
+
 
   openDocument(path: OnlineDocModel) {
     this.nav.navigate(DocumentsPage, path);
@@ -179,3 +249,13 @@ export class OnlineDocModel {
   CreatedOn: string = null;
   UpdatedOn: string = null;
 }
+
+export class employeeModel {
+  Name: string = '';
+  LastName: string = '';
+  Mobile: number = null;
+  Email: string = '';
+  Total: number = 0;
+}
+
+

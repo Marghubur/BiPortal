@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
-import { ResopnseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, Toast } from 'src/providers/common-service/common.service';
-import { BuildPdf, Files } from 'src/providers/constants';
+import { BuildPdf, Employees, Files } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { UserService } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
+import { DocumentUser } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 declare var $: any;
 
@@ -29,6 +30,9 @@ export class FilesComponent implements OnInit {
   model: NgbDateStruct;
   currentFileId: number = 0;
   billDetails: Array<BillDetails> = [];
+  singleEmployee: Filter = null;
+  isEmpPageReady: boolean = false;
+
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -121,17 +125,26 @@ export class FilesComponent implements OnInit {
     $('#addupdateModal').modal('show');
   }
 
+  AddEditDocuments(mobile: string) {
+    let userDetail: DocumentUser = new DocumentUser();
+    userDetail.Mobile = mobile;
+    userDetail.Email = this.employee.Email;
+    userDetail.PageName = Employees;
+    this.nav.navigate("admin/documents", userDetail);
+  }
+
   closeWindow() {
     $('#addupdateModal').modal('hide');
   }
 
   LoadFiles() {
     this.http.get(`OnlineDocument/GetFilesAndFolderById/employee/${this.currentEmployeeDetail.EmployeeUid}`)
-    .then((response: ResopnseModel) => {
+    .then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.common.ShowToast("File or folder found");
         this.userFiles = response.ResponseBody["Files"];
         let emp = response.ResponseBody["Employee"];
+        this.isEmpPageReady = true;
         if (emp && emp.length > 0)
           this.employee = emp[0];
         this.fileLoaded = true;
@@ -181,6 +194,13 @@ export class FilesComponent implements OnInit {
         this.common.ShowToast("No file or folder found");
       }
     });
+  }
+
+  GetFilterResult(e: Filter) {
+    if(e != null) {
+      this.singleEmployee = e;
+      this.LoadFiles();
+    }
   }
 
   EditCurrentDocument(userFile: any) {

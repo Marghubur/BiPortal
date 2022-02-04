@@ -26,3 +26,23 @@
   color: darkblue;
   text-decoration: underline;
 }
+
+.x_content,
+.x_panel {
+  min-height: 52vh !important;
+}
+
+.table-filter-control {
+  height: 1.6rem;
+  padding-left: 6px;
+}
+
+.col-title {
+  margin-top: 1rem;
+}
+.srch-btn {
+  font-size: 12px;
+  height: 1.6rem;
+  line-height: 1rem !important;
+  padding: 0 0.5rem !important;
+}

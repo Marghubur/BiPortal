@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
-import { ResopnseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
 import { DocumentsPage, RegisterClient } from 'src/providers/constants';
@@ -22,10 +22,14 @@ export class ClientsComponent implements OnInit {
   isLoading: boolean = false;
   RegisterNewClient: string = RegisterClient;
   clients: Array<any> = [];
-  activePage:number = 0;  
-  
-  displayActivePage(activePageNumber:number){  
-    this.activePage = activePageNumber  
+  activePage:number = 0;
+  paginationData: Filter = null;
+  isClientFound: boolean = false;
+  clientData: Filter = null;
+
+
+  displayActivePage(activePageNumber:number){
+    this.activePage = activePageNumber
   }
 
   constructor(private fb: FormBuilder,
@@ -36,6 +40,11 @@ export class ClientsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // this.paginationData = new Filter();
+    // this.paginationData.PageIndex = 1;
+    // this.paginationData.PageSize = 10;
+    // this.paginationData.TotalRecords = 95;
+    this.clientData = new Filter();
     this.documentForm = this.fb.group({
       "Title": new FormControl(""),
       "Description": new FormControl(""),
@@ -60,8 +69,14 @@ export class ClientsComponent implements OnInit {
 
     if (Mobile !== "" || Email !== "") {
       filter.SearchString = `1 `;
-      this.http.post("Clients/GetClients", filter).then((response: ResopnseModel) => {
+      this.http.post("Clients/GetClients", this.clientData).then((response: ResponseModel) => {
         this.clients = response.ResponseBody;
+        if (this.clients.length > 0) {
+          this.clientData.TotalRecords = this.clients.length;
+          this.isClientFound = true;
+        } else {
+          this.clientData.TotalRecords = 0;
+        }
       });
     }
   }
@@ -72,7 +87,7 @@ export class ClientsComponent implements OnInit {
       //data = data.item;
       let ClientId = data.ClientId;
       if (ClientId !== null && ClientId !== "") {
-        this.http.get(`Clients/GetClientById/${ClientId}/${data.IsActive}`).then((response: ResopnseModel) => {
+        this.http.get(`Clients/GetClientById/${ClientId}/${data.IsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             this.nav.navigate(RegisterClient, response.ResponseBody);
           }
@@ -94,7 +109,7 @@ export class ClientsComponent implements OnInit {
         filter["Mobile"] = this.user.Mobile;
         filter["Email"] = this.user.EmailId;
         this.http.post('OnlineDocument/CreateDocument', filter)
-          .then((response: ResopnseModel) => {
+          .then((response: ResponseModel) => {
             let data = response.ResponseBody;
             if (data !== null) {
               this.clients = data;;
@@ -109,6 +124,13 @@ export class ClientsComponent implements OnInit {
       } else {
         alert("Entry name is required field.");
       }
+    }
+  }
+
+  GetFilterResult(e: Filter) {
+    if(e != null) {
+      this.clientData = e;
+      this.LoadData();
     }
   }
 

@@ -37,7 +37,7 @@ export class JwtService {
     }
 }
 
-export function IsValidResponse(response: ResopnseModel) {
+export function IsValidResponse(response: ResponseModel) {
     if (response !== null)
         return HandleResponseStatus(response.HttpStatusCode);
     else
@@ -54,7 +54,7 @@ export function HandleResponseStatus(statusCode: number): boolean {
             let token = localStorage.getItem("access_token");
             if(token !== null && token != "")
                 document.getElementById("sessionexpiredBox").classList.remove('d-none');
-            else 
+            else
                 localStorage.clear();
             Toast("Unauthorized access. For more help contact to admin.");
             break;
@@ -72,7 +72,7 @@ export function HandleResponseStatus(statusCode: number): boolean {
     return flag;
 }
 
-export interface ResopnseModel {
+export interface ResponseModel {
     AuthenticationToken: string;
     HttpStatusCode: number;
     HttpStatusMessage: string;

@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, Toast } from 'src/providers/common-service/common.service';
-import { Resume } from 'src/providers/constants';
-import { ResopnseModel } from 'src/auth/jwtService';
+import { Doc, FlatFile, Pdf, Resume, Txt, UserType, Zip } from 'src/providers/constants';
+import { IsValidResponse, ResponseModel } from 'src/auth/jwtService';
 import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { read, utils, WorkBook, write } from 'xlsx';
+import { DocumentUser } from '../documents/documents.component';
 
 @Component({
   selector: 'app-resume',
@@ -37,26 +38,25 @@ export class ResumeComponent implements OnInit {
   tableConfiguration: tableConfig = null;
   isAvailable: boolean = false;
   resumeFiles: Array<ResumeFiles> = [];
-  filterModal: ResumeFiles = null;
-  filter: Filter = new Filter();
+  resumeFile: ResumeFiles = null;
   anyFilter: string = "";
   isRecordAvailable: boolean = false;
   columns: Array<any> = [];
   expandedTable: boolean = true;
   isDiasble: boolean = true;
   isUploadFile: boolean = true;
-  activePage:number = 0;  
-  
-  displayActivePage(activePageNumber:number){  
-    this.activePage = activePageNumber  
-  }
+  DocumentImageObjects: Array<any> = [];
+  FileDocuments: Array<any> = [];
+  FileDocumentList: Array<any> = [];
+  candidatesData: Filter = null;
+  uploadedCandidatesData: Filter = null;
 
   constructor(
     private http: AjaxService,
     private userService: UserService,
     private common: CommonService,
     private nav: iNavigation
-  ) { 
+  ) {
     this.columns = this.GetMappedColumns();
   }
 
@@ -69,12 +69,18 @@ export class ResumeComponent implements OnInit {
     return buf;
   }
 
+  displayActivePage(activePageNumber: number){
+
+  }
+
   ngOnInit() {
-    this.filterModal = new ResumeFiles();
+    this.uploadedCandidatesData = new Filter();
+    this.candidatesData = new Filter();
+
+    this.resumeFile = new ResumeFiles();
     this.baseUrl = this.http.GetImageBasePath();
     this.ExcelTableHeader = [];
     this.ExcelTableData = [];
-    this.filter.SearchString = `1=1`;
     this.getUploadedDetails();
   }
 
@@ -128,6 +134,10 @@ export class ResumeComponent implements OnInit {
             this.tableConfiguration.totalRecords = 1;
             this.tableConfiguration.header = excelData.value.Keys;
             this.tableConfiguration.data = rows.value.Data;
+            this.uploadedCandidatesData.TotalRecords = 0;
+            if(this.tableConfiguration.data.length > 0) {
+              this.uploadedCandidatesData.TotalRecords = this.tableConfiguration.data.length;
+            }
             this.tableConfiguration.isEnableAction = true;
             this.isAvailable = true;
             this.ValidateHeader();
@@ -625,7 +635,7 @@ export class ResumeComponent implements OnInit {
     $e.preventDefault();
     $e.stopPropagation();
     this.http.post("OnlineDocument/UploadDocumentRecords", this.resumeFiles)
-      .then((response: ResopnseModel) => {
+      .then((response: ResponseModel) => {
         if (response.ResponseBody != null) {
           this.common.ShowToast("Data Uploaded successfull");
           this.cleanFileHandler();
@@ -637,10 +647,15 @@ export class ResumeComponent implements OnInit {
 
   getUploadedDetails() {
     this.resumeFiles = [];
-    this.http.post("OnlineDocument/GetUploadedRecords", this.filter)
-    .then((response: ResopnseModel) => {
+    this.http.post("OnlineDocument/GetUploadedRecords", this.candidatesData)
+    .then((response: ResponseModel) => {
       if (response.ResponseBody != null) {
         this.resumeFiles = response.ResponseBody.Table;
+        if(this.resumeFiles.length > 0) {
+          this.candidatesData.TotalRecords = this.resumeFiles[0].Total;
+        } else {
+          this.candidatesData.TotalRecords = 0;
+        }
         this.common.ShowToast("Records found");
         this.isRecordAvailable = true;
       } else {
@@ -651,31 +666,31 @@ export class ResumeComponent implements OnInit {
 
   filterRecords() {
     let searchQuery = "";
-    if(this.filterModal.Name !== null && this.filterModal.Name !== "") {
-      searchQuery += ` Name like '${this.filterModal.Name}%' `;
+    if(this.resumeFile.Name !== null && this.resumeFile.Name !== "") {
+      searchQuery += ` Name like '${this.resumeFile.Name}%' `;
     }
 
-    if(this.filterModal.Email_ID !== null && this.filterModal.Email_ID !== "") {
-      searchQuery += ` Email_ID like '%${this.filterModal.Email_ID}%' `;
+    if(this.resumeFile.Email_ID !== null && this.resumeFile.Email_ID !== "") {
+      searchQuery += ` Email_ID like '%${this.resumeFile.Email_ID}%' `;
     }
-    if(this.filterModal.Phone_Number !== null && this.filterModal.Phone_Number !== "") {
-      searchQuery += ` Phone_Number like '${this.filterModal.Phone_Number}%' `;
+    if(this.resumeFile.Phone_Number !== null && this.resumeFile.Phone_Number !== "") {
+      searchQuery += ` Phone_Number like '${this.resumeFile.Phone_Number}%' `;
     }
-    if(this.filterModal.Job_Title !== null && this.filterModal.Job_Title !== "") {
-      searchQuery += ` Job_Title like '%${this.filterModal.Job_Title}%' `;
+    if(this.resumeFile.Job_Title !== null && this.resumeFile.Job_Title !== "") {
+      searchQuery += ` Job_Title like '%${this.resumeFile.Job_Title}%' `;
     }
-    if(this.filterModal.Preferred_Locations !== null && this.filterModal.Preferred_Locations !== "") {
-      searchQuery += ` Preferred_Locations like '${this.filterModal.Preferred_Locations}%' `;
+    if(this.resumeFile.Preferred_Locations !== null && this.resumeFile.Preferred_Locations !== "") {
+      searchQuery += ` Preferred_Locations like '${this.resumeFile.Preferred_Locations}%' `;
     }
-    if(this.filterModal.Total_Experience !== null && this.filterModal.Total_Experience !== 0) {
-      searchQuery += ` Total_Experience = '${this.filterModal.Total_Experience}%' `;
+    if(this.resumeFile.Total_Experience !== null && this.resumeFile.Total_Experience !== 0) {
+      searchQuery += ` Total_Experience = '${this.resumeFile.Total_Experience}%' `;
     }
-    if(this.filterModal.Notice_Period !== null && this.filterModal.Notice_Period !== 0) {
-      searchQuery += ` Notice_Period like '${this.filterModal.Notice_Period}%' `;
+    if(this.resumeFile.Notice_Period !== null && this.resumeFile.Notice_Period !== 0) {
+      searchQuery += ` Notice_Period like '${this.resumeFile.Notice_Period}%' `;
     }
 
     if(searchQuery !== "") {
-      this.filter.SearchString = `1=1 And ${searchQuery}`;
+      this.candidatesData.SearchString = `1=1 And ${searchQuery}`;
     }
 
     this.getUploadedDetails();
@@ -685,22 +700,30 @@ export class ResumeComponent implements OnInit {
     let searchQuery = "";
     searchQuery = ` Name like '${this.anyFilter}%' OR Email_ID like '%${this.anyFilter}%' OR Phone_Number like '${this.anyFilter}%' OR Job_Title like '%${this.anyFilter}%' `;
     if(searchQuery !== "") {
-      this.filter.SearchString = `1=1 And ${searchQuery}`;
+      this.candidatesData.SearchString = `1=1 And ${searchQuery}`;
     }
 
     this.getUploadedDetails();
   }
+
   resetFilter() {
-    this.filter = new Filter();
+    this.isRecordAvailable = false;
+    this.candidatesData.SearchString = "1=1";
+    this.candidatesData.PageIndex = 1;
+    this.candidatesData.PageSize = 10;
+    this.candidatesData.StartIndex = 1;
+    this.candidatesData.EndIndex = (this.candidatesData.PageSize * this.candidatesData.PageIndex);
+
     this.getUploadedDetails();
-    this.filterModal.Name="";
-    this.filterModal.Phone_Number = "";
-    this.filterModal.Email_ID="";
-    this.filterModal.Job_Title="";
-    this.filterModal.Preferred_Locations="";
-    this.filterModal.Total_Experience = 0;
-    this.filterModal.Notice_Period=0;
+    this.resumeFile.Name="";
+    this.resumeFile.Phone_Number = "";
+    this.resumeFile.Email_ID="";
+    this.resumeFile.Job_Title="";
+    this.resumeFile.Preferred_Locations="";
+    this.resumeFile.Total_Experience = null;
+    this.resumeFile.Notice_Period=null;
     this.anyFilter = "";
+    this.isRecordAvailable = true;
   }
 
   expandTable() {
@@ -732,6 +755,73 @@ export class ResumeComponent implements OnInit {
     // };
   }
 
+  uploadResume() {
+    $("#browsfile").click();
+    event.preventDefault();
+  }
+
+  GetDocumentFile(fileInput: any) {
+    this.FileDocuments = [];
+    let Files = fileInput.target.files;
+    if (Files.length > 0) {
+      let index = 0;
+      let file = null;
+      let extension = "";
+      let OtherFilePath = "";
+      while (index < Files.length) {
+        OtherFilePath = "";
+        file = <File>Files[index];
+        this.FileDocumentList.push(file);
+        let mimeType = file.type;
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (fileEvent) => {
+          this.FileDocuments.push(reader.result);
+            this.DocumentImageObjects.push({
+              FileUid: index,
+              FileOn: "server",
+              FilePath: reader.result,
+            });
+        };
+        index++;
+      }
+    } else {
+      Toast("No file selected");
+    }
+
+    this.SubmitFiles()
+  }
+
+  SubmitFiles() {
+    let formData = new FormData();
+    let files = Array<Files>();
+    if (this.FileDocumentList.length > 0) {
+      let index = 0;
+      while (index < this.FileDocumentList.length) {
+        formData.append("file_" + index, this.FileDocumentList[index]);
+        this.BuildFilesModel(files, "file_" + index, this.FileDocumentList[index]);
+        index++;
+      }
+
+      formData.append("fileDetail", JSON.stringify(files));
+      this.http.upload("OnlineDocument/UploadFile", formData).then(res => {
+        if(IsValidResponse(res)){
+          Toast("Uplaoded successfully");
+        } else {
+          Toast("Fail to uplaoded");
+        }
+      });
+    }
+  }
+
+  BuildFilesModel(filesModel: Array<Files>, uniqueKey: string, data: File) {
+    let file = new Files();
+    file.FileExtension = data.type;
+    file.FileName = uniqueKey;
+    file.FileUid = uniqueKey;
+    filesModel.push(file);
+  }
+
   PreviousPage(data: any) { }
 
   SelectSection(value: string) {
@@ -741,6 +831,30 @@ export class ResumeComponent implements OnInit {
     setTimeout(() => {
       $('#upload-container').addClass('show');
     }, 250);
+  }
+
+  AddEditDocuments(item: ResumeFiles) {
+    let userDetail: DocumentUser = new DocumentUser();
+    userDetail.Mobile = item.Phone_Number;
+    userDetail.Email = item.Email_ID;
+    userDetail.UserTypeId = UserType.Candidate;
+    userDetail.PageName = Resume;
+    userDetail.Name = item.Name;
+    userDetail.UserId = item.UserId;
+    this.nav.navigate("admin/documents", userDetail);
+  }
+
+  GetFilterResult(e: Filter) {
+    if(e != null) {
+      this.candidatesData = e;
+      this.getUploadedDetails();
+    }
+  }
+
+  changeUploadedRecords(e: Filter) {
+    if(e != null) {
+      this.candidatesData = e;
+    }
   }
 
   getFiledsMap(): Array<string> {
@@ -824,6 +938,7 @@ function saveAs(arg0: Blob, arg1: string) {
 }
 
 export class ResumeFiles {
+  UserId: number = 0;
   Total: number = 0;
   Index: number = 0;
   Source_Of_Application: string = "";
@@ -896,4 +1011,12 @@ export class ResumeFiles {
   Comment_5: string = "";
   Comment_5_BY: string = "";
   Time_Comment_5_posted: Date = null;
+}
+
+class Files {
+  FileName: string = "";
+  FileExtension: string = "";
+  FilePath: string = "";
+  FileUid: string = "";
+  ProfileUid: string = "";
 }

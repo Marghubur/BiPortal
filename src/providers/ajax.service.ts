@@ -8,7 +8,7 @@ import { CommonService } from "./common-service/common.service";
 import "rxjs/add/operator/map";
 import { iNavigation } from "./iNavigation";
 import { Observable } from "rxjs";
-import { HandleResponseStatus, IsValidResponse, JwtService, ResopnseModel } from "src/auth/jwtService";
+import { HandleResponseStatus, IsValidResponse, JwtService, ResponseModel } from "src/auth/jwtService";
 import { environment } from "src/environments/environment";
 
 @Injectable()
@@ -39,7 +39,7 @@ export class AjaxService {
     return JsonData;
   }
 
-  get(Url: string, IsLoaderRequired: boolean = true): Promise<ResopnseModel> {
+  get(Url: string, IsLoaderRequired: boolean = true): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
       if (IsLoaderRequired) {
         this.commonService.ShowLoaderByAjax();
@@ -143,7 +143,7 @@ export class AjaxService {
     });
   }
 
-  login(Url: string, Param: any): Promise<ResopnseModel> {
+  login(Url: string, Param: any): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
       this.commonService.ShowLoaderByAjax();
       if (this.commonService.IsValid(Param)) {
@@ -155,7 +155,7 @@ export class AjaxService {
             (res: HttpResponse<any>) => {
               try {
                 if (IsValidResponse(res.body)) {
-                  let loginData: ResopnseModel = res.body;
+                  let loginData: ResponseModel = res.body;
                   if (this.tokenHelper.setLoginDetail(loginData.ResponseBody)) {
                     resolve(res.body);
                   } else {

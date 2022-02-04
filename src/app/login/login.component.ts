@@ -8,7 +8,7 @@ import { EventEmitter } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
 declare var $: any;
 import { iNavigation } from "src/providers/iNavigation";
-import { JwtService, ResopnseModel } from './../../auth/jwtService'
+import { JwtService, ResponseModel } from './../../auth/jwtService'
 import { SocialAuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
 
@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
       };
       let userId = this.UserForm.controls['UserId'].value;
       let password = this.UserForm.controls['Password'].value;
-      
+
       if (userId !== "" && password !== "") {
         if(userId.indexOf("@") !== -1) {
           request.EmailId = userId;
@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
         }
 
         request.Password = password;
-        this.http.login("Login/AuthenticateUser", request).then((result: ResopnseModel) => {
+        this.http.login("Login/AuthenticateUser", request).then((result: ResponseModel) => {
           if (this.commonService.IsValid(result)) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
@@ -176,9 +176,9 @@ export class LoginComponent implements OnInit {
           CompanyName: null,
           MediaName: "google",
           AccessToken: user.response.access_token
-        }; 
-        
-        this.http.post("login/SignUpViaSocialMedia", userSignInDetail).then((response: ResopnseModel) => {
+        };
+
+        this.http.post("login/SignUpViaSocialMedia", userSignInDetail).then((response: ResponseModel) => {
           if(response.ResponseBody !== null && response.ResponseBody !== "") {
             this.jwtService.setLoginDetail(response.ResponseBody);
             this.commonService.ShowToast("Registration done successfully");

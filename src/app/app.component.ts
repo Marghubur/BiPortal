@@ -4,7 +4,7 @@ import {
   Event,
   NavigationStart,
 } from "@angular/router";
-import { JwtService, ResopnseModel } from 'src/auth/jwtService';
+import { JwtService, ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { AutoPlayService } from 'src/providers/AutoPlayService';
 import { CommonService } from 'src/providers/common-service/common.service';
@@ -20,10 +20,10 @@ export class AppComponent implements OnInit {
   title = "star-admin-angular";
   enableAuth: boolean = false;
   pageName: string = "";
-  activePage:number = 0;  
-  
-  displayActivePage(activePageNumber:number){  
-    this.activePage = activePageNumber  
+  activePage:number = 0;
+
+  displayActivePage(activePageNumber:number){
+    this.activePage = activePageNumber
   }
 
   constructor(
@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
   }
 
   GenerateNewtoken() {
-    this.http.get("login/GenerateNewToken/0").then((res: ResopnseModel) => {
+    this.http.get("login/GenerateNewToken/0").then((res: ResponseModel) => {
       if (res.ResponseBody !== null) {
         this.tokenHelper.setJwtToken(res.ResponseBody["Token"], res.ResponseBody["TokenExpiryDuration"]);
         document.getElementById("sessionexpiredBox").classList.add('d-none');
