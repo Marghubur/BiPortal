@@ -1,4 +1,4 @@
-<div class="container-fluid px-5 bg-light">
+<div class="">
   <div class="x_panel">
     <div class="x_header">
       <div class="x_header_title row">
@@ -112,17 +112,45 @@
         </div>
       <!-- </form> -->
     </div>
-    <div>
-      <h4>Your Drive</h4>
-      <button class="btn btn-primary" (click)="RefreshDocuments()">Refresh</button>
-    </div>
-    <div class="col-md-12 row" *ngIf="isDocumentReady">
-      <div class="card card-cont align-items-center ms-3" *ngFor="let item of fileData">
-        <div>
-          <img class="upload-img" src="assets/img/file.png" alt="document_image">
+  </div>
+
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="x_header_title row">
+        <div class="x_header_title">
+          <h2>File(s) & Folder(s)
+            <small>user drives</small>
+          </h2>
+          <div class="float-end d-inline create-link pt-2">
+            <h6>
+              <div class="d-inline ps-1 pe-1">
+                <a href="javascript:void(0)" (click)="RefreshDocuments()">
+                  <span class="badge bg-success">
+                    <i class="fa fa-folder-o" aria-hidden="true"></i>
+                  </span>
+                </a>
+              </div>
+              <div class="d-inline ps-1 pe-1">
+                <a href="javascript:void(0)" (click)="RefreshDocuments()">
+                  <span class="badge bg-dark">
+                    <i class="fa fa-refresh"></i>
+                  </span>
+                </a>
+              </div>
+            </h6>
+          </div>
         </div>
-        <div class="file-name">
-          {{item.FileName}} Type: {{item.FileExtension}}
+      </div>
+    </div>
+    <div class="x_content mt-4">
+      <div class="col-md-12 item-row" *ngIf="isDocumentReady">
+        <div class="file-type" *ngFor="let item of fileData">
+          <div class="d-inline">
+            <img class="upload-img" src="assets/img/file.png" alt="document_image">
+          </div>
+          <div class="file-name mt-2">
+            {{item.FileName}} Type: {{item.FileExtension}}
+          </div>
         </div>
       </div>
     </div>
