@@ -9,12 +9,12 @@
     </div>
     <div class="x_content mt-4">
       <!-- <form [formGroup]="documentForm" id="gpdfform" class="col-md-12 row"> -->
-        <form action="" [formGroup]="documentForm" id="resumefform" class="col-md-12 row">
+        <form action="" [formGroup]="documentForm" class="col-md-12 row">
           <div class="col-md-12 m-0 row">
             <div class="col-md-4">
               <label class="form-label">Type *</label>
-              <select class="form-select" aria-label="Default select example" formControlName="userId"
-              [ngClass]="{'error': submitted && f.userId.errors !== null && f.userId.errors.required}">
+              <select class="form-select" aria-label="Default select example" formControlName="userTypeId"
+              [ngClass]="{'error': submitted && f.userTypeId.errors !== null && f.userTypeId.errors.required}">
                 <option selected>Type</option>
                 <option value="1">Employee</option>
                 <option value="2">Client</option>
@@ -23,12 +23,12 @@
             </div>
             <div class="col-md-4">
               <label for="" class="form-label">Search by Email/ Mobile Number</label>
-              <input class="form-control table-filter-control" placeholder="Search by Email" formControlName="search"
-              [ngClass]="{'error': submitted && f.search.errors !== null && f.search.errors.required}">
+              <input class="form-control table-filter-control" placeholder="Search by Email" formControlName="Email" (keyup.enter)="filterRecords()"
+              [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}">
             </div>
             <div class="col-md-4">
               <label for="" class="form-label">Name</label>
-              <input class="form-control table-filter-control" placeholder="Search by Mobile Number" formControlName="name"
+              <input class="form-control table-filter-control" placeholder="Candidate Name" formControlName="name"
               [ngClass]="{'error': submitted && f.name.errors !== null && f.name.errors.required}">
             </div>
           </div>
@@ -56,9 +56,9 @@
                                                     Drop files here.
                                                 </span>
                                             </div>
-                                            <div class="col-md-12 solid-bg justify-content-center" *ngIf="!uploading" name="uploading">
+                                            <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="!uploading" name="uploading">
                                               <img src="assets/img/ExcelFile.png" />
-                                              <div class="filetitle">
+                                              <!-- <div class="filetitle">
                                                   File:
                                                   <div name="filename" style="display: inline-block !important;">
                                                       {{ fileName }}
@@ -70,7 +70,7 @@
                                                       {{ fileSize }}
                                                   </div>
                                                   KB
-                                              </div>
+                                              </div> -->
                                           </div>
                                         </div>
                                     </div>
@@ -92,7 +92,7 @@
           </div>
         </div>
           <div class="col-md-7 mt-4" style="height: 52vh;overflow: auto;">
-            <table class="table">
+            <table class="table" *ngIf="!btnDisable">
               <thead>
                 <tr>
                   <th width="8%">#</th>
@@ -108,6 +108,11 @@
                 </tr>
               </tbody>
             </table>
+            <div *ngIf="btnDisable" class="select-message">
+              <h3>
+                Please upload at least one file and You will see their details here.
+              </h3>
+            </div>
           </div>
         </div>
       <!-- </form> -->
@@ -145,6 +150,20 @@
     <div class="x_content mt-4">
       <div class="col-md-12 item-row" *ngIf="isDocumentReady">
         <div class="file-type" *ngFor="let item of fileData">
+          <div class="file-link col-md-12">
+            <h6 class="float-end">
+              <div>
+                <a href="javascript:void(0)">
+                  <i class="fa fa-pencil-square-o text-dark" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div class="mt-2">
+                <a href="javascript:void(0)">
+                  <i class="fa fa-download text-success"></i>
+                </a>
+              </div>
+            </h6>
+          </div>
           <div class="d-inline">
             <img class="upload-img" src="assets/img/file.png" alt="document_image">
           </div>

@@ -53,3 +53,20 @@ table {
   flex-flow: wrap;
   justify-content: center;
 }
+.select-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52vh;
+  text-align: center;
+}
+
+.file-link {
+  position: absolute;
+  top: 11px;
+  right: 10px;
+}
+
+.file-type {
+  position: relative;
+}

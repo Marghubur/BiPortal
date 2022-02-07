@@ -5,6 +5,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
 import { Clients, Employees, Resume, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { Filter } from 'src/providers/userService';
 
 @Component({
   selector: 'app-documents',
@@ -18,12 +19,14 @@ export class documentsComponent implements OnInit {
   FileDocuments: Array<any> = [];
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
-  resumeFiles: Array<any> = [];
   btnDisable:boolean = true;
   fileAvailable: boolean = false;
   uploading: boolean = true;
   fileData: Array<any> = [];
   isDocumentReady: boolean = false;
+  personDetail: DocumentUser = null;
+  personDetails: Array<DocumentUser> = [];
+  candidatesData: Filter = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -32,18 +35,20 @@ export class documentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.personDetail = new DocumentUser();
     let data = this.nav.getValue();
     if(data) {
       this.currentUser = data;
-      if(this.currentUser.PageName = Employees)
+      if(this.currentUser.PageName == Employees)
         this.currentUser.UserTypeId = UserType.Employee;
-      else if(this.currentUser.PageName = Clients)
+      else if(this.currentUser.PageName == Clients)
         this.currentUser.UserTypeId = UserType.Client;
-      else if(this.currentUser.PageName = Resume)
+      else if(this.currentUser.PageName == Resume)
         this.currentUser.UserTypeId = UserType.Candidate;
       else
         this.currentUser.UserTypeId = UserType.Other
 
+      this.bindForm(this.currentUser);
       this.RefreshDocuments();
     } else {
       this.currentUser = new DocumentUser();
@@ -56,9 +61,9 @@ export class documentsComponent implements OnInit {
 
   initForm() {
     this.documentForm = this.fb.group({
-      search: ['', Validators.required],
+      Email: ['', Validators.required],
       name: ['', Validators.required],
-      userId: ['', Validators.required]
+      userTypeId: ['', Validators.required]
     })
   }
 
@@ -66,8 +71,20 @@ export class documentsComponent implements OnInit {
     return this.documentForm.controls;
   }
 
+  bindForm(currentUser: DocumentUser) {
+    this.documentForm.patchValue({
+      name : currentUser.Name,
+      Email: currentUser.Email,
+      userTypeId: currentUser.UserTypeId
+    })
+  }
+
 
   fireBrowserFile() {
+    this.submitted = true;
+    if(this.documentForm.invalid) {
+      return;
+    }
     $("#uploadocument").click();
   }
 
@@ -82,6 +99,36 @@ export class documentsComponent implements OnInit {
     } else {
       Toast("Invalid user.")
     }
+  }
+
+  getUploadedDetails() {
+    this.personDetails = [];
+    this.http.post("OnlineDocument/GetUploadedRecords", this.candidatesData)
+    .then((response: ResponseModel) => {
+      if (response.ResponseBody != null) {
+        this.personDetail = response.ResponseBody.Table;
+        if(this.personDetails.length > 0) {
+          this.candidatesData.TotalRecords = this.personDetail[0].Total;
+        } else {
+          this.candidatesData.TotalRecords = 0;
+        }
+        Toast("Records found");
+      } else {
+        Toast("No records found");
+      }
+    })
+  }
+
+  filterRecords() {
+    let searchQuery = "";
+    if(this.personDetail.Email !== null && this.personDetail.Email !== "") {
+      searchQuery += ` Email_ID like '%${this.personDetail.Email}%' `;
+    }
+    if(searchQuery !== "") {
+      this.candidatesData.SearchString = `1=1 And ${searchQuery}`;
+    }
+
+    this.getUploadedDetails();
   }
 
   GetDocumentFile(fileInput: any) {
@@ -208,6 +255,7 @@ export class PersonDetail {
   ActualPackage: number = null;
   FinalPackage: number = null;
   TakeHomeByCandidate: number = null;
+  Total: number = null;
 }
 
 class Files {
