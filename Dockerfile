@@ -4,7 +4,7 @@ FROM node:14.16.1 as node
 WORKDIR /app
 COPY . .
 RUN npm install
-RUN npm run build -- --prod
+RUN npm run build -- --configuration production
 
 # STAGE 2
 FROM nginx:alpine
