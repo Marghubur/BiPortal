@@ -666,27 +666,36 @@ export class ResumeComponent implements OnInit {
 
   filterRecords() {
     let searchQuery = "";
+    let delimiter = "";
+
     if(this.resumeFile.Name !== null && this.resumeFile.Name !== "") {
       searchQuery += ` Name like '${this.resumeFile.Name}%' `;
+      delimiter = "and";
     }
 
     if(this.resumeFile.Email_ID !== null && this.resumeFile.Email_ID !== "") {
-      searchQuery += ` Email_ID like '%${this.resumeFile.Email_ID}%' `;
+      searchQuery += ` ${delimiter}  Email_ID like '%${this.resumeFile.Email_ID}%' `;
+      delimiter = "and";
     }
     if(this.resumeFile.Phone_Number !== null && this.resumeFile.Phone_Number !== "") {
-      searchQuery += ` Phone_Number like '${this.resumeFile.Phone_Number}%' `;
+      searchQuery += ` ${delimiter}  Phone_Number like '${this.resumeFile.Phone_Number}%' `;
+      delimiter = "and";
     }
     if(this.resumeFile.Job_Title !== null && this.resumeFile.Job_Title !== "") {
-      searchQuery += ` Job_Title like '%${this.resumeFile.Job_Title}%' `;
+      searchQuery += ` ${delimiter}  Job_Title like '%${this.resumeFile.Job_Title}%' `;
+      delimiter = "and";
     }
     if(this.resumeFile.Preferred_Locations !== null && this.resumeFile.Preferred_Locations !== "") {
-      searchQuery += ` Preferred_Locations like '${this.resumeFile.Preferred_Locations}%' `;
+      searchQuery += ` ${delimiter}  Preferred_Locations like '${this.resumeFile.Preferred_Locations}%' `;
+      delimiter = "and";
     }
     if(this.resumeFile.Total_Experience !== null && this.resumeFile.Total_Experience !== 0) {
-      searchQuery += ` Total_Experience = '${this.resumeFile.Total_Experience}%' `;
+      searchQuery += ` ${delimiter}  Total_Experience = '${this.resumeFile.Total_Experience}%' `;
+      delimiter = "and";
     }
     if(this.resumeFile.Notice_Period !== null && this.resumeFile.Notice_Period !== 0) {
-      searchQuery += ` Notice_Period like '${this.resumeFile.Notice_Period}%' `;
+      searchQuery += ` ${delimiter}  Notice_Period like '${this.resumeFile.Notice_Period}%' `;
+      delimiter = "and";
     }
 
     if(searchQuery !== "") {

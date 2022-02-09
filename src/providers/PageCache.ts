@@ -3,45 +3,23 @@ import { ApplicationStorage } from "src/providers/ApplicationStorage";
 
 @Injectable()
 export class PageCache {
-  PageCachingData: any = {};
-  constructor(private storage: ApplicationStorage) {}
-
-  set(Data: any) {
-    this.PageCachingData = Data;
+  pageStack: Array<string> = [];
+  constructor(private storage: ApplicationStorage) {
+    this.pageStack = new Array<string>();
   }
 
-  get(Name: string) {
-    if (
-      this.PageCachingData == null ||
-      Object.keys(this.PageCachingData).length === 0
-    ) {
-      let LocaleData = this.storage.get(Name);
-      if (LocaleData !== null && LocaleData !== "") {
-        this.PageCachingData = LocaleData;
-      }
+  public push(routeValue: string) {
+    if(routeValue != "") {
+      this.pageStack.push(routeValue);
     }
-    return this.PageCachingData;
+    console.log('After push: ' + JSON.stringify(this.pageStack));
   }
 
-  clear() {
-    this.PageCachingData = null;
-  }
-
-  SetData(Key: string, Data: any) {
-    if (Key !== null && Key !== "") {
-      localStorage.setItem(Key, JSON.stringify(Data));
+  public pop(): Array<string> {
+    if(this.pageStack.length > 0) {
+      this.pageStack.pop();
     }
-  }
-
-  GetPreviousPageData(Key: string) {
-    let Data = null;
-    if (Key !== null && Key !== "") {
-      Data = localStorage.getItem(Key);
-      localStorage.removeItem(Key);
-      if (Data !== null && Data !== "") {
-        Data = JSON.parse(Data);
-      }
-    }
-    return Data;
+    console.log('After pop: ' + JSON.stringify(this.pageStack));
+    return this.pageStack;
   }
 }

@@ -109,15 +109,20 @@ export class EmployeesComponent implements OnInit {
 
   filterRecords() {
     let searchQuery = "";
+    let delimiter = "";
+
     if(this.employeeDetails.Name !== null && this.employeeDetails.Name !== "") {
         searchQuery += ` FirstName like '${this.employeeDetails.Name}%' `;
+        delimiter = "and";
       }
 
     if(this.employeeDetails.Email !== null && this.employeeDetails.Email !== "") {
-      searchQuery += ` Email like '%${this.employeeDetails.Email}%' `;
+      searchQuery += ` ${delimiter} Email like '%${this.employeeDetails.Email}%' `;
+        delimiter = "and";
     }
     if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile !== 0) {
-      searchQuery += ` Mobile like '${this.employeeDetails.Mobile}%' `;
+      searchQuery += ` ${delimiter} Mobile like '${this.employeeDetails.Mobile}%' `;
+        delimiter = "and";
     }
     if(searchQuery !== "") {
       this.employeeData.SearchString = `1=1 And ${searchQuery}`;

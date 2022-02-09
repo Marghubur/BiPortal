@@ -12,7 +12,6 @@
 .body-wrapper {
   display: table;
   width: 100% !important;
-  height: calc(100vh - 65px) !important;
   margin-top: 65px !important;
 }
 
@@ -88,4 +87,15 @@ pre {
   //background: color(gray-lighter);
   padding: 15px;
   font-size: 14px;
+}
+
+.s-menu {
+  background: white;
+  overflow: auto;
+  height: 97vh;
+}
+
+.cols {
+  height: calc(100vh - 74px) !important;
+  overflow: auto;
 }

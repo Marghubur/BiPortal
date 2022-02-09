@@ -10,6 +10,7 @@ import { AutoPlayService } from 'src/providers/AutoPlayService';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { Login } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { PageCache } from 'src/providers/PageCache';
 
 @Component({
   selector: 'app-root',
@@ -32,11 +33,13 @@ export class AppComponent implements OnInit {
     private commonService: CommonService,
     private auto: AutoPlayService,
     private http: AjaxService,
-    private nav: iNavigation
+    private nav: iNavigation,
+    private cache: PageCache
   ) {
     this.GetScreenHeight();
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
+        console.log("Route: " + JSON.stringify(event));
         this.pageName = event.url.replace("/", "")
         this.commonService.ShowLoader();
         this.commonService.SetCurrentPageName(this.pageName);

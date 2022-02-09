@@ -28,7 +28,6 @@ import { FeedbacksComponent } from './feedbacks/feedbacks.component';
 import { FooterComponent } from './footer/footer.component';
 import { GeneratedresultComponent } from './generatedresult/generatedresult.component';
 import { HomeComponent } from './home/home.component';
-import { IautocompleteComponent } from './iautocomplete/iautocomplete.component';
 import { JsonFormatterComponent } from './json-formatter/json-formatter.component';
 import { LoginComponent } from './login/login.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -45,11 +44,9 @@ import { AdminModule } from './admin/admin.module';
 import { BuilderModule } from './builder/builder.module';
 import { UtilModule } from './util/util.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
 import { NgChartsModule } from 'ng2-charts';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { SidemenuComponent } from './sidemenu/sidemenu.component';
-import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +56,6 @@ import { PaginationComponent } from './pagination/pagination.component';
     JsonFormatterComponent,
     TabledsampledataComponent,
     HomeComponent,
-    IautocompleteComponent,
     LoginComponent,
     FeedbacksComponent,
     GeneratedresultComponent,
@@ -68,8 +64,7 @@ import { PaginationComponent } from './pagination/pagination.component';
     UploadscriptComponent,
     UserprofileComponent,
     CodegeneratorComponent,
-    LiveurlComponent, 
-    BreadcrumsComponent,
+    LiveurlComponent,
     SidemenuComponent
   ],
   imports: [
@@ -86,7 +81,7 @@ import { PaginationComponent } from './pagination/pagination.component';
     BrowserAnimationsModule,
     SocialLoginModule,
     NgChartsModule,
-    CarouselModule 
+    CarouselModule
   ],
   providers: [
     AppService,

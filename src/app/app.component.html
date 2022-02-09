@@ -1,65 +1,57 @@
-<!--
-        <button class="btn btn-primary" [disabled]="isLoading" (click)="click()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          {{ isLoading ? 'Processing' : 'Submit' }}
-      </button>
-       -->
-
-       <div class="container-scroller">
-        <app-navbar *ngIf="!enableAuth" (authentication)="doAuthentication()"></app-navbar>
-        <div *ngIf="enableAuth" class="content-wrapper">
+<div class="container-scroller">
+    <app-navbar *ngIf="!enableAuth" (authentication)="doAuthentication()"></app-navbar>
+    <div *ngIf="enableAuth" class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  <div *ngIf="!enableAuth" class="body-wrapper" id="main-scroller">
+    <div class="container-fluid p-0">
+      <div class="col-12 row m-0 p-0">
+        <div class="l-panel cols s-menu p-0">
+          <app-sidemenu></app-sidemenu>
+        </div>
+        <div class="r-panel cols pr-0 mt-2">
           <router-outlet></router-outlet>
         </div>
-        <div *ngIf="!enableAuth" class="body-wrapper" id="main-scroller">
-          <div class="container-fluid p-0">
-            <div class="col-12 row m-0 p-0">
-              <div class="col-md-2 p-0">
-                <app-sidemenu></app-sidemenu>
-              </div>
-              <div class="col-md-10 pr-0 mt-2">
-                <router-outlet></router-outlet>
-              </div>
-            </div>
-          </div>
-          <div class="page-footer">
-            <app-footer></app-footer>
-          </div>
-          <div id="popmessanger" class="d-none">
-            <div class="popmessanger">
-              <div id="pop-msg" class="popmessanger__msg"></div>
-            </div>
-          </div>
-          <div class="fadescreen d-none" id="fadescreen">
-            <div id="highlight-dv" class="highlight-box">
-            </div>
-          </div>
-          <div class="custom-toast d-none" id="toast">
-            <app-toast></app-toast>
-          </div>
-          <div class="arrow bounce d-none" id="bouncing_arrow">
-            <i class="mdi mdi-arrow-down-bold"></i>
-          </div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <app-footer></app-footer>
+    </div>
+    <div id="popmessanger" class="d-none">
+      <div class="popmessanger">
+        <div id="pop-msg" class="popmessanger__msg"></div>
+      </div>
+    </div>
+    <div class="fadescreen d-none" id="fadescreen">
+      <div id="highlight-dv" class="highlight-box">
+      </div>
+    </div>
+    <div class="custom-toast d-none" id="toast">
+      <app-toast></app-toast>
+    </div>
+    <div class="arrow bounce d-none" id="bouncing_arrow">
+      <i class="mdi mdi-arrow-down-bold"></i>
+    </div>
+  </div>
+  <div class="fadeout-screen d-none" id="sessionexpiredBox">
+    <div class="position-center">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="m-0 p-0">Session Alert</h5>
         </div>
-        <div class="fadeout-screen d-none" id="sessionexpiredBox">
-          <div class="position-center">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="m-0 p-0">Session Alert</h5>
-              </div>
-              <div class="card-body">
-                <div class="col-12">
-                  <p>Your session got expired. Press Continue to resume the session
-                    else Cancel to use application as Anonymous user.</p>
-                </div>
-                <div class="col-12">
-                  <div class="button-group">
-                    <button class="btn btn-outline-dark mr-2" (click)="RemovePopup()">Cancel</button>
-                    <button class="btn btn-success" (click)="GenerateNewtoken()">Continue</button>
-                  </div>
-                </div>
-              </div>
+        <div class="card-body">
+          <div class="col-12">
+            <p>Your session got expired. Press Continue to resume the session
+              else Cancel to use application as Anonymous user.</p>
+          </div>
+          <div class="col-12">
+            <div class="button-group">
+              <button class="btn btn-outline-dark mr-2" (click)="RemovePopup()">Cancel</button>
+              <button class="btn btn-success" (click)="GenerateNewtoken()">Continue</button>
             </div>
           </div>
         </div>
       </div>
-      
+    </div>
+  </div>
+</div>

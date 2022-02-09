@@ -80,3 +80,19 @@
   height: 34px !important;
   border-radius: 0px 4px 4px 0px;
 }
+
+.col-title {
+  margin-top: 1rem;
+}
+
+.global-searchbox {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  height: 2rem;
+  margin-top: 28px;
+  border-radius: 0.25rem;
+}

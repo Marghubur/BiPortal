@@ -8,6 +8,8 @@ import { ToastComponent } from './toast/toast.component';
 import { AllownumberDirective } from './directives/allownumber.directive';
 import { TransformDirective } from './directives/transform.directive';
 import { PaginationComponent } from '../pagination/pagination.component';
+import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
+import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component"
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import { PaginationComponent } from '../pagination/pagination.component';
     ToastComponent,
     AllownumberDirective,
     TransformDirective,
-    PaginationComponent
+    PaginationComponent,
+    IautocompleteComponent,
+    BreadcrumsComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +32,9 @@ import { PaginationComponent } from '../pagination/pagination.component';
     ToastComponent,
     AllownumberDirective,
     TransformDirective,
-    PaginationComponent
+    PaginationComponent,
+    BreadcrumsComponent,
+    IautocompleteComponent
   ]
 })
 export class UtilModule { }

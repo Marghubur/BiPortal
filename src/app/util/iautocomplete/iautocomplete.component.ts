@@ -1,14 +1,43 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-declare var $:any;
-import { CommonService } from "./../../providers/common-service/common.service";
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import * as $ from "jquery";
+import { CommonService } from "src/providers/common-service/common.service";
+
+/*
+
+
+
+  let value = [{
+                value: 'value used for the item (any type i.e string, array or any object)',
+                text: 'text to be displayed (allow only string or number)'
+              }];
+
+  let placehosderName = 'Placeholder name';
+
+  <app-iautocomplete id="FieldId" [Data]="value" (OnSelect)="FireEventOnSelection($event)"
+    [Placeholder]="placehosderName" [Defaultvalue]="DefaultData">
+  </app-iautocomplete>
+
+
+
+
+
+
+*/
 
 @Component({
   selector: "app-iautocomplete",
   templateUrl: "./iautocomplete.component.html",
-  styleUrls: ["./iautocomplete.component.scss"]
+  styleUrls: ["./iautocomplete.component.scss"],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => IautocompleteComponent),
+      multi: true,
+    },
+  ],
 })
-export class IautocompleteComponent implements OnInit {
-  SampleData: any;
+export class IautocompleteComponent implements OnInit, ControlValueAccessor {
   BindingData: any = [];
   AutofillDroopdownHeight: any;
   HeightValue: number;
@@ -18,8 +47,8 @@ export class IautocompleteComponent implements OnInit {
 
   OriginalData: any = null;
   DropdownData: any = null;
-  placeholder: string = "";
-  currentValue: any = "";
+  placeholder: string;
+  currentValue: string;
   selectedIndex: number = -1;
   element: any;
   el: any;
@@ -27,7 +56,6 @@ export class IautocompleteComponent implements OnInit {
   badQueries = [];
   intervalId: any;
   cachedResponse = [];
-  onChange: any;
   onChangeInterval: any;
   isLocal: any;
   ignoreValueChange: any;
@@ -39,12 +67,13 @@ export class IautocompleteComponent implements OnInit {
   manualFocus: boolean = false;
   DefaultValue: any = null;
   IsSingleMode: boolean = false;
-  @Input() filterByServer: any;
-  @Input() ClassName: any;
-  @Input() Tabindex: any;
+  ClassName: string = ""
+  Tabindex: string  = "0";
+
   @Output() OnSelect = new EventEmitter();
   @Output() onKeyup = new EventEmitter();
   @Output() onFocus = new EventEmitter();
+
   @Input()
   set SingleMode(mode: string) {
     if (typeof mode !== "undefined") {
@@ -56,26 +85,40 @@ export class IautocompleteComponent implements OnInit {
     }
   }
 
+
   @Input()
-  set Data(UpdatedData: any) {
-    if (typeof UpdatedData !== "undefined") {
-      this.DropdownData = UpdatedData;
-      this.OriginalData = UpdatedData;
-      this.ManageBindingData();
+  set data(dataModal: autoCompleteModal) {
+    if (dataModal !== null) {
+      this.placeholder = dataModal.placeholder;
+      this.ClassName = dataModal.className;
+      this.DropdownData = dataModal.data;
+      this.OriginalData = dataModal.data;
     }
+
+    this.ManageBindingData();
   }
 
   get Data() {
     return this.OriginalData;
   }
 
-  @Input()
-  set Defaultvalue(InitialValue: any) {
-    if (typeof InitialValue !== "undefined") {
-      this.DefaultValue = InitialValue;
-      this.BindDefaultValue();
-    }
+  // Sync data changes
+
+  onTuched: () => {};
+  onChange: (_: any) => {};
+
+  writeValue(value: string): void {
+    this.DefaultValue = value ? value : "";
+    this.BindDefaultValue();
   }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {}
+
+  // ----------------------  ends ----------------------
 
   constructor(private commonService: CommonService) {
     this.HeightValue = 250;
@@ -83,32 +126,30 @@ export class IautocompleteComponent implements OnInit {
   }
 
   BindDefaultValue() {
-    if (this.DefaultValue !== null) {
-      let elems = this.DropdownData.data.filter(
-        (x: any) => x.value === this.DefaultValue.value
+    if (this.DefaultValue !== null && this.DropdownData !== null) {
+      let elems = this.DropdownData.filter(
+        (x) => x.value === this.DefaultValue
       );
       if (elems.length === 1) {
-        this.InitValue = elems[0].value;
-        this.InitData = JSON.stringify(elems[0].data);
+        this.InitValue = elems[0].text;
+        this.InitData = JSON.stringify(elems[0].value);
       } else if (elems.length > 1) {
       }
     }
   }
 
   NoAction() {
-    let $event: any = event;
-    $event.stopPropagation();
-    $event.preventDefault();
+    event.stopPropagation();
+    event.preventDefault();
   }
 
   ManageBindingData() {
     if (this.commonService.IsValid(this.DropdownData)) {
       this.BindingData = null;
-      this.BindingData = this.DropdownData.data;
-      this.placeholder = this.DropdownData.placeholder;
+      this.BindingData = this.DropdownData;
       if (this.$CurrentAutoComplete !== null) {
-        this.suggestions = this.commonService.IsValid(this.DropdownData.data)
-          ? this.DropdownData.data
+        this.suggestions = this.commonService.IsValid(this.DropdownData)
+          ? this.DropdownData
           : [];
       }
 
@@ -126,8 +167,8 @@ export class IautocompleteComponent implements OnInit {
 
   ngOnInit() {}
 
-  InitialSetup(a: any, b: any) {
-    var c = function() {},
+  InitialSetup(a, b) {
+    var c = function () {},
       cn = {
         autoSelectFirst: !1,
         appendTo: "iautofill-searchfield",
@@ -149,13 +190,13 @@ export class IautocompleteComponent implements OnInit {
         containerClass: "autocomplete-suggestions",
         tabDisabled: !1,
         dataType: "text",
-        lookupFilter: function(a: any, b: any, c: any) {
+        lookupFilter: function (a, b, c) {
           return -1 !== a.value.toLowerCase().indexOf(c);
         },
         paramName: "query",
-        transformResult: function(a: any) {
+        transformResult: function (a) {
           return "string" === typeof a ? $.parseJSON(a) : a;
-        }
+        },
       };
     this.element = a;
     this.el = $(a);
@@ -165,7 +206,7 @@ export class IautocompleteComponent implements OnInit {
     this.currentValue = this.element.value;
     this.intervalId = 0;
     this.cachedResponse = [];
-    this.onChange = this.onChangeInterval = null;
+    // this.onChange = this.onChangeInterval = null;
     this.isLocal = this.ignoreValueChange = !1;
     this.suggestionsContainer = $(a)
       .closest('div[name="autofill-container"]')
@@ -173,7 +214,7 @@ export class IautocompleteComponent implements OnInit {
     this.options = $.extend({}, cn, b);
     this.classes = {
       selected: "autocomplete-selected",
-      suggestion: "autocomplete-suggestion"
+      suggestion: "autocomplete-suggestion",
     };
     this.setOptions(b);
     setTimeout(() => {
@@ -181,26 +222,25 @@ export class IautocompleteComponent implements OnInit {
     }, 100);
   }
 
-  InitAutoComplete() {
-    $("#autocomplete").autocomplete({
-      lookup: this.BindingData,
-      onValueSelect: function(suggestion: any) {
-        var thehtml =
-          "<strong>Currency Name:</strong> " +
-          suggestion.value +
-          " <br> <strong>Symbol:</strong> " +
-          suggestion.data;
-        $("#outputcontent").html(thehtml);
-      }
-    });
-  }
+  // InitAutoComplete() {
+  //   $("#autocomplete").autocomplete({
+  //     lookup: this.BindingData,
+  //     onValueSelect: function (suggestion) {
+  //       var thehtml =
+  //         "<strong>Currency Name:</strong> " +
+  //         suggestion.value +
+  //         " <br> <strong>Symbol:</strong> " +
+  //         suggestion.data;
+  //       $("#outputcontent").html(thehtml);
+  //     },
+  //   });
+  // }
 
   ShowAutofillDropdown() {
     this.onFocus.emit();
-    let $e: any = event;
     if (!this.manualFocus) {
       this.ManageBindingData();
-      let $event = $($e.currentTarget).closest(
+      let $event = $(event.currentTarget).closest(
         'div[name="autofill-container"]'
       );
       $event.find('input[name="autocomplete"]').val("");
@@ -210,7 +250,7 @@ export class IautocompleteComponent implements OnInit {
       this.$CurrentAutoComplete = $event;
       this.InitialSetup($event.find('input[name="autocomplete"]')[0], {
         lookup: this.BindingData,
-        onValueSelect: null
+        onValueSelect: null,
       });
     } else {
       this.manualFocus = false;
@@ -218,7 +258,6 @@ export class IautocompleteComponent implements OnInit {
   }
 
   onKeyPress(a: any) {
-    let $event: any = event;
     switch (a.keyCode) {
       case 27:
         this.el.val(this.currentValue);
@@ -226,8 +265,8 @@ export class IautocompleteComponent implements OnInit {
         break;
       case 9:
         if (-1 === this.selectedIndex) {
-          let fulltext = $($event.currentTarget).val();
-          this.selectOption({ value: fulltext, data: "" });
+          let fulltext = $(event.currentTarget).val();
+          this.selectOption({ value: fulltext, data: "" }, -1);
           this.hide();
           return;
         }
@@ -235,8 +274,8 @@ export class IautocompleteComponent implements OnInit {
         break;
       case 13:
         if (-1 === this.selectedIndex) {
-          let fulltext = $($event.currentTarget).val();
-          this.selectOption({ value: fulltext, data: "" });
+          let fulltext = $(event.currentTarget).val();
+          this.selectOption({ value: fulltext, data: "" }, -1);
           this.hide();
           return;
         }
@@ -266,15 +305,11 @@ export class IautocompleteComponent implements OnInit {
     clearInterval(b.onChangeInterval);
     if (b.currentValue !== b.el.val())
       if (0 < b.options.deferRequestBy)
-        b.onChangeInterval = setInterval(function() {
+        b.onChangeInterval = setInterval(function () {
           b.onValueChange();
         }, b.options.deferRequestBy);
       else {
-        if (this.filterByServer) {
-          this.currentValue = this.element.value;
-          a = this.getQuery(this.currentValue);
-          this.onKeyup.emit(a);
-        } else b.onValueChange();
+        b.onValueChange();
       }
   }
 
@@ -287,19 +322,19 @@ export class IautocompleteComponent implements OnInit {
     this.ignoreValueChange
       ? (this.ignoreValueChange = !1)
       : a.length < this.options.minChars
-      ? (this.BindingData = this.DropdownData.data)
+      ? (this.BindingData = this.DropdownData)
       : this.getSuggestions(a);
   }
 
-  getSuggestions(a: any) {
+  getSuggestions(a) {
     // make ajax request;
-    let Data = this.DropdownData.data;
+    let Data = this.DropdownData;
     this.BindingData = [];
     let index = 0;
     while (index < Data.length) {
       if (
-        Data[index].value !== null &&
-        Data[index].value.toLocaleLowerCase().indexOf(a) === 0
+        Data[index].text !== null &&
+        Data[index].text.toLocaleLowerCase().indexOf(a) === 0
       ) {
         this.BindingData.push(Data[index]);
       }
@@ -307,20 +342,20 @@ export class IautocompleteComponent implements OnInit {
     }
   }
 
-  getQuery(a: any) {
+  getQuery(a) {
     var b = this.options.delimiter;
     if (!b) return $.trim(a);
     a = a.split(b);
     return $.trim(a[a.length - 1]);
   }
 
-  getSuggestionsLocal(a: any) {
+  getSuggestionsLocal(a) {
     var b = a.toLowerCase(),
       c = this.options.lookupFilter;
     return {
-      suggestions: $.grep(this.options.lookup, function(d: any) {
+      suggestions: $.grep(this.options.lookup, function (d) {
         return c(d, a, b);
-      })
+      }),
     };
   }
 
@@ -333,7 +368,7 @@ export class IautocompleteComponent implements OnInit {
       .addClass("d-none");
   }
 
-  activate(a: any) {
+  activate(a) {
     var b = this.classes.selected,
       c = $(this.suggestionsContainer),
       d = c.children();
@@ -344,51 +379,39 @@ export class IautocompleteComponent implements OnInit {
       : null;
   }
 
-  select(a: any, b: any) {
+  select(a, b) {
     var c = this.BindingData[a];
     c &&
       (this.el.val(c),
       (this.ignoreValueChange = b),
       this.hide(),
       this.onValueSelect(a));
-    this.selectOption(c);
+    this.selectOption(c, a);
   }
 
-  selectOption(c: any) {
+  selectOption(c, a) {
     this.$CurrentAutoComplete
       .find('input[name="iautofill-textfield"]')
-      .val(c.value);
+      .val(c.text);
     this.$CurrentAutoComplete
       .find('input[name="iautofill-textfield"]')
-      .attr("data", JSON.stringify(c.data));
+      .attr("data", JSON.stringify(c));
     this.$CurrentAutoComplete
       .find('div[name="suggestionBox-dv"]')
       .addClass("d-none");
 
-    let TableRowIndex = "";
-    let $e: any = event;
-    let $event: any = $e.currentTarget;
-    if ($event.closest("tr") !== null) {
-      TableRowIndex = $event.closest("tr").getAttribute("index");
-      if (
-        TableRowIndex === undefined ||
-        TableRowIndex === null ||
-        TableRowIndex === ""
-      )
-        TableRowIndex = "0";
-    }
     this.OnSelect.emit(
       JSON.stringify({
         value: c.value,
         data: c.data,
-        index: TableRowIndex
+        index: a,
       })
     );
 
     if (this.IsSingleMode) {
       let index = 0;
       while (index < this.BindingData.length) {
-        if (this.BindingData[index].data.uid === c.data.uid) {
+        if (this.BindingData[index].value === c.value) {
           this.BindingData.splice(index, 1);
         }
         index++;
@@ -398,9 +421,8 @@ export class IautocompleteComponent implements OnInit {
   }
 
   AddToAutoFillList() {
-    let $event: any = event;
-    this.$CurrentAutoComplete = $($event.currentTarget).closest("div");
-    this.ToggleRemoveIcon($($event.currentTarget).attr("data"), true);
+    this.$CurrentAutoComplete = $(event.currentTarget).closest("div");
+    this.ToggleRemoveIcon($(event.currentTarget).attr("data"), true);
     this.ClearSelection();
   }
 
@@ -447,11 +469,11 @@ export class IautocompleteComponent implements OnInit {
       this.EnableFieldOnTab(this.selectedIndex + 1);
   }
 
-  EnableFieldOnTab(a: any) {
+  EnableFieldOnTab(a) {
     var b = this.activate(a);
   }
 
-  adjustScroll(a: any) {
+  adjustScroll(a) {
     var b = this.activate(a),
       c,
       d;
@@ -465,17 +487,17 @@ export class IautocompleteComponent implements OnInit {
           $(this.suggestionsContainer).scrollTop(
             b - this.options.maxHeight + 32
           ),
-      this.el.val(this.getValue(this.BindingData[a].value)));
+      this.el.val(this.getValue(this.BindingData[a].text)));
   }
 
-  onValueSelect(a: any) {
+  onValueSelect(a) {
     var b = this.options.onValueSelect;
     a = this.BindingData[a];
     this.el.val(this.getValue(a.value));
     $.isFunction(b) && b.call(this.element, a);
   }
 
-  getValue(a: any) {
+  getValue(a) {
     var b = this.options.delimiter,
       c;
     if (!b) return a;
@@ -497,17 +519,17 @@ export class IautocompleteComponent implements OnInit {
     this.killSuggestions();
   }
 
-  setOptions(a: any) {
+  setOptions(a) {
     var b = this.options;
     var h = {
-      extend: function(a: any, b: any) {
+      extend: function (a, b) {
         return $.extend(a, b);
       },
-      createNode: function(a: any) {
+      createNode: function (a) {
         var b = document.createElement("div");
         b.innerHTML = a;
         return b.firstChild;
-      }
+      },
     };
     h.extend(b, a);
     if ((this.isLocal = $.isArray(b.lookup)))
@@ -515,16 +537,16 @@ export class IautocompleteComponent implements OnInit {
     $(this.suggestionsContainer).css({
       "max-height": b.maxHeight + "px",
       width: b.width + "px",
-      "z-index": b.zIndex
+      "z-index": b.zIndex,
     });
   }
 
-  verifySuggestionsFormat(a: any) {
+  verifySuggestionsFormat(a) {
     return a.length && "string" === typeof a[0]
-      ? $.map(a, function(a: any) {
+      ? $.map(a, function (a) {
           return {
             value: a,
-            data: null
+            data: null,
           };
         })
       : a;
@@ -547,7 +569,7 @@ export class IautocompleteComponent implements OnInit {
       ((a = this.el.offset()),
       $(this.suggestionsContainer).css({
         top: a.top + this.el.outerHeight() + "px",
-        left: a.left + "px"
+        left: a.left + "px",
       }));
   }
 
@@ -559,7 +581,7 @@ export class IautocompleteComponent implements OnInit {
     $(document).off("click.autocomplete", this.killerFn);
   }
 
-  killerFn(b: any) {
+  killerFn(b) {
     0 === $(b.target).closest("." + this.options.containerClass).length &&
       (this.killSuggestions(), this.disableKillerFn());
   }
@@ -567,7 +589,7 @@ export class IautocompleteComponent implements OnInit {
   killSuggestions() {
     let a: any = this;
     a.stopKillSuggestions();
-    a.intervalId = window.setInterval(function() {
+    a.intervalId = window.setInterval(function () {
       a.hide();
       a.stopKillSuggestions();
     }, 300);
@@ -576,4 +598,15 @@ export class IautocompleteComponent implements OnInit {
   stopKillSuggestions() {
     window.clearInterval(this.intervalId);
   }
+}
+
+export class pairData {
+  value: any = null
+  text: string = "";
+}
+export class autoCompleteModal {
+  data: Array<pairData> = [];
+  className?: string = null;
+  placeholder?: string = null;
+  tabindex?: any = null;
 }

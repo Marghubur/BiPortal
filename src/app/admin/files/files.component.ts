@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, Toast } from 'src/providers/common-service/common.service';
@@ -10,6 +11,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { DocumentUser } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
+
 declare var $: any;
 
 @Component({
@@ -27,12 +29,22 @@ export class FilesComponent implements OnInit {
   basePath: string = "";
   viewer: any = null;
   employee: any = null;
-  model: NgbDateStruct;
+  fromModel: NgbDateStruct;
+  toModel: NgbDateStruct;
   currentFileId: number = 0;
   billDetails: Array<BillDetails> = [];
   singleEmployee: Filter = null;
   isEmpPageReady: boolean = false;
-
+  employeeDetails: Array<any> = null;
+  autoCompleteModal: autoCompleteModal = null;
+  placeholderName: string = "";
+  employeeFiles: Array<BillDetails> = [];
+  employeeFile: BillDetails = null;
+  anyFilter: string = "";
+  employeeData: Filter = null;
+  employeeId: number = 0;
+  fromDate: any = null;
+  toDate: any = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -40,12 +52,27 @@ export class FilesComponent implements OnInit {
     private common: CommonService,
     private calendar: NgbCalendar,
     private userService: UserService
-  ) { }
+  ) {
+    this.singleEmployee = new Filter();
+    this.placeholderName = "Select Employee";
+    this.employeeDetails = [{
+      value: '0',
+      text: 'Select Employee'
+    }];
+  }
 
   ngOnInit(): void {
-    this.model = this.calendar.getToday();
+    this.fromModel = this.calendar.getToday();
+    this.toModel = this.calendar.getToday();
+    this.employeeData = new Filter();
+    this.employeeFile = new BillDetails();
     this.basePath = this.http.GetImageBasePath();
     this.currentEmployeeDetail = this.nav.getValue();
+    this.employeeId = this.currentEmployeeDetail.EmployeeUid;
+    this.autoCompleteModal = {
+      data: [],
+      placeholder: "Select Employee"
+    }
     this.documentForm = this.fb.group({
       StatusId: new FormControl(0, Validators.required),
       UpdatedOn: new FormControl(new Date(), Validators.required),
@@ -55,9 +82,23 @@ export class FilesComponent implements OnInit {
     this.LoadFiles();
   }
 
+  alterResultSet(e: any) {
+    if(e.target.checked)
+      this.employeeId = 0;
+    else
+      this.employeeId = this.currentEmployeeDetail.EmployeeUid;
+  }
+
   onDateSelection(e: NgbDate) {
     let selectedDate = new Date(e.year, e.month - 1, e.day);
     this.documentForm.get("UpdatedOn").setValue(selectedDate);
+  }
+
+  GetFilterResult(e: Filter) {
+    if(e != null) {
+      this.singleEmployee = e;
+      this.LoadFiles();
+    }
   }
 
   updateRecord() {
@@ -138,69 +179,217 @@ export class FilesComponent implements OnInit {
   }
 
   LoadFiles() {
-    this.http.get(`OnlineDocument/GetFilesAndFolderById/employee/${this.currentEmployeeDetail.EmployeeUid}`)
+    this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.common.ShowToast("File or folder found");
+        let employees = response.ResponseBody.EmployeesList as Array<EmployeeDetail>;
+        if(employees !== null && employees.length > 0) {
+          let index = 0;
+          while(index < employees.length) {
+            this.employeeDetails.push({
+              value: employees[index]["EmployeeUId"],
+              text: employees[index]["Name"]
+            });
+            index++;
+          }
+        } else {
+          this.employeeDetails.push({
+            value: "0",
+            text: "No record found"
+          });
+        }
+
+        this.autoCompleteModal = {
+          data: this.employeeDetails,
+          placeholder: "Select Employee"
+        }
+        this.fileLoaded = true;
         this.userFiles = response.ResponseBody["Files"];
         let emp = response.ResponseBody["Employee"];
         this.isEmpPageReady = true;
         if (emp && emp.length > 0)
           this.employee = emp[0];
         this.fileLoaded = true;
-      this.billDetails = new Array<BillDetails>();
+        this.billDetails = new Array<BillDetails>();
         let i =0;
         let bills : BillDetails = null;
         let GST: number = 0;
 
-        while (i < this.userFiles.length) {
-          bills = new BillDetails();
-          bills.BillNo = this.userFiles[i].BillNo;
-          if(this.userFiles[i].IGST >0 || this.userFiles[i].SGST >0 || this.userFiles[i].CGST >0) {
-            GST = ((this.userFiles[i].IGST + this.userFiles[i].SGST + this.userFiles[i].CGST)/100);
-          } else {
-            GST = 1;
+        if(this.userFiles !== null && this.userFiles.length > 0) {
+          this.singleEmployee.TotalRecords = this.userFiles[0].Total;
+          while (i < this.userFiles.length) {
+            bills = new BillDetails();
+            bills.BillNo = this.userFiles[i].BillNo;
+            if(this.userFiles[i].IGST >0 || this.userFiles[i].SGST >0 || this.userFiles[i].CGST >0) {
+              GST = ((this.userFiles[i].IGST + this.userFiles[i].SGST + this.userFiles[i].CGST)/100);
+            } else {
+              GST = 1;
+            }
+            bills.GSTAmount = this.userFiles[i].SalaryAmount * GST;
+            bills.ClientId = this.userFiles[i].ClientId;
+            bills.ClientName = this.userFiles[i].ClientName;
+            bills.FileExtension = this.userFiles[i].FileExtension;
+            bills.FileName = this.userFiles[i].FileName;
+            bills.FileOwnerId = this.userFiles[i].FileOwnerId;
+            bills.FilePath = this.userFiles[i].FilePath;
+            bills.FileUid = this.userFiles[i].FileUid;
+            bills.GeneratedOn = this.userFiles[i].GeneratedOn;
+            bills.Month = this.userFiles[i].Month;
+            bills.PaidOn = this.userFiles[i].PaidOn;
+            bills.Status = this.userFiles[i].Status;
+            bills.SalaryAmount = this.userFiles[i].SalaryAmount;
+            bills.ReceivedAmount = (this.userFiles[i].SalaryAmount * (1 + GST)) - (this.userFiles[i].SalaryAmount /10);
+            bills.BilledAmount = this.userFiles[i].SalaryAmount * (1 + GST);
+            bills.TDS = (this.userFiles[i].SalaryAmount /10);
+            this.billDetails.push(bills);
+            i++;
           }
-          bills.GSTAmount = this.userFiles[i].SalaryAmount * GST;
-          bills.ClientId = this.userFiles[i].ClientId;
-          bills.ClientName = this.userFiles[i].ClientName;
-          bills.FileExtension = this.userFiles[i].FileExtension;
-          bills.FileName = this.userFiles[i].FileName;
-          bills.FileOwnerId = this.userFiles[i].FileOwnerId;
-          bills.FilePath = this.userFiles[i].FilePath;
-          bills.FileUid = this.userFiles[i].FileUid;
-          bills.GeneratedOn = this.userFiles[i].GeneratedOn;
-          bills.Month = this.userFiles[i].Month;
-          bills.PaidOn = this.userFiles[i].PaidOn;
-          bills.Status = this.userFiles[i].Status;
-          bills.SalaryAmount = this.userFiles[i].SalaryAmount;
-          bills.ReceivedAmount = (this.userFiles[i].SalaryAmount * (1 + GST)) - (this.userFiles[i].SalaryAmount /10);
-          bills.BilledAmount = this.userFiles[i].SalaryAmount * (1 + GST);
-          bills.TDS = (this.userFiles[i].SalaryAmount /10);
-          this.billDetails.push(bills);
-          i++;
         }
-        // this.tableConfiguration = new tableConfig();
-        // this.tableConfiguration.totalRecords = 1;
-        // this.tableConfiguration.data = this.userFiles;
-        // this.tableConfiguration.isEnableAction = true;
-        // this.tableConfiguration.header = this.userService.getColumns(Files);
-        // this.tableConfiguration.link = [
-        //   { iconName: 'fa fa-cogs', fn: this.UpdateCurrent },
-        //   { iconName: 'fa fa-pencil', fn: this.EditCurrentDocument },
-        //   { iconName: 'fa fa-file-pdf-o', fn: this.viewPdfFile }
-        //]
       } else {
         this.common.ShowToast("No file or folder found");
       }
     });
   }
 
-  GetFilterResult(e: Filter) {
-    if(e != null) {
-      this.singleEmployee = e;
-      this.LoadFiles();
+  fromDateSelection(e: NgbDateStruct) {
+    this.fromDate = e; //`${e.year}-${e.month}-${e.day}`;
+  }
+
+  toDateSelection(e: NgbDateStruct) {
+    this.toDate = e; //`${e.year}-${e.month}-${e.day}`;
+  }
+
+  filterRecords() {
+    let searchQuery = "";
+    let delimiter = "";
+    let fromDateValue = "";
+    let toDateValue = "";
+    let isDateFilterEnable = false;
+
+    if (this.fromDate !== null) {
+      if (this.toDate == null) {
+        Toast("Please selete to date to get the result.")
+        return;
+      }
+      isDateFilterEnable = true;
+    } else if(this.fromDate == null && this.toDate !== null) {
+      Toast("Please selete from date to get the result.")
+      isDateFilterEnable = true;
+      return;
     }
+
+    if (isDateFilterEnable) {
+      let fromDateTime = new Date(this.fromDate.year, this.fromDate.month, this.fromDate.day).getTime();
+      let toDateTime = new Date(this.toDate.year, this.toDate.month, this.toDate.day).getTime();
+      if (fromDateTime > toDateTime) {
+        Toast("Please select cottect From Date and To date");
+        return;
+      } else {
+        fromDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
+        toDateValue = `${this.toDate.year}-${this.toDate.month}-${this.toDate.day}`;
+      }
+    }
+
+    if(this.employeeFile.ClientName !== null && this.employeeFile.ClientName !== "") {
+      searchQuery += ` ClientName like '${this.employeeFile.ClientName}%' `;
+      delimiter = "and";
+    }
+
+    if(this.employeeFile.BillNo !== null && this.employeeFile.BillNo !== "") {
+      searchQuery += ` ${delimiter} BillNo like '%${this.employeeFile.BillNo}%' `;
+      delimiter = "and";
+    }
+
+    if(this.employeeFile.Status !== null && this.employeeFile.Status !== "") {
+      let StatusValue = '';
+      if (this.employeeFile.Status == '1') {
+        StatusValue = "Completed";
+      }
+      else if (this.employeeFile.Status == '2') {
+        StatusValue = "Pending";
+      }
+      else if (this.employeeFile.Status == '3') {
+        StatusValue = "Canceled";
+      } else {
+        StatusValue = '';
+      }
+      searchQuery += ` ${delimiter} Status = '${StatusValue}' `;
+      delimiter = "and";
+    }
+
+    if(this.employeeFile.GSTAmount !== null && this.employeeFile.GSTAmount !== 0) {
+      searchQuery += ` ${delimiter} GSTAmount like '%${this.employeeFile.GSTAmount}%' `;
+      delimiter = "and";
+    }
+
+    if(this.employeeFile.GSTStatus !== null && this.employeeFile.GSTStatus !== "") {
+      searchQuery += ` ${delimiter} GSTStatus = '${this.employeeFile.GSTStatus}%' `;
+      delimiter = "and";
+    }
+
+    if(this.employeeFile.SalaryAmount !== null && this.employeeFile.SalaryAmount !== 0) {
+      searchQuery += ` ${delimiter} PaidAmount like '${this.employeeFile.SalaryAmount}%' `;
+      delimiter = "and";
+    }
+
+    if(this.employeeFile.ReceivedAmount !== null && this.employeeFile.ReceivedAmount !== 0) {
+      searchQuery += ` ${delimiter} ReceivedAmount like '${this.employeeFile.ReceivedAmount}%' `;
+      delimiter = "and";
+    }
+
+    if(this.employeeFile.BilledAmount !== null && this.employeeFile.BilledAmount !== 0) {
+      searchQuery += ` ${delimiter} BilledAmount like '${this.employeeFile.BilledAmount}%' `;
+      delimiter = "and";
+    }
+
+    if(isDateFilterEnable) {
+      searchQuery += ` ${delimiter} BillUpdatedOn between '${fromDateValue}' and '${toDateValue}'`;
+    }
+
+    if(searchQuery !== "") {
+      this.singleEmployee.SearchString = `1=1 And ${searchQuery}`;
+    }
+
+    this.LoadFiles();
+  }
+
+  // globalFilter() {
+  //   let searchQuery = "";
+  //   searchQuery = ` ClientName like '${this.anyFilter}%' OR BillNo like '%${this.anyFilter}%' `;
+  //   if(searchQuery !== "") {
+  //     //this.employeeData.SearchString = `1=1 And ${searchQuery}`;
+  //     this.singleEmployee.SearchString = `1=1 And ${searchQuery}`;
+  //   }
+
+  //   this.LoadFiles();
+  // }
+
+  // unckeck() {
+  //   var value = document.getElementById("checkall");
+  //   value.checked = false
+  // }
+
+  resetFilter() {
+    this.employeeFile.ClientName="";
+    this.employeeFile.BillNo = "";
+    this.employeeFile.Status="";
+    this.employeeFile.GSTAmount=null;
+    this.employeeFile.GSTStatus="";
+    this.employeeFile.SalaryAmount = null;
+    this.employeeFile.ReceivedAmount=null;
+    this.employeeFile.BilledAmount = null;
+    this.employeeFile.GeneratedOn = "";
+    this.toModel = null;
+    this.fromModel = null;
+    this.toDate = null;
+    this.fromDate = null;
+    this.employeeId = this.currentEmployeeDetail.EmployeeUid;
+    //this.unckeck();
+    // this.anyFilter = "";
+    $('#checkall').prop('checked', false);
+    this.singleEmployee = new Filter();
+    this.LoadFiles();
   }
 
   EditCurrentDocument(userFile: any) {
@@ -225,10 +414,14 @@ export class BillDetails {
   Month: string = '';
   PaidOn: string = '';
   SGST: number =0;
-  SalaryAmount: number = 0;
+  SalaryAmount: number = null;
   Status: string = '';
   TDS: number = 0;
-  ReceivedAmount: number =0;
-  BilledAmount: number = 0;
-  GSTAmount: number =0;
+  ReceivedAmount: number =null;
+  BilledAmount: number = null;
+  GSTAmount: number =null;
+  Total: number = 0;
+  GSTStatus: string = '';
+  fromModel: string = '';
+  toModel: string = '';
 }

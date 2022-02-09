@@ -11,7 +11,7 @@
         style="position: relative; max-height: 300px; z-index: 9999;">
         <div class="autocomplete-suggestion" *ngFor="let item of BindingData; let index = index" data="index"
           (mousedown)="select(index, true)">
-          {{item.value}}
+          {{item.text}}
         </div>
       </div>
       <div *ngIf="isShowEmptyRow" class="autocomplete-suggestions w-100" name="iautofill-div"

@@ -35,6 +35,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   idReady: boolean = false;
   currentClientId: number = 0;
   isCreated: boolean = false;
+  isUpdated: boolean = false;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -234,6 +235,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (clientId) {
       let currentClient = this.allocatedClients.find(x => x.ClientUid == clientId);
       this.isCreated = false;
+      this.isUpdated = true;
+
       if (currentClient) {
         //this.currentClientId = clientId;
         this.employeeForm.get("AllocatedClientId").setValue(clientId);

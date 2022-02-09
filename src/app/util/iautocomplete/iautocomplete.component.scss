@@ -10,7 +10,7 @@
   border: 1px solid #d9d9d9;
 }
 
-.iautofill .filter-field>input {
+.iautofill .filter-field > input {
   border: none !important;
   outline: none;
   border-color: inherit;
@@ -18,7 +18,6 @@
   box-shadow: none;
   border-bottom: 1px solid #d9d9d9;
 }
-
 
 .iautofill .filter-field {
   border-bottom: 1px solid #d9d9d9 !important;
@@ -45,7 +44,6 @@
   box-shadow: none;
   border: 1px solid #d9d9d9;
 }
-
 
 /////////////////////////////////// auto complete ////////////////////////////////////////
 
@@ -151,7 +149,7 @@ html {
 }
 
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #313131;
   font-size: 62.5%;
   line-height: 1;
@@ -237,7 +235,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: '';
+  content: "";
   content: none;
 }
 
@@ -276,12 +274,12 @@ img {
 
 /** typography **/
 h1 {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 2.5em;
   line-height: 1.5em;
   letter-spacing: -0.05em;
   margin-bottom: 20px;
-  padding: .1em 0;
+  padding: 0.1em 0;
   color: #444;
   position: relative;
   overflow: hidden;
@@ -301,16 +299,16 @@ h1:after {
 }
 
 h1:before {
-  left: -.5em;
+  left: -0.5em;
   margin: 0 0 0 -50%;
 }
 
 h1:after {
-  left: .5em;
+  left: 0.5em;
   margin: 0 -50% 0 0;
 }
 
-h1>span {
+h1 > span {
   display: inline-block;
   vertical-align: middle;
   white-space: normal;
@@ -337,7 +335,6 @@ a:hover {
   text-align: center;
 }
 
-
 /** page structure **/
 #w {
   display: block;
@@ -356,16 +353,14 @@ a:hover {
   background-color: #fff;
   width: 100%;
   border: 1px solid #d9d9d9;
-  // height: 236px;
-  min-height: 75px;
+  min-height: 97px;
   max-height: 238px;
   z-index: 1000;
   border-radius: 4px;
 }
 
 #iautofill-searchfield .biginput {
-  width: 100%;
-  padding: 0 10px 0 10px;
+  width: 100% !important;
   background-color: #fff;
   border-radius: 4px;
   border: 1px solid #d9d9d9;
@@ -373,14 +368,12 @@ a:hover {
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
   transition: all 0.2s linear;
-  font-size: .8rem !important;
+  font-size: 0.8rem !important;
 }
 
 #iautofill-searchfield .biginput:focus {
   color: #858585;
 }
-
-
 
 .flatbtn {
   -webkit-box-sizing: border-box;
@@ -437,7 +430,7 @@ a:hover {
 
 .autocomplete-suggestions .autocomplete-suggestion {
   padding: 6px 5px;
-  font-size: .9em;
+  font-size: 0.9em;
   white-space: nowrap;
   overflow: hidden;
   padding-left: 10px;
@@ -469,18 +462,21 @@ input:focus {
 .anc-remove {
   position: absolute;
   right: 0px !important;
-  top: -2px !important;
-  bottom: -3px !important;
+  top: 0px !important;
+  bottom: 0px !important;
   margin: auto;
   cursor: pointer;
   font-size: 10px;
   font-weight: bold;
   width: 14px;
   text-align: center;
-  line-height: 24px;
+  transform: translate(-5px, 10px);
 }
 
 .anc-remove:hover {
-  background-color: rgba(241, 241, 24, 0.5803921568627451);
   font-size: 12px !important;
+}
+
+.autocomplete-suggestions div:first-child {
+  margin-top: 30px !important;
 }
