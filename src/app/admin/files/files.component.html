@@ -9,10 +9,15 @@
                   <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId">
                   </app-iautocomplete>
                 </div>
-                <div class="col-md-8 global-searchbox">
+                <div class="col-md-8 filter-action-container text-end">
+                  <a href="javascript:void(0)">
+                    <i class="fa fa-filter"></i>
+                  </a>
+                </div>
+                <!-- <div class="col-md-8 global-searchbox">
                   <label class="pe-2">Check to apply filter for all</label>
                   <input type="checkbox" (change)="alterResultSet($event)" id="checkall">
-                </div>
+                </div> -->
               </div>
 
               <!-- <div class="col-md-8">

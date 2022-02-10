@@ -62,8 +62,8 @@ export class FilesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fromModel = this.calendar.getToday();
-    this.toModel = this.calendar.getToday();
+    this.fromModel = null;
+    this.toModel = null;
     this.employeeData = new Filter();
     this.employeeFile = new BillDetails();
     this.basePath = this.http.GetImageBasePath();
