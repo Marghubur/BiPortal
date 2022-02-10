@@ -45,25 +45,25 @@
                   <tr>
                     <th width="1%">#</th>
                     <th>
-                      <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Name" placeholder="Search by Name">
+                      <input class="form-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Name" placeholder="Search by Name">
                         <div class="col-title">
                             Full Name
                         </div>
                     </th>
                     <th>
-                      <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Mobile" placeholder="Search by MobileNumber">
+                      <input class="form-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Mobile" placeholder="Search by MobileNumber">
                         <div class="col-title">
                             Mobile Number
                         </div>
                     </th>
                     <th>
-                      <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
+                      <input class="form-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
                         <div class="col-title">
                             Email id
                         </div>
                     </th>
                     <th width="8%">
-                      <button (click)="filterRecords()" class="btn btn-primary srch-btn"><i class="fa fa-search pr-2"></i>
+                      <button (click)="filterRecords()" class="btn btn-primary btn-sm"><i class="fa fa-search pr-2"></i>
                         Search
                     </button>
                     <div class="col-title">

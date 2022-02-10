@@ -5,7 +5,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommonService, Toast } from 'src/providers/common-service/common.service';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { ThisReceiver } from '@angular/compiler';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({

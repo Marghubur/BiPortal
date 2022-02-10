@@ -258,7 +258,7 @@ export class PersonDetail {
   Total: number = null;
 }
 
-class Files {
+export class Files {
   UserId: number = 0;
   FileName: string = "";
   FileExtension: string = "";

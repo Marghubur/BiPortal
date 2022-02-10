@@ -3,30 +3,26 @@
     <div class="x_panel">
         <div class="x_header">
             <div class="x_header_title mt-3">
-              <div class="row">
-                <div class="col-md-4" *ngIf="fileLoaded">
-                  <label class="form-label">Developer Name *</label>
-                  <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId">
-                  </app-iautocomplete>
+              <div class="row title-header">
+                <div class="col-md-6 d-flex align-items-center" *ngIf="fileLoaded">
+                  <label class="form-label pe-3 mt-1">Developer Name *</label>
+                  <div style="width: 20rem">
+                    <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"></app-iautocomplete>
+                  </div>
                 </div>
-                <div class="col-md-8 filter-action-container text-end">
-                  <a href="javascript:void(0)">
-                    <i class="fa fa-filter"></i>
+                <div class="col-md-6 filter-action-container text-end">
+                  <a href="javascript:void(0)" class="text-dark" (click)="toggleFilter()">
+                    <i class="fa fa-filter zoom-2"></i>
+                  </a>
+                  <a href="javascript:void(0)" (click)="resetFilter()" class="me-3">
+                    <i class="fa fa-refresh zoom-2" aria-hidden="true"></i>
                   </a>
                 </div>
-                <!-- <div class="col-md-8 global-searchbox">
-                  <label class="pe-2">Check to apply filter for all</label>
-                  <input type="checkbox" (change)="alterResultSet($event)" id="checkall">
-                </div> -->
               </div>
-
-              <!-- <div class="col-md-8">
-                  <label class="form-label">Advanced Filter</label>
-                  <input type="text" class="form-control" (keyup.enter)="globalFilter()" placeholder="By any: (Client Name, Bill No.)" [(ngModel)]="anyFilter">
-              </div> -->
-              <div class="mt-3 row">
-                <div class="col-md-5 row ms-1 p-0">
-                  <div class="col-md-6 d-flex justify-content-center align-items-center">
+              <div class="mt-3 row" *ngIf="filterbox">
+                <hr>
+                <div class="col-md-7 row ms-1 p-0">
+                  <div class="col-md-4 d-flex justify-content-center align-items-center">
                     <label for="" class="pe-2">From</label>
                     <form class="form-inline">
                       <div class="form-group">
@@ -34,7 +30,7 @@
                           <input class="form-control" placeholder="yyyy-mm-dd"
                           (dateSelect)="fromDateSelection($event)" name="from" [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
                           <div class="input-group-append">
-                            <button class="btn btn-outline-dark fa fa-calendar" (click)="from.toggle()" type="button"></button>
+                            <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()" type="button"></button>
                           </div>
                         </div>
                       </div>
@@ -42,7 +38,7 @@
 
                     <!-- <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.GeneratedOn" placeholder="From Date"> -->
                   </div>
-                  <div class="col-md-6 d-flex justify-content-center align-items-center">
+                  <div class="col-md-4 d-flex justify-content-center align-items-center">
                     <label for="" class="pe-2">To</label>
                     <form class="form-inline">
                       <div class="form-group">
@@ -50,20 +46,17 @@
                           <input class="form-control" placeholder="yyyy-mm-dd"
                           (dateSelect)="toDateSelection($event)" name="to" [(ngModel)]="toModel" ngbDatepicker #to="ngbDatepicker">
                           <div class="input-group-append">
-                            <button class="btn btn-outline-dark fa fa-calendar" (click)="to.toggle()" type="button"></button>
+                            <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="to.toggle()" type="button"></button>
                           </div>
                         </div>
                       </div>
                     </form>
                   </div>
                 </div>
-                <div class="col-md-7 ms-2">
-                  <button class="btn btn-outline-danger filter-btn-grp float-end ms-3" (click)="resetFilter()">
-                      <i class="fa fa-repeat"></i> Reset filter
-                  </button>
-                    <button class="btn btn-primary filter-btn-grp float-end" (click)="filterRecords()">
-                        <i class="fa fa-filter me-1"></i> Filter
-                    </button>
+                <div class="col-md-5 ms-2 text-end">
+                  <label class="pe-2">Check to apply filter for all</label>
+                  <input type="checkbox" (change)="alterResultSet($event)" id="checkall">
+
                 </div>
               </div>
 
@@ -108,16 +101,16 @@
                         Client Name
                     </div>
                   </th>
-                  <th>
+                  <th width="6%">
                     <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.BillNo" placeholder="By Bill No">
                     <div class="col-title">
                         Bill No.#
                     </div>
                   </th>
                   <!-- <th>Month</th> -->
-                  <th>
-                    <select class="form-control table-filter-control" aria-label="Default select example" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.Status">
-                      <option selected>Status</option>
+                  <th width="8%">
+                    <select class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.Status">
+                      <option value="0">Status</option>
                       <option value="1">Completed</option>
                       <option value="2">Pending</option>
                       <option value="3">Canceled</option>
@@ -126,57 +119,51 @@
                         Status
                     </div>
                   </th>
-                  <th>
+                  <th width="8%">
                     <div class="col-title">
                         Paid On
                     </div>
                   </th>
-                  <th>
-                    <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.GeneratedOn" placeholder="By Generated On">
+                  <th width="8%">
+                    <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.Month" placeholder="Month">
                     <div class="col-title">
-                        Generated On
+                        Month
                     </div>
                   </th>
-                  <th>
+                  <th width="14%">
                     <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
                     <div class="col-title">
                         Billed Amount
                     </div>
                   </th>
-                  <th>
+                  <th width="12%">
                     <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
                     <div class="col-title">
-                        Received Amount
-                    </div>
-                  </th>
-                  <th>
-                    <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.SalaryAmount" placeholder="By Salary Amount">
-                    <div class="col-title">
-                        Salary Amount
-                    </div>
-                  </th>
-                  <th>
-                    <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.GSTAmount" placeholder="By GST Amount">
-                    <div class="col-title">
-                        GST Amount
+                        Received
+                        <small class="text-muted">[- 10% TDS]</small>
                     </div>
                   </th>
                   <th width="7%">
-                    <select class="form-control table-filter-control" aria-label="Default select example" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.GSTStatus">
+                    <select class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.GSTStatus">
+                      <option value="0">Status</option>
                       <option value="1">Completed</option>
                       <option value="2">Pending</option>
                       <option value="3">Canceled</option>
+                      <option value="6">Raised</option>
                     </select>
                     <div class="col-title" >
-                        GST Status
+                        GST
                     </div>
                   </th>
-                  <th>
-                    <div class="col-title">
-                        TDS(10%)
+                  <th class="text-center">
+                    <button class="btn btn-outline-dark" (click)="filterRecords()">
+                      <i class="fa fa-search"></i>
+                    </button>
+
+                    <div class="col-title text-center">
+                     Action
                     </div>
                   </th>
-                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -189,13 +176,22 @@
                   <!-- <td>{{user.Month}}</td> -->
                   <td>{{user.Status}}</td>
                   <td>{{user.PaidOn}}</td>
-                  <td>{{user.GeneratedOn}}</td>
-                  <td>{{user.BilledAmount | number}}</td>
-                  <td>{{user.ReceivedAmount | number}}</td>
-                  <td>{{user.SalaryAmount | number}}</td>
-                  <td>{{user.GSTAmount | number}}</td>
-                  <td>Pending</td>
-                  <td>{{user.TDS | number}}</td>
+                  <td>{{user.Month}}</td>
+                  <td>
+                    <div>
+                      {{user.BilledAmount | number : '1.2-2'}}
+                      <div>
+                        <small class="s-item text-muted me-2">[A] {{user.SalaryAmount | number : '1.2-2'}}</small>
+                        <small class="s-item text-muted">[G] {{user.GSTAmount | number : '1.2-2'}}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{user.ReceivedAmount | number : '1.2-2'}}</td>
+                  <td>
+                    <a href="javascript:void(0)" class="h-font" (click)="updateGSTStatus(user.BillNo, user.GSTAmount)">
+                      {{user.GSTStatus}}
+                    </a>
+                  </td>
                   <td>
                     <div class="d-flex flex-row justify-content-around">
                       <a href="javascript:void(0)">
@@ -218,52 +214,108 @@
         <div class="mt-3">
           <app-pagination [pagination]="singleEmployee" (onPageChange)="GetFilterResult($event)"></app-pagination>
         </div>
-
-
-        <!-- <div class="x_content">
-            <div class="col-md-12 row">
-                <div class="col-md-4">
-                    <div class="x_panel">
-                        user detail
-                    </div>
-                </div>
-                <div class="col-md 8">
-                    <div class="x_panel row">
-                        <div class="border border-info rounded text-center img_container"
-                            *ngFor="let item of userFiles">
-                            <div class="col-md-12">
-                                <div>
-                                    <img src="assets/img/pdf.png" class="employee_images" alt="user">
-                                </div>
-                                <div class="text-center action_container pt-1">
-                                    <a href="javascript:void(0)" (click)="editFile(item.FileUid)">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </a>
-                                    <a href="javascript:void(0)">
-                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" (click)="deleteFile(item.FileUid)">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-12 text_size">
-                                {{item.FileName}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
   </ng-container>
 </div>
+
+
+<!-- add update detail modal -->
+<div class="modal fade" id="gstupdateModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Add Or Update</h5>
+              <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body f-12">
+              <div class="col-md-12">
+                  <div [formGroup]="gstDetailForm" class="col-md-12 popup-form">
+                      <div class="col-md-12 row m-0">
+                        <div class="col-4 form-group">
+                          <label for="">Bill No.#</label>
+                          <input class="form-control disabled text-muted" disabled formControlName="Billno">
+                        </div>
+                          <div class="col-4 form-group">
+                              <label for="">GST Status</label>
+                              <select formControlName="Gststatus" name="Gststatus" class="form-control">
+                                  <option value="0">Status Type</option>
+                                  <option value="1">Completed</option>
+                                  <option value="2">Pending</option>
+                                  <option value="3">Canceled</option>
+                                  <option value="4">Not Generated</option>
+                                  <option value="5">Rejected</option>
+                                  <option value="6">Generated</option>
+                              </select>
+                          </div>
+                          <div class="col-4 form-group">
+                              <label for="">Paid On</label>
+                              <form class="form-inline">
+                                  <div class="form-group w-100">
+                                      <div class="input-group w-100">
+                                          <input class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                                              [(ngModel)]="model" (dateSelect)="onDateSelection($event)"
+                                              ngbDatepicker #d="ngbDatepicker">
+                                          <div class="input-group-append">
+                                              <button class="btn btn-outline-secondary calendar"
+                                                  (click)="d.toggle()" type="button"><i class="fa fa-calendar"
+                                                      aria-hidden="true"></i>
+                                              </button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                      <div class="col-md-12 row m-0 mt-4">
+                        <div class="col-4 form-group">
+                          <label for="">GST Amount</label>
+                          <input class="form-control disabled text-muted" disabled placeholder="GST Amount" formControlName="Amount">
+                        </div>
+                        <div class="col-4 form-group">
+                            <label for="">Paid By</label>
+                            <select formControlName="Paidby" name="Paidby" class="form-control">
+                                <option value="0">Employee Name</option>
+                                <option value="1">Completed</option>
+                                <option value="2">Pending</option>
+                                <option value="3">Canceled</option>
+                                <option value="4">Not Generated</option>
+                                <option value="5">Rejected</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="col-md-12 row m-0">
+                          <div class="form-group mt-4">
+                              <input type="file" id="uploadocument" class="d-none" multiple (change)="GetDocumentFile($event)"/>
+                              <a href="javascript:void(0)" class="text-muted d-inline-block mt-4 mb-2">
+                                <i class="fa fa-upload zoom-2"></i>
+                              </a>
+                              <div class="file-upload-zone x_panel"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
+
+              <button class="btn btn-primary" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+                  {{ isLoading ? 'Processing' : 'Submit' }}
+              </button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
 <!-- add update detail modal -->
 <div class="modal fade" id="addupdateModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Or Update</h5>
+                <h5 class="modal-title">GST Status Update Modal</h5>
                 <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -287,7 +339,7 @@
                                 <label for="">Updated On</label>
                                 <form class="form-inline">
                                     <div class="form-group w-100">
-                                        <!-- <div class="input-group w-100">
+                                        <div class="input-group w-100">
                                             <input class="form-control" placeholder="yyyy-mm-dd" name="dp"
                                                 [(ngModel)]="model" (dateSelect)="onDateSelection($event)"
                                                 ngbDatepicker #d="ngbDatepicker">
@@ -297,7 +349,7 @@
                                                         aria-hidden="true"></i>
                                                 </button>
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                 </form>
                             </div>

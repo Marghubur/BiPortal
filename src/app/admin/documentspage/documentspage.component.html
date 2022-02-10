@@ -62,14 +62,14 @@
                             </button>
                         </div>
                     </div>
-                </ng-container>                
+                </ng-container>
                 <div class="col-12 mt-4">
                     <div class="upload-doc-dv">
                         <div class="x_header">
                             Your files or documents
                         </div>
                         <div>
-                            <table datatable [dtOptions]="config" [dtTrigger]="dtTrigger" class="table table-bordered compact">
+                            <table class="table table-bordered compact">
                                 <thead>
                                     <tr>
                                         <th>Bill No#</th>
@@ -153,7 +153,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" *ngIf="!isExecuting" (click)="ExecuteFileDelete()" class="btn btn-primary">Delete Now</button>
                 <button *ngIf="isExecuting" class="btn btn-primary" type="submit">
-                    Wait deleting 
+                    Wait deleting
                     <div class="spinner">
                       <div class="bounce1"></div>
                       <div class="bounce2"></div>
@@ -239,7 +239,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" *ngIf="isEdit" (click)="SaveModifiedChanges()" class="btn btn-primary">Save Changes</button>
                 <button *ngIf="isExecuting" class="btn btn-primary" type="submit">
-                    Wait saving 
+                    Wait saving
                     <div class="spinner">
                       <div class="bounce1"></div>
                       <div class="bounce2"></div>
@@ -250,7 +250,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">

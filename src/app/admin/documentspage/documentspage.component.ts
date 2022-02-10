@@ -15,7 +15,6 @@ import { Filter, UserService } from 'src/providers/userService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { OnlineDocModel } from '../documents/documents.component';
 import { Subject } from 'rxjs';
-import { DataTableDirective } from 'angular-datatables';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -42,8 +41,6 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
   FileUrl: string = "http://localhost:5000/Files/Documents/zaid2292_gmail_com/file_2.pdf";
   TotalRecords: number = 0;
   dtTrigger: Subject<any> = new Subject<any>();
-  @ViewChild(DataTableDirective, {static: false})
-  dtElement: DataTableDirective;
   tableFilter: Filter;
   isHttpCallPerformed: boolean = false;
   isDeleteConfirmed: boolean = false;
@@ -260,10 +257,6 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
 
   reRenderTable() {
     this.documentFiles = [];
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.dtTrigger.next();
-    });
   }
 
   DeleteFile(Uid: any) {
