@@ -11,15 +11,15 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~12.1.0-next.3",
-    "@angular/common": "~12.1.0-next.3",
-    "@angular/compiler": "~12.1.0-next.3",
-    "@angular/core": "~12.1.0-next.3",
-    "@angular/forms": "~12.1.0-next.3",
-    "@angular/localize": "^9.1.13",
-    "@angular/platform-browser": "~12.1.0-next.3",
-    "@angular/platform-browser-dynamic": "~12.1.0-next.3",
-    "@angular/router": "~12.1.0-next.3",
+    "@angular/animations": "~13.2.2",
+    "@angular/common": "~13.2.2",
+    "@angular/compiler": "~13.2.2",
+    "@angular/core": "~13.2.2",
+    "@angular/forms": "~13.2.2",
+    "@angular/localize": "^13.2.2",
+    "@angular/platform-browser": "~13.2.2",
+    "@angular/platform-browser-dynamic": "~13.2.2",
+    "@angular/router": "~13.2.2",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
     "@popperjs/core": "^2.9.3",
     "angularx-social-login": "^4.0.1",
@@ -27,9 +27,11 @@
     "chart.js": "^3.7.0",
     "doc-viewer-angular": "^1.0.8",
     "file-saver": "^2.0.5",
+    "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
     "jszip": "^3.6.0",
     "ng2-charts": "^3.0.6",
+    "ngx-doc-viewer": "^2.1.2",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.3",
@@ -38,9 +40,9 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~12.1.0-next.3",
-    "@angular/cli": "~12.1.0-next.3",
-    "@angular/compiler-cli": "~12.1.0-next.3",
+    "@angular-devkit/build-angular": "~13.2.3",
+    "@angular/cli": "~13.2.3",
+    "@angular/compiler-cli": "~13.2.2",
     "@types/datatables.net": "^1.10.19",
     "@types/datatables.net-buttons": "^1.4.6",
     "@types/jasmine": "~3.6.0",
@@ -57,6 +59,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.2.4"
+    "typescript": "~4.5.5"
   }
 }

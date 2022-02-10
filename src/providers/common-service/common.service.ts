@@ -138,42 +138,6 @@ export class CommonService {
     return flag;
   }
 
-  public IsValidField(Columns: any): boolean {
-    let Data = Columns;
-    let flag = false;
-    if ((Data !== null && Data !== "" && Data !== undefined) || Data !== "{}") {
-      let Type = typeof Data;
-      if (Type === "string") {
-        if (Data.trim().length > 0) flag = true;
-      } else if (Type === "object") {
-        if (Array.isArray(Data)) {
-          if (Data.length > 0) flag = true;
-        } else {
-          if (Object.keys(Data).length > 0) flag = true;
-        }
-      }
-    }
-    return flag;
-  }
-
-  ValidateField(formid: string, event: any) {
-    $("#" + formid)
-      .find("*[required]")
-      .blur(($event: any) => {
-        if ($($event.target).is("input")) {
-          if (this.IsValidField($(event).val())) {
-            $(event)
-              .removeClass("error-field")
-              .addClass("success-field");
-          } else {
-            $(event)
-              .removeClass("success-field")
-              .addClass("error-field");
-          }
-        }
-      });
-  }
-
   public IsMoney(value: any) {
     let flag = true;
     if (!this.IsNumeric(value)) {
@@ -182,54 +146,6 @@ export class CommonService {
       }
     }
     return flag;
-  }
-
-  public IsValidDataSet(Dataset: string): boolean {
-    let flag = false;
-    if (Dataset !== null && Dataset !== "") {
-      let Keys = Object.keys(Dataset);
-      if (Keys.length > 0) {
-        flag = true;
-      }
-    }
-    return flag;
-  }
-
-  public IsValidFilterResponse(Dataset: string): boolean {
-    let flag = false;
-    if (Dataset !== null && Dataset !== "") {
-      let Keys = Object.keys(Dataset);
-      if (Keys.length === 2) {
-        if (
-          Keys.indexOf("Record") !== -1 &&
-          Keys.indexOf("RecordCount") !== -1
-        ) {
-          flag = true;
-        } else {
-          this.ShowToast("Getting some error. Please contact admin.");
-        }
-      }
-    }
-    return flag;
-  }
-
-  public ValidateForm(Keys: any): any {
-    let $elem = null;
-    let IsValidForm = 0;
-    let index = 0;
-    while (index < Keys.length) {
-      $elem = $("#" + Keys[index]);
-      if (this.IsValid($elem.attr("required"))) {
-        if ($elem.val() != null) {
-          if ($elem.val().trim().length == 0) {
-            $elem.addClass("error-field");
-            IsValidForm++;
-          }
-        }
-      }
-      index++;
-    }
-    return IsValidForm;
   }
 
   public IsNumeric(data: any): boolean {
@@ -374,36 +290,6 @@ export class CommonService {
     return Data;
   }
 
-  GerPagination(TotalRecords: any, PageIndex: any, PageSize: any): any {
-    // PageIndex always be start from 1 and not 0
-    let Indexer = [];
-    if (
-      TotalRecords !== "" &&
-      TotalRecords !== null &&
-      PageIndex !== "" &&
-      PageIndex !== null &&
-      PageSize !== "" &&
-      PageSize !== null
-    ) {
-      let $TotalRecord = parseInt(TotalRecords);
-      let $CurrentIndex = parseInt(PageIndex) + 1;
-      let TotalSlice = $TotalRecord / parseInt(PageSize);
-      TotalSlice = Math.floor(TotalSlice);
-      let Reminder = $TotalRecord % parseInt(PageSize);
-      if (Reminder > 0) {
-        TotalSlice++;
-        let ExtraCounter = Math.floor($CurrentIndex / 5);
-        let index = 0;
-        while (index < TotalSlice) {
-          Indexer.push(index + 1 + ExtraCounter * 5);
-          index++;
-          if (index == 5) break;
-        }
-      }
-    }
-    return Indexer;
-  }
-
   LocateSection(ComponentId: string) {
     try {
       $("#main-scroller").animate(
@@ -542,6 +428,40 @@ export function PlaceEmpty(data: any) {
   if (data === 0)
     return null;
   return data;
+}
+
+export function MonthName(monthnumber: number): string {
+  let monthName = "";
+  if(monthnumber) {
+    const date = new Date(2000, monthnumber - 1, 1);
+    monthName = date.toLocaleString('default', { month: 'long' });
+  }
+  return monthName;
+}
+
+export function GetStatus(id: number): string {
+  let status = "";
+  switch(id) {
+    case 1:
+      status = "Completed";
+      break;
+    case 3:
+      status = "Canceled";
+      break;
+    case 4:
+      status = "Not Generated";
+      break;
+    case 5:
+      status = "Rejected";
+      break;
+    case 6:
+      status = "Raised";
+      break;
+    default:
+      status = "Pending";
+      break;
+  }
+  return status;
 }
 
 export class UserDetail {

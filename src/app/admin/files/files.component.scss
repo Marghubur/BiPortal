@@ -88,16 +88,41 @@
 .global-searchbox {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   background-color: #fff;
   background-clip: padding-box;
-  height: 2rem;
-  margin-top: 28px;
+  height: 37px;
   border-radius: 0.25rem;
+  border: 1px solid #ced4da;
 }
 
 .filter-action-container {
   display: flex;
   flex-direction: row-reverse;
   align-items: end;
+}
+
+.zoom-2 {
+  zoom: 2;
+}
+
+.btn-design {
+  height: 35px;
+  border: 1px solid #d9d9d9;
+  border-radius: 0px 4px 4px 0px;
+}
+
+.title-header {
+  background: #e3e3e0ab;
+  border-radius: 4px;
+  padding: 7px 0;
+}
+
+.file-upload-zone {
+  min-height: 8rem !important;
+}
+
+.h-font {
+  color: #414166;
+  font-weight: 700;
 }

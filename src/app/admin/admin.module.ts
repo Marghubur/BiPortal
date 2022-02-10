@@ -8,19 +8,14 @@ import { documentsComponent } from './documents/documents.component';
 import { ManageemployeeComponent } from './manageemployee/manageemployee.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DataTablesModule } from "angular-datatables";
 import { UtilModule } from '../util/util.module';
 import { BuildPdfComponent } from './build-pdf/build-pdf.component';
-//Datepicker
 import { ReplaceEmpty } from 'src/pipes/ReplaceEmpty';
 import { EmployeesComponent } from './employees/employees.component';
 import { ClientsComponent } from './clients/clients.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';
 import { FilesComponent } from './files/files.component';
 import { ResumeComponent } from './resume/resume.component';
-import { PaginationComponent } from '../pagination/pagination.component';
-
-
 
 @NgModule({
   declarations: [
@@ -41,7 +36,6 @@ import { PaginationComponent } from '../pagination/pagination.component';
     AdminRoutingModule,
     NgbModule,
     ReactiveFormsModule,
-    DataTablesModule,
     FormsModule,
     UtilModule
   ]

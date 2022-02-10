@@ -45,7 +45,6 @@ import { BuilderModule } from './builder/builder.module';
 import { UtilModule } from './util/util.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgChartsModule } from 'ng2-charts';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { SidemenuComponent } from './sidemenu/sidemenu.component';
 
 @NgModule({
@@ -80,8 +79,7 @@ import { SidemenuComponent } from './sidemenu/sidemenu.component';
     UtilModule,
     BrowserAnimationsModule,
     SocialLoginModule,
-    NgChartsModule,
-    CarouselModule
+    NgChartsModule
   ],
   providers: [
     AppService,

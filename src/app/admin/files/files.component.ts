@@ -5,11 +5,11 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, Toast } from 'src/providers/common-service/common.service';
-import { BuildPdf, Employees, Files } from 'src/providers/constants';
+import { CommonService, GetStatus, MonthName, Toast } from 'src/providers/common-service/common.service';
+import { BuildPdf, Employees } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
-import { DocumentUser } from '../documents/documents.component';
+import { DocumentUser, Files } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 
 declare var $: any;
@@ -21,6 +21,7 @@ declare var $: any;
 })
 export class FilesComponent implements OnInit {
   documentForm: FormGroup = null;
+  filterbox: boolean = false;
   isLoading: boolean = false;
   currentEmployeeDetail: EmployeeDetail = null;
   userFiles: Array<any> = [];
@@ -31,6 +32,7 @@ export class FilesComponent implements OnInit {
   employee: any = null;
   fromModel: NgbDateStruct;
   toModel: NgbDateStruct;
+  model: NgbDateStruct;
   currentFileId: number = 0;
   billDetails: Array<BillDetails> = [];
   singleEmployee: Filter = null;
@@ -45,6 +47,11 @@ export class FilesComponent implements OnInit {
   employeeId: number = 0;
   fromDate: any = null;
   toDate: any = null;
+  currentRecordBillNo: string = "";
+  gstDetailForm: FormGroup = null;
+  FileDocumentList: Array<Files> = [];
+  FilesCollection: Array<any> = [];
+  isUploading: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -64,8 +71,11 @@ export class FilesComponent implements OnInit {
   ngOnInit(): void {
     this.fromModel = null;
     this.toModel = null;
+    this.model = null;
     this.employeeData = new Filter();
     this.employeeFile = new BillDetails();
+    this.employeeFile.Status = "0";
+    this.employeeFile.GSTStatus = '0';
     this.basePath = this.http.GetImageBasePath();
     this.currentEmployeeDetail = this.nav.getValue();
     this.employeeId = this.currentEmployeeDetail.EmployeeUid;
@@ -73,6 +83,16 @@ export class FilesComponent implements OnInit {
       data: [],
       placeholder: "Select Employee"
     }
+
+    this.gstDetailForm = this.fb.group({
+      GstId: new FormControl(0),
+      Billno: new FormControl("", Validators.required),
+      Gststatus: new FormControl("0", Validators.required),
+      Paidon: new FormControl("", Validators.required),
+      Paidby: new FormControl("0"),
+      Amount: new FormControl(0)
+    });
+
     this.documentForm = this.fb.group({
       StatusId: new FormControl(0, Validators.required),
       UpdatedOn: new FormControl(new Date(), Validators.required),
@@ -92,6 +112,7 @@ export class FilesComponent implements OnInit {
   onDateSelection(e: NgbDate) {
     let selectedDate = new Date(e.year, e.month - 1, e.day);
     this.documentForm.get("UpdatedOn").setValue(selectedDate);
+    this.gstDetailForm.get("Paidon").setValue(selectedDate);
   }
 
   GetFilterResult(e: Filter) {
@@ -124,6 +145,77 @@ export class FilesComponent implements OnInit {
       });
     } else {
       Toast("Status and Update is mandatory fields.");
+    }
+  }
+
+  GetDocumentFile(fileInput: any) {
+    this.FilesCollection = [];
+    let selectedFiles = fileInput.target.files;
+    if (selectedFiles.length > 0) {
+      let index = 0;
+      let file = null;
+      this.isUploading = false;
+      while (index < selectedFiles.length) {
+        file = <File>selectedFiles[index];
+        let item: Files = new Files();
+        item.FileName = file.name;
+        item.FileType = file.type;
+        item.FileSize = file.size;
+        item.FileExtension = file.type;
+        item.DocumentId = 0;
+        this.FileDocumentList.push(item);
+        this.FilesCollection.push(file);
+        index++;
+      }
+    } else {
+      Toast("No file selected");
+    }
+  }
+
+  fireBrowserFile() {
+    if(this.documentForm.invalid) {
+      return;
+    }
+    $("#uploadocument").click();
+  }
+
+  submitGSTStatusDetail() {
+    let errorCount = 0;
+    this.isUploading = true;
+
+    if (this.gstDetailForm.get("Gststatus").errors) {
+      errorCount++;
+    }
+
+    if (this.gstDetailForm.get("Billno").errors) {
+      errorCount++;
+    }
+
+    if (this.gstDetailForm.get("Paidon").errors) {
+      errorCount++;
+    }
+
+    let formData = new FormData();
+
+    let index = 0;
+    while (index < this.FileDocumentList.length) {
+      formData.append(this.FileDocumentList[index].FileName, this.FilesCollection[index]);
+      index++;
+    }
+
+    formData.append("gstDetail", JSON.stringify(this.gstDetailForm.value));
+    formData.append("fileDetail", JSON.stringify(this.FileDocumentList));
+
+    if (errorCount === 0) {
+      this.http.upload(`Bill/UpdateGstStatus/${this.currentRecordBillNo}`, formData).then(response => {
+        if (response.ResponseBody) {
+          Toast(response.ResponseBody);
+        }
+        this.LoadFiles();
+        this.closeWindow();
+      });
+    } else {
+      Toast("Please fill all mandatory fields.");
     }
   }
 
@@ -176,15 +268,16 @@ export class FilesComponent implements OnInit {
 
   closeWindow() {
     $('#addupdateModal').modal('hide');
+    $('#gstupdateModal').modal('hide');
   }
 
   LoadFiles() {
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        this.common.ShowToast("File or folder found");
+        this.common.ShowToast("Record found.");
         let employees = response.ResponseBody.EmployeesList as Array<EmployeeDetail>;
-        if(employees !== null && employees.length > 0) {
+        if(employees && employees.length > 0) {
           let index = 0;
           while(index < employees.length) {
             this.employeeDetails.push({
@@ -226,6 +319,7 @@ export class FilesComponent implements OnInit {
             } else {
               GST = 1;
             }
+            bills.GSTStatus = GetStatus(this.userFiles[i].GstStatus);
             bills.GSTAmount = this.userFiles[i].SalaryAmount * GST;
             bills.ClientId = this.userFiles[i].ClientId;
             bills.ClientName = this.userFiles[i].ClientName;
@@ -235,7 +329,7 @@ export class FilesComponent implements OnInit {
             bills.FilePath = this.userFiles[i].FilePath;
             bills.FileUid = this.userFiles[i].FileUid;
             bills.GeneratedOn = this.userFiles[i].GeneratedOn;
-            bills.Month = this.userFiles[i].Month;
+            bills.Month = MonthName(this.userFiles[i].Month);
             bills.PaidOn = this.userFiles[i].PaidOn;
             bills.Status = this.userFiles[i].Status;
             bills.SalaryAmount = this.userFiles[i].SalaryAmount;
@@ -297,11 +391,11 @@ export class FilesComponent implements OnInit {
     }
 
     if(this.employeeFile.BillNo !== null && this.employeeFile.BillNo !== "") {
-      searchQuery += ` ${delimiter} BillNo like '%${this.employeeFile.BillNo}%' `;
+      searchQuery += ` ${delimiter} b.BillNo like '%${this.employeeFile.BillNo}' `;
       delimiter = "and";
     }
 
-    if(this.employeeFile.Status !== null && this.employeeFile.Status !== "") {
+    if(this.employeeFile.Status !== '0' && this.employeeFile.Status !== "") {
       let StatusValue = '';
       if (this.employeeFile.Status == '1') {
         StatusValue = "Completed";
@@ -323,8 +417,8 @@ export class FilesComponent implements OnInit {
       delimiter = "and";
     }
 
-    if(this.employeeFile.GSTStatus !== null && this.employeeFile.GSTStatus !== "") {
-      searchQuery += ` ${delimiter} GSTStatus = '${this.employeeFile.GSTStatus}%' `;
+    if(this.employeeFile.GSTStatus !== '0' && this.employeeFile.GSTStatus !== "") {
+      searchQuery += ` ${delimiter} GSTStatus = '${this.employeeFile.GSTStatus}' `;
       delimiter = "and";
     }
 
@@ -343,6 +437,11 @@ export class FilesComponent implements OnInit {
       delimiter = "and";
     }
 
+    if(this.employeeFile.Month !== null && this.employeeFile.Month !== "") {
+      searchQuery += ` ${delimiter} Month like '${this.employeeFile.Month}%' `;
+      delimiter = "and";
+    }
+
     if(isDateFilterEnable) {
       searchQuery += ` ${delimiter} BillUpdatedOn between '${fromDateValue}' and '${toDateValue}'`;
     }
@@ -354,32 +453,16 @@ export class FilesComponent implements OnInit {
     this.LoadFiles();
   }
 
-  // globalFilter() {
-  //   let searchQuery = "";
-  //   searchQuery = ` ClientName like '${this.anyFilter}%' OR BillNo like '%${this.anyFilter}%' `;
-  //   if(searchQuery !== "") {
-  //     //this.employeeData.SearchString = `1=1 And ${searchQuery}`;
-  //     this.singleEmployee.SearchString = `1=1 And ${searchQuery}`;
-  //   }
-
-  //   this.LoadFiles();
-  // }
-
-  // unckeck() {
-  //   var value = document.getElementById("checkall");
-  //   value.checked = false
-  // }
-
   resetFilter() {
     this.employeeFile.ClientName="";
     this.employeeFile.BillNo = "";
-    this.employeeFile.Status="";
+    this.employeeFile.Status='0';
     this.employeeFile.GSTAmount=null;
-    this.employeeFile.GSTStatus="";
+    this.employeeFile.GSTStatus='0';
     this.employeeFile.SalaryAmount = null;
     this.employeeFile.ReceivedAmount=null;
     this.employeeFile.BilledAmount = null;
-    this.employeeFile.GeneratedOn = "";
+    this.employeeFile.Month = "";
     this.toModel = null;
     this.fromModel = null;
     this.toDate = null;
@@ -395,6 +478,29 @@ export class FilesComponent implements OnInit {
   EditCurrentDocument(userFile: any) {
     if (this.nav) {
       this.nav.navigate(BuildPdf, userFile);
+    }
+  }
+
+  toggleFilter() {
+    this.filterbox = !this.filterbox;
+  }
+
+  updateGSTStatus(BillNo: string, GSTAmount: string) {
+    if(BillNo) {
+      this.model = this.calendar.getToday();
+      let selectedDate = new Date(this.model.year, this.model.month - 1, this.model.day);
+      this.gstDetailForm.get("Paidon").setValue(selectedDate);
+      this.currentRecordBillNo = BillNo;
+      this.gstDetailForm.get("Billno").setValue(BillNo);
+      let amount = Number(GSTAmount);
+      if(!isNaN(amount)) {
+        this.gstDetailForm.get("Amount").setValue(amount);
+        $('#gstupdateModal').modal('show');
+      } else {
+        Toast("Invalid GST amount");
+      }
+    } else {
+      Toast("Invalid record. No bill no#. found.");
     }
   }
 }
