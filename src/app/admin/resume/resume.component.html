@@ -6,9 +6,9 @@
                 <h2>Upload Files <small>Add files</small>
                 </h2>
                 <div class="float-end d-inline create-link">
-                    <button class="btn btn-outline-success"> <i class="fa fa-plus-square-o me-1"
+                    <button class="btn btn-outline-success btn-sm"> <i class="fa fa-plus-square-o me-1"
                             aria-hidden="true"></i>Add File</button>
-                    <button class="btn btn-outline-primary ms-2"><i class="fa fa-upload me-2"
+                    <button class="btn btn-outline-primary btn-sm ms-2"><i class="fa fa-upload me-2"
                             aria-hidden="true"></i>Upload bulk files
                     </button>
                 </div>
@@ -25,13 +25,13 @@
 
                 <div class="mb-4 row m-0">
                     <div class="col-md-9">
-                        <input type="text" class="form-control" (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)" [(ngModel)]="anyFilter">
+                        <input type="text" class="form-control form-control-sm" (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)" [(ngModel)]="anyFilter">
                     </div>
-                    <div class="col-md-3">
-                        <button class="btn btn-primary filter-btn-grp" (click)="globalFilter()">
+                    <div class="col-md-3 text-end">
+                        <button class="btn btn-primary filter-btn-grp btn-sm" (click)="globalFilter()">
                             <i class="fa fa-filter me-1"></i> Filter
                         </button>
-                        <button class="btn btn-outline-danger filter-btn-grp ms-2" (click)="resetFilter()">
+                        <button class="btn btn-outline-danger filter-btn-grp btn-sm ms-2" (click)="resetFilter()">
                             <i class="fa fa-repeat"></i> Reset filter
                         </button>
                     </div>

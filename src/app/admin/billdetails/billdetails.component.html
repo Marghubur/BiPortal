@@ -1,5 +1,66 @@
 <div class="col-md-12">
   <ng-container *ngIf="isEmpPageReady">
+    <div class="col-12 u-header curren-bg row m-0">
+      <div class="col-md-3">
+          <div class="d-inline-block c-tab">
+              <a class="a-tab tab-active">
+                  <span>Active</span>
+              </a>
+              <a class="a-tab">
+                  <span>InActive</span>
+              </a>
+              <a class="a-tab">
+                <span>All</span>
+              </a>
+          </div>
+      </div>
+      <div class="col-md-8 row m-0">
+        <div class="col-md-6">
+          <div class="mt-3 row">
+            <hr>
+            <div class="col-md-7 row ms-1 p-0">
+              <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <label for="" class="pe-2">From</label>
+                <form class="form-inline">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control form-control-sm" placeholder="yyyy-mm-dd"
+                      (dateSelect)="fromDateSelection($event)" name="from" [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()" type="button"></button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+
+                <!-- <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.GeneratedOn" placeholder="From Date"> -->
+              </div>
+              <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <label for="" class="pe-2">To</label>
+                <form class="form-inline">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control form-control-sm" placeholder="yyyy-mm-dd"
+                      (dateSelect)="toDateSelection($event)" name="to" [(ngModel)]="toModel" ngbDatepicker #to="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="to.toggle()" type="button"></button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-md-5 ms-2 text-end">
+              <label class="pe-2">Check to apply filter for all</label>
+              <input type="checkbox" (change)="alterResultSet($event)" id="checkall">
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
     <div class="x_panel">
         <div class="x_header">
             <div class="x_header_title mt-3">
@@ -19,7 +80,7 @@
                   </a>
                 </div>
               </div>
-              <div class="mt-3 row" *ngIf="filterbox">
+              <div class="mt-3 row">
                 <hr>
                 <div class="col-md-7 row ms-1 p-0">
                   <div class="col-md-4 d-flex justify-content-center align-items-center">
@@ -27,7 +88,7 @@
                     <form class="form-inline">
                       <div class="form-group">
                         <div class="input-group">
-                          <input class="form-control" placeholder="yyyy-mm-dd"
+                          <input class="form-control form-control-sm" placeholder="yyyy-mm-dd"
                           (dateSelect)="fromDateSelection($event)" name="from" [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
                           <div class="input-group-append">
                             <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()" type="button"></button>
@@ -43,7 +104,7 @@
                     <form class="form-inline">
                       <div class="form-group">
                         <div class="input-group">
-                          <input class="form-control" placeholder="yyyy-mm-dd"
+                          <input class="form-control form-control-sm" placeholder="yyyy-mm-dd"
                           (dateSelect)="toDateSelection($event)" name="to" [(ngModel)]="toModel" ngbDatepicker #to="ngbDatepicker">
                           <div class="input-group-append">
                             <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="to.toggle()" type="button"></button>
@@ -341,7 +402,7 @@
                                 <form class="form-inline">
                                     <div class="form-group w-100">
                                         <div class="input-group w-100">
-                                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                                            <input class="form-control " placeholder="yyyy-mm-dd" name="dp"
                                                 [(ngModel)]="model" (dateSelect)="onDateSelection($event)"
                                                 ngbDatepicker #billd="ngbDatepicker">
                                             <div class="input-group-append">

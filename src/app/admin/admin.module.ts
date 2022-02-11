@@ -16,6 +16,7 @@ import { ClientsComponent } from './clients/clients.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';
 import { FilesComponent } from './files/files.component';
 import { ResumeComponent } from './resume/resume.component';
+import { BilldetailsComponent } from './billdetails/billdetails.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ResumeComponent } from './resume/resume.component';
     ClientsComponent,
     RegisterclientComponent,
     FilesComponent,
-    ResumeComponent
+    ResumeComponent,
+    BilldetailsComponent
   ],
   imports: [
     CommonModule,

@@ -37,7 +37,7 @@ export const Article = "api/blogs/article/:articleid";
 // ********************** Admin route pages  *******************
 
 export const Employees = "admin/employees";
-export const Doclist = "admin/documents";
+export const Documents = "admin/documents";
 export const DocumentsPage = "admin/documentspage";
 export const BuildPdf = "admin/BuildPdf";
 export const ManageEmployee = 'admin/manageemployee';
@@ -46,6 +46,7 @@ export const RegisterClient = 'admin/registerclient';
 export const Files = 'admin/files';
 export const Resume = 'admin/resumes';
 export const SideMenu = 'admin/sidemenu';
+export const BillDetail = 'admin/billdetail';
 
 
 // *************************** file name constancts  *************
