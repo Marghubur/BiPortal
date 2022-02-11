@@ -4,9 +4,10 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
-import { DocumentsPage, RegisterClient } from 'src/providers/constants';
+import { Clients, Documents, DocumentsPage, RegisterClient } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
+import { DocumentUser } from '../documents/documents.component';
 
 @Component({
   selector: 'app-clients',
@@ -55,6 +56,13 @@ export class ClientsComponent implements OnInit {
     this.user = this.userService.getInstance();
     if (this.user !== undefined && this.user !== null)
       this.LoadData();
+  }
+
+  AddEditDocuments(clientId: number) {
+    let userDetail: DocumentUser = new DocumentUser();
+    userDetail.PageName = Clients;
+    userDetail.UserId = clientId;
+    this.nav.navigate(Documents, userDetail);
   }
 
   LoadData() {

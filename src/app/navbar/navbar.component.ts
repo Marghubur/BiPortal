@@ -1,7 +1,7 @@
 import { ApplicationStorage } from "./../../providers/ApplicationStorage";
 import { AjaxService } from "./../../providers/ajax.service";
 import { CommonService, UserDetail } from "./../../providers/common-service/common.service";
-import { AccessTokenExpiredOn, Blogs, BuildPdf, Doclist, Employees, Login } from "./../../providers/constants";
+import { AccessTokenExpiredOn, Blogs, BuildPdf, Documents, Employees, Login } from "./../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { AutoPlayService } from "src/providers/AutoPlayService";
@@ -98,7 +98,7 @@ export class NavbarComponent implements OnInit {
   }
 
   LoadDocFiles() {
-    this.nav.navigate(Doclist, null);
+    this.nav.navigate(Documents, null);
   }
 
   Loademployees() {

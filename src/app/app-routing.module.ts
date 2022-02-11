@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CodeGenerator, Doclist, DocumentsPage, Employees, Home, JsonFormatter, LiveUrl, Login, SamplePage, TableSampleData, UploadScript, UserProfile } from 'src/providers/constants';
+import { CodeGenerator, Documents, DocumentsPage, Employees, Home, JsonFormatter, LiveUrl, Login, SamplePage, TableSampleData, UploadScript, UserProfile } from 'src/providers/constants';
 
 import { CodegeneratorComponent } from './codegenerator/codegenerator.component';
 import { HomeComponent } from './home/home.component';
@@ -34,10 +34,10 @@ const routes: Routes = [
     loadChildren: () => import('./builder/builder.module')
     .then(m => m.BuilderModule)
   },
-  { 
-    path: 'service', 
-    loadChildren: () => 
-    import('./util/util.module').then(m => m.UtilModule) 
+  {
+    path: 'service',
+    loadChildren: () =>
+    import('./util/util.module').then(m => m.UtilModule)
   }
 ];
 

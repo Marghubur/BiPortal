@@ -38,6 +38,7 @@ export class BuildPdfComponent implements OnInit {
   originalBillingMonth: number = 1;
   isEdit: boolean = false;
   editMode: boolean = false;
+  isHalfDay: boolean = false;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -133,8 +134,22 @@ export class BuildPdfComponent implements OnInit {
             this.pdfModal.sGST = fileDetail.SGST;
             this.pdfModal.iGST = fileDetail.IGST;
             this.pdfModal.daysAbsent = fileDetail.NoOfDaysAbsent;
-            this.pdfModal.actualDaysBurned = (fileDetail.NoOfDays - fileDetail.NoOfDaysAbsent);
+            this.pdfModal.isHalfDay = 0;
             this.pdfModal.workingDay = fileDetail.NoOfDays;
+            if(this.pdfModal.daysAbsent) {
+              let value = this.pdfModal.daysAbsent.toString();
+              let allValue = value.split(".");
+              if(allValue.length > 1) {
+                let data = Number(allValue[1]);
+                if(!isNaN(data) && data > 0) {
+                  this.isHalfDay = true;
+                  this.pdfModal.isHalfDay = 1;
+                  this.pdfModal.daysAbsent = Number(allValue[0]) + 1;
+                }
+              }
+            }
+
+            this.pdfModal.actualDaysBurned = (fileDetail.NoOfDays - this.pdfModal.daysAbsent);
             this.pdfModal.billNo = fileDetail.BillNo.replace("#", "");
             this.pdfModal.packageAmount = fileDetail.PaidAmount;
             this.pdfModal.billId = fileDetail.BillDetailUid;
@@ -309,17 +324,45 @@ export class BuildPdfComponent implements OnInit {
   calculateAmount(e: any) {
     let workinDays = e.target.value;
     if (workinDays !== null) {
+      if(this.pdfForm.get('isHalfDay').value == "1") {
+        let days = Number(workinDays);
+        if(!isNaN(days)) {
+          this.pdfForm.get('actualDaysBurned').setValue(days + 0.5);
+        } else {
+          Toast("Invalid.")
+        }
+      }
       this._calculateAmount(Number(workinDays));
     } else {
       this.common.ShowToast("Total working days is selected null.")
     }
   }
 
+  calculateHalfDayExtraAmount(e: any) {
+    let days: number = 0;
+    let workinDays = this.pdfForm.get('actualDaysBurned').value;
+    this.isHalfDay = false;
+    if (workinDays && workinDays !== "") {
+      days = Number(workinDays);
+      if(isNaN(days)) {
+        Toast("Invalid amount calculated.")
+        return;
+      }
+      if(e.target.value == "1") {
+        this.isHalfDay = true;
+      }
+      this._calculateAmount(days);
+    } else {
+      this.common.ShowToast("Total working days is selected null.")
+    }
+  }
+
   _calculateAmount(days: number) {
-    let totalMonthDays = this.pdfModal.actualDaysBurned
+    let totalMonthDays = this.pdfModal.workingDay
     this.packageAmount = this.clientDetail.ActualPackage;
-    if (totalMonthDays !== days)
-      this.packageAmount = this.packageAmount / totalMonthDays * days;
+    let halfDayValue = this.isHalfDay ? 0.5 : 0;
+    if (totalMonthDays !== days || this.isHalfDay)
+      this.packageAmount = this.packageAmount / totalMonthDays * (days + halfDayValue);
 
     this.packageAmount = Number(this.packageAmount.toFixed(2));
     let cgst = this.pdfForm.controls["cGST"].value;
@@ -356,6 +399,7 @@ export class BuildPdfComponent implements OnInit {
       sGstAmount: new FormControl(this.pdfModal.sGSTAmount),
       igstAmount: new FormControl(this.pdfModal.iGSTAmount),
       workingDay: new FormControl(this.pdfModal.workingDay),
+      isHalfDay: new FormControl(this.pdfModal.isHalfDay),
       actualDaysBurned: new FormControl(this.pdfModal.actualDaysBurned),
       packageAmount: new FormControl(this.pdfModal.packageAmount, [Validators.required]),
       grandTotalAmount: new FormControl(this.pdfModal.grandTotalAmount),
@@ -488,12 +532,14 @@ export class BuildPdfComponent implements OnInit {
     this.pdfForm.get("billingMonth").setValue(new Date(this.model.year, this.originalBillingMonth - 1, 1));
 
     if (errroCounter === 0) {
-      // "daysAbsent" = a - b
       this.pdfForm.get("daysAbsent").setValue(worksDays - burnDays);
       let request: PdfModal = this.pdfForm.value;
+      if(this.isHalfDay) {
+        request.daysAbsent = Number(worksDays - burnDays) - 0.5;
+      }
       this.http.post("FileMaker/GeneratePdf", request).then((response: ResponseModel) => {
-        if (response.ResponseBody.Status !== null && response.ResponseBody.Status !== "") {
-          this.common.ShowToast(response.ResponseBody.Status);
+        if (response.ResponseBody.ErroMessage == null && response.ResponseBody.Result) {
+          this.common.ShowToast(response.ResponseBody.Result.Status);
         }
         else {
           this.common.ShowToast("Failed to generated, Please contact to admin.");
@@ -622,6 +668,7 @@ class PdfModal {
   sGSTAmount: number = 0;
   iGSTAmount: number = 0;
   workingDay: number = 0;
+  isHalfDay: number = 0;
   actualDaysBurned: number = 0;
   packageAmount: number = 0;
   grandTotalAmount: number = 0;
