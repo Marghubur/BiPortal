@@ -138,7 +138,7 @@
       <div class="col-md-12 item-row" *ngIf="isDocumentReady">
         <ng-container *ngFor="let folders of documentDetails">
           <ng-container *ngIf="folders.IsRootFolder">
-            <div class="col-12 row m-0 mt-3 mb-3 p-4 border border-warning rounded">
+            <div class="col-12 row m-0 mt-3 mb-3 p-4 border border-warning rounded position-relative">
               <div class="col-md-3">
                 <a href="javascript:void(0)" class="ps-2">
                   <i class="fa fa-folder text-warning f-zoom" aria-hidden="true"></i>
@@ -147,7 +147,7 @@
                   {{folders.FolderName}}
                 </label>
               </div>
-              <div class="col-md-6 content-center">
+              <div class="col-md-9 content-center">
                 <ng-container *ngIf="folders.TotalFileCount === 0">
                   <div class="empty-dv">Folder is empty.
                     <small class="text-muted fw-lighter d-block sm-text">
@@ -156,7 +156,14 @@
                   </div>
                 </ng-container>
               </div>
-              <div class="col-md-3 content-center text-center">Actions</div>
+              <div class="folder-action">
+                <a href="javascript:void(0)" class="ac-dv" (click)="addSubFolder(folders.FolderPath)">
+                  <i class="fa fa-folder text-warning" aria-hidden="true"></i>
+                </a>
+                <a href="javascript:void(0)" class="ac-dv" (click)="addFiles(folders.FolderPath)">
+                  <i class="fa fa-plus-square text-success" aria-hidden="true"></i>
+                </a>
+              </div>
             </div>
           </ng-container>
           <ng-container *ngIf="!folders.IsRootFolder">

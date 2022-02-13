@@ -331,6 +331,14 @@ export class documentsComponent implements OnInit {
     }
   }
 
+  addFiles(FilePath: string) {
+    alert(FilePath);
+  }
+
+  addSubFolder(FilePath: string) {
+    alert(FilePath);
+  }
+
   SubmitFiles() {
     let formData = new FormData();
     let files = Array<Files>();
