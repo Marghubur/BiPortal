@@ -22,14 +22,14 @@
               </select>
             </div>
             <div class="col-md-4">
-              <label for="" class="form-label">Search by Email/ Mobile Number</label>
-              <input class="form-control table-filter-control" placeholder="Search by Email" formControlName="Email" (keyup.enter)="filterRecords()"
-              [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}">
+              <label for="" class="form-label">Name</label>
+              <input class="form-control table-filter-control" placeholder="Candidate Name" formControlName="name">
             </div>
             <div class="col-md-4">
-              <label for="" class="form-label">Name</label>
-              <input class="form-control table-filter-control" placeholder="Candidate Name" formControlName="name"
-              [ngClass]="{'error': submitted && f.name.errors !== null && f.name.errors.required}">
+              <label for="" class="form-label">Folder</label>
+              <select class="form-control" name="FolderName">
+                <option value="0">Root</option>
+              </select>
             </div>
           </div>
         </form>
@@ -48,29 +48,15 @@
                                 <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
                                     aria-labelledby="home-tab">
                                     <div id="classmasterdata" class="col-md-12">
-                                        <div name="ifilezone" class="ifilezone mb-4"
-                                            (click)="fireBrowserFile()">
-                                            <div *ngIf="uploading">
-                                                <span
-                                                    style="color:darkgray;display: block;margin-top: 10rem;">
-                                                    Drop files here.
-                                                </span>
-                                            </div>
-                                            <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="!uploading" name="uploading">
-                                              <img src="assets/img/ExcelFile.png" />
-                                              <!-- <div class="filetitle">
-                                                  File:
-                                                  <div name="filename" style="display: inline-block !important;">
-                                                      {{ fileName }}
-                                                  </div>
-                                              </div>
-                                              <div>
-                                                  File size: &nbsp;
-                                                  <div name="filesize" style="display: inline-block !important;">
-                                                      {{ fileSize }}
-                                                  </div>
-                                                  KB
-                                              </div> -->
+                                        <div name="ifilezone" class="ifilezone mb-4" (click)="fireBrowserFile()">
+                                          <div *ngIf="uploading">
+                                              <span
+                                                  style="color:darkgray;display: block;margin-top: 10rem;">
+                                                  Drop files here.
+                                              </span>
+                                          </div>
+                                          <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="!uploading" name="uploading">
+                                            <img src="assets/img/ExcelFile.png" />
                                           </div>
                                         </div>
                                     </div>
@@ -119,59 +105,143 @@
     </div>
   </div>
 
-  <div class="x_panel">
-    <div class="x_header">
-      <div class="x_header_title row">
-        <div class="x_header_title">
-          <h2>File(s) & Folder(s)
-            <small>user drives</small>
-          </h2>
-          <div class="float-end d-inline create-link pt-2">
-            <h6>
-              <div class="d-inline ps-1 pe-1">
-                <a href="javascript:void(0)" (click)="RefreshDocuments()">
-                  <span class="badge bg-success">
-                    <i class="fa fa-folder-o" aria-hidden="true"></i>
-                  </span>
-                </a>
-              </div>
-              <div class="d-inline ps-1 pe-1">
-                <a href="javascript:void(0)" (click)="RefreshDocuments()">
-                  <span class="badge bg-dark">
-                    <i class="fa fa-refresh"></i>
-                  </span>
-                </a>
-              </div>
-            </h6>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="x_content mt-4">
-      <div class="col-md-12 item-row" *ngIf="isDocumentReady">
-        <div class="file-type" *ngFor="let item of fileData">
-          <div class="file-link col-md-12">
-            <h6 class="float-end">
-              <div>
-                <a href="javascript:void(0)">
-                  <i class="fa fa-pencil-square-o text-dark" aria-hidden="true"></i>
-                </a>
-              </div>
-              <div class="mt-2">
-                <a href="javascript:void(0)">
-                  <i class="fa fa-download text-success"></i>
-                </a>
-              </div>
-            </h6>
-          </div>
-          <div class="d-inline">
-            <img class="upload-img" src="assets/img/file.png" alt="document_image">
-          </div>
-          <div class="file-name mt-2">
-            {{item.FileName}} Type: {{item.FileExtension}}
-          </div>
+
+  <div class="x_header c_header">
+    <div class="x_header_title row">
+      <div class="x_header_title">
+        <h2>File(s) & Folder(s)
+          <small>user drives</small>
+        </h2>
+        <div class="float-end d-inline create-link pt-2">
+          <h6>
+            <div class="d-inline ps-1 pe-1">
+              <a href="javascript:void(0)" (click)="GetCreateFolderPopup()">
+                <span class="badge bg-success">
+                  <i class="fa fa-folder-o" aria-hidden="true"></i>
+                </span>
+              </a>
+            </div>
+            <div class="d-inline ps-1 pe-1">
+              <a href="javascript:void(0)" (click)="RefreshDocuments()">
+                <span class="badge bg-dark">
+                  <i class="fa fa-refresh"></i>
+                </span>
+              </a>
+            </div>
+          </h6>
         </div>
       </div>
     </div>
   </div>
+  <div class="x_panel">
+    <div class="x_content mt-4">
+      <div class="col-md-12 item-row" *ngIf="isDocumentReady">
+        <ng-container *ngFor="let folders of documentDetails">
+          <ng-container *ngIf="folders.IsRootFolder">
+            <div class="col-12 row m-0 mt-3 mb-3 p-4 border border-warning rounded">
+              <div class="col-md-3">
+                <a href="javascript:void(0)" class="ps-2">
+                  <i class="fa fa-folder text-warning f-zoom" aria-hidden="true"></i>
+                </a>
+                <label class="d-block ps-2">
+                  {{folders.FolderName}}
+                </label>
+              </div>
+              <div class="col-md-6 content-center">
+                <ng-container *ngIf="folders.TotalFileCount === 0">
+                  <div class="empty-dv">Folder is empty.
+                    <small class="text-muted fw-lighter d-block sm-text">
+                      Add file(s) and folder(s) from using righ panel
+                    </small>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="col-md-3 content-center text-center">Actions</div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!folders.IsRootFolder">
+            <ng-container *ngFor="let item of folders.ContentDetails">
+              <div class="file-type mt-2 mb-2">
+                <div class="file-link col-md-12">
+                  <h6 class="float-end">
+                    <div class="mt-2">
+                      <a href="javascript:void(0)" class="d-block">
+                        <i class="fa fa-download text-success"></i>
+                      </a>
+                      <a href="javascript:void(0)" data-bs-toggle="modal" (click)="selecteItemForDelete(item.FileUid)" data-bs-target="#staticBackdrop">
+                        <i class="fa fa-trash text-danger"></i>
+                      </a>
+                    </div>
+                  </h6>
+                </div>
+                <div class="d-inline">
+                  <a href="javascript:void(0)" (click)="viewPdfFile(item)">
+                    <img class="upload-img" [src]="item.LocalImgPath" alt="document_image">
+                  </a>
+                </div>
+                <div class="file-name mt-2">
+                  {{item.FileName}} Type: {{item.FileExtension}}
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createFolder" tabindex="-1" role="dialog" aria-labelledby="createFolderTitle" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle">New folder</h5>
+      </div>
+      <div class="modal-body">
+        <div class="col-12">
+          <input type="text" class="form-control" [(ngModel)]="newFolderName" placeholder="untitled name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:void(0)" (click)="CloseFolderPopup()" class="text-decoration-none btn-light pe-3" data-dismiss="modal">Cancel</a>
+        <a href="javascript:void(0)" (click)="CreateNewfolder()" class="text-decoration-none btn-light text-primary">Create</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Delete file(s)</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <ng-container *ngIf="currentDeleteMarkedItem !== null">
+          <div class="delete-content">
+            <b>File Name: </b> {{currentDeleteMarkedItem.FileName}}
+          </div>
+          <span class="text-muted">
+            <b>File Type:</b> {{currentDeleteMarkedItem.FileExtension}}
+          </span>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:void(0)" class="text-decoration-none btn-light pe-3" data-bs-dismiss="modal">Close</a>
+        <a href="javascript:void(0)" (click)="deleteFile()" class="text-decoration-none btn-light text-primary">Create</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
+  <div class="text-end">
+      <a (click)="closePdfViewer()" class="close_view">
+          <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+      </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
 </div>

@@ -52,6 +52,8 @@ export class BilldetailsComponent implements OnInit {
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
   isUploading: boolean = false;
+  isModalReady: boolean = false;
+  isGSTStatusModalReady: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -61,10 +63,10 @@ export class BilldetailsComponent implements OnInit {
     private userService: UserService
   ) {
     this.singleEmployee = new Filter();
-    this.placeholderName = "Select Employee";
+    this.placeholderName = "All result";
     this.employeeDetails = [{
       value: '0',
-      text: 'Select Employee'
+      text: 'All result'
     }];
   }
 
@@ -78,16 +80,17 @@ export class BilldetailsComponent implements OnInit {
     this.employeeFile.GSTStatus = '0';
     this.basePath = this.http.GetImageBasePath();
     this.currentEmployeeDetail = this.nav.getValue();
-    this.employeeId = 0; //this.currentEmployeeDetail.EmployeeUid;
+    this.employeeId = 0;
     this.autoCompleteModal = {
       data: [],
-      placeholder: "Select Employee"
+      placeholder: "All result"
     }
 
     this.gstDetailForm = this.fb.group({
       GstId: new FormControl(0),
       Billno: new FormControl("", Validators.required),
       Gststatus: new FormControl("0", Validators.required),
+      Status: new FormControl("0", Validators.required),
       Paidon: new FormControl("", Validators.required),
       Paidby: new FormControl("0"),
       Amount: new FormControl(0)
@@ -100,13 +103,6 @@ export class BilldetailsComponent implements OnInit {
     });
 
     this.LoadFiles();
-  }
-
-  alterResultSet(e: any) {
-    if(e.target.checked)
-      this.employeeId = 0;
-    else
-      this.employeeId = this.currentEmployeeDetail.EmployeeUid;
   }
 
   onDateSelection(e: NgbDate) {
@@ -255,6 +251,7 @@ export class BilldetailsComponent implements OnInit {
 
   UpdateCurrent(FileUid: number) {
     this.currentFileId = Number(FileUid);
+    this.isModalReady = true;
     $('#addupdateModal').modal('show');
   }
 
@@ -337,6 +334,7 @@ export class BilldetailsComponent implements OnInit {
             bills.ReceivedAmount = (this.userFiles[i].SalaryAmount * (1 + GST)) - (this.userFiles[i].SalaryAmount /10);
             bills.BilledAmount = this.userFiles[i].SalaryAmount * (1 + GST);
             bills.TDS = (this.userFiles[i].SalaryAmount /10);
+            bills.Name = this.userFiles[i].Name;
             this.billDetails.push(bills);
             i++;
           }
@@ -396,20 +394,8 @@ export class BilldetailsComponent implements OnInit {
       delimiter = "and";
     }
 
-    if(this.employeeFile.Status !== '0' && this.employeeFile.Status !== "") {
-      let StatusValue = '';
-      if (this.employeeFile.Status == '1') {
-        StatusValue = "Completed";
-      }
-      else if (this.employeeFile.Status == '2') {
-        StatusValue = "Pending";
-      }
-      else if (this.employeeFile.Status == '3') {
-        StatusValue = "Canceled";
-      } else {
-        StatusValue = '';
-      }
-      searchQuery += ` ${delimiter} Status = '${StatusValue}' `;
+    if(this.employeeFile.Status !== '0') {
+      searchQuery += ` ${delimiter} BillStatusId = ${this.employeeFile.Status} `;
       delimiter = "and";
     }
 
@@ -468,9 +454,7 @@ export class BilldetailsComponent implements OnInit {
     this.fromModel = null;
     this.toDate = null;
     this.fromDate = null;
-    this.employeeId = this.currentEmployeeDetail.EmployeeUid;
-    //this.unckeck();
-    // this.anyFilter = "";
+    this.employeeId = 0;
     $('#checkall').prop('checked', false);
     this.singleEmployee = new Filter();
     this.LoadFiles();
@@ -488,6 +472,7 @@ export class BilldetailsComponent implements OnInit {
 
   updateGSTStatus(BillNo: string, GSTAmount: string) {
     if(BillNo) {
+      this.isGSTStatusModalReady = true;
       this.model = this.calendar.getToday();
       let selectedDate = new Date(this.model.year, this.model.month - 1, this.model.day);
       this.gstDetailForm.get("Paidon").setValue(selectedDate);
@@ -507,6 +492,7 @@ export class BilldetailsComponent implements OnInit {
 }
 
 export class BillDetails {
+  Name: string = "";
   BillNo: string = '';
   CGST: number = 0;
   ClientId: number =0;

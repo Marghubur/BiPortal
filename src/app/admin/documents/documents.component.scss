@@ -35,8 +35,6 @@ table {
 }
 
 .file-type {
-  display: inline;
-  width: auto !important;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   margin: 10px;
@@ -48,8 +46,8 @@ table {
 .item-row {
   display: flex;
   flex-flow: wrap;
-  justify-content: center;
 }
+
 .select-message {
   display: flex;
   align-items: center;
@@ -66,4 +64,37 @@ table {
 
 .file-type {
   position: relative;
+}
+
+.f-zoom {
+  font-size: 4rem;
+}
+
+.delete-content {
+  font-size: 0.9rem;
+  color: #31314a;
+}
+
+.c_header {
+  border-bottom: none !important;
+  padding: 1px 8px 0px;
+  margin-top: 1rem;
+  margin-bottom: 0px !important;
+}
+
+.empty-dv {
+  text-align: center;
+  font-size: 1.4rem;
+  color: #a5b79a;
+  font-weight: 600;
+}
+
+.content-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sm-text {
+  font-size: 0.9rem;
 }

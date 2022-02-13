@@ -39,7 +39,6 @@ import { AppHttpIntercepter } from './../auth/app.intercepter';
 import { JwtService } from './../auth/jwtService';
 import { UserService } from './../providers/userService';
 import { LiveurlComponent } from './liveurl/liveurl.component';
-import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { AdminModule } from './admin/admin.module';
 import { BuilderModule } from './builder/builder.module';
 import { UtilModule } from './util/util.module';
@@ -73,7 +72,6 @@ import { SidemenuComponent } from './sidemenu/sidemenu.component';
     RouterModule,
     FormsModule,
     HttpClientModule,
-    NgxDocViewerModule,
     AdminModule,
     BuilderModule,
     UtilModule,

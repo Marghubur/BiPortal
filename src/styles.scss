@@ -811,3 +811,28 @@ body {
     width: calc(100% - 16rem) !important;
   }
 }
+
+.file-container {
+  position: fixed;
+  z-index: 9999;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  padding: 0rem 14rem;
+  background: #4444447a;
+}
+
+.file-container > iframe {
+  height: 100%;
+  width: 100%;
+  z-index: 999999;
+}
+
+.close_view {
+  text-decoration: none;
+  color: white;
+  position: absolute;
+  margin-left: 8%;
+  margin-top: 25px;
+}

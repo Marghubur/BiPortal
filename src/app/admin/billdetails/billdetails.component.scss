@@ -103,7 +103,7 @@
 }
 
 .zoom-2 {
-  zoom: 2;
+  zoom: 1.2;
 }
 
 .btn-design {
@@ -186,4 +186,30 @@
 
 .d-r {
   direction: rtl;
+}
+
+.blinking {
+  font-weight: bold;
+  animation: blinkingText 1s infinite;
+}
+
+@keyframes blinkingText {
+  0% {
+    color: #d58740;
+  }
+  20% {
+    color: #915c2c;
+  }
+  40% {
+    color: #3e2611;
+  }
+  60% {
+    color: #3e2611;
+  }
+  80% {
+    color: #915c2c;
+  }
+  100% {
+    color: #d58740;
+  }
 }

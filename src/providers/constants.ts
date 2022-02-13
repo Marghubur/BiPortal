@@ -26,6 +26,13 @@ export const AccessToken = ProjectName + "_access_token";
 export const Authorization = "Authorization";
 export const Master = ProjectName + "_master";
 export const UserDetailName = ProjectName + "_UserDetail";
+export const DocumentPathName = "Documents";
+export const UserPathName = "User";
+
+export enum FileSystemType {
+  User = 1,
+  Bills = 2
+}
 
 
 // ********************** API route pages  *******************
@@ -50,13 +57,26 @@ export const BillDetail = 'admin/billdetail';
 
 
 // *************************** file name constancts  *************
-export const Doc = "assets/doc.png";
-export const Pdf = "assets/pdf.png";
-export const Txt = "assets/txt.png";
-export const FlatFile = "assets/file.png";
-export const Zip = "assets/zip.png";
-export const Excel = "assets/excel.png";
-export const Ppt = "assets/ppt.png";
+export const Doc = "doc";
+export const Docx = "docx";
+export const Pdf = "pdf";
+export const Txt = "txt";
+export const FlatFile = "file";
+export const Zip = "zip";
+export const Excel = "xlsx";
+export const Ppt = "ppt";
+export const Directory = "";
+
+export const DocImg = "assets/ext/doc.jpg";
+export const PdfImg = "assets/ext/pdf.png";
+export const TxtImg = "assets/txt.png";
+export const FlatFileImg = "assets/file.png";
+export const ZipImg = "assets/zip.png";
+export const ExcelImg = "assets/excel.png";
+export const PptImg = "assets/ppt.png";
+export const DirectoryImg = "assets/ppt.png";
+
+
 export const MaxAllowedFileSize = 2048
 
 export enum UserType {
