@@ -113,25 +113,25 @@ export class AjaxService {
     });
   }
 
-  delete(Url: string, Param: any): Promise<any> {
+  delete(Url: string, Param?: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.commonService.ShowLoaderByAjax();
       this.http.delete(environment.baseUrl + Url, {
         headers: {
           observe: "response",
         },
-        params: Param
+        body: Param
       })
         .subscribe(
-          (res: HttpResponse<any>) => {
+          (res: any) => {
             try {
-              if (!IsValidResponse(res.body)) {
+              if (!IsValidResponse(res)) {
                 reject(null);
               }
             } catch (e) {
               reject(null);
             }
-            resolve(res.body);
+            resolve(res);
             this.commonService.HideLoaderByAjax();
           },
           error => {

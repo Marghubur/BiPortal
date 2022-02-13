@@ -17,6 +17,7 @@ import { RegisterclientComponent } from './registerclient/registerclient.compone
 import { FilesComponent } from './files/files.component';
 import { ResumeComponent } from './resume/resume.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { BilldetailsComponent } from './billdetails/billdetails.component';
     NgbModule,
     ReactiveFormsModule,
     FormsModule,
-    UtilModule
+    UtilModule,
+    NgxDocViewerModule
   ]
 })
 export class AdminModule { }
