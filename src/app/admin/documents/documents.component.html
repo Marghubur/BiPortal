@@ -1,111 +1,4 @@
 <div class="">
-  <div class="x_panel">
-    <div class="x_header">
-      <div class="x_header_title row">
-        <div class="col-md-3">
-          <h2>Header<small>small description</small></h2>
-        </div>
-      </div>
-    </div>
-    <div class="x_content mt-4">
-      <!-- <form [formGroup]="documentForm" id="gpdfform" class="col-md-12 row"> -->
-        <form action="" [formGroup]="documentForm" class="col-md-12 row">
-          <div class="col-md-12 m-0 row">
-            <div class="col-md-4">
-              <label class="form-label">Type *</label>
-              <select class="form-select" aria-label="Default select example" formControlName="userTypeId"
-              [ngClass]="{'error': submitted && f.userTypeId.errors !== null && f.userTypeId.errors.required}">
-                <option selected>Type</option>
-                <option value="1">Employee</option>
-                <option value="2">Client</option>
-                <option value="3">Candidate</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label for="" class="form-label">Name</label>
-              <input class="form-control table-filter-control" placeholder="Candidate Name" formControlName="name">
-            </div>
-            <div class="col-md-4">
-              <label for="" class="form-label">Folder</label>
-              <select class="form-control" name="FolderName">
-                <option value="0">Root</option>
-              </select>
-            </div>
-          </div>
-        </form>
-
-        <div class="col-12 row m-0">
-          <div class="col-md-4 mt-4 me-2">
-            <div class="x_panel">
-              <div class="x_header">
-                <div class="x_header_title">
-                  <div class="">
-                    <input type="file" id="uploadocument" class="d-none" multiple (change)="GetDocumentFile($event)" *ngIf="uploading"/>
-                    <div class="col-md-12 p-0">
-                        <div class="table-responsive">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                aria-labelledby="home-tab">
-                                <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
-                                    aria-labelledby="home-tab">
-                                    <div id="classmasterdata" class="col-md-12">
-                                        <div name="ifilezone" class="ifilezone mb-4" (click)="fireBrowserFile()">
-                                          <div *ngIf="uploading">
-                                              <span
-                                                  style="color:darkgray;display: block;margin-top: 10rem;">
-                                                  Drop files here.
-                                              </span>
-                                          </div>
-                                          <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="!uploading" name="uploading">
-                                            <img src="assets/img/ExcelFile.png" />
-                                          </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-              <div class="mt-4">
-                <button type="button" class="btn btn-primary me-2" (click)="SubmitFiles()" [disabled]="btnDisable">
-                    <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
-                </button>
-                <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()" [disabled]="btnDisable">
-                    <i class="fa fa-eraser pe-2"></i> Cancel
-                </button>
-            </div>
-            </div>
-          </div>
-        </div>
-          <div class="col-md-7 mt-4" style="height: 52vh;overflow: auto;">
-            <table class="table" *ngIf="!btnDisable">
-              <thead>
-                <tr>
-                  <th width="8%">#</th>
-                  <th>File Name</th>
-                  <th width="15%">File Size (KB)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of FilesCollection">
-                  <td class="counterCell"></td>
-                  <td>{{item.name}}</td>
-                  <td>{{item.size/1024}}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div *ngIf="btnDisable" class="select-message">
-              <h3>
-                Please upload at least one file and You will see their details here.
-              </h3>
-            </div>
-          </div>
-        </div>
-      <!-- </form> -->
-    </div>
-  </div>
-
-
   <div class="x_header c_header">
     <div class="x_header_title row">
       <div class="x_header_title">
@@ -115,7 +8,14 @@
         <div class="float-end d-inline create-link pt-2">
           <h6>
             <div class="d-inline ps-1 pe-1">
-              <a href="javascript:void(0)" (click)="GetCreateFolderPopup()">
+              <a href="javascript:void(0)" data-bs-toggle="modal" (click)="addFiles()">
+                <span class="badge bg-primary">
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                </span>
+              </a>
+            </div>
+            <div class="d-inline ps-1 pe-1">
+              <a href="javascript:void(0)" (click)="CreateFolderPopup()">
                 <span class="badge bg-success">
                   <i class="fa fa-folder-o" aria-hidden="true"></i>
                 </span>
@@ -135,62 +35,68 @@
   </div>
   <div class="x_panel">
     <div class="x_content mt-4">
+      <ng-container *ngFor="let f of folderNav">
+        <a href="javascript:void(0)" (click)="navigateTo(f.route)" class="navigation-link">
+          /{{f.name}}
+        </a>
+      </ng-container>
       <div class="col-md-12 item-row" *ngIf="isDocumentReady">
         <ng-container *ngFor="let folders of documentDetails">
-          <ng-container *ngIf="folders.IsRootFolder">
+          <ng-container *ngIf="folders.IsFolder">
             <div class="col-12 row m-0 mt-3 mb-3 p-4 border border-warning rounded position-relative">
               <div class="col-md-3">
                 <a href="javascript:void(0)" class="ps-2">
                   <i class="fa fa-folder text-warning f-zoom" aria-hidden="true"></i>
                 </a>
                 <label class="d-block ps-2">
-                  {{folders.FolderName}}
+                  {{folders.FilePath}}
                 </label>
               </div>
-              <div class="col-md-9 content-center">
-                <ng-container *ngIf="folders.TotalFileCount === 0">
-                  <div class="empty-dv">Folder is empty.
-                    <small class="text-muted fw-lighter d-block sm-text">
-                      Add file(s) and folder(s) from using righ panel
-                    </small>
-                  </div>
-                </ng-container>
+              <div class="col-md-9 content-end">
+                <div class="text-start">
+                  <h6 class="text-danger">Total: {{fileCount(folders.FilePath)}} item(s) present.</h6>
+                  <a href="javascript:void(0)" (click)="openSubFolder(folders.FilePath)">
+                    Open
+                  </a>
+                </div>
               </div>
               <div class="folder-action">
-                <a href="javascript:void(0)" class="ac-dv" (click)="addSubFolder(folders.FolderPath)">
+                <!-- <a href="javascript:void(0)" class="ac-dv" (click)="addSubFolder(folders.FolderPath)">
                   <i class="fa fa-folder text-warning" aria-hidden="true"></i>
                 </a>
                 <a href="javascript:void(0)" class="ac-dv" (click)="addFiles(folders.FolderPath)">
                   <i class="fa fa-plus-square text-success" aria-hidden="true"></i>
+                </a> -->
+                <a href="javascript:void(0)" class="ac-dv">
+                  <i class="fa fa-trash text-danger" aria-hidden="true"></i>
                 </a>
               </div>
             </div>
           </ng-container>
-          <ng-container *ngIf="!folders.IsRootFolder">
-            <ng-container *ngFor="let item of folders.ContentDetails">
-              <div class="file-type mt-2 mb-2">
-                <div class="file-link col-md-12">
-                  <h6 class="float-end">
-                    <div class="mt-2">
-                      <a href="javascript:void(0)" class="d-block">
-                        <i class="fa fa-download text-success"></i>
-                      </a>
-                      <a href="javascript:void(0)" data-bs-toggle="modal" (click)="selecteItemForDelete(item.FileUid)" data-bs-target="#staticBackdrop">
-                        <i class="fa fa-trash text-danger"></i>
-                      </a>
-                    </div>
-                  </h6>
-                </div>
-                <div class="d-inline">
-                  <a href="javascript:void(0)" (click)="viewPdfFile(item)">
-                    <img class="upload-img" [src]="item.LocalImgPath" alt="document_image">
-                  </a>
-                </div>
-                <div class="file-name mt-2">
-                  {{item.FileName}} Type: {{item.FileExtension}}
-                </div>
+          <ng-container *ngIf="!folders.IsFolder">
+            <div class="file-type mt-2 mb-2">
+              <div class="file-link col-md-12">
+                <h6 class="float-end">
+                  <div class="mt-2 file-action">
+                    <a href="javascript:void(0)" class="d-block">
+                      <i class="fa fa-download text-success"></i>
+                    </a>
+                    <a href="javascript:void(0)" data-bs-toggle="modal" (click)="selectItemForDelete(folders.FileUid)"
+                      data-bs-target="#staticBackdrop">
+                      <i class="fa fa-trash text-danger"></i>
+                    </a>
+                  </div>
+                </h6>
               </div>
-            </ng-container>
+              <div class="d-inline">
+                <a href="javascript:void(0)" (click)="viewPdfFile(folders)">
+                  <img class="upload-img" [src]="folders.LocalImgPath" alt="document_image">
+                </a>
+              </div>
+              <div class="file-name mt-2">
+                {{folders.FileName}} Type: {{folders.FileExtension}}
+              </div>
+            </div>
           </ng-container>
         </ng-container>
       </div>
@@ -237,8 +143,137 @@
       </div>
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none btn-light pe-3" data-bs-dismiss="modal">Close</a>
-        <a href="javascript:void(0)" (click)="deleteFile()" class="text-decoration-none btn-light text-primary">Create</a>
+        <a href="javascript:void(0)" (click)="deleteFile()" class="text-decoration-none btn-light text-primary">Delete</a>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdropDown" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-fullscreen p-4 ">
+    <div class="modal-content rounded-3">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="x_panel">
+          <div class="x_header">
+            <div class="x_header_title row">
+              <div class="col-md-3">
+                <h2>Header<small>small description</small></h2>
+              </div>
+            </div>
+          </div>
+          <div class="x_content mt-4">
+            <!-- <form [formGroup]="documentForm" id="gpdfform" class="col-md-12 row"> -->
+              <form action="" [formGroup]="documentForm" class="col-md-12 row">
+                <div class="col-md-12 m-0 row">
+                  <div class="col-md-4">
+                    <label class="form-label">Type *</label>
+                    <select class="form-select" aria-label="Default select example" formControlName="userTypeId"
+                    [ngClass]="{'error': submitted && f.userTypeId.errors !== null && f.userTypeId.errors.required}">
+                      <option value="0">Type</option>
+                      <option value="1">Employee</option>
+                      <option value="2">Client</option>
+                      <option value="3">Candidate</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="" class="form-label">Name</label>
+                    <input class="form-control table-filter-control" placeholder="Candidate Name" formControlName="name">
+                  </div>
+                  <div class="col-md-4">
+                    <label for="" class="form-label">Folder</label>
+                    <select class="form-control" name="FolderName">
+                      <option value="0">Root</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+
+              <div class="col-12 row m-0">
+                <div class="col-md-4 mt-4 me-2">
+                  <div class="x_panel">
+                    <div class="x_header">
+                      <div class="x_header_title">
+                        <div class="">
+                          <input type="file" id="uploadocument" class="d-none" multiple (change)="GetDocumentFile($event)" *ngIf="uploading"/>
+                          <div class="col-md-12 p-0">
+                              <div class="table-responsive">
+                                  <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                      aria-labelledby="home-tab">
+                                      <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
+                                          aria-labelledby="home-tab">
+                                          <div id="classmasterdata" class="col-md-12">
+                                              <div name="ifilezone" class="ifilezone mb-4" (click)="fireBrowserFile()">
+                                                <div *ngIf="uploading">
+                                                    <span
+                                                        style="color:darkgray;display: block;margin-top: 10rem;">
+                                                        Drop files here.
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="!uploading" name="uploading">
+                                                  <img src="assets/img/ExcelFile.png" />
+                                                </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="mt-4">
+                      <button type="button" class="btn btn-primary me-2" (click)="SubmitFiles()" [disabled]="btnDisable ||isLargeFile">
+                          <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
+                      </button>
+                      <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()" [disabled]="btnDisable">
+                          <i class="fa fa-eraser pe-2"></i> Cancel
+                      </button>
+                  </div>
+                  </div>
+                </div>
+              </div>
+                <div class="col-md-7 mt-4" style="height: 52vh;overflow: auto;">
+                  <table class="table" *ngIf="!btnDisable">
+                    <thead>
+                      <tr>
+                        <th width="8%">#</th>
+                        <th>File Name</th>
+                        <th width="15%">File Size (KB)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of FilesCollection">
+                        <td class="counterCell"></td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.size/1024 | number: '1.2-2'}}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
+                        <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
+                    File size is greater than 2028KB i.e 2 MB, so please remove some file
+                  </div>
+                  <div *ngIf="btnDisable" class="select-message">
+                    <h3>
+                      Please upload at least one file and You will see their details here.
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            <!-- </form> -->
+          </div>
+        </div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div> -->
     </div>
   </div>
 </div>

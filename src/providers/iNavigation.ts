@@ -14,7 +14,20 @@ export class iNavigation {
         this.manageLocalSessionKey(Path);
         localStorage.setItem(NAVPARAMNAME, Path);
       }
-      this.route.navigate(["/" + Path]);
+      this.route.navigate(["/" + Path, ]);
+    } else {
+      Toast("Invalid component path passed.");
+    }
+  }
+
+  public navigateWithArgs(Path: string, args: string, Parameter: any = null) {
+    if (Path !== null) {
+      if (Parameter !== null && Parameter !== "") {
+        localStorage.setItem(Path, JSON.stringify(Parameter));
+        this.manageLocalSessionKey(Path);
+        localStorage.setItem(NAVPARAMNAME, Path);
+      }
+      this.route.navigate(["/" + Path], { queryParams: { path: args } });
     } else {
       Toast("Invalid component path passed.");
     }
@@ -22,7 +35,8 @@ export class iNavigation {
 
   public manageLocalSessionKey(pageName: string) {
     let key = localStorage.getItem(NAVPARAMNAME);
-    if (pageName != key) {
+    let path = pageName.split("?");
+    if (path[0] != key) {
       if (key !== "") {
         localStorage.removeItem(key);
       }
@@ -31,7 +45,8 @@ export class iNavigation {
 
   public getValue(): any {
     let ParsedData = null;
-    let Data: any = localStorage.getItem(this.common.GetCurrentPageName());
+    let path = this.common.GetCurrentPageName().split("?");
+    let Data: any = localStorage.getItem(path[0]);
     if (Data && Data !== "") {
       try {
         ParsedData = JSON.parse(Data);

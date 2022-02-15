@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IsValidResponse, ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
-import { Clients, Doc, DocImg, DocumentPathName, Docx, Employees, FileSystemType, Pdf, PdfImg, Resume, UserPathName, UserType } from 'src/providers/constants';
+import { ADocx, AImage, APdf, Clients, Doc, DocImg, DocumentPath, DocumentPathName, Documents, Docx, Employees, Excel, ExcelImg, FileSystemType, Images, JImage, Pdf, PdfImg, PImage, Resume, UserPath, UserPathName, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
+import { environment } from "src/environments/environment";
+import { ActivatedRoute } from '@angular/router';
 
 declare var $:any;
 
@@ -31,19 +33,33 @@ export class documentsComponent implements OnInit {
   candidatesData: Filter = null;
   newFolderName: string = "";
   documentDetails: Array<DocumentDetail> = [];
-  winRootLocation: string = "Documents\\User";
-  unixRootLocation: string = "Documents\/User";
-  currentFoder: string = "";
+  cachedDocumentDetails: Array<any> = [];
+  rootLocation: string = `${DocumentPath}${environment.FolderDelimiter}${UserPath}`;
   baseUrl: string = "";
   viewer: any = null;
   currentDeleteMarkedItem: any = 0;
-
+  targetFolder: string = "";
+  totalFileSize: number = 0;
+  folderNav: Array<any> = [];
+  isLargeFile: boolean = false;
+  currentFolder: string = "";
+  routeParam: any = null;
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.folderNav.push({name: "home", route: this.rootLocation});
+    this.route.queryParamMap.subscribe((params: any) => {
+      if(params.params.path) {
+        this.routeParam = params.params.path;
+        this.buildRoute();
+      }
+    });
+
+    this.currentFolder = this.rootLocation;
     this.baseUrl = this.http.GetImageBasePath();
     this.initForm();
     this.personDetail = new DocumentUser();
@@ -62,7 +78,7 @@ export class documentsComponent implements OnInit {
       this.bindForm(this.currentUser);
       this.RefreshDocuments();
     } else {
-      this.currentUser = new DocumentUser();
+      this.nav.navigate("/", null);
     }
   }
 
@@ -86,7 +102,7 @@ export class documentsComponent implements OnInit {
     this.documentForm = this.fb.group({
       Email: ['', Validators.required],
       name: ['', Validators.required],
-      userTypeId: ['', Validators.required]
+      userTypeId: ['0', Validators.required]
     })
   }
 
@@ -101,7 +117,6 @@ export class documentsComponent implements OnInit {
       userTypeId: currentUser.UserTypeId
     })
   }
-
 
   fireBrowserFile() {
     this.submitted = true;
@@ -124,79 +139,67 @@ export class documentsComponent implements OnInit {
     }
   }
 
+  fileCount(key: string): number {
+    if(key !== "") {
+      let items = this.cachedDocumentDetails[key];
+      if(items) {
+        return items.length;
+      }
+    }
+    return 0;
+  }
+
   BuildFileAndFolderDetail(fileDetail: Array<any>) {
-    let isRootFolder = false;
-    let folderName = "";
-    let folderNames = [];
-    let directoryCollection: Array<any> = [];
-    this.documentDetails = new Array<DocumentDetail>();
-    let index = 0;
-    while(index < fileDetail.length) {
-      let fileFolder = new Files();
-      fileFolder.IsFolderType = false;
-      fileFolder.FileUid = fileDetail[index].FileId;
-      fileFolder.UserId = fileDetail[index].FileOwnerId;
-      fileFolder.FileName = fileDetail[index].FileName;
-      fileFolder.FileExtension = fileDetail[index].FileExtension;
-
-      switch(fileFolder.FileExtension) {
-        case Pdf:
-          fileFolder.LocalImgPath = PdfImg;
-          break;
-        case Docx:
-        case Doc:
-          fileFolder.LocalImgPath = DocImg;
-          break;
-        default:
-          fileFolder.IsFolderType = true;
-      }
-
-      if(fileDetail[index].FileName == null || fileDetail[index].FileName == "") {
-        fileFolder.FilePath = `${fileDetail[index].FilePath}`;
-      } else {
-        fileFolder.FilePath = `${this.baseUrl}/${fileDetail[index].FilePath}/${fileDetail[index].FileName}`;
-      }
-
-      folderNames = fileDetail[index].FilePath.split("\\");
-      if(folderNames.length === 1) {
-        folderNames = fileDetail[index].FilePath.split("\/");
-      }
-      if(folderNames.length > 2) {
-        if(folderNames[0] === DocumentPathName && folderNames[1] === UserPathName) {
-          folderName = folderNames[2];
+    if(fileDetail != null && fileDetail.length > 0) {
+      this.cachedDocumentDetails = [];
+      let index = 0;
+      let item = null;
+      let pathName = "";
+      let parentFolder = "";
+      let isParent = false;
+      while(fileDetail.length > 0) {
+        parentFolder = fileDetail[index].ParentFolder;
+        isParent = false;
+        if(parentFolder != null && parentFolder != "") {
+          pathName = parentFolder;
+          isParent = true;
+        } else {
+          pathName = fileDetail[index].FilePath;
         }
-        isRootFolder = true;
-      } else {
-        folderName = "";
-        isRootFolder = false;
-      }
 
-      let docDetail = directoryCollection.find(x => x.FolderPath.replace("/", "\\") === fileDetail[index].FilePath.replace("/", "\\"));
-      if(!docDetail) {
-        directoryCollection.push({
-          FolderPath: fileDetail[index].FilePath,
-          IsRootFolder: isRootFolder,
-          FolderName: folderName,
-          ContentDetails: [ fileFolder ]
-        });
-      } else {
-        docDetail.ContentDetails.push(fileFolder);
+        item = fileDetail.splice(index, 1);
+        item = item[0];
+        item["IsFolder"] = isParent;
+        switch(item.FileExtension) {
+          case APdf:
+          case Pdf:
+            item["LocalImgPath"] = PdfImg;
+            break;
+          case Docx:
+          case ADocx:
+          case Doc:
+            item["LocalImgPath"] = DocImg;
+            break;
+          case Excel:
+            item["LocalImgPath"] = ExcelImg;
+            break;
+          case PImage:
+          case JImage:
+          case AImage:
+            item["LocalImgPath"] = Images;
+            break;
+          default:
+            item.IsFolderType = true;
+        }
+        if(!this.cachedDocumentDetails[pathName]) {
+          this.cachedDocumentDetails[pathName] = [ item ];
+        } else {
+          this.cachedDocumentDetails[pathName].push(item);
+        }
       }
-      index++;
     }
 
-    if (directoryCollection.length > 0) {
-      let directories = directoryCollection.filter(x => x.IsRootFolder);
-      let files = directoryCollection.filter(x => !x.IsRootFolder);
-      this.documentDetails.push(...directories);
-      this.documentDetails.push(...files);
-    }
-
-    this.documentDetails.map((item, index) => {
-      if(item.ContentDetails.filter(x => x.IsFolderType).length > 0) {
-        item.TotalFileCount = item.ContentDetails.length - 1;
-      }
-    });
+    this.documentDetails = this.cachedDocumentDetails[this.rootLocation];
   }
 
   getUploadedDetails() {
@@ -233,6 +236,9 @@ export class documentsComponent implements OnInit {
     this.FileDocuments = [];
     this.FilesCollection = [];
     let selectedFiles = fileInput.target.files;
+    if (this.routeParam.params.path !== null || this.routeParam.params.path !== '') {
+      this.routeParam = this.routeParam.params.path;
+    }
     if (selectedFiles.length > 0) {
       let index = 0;
       let file = null;
@@ -244,23 +250,34 @@ export class documentsComponent implements OnInit {
         let item: Files = new Files();
         item.FileName = file.name;
         item.FileType = file.type;
-        item.FileSize = file.size;
+        item.FileSize = (Number(file.size)/1024);
         item.Mobile = this.currentUser.Mobile;
         item.Email = this.currentUser.Email;
         item.FileExtension = file.type;
         item.DocumentId = 0;
+        item.FilePath = this.getRelativePath(this.routeParam);
+        item.ParentFolder = '';
         item.UserId = this.currentUser.UserId;
         item.UserTypeId = this.currentUser.UserTypeId;
         this.FileDocumentList.push(item);
         this.FilesCollection.push(file);
         index++;
       }
+
+      for(let i=0; i<selectedFiles.length; i++) {
+        let filesize = Number(this.FilesCollection[i].size)
+        this.totalFileSize += (filesize/1024);
+      }
+
+      if (this.totalFileSize > 2048) {
+        this.isLargeFile = true;
+      }
     } else {
       Toast("No file selected");
     }
   }
 
-  GetCreateFolderPopup() {
+  CreateFolderPopup() {
     $('#createFolder').modal('show');
   }
 
@@ -269,30 +286,131 @@ export class documentsComponent implements OnInit {
     this.newFolderName = "";
   }
 
+  navigateTo(path: string) {
+    if(path != '' && this.routeParam != path) {
+      let nav = this.cachedDocumentDetails[path];
+      if(nav) {
+        this.documentDetails = nav;
+        this.currentFolder = path;
+        let item = null;
+        let index = 0;
+        let newRoute = [];
+        while(index < this.folderNav.length) {
+          if(this.folderNav[index].route !== path) {
+            newRoute.push(this.folderNav[index]);
+          } else {
+            item = this.folderNav[index];
+            break;
+          }
+          index++;
+        }
+
+        newRoute.push(item);
+        this.folderNav = newRoute;
+        if(item.name !== "home")
+          this.nav.navigateWithArgs(item.name, item.route);
+        else
+          this.nav.navigate(Documents, "");
+      } else {
+        Toast("Invalid folder.");
+      }
+    }
+    this.isDocumentReady = true;
+  }
+
+  buildRoute() {
+    if(this.routeParam) {
+      let items = this.routeParam.split(environment.FolderDelimiter);
+      let len = items.length;
+      if(len > 0) {
+        let relativePath = items[len - 1];
+        this.folderNav.push({name: relativePath, route: this.routeParam});
+      }
+    }
+  }
+
+  openSubFolder(path: string) {
+    if(path !== "" && this.currentFolder != path) {
+      this.documentDetails = [];
+      this.documentDetails = this.cachedDocumentDetails[path];
+      this.currentFolder = path;
+    } else {
+      Toast("No route or folder found.")
+    }
+    this.nav.navigateWithArgs(`${Documents}`, path);
+  }
+
+  // findRouteFolders(path: string) {
+  //   path = path.toLocaleLowerCase();
+  //   this.isDocumentReady = false;
+  //   let subItems = this.cachedDocumentDetails.filter(x => x.FolderPath.toLocaleLowerCase().startsWith(path));
+  //   if(subItems.length > 0) {
+  //     let items = JSON.stringify(subItems);
+  //     let subFolderItems = JSON.parse(items);
+  //     subFolderItems.map(item => {
+  //       if(path === item.FolderPath.toLocaleLowerCase()) {
+  //         item.IsRootFolder = false;
+  //       }
+  //     });
+
+  //     this.documentDetails = [];
+  //     this.documentDetails = subFolderItems;
+  //     this.isDocumentReady = true;
+  //   }
+  // }
+
   CreateNewfolder() {
-    if(this.newFolderName) {
+    if(this.newFolderName !== "") {
       let folderDetail: Files = new Files();
-      if(this.currentFoder !== "") {
-        folderDetail.FilePath = `${this.currentFoder}\\${this.newFolderName}`;
+      if (this.routeParam.params.path !== null || this.routeParam.params.path !== '') {
+        this.routeParam = this.routeParam.params.path;
+      }
+      let currentRoute = this.routeParam;
+      if (currentRoute == '' || currentRoute == null) {
+        currentRoute = '';
+      }
+      if(this.currentFolder !== "") {
+        folderDetail.FilePath = `${this.currentFolder}${environment.FolderDelimiter}${this.newFolderName}`;
       } else {
         folderDetail.FilePath = `${this.newFolderName}`;
       }
 
+      folderDetail.FilePath = this.getRelativePath(folderDetail.FilePath);
+      folderDetail.ParentFolder = this.getRelativePath(this.currentFolder);
       folderDetail.UserTypeId = this.currentUser.UserTypeId;
       folderDetail.UserId = this.currentUser.UserId;
       folderDetail.SystemFileType = FileSystemType.User;
       this.http.post("FileMaker/CreateFolder", folderDetail).then((response: ResponseModel) => {
         this.CloseFolderPopup();
-        if(response && response.ResponseBody) {
-          Toast(response.ResponseBody);
-        } else {
-          Toast("Fail to create folder.");
+        if(response.ResponseBody && response.ResponseBody.Table) {
+          let fileDetail = response.ResponseBody.Table;
+          if(fileDetail && fileDetail.length > 0) {
+            this.BuildFileAndFolderDetail(fileDetail);
+          }
+          this.isDocumentReady = true;;
         }
       })
     }
   }
 
-  selecteItemForDelete(fileId: number) {
+  getRelativePath(path: string): string {
+    if(path) {
+      path = path.toLocaleLowerCase();
+      let paths = path.split(`${environment.FolderDelimiter}`);
+      if(paths.length > 0 && paths[0] === DocumentPath) {
+        paths.splice(0, 1);
+      }
+
+      if(paths.length > 0 && paths[0] === UserPath) {
+        paths.splice(0, 1);
+      }
+
+      path = paths.join(environment.FolderDelimiter);
+    }
+    return path;
+  }
+
+  selectItemForDelete(fileId: number) {
     this.currentDeleteMarkedItem = null;
     if(fileId > 0) {
       let fileDetail = null;
@@ -331,13 +449,22 @@ export class documentsComponent implements OnInit {
     }
   }
 
-  addFiles(FilePath: string) {
-    alert(FilePath);
+  addFiles() {
+    let actualPath: string = "";
+    let FilePath = this.currentFolder;
+    if(FilePath !== "") {
+      actualPath = FilePath.replace(`${DocumentPathName}${environment.FolderDelimiter}${UserPathName}${environment.FolderDelimiter}`, "");
+    }
+
+    this.targetFolder = actualPath;
+    $('#staticBackdropDown').modal('show');
   }
 
-  addSubFolder(FilePath: string) {
-    alert(FilePath);
-  }
+  // addSubFolder(FilePath: string) {
+  //   let actualPath = FilePath.replace(`${DocumentPathName}${environment.FolderDelimiter}${UserPathName}${environment.FolderDelimiter}`, "");
+  //   this.targetFolder = actualPath;
+  //   $('#staticBackdropDown').modal('show');
+  // }
 
   SubmitFiles() {
     let formData = new FormData();
@@ -357,6 +484,8 @@ export class documentsComponent implements OnInit {
             this.BuildFileAndFolderDetail(fileDetail);
           }
           this.isDocumentReady = true;;
+          $('#staticBackdropDown').modal('hide');
+          this.cleanFileHandler();
           Toast("Created successfully.");
         } else {
           Toast("Fail to delte the file");
@@ -374,6 +503,7 @@ export class documentsComponent implements OnInit {
     this.uploading = true;
     $("#uploadocument").val("");
     this.FilesCollection = [];
+    this.isLargeFile = false;
   }
 }
 
@@ -440,7 +570,9 @@ export class PersonDetail {
 }
 
 export class Files {
-  IsFolderType: boolean = false;
+  IsFolder: boolean = false;
+  NoOfItems: number = 0;
+  ParentFolder: string = null;
   LocalImgPath: string = "";
   UserId: number = 0;
   FileName: string = "";
@@ -464,3 +596,4 @@ class DocumentDetail {
   FolderName: string = "";
   ContentDetails: Array<Files> = [];
 }
+

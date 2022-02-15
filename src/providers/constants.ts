@@ -45,7 +45,7 @@ export const Article = "api/blogs/article/:articleid";
 
 export const Employees = "admin/employees";
 export const Documents = "admin/documents";
-export const DocumentsPage = "admin/documentspage";
+export const DocumentsPage = "admin/documentspage/:path";
 export const BuildPdf = "admin/BuildPdf";
 export const ManageEmployee = 'admin/manageemployee';
 export const Clients = 'admin/clients';
@@ -59,22 +59,30 @@ export const BillDetail = 'admin/billdetail';
 // *************************** file name constancts  *************
 export const Doc = "doc";
 export const Docx = "docx";
+export const ADocx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 export const Pdf = "pdf";
+export const APdf = "application/pdf";
 export const Txt = "txt";
 export const FlatFile = "file";
 export const Zip = "zip";
 export const Excel = "xlsx";
 export const Ppt = "ppt";
 export const Directory = "";
+export const JImage = 'jpg';
+export const PImage = 'png';
+export const AImage = "jpeg";
 
 export const DocImg = "assets/ext/doc.jpg";
 export const PdfImg = "assets/ext/pdf.png";
-export const TxtImg = "assets/txt.png";
-export const FlatFileImg = "assets/file.png";
-export const ZipImg = "assets/zip.png";
-export const ExcelImg = "assets/excel.png";
-export const PptImg = "assets/ppt.png";
-export const DirectoryImg = "assets/ppt.png";
+export const TxtImg = "assets/ext/txt.png";
+export const FlatFileImg = "assets/ext/file.png";
+export const ZipImg = "assets/ext/zip.jpg";
+export const ExcelImg = "assets/ext/excel.png";
+export const PptImg = "assets/ext/ppt.jpg";
+export const DirectoryImg = "assets/ext/directory.jpg";
+export const Images = "assets/ext/image.png";
+export const DocumentPath = "documents";
+export const UserPath = "user";
 
 
 export const MaxAllowedFileSize = 2048

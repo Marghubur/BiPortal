@@ -94,6 +94,12 @@ table {
   justify-content: center;
 }
 
+.content-end {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
 .sm-text {
   font-size: 0.9rem;
 }
@@ -109,4 +115,15 @@ table {
 .ac-dv {
   padding: 4px 0px;
   display: block;
+}
+
+.file-action {
+  font-size: 14px;
+}
+
+.navigation-link {
+  text-decoration: none;
+  color: #222;
+  font-weight: 700;
+  padding-right: 4px;
 }
