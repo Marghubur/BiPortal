@@ -83,7 +83,6 @@ table {
 }
 
 .empty-dv {
-  text-align: center;
   font-size: 1.4rem;
   color: #a5b79a;
   font-weight: 600;
@@ -95,6 +94,36 @@ table {
   justify-content: center;
 }
 
+.content-end {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
 .sm-text {
   font-size: 0.9rem;
+}
+
+.folder-action {
+  position: absolute;
+  right: 0px;
+  display: inline-block !important;
+  max-width: 2.4rem;
+  top: 0.4rem;
+}
+
+.ac-dv {
+  padding: 4px 0px;
+  display: block;
+}
+
+.file-action {
+  font-size: 14px;
+}
+
+.navigation-link {
+  text-decoration: none;
+  color: #222;
+  font-weight: 700;
+  padding-right: 4px;
 }

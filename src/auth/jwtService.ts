@@ -56,7 +56,7 @@ export function HandleResponseStatus(statusCode: number): boolean {
                 document.getElementById("sessionexpiredBox").classList.remove('d-none');
             else
                 localStorage.clear();
-            Toast("Unauthorized access. For more help contact to admin.");
+            Toast("Unauthorized access. Please login again.");
             break;
         case NotFound:
             Toast("Page not found. Please chech your Url.");

@@ -39,7 +39,6 @@ export class AppComponent implements OnInit {
     this.GetScreenHeight();
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
-        console.log("Route: " + JSON.stringify(event));
         this.pageName = event.url.replace("/", "")
         this.commonService.ShowLoader();
         this.commonService.SetCurrentPageName(this.pageName);
@@ -51,9 +50,6 @@ export class AppComponent implements OnInit {
           default:
             this.enableAuth = false;
             break;
-        }
-        if (this.auto.GetAutoPlayValue()) {
-          this.auto.NextStep();
         }
       }
     });

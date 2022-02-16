@@ -24,7 +24,7 @@ export class ClientsComponent implements OnInit {
   RegisterNewClient: string = RegisterClient;
   clients: Array<any> = [];
   activePage:number = 0;
-  paginationData: Filter = null;
+  clientsData: Filter = null;
   isClientFound: boolean = false;
   clientData: Filter = null;
 
@@ -41,7 +41,7 @@ export class ClientsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.paginationData = new Filter();
+    this.clientsData = new Filter();
     // this.paginationData.PageIndex = 1;
     // this.paginationData.PageSize = 10;
     // this.paginationData.TotalRecords = 95;
