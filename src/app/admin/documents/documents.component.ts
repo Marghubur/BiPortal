@@ -157,7 +157,7 @@ export class documentsComponent implements OnInit {
 
   BuildFileAndFolderDetail(fileDetail: Array<any>) {
     if(fileDetail != null && fileDetail.length > 0) {
-      this.cachedDocumentDetails = [];
+      this.cachedDocumentDetails = {};
       let index = 0;
       let item = null;
       let pathName = "";
@@ -207,6 +207,10 @@ export class documentsComponent implements OnInit {
 
     this.local.setLocal("localpagedata", this.cachedDocumentDetails);
     this.buildRoute();
+  }
+
+  getDataObject() {
+
   }
 
   getUploadedDetails() {
