@@ -15,15 +15,15 @@
             </div>
         </div>
         <div class="col-md-7 pt-2 row m-0">
-          <div class="col-md-6">
+          <div class="col-md-10">
               <input type="text" class="form-control form-control-sm" (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)" [(ngModel)]="anyFilter">
           </div>
-          <div class="col-md-6">
+          <div class="col-md-2">
               <button class="btn btn-sm btn-primary filter-btn-grp" (click)="globalFilter()">
-                  <i class="fa fa-filter me-1"></i> Filter
+                  <i class="fa fa-filter"></i>
               </button>
               <button class="btn btn-sm btn-danger filter-btn-grp ms-2" (click)="resetFilter()">
-                  <i class="fa fa-repeat"></i> Reset filter
+                  <i class="fa fa-repeat"></i>
               </button>
           </div>
         </div>

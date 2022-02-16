@@ -112,7 +112,7 @@ export class EmployeesComponent implements OnInit {
     let delimiter = "";
 
     if(this.employeeDetails.Name !== null && this.employeeDetails.Name !== "") {
-        searchQuery += ` FirstName like '${this.employeeDetails.Name}%' `;
+        searchQuery += ` FirstName like '${this.employeeDetails.Name}%' OR LastName like '${this.employeeDetails.Name}%'`;
         delimiter = "and";
       }
 
