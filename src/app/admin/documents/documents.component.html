@@ -35,8 +35,8 @@
   </div>
   <div class="x_panel">
     <div class="x_content mt-4">
-      <ng-container *ngFor="let f of folderNav">
-        <a href="javascript:void(0)" (click)="navigateTo(f.route)" class="navigation-link">
+      <ng-container *ngIf="isDocumentReady">
+        <a href="javascript:void(0)" *ngFor="let f of folderNav" (click)="navigateTo(f.name, f.route)" class="navigation-link">
           /{{f.name}}
         </a>
       </ng-container>

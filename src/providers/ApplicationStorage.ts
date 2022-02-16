@@ -90,7 +90,7 @@ export class ApplicationStorage {
   }
 
   getByKey(key: string) {
-    if (key === undefined || key === null || key === "") 
+    if (key === undefined || key === null || key === "")
       return null;
     key = key.toLocaleLowerCase();
     let data: any = localStorage.getItem(key);
@@ -104,6 +104,22 @@ export class ApplicationStorage {
     if (Key != null && Key != "") {
       Key = Key.toLocaleLowerCase();
       localStorage.setItem(Key, ModifiedData);
+      flag = true;
+    }
+    return flag;
+  }
+
+  getLocal(key: string) {
+    let data: any = sessionStorage.getItem(key);
+    if(!data || data == '[]')
+      data = null;
+    return JSON.parse(data);
+  }
+
+  setLocal(key: string, data: any): boolean {
+    let flag = false;
+    if (key != null && key != "") {
+      sessionStorage.setItem(key.toLocaleLowerCase(), JSON.stringify(data));
       flag = true;
     }
     return flag;

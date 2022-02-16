@@ -8,6 +8,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 import { environment } from "src/environments/environment";
 import { ActivatedRoute } from '@angular/router';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 
 declare var $:any;
 
@@ -33,7 +34,7 @@ export class documentsComponent implements OnInit {
   candidatesData: Filter = null;
   newFolderName: string = "";
   documentDetails: Array<DocumentDetail> = [];
-  cachedDocumentDetails: Array<any> = [];
+  cachedDocumentDetails: any = {};
   rootLocation: string = `${DocumentPath}${environment.FolderDelimiter}${UserPath}`;
   baseUrl: string = "";
   viewer: any = null;
@@ -47,16 +48,20 @@ export class documentsComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private local: ApplicationStorage
   ) { }
 
   ngOnInit(): void {
-    this.folderNav.push({name: "home", route: this.rootLocation});
     this.route.queryParamMap.subscribe((params: any) => {
       if(params.params.path) {
         this.routeParam = params.params.path;
-        this.buildRoute();
+      } else {
+        this.routeParam = this.rootLocation;
+        this.folderNav.push({name: "home", route: this.rootLocation});
       }
+      this.buildRoute();
+      console.log(this.routeParam);
     });
 
     this.currentFolder = this.rootLocation;
@@ -199,7 +204,8 @@ export class documentsComponent implements OnInit {
       }
     }
 
-    this.documentDetails = this.cachedDocumentDetails[this.rootLocation];
+    this.local.setLocal("localpagedata", this.cachedDocumentDetails);
+    this.buildRoute();
   }
 
   getUploadedDetails() {
@@ -286,17 +292,37 @@ export class documentsComponent implements OnInit {
     this.newFolderName = "";
   }
 
-  navigateTo(path: string) {
+  navigateTo(name: string, path: string) {
+    this.isDocumentReady = false;
     if(path != '' && this.routeParam != path) {
-      let nav = this.cachedDocumentDetails[path];
+      if(name !== "home")
+        this.nav.navigateWithArgs(Documents, path);
+      else
+        this.nav.navigate(Documents, "");
+    }
+  }
+
+  buildRoute() {
+    if(this.routeParam != '') {
+      if(Object.keys(this.cachedDocumentDetails).length === 0) {
+        this.cachedDocumentDetails = this.local.getLocal("localpagedata");
+        if(!this.cachedDocumentDetails) {
+          this.folderNav = this.local.getLocal("pageroute");
+          return;
+        }
+      }
+
+      let nav = this.cachedDocumentDetails[this.routeParam];
       if(nav) {
+        if(this.folderNav.length === 0)
+          this.folderNav = this.local.getLocal("pageroute");
         this.documentDetails = nav;
-        this.currentFolder = path;
+        this.currentFolder = this.routeParam;
         let item = null;
         let index = 0;
         let newRoute = [];
         while(index < this.folderNav.length) {
-          if(this.folderNav[index].route !== path) {
+          if(this.folderNav[index].route !== this.routeParam) {
             newRoute.push(this.folderNav[index]);
           } else {
             item = this.folderNav[index];
@@ -307,57 +333,36 @@ export class documentsComponent implements OnInit {
 
         newRoute.push(item);
         this.folderNav = newRoute;
-        if(item.name !== "home")
-          this.nav.navigateWithArgs(item.name, item.route);
-        else
-          this.nav.navigate(Documents, "");
+        this.local.setLocal("pageroute", this.folderNav);
       } else {
-        Toast("Invalid folder.");
+        this.local.setLocal("pageroute", this.folderNav);
+        this.documentDetails = [];
       }
     }
     this.isDocumentReady = true;
   }
 
-  buildRoute() {
-    if(this.routeParam) {
-      let items = this.routeParam.split(environment.FolderDelimiter);
+  getNewRoute(path: string) {
+    if(path != "") {
+      let items = path.split(environment.FolderDelimiter);
       let len = items.length;
       if(len > 0) {
         let relativePath = items[len - 1];
-        this.folderNav.push({name: relativePath, route: this.routeParam});
+        this.folderNav.push({name: relativePath, route: path});
       }
     }
   }
 
   openSubFolder(path: string) {
-    if(path !== "" && this.currentFolder != path) {
-      this.documentDetails = [];
-      this.documentDetails = this.cachedDocumentDetails[path];
+    this.isDocumentReady = false;
+    if(path !== "") {
+      this.getNewRoute(path);
       this.currentFolder = path;
+      this.nav.navigateWithArgs(`${Documents}`, path);
     } else {
       Toast("No route or folder found.")
     }
-    this.nav.navigateWithArgs(`${Documents}`, path);
   }
-
-  // findRouteFolders(path: string) {
-  //   path = path.toLocaleLowerCase();
-  //   this.isDocumentReady = false;
-  //   let subItems = this.cachedDocumentDetails.filter(x => x.FolderPath.toLocaleLowerCase().startsWith(path));
-  //   if(subItems.length > 0) {
-  //     let items = JSON.stringify(subItems);
-  //     let subFolderItems = JSON.parse(items);
-  //     subFolderItems.map(item => {
-  //       if(path === item.FolderPath.toLocaleLowerCase()) {
-  //         item.IsRootFolder = false;
-  //       }
-  //     });
-
-  //     this.documentDetails = [];
-  //     this.documentDetails = subFolderItems;
-  //     this.isDocumentReady = true;
-  //   }
-  // }
 
   CreateNewfolder() {
     if(this.newFolderName !== "") {
