@@ -94,7 +94,8 @@ export class documentsComponent implements OnInit {
   viewPdfFile(file: Files) {
     this.viewer = document.getElementById("file-container");
     this.viewer.classList.remove('d-none');
-    this.viewer.querySelector('iframe').setAttribute('src', file.FilePath);
+    this.viewer.querySelector('iframe').setAttribute('src',
+    `${this.baseUrl}${environment.FolderDelimiter}${file.FilePath}${environment.FolderDelimiter}${file.FileName}`);
   }
 
   closePdfViewer() {
@@ -242,9 +243,6 @@ export class documentsComponent implements OnInit {
     this.FileDocuments = [];
     this.FilesCollection = [];
     let selectedFiles = fileInput.target.files;
-    if (this.routeParam.params.path !== null || this.routeParam.params.path !== '') {
-      this.routeParam = this.routeParam.params.path;
-    }
     if (selectedFiles.length > 0) {
       let index = 0;
       let file = null;
@@ -367,9 +365,6 @@ export class documentsComponent implements OnInit {
   CreateNewfolder() {
     if(this.newFolderName !== "") {
       let folderDetail: Files = new Files();
-      if (this.routeParam.params.path !== null || this.routeParam.params.path !== '') {
-        this.routeParam = this.routeParam.params.path;
-      }
       let currentRoute = this.routeParam;
       if (currentRoute == '' || currentRoute == null) {
         currentRoute = '';
@@ -419,13 +414,11 @@ export class documentsComponent implements OnInit {
     this.currentDeleteMarkedItem = null;
     if(fileId > 0) {
       let fileDetail = null;
-      let file = null;
       let index = 0;
       while(index < this.documentDetails.length) {
         fileDetail = this.documentDetails[index];
-        file = fileDetail.ContentDetails.find(x => x.FileUid === fileId);
-        if(file) {
-          this.currentDeleteMarkedItem = file;
+        if(fileDetail.FileId === fileId) {
+          this.currentDeleteMarkedItem = fileDetail;
           break;
         }
         index++;
@@ -435,7 +428,7 @@ export class documentsComponent implements OnInit {
 
   deleteFile() {
     if(this.currentDeleteMarkedItem) {
-      let fileIds = this.currentDeleteMarkedItem.FileUid;
+      let fileIds = this.currentDeleteMarkedItem.FileId;
       this.http.delete(`FileMaker/DeleteFile/${this.currentUser.UserId}`, [fileIds])
       .then((response:ResponseModel) => {
         if(response.ResponseBody && response.ResponseBody.Table) {
@@ -464,12 +457,6 @@ export class documentsComponent implements OnInit {
     this.targetFolder = actualPath;
     $('#staticBackdropDown').modal('show');
   }
-
-  // addSubFolder(FilePath: string) {
-  //   let actualPath = FilePath.replace(`${DocumentPathName}${environment.FolderDelimiter}${UserPathName}${environment.FolderDelimiter}`, "");
-  //   this.targetFolder = actualPath;
-  //   $('#staticBackdropDown').modal('show');
-  // }
 
   SubmitFiles() {
     let formData = new FormData();
