@@ -130,14 +130,18 @@ export class documentsComponent implements OnInit {
   }
 
   RefreshDocuments() {
-    if(this.currentUser.UserId > 0) {
-      this.http.post("OnlineDocument/GetDocumentByUserId", { "UserId": this.currentUser.UserId }).then((response: ResponseModel) => {
+    if(this.currentUser.UserId > 0 && this.currentUser.UserTypeId > 0) {
+      this.http.post("OnlineDocument/GetDocumentByUserId", {
+        "UserId": this.currentUser.UserId, "UserTypeId" : this.currentUser.UserTypeId
+      }).then((response: ResponseModel) => {
         if(response.ResponseBody && response.ResponseBody.Table) {
           let fileDetail = response.ResponseBody.Table;
           if(fileDetail && fileDetail.length > 0) {
             this.BuildFileAndFolderDetail(fileDetail);
+            this.isDocumentReady = true;
+          } else {
+            this.isDocumentReady = false;
           }
-          this.isDocumentReady = true;;
         }
       });
     } else {
@@ -433,7 +437,7 @@ export class documentsComponent implements OnInit {
   deleteFile() {
     if(this.currentDeleteMarkedItem) {
       let fileIds = this.currentDeleteMarkedItem.FileId;
-      this.http.delete(`FileMaker/DeleteFile/${this.currentUser.UserId}`, [fileIds])
+      this.http.delete(`FileMaker/DeleteFile/${this.currentUser.UserId}/${this.currentUser.UserTypeId}`, [fileIds])
       .then((response:ResponseModel) => {
         if(response.ResponseBody && response.ResponseBody.Table) {
           let fileDetail = response.ResponseBody.Table;
