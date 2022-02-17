@@ -130,14 +130,18 @@ export class documentsComponent implements OnInit {
   }
 
   RefreshDocuments() {
-    if(this.currentUser.UserId > 0) {
-      this.http.post("OnlineDocument/GetDocumentByUserId", { "UserId": this.currentUser.UserId }).then((response: ResponseModel) => {
+    if(this.currentUser.UserId > 0 && this.currentUser.UserTypeId > 0) {
+      this.http.post("OnlineDocument/GetDocumentByUserId", {
+        "UserId": this.currentUser.UserId, "UserTypeId" : this.currentUser.UserTypeId
+      }).then((response: ResponseModel) => {
         if(response.ResponseBody && response.ResponseBody.Table) {
           let fileDetail = response.ResponseBody.Table;
           if(fileDetail && fileDetail.length > 0) {
             this.BuildFileAndFolderDetail(fileDetail);
+            this.isDocumentReady = true;
+          } else {
+            this.isDocumentReady = false;
           }
-          this.isDocumentReady = true;;
         }
       });
     } else {
@@ -310,38 +314,47 @@ export class documentsComponent implements OnInit {
         this.cachedDocumentDetails = this.local.getLocal("localpagedata");
         if(!this.cachedDocumentDetails) {
           this.folderNav = this.local.getLocal("pageroute");
+          this.createPageRoute();
           return;
         }
       }
 
+      if(!this.folderNav || this.folderNav.length === 0) {
+        this.folderNav = this.local.getLocal("pageroute");
+        this.createPageRoute();
+      }
+
       let nav = this.cachedDocumentDetails[this.routeParam];
       if(nav) {
-        if(this.folderNav.length === 0)
-          this.folderNav = this.local.getLocal("pageroute");
         this.documentDetails = nav;
         this.currentFolder = this.routeParam;
-        let item = null;
-        let index = 0;
-        let newRoute = [];
-        while(index < this.folderNav.length) {
-          if(this.folderNav[index].route !== this.routeParam) {
-            newRoute.push(this.folderNav[index]);
-          } else {
-            item = this.folderNav[index];
-            break;
-          }
-          index++;
-        }
-
-        newRoute.push(item);
-        this.folderNav = newRoute;
-        this.local.setLocal("pageroute", this.folderNav);
+        this.createPageRoute();
       } else {
-        this.local.setLocal("pageroute", this.folderNav);
         this.documentDetails = [];
+        this.createPageRoute();
       }
+      this.local.setLocal("pageroute", this.folderNav);
     }
     this.isDocumentReady = true;
+  }
+
+  createPageRoute() {
+    let item = null;
+    let index = 0;
+    let newRoute = [];
+    while(index < this.folderNav.length) {
+      if(this.folderNav[index].route !== this.routeParam) {
+        newRoute.push(this.folderNav[index]);
+      } else {
+        item = this.folderNav[index];
+        break;
+      }
+      index++;
+    }
+
+    if(item)
+      newRoute.push(item);
+    this.folderNav = newRoute;
   }
 
   getNewRoute(path: string) {
@@ -433,7 +446,7 @@ export class documentsComponent implements OnInit {
   deleteFile() {
     if(this.currentDeleteMarkedItem) {
       let fileIds = this.currentDeleteMarkedItem.FileId;
-      this.http.delete(`FileMaker/DeleteFile/${this.currentUser.UserId}`, [fileIds])
+      this.http.delete(`FileMaker/DeleteFile/${this.currentUser.UserId}/${this.currentUser.UserTypeId}`, [fileIds])
       .then((response:ResponseModel) => {
         if(response.ResponseBody && response.ResponseBody.Table) {
           let fileDetail = response.ResponseBody.Table;
