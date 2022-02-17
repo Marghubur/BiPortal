@@ -26,8 +26,8 @@ export class ClientsComponent implements OnInit {
   activePage:number = 0;
   clientsData: Filter = null;
   isClientFound: boolean = false;
-  clientData: Filter = null;
-
+  clientDetails: clientModel = null;
+  anyFilter: string = "";
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -42,10 +42,11 @@ export class ClientsComponent implements OnInit {
 
   ngOnInit(): void {
     this.clientsData = new Filter();
+    this.clientDetails = new clientModel();
+
     // this.paginationData.PageIndex = 1;
     // this.paginationData.PageSize = 10;
     // this.paginationData.TotalRecords = 95;
-    this.clientData = new Filter();
     this.documentForm = this.fb.group({
       "Title": new FormControl(""),
       "Description": new FormControl(""),
@@ -77,13 +78,13 @@ export class ClientsComponent implements OnInit {
 
     if (Mobile !== "" || Email !== "") {
       filter.SearchString = `1 `;
-      this.http.post("Clients/GetClients", this.clientData).then((response: ResponseModel) => {
+      this.http.post("Clients/GetClients", this.clientsData).then((response: ResponseModel) => {
         this.clients = response.ResponseBody;
         if (this.clients.length > 0) {
-          this.clientData.TotalRecords = this.clients.length;
+          this.clientsData.TotalRecords = this.clients[0].Total;
           this.isClientFound = true;
         } else {
-          this.clientData.TotalRecords = 0;
+          this.clientsData.TotalRecords = 0;
         }
       });
     }
@@ -137,7 +138,7 @@ export class ClientsComponent implements OnInit {
 
   GetFilterResult(e: Filter) {
     if(e != null) {
-      this.clientData = e;
+      this.clientsData = e;
       this.LoadData();
     }
   }
@@ -163,6 +164,62 @@ export class ClientsComponent implements OnInit {
     // $('#addupdateModal').modal(this.openModal)
 
   }
+
+  filterRecords() {
+    let searchQuery = "";
+    let delimiter = "";
+
+    if(this.clientDetails.ClientName !== null && this.clientDetails.ClientName !== "") {
+        searchQuery += ` ClientName like '${this.clientDetails.ClientName}%'`;
+        delimiter = "and";
+      }
+
+    if(this.clientDetails.Email !== null && this.clientDetails.Email !== "") {
+      searchQuery += ` ${delimiter} Email like '%${this.clientDetails.Email}%' `;
+        delimiter = "and";
+    }
+    if(this.clientDetails.PrimaryContactNo !== null && this.clientDetails.PrimaryContactNo !== 0) {
+      searchQuery += ` ${delimiter} PrimaryPhoneNo like '%${this.clientDetails.PrimaryContactNo}%' `;
+        delimiter = "and";
+    }
+    if(this.clientDetails.City !== null && this.clientDetails.City !== "") {
+      searchQuery += ` ${delimiter} City like '${this.clientDetails.City}%' `;
+        delimiter = "and";
+    }
+    if(this.clientDetails.FirstAddress !== null && this.clientDetails.FirstAddress !== "") {
+      searchQuery += ` ${delimiter} FirstAddress like '${this.clientDetails.FirstAddress}%' `;
+        delimiter = "and";
+    }
+    if(searchQuery !== "") {
+      this.clientsData.SearchString = `1=1 And ${searchQuery}`;
+    }
+
+    this.LoadData();
+  }
+
+  globalFilter() {
+    let searchQuery = "";
+    searchQuery = ` ClientName like '${this.anyFilter}%' OR Email like '${this.anyFilter}%' OR Mobile like '%${this.anyFilter}%' OR City like '${this.anyFilter}%'`;
+    if(searchQuery !== "") {
+      this.clientsData.SearchString = `1=1 And ${searchQuery}`;
+    }
+    this.LoadData();
+  }
+
+  resetFilter() {
+    this.clientsData.SearchString = "1=1";
+    this.clientsData.PageIndex = 1;
+    this.clientsData.PageSize = 10;
+    this.clientsData.StartIndex = 1;
+    this.clientsData.EndIndex = (this.clientsData.PageSize * this.clientsData.PageIndex);
+    this.LoadData();
+    this.clientDetails.ClientName="";
+    this.clientDetails.PrimaryContactNo = null;
+    this.clientDetails.Email="";
+    this.clientDetails.FirstAddress="";
+    this.clientDetails.City="";
+    this.anyFilter = "";
+  }
 }
 
 export class OnlineDocModel {
@@ -183,4 +240,13 @@ export class OnlineDocModel {
   TotalRows: number = 0;
   CreatedOn: string = null;
   UpdatedOn: string = null;
+}
+
+export class clientModel {
+  ClientName: string = '';
+  City: string = '';
+  PrimaryContactNo: number = null;
+  Email: string = '';
+  FirstAddress: string = '';
+  Total: number = 0;
 }

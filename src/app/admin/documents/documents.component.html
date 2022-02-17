@@ -35,7 +35,7 @@
   </div>
   <div class="x_panel">
     <div class="x_content mt-4">
-      <ng-container *ngIf="isDocumentReady">
+      <ng-container>
         <a href="javascript:void(0)" *ngFor="let f of folderNav" (click)="navigateTo(f.name, f.route)" class="navigation-link">
           /{{f.name}}
         </a>
@@ -99,6 +99,9 @@
             </div>
           </ng-container>
         </ng-container>
+      </div>
+      <div class="select-message" *ngIf="!isDocumentReady">
+        <h3>There are no file and folder. Please select at least one file or folder.</h3>
       </div>
     </div>
   </div>
