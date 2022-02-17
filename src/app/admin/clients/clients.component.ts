@@ -199,7 +199,7 @@ export class ClientsComponent implements OnInit {
 
   globalFilter() {
     let searchQuery = "";
-    searchQuery = ` ClientName like '${this.anyFilter}%' OR Email like '${this.anyFilter}%' OR Mobile like '%${this.anyFilter}%' OR City like '${this.anyFilter}%'`;
+    searchQuery = ` ClientName like '${this.anyFilter}%' OR Email like '${this.anyFilter}%' OR PrimaryPhoneNo like '%${this.anyFilter}%' OR City like '${this.anyFilter}%'`;
     if(searchQuery !== "") {
       this.clientsData.SearchString = `1=1 And ${searchQuery}`;
     }
