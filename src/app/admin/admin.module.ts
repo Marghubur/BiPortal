@@ -10,7 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilModule } from '../util/util.module';
 import { BuildPdfComponent } from './build-pdf/build-pdf.component';
-import { ReplaceEmpty } from 'src/pipes/ReplaceEmpty';
+import { ReplaceEmpty } from '../../../src/pipes/ReplaceEmpty';
 import { EmployeesComponent } from './employees/employees.component';
 import { ClientsComponent } from './clients/clients.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';
@@ -18,6 +18,7 @@ import { FilesComponent } from './files/files.component';
 import { ResumeComponent } from './resume/resume.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { HomeComponent } from '../home/home.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     RegisterclientComponent,
     FilesComponent,
     ResumeComponent,
-    BilldetailsComponent
+    BilldetailsComponent,
+    HomeComponent
   ],
   imports: [
     CommonModule,

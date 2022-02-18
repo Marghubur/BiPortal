@@ -55,7 +55,8 @@
     color: white;
     padding-left: 15px;
     padding-right: 15px;
-    width: calc(100% - #{$sidebar-width-lg});
+    //width: calc(100% - #{$sidebar-width-lg});
+    width: 100%;
     height: $navbar-height;
 
     @media (max-width: 991px) {

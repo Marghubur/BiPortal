@@ -1,5 +1,4 @@
-<nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-
+<nav class="navbar default-layout col-12 p-0 d-flex flex-row">
   <!-- Modal -->
   <div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -22,39 +21,7 @@
     </div>
   </div>
 
-  <div class="col-sm-2 text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-    <a class="navbar-brand brand-logo c-pointer" (click)="NavigatetoHome()">
-      <span class="text-primary">Data</span><span class="text-success">Builder</span>
-    </a>
-    <a class="navbar-brand brand-logo-mini c-pointer" (click)="NavigatetoHome()">
-      <span class="text-primary">Data</span><span class="text-success">Builder</span>
-    </a>
-  </div>
-  <div class="col-sm-10 navbar-menu-wrapper d-flex align-items-center">
-    <!-- <ul class="navbar-nav navbar-nav-left header-links">
-      <li class="nav-item d-flex nav-li">
-        <a class="nav-link a-font" (click)="GoBlogsPage()">
-          <i class="mdi mdi-bookmark-plus-outline"></i>Blogs
-        </a>
-        <a *ngFor="let item of Menu" [routerLink]="['/' + item.Link]" class="nav-link a-font">
-          <i class="{{item.Icon}}"></i>{{item.Catagory}}
-        </a> -->
-        <!-- COMMENT  START HERE -->
-        <!-- <a class="nav-link a-font" (click)="AutoDemo()" id="autoplay">
-          <i class="{{item.Icon}}"></i>{{item.Catagory}}
-        </a> -->
-        <!-- <a class="nav-link a-font" (click)="Loademployees()">
-          <i class="fa fa-id-card" aria-hidden="true"></i>Employee
-        </a>
-        <a class="nav-link a-font" (click)="LoadDocFiles()">
-          <i class="fa fa-folder-open" aria-hidden="true"></i>Reports
-        </a>
-        <a class="nav-link a-font" routerLink="admin/BuildPdf" >
-          <i class="fa fa-file-pdf-o" aria-hidden="true"></i>Build Pdf
-        </a> -->
-        <!-- comment end here -->
-      <!-- </li>
-    </ul> -->
+  <div class="col-md-12 navbar-menu-wrapper d-flex align-items-center">
     <ul class="navbar-nav navbar-nav-right">
       <li>
         <div class="btn-group">
@@ -87,7 +54,7 @@
           </ul>
         </div>
       </li>
-      
+
       <li>
         <a type="button" class="btn text-light position-relative" data-bs-toggle="dropdown" aria-expanded="false">
           <a href="javascript:void" class="text-white pe-3 text-decoration-none" (click)="ViewUserProfile()">
@@ -95,7 +62,7 @@
           </a>
           <img class="img-xs rounded-circle" src="assets/images/faces/face1.jpg" alt="Profile image">
         </a>
-        
+
         <div *ngIf="!IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown lpp" ngbDropdownMenu
           aria-labelledby="UserDropdown">
           <a class="dropdown-item p-over-header p-0 lpp__a">

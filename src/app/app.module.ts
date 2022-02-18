@@ -29,8 +29,6 @@ import { FooterComponent } from './footer/footer.component';
 import { GeneratedresultComponent } from './generatedresult/generatedresult.component';
 import { HomeComponent } from './home/home.component';
 import { JsonFormatterComponent } from './json-formatter/json-formatter.component';
-import { LoginComponent } from './login/login.component';
-import { NavbarComponent } from './navbar/navbar.component';
 import { SamplepageComponent } from './samplepage/samplepage.component';
 import { TabledsampledataComponent } from './tabledsampledata/tabledsampledata.component';
 import { UploadscriptComponent } from './uploadscript/uploadscript.component';
@@ -39,22 +37,18 @@ import { AppHttpIntercepter } from './../auth/app.intercepter';
 import { JwtService } from './../auth/jwtService';
 import { UserService } from './../providers/userService';
 import { LiveurlComponent } from './liveurl/liveurl.component';
-import { AdminModule } from './admin/admin.module';
 import { BuilderModule } from './builder/builder.module';
 import { UtilModule } from './util/util.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgChartsModule } from 'ng2-charts';
-import { SidemenuComponent } from './sidemenu/sidemenu.component';
+import { LayoutModule } from "./layout/layout.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
     FooterComponent,
     JsonFormatterComponent,
     TabledsampledataComponent,
-    HomeComponent,
-    LoginComponent,
     FeedbacksComponent,
     GeneratedresultComponent,
     JoinString,
@@ -62,22 +56,20 @@ import { SidemenuComponent } from './sidemenu/sidemenu.component';
     UploadscriptComponent,
     UserprofileComponent,
     CodegeneratorComponent,
-    LiveurlComponent,
-    SidemenuComponent
+    LiveurlComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     RouterModule,
+    LayoutModule,
     FormsModule,
     HttpClientModule,
-    AdminModule,
     BuilderModule,
     UtilModule,
     BrowserAnimationsModule,
-    SocialLoginModule,
-    NgChartsModule
+    SocialLoginModule
   ],
   providers: [
     AppService,

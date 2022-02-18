@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IsValidResponse, ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -17,7 +17,7 @@ declare var $:any;
   templateUrl: './documents.component.html',
   styleUrls: ['./documents.component.scss']
 })
-export class documentsComponent implements OnInit {
+export class documentsComponent implements OnInit, OnDestroy {
   currentUser: DocumentUser = null;
   submitted: boolean = false;
   documentForm: FormGroup;
@@ -52,6 +52,11 @@ export class documentsComponent implements OnInit {
     private local: ApplicationStorage
   ) { }
 
+  ngOnDestroy(): void {
+    this.local.setLocal("localpagedata", null);
+    this.local.setLocal("pageroute", null);
+  }
+
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params: any) => {
       if(params.params.path) {
@@ -82,8 +87,6 @@ export class documentsComponent implements OnInit {
 
       this.bindForm(this.currentUser);
       this.RefreshDocuments();
-    } else {
-      this.nav.navigate("/", null);
     }
   }
 
@@ -342,19 +345,24 @@ export class documentsComponent implements OnInit {
     let item = null;
     let index = 0;
     let newRoute = [];
-    while(index < this.folderNav.length) {
-      if(this.folderNav[index].route !== this.routeParam) {
-        newRoute.push(this.folderNav[index]);
-      } else {
-        item = this.folderNav[index];
-        break;
+    if(this.folderNav) {
+      while(index < this.folderNav.length) {
+        if(this.folderNav[index].route !== this.routeParam) {
+          newRoute.push(this.folderNav[index]);
+        } else {
+          item = this.folderNav[index];
+          break;
+        }
+        index++;
       }
-      index++;
-    }
 
-    if(item)
-      newRoute.push(item);
-    this.folderNav = newRoute;
+      if(item)
+        newRoute.push(item);
+      this.folderNav = newRoute;
+    } else {
+      this.folderNav = [];
+      this.folderNav.push({name: "home", route: this.rootLocation});
+    }
   }
 
   getNewRoute(path: string) {

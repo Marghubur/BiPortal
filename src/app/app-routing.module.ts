@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CodeGenerator, Documents, DocumentsPage, Employees, Home, JsonFormatter, LiveUrl, Login, SamplePage, TableSampleData, UploadScript, UserProfile } from 'src/providers/constants';
+import { CodeGenerator, Documents, DocumentsPage, Employees, Home, JsonFormatter, LiveUrl, Login, SamplePage, SideMenu, TableSampleData, UploadScript, UserProfile } from 'src/providers/constants';
 
 import { CodegeneratorComponent } from './codegenerator/codegenerator.component';
 import { HomeComponent } from './home/home.component';
@@ -8,13 +8,19 @@ import { JsonFormatterComponent } from './json-formatter/json-formatter.componen
 import { LiveurlComponent } from './liveurl/liveurl.component';
 import { LoginComponent } from './login/login.component';
 import { SamplepageComponent } from './samplepage/samplepage.component';
+import { SidemenuComponent } from './sidemenu/sidemenu.component';
 import { TabledsampledataComponent } from './tabledsampledata/tabledsampledata.component';
 import { UploadscriptComponent } from './uploadscript/uploadscript.component';
 import { UserprofileComponent } from './userprofile/userprofile.component';
 
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
+  { path: '', component: LoginComponent},
+  {
+    path: "admin",
+    loadChildren: () => import('./layout/layout.module')
+    .then(m => m.LayoutModule)
+  },
   { path: JsonFormatter, component: JsonFormatterComponent },
   { path: Home, component: HomeComponent },
   { path: TableSampleData, component: TabledsampledataComponent },
@@ -42,7 +48,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

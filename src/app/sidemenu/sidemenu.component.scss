@@ -22,3 +22,22 @@ a {
   font-size: 14px !important;
   font-weight: 700 !important;
 }
+
+.side-panel {
+  height: 100vh !important;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.img-fluid {
+  max-width: 70% !important;
+}
+
+.menu-items {
+  height: calc(100vh - 4rem) !important;
+  overflow: auto;
+}
+
+.menu-top {
+  height: 4rem;
+}
