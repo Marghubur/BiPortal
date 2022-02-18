@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BillDetail, BuildPdf, Clients, Documents, DocumentsPage, Employees, Files, ManageEmployee, RegisterClient, Resume, SideMenu } from 'src/providers/constants';
+import { HomeComponent } from '../home/home.component';
 import { AdminComponent } from './admin.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
 import { BuildPdfComponent } from './build-pdf/build-pdf.component';
@@ -14,7 +15,7 @@ import { RegisterclientComponent } from './registerclient/registerclient.compone
 import { ResumeComponent } from './resume/resume.component';
 
 const routes: Routes = [
-  { path: '', component: AdminComponent },
+  { path: '', component: HomeComponent },
   { path: ManageEmployee, component: ManageemployeeComponent },
   { path: Employees, component: EmployeesComponent },
   { path: Documents, component: documentsComponent },
