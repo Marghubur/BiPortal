@@ -39,12 +39,12 @@ import { AppHttpIntercepter } from './../auth/app.intercepter';
 import { JwtService } from './../auth/jwtService';
 import { UserService } from './../providers/userService';
 import { LiveurlComponent } from './liveurl/liveurl.component';
-import { AdminModule } from './admin/admin.module';
 import { BuilderModule } from './builder/builder.module';
 import { UtilModule } from './util/util.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgChartsModule } from 'ng2-charts';
 import { SidemenuComponent } from './sidemenu/sidemenu.component';
+import { LayoutModule } from "./layout/layout.module";
 
 @NgModule({
   declarations: [
@@ -70,9 +70,9 @@ import { SidemenuComponent } from './sidemenu/sidemenu.component';
     AppRoutingModule,
     ReactiveFormsModule,
     RouterModule,
+    LayoutModule,
     FormsModule,
     HttpClientModule,
-    AdminModule,
     BuilderModule,
     UtilModule,
     BrowserAnimationsModule,

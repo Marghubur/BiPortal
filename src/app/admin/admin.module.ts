@@ -10,7 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilModule } from '../util/util.module';
 import { BuildPdfComponent } from './build-pdf/build-pdf.component';
-import { ReplaceEmpty } from 'src/pipes/ReplaceEmpty';
+import { ReplaceEmpty } from '../../../src/pipes/ReplaceEmpty';
 import { EmployeesComponent } from './employees/employees.component';
 import { ClientsComponent } from './clients/clients.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';

@@ -14,35 +14,41 @@ import { UserprofileComponent } from './userprofile/userprofile.component';
 
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
-  { path: JsonFormatter, component: JsonFormatterComponent },
-  { path: Home, component: HomeComponent },
-  { path: TableSampleData, component: TabledsampledataComponent },
-  { path: Login, component: LoginComponent },
-  { path: SamplePage, component: SamplepageComponent },
-  { path: UploadScript, component: UploadscriptComponent },
-  { path: UserProfile, component: UserprofileComponent },
-  { path: CodeGenerator, component: CodegeneratorComponent },
-  { path: LiveUrl, component: LiveurlComponent },
+  { path: '', component: HomeComponent },
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module')
-    .then(m => m.AdminModule)
-  },
-  {
-    path: 'api',
-    loadChildren: () => import('./builder/builder.module')
-    .then(m => m.BuilderModule)
-  },
-  {
-    path: 'service',
-    loadChildren: () =>
-    import('./util/util.module').then(m => m.UtilModule)
+    loadChildren: () => import('./layout/layout.module')
+    .then(m => m.LayoutModule)
   }
+  // { path: "", component: HomeComponent },
+  // { path: JsonFormatter, component: JsonFormatterComponent },
+  // { path: Home, component: HomeComponent },
+  // { path: TableSampleData, component: TabledsampledataComponent },
+  // { path: Login, component: LoginComponent },
+  // { path: SamplePage, component: SamplepageComponent },
+  // { path: UploadScript, component: UploadscriptComponent },
+  // { path: UserProfile, component: UserprofileComponent },
+  // { path: CodeGenerator, component: CodegeneratorComponent },
+  // { path: LiveUrl, component: LiveurlComponent },
+  // {
+  //   path: 'admin',
+  //   loadChildren: () => import('./admin/admin.module')
+  //   .then(m => m.AdminModule)
+  // },
+  // {
+  //   path: 'api',
+  //   loadChildren: () => import('./builder/builder.module')
+  //   .then(m => m.BuilderModule)
+  // },
+  // {
+  //   path: 'service',
+  //   loadChildren: () =>
+  //   import('./util/util.module').then(m => m.UtilModule)
+  // }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -1,8 +1,10 @@
-<div class="container-scroller">
-    <app-navbar *ngIf="!enableAuth" (authentication)="doAuthentication()"></app-navbar>
-    <div *ngIf="enableAuth" class="content-wrapper">
-      <router-outlet></router-outlet>
-    </div>
+<app-home></app-home>
+
+<!-- <div class="container-scroller">
+  <app-navbar *ngIf="!enableAuth" (authentication)="doAuthentication()"></app-navbar>
+  <div *ngIf="enableAuth" class="content-wrapper">
+    <router-outlet></router-outlet>
+  </div>
   <div *ngIf="!enableAuth" class="body-wrapper" id="main-scroller">
     <div class="container-fluid p-0">
       <div class="col-12 row m-0 p-0">
@@ -54,4 +56,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
