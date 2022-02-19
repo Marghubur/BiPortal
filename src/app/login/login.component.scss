@@ -1,18 +1,4 @@
-// $contW: 900px;
-// $imgW: 260px;
-// $formW: $contW - $imgW;
 $switchAT: 1.2s;
-
-// $inputW: 260px;
-// $btnH: 36px;
-
-// $diffRatio: ($contW - $imgW) / $contW;
-
-// @mixin signUpActive {
-//   .cont.s--signup & {
-//     @content;
-//   }
-// }
 
 .feedback {
   height: calc(100vh - 140px);
@@ -36,8 +22,10 @@ $switchAT: 1.2s;
   cursor: pointer;
 }
 
-.signin-dv {
-  width: 56% !important;
+@media (min-width: 961px) {
+  .center-big {
+    transform: translate(20%, 0%);
+  }
 }
 
 .signin-container {
@@ -88,7 +76,7 @@ h2 {
   text-transform: uppercase;
 }
 
-.check_box{
+.check_box {
   font-size: 14px;
 }
 
