@@ -4,7 +4,7 @@ import {
   HttpResponse,
   HttpErrorResponse
 } from "@angular/common/http";
-import { CommonService } from "./common-service/common.service";
+import { CommonService, Toast } from "./common-service/common.service";
 import "rxjs/add/operator/map";
 import { iNavigation } from "./iNavigation";
 import { Observable } from "rxjs";
@@ -92,9 +92,9 @@ export class AjaxService {
             this.commonService.HideLoaderByAjax();
             let flag = HandleResponseStatus(error.status);
             if(!flag) {
-              this.nav.navigate("/", null);
+              Toast("Getting some error. Please contact admin.")
             }
-            reject(null);
+            reject(error);
           }
         );
     });

@@ -81,13 +81,18 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let user of employeeDetail">
-                    <td>{{user.Index}}</td>
+                    <td>{{user.EmployeeUid}}</td>
                     <td>
                       <a (click)="ViewFiles(user)" >{{user.FirstName}} {{user.LastName}}</a>
                       <div class="float-end">
                         <a><span class="badge bg-primary fa fa-building-o"> &nbsp; 5</span></a>
-                        <span class="badge bg-danger ms-3">2</span>
-                        <span class="badge bg-success ms-3">3</span>
+                        <a class="text-decoration-none ms-3" (click)="goToAttendancePage(user.EmployeeUid)">
+                          <span class="text-sm-left text-muted">Attendance</span>
+                          <span class="ms-2 badge bg-success">
+                            <i class="fa fa-id-badge"></i>
+                          </span>
+                        </a>
+                        <span class="badge bg-danger ms-3">3</span>
                       </div>
                     </td>
                     <td>{{user.Mobile}}</td>

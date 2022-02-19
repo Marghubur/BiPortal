@@ -54,6 +54,7 @@ export const Files = 'admin/files';
 export const Resume = 'admin/resumes';
 export const SideMenu = 'admin/sidemenu';
 export const BillDetail = 'admin/billdetail';
+export const Attendance = 'admin/attendance';
 
 
 // *************************** file name constancts  *************

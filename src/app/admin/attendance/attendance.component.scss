@@ -1,0 +1,26 @@
+.attendance-form input {
+  border: none;
+  background: transparent;
+}
+
+.attendance-form textarea {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.attendance-form textarea:focus {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.employee-label {
+  width: 12rem;
+}
+
+.btn-design {
+  height: 35px;
+  border: 1px solid #d9d9d9;
+  border-radius: 0px 4px 4px 0px;
+}

@@ -12,6 +12,47 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.LoadChartData();
+    this.LoadLineChart();
+    this.LoadDoughnutchart();
+  }
+
+  LoadLineChart() {
+    let elem: any = document.getElementById('lineChart');
+    const ctx = elem.getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['January','February','March','April','May','June'],
+        datasets: [{
+          label: 'My First dataset',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(255, 99, 132)',
+          data: [0, 10, 5, 2, 20, 30, 45]
+      }]
+      }
+    })
+  }
+
+  LoadDoughnutchart() {
+    let elem: any = document.getElementById('doughnutchart');
+    const ctx = elem.getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Red','Blue','Yellow'],
+        datasets: [{
+          label: 'My First dataset',
+          backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            'rgb(255, 205, 86)'
+          ],
+          borderColor: 'rgb(255, 99, 132)',
+          data: [100, 100, 50],
+          hoverOffset: 4
+      }]
+      }
+    })
   }
 
   LoadChartData() {

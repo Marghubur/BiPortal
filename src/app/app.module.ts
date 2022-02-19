@@ -27,7 +27,6 @@ import { CodegeneratorComponent } from './codegenerator/codegenerator.component'
 import { FeedbacksComponent } from './feedbacks/feedbacks.component';
 import { FooterComponent } from './footer/footer.component';
 import { GeneratedresultComponent } from './generatedresult/generatedresult.component';
-import { HomeComponent } from './home/home.component';
 import { JsonFormatterComponent } from './json-formatter/json-formatter.component';
 import { SamplepageComponent } from './samplepage/samplepage.component';
 import { TabledsampledataComponent } from './tabledsampledata/tabledsampledata.component';
@@ -40,7 +39,6 @@ import { LiveurlComponent } from './liveurl/liveurl.component';
 import { BuilderModule } from './builder/builder.module';
 import { UtilModule } from './util/util.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgChartsModule } from 'ng2-charts';
 import { LayoutModule } from "./layout/layout.module";
 
 @NgModule({

@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BillDetail, BuildPdf, Clients, Documents, DocumentsPage, Employees, Files, ManageEmployee, RegisterClient, Resume, SideMenu } from 'src/providers/constants';
+import { Attendance, BillDetail, BuildPdf, Clients, Documents, DocumentsPage, Employees, Files, ManageEmployee, RegisterClient, Resume, SideMenu } from 'src/providers/constants';
 import { HomeComponent } from '../home/home.component';
 import { AdminComponent } from './admin.component';
+import { AttendanceComponent } from './attendance/attendance.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
 import { BuildPdfComponent } from './build-pdf/build-pdf.component';
 import { ClientsComponent } from './clients/clients.component';
@@ -25,7 +26,8 @@ const routes: Routes = [
   { path: BuildPdf, component: BuildPdfComponent },
   { path: Files, component: FilesComponent },
   { path: Resume, component: ResumeComponent },
-  { path: BillDetail, component: BilldetailsComponent}
+  { path: BillDetail, component: BilldetailsComponent},
+  { path: Attendance, component: AttendanceComponent}
 ];
 
 @NgModule({

@@ -1,0 +1,94 @@
+<div>
+  <form autocomplete="off">
+    <ng-container *ngIf="isEmployeesReady">
+      <div class="row">
+        <div class="col-md-2">
+            <app-iautocomplete [data]="employeeDetails" [(ngModel)]="userId" name="userId"></app-iautocomplete>
+        </div>
+        <div class="col-md-4 row ms-1 p-0">
+          <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <label for="" class="pe-2">From</label>
+            <form class="form-inline">
+              <div class="form-group">
+                <div class="input-group">
+                  <input class="form-control" readonly placeholder="yyyy-mm-dd"
+                  (dateSelect)="fromDateSelection($event)" name="fromModel" [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()" type="button"></button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <label for="" class="pe-2">To</label>
+            <form class="form-inline">
+              <div class="form-group">
+                <div class="input-group">
+                  <input class="form-control" readonly placeholder="yyyy-mm-dd"
+                  (dateSelect)="toDateSelection($event)" name="toModel" [(ngModel)]="toModel" ngbDatepicker #to="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="to.toggle()" type="button"></button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-2 text-end">
+          <a href="javascript:void(0)" (click)="getUserAttendanceData()">
+            <i class="fa fa-filter"></i>
+          </a>
+        </div>
+        <div class="col-md-2 text-end">
+          <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">Submit</button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isFormReady">
+      <div [formGroup]="attendenceForm" class="x_panel mt-4 pt-3 attendance-form">
+        <div class="x_content">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <td>
+                  Date
+                </td>
+                <td width="6%">
+                  Working Hour
+                </td>
+                <td width="20%">
+                  Comment
+                </td>
+              </tr>
+            </thead>
+            <tbody formArrayName="attendanceArray">
+              <ng-container *ngFor="let item of attendenceForm.get('attendanceArray').controls;let i = index;">
+                <tr [formGroupName]="i">
+                  <td>
+                    <label name="AttendanceDisplayDay">
+                      {{item.get('AttendanceDisplayDay').value}}
+                    </label>
+                  </td>
+                  <td>
+                    <input autofocus placeholder="no of working hours" formControlName="Hours" >
+                  </td>
+                  <td>
+                    <div ngbDropdown class="d-inline-block dropright">
+                      <input type="text" class="form-control" placeholder="no of working hours" formControlName="UserComments" ngbDropdownToggle>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <textarea class="form-control" formControlName="UserComments"></textarea>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+  </form>
+</div>
+

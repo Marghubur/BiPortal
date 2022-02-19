@@ -1,46 +1,34 @@
 <div class="col-md-12 feedback">
   <div class="w-100">
-    <div class="col-md-12 row d-flex justify-content-center">
-      <div id="signin" class="signin-dv">
+    <div class="col-12 row m-0 justify-content-center">
+      <div id="signin">
         <h3 class="mt-4 text-center text-warning">
           Create a New Account
         </h3>
-        <div>
+        <div class="text-center">
           Come join our community! Let's set up your account. Don't have and account?
           <a href="javascript:void(0)" (click)="backToHomePage()">Sign Up now</a>
         </div>
-        <div class="col-md-12 row">
-          <div class="col-md-5 p-4 signin-container">
+        <div class="col-12 row m-0 center-big">
+          <div class="col-md-3 p-4 signin-container">
             <h6 class="text-center mt-1 pt-1">
               You can also sign in with these
             </h6>
             <div class="text-center">
-
-
               <button class="btn btn-danger btn-block w-100 mb-2 mt-3" [disabled]="isGoogleLogin"
                 (click)="onGoogleSignIn()">
                 <i class="pe-2 fa"
                   [ngClass]="{'fa-spin fa-spinner': isGoogleLogin, 'fa-google fa-lg': !isGoogleLogin}"></i>
                 {{ isGoogleLogin ? 'Signing plesae wait' : 'Sign in with Google' }}
               </button>
-
-
               <button class="btn btn-primary btn-block w-100 mt-2" [disabled]="isGitHubLogin">
                 <i class="pe-2 fa"
                   [ngClass]="{'fa-spin fa-spinner': isGitHubLogin, 'fa-github fa-lg': !isGitHubLogin}"></i>
                 {{ isGitHubLogin ? 'Signing plesae wait' : 'Sign in with GitHub' }}
               </button>
-
-              <!-- 
-              <button *ngIf="!logging" class="btn btn-danger btn-block w-60 mb-2 mt-3" (click)="onGoogleSignIn()">
-                <i class="fa fa-google fa-lg" aria-hidden="true"></i> Sign in with Google
-              </button>
-              <button *ngIf="!logging" class="btn btn-primary btn-block w-60 mt-2">
-                <i class="fa fa-github fa-lg" aria-hidden="true"></i> Sign in with GitHub
-              </button> -->
             </div>
           </div>
-          <div class="col-md-7 card p-4 signin-container d-none">
+          <div class="col-md-4 card p-4 signin-container d-none">
             <form [formGroup]="UserForm" (ngSubmit)="SignupUser()" class="mt-1">
               <div class="form-group">
                 <label class="form-label">Email id</label>
@@ -66,7 +54,7 @@
             </form>
           </div>
 
-          <div class="col-md-7 card p-4 signin-container">
+          <div class="col-md-4 card p-4 signin-container">
             <form [formGroup]="UserForm" (ngSubmit)="LoginUser()" class="mt-1">
               <div class="form-group">
                 <label class="form-label">Email or Mobile Number</label>
@@ -88,7 +76,6 @@
                 <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
                 {{ isLoading ? 'Signing' : 'Sing In' }}
               </button>
-
             </form>
           </div>
         </div>
