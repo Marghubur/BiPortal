@@ -269,7 +269,6 @@ export class BilldetailsComponent implements OnInit {
   }
 
   LoadFiles() {
-
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       if (response.ResponseBody) {

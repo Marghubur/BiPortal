@@ -19,6 +19,7 @@ import { ResumeComponent } from './resume/resume.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { HomeComponent } from '../home/home.component';
+import { AttendanceComponent } from './attendance/attendance.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { HomeComponent } from '../home/home.component';
     FilesComponent,
     ResumeComponent,
     BilldetailsComponent,
-    HomeComponent
+    HomeComponent,
+    AttendanceComponent
   ],
   imports: [
     CommonModule,

@@ -5,7 +5,7 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
-import { DocumentsPage, Employees, Files, ManageEmployee } from 'src/providers/constants';
+import { Attendance, DocumentsPage, Employees, Files, ManageEmployee, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -42,10 +42,6 @@ export class EmployeesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //this.paginationData = new Filter();
-    // this.paginationData.PageIndex = 1;
-    // this.paginationData.PageSize = 10;
-    // this.paginationData.TotalRecords = 95;
     this.employeeData = new Filter();
     this.employeeDetails = new employeeModel();
 
@@ -85,27 +81,8 @@ export class EmployeesComponent implements OnInit {
       } else {
         this.employeeData.TotalRecords = 0;
       }
-      // this.BuildDocumentTable(this.employeeDetail);
     });
   }
-
-  // BuildDocumentTable(result: any) {
-  //   let rows: any = result;
-  //   if (result === null || result.length === 0) {
-  //     rows = [];
-  //   }
-
-    // this.tableConfiguration = new tableConfig();
-    // this.tableConfiguration.totalRecords = 1;
-    // this.tableConfiguration.data = rows;
-    // this.tableConfiguration.isEnableAction = true;
-    // this.tableConfiguration.header = this.userService.getColumns(Employees);
-    // this.tableConfiguration.link = [
-    //   { iconName: 'fa fa-pencil-square-o', fn: this.EditCurrent },
-    //   { iconName: 'fa fa-trash-o', fn: this.DeleteCurrent },
-    //   { iconName: 'fa fa-file-o', fn: this.ViewFiles }
-    // ]
-  // }
 
   filterRecords() {
     let searchQuery = "";
@@ -232,6 +209,13 @@ export class EmployeesComponent implements OnInit {
     else
       this.openModal = 'showmodal';
     $('#addupdateModal').modal(this.openModal)
+  }
+
+  goToAttendancePage(userId: number) {
+    this.nav.navigate(Attendance, {
+      "UserId": Number(userId),
+      "UserTypeId" : UserType.Employee
+    })
   }
 }
 

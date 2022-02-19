@@ -126,7 +126,7 @@ export class IautocompleteComponent implements OnInit, ControlValueAccessor {
   }
 
   BindDefaultValue() {
-    if (this.DefaultValue !== null && this.DropdownData !== null) {
+    if (this.DefaultValue && this.DropdownData) {
       let elems = this.DropdownData.filter(
         (x) => x.value === this.DefaultValue
       );

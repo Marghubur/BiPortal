@@ -700,7 +700,7 @@ class PdfModal {
   PaidOn: Date = null;
 }
 
-class ApplicationData {
+export class ApplicationData {
   fileDetail: Array<any> = [];
   clients: Array<any> = [];
   employees: Array<EmployeeDetail> = [];
