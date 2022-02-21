@@ -10,6 +10,7 @@ import { iNavigation } from "./iNavigation";
 import { Observable } from "rxjs";
 import { HandleResponseStatus, IsValidResponse, JwtService, ResponseModel } from "src/auth/jwtService";
 import { environment } from "src/environments/environment";
+import { Login, UnAuthorize } from "./constants";
 
 @Injectable()
 export class AjaxService {
@@ -91,10 +92,11 @@ export class AjaxService {
           error => {
             this.commonService.HideLoaderByAjax();
             let flag = HandleResponseStatus(error.status);
-            if(!flag) {
-              Toast("Getting some error. Please contact admin.")
+            if(error.status == UnAuthorize) {
+              this.nav.navigate(Login, null);
+            } else {
+              reject(error);
             }
-            reject(error);
           }
         );
     });

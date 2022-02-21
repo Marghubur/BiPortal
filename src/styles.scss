@@ -834,3 +834,24 @@ body {
   margin-left: 8%;
   margin-top: 25px;
 }
+
+.v-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+// ------------------------------------------ Table styling --------------------------------
+
+.table-middle {
+}
+
+.table-middle td {
+  position: relative;
+  padding: 0.2rem 0.5rem !important;
+}
+
+.table-cell-center {
+  position: absolute;
+  transform: translate(0%, 50%);
+}
