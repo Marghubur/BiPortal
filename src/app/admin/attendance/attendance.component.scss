@@ -4,15 +4,15 @@
 }
 
 .attendance-form textarea {
-  border: 1px solid #d9d9d9;
+  border: 1px solid #161616;
   border-radius: 4px;
-  padding: 6px 10px;
+  //padding: 6px 10px;
 }
 
 .attendance-form textarea:focus {
-  border: 1px solid #d9d9d9;
+  border: 1px solid #161616;
   border-radius: 4px;
-  padding: 6px 10px;
+  //padding: 6px 10px;
 }
 
 .employee-label {
@@ -23,4 +23,19 @@
   height: 35px;
   border: 1px solid #d9d9d9;
   border-radius: 0px 4px 4px 0px;
+}
+
+.input-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.center-badge {
+  padding-top: 0.4rem !important;
+}
+
+.highlight-font {
+  font-weight: 600;
+  color: #838689;
 }

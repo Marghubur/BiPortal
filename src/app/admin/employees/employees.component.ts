@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
+import { CommonService, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { Attendance, DocumentsPage, Employees, Files, ManageEmployee, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -211,11 +211,12 @@ export class EmployeesComponent implements OnInit {
     $('#addupdateModal').modal(this.openModal)
   }
 
-  goToAttendancePage(userId: number) {
-    this.nav.navigate(Attendance, {
-      "UserId": Number(userId),
-      "UserTypeId" : UserType.Employee
-    })
+  goToAttendancePage(user: any) {
+    if(user) {
+      this.nav.navigate(Attendance, user);
+    } else {
+      Toast("Please select an employee")
+    }
   }
 }
 

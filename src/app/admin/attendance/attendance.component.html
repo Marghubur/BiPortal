@@ -1,17 +1,17 @@
 <div>
   <form autocomplete="off">
     <ng-container *ngIf="isEmployeesReady">
-      <div class="row">
-        <div class="col-md-2">
-            <app-iautocomplete [data]="employeeDetails" [(ngModel)]="userId" name="userId"></app-iautocomplete>
-        </div>
-        <div class="col-md-4 row ms-1 p-0">
-          <div class="col-md-6 d-flex justify-content-center align-items-center">
-            <label for="" class="pe-2">From</label>
+      <div class="col-md-4">
+        <label class="form-label">Employee Name</label>
+        <input class="form-control" type="text" readonly value="{{userName}}">
+      </div>
+      <div class="row m-0">
+        <div class="col-md-8 row m-0 p-0 mt-4">
+          <div class="col-md-6 p-0">
             <form class="form-inline">
               <div class="form-group">
                 <div class="input-group">
-                  <input class="form-control" readonly placeholder="yyyy-mm-dd"
+                  <input class="form-control form-control-sm" placeholder="yyyy-mm-dd" (click)="from.toggle()"
                   (dateSelect)="fromDateSelection($event)" name="fromModel" [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
                   <div class="input-group-append">
                     <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()" type="button"></button>
@@ -20,72 +20,110 @@
               </div>
             </form>
           </div>
-          <div class="col-md-6 d-flex justify-content-center align-items-center">
-            <label for="" class="pe-2">To</label>
-            <form class="form-inline">
-              <div class="form-group">
-                <div class="input-group">
-                  <input class="form-control" readonly placeholder="yyyy-mm-dd"
-                  (dateSelect)="toDateSelection($event)" name="toModel" [(ngModel)]="toModel" ngbDatepicker #to="ngbDatepicker">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="to.toggle()" type="button"></button>
-                  </div>
-                </div>
-              </div>
-            </form>
+          <div class="col-md-4 d-flex">
+            <div class="ms-2">
+              <button href="javascript:void(0)" class="btn btn-sm btn-outline-dark" [disabled]="!fromDate" (click)="prevWeek()">
+                <i class="fa fa-angle-double-left pe-2"></i>Prev week
+              </button>
+            </div>
+            <div class="ms-2">
+              <button href="javascript:void(0)" class="btn btn-sm btn-success" [disabled]="!fromDate" (click)="nextWeek()">
+                Next week<i class="fa fa-angle-double-right ps-2"></i>
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="col-md-2 text-end">
-          <a href="javascript:void(0)" (click)="getUserAttendanceData()">
-            <i class="fa fa-filter"></i>
-          </a>
-        </div>
-        <div class="col-md-2 text-end">
-          <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">Submit</button>
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="isFormReady">
-      <div [formGroup]="attendenceForm" class="x_panel mt-4 pt-3 attendance-form">
-        <div class="x_content">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <td>
-                  Date
-                </td>
-                <td width="6%">
-                  Working Hour
-                </td>
-                <td width="20%">
-                  Comment
-                </td>
-              </tr>
-            </thead>
-            <tbody formArrayName="attendanceArray">
-              <ng-container *ngFor="let item of attendenceForm.get('attendanceArray').controls;let i = index;">
-                <tr [formGroupName]="i">
-                  <td>
-                    <label name="AttendanceDisplayDay">
-                      {{item.get('AttendanceDisplayDay').value}}
-                    </label>
-                  </td>
-                  <td>
-                    <input autofocus placeholder="no of working hours" formControlName="Hours" >
-                  </td>
-                  <td>
-                    <div ngbDropdown class="d-inline-block dropright">
-                      <input type="text" class="form-control" placeholder="no of working hours" formControlName="UserComments" ngbDropdownToggle>
-                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <textarea class="form-control" formControlName="UserComments"></textarea>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+    <ng-container [ngSwitch]="isFormReady">
+      <div *ngSwitchCase="true">
+        <div [formGroup]="attendenceForm" class="x_panel mt-4 pt-3 attendance-form">
+          <div class="row">
+            <div class="col-md-10 text-dark fw-bold">
+             <span>Attendance: From {{fromDate | date}} to {{toDate -1 | date}}.</span>
+            </div>
+            <div class="col-md-2 text-end">
+              <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">Submit</button>
+            </div>
+          </div>
+          <div class="x_content">
+            <table class="table-middle table table-hover">
+              <thead>
                 <tr>
-              </ng-container>
-            </tbody>
-          </table>
+                  <th width="10%">
+                    Day
+                  </th>
+                  <th>
+                    Date
+                  </th>
+                  <th width="6%" class="text-center">
+                    Working Hour
+                  </th>
+                  <th width="20%">
+                    Comment
+                  </th>
+                </tr>
+              </thead>
+              <tbody formArrayName="attendanceArray">
+                <ng-container *ngFor="let item of attendenceForm.get('attendanceArray').controls;let i = index;">
+                  <tr [formGroupName]="i">
+                    <td>
+                      <div class="table-cell-center highlight-font">
+                        {{item.get('AttendanceDisplayDay').value | date:'EEEE'}}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="table-cell-center" name="AttendanceDisplayDay">
+                        {{item.get('AttendanceDisplayDay').value}}
+                      </div>
+
+                      <div class="d-inline-block float-end center-badge" [ngSwitch]="item.get('AttendenceStatus').value">
+                        <div *ngSwitchCase="8">
+                          <span class="badge bg-primary ms-2">
+                            <i class="fa fa-check-square-o pe-2 pt-1 pb-1" aria-hidden="true"></i>Submitted
+                          </span>
+                          <small class="d-block text-end text-muted">
+                            {{item.get('AttendanceDay').value | date}}
+                          </small>
+                        </div>
+                        <div *ngSwitchDefault>
+                          <span class="badge bg-warning text-dark">
+                            <i class="fa fa-exclamation pe-2 pt-1 pb-1" aria-hidden="true"></i>Pending
+                          </span>
+                        </div>
+                      </div>
+
+                    </td>
+                    <td>
+                      <div class="center-badge">
+                        <input class="text-center" placeholder="no of working hours" formControlName="Hours" >
+                      </div>
+                    </td>
+                    <td>
+                      <div ngbDropdown class="d-inline-block dropright">
+                        <input type="text" class="form-control input-overflow" formControlName="UserComments" placeholder="Comments" (focus)="takeComments($event)">
+                        <div class="p-0 position-absolute d-none">
+                          <textarea class="form-control" (blur)="captureComments($event)"
+                            placeholder="enter your comments" formControlName="UserComments">
+                          </textarea>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div *ngSwitchDefault class="mt-5">
+        <div class="x_panel v-center">
+          <div class="x_content">
+            <p class="h3 text-muted text-center">
+              Please select week date to get attendance.
+            </p>
+          </div>
         </div>
       </div>
     </ng-container>
