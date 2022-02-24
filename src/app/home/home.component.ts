@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Chart } from "chart.js";
+import { AjaxService } from "src/providers/ajax.service";
+import { Toast } from "src/providers/common-service/common.service";
 declare var $:any;
 
 @Component({
@@ -8,12 +10,37 @@ declare var $:any;
   styleUrls: ["./home.component.scss"]
 })
 export class HomeComponent implements OnInit {
-  constructor() { }
+  userId: number = 0;
+  employeeUid: number = 0;
+  userName: string = "";
+  isPageReady: boolean = false;
+
+  constructor(private http: AjaxService) { }
 
   ngOnInit() {
     this.LoadChartData();
     this.LoadLineChart();
     this.LoadDoughnutchart();
+    this.getDeatils();
+  }
+
+
+  getDeatils() {
+    let data = {
+      "UserId" : 6,
+      "EmployeeUid": 6,
+      "AttendenceFromDay": "2021-09-03 20:49:08.000000",
+      "AttendenceToDay": "2022-02-24 20:49:08.000000"
+    }
+    this.http.post("Dashboard/GetEmployeeDeatils", data)
+    .then(response => {
+      if (response.ResponseBody) {
+        Toast(response.ResponseBody);
+      } else {
+        Toast("Fail to inser/update, please contact to admin.");
+      }
+    })
+
   }
 
   LoadLineChart() {
@@ -85,12 +112,12 @@ export class HomeComponent implements OnInit {
             }]
         },
         options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
     });
   }
 }
