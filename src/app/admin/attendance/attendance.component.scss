@@ -1,18 +1,23 @@
 .attendance-form input {
   border: none;
   background: transparent;
+  z-index: 90;
 }
 
 .attendance-form textarea {
   border: 1px solid #161616;
   border-radius: 4px;
+  background: #fff !important;
   //padding: 6px 10px;
+  z-index: 999 !important;
 }
 
 .attendance-form textarea:focus {
   border: 1px solid #161616;
   border-radius: 4px;
+  background: #fff !important;
   //padding: 6px 10px;
+  z-index: 998 !important;
 }
 
 .employee-label {
@@ -35,7 +40,17 @@
   padding-top: 0.4rem !important;
 }
 
+.center-badge input {
+  width: 3rem !important;
+}
+
 .highlight-font {
   font-weight: 600;
   color: #838689;
+}
+
+.head-badge {
+  font-size: 0.7rem !important;
+  text-decoration: none;
+  font-weight: 500 !important;
 }

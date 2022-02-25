@@ -5,7 +5,8 @@
 
 .navbar {
   font-family: Poppins, sans-serif;
-  background: linear-gradient(120deg, #00e4d0, #5983e8);
+  background: white;
+  border-bottom: 1px solid #d9d9d9;
   transition: background 0.25s ease;
   -webkit-transition: background 0.25s;
   -moz-transition: background 0.25s;
@@ -265,4 +266,36 @@
 .badge-counter {
   position: absolute;
   top: -4px;
+}
+
+.btn-user {
+  display: flex !important;
+}
+
+.nav-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.menu-sm-burger {
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  a > i {
+    font-size: 1.2rem;
+  }
+}
+
+.icon-deep {
+  color: #050554;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 1rem;
 }

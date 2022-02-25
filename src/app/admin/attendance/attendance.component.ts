@@ -89,7 +89,7 @@ export class AttendanceComponent implements OnInit {
   buildTime(timeValue: number) {
     let totalTime: string = "";
     try {
-      let hours = timeValue / 60;
+      let hours = parseInt((timeValue / 60).toFixed(0));
       if(hours < 10) {
         totalTime = `0${hours}`;
       } else {
@@ -100,7 +100,7 @@ export class AttendanceComponent implements OnInit {
       if(minutes < 10) {
         totalTime += `:0${minutes}`;
       } else {
-        totalTime += `${minutes}`;
+        totalTime += `:${minutes}`;
       }
     } catch(e) {
       Toast("Invalid time used.");
@@ -117,9 +117,15 @@ export class AttendanceComponent implements OnInit {
         AttendanceDay: [at.date, Validators.required],
         AttendanceDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
         UserId: [0],
-        UserTypeId: [UserType.Employee]
+        UserTypeId: [UserType.Employee],
+        UserHours: [at.hrs],
+        UserMin: [at.mins]
       });
     } else {
+      let totalTime = this.buildTime(item.hours);
+      let timeValues = totalTime.split(":");
+      let hours = timeValues[0];
+      let minutes = timeValues[1];
       return this.fb.group({
         UserComments: [item.userComments, Validators.required],
         Hours: [this.buildTime(item.hours), Validators.required],
@@ -127,7 +133,9 @@ export class AttendanceComponent implements OnInit {
         AttendanceDay: [at.date, Validators.required],
         AttendanceDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
         UserId: [item.userId],
-        UserTypeId: [item.userTypeId]
+        UserTypeId: [item.userTypeId],
+        UserHours: [hours],
+        UserMin: [minutes]
       });
     }
   }
@@ -143,16 +151,49 @@ export class AttendanceComponent implements OnInit {
     });
   }
 
-  calculateTime(timeValue: string) {
-    let timeValues = timeValue.split(":");
+  manageMinField(index: number, e: any) {
+    let min = parseInt(e.target.value);
+    let value: any = "";
+    if (min > 0) {
+      value = (min < 10 ? `0${min}` : min).toString();
+    } else {
+      value = "00";
+    }
+    let records = this.attendenceForm.get("attendanceArray")["controls"];
+    if(records && records.length >= index) {
+      records[index].get("UserMin").setValue(value);
+    }
+  }
+
+  manageHourField(index: number, e: any) {
+    // let hrs = this.attendenceForm.get("UserHours").value;
+    let hrs = parseInt(e.target.value);
+    let value: any = "";
+    if (hrs > 0 ) {
+      value = (hrs < 10 ? `0${hrs}` : hrs).toString();
+    } else {
+      value = "00";
+    }
+
+    let records = this.attendenceForm.get("attendanceArray")["controls"];
+    if(records && records.length >= index) {
+      records[index].get("UserHours").setValue(value);
+    }
+  }
+
+  calculateTime(UserHours: string, UserMin: string) {
     let totalTime: number = 0;
     try{
-      if(timeValues.length === 2) {
-        let hours = parseInt(timeValues[0]);
-        let minutes = parseInt(timeValues[1]);
-        totalTime = hours * 60 + minutes;
-      } else {
-        totalTime = parseInt(timeValue);
+      if (UserMin != "" && UserHours != "") {
+        let hours = parseInt(UserHours);
+        let minutes = parseInt(UserMin);
+        if (hours >= 0 && hours <= 24 && minutes >= 0 && minutes < 60) {
+          totalTime = hours * 60 + minutes;
+        } else {
+          Toast("Please input correct working hours and minutes");
+          return;
+        }
+
       }
     } catch(e) {
       Toast("Invalid time used.");
@@ -165,7 +206,7 @@ export class AttendanceComponent implements OnInit {
     let records: Array<any> = JSON.parse(values);
     let index = 0;
     while(index < records.length) {
-      records[index].Hours = this.calculateTime(records[index].Hours.toString());
+      records[index].Hours = this.calculateTime(records[index].UserHours, records[index].UserMin);
       records[index].UserId = Number(this.userId);
       records[index].AttendenceStatus = 8;
       records[index]["AttendanceDay"] = new Date(records[index]["AttendanceDay"]);
@@ -258,7 +299,8 @@ export class AttendanceComponent implements OnInit {
         currentDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         weekDaysList.push({
           date: new Date(currentDate.setDate(currentDate.getDate() + index)),
-          hrs: "08:00"
+          hrs: "08",
+          mins: "00"
         });
         currentDate = null;
         index++;
@@ -290,11 +332,27 @@ export class AttendanceComponent implements OnInit {
       this.toDate.setDate(this.toDate.getDate() + 7);
       this.getUserAttendanceData();
     }
+    let seletedDate = new Date(`${this.fromModel.year}-${this.fromModel.month}-${this.fromModel.day}`);
+    let dateChange = new Date (seletedDate.setDate(seletedDate.getDate() + 7));
+    this.fromModel.day = seletedDate.getDate();
+
+
+    // this.fromModel.year = dateChange.getFullYear();
   }
 
   prevWeek() {
     this.fromDate = new Date(this.fromDate.setDate(this.fromDate.getDate() - 7));
     if (this.fromDate) {
+      this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
+      this.toDate.setDate(this.toDate.getDate() + 7);
+      this.getUserAttendanceData();
+    }
+  }
+
+  presentWeek() {
+    let currentDate = new Date().setHours(0, 0, 0, 0);
+    this.fromDate = this.getMonday(new Date(currentDate));
+    if(this.fromDate) {
       this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
       this.toDate.setDate(this.toDate.getDate() + 7);
       this.getUserAttendanceData();
