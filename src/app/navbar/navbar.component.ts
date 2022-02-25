@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit {
   Messages: Array<string> = [];
   userDetail: UserDetail = new UserDetail();
   Menu: Array<any> = [];
+  TineMenu: boolean = false;
 
   @Output() authentication = new EventEmitter();
 
@@ -135,6 +136,16 @@ export class NavbarComponent implements OnInit {
       this.autoPlay.SetAutoPlayValue(true);
       this.autoPlay.InitAutoPlay();
     }, 100);
+  }
+
+  toggleMenu() {
+    let $e = document.getElementById("page-menu");
+    if($e && !this.TineMenu) {
+      $e.classList.add("d-block");
+    } else {
+      $e.classList.remove("d-block");
+    }
+    this.TineMenu = !this.TineMenu;
   }
 }
 

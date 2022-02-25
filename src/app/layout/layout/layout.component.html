@@ -1,12 +1,13 @@
-<div class="d-flex container-scroller h-100">
-  <div class="l-panel">
-    <app-sidemenu></app-sidemenu>
-  </div>
-  <div class="r-panel">
-    <app-navbar></app-navbar>
-    <div class="content-wrapper">
-      <router-outlet></router-outlet>
+<div class="vh-100 overflow-hidden">
+  <app-navbar></app-navbar>
+  <div class="d-flex container-scroller h-100">
+    <div class="l-panel">
+      <app-sidemenu></app-sidemenu>
     </div>
-
+    <div class="r-panel">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
   </div>
 </div>
