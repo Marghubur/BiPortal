@@ -317,7 +317,7 @@ export class FilesComponent implements OnInit {
             if(this.userFiles[i].IGST >0 || this.userFiles[i].SGST >0 || this.userFiles[i].CGST >0) {
               GST = ((this.userFiles[i].IGST + this.userFiles[i].SGST + this.userFiles[i].CGST)/100);
             } else {
-              GST = 1;
+              GST = 0;
             }
             bills.GSTStatus = GetStatus(this.userFiles[i].GstStatus);
             bills.GSTAmount = this.userFiles[i].SalaryAmount * GST;
