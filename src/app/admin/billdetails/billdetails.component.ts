@@ -78,6 +78,7 @@ export class BilldetailsComponent implements OnInit {
     this.employeeFile = new BillDetails();
     this.employeeFile.Status = "0";
     this.employeeFile.GSTStatus = '0';
+    this.employeeFile.Month = "0";
     this.basePath = this.http.GetImageBasePath();
     this.currentEmployeeDetail = this.nav.getValue();
     this.employeeId = 0;
@@ -103,6 +104,10 @@ export class BilldetailsComponent implements OnInit {
     });
 
     this.LoadFiles();
+  }
+
+  onEmloyeeChanged(_: any) {
+    this.filterRecords();
   }
 
   onDateSelection(e: NgbDate) {
@@ -398,6 +403,11 @@ export class BilldetailsComponent implements OnInit {
       delimiter = "and";
     }
 
+    if(this.employeeId > 0) {
+      searchQuery += ` ${delimiter} FileOwnerId = ${this.employeeId} `;
+      delimiter = "and";
+    }
+
     if(this.employeeFile.GSTAmount !== null && this.employeeFile.GSTAmount !== 0) {
       searchQuery += ` ${delimiter} GSTAmount like '%${this.employeeFile.GSTAmount}%' `;
       delimiter = "and";
@@ -423,8 +433,9 @@ export class BilldetailsComponent implements OnInit {
       delimiter = "and";
     }
 
-    if(this.employeeFile.Month !== null && this.employeeFile.Month !== "") {
-      searchQuery += ` ${delimiter} Month like '${this.employeeFile.Month}%' `;
+    if(this.employeeFile.Month !== null && this.employeeFile.Month !== "0") {
+      let monthValue = Number(this.employeeFile.Month);
+      searchQuery += ` ${delimiter} BillForMonth = '${monthValue}' `;
       delimiter = "and";
     }
 
@@ -448,7 +459,7 @@ export class BilldetailsComponent implements OnInit {
     this.employeeFile.SalaryAmount = null;
     this.employeeFile.ReceivedAmount=null;
     this.employeeFile.BilledAmount = null;
-    this.employeeFile.Month = "";
+    this.employeeFile.Month = "0";
     this.toModel = null;
     this.fromModel = null;
     this.toDate = null;
@@ -516,4 +527,5 @@ export class BillDetails {
   GSTStatus: string = '';
   fromModel: string = '';
   toModel: string = '';
+  Employee: string = '';
 }

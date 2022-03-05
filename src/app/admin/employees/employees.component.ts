@@ -29,6 +29,9 @@ export class EmployeesComponent implements OnInit {
   isEmpPageReady: boolean = false;
   anyFilter: string = "";
   employeeDetails: employeeModel = null;
+  singleEmployee: any = null;
+  isActiveEmployee: number = 1;
+  isActiveTab: any = {}
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -42,7 +45,13 @@ export class EmployeesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isActiveTab = {
+      Active: true,
+      InActive: false,
+      All: false
+    };
     this.employeeData = new Filter();
+    this.employeeData.SearchString = "";
     this.employeeDetails = new employeeModel();
 
 
@@ -54,26 +63,55 @@ export class EmployeesComponent implements OnInit {
     });
 
     this.user = this.userService.getInstance();
-    if (this.user !== undefined && this.user !== null)
-      this.LoadData(1);
+    if (this.user !== undefined && this.user !== null) {
+      this.LoadData();
+    }
   }
 
-  LoadAllActiveOnly(){
-    this.LoadData(1);
+  SwitchTab(e: any, value: number) {
+    switch(value) {
+      case 1:
+        this.isActiveTab = {
+          Active: true,
+          InActive: false,
+          All: false
+        };
+        break;
+      case 0:
+        this.isActiveTab = {
+          Active: false,
+          InActive: true,
+          All: false
+        };
+        break;
+      default:
+        this.isActiveTab = {
+          Active: false,
+          InActive: false,
+          All: true
+        };
+        break;
+    }
+    this.isActiveEmployee = value;
+    this.LoadData();
   }
 
-  LoadAllInActiveOnly(){
-    this.LoadData(0);
-  }
+  LoadData() {
+    let query = " 1=1 ";
+    if(this.employeeData.SearchString.trim() !== "") {
+      query = ` 1=1 And ${this.employeeData.SearchString}`;
+    }
 
-  LoadAll(){
-    this.LoadData(-1);
-  }
+    if(this.isActiveEmployee != -1){
+      query += ` And IsActive = ${this.isActiveEmployee}`;
+    }
 
-  LoadData(IsActive: number) {
-    let filter: Filter = new Filter();
-    filter.SearchString = `1=1 And IsActive = ${IsActive}`;
-    this.http.post("Employee/GetEmployees", this.employeeData).then((response: ResponseModel) => {
+    this.http.post("Employee/GetEmployees", {
+      SearchString: query,
+      PageIndex: this.employeeData.PageIndex,
+      PageSize: this.employeeData.PageSize,
+      SortBy: this.employeeData.SortBy,
+    }).then((response: ResponseModel) => {
       this.employeeDetail = response.ResponseBody;
       if (this.employeeDetail.length > 0) {
         this.employeeData.TotalRecords = this.employeeDetail[0].Total;
@@ -89,51 +127,90 @@ export class EmployeesComponent implements OnInit {
     let delimiter = "";
 
     if(this.employeeDetails.Name !== null && this.employeeDetails.Name !== "") {
-        searchQuery += ` FirstName like '${this.employeeDetails.Name}%' OR LastName like '${this.employeeDetails.Name}%'`;
+      this.employeeData.SearchString += ` FirstName like '${this.employeeDetails.Name}%' OR LastName like '${this.employeeDetails.Name}%'`;
         delimiter = "and";
-      }
+    }
 
     if(this.employeeDetails.Email !== null && this.employeeDetails.Email !== "") {
-      searchQuery += ` ${delimiter} Email like '%${this.employeeDetails.Email}%' `;
+      this.employeeData.SearchString += ` ${delimiter} Email like '%${this.employeeDetails.Email}%' `;
         delimiter = "and";
-    }
-    if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile !== 0) {
-      searchQuery += ` ${delimiter} Mobile like '${this.employeeDetails.Mobile}%' `;
-        delimiter = "and";
-    }
-    if(searchQuery !== "") {
-      this.employeeData.SearchString = `1=1 And ${searchQuery}`;
     }
 
-    this.LoadData(1);
+    if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile !== 0) {
+      this.employeeData.SearchString += ` ${delimiter} Mobile like '%${this.employeeDetails.Mobile}%' `;
+        delimiter = "and";
+    }
+
+    this.LoadData();
   }
 
   globalFilter() {
     let searchQuery = "";
-    searchQuery = ` FirstName like '${this.anyFilter}%' OR LastName like '${this.anyFilter}%' OR Email like '%${this.anyFilter}%' OR Mobile like '${this.anyFilter}%'`;
-    if(searchQuery !== "") {
-      this.employeeData.SearchString = `1=1 And ${searchQuery}`;
-    }
+    this.employeeData.SearchString = ` FirstName like '${this.anyFilter}%' OR LastName like '${this.anyFilter}%' OR Email like '%${this.anyFilter}%' OR Mobile like '${this.anyFilter}%'`;
 
-    this.LoadData(1);
+    this.LoadData();
   }
 
   resetFilter() {
-    this.employeeData.SearchString = "1=1";
+    this.isActiveEmployee = 1;
+    this.isActiveTab = {
+      Active: true,
+      InActive: false,
+      All: false
+    };
+    this.employeeData.SearchString = "";
     this.employeeData.PageIndex = 1;
     this.employeeData.PageSize = 10;
     this.employeeData.StartIndex = 1;
     this.employeeData.EndIndex = (this.employeeData.PageSize * this.employeeData.PageIndex);
 
-    this.LoadData(1);
+    this.LoadData();
     this.employeeDetails.Name="";
     this.employeeDetails.Mobile = null;
     this.employeeDetails.Email="";
     this.anyFilter = "";
   }
 
-  DeleteCurrent() {
-    this.common.ShowToast("Its working...");
+
+  DeleteCurrent(item: any) {
+    if (item != null) {
+      let empId = item.EmployeeUid;
+      if (empId !== null && empId !== "") {
+        item.IsActive = false;
+        this.http.delete(`Employee/DeleteEmployeeById/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
+          if (response.ResponseBody !== null) {
+            Toast("Employee Deleted successfully")
+            this.LoadData();
+          }
+        });
+      }
+    }
+    this.ClosePopup();
+  }
+
+  DeactivatedEmployee(item: any) {
+    if (item != null) {
+      let empId = item.EmployeeUid;
+      if (empId !== null && empId !== "") {
+        item.IsActive = true;
+        this.http.delete(`Employee/DeleteEmployeeById/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
+          if (response.ResponseBody !== null) {
+            Toast("Employee Activated successfully");
+            this.LoadData();
+          }
+        });
+      }
+    }
+    this.ClosePopup();
+  }
+
+  CreatePopup(e: any) {
+    $('#deleteEmployee').modal('show');
+    this.singleEmployee = e;
+  }
+
+  ClosePopup() {
+    $('#deleteEmployee').modal('hide');
   }
 
   ViewFiles(data: any) {
@@ -177,7 +254,7 @@ export class EmployeesComponent implements OnInit {
             if (data !== null) {
               // this.BuildDocumentTable(data);
               this.toggelAddUpdateModal();
-              this.LoadData(1);
+              this.LoadData();
             } else {
               this.toggelAddUpdateModal();
             }
@@ -194,7 +271,7 @@ export class EmployeesComponent implements OnInit {
   GetFilterResult(e: Filter) {
     if(e != null) {
       this.employeeData = e;
-      this.LoadData(1);
+      this.LoadData();
     }
   }
 
