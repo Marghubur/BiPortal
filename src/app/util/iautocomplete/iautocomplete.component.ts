@@ -14,9 +14,8 @@ import { CommonService } from "src/providers/common-service/common.service";
 
   let placehosderName = 'Placeholder name';
 
-  <app-iautocomplete id="FieldId" [Data]="value" (OnSelect)="FireEventOnSelection($event)"
-    [Placeholder]="placehosderName" [Defaultvalue]="DefaultData">
-  </app-iautocomplete>
+  <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
+  (OnSelect)="your-fn($event)"></app-iautocomplete>
 
 
 
@@ -400,13 +399,9 @@ export class IautocompleteComponent implements OnInit, ControlValueAccessor {
       .find('div[name="suggestionBox-dv"]')
       .addClass("d-none");
 
-    this.OnSelect.emit(
-      JSON.stringify({
-        value: c.value,
-        data: c.data,
-        index: a,
-      })
-    );
+    this.DefaultValue = c.value;
+    this.onChange(this.DefaultValue);
+    this.OnSelect.emit(c.value);
 
     if (this.IsSingleMode) {
       let index = 0;

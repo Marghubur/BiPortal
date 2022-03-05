@@ -96,7 +96,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         if (this.allocatedClients.length > 0)
           this.isAllocated = true;
       }
-      this.initForm();
+      this.bindForm();
       this.idReady = true;
     });
   }
@@ -111,12 +111,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.employeeForm.controls["dateOfBilling"].setValue(date);
   }
 
-  initForm() {
+  bindForm() {
     this.employeeForm = this.fb.group({
       FirstName: new FormControl(this.employeeModal.FirstName, [Validators.required]),
       LastName: new FormControl(this.employeeModal.LastName),
-      Mobile: new FormControl(this.employeeModal.Mobile, [Validators.required]),
-      Email: new FormControl(this.employeeModal.Email, [Validators.required]),
+      Mobile: new FormControl(this.employeeModal.Mobile),
+      Email: new FormControl(this.employeeModal.Email),
       SecondaryMobile: new FormControl(this.employeeModal.SecondaryMobile),
       FatherName: new FormControl(this.employeeModal.FatherName),
       MotherName: new FormControl(this.employeeModal.MotherName),
@@ -142,6 +142,40 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       EmployeeUid: new FormControl(this.employeeModal.EmployeeUid),
       BranchName: new FormControl(this.employeeModal.BranchName),
       AllocatedClientName: new FormControl(this.employeeModal.AllocatedClientName)
+    });
+  }
+
+  initForm() {
+    this.employeeForm = this.fb.group({
+      FirstName: new FormControl("", [Validators.required]),
+      LastName: new FormControl("", [Validators.required]),
+      Mobile: new FormControl("0000000000"),
+      Email: new FormControl("xxxxx@xxx.com"),
+      SecondaryMobile: new FormControl(""),
+      FatherName: new FormControl(""),
+      MotherName: new FormControl(""),
+      SpouseName: new FormControl(""),
+      State: new FormControl(""),
+      City: new FormControl(""),
+      Pincode: new FormControl(PlaceEmpty("")),
+      Address: new FormControl(""),
+      PANNo: new FormControl(""),
+      AadharNo: new FormControl(""),
+      AccountNumber: new FormControl(""),
+      BankName: new FormControl(""),
+      IFSCCode: new FormControl(""),
+      Domain: new FormControl(""),
+      Specification: new FormControl(""),
+      ExprienceInYear: new FormControl(PlaceEmpty("")),
+      LastCompanyName: new FormControl(""),
+      IsPermanent: new FormControl(""),
+      AllocatedClientId: new FormControl(""),
+      ActualPackage: new FormControl(""),
+      FinalPackage: new FormControl(""),
+      TakeHomeByCandidate: new FormControl(""),
+      EmployeeUid: new FormControl(""),
+      BranchName: new FormControl(""),
+      AllocatedClientName: new FormControl("")
     });
   }
 

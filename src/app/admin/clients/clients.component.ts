@@ -8,6 +8,7 @@ import { Clients, Documents, DocumentsPage, RegisterClient } from 'src/providers
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { DocumentUser } from '../documents/documents.component';
+declare var $:any;
 
 @Component({
   selector: 'app-clients',
@@ -28,6 +29,8 @@ export class ClientsComponent implements OnInit {
   isClientFound: boolean = false;
   clientDetails: clientModel = null;
   anyFilter: string = "";
+  singleClient: any = null;
+  isActiveClient: number = 1;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -64,6 +67,20 @@ export class ClientsComponent implements OnInit {
     userDetail.PageName = Clients;
     userDetail.UserId = clientId;
     this.nav.navigate(Documents, userDetail);
+  }
+
+  SwitchTab(e: any, value: number) {
+    let elem: any = document.getElementById("client-tab").querySelectorAll('a')
+    let i = 0;
+    while(i < elem.length) {
+      elem[i].classList.remove('tab-active');
+      i++;
+    }
+    e.target.classList.add('tab-active');
+    this.isActiveClient = value;
+    // var searchQuery = `IsActive = '${value}' `;
+    // this.clientsData.SearchString = `1=1 And ${searchQuery}`;
+    // this.LoadData();
   }
 
   LoadData() {
@@ -206,6 +223,20 @@ export class ClientsComponent implements OnInit {
     this.LoadData();
   }
 
+  activeClients() {
+    // let searchQuery = "";
+    // let delimiter = "";
+    // if(this.clientDetails.FirstAddress !== null && this.clientDetails.FirstAddress !== "") {
+    //   searchQuery += ` ${delimiter} IsActive = '${this.clientDetails.FirstAddress}%' `;
+    //     delimiter = "and";
+    // }
+    // if(searchQuery !== "") {
+    //   this.clientsData.SearchString = `1=1 And ${searchQuery}`;
+    // }
+
+    // this.LoadData();
+  }
+
   resetFilter() {
     this.clientsData.SearchString = "1=1";
     this.clientsData.PageIndex = 1;
@@ -219,6 +250,19 @@ export class ClientsComponent implements OnInit {
     this.clientDetails.FirstAddress="";
     this.clientDetails.City="";
     this.anyFilter = "";
+  }
+
+  // DeleteCurrent(e: any) {
+  //   alert(e.ClientId);
+  //   this.ClosePopup();
+  // }
+
+  CreatePopup(e: any) {
+    $('#deleteClient').modal('show');
+  }
+
+  ClosePopup() {
+    $('#deleteClient').modal('hide');
   }
 }
 

@@ -431,7 +431,7 @@ export class BuildPdfComponent implements OnInit {
       FileId: new FormControl(this.pdfModal.FileId),
       StatusId: new FormControl(this.pdfModal.StatusId),
       PaidOn: new FormControl(this.pdfModal.PaidOn),
-      UpdateSeqNo: new FormControl(this.pdfModal.UpdateSeqNo)
+      UpdateSeqNo: new FormControl(this.pdfModal.UpdateSeqNo),
     });
   }
 
@@ -537,7 +537,7 @@ export class BuildPdfComponent implements OnInit {
       if(this.isHalfDay) {
         request.daysAbsent = Number(worksDays - burnDays) - 0.5;
       }
-      this.http.post("FileMaker/GeneratePdf", request).then((response: ResponseModel) => {
+      this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
         if (response.ResponseBody.ErroMessage == null && response.ResponseBody.Result) {
           this.common.ShowToast(response.ResponseBody.Result.Status);
         }
