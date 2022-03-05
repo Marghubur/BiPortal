@@ -73,7 +73,7 @@
                         name="FirstName" formControlName="FirstName" />
                     </div>
                     <div class="col-md-6 mb-3">
-                      <label class="form-label">Last Name</label>
+                      <label class="form-label">Last Name *</label>
                       <input class="form-control" placeholder="Last Name" name="LastName" formControlName="LastName"
                         transform=""
                         [ngClass]="{'error': submitted && f.LastName.errors !== null && f.LastName.errors.required}" />
@@ -82,13 +82,13 @@
 
                   <div class="col-md-12 m-0 row">
                     <div class="col-md-6 mb-3">
-                      <label class="form-label">Mobile Number *</label>
+                      <label class="form-label">Mobile Number </label>
                       <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#"
                         [ngClass]="{'error': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}"
                         OnlyNumber="10" name="Mobile" formControlName="Mobile" />
                     </div>
                     <div class="col-md-6 mb-3">
-                      <label class="form-label">Email Id *</label>
+                      <label class="form-label">Email Id </label>
                       <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email"
                         [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}" />
                     </div>
@@ -101,7 +101,7 @@
                         formControlName="SecondaryMobile" />
                     </div>
                     <div class="col-md-6 pb-3">
-                      <label class="form-label">Date of birth *</label>
+                      <label class="form-label">Date of birth </label>
                       <form class="form-inline">
                         <div class="form-group w-100">
                           <div class="input-group w-100">
