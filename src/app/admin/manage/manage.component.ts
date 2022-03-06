@@ -75,71 +75,16 @@ export class ManageComponent implements OnInit {
     }
   }
 
-  // loadData(employeeId: number) {
-  //   this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
-  //     if (res.ResponseBody) {
-  //       this.clients = res.ResponseBody.Clients;
-  //       if (res.ResponseBody.Employee.length > 0)
-  //         this.employeeModal = res.ResponseBody.Employee[0] as EmployeeDetail;
-  //       this.allocatedClients = res.ResponseBody.AllocatedClients;
-  //       if (this.isCreated = true) {
-  //         this.employeeModal.ActualPackage = 0;
-  //         this.employeeModal.FinalPackage = 0;
-  //         this.employeeModal.TakeHomeByCandidate = 0;
-  //         this.employeeModal.AllocatedClientId = 0;
-  //       }
-  //       if (this.isCreated = false) {
-  //         if (this.allocatedClients != null && this.allocatedClients.length > 0) {
-  //           let mappedClient = this.allocatedClients[0];
-  //           this.employeeModal.FinalPackage = mappedClient.FinalPackage;
-  //           this.employeeModal.ActualPackage = mappedClient.ActualPackage;
-  //           this.employeeModal.TakeHomeByCandidate = mappedClient.TakeHomeByCandidate;
-  //           this.employeeModal.AllocatedClientId = mappedClient.ClientUid;
-  //           this.assignedActiveClientUid = mappedClient.ClientUid;
-  //           this.isCreated = true;
-  //         }
-  //       }
-  //       if (this.allocatedClients.length > 0)
-  //         this.isAllocated = true;
-  //     }
-  //     this.bindForm();
-  //     this.idReady = true;
-  //   });
-  // }
-
   loadData(user: any) {
-    this.http.get(`Login/GetUserDetail/${user}`).then((res: ResponseModel) => {
+    this.http.post(`Login/GetUserDetail`, { MobileNo: user.Mobile, Email: user.EmailId }).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        let data = res.ResponseBody;
-        this.clients = res.ResponseBody.Clients;
-        if (res.ResponseBody.Employee.length > 0)
-          this.employeeModal = res.ResponseBody.Employee[0] as EmployeeDetail;
-        this.allocatedClients = res.ResponseBody.AllocatedClients;
-        if (this.isCreated = true) {
-          this.employeeModal.ActualPackage = 0;
-          this.employeeModal.FinalPackage = 0;
-          this.employeeModal.TakeHomeByCandidate = 0;
-          this.employeeModal.AllocatedClientId = 0;
-        }
-        if (this.isCreated = false) {
-          if (this.allocatedClients != null && this.allocatedClients.length > 0) {
-            let mappedClient = this.allocatedClients[0];
-            this.employeeModal.FinalPackage = mappedClient.FinalPackage;
-            this.employeeModal.ActualPackage = mappedClient.ActualPackage;
-            this.employeeModal.TakeHomeByCandidate = mappedClient.TakeHomeByCandidate;
-            this.employeeModal.AllocatedClientId = mappedClient.ClientUid;
-            this.assignedActiveClientUid = mappedClient.ClientUid;
-            this.isCreated = true;
-          }
-        }
-        if (this.allocatedClients.length > 0)
-          this.isAllocated = true;
+        this.employeeModal = res.ResponseBody as EmployeeDetail;
       }
       this.bindForm();
       this.idReady = true;
     });
   }
-
+  
   daysInMonth(monthNumber: number) {
     var now = new Date();
     return new Date(now.getFullYear(), monthNumber, 0).getDate();
