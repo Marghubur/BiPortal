@@ -1,8 +1,8 @@
-<div>
+<div class="main-container">
   <form autocomplete="off">
     <ng-container *ngIf="isEmployeesReady">
       <div class="col-12 row m-0 p-0">
-        <div class="col-md-4">
+        <div class="col-md-4 p-0 m-0">
           <label class="form-label">Employee Name</label>
           <input class="form-control" type="text" readonly value="{{userName}}">
         </div>
@@ -26,9 +26,11 @@
               <div class="form-group">
                 <div class="input-group">
                   <input class="form-control form-control-sm" placeholder="yyyy-mm-dd" (click)="from.toggle()"
-                  (dateSelect)="fromDateSelection($event)" name="fromModel" [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
+                    (dateSelect)="fromDateSelection($event)" name="fromModel" [(ngModel)]="fromModel" ngbDatepicker
+                    #from="ngbDatepicker">
                   <div class="input-group-append">
-                    <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()" type="button"></button>
+                    <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()"
+                      type="button"></button>
                   </div>
                 </div>
               </div>
@@ -36,12 +38,14 @@
           </div>
           <div class="col-md-4 d-flex">
             <div class="ms-2">
-              <button href="javascript:void(0)" class="btn btn-sm btn-outline-dark" [disabled]="!fromDate" (click)="prevWeek()">
+              <button href="javascript:void(0)" class="btn btn-sm btn-outline-dark" [disabled]="!fromDate"
+                (click)="prevWeek()">
                 <i class="fa fa-angle-double-left pe-2"></i>Prev week
               </button>
             </div>
             <div class="ms-2">
-              <button href="javascript:void(0)" class="btn btn-sm btn-success" [disabled]="!fromDate" (click)="nextWeek()">
+              <button href="javascript:void(0)" class="btn btn-sm btn-success" [disabled]="!fromDate"
+                (click)="nextWeek()">
                 Next week<i class="fa fa-angle-double-right ps-2"></i>
               </button>
             </div>
@@ -54,7 +58,8 @@
         <div [formGroup]="attendenceForm" class="x_panel mt-4 pt-3 attendance-form">
           <div class="row">
             <div class="col-md-10 text-dark">
-             <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}} <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
+              <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}} <span class="fw-bold">&nbsp; to
+                &nbsp; </span> {{toDate -1 | date}}.
             </div>
             <div class="col-md-2 text-end">
               <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">Submit</button>
@@ -94,7 +99,8 @@
                         {{item.get('AttendanceDisplayDay').value}}
                       </div>
 
-                      <div class="d-inline-block float-end center-badge" [ngSwitch]="item.get('AttendenceStatus').value">
+                      <div class="d-inline-block float-end center-badge"
+                        [ngSwitch]="item.get('AttendenceStatus').value">
                         <div *ngSwitchCase="8">
                           <span class="badge bg-primary ms-2">
                             <i class="fa fa-check-square-o pe-2 pt-1 pb-1" aria-hidden="true"></i>Submitted
@@ -113,9 +119,13 @@
                     </td>
                     <td>
                       <div class="center-badge d-flex ">
-                        <input type="number" class="text-end" placeholder="hours" min="0" max="23" (blur)="manageHourField(i, $event)" formControlName="UserHours" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        <input type="number" class="text-end" placeholder="hours" min="0" max="23"
+                          (blur)="manageHourField(i, $event)" formControlName="UserHours"
+                          onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         <span>&nbsp;:</span>
-                        <input type="number" class="text-start" placeholder="minutes" min="0" max="59" (blur)="manageMinField(i, $event)" formControlName="UserMin" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        <input type="number" class="text-start" placeholder="minutes" min="0" max="59"
+                          (blur)="manageMinField(i, $event)" formControlName="UserMin"
+                          onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                       </div>
                     </td>
                     <td>
@@ -125,8 +135,9 @@
                     </td>
                     <td>
                       <div ngbDropdown class="d-inline-block dropright">
-                        <input type="text" class="form-control input-overflow" formControlName="UserComments" placeholder="Comments" (focus)="takeComments($event)">
-                        <div class="p-0 position-absolute d-none">
+                        <input type="text" class="form-control input-overflow" formControlName="UserComments"
+                          placeholder="Comments" (focus)="takeComments($event)">
+                        <div class="p-0 position-absolute d-none textarea-box">
                           <textarea class="form-control" (blur)="captureComments($event)"
                             placeholder="enter your comments" formControlName="UserComments">
                           </textarea>
@@ -153,4 +164,3 @@
     </ng-container>
   </form>
 </div>
-

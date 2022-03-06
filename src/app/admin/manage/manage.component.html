@@ -1,56 +1,22 @@
 <div class="col-12 full-v main-container">
-  <!-- <div class="col-12 u-header curren-bg row m-0">
-        <div class="col-md-4 inline-row p-0">
-            <div class="ml-2 pt-1">
-                <button class="btn btn-sp btn-sm btn-lightorange">New</button>
-            </div>
-            <div class="pt-1">
-                <button class="btn btn-sp btn-sm btn-lightdark">Runner</button>
-            </div>
-            <div class="pt-1">
-                <button class="btn btn-sp btn-sm btn-lightdark">Import</button>
-            </div>
-        </div>
-        <div class="col-md-4 text-center">
-            <div class="d-inline-block c-tab">
-                <a class="a-tab tab-active">
-                    <span>Pending</span>
-                </a>
-                <a class="a-tab">
-                    <span>Completed</span>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-4 inline-row d-r p-0 m-0">
-            <div class="pt-1">
-                <button class="btn btn-sp btn-sm btn-lightorange">New</button>
-            </div>
-            <div class="pt-1">
-                <button class="btn btn-sp btn-sm btn-lightdark">Runner</button>
-            </div>
-            <div class="pt-1">
-                <button class="btn btn-sp btn-sm btn-lightdark">Import</button>
-            </div>
-        </div>
-    </div> -->
   <div class="col-12 row p-0 m-0">
     <div class="right-panel container col-md-12 p-0">
       <div class="col-md-12 row m-0 ps-2 pe-4">
         <div>
           <!-- Tabs navs -->
-          <h4>Employee registration page</h4>
+          <h4>Manage User</h4>
           <!-- Tabs navs -->
         </div>
       </div>
       <div class="container-fluid pt-4 bg-light">
         <div class="x_panel mt-2">
-          <div class="x_header">
+          <!-- <div class="x_header">
             <div class="x_header_title">
               <h2>Employee<small>Details</small></h2>
             </div>
-          </div>
+          </div> -->
           <div class="x_content mt-4" *ngIf="idReady">
-            <form [formGroup]="employeeForm">
+            <form [formGroup]=" manageUserForm">
               <div class="col-12 row">
                 <div class="col-md-4">
                   <div class="x_header_title position-relative">
@@ -135,99 +101,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- <div class="x_panel x-panel-changed">
-                <div class="x_header">
-                  <div class="x_header_title">
-                    <h2>Add Update Client<small>Add or update client(s) allocation detail</small>
-                    </h2>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="col-md-12 row m-0">
-
-                    <div class="col-md-6 border-end pt-2">
-                      <label for="">Allocated Client(s)</label>
-                      <hr class="w-100" />
-                      <div class="col-md-12 p-2 pt-3">
-                        <ng-container *ngIf="isAllocated">
-                          <div class="d-block span-clients pe-2 pb-1 mb-2"
-                            [ngClass]="{'inactive-mode': c.IsActive != 1}" *ngFor="let c of allocatedClients">
-                            <span class="text-start">{{c.ClientName}}</span>
-                            <span class="float-end">
-                              <a (click)="bindCurrentClientDetail(c.ClientUid)">
-                                <i class="fa fa-edit"></i>
-                              </a>
-                              <a (click)="deleteCurrentClient(c.ClientUid)">
-                                <i class="ps-2 fa fa-trash"></i>
-                              </a>
-                            </span>
-                          </div>
-                        </ng-container>
-
-                        <ng-container *ngIf="!isAllocated">
-                          <div class="text-center">
-                            <p class="p-4">
-                              Not allocated to any client
-                            </p>
-                          </div>
-                        </ng-container>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label class="form-label">Client (Allocated)</label>
-                        <div class="col-md-12">
-                          <select name="receiverCompanyId" class="form-control" formControlName="AllocatedClientId">
-                            <option value="0">Clients Name</option>
-                            <option *ngFor="let client of clients" value="{{client.ClientId}}">
-                              {{client.ClientName}}
-                            </option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <div class="row mt-3">
-                        <div class="form-group col-md-4 mb-3">
-                          <label class="form-label">Actual Package / Mon</label>
-                          <input class="form-control" placeholder="Actual Package" OnlyNumber="10" name="ActualPackage"
-                            formControlName="ActualPackage"
-                            [ngClass]="{'error': submitted && f.ActualPackage !== null && f.ActualPackage.errors.required}" />
-                        </div>
-                        <div class="form-group col-md-4 mb-3">
-                          <label class="form-label">Final Package / Mon</label>
-                          <input class="form-control" placeholder="Final Package" OnlyNumber="10" name="FinalPackage"
-                            formControlName="FinalPackage"
-                            [ngClass]="{'error': submitted && f.FinalPackage.errors !== null && f.FinalPackage.errors.required}" />
-                        </div>
-                        <div class="form-group col-md-4 mb-3">
-                          <label class="form-label">Take Home</label>
-                          <input class="form-control" placeholder="TakeHomeByCandidate" OnlyNumber="10"
-                            name="TakeHomeByCandidate" formControlName="TakeHomeByCandidate"
-                            [ngClass]="{'error': submitted && f.TakeHomeByCandidate.errors !== null && f.TakeHomeByCandidate.errors.required}" />
-                        </div>
-                      </div>
-
-                      <div class="col-md-12 mt-3 text-end mb-3">
-                        <button class="btn btn-outline-success" (click)="addDetail()">
-                          <i class="fa pe-3"
-                            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-                          <span *ngIf="isUpdated">
-                            Update changes
-                          </span>
-                          <span *ngIf="!isUpdated">
-                            Created
-                          </span>
-                        </button>
-                      </div>
-
-                    </div>
-
-                  </div>
-                </div>
-              </div> -->
 
               <div class="col-12 row m-0 mt-5">
                 <div class="col-md-6">
@@ -366,7 +239,7 @@
                   <div class="btn-group ms-2">
                     <button class="btn btn-success" [disabled]="isLoading" (click)="RegisterEmployee()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
-                      {{ isLoading ? 'Wait' : 'Register' }}
+                      {{ isLoading ? 'Wait' : 'Update' }}
                     </button>
                   </div>
                 </div>

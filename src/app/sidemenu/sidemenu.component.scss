@@ -68,3 +68,7 @@ a {
 .fa-server {
   padding-right: 6px;
 }
+
+.accordion-button:not(.collapsed) {
+  color: #783327 !important;
+}

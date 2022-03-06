@@ -27,7 +27,7 @@
         <div class="x_header_title mt-3">
           <div class="row">
             <div class="row">
-              <div class="col-md-4 d-flex align-items-center" *ngIf="fileLoaded">
+              <div class="col-md-5 d-flex align-items-center" *ngIf="fileLoaded">
                 <label class="form-label pe-3 mt-1">Developer *</label>
                 <div style="width: 20rem">
                   <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
@@ -35,12 +35,12 @@
                   </app-iautocomplete>
                 </div>
               </div>
-              <div class="col-md-8 row">
-                <div class="col-md-12 row ms-1 p-0">
-                  <div class="col-md-6 d-flex justify-content-center align-items-center">
+              <div class="col-md-7 row ms-2">
+                <div class="col-md-12 row ms-4 p-0">
+                  <div class="col-md-6 d-flex justify-content-end align-items-center">
                     <label for="" class="pe-2">Raised From</label>
                     <form class="form-inline">
-                      <div class="form-group">
+                      <div class="form-group form-container">
                         <div class="input-group">
                           <input class="form-control form-control-sm" placeholder="yyyy-mm-dd"
                             (dateSelect)="fromDateSelection($event)" name="from" [(ngModel)]="fromModel" ngbDatepicker
@@ -55,10 +55,10 @@
 
                     <!-- <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.GeneratedOn" placeholder="From Date"> -->
                   </div>
-                  <div class="col-md-6 d-flex justify-content-center align-items-center">
+                  <div class="col-md-6 d-flex justify-content-end align-items-center">
                     <label for="" class="pe-2">Raised To</label>
                     <form class="form-inline">
-                      <div class="form-group">
+                      <div class="form-group form-container">
                         <div class="input-group">
                           <input class="form-control form-control-sm" placeholder="yyyy-mm-dd"
                             (dateSelect)="toDateSelection($event)" name="to" [(ngModel)]="toModel" ngbDatepicker

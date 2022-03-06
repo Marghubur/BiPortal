@@ -483,4 +483,5 @@ export class UserDetail {
   State: string = null;
   Token: string = null;
   TokenExpiryDuration: Date = null;
+  UserId: number = null;
 }
