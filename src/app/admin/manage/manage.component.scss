@@ -1,0 +1,155 @@
+.curren-bg {
+  background-color: #4a4545 !important;
+}
+
+.btn-lightorange {
+  background-color: var(--orange);
+  color: var(--light);
+}
+
+.btn-lightdark {
+  background-color: #6d6d6d !important;
+  color: var(--light);
+}
+
+.u-header {
+  z-index: 99999;
+  height: 3rem;
+}
+
+.btn-sm {
+  height: 32px;
+  line-height: 1.2;
+  font-size: 14px;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-sp {
+  margin: 4px 6px;
+}
+
+.a-tab {
+  padding-top: 10px !important;
+  display: inline-block;
+  height: inherit;
+  color: #a2a2a2;
+  padding: 0px 1rem;
+}
+
+.c-tab {
+  height: 48px;
+  position: relative;
+}
+
+.tab-active {
+  border-bottom: 4px solid #eb7d25 !important;
+  color: #eee;
+}
+
+.a-tab:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.d-r {
+  direction: rtl;
+}
+
+.filter-input {
+  height: 2.4rem;
+}
+
+.nav-link.active {
+  border-bottom: 2px solid orange;
+  color: var(--gray) !important;
+}
+
+.inactive {
+  color: #ccc;
+}
+
+.nav-link {
+  padding: 0.2rem 1rem;
+  font-size: 14px;
+}
+
+.tab-link > li:hover {
+  cursor: pointer;
+}
+
+a.text-underline {
+  text-decoration: underline;
+  color: darkblue;
+}
+
+.side-panel-top {
+  height: 6rem;
+}
+
+.side-panel-bottom {
+  height: 2rem;
+}
+
+.anc {
+  color: #757171;
+  font-size: 1rem;
+}
+
+.img-container {
+  width: 12rem;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  transform: translate(0%, 0%);
+
+  &__box {
+    height: 12rem;
+    margin-bottom: 0.6rem;
+    border: 1px solid #d9d9d9;
+    width: 12rem;
+    border-radius: 4px;
+  }
+}
+
+.span-clients {
+  border: 1px solid #d9d9d9;
+  background: #845b99;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: #eee;
+}
+
+.span-clients:hover {
+  cursor: pointer;
+}
+
+hr {
+  margin: 0.4rem 0 !important;
+}
+
+.add_button {
+  padding-top: 15px;
+}
+.add_button button {
+  height: 35px;
+}
+
+.x-panel-changed {
+  min-height: auto !important;
+  padding-bottom: 0px;
+}
+
+.inactive-mode {
+  border: 1px solid #d9d9d9 !important;
+  background: #eee !important;
+  color: #bd9c9c !important;
+}
+
+.x_panel {
+  min-height: 300px !important;
+}

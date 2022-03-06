@@ -20,6 +20,8 @@ import { BilldetailsComponent } from './billdetails/billdetails.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { HomeComponent } from '../home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
+import { ManageComponent } from './manage/manage.component';
+import { RecentComponent } from './recent/recent.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { AttendanceComponent } from './attendance/attendance.component';
     ResumeComponent,
     BilldetailsComponent,
     HomeComponent,
-    AttendanceComponent
+    AttendanceComponent,
+    ManageComponent,
+    RecentComponent
   ],
   imports: [
     CommonModule,
