@@ -64,20 +64,6 @@ export class LayoutComponent implements OnInit {
     this.enableAuth = false;
   }
 
-  GenerateNewtoken() {
-    this.http.get("login/GenerateNewToken/0").then((res: ResponseModel) => {
-      if (res.ResponseBody !== null) {
-        this.tokenHelper.setJwtToken(res.ResponseBody["Token"], res.ResponseBody["TokenExpiryDuration"]);
-        document.getElementById("sessionexpiredBox").classList.add('d-none');
-      } else {
-        this.tokenHelper.removeJwtToken();
-        this.commonService.ShowToast("Your session got expired. Please login again.");
-        document.getElementById("sessionexpiredBox").classList.add('d-none');
-        this.nav.navigate(Login, null);
-      }
-    });
-  }
-
   RemovePopup() {
     document.getElementById("sessionexpiredBox").classList.add('d-none');
   }
