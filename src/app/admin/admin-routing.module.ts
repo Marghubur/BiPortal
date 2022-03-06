@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Attendance, BillDetail, BuildPdf, Clients, Documents, DocumentsPage, Employees, Files, ManageEmployee, RegisterClient, Resume, SideMenu } from 'src/providers/constants';
+import { Attendance, BillDetail, BuildPdf, Clients, Documents, DocumentsPage, Employees, Files, Manage, ManageEmployee, Recent, RegisterClient, Resume, SideMenu } from 'src/providers/constants';
 import { HomeComponent } from '../home/home.component';
 import { AdminComponent } from './admin.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -11,7 +11,9 @@ import { documentsComponent } from './documents/documents.component';
 import { documentspageComponent } from './documentspage/documentspage.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { FilesComponent } from './files/files.component';
+import { ManageComponent } from './manage/manage.component';
 import { ManageemployeeComponent } from './manageemployee/manageemployee.component';
+import { RecentComponent } from './recent/recent.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';
 import { ResumeComponent } from './resume/resume.component';
 
@@ -27,7 +29,9 @@ const routes: Routes = [
   { path: Files, component: FilesComponent },
   { path: Resume, component: ResumeComponent },
   { path: BillDetail, component: BilldetailsComponent},
-  { path: Attendance, component: AttendanceComponent}
+  { path: Attendance, component: AttendanceComponent},
+  { path: Manage, component: ManageComponent},
+  { path: Recent, component: RecentComponent}
 ];
 
 @NgModule({
