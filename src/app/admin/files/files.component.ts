@@ -258,14 +258,6 @@ export class FilesComponent implements OnInit {
     $('#addupdateModal').modal('show');
   }
 
-  AddEditDocuments(mobile: string) {
-    let userDetail: DocumentUser = new DocumentUser();
-    userDetail.Mobile = mobile;
-    userDetail.Email = this.employee.Email;
-    userDetail.PageName = Employees;
-    this.nav.navigate("admin/documents", userDetail);
-  }
-
   closeWindow() {
     $('#addupdateModal').modal('hide');
     $('#gstupdateModal').modal('hide');
@@ -299,13 +291,22 @@ export class FilesComponent implements OnInit {
         }
         this.fileLoaded = true;
         this.userFiles = response.ResponseBody["Files"];
+        let exts = [];
+        let i = 0;
+        while(i < this.userFiles.length) {
+          if(this.userFiles[i].FileName.indexOf(".pdf") == -1){
+            this.userFiles[i].FileName += ".pdf";
+          }
+          i++;
+        }
+
         let emp = response.ResponseBody["Employee"];
         this.isEmpPageReady = true;
         if (emp && emp.length > 0)
           this.employee = emp[0];
         this.fileLoaded = true;
         this.billDetails = new Array<BillDetails>();
-        let i =0;
+        i =0;
         let bills : BillDetails = null;
         let GST: number = 0;
 

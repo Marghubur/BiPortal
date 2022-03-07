@@ -1,13 +1,13 @@
-import { fn } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { Attendance, DocumentsPage, Employees, Files, ManageEmployee, UserType } from 'src/providers/constants';
+import { Attendance, Documents, DocumentsPage, Employees, Files, ManageEmployee, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
+import { DocumentUser } from '../documents/documents.component';
 declare var $: any;
 
 @Component({
@@ -136,7 +136,7 @@ export class EmployeesComponent implements OnInit {
         delimiter = "and";
     }
 
-    if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile !== 0) {
+    if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile.trim() !== '') {
       this.employeeData.SearchString += ` ${delimiter} Mobile like '%${this.employeeDetails.Mobile}%' `;
         delimiter = "and";
     }
@@ -295,6 +295,15 @@ export class EmployeesComponent implements OnInit {
       Toast("Please select an employee")
     }
   }
+
+  AddEditDocuments(user: employeeModel) {
+    let userDetail: DocumentUser = new DocumentUser();
+    userDetail.Mobile = user.Mobile;
+    userDetail.Email = user.Email;
+    userDetail.PageName = Employees;
+    userDetail.UserId = user.EmployeeUid
+    this.nav.navigate(Documents, userDetail);
+  }
 }
 
 export class OnlineDocModel {
@@ -320,9 +329,10 @@ export class OnlineDocModel {
 export class employeeModel {
   Name: string = '';
   LastName: string = '';
-  Mobile: number = null;
+  Mobile: string = null;
   Email: string = '';
   Total: number = 0;
+  EmployeeUid: number = 0;
 }
 
 
