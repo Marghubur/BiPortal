@@ -9,6 +9,7 @@ import { Filter } from 'src/providers/userService';
 import { environment } from "src/environments/environment";
 import { ActivatedRoute } from '@angular/router';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare var $:any;
 
@@ -35,6 +36,7 @@ export class documentsComponent implements OnInit, OnDestroy {
   newFolderName: string = "";
   documentDetails: Array<DocumentDetail> = [];
   cachedDocumentDetails: any = {};
+  initRootLocation: string = `${DocumentPath}${environment.FolderDelimiter}${UserPath}${environment.FolderDelimiter}`;
   rootLocation: string = `${DocumentPath}${environment.FolderDelimiter}${UserPath}`;
   baseUrl: string = "";
   viewer: any = null;
@@ -45,12 +47,23 @@ export class documentsComponent implements OnInit, OnDestroy {
   isLargeFile: boolean = false;
   currentFolder: string = "";
   routeParam: any = null;
+  renderedDocxFile: any = null;
+
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
     private route: ActivatedRoute,
-    private local: ApplicationStorage
-  ) { }
+    private local: ApplicationStorage,
+    private sanitizer: DomSanitizer
+  ) {
+    let data = this.nav.getValue();
+    this.currentUser = data;
+    if(data) {
+      this.rootLocation = `${this.rootLocation}${environment.FolderDelimiter}${this.currentUser.Email.replace("@", "_").replace(/\./g, "_")}`;
+    } else {
+      Toast("UnAuthorized access.")
+    }
+  }
 
   ngOnDestroy(): void {
     this.local.setLocal("localpagedata", null);
@@ -59,23 +72,21 @@ export class documentsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params: any) => {
-      if(params.params.path) {
-        this.routeParam = params.params.path;
-      } else {
-        this.routeParam = this.rootLocation;
-        this.folderNav.push({name: "home", route: this.rootLocation});
-      }
-      this.buildRoute();
-      console.log(this.routeParam);
-    });
+        if(params.params.path) {
+          this.routeParam = params.params.path;
+        } else {
+          this.routeParam = this.rootLocation;
+          this.folderNav.push({name: "home", route: this.rootLocation});
+        }
+        this.buildRoute();
+        console.log(this.routeParam);
+      });
 
-    this.currentFolder = this.rootLocation;
-    this.baseUrl = this.http.GetImageBasePath();
-    this.initForm();
-    this.personDetail = new DocumentUser();
-    let data = this.nav.getValue();
-    if(data) {
-      this.currentUser = data;
+      this.currentFolder = this.rootLocation;
+      this.baseUrl = this.http.GetImageBasePath();
+      this.initForm();
+      this.personDetail = new DocumentUser();
+
       if(this.currentUser.PageName == Employees)
         this.currentUser.UserTypeId = UserType.Employee;
       else if(this.currentUser.PageName == Clients)
@@ -87,18 +98,50 @@ export class documentsComponent implements OnInit, OnDestroy {
 
       this.bindForm(this.currentUser);
       this.RefreshDocuments();
-    }
   }
 
   findType(e: any) {
 
   }
 
-  viewPdfFile(file: Files) {
-    this.viewer = document.getElementById("file-container");
-    this.viewer.classList.remove('d-none');
-    this.viewer.querySelector('iframe').setAttribute('src',
-    `${this.baseUrl}${environment.FolderDelimiter}${file.FilePath}${environment.FolderDelimiter}${file.FileName}`);
+  getFolderName(path: string) {
+    let pos = path.lastIndexOf('\\');
+    if(pos != -1)
+      return path.substring(pos + 1, path.length);
+    return path;
+  }
+
+  viewFile(file: Files) {
+    switch(file.FileExtension) {
+      case Pdf:
+        this.viewer = document.getElementById("file-container");
+        this.viewer.classList.remove('d-none');
+        this.viewer.querySelector('iframe').setAttribute('src',
+        `${this.baseUrl}${environment.FolderDelimiter}${file.FilePath}${environment.FolderDelimiter}${file.FileName}`);
+      break;
+      case Docx:
+      case Doc:
+        this.getDocxHtml(file);
+        break;
+    }
+  }
+
+  getDocxHtml(file: Files) {
+    this.renderedDocxFile = null;
+    let filePath = `${file.FilePath}${environment.FolderDelimiter}${file.FileName}`;
+    this.http.post("FileMaker/GetDocxHtml", { DiskFilePath: file.FilePath, FilePath: filePath }).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.renderedDocxFile = this.sanitizer.bypassSecurityTrustHtml(response.ResponseBody);
+        $('#showDocx').modal('show');
+      } else {
+        Toast("Unable to render the file");
+      }
+    })
+  }
+
+  CloseDocxViewer() {
+    $('#showDocx').modal('hide');
+    this.renderedDocxFile = null;
   }
 
   closePdfViewer() {

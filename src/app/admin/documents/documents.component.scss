@@ -61,6 +61,7 @@ table {
   position: absolute;
   top: 11px;
   right: 10px;
+  width: auto !important;
 }
 
 .file-type {
@@ -120,6 +121,9 @@ table {
 
 .file-action {
   font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .navigation-link {
