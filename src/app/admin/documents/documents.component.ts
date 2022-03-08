@@ -550,6 +550,9 @@ export class documentsComponent implements OnInit, OnDestroy {
         } else {
           Toast("Fail to delte the file");
         }
+      }).catch(err => {
+        $('#staticBackdropDown').modal('hide');
+        this.cleanFileHandler();
       });
     } else {
       Toast("Invalid userId");
