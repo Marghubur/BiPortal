@@ -1,9 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Toast } from "src/providers/common-service/common.service";
-import { AccessToken, AccessTokenExpiredOn, Master, NotFound, ServerError, Success, UnAuthorize } from "src/providers/constants";
+import { AccessToken, AccessTokenExpiredOn, Login, Master, NotFound, ServerError, Success, UnAuthorize } from "src/providers/constants";
+import { iNavigation } from "src/providers/iNavigation";
 
 @Injectable()
 export class JwtService {
+
+    constructor(private nav: iNavigation){ }
+
     getJwtToken() {
         let Token = localStorage.getItem(AccessToken);
         return Token;
@@ -57,6 +61,7 @@ export function HandleResponseStatus(statusCode: number): boolean {
             else
                 localStorage.clear();
             Toast("Unauthorized access. Please login again.");
+            this.nav.navigate(Login, null);
             break;
         case NotFound:
             Toast("Page not found. Please chech your Url.");

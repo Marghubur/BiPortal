@@ -61,10 +61,7 @@ export class AjaxService {
           },
           (error: HttpErrorResponse) => {
             this.commonService.HideLoaderByAjax();
-            let flag = HandleResponseStatus(error.status);
-            if(!flag) {
-              this.nav.navigate("/", null);
-            }
+            HandleResponseStatus(error.status);
             reject(false);
           });
     });
@@ -91,12 +88,8 @@ export class AjaxService {
           },
           error => {
             this.commonService.HideLoaderByAjax();
-            let flag = HandleResponseStatus(error.status);
-            if(error.status == UnAuthorize) {
-              this.nav.navigate(Login, null);
-            } else {
-              reject(error);
-            }
+            HandleResponseStatus(error.status);
+            reject(null);
           }
         );
     });
@@ -114,10 +107,7 @@ export class AjaxService {
             resolve(res.body);
           },
           error => {
-            let flag = HandleResponseStatus(error.status);
-            if(!flag) {
-              this.nav.navigate("/", null);
-            }
+            HandleResponseStatus(error.status);
             reject(null);
           }
         );
@@ -147,10 +137,7 @@ export class AjaxService {
           },
           error => {
             this.commonService.HideLoaderByAjax();
-            let flag = HandleResponseStatus(error.status);
-            if(!flag) {
-              this.nav.navigate("/", null);
-            }
+            HandleResponseStatus(error.status);
             reject(null);
           }
         );
@@ -185,10 +172,7 @@ export class AjaxService {
             },
             error => {
               this.commonService.HideLoaderByAjax();
-              let flag = HandleResponseStatus(error.status);
-            if(!flag) {
-              this.nav.navigate("/", null);
-            }
+              HandleResponseStatus(error.status);
               reject(null);
             }
           );
@@ -217,10 +201,7 @@ export class AjaxService {
           },
           error => {
             this.commonService.HideLoaderByAjax();
-            let flag = HandleResponseStatus(error.status);
-            if(!flag) {
-              this.nav.navigate("/", null);
-            }
+            HandleResponseStatus(error.status);
             reject(null);
           }
         );
