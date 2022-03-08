@@ -108,14 +108,23 @@ a.text-underline {
   transform: translate(0%, 0%);
 
   &__box {
-    height: 12rem;
+    height: 7rem;
     margin-bottom: 0.6rem;
     border: 1px solid #d9d9d9;
-    width: 12rem;
-    border-radius: 4px;
+    width: 7rem;
+    border-radius: 50%;
+    position: relative;
+  }
+  &__select {
+    background: blue;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    top: 0;
+    right: 5rem;
   }
 }
-
 .span-clients {
   border: 1px solid #d9d9d9;
   background: #845b99;
@@ -151,5 +160,170 @@ hr {
 }
 
 .x_panel {
-  min-height: 300px !important;
+  min-height: 2rem !important;
+}
+
+.zoom-2 {
+  zoom: 1.2;
+}
+
+.fa-camera {
+  padding: 6px !important;
+  cursor: pointer;
+}
+
+.ifilezone {
+  background-image: url(/assets/img/drop-back.png) !important;
+  background-size: 100% 70%;
+  cursor: pointer;
+  border: 2px dashed #bbb;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #f8f7f7;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+table {
+  counter-reset: tableCount;
+}
+
+.counterCell:before {
+  content: counter(tableCount);
+  counter-increment: tableCount;
+}
+
+.upload-img {
+  width: 60px;
+}
+
+.file-name {
+  width: 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 7rem;
+}
+.card-cont {
+  width: 8rem;
+}
+
+.file-type {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  margin: 10px;
+  padding: 26px;
+  text-align: center;
+  box-shadow: 2px 3px 8px -3px #444;
+}
+
+.item-row {
+  display: flex;
+  flex-flow: wrap;
+}
+
+.select-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52vh;
+  text-align: center;
+  color: #a9a9a9;
+}
+
+.file-link {
+  position: absolute;
+  top: 11px;
+  right: 10px;
+}
+
+.file-type {
+  position: relative;
+}
+
+.f-zoom {
+  font-size: 4rem;
+}
+
+.delete-content {
+  font-size: 0.9rem;
+  color: #31314a;
+}
+
+.c_header {
+  border-bottom: none !important;
+  padding: 1px 8px 0px;
+  margin-top: 1rem;
+  margin-bottom: 0px !important;
+}
+
+.empty-dv {
+  font-size: 1.4rem;
+  color: #a5b79a;
+  font-weight: 600;
+}
+
+.content-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content-end {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+.sm-text {
+  font-size: 0.9rem;
+}
+
+.folder-action {
+  position: absolute;
+  right: 0px;
+  display: inline-block !important;
+  max-width: 2.4rem;
+  top: 0.4rem;
+}
+
+.ac-dv {
+  padding: 4px 0px;
+  display: block;
+}
+
+.file-action {
+  font-size: 12px;
+}
+
+.navigation-link {
+  text-decoration: none;
+  color: #222;
+  font-weight: 700;
+  padding-right: 4px;
+}
+
+.working-input-box {
+  width: 45% !important;
+}
+
+.exp-input-box {
+  width: 46% !important;
+}
+
+.worked-input-box {
+  width: 95% !important;
+}
+
+.add-btn {
+  font-size: 15px !important;
+  font-weight: 600;
+}
+
+.custom-form-control {
+  border: none !important;
+  background: transparent !important;
+}
+.edit-icon {
+  font-size: 13px;
 }

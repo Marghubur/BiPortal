@@ -6,7 +6,6 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { PlaceEmpty, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn } from 'src/providers/constants';
-import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 
 @Component({
@@ -18,8 +17,8 @@ export class ManageComponent implements OnInit {
   model: NgbDateStruct;
   submitted: boolean = false;
   manageUserForm: FormGroup = null;
-  employeeModal: EmployeeDetail = null;
-  employees: Array<EmployeeDetail> = [];
+  userModal: UserDetail = null;
+  employees: Array<UserDetail> = [];
   grandTotalAmount: number = 0;
   packageAmount: number = 0;
   isDeveloperSelected: boolean = false;
@@ -38,9 +37,12 @@ export class ManageComponent implements OnInit {
   idReady: boolean = false;
   currentClientId: number = 0;
   isCreated: boolean = false;
-  isUpdated: boolean = false;
+  isEdited: boolean = false;
   User: string;
   userDetail: UserDetail = new UserDetail();
+  UserId: number = null;
+  uploading: boolean = true;
+  isLargeFile: Boolean= false;
 
   @Output() authentication = new EventEmitter();
 
@@ -52,14 +54,13 @@ export class ManageComponent implements OnInit {
   constructor(private http: AjaxService,
     private fb: FormBuilder,
     private calendar: NgbCalendar,
-    private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService
   ) { }
 
   ngOnInit(): void {
     this.model = this.calendar.getToday();
-    this.employeeModal = new EmployeeDetail();
+    this.userModal = new UserDetail();
     this.initForm();
 
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
@@ -78,13 +79,14 @@ export class ManageComponent implements OnInit {
   loadData(user: any) {
     this.http.post(`Login/GetUserDetail`, { MobileNo: user.Mobile, Email: user.EmailId }).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        this.employeeModal = res.ResponseBody as EmployeeDetail;
+        this.userModal = res.ResponseBody as UserDetail;
+        this.UserId = this.userModal.UserId;
       }
       this.bindForm();
       this.idReady = true;
     });
   }
-  
+
   daysInMonth(monthNumber: number) {
     var now = new Date();
     return new Date(now.getFullYear(), monthNumber, 0).getDate();
@@ -92,40 +94,41 @@ export class ManageComponent implements OnInit {
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.manageUserForm.controls["dateOfBilling"].setValue(date);
+    this.manageUserForm.controls["Dob"].setValue(date);
   }
 
   bindForm() {
     this.manageUserForm = this.fb.group({
-      FirstName: new FormControl(this.employeeModal.FirstName, [Validators.required]),
-      LastName: new FormControl(this.employeeModal.LastName),
-      Mobile: new FormControl(this.employeeModal.Mobile),
-      Email: new FormControl(this.employeeModal.Email),
-      SecondaryMobile: new FormControl(this.employeeModal.SecondaryMobile),
-      FatherName: new FormControl(this.employeeModal.FatherName),
-      MotherName: new FormControl(this.employeeModal.MotherName),
-      SpouseName: new FormControl(this.employeeModal.SpouseName),
-      State: new FormControl(this.employeeModal.State),
-      City: new FormControl(this.employeeModal.City),
-      Pincode: new FormControl(PlaceEmpty(this.employeeModal.Pincode)),
-      Address: new FormControl(this.employeeModal.Address),
-      PANNo: new FormControl(this.employeeModal.PANNo),
-      AadharNo: new FormControl(this.employeeModal.AadharNo),
-      AccountNumber: new FormControl(this.employeeModal.AccountNumber),
-      BankName: new FormControl(this.employeeModal.BankName),
-      IFSCCode: new FormControl(this.employeeModal.IFSCCode),
-      Domain: new FormControl(this.employeeModal.Domain),
-      Specification: new FormControl(this.employeeModal.Specification),
-      ExprienceInYear: new FormControl(PlaceEmpty(this.employeeModal.ExprienceInYear)),
-      LastCompanyName: new FormControl(this.employeeModal.LastCompanyName),
-      IsPermanent: new FormControl(this.employeeModal.IsPermanent),
-      AllocatedClientId: new FormControl(this.employeeModal.AllocatedClientId),
-      ActualPackage: new FormControl(this.employeeModal.ActualPackage, [Validators.required]),
-      FinalPackage: new FormControl(this.employeeModal.FinalPackage, [Validators.required]),
-      TakeHomeByCandidate: new FormControl(this.employeeModal.TakeHomeByCandidate, [Validators.required]),
-      EmployeeUid: new FormControl(this.employeeModal.EmployeeUid),
-      BranchName: new FormControl(this.employeeModal.BranchName),
-      AllocatedClientName: new FormControl(this.employeeModal.AllocatedClientName)
+      FirstName: new FormControl(this.userModal.FirstName, [Validators.required]),
+      LastName: new FormControl(this.userModal.LastName),
+      Mobile: new FormControl(this.userModal.Mobile),
+      Email: new FormControl(this.userModal.EmailId),
+      // SecondaryMobile: new FormControl(this.userModal.SecondaryMobile),
+      // FatherName: new FormControl(this.userModal.FatherName),
+      // MotherName: new FormControl(this.userModal.MotherName),
+      // SpouseName: new FormControl(this.userModal.SpouseName),
+      State: new FormControl(this.userModal.State),
+      City: new FormControl(this.userModal.City),
+      // Pincode: new FormControl(PlaceEmpty(this.userModal.Pincode)),
+      Address: new FormControl(this.userModal.Address),
+      Dob: new FormControl(this.userModal.Dob),
+      // PANNo: new FormControl(this.userModal.PANNo),
+      // AadharNo: new FormControl(this.userModal.AadharNo),
+      // AccountNumber: new FormControl(this.userModal.AccountNumber),
+      // BankName: new FormControl(this.userModal.BankName),
+      // IFSCCode: new FormControl(this.userModal.IFSCCode),
+      // Domain: new FormControl(this.userModal.Domain),
+      // Specification: new FormControl(this.userModal.Specification),
+      // ExprienceInYear: new FormControl(PlaceEmpty(this.userModal.ExprienceInYear)),
+      // LastCompanyName: new FormControl(this.userModal.LastCompanyName),
+      // IsPermanent: new FormControl(this.userModal.IsPermanent),
+      // AllocatedClientId: new FormControl(this.userModal.AllocatedClientId),
+      // ActualPackage: new FormControl(this.userModal.ActualPackage, [Validators.required]),
+      // FinalPackage: new FormControl(this.userModal.FinalPackage, [Validators.required]),
+      // TakeHomeByCandidate: new FormControl(this.userModal.TakeHomeByCandidate, [Validators.required]),
+      UserId: new FormControl(this.userModal.UserId),
+      // BranchName: new FormControl(this.userModal.BranchName),
+      // AllocatedClientName: new FormControl(this.userModal.AllocatedClientName)
     });
   }
 
@@ -135,11 +138,36 @@ export class ManageComponent implements OnInit {
       LastName: new FormControl("", [Validators.required]),
       Mobile: new FormControl("0000000000"),
       Email: new FormControl("xxxxx@xxx.com"),
-      SecondaryMobile: new FormControl("")
+      // SecondaryMobile: new FormControl(""),
+      // FatherName: new FormControl(""),
+      // MotherName: new FormControl(""),
+      // SpouseName: new FormControl(""),
+      State: new FormControl(""),
+      City: new FormControl(""),
+      // Pincode: new FormControl(PlaceEmpty("")),
+      Address: new FormControl(""),
+      Dob: new FormControl(new Date()),
+      // PANNo: new FormControl(""),
+      // AadharNo: new FormControl(""),
+      // AccountNumber: new FormControl(""),
+      // BankName: new FormControl(""),
+      // IFSCCode: new FormControl(""),
+      // Domain: new FormControl(""),
+      // Specification: new FormControl(""),
+      // ExprienceInYear: new FormControl(PlaceEmpty("")),
+      // LastCompanyName: new FormControl(""),
+      // IsPermanent: new FormControl(false),
+      // AllocatedClientId: new FormControl(""),
+      // ActualPackage: new FormControl(""),
+      // FinalPackage: new FormControl(""),
+      // TakeHomeByCandidate: new FormControl(""),
+      // EmployeeUid: new FormControl(""),
+      // BranchName: new FormControl(""),
+      // AllocatedClientName: new FormControl("")
     });
   }
 
-  RegisterEmployee() {
+  UpdateUser() {
     this.isLoading = true;
     this.submitted = true;
     let errroCounter = 0;
@@ -151,9 +179,23 @@ export class ManageComponent implements OnInit {
     if (this.manageUserForm.get('Mobile').errors !== null)
       errroCounter++;
 
-    this.employeeModal = this.manageUserForm.value;
+    this.userModal = this.manageUserForm.value;
+
+    // if (this.userModal.Pincode === null)
+    //   this.userModal.Pincode = 0;
+    // if (this.userModal.ExprienceInYear === null)
+    //   this.userModal.ExprienceInYear = 0;
+    // if (this.userModal.AllocatedClientId === null)
+    //   this.userModal.AllocatedClientId = 0;
+    // if (this.userModal.ActualPackage === null)
+    //   this.userModal.ActualPackage = 0;
+    // if (this.userModal.FinalPackage === null)
+    //   this.userModal.FinalPackage = 0;
+    // if (this.userModal.TakeHomeByCandidate === null)
+    //   this.userModal.TakeHomeByCandidate = 0;
     if (errroCounter == 0) {
-      this.http.post("login/employeeregistration", this.manageUserForm.value).then((response: ResponseModel) => {
+      this.http.post("user/UpdateUser", this.userModal)
+      .then((response: ResponseModel) => {
         if (response.ResponseBody !== null && response.ResponseBody !== "expired") {
           Toast(response.ResponseBody);
         } else {
@@ -211,39 +253,123 @@ export class ManageComponent implements OnInit {
 
   // }
 
+  fireBrowserFile() {
+    this.submitted = true;
+    $("#uploadocument").click();
+  }
+
+  fireresumeBrowserFile() {
+    this.submitted = true;
+    $("#uploadresume").click();
+  }
+
+  GetDocumentFile(fileInput: any) {
+    // this.FileDocuments = [];
+    // this.FilesCollection = [];
+    // let selectedFiles = fileInput.target.files;
+    // if (selectedFiles.length > 0) {
+    //   let index = 0;
+    //   let file = null;
+    //   this.btnDisable = false;
+    //   this.fileAvailable = true;
+    //   this.uploading = false;
+    //   while (index < selectedFiles.length) {
+    //     file = <File>selectedFiles[index];
+    //     let item: Files = new Files();
+    //     item.FileName = file.name;
+    //     item.FileType = file.type;
+    //     item.FileSize = (Number(file.size)/1024);
+    //     item.Mobile = this.currentUser.Mobile;
+    //     item.Email = this.currentUser.Email;
+    //     item.FileExtension = file.type;
+    //     item.DocumentId = 0;
+    //     item.FilePath = this.getRelativePath(this.routeParam);
+    //     item.ParentFolder = '';
+    //     item.UserId = this.currentUser.UserId;
+    //     item.UserTypeId = this.currentUser.UserTypeId;
+    //     this.FileDocumentList.push(item);
+    //     this.FilesCollection.push(file);
+    //     index++;
+    //   }
+
+    //   for(let i=0; i<selectedFiles.length; i++) {
+    //     let filesize = Number(this.FilesCollection[i].size)
+    //     this.totalFileSize += (filesize/1024);
+    //   }
+
+    //   if (this.totalFileSize > 2048) {
+    //     this.isLargeFile = true;
+    //   }
+    // } else {
+    //   Toast("No file selected");
+    // }
+  }
+
+  editEmployment() {
+    var input = document.getElementsByTagName('input');
+    var txtarea = document.getElementsByTagName("textarea");
+    var select = document.getElementsByTagName("select");
+    let i =0;
+    while(i < input.length) {
+      input[i].classList.remove('custom-form-control');
+      input[i].removeAttribute("readonly");
+      i++;
+    }
+    while(i < txtarea.length) {
+      txtarea[i].classList.remove('custom-form-control');
+      txtarea[i].removeAttribute("readonly");
+      i++;
+    }
+    while(i < select.length) {
+      select[i].classList.remove('custom-form-control');
+      select[i].removeAttribute("disabled");
+      i++;
+    }
+    this.isEdited = true;
+  }
+
+  cleanFileHandler() {
+    // this.btnDisable = true;
+    // this.fileAvailable = false;
+    // this.uploading = true;
+    // $("#uploadocument").val("");
+    // this.FilesCollection = [];
+    // this.isLargeFile = false;
+  }
+
   reset() {
     this.manageUserForm.reset();
   }
 }
 
-export class EmployeeDetail {
-  EmployeeUid: number = 0;
-  FirstName: string = null;
-  LastName: string = null;
-  Mobile: string = null;
-  Email: string = null;
-  BranchName: string = null;
-  SecondaryMobile: string = null;
-  FatherName: string = null;
-  MotherName: string = null;
-  SpouseName: string = null;
-  State: string = null;
-  City: string = null;
-  Pincode: number = null;
-  Address: string = null;
-  PANNo: string = null;
-  AadharNo: string = null;
-  AccountNumber: string = null;
-  BankName: string = null;
-  IFSCCode: string = null;
-  Domain: string = null;
-  Specification: string = null;
-  ExprienceInYear: number = null;
-  LastCompanyName: string = null;
-  IsPermanent: boolean = false;
-  AllocatedClientId: number = null;
-  AllocatedClientName: string = null;
-  ActualPackage: number = null;
-  FinalPackage: number = null;
-  TakeHomeByCandidate: number = null;
-}
+// export class EmployeeDetail {
+//   EmployeeUid: number = 0;
+//   FirstName: string = null;
+//   LastName: string = null;
+//   Mobile: string = null;
+//   Email: string = null;
+//   BranchName: string = null;
+//   SecondaryMobile: string = null;
+//   FatherName: string = null;
+//   MotherName: string = null;
+//   SpouseName: string = null;
+//   State: string = null;
+//   City: string = null;
+//   Pincode: number = null;
+//   Address: string = null;
+//   PANNo: string = null;
+//   AadharNo: string = null;
+//   AccountNumber: string = null;
+//   BankName: string = null;
+//   IFSCCode: string = null;
+//   Domain: string = null;
+//   Specification: string = null;
+//   ExprienceInYear: number = null;
+//   LastCompanyName: string = null;
+//   IsPermanent: boolean = false;
+//   AllocatedClientId: number = null;
+//   AllocatedClientName: string = null;
+//   ActualPackage: number = null;
+//   FinalPackage: number = null;
+//   TakeHomeByCandidate: number = null;
+// }

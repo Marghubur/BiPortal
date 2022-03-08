@@ -33,9 +33,12 @@ a {
   max-width: 70% !important;
 }
 
+.menu-items:hover {
+  overflow: auto !important;
+}
+
 .menu-items {
   height: calc(100vh - 4rem) !important;
-  overflow: auto;
   border-right: 1px solid #c5c5c5;
 }
 
@@ -70,5 +73,5 @@ a {
 }
 
 .accordion-button:not(.collapsed) {
-  color: #783327 !important;
+  color: #771807 !important;
 }
