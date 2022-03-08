@@ -8,29 +8,32 @@
           <!-- Tabs navs -->
         </div>
       </div>
-      <div class="container-fluid pt-4 bg-light">
-        <div class="x_panel mt-2">
+      <div class="container-fluid pt-4">
+        <div class="mt-2">
           <!-- <div class="x_header">
             <div class="x_header_title">
               <h2>Employee<small>Details</small></h2>
             </div>
           </div> -->
-          <div class="x_content mt-4" *ngIf="idReady">
-            <form [formGroup]=" manageUserForm">
-              <div class="col-12 row">
-                <div class="col-md-4">
+          <div class="x_content mt-1" *ngIf="idReady">
+            <form [formGroup]="manageUserForm">
+              <div class="col-12 x_panel row  m-0 p-0 pt-2">
+                <div class="col-md-3">
                   <div class="x_header_title position-relative">
                     <div class="img-container">
                       <div class="img-container__box">
                         <img src="" alt="">
                       </div>
                       <div class="img-container__select">
-                        <button class="btn btn-outline-success form-control">Browse</button>
+                        <!-- <button class="btn btn-outline-success form-control">Browse</button> -->
+                        <input type="file" id="uploadocument" class="d-none" />
+                        <i class="fa fa-camera text-light p-1 zoom-2" aria-hidden="true"
+                          (click)="fireBrowserFile()"></i>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-9">
                   <div class="col-md-12 m-0 row">
                     <div class="col-md-6 mb-3">
                       <label class="form-label">First Name *</label>
@@ -49,52 +52,109 @@
                   <div class="col-md-12 m-0 row">
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Mobile Number </label>
-                      <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#"
+                      <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#" readonly
                         [ngClass]="{'error': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}"
                         OnlyNumber="10" name="Mobile" formControlName="Mobile" />
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Email Id </label>
-                      <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email"
+                      <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email" readonly
                         [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}" />
                     </div>
                   </div>
 
                   <div class="col-md-12 m-0 row">
-                    <div class="col-md-6 mb-3">
+                    <!-- <div class="col-md-6 mb-3">
                       <label class="form-label">Alternet Number</label>
                       <input class="form-control" placeholder="SecondaryMobile" OnlyNumber="10" name="SecondaryMobile"
                         formControlName="SecondaryMobile" />
+                    </div> -->
+                    
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12 row m-0 p-0 mt-2">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Attach Resume</h2>
                     </div>
-                    <div class="col-md-6 pb-3">
-                      <label class="form-label">Date of birth </label>
-                      <form class="form-inline">
-                        <div class="form-group w-100">
-                          <div class="input-group w-100">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
-                              (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
-                            <div class="input-group-append">
-                              <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                                  class="fa fa-calendar" aria-hidden="true"></i>
-                              </button>
+                    <small>Resume is the most important document recruiters look for. Recruiters generally do not
+                      look at profiles without resumes.</small>
+                  </div>
+                  <div class="col-md-12 mb-3 row m-0">
+                    <div class="col-md-12 mt-4 me-2 row">
+                      <div class="x_panel col-md-6">
+                        <div class="x_header">
+                          <div class="x_header_title">
+                            <div class="">
+                              <input type="file" id="uploadresume" class="d-none" (change)="GetDocumentFile($event)"
+                                *ngIf="uploading" />
+                              <div class="col-md-12 p-0">
+                                <div class="table-responsive">
+                                  <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                    aria-labelledby="home-tab">
+                                    <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
+                                      aria-labelledby="home-tab">
+                                      <div id="classmasterdata" class="col-md-12">
+                                        <div name="ifilezone" class="ifilezone mb-4" (click)="fireresumeBrowserFile()">
+                                          <div *ngIf="uploading">
+                                            <span style="color:darkgray;display: block;margin-top: 10rem;">
+                                              Supported Formats: doc, docx, rtf, pdf, upto 2 MB
+                                            </span>
+                                          </div>
+                                          <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="!uploading"
+                                            name="uploading">
+                                            <img src="assets/img/ExcelFile.png" />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
+                          <div class="mt-4">
+                            <button type="button" class="btn btn-primary me-2" *ngif="uploading">
+                              <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
+                            </button>
+                            <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
+                              *ngif="uploading">
+                              <i class="fa fa-eraser pe-2"></i> Cancel
+                            </button>
+                          </div>
                         </div>
-                      </form>
-                    </div>
-                  </div>
-
-                  <div class="col-md-12 m-0 row">
-                    <div class="col-12 p-3 pt-4">
-                      <p>Select your gender</p>
-                      <div class="col-12 row">
-                        <div>
-                          <input type="checkbox" class="me-2">
-                          <span>Male</span>
+                      </div>
+                      <div class="col-md-6 mt-4" style="height: 52vh;overflow: auto;">
+                        <table class="table" *ngif="uploading">
+                          <thead>
+                            <tr>
+                              <th width="8%">#</th>
+                              <th>File Name</th>
+                              <th width="15%">File Size (KB)</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of FilesCollection">
+                              <td class="counterCell"></td>
+                              <td>{{item.name}}</td>
+                              <td>{{item.size/1024 | number: '1.2-2'}}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
+                              <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
+                          File size is greater than 2028KB i.e 2 MB, so please remove some file
                         </div>
-                        <div>
-                          <input type="checkbox" class="me-2">
-                          <label>Female</label>
+                        <div *ngIf="btnDisable" class="select-message">
+                          <h3>
+                            Please upload at least one file and You will see their details here.
+                          </h3>
                         </div>
                       </div>
                     </div>
@@ -102,111 +162,546 @@
                 </div>
               </div>
 
-              <div class="col-12 row m-0 mt-5">
-                <div class="col-md-6">
-                  <div class="x_panel">
-                    <div class="x_header">
-                      <div class="x_header_title">
-                        <h2>Personal Detail<small>Fill the sender Compnay details</small></h2>
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Resume Headline</h2>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <textarea placeholder="Resume Headline" class="form-control" name="" id="" class="w-100" rows="3"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Key Skill</h2>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <textarea placeholder="Key Skill" class="form-control" name="" id="" class="w-100" rows="3"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Employment
+                        <i class="fa text-dark edit-icon ps-2" [ngClass]="{'fa-pencil':!isEdited, 'fa-eye': isEdited}" (click)="editEmployment()"></i>
+                      </h2>
+                      <a href="javascript:void(0)" class="text-decoration-none add-btn float-end" *ngIf="!isEdited">ADD EMPLOYMENT</a>
+                      <button class="btn btn-outline-success btn-sm float-end" *ngIf="isEdited">Save</button>
+                    </div>
+                  </div>
+                  <div class="col-md-12 ps-2">
+                    <form action="" class="row">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Designation <span class="text-danger">*</span></label>
+                        <input class="form-control custom-form-control" placeholder="Enter YourDesignation" name="Designation" readonly
+                          formControlName="Designation" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Your Organization <span class="text-danger">*</span></label>
+                        <input class="form-control custom-form-control" placeholder="Your Organization" name="Organization" readonly
+                          formControlName="Organization" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Is this your current company?</label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input custom-form-control" type="radio" name="gridRadios" id="gridRadios1" readonly
+                              value="option1" checked>
+                            <label class="form-check-label" for="gridRadios1">
+                              Yes
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3 ms-3">
+                            <input class="form-check-input custom-form-control" type="radio" name="gridRadios" id="gridRadios2" readonly
+                              value="option2">
+                            <label class="form-check-label" for="gridRadios2">
+                              No
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 row">
+                        <div class="col-md-9 mb-3 row p-0 m-0">
+                          <label class="form-label">Started Working From <span class="text-danger">*</span></label>
+                          <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Year" name="WorkingYear" readonly
+                            formControlName="WorkingYear" />
+                          <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Month" name="WorkingMonth" readonly
+                            formControlName="WorkingMonth" />
+                        </div>
+                        <div class="col-md-3 mb-3 row p-0 m-0">
+                          <label class="form-label">Worked Till <span class="text-danger">*</span></label>
+                          <input class="form-control worked-input-box  ms-3 custom-form-control" placeholder="Year" name="WorkedYear" readonly
+                            formControlName="WorkedYear" />
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Current Salary <span class="text-danger">*</span></label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input custom-form-control" type="radio" name="currencyRadio" id="currencyRadio1" readonly
+                              value="option1" checked>
+                            <label class="form-check-label" for="currencyRadio1">
+                              Indian Rupees
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3 ms-3">
+                            <input class="form-check-input custom-form-control" type="radio" name="currencyRadio" id="currencyRadio2" readonly
+                              value="option2">
+                            <label class="form-check-label" for="currencyRadio2">
+                              US Dollars
+                            </label>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <input class="form-control w-25 ms-3 custom-form-control" placeholder="Lakh" name="CurrentSalaryLakh" readonly
+                            formControlName="CurrentSalaryLakh" />
+                          <input class="form-control w-25 ms-3 custom-form-control" placeholder="Thousand" readonly
+                            name="CurrentSalaryThousand" formControlName="CurrentSalaryThousand" />
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Top 5 key skills that you think are important for current
+                          employment<span class="text-danger"> *</span></label>
+                        <textarea name="Experties" placeholder="Enter your area of Experties/Specialization" readonly
+                          class="form-control custom-form-control" formControlName="Experties" id="" rows="2"></textarea>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Describe your Job Profile</label>
+                        <textarea name="JobProfile" placeholder="Type here ....." class="form-control custom-form-control" readonly
+                          formControlName="JobProfile" id="" rows="2"></textarea>
+                        <small class="float-end">4000 Character(s) Left</small>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Notice Period <span class="text-danger">*</span></label>
+                        <select name="" id="" class="form-control custom-form-control" disabled formControlname="NoticePeriod">
+                          <option value="1">15 Days or Less</option>
+                          <option value="2">1 Month</option>
+                          <option value="3">2 Month</option>
+                          <option value="4">3 Month</option>
+                          <option value="5">More than 3 Month</option>
+                          <option value="6">Serving Notice Period</option>
+                        </select>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Education</h2>
+                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD EDUCATION</a>
+                    </div>
+                  </div>
+                  <div class="col-md-12 ps-2">
+                    <form action="" class="row">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Education <span class="text-danger">*</span></label>
+                        <input class="form-control" placeholder="Education" name="Education"
+                          formControlName="Education" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Course <span class="text-danger">*</span></label>
+                        <input class="form-control" placeholder="Course" name="Course" formControlName="Course" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Specialization <span class="text-danger">*</span></label>
+                        <input class="form-control" placeholder="Specialization" name="Specialization"
+                          formControlName="Specialization" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">University <span class="text-danger">*</span></label>
+                        <input class="form-control" placeholder="University" name="University"
+                          formControlName="University" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Course Type</label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="radio" name="courseTypeRadio" id="courseTypeRadio1"
+                              value="option1" checked>
+                            <label class="form-check-label" for="courseTypeRadio1">
+                              Full Time
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="radio" name="courseTypeRadio" id="courseTypeRadio2"
+                              value="option2">
+                            <label class="form-check-label" for="courseTypeRadio2">
+                              Part Time
+                            </label>
+                          </div>
+                          <div class="form-check col-md-6">
+                            <input class="form-check-input" type="radio" name="courseTypeRadio" id="courseTypeRadio3"
+                              value="option2">
+                            <label class="form-check-label" for="courseTypeRadio3">
+                              Correspondence/Distance Learning
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Passing Out Year <span class="text-danger">*</span></label>
+                        <input class="form-control" placeholder="PassingYear" name="PassingYear"
+                          formControlName="PassingYear" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Grading Syatem <span class="text-danger">*</span></label>
+                        <select name="" id="" class="form-control" formControlname="GradingSystem">
+                          <option value="0">Select grading system</option>
+                          <option value="1">Scale 10 Grading System</option>
+                          <option value="2">Scale 4 Grading System</option>
+                          <option value="3">% Mark of 100 Maximum</option>
+                          <option value="4">Course Requires a Pass</option>
+                        </select>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>IT Skills</h2>
+                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD DETAILS</a>
+                    </div>
+                  </div>
+                  <div class="col-md-12 ps-2">
+                    <form action="" class="row">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">IT Skills <span class="text-danger">*</span></label>
+                        <input class="form-control" placeholder="IT Skills" name="ITSkill" formControlName="ITSkill" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Version</label>
+                        <input class="form-control" placeholder="Version" name="Version" formControlName="Version" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Last Used </label>
+                        <input class="form-control" placeholder="LastUsed" name="LastUsed" formControlName="LastUsed" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Exprience</label>
+                        <div class="row">
+                          <input class="form-control exp-input-box ms-3" placeholder="Year" name="ExperienceYear"
+                            formControlName="ExperienceYear" />
+                          <input class="form-control exp-input-box ms-3" placeholder="Month" name="ExperienceMonth"
+                            formControlName="ExperienceMonth" />
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Projects</h2>
+                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD PROJECT</a>
+                    </div>
+                    <small>
+                      Add details about projects you have done in college, internship or at work.
+                    </small>
+                  </div>
+                  <div class="col-md-12 ps-2">
+                    <form action="" class="row">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Project Title <span class="text-danger">*</span></label>
+                        <input class="form-control" placeholder="Enter Project Title" name="ProjectTitle"
+                          formControlName="ProjectTitle" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Tag this project with your Employment/Education</label>
+                        <input class="form-control" placeholder="Select Employment/Education" name="ProjectTag"
+                          formControlName="ProjectTag" />
+                      </div>
+                      <div class="col-md-6 row">
+                        <div class="col-md-9 mb-3 row p-0 m-0">
+                          <label class="form-label">Started Working From <span class="text-danger">*</span></label>
+                          <input class="form-control working-input-box ms-3" placeholder="Year" name="WorkingYear"
+                            formControlName="ProjectWorkingYear" />
+                          <input class="form-control working-input-box ms-3" placeholder="Month" name="WorkingMonth"
+                            formControlName="ProjectWorkingMonth" />
+                        </div>
+                        <div class="col-md-3 mb-3 row p-0 m-0">
+                          <label class="form-label">Worked Till <span class="text-danger">*</span></label>
+                          <input class="form-control worked-input-box ms-3" placeholder="Year" name="WorkedYear"
+                            formControlName="ProjectWorkedYear" />
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3 ms-4">
+                        <label class="form-label">Project Status</label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="radio" name="ProgressStatus" id="ProgressStatus1"
+                              value="option1" checked>
+                            <label class="form-check-label" for="ProgressStatus1">
+                              In progress
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="radio" name="ProgressStatus" id="ProgressStatus2"
+                              value="option2">
+                            <label class="form-check-label" for="ProgressStatus2">
+                              Finished
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Client <span class="text-danger"> *</span> </label>
+                        <input class="form-control" placeholder="Client Name" name="ClientName"
+                          formControlName="ClientName" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Details of Project<span class="text-danger"> *</span></label>
+                        <textarea name="ProjectDetail" placeholder="Type here ....." class="form-control"
+                          formControlName="ProjectDetail" id="" rows="1"></textarea>
+                        <small>1000 Character(s) Left</small>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <a href="javascript:void(0)" class="form-label text-decoration-none ">Add More Details</a>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Profile Summary</h2>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <textarea
+                      placeholder="Your Profile Summary should mention the highlights of your career and education, what your professional interests are, and what kind of a career you are looking for. Write a meaningful summary of more than 50 characters."
+                      class="form-control" formControlName="ProfileSummary" name="" id="" class="w-100" rows="3"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Accomplishments</h2>
+                    </div>
+                  </div>
+                  <div class="col-md-12 row">
+                    <div class="col-md-6 mt-2">
+                      <div class="form-control">
+                        <h6>
+                          <span class="fw-bold">Online Profile</span>
+                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                        </h6>
+                        <small>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</small>
                       </div>
                     </div>
-                    <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Father Name</label>
-                        <input class="form-control" placeholder="Mother Name" name="FatherName" transform=""
-                          formControlName="FatherName" />
+                    <div class="col-md-6 mt-2">
+                      <div class="form-control">
+                        <h6>
+                          <span class="fw-bold">Work Sample</span>
+                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                        </h6>
+                        <small>Add link to your Projects (e.g. Github links etc.).</small>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Mother Name</label>
-                        <input class="form-control" placeholder="Mother Name" name="MotherName" transform=""
-                          formControlName="MotherName" />
+                    </div>
+                    <div class="col-md-6 mt-2">
+                      <div class="form-control">
+                        <h6>
+                          <span class="fw-bold">White Paper / Research Publication / Journal Entry</span>
+                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                        </h6>
+                        <small>Add links to your Online publications.</small>
                       </div>
-                      <div class="col-md-12 mb-3">
-                        <label class="form-label">Spouse Name (if maried)</label>
-                        <input class="form-control" placeholder="Spouse Name" name="SpouseName" transform=""
-                          formControlName="SpouseName" />
+                    </div>
+                    <div class="col-md-6 mt-2">
+                      <div class="form-control">
+                        <h6>
+                          <span class="fw-bold">Presentation</span>
+                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                        </h6>
+                        <small>Add links to your Online presentations (e.g. Slideshare presentation links etc.).</small>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Domain</label>
-                        <input class="form-control" placeholder="Domain" name="Domain" formControlName="Domain" />
+                    </div>
+                    <div class="col-md-6 mt-2">
+                      <div class="form-control">
+                        <h6>
+                          <span class="fw-bold">Patent</span>
+                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                        </h6>
+                        <small>Add details of Patents you have filed.</small>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Specification</label>
-                        <input class="form-control" placeholder="Specification" name="Specification"
-                          formControlName="Specification" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Year's of Exprience</label>
-                        <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="5"
-                          name="ExprienceInYear" formControlName="ExprienceInYear" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Last Company Name</label>
-                        <input class="form-control" placeholder="Last Company Name" name="LastCompanyName" transform=""
-                          formControlName="LastCompanyName" />
-                      </div>
-                      <div class="col-md-12 mb-3">
-                        <label class="form-label">State</label>
-                        <input class="form-control" placeholder="State" name="State" formControlName="State" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">City</label>
-                        <input class="form-control" placeholder="City" name="City" formControlName="City" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Pincode</label>
-                        <input class="form-control" placeholder="Pincode" OnlyNumber="6" name="Pincode"
-                          formControlName="Pincode" />
-                      </div>
-                      <div class="col-md-12 mb-3">
-                        <label class="form-label">Address</label>
-                        <textarea rows="5" class="form-control" placeholder="Address" name="Address"
-                          formControlName="Address"></textarea>
+                    </div>
+                    <div class="col-md-6 mt-2">
+                      <div class="form-control">
+                        <h6>
+                          <span class="fw-bold">Certification</span>
+                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                        </h6>
+                        <small>Add details of Certifications you have achieved/completed.</small>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div class="col-md-6">
-                  <div class="x_panel">
-                    <div class="x_header">
-                      <div class="x_header_title">
-                        <h2>Account Detail<small>Fill the receiver Compnay details</small></h2>
-                      </div>
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Carrer Profile</h2>
+                      <h2 class="float-end">
+                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD PROJECT</a>
+                      </h2>
                     </div>
-                    <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
+                  </div>
+                  <div class="col-md-12 ps-2">
+                    <form action="" class="row">
                       <div class="col-md-6 mb-3">
-                        <label class="form-label">PAN No. #</label>
-                        <input class="form-control" placeholder="PAN card no.#" name="PANNo" transform="upper"
-                          formControlName="PANNo" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Aadhar No. #</label>
-                        <input class="form-control" placeholder="Aadhar No. #" name="AadharNo" transform="upper"
-                          formControlName="AadharNo" />
-                      </div>
-                      <div class="col-md-12 mb-3">
-                        <label class="form-label">Bank Account No.#</label>
-                        <input class="form-control" placeholder="Bank Account No.#" name="AccountNumber"
-                          formControlName="AccountNumber" />
-                      </div>
-                      <div class="col-md-12 mb-3">
-                        <label class="form-label">Bank Name</label>
-                        <input class="form-control" placeholder="Bank Name" name="BankName" transform=""
-                          formControlName="BankName" />
+                        <label class="form-label">Current Industry<span class="text-danger"> *</span></label>
+                        <input class="form-control" placeholder="CurrentIndustry" name="CurrentIndustry"
+                          formControlName="CurrentIndustry" />
                       </div>
                       <div class="col-md-6 mb-3">
-                        <label class="form-label">IFSC Code</label>
-                        <input class="form-control" placeholder="IFSC Code" name="IFSCCode" transform="upper"
-                          formControlName="IFSCCode" />
+                        <label class="form-label">Department<span class="text-danger"> *</span></label>
+                        <input class="form-control" placeholder="Department" name="Department"
+                          formControlName="Department" />
                       </div>
                       <div class="col-md-6 mb-3">
-                        <label class="form-label">Branch (Optional)</label>
-                        <input class="form-control" placeholder="Branch name" name="BranchName" transform="upper"
-                          formControlName="BranchName" />
+                        <label class="form-label">Role Category<span class="text-danger"> *</span></label>
+                        <input class="form-control" placeholder="RoleCategory" name="RoleCategory"
+                          formControlName="RoleCategory" />
                       </div>
                       <div class="col-md-6 mb-3">
-                        <label class="form-label">Date of joining</label>
+                        <label class="form-label">Job Role<span class="text-danger"> *</span></label>
+                        <input class="form-control" placeholder="JobRole" name="JobRole"
+                          formControlName="JobRole" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Desireed Job Type<span class="text-danger"> *</span></label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="checkbox" formControlName="Permanent">
+                            <label class="form-check-label" for="gridCheck">
+                              Permanent
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3 ms-3">
+                            <input class="form-check-input" type="checkbox" formControlName="Contractual">
+                            <label class="form-check-label" for="gridCheck">
+                              Contractual
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Desired Employment Type<span class="text-danger"> *</span></label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="checkbox" formControlName="FullTime">
+                            <label class="form-check-label" for="gridCheck">
+                              Full Time
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3 ms-3">
+                            <input class="form-check-input" type="checkbox" formControlName="PartTime">
+                            <label class="form-check-label" for="gridCheck">
+                              Part Time
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Preferred Shift</label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="radio" name="preferredShift" id="preferredShift1"
+                              value="option1" checked>
+                            <label class="form-check-label" for="preferredShift1">
+                              Day
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3 ms-3">
+                            <input class="form-check-input" type="radio" name="preferredShift" id="preferredShift2"
+                              value="option2">
+                            <label class="form-check-label" for="preferredShift2">
+                              Night
+                            </label>
+                          </div>
+                          <div class="form-check col-md-4">
+                            <input class="form-check-input" type="radio" name="preferredShift" id="preferredShift3"
+                              value="option2">
+                            <label class="form-check-label" for="preferredShift3">
+                              Flexible
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Preferred Work Location (Max 3)<span class="text-danger"> *</span></label>
+                        <input class="form-control" placeholder="CurrentIndustry" name="CurrentIndustry"
+                          formControlName="CurrentIndustry" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Expected Salary <span class="text-danger">*</span></label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="radio" name="ExpectedcurrencyRadio" id="ExpectedcurrencyRadio1"
+                              value="option1" checked>
+                            <label class="form-check-label" for="ExpectedcurrencyRadio1">
+                              Indian Rupees
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3 ms-3">
+                            <input class="form-check-input" type="radio" name="ExpectedcurrencyRadio" id="ExpectedcurrencyRadio2"
+                              value="option2">
+                            <label class="form-check-label" for="ExpectedcurrencyRadio2">
+                              US Dollars
+                            </label>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <input class="form-control w-25 ms-3" placeholder="Lakh" name="ExpectedSalaryLakh"
+                            formControlName="ExpectedSalaryLakh" />
+                          <input class="form-control w-25 ms-3" placeholder="Thousand"
+                            name="ExpectedSalaryThousand" formControlName="ExpectedSalaryThousand" />
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Personal Details</h2>
+                    </div>
+                  </div>
+                  <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
+                    <form action="" class="row">
+                      <div class="col-md-6 pb-3">
+                        <label class="form-label">Date of birth </label>
                         <form class="form-inline">
                           <div class="form-group w-100">
                             <div class="input-group w-100">
@@ -221,12 +716,138 @@
                           </div>
                         </form>
                       </div>
-                      <div class="col-md-12 mb-3">
-                        <label class="form-label">Client Name</label>
-                        <input class="form-control" placeholder="Client Name" name="AllocatedClientName"
-                          formControlName="AllocatedClientName" />
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Gender</label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="radio" name="Gender" id="Gender1"
+                              value="option1" checked>
+                            <label class="form-check-label" for="Gender1">
+                              Male
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3 ms-3">
+                            <input class="form-check-input" type="radio" name="Gender" id="Gender2"
+                              value="option2">
+                            <label class="form-check-label" for="Gender2">
+                              Female
+                            </label>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Permanent Address</label>
+                        <input class="form-control" placeholder="Full Address" name="Address" transform=""
+                          formControlName="Address" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Home Town</label>
+                        <input class="form-control" placeholder="Home Town" name="HomeTown" transform=""
+                          formControlName="HomeTown" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Pin Code</label>
+                        <input class="form-control" placeholder="Pin Code" name="Pin Code" transform=""
+                          formControlName="Pin Code" />
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Marital Status <span class="text-danger">*</span></label>
+                        <select name="" id="" class="form-control" formControlname="MaritalStatus">
+                          <option value="0">Single/Unmarried</option>
+                          <option value="1">Married</option>
+                          <option value="2">Widowed</option>
+                          <option value="3">Divorced</option>
+                          <option value="4">Separated</option>
+                          <option value="4">Other</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Category <span class="text-danger">*</span></label>
+                        <select name="" id="" class="form-control" formControlname="Category">
+                          <option value="0">General</option>
+                          <option value="1">SC</option>
+                          <option value="2">ST</option>
+                          <option value="3">OBC-Creamy</option>
+                          <option value="4">OBC-Non-Creamy</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Are you Differently Abled?</label>
+                        <div class="row ps-4">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="radio" name="DifferentlyAbled" id="DifferentlyAbled1"
+                              value="option1" checked>
+                            <label class="form-check-label" for="DifferentlyAbled1">
+                              Yes
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3 ms-3">
+                            <input class="form-check-input" type="radio" name="DifferentlyAbled" id="DifferentlyAbled2"
+                              value="option2">
+                            <label class="form-check-label" for="DifferentlyAbled2">
+                              No
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Work Permit for USA</label>
+                        <select name="" id="" class="form-control" formControlname="PermitUSA">
+                          <option value="0">Have H1 Visa</option>
+                          <option value="1">Need H1 Visa</option>
+                          <option value="2">TN Permit Holder</option>
+                          <option value="3">Green Card Holder</option>
+                          <option value="4">US Citizen</option>
+                          <option value="4">Authorized to work in US</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Work Permit for Other Countries</label>
+                        <input class="form-control" placeholder="You can choose 3 countries at max" name="PermitOtherCountry" transform=""
+                          formControlName="PermitOtherCountry" />
+                      </div>
+                      <div class="mt-3 mb-3">
+                        <h4 class="fw-bold">Language</h4>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Language <span class="text-danger">*</span></label>
+                        <input class="form-control" placeholder="Language" name="Language" transform=""
+                          formControlName="Language" />
+                        <div class="row ps-4 mt-2">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="checkbox" formControlName="LanguageRead">
+                            <label class="form-check-label" for="gridCheck">
+                              Read
+                            </label>
+                          </div>
+                          <div class="form-check col-md-3 ms-3">
+                            <input class="form-check-input" type="checkbox" formControlName="LanguageWrite">
+                            <label class="form-check-label" for="gridCheck">
+                              Write
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Proficiency</label>
+                        <select name="" id="" class="form-control" formControlname="ProficiencyLanguage">
+                          <option value="0">Beginner</option>
+                          <option value="1">Proficient</option>
+                          <option value="2">TExpert</option>
+                        </select>
+                        <div class="row ps-4 mt-2">
+                          <div class="form-check col-md-3">
+                            <input class="form-check-input" type="checkbox" formControlName="LanguageSpeak">
+                            <label class="form-check-label" for="gridCheck">
+                              Spaek
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <a href="javascript:void(0)" class="text-decoration-none">Add Another Language</a>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -237,7 +858,7 @@
                     <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
                   </div>
                   <div class="btn-group ms-2">
-                    <button class="btn btn-success" [disabled]="isLoading" (click)="RegisterEmployee()">
+                    <button class="btn btn-success" [disabled]="isLoading" (click)="UpdateUser()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
                       {{ isLoading ? 'Wait' : 'Update' }}
                     </button>

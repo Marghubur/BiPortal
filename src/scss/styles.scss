@@ -58,6 +58,8 @@ pre {
   --orange: #e6791e;
   --light: #eee;
   --bg-color: #f9eeee;
+  --scrollbarBG: #CFD8DC;
+  --thumbBG: #90A4AE;
 }
 
 .container-box {
@@ -189,27 +191,6 @@ input::-ms-input-placeholder {
   color: rgba(0, 0, 0, 0.87);
 }
 
-body ::-webkit-scrollbar-thumb {
-  border-radius: 0;
-}
-
-body ::-webkit-scrollbar-track {
-  border-radius: 0;
-}
-
-body ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-body ::-webkit-scrollbar-thumb {
-  cursor: pointer;
-  border-radius: 5px;
-  background: rgba(0, 0, 0, 0.25);
-  -webkit-transition: color 0.2s ease;
-  transition: color 0.2s ease;
-}
-
 .custom-toast {
   position: fixed;
   border-radius: 4px;
@@ -313,19 +294,6 @@ body ::-webkit-scrollbar-thumb {
   display: inherit;
 }
 
-html,
-body {
-  height: 100%;
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #67748e;
-  font-family: "Open Sans, Segoe UI", Tahoma, Arial, Helvetica, sans-serif !important;
-  overflow-x: hidden;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
 .x_content {
   padding: 0 5px 6px;
   position: relative;
@@ -391,7 +359,8 @@ select,
 a,
 label,
 input,
-button {
+button,
+textarea {
   outline: none !important;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
@@ -401,10 +370,6 @@ button {
   position: absolute;
   top: 0px;
   right: 0px;
-}
-
-.form-control {
-  font-size: 0.75rem !important;
 }
 
 .card {
@@ -575,19 +540,6 @@ button {
   height: 26px;
 }
 
-.form-control {
-  font-size: 14px !important;
-}
-
-body {
-  color: #6d7680 !important;
-  font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif !important;
-  font-size: 0.8rem !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  background-color: var(--bg-color) !important;
-}
-
 .panel {
   position: relative;
   width: 100%;
@@ -724,23 +676,6 @@ body {
 
 .w-10 {
   width: 10% !important;
-}
-
-::-webkit-scrollbar {
-  width: auto;
-  max-width: 8px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
-  border-radius: 10px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: grey;
-  border-radius: 10px;
 }
 
 @media (min-width: 320px) {
@@ -961,4 +896,27 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .main-container {
   padding: 1.5rem !important;
+}
+
+// ---------------------------- body ------------------------------------
+
+body ::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.25);
+  -webkit-transition: color 0.2s ease;
+  transition: color 0.2s ease;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5;
+  color: #6d7680 !important;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
