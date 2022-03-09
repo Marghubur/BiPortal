@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IsValidResponse, ResponseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
 import { ADocx, AImage, APdf, Clients, Doc, DocImg, DocumentPath, DocumentPathName, Documents, Docx, Employees, Excel, ExcelImg, FileSystemType, Images, JImage, Pdf, PdfImg, PImage, Resume, UserPath, UserPathName, UserType } from 'src/providers/constants';

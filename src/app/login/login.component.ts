@@ -1,4 +1,4 @@
-import { CommonService } from "./../../providers/common-service/common.service";
+import { CommonService, ErrorToast, Toast } from "./../../providers/common-service/common.service";
 import { ApplicationStorage } from "./../../providers/ApplicationStorage";
 import { AjaxService } from "src/providers/ajax.service";
 import { FormControl } from "@angular/forms";
@@ -27,8 +27,6 @@ export class LoginComponent implements OnInit {
 
   @Output() userAuthState = new EventEmitter();
 
-
-
   UserForm = new FormGroup({
     UserId: new FormControl(""),
     Password: new FormControl(""),
@@ -37,6 +35,7 @@ export class LoginComponent implements OnInit {
     ShopName: new FormControl(""),
     MobileNo: new FormControl("")
   });
+
   constructor(
     private http: AjaxService,
     private commonService: CommonService,
@@ -73,12 +72,10 @@ export class LoginComponent implements OnInit {
           if (this.commonService.IsValid(result)) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
-            this.commonService.ShowToast("Login done successfull.");
+            Toast("Login done successfull.");
             this.nav.navigate("/admin", null);
           } else {
-            this.commonService.ShowToast(
-              "Incorrect username or password. Please try again."
-            );
+            ErrorToast("Incorrect username or password. Please try again.");
           }
           this.isLoading = false;
         }).catch(e => {

@@ -69,7 +69,7 @@
                       <input class="form-control" placeholder="SecondaryMobile" OnlyNumber="10" name="SecondaryMobile"
                         formControlName="SecondaryMobile" />
                     </div> -->
-                    
+
                   </div>
                 </div>
               </div>
@@ -117,41 +117,41 @@
                             </div>
                           </div>
                           <div class="mt-4">
-                            <button type="button" class="btn btn-primary me-2" *ngif="uploading">
+                            <button type="button" class="btn btn-primary me-2" *ngIf="!uploading">
                               <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
                             </button>
                             <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
-                              *ngif="uploading">
+                              *ngIf="!uploading">
                               <i class="fa fa-eraser pe-2"></i> Cancel
                             </button>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-6 mt-4" style="height: 52vh;overflow: auto;">
-                        <table class="table" *ngif="uploading">
+                      <div class="col-md-6 mt-4">
+                        <table class="table" *ngIf="!uploading">
                           <thead>
                             <tr>
-                              <th width="8%">#</th>
+                              <th>#</th>
                               <th>File Name</th>
-                              <th width="15%">File Size (KB)</th>
+                              <th>File Size (KB)</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of FilesCollection">
+                            <tr *ngFor="let item of fileDetail">
                               <td class="counterCell"></td>
                               <td>{{item.name}}</td>
                               <td>{{item.size/1024 | number: '1.2-2'}}</td>
                             </tr>
                             <tr>
                               <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
-                              <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
+                              <td class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
                             </tr>
                           </tbody>
                         </table>
                         <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
                           File size is greater than 2028KB i.e 2 MB, so please remove some file
                         </div>
-                        <div *ngIf="btnDisable" class="select-message">
+                        <div *ngIf="uploading" class="select-message">
                           <h3>
                             Please upload at least one file and You will see their details here.
                           </h3>
@@ -170,7 +170,8 @@
                     </div>
                   </div>
                   <div class="col-md-12">
-                    <textarea placeholder="Resume Headline" class="form-control" name="" id="" class="w-100" rows="3"></textarea>
+                    <textarea placeholder="Resume Headline" class="form-control" name="" id="" class="w-100"
+                      rows="3"></textarea>
                   </div>
                 </div>
               </div>
@@ -183,7 +184,8 @@
                     </div>
                   </div>
                   <div class="col-md-12">
-                    <textarea placeholder="Key Skill" class="form-control" name="" id="" class="w-100" rows="3"></textarea>
+                    <textarea placeholder="Key Skill" class="form-control" name="" id="" class="w-100"
+                      rows="3"></textarea>
                   </div>
                 </div>
               </div>
@@ -193,9 +195,11 @@
                   <div class="x_header">
                     <div class="x_header_title">
                       <h2>Employment
-                        <i class="fa text-dark edit-icon ps-2" [ngClass]="{'fa-pencil':!isEdited, 'fa-eye': isEdited}" (click)="editEmployment()"></i>
+                        <i class="fa text-dark edit-icon ps-2" [ngClass]="{'fa-pencil':!isEdited, 'fa-eye': isEdited}"
+                          (click)="editEmployment()"></i>
                       </h2>
-                      <a href="javascript:void(0)" class="text-decoration-none add-btn float-end" *ngIf="!isEdited">ADD EMPLOYMENT</a>
+                      <a href="javascript:void(0)" class="text-decoration-none add-btn float-end" *ngIf="!isEdited">ADD
+                        EMPLOYMENT</a>
                       <button class="btn btn-outline-success btn-sm float-end" *ngIf="isEdited">Save</button>
                     </div>
                   </div>
@@ -203,27 +207,27 @@
                     <form action="" class="row">
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Designation <span class="text-danger">*</span></label>
-                        <input class="form-control custom-form-control" placeholder="Enter YourDesignation" name="Designation" readonly
-                          formControlName="Designation" />
+                        <input class="form-control custom-form-control" placeholder="Enter YourDesignation"
+                          name="Designation" readonly formControlName="Designation" />
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Your Organization <span class="text-danger">*</span></label>
-                        <input class="form-control custom-form-control" placeholder="Your Organization" name="Organization" readonly
-                          formControlName="Organization" />
+                        <input class="form-control custom-form-control" placeholder="Your Organization"
+                          name="Organization" readonly formControlName="Organization" />
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Is this your current company?</label>
                         <div class="row ps-4">
                           <div class="form-check col-md-3">
-                            <input class="form-check-input custom-form-control" type="radio" name="gridRadios" id="gridRadios1" readonly
-                              value="option1" checked>
+                            <input class="form-check-input custom-form-control" type="radio" name="gridRadios"
+                              id="gridRadios1" readonly value="option1" checked>
                             <label class="form-check-label" for="gridRadios1">
                               Yes
                             </label>
                           </div>
                           <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input custom-form-control" type="radio" name="gridRadios" id="gridRadios2" readonly
-                              value="option2">
+                            <input class="form-check-input custom-form-control" type="radio" name="gridRadios"
+                              id="gridRadios2" readonly value="option2">
                             <label class="form-check-label" for="gridRadios2">
                               No
                             </label>
@@ -233,38 +237,38 @@
                       <div class="col-md-6 row">
                         <div class="col-md-9 mb-3 row p-0 m-0">
                           <label class="form-label">Started Working From <span class="text-danger">*</span></label>
-                          <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Year" name="WorkingYear" readonly
-                            formControlName="WorkingYear" />
-                          <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Month" name="WorkingMonth" readonly
-                            formControlName="WorkingMonth" />
+                          <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Year"
+                            name="WorkingYear" readonly formControlName="WorkingYear" />
+                          <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Month"
+                            name="WorkingMonth" readonly formControlName="WorkingMonth" />
                         </div>
                         <div class="col-md-3 mb-3 row p-0 m-0">
                           <label class="form-label">Worked Till <span class="text-danger">*</span></label>
-                          <input class="form-control worked-input-box  ms-3 custom-form-control" placeholder="Year" name="WorkedYear" readonly
-                            formControlName="WorkedYear" />
+                          <input class="form-control worked-input-box  ms-3 custom-form-control" placeholder="Year"
+                            name="WorkedYear" readonly formControlName="WorkedYear" />
                         </div>
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Current Salary <span class="text-danger">*</span></label>
                         <div class="row ps-4">
                           <div class="form-check col-md-3">
-                            <input class="form-check-input custom-form-control" type="radio" name="currencyRadio" id="currencyRadio1" readonly
-                              value="option1" checked>
+                            <input class="form-check-input custom-form-control" type="radio" name="currencyRadio"
+                              id="currencyRadio1" readonly value="option1" checked>
                             <label class="form-check-label" for="currencyRadio1">
                               Indian Rupees
                             </label>
                           </div>
                           <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input custom-form-control" type="radio" name="currencyRadio" id="currencyRadio2" readonly
-                              value="option2">
+                            <input class="form-check-input custom-form-control" type="radio" name="currencyRadio"
+                              id="currencyRadio2" readonly value="option2">
                             <label class="form-check-label" for="currencyRadio2">
                               US Dollars
                             </label>
                           </div>
                         </div>
                         <div class="row">
-                          <input class="form-control w-25 ms-3 custom-form-control" placeholder="Lakh" name="CurrentSalaryLakh" readonly
-                            formControlName="CurrentSalaryLakh" />
+                          <input class="form-control w-25 ms-3 custom-form-control" placeholder="Lakh"
+                            name="CurrentSalaryLakh" readonly formControlName="CurrentSalaryLakh" />
                           <input class="form-control w-25 ms-3 custom-form-control" placeholder="Thousand" readonly
                             name="CurrentSalaryThousand" formControlName="CurrentSalaryThousand" />
                         </div>
@@ -273,17 +277,20 @@
                         <label class="form-label">Top 5 key skills that you think are important for current
                           employment<span class="text-danger"> *</span></label>
                         <textarea name="Experties" placeholder="Enter your area of Experties/Specialization" readonly
-                          class="form-control custom-form-control" formControlName="Experties" id="" rows="2"></textarea>
+                          class="form-control custom-form-control" formControlName="Experties" id=""
+                          rows="2"></textarea>
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Describe your Job Profile</label>
-                        <textarea name="JobProfile" placeholder="Type here ....." class="form-control custom-form-control" readonly
-                          formControlName="JobProfile" id="" rows="2"></textarea>
+                        <textarea name="JobProfile" placeholder="Type here ....."
+                          class="form-control custom-form-control" readonly formControlName="JobProfile" id=""
+                          rows="2"></textarea>
                         <small class="float-end">4000 Character(s) Left</small>
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Notice Period <span class="text-danger">*</span></label>
-                        <select name="" id="" class="form-control custom-form-control" disabled formControlname="NoticePeriod">
+                        <select name="" id="" class="form-control custom-form-control" disabled
+                          formControlname="NoticePeriod">
                           <option value="1">15 Days or Less</option>
                           <option value="2">1 Month</option>
                           <option value="3">2 Month</option>
@@ -302,7 +309,7 @@
                   <div class="x_header">
                     <div class="x_header_title">
                       <h2>Education</h2>
-                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD EDUCATION</a>
+                      <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD EDUCATION</a>
                     </div>
                   </div>
                   <div class="col-md-12 ps-2">
@@ -377,7 +384,7 @@
                   <div class="x_header">
                     <div class="x_header_title">
                       <h2>IT Skills</h2>
-                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD DETAILS</a>
+                      <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD DETAILS</a>
                     </div>
                   </div>
                   <div class="col-md-12 ps-2">
@@ -413,7 +420,7 @@
                   <div class="x_header">
                     <div class="x_header_title">
                       <h2>Projects</h2>
-                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD PROJECT</a>
+                      <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD PROJECT</a>
                     </div>
                     <small>
                       Add details about projects you have done in college, internship or at work.
@@ -493,7 +500,8 @@
                   <div class="col-md-12">
                     <textarea
                       placeholder="Your Profile Summary should mention the highlights of your career and education, what your professional interests are, and what kind of a career you are looking for. Write a meaningful summary of more than 50 characters."
-                      class="form-control" formControlName="ProfileSummary" name="" id="" class="w-100" rows="3"></textarea>
+                      class="form-control" formControlName="ProfileSummary" name="" id="" class="w-100"
+                      rows="3"></textarea>
                   </div>
                 </div>
               </div>
@@ -593,8 +601,7 @@
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Job Role<span class="text-danger"> *</span></label>
-                        <input class="form-control" placeholder="JobRole" name="JobRole"
-                          formControlName="JobRole" />
+                        <input class="form-control" placeholder="JobRole" name="JobRole" formControlName="JobRole" />
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Desireed Job Type<span class="text-danger"> *</span></label>
@@ -657,7 +664,8 @@
                         </div>
                       </div>
                       <div class="col-md-6 mb-3">
-                        <label class="form-label">Preferred Work Location (Max 3)<span class="text-danger"> *</span></label>
+                        <label class="form-label">Preferred Work Location (Max 3)<span class="text-danger">
+                            *</span></label>
                         <input class="form-control" placeholder="CurrentIndustry" name="CurrentIndustry"
                           formControlName="CurrentIndustry" />
                       </div>
@@ -665,15 +673,15 @@
                         <label class="form-label">Expected Salary <span class="text-danger">*</span></label>
                         <div class="row ps-4">
                           <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="ExpectedcurrencyRadio" id="ExpectedcurrencyRadio1"
-                              value="option1" checked>
+                            <input class="form-check-input" type="radio" name="ExpectedcurrencyRadio"
+                              id="ExpectedcurrencyRadio1" value="option1" checked>
                             <label class="form-check-label" for="ExpectedcurrencyRadio1">
                               Indian Rupees
                             </label>
                           </div>
                           <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input" type="radio" name="ExpectedcurrencyRadio" id="ExpectedcurrencyRadio2"
-                              value="option2">
+                            <input class="form-check-input" type="radio" name="ExpectedcurrencyRadio"
+                              id="ExpectedcurrencyRadio2" value="option2">
                             <label class="form-check-label" for="ExpectedcurrencyRadio2">
                               US Dollars
                             </label>
@@ -682,8 +690,8 @@
                         <div class="row">
                           <input class="form-control w-25 ms-3" placeholder="Lakh" name="ExpectedSalaryLakh"
                             formControlName="ExpectedSalaryLakh" />
-                          <input class="form-control w-25 ms-3" placeholder="Thousand"
-                            name="ExpectedSalaryThousand" formControlName="ExpectedSalaryThousand" />
+                          <input class="form-control w-25 ms-3" placeholder="Thousand" name="ExpectedSalaryThousand"
+                            formControlName="ExpectedSalaryThousand" />
                         </div>
                       </div>
                     </form>
@@ -720,15 +728,14 @@
                         <label class="form-label">Gender</label>
                         <div class="row ps-4">
                           <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="Gender" id="Gender1"
-                              value="option1" checked>
+                            <input class="form-check-input" type="radio" name="Gender" id="Gender1" value="option1"
+                              checked>
                             <label class="form-check-label" for="Gender1">
                               Male
                             </label>
                           </div>
                           <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input" type="radio" name="Gender" id="Gender2"
-                              value="option2">
+                            <input class="form-check-input" type="radio" name="Gender" id="Gender2" value="option2">
                             <label class="form-check-label" for="Gender2">
                               Female
                             </label>
@@ -803,8 +810,8 @@
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Work Permit for Other Countries</label>
-                        <input class="form-control" placeholder="You can choose 3 countries at max" name="PermitOtherCountry" transform=""
-                          formControlName="PermitOtherCountry" />
+                        <input class="form-control" placeholder="You can choose 3 countries at max"
+                          name="PermitOtherCountry" transform="" formControlName="PermitOtherCountry" />
                       </div>
                       <div class="mt-3 mb-3">
                         <h4 class="fw-bold">Language</h4>

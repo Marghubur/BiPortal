@@ -407,7 +407,32 @@ export class CommonService {
 
 export function Toast(message: string, timeSpan: number = 5) {
   let $Toast = document.getElementById("toast");
-  if ($Toast !== null && $Toast !== undefined) {
+  if ($Toast) {
+    $Toast.classList.add("success-toast");
+    document.getElementById("toastmessage").innerHTML = message;
+    $Toast.classList.remove("d-none");
+    setTimeout(() => {
+      HideToast();
+    }, timeSpan * 998);
+  }
+}
+
+export function ErrorToast(message: string, timeSpan: number = 5) {
+  let $Toast = document.getElementById("toast");
+  if ($Toast) {
+    $Toast.classList.add("error-toast");
+    document.getElementById("toastmessage").innerHTML = message;
+    $Toast.classList.remove("d-none");
+    setTimeout(() => {
+      HideToast();
+    }, timeSpan * 998);
+  }
+}
+
+export function WarningToast(message: string, timeSpan: number = 5) {
+  let $Toast = document.getElementById("toast");
+  if ($Toast) {
+    $Toast.classList.add("warning-toast");
     document.getElementById("toastmessage").innerHTML = message;
     $Toast.classList.remove("d-none");
     setTimeout(() => {
@@ -418,8 +443,9 @@ export function Toast(message: string, timeSpan: number = 5) {
 
 export function HideToast() {
   let $Toast = document.getElementById("toast");
-  if ($Toast !== null && $Toast !== undefined) {
+  if ($Toast) {
     $Toast.classList.add("d-none");
+    $Toast.classList.remove("error-toast", "success-toast", "warning-toast");
   }
 }
 

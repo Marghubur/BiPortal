@@ -39,42 +39,42 @@ export class JwtService {
         localStorage.removeItem(AccessTokenExpiredOn);
         localStorage.removeItem(Master);
     }
-}
 
-export function IsValidResponse(response: ResponseModel) {
-    if (response !== null)
-        return HandleResponseStatus(response.HttpStatusCode);
-    else
-        return false;
-}
-
-export function HandleResponseStatus(statusCode: number): boolean {
-    let flag = false;
-    switch (statusCode) {
-        case Success:
-            flag = true;
-            break;
-        case UnAuthorize:
-            let token = localStorage.getItem("access_token");
-            if(token !== null && token != "")
-                document.getElementById("sessionexpiredBox").classList.remove('d-none');
-            else
-                localStorage.clear();
-            Toast("Unauthorized access. Please login again.");
-            this.nav.navigate(Login, null);
-            break;
-        case NotFound:
-            Toast("Page not found. Please chech your Url.");
-            break;
-        case ServerError:
-            Toast("Getting server error. Please contact to admin.");
-            break;
-        default:
-            Toast("Unknown error occured. Please contact to admin.");
-            break;
+    IsValidResponse(response: ResponseModel) {
+      if (response !== null)
+          return this.HandleResponseStatus(response.HttpStatusCode);
+      else
+          return false;
     }
 
-    return flag;
+    HandleResponseStatus(statusCode: number): boolean {
+      let flag = false;
+      switch (statusCode) {
+          case Success:
+              flag = true;
+              break;
+          case UnAuthorize:
+              let token = localStorage.getItem("access_token");
+              if(token !== null && token != "")
+                  document.getElementById("sessionexpiredBox").classList.remove('d-none');
+              else
+                  localStorage.clear();
+              Toast("Unauthorized access. Please login again.");
+              this.nav.navigate(Login, null);
+              break;
+          case NotFound:
+              Toast("Page not found. Please chech your Url.");
+              break;
+          case ServerError:
+              Toast("Getting server error. Please contact to admin.");
+              break;
+          default:
+              Toast("Unknown error occured. Please contact to admin.");
+              break;
+      }
+
+      return flag;
+    }
 }
 
 export interface ResponseModel {

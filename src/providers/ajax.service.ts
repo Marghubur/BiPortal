@@ -8,7 +8,7 @@ import { CommonService, Toast } from "./common-service/common.service";
 import "rxjs/add/operator/map";
 import { iNavigation } from "./iNavigation";
 import { Observable } from "rxjs";
-import { HandleResponseStatus, IsValidResponse, JwtService, ResponseModel } from "src/auth/jwtService";
+import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { environment } from "src/environments/environment";
 import { Login, UnAuthorize } from "./constants";
 
@@ -19,8 +19,7 @@ export class AjaxService {
   constructor(
     private tokenHelper: JwtService,
     private http: HttpClient,
-    private commonService: CommonService,
-    private nav: iNavigation
+    private commonService: CommonService
   ) {
     if (environment.production) {
       console.log("[Bottomhalf]: Bottomhalf/builder Running");
@@ -53,7 +52,7 @@ export class AjaxService {
         })
         .subscribe(
           (res: any) => {
-            if (IsValidResponse(res.body)) {
+            if (this.tokenHelper.IsValidResponse(res.body)) {
               resolve(res.body);
             } else {
               resolve(null);
@@ -61,7 +60,7 @@ export class AjaxService {
           },
           (error: HttpErrorResponse) => {
             this.commonService.HideLoaderByAjax();
-            HandleResponseStatus(error.status);
+            this.tokenHelper.HandleResponseStatus(error.status);
             reject(false);
           });
     });
@@ -77,7 +76,7 @@ export class AjaxService {
         .subscribe(
           (res: HttpResponse<any>) => {
             try {
-              if (!IsValidResponse(res.body)) {
+              if (!this.tokenHelper.IsValidResponse(res.body)) {
                 reject(null);
               }
             } catch (e) {
@@ -88,7 +87,7 @@ export class AjaxService {
           },
           error => {
             this.commonService.HideLoaderByAjax();
-            HandleResponseStatus(error.status);
+            this.tokenHelper.HandleResponseStatus(error.status);
             reject(null);
           }
         );
@@ -107,7 +106,7 @@ export class AjaxService {
             resolve(res.body);
           },
           error => {
-            HandleResponseStatus(error.status);
+            this.tokenHelper.HandleResponseStatus(error.status);
             reject(null);
           }
         );
@@ -126,7 +125,7 @@ export class AjaxService {
         .subscribe(
           (res: any) => {
             try {
-              if (!IsValidResponse(res)) {
+              if (!this.tokenHelper.IsValidResponse(res)) {
                 reject(null);
               }
             } catch (e) {
@@ -137,7 +136,7 @@ export class AjaxService {
           },
           error => {
             this.commonService.HideLoaderByAjax();
-            HandleResponseStatus(error.status);
+            this.tokenHelper.HandleResponseStatus(error.status);
             reject(null);
           }
         );
@@ -155,7 +154,7 @@ export class AjaxService {
           .subscribe(
             (res: HttpResponse<any>) => {
               try {
-                if (IsValidResponse(res.body)) {
+                if (this.tokenHelper.IsValidResponse(res.body)) {
                   let loginData: ResponseModel = res.body;
                   if (this.tokenHelper.setLoginDetail(loginData.ResponseBody)) {
                     resolve(res.body);
@@ -172,7 +171,7 @@ export class AjaxService {
             },
             error => {
               this.commonService.HideLoaderByAjax();
-              HandleResponseStatus(error.status);
+              this.tokenHelper.HandleResponseStatus(error.status);
               reject(null);
             }
           );
@@ -190,7 +189,7 @@ export class AjaxService {
         .subscribe(
           (res: HttpResponse<any>) => {
             try {
-              if (!IsValidResponse(res.body)) {
+              if (!this.tokenHelper.IsValidResponse(res.body)) {
                 reject(null);
               }
             } catch (e) {
@@ -201,7 +200,7 @@ export class AjaxService {
           },
           error => {
             this.commonService.HideLoaderByAjax();
-            HandleResponseStatus(error.status);
+            this.tokenHelper.HandleResponseStatus(error.status);
             reject(null);
           }
         );

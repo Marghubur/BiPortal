@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { PlaceEmpty, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 
@@ -43,6 +43,7 @@ export class ManageComponent implements OnInit {
   UserId: number = null;
   uploading: boolean = true;
   isLargeFile: Boolean= false;
+  fileDetail: Array<any> = [];
 
   @Output() authentication = new EventEmitter();
 
@@ -103,32 +104,11 @@ export class ManageComponent implements OnInit {
       LastName: new FormControl(this.userModal.LastName),
       Mobile: new FormControl(this.userModal.Mobile),
       Email: new FormControl(this.userModal.EmailId),
-      // SecondaryMobile: new FormControl(this.userModal.SecondaryMobile),
-      // FatherName: new FormControl(this.userModal.FatherName),
-      // MotherName: new FormControl(this.userModal.MotherName),
-      // SpouseName: new FormControl(this.userModal.SpouseName),
       State: new FormControl(this.userModal.State),
       City: new FormControl(this.userModal.City),
-      // Pincode: new FormControl(PlaceEmpty(this.userModal.Pincode)),
       Address: new FormControl(this.userModal.Address),
       Dob: new FormControl(this.userModal.Dob),
-      // PANNo: new FormControl(this.userModal.PANNo),
-      // AadharNo: new FormControl(this.userModal.AadharNo),
-      // AccountNumber: new FormControl(this.userModal.AccountNumber),
-      // BankName: new FormControl(this.userModal.BankName),
-      // IFSCCode: new FormControl(this.userModal.IFSCCode),
-      // Domain: new FormControl(this.userModal.Domain),
-      // Specification: new FormControl(this.userModal.Specification),
-      // ExprienceInYear: new FormControl(PlaceEmpty(this.userModal.ExprienceInYear)),
-      // LastCompanyName: new FormControl(this.userModal.LastCompanyName),
-      // IsPermanent: new FormControl(this.userModal.IsPermanent),
-      // AllocatedClientId: new FormControl(this.userModal.AllocatedClientId),
-      // ActualPackage: new FormControl(this.userModal.ActualPackage, [Validators.required]),
-      // FinalPackage: new FormControl(this.userModal.FinalPackage, [Validators.required]),
-      // TakeHomeByCandidate: new FormControl(this.userModal.TakeHomeByCandidate, [Validators.required]),
       UserId: new FormControl(this.userModal.UserId),
-      // BranchName: new FormControl(this.userModal.BranchName),
-      // AllocatedClientName: new FormControl(this.userModal.AllocatedClientName)
     });
   }
 
@@ -138,32 +118,10 @@ export class ManageComponent implements OnInit {
       LastName: new FormControl("", [Validators.required]),
       Mobile: new FormControl("0000000000"),
       Email: new FormControl("xxxxx@xxx.com"),
-      // SecondaryMobile: new FormControl(""),
-      // FatherName: new FormControl(""),
-      // MotherName: new FormControl(""),
-      // SpouseName: new FormControl(""),
       State: new FormControl(""),
       City: new FormControl(""),
-      // Pincode: new FormControl(PlaceEmpty("")),
       Address: new FormControl(""),
       Dob: new FormControl(new Date()),
-      // PANNo: new FormControl(""),
-      // AadharNo: new FormControl(""),
-      // AccountNumber: new FormControl(""),
-      // BankName: new FormControl(""),
-      // IFSCCode: new FormControl(""),
-      // Domain: new FormControl(""),
-      // Specification: new FormControl(""),
-      // ExprienceInYear: new FormControl(PlaceEmpty("")),
-      // LastCompanyName: new FormControl(""),
-      // IsPermanent: new FormControl(false),
-      // AllocatedClientId: new FormControl(""),
-      // ActualPackage: new FormControl(""),
-      // FinalPackage: new FormControl(""),
-      // TakeHomeByCandidate: new FormControl(""),
-      // EmployeeUid: new FormControl(""),
-      // BranchName: new FormControl(""),
-      // AllocatedClientName: new FormControl("")
     });
   }
 
@@ -215,44 +173,6 @@ export class ManageComponent implements OnInit {
     }
   }
 
-  // addDetail() {
-  //   if (this.manageUserForm.get("AllocatedClientId").value > 0) {
-  //     let updateClientRequest = {
-  //       "AllocatedClientId": Number(this.manageUserForm.get("AllocatedClientId").value),
-  //       "ActualPackage": Number(this.manageUserForm.get("ActualPackage").value),
-  //       "FinalPackage": Number(this.manageUserForm.get("FinalPackage").value),
-  //       "TakeHomeByCandidate": Number(this.manageUserForm.get("TakeHomeByCandidate").value),
-  //       "EmployeeUid": this.employeeUid
-  //     }
-
-  //     this.isInsertingNewClient = true;
-  //     if (this.assignedActiveClientUid > 0)
-  //       this.isInsertingNewClient = false;
-  //     this.http.post(`employee/UpdateEmployeeDetail/${!this.isInsertingNewClient}`, updateClientRequest).then((response: ResponseModel) => {
-  //       if (response.ResponseBody && response.ResponseBody != {}) {
-  //         if (this.isInsertingNewClient) {
-  //           this.allocatedClients.push(response.ResponseBody.Table[0]);
-  //           this.allocatedClients.map(elem => elem.IsActive = 0);
-  //           Toast("Added Successfully");
-  //         } else {
-  //           let currentClient = this.allocatedClients.find(x => x.ClientUid == this.currentClientId);
-  //           currentClient.ActualPackage = updateClientRequest.ActualPackage;
-  //           currentClient.FinalPackage = updateClientRequest.FinalPackage;
-  //           currentClient.TakeHomeByCandidate = updateClientRequest.TakeHomeByCandidate;
-  //           Toast("Updated Successfully");
-  //         }
-  //         this.isAllocated = true;
-  //       } else {
-  //         this.common.ShowToast("Fail to add");
-  //       }
-  //     });
-  //   } else {
-  //     this.common.ShowToast("Please select client first");
-  //   }
-
-
-  // }
-
   fireBrowserFile() {
     this.submitted = true;
     $("#uploadocument").click();
@@ -265,14 +185,13 @@ export class ManageComponent implements OnInit {
 
   GetDocumentFile(fileInput: any) {
     // this.FileDocuments = [];
-    // this.FilesCollection = [];
-    // let selectedFiles = fileInput.target.files;
+     this.fileDetail = fileInput.target.files[0];
     // if (selectedFiles.length > 0) {
     //   let index = 0;
     //   let file = null;
     //   this.btnDisable = false;
     //   this.fileAvailable = true;
-    //   this.uploading = false;
+       this.uploading = false;
     //   while (index < selectedFiles.length) {
     //     file = <File>selectedFiles[index];
     //     let item: Files = new Files();
