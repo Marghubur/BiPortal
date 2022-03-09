@@ -16,24 +16,23 @@
             </div>
           </div> -->
           <div class="x_content mt-1" *ngIf="idReady">
-            <form [formGroup]="manageUserForm">
-              <div class="col-12 x_panel row  m-0 p-0 pt-2">
-                <div class="col-md-3">
-                  <div class="x_header_title position-relative">
-                    <div class="img-container">
-                      <div class="img-container__box">
-                        <img src="" alt="">
-                      </div>
-                      <div class="img-container__select">
-                        <!-- <button class="btn btn-outline-success form-control">Browse</button> -->
-                        <input type="file" id="uploadocument" class="d-none" />
-                        <i class="fa fa-camera text-light p-1 zoom-2" aria-hidden="true"
-                          (click)="fireBrowserFile()"></i>
-                      </div>
+            <div class="col-12 x_panel row  m-0 p-0 pt-2">
+              <div class="col-md-3">
+                <div class="x_header_title position-relative">
+                  <div class="img-container">
+                    <div class="img-container__box">
+                      <img src="" alt="">
+                    </div>
+                    <div class="img-container__select">
+                      <!-- <button class="btn btn-outline-success form-control">Browse</button> -->
+                      <input type="file" id="uploadocument" class="d-none" />
+                      <i class="fa fa-camera text-light p-1 zoom-2" aria-hidden="true" (click)="fireBrowserFile()"></i>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-9">
+              </div>
+              <div class="col-md-9">
+                <form [formGroup]="userDeatilForm">
                   <div class="col-md-12 m-0 row">
                     <div class="col-md-6 mb-3">
                       <label class="form-label">First Name *</label>
@@ -62,52 +61,43 @@
                         [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}" />
                     </div>
                   </div>
-
-                  <div class="col-md-12 m-0 row">
-                    <!-- <div class="col-md-6 mb-3">
-                      <label class="form-label">Alternet Number</label>
-                      <input class="form-control" placeholder="SecondaryMobile" OnlyNumber="10" name="SecondaryMobile"
-                        formControlName="SecondaryMobile" />
-                    </div> -->
-                    
-                  </div>
-                </div>
+                </form>
               </div>
+            </div>
 
-              <div class="col-md-12 row m-0 p-0 mt-2">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Attach Resume</h2>
-                    </div>
-                    <small>Resume is the most important document recruiters look for. Recruiters generally do not
-                      look at profiles without resumes.</small>
+            <div class="col-md-12 row m-0 p-0 mt-2">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Attach Resume</h2>
                   </div>
-                  <div class="col-md-12 mb-3 row m-0">
-                    <div class="col-md-12 mt-4 me-2 row">
-                      <div class="x_panel col-md-6">
-                        <div class="x_header">
-                          <div class="x_header_title">
-                            <div class="">
-                              <input type="file" id="uploadresume" class="d-none" (change)="GetDocumentFile($event)"
-                                *ngIf="uploading" />
-                              <div class="col-md-12 p-0">
-                                <div class="table-responsive">
-                                  <div class="tab-pane fade show active" id="home" role="tabpanel"
+                  <small>Resume is the most important document recruiters look for. Recruiters generally do not
+                    look at profiles without resumes.</small>
+                </div>
+                <div class="col-md-12 mb-3 row m-0">
+                  <div class="col-md-12 mt-4 me-2 row">
+                    <div class="x_panel col-md-6">
+                      <div class="x_header">
+                        <div class="x_header_title">
+                          <div class="">
+                            <input type="file" id="uploadresume" class="d-none" (change)="GetDocumentFile($event)"
+                              *ngIf="uploading" />
+                            <div class="col-md-12 p-0">
+                              <div class="table-responsive">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                  aria-labelledby="home-tab">
+                                  <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
                                     aria-labelledby="home-tab">
-                                    <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
-                                      aria-labelledby="home-tab">
-                                      <div id="classmasterdata" class="col-md-12">
-                                        <div name="ifilezone" class="ifilezone mb-4" (click)="fireresumeBrowserFile()">
-                                          <div *ngIf="uploading">
-                                            <span style="color:darkgray;display: block;margin-top: 10rem;">
-                                              Supported Formats: doc, docx, rtf, pdf, upto 2 MB
-                                            </span>
-                                          </div>
-                                          <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="!uploading"
-                                            name="uploading">
-                                            <img src="assets/img/ExcelFile.png" />
-                                          </div>
+                                    <div id="classmasterdata" class="col-md-12">
+                                      <div name="ifilezone" class="ifilezone mb-4" (click)="fireresumeBrowserFile()">
+                                        <div *ngIf="uploading">
+                                          <span style="color:darkgray;display: block;margin-top: 10rem;">
+                                            Supported Formats: doc, docx, rtf, pdf, upto 2 MB
+                                          </span>
+                                        </div>
+                                        <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="!uploading"
+                                          name="uploading">
+                                          <img src="assets/img/ExcelFile.png" />
                                         </div>
                                       </div>
                                     </div>
@@ -116,756 +106,828 @@
                               </div>
                             </div>
                           </div>
-                          <div class="mt-4">
-                            <button type="button" class="btn btn-primary me-2" *ngif="uploading">
-                              <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
-                            </button>
-                            <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
-                              *ngif="uploading">
-                              <i class="fa fa-eraser pe-2"></i> Cancel
-                            </button>
-                          </div>
+                        </div>
+                        <div class="mt-4">
+                          <button type="button" class="btn btn-primary me-2" *ngIf="uploading">
+                            <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
+                          </button>
+                          <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
+                            *ngIf="uploading">
+                            <i class="fa fa-eraser pe-2"></i> Cancel
+                          </button>
                         </div>
                       </div>
-                      <div class="col-md-6 mt-4" style="height: 52vh;overflow: auto;">
-                        <table class="table" *ngif="uploading">
-                          <thead>
-                            <tr>
-                              <th width="8%">#</th>
-                              <th>File Name</th>
-                              <th width="15%">File Size (KB)</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let item of FilesCollection">
-                              <td class="counterCell"></td>
-                              <td>{{item.name}}</td>
-                              <td>{{item.size/1024 | number: '1.2-2'}}</td>
-                            </tr>
-                            <tr>
-                              <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
-                              <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
-                          File size is greater than 2028KB i.e 2 MB, so please remove some file
-                        </div>
-                        <div *ngIf="btnDisable" class="select-message">
-                          <h3>
-                            Please upload at least one file and You will see their details here.
-                          </h3>
-                        </div>
+                    </div>
+                    <div class="col-md-6 mt-4" style="height: 52vh;overflow: auto;">
+                      <table class="table" *ngIf="uploading">
+                        <thead>
+                          <tr>
+                            <th width="8%">#</th>
+                            <th>File Name</th>
+                            <th width="15%">File Size (KB)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of FilesCollection">
+                            <td class="counterCell"></td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.size/1024 | number: '1.2-2'}}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
+                            <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
+                        File size is greater than 2028KB i.e 2 MB, so please remove some file
+                      </div>
+                      <div *ngIf="btnDisable" class="select-message">
+                        <h3>
+                          Please upload at least one file and You will see their details here.
+                        </h3>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Resume Headline</h2>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <textarea placeholder="Resume Headline" class="form-control" name="" id="" class="w-100" rows="3"></textarea>
+            <!-- <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Resume Headline <i class="fa text-dark edit-icon ps-2"
+                        [ngClass]="{'fa-pencil':!section.isResumeHeadlineEdit, 'fa-eye': section.isResumeHeadlineEdit}"
+                        (click)="editResumeHeadline()"></i>
+                    </h2>
+                    <button class="btn btn-outline-success btn-sm float-end"
+                      *ngIf="section.isResumeHeadlineEdit">Save</button>
                   </div>
                 </div>
-              </div>
-
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Key Skill</h2>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <textarea placeholder="Key Skill" class="form-control" name="" id="" class="w-100" rows="3"></textarea>
-                  </div>
+                <div class="col-md-12" id="resumeHeadline">
+                  <textarea placeholder="Resume Headline" [readonly]="!section.isResumeHeadlineEdit"
+                    [class.custom-form-control]="!section.isResumeHeadlineEdit"
+                    class="w-100 from-control lg-txtarea"></textarea>
                 </div>
               </div>
+            </div>
 
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Employment
-                        <i class="fa text-dark edit-icon ps-2" [ngClass]="{'fa-pencil':!isEdited, 'fa-eye': isEdited}" (click)="editEmployment()"></i>
-                      </h2>
-                      <a href="javascript:void(0)" class="text-decoration-none add-btn float-end" *ngIf="!isEdited">ADD EMPLOYMENT</a>
-                      <button class="btn btn-outline-success btn-sm float-end" *ngIf="isEdited">Save</button>
-                    </div>
-                  </div>
-                  <div class="col-md-12 ps-2">
-                    <form action="" class="row">
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Designation <span class="text-danger">*</span></label>
-                        <input class="form-control custom-form-control" placeholder="Enter YourDesignation" name="Designation" readonly
-                          formControlName="Designation" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Your Organization <span class="text-danger">*</span></label>
-                        <input class="form-control custom-form-control" placeholder="Your Organization" name="Organization" readonly
-                          formControlName="Organization" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Is this your current company?</label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input custom-form-control" type="radio" name="gridRadios" id="gridRadios1" readonly
-                              value="option1" checked>
-                            <label class="form-check-label" for="gridRadios1">
-                              Yes
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input custom-form-control" type="radio" name="gridRadios" id="gridRadios2" readonly
-                              value="option2">
-                            <label class="form-check-label" for="gridRadios2">
-                              No
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6 row">
-                        <div class="col-md-9 mb-3 row p-0 m-0">
-                          <label class="form-label">Started Working From <span class="text-danger">*</span></label>
-                          <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Year" name="WorkingYear" readonly
-                            formControlName="WorkingYear" />
-                          <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Month" name="WorkingMonth" readonly
-                            formControlName="WorkingMonth" />
-                        </div>
-                        <div class="col-md-3 mb-3 row p-0 m-0">
-                          <label class="form-label">Worked Till <span class="text-danger">*</span></label>
-                          <input class="form-control worked-input-box  ms-3 custom-form-control" placeholder="Year" name="WorkedYear" readonly
-                            formControlName="WorkedYear" />
-                        </div>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Current Salary <span class="text-danger">*</span></label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input custom-form-control" type="radio" name="currencyRadio" id="currencyRadio1" readonly
-                              value="option1" checked>
-                            <label class="form-check-label" for="currencyRadio1">
-                              Indian Rupees
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input custom-form-control" type="radio" name="currencyRadio" id="currencyRadio2" readonly
-                              value="option2">
-                            <label class="form-check-label" for="currencyRadio2">
-                              US Dollars
-                            </label>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <input class="form-control w-25 ms-3 custom-form-control" placeholder="Lakh" name="CurrentSalaryLakh" readonly
-                            formControlName="CurrentSalaryLakh" />
-                          <input class="form-control w-25 ms-3 custom-form-control" placeholder="Thousand" readonly
-                            name="CurrentSalaryThousand" formControlName="CurrentSalaryThousand" />
-                        </div>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Top 5 key skills that you think are important for current
-                          employment<span class="text-danger"> *</span></label>
-                        <textarea name="Experties" placeholder="Enter your area of Experties/Specialization" readonly
-                          class="form-control custom-form-control" formControlName="Experties" id="" rows="2"></textarea>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Describe your Job Profile</label>
-                        <textarea name="JobProfile" placeholder="Type here ....." class="form-control custom-form-control" readonly
-                          formControlName="JobProfile" id="" rows="2"></textarea>
-                        <small class="float-end">4000 Character(s) Left</small>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Notice Period <span class="text-danger">*</span></label>
-                        <select name="" id="" class="form-control custom-form-control" disabled formControlname="NoticePeriod">
-                          <option value="1">15 Days or Less</option>
-                          <option value="2">1 Month</option>
-                          <option value="3">2 Month</option>
-                          <option value="4">3 Month</option>
-                          <option value="5">More than 3 Month</option>
-                          <option value="6">Serving Notice Period</option>
-                        </select>
-                      </div>
-                    </form>
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Key Skill <i class="fa text-dark edit-icon ps-2"
+                        [ngClass]="{'fa-pencil':!section.isKeySkillEdit, 'fa-eye': section.isKeySkillEdit}"
+                        (click)="editKeySkill()"></i></h2>
+                    <button class="btn btn-outline-success btn-sm float-end"
+                      *ngIf="section.isKeySkillEdit">Save</button>
                   </div>
                 </div>
-              </div>
-
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Education</h2>
-                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD EDUCATION</a>
-                    </div>
-                  </div>
-                  <div class="col-md-12 ps-2">
-                    <form action="" class="row">
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Education <span class="text-danger">*</span></label>
-                        <input class="form-control" placeholder="Education" name="Education"
-                          formControlName="Education" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Course <span class="text-danger">*</span></label>
-                        <input class="form-control" placeholder="Course" name="Course" formControlName="Course" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Specialization <span class="text-danger">*</span></label>
-                        <input class="form-control" placeholder="Specialization" name="Specialization"
-                          formControlName="Specialization" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">University <span class="text-danger">*</span></label>
-                        <input class="form-control" placeholder="University" name="University"
-                          formControlName="University" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Course Type</label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="courseTypeRadio" id="courseTypeRadio1"
-                              value="option1" checked>
-                            <label class="form-check-label" for="courseTypeRadio1">
-                              Full Time
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="courseTypeRadio" id="courseTypeRadio2"
-                              value="option2">
-                            <label class="form-check-label" for="courseTypeRadio2">
-                              Part Time
-                            </label>
-                          </div>
-                          <div class="form-check col-md-6">
-                            <input class="form-check-input" type="radio" name="courseTypeRadio" id="courseTypeRadio3"
-                              value="option2">
-                            <label class="form-check-label" for="courseTypeRadio3">
-                              Correspondence/Distance Learning
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Passing Out Year <span class="text-danger">*</span></label>
-                        <input class="form-control" placeholder="PassingYear" name="PassingYear"
-                          formControlName="PassingYear" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Grading Syatem <span class="text-danger">*</span></label>
-                        <select name="" id="" class="form-control" formControlname="GradingSystem">
-                          <option value="0">Select grading system</option>
-                          <option value="1">Scale 10 Grading System</option>
-                          <option value="2">Scale 4 Grading System</option>
-                          <option value="3">% Mark of 100 Maximum</option>
-                          <option value="4">Course Requires a Pass</option>
-                        </select>
-                      </div>
-                    </form>
-                  </div>
+                <div class="col-md-12" id="keyskill">
+                  <form action="" [formGroup]="keySkillForm">
+                    <textarea [readonly]="!section.isKeySkillEdit" placeholder="Key Skill" formControlName="KeySkill"
+                      [class.custom-form-control]="!section.isKeySkillEdit"
+                      class="w-100 form-control lg-txtarea"></textarea>
+                  </form>
                 </div>
               </div>
+            </div> -->
 
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>IT Skills</h2>
-                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD DETAILS</a>
-                    </div>
-                  </div>
-                  <div class="col-md-12 ps-2">
-                    <form action="" class="row">
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">IT Skills <span class="text-danger">*</span></label>
-                        <input class="form-control" placeholder="IT Skills" name="ITSkill" formControlName="ITSkill" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Version</label>
-                        <input class="form-control" placeholder="Version" name="Version" formControlName="Version" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Last Used </label>
-                        <input class="form-control" placeholder="LastUsed" name="LastUsed" formControlName="LastUsed" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Exprience</label>
-                        <div class="row">
-                          <input class="form-control exp-input-box ms-3" placeholder="Year" name="ExperienceYear"
-                            formControlName="ExperienceYear" />
-                          <input class="form-control exp-input-box ms-3" placeholder="Month" name="ExperienceMonth"
-                            formControlName="ExperienceMonth" />
-                        </div>
-                      </div>
-                    </form>
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Employment
+                      <i class="fa text-dark edit-icon ps-2"
+                        [ngClass]="{'fa-pencil':!section.isEmploymentEdit, 'fa-eye': section.isEmploymentEdit}"
+                        (click)="editEmployment()"></i>
+                    </h2>
+                    <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
+                      *ngIf="!section.isEmploymentEdit">ADD
+                      EMPLOYMENT</a>
+                    <button class="btn btn-outline-success btn-sm float-end"
+                      *ngIf="section.isEmploymentEdit">Save</button>
                   </div>
                 </div>
-              </div>
-
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Projects</h2>
-                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD PROJECT</a>
+                <div class="col-md-12 ps-2" id="employment">
+                  <form action="" class="row" [formGroup]="employmentForm">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Designation <span class="text-danger">*</span></label>
+                      <input class="form-control" placeholder="Enter YourDesignation"
+                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                        name="Designation" formControlName="Designation" />
                     </div>
-                    <small>
-                      Add details about projects you have done in college, internship or at work.
-                    </small>
-                  </div>
-                  <div class="col-md-12 ps-2">
-                    <form action="" class="row">
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Project Title <span class="text-danger">*</span></label>
-                        <input class="form-control" placeholder="Enter Project Title" name="ProjectTitle"
-                          formControlName="ProjectTitle" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Tag this project with your Employment/Education</label>
-                        <input class="form-control" placeholder="Select Employment/Education" name="ProjectTag"
-                          formControlName="ProjectTag" />
-                      </div>
-                      <div class="col-md-6 row">
-                        <div class="col-md-9 mb-3 row p-0 m-0">
-                          <label class="form-label">Started Working From <span class="text-danger">*</span></label>
-                          <input class="form-control working-input-box ms-3" placeholder="Year" name="WorkingYear"
-                            formControlName="ProjectWorkingYear" />
-                          <input class="form-control working-input-box ms-3" placeholder="Month" name="WorkingMonth"
-                            formControlName="ProjectWorkingMonth" />
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Your Organization <span class="text-danger">*</span></label>
+                      <input class="form-control" placeholder="Your Organization" [readonly]="!section.isEmploymentEdit"
+                        [class.custom-form-control]="!section.isEmploymentEdit" name="Organization"
+                        formControlName="YourOrganization" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Is this your current company?</label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input" type="radio" name="gridRadios"
+                            [readonly]="!section.isEmploymentEdit"
+                            [class.custom-form-control]="!section.isEmploymentEdit" formControlName="CurrentCompany"
+                            id="gridRadios1" value="option1" checked>
+                          <label class="form-check-label" for="gridRadios1">
+                            Yes
+                          </label>
                         </div>
-                        <div class="col-md-3 mb-3 row p-0 m-0">
-                          <label class="form-label">Worked Till <span class="text-danger">*</span></label>
-                          <input class="form-control worked-input-box ms-3" placeholder="Year" name="WorkedYear"
-                            formControlName="ProjectWorkedYear" />
+                        <div class="form-check col-md-3 ms-3">
+                          <input class="form-check-input" type="radio" name="gridRadios"
+                            [readonly]="!section.isEmploymentEdit"
+                            [class.custom-form-control]="!section.isEmploymentEdit" formControlName="CurrentCompany"
+                            id="gridRadios2" value="option2">
+                          <label class="form-check-label" for="gridRadios2">
+                            No
+                          </label>
                         </div>
                       </div>
-                      <div class="col-md-6 mb-3 ms-4">
-                        <label class="form-label">Project Status</label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="ProgressStatus" id="ProgressStatus1"
-                              value="option1" checked>
-                            <label class="form-check-label" for="ProgressStatus1">
-                              In progress
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="ProgressStatus" id="ProgressStatus2"
-                              value="option2">
-                            <label class="form-check-label" for="ProgressStatus2">
-                              Finished
-                            </label>
-                          </div>
+                    </div>
+                    <div class="col-md-6 row">
+                      <div class="col-md-9 mb-3 row p-0 m-0">
+                        <label class="form-label">Started Working From <span class="text-danger">*</span></label>
+                        <input class="form-control working-input-box ms-3" placeholder="Year"
+                          [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                          formControlName="WorkingYear" />
+                        <input class="form-control working-input-box ms-3" placeholder="Month"
+                          [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                          formControlName="WorkingMonth" />
+                      </div>
+                      <div class="col-md-3 mb-3 row p-0 m-0">
+                        <label class="form-label">Worked Till <span class="text-danger">*</span></label>
+                        <input class="form-control worked-input-box  ms-3" placeholder="Year"
+                          [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                          name="WorkedYear" formControlName="WorkedYear" />
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Current Salary <span class="text-danger">*</span></label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input" type="radio" name="currencyRadio"
+                            [readonly]="!section.isEmploymentEdit"
+                            [class.custom-form-control]="!section.isEmploymentEdit" id="currencyRadio1" value="option1"
+                            checked formControlName="CurrentSalary">
+                          <label class="form-check-label" for="currencyRadio1">
+                            Indian Rupees
+                          </label>
+                        </div>
+                        <div class="form-check col-md-3 ms-3">
+                          <input class="form-check-input" type="radio" name="currencyRadio"
+                            [readonly]="!section.isEmploymentEdit"
+                            [class.custom-form-control]="!section.isEmploymentEdit" id="currencyRadio2" value="option2"
+                            formControlName="CurrentSalary">
+                          <label class="form-check-label" for="currencyRadio2">
+                            US Dollars
+                          </label>
                         </div>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Client <span class="text-danger"> *</span> </label>
-                        <input class="form-control" placeholder="Client Name" name="ClientName"
-                          formControlName="ClientName" />
+                      <div class="row">
+                        <input class="form-control w-25 ms-3" placeholder="Lakh" [readonly]="!section.isEmploymentEdit"
+                          [class.custom-form-control]="!section.isEmploymentEdit" name="CurrentSalaryLakh"
+                          formControlName="CurrentSalaryLakh" />
+                        <input class="form-control w-25 ms-3" placeholder="Thousand"
+                          [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                          name="CurrentSalaryThousand" formControlName="CurrentSalaryThousand" />
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Details of Project<span class="text-danger"> *</span></label>
-                        <textarea name="ProjectDetail" placeholder="Type here ....." class="form-control"
-                          formControlName="ProjectDetail" id="" rows="1"></textarea>
-                        <small>1000 Character(s) Left</small>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <a href="javascript:void(0)" class="form-label text-decoration-none ">Add More Details</a>
-                      </div>
-                    </form>
-                  </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Top 5 key skills that you think are important for current
+                        employment<span class="text-danger"> *</span></label>
+                      <textarea name="Experties" placeholder="Enter your area of Experties/Specialization"
+                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                        class="form-control" formControlName="Experties"></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Describe your Job Profile</label>
+                      <textarea name="JobProfile" placeholder="Type here ....." class="form-control"
+                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                        formControlName="JobProfile"></textarea>
+                      <small class="float-end">4000 Character(s) Left</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Notice Period <span class="text-danger">*</span></label>
+                      <select class="form-control" [disabled]="!section.isEmploymentEdit"
+                        [class.custom-form-control]="!section.isEmploymentEdit" formControlname="NoticePeriod">
+                        <option value="1">15 Days or Less</option>
+                        <option value="2">1 Month</option>
+                        <option value="3">2 Month</option>
+                        <option value="4">3 Month</option>
+                        <option value="5">More than 3 Month</option>
+                        <option value="6">Serving Notice Period</option>
+                      </select>
+                    </div>
+                  </form>
                 </div>
               </div>
+            </div>
 
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Profile Summary</h2>
-                    </div>
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Education</h2> <i class="fa text-dark edit-icon ps-2"
+                      [ngClass]="{'fa-pencil': !isEducationEdit, 'fa-eye': isEducationEdit}"
+                      (click)="editEducation()"></i>
+                    <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
+                      *ngIf="!isEducationEdit">ADD
+                      EDUCATION</a>
+                    <button class="btn btn-outline-success btn-sm float-end" *ngIf="isEducationEdit">Save</button>
                   </div>
-                  <div class="col-md-12">
+                </div>
+                <div class="col-md-12 ps-2" id="education">
+                  <form action="" class="row" [formGroup]="educationForm">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Education <span class="text-danger">*</span></label>
+                      <input class="form-control custom-form-control" placeholder="Education" name="Education" readonly
+                        formControlName="Education" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Course <span class="text-danger">*</span></label>
+                      <input class="form-control custom-form-control" placeholder="Course" readonly name="Course"
+                        formControlName="Course" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Specialization <span class="text-danger">*</span></label>
+                      <input class="form-control custom-form-control" readonly placeholder="Specialization"
+                        name="Specialization" formControlName="Specialization" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">University <span class="text-danger">*</span></label>
+                      <input class="form-control custom-form-control" readonly placeholder="University"
+                        name="University" formControlName="University" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Course Type</label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input custom-form-control" type="radio" name="courseTypeRadio"
+                            formControlName="CourseType" id="courseTypeRadio1" readonly value="option1" checked>
+                          <label class="form-check-label" for="courseTypeRadio1">
+                            Full Time
+                          </label>
+                        </div>
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input custom-form-control" type="radio" name="courseTypeRadio"
+                            formControlName="CourseType" id="courseTypeRadio2" readonly value="option2">
+                          <label class="form-check-label" for="courseTypeRadio2">
+                            Part Time
+                          </label>
+                        </div>
+                        <div class="form-check col-md-6">
+                          <input class="form-check-input custom-form-control" type="radio" name="courseTypeRadio"
+                            formControlName="CourseType" id="courseTypeRadio3" readonly value="option2">
+                          <label class="form-check-label" for="courseTypeRadio3">
+                            Correspondence/Distance Learning
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Passing Out Year <span class="text-danger">*</span></label>
+                      <input class="form-control custom-form-control" placeholder="PassingYear" name="PassingYear"
+                        readonly formControlName="PassingYear" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Grading Syatem <span class="text-danger">*</span></label>
+                      <select name="" id="" class="form-control custom-form-control" formControlname="GradingSystem"
+                        disabled>
+                        <option value="0">Select grading system</option>
+                        <option value="1">Scale 10 Grading System</option>
+                        <option value="2">Scale 4 Grading System</option>
+                        <option value="3">% Mark of 100 Maximum</option>
+                        <option value="4">Course Requires a Pass</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>IT Skills
+                      <a href="javascript:void" (click)="editItSkill()">
+                        <i *ngIf="!section.isItSkillEdit" class="fa fa-pencil text-dark edit-icon ps-2"></i>
+                        <i *ngIf="section.isItSkillEdit" class="fa fa-eye text-dark edit-icon ps-2"></i>
+                      </a>
+                    </h2>
+                    <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
+                      *ngIf="!isItSkillEdit">ADD DETAILS</a>
+                  </div>
+                </div>
+                <div class="col-md-12 ps-2" id="itSkill">
+                  <form action="" class="row" [formGroup]="itSkillForm">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">IT Skills <span class="text-danger">*</span></label>
+                      <input class="form-control custom-form-control" placeholder="IT Skills" name="ITSkill"
+                        formControlName="ITSkill" readonly />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Version</label>
+                      <input class="form-control custom-form-control" placeholder="Version" name="Version"
+                        formControlName="Version" readonly />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Last Used </label>
+                      <input class="form-control custom-form-control" placeholder="LastUsed" name="LastUsed"
+                        formControlName="LastUsed" readonly />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Exprience</label>
+                      <div class="row">
+                        <input class="form-control exp-input-box ms-3 custom-form-control" placeholder="Year"
+                          name="ExperienceYear" readonly formControlName="ExperienceYear" />
+                        <input class="form-control exp-input-box ms-3 custom-form-control" placeholder="Month"
+                          name="ExperienceMonth" readonly formControlName="ExperienceMonth" />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Projects <i class="fa text-dark edit-icon ps-2"
+                        [ngClass]="{'fa-pencil':!isProjectsEdit, 'fa-eye': isProjectsEdit}" (click)="editProject()"></i>
+                    </h2>
+                    <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
+                      *ngIf="!isProjectsEdit">ADD
+                      PROJECT</a>
+                  </div>
+                  <small>
+                    Add details about projects you have done in college, internship or at work.
+                  </small>
+                </div>
+                <div class="col-md-12 ps-2" id="project">
+                  <form action="" class="row" [formGroup]="projectForm">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Project Title <span class="text-danger">*</span></label>
+                      <input class="form-control custom-form-control" placeholder="Enter Project Title"
+                        name="ProjectTitle" readonly formControlName="ProjectTitle" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Tag this project with your Employment/Education</label>
+                      <input class="form-control custom-form-control" placeholder="Select Employment/Education"
+                        name="ProjectTag" readonly formControlName="ProjectTag" />
+                    </div>
+                    <div class="col-md-6 row">
+                      <div class="col-md-9 mb-3 row p-0 m-0">
+                        <label class="form-label">Started Working From <span class="text-danger">*</span></label>
+                        <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Year"
+                          name="WorkingYear" readonly formControlName="ProjectWorkingYear" />
+                        <input class="form-control working-input-box ms-3 custom-form-control" placeholder="Month"
+                          name="WorkingMonth" readonly formControlName="ProjectWorkingMonth" />
+                      </div>
+                      <div class="col-md-3 mb-3 row p-0 m-0">
+                        <label class="form-label">Worked Till <span class="text-danger">*</span></label>
+                        <input class="form-control worked-input-box ms-3 custom-form-control" placeholder="Year"
+                          name="WorkedYear" readonly formControlName="ProjectWorkedYear" />
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3 ms-4">
+                      <label class="form-label">Project Status</label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input custom-form-control" type="radio" name="ProgressStatus"
+                            id="ProgressStatus1" readonly value="option1" checked formControlName="ProjectStatus">
+                          <label class="form-check-label" for="ProgressStatus1">
+                            In progress
+                          </label>
+                        </div>
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input custom-form-control" type="radio" name="ProgressStatus"
+                            id="ProgressStatus2" readonly value="option2" formControlName="ProjectStatus">
+                          <label class="form-check-label" for="ProgressStatus2">
+                            Finished
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Client <span class="text-danger"> *</span> </label>
+                      <input class="form-control custom-form-control" placeholder="Client Name" name="ClientName"
+                        readonly formControlName="ClientName" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Details of Project<span class="text-danger"> *</span></label>
+                      <textarea name="ProjectDetail" placeholder="Type here ....."
+                        class="form-control custom-form-control" readonly formControlName="ProjectDetail" id=""
+                        rows="1"></textarea>
+                      <small>1000 Character(s) Left</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <a href="javascript:void(0)" class="form-label text-decoration-none ">Add More Details</a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Profile Summary<i class="fa text-dark edit-icon ps-2"
+                        [ngClass]="{'fa-pencil':!isProfileSummaryEdit, 'fa-eye': isProfileSummaryEdit}"
+                        (click)="editProfileSummary()"></i></h2>
+                  </div>
+                </div>
+                <div class="col-md-12" id="profileSummary">
+                  <form action="" [formGroup]="profileSummaryForm">
                     <textarea
                       placeholder="Your Profile Summary should mention the highlights of your career and education, what your professional interests are, and what kind of a career you are looking for. Write a meaningful summary of more than 50 characters."
-                      class="form-control" formControlName="ProfileSummary" name="" id="" class="w-100" rows="3"></textarea>
+                      class="form-control custom-form-control w-100 .lg-txtarea" formControlName="ProfileSummary"
+                      readonly></textarea>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Accomplishments</h2>
+                  </div>
+                </div>
+                <div class="col-md-12 row">
+                  <div class="col-md-6 mt-2">
+                    <div class="form-control">
+                      <h6>
+                        <span class="fw-bold">Online Profile</span>
+                        <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                      </h6>
+                      <small>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</small>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <div class="form-control">
+                      <h6>
+                        <span class="fw-bold">Work Sample</span>
+                        <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                      </h6>
+                      <small>Add link to your Projects (e.g. Github links etc.).</small>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <div class="form-control">
+                      <h6>
+                        <span class="fw-bold">White Paper / Research Publication / Journal Entry</span>
+                        <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                      </h6>
+                      <small>Add links to your Online publications.</small>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <div class="form-control">
+                      <h6>
+                        <span class="fw-bold">Presentation</span>
+                        <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                      </h6>
+                      <small>Add links to your Online presentations (e.g. Slideshare presentation links etc.).</small>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <div class="form-control">
+                      <h6>
+                        <span class="fw-bold">Patent</span>
+                        <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                      </h6>
+                      <small>Add details of Patents you have filed.</small>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <div class="form-control">
+                      <h6>
+                        <span class="fw-bold">Certification</span>
+                        <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
+                      </h6>
+                      <small>Add details of Certifications you have achieved/completed.</small>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Accomplishments</h2>
-                    </div>
-                  </div>
-                  <div class="col-md-12 row">
-                    <div class="col-md-6 mt-2">
-                      <div class="form-control">
-                        <h6>
-                          <span class="fw-bold">Online Profile</span>
-                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
-                        </h6>
-                        <small>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</small>
-                      </div>
-                    </div>
-                    <div class="col-md-6 mt-2">
-                      <div class="form-control">
-                        <h6>
-                          <span class="fw-bold">Work Sample</span>
-                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
-                        </h6>
-                        <small>Add link to your Projects (e.g. Github links etc.).</small>
-                      </div>
-                    </div>
-                    <div class="col-md-6 mt-2">
-                      <div class="form-control">
-                        <h6>
-                          <span class="fw-bold">White Paper / Research Publication / Journal Entry</span>
-                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
-                        </h6>
-                        <small>Add links to your Online publications.</small>
-                      </div>
-                    </div>
-                    <div class="col-md-6 mt-2">
-                      <div class="form-control">
-                        <h6>
-                          <span class="fw-bold">Presentation</span>
-                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
-                        </h6>
-                        <small>Add links to your Online presentations (e.g. Slideshare presentation links etc.).</small>
-                      </div>
-                    </div>
-                    <div class="col-md-6 mt-2">
-                      <div class="form-control">
-                        <h6>
-                          <span class="fw-bold">Patent</span>
-                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
-                        </h6>
-                        <small>Add details of Patents you have filed.</small>
-                      </div>
-                    </div>
-                    <div class="col-md-6 mt-2">
-                      <div class="form-control">
-                        <h6>
-                          <span class="fw-bold">Certification</span>
-                          <a href="javascript:void(0)" class="float-end text-decoration-none">ADD</a>
-                        </h6>
-                        <small>Add details of Certifications you have achieved/completed.</small>
-                      </div>
-                    </div>
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Carrer Profile <i class="fa text-dark edit-icon ps-2"
+                        [ngClass]="{'fa-pencil':!isCarrerProfileEdit, 'fa-eye': isCarrerProfileEdit}"
+                        (click)="editCarrerProfile()"></i></h2>
+                    <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
+                      *ngIf="!isCarrerProfileEdit">ADD
+                      PROJECT</a>
                   </div>
                 </div>
-              </div>
-
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Carrer Profile</h2>
-                      <h2 class="float-end">
-                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD PROJECT</a>
-                      </h2>
+                <div class="col-md-12 ps-2" id="carrerProfile">
+                  <form action="" class="row" [formGroup]="carrerProfileForm">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Current Industry<span class="text-danger"> *</span></label>
+                      <input class="form-control custom-form-control" placeholder="CurrentIndustry"
+                        name="CurrentIndustry" readonly formControlName="CurrentIndustry" />
                     </div>
-                  </div>
-                  <div class="col-md-12 ps-2">
-                    <form action="" class="row">
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Current Industry<span class="text-danger"> *</span></label>
-                        <input class="form-control" placeholder="CurrentIndustry" name="CurrentIndustry"
-                          formControlName="CurrentIndustry" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Department<span class="text-danger"> *</span></label>
-                        <input class="form-control" placeholder="Department" name="Department"
-                          formControlName="Department" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Role Category<span class="text-danger"> *</span></label>
-                        <input class="form-control" placeholder="RoleCategory" name="RoleCategory"
-                          formControlName="RoleCategory" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Job Role<span class="text-danger"> *</span></label>
-                        <input class="form-control" placeholder="JobRole" name="JobRole"
-                          formControlName="JobRole" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Desireed Job Type<span class="text-danger"> *</span></label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="checkbox" formControlName="Permanent">
-                            <label class="form-check-label" for="gridCheck">
-                              Permanent
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input" type="checkbox" formControlName="Contractual">
-                            <label class="form-check-label" for="gridCheck">
-                              Contractual
-                            </label>
-                          </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Department<span class="text-danger"> *</span></label>
+                      <input class="form-control custom-form-control" placeholder="Department" name="Department"
+                        readonly formControlName="Department" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Role Category<span class="text-danger"> *</span></label>
+                      <input class="form-control custom-form-control" placeholder="RoleCategory" name="RoleCategory"
+                        readonly formControlName="RoleCategory" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Job Role<span class="text-danger"> *</span></label>
+                      <input class="form-control custom-form-control" placeholder="JobRole" name="JobRole"
+                        formControlName="JobRole" readonly />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Desireed Job Type<span class="text-danger"> *</span></label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input custom-form-control" type="checkbox"
+                            formControlName="DesiredJob" readonly>
+                          <label class="form-check-label" for="gridCheck">
+                            Permanent
+                          </label>
+                        </div>
+                        <div class="form-check col-md-3 ms-3">
+                          <input class="form-check-input custom-form-control" type="checkbox"
+                            formControlName="DesiredJob" readonly>
+                          <label class="form-check-label" for="gridCheck">
+                            Contractual
+                          </label>
                         </div>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Desired Employment Type<span class="text-danger"> *</span></label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="checkbox" formControlName="FullTime">
-                            <label class="form-check-label" for="gridCheck">
-                              Full Time
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input" type="checkbox" formControlName="PartTime">
-                            <label class="form-check-label" for="gridCheck">
-                              Part Time
-                            </label>
-                          </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Desired Employment Type<span class="text-danger"> *</span></label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input custom-form-control" type="checkbox"
+                            formControlName="EmploymentType" readonly>
+                          <label class="form-check-label" for="gridCheck">
+                            Full Time
+                          </label>
+                        </div>
+                        <div class="form-check col-md-3 ms-3">
+                          <input class="form-check-input custom-form-control" type="checkbox"
+                            formControlName="EmploymentType" readonly>
+                          <label class="form-check-label" for="gridCheck">
+                            Part Time
+                          </label>
                         </div>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Preferred Shift</label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="preferredShift" id="preferredShift1"
-                              value="option1" checked>
-                            <label class="form-check-label" for="preferredShift1">
-                              Day
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input" type="radio" name="preferredShift" id="preferredShift2"
-                              value="option2">
-                            <label class="form-check-label" for="preferredShift2">
-                              Night
-                            </label>
-                          </div>
-                          <div class="form-check col-md-4">
-                            <input class="form-check-input" type="radio" name="preferredShift" id="preferredShift3"
-                              value="option2">
-                            <label class="form-check-label" for="preferredShift3">
-                              Flexible
-                            </label>
-                          </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Preferred Shift</label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input custom-form-control" type="radio" name="preferredShift"
+                            formControlName="PreferredShift" id="preferredShift1" readonly value="option1" checked>
+                          <label class="form-check-label" for="preferredShift1">
+                            Day
+                          </label>
+                        </div>
+                        <div class="form-check col-md-3 ms-3">
+                          <input class="form-check-input custom-form-control" type="radio" name="preferredShift"
+                            formControlName="PreferredShift" id="preferredShift2" readonly value="option2">
+                          <label class="form-check-label" for="preferredShift2">
+                            Night
+                          </label>
+                        </div>
+                        <div class="form-check col-md-4">
+                          <input class="form-check-input custom-form-control" type="radio" name="preferredShift"
+                            formControlName="PreferredShift" id="preferredShift3" readonly value="option2">
+                          <label class="form-check-label" for="preferredShift3">
+                            Flexible
+                          </label>
                         </div>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Preferred Work Location (Max 3)<span class="text-danger"> *</span></label>
-                        <input class="form-control" placeholder="CurrentIndustry" name="CurrentIndustry"
-                          formControlName="CurrentIndustry" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Expected Salary <span class="text-danger">*</span></label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="ExpectedcurrencyRadio" id="ExpectedcurrencyRadio1"
-                              value="option1" checked>
-                            <label class="form-check-label" for="ExpectedcurrencyRadio1">
-                              Indian Rupees
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input" type="radio" name="ExpectedcurrencyRadio" id="ExpectedcurrencyRadio2"
-                              value="option2">
-                            <label class="form-check-label" for="ExpectedcurrencyRadio2">
-                              US Dollars
-                            </label>
-                          </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Preferred Work Location (Max 3)<span class="text-danger">
+                          *</span></label>
+                      <input class="form-control custom-form-control" placeholder="Preferred Work Location"
+                        name="PreferredWorkLocation" readonly formControlName="PreferredWorkLocation" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Expected Salary <span class="text-danger">*</span></label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input custom-form-control" type="radio" name="ExpectedcurrencyRadio"
+                            formControlName="ExpectedSalary" readonly id="ExpectedcurrencyRadio1" value="option1"
+                            checked>
+                          <label class="form-check-label" for="ExpectedcurrencyRadio1">
+                            Indian Rupees
+                          </label>
                         </div>
-                        <div class="row">
-                          <input class="form-control w-25 ms-3" placeholder="Lakh" name="ExpectedSalaryLakh"
-                            formControlName="ExpectedSalaryLakh" />
-                          <input class="form-control w-25 ms-3" placeholder="Thousand"
-                            name="ExpectedSalaryThousand" formControlName="ExpectedSalaryThousand" />
+                        <div class="form-check col-md-3 ms-3">
+                          <input class="form-check-input custom-form-control" type="radio" name="ExpectedcurrencyRadio"
+                            formControlName="ExpectedSalary" readonly id="ExpectedcurrencyRadio2" value="option2">
+                          <label class="form-check-label" for="ExpectedcurrencyRadio2">
+                            US Dollars
+                          </label>
                         </div>
                       </div>
-                    </form>
-                  </div>
+                      <div class="row">
+                        <input class="form-control custom-form-control w-25 ms-3" placeholder="Lakh"
+                          name="ExpectedSalaryLakh" readonly formControlName="ExpectedSalaryLakh" />
+                        <input class="form-control custom-form-control w-25 ms-3" placeholder="Thousand" readonly
+                          name="ExpectedSalaryThousand" formControlName="ExpectedSalaryThousand" />
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
+            </div>
 
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Personal Details</h2>
-                    </div>
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Personal Details</h2>
                   </div>
-                  <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
-                    <form action="" class="row">
-                      <div class="col-md-6 pb-3">
-                        <label class="form-label">Date of birth </label>
-                        <form class="form-inline">
-                          <div class="form-group w-100">
-                            <div class="input-group w-100">
-                              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
-                                (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
-                              <div class="input-group-append">
-                                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                                    class="fa fa-calendar" aria-hidden="true"></i>
-                                </button>
-                              </div>
+                </div>
+                <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
+                  <form action="" class="row" [formGroup]="personalDetailsForm">
+                    <div class="col-md-6 pb-3">
+                      <label class="form-label">Date of birth </label>
+                      <form class="form-inline">
+                        <div class="form-group w-100">
+                          <div class="input-group w-100">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                              (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                              <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                                  class="fa fa-calendar" aria-hidden="true"></i>
+                              </button>
                             </div>
                           </div>
-                        </form>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Gender</label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="Gender" id="Gender1"
-                              value="option1" checked>
-                            <label class="form-check-label" for="Gender1">
-                              Male
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input" type="radio" name="Gender" id="Gender2"
-                              value="option2">
-                            <label class="form-check-label" for="Gender2">
-                              Female
-                            </label>
-                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Gender</label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input" type="radio" name="Gender" id="Gender1" value="option1"
+                            formControlName="Gender" checked>
+                          <label class="form-check-label" for="Gender1">
+                            Male
+                          </label>
+                        </div>
+                        <div class="form-check col-md-3 ms-3">
+                          <input class="form-check-input" type="radio" name="Gender" id="Gender2" value="option2"
+                            formControlName="Gender">
+                          <label class="form-check-label" for="Gender2">
+                            Female
+                          </label>
                         </div>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Permanent Address</label>
-                        <input class="form-control" placeholder="Full Address" name="Address" transform=""
-                          formControlName="Address" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Home Town</label>
-                        <input class="form-control" placeholder="Home Town" name="HomeTown" transform=""
-                          formControlName="HomeTown" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Pin Code</label>
-                        <input class="form-control" placeholder="Pin Code" name="Pin Code" transform=""
-                          formControlName="Pin Code" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Marital Status <span class="text-danger">*</span></label>
-                        <select name="" id="" class="form-control" formControlname="MaritalStatus">
-                          <option value="0">Single/Unmarried</option>
-                          <option value="1">Married</option>
-                          <option value="2">Widowed</option>
-                          <option value="3">Divorced</option>
-                          <option value="4">Separated</option>
-                          <option value="4">Other</option>
-                        </select>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Category <span class="text-danger">*</span></label>
-                        <select name="" id="" class="form-control" formControlname="Category">
-                          <option value="0">General</option>
-                          <option value="1">SC</option>
-                          <option value="2">ST</option>
-                          <option value="3">OBC-Creamy</option>
-                          <option value="4">OBC-Non-Creamy</option>
-                        </select>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Are you Differently Abled?</label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="radio" name="DifferentlyAbled" id="DifferentlyAbled1"
-                              value="option1" checked>
-                            <label class="form-check-label" for="DifferentlyAbled1">
-                              Yes
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input" type="radio" name="DifferentlyAbled" id="DifferentlyAbled2"
-                              value="option2">
-                            <label class="form-check-label" for="DifferentlyAbled2">
-                              No
-                            </label>
-                          </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Permanent Address</label>
+                      <input class="form-control" placeholder="Full Address" name="Address" transform=""
+                        formControlName="Address" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Home Town</label>
+                      <input class="form-control" placeholder="Home Town" name="HomeTown" transform=""
+                        formControlName="HomeTown" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Pin Code</label>
+                      <input class="form-control" placeholder="Pin Code" name="Pin Code" transform=""
+                        formControlName="PinCode" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Marital Status <span class="text-danger">*</span></label>
+                      <select name="" id="" class="form-control" formControlname="MaritalStatus">
+                        <option value="0">Single/Unmarried</option>
+                        <option value="1">Married</option>
+                        <option value="2">Widowed</option>
+                        <option value="3">Divorced</option>
+                        <option value="4">Separated</option>
+                        <option value="4">Other</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Category <span class="text-danger">*</span></label>
+                      <select name="" id="" class="form-control" formControlname="Category">
+                        <option value="0">General</option>
+                        <option value="1">SC</option>
+                        <option value="2">ST</option>
+                        <option value="3">OBC-Creamy</option>
+                        <option value="4">OBC-Non-Creamy</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Are you Differently Abled?</label>
+                      <div class="row ps-4">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input" type="radio" name="DifferentlyAbled" id="DifferentlyAbled1"
+                            formControlName="DifferentlyAbled" value="option1" checked>
+                          <label class="form-check-label" for="DifferentlyAbled1">
+                            Yes
+                          </label>
+                        </div>
+                        <div class="form-check col-md-3 ms-3">
+                          <input class="form-check-input" type="radio" name="DifferentlyAbled" id="DifferentlyAbled2"
+                            formControlName="DifferentlyAbled" value="option2">
+                          <label class="form-check-label" for="DifferentlyAbled2">
+                            No
+                          </label>
                         </div>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Work Permit for USA</label>
-                        <select name="" id="" class="form-control" formControlname="PermitUSA">
-                          <option value="0">Have H1 Visa</option>
-                          <option value="1">Need H1 Visa</option>
-                          <option value="2">TN Permit Holder</option>
-                          <option value="3">Green Card Holder</option>
-                          <option value="4">US Citizen</option>
-                          <option value="4">Authorized to work in US</option>
-                        </select>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Work Permit for Other Countries</label>
-                        <input class="form-control" placeholder="You can choose 3 countries at max" name="PermitOtherCountry" transform=""
-                          formControlName="PermitOtherCountry" />
-                      </div>
-                      <div class="mt-3 mb-3">
-                        <h4 class="fw-bold">Language</h4>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Language <span class="text-danger">*</span></label>
-                        <input class="form-control" placeholder="Language" name="Language" transform=""
-                          formControlName="Language" />
-                        <div class="row ps-4 mt-2">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="checkbox" formControlName="LanguageRead">
-                            <label class="form-check-label" for="gridCheck">
-                              Read
-                            </label>
-                          </div>
-                          <div class="form-check col-md-3 ms-3">
-                            <input class="form-check-input" type="checkbox" formControlName="LanguageWrite">
-                            <label class="form-check-label" for="gridCheck">
-                              Write
-                            </label>
-                          </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Work Permit for USA</label>
+                      <select name="" id="" class="form-control" formControlname="PermitUSA">
+                        <option value="0">Have H1 Visa</option>
+                        <option value="1">Need H1 Visa</option>
+                        <option value="2">TN Permit Holder</option>
+                        <option value="3">Green Card Holder</option>
+                        <option value="4">US Citizen</option>
+                        <option value="4">Authorized to work in US</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Work Permit for Other Countries</label>
+                      <input class="form-control" placeholder="You can choose 3 countries at max"
+                        name="PermitOtherCountry" transform="" formControlName="PermitOtherCountry" />
+                    </div>
+                    <div class="mt-3 mb-3">
+                      <h4 class="fw-bold">Language</h4>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Language <span class="text-danger">*</span></label>
+                      <input class="form-control" placeholder="Language" name="Language" transform=""
+                        formControlName="Language" />
+                      <div class="row ps-4 mt-2">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input" type="checkbox" formControlName="LanguageReadWrite">
+                          <label class="form-check-label" for="gridCheck">
+                            Read
+                          </label>
+                        </div>
+                        <div class="form-check col-md-3 ms-3">
+                          <input class="form-check-input" type="checkbox" formControlName="LanguageReadWrite">
+                          <label class="form-check-label" for="gridCheck">
+                            Write
+                          </label>
                         </div>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Proficiency</label>
-                        <select name="" id="" class="form-control" formControlname="ProficiencyLanguage">
-                          <option value="0">Beginner</option>
-                          <option value="1">Proficient</option>
-                          <option value="2">TExpert</option>
-                        </select>
-                        <div class="row ps-4 mt-2">
-                          <div class="form-check col-md-3">
-                            <input class="form-check-input" type="checkbox" formControlName="LanguageSpeak">
-                            <label class="form-check-label" for="gridCheck">
-                              Spaek
-                            </label>
-                          </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Proficiency</label>
+                      <select name="" id="" class="form-control" formControlname="ProficiencyLanguage">
+                        <option value="0">Beginner</option>
+                        <option value="1">Proficient</option>
+                        <option value="2">TExpert</option>
+                      </select>
+                      <div class="row ps-4 mt-2">
+                        <div class="form-check col-md-3">
+                          <input class="form-check-input" type="checkbox" formControlName="LanguageSpeak">
+                          <label class="form-check-label" for="gridCheck">
+                            Spaek
+                          </label>
                         </div>
                       </div>
-                      <div>
-                        <a href="javascript:void(0)" class="text-decoration-none">Add Another Language</a>
-                      </div>
-                    </form>
-                  </div>
+                    </div>
+                    <div>
+                      <a href="javascript:void(0)" class="text-decoration-none">Add Another Language</a>
+                    </div>
+                  </form>
                 </div>
               </div>
+            </div>
 
-              <div class="col-12 row m-0 pt-5">
-                <div class="col-md-12 button groups text-end">
-                  <div class="btn-group">
-                    <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
-                  </div>
-                  <div class="btn-group ms-2">
-                    <button class="btn btn-success" [disabled]="isLoading" (click)="UpdateUser()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
-                      {{ isLoading ? 'Wait' : 'Update' }}
-                    </button>
-                  </div>
+            <div class="col-12 row m-0 pt-5">
+              <div class="col-md-12 button groups text-end">
+                <div class="btn-group">
+                  <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+                </div>
+                <div class="btn-group ms-2">
+                  <button class="btn btn-success" [disabled]="isLoading" (click)="UpdateUser()">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                    {{ isLoading ? 'Wait' : 'Update' }}
+                  </button>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
