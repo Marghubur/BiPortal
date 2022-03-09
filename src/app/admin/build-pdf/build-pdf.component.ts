@@ -577,7 +577,7 @@ export class BuildPdfComponent implements OnInit {
 
     if (request.billForMonth) {
       let value = new Date(`${request.billForMonth} 04, 2016 9:28 AM`).getMonth();
-      if (value <= 0) {
+      if (value < 0) {
         message = "Invalid month selected";
         return message;
       }
