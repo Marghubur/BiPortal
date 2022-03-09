@@ -43,6 +43,17 @@ export class ManageComponent implements OnInit {
   UserId: number = null;
   uploading: boolean = true;
   isLargeFile: Boolean= false;
+  section: any = {};
+
+  employmentForm: FormGroup = null;
+  userDeatilForm: FormGroup = null;
+  keySkillForm: FormGroup = null;
+  educationForm: FormGroup = null;
+  itSkillForm: FormGroup = null;
+  projectForm: FormGroup = null;
+  profileSummaryForm: FormGroup = null;
+  carrerProfileForm: FormGroup = null;
+  personalDetailsForm: FormGroup = null;
 
   @Output() authentication = new EventEmitter();
 
@@ -57,6 +68,20 @@ export class ManageComponent implements OnInit {
     private local: ApplicationStorage,
     private user: UserService
   ) { }
+
+  setSections() {
+    this.section = {
+      isResumeHeadlineEdit: false,
+      isKeySkillEdit: false,
+      isEmploymentEdit: false,
+      isEducationEdit: false,
+      isItSkillEdit: false,
+      isProjectsEdit: false,
+      isProfileSummaryEdit: false,
+      isCarrerProfileEdit: false,
+      isPersonalDetailEdit: false
+    }
+  }
 
   ngOnInit(): void {
     this.model = this.calendar.getToday();
@@ -133,37 +158,117 @@ export class ManageComponent implements OnInit {
   }
 
   initForm() {
-    this.manageUserForm = this.fb.group({
-      FirstName: new FormControl("", [Validators.required]),
-      LastName: new FormControl("", [Validators.required]),
-      Mobile: new FormControl("0000000000"),
-      Email: new FormControl("xxxxx@xxx.com"),
-      // SecondaryMobile: new FormControl(""),
-      // FatherName: new FormControl(""),
-      // MotherName: new FormControl(""),
-      // SpouseName: new FormControl(""),
-      State: new FormControl(""),
-      City: new FormControl(""),
-      // Pincode: new FormControl(PlaceEmpty("")),
-      Address: new FormControl(""),
-      Dob: new FormControl(new Date()),
-      // PANNo: new FormControl(""),
-      // AadharNo: new FormControl(""),
-      // AccountNumber: new FormControl(""),
-      // BankName: new FormControl(""),
-      // IFSCCode: new FormControl(""),
-      // Domain: new FormControl(""),
-      // Specification: new FormControl(""),
-      // ExprienceInYear: new FormControl(PlaceEmpty("")),
-      // LastCompanyName: new FormControl(""),
-      // IsPermanent: new FormControl(false),
-      // AllocatedClientId: new FormControl(""),
-      // ActualPackage: new FormControl(""),
-      // FinalPackage: new FormControl(""),
-      // TakeHomeByCandidate: new FormControl(""),
-      // EmployeeUid: new FormControl(""),
-      // BranchName: new FormControl(""),
-      // AllocatedClientName: new FormControl("")
+    this.buildUserDetailForm()
+    this.buildEducationForm(new EducationDetail());
+    this.buildEmploymentForm();
+    this.buildItSkillForm();
+    this.buildPersonalDetailForm();
+  }
+
+  buildUserDetailForm() {
+    this.userDeatilForm = this.fb.group({
+      FirstName: new FormControl(UserPersonalDetail, Validators.required),
+      LastName: new FormControl(UserPersonalDetail, Validators.required),
+      Mobile: new FormControl(UserPersonalDetail, Validators.required),
+      Email: new FormControl(UserPersonalDetail, Validators.required)
+    })
+  }
+
+  buildKeySkillForm() {
+    this.keySkillForm = this.fb.group({
+      KeySkill: new FormControl('', Validators.required)
+    })
+  }
+
+  buildEmploymentForm() {
+    this.employmentForm = this.fb.group({
+      Designation: new FormControl('', Validators.required),
+      YourOrganization: new FormControl('', Validators.required),
+      CurrentCompany: new FormControl(''),
+      WorkingYear: new FormControl('', Validators.required),
+      WorkingMonth: new FormControl('', Validators.required),
+      WorkedYear: new FormControl('', Validators.required),
+      CurrentSalary: new FormControl('', Validators.required),
+      CurrentSalaryLakh: new FormControl('', Validators.required),
+      Experties: new FormControl('', Validators.required),
+      JobProfile: new FormControl('', Validators.required),
+      NoticePeriod: new FormControl('', Validators.required)
+    });
+  }
+
+  buildItSkillForm() {
+    this.itSkillForm = this.fb.group({
+      ITSkill: new FormControl('', Validators.required),
+      Version: new FormControl(''),
+      LastUsed: new FormControl(''),
+      ExperienceYear: new FormControl(''),
+      ExperienceMonth: new FormControl('')
+    });
+  }
+
+  buildEducationForm(educationDetail: EducationDetail) {
+    this.educationForm = this.fb.group({
+      Education: new FormControl('', Validators.required),
+      Course: new FormControl('', Validators.required),
+      Specialization: new FormControl('', Validators.required),
+      University: new FormControl('', Validators.required),
+      CourseType: new FormControl('', Validators.required),
+      PassingYear: new FormControl('', Validators.required),
+      GradingSystem: new FormControl('', Validators.required)
+    });
+  }
+
+  buildProjectForm() {
+    this.projectForm = this.fb.group({
+      ProjectTitle: new FormControl('', Validators.required),
+      ProjectTag: new FormControl(''),
+      ProjectWorkingYear: new FormControl(''),
+      ProjectWorkingMonth: new FormControl(''),
+      ProjectWorkedYear: new FormControl(''),
+      ProjectStatus: new FormControl(''),
+      ClientName: new FormControl('', Validators.required),
+      ProjectDetail: new FormControl('', Validators.required)
+    })
+  }
+
+  buildCarrerProfile() {
+    this.carrerProfileForm = this.fb.group({
+      CurrentIndustry: new FormControl('', Validators.required),
+      Department: new FormControl('', Validators.required),
+      RoleCategory: new FormControl('', Validators.required),
+      JobRole: new FormControl('', Validators.required),
+      DesiredJob: new FormControl('', Validators.required),
+      EmploymentType: new FormControl('', Validators.required),
+      PreferredShift: new FormControl(''),
+      PreferredWorkLocation: new FormControl(''),
+      ExpectedSalary: new FormControl('', Validators.required),
+      ExpectedSalaryLakh: new FormControl(''),
+      ExpectedSalaryThousand: new FormControl('')
+    })
+  }
+
+  buildProfileSummaryForm() {
+    this.profileSummaryForm = this.fb.group({
+      ProfileSummary: new FormControl('')
+    })
+  }
+
+  buildPersonalDetailForm() {
+    this.personalDetailsForm = this.fb.group({
+      DOB: new FormControl('', Validators.required),
+      Gender: new FormControl('', Validators.required),
+      Address: new FormControl(''),
+      HomeTown: new FormControl(''),
+      PinCode: new FormControl(''),
+      MaritalStatus: new FormControl('', Validators.required),
+      Category: new FormControl('', Validators.required),
+      DifferentlyAbled: new FormControl(''),
+      PermitUSA: new FormControl(''),
+      PermitOtherCountry: new FormControl(''),
+      Language: new FormControl('', Validators.required),
+      LanguageReadWrite: new FormControl ('', Validators.required),
+      ProficiencyLanguage: new FormControl(''),
+      LanguageSpeak: new FormControl('')
     });
   }
 
@@ -214,44 +319,6 @@ export class ManageComponent implements OnInit {
       Toast("Please correct all the mandaroty field marded red");
     }
   }
-
-  // addDetail() {
-  //   if (this.manageUserForm.get("AllocatedClientId").value > 0) {
-  //     let updateClientRequest = {
-  //       "AllocatedClientId": Number(this.manageUserForm.get("AllocatedClientId").value),
-  //       "ActualPackage": Number(this.manageUserForm.get("ActualPackage").value),
-  //       "FinalPackage": Number(this.manageUserForm.get("FinalPackage").value),
-  //       "TakeHomeByCandidate": Number(this.manageUserForm.get("TakeHomeByCandidate").value),
-  //       "EmployeeUid": this.employeeUid
-  //     }
-
-  //     this.isInsertingNewClient = true;
-  //     if (this.assignedActiveClientUid > 0)
-  //       this.isInsertingNewClient = false;
-  //     this.http.post(`employee/UpdateEmployeeDetail/${!this.isInsertingNewClient}`, updateClientRequest).then((response: ResponseModel) => {
-  //       if (response.ResponseBody && response.ResponseBody != {}) {
-  //         if (this.isInsertingNewClient) {
-  //           this.allocatedClients.push(response.ResponseBody.Table[0]);
-  //           this.allocatedClients.map(elem => elem.IsActive = 0);
-  //           Toast("Added Successfully");
-  //         } else {
-  //           let currentClient = this.allocatedClients.find(x => x.ClientUid == this.currentClientId);
-  //           currentClient.ActualPackage = updateClientRequest.ActualPackage;
-  //           currentClient.FinalPackage = updateClientRequest.FinalPackage;
-  //           currentClient.TakeHomeByCandidate = updateClientRequest.TakeHomeByCandidate;
-  //           Toast("Updated Successfully");
-  //         }
-  //         this.isAllocated = true;
-  //       } else {
-  //         this.common.ShowToast("Fail to add");
-  //       }
-  //     });
-  //   } else {
-  //     this.common.ShowToast("Please select client first");
-  //   }
-
-
-  // }
 
   fireBrowserFile() {
     this.submitted = true;
@@ -306,26 +373,35 @@ export class ManageComponent implements OnInit {
   }
 
   editEmployment() {
-    var input = document.getElementsByTagName('input');
-    var txtarea = document.getElementsByTagName("textarea");
-    var select = document.getElementsByTagName("select");
-    let i =0;
-    while(i < input.length) {
-      input[i].classList.remove('custom-form-control');
-      input[i].removeAttribute("readonly");
-      i++;
-    }
-    while(i < txtarea.length) {
-      txtarea[i].classList.remove('custom-form-control');
-      txtarea[i].removeAttribute("readonly");
-      i++;
-    }
-    while(i < select.length) {
-      select[i].classList.remove('custom-form-control');
-      select[i].removeAttribute("disabled");
-      i++;
-    }
-    this.isEdited = true;
+    this.section.isEmploymentEdit = !this.section.isEmploymentEdit;
+  }
+
+  editResumeHeadline() {
+    this.section.isResumeHeadlineEdit = !this.section.isResumeHeadlineEdit;
+  }
+
+  editKeySkill() {
+    this.section.isKeySkillEdit = !this.section.isKeySkillEdit;
+  }
+
+  editEducation() {
+    this.section.isEducationEdit = !this.section.isEducationEdit;
+  }
+
+  editItSkill() {
+    this.section.isItSkillEdit = !this.section.isItSkillEdit;
+  }
+
+  editProject() {
+    this.section.isProjectsEdit = !this.section.isProjectsEdit;
+  }
+
+  editProfileSummary() {
+    this.section.isProfileSummaryEdit = !this.section.isProfileSummaryEdit;
+  }
+
+  editCarrerProfile() {
+    this.section.isCarrerProfileEdit = !this.section.isCarrerProfileEdit;
   }
 
   cleanFileHandler() {
@@ -342,34 +418,27 @@ export class ManageComponent implements OnInit {
   }
 }
 
-// export class EmployeeDetail {
-//   EmployeeUid: number = 0;
-//   FirstName: string = null;
-//   LastName: string = null;
-//   Mobile: string = null;
-//   Email: string = null;
-//   BranchName: string = null;
-//   SecondaryMobile: string = null;
-//   FatherName: string = null;
-//   MotherName: string = null;
-//   SpouseName: string = null;
-//   State: string = null;
-//   City: string = null;
-//   Pincode: number = null;
-//   Address: string = null;
-//   PANNo: string = null;
-//   AadharNo: string = null;
-//   AccountNumber: string = null;
-//   BankName: string = null;
-//   IFSCCode: string = null;
-//   Domain: string = null;
-//   Specification: string = null;
-//   ExprienceInYear: number = null;
-//   LastCompanyName: string = null;
-//   IsPermanent: boolean = false;
-//   AllocatedClientId: number = null;
-//   AllocatedClientName: string = null;
-//   ActualPackage: number = null;
-//   FinalPackage: number = null;
-//   TakeHomeByCandidate: number = null;
-// }
+class UserPersonalDetail {
+  FirstName: string = '';
+  LastName: string = '';
+  Mobile: number = 0;
+  Email: string = '';
+}
+
+class KeySkillDetail {
+  KeySkill: string = '';
+}
+
+class EmploymentDetail {
+  Designation: string = '';
+  YourOrganization: string = '';
+  CurrentCompany: string = '';
+  WorkingYear: number = 0;
+  WorkingMonth: number = 0;
+  WorkedYear: number = 0;
+  CurrentSalary: string= ''
+  CurrentSalaryLakh: number = 0;
+}
+class EducationDetail {
+
+}
