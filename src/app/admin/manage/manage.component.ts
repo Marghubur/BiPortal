@@ -43,7 +43,17 @@ export class ManageComponent implements OnInit {
   UserId: number = null;
   uploading: boolean = true;
   isLargeFile: Boolean= false;
-  section: any = {};
+  section: any = {
+    isResumeHeadlineEdit: false,
+    isKeySkillEdit: false,
+    isEmploymentEdit: false,
+    isEducationEdit: false,
+    isItSkillEdit: false,
+    isProjectsEdit: false,
+    isProfileSummaryEdit: false,
+    isCarrerProfileEdit: false,
+    isPersonalDetailEdit: false
+  };
 
   employmentForm: FormGroup = null;
   userDeatilForm: FormGroup = null;
@@ -84,6 +94,7 @@ export class ManageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setSections();
     this.model = this.calendar.getToday();
     this.userModal = new UserDetail();
     this.initForm();
@@ -141,6 +152,10 @@ export class ManageComponent implements OnInit {
     this.buildEducationForm(new EducationDetail());
     this.buildEmploymentForm();
     this.buildItSkillForm();
+    this.buildKeySkillForm();
+    this.buildProjectForm();
+    this.buildCarrerProfile();
+    this.buildProfileSummaryForm();
     this.buildPersonalDetailForm();
   }
 
@@ -171,7 +186,8 @@ export class ManageComponent implements OnInit {
       CurrentSalaryLakh: new FormControl('', Validators.required),
       Experties: new FormControl('', Validators.required),
       JobProfile: new FormControl('', Validators.required),
-      NoticePeriod: new FormControl('', Validators.required)
+      NoticePeriod: new FormControl('', Validators.required),
+      CurrentSalaryThousand: new FormControl(null)
     });
   }
 

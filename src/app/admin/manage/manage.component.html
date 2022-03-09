@@ -16,7 +16,7 @@
             </div>
           </div> -->
           <div class="x_content mt-1" *ngIf="idReady">
-            <div class="col-12 x_panel row  m-0 p-0 pt-2">
+            <div class="col-12 x_panel row pt-5">
               <div class="col-md-3">
                 <div class="x_header_title position-relative">
                   <div class="img-container">
@@ -32,7 +32,7 @@
                 </div>
               </div>
               <div class="col-md-9">
-                <form [formGroup]="userDeatilForm">
+                <form [formGroup]="manageUserForm">
                   <div class="col-md-12 m-0 row">
                     <div class="col-md-6 mb-3">
                       <label class="form-label">First Name *</label>
@@ -257,17 +257,17 @@
                   <label class="form-label">Is this your current company?</label>
                   <div class="row ps-4">
                     <div class="form-check col-md-3">
-                      <input class="form-check-input" type="radio" name="gridRadios"
+                      <input class="form-check-input" type="radio" name="CurrentCompany"
                         [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                        formControlName="CurrentCompany" id="gridRadios1" value="option1" checked>
+                        formControlName="CurrentCompany" value="yes" checked>
                       <label class="form-check-label" for="gridRadios1">
                         Yes
                       </label>
                     </div>
                     <div class="form-check col-md-3 ms-3">
-                      <input class="form-check-input" type="radio" name="gridRadios"
+                      <input class="form-check-input" type="radio" name="CurrentCompany"
                         [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                        formControlName="CurrentCompany" id="gridRadios2" value="option2">
+                        formControlName="CurrentCompany" value="no">
                       <label class="form-check-label" for="gridRadios2">
                         No
                       </label>
@@ -295,17 +295,17 @@
                   <label class="form-label">Current Salary <span class="text-danger">*</span></label>
                   <div class="row ps-4">
                     <div class="form-check col-md-3">
-                      <input class="form-check-input" type="radio" name="currencyRadio"
+                      <input class="form-check-input" type="radio" name="CurrentSalary"
                         [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                        id="currencyRadio1" value="option1" checked formControlName="CurrentSalary">
+                        value="option1" checked formControlName="CurrentSalary">
                       <label class="form-check-label" for="currencyRadio1">
                         Indian Rupees
                       </label>
                     </div>
                     <div class="form-check col-md-3 ms-3">
-                      <input class="form-check-input" type="radio" name="currencyRadio"
+                      <input class="form-check-input" type="radio" name="CurrentSalary"
                         [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                        id="currencyRadio2" value="option2" formControlName="CurrentSalary">
+                        value="option2" formControlName="CurrentSalary">
                       <label class="form-check-label" for="currencyRadio2">
                         US Dollars
                       </label>
@@ -390,23 +390,23 @@
                   <label class="form-label">Course Type</label>
                   <div class="row ps-4">
                     <div class="form-check col-md-3">
-                      <input class="form-check-input custom-form-control" type="radio" name="courseTypeRadio"
-                        formControlName="CourseType" id="courseTypeRadio1" readonly value="option1" checked>
-                      <label class="form-check-label" for="courseTypeRadio1">
+                      <input class="form-check-input custom-form-control" type="radio" name="CourseType"
+                        formControlName="CourseType" readonly value="fulltime" checked>
+                      <label class="form-check-label" for="CourseType">
                         Full Time
                       </label>
                     </div>
                     <div class="form-check col-md-3">
-                      <input class="form-check-input custom-form-control" type="radio" name="courseTypeRadio"
-                        formControlName="CourseType" id="courseTypeRadio2" readonly value="option2">
-                      <label class="form-check-label" for="courseTypeRadio2">
+                      <input class="form-check-input custom-form-control" type="radio" name="CourseType"
+                        formControlName="CourseType" readonly value="parttime">
+                      <label class="form-check-label" for="CourseType">
                         Part Time
                       </label>
                     </div>
                     <div class="form-check col-md-6">
-                      <input class="form-check-input custom-form-control" type="radio" name="courseTypeRadio"
-                        formControlName="CourseType" id="courseTypeRadio3" readonly value="option2">
-                      <label class="form-check-label" for="courseTypeRadio3">
+                      <input class="form-check-input custom-form-control" type="radio" name="CourseType"
+                        formControlName="CourseType" readonly value="distance">
+                      <label class="form-check-label" for="CourseType">
                         Correspondence/Distance Learning
                       </label>
                     </div>
@@ -525,16 +525,16 @@
                   <label class="form-label">Project Status</label>
                   <div class="row ps-4">
                     <div class="form-check col-md-3">
-                      <input class="form-check-input custom-form-control" type="radio" name="ProgressStatus"
-                        id="ProgressStatus1" readonly value="option1" checked formControlName="ProjectStatus">
-                      <label class="form-check-label" for="ProgressStatus1">
+                      <input class="form-check-input custom-form-control" type="radio" name="ProjectStatus" readonly
+                        value="inprogress" checked formControlName="ProjectStatus">
+                      <label class="form-check-label" for="ProjectStatus">
                         In progress
                       </label>
                     </div>
                     <div class="form-check col-md-3">
-                      <input class="form-check-input custom-form-control" type="radio" name="ProgressStatus"
-                        id="ProgressStatus2" readonly value="option2" formControlName="ProjectStatus">
-                      <label class="form-check-label" for="ProgressStatus2">
+                      <input class="form-check-input custom-form-control" type="radio" name="ProjectStatus" readonly
+                        value="finished" formControlName="ProjectStatus">
+                      <label class="form-check-label" for="ProjectStatus">
                         Finished
                       </label>
                     </div>
@@ -721,22 +721,22 @@
                   <label class="form-label">Preferred Shift</label>
                   <div class="row ps-4">
                     <div class="form-check col-md-3">
-                      <input class="form-check-input custom-form-control" type="radio" name="preferredShift"
-                        formControlName="PreferredShift" id="preferredShift1" readonly value="option1" checked>
+                      <input class="form-check-input custom-form-control" type="radio" name="PreferredShift"
+                        formControlName="PreferredShift" readonly value="day" checked>
                       <label class="form-check-label" for="preferredShift1">
                         Day
                       </label>
                     </div>
                     <div class="form-check col-md-3 ms-3">
-                      <input class="form-check-input custom-form-control" type="radio" name="preferredShift"
-                        formControlName="PreferredShift" id="preferredShift2" readonly value="option2">
+                      <input class="form-check-input custom-form-control" type="radio" name="PreferredShift"
+                        formControlName="PreferredShift" readonly value="night">
                       <label class="form-check-label" for="preferredShift2">
                         Night
                       </label>
                     </div>
                     <div class="form-check col-md-4">
-                      <input class="form-check-input custom-form-control" type="radio" name="preferredShift"
-                        formControlName="PreferredShift" id="preferredShift3" readonly value="option2">
+                      <input class="form-check-input custom-form-control" type="radio" name="PreferredShift"
+                        formControlName="PreferredShift" readonly value="flexible">
                       <label class="form-check-label" for="preferredShift3">
                         Flexible
                       </label>
@@ -753,16 +753,16 @@
                   <label class="form-label">Expected Salary <span class="text-danger">*</span></label>
                   <div class="row ps-4">
                     <div class="form-check col-md-3">
-                      <input class="form-check-input custom-form-control" type="radio" name="ExpectedcurrencyRadio"
-                        formControlName="ExpectedSalary" readonly id="ExpectedcurrencyRadio1" value="option1" checked>
-                      <label class="form-check-label" for="ExpectedcurrencyRadio1">
+                      <input class="form-check-input custom-form-control" type="radio" name="ExpectedSalary"
+                        formControlName="ExpectedSalary" readonly value="option1" checked>
+                      <label class="form-check-label" for="ExpectedSalary">
                         Indian Rupees
                       </label>
                     </div>
                     <div class="form-check col-md-3 ms-3">
-                      <input class="form-check-input custom-form-control" type="radio" name="ExpectedcurrencyRadio"
-                        formControlName="ExpectedSalary" readonly id="ExpectedcurrencyRadio2" value="option2">
-                      <label class="form-check-label" for="ExpectedcurrencyRadio2">
+                      <input class="form-check-input custom-form-control" type="radio" name="ExpectedSalary"
+                        formControlName="ExpectedSalary" readonly value="option2">
+                      <label class="form-check-label" for="ExpectedSalary">
                         US Dollars
                       </label>
                     </div>
@@ -808,14 +808,14 @@
                   <label class="form-label">Gender</label>
                   <div class="row ps-4">
                     <div class="form-check col-md-3">
-                      <input class="form-check-input" type="radio" name="Gender" id="Gender1" value="option1"
-                        formControlName="Gender" checked>
+                      <input class="form-check-input" type="radio" name="Gender" value="male" formControlName="Gender"
+                        checked>
                       <label class="form-check-label" for="Gender1">
                         Male
                       </label>
                     </div>
                     <div class="form-check col-md-3 ms-3">
-                      <input class="form-check-input" type="radio" name="Gender" id="Gender2" value="option2"
+                      <input class="form-check-input" type="radio" name="Gender" value="female"
                         formControlName="Gender">
                       <label class="form-check-label" for="Gender2">
                         Female
@@ -863,15 +863,15 @@
                   <label class="form-label">Are you Differently Abled?</label>
                   <div class="row ps-4">
                     <div class="form-check col-md-3">
-                      <input class="form-check-input" type="radio" name="DifferentlyAbled" id="DifferentlyAbled1"
-                        formControlName="DifferentlyAbled" value="option1" checked>
+                      <input class="form-check-input" type="radio" name="DifferentlyAbled"
+                        formControlName="DifferentlyAbled" value="yes" checked>
                       <label class="form-check-label" for="DifferentlyAbled1">
                         Yes
                       </label>
                     </div>
                     <div class="form-check col-md-3 ms-3">
-                      <input class="form-check-input" type="radio" name="DifferentlyAbled" id="DifferentlyAbled2"
-                        formControlName="DifferentlyAbled" value="option2">
+                      <input class="form-check-input" type="radio" name="DifferentlyAbled"
+                        formControlName="DifferentlyAbled" value="no">
                       <label class="form-check-label" for="DifferentlyAbled2">
                         No
                       </label>

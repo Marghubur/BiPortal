@@ -405,6 +405,17 @@ export class CommonService {
   }
 }
 
+export function ToFixed(amount: number, precision: number): number {
+  let value = 0.0;
+  let strValue = amount.toString();
+  if(strValue.indexOf(".") === -1) {
+    value = parseFloat(`${strValue}`);
+  } else {
+    value = parseFloat(strValue.slice(0, (strValue.indexOf("."))+3))
+  }
+  return value;
+}
+
 export function Toast(message: string, timeSpan: number = 5) {
   let $Toast = document.getElementById("toast");
   if ($Toast) {
