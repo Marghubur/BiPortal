@@ -3,7 +3,7 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, Toast } from 'src/providers/common-service/common.service';
 import { Doc, FlatFile, Pdf, Resume, Txt, UserType, Zip } from 'src/providers/constants';
-import { IsValidResponse, ResponseModel } from 'src/auth/jwtService';
+import { ResponseModel } from 'src/auth/jwtService';
 import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -814,7 +814,7 @@ export class ResumeComponent implements OnInit {
 
       formData.append("fileDetail", JSON.stringify(files));
       this.http.upload("OnlineDocument/UploadFile", formData).then(res => {
-        if(IsValidResponse(res)){
+        if(res.ResponseBody){
           Toast("Uplaoded successfully");
         } else {
           Toast("Fail to uplaoded");

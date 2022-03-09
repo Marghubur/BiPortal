@@ -1,10 +1,10 @@
-<div class="col-md-12 toast-container" (click)="closeToast()">
-    <div class="bullet-point">
-        <div class="inner-circle"></div>
-    </div>
-    <div class="msg-box">
-        <span id="toastmessage">
-            Page level error messages.
-        </span>
-    </div>
+<div class="col-md-12 toast-container" [ngClass]="className" (click)="closeToast()">
+  <div class="bullet-point">
+    <div class="inner-circle"></div>
+  </div>
+  <div class="msg-box">
+    <span id="toastmessage">
+      {{errorMessage}}
+    </span>
+  </div>
 </div>

@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { PlaceEmpty, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 
@@ -43,7 +43,17 @@ export class ManageComponent implements OnInit {
   UserId: number = null;
   uploading: boolean = true;
   isLargeFile: Boolean= false;
-  section: any = {};
+  section: any = {
+    isResumeHeadlineEdit: false,
+    isKeySkillEdit: false,
+    isEmploymentEdit: false,
+    isEducationEdit: false,
+    isItSkillEdit: false,
+    isProjectsEdit: false,
+    isProfileSummaryEdit: false,
+    isCarrerProfileEdit: false,
+    isPersonalDetailEdit: false
+  };
 
   employmentForm: FormGroup = null;
   userDeatilForm: FormGroup = null;
@@ -84,6 +94,7 @@ export class ManageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setSections();
     this.model = this.calendar.getToday();
     this.userModal = new UserDetail();
     this.initForm();
@@ -128,32 +139,11 @@ export class ManageComponent implements OnInit {
       LastName: new FormControl(this.userModal.LastName),
       Mobile: new FormControl(this.userModal.Mobile),
       Email: new FormControl(this.userModal.EmailId),
-      // SecondaryMobile: new FormControl(this.userModal.SecondaryMobile),
-      // FatherName: new FormControl(this.userModal.FatherName),
-      // MotherName: new FormControl(this.userModal.MotherName),
-      // SpouseName: new FormControl(this.userModal.SpouseName),
       State: new FormControl(this.userModal.State),
       City: new FormControl(this.userModal.City),
-      // Pincode: new FormControl(PlaceEmpty(this.userModal.Pincode)),
       Address: new FormControl(this.userModal.Address),
       Dob: new FormControl(this.userModal.Dob),
-      // PANNo: new FormControl(this.userModal.PANNo),
-      // AadharNo: new FormControl(this.userModal.AadharNo),
-      // AccountNumber: new FormControl(this.userModal.AccountNumber),
-      // BankName: new FormControl(this.userModal.BankName),
-      // IFSCCode: new FormControl(this.userModal.IFSCCode),
-      // Domain: new FormControl(this.userModal.Domain),
-      // Specification: new FormControl(this.userModal.Specification),
-      // ExprienceInYear: new FormControl(PlaceEmpty(this.userModal.ExprienceInYear)),
-      // LastCompanyName: new FormControl(this.userModal.LastCompanyName),
-      // IsPermanent: new FormControl(this.userModal.IsPermanent),
-      // AllocatedClientId: new FormControl(this.userModal.AllocatedClientId),
-      // ActualPackage: new FormControl(this.userModal.ActualPackage, [Validators.required]),
-      // FinalPackage: new FormControl(this.userModal.FinalPackage, [Validators.required]),
-      // TakeHomeByCandidate: new FormControl(this.userModal.TakeHomeByCandidate, [Validators.required]),
       UserId: new FormControl(this.userModal.UserId),
-      // BranchName: new FormControl(this.userModal.BranchName),
-      // AllocatedClientName: new FormControl(this.userModal.AllocatedClientName)
     });
   }
 
@@ -162,6 +152,10 @@ export class ManageComponent implements OnInit {
     this.buildEducationForm(new EducationDetail());
     this.buildEmploymentForm();
     this.buildItSkillForm();
+    this.buildKeySkillForm();
+    this.buildProjectForm();
+    this.buildCarrerProfile();
+    this.buildProfileSummaryForm();
     this.buildPersonalDetailForm();
   }
 
@@ -192,7 +186,8 @@ export class ManageComponent implements OnInit {
       CurrentSalaryLakh: new FormControl('', Validators.required),
       Experties: new FormControl('', Validators.required),
       JobProfile: new FormControl('', Validators.required),
-      NoticePeriod: new FormControl('', Validators.required)
+      NoticePeriod: new FormControl('', Validators.required),
+      CurrentSalaryThousand: new FormControl(null)
     });
   }
 
@@ -332,14 +327,13 @@ export class ManageComponent implements OnInit {
 
   GetDocumentFile(fileInput: any) {
     // this.FileDocuments = [];
-    // this.FilesCollection = [];
-    // let selectedFiles = fileInput.target.files;
+    // this.fileDetail = fileInput.target.files[0];
     // if (selectedFiles.length > 0) {
     //   let index = 0;
     //   let file = null;
     //   this.btnDisable = false;
     //   this.fileAvailable = true;
-    //   this.uploading = false;
+       this.uploading = false;
     //   while (index < selectedFiles.length) {
     //     file = <File>selectedFiles[index];
     //     let item: Files = new Files();

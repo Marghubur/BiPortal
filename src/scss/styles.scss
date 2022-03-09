@@ -58,8 +58,8 @@ pre {
   --orange: #e6791e;
   --light: #eee;
   --bg-color: #f9eeee;
-  --scrollbarBG: #CFD8DC;
-  --thumbBG: #90A4AE;
+  --scrollbarBG: #cfd8dc;
+  --thumbBG: #90a4ae;
 }
 
 .container-box {
@@ -191,20 +191,33 @@ input::-ms-input-placeholder {
   color: rgba(0, 0, 0, 0.87);
 }
 
+.success-toast {
+  background: green;
+  color: #fff;
+}
+
+.warning-toast {
+  background: yellowgreen;
+  color: #444;
+}
+
+.error-toast {
+  background: red;
+  color: #fff;
+}
+
 .custom-toast {
   position: fixed;
   border-radius: 4px;
-  color: #fff;
   font-weight: bold;
   z-index: 999999;
   font-size: 0.8rem;
   top: 2rem;
   right: 2rem;
-  background: green;
   max-width: 20rem;
 
   .toast-container {
-    position: relative!important;
+    position: relative !important;
     display: flex;
     flex-direction: row-reverse;
     padding-right: 8px;

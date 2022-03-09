@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
-import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CommonService, Toast } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, Toast, ToFixed } from 'src/providers/common-service/common.service';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
+import { DateFormatter } from 'src/providers/DateFormatter';
 
 @Component({
   selector: 'app-build-pdf',
   templateUrl: './build-pdf.component.html',
-  styleUrls: ['./build-pdf.component.scss']
+  styleUrls: ['./build-pdf.component.scss'],
+  providers: [{ provide: NgbDateParserFormatter, useClass: DateFormatter }]
 })
 export class BuildPdfComponent implements OnInit {
   model: NgbDateStruct;
@@ -286,7 +288,7 @@ export class BuildPdfComponent implements OnInit {
 
   calculateGSTAmount(value: number) {
     if (value > 0) {
-      this.igstAmount = Number(((this.packageAmount * value) / 100).toFixed(2));
+      this.igstAmount = ToFixed((this.packageAmount * value) / 100, 2);
       this.calculateGrandTotal();
     } else {
       this.igstAmount = 0;
@@ -295,7 +297,7 @@ export class BuildPdfComponent implements OnInit {
   }
 
   calculateGrandTotal() {
-    this.grandTotalAmount = Number((this.packageAmount + this.cgstAmount + this.sgstAmount + this.igstAmount).toFixed(2));
+    this.grandTotalAmount = ToFixed((this.packageAmount + this.cgstAmount + this.sgstAmount + this.igstAmount), 2);
     this.pdfForm.controls["grandTotalAmount"].setValue(this.grandTotalAmount);
   }
 
@@ -364,18 +366,18 @@ export class BuildPdfComponent implements OnInit {
     if (totalMonthDays !== days || this.isHalfDay)
       this.packageAmount = this.packageAmount / totalMonthDays * (days + halfDayValue);
 
-    this.packageAmount = Number(this.packageAmount.toFixed(2));
+    this.packageAmount = ToFixed(this.packageAmount, 2);
     let cgst = this.pdfForm.controls["cGST"].value;
-    this.cgstAmount = Number(((this.packageAmount * Number(cgst)) / 100).toFixed(2));
+    this.cgstAmount = ToFixed(((this.packageAmount * Number(cgst)) / 100), 2);
 
     let sgst = this.pdfForm.controls["sGST"].value;
-    this.sgstAmount = Number(((this.packageAmount * Number(sgst)) / 100).toFixed(2));
+    this.sgstAmount = ToFixed(((this.packageAmount * Number(sgst)) / 100), 2);
 
     let igst = this.pdfForm.controls["iGST"].value;
-    this.igstAmount = Number(((this.packageAmount * Number(igst)) / 100).toFixed(2));
+    this.igstAmount = ToFixed(((this.packageAmount * Number(igst)) / 100), 2);
 
     this.grandTotalAmount = this.packageAmount + this.cgstAmount + this.sgstAmount + this.igstAmount;
-    this.grandTotalAmount = Number(this.grandTotalAmount.toFixed(2));
+    this.grandTotalAmount = ToFixed(this.grandTotalAmount, 2);
 
     this.pdfForm.get("actualDaysBurned").setValue(days);
     this.pdfForm.controls["grandTotalAmount"].setValue(this.grandTotalAmount);
@@ -537,21 +539,93 @@ export class BuildPdfComponent implements OnInit {
       if(this.isHalfDay) {
         request.daysAbsent = Number(worksDays - burnDays) - 0.5;
       }
-      this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
-        if (response.ResponseBody.ErroMessage == null && response.ResponseBody.Result) {
-          this.common.ShowToast(response.ResponseBody.Result.Status);
-        }
-        else {
-          this.common.ShowToast("Failed to generated, Please contact to admin.");
-        }
+
+      let modalStatus = this.validateBillRequest(request);
+      if(modalStatus == null) {
+        this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
+          Toast("Bill pdf generated successfully");
+          this.isLoading = false;
+        }).catch(e => {
+          this.isLoading = false;
+        });
+      } else {
         this.isLoading = false;
-      }).catch(e => {
-        this.isLoading = false;
-      });
+        ErrorToast(modalStatus);
+      }
     } else {
       this.isLoading = false;
-      this.common.ShowToast("All read marked fields are mandatory.");
+      ErrorToast("Please fill all mandatory fields");
     }
+  }
+
+  validateBillRequest(request: PdfModal) {
+    let message = null;
+    if(request.EmployeeId <=0){
+      message = "Invalid Employee selected";
+      return message;
+    }
+
+    if (request.senderClientId <=0) {
+      message = "Invalid Sender selected"
+      return message;
+    }
+
+    if(request.ClientId <= 0) {
+      message = "Invalid client seleted.";
+      return message;
+    }
+
+    if (request.billForMonth) {
+      let value = new Date(`${request.billForMonth} 04, 2016 9:28 AM`).getMonth();
+      if (value <= 0) {
+        message = "Invalid month selected";
+        return message;
+      }
+    }
+
+    if (request.workingDay) {
+      let value = new Date(`${request.billForMonth} 04, 2016 9:28 AM`);
+      let days = new Date(value.getFullYear(), value.getMonth() + 1, 0).getDate();
+      if (days < request.workingDay) {
+       return message = "Invalid No of days selected for the month" + ` ${request.billForMonth}`
+      }
+    }
+
+    if (request.dateOfBilling) {
+      var date = new Date(request.dateOfBilling);
+      var value = date instanceof Date && !isNaN(date.valueOf());
+      if (value == false) {
+        return message = "Invalid Date of Billing";
+      }
+    }
+
+    if (request.actualDaysBurned > request.workingDay || request.actualDaysBurned == 0){
+      return message = "Invalid Actual days selected";
+    }
+
+    if (request.packageAmount <= 0)
+      return message = "Invalid Package amount";
+
+    if (request.cGST < 0)
+      return message = "Invalid CGST";
+
+    if (request.sGST < 0)
+      return message = "Invalid SGST";
+
+    if (request.iGST < 0)
+      return message = "Invalid IGST";
+
+    if (request.sGSTAmount < 0)
+      return message = "Invalid SGST Amount";
+
+    if (request.cGSTAmount < 0)
+      return message = "Invalid CGST Amount";
+
+    if (request.iGSTAmount < 0)
+      return message = "Invalid IGST Amount";
+
+    if (request.grandTotalAmount <=0)
+      return message = "Invalid Total Amount";
   }
 
   replaceWithOriginalValues() {
@@ -606,6 +680,7 @@ export class BuildPdfComponent implements OnInit {
         this.pdfForm.get('receiverPrimaryContactNo').setValue(client.PrimaryPhoneNo);
         this.pdfForm.get('receiverEmail').setValue(client.Email);
         this.pdfForm.get('ClientId').setValue(client.ClientId);
+        this.grandTotalAmount = this.clientDetail.ActualPackage;
 
         if (!this.editMode) {
           this.packageAmount = this.clientDetail.ActualPackage;

@@ -35,6 +35,8 @@ import { UserprofileComponent } from './userprofile/userprofile.component';
 import { AppHttpIntercepter } from './../auth/app.intercepter';
 import { JwtService } from './../auth/jwtService';
 import { UserService } from './../providers/userService';
+import { DateFormatter } from './../providers/DateFormatter';
+import { FullDateFormatter } from './../providers/FullDateFormatter';
 import { LiveurlComponent } from './liveurl/liveurl.component';
 import { BuilderModule } from './builder/builder.module';
 import { UtilModule } from './util/util.module';
@@ -79,6 +81,8 @@ import { LayoutModule } from "./layout/layout.module";
     AutoPlayService,
     JwtService,
     UserService,
+    DateFormatter,
+    FullDateFormatter,
     MetaServices,
     {
       provide: HTTP_INTERCEPTORS,
