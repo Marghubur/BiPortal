@@ -217,7 +217,7 @@
           </tbody>
         </table>
       </div>
-      <div class="mt-3">
+      <div class="mt-3" *ngIf="isEmpPageReady">
         <app-pagination [pagination]="singleEmployee" (onPageChange)="GetFilterResult($event)"></app-pagination>
       </div>
     </div>

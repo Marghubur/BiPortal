@@ -84,6 +84,7 @@ export class ClientsComponent implements OnInit {
   }
 
   LoadData() {
+    this.isClientFound = false;
     let filter: Filter = new Filter();
     let Mobile = '';
     let Email = '';
@@ -103,6 +104,7 @@ export class ClientsComponent implements OnInit {
         } else {
           this.clientsData.TotalRecords = 0;
         }
+        this.isClientFound = true;
       });
     }
   }
@@ -185,6 +187,7 @@ export class ClientsComponent implements OnInit {
   filterRecords() {
     let searchQuery = "";
     let delimiter = "";
+    this.clientsData.reset();
 
     if(this.clientDetails.ClientName !== null && this.clientDetails.ClientName !== "") {
         searchQuery += ` ClientName like '${this.clientDetails.ClientName}%'`;
@@ -216,6 +219,7 @@ export class ClientsComponent implements OnInit {
 
   globalFilter() {
     let searchQuery = "";
+    this.clientsData.reset();
     searchQuery = ` ClientName like '${this.anyFilter}%' OR Email like '${this.anyFilter}%' OR PrimaryPhoneNo like '%${this.anyFilter}%' OR City like '${this.anyFilter}%'`;
     if(searchQuery !== "") {
       this.clientsData.SearchString = `1=1 And ${searchQuery}`;

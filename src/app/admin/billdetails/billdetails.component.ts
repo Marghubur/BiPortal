@@ -274,6 +274,7 @@ export class BilldetailsComponent implements OnInit {
   }
 
   LoadFiles() {
+    this.isEmpPageReady = false;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       if (response.ResponseBody) {
@@ -346,6 +347,7 @@ export class BilldetailsComponent implements OnInit {
       } else {
         this.common.ShowToast("No file or folder found");
       }
+      this.isEmpPageReady = true;
     });
   }
 
@@ -363,6 +365,7 @@ export class BilldetailsComponent implements OnInit {
     let fromDateValue = "";
     let toDateValue = "";
     let isDateFilterEnable = false;
+    this.singleEmployee.reset();
 
     if (this.fromDate !== null) {
       if (this.toDate == null) {

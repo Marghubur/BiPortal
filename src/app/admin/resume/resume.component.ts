@@ -646,6 +646,7 @@ export class ResumeComponent implements OnInit {
   }
 
   getUploadedDetails() {
+    this.isRecordAvailable = false;
     this.resumeFiles = [];
     this.http.post("OnlineDocument/GetUploadedRecords", this.candidatesData)
     .then((response: ResponseModel) => {
@@ -661,12 +662,15 @@ export class ResumeComponent implements OnInit {
       } else {
         this.common.ShowToast("No records found");
       }
+
+      this.isRecordAvailable = true;
     })
   }
 
   filterRecords() {
     let searchQuery = "";
     let delimiter = "";
+    this.candidatesData.reset();
 
     if(this.resumeFile.Name !== null && this.resumeFile.Name !== "") {
       searchQuery += ` Name like '${this.resumeFile.Name}%' `;
@@ -707,6 +711,7 @@ export class ResumeComponent implements OnInit {
 
   globalFilter() {
     let searchQuery = "";
+    this.candidatesData.reset();
     searchQuery = ` Name like '${this.anyFilter}%' OR Email_ID like '%${this.anyFilter}%' OR Phone_Number like '${this.anyFilter}%' OR Job_Title like '%${this.anyFilter}%' `;
     if(searchQuery !== "") {
       this.candidatesData.SearchString = `1=1 And ${searchQuery}`;
@@ -754,14 +759,6 @@ export class ResumeComponent implements OnInit {
     if (recordDetail) {
       this.pageIndex = recordDetail.PageIndex;
     }
-    // this.GridData = {
-    //   headers: this.mappedColumn,
-    //   rows: this.ExcelTableData.slice((this.pageIndex - 1) * 15, ((this.pageIndex - 1) * this.pageSize + 15)),
-    //   totalCount: this.ExcelTableData.length,
-    //   pageIndex: this.pageIndex,
-    //   pageSize: this.pageSize,
-    //   inlineContent: true
-    // };
   }
 
   uploadResume() {

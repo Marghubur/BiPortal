@@ -1,10 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 
@@ -16,33 +16,20 @@ import { UserService } from 'src/providers/userService';
 export class ManageComponent implements OnInit {
   model: NgbDateStruct;
   submitted: boolean = false;
-  manageUserForm: FormGroup = null;
   userModal: UserDetail = null;
-  employees: Array<UserDetail> = [];
-  grandTotalAmount: number = 0;
-  packageAmount: number = 0;
-  isDeveloperSelected: boolean = false;
-  cgstAmount: number = 0;
-  sgstAmount: number = 0;
-  igstAmount: number = 0;
-  months: Array<any> = null;
+  itskillModal: ItSkillModal = null
   isLoading: boolean = false;
-  clients: Array<any> = [];
-  allocatedClients: Array<any> = [];
-  isAllocated: boolean = false;
-  isUpdate: boolean = false;
-  employeeUid: number = 0;
-  isInsertingNewClient: boolean = true;
-  assignedActiveClientUid: number = 0;
-  idReady: boolean = false;
-  currentClientId: number = 0;
-  isCreated: boolean = false;
-  isEdited: boolean = false;
   User: string;
+  isLargeFile: boolean = false;
   userDetail: UserDetail = new UserDetail();
   UserId: number = null;
-  uploading: boolean = true;
-  isLargeFile: Boolean= false;
+  uploading: boolean = false;
+  fileDetail: Array<any> = [];
+  FileDocuments: Array<any> = [];
+  FileDocumentList: Array<Files> = [];
+  ProfileList: Array<Files> = [];
+  ProfileCollection: Array<any> = [];
+  FilesCollection: Array<any> = [];
   section: any = {
     isResumeHeadlineEdit: false,
     isKeySkillEdit: false,
@@ -52,27 +39,32 @@ export class ManageComponent implements OnInit {
     isProjectsEdit: false,
     isProfileSummaryEdit: false,
     isCarrerProfileEdit: false,
-    isPersonalDetailEdit: false
+    isPersonalDetailEdit: false,
+    isOnlineProfileEdit: false,
+    isResaerchEdit: false,
+    isPatentEdit: false,
+    isWorkSampleEdit: false,
+    isPresentationEdit: false,
+    isCertificationEdit: false,
+    isProfileEdit: false
   };
+  isKeySkillSubmit: boolean = false;
+  isEmployeeSubmit: boolean = false;
+  isEducationSubmit: boolean = false;
+  isITSkillSubmit: boolean = false;
+  isProjectSubmit: boolean = false;
+  isCarrerProfileSubmit: boolean = false;
+  isPersonalDetailSubmit: boolean = false;
+  isProfileSubmit: boolean = false;
+  isAcomplishmentSubmit: boolean = false;
 
-  employmentForm: FormGroup = null;
-  userDeatilForm: FormGroup = null;
-  keySkillForm: FormGroup = null;
-  educationForm: FormGroup = null;
-  itSkillForm: FormGroup = null;
-  projectForm: FormGroup = null;
-  profileSummaryForm: FormGroup = null;
-  carrerProfileForm: FormGroup = null;
-  personalDetailsForm: FormGroup = null;
+  profileURL: string = "assets/images/faces/face1.jpg";
+
+  manageUserForm: FormGroup = null;
 
   @Output() authentication = new EventEmitter();
 
-  get f() {
-    let data = this.manageUserForm.controls;
-    return data;
-  }
-
-  constructor(private http: AjaxService,
+    constructor(private http: AjaxService,
     private fb: FormBuilder,
     private calendar: NgbCalendar,
     private local: ApplicationStorage,
@@ -89,7 +81,14 @@ export class ManageComponent implements OnInit {
       isProjectsEdit: false,
       isProfileSummaryEdit: false,
       isCarrerProfileEdit: false,
-      isPersonalDetailEdit: false
+      isPersonalDetailEdit: false,
+      isProfileEdit: false,
+      isOnlineProfileEdit: false,
+      isResaerchEdit: false,
+      isPatentEdit: false,
+      isWorkSampleEdit: false,
+      isPresentationEdit: false,
+      isCertificationEdit: false
     }
   }
 
@@ -119,153 +118,178 @@ export class ManageComponent implements OnInit {
         this.UserId = this.userModal.UserId;
       }
       this.bindForm();
-      this.idReady = true;
     });
-  }
-
-  daysInMonth(monthNumber: number) {
-    var now = new Date();
-    return new Date(now.getFullYear(), monthNumber, 0).getDate();
   }
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.manageUserForm.controls["Dob"].setValue(date);
+    this.manageUserForm.controls["DOB"].setValue(date);
   }
 
   bindForm() {
     this.manageUserForm = this.fb.group({
-      FirstName: new FormControl(this.userModal.FirstName, [Validators.required]),
+      FirstName: new FormControl(this.userModal.FirstName),
       LastName: new FormControl(this.userModal.LastName),
       Mobile: new FormControl(this.userModal.Mobile),
       Email: new FormControl(this.userModal.EmailId),
-      State: new FormControl(this.userModal.State),
-      City: new FormControl(this.userModal.City),
-      Address: new FormControl(this.userModal.Address),
-      Dob: new FormControl(this.userModal.Dob),
       UserId: new FormControl(this.userModal.UserId),
+      ProfileImg: new FormControl ( '')
+
     });
   }
 
   initForm() {
-    this.buildUserDetailForm()
-    this.buildEducationForm(new EducationDetail());
-    this.buildEmploymentForm();
-    this.buildItSkillForm();
-    this.buildKeySkillForm();
-    this.buildProjectForm();
-    this.buildCarrerProfile();
-    this.buildProfileSummaryForm();
-    this.buildPersonalDetailForm();
-  }
-
-  buildUserDetailForm() {
-    this.userDeatilForm = this.fb.group({
-      FirstName: new FormControl(UserPersonalDetail, Validators.required),
-      LastName: new FormControl(UserPersonalDetail, Validators.required),
-      Mobile: new FormControl(UserPersonalDetail, Validators.required),
-      Email: new FormControl(UserPersonalDetail, Validators.required)
-    })
-  }
-
-  buildKeySkillForm() {
-    this.keySkillForm = this.fb.group({
-      KeySkill: new FormControl('', Validators.required)
-    })
-  }
-
-  buildEmploymentForm() {
-    this.employmentForm = this.fb.group({
-      Designation: new FormControl('', Validators.required),
-      YourOrganization: new FormControl('', Validators.required),
+    this.manageUserForm = this.fb .group({
+      KeySkill: new FormControl(''),
+      Designation: new FormControl(''),
+      YourOrganization: new FormControl(''),
       CurrentCompany: new FormControl(''),
-      WorkingYear: new FormControl('', Validators.required),
-      WorkingMonth: new FormControl('', Validators.required),
-      WorkedYear: new FormControl('', Validators.required),
-      CurrentSalary: new FormControl('', Validators.required),
-      CurrentSalaryLakh: new FormControl('', Validators.required),
-      Experties: new FormControl('', Validators.required),
-      JobProfile: new FormControl('', Validators.required),
-      NoticePeriod: new FormControl('', Validators.required),
-      CurrentSalaryThousand: new FormControl(null)
-    });
-  }
-
-  buildItSkillForm() {
-    this.itSkillForm = this.fb.group({
-      ITSkill: new FormControl('', Validators.required),
+      WorkingYear: new FormControl(''),
+      WorkingMonth: new FormControl(''),
+      WorkedYear: new FormControl(''),
+      CurrentSalary: new FormControl(''),
+      CurrentSalaryLakh: new FormControl(''),
+      Experties: new FormControl(''),
+      JobProfile: new FormControl(''),
+      NoticePeriod: new FormControl(''),
+      CurrentSalaryThousand: new FormControl(''),
+      ITSkill: new FormControl(''),
       Version: new FormControl(''),
       LastUsed: new FormControl(''),
       ExperienceYear: new FormControl(''),
-      ExperienceMonth: new FormControl('')
-    });
-  }
-
-  buildEducationForm(educationDetail: EducationDetail) {
-    this.educationForm = this.fb.group({
-      Education: new FormControl('', Validators.required),
-      Course: new FormControl('', Validators.required),
-      Specialization: new FormControl('', Validators.required),
-      University: new FormControl('', Validators.required),
-      CourseType: new FormControl('', Validators.required),
-      PassingYear: new FormControl('', Validators.required),
-      GradingSystem: new FormControl('', Validators.required)
-    });
-  }
-
-  buildProjectForm() {
-    this.projectForm = this.fb.group({
-      ProjectTitle: new FormControl('', Validators.required),
+      ExperienceMonth: new FormControl(''),
+      Education: new FormControl(''),
+      Course: new FormControl(''),
+      Specialization: new FormControl(''),
+      University: new FormControl(''),
+      CourseType: new FormControl(''),
+      PassingYear: new FormControl(''),
+      GradingSystem: new FormControl(''),
+      ProjectTitle: new FormControl(''),
       ProjectTag: new FormControl(''),
       ProjectWorkingYear: new FormControl(''),
       ProjectWorkingMonth: new FormControl(''),
       ProjectWorkedYear: new FormControl(''),
       ProjectStatus: new FormControl(''),
-      ClientName: new FormControl('', Validators.required),
-      ProjectDetail: new FormControl('', Validators.required)
-    })
-  }
-
-  buildCarrerProfile() {
-    this.carrerProfileForm = this.fb.group({
-      CurrentIndustry: new FormControl('', Validators.required),
-      Department: new FormControl('', Validators.required),
-      RoleCategory: new FormControl('', Validators.required),
-      JobRole: new FormControl('', Validators.required),
-      DesiredJob: new FormControl('', Validators.required),
-      EmploymentType: new FormControl('', Validators.required),
+      ClientName: new FormControl(''),
+      ProjectDetail: new FormControl(''),
+      CurrentIndustry: new FormControl(''),
+      Department: new FormControl(''),
+      RoleCategory: new FormControl(''),
+      JobRole: new FormControl(''),
+      DesiredJob: new FormControl(''),
+      EmploymentType: new FormControl(''),
       PreferredShift: new FormControl(''),
       PreferredWorkLocation: new FormControl(''),
-      ExpectedSalary: new FormControl('', Validators.required),
+      ExpectedSalary: new FormControl(''),
       ExpectedSalaryLakh: new FormControl(''),
-      ExpectedSalaryThousand: new FormControl('')
-    })
-  }
-
-  buildProfileSummaryForm() {
-    this.profileSummaryForm = this.fb.group({
+      ExpectedSalaryThousand: new FormControl(''),
+      FirstName: new FormControl(''),
+      LastName: new FormControl (''),
+      Email: new FormControl(''),
+      Mobile: new FormControl(''),
+      ProfileImg: new FormControl ( ''),
+      DOB: new FormControl(''),
+      Gender: new FormControl(''),
+      Address: new FormControl(''),
+      HomeTown: new FormControl(''),
+      PinCode: new FormControl(''),
+      MaritalStatus: new FormControl(''),
+      Category: new FormControl(''),
+      DifferentlyAbled: new FormControl(''),
+      PermitUSA: new FormControl(''),
+      PermitOtherCountry: new FormControl(''),
+      LanguageRow : this.fb.array([this.languageField()]),
+      OnlineProfile: new FormControl (''),
+      WorkSample: new FormControl (''),
+      Research: new FormControl (''),
+      Presentation: new FormControl (''),
+      Patent: new FormControl (''),
+      Certification: new FormControl (''),
       ProfileSummary: new FormControl('')
     })
   }
 
-  buildPersonalDetailForm() {
-    this.personalDetailsForm = this.fb.group({
-      DOB: new FormControl('', Validators.required),
-      Gender: new FormControl('', Validators.required),
-      Address: new FormControl(''),
-      HomeTown: new FormControl(''),
-      PinCode: new FormControl(''),
-      MaritalStatus: new FormControl('', Validators.required),
-      Category: new FormControl('', Validators.required),
-      DifferentlyAbled: new FormControl(''),
-      PermitUSA: new FormControl(''),
-      PermitOtherCountry: new FormControl(''),
-      Language: new FormControl('', Validators.required),
-      LanguageReadWrite: new FormControl ('', Validators.required),
+
+  languageField() {
+    return this.fb.group({
+      Language: new FormControl (''),
+      LanguageRead: new FormControl (''),
+      LanguageWrite: new FormControl (''),
       ProficiencyLanguage: new FormControl(''),
-      LanguageSpeak: new FormControl('')
-    });
+      LanguageSpeak: new FormControl(''),
+      ResumeHeadline: new FormControl('')
+    })
   }
+
+  addLanguageForm() {
+      this.formArry.push(this.languageField());
+  }
+
+  get formArry() {
+    return (<FormArray>this.manageUserForm.get('LanguageRow')).controls;
+  }
+
+  get f() {
+    let data = this.manageUserForm.controls;
+    return data;
+  }
+
+
+
+  maritalStatusSelected(event: any) {
+    let value = event.target.value;
+    this.manageUserForm.get('MaritalStatus').setValue(value);
+  }
+
+  personalDetailsFormSubmit() {
+    this.isPersonalDetailSubmit = true;
+
+  }
+
+  resumeHeadlineFormSubmit() {
+  }
+
+  keySkillFormSubmit() {
+    this.isKeySkillSubmit = true;
+
+  }
+
+  employmentFormSubmit() {
+    this.isEmployeeSubmit = true;
+
+  }
+
+  educationFormSubmit() {
+    this.isEducationSubmit = true;
+
+  }
+
+  itSkillFormSubmit() {
+    this.isITSkillSubmit = true;
+      // if (errroCounter == 0) {
+      //   this.http.post("user/ItSkill", this.itskillModal)
+      //   .then((response: ResponseModel) => {
+      //     if (response.ResponseBody !== null && response.ResponseBody !== "expired") {
+      //       Toast(response.ResponseBody);
+      //     } else {
+      //       if (response.ResponseBody !== "expired") {
+      //         Toast("Your session got expired. Log in again.");
+      //       }
+      //     }
+
+      //     this.isLoading = false;
+      //   }).catch(e => {
+      //     this.isLoading = false;
+      //     Toast("Registration fail. Please contact admin.")
+      //   });
+      // } else {
+      //   this.isLoading = false;
+      //   Toast("Please correct all the mandaroty field marded red");
+      // }
+  }
+
+
 
   UpdateUser() {
     this.isLoading = true;
@@ -280,39 +304,27 @@ export class ManageComponent implements OnInit {
       errroCounter++;
 
     this.userModal = this.manageUserForm.value;
+    // if (errroCounter == 0) {
+    //   this.http.post("user/UpdateUser", this.userModal)
+    //   .then((response: ResponseModel) => {
+    //     if (response.ResponseBody !== null && response.ResponseBody !== "expired") {
+    //       Toast(response.ResponseBody);
+    //     } else {
+    //       if (response.ResponseBody !== "expired") {
+    //         Toast("Your session got expired. Log in again.");
+    //       }
+    //     }
 
-    // if (this.userModal.Pincode === null)
-    //   this.userModal.Pincode = 0;
-    // if (this.userModal.ExprienceInYear === null)
-    //   this.userModal.ExprienceInYear = 0;
-    // if (this.userModal.AllocatedClientId === null)
-    //   this.userModal.AllocatedClientId = 0;
-    // if (this.userModal.ActualPackage === null)
-    //   this.userModal.ActualPackage = 0;
-    // if (this.userModal.FinalPackage === null)
-    //   this.userModal.FinalPackage = 0;
-    // if (this.userModal.TakeHomeByCandidate === null)
-    //   this.userModal.TakeHomeByCandidate = 0;
-    if (errroCounter == 0) {
-      this.http.post("user/UpdateUser", this.userModal)
-      .then((response: ResponseModel) => {
-        if (response.ResponseBody !== null && response.ResponseBody !== "expired") {
-          Toast(response.ResponseBody);
-        } else {
-          if (response.ResponseBody !== "expired") {
-            Toast("Your session got expired. Log in again.");
-          }
-        }
-
-        this.isLoading = false;
-      }).catch(e => {
-        this.isLoading = false;
-        Toast("Registration fail. Please contact admin.")
-      });
-    } else {
-      this.isLoading = false;
-      Toast("Please correct all the mandaroty field marded red");
-    }
+    //     this.isLoading = false;
+    //   }).catch(e => {
+    //     this.isLoading = false;
+    //     Toast("Registration fail. Please contact admin.")
+    //   });
+    // } else {
+    //   this.isLoading = false;
+    //   Toast("Please correct all the mandaroty field marded red");
+    // }
+    Toast("Update Successfully.")
   }
 
   fireBrowserFile() {
@@ -325,45 +337,67 @@ export class ManageComponent implements OnInit {
     $("#uploadresume").click();
   }
 
+  uploadProfilePicture(event: any) {
+    if (event.target.files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.profileURL = event.target.result;
+      }
+      this.manageUserForm.patchValue({
+        ProfileImg: event.target.result,
+      });
+      let selectedfile = event.target.files;
+      this.fileDetail = selectedfile[0];
+      let file = null;
+      file = <File>selectedfile[0];
+      let item: Files = new Files();
+      item.FileName = file.name;
+      item.FileType = file.type;
+      item.FileSize = file.size;
+      item.FileExtension = file.type;
+      item.UserId = this.UserId;
+      this.ProfileList.push(item);
+      this.ProfileCollection.push(file);
+    }
+  }
+
   GetDocumentFile(fileInput: any) {
-    // this.FileDocuments = [];
-    // this.fileDetail = fileInput.target.files[0];
-    // if (selectedFiles.length > 0) {
-    //   let index = 0;
-    //   let file = null;
-    //   this.btnDisable = false;
-    //   this.fileAvailable = true;
-       this.uploading = false;
-    //   while (index < selectedFiles.length) {
-    //     file = <File>selectedFiles[index];
-    //     let item: Files = new Files();
-    //     item.FileName = file.name;
-    //     item.FileType = file.type;
-    //     item.FileSize = (Number(file.size)/1024);
-    //     item.Mobile = this.currentUser.Mobile;
-    //     item.Email = this.currentUser.Email;
-    //     item.FileExtension = file.type;
-    //     item.DocumentId = 0;
-    //     item.FilePath = this.getRelativePath(this.routeParam);
-    //     item.ParentFolder = '';
-    //     item.UserId = this.currentUser.UserId;
-    //     item.UserTypeId = this.currentUser.UserTypeId;
-    //     this.FileDocumentList.push(item);
-    //     this.FilesCollection.push(file);
-    //     index++;
-    //   }
+    let selectedfile = fileInput.target.files;
+    if (selectedfile.length > 0) {
+      this.fileDetail = selectedfile[0];
+      let file = null;
+      file = <File>selectedfile[0];
+      let item: Files = new Files();
+      item.FileName = file.name;
+      item.FileType = file.type;
+      item.FileSize = file.size;
+      item.FileExtension = file.type;
+      item.UserId = this.UserId;
+      this.FileDocumentList.push(item);
+      this.FilesCollection.push(file);
+      let fileSize = selectedfile[0].size/1024;
+      if ( fileSize > 100) {
+        this.isLargeFile = true;
+      }
+      this.uploading = true;
+    } else {
+      ErrorToast("You are not slected the file")
+    }
+  }
 
-    //   for(let i=0; i<selectedFiles.length; i++) {
-    //     let filesize = Number(this.FilesCollection[i].size)
-    //     this.totalFileSize += (filesize/1024);
-    //   }
-
-    //   if (this.totalFileSize > 2048) {
-    //     this.isLargeFile = true;
-    //   }
-    // } else {
-    //   Toast("No file selected");
-    // }
+  uploadResumeFile() {
+    let formData = new FormData();
+    if (this.FileDocumentList.length > 0 && this.UserId > 0) {
+      formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+      formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
+      this.http.upload('User/UploadResume', formData)
+      .then(response => {
+        if (response.ResponseBody) {
+          Toast("Resume Uploaded Successfully")
+        }
+      })
+    }
   }
 
   editEmployment() {
@@ -398,13 +432,45 @@ export class ManageComponent implements OnInit {
     this.section.isCarrerProfileEdit = !this.section.isCarrerProfileEdit;
   }
 
+  editPersonalDetail() {
+    this.section.ispersonalDetailsEdit = !this.section.ispersonalDetailsEdit;
+  }
+
+  editOnlineProfile() {
+    this.section.isOnlineProfileEdit = !this.section.isOnlineProfileEdit;
+  }
+
+  editResaerchEdit() {
+    this.section.isResaerchEdit = !this.section.isResaerchEdit;
+  }
+
+  editPatentEdit() {
+    this.section.isPatentEdit = !this.section.isPatentEdit;
+  }
+
+  editWorkSampleEdit() {
+    this.section.isWorkSampleEdit = !this.section.isWorkSampleEdit;
+  }
+
+  editPresentationEdit() {
+    this.section.isPresentationEdit = !this.section.isPresentationEdit;
+  }
+
+  editCertificationEdit() {
+    this.section.isCertificationEdit = !this.section.isCertificationEdit;
+  }
+
+  editProfile() {
+    this.section.isProfileEdit = !this.section.isProfileEdit;
+  }
+
   cleanFileHandler() {
     // this.btnDisable = true;
     // this.fileAvailable = false;
-    // this.uploading = true;
-    // $("#uploadocument").val("");
+    this.uploading = false;
+    $("#uploadocument").val("");
+    this.isLargeFile = false;
     // this.FilesCollection = [];
-    // this.isLargeFile = false;
   }
 
   reset() {
@@ -417,10 +483,7 @@ class UserPersonalDetail {
   LastName: string = '';
   Mobile: number = 0;
   Email: string = '';
-}
-
-class KeySkillDetail {
-  KeySkill: string = '';
+  ProfileImg: string = '';
 }
 
 class EmploymentDetail {
@@ -430,9 +493,108 @@ class EmploymentDetail {
   WorkingYear: number = 0;
   WorkingMonth: number = 0;
   WorkedYear: number = 0;
-  CurrentSalary: string= ''
+  CurrentSalary: string= '';
   CurrentSalaryLakh: number = 0;
+  Experties: number = 0;
+  JobProfile: string = '';
+  NoticePeriod: string = '';
+  CurrentSalaryThousand: number = 0;
 }
-class EducationDetail {
+class ItSkillModal {
+  ITSkill: string = '';
+  Version: number = 0;
+  LastUsed: string= '';
+  ExperienceYear: number = 0;
+  ExperienceMonth: number = 0;
+}
 
+class Files {
+  LocalImgPath: string = "";
+  UserId: number = 0;
+  FileName: string = "";
+  FileExtension: string = "";
+  FilePath: string = "";
+  FileUid: number = 0;
+  ProfileUid: string = "";
+  DocumentId: number = 0;
+  FileType: string = "";
+  FileSize: number = 0;
+}
+
+class KeySkill {
+    KeySkill: string = ''
+}
+
+class Education {
+    Education: string = '';
+    Course: string = '';
+    Specialization: string = '';
+    University: string = '';
+    CourseType: string = '';
+    PassingYear: number = 0;
+    GradingSystem: string = ''
+}
+
+class Project {
+    ProjectTitle: string = ';'
+    ProjectTag: string = '';
+    ProjectWorkingYear: number = 0;
+    ProjectWorkingMonth: number = 0;
+    ProjectWorkedYear: number = 0;
+    ProjectStatus: string = '';
+    ClientName: string = '';
+    ProjectDetail: string = '';
+}
+
+class CarrerProfile {
+    CurrentIndustry: string = '';
+    Department: string = '';
+    RoleCategory: string = '';
+    JobRole: string = '';
+    DesiredJob: string = '';
+    EmploymentType: string = '';
+    PreferredShift: string = '';
+    PreferredWorkLocation: string = '';
+    ExpectedSalary: number = 0;
+    ExpectedSalaryLakh: number = 0;
+    ExpectedSalaryThousand: number = 0;
+}
+
+class ProfileSummary {
+    ProfileSummary: string = '';
+}
+
+class ManageUser {
+    FirstName:string = '';
+    LastName: string = '';
+    Email: string = '';
+    Mobile: string = '';
+    ProfileImg: string = '';
+}
+
+class Personal {
+    DOB: string = '';
+    Gender: string = '';
+    Address: string = '';
+    HomeTown: string ='';
+    PinCode: number = 0;
+    MaritalStatus: string = '';
+    Category: string = '';
+    DifferentlyAbled: string = '';
+    PermitUSA: string = '';
+    PermitOtherCountry: string = '';
+    Language: string = '';
+    LanguageRead: string = '';
+    LanguageWrite: string = '';
+    ProficiencyLanguage: string = '';
+    LanguageSpeak: string = '';
+}
+
+class Accomplishment {
+    OnlineProfile: string = '';
+    WorkSample: string = '';
+    Research: string = '';
+    Presentation: string = '';
+    Patent: string = '';
+    Certification: string = '';
 }

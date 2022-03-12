@@ -5,7 +5,7 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, GetStatus, MonthName, Toast } from 'src/providers/common-service/common.service';
+import { CommonService, GetStatus, MonthName, Toast, WarningToast, ErrorToast } from 'src/providers/common-service/common.service';
 import { BuildPdf, Employees } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -223,16 +223,20 @@ export class FilesComponent implements OnInit {
     let data = this.userFiles.filter(x => x.FileUid === FileUid);
     let newData = data[0];
     this.http.post(`OnlineDocument/EditFile`, newData).then(response => {
-      this.common.ShowToast("File Reterive");
-    }).catch(e => { console.log(e) });
+      Toast("File Reterive");
+    }).catch(e => {
+      ErrorToast("Fail to edit.");
+     });
   }
 
   deleteFile(FileUid: string) {
     let data = this.userFiles.filter(a => a.FileUid === FileUid);
     let newData = data[0];
     this.http.get(`OnlineDocument/DeleteData/${this.currentEmployeeDetail.EmployeeUid}`).then(response => {
-      this.common.ShowToast("File Reterive");
-    }).catch(e => { console.log(e) });
+      Toast("File Reterive");
+    }).catch(e => {
+      ErrorToast("Fail to delete.");
+    });
   }
 
   ClickEvents(e: any) {
@@ -264,10 +268,11 @@ export class FilesComponent implements OnInit {
   }
 
   LoadFiles() {
+    this.isEmpPageReady = false;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        this.common.ShowToast("Record found.");
+        Toast("Record found.");
         let employees = response.ResponseBody.EmployeesList as Array<EmployeeDetail>;
         if(employees && employees.length > 0) {
           let index = 0;
@@ -301,7 +306,6 @@ export class FilesComponent implements OnInit {
         }
 
         let emp = response.ResponseBody["Employee"];
-        this.isEmpPageReady = true;
         if (emp && emp.length > 0)
           this.employee = emp[0];
         this.fileLoaded = true;
@@ -311,7 +315,7 @@ export class FilesComponent implements OnInit {
         let GST: number = 0;
 
         if(this.userFiles !== null && this.userFiles.length > 0) {
-          this.singleEmployee.TotalRecords = this.userFiles[0].Total;
+          this.singleEmployee.update(this.userFiles[0].Total);
           while (i < this.userFiles.length) {
             bills = new BillDetails();
             bills.BillNo = this.userFiles[i].BillNo;
@@ -342,8 +346,10 @@ export class FilesComponent implements OnInit {
           }
         }
       } else {
-        this.common.ShowToast("No file or folder found");
+        WarningToast("No file or folder found");
       }
+
+      this.isEmpPageReady = true;
     });
   }
 
@@ -362,6 +368,7 @@ export class FilesComponent implements OnInit {
     let toDateValue = "";
     let isDateFilterEnable = false;
 
+    this.singleEmployee.reset();
     if (this.fromDate !== null) {
       if (this.toDate == null) {
         Toast("Please selete to date to get the result.")

@@ -42,5 +42,21 @@ export class Filter {
     SortBy: string = "";
     TotalRecords: number = 0;
     ShowPageNo: number = 5;
+    ActivePageNumber: number = 1;
     isReUseSame: boolean = false;
+
+    update(total: any) {
+      if(!isNaN(Number(total))) {
+        this.TotalRecords = total;
+        this.StartIndex = 1;
+        this.PageIndex = 1;
+      }
+    }
+
+    reset() {
+      this.TotalRecords = 0;
+      this.StartIndex = 1;
+      this.PageIndex = 1;
+      this.ActivePageNumber = 1;
+  }
 }
