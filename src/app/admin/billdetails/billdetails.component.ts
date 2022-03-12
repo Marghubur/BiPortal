@@ -9,6 +9,7 @@ import { CommonService, GetStatus, MonthName, Toast } from 'src/providers/common
 import { BuildPdf, Employees } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
+import { ApplicationData } from '../build-pdf/build-pdf.component';
 import { DocumentUser, Files } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 
@@ -54,6 +55,9 @@ export class BilldetailsComponent implements OnInit {
   isUploading: boolean = false;
   isModalReady: boolean = false;
   isGSTStatusModalReady: boolean = false;
+  applicationData: ApplicationData = new ApplicationData();
+  employees: Array<EmployeeDetail> = [];
+  currentOrganization: any = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -248,10 +252,32 @@ export class BilldetailsComponent implements OnInit {
   }
 
   viewPdfFile(userFile: any) {
-    let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
+    this.regeneratebill(userFile);
+  }
+
+  showFile(userFile: any) {
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}.pdf`;
     this.viewer = document.getElementById("file-container");
     this.viewer.classList.remove('d-none');
     this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+  }
+
+  regeneratebill(userFile: any) {
+    let employeeBillDetail = {
+      "EmployeeId": userFile.FileOwnerId,
+      "ClientId": userFile.ClientId,
+      "FileId": userFile.FileUid,
+      "FilePath": userFile.FilePath,
+      "FileName": userFile.FileName,
+      "FileExtension": userFile.FileExtension
+    };
+    this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
+      let fileDetail: any = null;
+      if (response.ResponseBody) {
+        this.showFile(userFile);
+      }
+    })
   }
 
   UpdateCurrent(FileUid: number) {

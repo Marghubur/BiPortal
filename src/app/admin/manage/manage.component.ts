@@ -16,8 +16,7 @@ import { UserService } from 'src/providers/userService';
 export class ManageComponent implements OnInit {
   model: NgbDateStruct;
   submitted: boolean = false;
-  userModal: UserDetail = null;
-  itskillModal: ItSkillModal = null
+  userModal: UserModal = null;
   isLoading: boolean = false;
   User: string;
   isLargeFile: boolean = false;
@@ -25,11 +24,10 @@ export class ManageComponent implements OnInit {
   UserId: number = null;
   uploading: boolean = false;
   fileDetail: Array<any> = [];
-  FileDocuments: Array<any> = [];
-  FileDocumentList: Array<Files> = [];
-  ProfileList: Array<Files> = [];
-  ProfileCollection: Array<any> = [];
-  FilesCollection: Array<any> = [];
+  FileDocumentList: Files = null;
+  ProfileList: Files = null;
+  ProfileCollection: any = null;
+  FilesCollection: any = null;
   section: any = {
     isResumeHeadlineEdit: false,
     isKeySkillEdit: false,
@@ -95,7 +93,7 @@ export class ManageComponent implements OnInit {
   ngOnInit(): void {
     this.setSections();
     this.model = this.calendar.getToday();
-    this.userModal = new UserDetail();
+    this.userModal = new UserModal();
     this.initForm();
 
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
@@ -114,10 +112,10 @@ export class ManageComponent implements OnInit {
   loadData(user: any) {
     this.http.post(`Login/GetUserDetail`, { MobileNo: user.Mobile, Email: user.EmailId }).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        this.userModal = res.ResponseBody as UserDetail;
+        this.userModal = res.ResponseBody as UserModal;
         this.UserId = this.userModal.UserId;
       }
-      this.bindForm();
+      this.initForm();
     });
   }
 
@@ -126,17 +124,17 @@ export class ManageComponent implements OnInit {
     this.manageUserForm.controls["DOB"].setValue(date);
   }
 
-  bindForm() {
-    this.manageUserForm = this.fb.group({
-      FirstName: new FormControl(this.userModal.FirstName),
-      LastName: new FormControl(this.userModal.LastName),
-      Mobile: new FormControl(this.userModal.Mobile),
-      Email: new FormControl(this.userModal.EmailId),
-      UserId: new FormControl(this.userModal.UserId),
-      ProfileImg: new FormControl ( '')
+  // bindForm() {
+  //   this.manageUserForm = this.fb.group({
+  //     FirstName: new FormControl(this.userModal.FirstName),
+  //     LastName: new FormControl(this.userModal.LastName),
+  //     Mobile: new FormControl(this.userModal.Mobile),
+  //     Email: new FormControl(this.userModal.Email),
+  //     UserId: new FormControl(this.userModal.UserId),
+  //     ProfileImg: new FormControl ( '')
 
-    });
-  }
+  //   });
+  // }
 
   initForm() {
     this.manageUserForm = this.fb .group({
@@ -184,10 +182,10 @@ export class ManageComponent implements OnInit {
       ExpectedSalary: new FormControl(''),
       ExpectedSalaryLakh: new FormControl(''),
       ExpectedSalaryThousand: new FormControl(''),
-      FirstName: new FormControl(''),
-      LastName: new FormControl (''),
-      Email: new FormControl(''),
-      Mobile: new FormControl(''),
+      FirstName: new FormControl(this.userModal.FirstName),
+      LastName: new FormControl (this.userModal.LastName),
+      Email: new FormControl(this.userModal.Email),
+      Mobile: new FormControl(this.userModal.Mobile),
       ProfileImg: new FormControl ( ''),
       DOB: new FormControl(''),
       Gender: new FormControl(''),
@@ -206,10 +204,10 @@ export class ManageComponent implements OnInit {
       Presentation: new FormControl (''),
       Patent: new FormControl (''),
       Certification: new FormControl (''),
-      ProfileSummary: new FormControl('')
+      ProfileSummary: new FormControl(''),
+      UserId: new FormControl(this.userModal.UserId)
     })
   }
-
 
   languageField() {
     return this.fb.group({
@@ -235,58 +233,42 @@ export class ManageComponent implements OnInit {
     return data;
   }
 
-
-
   maritalStatusSelected(event: any) {
     let value = event.target.value;
     this.manageUserForm.get('MaritalStatus').setValue(value);
   }
 
-  personalDetailsFormSubmit() {
-    this.isPersonalDetailSubmit = true;
-
+  categorySelected(event: any) {
+    let value = event.target.value;
+    this.manageUserForm.get('Category').setValue(value);
   }
 
-  resumeHeadlineFormSubmit() {
+  workPermitSelected(event: any) {
+    let value = event.target.value;
+    this.manageUserForm.get('PermitUSA').setValue(value);
   }
 
-  keySkillFormSubmit() {
-    this.isKeySkillSubmit = true;
-
+  proficiencySelected(event: any) {
+    let value = event.target.value;
+    this.manageUserForm.get('ProficiencyLanguage').setValue(value);
   }
 
-  employmentFormSubmit() {
-    this.isEmployeeSubmit = true;
-
+  gradingSystemSelected(event: any) {
+    let value = event.target.value;
+    this.manageUserForm.get('GradingSystem').setValue(value);
   }
 
-  educationFormSubmit() {
-    this.isEducationSubmit = true;
-
+  noticePeriodSelected(event: any) {
+    let value = event.target.value;
+    this.manageUserForm.get('NoticePeriod').setValue(value);
   }
 
-  itSkillFormSubmit() {
-    this.isITSkillSubmit = true;
-      // if (errroCounter == 0) {
-      //   this.http.post("user/ItSkill", this.itskillModal)
-      //   .then((response: ResponseModel) => {
-      //     if (response.ResponseBody !== null && response.ResponseBody !== "expired") {
-      //       Toast(response.ResponseBody);
-      //     } else {
-      //       if (response.ResponseBody !== "expired") {
-      //         Toast("Your session got expired. Log in again.");
-      //       }
-      //     }
-
-      //     this.isLoading = false;
-      //   }).catch(e => {
-      //     this.isLoading = false;
-      //     Toast("Registration fail. Please contact admin.")
-      //   });
-      // } else {
-      //   this.isLoading = false;
-      //   Toast("Please correct all the mandaroty field marded red");
-      // }
+  submitManageUserForm() {
+    this.userModal = this.manageUserForm.value;
+    this.http.post("user/ManageUserDetail", this.userModal)
+    .then ((response: ResponseModel) => {
+      Toast("Submitted successfully")
+    })
   }
 
 
@@ -357,8 +339,8 @@ export class ManageComponent implements OnInit {
       item.FileSize = file.size;
       item.FileExtension = file.type;
       item.UserId = this.UserId;
-      this.ProfileList.push(item);
-      this.ProfileCollection.push(file);
+      this.ProfileList = item;
+      this.ProfileCollection = file;
     }
   }
 
@@ -374,8 +356,8 @@ export class ManageComponent implements OnInit {
       item.FileSize = file.size;
       item.FileExtension = file.type;
       item.UserId = this.UserId;
-      this.FileDocumentList.push(item);
-      this.FilesCollection.push(file);
+      this.FileDocumentList = item;
+      this.FilesCollection = file;
       let fileSize = selectedfile[0].size/1024;
       if ( fileSize > 100) {
         this.isLargeFile = true;
@@ -388,8 +370,8 @@ export class ManageComponent implements OnInit {
 
   uploadResumeFile() {
     let formData = new FormData();
-    if (this.FileDocumentList.length > 0 && this.UserId > 0) {
-      formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+    if (this.FileDocumentList != null && this.UserId > 0) {
+      formData.append(this.FileDocumentList.FileName, this.FilesCollection);
       formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
       this.http.upload('User/UploadResume', formData)
       .then(response => {
@@ -478,15 +460,12 @@ export class ManageComponent implements OnInit {
   }
 }
 
-class UserPersonalDetail {
+class UserModal {
   FirstName: string = '';
   LastName: string = '';
-  Mobile: number = 0;
+  Mobile: string = '';
   Email: string = '';
   ProfileImg: string = '';
-}
-
-class EmploymentDetail {
   Designation: string = '';
   YourOrganization: string = '';
   CurrentCompany: string = '';
@@ -499,13 +478,61 @@ class EmploymentDetail {
   JobProfile: string = '';
   NoticePeriod: string = '';
   CurrentSalaryThousand: number = 0;
-}
-class ItSkillModal {
   ITSkill: string = '';
   Version: number = 0;
   LastUsed: string= '';
   ExperienceYear: number = 0;
   ExperienceMonth: number = 0;
+  KeySkill: string = ''
+  Education: string = '';
+  Course: string = '';
+  Specialization: string = '';
+  University: string = '';
+  CourseType: string = '';
+  PassingYear: number = 0;
+  GradingSystem: string = ''
+  ProjectTitle: string = ';'
+  ProjectTag: string = '';
+  ProjectWorkingYear: number = 0;
+  ProjectWorkingMonth: number = 0;
+  ProjectWorkedYear: number = 0;
+  ProjectStatus: string = '';
+  ClientName: string = '';
+  ProjectDetail: string = '';
+  CurrentIndustry: string = '';
+  Department: string = '';
+  RoleCategory: string = '';
+  JobRole: string = '';
+  DesiredJob: string = '';
+  EmploymentType: string = '';
+  PreferredShift: string = '';
+  PreferredWorkLocation: string = '';
+  ExpectedSalary: string = '';
+  ExpectedSalaryLakh: number = 0;
+  ExpectedSalaryThousand: number = 0;
+  ProfileSummary: string = '';
+  DOB: Date = new Date();
+  Gender: string = '';
+  Address: string = '';
+  HomeTown: string ='';
+  PinCode: number = 0;
+  MaritalStatus: string = '';
+  Category: string = '';
+  DifferentlyAbled: string = '';
+  PermitUSA: string = '';
+  PermitOtherCountry: string = '';
+  Language: string = '';
+  LanguageRead: string = '';
+  LanguageWrite: string = '';
+  ProficiencyLanguage: string = '';
+  LanguageSpeak: string = '';
+  OnlineProfile: string = '';
+  WorkSample: string = '';
+  Research: string = '';
+  Presentation: string = '';
+  Patent: string = '';
+  Certification: string = '';
+  UserId: number = 0;
 }
 
 class Files {
@@ -519,82 +546,4 @@ class Files {
   DocumentId: number = 0;
   FileType: string = "";
   FileSize: number = 0;
-}
-
-class KeySkill {
-    KeySkill: string = ''
-}
-
-class Education {
-    Education: string = '';
-    Course: string = '';
-    Specialization: string = '';
-    University: string = '';
-    CourseType: string = '';
-    PassingYear: number = 0;
-    GradingSystem: string = ''
-}
-
-class Project {
-    ProjectTitle: string = ';'
-    ProjectTag: string = '';
-    ProjectWorkingYear: number = 0;
-    ProjectWorkingMonth: number = 0;
-    ProjectWorkedYear: number = 0;
-    ProjectStatus: string = '';
-    ClientName: string = '';
-    ProjectDetail: string = '';
-}
-
-class CarrerProfile {
-    CurrentIndustry: string = '';
-    Department: string = '';
-    RoleCategory: string = '';
-    JobRole: string = '';
-    DesiredJob: string = '';
-    EmploymentType: string = '';
-    PreferredShift: string = '';
-    PreferredWorkLocation: string = '';
-    ExpectedSalary: number = 0;
-    ExpectedSalaryLakh: number = 0;
-    ExpectedSalaryThousand: number = 0;
-}
-
-class ProfileSummary {
-    ProfileSummary: string = '';
-}
-
-class ManageUser {
-    FirstName:string = '';
-    LastName: string = '';
-    Email: string = '';
-    Mobile: string = '';
-    ProfileImg: string = '';
-}
-
-class Personal {
-    DOB: string = '';
-    Gender: string = '';
-    Address: string = '';
-    HomeTown: string ='';
-    PinCode: number = 0;
-    MaritalStatus: string = '';
-    Category: string = '';
-    DifferentlyAbled: string = '';
-    PermitUSA: string = '';
-    PermitOtherCountry: string = '';
-    Language: string = '';
-    LanguageRead: string = '';
-    LanguageWrite: string = '';
-    ProficiencyLanguage: string = '';
-    LanguageSpeak: string = '';
-}
-
-class Accomplishment {
-    OnlineProfile: string = '';
-    WorkSample: string = '';
-    Research: string = '';
-    Presentation: string = '';
-    Patent: string = '';
-    Certification: string = '';
 }

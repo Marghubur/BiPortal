@@ -254,7 +254,12 @@ export class FilesComponent implements OnInit {
     let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
     this.viewer = document.getElementById("file-container");
     this.viewer.classList.remove('d-none');
-    this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+    let data = this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+    if (data == undefined) {
+      Toast("hi")
+    } else {
+      Toast("new")
+    }
   }
 
   UpdateCurrent(FileUid: number) {
