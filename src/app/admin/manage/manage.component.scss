@@ -125,6 +125,13 @@ a.text-underline {
     right: 5rem;
   }
 }
+
+.img-container img {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  z-index: 999;
+}
 .span-clients {
   border: 1px solid #d9d9d9;
   background: #845b99;
@@ -319,10 +326,15 @@ table {
   font-weight: 600;
 }
 
-.custom-form-control {
+.border-none {
   border: none !important;
+}
+
+.form-control {
+  border: 1px solid #d9d9d9;
   background: transparent !important;
 }
+
 .edit-icon {
   font-size: 13px;
 }
@@ -333,5 +345,9 @@ table {
 }
 
 .sm-txtarea {
-  max-height: 1rem !important;
+  max-height: 2.4rem !important;
+}
+
+.disableClick {
+  pointer-events: none;
 }

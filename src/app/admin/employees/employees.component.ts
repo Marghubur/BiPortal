@@ -97,6 +97,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   LoadData() {
+    this.isEmpPageReady = false;
     let query = " 1=1 ";
     if(this.employeeData.SearchString.trim() !== "") {
       query = ` 1=1 And ${this.employeeData.SearchString}`;
@@ -119,12 +120,14 @@ export class EmployeesComponent implements OnInit {
       } else {
         this.employeeData.TotalRecords = 0;
       }
+      this.isEmpPageReady = true;
     });
   }
 
   filterRecords() {
     let searchQuery = "";
     let delimiter = "";
+    this.employeeData.reset();
 
     if(this.employeeDetails.Name !== null && this.employeeDetails.Name !== "") {
       this.employeeData.SearchString += ` FirstName like '${this.employeeDetails.Name}%' OR LastName like '${this.employeeDetails.Name}%'`;
@@ -146,6 +149,7 @@ export class EmployeesComponent implements OnInit {
 
   globalFilter() {
     let searchQuery = "";
+    this.employeeData.reset();
     this.employeeData.SearchString = ` FirstName like '${this.anyFilter}%' OR LastName like '${this.anyFilter}%' OR Email like '%${this.anyFilter}%' OR Mobile like '${this.anyFilter}%'`;
 
     this.LoadData();
