@@ -58,6 +58,7 @@ export class BilldetailsComponent implements OnInit {
   applicationData: ApplicationData = new ApplicationData();
   employees: Array<EmployeeDetail> = [];
   currentOrganization: any = null;
+  isPdfGenerating: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -252,10 +253,13 @@ export class BilldetailsComponent implements OnInit {
   }
 
   viewPdfFile(userFile: any) {
+    this.isPdfGenerating = true;
+    $('#pdfviewingModal').modal('show');
     this.regeneratebill(userFile);
   }
 
   showFile(userFile: any) {
+    this.isPdfGenerating = false;
     userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
     let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}.pdf`;
     this.viewer = document.getElementById("file-container");
@@ -275,7 +279,11 @@ export class BilldetailsComponent implements OnInit {
     this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
       let fileDetail: any = null;
       if (response.ResponseBody) {
-        this.showFile(userFile);
+        fileDetail = response.ResponseBody;
+        if (fileDetail.FilePath != null && fileDetail.FilePath != '')
+          this.showFile(fileDetail);
+        else
+          this.showFile(userFile);
       }
     })
   }
