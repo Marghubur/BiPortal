@@ -5,11 +5,11 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, GetStatus, MonthName, Toast, WarningToast, ErrorToast } from 'src/providers/common-service/common.service';
-import { BuildPdf, Employees } from 'src/providers/constants';
+import { GetStatus, MonthName, Toast, WarningToast, ErrorToast } from 'src/providers/common-service/common.service';
+import { BuildPdf } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter, UserService } from 'src/providers/userService';
-import { DocumentUser, Files } from '../documents/documents.component';
+import { Filter } from 'src/providers/userService';
+import { Files } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 
 declare var $: any;
@@ -52,13 +52,12 @@ export class FilesComponent implements OnInit {
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
   isUploading: boolean = false;
+  isPdfGenerating: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
-    private common: CommonService,
     private calendar: NgbCalendar,
-    private userService: UserService
   ) {
     this.singleEmployee = new Filter();
     this.placeholderName = "Select Employee";
@@ -251,10 +250,39 @@ export class FilesComponent implements OnInit {
   }
 
   viewPdfFile(userFile: any) {
-    let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
+    this.isPdfGenerating = true;
+    $('#pdfviewingModal').modal('show');
+    this.regeneratebill(userFile);
+  }
+
+  showFile(userFile: any) {
+    this.isPdfGenerating = false;
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}.pdf`;
     this.viewer = document.getElementById("file-container");
     this.viewer.classList.remove('d-none');
     this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+  }
+
+  regeneratebill(userFile: any) {
+    let employeeBillDetail = {
+      "EmployeeId": userFile.FileOwnerId,
+      "ClientId": userFile.ClientId,
+      "FileId": userFile.FileUid,
+      "FilePath": userFile.FilePath,
+      "FileName": userFile.FileName,
+      "FileExtension": userFile.FileExtension
+    };
+    this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
+      let fileDetail: any = null;
+      if (response.ResponseBody) {
+        fileDetail = response.ResponseBody;
+        if (fileDetail.FilePath != null && fileDetail.FilePath != '')
+          this.showFile(fileDetail);
+        else
+          this.showFile(userFile);
+      }
+    })
   }
 
   UpdateCurrent(FileUid: number) {
