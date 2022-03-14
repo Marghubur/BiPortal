@@ -102,16 +102,6 @@ export class SidemenuComponent implements OnInit {
           });
           i++;
         }
-
-        // let item = null;
-        // i = 0;
-        // while(i < menu.length) {
-        //   item = this.Menu.find(x => x.Catagory == menu[i].Childs);
-        //   if(item !== null) {
-        //     item.Value.push(menu[i])
-        //   }
-        //   i++;
-        // }
       } else {
         ErrorToast("Hmm! Looks login issue. Please Login again.");
       }

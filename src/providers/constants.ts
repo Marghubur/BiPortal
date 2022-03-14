@@ -2,7 +2,6 @@ export const Login = "login";
 export const Dashboard = "dashboard";
 export const Users = "users";
 export const Sales = "sales";
-export const Roles = "roles";
 export const Setting = "setting";
 export const JsonFormatter = "jsonformatter";
 export const TableSampleData = "tablesampledata";
@@ -55,8 +54,9 @@ export const Resume = 'admin/resumes';
 export const SideMenu = 'admin/sidemenu';
 export const BillDetail = 'admin/billdetail';
 export const Attendance = 'admin/attendance';
-export const Manage = 'admin/manage';
+export const Profile = 'admin/profile';
 export const Recent = 'admin/recent';
+export const Roles = 'admin/roles';
 
 
 // *************************** file name constancts  *************
