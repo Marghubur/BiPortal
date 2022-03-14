@@ -22,6 +22,7 @@ import { HomeComponent } from '../home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { ManageComponent } from './manage/manage.component';
 import { RecentComponent } from './recent/recent.component';
+import { RolesComponent } from './roles/roles.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { RecentComponent } from './recent/recent.component';
     HomeComponent,
     AttendanceComponent,
     ManageComponent,
-    RecentComponent
+    RecentComponent,
+    RolesComponent
   ],
   imports: [
     CommonModule,

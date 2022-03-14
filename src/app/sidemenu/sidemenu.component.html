@@ -1,24 +1,24 @@
 <div id="page-menu" class="page-menu mobile-mode-menu bg-white menu-items">
   <div id="accordionPanelsStayOpenExample">
-    <div class="">
-      <h4 class="accordion-header" id="panelsStayOpen-headingOne">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-          data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-          PLANNINGS <span class="badge bg-secondary ms-3">NEW</span>
-        </button>
-      </h4>
-      <div id="panelsStayOpen-collapseOne" class=" mb-0 accordion-collapse collapse show"
-        aria-labelledby="panelsStayOpen-headingOne">
-        <div class="accordion-body">
-          <a class="nav-link a-font" (click)="GoBlogsPage()">
-            <i class="fa fa-server"></i>Blogs
-          </a>
-          <a *ngFor="let item of Menu" [routerLink]="['/' + item.Link]" class="nav-link a-font">
-            <i class="{{item.Icon}} me-2"></i>{{item.Catagory}}
-          </a>
+    <ng-container *ngFor="let catagory of Menu;let index = index;">
+      <div>
+        <h4 class="accordion-header" id="panelsStayOpen-headingOne-{{index}}">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse"
+            data-bs-target="{{index}}" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne-{{index}}">
+            {{catagory.Name}} <span *ngIf="catagory.ParentDetail.Badge != null" class="badge bg-secondary ms-3">NEW</span>
+          </button>
+        </h4>
+        <div id="panelsStayOpen-collapseOne-{{index}}" class=" mb-0 accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne-{{index}}">
+          <div class="accordion-body">
+            <ng-container *ngFor="let item of catagory.Value">
+              <a [routerLink]="['/' + item.Link]" class="nav-link a-font">
+                <i class="{{item.Icon}} me-2"></i>{{item.Catagory}}
+              </a>
+            </ng-container>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
     <div class="">
       <h4 class="accordion-header" id="panelsStayOpen-headingTwo">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -31,7 +31,7 @@
         <div class="accordion-body">
           <a [routerLink]="['/admin/manage']" routerLinkActive="router-link-active"><i class="fa fa-code me-3 pb-2"
               aria-hidden="true"></i>Managae</a>
-          <a [routerLink]="['//admin/recent']" routerLinkActive="router-link-active" class="mt-2"><i
+          <a [routerLink]="['/admin/recent']" routerLinkActive="router-link-active" class="mt-2"><i
               class="fa fa-retweet me-3" aria-hidden="true"></i>Recent</a>
         </div>
       </div>

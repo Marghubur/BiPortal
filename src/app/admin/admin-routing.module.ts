@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Attendance, BillDetail, BuildPdf, Clients, Documents, DocumentsPage, Employees, Files, Manage, ManageEmployee, Recent, RegisterClient, Resume, SideMenu } from 'src/providers/constants';
+import { Attendance, BillDetail, BuildPdf, Clients, Documents, DocumentsPage, Employees, Files, ManageEmployee, Profile, Recent, RegisterClient, Resume, Roles } from 'src/providers/constants';
 import { HomeComponent } from '../home/home.component';
 import { AdminComponent } from './admin.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -16,6 +16,7 @@ import { ManageemployeeComponent } from './manageemployee/manageemployee.compone
 import { RecentComponent } from './recent/recent.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';
 import { ResumeComponent } from './resume/resume.component';
+import { RolesComponent } from './roles/roles.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -30,8 +31,9 @@ const routes: Routes = [
   { path: Resume, component: ResumeComponent },
   { path: BillDetail, component: BilldetailsComponent},
   { path: Attendance, component: AttendanceComponent},
-  { path: Manage, component: ManageComponent},
-  { path: Recent, component: RecentComponent}
+  { path: Profile, component: ManageComponent},
+  { path: Recent, component: RecentComponent},
+  { path: Roles, component: RolesComponent }
 ];
 
 @NgModule({

@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
           if (this.commonService.IsValid(result)) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
-            Toast("Login done successfull.");
+            Toast("Login done. Loading dashboard ...");
             this.nav.navigate("/admin", null);
           } else {
             ErrorToast("Incorrect username or password. Please try again.");

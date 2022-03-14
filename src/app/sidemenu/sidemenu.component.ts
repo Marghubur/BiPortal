@@ -1,6 +1,6 @@
 import { ApplicationStorage } from "../../providers/ApplicationStorage";
 import { AjaxService } from "../../providers/ajax.service";
-import { CommonService, UserDetail } from "../../providers/common-service/common.service";
+import { CommonService, ErrorToast, UserDetail } from "../../providers/common-service/common.service";
 import { AccessTokenExpiredOn, Blogs, BuildPdf, Documents, Employees, Login } from "../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
@@ -63,7 +63,7 @@ export class SidemenuComponent implements OnInit {
           if(response.ResponseBody !== null) {
             this.IsLoggedIn = true;
             this.userDetail = response.ResponseBody["UserDetail"];
-            this.Menu = response.ResponseBody["Menu"];
+            this.BuildMenu(response.ResponseBody["Menu"]);
             this.local.set(response.ResponseBody);
             this.tokenHelper.setJwtToken(this.userDetail['Token'], this.userDetail.TokenExpiryDuration.toString());
           } else {
@@ -83,7 +83,27 @@ export class SidemenuComponent implements OnInit {
       if(Master !== null && Master !== "") {
         this.IsLoggedIn = true;
         this.userDetail = Master["UserDetail"];
-        this.Menu = Master["Menu"];
+        this.BuildMenu(Master["Menu"]);
+      }
+    }
+  }
+
+  BuildMenu(menu: any) {
+    this.Menu = [];
+    if(menu) {
+      let parentItems = menu.filter(x => x.Childs == null);
+      if(parentItems.length > 0) {
+        let i = 0;
+        while(i < parentItems.length) {
+          this.Menu.push({
+            Name: parentItems[i].Catagory,
+            ParentDetail: parentItems[i],
+            Value: menu.filter(x => x.Childs === parentItems[i].Catagory)
+          });
+          i++;
+        }
+      } else {
+        ErrorToast("Hmm! Looks login issue. Please Login again.");
       }
     }
   }
