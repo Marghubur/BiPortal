@@ -5,7 +5,7 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, GetStatus, MonthName, Toast } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, GetStatus, MonthName, Toast } from 'src/providers/common-service/common.service';
 import { BuildPdf, Employees } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -59,6 +59,10 @@ export class BilldetailsComponent implements OnInit {
   employees: Array<EmployeeDetail> = [];
   currentOrganization: any = null;
   isPdfGenerating: boolean = false;
+  isDownloadModal: boolean = false;
+  downLoadFileExtension: string = ".pdf";
+  downloadFileLink: string = "";
+  downlodFilePath: string = "";
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -288,6 +292,29 @@ export class BilldetailsComponent implements OnInit {
     })
   }
 
+  getFileExtension(value: any) {
+    this.downLoadFileExtension = "." + value.target.value;
+  }
+
+  downloadFile(userFile: any) {
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    this.downloadFileLink = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
+    this.isDownloadModal = true;
+    $('#downloadPopUp').modal('show')
+  }
+
+  downloadPdfDocx() {
+    this.downlodFilePath = `${this.downloadFileLink}${this.downLoadFileExtension}`;
+    var xhr = new XMLHttpRequest();
+    xhr.open('HEAD', this.downlodFilePath, false);
+    xhr.send();
+    this.closeWindow();
+    if (xhr.status == 404) {
+      ErrorToast("File not found");
+      this.downlodFilePath = "javascript:void(0)"
+    }
+  }
+
   UpdateCurrent(FileUid: number) {
     this.currentFileId = Number(FileUid);
     this.isModalReady = true;
@@ -305,6 +332,7 @@ export class BilldetailsComponent implements OnInit {
   closeWindow() {
     $('#addupdateModal').modal('hide');
     $('#gstupdateModal').modal('hide');
+    $('#downloadPopUp').modal('hide');
   }
 
   LoadFiles() {

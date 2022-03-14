@@ -53,6 +53,11 @@ export class FilesComponent implements OnInit {
   FilesCollection: Array<any> = [];
   isUploading: boolean = false;
   isPdfGenerating: boolean = false;
+  isDownloadModal: boolean = false;
+  downLoadFileExtension: string = ".pdf";
+  downloadFileLink: string = "";
+  downlodFilePath: string = "";
+  FileDetail: any = "";
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -285,6 +290,55 @@ export class FilesComponent implements OnInit {
     })
   }
 
+  getFileExtension(value: any) {
+    this.downLoadFileExtension = "." + value.target.value;
+  }
+
+  downloadFile(userFile: any) {
+    this.FileDetail = userFile;
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    //this.downloadFileLink = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
+    this.isDownloadModal = true;
+    $('#downloadPopUp').modal('show')
+  }
+
+  downloadPdfDocx() {
+    let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
+    var xhr = new XMLHttpRequest();
+    xhr.open('HEAD', updateFilePath, false);
+    xhr.send();
+    if (xhr.status == 404) {
+      //this.regeneratebill(this.FileDetail);
+
+      let employeeBillDetail = {
+        "EmployeeId": this.FileDetail.FileOwnerId,
+        "ClientId": this.FileDetail.ClientId,
+        "FileId": this.FileDetail.FileUid,
+        "FilePath": this.FileDetail.FilePath,
+        "FileName": this.FileDetail.FileName,
+        "FileExtension": this.FileDetail.FileExtension
+      };
+
+      this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
+        let fileDetail: any = null;
+        if (response.ResponseBody) {
+          fileDetail = response.ResponseBody;
+          if (fileDetail.FilePath != null && fileDetail.FilePath != '') {
+            this.showFile(fileDetail);
+            fileDetail.FileName = fileDetail.FileName.replace(/\.[^/.]+$/, "");
+            updateFilePath = `${this.basePath}${fileDetail.FilePath}/${fileDetail.FileName}${this.downLoadFileExtension}`;
+            this.downlodFilePath = updateFilePath;
+          }
+          else
+          ErrorToast("Please contact to admin")
+        }
+        this.closeWindow();
+      })
+      //ErrorToast("File not found");
+    }
+    this.downlodFilePath = updateFilePath;
+  }
+
   UpdateCurrent(FileUid: number) {
     this.currentFileId = Number(FileUid);
     $('#addupdateModal').modal('show');
@@ -293,6 +347,7 @@ export class FilesComponent implements OnInit {
   closeWindow() {
     $('#addupdateModal').modal('hide');
     $('#gstupdateModal').modal('hide');
+    $('#downloadPopUp').modal('hide');
   }
 
   LoadFiles() {
