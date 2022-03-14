@@ -435,7 +435,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" (click)="closeWindow()">Close</button>
-        <a href="{{downlodFilePath}}" class="btn btn-primary" [disabled]="isLoading" (click)="downloadPdfDocx()"
+        <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
+        <a class="btn btn-primary" [disabled]="isLoading" (click)="downloadPdfDocx()"
           download>
           <i class="fa fa-download text-light pe-2"></i> Download
         </a>

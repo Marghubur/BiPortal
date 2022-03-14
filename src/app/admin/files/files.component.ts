@@ -303,40 +303,28 @@ export class FilesComponent implements OnInit {
   }
 
   downloadPdfDocx() {
+    this.downlodFilePath = "";
     let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
-    var xhr = new XMLHttpRequest();
-    xhr.open('HEAD', updateFilePath, false);
-    xhr.send();
-    if (xhr.status == 404) {
-      //this.regeneratebill(this.FileDetail);
+    let employeeBillDetail = {
+      "EmployeeId": this.FileDetail.FileOwnerId,
+      "ClientId": this.FileDetail.ClientId,
+      "FileId": this.FileDetail.FileUid,
+      "FilePath": this.FileDetail.FilePath,
+      "FileName": this.FileDetail.FileName,
+      "FileExtension": this.FileDetail.FileExtension
+    };
 
-      let employeeBillDetail = {
-        "EmployeeId": this.FileDetail.FileOwnerId,
-        "ClientId": this.FileDetail.ClientId,
-        "FileId": this.FileDetail.FileUid,
-        "FilePath": this.FileDetail.FilePath,
-        "FileName": this.FileDetail.FileName,
-        "FileExtension": this.FileDetail.FileExtension
-      };
-
-      this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
-        let fileDetail: any = null;
-        if (response.ResponseBody) {
-          fileDetail = response.ResponseBody;
-          if (fileDetail.FilePath != null && fileDetail.FilePath != '') {
-            this.showFile(fileDetail);
-            fileDetail.FileName = fileDetail.FileName.replace(/\.[^/.]+$/, "");
-            updateFilePath = `${this.basePath}${fileDetail.FilePath}/${fileDetail.FileName}${this.downLoadFileExtension}`;
-            this.downlodFilePath = updateFilePath;
-          }
-          else
-          ErrorToast("Please contact to admin")
+    this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        if(updateFilePath !== "") {
+          this.downlodFilePath = updateFilePath;
+          $('#downloadexistingfile').click();        
         }
-        this.closeWindow();
-      })
-      //ErrorToast("File not found");
-    }
-    this.downlodFilePath = updateFilePath;
+      }
+      this.closeWindow();
+    }).catch(e => {
+      console.log(JSON.stringify(e));
+    });    
   }
 
   UpdateCurrent(FileUid: number) {
