@@ -427,7 +427,7 @@
 </div>
 
 <!-- Download file model -->
-<div class="modal fade" id="downloadPopUp" tabindex="-1" *ngIf="isDownloadModal">
+<div class="modal fade" id="downloadPopUp" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -466,8 +466,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" (click)="closeWindow()">Close</button>
-        <a href="{{downlodFilePath}}" class="btn btn-primary" [disabled]="isLoading" (click)="downloadPdfDocx()"
-          download>
+        <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
+        <a class="btn btn-primary" [attr.disabled]="isLoading" (click)="downloadPdfDocx()" download>
           <i class="fa fa-download text-light pe-2"></i> Download
         </a>
       </div>

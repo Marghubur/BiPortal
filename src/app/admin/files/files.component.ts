@@ -318,13 +318,19 @@ export class FilesComponent implements OnInit {
       if (response.ResponseBody) {
         if(updateFilePath !== "") {
           this.downlodFilePath = updateFilePath;
-          $('#downloadexistingfile').click();        
+          $('#downloadexistingfile').click();
+          this.viewer = document.getElementById("file-container");
+          this.viewer.classList.remove('d-none');
+          this.viewer.querySelector('iframe').setAttribute('src', this.downlodFilePath);
+          var ext =this.downlodFilePath.split(".");
+          if (ext[1] == "docx")
+            this.viewer.classList.add("d-none");
         }
       }
       this.closeWindow();
     }).catch(e => {
       console.log(JSON.stringify(e));
-    });    
+    });
   }
 
   UpdateCurrent(FileUid: number) {

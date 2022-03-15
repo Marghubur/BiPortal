@@ -20,7 +20,7 @@ import { BilldetailsComponent } from './billdetails/billdetails.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { HomeComponent } from '../home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
-import { ManageComponent } from './manage/manage.component';
+import { ManageComponent } from './profile/profile.component';
 import { RecentComponent } from './recent/recent.component';
 import { RolesComponent } from './roles/roles.component';
 

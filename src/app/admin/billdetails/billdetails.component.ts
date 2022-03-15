@@ -63,6 +63,7 @@ export class BilldetailsComponent implements OnInit {
   downLoadFileExtension: string = ".pdf";
   downloadFileLink: string = "";
   downlodFilePath: string = "";
+  FileDetail: any = "";
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -297,23 +298,44 @@ export class BilldetailsComponent implements OnInit {
   }
 
   downloadFile(userFile: any) {
+    this.FileDetail = userFile;
     userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
-    this.downloadFileLink = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
+    //this.downloadFileLink = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
     this.isDownloadModal = true;
     $('#downloadPopUp').modal('show')
   }
 
   downloadPdfDocx() {
-    this.downlodFilePath = `${this.downloadFileLink}${this.downLoadFileExtension}`;
-    var xhr = new XMLHttpRequest();
-    xhr.open('HEAD', this.downlodFilePath, false);
-    xhr.send();
-    this.closeWindow();
-    if (xhr.status == 404) {
-      ErrorToast("File not found");
-      this.downlodFilePath = "javascript:void(0)"
-    }
+    this.downlodFilePath = "";
+    let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
+    let employeeBillDetail = {
+      "EmployeeId": this.FileDetail.FileOwnerId,
+      "ClientId": this.FileDetail.ClientId,
+      "FileId": this.FileDetail.FileUid,
+      "FilePath": this.FileDetail.FilePath,
+      "FileName": this.FileDetail.FileName,
+      "FileExtension": this.FileDetail.FileExtension
+    };
+
+    this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        if(updateFilePath !== "") {
+          this.downlodFilePath = updateFilePath;
+          $('#downloadexistingfile').click();
+          this.viewer = document.getElementById("file-container");
+          this.viewer.classList.remove('d-none');
+          this.viewer.querySelector('iframe').setAttribute('src', this.downlodFilePath);
+          var ext =this.downlodFilePath.split(".");
+          if (ext[1] == "docx")
+            this.viewer.classList.add("d-none");
+        }
+      }
+      this.closeWindow();
+    }).catch(e => {
+      console.log(JSON.stringify(e));
+    });
   }
+
 
   UpdateCurrent(FileUid: number) {
     this.currentFileId = Number(FileUid);

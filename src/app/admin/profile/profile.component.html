@@ -198,118 +198,121 @@
                       (click)="editEmployment()"></i>
                   </h2>
                   <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
-                    *ngIf="!section.isEmploymentEdit">ADD
+                    *ngIf="!section.isEmploymentEdit" (click)="addEmployment()">ADD
                     EMPLOYMENT</a>
                   <button class="btn btn-outline-success btn-sm float-end" *ngIf="section.isEmploymentEdit"
                     (click)="submitManageUserForm()">Save</button>
                 </div>
               </div>
-              <div class="col-md-12 row ps-2" id="employment">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Designation <span class="text-danger">*</span></label>
-                  <input class="form-control" placeholder="Enter YourDesignation" [readonly]="!section.isEmploymentEdit"
-                    [class.custom-form-control]="!section.isEmploymentEdit" name="Designation"
-                    formControlName="Designation" />
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Your Organization <span class="text-danger">*</span></label>
-                  <input class="form-control" placeholder="Your Organization" [readonly]="!section.isEmploymentEdit"
-                    [class.custom-form-control]="!section.isEmploymentEdit" name="YourOrganization"
-                    formControlName="YourOrganization" />
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Is this your current company?</label>
-                  <div class="row ps-4">
-                    <div class="form-check col-md-3">
-                      <input class="form-check-input" type="radio" name="CurrentCompany"
-                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                        formControlName="CurrentCompany" value="yes" checked>
-                      <label class="form-check-label" for="gridRadios1">
-                        Yes
-                      </label>
-                    </div>
-                    <div class="form-check col-md-3 ms-3">
-                      <input class="form-check-input" type="radio" name="CurrentCompany"
-                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                        formControlName="CurrentCompany" value="no">
-                      <label class="form-check-label" for="gridRadios2">
-                        No
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 row">
-                  <div class="col-md-9 mb-3 row p-0 m-0">
-                    <label class="form-label">Started Working From <span class="text-danger">*</span></label>
-                    <input class="form-control working-input-box ms-3" placeholder="Year"
+              <div class="col-md-12 ps-2" formArrayName="Employment">
+                <div class="col=-md-12 row border-bottom" *ngFor="let item of employmentFormArray; let i=index"
+                  [formGroupName]="i">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Designation <span class="text-danger">*</span></label>
+                    <input class="form-control" placeholder="Enter YourDesignation"
                       [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                      formControlName="WorkingYear" />
-                    <input class="form-control working-input-box ms-3" placeholder="Month"
-                      [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                      formControlName="WorkingMonth" />
+                      name="Designation" formControlName="Designation" />
                   </div>
-                  <div class="col-md-3 mb-3 row p-0 m-0">
-                    <label class="form-label">Worked Till <span class="text-danger">*</span></label>
-                    <input class="form-control worked-input-box  ms-3" placeholder="Year"
-                      [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                      name="WorkedYear" formControlName="WorkedYear" />
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Your Organization <span class="text-danger">*</span></label>
+                    <input class="form-control" placeholder="Your Organization" [readonly]="!section.isEmploymentEdit"
+                      [class.custom-form-control]="!section.isEmploymentEdit" name="YourOrganization"
+                      formControlName="YourOrganization" />
                   </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Current Salary <span class="text-danger">*</span></label>
-                  <div class="row ps-4">
-                    <div class="form-check col-md-3">
-                      <input class="form-check-input" type="radio" name="CurrentSalary"
-                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                        value="indianrupees" checked formControlName="CurrentSalary">
-                      <label class="form-check-label" for="CurrentSalary">
-                        Indian Rupees
-                      </label>
-                    </div>
-                    <div class="form-check col-md-3 ms-3">
-                      <input class="form-check-input" type="radio" name="CurrentSalary"
-                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                        value="usdollrs" formControlName="CurrentSalary">
-                      <label class="form-check-label" for="CurrentSalary">
-                        US Dollars
-                      </label>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Is this your current company?</label>
+                    <div class="row ps-4">
+                      <div class="form-check col-md-3">
+                        <input class="form-check-input" type="radio" name="CurrentCompany"
+                          [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                          formControlName="CurrentCompany" value="yes" checked>
+                        <label class="form-check-label" for="gridRadios1">
+                          Yes
+                        </label>
+                      </div>
+                      <div class="form-check col-md-3 ms-3">
+                        <input class="form-check-input" type="radio" name="CurrentCompany"
+                          [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                          formControlName="CurrentCompany" value="no">
+                        <label class="form-check-label" for="gridRadios2">
+                          No
+                        </label>
+                      </div>
                     </div>
                   </div>
-                  <div class="row">
-                    <input class="form-control w-25 ms-3" placeholder="Lakh" [readonly]="!section.isEmploymentEdit"
-                      [class.custom-form-control]="!section.isEmploymentEdit" name="CurrentSalaryLakh"
-                      formControlName="CurrentSalaryLakh" />
-                    <input class="form-control w-25 ms-3" placeholder="Thousand" [readonly]="!section.isEmploymentEdit"
-                      [class.custom-form-control]="!section.isEmploymentEdit" name="CurrentSalaryThousand"
-                      formControlName="CurrentSalaryThousand" />
+                  <div class="col-md-6 row">
+                    <div class="col-md-9 mb-3 row p-0 m-0">
+                      <label class="form-label">Started Working From <span class="text-danger">*</span></label>
+                      <input class="form-control working-input-box ms-3" placeholder="Year"
+                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                        formControlName="WorkingYear" />
+                      <input class="form-control working-input-box ms-3" placeholder="Month"
+                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                        formControlName="WorkingMonth" />
+                    </div>
+                    <div class="col-md-3 mb-3 row p-0 m-0">
+                      <label class="form-label">Worked Till <span class="text-danger">*</span></label>
+                      <input class="form-control worked-input-box  ms-3" placeholder="Year"
+                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                        name="WorkedYear" formControlName="WorkedYear" />
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Top 5 key skills that you think are important for current
-                    employment<span class="text-danger"> *</span></label>
-                  <textarea name="Experties" placeholder="Enter your area of Experties/Specialization"
-                    [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                    class="form-control sm-txtarea" formControlName="Experties"></textarea>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Describe your Job Profile</label>
-                  <textarea name="JobProfile" placeholder="Type here ....." class="form-control sm-txtarea"
-                    [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
-                    formControlName="JobProfile"></textarea>
-                  <small class="float-end">4000 Character(s) Left</small>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Notice Period <span class="text-danger">*</span></label>
-                  <select class="form-control" [disabled]="!section.isEmploymentEdit"
-                    (change)="noticePeriodSelected($event)" [class.custom-form-control]="!section.isEmploymentEdit"
-                    formControlname="NoticePeriod">
-                    <option value="15days0rless">15 Days or Less</option>
-                    <option value="1month">1 Month</option>
-                    <option value="2month">2 Month</option>
-                    <option value="3month">3 Month</option>
-                    <option value="morethan3month">More than 3 Month</option>
-                    <option value="servingnoticeperiod">Serving Notice Period</option>
-                  </select>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Current Salary <span class="text-danger">*</span></label>
+                    <div class="row ps-4">
+                      <div class="form-check col-md-3">
+                        <input class="form-check-input" type="radio" name="CurrentSalary"
+                          [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                          value="indianrupees" checked formControlName="CurrentSalary">
+                        <label class="form-check-label" for="CurrentSalary">
+                          Indian Rupees
+                        </label>
+                      </div>
+                      <div class="form-check col-md-3 ms-3">
+                        <input class="form-check-input" type="radio" name="CurrentSalary"
+                          [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                          value="usdollrs" formControlName="CurrentSalary">
+                        <label class="form-check-label" for="CurrentSalary">
+                          US Dollars
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <input class="form-control w-25 ms-3" placeholder="Lakh" [readonly]="!section.isEmploymentEdit"
+                        [class.custom-form-control]="!section.isEmploymentEdit" name="CurrentSalaryLakh"
+                        formControlName="CurrentSalaryLakh" />
+                      <input class="form-control w-25 ms-3" placeholder="Thousand"
+                        [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                        name="CurrentSalaryThousand" formControlName="CurrentSalaryThousand" />
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Top 5 key skills that you think are important for current
+                      employment<span class="text-danger"> *</span></label>
+                    <textarea name="Experties" placeholder="Enter your area of Experties/Specialization"
+                      [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                      class="form-control sm-txtarea" formControlName="Experties"></textarea>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Describe your Job Profile</label>
+                    <textarea name="JobProfile" placeholder="Type here ....." class="form-control sm-txtarea"
+                      [readonly]="!section.isEmploymentEdit" [class.custom-form-control]="!section.isEmploymentEdit"
+                      formControlName="JobProfile"></textarea>
+                    <small class="float-end">4000 Character(s) Left</small>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Notice Period <span class="text-danger">*</span></label>
+                    <select class="form-control" [disabled]="!section.isEmploymentEdit"
+                      (change)="noticePeriodSelected($event)" [class.custom-form-control]="!section.isEmploymentEdit"
+                      formControlname="NoticePeriod">
+                      <option value="15days0rless">15 Days or Less</option>
+                      <option value="1month">1 Month</option>
+                      <option value="2month">2 Month</option>
+                      <option value="3month">3 Month</option>
+                      <option value="morethan3month">More than 3 Month</option>
+                      <option value="servingnoticeperiod">Serving Notice Period</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -325,13 +328,14 @@
                       (click)="editEducation()"></i>
                   </h2>
                   <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
-                    *ngIf="!section.isEducationEdit">ADD
+                    *ngIf="!section.isEducationEdit" (click)="addItskill()">ADD
                     EDUCATION</a>
                   <button class="btn btn-outline-success btn-sm float-end" *ngIf="section.isEducationEdit"
                     (click)="submitManageUserForm()">Save</button>
                 </div>
               </div>
-              <div class="col-md-12 row ps-2" id="education">
+              <div class="col-md-12 ps-2" formArrayName="ITSkillrow">
+                <div class="col-md-12 row"></div>
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Education <span class="text-danger">*</span></label>
                   <input class="form-control" placeholder="Education" name="Education"
@@ -951,7 +955,7 @@
 
                 <div class="mt-3 mb-3" formArrayName="LanguageRow">
                   <h4 class="fw-bold">Language</h4>
-                  <div class="col-md-12 row" *ngFor="let item of formArry; let i=index" [formGroupName]="i">
+                  <div class="col-md-12 row" *ngFor="let item of languageformArry; let e=index" [formGroupName]="e">
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Language <span class="text-danger">*</span></label>
                       <input class="form-control" placeholder="Language" name="Language"

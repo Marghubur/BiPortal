@@ -11,7 +11,7 @@ import { documentsComponent } from './documents/documents.component';
 import { documentspageComponent } from './documentspage/documentspage.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { FilesComponent } from './files/files.component';
-import { ManageComponent } from './manage/manage.component';
+import { ManageComponent } from './profile/profile.component';
 import { ManageemployeeComponent } from './manageemployee/manageemployee.component';
 import { RecentComponent } from './recent/recent.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';

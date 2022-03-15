@@ -9,9 +9,9 @@ import { AccessTokenExpiredOn } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 
 @Component({
-  selector: 'app-manage',
-  templateUrl: './manage.component.html',
-  styleUrls: ['./manage.component.scss']
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
 })
 export class ManageComponent implements OnInit {
   model: NgbDateStruct;
@@ -139,23 +139,8 @@ export class ManageComponent implements OnInit {
   initForm() {
     this.manageUserForm = this.fb .group({
       KeySkill: new FormControl(''),
-      Designation: new FormControl(''),
-      YourOrganization: new FormControl(''),
-      CurrentCompany: new FormControl(''),
-      WorkingYear: new FormControl(''),
-      WorkingMonth: new FormControl(''),
-      WorkedYear: new FormControl(''),
-      CurrentSalary: new FormControl(''),
-      CurrentSalaryLakh: new FormControl(''),
-      Experties: new FormControl(''),
-      JobProfile: new FormControl(''),
-      NoticePeriod: new FormControl(''),
-      CurrentSalaryThousand: new FormControl(''),
-      ITSkill: new FormControl(''),
-      Version: new FormControl(''),
-      LastUsed: new FormControl(''),
-      ExperienceYear: new FormControl(''),
-      ExperienceMonth: new FormControl(''),
+      Employment: this.fb.array([this.employmentField()]),
+      ITSkillrow: this.fb.array([this.iTSkillrowField()]),
       Education: new FormControl(''),
       Course: new FormControl(''),
       Specialization: new FormControl(''),
@@ -220,12 +205,55 @@ export class ManageComponent implements OnInit {
     })
   }
 
-  addLanguageForm() {
-      this.formArry.push(this.languageField());
+  employmentField() {
+    return this.fb.group({
+      Designation: new FormControl(''),
+      YourOrganization: new FormControl(''),
+      CurrentCompany: new FormControl(''),
+      WorkingYear: new FormControl(''),
+      WorkingMonth: new FormControl(''),
+      WorkedYear: new FormControl(''),
+      CurrentSalary: new FormControl(''),
+      CurrentSalaryLakh: new FormControl(''),
+      CurrentSalaryThousand: new FormControl(''),
+      Experties: new FormControl(''),
+      JobProfile: new FormControl(''),
+      NoticePeriod: new FormControl('')
+    })
   }
 
-  get formArry() {
+  iTSkillrowField() {
+    return this.fb.group({
+      ITSkill: new FormControl(''),
+      Version: new FormControl(''),
+      LastUsed: new FormControl(''),
+      ExperienceYear: new FormControl(''),
+      ExperienceMonth: new FormControl('')
+    })
+  }
+
+  addItskill() {
+    this.iTSkillFormArray.push(this.iTSkillrowField());
+  }
+
+  addEmployment() {
+    this.employmentFormArray.push(this.employmentField());
+  }
+
+  addLanguageForm() {
+    this.languageformArry.push(this.languageField());
+  }
+
+  get languageformArry() {
     return (<FormArray>this.manageUserForm.get('LanguageRow')).controls;
+  }
+
+  get employmentFormArray() {
+    return (<FormArray>this.manageUserForm.get('Employment')).controls;
+  }
+
+  get iTSkillFormArray() {
+    return (<FormArray>this.manageUserForm.get('ITSkillrow')).controls;
   }
 
   get f() {
