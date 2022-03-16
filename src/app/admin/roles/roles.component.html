@@ -1,79 +1,85 @@
 <div class="col-12 full-v main-container">
-    <div class="col-md-12 row m-0 p-0">
-        <h4 class="p-0">Manage Role</h4>
-    </div>
-    <div>
-        <form [formGroup]="rolesForm">
-            <div class="x_panel">
-                <div class="x_header">
-                    <div class="x_header_title">
-                        <h2>Employment
-                            <i class="fa text-dark edit-icon ps-2"></i>
-                        </h2>
-                        <button class="btn btn-outline-success btn-sm float-end">Save</button>
-                    </div>
-                </div>
-                <div class="col-12 row m-0">
-                    <div class="col-md-4">
-                        <label class="form-label">Existing Roles *</label>
-                        <select class="form-control" name="RoleName" (change)="loadMenu($event)" formControlName="RoleName">
-                            <option value="0">Select Role</option>
-                            <option value="1">Administration</option>
-                            <option value="2">User</option>
-                            <option value="3">Management</option>
-                        </select>
-                    </div>
-                </div>
+  <div class="col-md-12 row m-0 p-0">
+    <h4 class="p-0">Manage Role</h4>
+  </div>
+  <div>
+    <div class="x_panel">
+      <div class="x_header">
+        <div class="x_header_title">
+          <h2>Employment
+            <i class="fa text-dark edit-icon ps-2"></i>
+          </h2>
+          <button class="btn btn-outline-success btn-sm float-end" (click)="submitRole()">
+            <i class="fa fa-sign-in pe-2" aria-hidden="true"></i>
+            Save
+          </button>
+        </div>
+      </div>
+      <div class="col-12 row m-0">
+        <div class="col-md-4">
+          <label class="form-label">Existing Roles *</label>
+          <select class="form-control" name="RoleName" (change)="loadMenu($event)" [(ngModel)]="RoleName">
+            <option value="0">Select Role</option>
+            <option value="1">Administration</option>
+            <option value="2">User</option>
+            <option value="3">Management</option>
+          </select>
+        </div>
+      </div>
 
-                <ng-container *ngIf="!isRolesLoaded">
-                    <h2 class="mt-5 text-center text-muted">
-                        Please select existing role from above dropdown and grant appropriate permission.
-                    </h2>
-                </ng-container>
-                <ng-container *ngIf="isRolesLoaded">
-                    <div class="row mt-4">
-                        <div class="col-md-6" *ngFor="let catagory of Menu">
-                            <div class="card">
-                                <div class="card-header header-text">
-                                  {{catagory.Name}}
-                                </div>
-                                <div class="card-body pt-0 pb-0">
-                                  <ng-container *ngFor="let item of catagory.value; let i=index">
-                                      <div class="d-flex justify-content-between border-bottom pt-4 pb-4">
-                                          <div class="d-flex flex-column justify-content-center align-items-center">
-                                              <i class="{{item.Icon}} menu-icon"></i>
-                                              <label class="category-name">
-                                                  {{item.Catagory}}
-                                              </label>
-                                          </div>
-                                          <div class="d-flex flex-column">
-                                            <div class="form-check pt-1 pb-1">
-                                                <input class="form-check-input" type="checkbox" value="readonly" name="permission{{i}}" (click)="selectPermission()">
-                                                <label class="form-check-label permission-text" for="deactive">
-                                                    Read only
-                                                </label>
-                                            </div>
-                                            <div class="form-check pt-1 pb-1">
-                                                <input class="form-check-input" type="checkbox" value="read&write" name="permission{{i}}" (click)="selectPermission()">
-                                                <label class="form-check-label permission-text" for="deactive">
-                                                    Read & Write
-                                                </label>
-                                            </div>
-                                            <div class="form-check pt-1 pb-1">
-                                                <input class="form-check-input" type="checkbox" value="fulaccess" name="permission{{i}}" (click)="selectPermission()">
-                                                <label class="form-check-label permission-text" for="deactive">
-                                                    Full Access
-                                                </label>
-                                            </div>
-                                          </div>
-                                      </div>
-                                  </ng-container>
-                                </div>
-                              </div>
+      <ng-container *ngIf="!isRolesLoaded">
+        <h2 class="mt-5 text-center text-muted">
+          Please select existing role from above dropdown and grant appropriate permission.
+        </h2>
+      </ng-container>
+
+      <ng-container *ngIf="isRolesLoaded">
+        <form [formGroup]="rolesForm">
+          <div class="row mt-4 col-md-12">
+            <div class="col-md-6" *ngFor="let catagory of Menu">
+              <div class="card">
+                <div class="card-header header-text">
+                  {{catagory.Name}}
+                </div>
+                <div formArrayName="menuItems" class="card-body pt-0 pb-0">
+                  <ng-container *ngFor="let item of rolesForm.get('menuItems').controls;let index = index;">
+                    <ng-container [formGroupName]="index">
+                      <div *ngIf="catagory.Name === item.get('ParentMenu').value"
+                        class="d-flex justify-content-between border-bottom pt-4 pb-4">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <i class="{{item.get('Icon').value}} menu-icon"></i>
+                          <label class="category-name ps-3">
+                            {{item.get('Catagory').value}}
+                          </label>
                         </div>
-                    </div>
-                </ng-container>
+                        <div class="btn-group dropstart">
+                          <label class="pe-4">{{getPermessionName(item.get('Permission').value)}}</label>
+
+                          <button class="btn btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="javascriptt:void(0)"
+                                (click)="selectPermission(2, index)">Read
+                                only</a></li>
+                            <li><a class="dropdown-item" href="javascriptt:void(0)"
+                                (click)="selectPermission(3, index)">Read &
+                                Write</a></li>
+                            <li><a class="dropdown-item" href="javascriptt:void(0)"
+                                (click)="selectPermission(1, index)">Full
+                                Access</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </div>
             </div>
+          </div>
         </form>
+      </ng-container>
     </div>
+  </div>
 </div>

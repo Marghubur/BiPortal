@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
 import { NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CommonService, ErrorToast, Toast, ToFixed } from 'src/providers/common-service/common.service';
+import { AddNumbers, CommonService, ErrorToast, Toast, ToFixed } from 'src/providers/common-service/common.service';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -41,6 +41,7 @@ export class BuildPdfComponent implements OnInit {
   isEdit: boolean = false;
   editMode: boolean = false;
   isHalfDay: boolean = false;
+  halfDayDisable: boolean = false;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -112,6 +113,8 @@ export class BuildPdfComponent implements OnInit {
 
       this.http.post("FileMaker/EditEmployeeBillDetail", employeeBillDetail).then((response: ResponseModel) => {
         let fileDetail: any = null;
+        let editPackageAmount: number = 0;
+        let editGrandTotalAmount: number = 0;
         if (response.ResponseBody) {
           this.applicationData = response.ResponseBody as ApplicationData;
           this.employees = this.applicationData.employees;
@@ -138,6 +141,10 @@ export class BuildPdfComponent implements OnInit {
             this.pdfModal.daysAbsent = fileDetail.NoOfDaysAbsent;
             this.pdfModal.isHalfDay = 0;
             this.pdfModal.workingDay = fileDetail.NoOfDays;
+            this.packageAmount = fileDetail.PaidAmount;
+            editPackageAmount = this.packageAmount;
+            this.pdfModal.packageAmount = fileDetail.PaidAmount;
+
             if(this.pdfModal.daysAbsent) {
               let value = this.pdfModal.daysAbsent.toString();
               let allValue = value.split(".");
@@ -151,16 +158,34 @@ export class BuildPdfComponent implements OnInit {
               }
             }
 
+            if (this.pdfModal.cGST > 0) {
+              let gst = this.pdfModal.cGST;
+              this.pdfModal.cGSTAmount = this.calculateGSTAmount(gst);
+              this.cgstAmount = this.pdfModal.cGSTAmount;
+            }
+
+            if (this.pdfModal.sGST > 0) {
+              let gst = this.pdfModal.sGST
+              this.pdfModal.sGSTAmount = this.calculateGSTAmount(gst);
+              this.sgstAmount = this.pdfModal.sGSTAmount;
+            }
+
+            if (this.pdfModal.iGST > 0) {
+              let gst = this.pdfModal.iGST
+              this.pdfModal.iGSTAmount = this.calculateGSTAmount(gst);
+              this.igstAmount = this.pdfModal.iGSTAmount;
+            }
+
+            editGrandTotalAmount = AddNumbers([this.pdfModal.packageAmount, this.pdfModal.cGSTAmount, this.pdfModal.sGSTAmount, this.pdfModal.iGSTAmount], 2)
             this.pdfModal.actualDaysBurned = (fileDetail.NoOfDays - this.pdfModal.daysAbsent);
             this.pdfModal.billNo = fileDetail.BillNo.replace("#", "");
-            this.pdfModal.packageAmount = fileDetail.PaidAmount;
             this.pdfModal.billId = fileDetail.BillDetailUid;
             this.pdfModal.FileId = fileDetail.FileDetailId;
             this.pdfModal.dateOfBilling = fileDetail.BillUpdatedOn;
             this.pdfModal.UpdateSeqNo = fileDetail.UpdateSeqNo;
             this.pdfModal.StatusId = fileDetail.BillStatusId;
             this.pdfModal.PaidOn = fileDetail.PaidOn;
-            this.generateDaysCount();
+            this.grandTotalAmount = this.pdfModal.grandTotalAmount;
           }
         } else {
           this.common.ShowToast("Not able to load page data. Please do re-login");
@@ -178,17 +203,14 @@ export class BuildPdfComponent implements OnInit {
         this.initForm();
         this.findEmployeeById(this.pdfModal.developerId);
         this.bindClientDetail(this.pdfModal.receiverCompanyId);
-        this.packageAmount = fileDetail.PaidAmount;
 
-        let gst: number = 0;
-        if (this.pdfModal.cGST > 0)
-          gst += this.pdfModal.cGST;
-        if (this.pdfModal.sGST > 0)
-          gst += this.pdfModal.sGST
-        if (this.pdfModal.iGST > 0)
-          gst += this.pdfModal.iGST
+        if(this.pdfModal.actualDaysBurned < this.pdfModal.workingDay)
+          this.halfDayDisable = true;
+        if(this.editMode && editPackageAmount > 0) {
+          this.packageAmount = editPackageAmount;
+          this.grandTotalAmount = editGrandTotalAmount;
+        }
 
-        this.calculateGSTAmount(gst);
         this.pageDataIsReady = true;
       });
     }
@@ -262,42 +284,46 @@ export class BuildPdfComponent implements OnInit {
   checkCGST(e: any) {
     if (e.target.value !== "") {
       let gst = parseFloat(e.target.value);
-      this.calculateGSTAmount(gst);
+      this.cgstAmount = this.calculateGSTAmount(gst);
     } else {
       this.cgstAmount = 0;
     }
+    this.calculateGrandTotal();
   }
 
   checkSGST(e: any) {
     if (e.target.value !== "") {
       let gst = parseFloat(e.target.value);
-      this.calculateGSTAmount(gst);
+      this.sgstAmount = this.calculateGSTAmount(gst);
     } else {
       this.sgstAmount = 0;
     }
+    this.calculateGrandTotal();
   }
 
   checkIGST(e: any) {
     if (e.target.value !== "") {
       let gst = parseFloat(e.target.value);
-      this.calculateGSTAmount(gst);
+      this.igstAmount = this.calculateGSTAmount(gst);
     } else {
       this.igstAmount = 0;
     }
+    this.calculateGrandTotal();
   }
 
   calculateGSTAmount(value: number) {
+    let amount: number = 0.0;
     if (value > 0) {
-      this.igstAmount = ToFixed((this.packageAmount * value) / 100, 2);
-      this.calculateGrandTotal();
+      amount = ToFixed((this.packageAmount * value) / 100, 2);
+
     } else {
-      this.igstAmount = 0;
-      this.calculateGrandTotal();
+      amount = 0;
     }
+    return amount;
   }
 
   calculateGrandTotal() {
-    this.grandTotalAmount = ToFixed((this.packageAmount + this.cgstAmount + this.sgstAmount + this.igstAmount), 2);
+    this.grandTotalAmount = AddNumbers([this.packageAmount, this.cgstAmount, this.sgstAmount, this.igstAmount], 2);
     this.pdfForm.controls["grandTotalAmount"].setValue(this.grandTotalAmount);
   }
 
@@ -324,7 +350,10 @@ export class BuildPdfComponent implements OnInit {
   }
 
   calculateAmount(e: any) {
+    this.halfDayDisable = false;
     let workinDays = e.target.value;
+    if (workinDays < this.pdfModal.workingDay)
+      this.halfDayDisable = true;
     if (workinDays !== null) {
       if(this.pdfForm.get('isHalfDay').value == "1") {
         let days = Number(workinDays);
@@ -363,8 +392,9 @@ export class BuildPdfComponent implements OnInit {
     let totalMonthDays = this.pdfModal.workingDay
     this.packageAmount = this.clientDetail.ActualPackage;
     let halfDayValue = this.isHalfDay ? 0.5 : 0;
+    let burndays = days + halfDayValue;
     if (totalMonthDays !== days || this.isHalfDay)
-      this.packageAmount = this.packageAmount / totalMonthDays * (days + halfDayValue);
+      this.packageAmount = this.packageAmount / totalMonthDays * (burndays);
 
     this.packageAmount = ToFixed(this.packageAmount, 2);
     let cgst = this.pdfForm.controls["cGST"].value;
@@ -376,7 +406,7 @@ export class BuildPdfComponent implements OnInit {
     let igst = this.pdfForm.controls["iGST"].value;
     this.igstAmount = ToFixed(((this.packageAmount * Number(igst)) / 100), 2);
 
-    this.grandTotalAmount = this.packageAmount + this.cgstAmount + this.sgstAmount + this.igstAmount;
+    this.grandTotalAmount = AddNumbers([this.packageAmount, this.cgstAmount, this.sgstAmount, this.igstAmount], 2);
     this.grandTotalAmount = ToFixed(this.grandTotalAmount, 2);
 
     this.pdfForm.get("actualDaysBurned").setValue(days);
@@ -443,9 +473,8 @@ export class BuildPdfComponent implements OnInit {
 
   findEmployeeById(employeeId: any) {
     if (employeeId) {
-      let employeeList = this.employees.filter(x => x.EmployeeUid === parseInt(employeeId));
-      if (employeeList.length > 0) {
-        this.currentEmployee = employeeList[0];
+      this.currentEmployee = this.employees.find(x => x.EmployeeUid === parseInt(employeeId));
+      if (this.currentEmployee) {
         this.assignedClients = this.applicationData.allocatedClients.filter(x => x.EmployeeUid == this.currentEmployee.EmployeeUid);
         this.pdfForm.controls["developerName"].setValue(this.currentEmployee.FirstName + " " + this.currentEmployee.LastName);
         if (!this.editMode) {
@@ -543,7 +572,8 @@ export class BuildPdfComponent implements OnInit {
       let modalStatus = this.validateBillRequest(request);
       if(modalStatus == null) {
         this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
-          Toast("Bill pdf generated successfully");
+          if(response.ResponseBody)
+            Toast("Bill pdf generated successfully");
           this.isLoading = false;
         }).catch(e => {
           this.isLoading = false;

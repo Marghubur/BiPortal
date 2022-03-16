@@ -416,6 +416,28 @@ export function ToFixed(amount: number, precision: number): number {
   return value;
 }
 
+export function AddNumbers(data: Array<number>, precision: number): number {
+  let value: number = 0;
+  if(precision == 0) {
+    let i = 0;
+    while(i < data.length) {
+      value += data[i] * 100;
+      i++;
+    }
+
+    value = value / 100;
+  } else {
+    let i = 0;
+    while(i < data.length) {
+      value += ToFixed(data[i], precision) * 100;
+      i++;
+    }
+
+    value = value / 100;
+  }
+  return value;
+}
+
 export function Toast(message: string, timeSpan: number = 5) {
   let $Toast = document.getElementById("toast");
   if ($Toast) {

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Toast } from "src/providers/common-service/common.service";
+import { ErrorToast, Toast } from "src/providers/common-service/common.service";
 import { AccessToken, AccessTokenExpiredOn, Login, Master, NotFound, ServerError, Success, UnAuthorize } from "src/providers/constants";
 import { iNavigation } from "src/providers/iNavigation";
 
@@ -59,17 +59,17 @@ export class JwtService {
                   document.getElementById("sessionexpiredBox").classList.remove('d-none');
               else
                   localStorage.clear();
-              Toast("Unauthorized access. Please login again.");
+              ErrorToast("Unauthorized access. Please login again.");
               this.nav.navigate(Login, null);
               break;
           case NotFound:
-              Toast("Page not found. Please chech your Url.");
+              ErrorToast("Page not found. Please chech your Url.");
               break;
           case ServerError:
-              Toast("Getting server error. Please contact to admin.");
+              ErrorToast("Getting server error. Please contact to admin.");
               break;
           default:
-              Toast("Unknown error occured. Please contact to admin.");
+              ErrorToast("Unknown error occured. Please contact to admin.");
               break;
       }
 
