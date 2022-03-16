@@ -140,7 +140,7 @@ export class ManageComponent implements OnInit {
     this.manageUserForm = this.fb .group({
       KeySkill: new FormControl(''),
       Employment: this.fb.array([this.employmentField()]),
-      ITSkillrow: this.fb.array([this.iTSkillrowField()]),
+      ITSkillrow: this.fb.array([]),
       Education: new FormControl(''),
       Course: new FormControl(''),
       Specialization: new FormControl(''),
@@ -233,7 +233,7 @@ export class ManageComponent implements OnInit {
   }
 
   addItskill() {
-    this.iTSkillFormArray.push(this.iTSkillrowField());
+    this.ITSkillrow.push(this.iTSkillrowField());
   }
 
   addEmployment() {
@@ -252,8 +252,8 @@ export class ManageComponent implements OnInit {
     return (<FormArray>this.manageUserForm.get('Employment')).controls;
   }
 
-  get iTSkillFormArray() {
-    return (<FormArray>this.manageUserForm.get('ITSkillrow')).controls;
+  get ITSkillrow() {
+    return this.manageUserForm.get('ITSkillrow') as FormArray;
   }
 
   get f() {
@@ -539,7 +539,7 @@ class UserModal {
   ExpectedSalaryLakh: number = 0;
   ExpectedSalaryThousand: number = 0;
   ProfileSummary: string = '';
-  DOB: Date = new Date();
+  DOB: string = '';
   Gender: string = '';
   Address: string = '';
   HomeTown: string ='';

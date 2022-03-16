@@ -710,10 +710,6 @@ textarea {
     right: 0px;
   }
 
-  #anc-user {
-    display: none;
-  }
-
   #tine-menu {
     display: none !important;
   }
@@ -738,7 +734,7 @@ textarea {
   }
 
   #anc-user {
-    display: block !important;
+    display: block;
   }
 
   #tine-menu {

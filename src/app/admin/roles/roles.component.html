@@ -3,38 +3,39 @@
     <h4 class="p-0">Manage Role</h4>
   </div>
   <div>
-    <div class="x_panel">
-      <div class="x_header">
-        <div class="x_header_title">
-          <h2>Employment
-            <i class="fa text-dark edit-icon ps-2"></i>
+    <form [formGroup]="rolesForm">
+      <div class="x_panel">
+        <div class="x_header">
+          <div class="x_header_title">
+            <h2>Employment
+              <i class="fa text-dark edit-icon ps-2"></i>
+            </h2>
+            <button class="btn btn-sm btn-outline-primary float-end ms-3" (click)="addRolePopUp()">
+              <i class="fa fa-plus-square-o pe-2" aria-hidden="true"></i>Add Role
+            </button>
+            <button class="btn btn-outline-success btn-sm float-end" [disabled]="!isRolesLoaded" (click)="submitRole()">
+              <i class="fa fa-sign-in pe-2" aria-hidden="true"></i>
+              Save
+            </button>
+          </div>
+        </div>
+        <div class="col-12 row m-0">
+          <div class="col-md-4">
+            <label class="form-label">Existing Roles *</label>
+            <select class="form-control" name="RoleName" (change)="loadMenu($event)" formControlName="accessLevel">
+              <option value="0">Select Role</option>
+              <option value="{{item.AccessLevelId}}" *ngFor="let item of Roles">{{item.RoleName}}</option>
+            </select>
+          </div>
+        </div>
+
+        <ng-container *ngIf="!isRolesLoaded">
+          <h2 class="mt-5 text-center text-muted select-role-message">
+            Please select existing role from above dropdown and grant appropriate permission.
           </h2>
-          <button class="btn btn-outline-success btn-sm float-end" (click)="submitRole()">
-            <i class="fa fa-sign-in pe-2" aria-hidden="true"></i>
-            Save
-          </button>
-        </div>
-      </div>
-      <div class="col-12 row m-0">
-        <div class="col-md-4">
-          <label class="form-label">Existing Roles *</label>
-          <select class="form-control" name="RoleName" (change)="loadMenu($event)" [(ngModel)]="RoleName">
-            <option value="0">Select Role</option>
-            <option value="1">Administration</option>
-            <option value="2">User</option>
-            <option value="3">Management</option>
-          </select>
-        </div>
-      </div>
+        </ng-container>
 
-      <ng-container *ngIf="!isRolesLoaded">
-        <h2 class="mt-5 text-center text-muted">
-          Please select existing role from above dropdown and grant appropriate permission.
-        </h2>
-      </ng-container>
-
-      <ng-container *ngIf="isRolesLoaded">
-        <form [formGroup]="rolesForm">
+        <ng-container *ngIf="isRolesLoaded">
           <div class="row mt-4 col-md-12">
             <div class="col-md-6" *ngFor="let catagory of Menu">
               <div class="card">
@@ -53,20 +54,26 @@
                           </label>
                         </div>
                         <div class="btn-group dropstart">
-                          <label class="pe-4">{{getPermessionName(item.get('Permission').value)}}</label>
+                          <label class="noaccess pe-4" [ngClass]="{
+                              'readonly': item.get('Permission').value == 2,
+                              'readwrite': item.get('Permission').value == 3,
+                              'fullaccess': item.get('Permission').value == 1
+                            }">{{getPermessionName(item.get('Permission').value)}}</label>
 
                           <button class="btn btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                           </button>
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="javascriptt:void(0)"
+                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                (click)="selectPermission(0, index)">Block Access</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)"
                                 (click)="selectPermission(2, index)">Read
                                 only</a></li>
-                            <li><a class="dropdown-item" href="javascriptt:void(0)"
+                            <li><a class="dropdown-item" href="javascript:void(0)"
                                 (click)="selectPermission(3, index)">Read &
                                 Write</a></li>
-                            <li><a class="dropdown-item" href="javascriptt:void(0)"
+                            <li><a class="dropdown-item" href="javascript:void(0)"
                                 (click)="selectPermission(1, index)">Full
                                 Access</a></li>
                           </ul>
@@ -78,8 +85,39 @@
               </div>
             </div>
           </div>
-        </form>
-      </ng-container>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Role Modal -->
+<div class="modal fade" id="addRole" tabindex="-1" role="dialog" aria-labelledby="createFolderTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle">New Role</h5>
+      </div>
+      <div class="modal-body">
+        <div class="col-12">
+          <form [formGroup]="addRoleForm">
+            <div class=" col-md-6">
+              <label class="form-label">Role Name</label>
+              <input type="text" class="form-control" placeholder="Role Name" formControlName="RoleName">
+            </div>
+            <div class="pt-3">
+              <label class="form-label">Access Code Defination</label>
+              <textarea class="form-control code-defination-txtarea" placeholder="Access Code Defination"
+                formControlName="AccessCodeDefination"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="CloseFolderPopup()" class="btn btn-sm btn-outline-danger" data-dismiss="modal">Cancel</button>
+        <button (click)="AddRole()" class="btn btn-sm btn-outline-success">Add
+          Role</button>
+      </div>
     </div>
   </div>
 </div>

@@ -2,13 +2,16 @@
   <div id="accordionPanelsStayOpenExample">
     <ng-container *ngFor="let catagory of Menu;let index = index;">
       <div>
-        <h4 class="accordion-header" id="panelsStayOpen-headingOne-{{index}}">
+        <h4 class="accordion-header" id="panelsStayOpen-headingOne">
           <button class="accordion-button" type="button" data-bs-toggle="collapse"
-            data-bs-target="{{index}}" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne-{{index}}">
-            {{catagory.Name}} <span *ngIf="catagory.ParentDetail.Badge != null" class="badge bg-secondary ms-3">NEW</span>
+            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
+            aria-controls="panelsStayOpen-collapseOne">
+            {{catagory.Name}} <span *ngIf="catagory.ParentDetail.Badge != null"
+              class="badge bg-secondary ms-3">NEW</span>
           </button>
         </h4>
-        <div id="panelsStayOpen-collapseOne-{{index}}" class=" mb-0 accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne-{{index}}">
+        <div id="panelsStayOpen-collapseOne" class=" mb-0 accordion-collapse collapse show"
+          aria-labelledby="panelsStayOpen-headingOne">
           <div class="accordion-body">
             <ng-container *ngFor="let item of catagory.Value">
               <a [routerLink]="['/' + item.Link]" class="nav-link a-font">
