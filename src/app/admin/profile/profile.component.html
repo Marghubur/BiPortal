@@ -23,7 +23,8 @@
                           </div>
                           <div class="img-container__select">
                             <!-- <button class="btn btn-outline-success form-control">Browse</button> -->
-                            <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png" />
+                            <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
+                              formControlName="ProfileImgPath" />
                             <a class="fa fa-camera text-light p-1 zoom-2 text-decoration-none"
                               [class.disableClick]="!section.isProfileEdit" (click)="fireBrowserFile()"></a>
                           </div>
@@ -99,6 +100,7 @@
                             <div class="x_header_title">
                               <div class="">
                                 <input type="file" id="uploadresume" class="d-none" (change)="GetDocumentFile($event)"
+                                  formControlName="ResumePath"
                                   accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                                   *ngIf="!uploading" />
                                 <div class="col-md-12 p-0">
