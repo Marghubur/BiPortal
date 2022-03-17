@@ -64,6 +64,8 @@ export class ManageComponent implements OnInit {
   skillsForm: FormGroup;
   projectsForm: FormGroup;
   accomplishmentsForm: FormGroup;
+  carrerProfileForm: FormGroup;
+  personalDetailForm: FormGroup;
 
   @Output() authentication = new EventEmitter();
 
@@ -106,6 +108,8 @@ export class ManageComponent implements OnInit {
     this.buildSkillsForm();
     this.buildProjectsForm();
     this.buildAccomplishmentsForm();
+    this.buildCarrerProfileForm();
+    this.buildPersonalDetailForm();
 
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
@@ -132,8 +136,49 @@ export class ManageComponent implements OnInit {
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.manageUserForm.controls["DOB"].setValue(date);
+    this.personalDetailForm.controls["DOB"].setValue(date);
   }
+
+
+  //----------------- Personal Detail form, group and add new ------------------------
+
+  buildPersonalDetailForm() {
+    this.personalDetailForm = this.fb.group({
+      DOB: new FormControl(''),
+      Male: new FormControl(''),
+      Female: new FormControl(''),
+      Address: new FormControl(''),
+      HomeTown: new FormControl(''),
+      PinCode: new FormControl(''),
+      MaritalStatus: new FormControl(''),
+      Category: new FormControl(false),
+      DifferentlyAbled: new FormControl(false),
+      PermitUSA: new FormControl(''),
+      PermitOtherCountry: new FormControl(''),
+      Languages: this.fb.array([this.buildLanguages()]),
+    })
+  }
+
+  buildLanguages() {
+    return this.fb.group({
+      Language: new FormControl(''),
+      CanLanguageRead: new FormControl(''),
+      CanLanguageWrite: new FormControl(''),
+      ProficiencyLanguage: new FormControl(''),
+      CanLanguageSpeak: new FormControl('')
+    });
+  }
+
+  addLanguages() {
+    this.langauge.push(this.buildLanguages());
+  }
+
+  get langauge() {
+    return this.personalDetailForm.get('Languages') as FormArray;
+  }
+
+  //----------------- Personal Detail END'S ------------------------
+
 
 
 
@@ -161,11 +206,10 @@ export class ManageComponent implements OnInit {
   }
 
   addProject() {
-    let projects = this.manageUserForm.controls["Projects"] as FormArray;
-    projects.push(this.projectForm());
+    this.projects.push(this.projectForm());
   }
 
-  get Projects() {
+  get projects() {
     return this.projectsForm.get('Projects') as FormArray;
   }
 
@@ -207,7 +251,7 @@ export class ManageComponent implements OnInit {
 
 
 
-  //----------------- technical skills form, group and add new ------------------------
+  //----------------- Accomplishments form, group and add new ------------------------
 
     buildAccomplishmentsForm() {
       this.accomplishmentsForm = this.fb.group({
@@ -259,33 +303,27 @@ export class ManageComponent implements OnInit {
 
 
     addOnlieProfiles() {
-      let skills = this.accomplishmentsForm.get("TechnicalSkills") as FormArray;
-      skills.push(this.createTechnicalSkillsGroup());
+      this.onlieProfiles.push(this.buildOnlieProfiles());
     }
 
     addWorkSamples() {
-      let skills = this.accomplishmentsForm.get("TechnicalSkills") as FormArray;
-      skills.push(this.createTechnicalSkillsGroup());
+      this.workSamples.push(this.buildWorkSamples());
     }
 
     addResearchs() {
-      let skills = this.accomplishmentsForm.get("TechnicalSkills") as FormArray;
-      skills.push(this.createTechnicalSkillsGroup());
+      this.researchs.push(this.buildResearchs());
     }
 
     addPresentations() {
-      let skills = this.accomplishmentsForm.get("TechnicalSkills") as FormArray;
-      skills.push(this.createTechnicalSkillsGroup());
+      this.presentations.push(this.buildPresentations());
     }
 
     addPatents() {
-      let skills = this.accomplishmentsForm.get("TechnicalSkills") as FormArray;
-      skills.push(this.createTechnicalSkillsGroup());
+      this.patents.push(this.buildPatents());
     }
 
     addCertifications() {
-      let skills = this.accomplishmentsForm.get("TechnicalSkills") as FormArray;
-      skills.push(this.createTechnicalSkillsGroup());
+      this.certifications.push(this.buildCertifications());
     }
 
     get onlieProfiles(): FormArray {
@@ -340,8 +378,11 @@ export class ManageComponent implements OnInit {
   }
 
   addEducation() {
-    let educations = this.educationForm.get("Educations") as FormArray;
-    educations.push(this.createEducationForm());
+    this.education.push(this.createEducationForm());
+  }
+
+  get education(): FormArray{
+    return this.educationForm.get("Educations") as FormArray
   }
 
   //----------------- Education END'S ------------------------
@@ -370,6 +411,46 @@ export class ManageComponent implements OnInit {
 
   //----------------- Employment END'S ------------------------
 
+
+
+
+  //----------------- Carreer Profile form, group and add new ------------------------
+
+  createCarrerProfileForm() {
+    return this.fb.group({
+      Industry: new FormControl(''),
+      Department: new FormControl(''),
+      RoleCategory: new FormControl(''),
+      JobRole: new FormControl(''),
+      DesiredJob: new FormControl(''),
+      EmploymentType: new FormControl(false),
+      PreferredShift: new FormControl(false),
+      PreferredWorkLocation: new FormControl(false),
+      ExpectedSalary: new FormControl(''),
+      ExpectedSalaryInLakh: new FormControl(''),
+      ExpectedSalaryInThousand: new FormControl('')
+    })
+  }
+
+  buildCarrerProfileForm() {
+    this.carrerProfileForm = this.fb.group({
+      CarrerProfile: this.fb.array([this.createCarrerProfileForm()])
+    })
+  }
+
+  addCarrerProfile() {
+    this.carrer.push(this.createCarrerProfileForm());
+  }
+
+  get carrer(): FormArray {
+    return this.carrerProfileForm.get("CarrerProfile") as FormArray;
+  }
+
+  //----------------- Carreer Profile END'S ------------------------
+
+
+
+
   initForm() {
     this.manageUserForm = this.fb .group({
       FirstName: new FormControl(this.userModal.FirstName),
@@ -383,30 +464,6 @@ export class ManageComponent implements OnInit {
     })
   }
 
-  // languageField() {
-  //   return this.fb.group({
-  //     Language: new FormControl (''),
-  //     LanguageRead: new FormControl (''),
-  //     LanguageWrite: new FormControl (''),
-  //     ProficiencyLanguage: new FormControl(''),
-  //     LanguageSpeak: new FormControl(''),
-  //     ResumeHeadline: new FormControl('')
-  //   })
-  // }
-
-  // addLanguageForm() {
-  //   this.languageformArry.push(this.languageField());
-  // }
-
-
-  get educations(): FormArray {
-    return this.manageUserForm.get("Educations") as FormArray;
-  }
-
-  get f() {
-    let data = this.manageUserForm.controls;
-    return data;
-  }
 
   maritalStatusSelected(event: any) {
     let value = event.target.value;
@@ -446,6 +503,15 @@ export class ManageComponent implements OnInit {
     // })
   }
 
+  submitPersonalDetails() {
+    let userDetails = this.personalDetailForm.value;
+    let languages = this.personalDetailForm.controls['Languages'].value;
+    this.http.post("user/personalDetail", userDetails).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Personal Deatil submitted successfully")
+    })
+  }
+
 
 
   UpdateUser() {
@@ -459,8 +525,19 @@ export class ManageComponent implements OnInit {
       errroCounter++;
     if (this.manageUserForm.get('Mobile').errors !== null)
       errroCounter++;
-
-    this.userModal = this.manageUserForm.value;
+    let formValue = {};
+    let users = this.manageUserForm.value;
+    let employments = this.employmentForm.value;
+    let educations = this.educationForm.controls['Educations'].value;
+    let skills = this.skillsForm.controls['TechnicalSkills'].value;
+    let projects = this.projectsForm.controls['Projects'].value;
+    let onlineProfiles = this.accomplishmentsForm.controls['OnlineProfiles'].value;
+    let certifications = this.accomplishmentsForm.controls['Certifications'].value;
+    let patents = this.accomplishmentsForm.controls['Patents'].value;
+    let presentations = this.accomplishmentsForm.controls['Presentations'].value;
+    let researches = this.accomplishmentsForm.controls['Researchs'].value;
+    let workSamples = this.accomplishmentsForm.controls['WorkSamples'].value;
+    let carrerProfiles = this.carrerProfileForm.controls['CarrerProfile'].value;
     // if (errroCounter == 0) {
     //   this.http.post("user/UpdateUser", this.userModal)
     //   .then((response: ResponseModel) => {
@@ -648,11 +725,11 @@ class UserModal {
   WorkingMonth: number = 0;
   WorkedYear: number = 0;
   CurrentSalary: string= '';
-  CurrentSalaryLakh: number = 0;
+  CurrentSalaryInLakh: number = 0;
   Experties: number = 0;
   JobProfile: string = '';
   NoticePeriod: string = '';
-  CurrentSalaryThousand: number = 0;
+  CurrentSalaryInThousand: number = 0;
   ITSkill: string = '';
   Version: number = 0;
   LastUsed: string= '';
@@ -697,10 +774,10 @@ class UserModal {
   PermitUSA: string = '';
   PermitOtherCountry: string = '';
   Language: string = '';
-  LanguageRead: string = '';
-  LanguageWrite: string = '';
+  CanLanguageRead: string = '';
+  CanLanguageWrite: string = '';
   ProficiencyLanguage: string = '';
-  LanguageSpeak: string = '';
+  CanLanguageSpeak: string = '';
   OnlineProfile: string = '';
   WorkSample: string = '';
   Research: string = '';
