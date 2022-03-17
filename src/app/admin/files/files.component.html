@@ -218,6 +218,23 @@
                 </div>
               </td>
             </tr>
+            <tr>
+              <td colspan="6" class="fw-bold">
+                Total Amount
+              </td>
+              <td>
+                <div class="fw-bold">
+                  Rs {{TotalBilledAmount | number : '1.2-2'}}
+                  <div>
+                    <small class="s-item text-muted me-2 d-block">[A] {{ TotalSalaryAmount | number : '1.2-2'}}</small>
+                    <small class="s-item text-muted">[G] {{TotalGSTAmount | number : '1.2-2'}}</small>
+                  </div>
+                </div>
+              </td>
+              <td colspan="3" class="fw-bold">
+                Rs {{TotalReceivedAmount | number : '1.2-2'}}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -436,8 +453,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" (click)="closeWindow()">Close</button>
         <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
-        <a class="btn btn-primary" [disabled]="isLoading" (click)="downloadPdfDocx()"
-          download>
+        <a class="btn btn-primary" [disabled]="isLoading" (click)="downloadPdfDocx()" download>
           <i class="fa fa-download text-light pe-2"></i> Download
         </a>
       </div>

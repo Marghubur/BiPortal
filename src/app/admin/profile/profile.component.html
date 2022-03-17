@@ -190,7 +190,7 @@
                             (click)="editEmployment()"></i>
                         </h2>
                         <button class="btn btn-outline-success btn-sm float-end" *ngIf="section.isEmploymentEdit"
-                          (click)="submitManageUserForm()">Save</button>
+                          (click)="submitEmploymentDetail()">Save</button>
                       </div>
                     </div>
                     <div class="col-md-12 ps-2">
@@ -215,11 +215,12 @@
                                 class="text-danger">*</span></label>
                             <div class="col ps-0">
                               <input class="form-control" placeholder="Year" [readonly]="!section.isEmploymentEdit"
-                                [class.custom-form-control]="!section.isEmploymentEdit" formControlName="WorkingYear" />
+                                type="number" [class.custom-form-control]="!section.isEmploymentEdit"
+                                formControlName="WorkingYear" />
                             </div>
                             <div class="col pe-0">
                               <input class="form-control" placeholder="Month" [readonly]="!section.isEmploymentEdit"
-                                [class.custom-form-control]="!section.isEmploymentEdit"
+                                type="number" [class.custom-form-control]="!section.isEmploymentEdit"
                                 formControlName="WorkingMonth" />
                             </div>
                           </div>
@@ -227,12 +228,12 @@
                             <label class="form-label">Worked Till <span class="text-danger">*</span></label>
                             <div class="col ps-0">
                               <input class="form-control" placeholder="Year" [readonly]="!section.isEmploymentEdit"
-                                [class.custom-form-control]="!section.isEmploymentEdit" name="WorkedYear"
+                                type="number" [class.custom-form-control]="!section.isEmploymentEdit" name="WorkedYear"
                                 formControlName="WorkedYear" />
                             </div>
                             <div class="col pe-0">
                               <input class="form-control" placeholder="Month" [readonly]="!section.isEmploymentEdit"
-                                [class.custom-form-control]="!section.isEmploymentEdit" name="WorkedMonth"
+                                type="number" [class.custom-form-control]="!section.isEmploymentEdit" name="WorkedMonth"
                                 formControlName="WorkedMonth" />
                             </div>
                           </div>
@@ -286,13 +287,13 @@
                             </div>
                             <div class="row">
                               <div class="col">
-                                <input class="form-control form-control" placeholder="Lakh"
+                                <input class="form-control form-control" placeholder="Lakh" type="number"
                                   [readonly]="!section.isEmploymentEdit"
                                   [class.custom-form-control]="!section.isEmploymentEdit" name="CurrentSalaryLakh"
                                   formControlName="CurrentSalaryLakh" />
                               </div>
                               <div class="col">
-                                <input class="form-control" placeholder="Thousand"
+                                <input class="form-control" placeholder="Thousand" type="number"
                                   [readonly]="!section.isEmploymentEdit"
                                   [class.custom-form-control]="!section.isEmploymentEdit" name="CurrentSalaryThousand"
                                   formControlName="CurrentSalaryThousand" />
@@ -354,7 +355,7 @@
                           *ngIf="!section.isEducationEdit" (click)="addEducation()">ADD
                           EDUCATION</a>
                         <button class="btn btn-outline-success btn-sm float-end" *ngIf="section.isEducationEdit"
-                          (click)="submitManageUserForm()">Save</button>
+                          (click)="submitEducationDetail()">Save</button>
                       </div>
                     </div>
                     <ng-container formArrayName="Educations">
@@ -386,7 +387,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Course Type</label>
-                          <div class="row ps-4">
+                          <div class="row ps-3">
                             <div class="form-check col-md-3">
                               <input class="form-check-input " type="radio" name="IsFullTime"
                                 formControlName="IsFullTime" [readonly]="!section.isEducationEdit"
@@ -415,7 +416,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Passing Out Year <span class="text-danger">*</span></label>
-                          <input class="form-control " placeholder="Passing Year" name="PassingYear"
+                          <input class="form-control " placeholder="Passing Year" name="PassingYear" type="number"
                             [readonly]="!section.isEducationEdit" [class.custom-form-control]="!section.isEducationEdit"
                             formControlName="PassingYear" />
                         </div>
@@ -457,7 +458,7 @@
                           *ngIf="!section.isItSkillEdit" (click)="addItskill()">ADD
                           IT SKILLS</a>
                         <button class="btn btn-outline-success btn-sm float-end" *ngIf="section.isItSkillEdit"
-                          (click)="submitManageUserForm()">Save</button>
+                          (click)="submitSkillDetail()">Save</button>
                       </div>
                     </div>
                     <ng-container formArrayName="TechnicalSkills">
@@ -471,22 +472,24 @@
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Version</label>
                           <input class="form-control " placeholder="Version" name="Version" formControlName="Version"
-                            [readonly]="!section.isItSkillEdit" [class.custom-form-control]="!section.isItSkillEdit" />
+                            type="number" [readonly]="!section.isItSkillEdit"
+                            [class.custom-form-control]="!section.isItSkillEdit" />
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Last Used </label>
                           <input class="form-control " placeholder="LastUsed" name="LastUsed" formControlName="LastUsed"
-                            [readonly]="!section.isItSkillEdit" [class.custom-form-control]="!section.isItSkillEdit" />
+                            type="number" [readonly]="!section.isItSkillEdit"
+                            [class.custom-form-control]="!section.isItSkillEdit" />
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Exprience</label>
                           <div class="row">
                             <input class="form-control exp-input-box ms-3 " placeholder="Year" name="ExperienceYear"
-                              [readonly]="!section.isItSkillEdit" [class.custom-form-control]="!section.isItSkillEdit"
-                              formControlName="ExperienceYear" />
+                              type="number" [readonly]="!section.isItSkillEdit"
+                              [class.custom-form-control]="!section.isItSkillEdit" formControlName="ExperienceYear" />
                             <input class="form-control exp-input-box ms-3 " placeholder="Month" name="ExperienceMonth"
-                              [readonly]="!section.isItSkillEdit" [class.custom-form-control]="!section.isItSkillEdit"
-                              formControlName="ExperienceMonth" />
+                              type="number" [readonly]="!section.isItSkillEdit"
+                              [class.custom-form-control]="!section.isItSkillEdit" formControlName="ExperienceMonth" />
                           </div>
                         </div>
                       </div>
@@ -513,7 +516,7 @@
                           class="text-decoration-none add-btn float-end" *ngIf="!section.isProjectsEdit">ADD
                           PROJECT</a>
                         <button class="btn btn-outline-success btn-sm float-end" *ngIf="section.isProjectsEdit"
-                          (click)="submitManageUserForm()">Save</button>
+                          (click)="submitProjectDetail()">Save</button>
                       </div>
                       <small>
                         Add details about projects you have done in college, internship or at work.
@@ -539,13 +542,13 @@
                             <div class="col-md-6 mb-3 row p-0 m-0">
                               <label class="form-label">Started Working From <span class="text-danger">*</span></label>
                               <div class="col">
-                                <input class="form-control ms-3 " placeholder="Year" name="ProjectWorkingYear"
+                                <input class="form-control" placeholder="Year" name="ProjectWorkingYear" type="number"
                                   [readonly]="!section.isProjectsEdit"
                                   [class.custom-form-control]="!section.isProjectsEdit"
                                   formControlName="ProjectWorkingYear" />
                               </div>
                               <div class="col">
-                                <input class="form-control ms-3 " placeholder="Month" name="ProjectWorkingMonth"
+                                <input class="form-control" placeholder="Month" name="ProjectWorkingMonth" type="number"
                                   [readonly]="!section.isProjectsEdit"
                                   [class.custom-form-control]="!section.isProjectsEdit"
                                   formControlName="ProjectWorkingMonth" />
@@ -553,20 +556,24 @@
                             </div>
                             <div class="col-md-6 mb-3 row p-0 m-0">
                               <label class="form-label">Worked Till <span class="text-danger">*</span></label>
-                              <input class="form-control ms-3 " placeholder="Year" name="ProjectWorkedYear"
-                                [readonly]="!section.isProjectsEdit"
-                                [class.custom-form-control]="!section.isProjectsEdit"
-                                formControlName="ProjectWorkedYear" />
-                              <input class="form-control ms-3 " placeholder="Month" name="ProjectWorkedMonth"
-                                [readonly]="!section.isProjectsEdit"
-                                [class.custom-form-control]="!section.isProjectsEdit"
-                                formControlName="ProjectWorkedMonth" />
+                              <div class="col">
+                                <input class="form-control" placeholder="Year" name="ProjectWorkedYear" type="number"
+                                  [readonly]="!section.isProjectsEdit"
+                                  [class.custom-form-control]="!section.isProjectsEdit"
+                                  formControlName="ProjectWorkedYear" />
+                              </div>
+                              <div class="col">
+                                <input class="form-control" placeholder="Month" name="ProjectWorkedMonth" type="number"
+                                  [readonly]="!section.isProjectsEdit"
+                                  [class.custom-form-control]="!section.isProjectsEdit"
+                                  formControlName="ProjectWorkedMonth" />
+                              </div>
                             </div>
                           </div>
                           <div class="col-md-6 mb-3 ms-4">
                             <label class="form-label">Project Status</label>
-                            <div class="row ps-4">
-                              <div class="form-check col-md-3">
+                            <div class="row ps-3">
+                              <div class="form-check col">
                                 <input class="form-check-input " type="radio" name="IsProjectInProgress"
                                   [readonly]="!section.isProjectsEdit"
                                   [class.custom-form-control]="!section.isProjectsEdit" value="inprogress" checked
@@ -575,7 +582,7 @@
                                   In progress
                                 </label>
                               </div>
-                              <div class="form-check col-md-3">
+                              <div class="form-check col">
                                 <input class="form-check-input " type="radio" name="IsProjectInCompleted"
                                   [readonly]="!section.isProjectsEdit"
                                   [class.custom-form-control]="!section.isProjectsEdit" value="finished"
@@ -594,10 +601,10 @@
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Details of Project<span class="text-danger"> *</span></label>
-                            <textarea name="ProjectDetail" placeholder="Type here ....."
+                            <textarea name="ProjectDetails" placeholder="Type here ....."
                               class="form-control  sm-txtarea" [readonly]="!section.isProjectsEdit"
                               [class.custom-form-control]="!section.isProjectsEdit"
-                              formControlName="ProjectDetail"></textarea>
+                              formControlName="ProjectDetails"></textarea>
                             <small>1000 Character(s) Left</small>
                           </div>
                         </div>
@@ -618,7 +625,7 @@
                     <div class="x_header">
                       <div class="x_header_title">
                         <h2>Accomplishments</h2>
-                        <button class="btn btn-outline-success btn-sm float-end" (click)="submitManageUserForm()"
+                        <button class="btn btn-outline-success btn-sm float-end" (click)="submitAccomplishmentDetail()"
                           *ngIf="section.isOnlineProfileEdit">Save</button>
                       </div>
                     </div>
@@ -766,10 +773,9 @@
                             [ngClass]="{'fa-pencil':!section.isCarrerProfileEdit, 'fa-eye': section.isCarrerProfileEdit}"
                             (click)="editCarrerProfile()"></i>
                         </h2>
-                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
-                          *ngIf="!section.isCarrerProfileEdit">ADD
+                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end">ADD
                           PROFILE</a>
-                        <button class="btn btn-outline-success btn-sm float-end" (click)="submitManageUserForm()"
+                        <button class="btn btn-outline-success btn-sm float-end" (click)="submitCarrerProfileDetail()"
                           *ngIf="section.isCarrerProfileEdit">Save</button>
                       </div>
                     </div>
@@ -802,8 +808,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Desireed Job Type<span class="text-danger"> *</span></label>
-                          <div class="row ps-4">
-                            <div class="form-check col-md-3">
+                          <div class="row ps-3">
+                            <div class="form-check col">
                               <input class="form-check-input " type="checkbox" formControlName="DesiredJob"
                                 [class.custom-form-control]="!section.isCarrerProfileEdit" value="permanent"
                                 [readonly]="!section.isCarrerProfileEdit">
@@ -811,7 +817,7 @@
                                 Permanent
                               </label>
                             </div>
-                            <div class="form-check col-md-3 ms-3">
+                            <div class="form-check col">
                               <input class="form-check-input " type="checkbox" formControlName="DesiredJob"
                                 [class.custom-form-control]="!section.isCarrerProfileEdit" value="contractual"
                                 [readonly]="!section.isCarrerProfileEdit">
@@ -822,30 +828,9 @@
                           </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                          <label class="form-label">Desired Employment Type<span class="text-danger"> *</span></label>
-                          <div class="row ps-4">
-                            <div class="form-check col-md-3">
-                              <input class="form-check-input " type="checkbox" formControlName="EmploymentType"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit" value="fulltime"
-                                [readonly]="!section.isCarrerProfileEdit">
-                              <label class="form-check-label" for="EmploymentType">
-                                Full Time
-                              </label>
-                            </div>
-                            <div class="form-check col-md-3 ms-3">
-                              <input class="form-check-input " type="checkbox" formControlName="EmploymentType"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit" value="parttime"
-                                [readonly]="!section.isCarrerProfileEdit">
-                              <label class="form-check-label" for="EmploymentType">
-                                Part Time
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
                           <label class="form-label">Preferred Shift</label>
-                          <div class="row ps-4">
-                            <div class="form-check col-md-3">
+                          <div class="row ps-3">
+                            <div class="form-check col-md-4">
                               <input class="form-check-input " type="radio" name="PreferredShift"
                                 formControlName="PreferredShift"
                                 [class.custom-form-control]="!section.isCarrerProfileEdit"
@@ -854,7 +839,7 @@
                                 Day
                               </label>
                             </div>
-                            <div class="form-check col-md-3 ms-3">
+                            <div class="form-check col-md-4">
                               <input class="form-check-input " type="radio" name="PreferredShift"
                                 formControlName="PreferredShift"
                                 [class.custom-form-control]="!section.isCarrerProfileEdit"
@@ -875,6 +860,27 @@
                           </div>
                         </div>
                         <div class="col-md-6 mb-3">
+                          <label class="form-label">Desired Employment Type<span class="text-danger"> *</span></label>
+                          <div class="row ps-3">
+                            <div class="form-check col">
+                              <input class="form-check-input " type="checkbox" formControlName="EmploymentType"
+                                [class.custom-form-control]="!section.isCarrerProfileEdit" value="fulltime"
+                                [readonly]="!section.isCarrerProfileEdit">
+                              <label class="form-check-label" for="EmploymentType">
+                                Full Time
+                              </label>
+                            </div>
+                            <div class="form-check col">
+                              <input class="form-check-input " type="checkbox" formControlName="EmploymentType"
+                                [class.custom-form-control]="!section.isCarrerProfileEdit" value="parttime"
+                                [readonly]="!section.isCarrerProfileEdit">
+                              <label class="form-check-label" for="EmploymentType">
+                                Part Time
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
                           <label class="form-label">Preferred Work Location (Max 3)<span class="text-danger">
                               *</span></label>
                           <input class="form-control " placeholder="Preferred Work Location"
@@ -883,8 +889,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Expected Salary <span class="text-danger">*</span></label>
-                          <div class="row ps-4">
-                            <div class="form-check col-md-3">
+                          <div class="row ps-3">
+                            <div class="form-check col">
                               <input class="form-check-input " type="radio" name="ExpectedSalary"
                                 formControlName="ExpectedSalary"
                                 [class.custom-form-control]="!section.isCarrerProfileEdit"
@@ -893,7 +899,7 @@
                                 Indian Rupees
                               </label>
                             </div>
-                            <div class="form-check col-md-3 ms-3">
+                            <div class="form-check col">
                               <input class="form-check-input " type="radio" name="ExpectedSalary"
                                 formControlName="ExpectedSalary"
                                 [class.custom-form-control]="!section.isCarrerProfileEdit"
@@ -904,13 +910,17 @@
                             </div>
                           </div>
                           <div class="row">
-                            <input class="form-control  w-25 ms-3" placeholder="Lakh" name="ExpectedSalaryInLakh"
-                              [class.custom-form-control]="!section.isCarrerProfileEdit"
-                              [readonly]="!section.isCarrerProfileEdit" formControlName="ExpectedSalaryInLakh" />
-                            <input class="form-control  w-25 ms-3" placeholder="Thousand"
-                              [class.custom-form-control]="!section.isCarrerProfileEdit"
-                              [readonly]="!section.isCarrerProfileEdit" name="ExpectedSalaryInThousand"
-                              formControlName="ExpectedSalaryInThousand" />
+                            <div class="col">
+                              <input class="form-control" placeholder="Lakh" name="ExpectedSalaryInLakh" type="number"
+                                [class.custom-form-control]="!section.isCarrerProfileEdit"
+                                [readonly]="!section.isCarrerProfileEdit" formControlName="ExpectedSalaryInLakh" />
+                            </div>
+                            <div class="col">
+                              <input class="form-control" placeholder="Thousand" type="number"
+                                [class.custom-form-control]="!section.isCarrerProfileEdit"
+                                [readonly]="!section.isCarrerProfileEdit" name="ExpectedSalaryInThousand"
+                                formControlName="ExpectedSalaryInThousand" />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -959,7 +969,7 @@
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Gender <span class="text-danger"> *</span></label>
                         <div class="row ps-4">
-                          <div class="form-check col-md-3">
+                          <div class="form-check col">
                             <input class="form-check-input" type="radio" name="Male" value="male" formControlName="Male"
                               [class.custom-form-control]="!section.ispersonalDetailsEdit"
                               [readonly]="!section.ispersonalDetailsEdit" checked>
@@ -967,7 +977,7 @@
                               Male
                             </label>
                           </div>
-                          <div class="form-check col-md-3 ms-3">
+                          <div class="form-check col ms-3">
                             <input class="form-check-input" type="radio" name="Female" value="female"
                               [class.custom-form-control]="!section.ispersonalDetailsEdit"
                               [readonly]="!section.ispersonalDetailsEdit" formControlName="Female">
@@ -991,7 +1001,7 @@
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Pin Code</label>
-                        <input class="form-control" placeholder="Pin Code" name="Pin Code" transform=""
+                        <input class="form-control" placeholder="Pin Code" name="Pin Code" type="number"
                           [class.custom-form-control]="!section.ispersonalDetailsEdit"
                           [readonly]="!section.ispersonalDetailsEdit" formControlName="PinCode" />
                       </div>
@@ -1025,8 +1035,8 @@
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Are you Differently Abled? <span class="text-danger"> *</span></label>
-                        <div class="row ps-4">
-                          <div class="form-check col-md-3">
+                        <div class="row ps-3">
+                          <div class="form-check col">
                             <input class="form-check-input" type="radio" name="DifferentlyAbled"
                               [class.custom-form-control]="!section.ispersonalDetailsEdit"
                               [readonly]="!section.ispersonalDetailsEdit" formControlName="DifferentlyAbled" value="yes"
@@ -1035,7 +1045,7 @@
                               Yes
                             </label>
                           </div>
-                          <div class="form-check col-md-3 ms-3">
+                          <div class="form-check col ms-3">
                             <input class="form-check-input" type="radio" name="DifferentlyAbled"
                               [class.custom-form-control]="!section.ispersonalDetailsEdit"
                               [readonly]="!section.ispersonalDetailsEdit" formControlName="DifferentlyAbled" value="no">
@@ -1069,15 +1079,15 @@
 
                       <div class="mt-3 mb-3" formArrayName="Languages">
                         <h4 class="fw-bold">Language</h4>
-                        <div class="col-md-12 row" *ngFor="let item of langauge.controls; let e = index"
+                        <div class="col-md-12 row p-0 m-0" *ngFor="let item of langauge.controls; let e = index"
                           [formGroupName]="e">
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-3 ps-0">
                             <label class="form-label">Language <span class="text-danger">*</span></label>
                             <input class="form-control" placeholder="Language" name="Language"
                               [class.custom-form-control]="!section.ispersonalDetailsEdit"
                               [readonly]="!section.ispersonalDetailsEdit" formControlName="Language" />
-                            <div class="row ps-4 mt-2">
-                              <div class="form-check col-md-3">
+                            <div class="row ps-3 mt-2">
+                              <div class="form-check col">
                                 <input class="form-check-input" type="checkbox" formControlName="CanLanguageRead"
                                   [class.custom-form-control]="!section.ispersonalDetailsEdit"
                                   [readonly]="!section.ispersonalDetailsEdit">
@@ -1085,7 +1095,7 @@
                                   Read
                                 </label>
                               </div>
-                              <div class="form-check col-md-3 ms-3">
+                              <div class="form-check col">
                                 <input class="form-check-input" type="checkbox" formControlName="CanLanguageWrite"
                                   [class.custom-form-control]="!section.ispersonalDetailsEdit"
                                   [readonly]="!section.ispersonalDetailsEdit">
@@ -1095,7 +1105,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-3 pe-0">
                             <label class="form-label">Proficiency</label>
                             <select name="" id="" class="form-control" formControlName="ProficiencyLanguage"
                               [class.custom-form-control]="!section.ispersonalDetailsEdit"
@@ -1104,8 +1114,8 @@
                               <option value="Proficient">Proficient</option>
                               <option value="Expert">Expert</option>
                             </select>
-                            <div class="row ps-4 mt-2">
-                              <div class="form-check col-md-3">
+                            <div class="row ps-3 mt-2">
+                              <div class="form-check col">
                                 <input class="form-check-input" type="checkbox" formControlName="CanLanguageSpeak"
                                   [class.custom-form-control]="!section.ispersonalDetailsEdit"
                                   [readonly]="!section.ispersonalDetailsEdit">
