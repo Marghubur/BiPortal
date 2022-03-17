@@ -14,6 +14,7 @@ import { UserService } from 'src/providers/userService';
   styleUrls: ['./profile.component.scss']
 })
 export class ManageComponent implements OnInit {
+  active = 1;
   model: NgbDateStruct;
   submitted: boolean = false;
   userModal: UserModal = null;
@@ -55,10 +56,16 @@ export class ManageComponent implements OnInit {
   isPersonalDetailSubmit: boolean = false;
   isProfileSubmit: boolean = false;
   isAcomplishmentSubmit: boolean = false;
-
   profileURL: string = "assets/images/faces/face1.jpg";
 
-  manageUserForm: FormGroup = null;
+  manageUserForm: FormGroup;
+  educationForm: FormGroup;
+  employmentForm: FormGroup;
+  skillsForm: FormGroup;
+  projectsForm: FormGroup;
+  accomplishmentsForm: FormGroup;
+  carrerProfileForm: FormGroup;
+  personalDetailForm: FormGroup;
 
   @Output() authentication = new EventEmitter();
 
@@ -94,7 +101,15 @@ export class ManageComponent implements OnInit {
     this.setSections();
     this.model = this.calendar.getToday();
     this.userModal = new UserModal();
+
     this.initForm();
+    this.buildEmploymentForm();
+    this.buildEducationForm();
+    this.buildSkillsForm();
+    this.buildProjectsForm();
+    this.buildAccomplishmentsForm();
+    this.buildCarrerProfileForm();
+    this.buildPersonalDetailForm();
 
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
@@ -121,108 +136,98 @@ export class ManageComponent implements OnInit {
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.manageUserForm.controls["DOB"].setValue(date);
+    this.personalDetailForm.controls["DOB"].setValue(date);
   }
 
-  // bindForm() {
-  //   this.manageUserForm = this.fb.group({
-  //     FirstName: new FormControl(this.userModal.FirstName),
-  //     LastName: new FormControl(this.userModal.LastName),
-  //     Mobile: new FormControl(this.userModal.Mobile),
-  //     Email: new FormControl(this.userModal.Email),
-  //     UserId: new FormControl(this.userModal.UserId),
-  //     ProfileImg: new FormControl ( '')
 
-  //   });
-  // }
+  //----------------- Personal Detail form, group and add new ------------------------
 
-  initForm() {
-    this.manageUserForm = this.fb .group({
-      KeySkill: new FormControl(''),
-      Employment: this.fb.array([this.employmentField()]),
-      ITSkillrow: this.fb.array([this.iTSkillrowField()]),
-      Education: new FormControl(''),
-      Course: new FormControl(''),
-      Specialization: new FormControl(''),
-      University: new FormControl(''),
-      CourseType: new FormControl(''),
-      PassingYear: new FormControl(''),
-      GradingSystem: new FormControl(''),
+  buildPersonalDetailForm() {
+    this.personalDetailForm = this.fb.group({
+      DOB: new FormControl(''),
+      Male: new FormControl(''),
+      Female: new FormControl(''),
+      Address: new FormControl(''),
+      HomeTown: new FormControl(''),
+      PinCode: new FormControl(''),
+      MaritalStatus: new FormControl(''),
+      Category: new FormControl(false),
+      DifferentlyAbled: new FormControl(false),
+      PermitUSA: new FormControl(''),
+      PermitOtherCountry: new FormControl(''),
+      Languages: this.fb.array([this.buildLanguages()]),
+    })
+  }
+
+  buildLanguages() {
+    return this.fb.group({
+      Language: new FormControl(''),
+      CanLanguageRead: new FormControl(''),
+      CanLanguageWrite: new FormControl(''),
+      ProficiencyLanguage: new FormControl(''),
+      CanLanguageSpeak: new FormControl('')
+    });
+  }
+
+  addLanguages() {
+    this.langauge.push(this.buildLanguages());
+  }
+
+  get langauge() {
+    return this.personalDetailForm.get('Languages') as FormArray;
+  }
+
+  //----------------- Personal Detail END'S ------------------------
+
+
+
+
+  //----------------- Projects form, group and add new ------------------------
+
+  buildProjectsForm() {
+    this.projectsForm = this.fb.group({
+      Projects: this.fb.array([this.projectForm()])
+    });
+  }
+
+  projectForm() {
+    return this.fb.group({
       ProjectTitle: new FormControl(''),
       ProjectTag: new FormControl(''),
       ProjectWorkingYear: new FormControl(''),
       ProjectWorkingMonth: new FormControl(''),
       ProjectWorkedYear: new FormControl(''),
-      ProjectStatus: new FormControl(''),
+      ProjectWorkedMonth: new FormControl(''),
+      IsProjectInProgress: new FormControl(false),
+      IsProjectInCompleted: new FormControl(false),
       ClientName: new FormControl(''),
-      ProjectDetail: new FormControl(''),
-      CurrentIndustry: new FormControl(''),
-      Department: new FormControl(''),
-      RoleCategory: new FormControl(''),
-      JobRole: new FormControl(''),
-      DesiredJob: new FormControl(''),
-      EmploymentType: new FormControl(''),
-      PreferredShift: new FormControl(''),
-      PreferredWorkLocation: new FormControl(''),
-      ExpectedSalary: new FormControl(''),
-      ExpectedSalaryLakh: new FormControl(''),
-      ExpectedSalaryThousand: new FormControl(''),
-      FirstName: new FormControl(this.userModal.FirstName),
-      LastName: new FormControl (this.userModal.LastName),
-      Email: new FormControl(this.userModal.Email),
-      Mobile: new FormControl(this.userModal.Mobile),
-      ProfileImg: new FormControl ( ''),
-      DOB: new FormControl(''),
-      Gender: new FormControl(''),
-      Address: new FormControl(''),
-      HomeTown: new FormControl(''),
-      PinCode: new FormControl(''),
-      MaritalStatus: new FormControl(''),
-      Category: new FormControl(''),
-      DifferentlyAbled: new FormControl(''),
-      PermitUSA: new FormControl(''),
-      PermitOtherCountry: new FormControl(''),
-      LanguageRow : this.fb.array([this.languageField()]),
-      OnlineProfile: new FormControl (''),
-      WorkSample: new FormControl (''),
-      Research: new FormControl (''),
-      Presentation: new FormControl (''),
-      Patent: new FormControl (''),
-      Certification: new FormControl (''),
-      ProfileSummary: new FormControl(''),
-      UserId: new FormControl(this.userModal.UserId)
+      ProjectDetail: new FormControl('')
     })
   }
 
-  languageField() {
-    return this.fb.group({
-      Language: new FormControl (''),
-      LanguageRead: new FormControl (''),
-      LanguageWrite: new FormControl (''),
-      ProficiencyLanguage: new FormControl(''),
-      LanguageSpeak: new FormControl(''),
-      ResumeHeadline: new FormControl('')
+  addProject() {
+    this.projects.push(this.projectForm());
+  }
+
+  get projects() {
+    return this.projectsForm.get('Projects') as FormArray;
+  }
+
+  //----------------- Projects END'S ------------------------
+
+
+
+
+
+  //----------------- technical skills form, group and add new ------------------------
+
+  buildSkillsForm() {
+    this.skillsForm = this.fb.group({
+      TechnicalSkills: this.fb.array([this.createTechnicalSkillsGroup()])
     })
   }
 
-  employmentField() {
-    return this.fb.group({
-      Designation: new FormControl(''),
-      YourOrganization: new FormControl(''),
-      CurrentCompany: new FormControl(''),
-      WorkingYear: new FormControl(''),
-      WorkingMonth: new FormControl(''),
-      WorkedYear: new FormControl(''),
-      CurrentSalary: new FormControl(''),
-      CurrentSalaryLakh: new FormControl(''),
-      CurrentSalaryThousand: new FormControl(''),
-      Experties: new FormControl(''),
-      JobProfile: new FormControl(''),
-      NoticePeriod: new FormControl('')
-    })
-  }
-
-  iTSkillrowField() {
+  createTechnicalSkillsGroup() {
     return this.fb.group({
       ITSkill: new FormControl(''),
       Version: new FormControl(''),
@@ -233,33 +238,232 @@ export class ManageComponent implements OnInit {
   }
 
   addItskill() {
-    this.iTSkillFormArray.push(this.iTSkillrowField());
+    let skills = this.skillsForm.get("TechnicalSkills") as FormArray;
+    skills.push(this.createTechnicalSkillsGroup());
   }
 
-  addEmployment() {
-    this.employmentFormArray.push(this.employmentField());
+  get skills(): FormArray {
+    return this.skillsForm.get("TechnicalSkills") as FormArray;
   }
 
-  addLanguageForm() {
-    this.languageformArry.push(this.languageField());
+  //----------------- technical skills END'S ------------------------
+
+
+
+
+  //----------------- Accomplishments form, group and add new ------------------------
+
+    buildAccomplishmentsForm() {
+      this.accomplishmentsForm = this.fb.group({
+        OnlineProfiles: this.fb.array([this.buildOnlieProfiles()]),
+        WorkSamples: this.fb.array([this.buildWorkSamples()]),
+        Researchs: this.fb.array([this.buildResearchs()]),
+        Presentations: this.fb.array([this.buildPresentations()]),
+        Patents: this.fb.array([this.buildPatents()]),
+        Certifications: this.fb.array([this.buildCertifications()])
+      })
+    }
+
+
+    buildOnlieProfiles() {
+      return this.fb.group({
+        OnlineProfileUrl: new FormControl('')
+      });
+    }
+
+    buildWorkSamples() {
+      return this.fb.group({
+        WorkSampleUrl: new FormControl('')
+      });
+    }
+
+    buildResearchs() {
+      return this.fb.group({
+        ResearchUrl: new FormControl('')
+      });
+    }
+
+    buildPresentations() {
+      return this.fb.group({
+        PresentationUrl: new FormControl('')
+      });
+    }
+
+    buildPatents() {
+      return this.fb.group({
+        PatentUrl: new FormControl('')
+      });
+    }
+
+    buildCertifications() {
+      return this.fb.group({
+        CertificationUrl: new FormControl('')
+      });
+    }
+
+
+    addOnlieProfiles() {
+      this.onlieProfiles.push(this.buildOnlieProfiles());
+    }
+
+    addWorkSamples() {
+      this.workSamples.push(this.buildWorkSamples());
+    }
+
+    addResearchs() {
+      this.researchs.push(this.buildResearchs());
+    }
+
+    addPresentations() {
+      this.presentations.push(this.buildPresentations());
+    }
+
+    addPatents() {
+      this.patents.push(this.buildPatents());
+    }
+
+    addCertifications() {
+      this.certifications.push(this.buildCertifications());
+    }
+
+    get onlieProfiles(): FormArray {
+      return this.accomplishmentsForm.get("OnlineProfiles") as FormArray;
+    }
+
+    get workSamples(): FormArray {
+      return this.accomplishmentsForm.get("WorkSamples") as FormArray;
+    }
+
+    get researchs(): FormArray {
+      return this.accomplishmentsForm.get("Researchs") as FormArray;
+    }
+
+    get presentations(): FormArray {
+      return this.accomplishmentsForm.get("Presentations") as FormArray;
+    }
+
+    get patents(): FormArray {
+      return this.accomplishmentsForm.get("Patents") as FormArray;
+    }
+
+    get certifications(): FormArray {
+      return this.accomplishmentsForm.get("Certifications") as FormArray;
+    }
+
+  //----------------- technical skills END'S ------------------------
+
+
+
+
+  //----------------- Education form, group and add new ------------------------
+
+  createEducationForm() {
+    return this.fb.group({
+      Education: new FormControl(''),
+      Course: new FormControl(''),
+      Specialization: new FormControl(''),
+      University: new FormControl(''),
+      IsFullTime: new FormControl(false),
+      IsPartTime: new FormControl(false),
+      IsDistance: new FormControl(false),
+      PassingYear: new FormControl(''),
+      GradingSystem: new FormControl('')
+    })
   }
 
-  get languageformArry() {
-    return (<FormArray>this.manageUserForm.get('LanguageRow')).controls;
+  buildEducationForm() {
+    this.educationForm = this.fb.group({
+      Educations: this.fb.array([this.createEducationForm()])
+    })
   }
 
-  get employmentFormArray() {
-    return (<FormArray>this.manageUserForm.get('Employment')).controls;
+  addEducation() {
+    this.education.push(this.createEducationForm());
   }
 
-  get iTSkillFormArray() {
-    return (<FormArray>this.manageUserForm.get('ITSkillrow')).controls;
+  get education(): FormArray{
+    return this.educationForm.get("Educations") as FormArray
   }
 
-  get f() {
-    let data = this.manageUserForm.controls;
-    return data;
+  //----------------- Education END'S ------------------------
+
+
+
+  //----------------- Employment form, group and add new ------------------------
+
+  buildEmploymentForm() {
+    this.employmentForm = this.fb.group({
+      Designation: new FormControl(''),
+      YourOrganization: new FormControl(''),
+      CurrentCompany: new FormControl(''),
+      WorkingYear: new FormControl(''),
+      WorkingMonth: new FormControl(''),
+      WorkedYear: new FormControl(''),
+      WorkedMonth: new FormControl(''),
+      CurrentSalary: new FormControl(''),
+      CurrentSalaryLakh: new FormControl(''),
+      CurrentSalaryThousand: new FormControl(''),
+      Experties: new FormControl(''),
+      JobProfile: new FormControl(''),
+      NoticePeriod: new FormControl(''),
+    })
   }
+
+  //----------------- Employment END'S ------------------------
+
+
+
+
+  //----------------- Carreer Profile form, group and add new ------------------------
+
+  createCarrerProfileForm() {
+    return this.fb.group({
+      Industry: new FormControl(''),
+      Department: new FormControl(''),
+      RoleCategory: new FormControl(''),
+      JobRole: new FormControl(''),
+      DesiredJob: new FormControl(''),
+      EmploymentType: new FormControl(false),
+      PreferredShift: new FormControl(false),
+      PreferredWorkLocation: new FormControl(false),
+      ExpectedSalary: new FormControl(''),
+      ExpectedSalaryInLakh: new FormControl(''),
+      ExpectedSalaryInThousand: new FormControl('')
+    })
+  }
+
+  buildCarrerProfileForm() {
+    this.carrerProfileForm = this.fb.group({
+      CarrerProfile: this.fb.array([this.createCarrerProfileForm()])
+    })
+  }
+
+  addCarrerProfile() {
+    this.carrer.push(this.createCarrerProfileForm());
+  }
+
+  get carrer(): FormArray {
+    return this.carrerProfileForm.get("CarrerProfile") as FormArray;
+  }
+
+  //----------------- Carreer Profile END'S ------------------------
+
+
+
+
+  initForm() {
+    this.manageUserForm = this.fb .group({
+      FirstName: new FormControl(this.userModal.FirstName),
+      LastName: new FormControl (this.userModal.LastName),
+      Email: new FormControl(this.userModal.Email),
+      Mobile: new FormControl(this.userModal.Mobile),
+      KeySkill: new FormControl(''),
+
+      ProfileSummary: new FormControl(''),
+      Educations: this.fb.array([])
+    })
+  }
+
 
   maritalStatusSelected(event: any) {
     let value = event.target.value;
@@ -293,9 +497,18 @@ export class ManageComponent implements OnInit {
 
   submitManageUserForm() {
     this.userModal = this.manageUserForm.value;
-    this.http.post("user/ManageUserDetail", this.userModal)
-    .then ((response: ResponseModel) => {
-      Toast("Submitted successfully")
+    // this.http.post("user/ManageUserDetail", this.userModal)
+    // .then ((response: ResponseModel) => {
+    //   Toast("Submitted successfully")
+    // })
+  }
+
+  submitPersonalDetails() {
+    let userDetails = this.personalDetailForm.value;
+    let languages = this.personalDetailForm.controls['Languages'].value;
+    this.http.post("user/personalDetail", userDetails).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Personal Deatil submitted successfully")
     })
   }
 
@@ -312,8 +525,19 @@ export class ManageComponent implements OnInit {
       errroCounter++;
     if (this.manageUserForm.get('Mobile').errors !== null)
       errroCounter++;
-
-    this.userModal = this.manageUserForm.value;
+    let formValue = {};
+    let users = this.manageUserForm.value;
+    let employments = this.employmentForm.value;
+    let educations = this.educationForm.controls['Educations'].value;
+    let skills = this.skillsForm.controls['TechnicalSkills'].value;
+    let projects = this.projectsForm.controls['Projects'].value;
+    let onlineProfiles = this.accomplishmentsForm.controls['OnlineProfiles'].value;
+    let certifications = this.accomplishmentsForm.controls['Certifications'].value;
+    let patents = this.accomplishmentsForm.controls['Patents'].value;
+    let presentations = this.accomplishmentsForm.controls['Presentations'].value;
+    let researches = this.accomplishmentsForm.controls['Researchs'].value;
+    let workSamples = this.accomplishmentsForm.controls['WorkSamples'].value;
+    let carrerProfiles = this.carrerProfileForm.controls['CarrerProfile'].value;
     // if (errroCounter == 0) {
     //   this.http.post("user/UpdateUser", this.userModal)
     //   .then((response: ResponseModel) => {
@@ -501,11 +725,11 @@ class UserModal {
   WorkingMonth: number = 0;
   WorkedYear: number = 0;
   CurrentSalary: string= '';
-  CurrentSalaryLakh: number = 0;
+  CurrentSalaryInLakh: number = 0;
   Experties: number = 0;
   JobProfile: string = '';
   NoticePeriod: string = '';
-  CurrentSalaryThousand: number = 0;
+  CurrentSalaryInThousand: number = 0;
   ITSkill: string = '';
   Version: number = 0;
   LastUsed: string= '';
@@ -539,7 +763,7 @@ class UserModal {
   ExpectedSalaryLakh: number = 0;
   ExpectedSalaryThousand: number = 0;
   ProfileSummary: string = '';
-  DOB: Date = new Date();
+  DOB: string = '';
   Gender: string = '';
   Address: string = '';
   HomeTown: string ='';
@@ -550,10 +774,10 @@ class UserModal {
   PermitUSA: string = '';
   PermitOtherCountry: string = '';
   Language: string = '';
-  LanguageRead: string = '';
-  LanguageWrite: string = '';
+  CanLanguageRead: string = '';
+  CanLanguageWrite: string = '';
   ProficiencyLanguage: string = '';
-  LanguageSpeak: string = '';
+  CanLanguageSpeak: string = '';
   OnlineProfile: string = '';
   WorkSample: string = '';
   Research: string = '';

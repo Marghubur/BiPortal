@@ -16,3 +16,30 @@
 .permission-text {
   font-size: 1.1rem;
 }
+
+.noaccess {
+  color: #b9b4b4;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.readonly {
+  color: brown !important;
+}
+
+.readwrite {
+  color: darkblue !important;
+}
+
+.fullaccess {
+  color: green !important;
+}
+
+.select-role-message {
+  margin-top: 6rem !important;
+  padding: 0px 15rem;
+}
+
+.code-defination-txtarea {
+  height: 5rem !important;
+}

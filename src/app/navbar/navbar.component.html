@@ -1,7 +1,8 @@
 <nav class="navbar default-layout col-12 p-0 d-flex flex-row">
   <div class="nav-content">
     <div class="logo">
-      <a href="javascript:void(0)" routerLink="/admin"><img src="assets/images/logo.png" class="img-fluid" alt="logo"></a>
+      <a href="javascript:void(0)" routerLink="/admin"><img src="assets/images/logo.png" class="img-fluid"
+          alt="logo"></a>
     </div>
 
     <div class="navbar-menu-wrapper d-flex align-items-center">
@@ -16,7 +17,9 @@
               <li><a class="dropdown-item" href="#">Action</a></li>
               <li><a class="dropdown-item" href="#">Another action</a></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
-              <li><hr class="dropdown-divider"></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
               <li><a class="dropdown-item" href="#">Separated link</a></li>
             </ul>
           </div>
@@ -32,15 +35,20 @@
               <li><a class="dropdown-item" href="#">Action</a></li>
               <li><a class="dropdown-item" href="#">Another action</a></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
-              <li><hr class="dropdown-divider"></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
               <li><a class="dropdown-item" href="#">Separated link</a></li>
             </ul>
           </div>
         </li>
 
         <li>
-          <a type="button" id="btn-user" class="btn btn-user position-relative" data-bs-toggle="dropdown" aria-expanded="false">
-            <a href="javascript:void" id="anc-user" class="text-dark pe-3 text-decoration-none" (click)="ViewUserProfile()">
+          <a type="button" id="btn-user" class="btn btn-user position-relative" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <a href="javascript:void" id="anc-user"
+              class="d-flex flex-column justify-content-center text-dark pe-3 text-decoration-none"
+              (click)="ViewUserProfile()">
               <span class="profile-text">{{userDetail.LastName}}</span>
             </a>
             <img class="img-xs rounded-circle" src="assets/images/faces/face1.jpg" alt="Profile image">
@@ -62,13 +70,13 @@
             </a>
           </div>
 
-          <div *ngIf="IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown adject-p-o lpp" ngbDropdownMenu
-            aria-labelledby="UserDropdown">
+          <div *ngIf="IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown adject-p-o lpp"
+            ngbDropdownMenu aria-labelledby="UserDropdown">
             <a class="dropdown-item p-over-header p-0 lpp__a">
               <div class="d-inline-block">
-                <div
-                  class="py-3 px-4 d-flex align-items-center justify-content-center border-left border-right lpp__icon-circle">
-                  <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i>
+                <div class="d-flex align-items-center justify-content-center">
+                  <!-- <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i> -->
+                  <img class="img-xs rounded-circle" src="assets/images/faces/face1.jpg" alt="Profile image">
                 </div>
               </div>
             </a>
