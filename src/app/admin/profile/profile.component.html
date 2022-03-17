@@ -49,38 +49,28 @@
                       <div class="col-md-12 m-0 row">
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Mobile Number </label>
-                          <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#" readonly
+                          <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#" [readonly]="!section.isProfileEdit"
                             OnlyNumber="10" name="Mobile" formControlName="Mobile" />
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Email Id </label>
                           <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email"
-                            readonly />
+                          [class.custom-form-control]="!section.isProfileEdit" [readonly]="!section.isProfileEdit" />
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="col-md-12">
-                  <div class="x_panel">
-                    <div class="x_header">
-                      <div class="x_header_title">
-                        <h2>Resume Headline<i class="fa text-dark edit-icon ps-2"
-                            [ngClass]="{'fa-pencil':!section.isResumeHeadlineEdit, 'fa-eye': section.isResumeHeadlineEdit}"
-                            (click)="editResumeHeadline()"></i></h2>
-                        <button class="btn btn-outline-success btn-sm float-end" *ngIf="section.isResumeHeadlineEdit"
-                          (click)="submitManageUserForm()">Save</button>
-                      </div>
+                  <div class="x_header mt-4">
+                    <div class="x_header_title">
+                      <h2>Resume Headline</h2>
                     </div>
+                  </div>
 
-                    <!-- [ngClass]="{'border-none': !section.isResumeHeadlineEdit}" -->
-
-                    <div class="col-md-12">
-                      <textarea [readonly]="!section.isResumeHeadlineEdit" placeholder="Resume Headline"
-                        [class.custom-form-control]="!section.isKeySkillEdit" formControlname="ResumeHeadline"
-                        name="ResumeHeadline" class="w-100 form-control lg-txtarea"></textarea>
-                    </div>
+                  <div class="col-md-12">
+                    <textarea [readonly]="!section.isResumeHeadlineEdit" placeholder="Resume Headline"
+                    [class.custom-form-control]="!section.isProfileEdit" [readonly]="!section.isProfileEdit" formControlname="ResumeHeadline"
+                      name="ResumeHeadline" class="w-100 form-control lg-txtarea"></textarea>
                   </div>
                 </div>
 

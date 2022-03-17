@@ -30,7 +30,6 @@ export class ManageComponent implements OnInit {
   ProfileCollection: any = null;
   FilesCollection: any = null;
   section: any = {
-    isResumeHeadlineEdit: false,
     isKeySkillEdit: false,
     isEmploymentEdit: false,
     isEducationEdit: false,
@@ -78,7 +77,6 @@ export class ManageComponent implements OnInit {
 
   setSections() {
     this.section = {
-      isResumeHeadlineEdit: false,
       isKeySkillEdit: false,
       isEmploymentEdit: false,
       isEducationEdit: false,
@@ -457,10 +455,9 @@ export class ManageComponent implements OnInit {
       LastName: new FormControl (this.userModal.LastName),
       Email: new FormControl(this.userModal.Email),
       Mobile: new FormControl(this.userModal.Mobile),
-      KeySkill: new FormControl(''),
-
-      ProfileSummary: new FormControl(''),
-      Educations: this.fb.array([])
+      ResumeHeadline: new FormControl(''),
+      ProfileImgPath: new FormControl(''),
+      ResumePath: new FormControl('')
     })
   }
 
@@ -493,14 +490,6 @@ export class ManageComponent implements OnInit {
   noticePeriodSelected(event: any) {
     let value = event.target.value;
     this.manageUserForm.get('NoticePeriod').setValue(value);
-  }
-
-  submitManageUserForm() {
-    this.userModal = this.manageUserForm.value;
-    // this.http.post("user/ManageUserDetail", this.userModal)
-    // .then ((response: ResponseModel) => {
-    //   Toast("Submitted successfully")
-    // })
   }
 
   submitPersonalDetails() {
@@ -582,17 +571,11 @@ export class ManageComponent implements OnInit {
         ProfileImg: event.target.result,
       });
       let selectedfile = event.target.files;
-      this.fileDetail = selectedfile[0];
-      let file = null;
-      file = <File>selectedfile[0];
-      let item: Files = new Files();
-      item.FileName = file.name;
-      item.FileType = file.type;
-      item.FileSize = file.size;
-      item.FileExtension = file.type;
-      item.UserId = this.UserId;
-      this.ProfileList = item;
-      this.ProfileCollection = file;
+      let file = <File>selectedfile[0];
+      this.fileDetail.push({
+        name: "profileImage", 
+        file: file
+      });
     }
   }
 
@@ -636,10 +619,6 @@ export class ManageComponent implements OnInit {
 
   editEmployment() {
     this.section.isEmploymentEdit = !this.section.isEmploymentEdit;
-  }
-
-  editResumeHeadline() {
-    this.section.isResumeHeadlineEdit = !this.section.isResumeHeadlineEdit;
   }
 
   editKeySkill() {
@@ -709,6 +688,23 @@ export class ManageComponent implements OnInit {
 
   reset() {
     this.manageUserForm.reset();
+  }
+
+  public submitManageUserForm() {
+    let formData = new FormData();
+    let userInfo = this.manageUserForm.value;
+    let i = 0;
+    while(i < this.fileDetail.length) {
+      formData.append(this.fileDetail[i].name, this.fileDetail[i].file);
+      i++;
+    }
+
+    formData.append("userInfo", JSON.stringify(userInfo));
+    this.http.post("user/UploadProfileDetailFile", formData).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        Toast(response.ResponseBody);
+      }      
+    })
   }
 }
 
