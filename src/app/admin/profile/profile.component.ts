@@ -201,7 +201,7 @@ export class ManageComponent implements OnInit {
       IsProjectInProgress: new FormControl(false),
       IsProjectInCompleted: new FormControl(false),
       ClientName: new FormControl(''),
-      ProjectDetail: new FormControl('')
+      ProjectDetails: new FormControl('')
     })
   }
 
@@ -425,7 +425,7 @@ export class ManageComponent implements OnInit {
       DesiredJob: new FormControl(''),
       EmploymentType: new FormControl(false),
       PreferredShift: new FormControl(false),
-      PreferredWorkLocation: new FormControl(false),
+      PreferredWorkLocation: new FormControl(''),
       ExpectedSalary: new FormControl(''),
       ExpectedSalaryInLakh: new FormControl(''),
       ExpectedSalaryInThousand: new FormControl('')
@@ -457,10 +457,8 @@ export class ManageComponent implements OnInit {
       LastName: new FormControl (this.userModal.LastName),
       Email: new FormControl(this.userModal.Email),
       Mobile: new FormControl(this.userModal.Mobile),
-      KeySkill: new FormControl(''),
-
-      ProfileSummary: new FormControl(''),
-      Educations: this.fb.array([])
+      ProfileImgPath: new FormControl(''),
+      ResumePath: new FormControl(''),
     })
   }
 
@@ -487,7 +485,9 @@ export class ManageComponent implements OnInit {
 
   gradingSystemSelected(event: any) {
     let value = event.target.value;
-    this.manageUserForm.get('GradingSystem').setValue(value);
+    this.manageUserForm.patchValue({
+      GradingSystem:value
+    });
   }
 
   noticePeriodSelected(event: any) {
@@ -508,11 +508,71 @@ export class ManageComponent implements OnInit {
     let languages = this.personalDetailForm.controls['Languages'].value;
     this.http.post("user/personalDetail", userDetails).then((response:ResponseModel) => {
       if (response.ResponseBody)
-        Toast("Personal Deatil submitted successfully")
+        Toast("Personal Deatil Form submitted successfully")
     })
   }
 
+  submitEmploymentDetail() {
+    let employment = this.employmentForm.value;
+    this.http.post("user/EmploymentDetail", employment).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Employment Form submitted successfully")
+    })
+  }
 
+  submitEducationDetail() {
+    let educations = this.educationForm.controls['Educations'].value;
+    this.http.post("user/EducationDetail", educations).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Employment Form submitted successfully")
+    })
+  }
+
+  submitSkillDetail() {
+    let skills = this.skillsForm.controls['TechnicalSkills'].value;
+    this.http.post("user/SkillsDetail", skills).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Employment Form submitted successfully")
+    })
+  }
+
+  submitProjectDetail() {
+    let projects = this.projectsForm.controls['Projects'].value;
+    this.http.post("user/ProjectDetail", projects).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Employment Form submitted successfully")
+    })
+  }
+
+  submitAccomplishmentDetail() {
+    let accomplishmentsDetail = {};
+    let onlineProfiles = this.accomplishmentsForm.controls['OnlineProfiles'].value;
+    let certifications = this.accomplishmentsForm.controls['Certifications'].value;
+    let patents = this.accomplishmentsForm.controls['Patents'].value;
+    let presentations = this.accomplishmentsForm.controls['Presentations'].value;
+    let researches = this.accomplishmentsForm.controls['Researchs'].value;
+    let workSamples = this.accomplishmentsForm.controls['WorkSamples'].value;
+    accomplishmentsDetail = {
+      OnlineProfiles: onlineProfiles,
+      Certifications: certifications,
+      Patents: patents,
+      Presentations: presentations,
+      Researches: researches,
+      WorkSamples: workSamples
+    }
+    this.http.post("user/AccomplishmentDetail", accomplishmentsDetail).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Employment Form submitted successfully")
+    })
+  }
+
+  submitCarrerProfileDetail(){
+    let carrerProfiles = this.carrerProfileForm.controls['CarrerProfile'].value;
+    this.http.post("user/CarrerProfileDetail", carrerProfiles).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Employment Form submitted successfully")
+    })
+  }
 
   UpdateUser() {
     this.isLoading = true;
@@ -527,17 +587,7 @@ export class ManageComponent implements OnInit {
       errroCounter++;
     let formValue = {};
     let users = this.manageUserForm.value;
-    let employments = this.employmentForm.value;
-    let educations = this.educationForm.controls['Educations'].value;
-    let skills = this.skillsForm.controls['TechnicalSkills'].value;
-    let projects = this.projectsForm.controls['Projects'].value;
-    let onlineProfiles = this.accomplishmentsForm.controls['OnlineProfiles'].value;
-    let certifications = this.accomplishmentsForm.controls['Certifications'].value;
-    let patents = this.accomplishmentsForm.controls['Patents'].value;
-    let presentations = this.accomplishmentsForm.controls['Presentations'].value;
-    let researches = this.accomplishmentsForm.controls['Researchs'].value;
-    let workSamples = this.accomplishmentsForm.controls['WorkSamples'].value;
-    let carrerProfiles = this.carrerProfileForm.controls['CarrerProfile'].value;
+
     // if (errroCounter == 0) {
     //   this.http.post("user/UpdateUser", this.userModal)
     //   .then((response: ResponseModel) => {
@@ -750,7 +800,7 @@ class UserModal {
   ProjectWorkedYear: number = 0;
   ProjectStatus: string = '';
   ClientName: string = '';
-  ProjectDetail: string = '';
+  ProjectDetails: string = '';
   CurrentIndustry: string = '';
   Department: string = '';
   RoleCategory: string = '';

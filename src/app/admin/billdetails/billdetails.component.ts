@@ -5,7 +5,7 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, ErrorToast, GetStatus, MonthName, Toast } from 'src/providers/common-service/common.service';
+import { AddNumbers, CommonService, ErrorToast, GetStatus, MonthName, Toast } from 'src/providers/common-service/common.service';
 import { BuildPdf, Employees } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -64,6 +64,10 @@ export class BilldetailsComponent implements OnInit {
   downloadFileLink: string = "";
   downlodFilePath: string = "";
   FileDetail: any = "";
+  TotalGSTAmount: number = 0;
+  TotalReceivedAmount: number = 0;
+  TotalBilledAmount: number = 0;
+  TotalSalaryAmount: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -361,8 +365,12 @@ export class BilldetailsComponent implements OnInit {
     this.isEmpPageReady = false;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
+      this.TotalGSTAmount = 0;
+      this.TotalReceivedAmount = 0;
+      this.TotalBilledAmount = 0;
+      this.TotalSalaryAmount = 0;
       if (response.ResponseBody) {
-        this.common.ShowToast("Record found.");
+        Toast("Record found.");
         let employees = response.ResponseBody.EmployeesList as Array<EmployeeDetail>;
         if(employees && employees.length > 0) {
           let index = 0;
@@ -425,6 +433,10 @@ export class BilldetailsComponent implements OnInit {
             bills.TDS = (this.userFiles[i].SalaryAmount /10);
             bills.Name = this.userFiles[i].Name;
             this.billDetails.push(bills);
+            this.TotalGSTAmount = AddNumbers([this.TotalGSTAmount, bills.GSTAmount], 2);
+            this.TotalReceivedAmount = AddNumbers([this.TotalReceivedAmount, bills.ReceivedAmount], 2);
+            this.TotalBilledAmount = AddNumbers([bills.BilledAmount, this.TotalBilledAmount], 2);
+            this.TotalSalaryAmount = AddNumbers([bills.SalaryAmount, this.TotalSalaryAmount], 2);
             i++;
           }
         }
