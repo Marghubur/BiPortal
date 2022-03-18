@@ -94,8 +94,12 @@
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th>
-                #
+              <th width="6%">
+                <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                  [(ngModel)]="employeeFile.BillNo" placeholder="By Bill No">
+                <div class="col-title">
+                  Bill No.#
+                </div>
               </th>
               <th>
                 <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
@@ -104,13 +108,7 @@
                   Client Name
                 </div>
               </th>
-              <th width="6%">
-                <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                  [(ngModel)]="employeeFile.BillNo" placeholder="By Bill No">
-                <div class="col-title">
-                  Bill No.#
-                </div>
-              </th>
+
               <!-- <th>Month</th> -->
               <th width="8%">
                 <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
@@ -130,25 +128,49 @@
                 </div>
               </th>
               <th width="8%">
-                <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                  [(ngModel)]="employeeFile.Month" placeholder="Month">
+                <!-- <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                  [(ngModel)]="employeeFile.Month" placeholder="Month"> -->
+                <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Month">
+                  <option value="0" selected>Status</option>
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
                 <div class="col-title">
                   Month
                 </div>
               </th>
               <th width="14%">
-                <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                  [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
+                <input class="form-control table-filter-control form-control-sm" readonly
+                  (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.BilledAmount"
+                  placeholder="By Billed Amount">
                 <div class="col-title">
                   Billed Amount
                 </div>
               </th>
-              <th width="12%">
-                <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                  [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
+              <th width="10%">
+                <input class="form-control table-filter-control form-control-sm" readonly
+                  (keyup.enter)="filterRecords()" [(ngModel)]="employeeFile.ReceivedAmount"
+                  placeholder="By Received Amount">
                 <div class="col-title">
                   Received
-                  <small class="text-muted">[- 10% TDS]</small>
+                </div>
+              </th>
+              <th width="8%">
+                <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome" placeholder="By Received Amount">
+                <div class="col-title">
+                  Take Home
                 </div>
               </th>
               <th width="7%">
@@ -177,10 +199,15 @@
           </thead>
           <tbody>
             <tr *ngFor="let user of billDetails">
-              <td>{{user.FileUid}}</td>
-              <td>{{user.ClientName}}</td>
               <td>
                 <a href="javascript:void(0)" (click)="EditCurrentDocument(user)">{{user.BillNo}}</a>
+              </td>
+              <td><a href="javascript:void(0)" class="text-plain"
+                  (click)="EditClient(user.ClientId)">{{user.ClientName}}</a>
+                <div class="float-end">
+                  <a><span class="badge bg-primary">T 21</span></a>
+                  <span class="badge bg-danger ms-3">A {{user.Absent}}</span>
+                </div>
               </td>
               <!-- <td>{{user.Month}}</td> -->
               <td>{{user.Status}}</td>
@@ -188,14 +215,21 @@
               <td>{{user.Month}}</td>
               <td>
                 <div>
-                  {{user.BilledAmount | number : '1.2-2'}}
-                  <div>
+                  <b>{{user.BilledAmount | number : '1.2-2'}}</b>
+                  <div class="d-flex flex-column">
                     <small class="s-item text-muted me-2">[A] {{user.SalaryAmount | number : '1.2-2'}}</small>
                     <small class="s-item text-muted">[G] {{user.GSTAmount | number : '1.2-2'}}</small>
                   </div>
                 </div>
               </td>
-              <td>{{user.ReceivedAmount | number : '1.2-2'}}</td>
+              <td><b>{{user.ReceivedAmount | number : '1.2-2'}}</b>
+                <div>
+                  <small class="text-muted">[- 10% TDS]</small>
+                </div>
+              </td>
+              <td>
+                {{user.TakeHome | number : '1.2-2'}}
+              </td>
               <td>
                 <a href="javascript:void(0)" class="h-font" (click)="updateGSTStatus(user.BillNo, user.GSTAmount)">
                   {{user.GSTStatus}}
@@ -225,8 +259,8 @@
               <td>
                 <div class="fw-bold">
                   Rs {{TotalBilledAmount | number : '1.2-2'}}
-                  <div>
-                    <small class="s-item text-muted me-2 d-block">[A] {{ TotalSalaryAmount | number : '1.2-2'}}</small>
+                  <div class=" d-flex flex-column">
+                    <small class="s-item text-muted me-2">[A] {{ TotalSalaryAmount | number : '1.2-2'}}</small>
                     <small class="s-item text-muted">[G] {{TotalGSTAmount | number : '1.2-2'}}</small>
                   </div>
                 </div>

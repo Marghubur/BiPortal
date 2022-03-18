@@ -5,8 +5,8 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { GetStatus, MonthName, Toast, WarningToast, ErrorToast, AddNumbers } from 'src/providers/common-service/common.service';
-import { BuildPdf } from 'src/providers/constants';
+import { GetStatus, MonthName, Toast, WarningToast, ErrorToast, AddNumbers, ToFixed } from 'src/providers/common-service/common.service';
+import { BuildPdf, ManageEmployee, RegisterClient } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 import { Files } from '../documents/documents.component';
@@ -84,6 +84,7 @@ export class FilesComponent implements OnInit {
     this.employeeFile = new BillDetails();
     this.employeeFile.Status = "0";
     this.employeeFile.GSTStatus = '0';
+    this.employeeFile.Month = "0";
     this.basePath = this.http.GetImageBasePath();
     this.currentEmployeeDetail = this.nav.getValue();
     this.employeeId = this.currentEmployeeDetail.EmployeeUid;
@@ -410,7 +411,7 @@ export class FilesComponent implements OnInit {
               GST = 0;
             }
             bills.GSTStatus = GetStatus(this.userFiles[i].GstStatus);
-            bills.GSTAmount = this.userFiles[i].SalaryAmount * GST;
+            bills.GSTAmount = ToFixed(this.userFiles[i].SalaryAmount * GST, 2);
             bills.ClientId = this.userFiles[i].ClientId;
             bills.ClientName = this.userFiles[i].ClientName;
             bills.FileExtension = this.userFiles[i].FileExtension;
@@ -422,10 +423,12 @@ export class FilesComponent implements OnInit {
             bills.Month = MonthName(this.userFiles[i].Month);
             bills.PaidOn = this.userFiles[i].PaidOn;
             bills.Status = this.userFiles[i].Status;
-            bills.SalaryAmount = this.userFiles[i].SalaryAmount;
-            bills.ReceivedAmount = (this.userFiles[i].SalaryAmount * (1 + GST)) - (this.userFiles[i].SalaryAmount /10);
-            bills.BilledAmount = this.userFiles[i].SalaryAmount * (1 + GST);
-            bills.TDS = (this.userFiles[i].SalaryAmount /10);
+            bills.SalaryAmount = ToFixed(this.userFiles[i].SalaryAmount, 2);
+            bills.ReceivedAmount = ToFixed((this.userFiles[i].SalaryAmount * (1 + GST)) - (this.userFiles[i].SalaryAmount /10), 2);
+            bills.BilledAmount = ToFixed(this.userFiles[i].SalaryAmount * (1 + GST), 2);
+            bills.TDS = ToFixed((this.userFiles[i].SalaryAmount /10), 2);
+            bills.TakeHome = this.userFiles[i].TakeHome;
+            bills.Absent = this.userFiles[i].Absents;
             this.billDetails.push(bills);
             this.TotalGSTAmount = AddNumbers([this.TotalGSTAmount, bills.GSTAmount], 2);
             this.TotalReceivedAmount = AddNumbers([this.TotalReceivedAmount, bills.ReceivedAmount], 2);
@@ -456,8 +459,8 @@ export class FilesComponent implements OnInit {
     let fromDateValue = "";
     let toDateValue = "";
     let isDateFilterEnable = false;
-
     this.singleEmployee.reset();
+
     if (this.fromDate !== null) {
       if (this.toDate == null) {
         Toast("Please selete to date to get the result.")
@@ -483,7 +486,7 @@ export class FilesComponent implements OnInit {
     }
 
     if(this.employeeFile.ClientName !== null && this.employeeFile.ClientName !== "") {
-      searchQuery += ` ClientName like '${this.employeeFile.ClientName}%' `;
+      searchQuery += ` c.ClientName like '${this.employeeFile.ClientName}%' `;
       delimiter = "and";
     }
 
@@ -492,20 +495,13 @@ export class FilesComponent implements OnInit {
       delimiter = "and";
     }
 
-    if(this.employeeFile.Status !== '0' && this.employeeFile.Status !== "") {
-      let StatusValue = '';
-      if (this.employeeFile.Status == '1') {
-        StatusValue = "Completed";
-      }
-      else if (this.employeeFile.Status == '2') {
-        StatusValue = "Pending";
-      }
-      else if (this.employeeFile.Status == '3') {
-        StatusValue = "Canceled";
-      } else {
-        StatusValue = '';
-      }
-      searchQuery += ` ${delimiter} Status = '${StatusValue}' `;
+    if(this.employeeFile.Status !== '0') {
+      searchQuery += ` ${delimiter} BillStatusId = ${this.employeeFile.Status} `;
+      delimiter = "and";
+    }
+
+    if(this.employeeId > 0) {
+      searchQuery += ` ${delimiter} FileOwnerId = ${this.employeeId} `;
       delimiter = "and";
     }
 
@@ -529,13 +525,19 @@ export class FilesComponent implements OnInit {
       delimiter = "and";
     }
 
+    if(this.employeeFile.TakeHome !== null && this.employeeFile.TakeHome !== 0) {
+      searchQuery += ` ${delimiter} TakeHomeByCandidate like '%${this.employeeFile.TakeHome}%' `;
+      delimiter = "and";
+    }
+
     if(this.employeeFile.BilledAmount !== null && this.employeeFile.BilledAmount !== 0) {
       searchQuery += ` ${delimiter} BilledAmount like '${this.employeeFile.BilledAmount}%' `;
       delimiter = "and";
     }
 
-    if(this.employeeFile.Month !== null && this.employeeFile.Month !== "") {
-      searchQuery += ` ${delimiter} Month like '${this.employeeFile.Month}%' `;
+    if(this.employeeFile.Month !== null && this.employeeFile.Month !== "0") {
+      let monthValue = Number(this.employeeFile.Month);
+      searchQuery += ` ${delimiter} BillForMonth = '${monthValue}' `;
       delimiter = "and";
     }
 
@@ -560,6 +562,7 @@ export class FilesComponent implements OnInit {
     this.employeeFile.ReceivedAmount=null;
     this.employeeFile.BilledAmount = null;
     this.employeeFile.Month = "";
+    this.employeeFile.TakeHome = null;
     this.toModel = null;
     this.fromModel = null;
     this.toDate = null;
@@ -600,6 +603,22 @@ export class FilesComponent implements OnInit {
       Toast("Invalid record. No bill no#. found.");
     }
   }
+
+  EditClient(data: any) {
+    if (data !== null) {
+      let ClientId = data;
+      let ClientIsActive = false;
+      if (ClientId !== null && ClientId !== "") {
+        this.http.get(`Clients/GetClientById/${ClientId}/${ClientIsActive}`).then((response: ResponseModel) => {
+          if (response.ResponseBody !== null) {
+            this.nav.navigate(RegisterClient, response.ResponseBody);
+          }
+        }).catch(e => {
+          ErrorToast("Got error to get data. Please contact to admin.");
+        })
+      }
+    }
+  }
 }
 
 export class BillDetails {
@@ -627,4 +646,6 @@ export class BillDetails {
   GSTStatus: string = '';
   fromModel: string = '';
   toModel: string = '';
+  TakeHome: number = null;
+  Absent: number = 0;
 }
