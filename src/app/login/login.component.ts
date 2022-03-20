@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   isGoogleLogin: boolean = false;
   isGitHubLogin: boolean = false;
+  isUserMode: boolean = true;
 
   @Output() userAuthState = new EventEmitter();
 
@@ -45,6 +46,51 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() { }
+
+  switchMode() {
+    this.isUserMode = !this.isUserMode;
+  }
+
+  LoginProvider() {
+    this.isLoading = true;
+    if (this.UserForm.valid) {
+      this.isLoading = true;
+      let request = {
+        Password: null,
+        EmailId: null,
+        Mobile: null,
+        MediaName: null,
+        AccessToken: null
+      };
+      let userId = this.UserForm.controls['UserId'].value;
+      let password = this.UserForm.controls['Password'].value;
+
+      if (userId !== "" && password !== "") {
+        if(userId.indexOf("@") !== -1) {
+          request.EmailId = userId;
+        } else {
+          request.Mobile = userId;
+        }
+
+        request.Password = password;
+        this.http.login("Login/AuthenticateProvider", request).then((result: ResponseModel) => {
+          if (this.commonService.IsValid(result)) {
+            let Data = result.ResponseBody;
+            this.jwtService.setLoginDetail(Data);
+            Toast("Login done. Loading dashboard ...");
+            this.nav.navigate("/admin", null);
+          } else {
+            ErrorToast("Incorrect username or password. Please try again.");
+          }
+          this.isLoading = false;
+        }).catch(e => {
+          this.isLoading = false;
+        });
+      }
+    } else {
+      this.isLoading = false;
+    }
+  }
 
   LoginUser() {
     this.isLoading = true;

@@ -94,6 +94,34 @@ export class AjaxService {
     });
   }
 
+  put(Url: string, Param: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.commonService.ShowLoaderByAjax();
+      this.http
+        .put(environment.baseUrl + Url, Param, {
+          observe: "response"
+        })
+        .subscribe(
+          (res: HttpResponse<any>) => {
+            try {
+              if (!this.tokenHelper.IsValidResponse(res.body)) {
+                reject(null);
+              }
+            } catch (e) {
+              reject(null);
+            }
+            resolve(res.body);
+            this.commonService.HideLoaderByAjax();
+          },
+          error => {
+            this.commonService.HideLoaderByAjax();
+            this.tokenHelper.HandleResponseStatus(error.status);
+            reject(null);
+          }
+        );
+    });
+  }
+
   postRequest(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.commonService.ShowLoaderByAjax();
