@@ -34,6 +34,7 @@ export class RolesComponent implements OnInit {
     })
     this.initForm(0, []);
     this.Roleform();
+    this.PermissionValue = 0;
   }
 
   getPermessionName(permissionValue: number) {
@@ -55,6 +56,8 @@ export class RolesComponent implements OnInit {
     let i = 0;
     while(i < menu.length) {
       if(menu[i].Childs != null) {
+        if(menu[i].Permission == null)
+          menu[i].Permission = 0;
         itemArray.push(this.fb.group({
           Icon: new FormControl(menu[i].Icon),
           Catagory: new FormControl(menu[i].Catagory),
@@ -131,7 +134,7 @@ export class RolesComponent implements OnInit {
     this.addRootCatagory(items.value);
     RolesAndMenu = {
       AccessLevelId: access.value,
-      menu: items.value
+      Menu: items.value
     };
 
     this.http.post("Roles/AddUpdatePermission", RolesAndMenu).then((response: ResponseModel) => {
