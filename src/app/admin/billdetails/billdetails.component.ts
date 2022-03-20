@@ -5,8 +5,8 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { AddNumbers, CommonService, ErrorToast, GetStatus, MonthName, Toast } from 'src/providers/common-service/common.service';
-import { BuildPdf, Employees } from 'src/providers/constants';
+import { AddNumbers, CommonService, ErrorToast, GetStatus, MonthName, Toast, ToFixed } from 'src/providers/common-service/common.service';
+import { BuildPdf, Employees, ManageEmployee, RegisterClient } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { ApplicationData } from '../build-pdf/build-pdf.component';
@@ -415,7 +415,7 @@ export class BilldetailsComponent implements OnInit {
               GST = 0;
             }
             bills.GSTStatus = GetStatus(this.userFiles[i].GstStatus);
-            bills.GSTAmount = this.userFiles[i].SalaryAmount * GST;
+            bills.GSTAmount = ToFixed(this.userFiles[i].SalaryAmount * GST, 2);
             bills.ClientId = this.userFiles[i].ClientId;
             bills.ClientName = this.userFiles[i].ClientName;
             bills.FileExtension = this.userFiles[i].FileExtension;
@@ -427,11 +427,13 @@ export class BilldetailsComponent implements OnInit {
             bills.Month = MonthName(this.userFiles[i].Month);
             bills.PaidOn = this.userFiles[i].PaidOn;
             bills.Status = this.userFiles[i].Status;
-            bills.SalaryAmount = this.userFiles[i].SalaryAmount;
-            bills.ReceivedAmount = (this.userFiles[i].SalaryAmount * (1 + GST)) - (this.userFiles[i].SalaryAmount /10);
-            bills.BilledAmount = this.userFiles[i].SalaryAmount * (1 + GST);
-            bills.TDS = (this.userFiles[i].SalaryAmount /10);
+            bills.SalaryAmount = ToFixed(this.userFiles[i].SalaryAmount, 2);
+            bills.ReceivedAmount = ToFixed((this.userFiles[i].SalaryAmount * (1 + GST)) - (this.userFiles[i].SalaryAmount /10), 2);
+            bills.BilledAmount = ToFixed(this.userFiles[i].SalaryAmount * (1 + GST), 2);
+            bills.TDS = ToFixed(((this.userFiles[i].SalaryAmount /10)), 2);
             bills.Name = this.userFiles[i].Name;
+            bills.TakeHome = this.userFiles[i].TakeHome;
+            bills.Absent = this.userFiles[i].Absents;
             this.billDetails.push(bills);
             this.TotalGSTAmount = AddNumbers([this.TotalGSTAmount, bills.GSTAmount], 2);
             this.TotalReceivedAmount = AddNumbers([this.TotalReceivedAmount, bills.ReceivedAmount], 2);
@@ -488,7 +490,7 @@ export class BilldetailsComponent implements OnInit {
     }
 
     if(this.employeeFile.ClientName !== null && this.employeeFile.ClientName !== "") {
-      searchQuery += ` ClientName like '${this.employeeFile.ClientName}%' `;
+      searchQuery += ` c.ClientName like '${this.employeeFile.ClientName}%' `;
       delimiter = "and";
     }
 
@@ -518,19 +520,24 @@ export class BilldetailsComponent implements OnInit {
     }
 
     if(this.employeeFile.SalaryAmount !== null && this.employeeFile.SalaryAmount !== 0) {
-      searchQuery += ` ${delimiter} PaidAmount like '${this.employeeFile.SalaryAmount}%' `;
+      searchQuery += ` ${delimiter} b.PaidAmount like '${this.employeeFile.SalaryAmount}%' `;
       delimiter = "and";
     }
 
     if(this.employeeFile.ReceivedAmount !== null && this.employeeFile.ReceivedAmount !== 0) {
-      searchQuery += ` ${delimiter} ReceivedAmount like '${this.employeeFile.ReceivedAmount}%' `;
+      searchQuery += ` ${delimiter} PaidAmount like '${this.employeeFile.ReceivedAmount}%' `;
       delimiter = "and";
     }
 
-    if(this.employeeFile.BilledAmount !== null && this.employeeFile.BilledAmount !== 0) {
-      searchQuery += ` ${delimiter} BilledAmount like '${this.employeeFile.BilledAmount}%' `;
+    if(this.employeeFile.TakeHome !== null && this.employeeFile.TakeHome !== 0) {
+      searchQuery += ` ${delimiter} TakeHomeByCandidate like '%${this.employeeFile.TakeHome}%' `;
       delimiter = "and";
     }
+
+    // if(this.employeeFile.BilledAmount !== null && this.employeeFile.BilledAmount !== 0) {
+    //   searchQuery += ` ${delimiter} BilledAmount like '${this.employeeFile.BilledAmount}%' `;
+    //   delimiter = "and";
+    // }
 
     if(this.employeeFile.Month !== null && this.employeeFile.Month !== "0") {
       let monthValue = Number(this.employeeFile.Month);
@@ -559,6 +566,7 @@ export class BilldetailsComponent implements OnInit {
     this.employeeFile.ReceivedAmount=null;
     this.employeeFile.BilledAmount = null;
     this.employeeFile.Month = "0";
+    this.employeeFile.TakeHome = null;
     this.toModel = null;
     this.fromModel = null;
     this.toDate = null;
@@ -598,6 +606,38 @@ export class BilldetailsComponent implements OnInit {
       Toast("Invalid record. No bill no#. found.");
     }
   }
+
+  EditClient(data: any) {
+    if (data !== null) {
+      let ClientId = data;
+      let ClientIsActive = false;
+      if (ClientId !== null && ClientId !== "") {
+        this.http.get(`Clients/GetClientById/${ClientId}/${ClientIsActive}`).then((response: ResponseModel) => {
+          if (response.ResponseBody !== null) {
+            this.nav.navigate(RegisterClient, response.ResponseBody);
+          }
+        }).catch(e => {
+          ErrorToast("Got error to get data. Please contact to admin.");
+        })
+      }
+    }
+  }
+
+  EditEmployee(item: any) {
+    if (item !== null) {
+      let EmpId = item;
+      let EmpIsActive = true;
+      if (EmpId !== null && EmpId !== "") {
+        this.http.get(`Employee/GetEmployeeById/${EmpId}/${EmpIsActive}`).then((response: ResponseModel) => {
+          if (response.ResponseBody !== null) {
+            this.nav.navigate(ManageEmployee, response.ResponseBody);
+          }
+        }).catch(e => {
+          ErrorToast("Got error to get data. Please contact to admin.");
+        })
+      }
+    }
+  }
 }
 
 export class BillDetails {
@@ -627,4 +667,6 @@ export class BillDetails {
   fromModel: string = '';
   toModel: string = '';
   Employee: string = '';
+  TakeHome: number = null;
+  Absent: number = 0;
 }

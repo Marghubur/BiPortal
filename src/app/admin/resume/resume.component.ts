@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, Toast } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Doc, FlatFile, Pdf, Resume, Txt, UserType, Zip } from 'src/providers/constants';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
@@ -144,7 +144,7 @@ export class ResumeComponent implements OnInit {
           }
         } else {
           this.cleanFileHandler();
-          this.common.ShowToast("Excel data is not valid.");
+          ErrorToast("Excel data is not valid.");
         }
       });
     }
@@ -637,10 +637,10 @@ export class ResumeComponent implements OnInit {
     this.http.post("OnlineDocument/UploadDocumentRecords", this.resumeFiles)
       .then((response: ResponseModel) => {
         if (response.ResponseBody != null) {
-          this.common.ShowToast("Data Uploaded successfull");
+          Toast("Data Uploaded successfull");
           this.cleanFileHandler();
         } else {
-          this.common.ShowToast("Unable to upload the data");
+          ErrorToast("Unable to upload the data");
         }
       });
   }
@@ -657,10 +657,10 @@ export class ResumeComponent implements OnInit {
         } else {
           this.candidatesData.TotalRecords = 0;
         }
-        this.common.ShowToast("Records found");
+        Toast("Records found");
         this.isRecordAvailable = true;
       } else {
-        this.common.ShowToast("No records found");
+        ErrorToast("No records found");
       }
 
       this.isRecordAvailable = true;

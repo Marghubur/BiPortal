@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { ADocx, AImage, APdf, Clients, Doc, DocImg, DocumentPath, DocumentPathName, Documents, Docx, Employees, Excel, ExcelImg, FileSystemType, Images, JImage, Pdf, PdfImg, PImage, Resume, UserPath, UserPathName, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
@@ -61,7 +61,7 @@ export class documentsComponent implements OnInit, OnDestroy {
     if(data) {
       this.rootLocation = `${this.rootLocation}${environment.FolderDelimiter}${this.currentUser.Email.replace("@", "_").replace(/\./g, "_")}`;
     } else {
-      Toast("UnAuthorized access.")
+      ErrorToast("UnAuthorized access.")
     }
   }
 
@@ -134,7 +134,7 @@ export class documentsComponent implements OnInit, OnDestroy {
         this.renderedDocxFile = this.sanitizer.bypassSecurityTrustHtml(response.ResponseBody);
         $('#showDocx').modal('show');
       } else {
-        Toast("Unable to render the file");
+        ErrorToast("Unable to render the file");
       }
     })
   }
@@ -191,7 +191,7 @@ export class documentsComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      Toast("Invalid user.")
+      ErrorToast("Invalid user.")
     }
   }
 
@@ -276,7 +276,7 @@ export class documentsComponent implements OnInit, OnDestroy {
         }
         Toast("Records found");
       } else {
-        Toast("No records found");
+       ErrorToast("No records found");
       }
     })
   }
@@ -331,7 +331,7 @@ export class documentsComponent implements OnInit, OnDestroy {
         this.isLargeFile = true;
       }
     } else {
-      Toast("No file selected");
+      ErrorToast("No file selected");
     }
   }
 
@@ -426,7 +426,7 @@ export class documentsComponent implements OnInit, OnDestroy {
       this.currentFolder = path;
       this.nav.navigateWithArgs(`${Documents}`, path);
     } else {
-      Toast("No route or folder found.")
+      ErrorToast("No route or folder found.")
     }
   }
 
@@ -509,7 +509,7 @@ export class documentsComponent implements OnInit, OnDestroy {
           this.isDocumentReady = true;;
           Toast("Deleted successfully.");
         } else {
-          Toast("Fail to delte the file");
+          ErrorToast("Fail to delte the file");
         }
       });
     }
@@ -548,14 +548,14 @@ export class documentsComponent implements OnInit, OnDestroy {
           this.cleanFileHandler();
           Toast("Created successfully.");
         } else {
-          Toast("Fail to delte the file");
+          ErrorToast("Fail to delte the file");
         }
       }).catch(err => {
         $('#staticBackdropDown').modal('hide');
         this.cleanFileHandler();
       });
     } else {
-      Toast("Invalid userId");
+      ErrorToast("Invalid userId");
     }
     this.cleanFileHandler();
   }
