@@ -7,6 +7,7 @@ import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
+import { ProfessionalUserDetail } from '../resume/resume.component';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,7 @@ export class ManageComponent implements OnInit {
   active = 1;
   model: NgbDateStruct;
   submitted: boolean = false;
-  userModal: UserModal = null;
+  userModal: ProfessionalUserDetail = null;
   isLoading: boolean = false;
   User: string;
   isLargeFile: boolean = false;
@@ -29,6 +30,10 @@ export class ManageComponent implements OnInit {
   ProfileList: Files = null;
   ProfileCollection: any = null;
   FilesCollection: any = null;
+  profile: Files = new Files();
+  isFormReady: boolean = false;
+  iTSkills: Array<Skills> = [];
+
   section: any = {
     isKeySkillEdit: false,
     isEmploymentEdit: false,
@@ -98,12 +103,8 @@ export class ManageComponent implements OnInit {
   ngOnInit(): void {
     this.setSections();
     this.model = this.calendar.getToday();
-    this.userModal = new UserModal();
+    this.userModal = new ProfessionalUserDetail();
 
-    this.initForm();
-    this.buildEmploymentForm();
-    this.buildEducationForm();
-    this.buildSkillsForm();
     this.buildProjectsForm();
     this.buildAccomplishmentsForm();
     this.buildCarrerProfileForm();
@@ -119,17 +120,53 @@ export class ManageComponent implements OnInit {
     if(Master !== null && Master !== "") {
       this.userDetail = Master["UserDetail"];
       this.loadData(this.userDetail)
+    } else {
+      this.initForm();
     }
   }
 
   loadData(user: any) {
-    this.http.post(`Login/GetUserDetail`, { MobileNo: user.Mobile, Email: user.EmailId }).then((res: ResponseModel) => {
+    this.http.get(`user/GetUserDetail/${this.userDetail.UserId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        this.userModal = res.ResponseBody as UserModal;
+        let detail = res.ResponseBody.Table[0];
+        this.userModal = detail;
+        this.profile = res.ResponseBody.Table1[0];
+        this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
+        let names = detail.Name.split(" ");
+        this.userModal.FirstName = names[0];
+        this.userModal.LastName = names.splice(1, 1).join(" ");
         this.UserId = this.userModal.UserId;
+      } else {
+        ErrorToast("Invalid user. Please login again.");
       }
       this.initForm();
+      this.buildEmploymentForm();
+      this.buildEducationForm();
+      this.buildSkills();
+      this.buildSkillsForm();
+      this.isFormReady = true;
     });
+  }
+
+  buildSkills() {
+    let skillSet = [];
+    if(this.userModal.Key_Skills) {
+      skillSet = this.userModal.Key_Skills.split(",");
+    }
+
+    if(skillSet.length > 0) {
+      let i = 0;
+      while(i < skillSet.length) {
+        this.iTSkills.push({
+         Language: skillSet[i],
+         LastUsed: null,
+         ExperienceMonth: 0,
+         Version: null,
+         ExperienceYear: 0  
+        });
+        i++;
+      }
+    }
   }
 
   onDateSelection(e: NgbDateStruct) {
@@ -221,23 +258,24 @@ export class ManageComponent implements OnInit {
 
   buildSkillsForm() {
     this.skillsForm = this.fb.group({
-      TechnicalSkills: this.fb.array([this.createTechnicalSkillsGroup()])
+      TechnicalSkills: this.fb.array(this.iTSkills.map(item => this.createTechnicalSkillsGroup(item)))
     })
   }
 
-  createTechnicalSkillsGroup() {
+  createTechnicalSkillsGroup(skill: Skills) {
     return this.fb.group({
-      ITSkill: new FormControl(''),
-      Version: new FormControl(''),
-      LastUsed: new FormControl(''),
-      ExperienceYear: new FormControl(''),
-      ExperienceMonth: new FormControl('')
+      ITSkill: new FormControl(skill.Language),
+      Version: new FormControl(skill.Version),
+      LastUsed: new FormControl(skill.LastUsed),
+      ExperienceYear: new FormControl(skill.ExperienceYear),
+      ExperienceMonth: new FormControl(skill.ExperienceMonth)
     })
   }
 
   addItskill() {
+    let NewSkill = new Skills(); 
     let skills = this.skillsForm.get("TechnicalSkills") as FormArray;
-    skills.push(this.createTechnicalSkillsGroup());
+    skills.push(this.createTechnicalSkillsGroup(NewSkill));
   }
 
   get skills(): FormArray {
@@ -355,28 +393,66 @@ export class ManageComponent implements OnInit {
 
   //----------------- Education form, group and add new ------------------------
 
-  createEducationForm() {
+  createEducationForm(item: any) {
     return this.fb.group({
-      Education: new FormControl(''),
+      Education: new FormControl(item.Education),
       Course: new FormControl(''),
-      Specialization: new FormControl(''),
-      University: new FormControl(''),
+      Specialization: new FormControl(item.Specialization),
+      University: new FormControl(item.University),
       IsFullTime: new FormControl(false),
       IsPartTime: new FormControl(false),
       IsDistance: new FormControl(false),
-      PassingYear: new FormControl(''),
+      PassingYear: new FormControl(item.PassingYear),
       GradingSystem: new FormControl('')
     })
   }
 
   buildEducationForm() {
+    let educationFormData = [];
+    educationFormData.push({
+      Education: 'Under Graduate',
+      Course: '',
+      Specialization: this.userModal.UG_Specialization,
+      University: this.userModal.UG_University_institute_Name,
+      IsFullTime: false,
+      IsPartTime: false,
+      IsDistance: false,
+      PassingYear: this.userModal.UG_Graduation_year,
+      GradingSystem: ''
+    });
+
+    educationFormData.push({
+      Education: 'Post Graduate',
+      Course: '',
+      Specialization: this.userModal.PG_specialization,
+      University: this.userModal.PG_graduation_year,
+      IsFullTime: false,
+      IsPartTime: false,
+      IsDistance: false,
+      PassingYear: this.userModal.PG_graduation_year,
+      GradingSystem: ''
+    });
+
     this.educationForm = this.fb.group({
-      Educations: this.fb.array([this.createEducationForm()])
+      Educations: this.fb.array(educationFormData.map(item => {
+        return this.createEducationForm(item)
+      }))
     })
   }
 
   addEducation() {
-    this.education.push(this.createEducationForm());
+    let educationFormData = {
+      Education: 'Under Graduate',
+      Course: '',
+      Specialization: '',
+      University: '',
+      IsFullTime: false,
+      IsPartTime: false,
+      IsDistance: false,
+      PassingYear: '',
+      GradingSystem: ''
+    };
+    this.education.push(this.createEducationForm(educationFormData));
   }
 
   get education(): FormArray{
@@ -391,19 +467,20 @@ export class ManageComponent implements OnInit {
 
   buildEmploymentForm() {
     this.employmentForm = this.fb.group({
-      Designation: new FormControl(''),
-      YourOrganization: new FormControl(''),
-      CurrentCompany: new FormControl(''),
+      Designation: new FormControl(this.userModal.Current_Company_Designation),
+      YourOrganization: new FormControl(this.userModal.Current_Company_name),
+      NoCurrentCompany: new FormControl(''),
+      YesCurrentCompany: new FormControl(''),
       WorkingYear: new FormControl(''),
       WorkingMonth: new FormControl(''),
       WorkedYear: new FormControl(''),
       WorkedMonth: new FormControl(''),
-      CurrentSalary: new FormControl(''),
+      CurrentSalary: new FormControl(this.userModal.Annual_Salary),
       CurrentSalaryLakh: new FormControl(''),
       CurrentSalaryThousand: new FormControl(''),
-      Experties: new FormControl(''),
-      JobProfile: new FormControl(''),
-      NoticePeriod: new FormControl(''),
+      Experties: new FormControl(this.userModal.Key_Skills),
+      JobProfile: new FormControl(this.userModal.Job_Title),
+      NoticePeriod: new FormControl(this.userModal.Notice_Period),
     })
   }
 
@@ -447,17 +524,17 @@ export class ManageComponent implements OnInit {
   //----------------- Carreer Profile END'S ------------------------
 
 
-
-
   initForm() {
     this.manageUserForm = this.fb .group({
+      UserId: new FormControl(this.userModal.UserId),
       FirstName: new FormControl(this.userModal.FirstName),
       LastName: new FormControl (this.userModal.LastName),
-      Email: new FormControl(this.userModal.Email),
-      Mobile: new FormControl(this.userModal.Mobile),
-      ResumeHeadline: new FormControl(''),
+      Email: new FormControl(this.userModal.Email_ID),
+      Mobile: new FormControl(this.userModal.Phone_Number),
+      ResumeHeadline: new FormControl(this.userModal.Resume_Headline),
       ProfileImgPath: new FormControl(''),
-      ResumePath: new FormControl('')
+      ResumePath: new FormControl(''),
+      FileId: new FormControl(this.profile.FileId)
     })
   }
 
@@ -625,7 +702,7 @@ export class ManageComponent implements OnInit {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.fileDetail.push({
-        name: "profileImage", 
+        name: "profile", 
         file: file
       });
     }
@@ -752,7 +829,7 @@ export class ManageComponent implements OnInit {
     }
 
     formData.append("userInfo", JSON.stringify(userInfo));
-    this.http.post("user/UploadProfileDetailFile", formData).then((response: ResponseModel) => {
+    this.http.post(`user/UploadProfileDetailFile/${this.userDetail.UserId}`, formData).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         Toast(response.ResponseBody);
       }      
@@ -760,84 +837,10 @@ export class ManageComponent implements OnInit {
   }
 }
 
-class UserModal {
-  FirstName: string = '';
-  LastName: string = '';
-  Mobile: string = '';
-  Email: string = '';
-  ProfileImg: string = '';
-  Designation: string = '';
-  YourOrganization: string = '';
-  CurrentCompany: string = '';
-  WorkingYear: number = 0;
-  WorkingMonth: number = 0;
-  WorkedYear: number = 0;
-  CurrentSalary: string= '';
-  CurrentSalaryInLakh: number = 0;
-  Experties: number = 0;
-  JobProfile: string = '';
-  NoticePeriod: string = '';
-  CurrentSalaryInThousand: number = 0;
-  ITSkill: string = '';
-  Version: number = 0;
-  LastUsed: string= '';
-  ExperienceYear: number = 0;
-  ExperienceMonth: number = 0;
-  KeySkill: string = ''
-  Education: string = '';
-  Course: string = '';
-  Specialization: string = '';
-  University: string = '';
-  CourseType: string = '';
-  PassingYear: number = 0;
-  GradingSystem: string = ''
-  ProjectTitle: string = ';'
-  ProjectTag: string = '';
-  ProjectWorkingYear: number = 0;
-  ProjectWorkingMonth: number = 0;
-  ProjectWorkedYear: number = 0;
-  ProjectStatus: string = '';
-  ClientName: string = '';
-  ProjectDetails: string = '';
-  CurrentIndustry: string = '';
-  Department: string = '';
-  RoleCategory: string = '';
-  JobRole: string = '';
-  DesiredJob: string = '';
-  EmploymentType: string = '';
-  PreferredShift: string = '';
-  PreferredWorkLocation: string = '';
-  ExpectedSalary: string = '';
-  ExpectedSalaryLakh: number = 0;
-  ExpectedSalaryThousand: number = 0;
-  ProfileSummary: string = '';
-  DOB: string = '';
-  Gender: string = '';
-  Address: string = '';
-  HomeTown: string ='';
-  PinCode: number = 0;
-  MaritalStatus: string = '';
-  Category: string = '';
-  DifferentlyAbled: string = '';
-  PermitUSA: string = '';
-  PermitOtherCountry: string = '';
-  Language: string = '';
-  CanLanguageRead: string = '';
-  CanLanguageWrite: string = '';
-  ProficiencyLanguage: string = '';
-  CanLanguageSpeak: string = '';
-  OnlineProfile: string = '';
-  WorkSample: string = '';
-  Research: string = '';
-  Presentation: string = '';
-  Patent: string = '';
-  Certification: string = '';
-  UserId: number = 0;
-}
-
 class Files {
   LocalImgPath: string = "";
   UserId: number = 0;
+  FileId: number = -1;
   FileName: string = "";
   FileExtension: string = "";
   FilePath: string = "";
@@ -846,4 +849,12 @@ class Files {
   DocumentId: number = 0;
   FileType: string = "";
   FileSize: number = 0;
+}
+
+class Skills {
+  Language: string = '';
+  Version: string = '';
+  LastUsed: Date = null;
+  ExperienceYear: number = null;
+  ExperienceMonth: number = null;
 }

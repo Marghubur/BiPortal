@@ -6,7 +6,7 @@
           <li [ngbNavItem]="1">
             <a ngbNavLink>Heading</a>
             <ng-template ngbNavContent>
-              <form [formGroup]="manageUserForm">
+              <form [formGroup]="manageUserForm" *ngIf="isFormReady">
                 <div class="x_content mt-2 p-0">
                   <div class="col-12 x_panel row m-0 p-0 pt-3">
                     <div class="float-end">
@@ -69,7 +69,7 @@
 
                   <div class="col-md-12">
                     <textarea [readonly]="!section.isResumeHeadlineEdit" placeholder="Resume Headline"
-                    [class.custom-form-control]="!section.isProfileEdit" [readonly]="!section.isProfileEdit" formControlname="ResumeHeadline"
+                    [class.custom-form-control]="!section.isProfileEdit" [readonly]="!section.isProfileEdit" formControlName="ResumeHeadline"
                       name="ResumeHeadline" class="w-100 form-control lg-txtarea"></textarea>
                   </div>
                 </div>
@@ -234,19 +234,19 @@
                             <label class="form-label">Is this your current company?</label>
                             <div class="row ps-3">
                               <div class="form-check col-md-6">
-                                <input class="form-check-input" type="radio" name="CurrentCompany"
+                                <input class="form-check-input" type="radio" name="YesCurrentCompany"
                                   [readonly]="!section.isEmploymentEdit"
                                   [class.custom-form-control]="!section.isEmploymentEdit"
-                                  formControlName="CurrentCompany" value="yes" checked>
+                                  formControlName="YesCurrentCompany" value="yes" checked>
                                 <label class="form-check-label" for="gridRadios1">
                                   Yes
                                 </label>
                               </div>
                               <div class="form-check col-md-6">
-                                <input class="form-check-input" type="radio" name="CurrentCompany"
+                                <input class="form-check-input" type="radio" name="NoCurrentCompany"
                                   [readonly]="!section.isEmploymentEdit"
                                   [class.custom-form-control]="!section.isEmploymentEdit"
-                                  formControlName="CurrentCompany" value="no">
+                                  formControlName="NoCurrentCompany" value="no">
                                 <label class="form-check-label" for="gridRadios2">
                                   No
                                 </label>
@@ -452,32 +452,32 @@
                       </div>
                     </div>
                     <ng-container formArrayName="TechnicalSkills">
-                      <div class="col-md-12 row ps-2 border-bottom pt-2"
+                      <div class="col-md-12 row ps-2 pt-2"
                         *ngFor="let skills of skills.controls;let i = index" [formGroupName]="i">
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">IT Skills <span class="text-danger">*</span></label>
+                        <div class="col-md-4 mb-3">
+                          <label class="form-label">Language <span class="text-danger">*</span></label>
                           <input class="form-control " placeholder="IT Skills" name="ITSkill" formControlName="ITSkill"
                             [readonly]="!section.isItSkillEdit" [class.custom-form-control]="!section.isItSkillEdit" />
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-2 mb-3">
                           <label class="form-label">Version</label>
                           <input class="form-control " placeholder="Version" name="Version" formControlName="Version"
                             type="number" [readonly]="!section.isItSkillEdit"
                             [class.custom-form-control]="!section.isItSkillEdit" />
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-3 mb-3">
                           <label class="form-label">Last Used </label>
                           <input class="form-control " placeholder="LastUsed" name="LastUsed" formControlName="LastUsed"
                             type="number" [readonly]="!section.isItSkillEdit"
                             [class.custom-form-control]="!section.isItSkillEdit" />
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-3 mb-3">
                           <label class="form-label">Exprience</label>
                           <div class="row">
-                            <input class="form-control exp-input-box ms-3 " placeholder="Year" name="ExperienceYear"
+                            <input class="form-control col exp-input-box ms-3 " placeholder="Year" name="ExperienceYear"
                               type="number" [readonly]="!section.isItSkillEdit"
                               [class.custom-form-control]="!section.isItSkillEdit" formControlName="ExperienceYear" />
-                            <input class="form-control exp-input-box ms-3 " placeholder="Month" name="ExperienceMonth"
+                            <input class="form-control col exp-input-box ms-3 " placeholder="Month" name="ExperienceMonth"
                               type="number" [readonly]="!section.isItSkillEdit"
                               [class.custom-form-control]="!section.isItSkillEdit" formControlName="ExperienceMonth" />
                           </div>

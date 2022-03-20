@@ -37,8 +37,8 @@ export class ResumeComponent implements OnInit {
   excelPath: string;
   tableConfiguration: tableConfig = null;
   isAvailable: boolean = false;
-  resumeFiles: Array<ResumeFiles> = [];
-  resumeFile: ResumeFiles = null;
+  ProfessionalUserDetail: Array<ProfessionalUserDetail> = [];
+  resumeFile: ProfessionalUserDetail = null;
   anyFilter: string = "";
   isRecordAvailable: boolean = false;
   columns: Array<any> = [];
@@ -77,7 +77,7 @@ export class ResumeComponent implements OnInit {
     this.uploadedCandidatesData = new Filter();
     this.candidatesData = new Filter();
 
-    this.resumeFile = new ResumeFiles();
+    this.resumeFile = new ProfessionalUserDetail();
     this.baseUrl = this.http.GetImageBasePath();
     this.ExcelTableHeader = [];
     this.ExcelTableData = [];
@@ -231,13 +231,13 @@ export class ResumeComponent implements OnInit {
       let fields = this.getFiledsMap();
       let notFoundFields = [];
       let currentField = null;
-      this.resumeFiles = new Array<ResumeFiles>();
-      let resume: ResumeFiles = null;
+      this.ProfessionalUserDetail = new Array<ProfessionalUserDetail>();
+      let resume: ProfessionalUserDetail = null;
       let value = null;
       let i = 0;
       let index = 0;
       while (i < this.tableConfiguration.data.length) {
-        resume = new ResumeFiles();
+        resume = new ProfessionalUserDetail();
         while (index < fields.length) {
           currentField = this.tableConfiguration.header.find(x => x.ColumnName.toLowerCase().indexOf(fields[index]) !== -1);
           if (!currentField) {
@@ -554,7 +554,7 @@ export class ResumeComponent implements OnInit {
         }
 
         index = 0;
-        this.resumeFiles.push(resume);
+        this.ProfessionalUserDetail.push(resume);
         i++;
       }
 
@@ -634,7 +634,7 @@ export class ResumeComponent implements OnInit {
   uploadExcelSheet($e: any) {
     $e.preventDefault();
     $e.stopPropagation();
-    this.http.post("OnlineDocument/UploadDocumentRecords", this.resumeFiles)
+    this.http.post("OnlineDocument/UploadDocumentRecords", this.ProfessionalUserDetail)
       .then((response: ResponseModel) => {
         if (response.ResponseBody != null) {
           this.common.ShowToast("Data Uploaded successfull");
@@ -647,13 +647,13 @@ export class ResumeComponent implements OnInit {
 
   getUploadedDetails() {
     this.isRecordAvailable = false;
-    this.resumeFiles = [];
+    this.ProfessionalUserDetail = [];
     this.http.post("OnlineDocument/GetUploadedRecords", this.candidatesData)
     .then((response: ResponseModel) => {
       if (response.ResponseBody != null) {
-        this.resumeFiles = response.ResponseBody.Table;
-        if(this.resumeFiles.length > 0) {
-          this.candidatesData.TotalRecords = this.resumeFiles[0].Total;
+        this.ProfessionalUserDetail = response.ResponseBody.Table;
+        if(this.ProfessionalUserDetail.length > 0) {
+          this.candidatesData.TotalRecords = this.ProfessionalUserDetail[0].Total;
         } else {
           this.candidatesData.TotalRecords = 0;
         }
@@ -839,7 +839,7 @@ export class ResumeComponent implements OnInit {
     }, 250);
   }
 
-  AddEditDocuments(item: ResumeFiles) {
+  AddEditDocuments(item: ProfessionalUserDetail) {
     let userDetail: DocumentUser = new DocumentUser();
     userDetail.Mobile = item.Phone_Number;
     userDetail.Email = item.Email_ID;
@@ -943,7 +943,7 @@ function saveAs(arg0: Blob, arg1: string) {
   throw new Error('Function not implemented.');
 }
 
-export class ResumeFiles {
+export class ProfessionalUserDetail {
   UserId: number = 0;
   Total: number = 0;
   Index: number = 0;
@@ -951,6 +951,8 @@ export class ResumeFiles {
   Job_Title: string = "";
   Date_of_application: Date = null;
   Name: string = "";
+  FirstName: string = "";
+  LastName: string = "";
   Email_ID: string = "";
   Phone_Number: string = "";
   Alternet_Numbers: string = "";

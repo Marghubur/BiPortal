@@ -58,26 +58,7 @@ export class SidemenuComponent implements OnInit {
       this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
 
     if(this.userDetail.TokenExpiryDuration.getTime() - (new Date()).getTime() <= 0 && expiredOn !== null) {
-      this.http.post("login/AuthenticateUser", this.userDetail).then(
-        (response: ResponseModel) => {
-          if(response.ResponseBody !== null) {
-            this.IsLoggedIn = true;
-            this.userDetail = response.ResponseBody["UserDetail"];
-            this.BuildMenu(response.ResponseBody["Menu"]);
-            this.local.set(response.ResponseBody);
-            this.tokenHelper.setJwtToken(this.userDetail['Token'], this.userDetail.TokenExpiryDuration.toString());
-          } else {
-            this.IsLoggedIn = false;
-            this.local.set("");
-          }
-        },
-        error => {
-          this.IsLoggedIn = false;
-          this.commonService.ShowToast(
-            "Your session expired. Please login again."
-          );
-        }
-      );
+      this.nav.navigate("/", null);
     } else {
       let Master = this.local.get(null);
       if(Master !== null && Master !== "") {
@@ -93,15 +74,18 @@ export class SidemenuComponent implements OnInit {
     if(menu) {
       let parentItems = menu.filter(x => x.Childs == null);
       if(parentItems.length > 0) {
+        let filteredMenu = [];
         let i = 0;
         while(i < parentItems.length) {
-          this.Menu.push({
+          filteredMenu.push({
             Name: parentItems[i].Catagory,
             ParentDetail: parentItems[i],
             Value: menu.filter(x => x.Childs === parentItems[i].Catagory)
           });
           i++;
         }
+
+        this.Menu = filteredMenu.filter(x => x.Value.length > 0);
       } else {
         ErrorToast("Hmm! Looks login issue. Please Login again.");
       }

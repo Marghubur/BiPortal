@@ -9,75 +9,109 @@
           Come join our community! Let's set up your account. Don't have and account?
           <a href="javascript:void(0)" (click)="backToHomePage()">Sign Up now</a>
         </div>
+        
+        <a href="javascript:void(0)" (click)="switchMode()" class="provider-mode text-decoration-none">
+          {{isUserMode === true ? 'Provider' : 'User'}}
+        </a>
+        
         <div class="col-12 row m-0 center-big">
-          <div class="col-md-3 p-4 signin-container">
-            <h6 class="text-center mt-1 pt-1">
-              You can also sign in with these
-            </h6>
-            <div class="text-center">
-              <button class="btn btn-danger btn-block w-100 mb-2 mt-3" [disabled]="isGoogleLogin"
-                (click)="onGoogleSignIn()">
-                <i class="pe-2 fa"
-                  [ngClass]="{'fa-spin fa-spinner': isGoogleLogin, 'fa-google fa-lg': !isGoogleLogin}"></i>
-                {{ isGoogleLogin ? 'Signing plesae wait' : 'Sign in with Google' }}
-              </button>
-              <button class="btn btn-primary btn-block w-100 mt-2" [disabled]="isGitHubLogin">
-                <i class="pe-2 fa"
-                  [ngClass]="{'fa-spin fa-spinner': isGitHubLogin, 'fa-github fa-lg': !isGitHubLogin}"></i>
-                {{ isGitHubLogin ? 'Signing plesae wait' : 'Sign in with GitHub' }}
-              </button>
+          <ng-container *ngIf="isUserMode">
+            <div class="col-md-3 p-4 signin-container">
+              <h6 class="text-center mt-1 pt-1">
+                You can also sign in with these
+              </h6>
+              <div class="text-center">
+                <button class="btn btn-danger btn-block w-100 mb-2 mt-3" [disabled]="isGoogleLogin"
+                  (click)="onGoogleSignIn()">
+                  <i class="pe-2 fa"
+                    [ngClass]="{'fa-spin fa-spinner': isGoogleLogin, 'fa-google fa-lg': !isGoogleLogin}"></i>
+                  {{ isGoogleLogin ? 'Signing plesae wait' : 'Sign in with Google' }}
+                </button>
+                <button class="btn btn-primary btn-block w-100 mt-2" [disabled]="isGitHubLogin">
+                  <i class="pe-2 fa"
+                    [ngClass]="{'fa-spin fa-spinner': isGitHubLogin, 'fa-github fa-lg': !isGitHubLogin}"></i>
+                  {{ isGitHubLogin ? 'Signing plesae wait' : 'Sign in with GitHub' }}
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="col-md-4 card p-4 signin-container d-none">
-            <form [formGroup]="UserForm" (ngSubmit)="SignupUser()" class="mt-1">
-              <div class="form-group">
-                <label class="form-label">Email id</label>
-                <input class="form-control" placeholder="Email id" name="UserId" formControlName="UserId">
-              </div>
-              <div class="form-group mt-3">
-                <label class="form-label">Mobile No</label>
-                <input class="form-control" placeholder="Mobile No" name="MobileNo" formControlName="MobileNo">
-              </div>
-              <div class="form-group mt-3">
-                <label class="form-label">Password</label>
-                <input class="form-control" placeholder="Password" name="Password" formControlName="Password">
-              </div>
-              <div class="form-group mt-3">
-                <label class="form-label">Confirm Password</label>
-                <input class="form-control" placeholder="ConfirmPassword" name="ConfirmPassword"
-                  formControlName="ConfirmPassword">
-              </div>
-              <button class="btn btn-primary" [disabled]="isLoading" type="submit">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-plus': !isLoading}"></i>
-                {{ isLoading ? 'Signing' : 'Sign Up' }}
-              </button>
-            </form>
-          </div>
+            <div class="col-md-4 card p-4 signin-container d-none">
+              <form [formGroup]="UserForm" (ngSubmit)="SignupUser()" class="mt-1">
+                <div class="form-group">
+                  <label class="form-label">Email id</label>
+                  <input class="form-control" placeholder="Email id" name="UserId" formControlName="UserId">
+                </div>
+                <div class="form-group mt-3">
+                  <label class="form-label">Mobile No</label>
+                  <input class="form-control" placeholder="Mobile No" name="MobileNo" formControlName="MobileNo">
+                </div>
+                <div class="form-group mt-3">
+                  <label class="form-label">Password</label>
+                  <input class="form-control" placeholder="Password" name="Password" formControlName="Password">
+                </div>
+                <div class="form-group mt-3">
+                  <label class="form-label">Confirm Password</label>
+                  <input class="form-control" placeholder="ConfirmPassword" name="ConfirmPassword"
+                    formControlName="ConfirmPassword">
+                </div>
+                <button class="btn btn-primary" [disabled]="isLoading" type="submit">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-plus': !isLoading}"></i>
+                  {{ isLoading ? 'Signing' : 'Sign Up' }}
+                </button>
+              </form>
+            </div>
 
-          <div class="col-md-4 card p-4 signin-container">
-            <form [formGroup]="UserForm" (ngSubmit)="LoginUser()" class="mt-1">
-              <div class="form-group">
-                <label class="form-label">Email or Mobile Number</label>
-                <input class="form-control" placeholder="Email or Mobile Number" name="UserId" formControlName="UserId">
-              </div>
-              <div class="form-group mt-3">
-                <label class="form-label">Password</label>
-                <input class="form-control" type="password" placeholder="Password" name="Password"
-                  formControlName="Password">
-              </div>
-              <div class="form-check mt-3">
-                <input class="form-check-input" type="checkbox" checked>
-                <label class="check_box">
-                  By submitting the form you agree to our Terms of Service
-                </label>
-              </div>
+            <div class="col-md-4 card p-4 signin-container">
+              <form [formGroup]="UserForm" (ngSubmit)="LoginProvider()" class="mt-1">
+                <div class="form-group">
+                  <label class="form-label">Email or Mobile Number</label>
+                  <input class="form-control" placeholder="Email or Mobile Number" name="UserId" formControlName="UserId">
+                </div>
+                <div class="form-group mt-3">
+                  <label class="form-label">Password</label>
+                  <input class="form-control" type="password" placeholder="Password" name="Password"
+                    formControlName="Password">
+                </div>
+                <div class="form-check mt-3">
+                  <input class="form-check-input" type="checkbox" checked>
+                  <label class="check_box">
+                    By submitting the form you agree to our Terms of Service
+                  </label>
+                </div>
+  
+                <button class="btn btn-primary" [disabled]="isLoading" type="submit">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                  {{ isLoading ? 'Signing' : 'Sing In' }}
+                </button>
+              </form>
+            </div>
+          </ng-container>
 
-              <button class="btn btn-primary" [disabled]="isLoading" type="submit">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                {{ isLoading ? 'Signing' : 'Sing In' }}
-              </button>
-            </form>
-          </div>
+          <ng-container *ngIf="!isUserMode">
+            <div class="col-md-4 card p-4 signin-container">
+              <form [formGroup]="UserForm" (ngSubmit)="LoginUser()" class="mt-1">
+                <div class="form-group">
+                  <label class="form-label">Email or Mobile Number</label>
+                  <input class="form-control" placeholder="Email or Mobile Number" name="UserId" formControlName="UserId">
+                </div>
+                <div class="form-group mt-3">
+                  <label class="form-label">Password</label>
+                  <input class="form-control" type="password" placeholder="Password" name="Password"
+                    formControlName="Password">
+                </div>
+                <div class="form-check mt-3">
+                  <input class="form-check-input" type="checkbox" checked>
+                  <label class="check_box">
+                    By submitting the form you agree to our Terms of Service
+                  </label>
+                </div>
+  
+                <button class="btn btn-primary" [disabled]="isLoading" type="submit">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                  {{ isLoading ? 'Signing' : 'Sing In' }}
+                </button>
+              </form>
+            </div>
+          </ng-container>
         </div>
 
       </div>

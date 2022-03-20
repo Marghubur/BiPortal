@@ -186,6 +186,10 @@ input::-ms-input-placeholder {
   border-bottom: 1px solid #d9d9d9 !important;
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
 ::selection {
   background-color: #cce2ff;
   color: rgba(0, 0, 0, 0.87);
