@@ -14,13 +14,13 @@
               <span class="count badge-counter">{{NotificationBadge}}</span>
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item dropdown-menu-text" href="#">Action</a></li>
+              <li><a class="dropdown-item dropdown-menu-text" href="#">Another action</a></li>
+              <li><a class="dropdown-item dropdown-menu-text" href="#">Something else here</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="#">Separated link</a></li>
+              <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
             </ul>
           </div>
         </li>
@@ -32,13 +32,13 @@
               <span class="count badge-counter">{{NotificationBadge}}</span>
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item dropdown-menu-text" href="#">Action</a></li>
+              <li><a class="dropdown-item dropdown-menu-text" href="#">Another action</a></li>
+              <li><a class="dropdown-item dropdown-menu-text" href="#">Something else here</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="#">Separated link</a></li>
+              <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
             </ul>
           </div>
         </li>
@@ -76,21 +76,21 @@
               <div class="d-inline-block">
                 <div class="d-flex align-items-center justify-content-center">
                   <!-- <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i> -->
-                  <img class="img-xs rounded-circle" src="assets/images/faces/face1.jpg" alt="Profile image">
+                  <img class="img-xl rounded-circle" src="assets/images/faces/face1.jpg" alt="Profile image">
                 </div>
               </div>
             </a>
-            <hr />
-            <a class="dropdown-item c-pointer mt-2">
+            <hr class="m-0 p-0" />
+            <a class="dropdown-item c-pointer dropdown-menu-text mt-2">
               Manage Accounts
             </a>
-            <a class="dropdown-item c-pointer">
+            <a class="dropdown-item c-pointer dropdown-menu-text">
               Change Password
             </a>
-            <a class="dropdown-item c-pointer">
+            <a class="dropdown-item c-pointer dropdown-menu-text">
               Check Inbox
             </a>
-            <a class="dropdown-item c-pointer" (click)="LogoutUser()">
+            <a class="dropdown-item c-pointer dropdown-menu-text" (click)="LogoutUser()">
               Sign Out
             </a>
           </div>

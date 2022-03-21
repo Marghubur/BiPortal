@@ -65,6 +65,9 @@
 
 .nav-link.active {
   border-bottom: 2px solid orange;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
   color: var(--gray) !important;
 }
 
