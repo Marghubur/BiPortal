@@ -18,7 +18,7 @@ export class ManageComponent implements OnInit {
   active = 1;
   model: NgbDateStruct;
   submitted: boolean = false;
-  userModal: ProfessionalUserDetail = null;
+  userModal: ProfessionalUser = null;
   isLoading: boolean = false;
   User: string;
   isLargeFile: boolean = false;
@@ -103,13 +103,7 @@ export class ManageComponent implements OnInit {
   ngOnInit(): void {
     this.setSections();
     this.model = this.calendar.getToday();
-    this.userModal = new ProfessionalUserDetail();
-
-    this.buildProjectsForm();
-    this.buildAccomplishmentsForm();
-    this.buildCarrerProfileForm();
-    this.buildPersonalDetailForm();
-
+    this.userModal = new ProfessionalUser();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     if(expiredOn === null || expiredOn === "")
@@ -121,52 +115,34 @@ export class ManageComponent implements OnInit {
       this.userDetail = Master["UserDetail"];
       this.loadData(this.userDetail)
     } else {
-      this.initForm();
+      Toast("Invalid user. Please login again.")
     }
   }
 
   loadData(user: any) {
     this.http.get(`user/GetUserDetail/${this.userDetail.UserId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        let detail = res.ResponseBody.Table[0];
+        let detail = res.ResponseBody.professionalUser;
+        this.profile = res.ResponseBody.profileDetail;
         this.userModal = detail;
-        this.profile = res.ResponseBody.Table1[0];
         this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
-        let names = detail.Name.split(" ");
-        this.userModal.FirstName = names[0];
-        this.userModal.LastName = names.splice(1, 1).join(" ");
+        let educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
+        this.userModal.Educational_Detail = educations;
         this.UserId = this.userModal.UserId;
       } else {
         ErrorToast("Invalid user. Please login again.");
       }
+
       this.initForm();
+      this.buildProjectsForm();
       this.buildEmploymentForm();
       this.buildEducationForm();
-      this.buildSkills();
       this.buildSkillsForm();
+      this.buildAccomplishmentsForm();
+      this.buildCarrerProfileForm();
+      this.buildPersonalDetailForm();
       this.isFormReady = true;
     });
-  }
-
-  buildSkills() {
-    let skillSet = [];
-    if(this.userModal.Key_Skills) {
-      skillSet = this.userModal.Key_Skills.split(",");
-    }
-
-    if(skillSet.length > 0) {
-      let i = 0;
-      while(i < skillSet.length) {
-        this.iTSkills.push({
-         Language: skillSet[i],
-         LastUsed: null,
-         ExperienceMonth: 0,
-         Version: null,
-         ExperienceYear: 0  
-        });
-        i++;
-      }
-    }
   }
 
   onDateSelection(e: NgbDateStruct) {
@@ -221,27 +197,29 @@ export class ManageComponent implements OnInit {
 
   buildProjectsForm() {
     this.projectsForm = this.fb.group({
-      Projects: this.fb.array([this.projectForm()])
+      Projects: this.fb.array(this.userModal.Projects.map(item => this.projectForm(item)))
     });
   }
 
-  projectForm() {
+  projectForm(project: Project) {
     return this.fb.group({
-      ProjectTitle: new FormControl(''),
-      ProjectTag: new FormControl(''),
-      ProjectWorkingYear: new FormControl(''),
-      ProjectWorkingMonth: new FormControl(''),
-      ProjectWorkedYear: new FormControl(''),
-      ProjectWorkedMonth: new FormControl(''),
-      IsProjectInProgress: new FormControl(false),
-      IsProjectInCompleted: new FormControl(false),
-      ClientName: new FormControl(''),
-      ProjectDetails: new FormControl('')
+      ProjectTitle: new FormControl(project.ProjectTitle),
+      ProjectTag: new FormControl(project.ProjectTag),
+      ProjectWorkingYear: new FormControl(project.ProjectWorkingYear),
+      ProjectWorkingMonth: new FormControl(project.ProjectWorkedMonth),
+      ProjectWorkedYear: new FormControl(project.ProjectWorkedYear),
+      ProjectWorkedMonth: new FormControl(project.ProjectWorkedMonth),
+      ProjectStatus: new FormControl(project.ProjectStatus),
+      ClientName: new FormControl(project.ClientName),
+      ProjectDetails: new FormControl(project.ProjectDetails),
+      RolesResponsibility: new FormControl(project.RolesResponsibility),
+      TechnalogyStack: new FormControl(project.TechnalogyStack)
     })
   }
 
   addProject() {
-    this.projects.push(this.projectForm());
+    let NewProject = new Project();
+    this.projects.push(this.projectForm(NewProject));
   }
 
   get projects() {
@@ -258,22 +236,22 @@ export class ManageComponent implements OnInit {
 
   buildSkillsForm() {
     this.skillsForm = this.fb.group({
-      TechnicalSkills: this.fb.array(this.iTSkills.map(item => this.createTechnicalSkillsGroup(item)))
+      TechnicalSkills: this.fb.array(this.userModal.Skills.map(item => this.createTechnicalSkillsGroup(item)))
     })
   }
 
   createTechnicalSkillsGroup(skill: Skills) {
     return this.fb.group({
-      ITSkill: new FormControl(skill.Language),
+      Language: new FormControl(skill.Language),
       Version: new FormControl(skill.Version),
       LastUsed: new FormControl(skill.LastUsed),
-      ExperienceYear: new FormControl(skill.ExperienceYear),
-      ExperienceMonth: new FormControl(skill.ExperienceMonth)
+      ExperienceInYear: new FormControl(skill.ExperienceInYear),
+      ExperienceInMonth: new FormControl(skill.ExperienceInMonth)
     })
   }
 
   addItskill() {
-    let NewSkill = new Skills(); 
+    let NewSkill = new Skills();
     let skills = this.skillsForm.get("TechnicalSkills") as FormArray;
     skills.push(this.createTechnicalSkillsGroup(NewSkill));
   }
@@ -290,76 +268,87 @@ export class ManageComponent implements OnInit {
   //----------------- Accomplishments form, group and add new ------------------------
 
     buildAccomplishmentsForm() {
-      this.accomplishmentsForm = this.fb.group({
-        OnlineProfiles: this.fb.array([this.buildOnlieProfiles()]),
-        WorkSamples: this.fb.array([this.buildWorkSamples()]),
-        Researchs: this.fb.array([this.buildResearchs()]),
-        Presentations: this.fb.array([this.buildPresentations()]),
-        Patents: this.fb.array([this.buildPatents()]),
-        Certifications: this.fb.array([this.buildCertifications()])
-      })
+      if(this.userModal.Accomplishments !== null) {
+        this.accomplishmentsForm = this.fb.group({
+          OnlineProfiles: this.fb.array(this.userModal.Accomplishments.OnlineProfile.map(item => this.buildOnlieProfiles(item))),
+          WorkSamples: this.fb.array(this.userModal.Accomplishments.WorkSample.map(item => this.buildWorkSamples(item))),
+          Researchs: this.fb.array(this.userModal.Accomplishments.Research.map(item => this.buildResearchs(item))),
+          Presentations: this.fb.array(this.userModal.Accomplishments.Presentation.map(item => this.buildPresentations(item))),
+          Patents: this.fb.array(this.userModal.Accomplishments.Patent.map(item => this.buildPatents(item))),
+          Certifications: this.fb.array(this.userModal.Accomplishments.Certification.map(item => this.buildCertifications(item)))
+        })
+      } else {
+        this.accomplishmentsForm = this.fb.group({
+          OnlineProfiles: this.fb.array([this.buildOnlieProfiles('')]),
+          WorkSamples: this.fb.array([this.buildWorkSamples('')]),
+          Researchs: this.fb.array([this.buildResearchs('')]),
+          Presentations: this.fb.array([this.buildPresentations('')]),
+          Patents: this.fb.array([this.buildPatents('')]),
+          Certifications: this.fb.array([this.buildCertifications('')])
+        })
+      }
     }
 
 
-    buildOnlieProfiles() {
+    buildOnlieProfiles(value: string) {
       return this.fb.group({
-        OnlineProfileUrl: new FormControl('')
+        OnlineProfileUrl: new FormControl(value)
       });
     }
 
-    buildWorkSamples() {
+    buildWorkSamples(value: string) {
       return this.fb.group({
-        WorkSampleUrl: new FormControl('')
+        WorkSampleUrl: new FormControl(value)
       });
     }
 
-    buildResearchs() {
+    buildResearchs(value: string) {
       return this.fb.group({
-        ResearchUrl: new FormControl('')
+        ResearchUrl: new FormControl(value)
       });
     }
 
-    buildPresentations() {
+    buildPresentations(value: string) {
       return this.fb.group({
-        PresentationUrl: new FormControl('')
+        PresentationUrl: new FormControl(value)
       });
     }
 
-    buildPatents() {
+    buildPatents(value: string) {
       return this.fb.group({
-        PatentUrl: new FormControl('')
+        PatentUrl: new FormControl(value)
       });
     }
 
-    buildCertifications() {
+    buildCertifications(value: string) {
       return this.fb.group({
-        CertificationUrl: new FormControl('')
+        CertificationUrl: new FormControl(value)
       });
     }
 
 
     addOnlieProfiles() {
-      this.onlieProfiles.push(this.buildOnlieProfiles());
+      this.onlieProfiles.push(this.buildOnlieProfiles(''));
     }
 
     addWorkSamples() {
-      this.workSamples.push(this.buildWorkSamples());
+      this.workSamples.push(this.buildWorkSamples(''));
     }
 
     addResearchs() {
-      this.researchs.push(this.buildResearchs());
+      this.researchs.push(this.buildResearchs(''));
     }
 
     addPresentations() {
-      this.presentations.push(this.buildPresentations());
+      this.presentations.push(this.buildPresentations(''));
     }
 
     addPatents() {
-      this.patents.push(this.buildPatents());
+      this.patents.push(this.buildPatents(''));
     }
 
     addCertifications() {
-      this.certifications.push(this.buildCertifications());
+      this.certifications.push(this.buildCertifications(''));
     }
 
     get onlieProfiles(): FormArray {
@@ -393,48 +382,22 @@ export class ManageComponent implements OnInit {
 
   //----------------- Education form, group and add new ------------------------
 
-  createEducationForm(item: any) {
+  createEducationForm(item: EducationalDetail) {
+
     return this.fb.group({
-      Education: new FormControl(item.Education),
-      Course: new FormControl(''),
+      Degree_Name: new FormControl(item.Degree_Name),
+      Course: new FormControl(item.Course),
       Specialization: new FormControl(item.Specialization),
-      University: new FormControl(item.University),
-      IsFullTime: new FormControl(false),
-      IsPartTime: new FormControl(false),
-      IsDistance: new FormControl(false),
-      PassingYear: new FormControl(item.PassingYear),
-      GradingSystem: new FormControl('')
+      University_Name: new FormControl(item.University_Name),
+      Course_Type: new FormControl(item.Course_Type),
+      Passout_Year: new FormControl(new Date(item.Passout_Year).toISOString().substring(0,10)),
+      Grading_System: new FormControl(item.Grading_System)
     })
   }
 
   buildEducationForm() {
-    let educationFormData = [];
-    educationFormData.push({
-      Education: 'Under Graduate',
-      Course: '',
-      Specialization: this.userModal.UG_Specialization,
-      University: this.userModal.UG_University_institute_Name,
-      IsFullTime: false,
-      IsPartTime: false,
-      IsDistance: false,
-      PassingYear: this.userModal.UG_Graduation_year,
-      GradingSystem: ''
-    });
-
-    educationFormData.push({
-      Education: 'Post Graduate',
-      Course: '',
-      Specialization: this.userModal.PG_specialization,
-      University: this.userModal.PG_graduation_year,
-      IsFullTime: false,
-      IsPartTime: false,
-      IsDistance: false,
-      PassingYear: this.userModal.PG_graduation_year,
-      GradingSystem: ''
-    });
-
     this.educationForm = this.fb.group({
-      Educations: this.fb.array(educationFormData.map(item => {
+      Educations: this.fb.array(this.userModal.Educational_Detail.map(item => {
         return this.createEducationForm(item)
       }))
     })
@@ -442,15 +405,13 @@ export class ManageComponent implements OnInit {
 
   addEducation() {
     let educationFormData = {
-      Education: 'Under Graduate',
+      Degree_Name: '',
       Course: '',
       Specialization: '',
-      University: '',
-      IsFullTime: false,
-      IsPartTime: false,
-      IsDistance: false,
-      PassingYear: '',
-      GradingSystem: ''
+      University_Name: '',
+      Course_Type: '',
+      Passout_Year: null,
+      Grading_System: ''
     };
     this.education.push(this.createEducationForm(educationFormData));
   }
@@ -466,22 +427,31 @@ export class ManageComponent implements OnInit {
   //----------------- Employment form, group and add new ------------------------
 
   buildEmploymentForm() {
+    if(this.userModal.Employments.length == 0) {
+      this.userModal.Employments = [new Employment()];
+    }
+
     this.employmentForm = this.fb.group({
-      Designation: new FormControl(this.userModal.Current_Company_Designation),
-      YourOrganization: new FormControl(this.userModal.Current_Company_name),
-      NoCurrentCompany: new FormControl(''),
-      YesCurrentCompany: new FormControl(''),
-      WorkingYear: new FormControl(''),
-      WorkingMonth: new FormControl(''),
-      WorkedYear: new FormControl(''),
-      WorkedMonth: new FormControl(''),
-      CurrentSalary: new FormControl(this.userModal.Annual_Salary),
-      CurrentSalaryLakh: new FormControl(''),
-      CurrentSalaryThousand: new FormControl(''),
-      Experties: new FormControl(this.userModal.Key_Skills),
-      JobProfile: new FormControl(this.userModal.Job_Title),
-      NoticePeriod: new FormControl(this.userModal.Notice_Period),
+      Employments: this.fb.array(this.userModal.Employments.map(item => this.createEmployment(item)))
     })
+  }
+
+  createEmployment(record: Employment) {
+    return this.fb.group({
+      Organization: new FormControl(record.Organization),
+      Designation: new FormControl(record.Designation),
+      EmploymentStatus: new FormControl(record.EmploymentStatus),
+      Years: new FormControl(record.Years),
+      Months: new FormControl(record.Months),
+      CurrentSalary: new FormControl(record.CurrentSalary),
+      CurrencyType: new FormControl(record.CurrencyType),
+      Experties: new FormControl(record.Experties),
+      JobProfile: new FormControl(record.JobProfile)
+    })
+  }
+
+  get employment(): FormArray {
+    return this.employmentForm.get("Employments") as FormArray
   }
 
   //----------------- Employment END'S ------------------------
@@ -491,30 +461,31 @@ export class ManageComponent implements OnInit {
 
   //----------------- Carreer Profile form, group and add new ------------------------
 
-  createCarrerProfileForm() {
+  createCarrerProfileForm(carrer: Company) {
     return this.fb.group({
-      Industry: new FormControl(''),
-      Department: new FormControl(''),
-      RoleCategory: new FormControl(''),
-      JobRole: new FormControl(''),
-      DesiredJob: new FormControl(''),
-      EmploymentType: new FormControl(false),
-      PreferredShift: new FormControl(false),
-      PreferredWorkLocation: new FormControl(''),
-      ExpectedSalary: new FormControl(''),
-      ExpectedSalaryInLakh: new FormControl(''),
-      ExpectedSalaryInThousand: new FormControl('')
+      Industry: new FormControl(carrer.Industry),
+      Department: new FormControl(carrer.Department),
+      RoleCategory: new FormControl(carrer.RoleCategory),
+      Role: new FormControl(carrer.Role),
+      DesiredJobType: new FormControl(carrer.DesiredJobType),
+      DesiredEmploymentType: new FormControl(carrer.DesiredEmploymentType),
+      PreferredShift: new FormControl(carrer.PreferredShift),
+      PreferredWorkLocation: new FormControl(carrer.PreferredWorkLocation),
+      ExpectedSalary: new FormControl(carrer.ExpectedSalary),
+      ExpectedSalaryInLakh: new FormControl(carrer.ExpectedSalaryInLakh),
+      ExpectedSalaryInThousand: new FormControl(carrer.ExpectedSalaryInThousand)
     })
   }
 
   buildCarrerProfileForm() {
     this.carrerProfileForm = this.fb.group({
-      CarrerProfile: this.fb.array([this.createCarrerProfileForm()])
+      CarrerProfile: this.fb.array(this.userModal.Companies.map(item => this.createCarrerProfileForm(item)))
     })
   }
 
   addCarrerProfile() {
-    this.carrer.push(this.createCarrerProfileForm());
+    let newCarrer = new Company();
+    this.carrer.push(this.createCarrerProfileForm(newCarrer));
   }
 
   get carrer(): FormArray {
@@ -525,16 +496,22 @@ export class ManageComponent implements OnInit {
 
 
   initForm() {
+    let fullName = this.userModal.Name.split(" ");
+    if(fullName.length > 0) {
+      this.userModal.FirstName = fullName[0];
+      this.userModal.LastName = fullName.splice(1, 1).join(" ");
+    }
+
     this.manageUserForm = this.fb .group({
       UserId: new FormControl(this.userModal.UserId),
       FirstName: new FormControl(this.userModal.FirstName),
       LastName: new FormControl (this.userModal.LastName),
-      Email: new FormControl(this.userModal.Email_ID),
-      Mobile: new FormControl(this.userModal.Phone_Number),
-      ResumeHeadline: new FormControl(this.userModal.Resume_Headline),
+      Email: new FormControl(this.userModal.Email),
+      Mobile: new FormControl(this.userModal.Mobile_Number),
+      ResumeHeadline: new FormControl(this.userModal.ResumeHeadline),
       ProfileImgPath: new FormControl(''),
       ResumePath: new FormControl(''),
-      FileId: new FormControl(this.profile.FileId)
+      FileId: new FormControl(this.userModal.FileId)
     })
   }
 
@@ -581,19 +558,17 @@ export class ManageComponent implements OnInit {
   }
 
   submitEmploymentDetail() {
-    let employment = this.employmentForm.value;
-    this.http.post("user/EmploymentDetail", employment).then((response:ResponseModel) => {
-      if (response.ResponseBody)
-        Toast("Employment Form submitted successfully")
-    })
+    let employment = this.employmentForm.get("Employments").value;
+    if(employment.length > 0) {
+      this.userModal.Employments = employment;
+    }
+    this.updateProfile();
   }
 
   submitEducationDetail() {
     let educations = this.educationForm.controls['Educations'].value;
-    this.http.post("user/EducationDetail", educations).then((response:ResponseModel) => {
-      if (response.ResponseBody)
-        Toast("Employment Form submitted successfully")
-    })
+    this.userModal.Educational_Detail = educations;
+    this.updateProfile();
   }
 
   submitSkillDetail() {
@@ -606,40 +581,34 @@ export class ManageComponent implements OnInit {
 
   submitProjectDetail() {
     let projects = this.projectsForm.controls['Projects'].value;
-    this.http.post("user/ProjectDetail", projects).then((response:ResponseModel) => {
-      if (response.ResponseBody)
-        Toast("Employment Form submitted successfully")
-    })
+    this.userModal.Projects = projects;
+    this.updateProfile();
   }
 
   submitAccomplishmentDetail() {
-    let accomplishmentsDetail = {};
     let onlineProfiles = this.accomplishmentsForm.controls['OnlineProfiles'].value;
     let certifications = this.accomplishmentsForm.controls['Certifications'].value;
     let patents = this.accomplishmentsForm.controls['Patents'].value;
     let presentations = this.accomplishmentsForm.controls['Presentations'].value;
     let researches = this.accomplishmentsForm.controls['Researchs'].value;
     let workSamples = this.accomplishmentsForm.controls['WorkSamples'].value;
-    accomplishmentsDetail = {
-      OnlineProfiles: onlineProfiles,
-      Certifications: certifications,
-      Patents: patents,
-      Presentations: presentations,
-      Researches: researches,
-      WorkSamples: workSamples
+    this.userModal.Accomplishments = {
+      OnlineProfile: onlineProfiles.map(item => item.OnlineProfileUrl),
+      Certification: certifications.map(item => item.CertificationUrl),
+      Patent: patents.map(item => item.PatentUrl),
+      Presentation: presentations.map(item => item.PresentationUrl),
+      Research: researches.map(item => item.ResearchUrl),
+      WorkSample: workSamples.map(item => item.WorkSampleUrl),
+      //ProfileSummary: []
     }
-    this.http.post("user/AccomplishmentDetail", accomplishmentsDetail).then((response:ResponseModel) => {
-      if (response.ResponseBody)
-        Toast("Employment Form submitted successfully")
-    })
+
+    this.updateProfile();
   }
 
   submitCarrerProfileDetail(){
     let carrerProfiles = this.carrerProfileForm.controls['CarrerProfile'].value;
-    this.http.post("user/CarrerProfileDetail", carrerProfiles).then((response:ResponseModel) => {
-      if (response.ResponseBody)
-        Toast("Employment Form submitted successfully")
-    })
+    this.userModal.Companies = carrerProfiles;
+    this.updateProfile();
   }
 
   UpdateUser() {
@@ -679,6 +648,13 @@ export class ManageComponent implements OnInit {
     Toast("Update Successfully.")
   }
 
+  updateProfile() {
+    this.http.post("user/UpdateUserProfile", this.userModal).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Employment Form submitted successfully")
+    })
+  }
+
   fireBrowserFile() {
     this.submitted = true;
     $("#uploadocument").click();
@@ -702,7 +678,7 @@ export class ManageComponent implements OnInit {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.fileDetail.push({
-        name: "profile", 
+        name: "profile",
         file: file
       });
     }
@@ -821,27 +797,139 @@ export class ManageComponent implements OnInit {
 
   public submitManageUserForm() {
     let formData = new FormData();
+
     let userInfo = this.manageUserForm.value;
+
+    this.userModal.FirstName = userInfo.FirstName;
+    this.userModal.LastName = userInfo.LastName;
+    this.userModal.ResumeHeadline = userInfo.ResumeHeadline;
+    this.userModal.FileId = userInfo.FileId;
+
     let i = 0;
     while(i < this.fileDetail.length) {
       formData.append(this.fileDetail[i].name, this.fileDetail[i].file);
       i++;
     }
 
-    formData.append("userInfo", JSON.stringify(userInfo));
+    formData.append("userInfo", JSON.stringify(this.userModal));
     this.http.post(`user/UploadProfileDetailFile/${this.userDetail.UserId}`, formData).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         Toast(response.ResponseBody);
-      }      
+      }
     })
   }
 }
 
-class Files {
-  LocalImgPath: string = "";
+class ProfessionalUser {
   UserId: number = 0;
   FileId: number = -1;
+  Name: string = '';
+  FirstName: string = '';
+  LastName: string = '';
+  ResumeHeadline: string = '';
+  Email: string= '';
+  Gender: string = '';
+  Skills: Skills[] = [];
+  Companies: Company[] = [];
+  Job_Title: string = '';
+  OtherDetail: OtherDetail = null;
+  ExpectedCTC: number = null;
+  Mobile_Number: string = null;
+  Notice_Period: number = 0;
+  Salary_Package: number = 0;
+  Activity_Status: ActivityStatus = null;
+  Alternate_Number: number = null;
+  Current_Location: string = '';
+  Educational_Detail: EducationalDetail[] = [];
+  Date_Of_Application: Date = null;
+  Preferred_Location: string[] = [];
+  Total_Experience_In_Months: number = 0;
+  Key_Skills: string = '';
+  Projects: Project[] = [];
+  Accomplishments: Accomplishment = null;
+  PersonalDetail: PersonalDetail = null;
+  Employments: Array<Employment> = [];
+}
+
+class Employment {
+  Organization: string = null;
+  Designation: string = null;
+  EmploymentStatus: string = null;
+  Years: number = 0;
+  Months: number = 0;
+  CurrentSalary: number = 0;
+  CurrencyType: string = null;
+  Experties: string = null;
+  JobProfile: string = null;
+}
+
+class Company {
+  Role: string = '';
+  Industry: string = '';
+  Company_Name: string = '';
+  Functional_Area: string = '';
+  Department: string = '';
+  DesiredJobType: string = '';
+  DesiredEmploymentType: string = '';
+  PreferredShift: string = '';
+  PreferredWorkLocation: string = '';
+  ExpectedSalary: string = '';
+  ExpectedSalaryInLakh: number = 0;
+  ExpectedSalaryInThousand: number = 0;
+  RoleCategory: string = '';
+  Designation: string = '';
+}
+
+class OtherDetail {
+  Sumary: string = '';
+  Feedback: string = '';
+  Pin_Code: number = 0;
+  Resume_Headline: string= '';
+  Latest_Star_Rating: number = 0;
+  Work_Permit_For_USA: string = '';
+  Source_Of_Application: string = ''
+}
+
+class ActivityStatus {
+  Viewed: string = '';
+  Emailed: string = '';
+  Comment_1: string = '';
+  Comment_2: string = '';
+  Comment_3: string = '';
+  Comment_4: string = '';
+  Comment_5: string = '';
+  Viewed_By: string = '';
+  Emailed_By: string = '';
+  Comment_1_By: string = '';
+  Comment_2_By: string = '';
+  Comment_3_By: string = '';
+  Comment_4_By: string = '';
+  Comment_5_By: string = '';
+  Time_Of_Email: string = '';
+  Calling_Status: string = '';
+  Time_Comment_1_posted: string = '';
+  Time_Comment_2_posted: string = '';
+  Time_Comment_3_posted: string = '';
+  Time_Comment_4_posted: string = '';
+  Time_Comment_5_posted: string = '';
+  Calling_Status_updated_by: string = '';
+  Time_of_Calling_activity_update: string = '';
+}
+
+class EducationalDetail {
+  Degree_Name: string = '';
+  Passout_Year: Date = null;
+  Specialization: string = '';
+  University_Name: string = '';
+  Course_Type: string = '';
+  Grading_System: string = '';
+  Course: string = '';
+}
+
+class Files {
+  LocalImgPath: string = "";
   FileName: string = "";
+  UserId: number = 0;
   FileExtension: string = "";
   FilePath: string = "";
   FileUid: number = 0;
@@ -853,8 +941,55 @@ class Files {
 
 class Skills {
   Language: string = '';
-  Version: string = '';
+  Version: number = 0;
   LastUsed: Date = null;
-  ExperienceYear: number = null;
-  ExperienceMonth: number = null;
+  ExperienceInYear: number = 0;
+  ExperienceInMonth: number = 0;
+}
+
+class Project {
+  ProjectTitle: string = '';
+  ProjectTag: string = '';
+  ProjectWorkingYear: number = 0;
+  ProjectWorkingMonth: number = 0;
+  ProjectWorkedYear: number = 0;
+  ProjectWorkedMonth: number = 0;
+  ProjectStatus: string = '';
+  ClientName: string = '';
+  ProjectDetails: string = '';
+  RolesResponsibility: string = '';
+  TechnalogyStack: string = ''
+
+}
+
+class Accomplishment {
+  //ProfileSummary: Array<string> = [];
+  OnlineProfile: Array<string> = [];
+  WorkSample: Array<string> = [];
+  Research: Array<string> = [];
+  Presentation: Array<string> = [];
+  Patent: Array<string> = [];
+  Certification: Array<string> = [];
+}
+
+class PersonalDetail {
+  DOB: Date = new Date();
+  Gender: string = '';
+  Address: string = '';
+  HomeTown: string = '';
+  PinCode: number = 0;
+  MaritalStatus: string = '';
+  Category: string = '';
+  DifferentlyAbled: string = '';
+  PermitUSA: string = '';
+  PermitOtherCountry: string = '';
+  LanguageDetails: LanguageDetail[] = [];
+}
+
+class LanguageDetail {
+  Language: string = '';
+  LanguageRead: boolean = null;
+  LanguageWrite: boolean = null;
+  ProficiencyLanguage: string = '';
+  LanguageSpeak: boolean = null;
 }
