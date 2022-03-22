@@ -7,7 +7,8 @@ import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
-import { ProfessionalUserDetail } from '../resume/resume.component';
+declare var $: any;
+
 
 @Component({
   selector: 'app-profile',
@@ -33,6 +34,8 @@ export class ManageComponent implements OnInit {
   profile: Files = new Files();
   isFormReady: boolean = false;
   iTSkills: Array<Skills> = [];
+  isLanguageSeleted: boolean = false;
+  singleSkill: Array<any> = [];
 
   section: any = {
     isKeySkillEdit: false,
@@ -154,18 +157,21 @@ export class ManageComponent implements OnInit {
   //----------------- Personal Detail form, group and add new ------------------------
 
   buildPersonalDetailForm() {
+    let date = new Date(this.userModal.PersonalDetail.DOB);
+    this.model.year = date.getFullYear();
+    this.model.month = date.getMonth() + 1;
+    this.model.day = date.getDate();
     this.personalDetailForm = this.fb.group({
-      DOB: new FormControl(''),
-      Male: new FormControl(''),
-      Female: new FormControl(''),
-      Address: new FormControl(''),
-      HomeTown: new FormControl(''),
-      PinCode: new FormControl(''),
-      MaritalStatus: new FormControl(''),
-      Category: new FormControl(false),
-      DifferentlyAbled: new FormControl(false),
-      PermitUSA: new FormControl(''),
-      PermitOtherCountry: new FormControl(''),
+      DOB: new FormControl(date),
+      Gender: new FormControl(this.userModal.PersonalDetail.Gender),
+      Address: new FormControl(this.userModal.PersonalDetail.Address),
+      HomeTown: new FormControl(this.userModal.PersonalDetail.HomeTown),
+      PinCode: new FormControl(this.userModal.PersonalDetail.PinCode),
+      MaritalStatus: new FormControl(this.userModal.PersonalDetail.MaritalStatus),
+      Category: new FormControl(this.userModal.PersonalDetail.Category),
+      DifferentlyAbled: new FormControl(this.userModal.PersonalDetail.DifferentlyAbled),
+      PermitUSA: new FormControl(this.userModal.PersonalDetail.PermitUSA),
+      PermitOtherCountry: new FormControl(this.userModal.PersonalDetail.PermitOtherCountry),
       Languages: this.fb.array([this.buildLanguages()]),
     })
   }
@@ -218,8 +224,10 @@ export class ManageComponent implements OnInit {
   }
 
   addProject() {
-    let NewProject = new Project();
-    this.projects.push(this.projectForm(NewProject));
+    // let NewProject = new Project();
+    // this.projects.push(this.projectForm(NewProject));
+
+    $("#editProjectModal").modal("show");
   }
 
   get projects() {
@@ -383,7 +391,6 @@ export class ManageComponent implements OnInit {
   //----------------- Education form, group and add new ------------------------
 
   createEducationForm(item: EducationalDetail) {
-
     return this.fb.group({
       Degree_Name: new FormControl(item.Degree_Name),
       Course: new FormControl(item.Course),
@@ -454,6 +461,11 @@ export class ManageComponent implements OnInit {
     return this.employmentForm.get("Employments") as FormArray
   }
 
+  addEmployment() {
+    let newEmployment = new Employment();
+    this.employment.push(this.createEmployment(newEmployment))
+  }
+
   //----------------- Employment END'S ------------------------
 
 
@@ -467,13 +479,14 @@ export class ManageComponent implements OnInit {
       Department: new FormControl(carrer.Department),
       RoleCategory: new FormControl(carrer.RoleCategory),
       Role: new FormControl(carrer.Role),
-      DesiredJobType: new FormControl(carrer.DesiredJobType),
-      DesiredEmploymentType: new FormControl(carrer.DesiredEmploymentType),
+      JobTypePermanent: new FormControl(carrer.JobTypePermanent),
+      JobTypeContractual: new FormControl(carrer.JobTypeContractual),
+      PartTime: new FormControl(carrer.PartTime),
+      FullTime: new FormControl(carrer.FullTime),
       PreferredShift: new FormControl(carrer.PreferredShift),
       PreferredWorkLocation: new FormControl(carrer.PreferredWorkLocation),
       ExpectedSalary: new FormControl(carrer.ExpectedSalary),
-      ExpectedSalaryInLakh: new FormControl(carrer.ExpectedSalaryInLakh),
-      ExpectedSalaryInThousand: new FormControl(carrer.ExpectedSalaryInThousand)
+      CurrencyType: new FormControl(carrer.CurrencyType)
     })
   }
 
@@ -515,46 +528,11 @@ export class ManageComponent implements OnInit {
     })
   }
 
-
-  maritalStatusSelected(event: any) {
-    let value = event.target.value;
-    this.manageUserForm.get('MaritalStatus').setValue(value);
-  }
-
-  categorySelected(event: any) {
-    let value = event.target.value;
-    this.manageUserForm.get('Category').setValue(value);
-  }
-
-  workPermitSelected(event: any) {
-    let value = event.target.value;
-    this.manageUserForm.get('PermitUSA').setValue(value);
-  }
-
-  proficiencySelected(event: any) {
-    let value = event.target.value;
-    this.manageUserForm.get('ProficiencyLanguage').setValue(value);
-  }
-
-  gradingSystemSelected(event: any) {
-    let value = event.target.value;
-    this.manageUserForm.patchValue({
-      GradingSystem:value
-    });
-  }
-
-  noticePeriodSelected(event: any) {
-    let value = event.target.value;
-    this.manageUserForm.get('NoticePeriod').setValue(value);
-  }
-
   submitPersonalDetails() {
     let userDetails = this.personalDetailForm.value;
     let languages = this.personalDetailForm.controls['Languages'].value;
-    this.http.post("user/personalDetail", userDetails).then((response:ResponseModel) => {
-      if (response.ResponseBody)
-        Toast("Personal Deatil Form submitted successfully")
-    })
+    this.userModal.PersonalDetail = userDetails;
+    this.updateProfile();
   }
 
   submitEmploymentDetail() {
@@ -723,7 +701,7 @@ export class ManageComponent implements OnInit {
   }
 
   editEmployment() {
-    this.section.isEmploymentEdit = !this.section.isEmploymentEdit;
+    this.section.isEmploymentEdit = true;
   }
 
   editKeySkill() {
@@ -782,6 +760,17 @@ export class ManageComponent implements OnInit {
     this.section.isProfileEdit = !this.section.isProfileEdit;
   }
 
+  editDetail(e: any) {
+    $("#skillModal").modal('show');
+    let singleSkill = e.value;
+
+
+  }
+
+  closeSkillModal() {
+    $("#skillModal").modal('hide');
+  }
+
   cleanFileHandler() {
     // this.btnDisable = true;
     // this.fileAvailable = false;
@@ -817,6 +806,11 @@ export class ManageComponent implements OnInit {
         Toast(response.ResponseBody);
       }
     })
+  }
+
+  selectLanguage(e: any) {
+    this.singleSkill = e.value;
+    this.isLanguageSeleted = true;
   }
 }
 
@@ -869,15 +863,16 @@ class Company {
   Company_Name: string = '';
   Functional_Area: string = '';
   Department: string = '';
-  DesiredJobType: string = '';
-  DesiredEmploymentType: string = '';
+  JobTypePermanent: boolean = true;
+  JobTypeContractual: boolean = false;
+  PartTime: boolean = true;
+  FullTime: boolean = false
   PreferredShift: string = '';
   PreferredWorkLocation: string = '';
   ExpectedSalary: string = '';
-  ExpectedSalaryInLakh: number = 0;
-  ExpectedSalaryInThousand: number = 0;
   RoleCategory: string = '';
   Designation: string = '';
+  CurrencyType: string = ''
 }
 
 class OtherDetail {

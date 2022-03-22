@@ -346,3 +346,8 @@ table {
 .disableClick {
   pointer-events: none;
 }
+
+.col-info {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity));
+}
