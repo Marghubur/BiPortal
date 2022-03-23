@@ -8,7 +8,7 @@
             <ng-template ngbNavContent>
               <form [formGroup]="manageUserForm" *ngIf="isFormReady">
                 <div class="x_content mt-2 p-0">
-                  <div class="col-12 x_panel row m-0 p-0 pt-3">
+                  <div class="col-12 row m-0 p-0 pt-3">
                     <div class="float-end">
                       <a href="javascript:void(0)" class="float-end text-decoration-none fa fa-pencil"
                         (click)="editProfile()" *ngIf="!section.isProfileEdit"></a>
@@ -186,41 +186,31 @@
 
                     <ng-container formArrayName="Employments">
                       <div class="col-md-12 ps-2" *ngFor="let item of employment.controls; let index = index;">
-                        <div [formGroupName]="index" class="col=-md-12 row border-bottom">
+                        <div [formGroupName]="index" class="col-md-12 row">
+
                           <div class="col-md-6">
                             <div class="mb-3">
                               <label class="form-label">Organization </label>
                               <input class="form-control" placeholder="Organization name" (click)="editEmployment()"
                                 name="Organization" formControlName="Organization" />
                             </div>
+
                             <div class="mb-3">
-                              <label class="form-label pb-1">Designation </label>
-                              <input class="form-control mt-2" placeholder="Enter Designation"
-                                (click)="editEmployment()" name="Designation" formControlName="Designation" />
-                            </div>
-                            <div class="mb-3 row p-0 m-0">
-                              <label class="form-label p-0">Started Working From <span
-                                  class="text-danger">*</span></label>
-                              <div class="col ps-0">
-                                <input class="form-control" placeholder="Year" (click)="editEmployment()" type="number"
-                                  formControlName="Years" />
-                              </div>
-                              <div class="col pe-0">
-                                <input class="form-control" placeholder="Month" (click)="editEmployment()" type="number"
-                                  formControlName="Months" />
-                              </div>
+                              <label class="form-label">Designation </label>
+                              <input class="form-control" placeholder="Enter Designation" (click)="editEmployment()"
+                                name="Designation" formControlName="Designation" />
                             </div>
                           </div>
 
                           <div class="col-md-6">
                             <div class="mb-3">
                               <label class="form-label">Current Salary </label>
-                              <div class="row ps-3">
-                                <div class="form-check col-md-6 p-0 m-0">
+                              <div class="row">
+                                <div class="col-md-6">
                                   <input class="form-control" name="CurrentSalary" (click)="editEmployment()"
                                     formControlName="CurrentSalary">
                                 </div>
-                                <div class="form-check col-md-6">
+                                <div class="col-md-6">
                                   <select name="CurrencyType" class="form-control" (click)="editEmployment()"
                                     formControlName="CurrencyType">
                                     <option value="">Select Currenty</option>
@@ -230,19 +220,73 @@
                                 </div>
                               </div>
                             </div>
+
                             <div class="mb-3">
-                              <label class="form-label">Describe your Job Profile</label>
-                              <textarea name="JobProfile" placeholder="Type here ....." (click)="editEmployment()"
-                                class="form-control sm-txtarea" formControlName="JobProfile"></textarea>
-                              <small class="float-end">4000 Character(s) Left</small>
+                              <fieldset>
+                                <div class="row">
+                                  <div class="col">
+                                    <label class="form-label">Project duration in years</label>
+                                    <select class="form-select" aria-label="Default select example"
+                                      formControlName="Years" (click)="editEmployment()">
+                                      <option value="1" selected>1</option>
+                                      <option value="2">2</option>
+                                      <option value="3">3</option>
+                                      <option value="4">4</option>
+                                      <option value="5">5</option>
+                                      <option value="6">6</option>
+                                      <option value="7">7</option>
+                                      <option value="8">8</option>
+                                      <option value="9">9</option>
+                                      <option value="10">10</option>
+                                    </select>
+                                  </div>
+                                  <div class="col">
+                                    <label class="form-label">Project duration in Months</label>
+                                    <select class="form-select" aria-label="Default select example"
+                                      formControlName="Months" (click)="editEmployment()">
+                                      <option value="1" selected>1</option>
+                                      <option value="2">2</option>
+                                      <option value="3">3</option>
+                                      <option value="4">4</option>
+                                      <option value="5">5</option>
+                                      <option value="6">6</option>
+                                      <option value="7">7</option>
+                                      <option value="8">8</option>
+                                      <option value="9">9</option>
+                                      <option value="10">10</option>
+                                      <option value="11">11</option>
+                                      <option value="12">12</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </fieldset>
                             </div>
                           </div>
-                          <div class="col-md-12 mb-3">
-                            <label class="form-label">Top 5 key skills that you think are important for current
-                              employment<span class="text-danger"> *</span></label>
-                            <textarea name="Experties" placeholder="Enter your area of Experties/Specialization"
-                              (click)="editEmployment()" class="form-control sm-txtarea"
-                              formControlName="Experties"></textarea>
+
+                          <div class="x_header mt-3">
+                            <div class="x_header_title">
+                              <h2>Project Description</h2>
+                            </div>
+                          </div>
+
+                          <div>
+                            <fieldset>
+                              <div class="mb-3">
+                                <label class="form-label">Describe your Job Profile</label>
+                                <textarea name="JobProfile" rows="5" placeholder="Type here ....."
+                                  (click)="editEmployment()" class="form-control"
+                                  formControlName="JobProfile"></textarea>
+                                <small class="float-end">4000 Character(s) Left</small>
+                              </div>
+
+                              <div class="col-md-12 mb-3">
+                                <label class="form-label">Top 5 key skills that you think are important for current
+                                  employment<span class="text-danger"> *</span></label>
+                                <textarea name="Experties" rows="5"
+                                  placeholder="Enter your area of Experties/Specialization" (click)="editEmployment()"
+                                  class="form-control" formControlName="Experties"></textarea>
+                              </div>
+                            </fieldset>
                           </div>
                         </div>
                       </div>
@@ -269,74 +313,66 @@
                       </div>
                     </div>
                     <ng-container formArrayName="Educations">
-                      <div class="col-md-12 ps-2 row border-bottom mt-2"
+                      <div class="col-md-12 ps-2 row mt-2"
                         *ngFor="let education of education.controls; let index = index;" [formGroupName]="index">
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Education </label>
-                          <input class="form-control" placeholder="Education" name="Degree_Name"
-                            (click)="editEducation()" [readonly]="!section.isEducationEdit"
-                            [class.custom-form-control]="!section.isEducationEdit" formControlName="Degree_Name" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Course </label>
-                          <input class="form-control " placeholder="Course" [readonly]="!section.isEducationEdit"
-                            [class.custom-form-control]="!section.isEducationEdit" name="Course"
-                            (click)="editEducation()" formControlName="Course" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Specialization </label>
-                          <input class="form-control " [readonly]="!section.isEducationEdit" (click)="editEducation()"
-                            [class.custom-form-control]="!section.isEducationEdit" placeholder="Specialization"
-                            name="Specialization" formControlName="Specialization" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">University </label>
-                          <input class="form-control " [readonly]="!section.isEducationEdit" (click)="editEducation()"
-                            [class.custom-form-control]="!section.isEducationEdit" placeholder="University Name"
-                            name="University_Name" formControlName="University_Name" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Course Type</label>
-                          <div class="row ps-3">
-                            <div class="form-check col-md-3">
-                              <input class="form-check-input " type="radio" name="Course_Type" (click)="editEducation()"
-                                formControlName="Course_Type" value="fulltime" checked>
-                              <label class="form-check-label" for="Course_Type">
-                                Full Time
-                              </label>
-                            </div>
-                            <div class="form-check col-md-3">
-                              <input class="form-check-input " type="radio" name="Course_Type" (click)="editEducation()"
-                                formControlName="Course_Type" value="parttime">
-                              <label class="form-check-label" for="Course_Type">
-                                Part Time
-                              </label>
-                            </div>
-                            <div class="form-check col-md-6">
-                              <input class="form-check-input " type="radio" name="Course_Type" (click)="editEducation()"
-                                formControlName="Course_Type" value="distance">
-                              <label class="form-check-label" for="Course_Type">
-                                Correspondence/Distance Learning
-                              </label>
-                            </div>
+                        <div class="col-md-6">
+                          <div class="mb-3">
+                            <label class="form-label">Education </label>
+                            <input class="form-control" placeholder="Education" name="Degree_Name"
+                              (click)="editEducation()" [readonly]="!section.isEducationEdit"
+                              [class.custom-form-control]="!section.isEducationEdit" formControlName="Degree_Name" />
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Specialization </label>
+                            <input class="form-control " [readonly]="!section.isEducationEdit" (click)="editEducation()"
+                              [class.custom-form-control]="!section.isEducationEdit" placeholder="Specialization"
+                              name="Specialization" formControlName="Specialization" />
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Course Type</label>
+                            <select class="form-select" aria-label="Default select example"
+                              formControlName="Course_Type" (click)="editEmployment()">
+                              <option value="fulltime" selected>Full Time</option>
+                              <option value="parttime">Part Time</option>
+                              <option value="distance">Correspondence/Distance Learning</option>
+                            </select>
                           </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Date of passout</label>
-                          <input class="form-control " placeholder="Date of passout" name="Passout_Year" type="date"
-                            [readonly]="!section.isEducationEdit" [class.custom-form-control]="!section.isEducationEdit"
-                            formControlName="Passout_Year" (click)="editEducation()" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Grading Syatem </label>
-                          <select name="Grading_System" class="form-control" formControlName="Grading_System"
-                            (change)="editEducation()">
-                            <option value="">Select grading system</option>
-                            <option value="Scale10GradingSystem">Scale 10 Grading System</option>
-                            <option value="Scale4GradingSystem">Scale 4 Grading System</option>
-                            <option value="%Markof100Maximum">% Mark of 100 Maximum</option>
-                            <option value="CourseRequiresaPass">Course Requires a Pass</option>
-                          </select>
+                        <div class="col-md-6">
+                          <div class="mb-3">
+                            <label class="form-label">Course </label>
+                            <input class="form-control " placeholder="Course" [readonly]="!section.isEducationEdit"
+                              [class.custom-form-control]="!section.isEducationEdit" name="Course"
+                              (click)="editEducation()" formControlName="Course" />
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">University </label>
+                            <input class="form-control " [readonly]="!section.isEducationEdit" (click)="editEducation()"
+                              [class.custom-form-control]="!section.isEducationEdit" placeholder="University Name"
+                              name="University_Name" formControlName="University_Name" />
+                          </div>
+                          <div class="mb-3 row">
+                            <div class="col-md-6">
+                              <label class="form-label">Date of passout</label>
+                              <input class="form-control " placeholder="Date of passout" name="Passout_Year" type="date"
+                                [readonly]="!section.isEducationEdit"
+                                [class.custom-form-control]="!section.isEducationEdit" formControlName="Passout_Year"
+                                (click)="editEducation()" />
+                            </div>
+                            <div class="col-md-6">
+                              <div class="mb-3">
+                                <label class="form-label">Grading Syatem </label>
+                                <select name="Grading_System" class="form-control" formControlName="Grading_System"
+                                  (change)="editEducation()">
+                                  <option value="">Select grading system</option>
+                                  <option value="Scale10GradingSystem">Scale 10 Grading System</option>
+                                  <option value="Scale4GradingSystem">Scale 4 Grading System</option>
+                                  <option value="%Markof100Maximum">% Mark of 100 Maximum</option>
+                                  <option value="CourseRequiresaPass">Course Requires a Pass</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </ng-container>
@@ -354,17 +390,9 @@
                   <div class="x_panel">
                     <div class="x_header">
                       <div class="x_header_title">
-                        <h2>IT Skills
-                          <a href="javascript:void" (click)="editItSkill()">
-                            <i *ngIf="!section.isItSkillEdit" class="fa fa-pencil text-dark edit-icon ps-2"></i>
-                            <i *ngIf="section.isItSkillEdit" class="fa fa-eye text-dark edit-icon ps-2"></i>
-                          </a>
-                        </h2>
+                        <h2>IT Skills</h2>
                         <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
-                          *ngIf="!section.isItSkillEdit" (click)="addItskill()">ADD
-                          IT SKILLS</a>
-                        <button class="btn btn-outline-success btn-sm float-end" *ngIf="section.isItSkillEdit"
-                          (click)="submitSkillDetail()">Save</button>
+                          (click)="addNewItskill()">ADD ITSKILLS</a>
                       </div>
                     </div>
                     <ng-container formArrayName="TechnicalSkills">
@@ -391,7 +419,7 @@
                                     Exp: {{skills.get("ExperienceInYear").value}}
                                   </span>
                                   <div class="ms-3 d-inline">
-                                    <a href="javascript:void(0)" class="pe-3">
+                                    <a href="javascript:void(0)" class="pe-3" (click)="editDetail(skills)">
                                       <i class="fa fa-pencil text-white"></i>
                                     </a>
                                     <a href="javascript:void(0)">
@@ -402,53 +430,75 @@
                               </div>
                             </div>
                           </ng-container>
+                          <!--Skill Add Edit Modal -->
+                          <div class="modal fade" id="itSkillModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <ng-container *ngFor="let skills of skills.controls;let i = index">
+                                    <div class="col-md-12 row ps-2 pt-2" [formGroupName]="i">
+                                      <div class="col-md-4 mb-3">
+                                        <label class="form-label">Language </label>
+                                        <input class="form-control " placeholder="IT Skills" name="Language"
+                                          formControlName="Language" />
+                                      </div>
+                                      <div class="col-md-2 mb-3">
+                                        <label class="form-label">Version</label>
+                                        <input class="form-control " placeholder="Version" name="Version"
+                                          formControlName="Version" type="number" />
+                                      </div>
+                                      <div class="col-md-3 mb-3">
+                                        <label class="form-label">Last Used </label>
+                                        <input class="form-control " placeholder="LastUsed" name="LastUsed"
+                                          formControlName="LastUsed" type="number" />
+                                      </div>
+                                      <div class="col-md-3 mb-3">
+                                        <label class="form-label">Exprience</label>
+                                        <div class="row">
+                                          <input class="form-control col exp-input-box ms-3 " placeholder="Year"
+                                            name="ExperienceInYear" type="number" formControlName="ExperienceInYear" />
+                                          <input class="form-control col exp-input-box ms-3 " placeholder="Month"
+                                            name="ExperienceInMonth" type="number"
+                                            formControlName="ExperienceInMonth" />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    (click)="closeModal()">Close</button>
+                                  <button type="button" class="btn btn-primary" (click)="submitSkillDetail()">Save
+                                    changes</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- End Modal -->
                         </div>
                         <div class="col-md-4">
                           <ng-container *ngIf="!isLanguageSeleted">
-                            <div>Please click on any language to see their details</div>
+                            <div class="language-msg">Please click on any language to see their details</div>
                           </ng-container>
                           <ng-container *ngIf="isLanguageSeleted">
-                            <div><span class="fw-bold">Language:</span> {{singleSkill.Language}}</div>
-                            <div><span class="fw-bold">Version: </span>{{singleSkill.Version}}</div>
-                            <div><span class="fw-bold">Last Used: </span>{{singleSkill.LastUsed | date}}</div>
-                            <div><span class="fw-bold">Experience: </span>{{singleSkill.ExperienceInYear}}</div>
+                            <div class="language-view"><span class="fw-bold">Language:</span> {{singleSkill.Language}}
+                            </div>
+                            <div class="language-view"><span class="fw-bold">Version: </span>{{singleSkill.Version}}
+                            </div>
+                            <div class="language-view"><span class="fw-bold">Last Used: </span>{{singleSkill.LastUsed |
+                              date}}</div>
+                            <div class="language-view"><span class="fw-bold">Experience:
+                              </span>{{singleSkill.ExperienceInYear}}</div>
                           </ng-container>
                         </div>
                       </div>
-                      <!-- <ng-container *ngFor="let skills of skills.controls;let i = index">
-                        <div class="col-md-12 row ps-2 pt-2" [formGroupName]="i">
-                          <div class="col-md-4 mb-3">
-                            <label class="form-label">Language </label>
-                            <input class="form-control " placeholder="IT Skills" name="Language"
-                              formControlName="Language" [readonly]="!section.isItSkillEdit"
-                              [class.custom-form-control]="!section.isItSkillEdit" />
-                          </div>
-                          <div class="col-md-2 mb-3">
-                            <label class="form-label">Version</label>
-                            <input class="form-control " placeholder="Version" name="Version" formControlName="Version"
-                              type="number" [readonly]="!section.isItSkillEdit"
-                              [class.custom-form-control]="!section.isItSkillEdit" />
-                          </div>
-                          <div class="col-md-3 mb-3">
-                            <label class="form-label">Last Used </label>
-                            <input class="form-control " placeholder="LastUsed" name="LastUsed" formControlName="LastUsed"
-                              type="number" [readonly]="!section.isItSkillEdit"
-                              [class.custom-form-control]="!section.isItSkillEdit" />
-                          </div>
-                          <div class="col-md-3 mb-3">
-                            <label class="form-label">Exprience</label>
-                            <div class="row">
-                              <input class="form-control col exp-input-box ms-3 " placeholder="Year"
-                                name="ExperienceInYear" type="number" [readonly]="!section.isItSkillEdit"
-                                [class.custom-form-control]="!section.isItSkillEdit" formControlName="ExperienceInYear" />
-                              <input class="form-control col exp-input-box ms-3 " placeholder="Month"
-                                name="ExperienceInMonth" type="number" [readonly]="!section.isItSkillEdit"
-                                [class.custom-form-control]="!section.isItSkillEdit"
-                                formControlName="ExperienceInMonth" />
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container> -->
+
                     </ng-container>
                   </div>
                 </div>
@@ -470,11 +520,8 @@
                             Add details about projects you have done in college, internship or at work.
                           </small>
                         </h2>
-                        <a href="javascript:void(0)" class="text-decoration-none add-btn float-end"
-                          *ngIf="!section.isProjectsEdit">ADD
-                          PROJECT</a>
-                        <button class="btn btn-outline-success btn-sm float-end" *ngIf="section.isProjectsEdit"
-                          (click)="submitProjectDetail()">Save</button>
+                        <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn" (click)="addProject()">ADD
+                          PROJECT</button>
                       </div>
                     </div>
 
@@ -483,53 +530,40 @@
                         <div [formGroupName]="index" class="col-md-12 row ps-2" id="project">
 
                           <ng-container>
-                            <div class="d-flex flex-row justify-content-between">
+                            <div class="d-flex flex-row justify-content-between mt-5">
                               <b class="fw-bold">Project {{index + 1}}:</b>
-                              <a href="javascript:void(0)" (click)="addProject()">
-                                <i class="fa fa-pencil"></i>
-                              </a>
+                              <div class="inline-block">
+                                <a href="javascript:void(0)" (click)="editProjectDetail(item)">
+                                  <i class="fa fa-pencil pe-2"></i>
+                                </a>
+                                <a href="javascript:void(0)" (click)="deleteProjectPopup(item)">
+                                  <i class="fa fa-trash text-danger"></i>
+                                </a>
+                              </div>
                             </div>
                             <hr />
-                            <div class="d-flex flex-row justify-content-start">
-                              <div class="col-md-2 fw-bold">
-                                <ins>Project Title:</ins>
+                            <div class="mt-3 d-flex flex-row justify-content-start">
+                              <div class="me-4 d-flex flex-column justify-content-center fw-bold">
+                                <p class="m-0 mb-1"><ins>Project</ins></p>
+                                <p class="fs-5">{{item.get("ProjectTitle").value}}:</p>
                               </div>
-                              <div class="col-md-10">
-                                <label class="form-label">{{item.get("ProjectTitle").value}}</label>
-                                <span class="badge bg-primary text-white ms-2">{{item.get("ClientName").value}}</span>
-                              </div>
-                            </div>
+                              <div class="">
+                                <label class="form-label text-dark fw-bold"></label>
+                                <span class="badge bg-primary text-white">Client:
+                                  {{item.get("ClientName").value}}</span>
+                                <span class="badge bg-warning text-white ms-2">
+                                  Duration: {{item.get("ProjectDuration").value}}
+                                </span>
+                                <span class="badge bg-dark text-white ms-2">
+                                  Status: {{item.get("ProjectStatus").value}}
+                                </span>
 
-                            <div class="d-flex flex-row justify-content-start">
-                              <div class="col-md-2 fw-bold">
-                                <ins>
-                                  Technalogy Used:
-                                </ins>
-                              </div>
-                              <div class="col-md-10">
-                                <label class="form-label">{{item.get("TechnalogyStack").value}}</label>
-                              </div>
-                            </div>
-
-                            <div class="d-flex flex-row justify-content-start">
-                              <div class="col-md-2 fw-bold">
-                                <ins>
-                                  Project Description:
-                                </ins>
-                              </div>
-                              <div class="col-md-10">
-                                <label class="form-label">{{item.get("ProjectDetails").value}}</label>
-                              </div>
-                            </div>
-
-                            <div class="d-flex flex-row justify-content-start">
-                              <div class="col-md-2 fw-bold">
-                                <ins>
-                                  Role & Responsibility:
-                                </ins>
-                              </div>
-                              <div class="col-md-10">
-                                <label class="form-label">{{item.get("RolesResponsibility").value}}</label>
+                                <b class="d-block mt-2 mb-1">
+                                  Description:
+                                </b>
+                                <p class="mark">
+                                  {{item.get("ProjectDetails").value}}
+                                </p>
                               </div>
                             </div>
                           </ng-container>
@@ -559,10 +593,8 @@
                       <div formArrayName="OnlineProfiles" class="col-md-6 pt-3">
                         <h6>
                           <span class="fw-bold">Online Profile</span>
-                          <a href="javascript:void(0)" (click)="addOnlieProfiles()"
-                            class="text-decoration-none add-btn float-end fa fa-plus-circle pe-3"></a>
                         </h6>
-                        <ng-container
+                        <!-- <ng-container
                           *ngFor="let item of accomplishmentsForm.controls.OnlineProfiles['controls'];let i = index;"
                           class="col-md-6 mt-2">
                           <div [formGroupName]="i">
@@ -572,86 +604,352 @@
                               [readonly]="!section.isOnlineProfileEdit" class="mb-2 form-control"
                               name="OnlineProfileUrl" [class.custom-form-control]="!section.isOnlineProfileEdit">
                           </div>
+                        </ng-container> -->
+                        <ng-container
+                          *ngFor="let item of accomplishmentsForm.controls.OnlineProfiles['controls'];let index = index">
+                          <div class="col-md-12 mt-3" [formGroupName]="index">
+                            <div class="col-md-12 btn btn-info">
+                              <span class="fw-bold float-start">{{item.get("OnlineProfileUrl").value}}</span>
+                              <div class="ms-3 float-end d-inline-block">
+                                <a href="javascript:void(0)" class="pe-3" (click)="editOnlineProfile(skills)">
+                                  <i class="fa fa-pencil text-dark"></i>
+                                </a>
+                                <a href="javascript:void(0)" (click)="addNewOnlieProfiles()"
+                                  class="text-decoration-none text-dark pe-3 fa fa-plus-circle"></a>
+                                <a href="javascript:void(0)">
+                                  <i class="fa fa-trash text-dark"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
                         </ng-container>
+                        <!--Add or Edit Online Profile Modal -->
+                        <div class="modal fade" id="onlineProfileModal" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Edit Online Profile</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <ng-container
+                                  *ngFor="let item of accomplishmentsForm.controls.OnlineProfiles['controls'];let i = index;"
+                                  class="col-md-6 mt-2">
+                                  <div [formGroupName]="i">
+                                    <input type=" text"
+                                      placeholder="Add link to Online profiles (e.g. Linkedin, Facebook etc.)."
+                                      formControlName="OnlineProfileUrl" class="mb-2 form-control"
+                                      name="OnlineProfileUrl">
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                  (click)="closeModal()">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                  (click)="submitAccomplishmentDetail()">Save</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Moal -->
                       </div>
 
                       <div formArrayName="WorkSamples" class="col-md-6 pt-3">
                         <h6>
                           <span class="fw-bold">Work Sample</span>
-                          <a href="javascript:void(0)" (click)="addWorkSamples()"
-                            class="text-decoration-none add-btn float-end fa fa-plus-circle pe-3"></a>
                         </h6>
-                        <ng-container *ngFor="let item of workSamples.controls;let index = index;" class="mt-2">
+                        <!-- <ng-container *ngFor="let item of workSamples.controls;let index = index;" class="mt-2">
                           <div [formGroupName]="index">
                             <input type=" text" placeholder="Add link to your Projects (e.g. Github links etc.)."
                               formControlName="WorkSampleUrl" class="mb-2 form-control" name="WorkSampleUrl"
-                              (click)="editWorkSampleEdit()" [class.custom-form-control]="!section.isWorkSampleEdit">
+                              (click)="editWorkSample()" [class.custom-form-control]="!section.isWorkSampleEdit">
+                          </div>
+                        </ng-container> -->
+                        <ng-container *ngFor="let item of workSamples.controls;let index = index">
+                          <div class="col-md-12 mt-3" [formGroupName]="index">
+                            <div class="col-md-12 btn btn-dark">
+                              <span class="fw-bold float-start">{{item.get("WorkSampleUrl").value}}</span>
+                              <div class="ms-3 float-end d-inline-block">
+                                <a href="javascript:void(0)" class="pe-3" (click)="editWorkSample()">
+                                  <i class="fa fa-pencil text-white"></i>
+                                </a>
+                                <a href="javascript:void(0)" (click)="addNewWorkSamples()"
+                                  class="text-decoration-none text-white pe-3 fa fa-plus-circle"></a>
+                                <a href="javascript:void(0)">
+                                  <i class="fa fa-trash text-white"></i>
+                                </a>
+                              </div>
+                            </div>
                           </div>
                         </ng-container>
+                        <!--Add or Edit Work Sample Modal -->
+                        <div class="modal fade" id="workSampleModal" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Edit work sample project link</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <ng-container *ngFor="let item of workSamples.controls;let index = index;" class="mt-2">
+                                  <div [formGroupName]="index">
+                                    <input type=" text"
+                                      placeholder="Add link to your Projects (e.g. Github links etc.)."
+                                      formControlName="WorkSampleUrl" class="mb-2 form-control" name="WorkSampleUrl">
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                  (click)="closeModal()">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                  (click)="submitAccomplishmentDetail()">Save</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Moal -->
                       </div>
 
                       <div formArrayName="Researchs" class="col-md-6 pt-3">
                         <h6>
                           <span class="fw-bold">White Paper / Research Publication / Journal Entry</span>
-                          <a href="javascript:void(0)" (click)="addResearchs()"
-                            class="text-decoration-none add-btn float-end fa fa-plus-circle pe-3"></a>
                         </h6>
-                        <ng-container *ngFor="let item of researchs.controls;let j = index;" class="mt-2">
+                        <!-- <ng-container *ngFor="let item of researchs.controls;let j = index;" class="mt-2">
                           <div [formGroupName]="j">
                             <input type=" text" placeholder="Add links to your Online publications."
-                              (click)="editResaerchEdit()" formControlName="ResearchUrl" class="mb-2 form-control"
+                              (click)="editResaerch()" formControlName="ResearchUrl" class="mb-2 form-control"
                               name="ResearchUrl" [class.custom-form-control]="!section.isResaerchEdit">
                           </div>
+                        </ng-container> -->
+                        <ng-container *ngFor="let item of researchs.controls;let index = index">
+                          <div class="col-md-12 mt-3" [formGroupName]="index">
+                            <div class="col-md-12 btn btn-secondary">
+                              <span class="fw-bold float-start">{{item.get("ResearchUrl").value}}</span>
+                              <div class="ms-3 float-end d-inline-block">
+                                <a href="javascript:void(0)" class="pe-3" (click)="editResaerch()">
+                                  <i class="fa fa-pencil text-white"></i>
+                                </a>
+                                <a href="javascript:void(0)" (click)="addNewResearchs()"
+                                  class="text-decoration-none text-white pe-3 fa fa-plus-circle"></a>
+                                <a href="javascript:void(0)">
+                                  <i class="fa fa-trash text-white"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
                         </ng-container>
+                        <!--Add or Edit Research Modal -->
+                        <div class="modal fade" id="resarchModal" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Edit White Paper / Research Publication /
+                                  Journal Entry</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <ng-container *ngFor="let item of researchs.controls;let j = index;" class="mt-2">
+                                  <div [formGroupName]="j">
+                                    <input type=" text" placeholder="Add links to your Online publications."
+                                      formControlName="ResearchUrl" class="mb-2 form-control" name="ResearchUrl"
+                                      [class.custom-form-control]="!section.isResaerchEdit">
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                  (click)="closeModal()">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                  (click)="submitAccomplishmentDetail()">Save</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Moal -->
                       </div>
 
                       <div formArrayName="Presentations" class="col-md-6 pt-3">
                         <h6>
                           <span class="fw-bold">Presentation</span>
-                          <a href="javascript:void(0)" (click)="addPresentations()"
-                            class="text-decoration-none add-btn float-end fa fa-plus-circle pe-3"></a>
                         </h6>
-                        <ng-container *ngFor="let item of presentations.controls;let k = index;" class="mt-2">
+                        <!-- <ng-container *ngFor="let item of presentations.controls;let k = index;" class="mt-2">
                           <div [formGroupName]="k">
                             <input type=" text" formControlName="PresentationUrl" name="PresentationUrl"
                               (click)="editPresentationEdit()"
                               placeholder="Add links to your Online presentations (e.g. Slideshare presentation links etc.)."
                               class="mb-2 form-control" [class.custom-form-control]="!section.isPresentationEdit">
                           </div>
+                        </ng-container> -->
+                        <ng-container *ngFor="let item of presentations.controls;let index = index">
+                          <div class="col-md-12 mt-3" [formGroupName]="index">
+                            <div class="col-md-12 btn btn-primary">
+                              <span class="fw-bold float-start">{{item.get("PresentationUrl").value}}</span>
+                              <div class="ms-3 float-end d-inline-block">
+                                <a href="javascript:void(0)" class="pe-3" (click)="editPresentation()">
+                                  <i class="fa fa-pencil text-white"></i>
+                                </a>
+                                <a href="javascript:void(0)" (click)="addNewPresentations()"
+                                  class="text-decoration-none text-white pe-3 fa fa-plus-circle"></a>
+                                <a href="javascript:void(0)">
+                                  <i class="fa fa-trash text-white"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
                         </ng-container>
+                        <!--Add or Edit Research Modal -->
+                        <div class="modal fade" id="presentationModal" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Edit Presentation</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <ng-container *ngFor="let item of presentations.controls;let k = index;" class="mt-2">
+                                  <div [formGroupName]="k">
+                                    <input type=" text" formControlName="PresentationUrl" name="PresentationUrl"
+                                      placeholder="Add links to your Online presentations (e.g. Slideshare presentation links etc.)."
+                                      class="mb-2 form-control">
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                  (click)="closeModal()">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                  (click)="submitAccomplishmentDetail()">Save</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Moal -->
                       </div>
 
                       <div formArrayName="Patents" class="col-md-6 pt-3">
                         <h6>
                           <span class="fw-bold">Patent</span>
-                          <a href="javascript:void(0)" (click)="addPatents()"
-                            class="text-decoration-none add-btn float-end fa fa-plus-circle pe-3"></a>
                         </h6>
-                        <ng-container *ngFor="let item of patents.controls;let l = index;" class="col-md-6 mt-2">
+                        <!-- <ng-container *ngFor="let item of patents.controls;let l = index;" class="col-md-6 mt-2">
                           <div [formGroupName]="l">
                             <input type=" text" placeholder="Add details of Patents you have filed."
                               class="mb-2 form-control" formControlName="PatentUrl" (click)="editPatentEdit()"
                               [class.custom-form-control]="!section.isPatentEdit" name="PatentUrl">
                           </div>
+                        </ng-container> -->
+                        <ng-container *ngFor="let item of patents.controls;let index = index">
+                          <div class="col-md-12 mt-3" [formGroupName]="index">
+                            <div class="col-md-12 btn btn-success">
+                              <span class="fw-bold float-start">{{item.get("PatentUrl").value}}</span>
+                              <div class="ms-3 float-end d-inline-block">
+                                <a href="javascript:void(0)" class="pe-3" (click)="editPatent()">
+                                  <i class="fa fa-pencil text-white"></i>
+                                </a>
+                                <a href="javascript:void(0)" (click)="addNewPatents()"
+                                  class="text-decoration-none text-white pe-3 fa fa-plus-circle"></a>
+                                <a href="javascript:void(0)">
+                                  <i class="fa fa-trash text-white"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
                         </ng-container>
+                        <!--Add or Edit Research Modal -->
+                        <div class="modal fade" id="researchModal" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Edit Patent</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <ng-container *ngFor="let item of patents.controls;let l = index;"
+                                  class="col-md-6 mt-2">
+                                  <div [formGroupName]="l">
+                                    <input type=" text" placeholder="Add details of Patents you have filed."
+                                      class="mb-2 form-control" formControlName="PatentUrl" name="PatentUrl">
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                  (click)="closeModal()">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                  (click)="submitAccomplishmentDetail()">Save</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Moal -->
                       </div>
 
                       <div formArrayName="Certifications" class="col-md-6 pt-3">
                         <h6>
                           <span class="fw-bold">Certification</span>
-                          <a href="javascript:void(0)" (click)="addCertifications()"
-                            class="text-decoration-none add-btn float-end fa fa-plus-circle pe-3"></a>
                         </h6>
-                        <ng-container *ngFor="let item of certifications.controls;let m = index;" class="col-md-6 mt-2">
+                        <!-- <ng-container *ngFor="let item of certifications.controls;let m = index;" class="col-md-6 mt-2">
                           <div [formGroupName]="m">
                             <input type=" text" placeholder="Add details of Certifications you have achieved/completed."
                               class="mb-2 form-control" formControlName="CertificationUrl" name="CertificationUrl"
                               (click)="editCertificationEdit()"
                               [class.custom-form-control]="!section.isCertificationEdit">
                           </div>
+                        </ng-container> -->
+                        <ng-container *ngFor="let item of certifications.controls;let index = index">
+                          <div class="col-md-12 mt-3" [formGroupName]="index">
+                            <div class="col-md-12 btn btn-warning">
+                              <span class="fw-bold float-start">{{item.get("CertificationUrl").value}}</span>
+                              <div class="ms-3 float-end d-inline-block">
+                                <a href="javascript:void(0)" class="pe-3" (click)="editCertification()">
+                                  <i class="fa fa-pencil text-dark"></i>
+                                </a>
+                                <a href="javascript:void(0)" (click)="addNewCertifications()"
+                                  class="text-decoration-none text-dark pe-3 fa fa-plus-circle"></a>
+                                <a href="javascript:void(0)">
+                                  <i class="fa fa-trash text-dark"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
                         </ng-container>
+                        <!--Add or Edit Research Modal -->
+                        <div class="modal fade" id="certificationModal" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Edit Certification</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <ng-container *ngFor="let item of certifications.controls;let m = index;"
+                                  class="col-md-6 mt-2">
+                                  <div [formGroupName]="m">
+                                    <input type=" text"
+                                      placeholder="Add details of Certifications you have achieved/completed."
+                                      class="mb-2 form-control" formControlName="CertificationUrl"
+                                      name="CertificationUrl">
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                  (click)="closeModal()">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                  (click)="submitAccomplishmentDetail()">Save</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Moal -->
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -682,127 +980,84 @@
                     <ng-container formArrayName="CarrerProfile">
                       <div class="col-md-12 row ps-2" *ngFor="let item of carrer.controls; let i = index"
                         [formGroupName]="i">
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Industry<span class="text-danger"> *</span></label>
-                          <input class="form-control " placeholder="Industry" name="Industry"
-                            [class.custom-form-control]="!section.isCarrerProfileEdit"
-                            [readonly]="!section.isCarrerProfileEdit" formControlName="Industry" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Department<span class="text-danger"> *</span></label>
-                          <input class="form-control " placeholder="Department" name="Department"
-                            [class.custom-form-control]="!section.isCarrerProfileEdit"
-                            [readonly]="!section.isCarrerProfileEdit" formControlName="Department" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Role Category<span class="text-danger"> *</span></label>
-                          <input class="form-control " placeholder="RoleCategory" name="RoleCategory"
-                            [class.custom-form-control]="!section.isCarrerProfileEdit"
-                            [readonly]="!section.isCarrerProfileEdit" formControlName="RoleCategory" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Job Role<span class="text-danger"> *</span></label>
-                          <input class="form-control " placeholder="Role" name="Role" formControlName="Role"
-                            [class.custom-form-control]="!section.isCarrerProfileEdit"
-                            [readonly]="!section.isCarrerProfileEdit" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Desired Job Type<span class="text-danger"> *</span></label>
-                          <div class="row ps-3">
-                            <div class="form-check col">
-                              <input class="form-check-input " type="checkbox" formControlName="JobTypePermanent"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit"
-                                [readonly]="!section.isCarrerProfileEdit">
-                              <label class="form-check-label" for="JobTypePermanent">
-                                Permanent
-                              </label>
-                            </div>
-                            <div class="form-check col">
-                              <input class="form-check-input " type="checkbox" formControlName="JobTypeContractual"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit"
-                                [readonly]="!section.isCarrerProfileEdit">
-                              <label class="form-check-label" for="JobTypeContractual">
-                                Contractual
-                              </label>
-                            </div>
+                        <div class="col-md-6">
+                          <div class="mb-3">
+                            <label class="form-label">Industry<span class="text-danger"> *</span></label>
+                            <input class="form-control " placeholder="Industry" name="Industry"
+                              [class.custom-form-control]="!section.isCarrerProfileEdit"
+                              [readonly]="!section.isCarrerProfileEdit" formControlName="Industry" />
                           </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Preferred Shift</label>
-                          <div class="row ps-3">
-                            <div class="form-check col-md-4">
-                              <input class="form-check-input " type="radio" name="PreferredShift"
-                                formControlName="PreferredShift"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit"
-                                [readonly]="!section.isCarrerProfileEdit" value="day" checked>
-                              <label class="form-check-label" for="preferredShift1">
-                                Day
-                              </label>
-                            </div>
-                            <div class="form-check col-md-4">
-                              <input class="form-check-input " type="radio" name="PreferredShift"
-                                formControlName="PreferredShift"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit"
-                                [readonly]="!section.isCarrerProfileEdit" value="night">
-                              <label class="form-check-label" for="preferredShift2">
-                                Night
-                              </label>
-                            </div>
-                            <div class="form-check col-md-4">
-                              <input class="form-check-input " type="radio" name="PreferredShift"
-                                formControlName="PreferredShift"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit"
-                                [readonly]="!section.isCarrerProfileEdit" value="flexible">
-                              <label class="form-check-label" for="preferredShift3">
-                                Flexible
-                              </label>
-                            </div>
+                          <div class="mb-3">
+                            <label class="form-label">Role Category<span class="text-danger"> *</span></label>
+                            <input class="form-control " placeholder="RoleCategory" name="RoleCategory"
+                              [class.custom-form-control]="!section.isCarrerProfileEdit"
+                              [readonly]="!section.isCarrerProfileEdit" formControlName="RoleCategory" />
                           </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Desired Employment Type<span class="text-danger"> *</span></label>
-                          <div class="row ps-3">
-                            <div class="form-check col">
-                              <input class="form-check-input " type="checkbox" formControlName="FullTime"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit"
-                                [readonly]="!section.isCarrerProfileEdit">
-                              <label class="form-check-label" for="FullTime">
-                                Full Time
-                              </label>
-                            </div>
-                            <div class="form-check col">
-                              <input class="form-check-input " type="checkbox" formControlName="PartTime"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit" value="parttime"
-                                [readonly]="!section.isCarrerProfileEdit">
-                              <label class="form-check-label" for="PartTime">
-                                Part Time
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Preferred Work Location (Max 3)<span class="text-danger">
-                              *</span></label>
-                          <input class="form-control " placeholder="Preferred Work Location"
-                            name="PreferredWorkLocation" [class.custom-form-control]="!section.isCarrerProfileEdit"
-                            [readonly]="!section.isCarrerProfileEdit" formControlName="PreferredWorkLocation" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Expected Salary </label>
-                          <div class="row ps-3">
-                            <div class="form-check col-md-6 p-0 m-0">
-                              <input class="form-control" name="ExpectedSalary"
-                                [readonly]="!section.isCarrerProfileEdit"
-                                [class.custom-form-control]="!section.isCarrerProfileEdit"
-                                formControlName="ExpectedSalary">
-                            </div>
-                            <div class="form-check col-md-6">
-                              <select name="CurrencyType" class="form-control" formControlName="CurrencyType">
-                                <option value="">Select Currenty</option>
-                                <option value="INR">Indian Rupees</option>
-                                <option value="USD">US Dollar</option>
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label class="form-label">Desired Job Type<span class="text-danger"> *</span></label>
+                              <select class="form-select" aria-label="Default select example"
+                                formControlName="DesiredTypePermanent">
+                                <option value="1">Permanent</option>
+                                <option value="2">Contractual</option>
                               </select>
                             </div>
+                            <div class="col-md-6 mb-3">
+                              <label class="form-label">Desired Employment Type</label>
+                              <select class="form-select" aria-label="Default select example"
+                                formControlName="DesiredEmploymentType">
+                                <option value="1">Full Time</option>
+                                <option value="2">Part Time</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Expected Salary </label>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <input class="form-control" name="ExpectedSalary"
+                                  [readonly]="!section.isCarrerProfileEdit"
+                                  [class.custom-form-control]="!section.isCarrerProfileEdit"
+                                  formControlName="ExpectedSalary">
+                              </div>
+                              <div class="col-md-6">
+                                <select name="CurrencyType" class="form-control" formControlName="CurrencyType">
+                                  <option value="">Select Currenty</option>
+                                  <option value="INR">Indian Rupees</option>
+                                  <option value="USD">US Dollar</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="mb-3">
+                            <label class="form-label">Department<span class="text-danger"> *</span></label>
+                            <input class="form-control " placeholder="Department" name="Department"
+                              [class.custom-form-control]="!section.isCarrerProfileEdit"
+                              [readonly]="!section.isCarrerProfileEdit" formControlName="Department" />
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Job Role<span class="text-danger"> *</span></label>
+                            <input class="form-control " placeholder="Role" name="Role" formControlName="Role"
+                              [class.custom-form-control]="!section.isCarrerProfileEdit"
+                              [readonly]="!section.isCarrerProfileEdit" />
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Preferred Shift</label>
+                            <select class="form-select" aria-label="Default select example"
+                              formControlName="PreferredShift">
+                              <option value="1">Day</option>
+                              <option value="2">Night</option>
+                              <option value="2">Flexible</option>
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Preferred Work Location (Max 3)<span class="text-danger">
+                                *</span></label>
+                            <input class="form-control " placeholder="Preferred Work Location"
+                              name="PreferredWorkLocation" [class.custom-form-control]="!section.isCarrerProfileEdit"
+                              [readonly]="!section.isCarrerProfileEdit" formControlName="PreferredWorkLocation" />
                           </div>
                         </div>
                       </div>
@@ -1041,68 +1296,136 @@
 
 
 <!-- Add or Edit Project(s) modal -->
-
 <div class="modal" id="editProjectModal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Update Project Detail</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body f-12">
-        <div class="d-flex flex-row justify-content-start mb-3">
-          <label class="form-label">Project Title </label>
-          <div class="col-md-6">
-            <input class="form-control " placeholder="Enter Project Title" name="ProjectTitle" />
-          </div>
-        </div>
+      <div class="modal-body">
+        <ng-container *ngIf="isEditProject">
+          <form autocomplete="off" class="ps-5 pe-5 pt-4 pb-2 row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Project Title </label>
+                <input class="form-control" placeholder="Enter Project Title"
+                  [(ngModel)]="editProjectModal.ProjectTitle" name="ProjectTitle" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Project Duration</label>
+                <select class="form-control" name="ProjectDuration" [(ngModel)]="editProjectModal.ProjectDuration">
+                  <option value="1" selected>1 month</option>
+                  <option value="2">2 month</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Technalogy Stack</label>
+                <input class="form-control" placeholder="Technalogy Stack" name="TechnalogyStack"
+                  [(ngModel)]="editProjectModal.TechnalogyStack" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Tag project to client.</label>
+                <input class="form-control " placeholder="Select Employment/Education" name="ClientName"
+                  [(ngModel)]="editProjectModal.ClientName" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Project Status</label>
+                <select class="form-control" name="ProjectStatus" [(ngModel)]="editProjectModal.ProjectStatus">
+                  <option value="Completed" selected>Completed</option>
+                  <option value="Pending">Pending</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Roles and Responsibility</label>
+                <input class="form-control" placeholder="Roles and Responsibility" name="RolesResponsibility"
+                  [(ngModel)]="editProjectModal.RolesResponsibility" />
+              </div>
+            </div>
 
-        <div class="d-flex flex-row justify-content-start mb-3">
-          <label class="col form-label">Tag this project.</label>
-          <div class="col-md-6">
-            <input class="form-control " placeholder="Select Employment/Education" name="ProjectTag" />
-          </div>
-        </div>
+            <div class="col-md-12">
+              <div class="mb-3">
+                <label class="form-label">Project Description<span class="text-danger"> *</span></label>
+                <textarea name="ProjectDetails" row="10" placeholder="Type here ....." name="ProjectDetails"
+                  class="form-control  Detail-Project-txtarea" [(ngModel)]="editProjectModal.ProjectDetails"></textarea>
+                <small>1500 Character(s) Left</small>
+              </div>
+            </div>
+          </form>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addOrUpdateProject()">Update Project</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <div class="row col-md-12">
-          <div class="col-md-6">
-            <label class="form-label">Project Duration</label>
-            <select class="form-control" name="ProjectStatus">
-              <option value="">Duration</option>
-            </select>
+<!-- Delete Project Modal -->
+<div class="modal fade" id="deleteProjectMOdal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Are you wamt to delete?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="isDeleted">
+        <div class="d-flex flex-row justify-content-start pt-2 pb-2">
+          <div class="col-md-4 fw-bold">
+            <span>Project Title:</span>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Project Status</label>
-            <select class="form-control" name="ProjectStatus">
-              <option value="">Status</option>
-            </select>
+          <div class="col-md-8 ps-4">
+            <label class="form-label">{{deleteProjectDetail.ProjectTitle}}</label>
+            <span class="badge bg-primary text-white ms-2">{{deleteProjectDetail.ClientName}}</span>
           </div>
         </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Client <span class="text-danger"> *</span> </label>
-          <input class="form-control " placeholder="Client Name" name="ClientName" />
+        <div class="d-flex flex-row justify-content-start pt-2 pb-2">
+          <div class="col-md-4 fw-bold">
+            <span>
+              Project Duration:
+            </span>
+          </div>
+          <div class="col-md-8 ps-4">
+            <label class="form-label">{{deleteProjectDetail.ProjectDuration}}</label>
+          </div>
         </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Details of Project<span class="text-danger"> *</span></label>
-          <textarea name="ProjectDetails" cols="10" placeholder="Type here ....."
-            class="form-control  sm-txtarea"></textarea>
-          <small>1500 Character(s) Left</small>
+        <div class="d-flex flex-row justify-content-start pt-2 pb-2">
+          <div class="col-md-4 fw-bold">
+            <span>
+              Project Status:
+            </span>
+          </div>
+          <div class="col-md-8 ps-4">
+            <label class="form-label">{{deleteProjectDetail.ProjectStatus}}</label>
+          </div>
         </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Technalogy Stack</label>
-          <input class="form-control" placeholder="Technalogy Stack" name="TechnalogyStack" />
+        <div class="d-flex flex-row justify-content-start pt-2 pb-2">
+          <div class="col-md-4 fw-bold">
+            <span>
+              Technalogy Used:
+            </span>
+          </div>
+          <div class="col-md-8 ps-4">
+            <label class="form-label">{{deleteProjectDetail.TechnalogyStack}}</label>
+          </div>
         </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Roles and Responsibility</label>
-          <input class="form-control" placeholder="Roles and Responsibility" />
+        <div class="d-flex flex-row justify-content-start pt-2 pb-2">
+          <div class="col-md-4 fw-bold">
+            <span>
+              Role & Responsibility:
+            </span>
+          </div>
+          <div class="col-md-8 ps-4">
+            <label class="form-label">{{deleteProjectDetail.RolesResponsibility}}</label>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Add Now</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="deleteProject()">Yes</button>
       </div>
     </div>
   </div>

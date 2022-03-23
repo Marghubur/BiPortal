@@ -351,3 +351,18 @@ table {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity));
 }
+
+.language-view {
+  font-size: 1.2rem !important;
+  padding: 5px !important;
+}
+
+.language-msg {
+  font-weight: 600;
+  font-size: 1.4rem;
+  text-align: center;
+  padding: 1rem;
+}
+.Detail-Project-txtarea {
+  height: 7.6rem !important;
+}
