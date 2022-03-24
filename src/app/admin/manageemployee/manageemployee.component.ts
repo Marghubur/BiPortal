@@ -3,8 +3,9 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, PlaceEmpty, Toast } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, PlaceEmpty, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-manageemployee',
@@ -36,6 +37,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   currentClientId: number = 0;
   isCreated: boolean = false;
   isUpdated: boolean = false;
+  activeClient: any = null;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -84,6 +86,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         }
         if (this.isCreated = false) {
           if (this.allocatedClients != null && this.allocatedClients.length > 0) {
+            this.allocatedClients.map(item => item["IsActiveRow"] = 0);
             let mappedClient = this.allocatedClients[0];
             this.employeeModal.FinalPackage = mappedClient.FinalPackage;
             this.employeeModal.ActualPackage = mappedClient.ActualPackage;
@@ -229,67 +232,61 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   addDetail() {
     if (this.employeeForm.get("AllocatedClientId").value > 0) {
-      let updateClientRequest = {
-        "AllocatedClientId": Number(this.employeeForm.get("AllocatedClientId").value),
-        "ActualPackage": Number(this.employeeForm.get("ActualPackage").value),
-        "FinalPackage": Number(this.employeeForm.get("FinalPackage").value),
-        "TakeHomeByCandidate": Number(this.employeeForm.get("TakeHomeByCandidate").value),
-        "EmployeeUid": this.employeeUid
-      }
-
-      this.isInsertingNewClient = true;
-      if (this.assignedActiveClientUid > 0)
-        this.isInsertingNewClient = false;
-      this.http.post(`employee/UpdateEmployeeDetail/${!this.isInsertingNewClient}`, updateClientRequest).then((response: ResponseModel) => {
+      this.activeClient.TakeHomeByCandidate = Number(this.employeeForm.get("TakeHomeByCandidate").value);
+      this.http.post(`employee/UpdateEmployeeDetail/${true}`, this.activeClient).then((response: ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody != {}) {
-          if (this.isInsertingNewClient) {
-            this.allocatedClients.push(response.ResponseBody.Table[0]);
-            this.allocatedClients.map(elem => elem.IsActive = 0);
-            Toast("Added Successfully");
-          } else {
-            let currentClient = this.allocatedClients.find(x => x.ClientUid == this.currentClientId);
-            currentClient.ActualPackage = updateClientRequest.ActualPackage;
-            currentClient.FinalPackage = updateClientRequest.FinalPackage;
-            currentClient.TakeHomeByCandidate = updateClientRequest.TakeHomeByCandidate;
-            Toast("Updated Successfully");
-          }
-          this.isAllocated = true;
+          Toast("Updated Successfully");
         } else {
-          this.common.ShowToast("Fail to add");
+          ErrorToast("Fail to add");
         }
       });
     } else {
-      this.common.ShowToast("Please select client first");
+      ErrorToast("Please select client first");
     }
-
-
   }
 
   bindCurrentClientDetail(clientId: number) {
     if (clientId) {
-      let currentClient = this.allocatedClients.find(x => x.ClientUid == clientId);
+      this.activeClient = this.allocatedClients.find(x => x.ClientUid == clientId);
       this.isCreated = false;
       this.isUpdated = true;
 
-      if (currentClient) {
+      if (this.activeClient) {
         //this.currentClientId = clientId;
         this.employeeForm.get("AllocatedClientId").setValue(clientId);
-        this.employeeForm.get("ActualPackage").setValue(currentClient.ActualPackage);
-        this.employeeForm.get("FinalPackage").setValue(currentClient.FinalPackage);
-        this.employeeForm.get("TakeHomeByCandidate").setValue(currentClient.TakeHomeByCandidate);
-        this.allocatedClients.map(elem => elem.IsActive = 0);
-        currentClient.IsActive = 1;
+        this.employeeForm.get("ActualPackage").setValue(this.activeClient.ActualPackage);
+        this.employeeForm.get("FinalPackage").setValue(this.activeClient.FinalPackage);
+        this.employeeForm.get("TakeHomeByCandidate").setValue(this.activeClient.TakeHomeByCandidate);
+        this.allocatedClients.map(item => item["IsActiveRow"] = 0);
+        this.activeClient.IsActiveRow = 1;
       }
     }
   }
 
-  deleteCurrentClient(clientId: number) {
-
+  deleteCurrentClient(client: any) {
+    this.activeClient = client;
+    $("#remoteClient").modal('show');
   }
 
   reset() {
     this.employeeForm.reset();
-   }
+  }
+
+  removeClient(){
+    this.http.delete(`clients/DeactivateClient`, {
+      EmployeeUid:  this.activeClient.EmployeeUid,
+      EmployeeMappedClientsUid: this.activeClient.EmployeeMappedClientsUid
+    }).then(response => {
+      if(response.ResponseBody) {
+        this.allocatedClients = response.ResponseBody.Table;
+        Toast("Client de-activated successfully.");
+      } else {
+        ErrorToast("Fail de-activated it. Please contact to admin.");
+      }
+
+      $("#remoteClient").modal('hide');
+    })
+  }
 }
 
 export class EmployeeDetail {

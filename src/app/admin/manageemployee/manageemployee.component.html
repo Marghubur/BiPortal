@@ -136,7 +136,7 @@
                 </div>
               </div>
 
-              <!-- <div class="x_panel x-panel-changed">
+              <div class="x_panel x-panel-changed">
                 <div class="x_header">
                   <div class="x_header_title">
                     <h2>Add Update Client<small>Add or update client(s) allocation detail</small>
@@ -152,18 +152,20 @@
                       <hr class="w-100" />
                       <div class="col-md-12 p-2 pt-3">
                         <ng-container *ngIf="isAllocated">
-                          <div class="d-block span-clients pe-2 pb-1 mb-2"
-                            [ngClass]="{'inactive-mode': c.IsActive != 1}" *ngFor="let c of allocatedClients">
-                            <span class="text-start">{{c.ClientName}}</span>
-                            <span class="float-end">
-                              <a (click)="bindCurrentClientDetail(c.ClientUid)">
-                                <i class="fa fa-edit"></i>
-                              </a>
-                              <a (click)="deleteCurrentClient(c.ClientUid)">
-                                <i class="ps-2 fa fa-trash"></i>
-                              </a>
-                            </span>
-                          </div>
+                          <ng-container *ngFor="let c of allocatedClients">
+                            <div class="d-block span-clients pe-2 pb-1 mb-2" *ngIf="c.IsActive"
+                              [ngClass]="{'inactive-mode': c.IsActiveRow != 1}">
+                              <span class="text-start">{{c.ClientName}}</span>
+                              <span class="float-end">
+                                <a (click)="bindCurrentClientDetail(c.ClientUid)">
+                                  <i class="fa fa-edit"></i>
+                                </a>
+                                <a (click)="deleteCurrentClient(c)">
+                                  <i class="ps-2 fa fa-trash"></i>
+                                </a>
+                              </span>
+                            </div>
+                          </ng-container>
                         </ng-container>
 
                         <ng-container *ngIf="!isAllocated">
@@ -227,7 +229,7 @@
 
                   </div>
                 </div>
-              </div> -->
+              </div>
 
               <div class="col-12 row m-0 mt-5">
                 <div class="col-md-6">
@@ -374,6 +376,34 @@
             </form>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="remoteClient" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="remoteClientLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="remoteClientLabel">Remove client(s)</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <ng-container *ngIf="activeClient != null">
+          <div class="delete-content">
+            <b>Client Name: </b> <ins class="ps-4 fw-bold">{{activeClient.ClientName}}</ins>
+          </div>
+          <div class="mt-4 mark">
+            Please check client name very carefully, as once you de-activate the client,
+            in future you can't see any data or information under your login.
+          </div>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:void(0)" class="text-decoration-none btn-light pe-3" data-bs-dismiss="modal">Close</a>
+        <a href="javascript:void(0)" (click)="removeClient()"
+          class="text-decoration-none btn-light text-primary">Delete</a>
       </div>
     </div>
   </div>

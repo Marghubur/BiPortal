@@ -36,6 +36,13 @@ export class ManageComponent implements OnInit {
   iTSkills: Array<Skills> = [];
   isLanguageSeleted: boolean = false;
   singleSkill: Array<any> = [];
+  isItskillEdit: boolean = false;
+  deleteProjectDetail: any = null;
+  isDeleted: boolean = false;
+
+  editProjectModal: Project;
+  currentProjectOnEdit: FormGroup;
+  isEditProject: boolean = false;
 
   section: any = {
     isKeySkillEdit: false,
@@ -203,12 +210,13 @@ export class ManageComponent implements OnInit {
 
   buildProjectsForm() {
     this.projectsForm = this.fb.group({
-      Projects: this.fb.array(this.userModal.Projects.map(item => this.projectForm(item)))
+      Projects: this.fb.array(this.userModal.Projects.map((item, index) => this.projectForm(item, index)))
     });
   }
 
-  projectForm(project: Project) {
+  projectForm(project: Project, index: number) {
     return this.fb.group({
+      ProjectIndex: new FormControl(index),
       ProjectTitle: new FormControl(project.ProjectTitle),
       ProjectTag: new FormControl(project.ProjectTag),
       ProjectWorkingYear: new FormControl(project.ProjectWorkingYear),
@@ -219,20 +227,62 @@ export class ManageComponent implements OnInit {
       ClientName: new FormControl(project.ClientName),
       ProjectDetails: new FormControl(project.ProjectDetails),
       RolesResponsibility: new FormControl(project.RolesResponsibility),
-      TechnalogyStack: new FormControl(project.TechnalogyStack)
+      TechnalogyStack: new FormControl(project.TechnalogyStack),
+      ProjectDuration: new FormControl(project.ProjectDuration)
     })
   }
 
-  addProject() {
-    // let NewProject = new Project();
-    // this.projects.push(this.projectForm(NewProject));
-
+  editProjectDetail(current: FormGroup) {
+    this.currentProjectOnEdit = current;
+    this.editProjectModal = current.value as Project;
     $("#editProjectModal").modal("show");
+    this.isEditProject = true;
+  }
+
+  addOrUpdateProject() {
+      this.currentProjectOnEdit.get("ProjectTitle").setValue(this.editProjectModal.ProjectTitle);
+      this.currentProjectOnEdit.get("ProjectDuration").setValue(this.editProjectModal.ProjectDuration);
+      this.currentProjectOnEdit.get("TechnalogyStack").setValue(this.editProjectModal.TechnalogyStack);
+      this.currentProjectOnEdit.get("ClientName").setValue(this.editProjectModal.ClientName);
+      this.currentProjectOnEdit.get("ProjectStatus").setValue(this.editProjectModal.ProjectStatus);
+      this.currentProjectOnEdit.get("RolesResponsibility").setValue(this.editProjectModal.RolesResponsibility);
+      this.currentProjectOnEdit.get("ProjectDetails").setValue(this.editProjectModal.ProjectDetails);
+      this.submitProjectDetail();
+    this.closeModal();
   }
 
   get projects() {
     return this.projectsForm.get('Projects') as FormArray;
   }
+
+  addProject() {
+    let newProject = new Project();
+    let project = this.projectsForm.get('Projects') as FormArray;
+    this.currentProjectOnEdit = this.projectForm(newProject, project.length + 1);
+    project.push(this.currentProjectOnEdit);
+    this.editProjectModal = this.currentProjectOnEdit.value as Project;
+    $("#editProjectModal").modal("show");
+    this.isEditProject = true;
+  }
+
+  deleteProjectPopup(e: any) {
+    this.isDeleted = true;
+    $("#deleteProjectMOdal").modal("show")
+    this.deleteProjectDetail = e.value;
+  }
+
+  deleteProject() {
+    let projectValue = this.deleteProjectDetail;
+    let project = this.projectsForm.get('Projects') as FormArray;
+    project.removeAt(project.value.findIndex(item => item.ProjectIndex == projectValue.ProjectIndex));
+    this.userModal.Projects = project.value;
+    this.updateProfile();
+    this.closeModal();
+  }
+
+
+
+
 
   //----------------- Projects END'S ------------------------
 
@@ -383,6 +433,60 @@ export class ManageComponent implements OnInit {
       return this.accomplishmentsForm.get("Certifications") as FormArray;
     }
 
+    editPresentation() {
+      //this.section.isPresentationEdit = !this.section.isPresentationEdit;
+      $("#presentationModal").modal("show");
+    }
+
+    addNewPresentations() {
+      this.addPresentations();
+      this.editPresentation();
+    }
+
+    addNewOnlieProfiles() {
+      this.addOnlieProfiles();
+      this.editOnlineProfile();
+    }
+
+    addNewWorkSamples() {
+      this.addWorkSamples();
+      this.editWorkSample();
+    }
+
+    addNewResearchs() {
+      this.addResearchs();
+      this.editResaerch();
+    }
+
+    addNewPatents() {
+      this.addPatents();
+      this.editPatent();
+    }
+
+    addNewCertifications() {
+      this.addCertifications();
+      this.editCertification();
+    }
+
+    editOnlineProfile() {
+      $("#onlineProfileModal").modal("show");
+    }
+
+    editResaerch() {
+      $("#resarchModal").modal("show");
+    }
+
+    editWorkSample() {
+      $("#workSampleModal").modal("show");
+    }
+
+    editPatent() {
+      $("#researchModal").modal("show");
+    }
+
+    editCertification() {
+      $("#researchModal").modal("show");
+    }
   //----------------- technical skills END'S ------------------------
 
 
@@ -479,10 +583,8 @@ export class ManageComponent implements OnInit {
       Department: new FormControl(carrer.Department),
       RoleCategory: new FormControl(carrer.RoleCategory),
       Role: new FormControl(carrer.Role),
-      JobTypePermanent: new FormControl(carrer.JobTypePermanent),
-      JobTypeContractual: new FormControl(carrer.JobTypeContractual),
-      PartTime: new FormControl(carrer.PartTime),
-      FullTime: new FormControl(carrer.FullTime),
+      DesiredTypePermanent: new FormControl(carrer.DesiredTypePermanent),
+      DesiredEmploymentType: new FormControl(carrer.DesiredEmploymentType),
       PreferredShift: new FormControl(carrer.PreferredShift),
       PreferredWorkLocation: new FormControl(carrer.PreferredWorkLocation),
       ExpectedSalary: new FormControl(carrer.ExpectedSalary),
@@ -551,10 +653,8 @@ export class ManageComponent implements OnInit {
 
   submitSkillDetail() {
     let skills = this.skillsForm.controls['TechnicalSkills'].value;
-    this.http.post("user/SkillsDetail", skills).then((response:ResponseModel) => {
-      if (response.ResponseBody)
-        Toast("Employment Form submitted successfully")
-    })
+    this.userModal.Skills = skills;
+    this.updateProfile();
   }
 
   submitProjectDetail() {
@@ -581,6 +681,7 @@ export class ManageComponent implements OnInit {
     }
 
     this.updateProfile();
+    this.closeModal();
   }
 
   submitCarrerProfileDetail(){
@@ -732,43 +833,25 @@ export class ManageComponent implements OnInit {
     this.section.ispersonalDetailsEdit = !this.section.ispersonalDetailsEdit;
   }
 
-  editOnlineProfile() {
-    this.section.isOnlineProfileEdit = !this.section.isOnlineProfileEdit;
-  }
-
-  editResaerchEdit() {
-    this.section.isResaerchEdit = !this.section.isResaerchEdit;
-  }
-
-  editPatentEdit() {
-    this.section.isPatentEdit = !this.section.isPatentEdit;
-  }
-
-  editWorkSampleEdit() {
-    this.section.isWorkSampleEdit = !this.section.isWorkSampleEdit;
-  }
-
-  editPresentationEdit() {
-    this.section.isPresentationEdit = !this.section.isPresentationEdit;
-  }
-
-  editCertificationEdit() {
-    this.section.isCertificationEdit = !this.section.isCertificationEdit;
-  }
-
   editProfile() {
     this.section.isProfileEdit = !this.section.isProfileEdit;
   }
 
   editDetail(e: any) {
-    $("#skillModal").modal('show');
+    $("#itSkillModal").modal('show');
     let singleSkill = e.value;
-
-
   }
 
-  closeSkillModal() {
-    $("#skillModal").modal('hide');
+  closeModal() {
+    $("#itSkillModal").modal('hide');
+    $("#editProjectModal").modal('hide');
+    $("#onlineProfileModal").modal('hide');
+    $("#workSampleModal").modal("hide");
+    $("#resarchModal").modal("hide");
+    $("#presentationModal").modal("hide");
+    $("#researchModal").modal("hide");
+    $("#certificationModal").modal("hide");
+    $("#deleteProjectMOdal").modal("hide")
   }
 
   cleanFileHandler() {
@@ -778,6 +861,11 @@ export class ManageComponent implements OnInit {
     $("#uploadocument").val("");
     this.isLargeFile = false;
     // this.FilesCollection = [];
+  }
+
+  addNewItskill() {
+    this.addItskill();
+    $("#itSkillModal").modal('show');
   }
 
   reset() {
@@ -863,10 +951,8 @@ class Company {
   Company_Name: string = '';
   Functional_Area: string = '';
   Department: string = '';
-  JobTypePermanent: boolean = true;
-  JobTypeContractual: boolean = false;
-  PartTime: boolean = true;
-  FullTime: boolean = false
+  DesiredTypePermanent: string = '';
+  DesiredEmploymentType: string = '';
   PreferredShift: string = '';
   PreferredWorkLocation: string = '';
   ExpectedSalary: string = '';
@@ -953,8 +1039,9 @@ class Project {
   ClientName: string = '';
   ProjectDetails: string = '';
   RolesResponsibility: string = '';
-  TechnalogyStack: string = ''
-
+  TechnalogyStack: string = '';
+  ProjectDuration: string = '';
+  ProjectIndex: number = 0;
 }
 
 class Accomplishment {
