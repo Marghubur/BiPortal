@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn } from 'src/providers/constants';
+import { AccessTokenExpiredOn, UserImage } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -82,7 +82,7 @@ export class ManageComponent implements OnInit {
     isCertificationEdit: false,
     isProfileEdit: false
   };
-  profileURL: string = "assets/images/faces/face1.jpg";
+  profileURL: string = UserImage;
 
   manageUserForm: FormGroup;
   educationForm: FormGroup;
