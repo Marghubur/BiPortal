@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -39,6 +39,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   isUpdated: boolean = false;
   activeClient: any = null;
   profileURL: string = UserImage;
+  fileDetail: Array<any> = [];
+  activeAssignedClient: AssignedClients = new AssignedClients();
 
   get f() {
     let data = this.employeeForm.controls;
@@ -130,13 +132,30 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ExprienceInYear: new FormControl(PlaceEmpty(this.employeeModal.ExprienceInYear)),
       LastCompanyName: new FormControl(this.employeeModal.LastCompanyName),
       IsPermanent: new FormControl(this.employeeModal.IsPermanent),
-      AllocatedClientId: new FormControl(this.employeeModal.AllocatedClientId),
-      ActualPackage: new FormControl(this.employeeModal.ActualPackage, [Validators.required]),
-      FinalPackage: new FormControl(this.employeeModal.FinalPackage, [Validators.required]),
-      TakeHomeByCandidate: new FormControl(this.employeeModal.TakeHomeByCandidate, [Validators.required]),
       EmployeeUid: new FormControl(this.employeeModal.EmployeeUid),
       BranchName: new FormControl(this.employeeModal.BranchName),
-      AllocatedClientName: new FormControl(this.employeeModal.AllocatedClientName)
+      AllocatedClientName: new FormControl(this.employeeModal.AllocatedClientName),
+      ProfileImgPath: new FormControl(""),
+      AllocatedClientId: new FormControl("0"),
+      ActualPackage: new FormControl(null),
+      FinalPackage: new FormControl(null),
+      TakeHomeByCandidate: new FormControl(null),
+      AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
+    });
+  }
+
+  buildAlocatedClients(client: any, flag: boolean) {
+    return this.fb.group({
+      IsActive: new FormControl(true),
+      IsActiveRow: new FormControl(flag),
+      ClientUid: new FormControl(client.ClientUid),
+      ClientName: new FormControl(client.ClientName),
+      ActualPackage: new FormControl(client.ActualPackage),
+      FinalPackage: new FormControl(client.FinalPackage),
+      TakeHomeByCandidate: new FormControl(client.TakeHomeByCandidate),
+      EmployeeUid: new FormControl(this.employeeModal.EmployeeUid),
+      EmployeeMappedClientsUid: new FormControl(client.EmployeeMappedClientsUid),
+      IsPermanent: new FormControl(false),
     });
   }
 
@@ -164,14 +183,15 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ExprienceInYear: new FormControl(PlaceEmpty("")),
       LastCompanyName: new FormControl(""),
       IsPermanent: new FormControl(""),
-      AllocatedClientId: new FormControl(""),
-      ActualPackage: new FormControl(""),
-      FinalPackage: new FormControl(""),
-      TakeHomeByCandidate: new FormControl(""),
       EmployeeUid: new FormControl(""),
       BranchName: new FormControl(""),
-      AllocatedClientName: new FormControl("")
+      AllocatedClientName: new FormControl(""),
+      ProfileImgPath: new FormControl("")
     });
+  }
+
+  get allocatedClient(): FormArray {
+    return this.employeeForm.get ("AllocatedClients") as FormArray;
   }
 
   RegisterEmployee() {
@@ -202,18 +222,20 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.TakeHomeByCandidate = 0;
 
     if (errroCounter == 0) {
-      
+
       let formData = new FormData();
       formData.append("employeeDetail", JSON.stringify(this.employeeForm.value));
-      formData.append("allocatedClients", JSON.stringify(this.employeeForm.value));
+      formData.append("allocatedClients", JSON.stringify(this.employeeForm.value.AllocatedClients));
+      let file = null;
+      if(this.fileDetail.length > 0)
+        file = this.fileDetail[0].file;
+      formData.append("profileImage", file);
 
-      this.http.post("login/employeeregistration", this.employeeForm.value).then((response: ResponseModel) => {
-        if (response.ResponseBody !== null && response.ResponseBody !== "expired") {
+      this.http.post("login/employeeregistration", formData).then((response: ResponseModel) => {
+        if (response.ResponseBody) {
           Toast(response.ResponseBody);
         } else {
-          if (response.ResponseBody !== "expired") {
-            Toast("Your session got expired. Log in again.");
-          }
+          ErrorToast("Fail to insert or update.");
         }
 
         this.isLoading = false;
@@ -227,40 +249,87 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     }
   }
 
-  addDetail() {
-    if (this.employeeForm.get("AllocatedClientId").value > 0) {
-      this.activeClient.TakeHomeByCandidate = Number(this.employeeForm.get("TakeHomeByCandidate").value);
-      this.http.post(`employee/UpdateEmployeeDetail/${true}`, this.activeClient).then((response: ResponseModel) => {
-        if (response.ResponseBody && response.ResponseBody != {}) {
-          Toast("Updated Successfully");
-        } else {
-          ErrorToast("Fail to add");
-        }
-      });
-    } else {
-      ErrorToast("Please select client first");
+  addDetail(index: number) {
+    this.isAllocated = false;
+    let clientId = Number(this.employeeForm.get("AllocatedClientId").value);
+    if(isNaN(clientId) || clientId <= 0){
+      ErrorToast("Invalid client selected");
+      return;
     }
+
+    this.activeAssignedClient.ClientUid = clientId;
+    let actualPackage = Number(this.employeeForm.get("ActualPackage").value);
+    if(isNaN(actualPackage)){
+      ErrorToast("Invalid client selected");
+      return;
+    }
+
+    this.activeAssignedClient.ActualPackage = actualPackage;
+    let finalPackage = Number(this.employeeForm.get("FinalPackage").value);
+    if(isNaN(finalPackage)){
+      ErrorToast("Invalid client selected");
+      return;
+    }
+
+    this.activeAssignedClient.FinalPackage = finalPackage;
+    let takeHomeByCandidate = Number(this.employeeForm.get("TakeHomeByCandidate").value);
+    if(isNaN(takeHomeByCandidate)){
+      ErrorToast("Invalid client selected");
+      return;
+    }
+
+    this.activeAssignedClient.TakeHomeByCandidate = takeHomeByCandidate;
+    if(finalPackage < actualPackage) {
+      ErrorToast("Final package must be greater that or equal to Actual package.")
+      return;
+    }
+
+    if(actualPackage < takeHomeByCandidate) {
+      ErrorToast("Actual package must be greater that or equal to TakeHome package.")
+      return;
+    }
+
+    this.http.post(`employee/UpdateEmployeeDetail/${true}`, this.activeAssignedClient).then((response: ResponseModel) => {
+      if (response.ResponseBody.Table) {
+        this.allocatedClients = response.ResponseBody.Table;
+        if(this.allocatedClient.length > 0) {
+          let assignedClients: FormArray = this.employeeForm.get("AllocatedClients") as FormArray;
+          assignedClients.clear();
+          let apiClients: FormArray = this.fb.array(this.allocatedClients.map(x => this.buildAlocatedClients(x, (x.ClientUid == this.activeAssignedClient.ClientUid) ?? false)));
+          this.employeeForm.setControl("AllocatedClients", apiClients);
+        }
+        Toast("Organization added/updated successfully.");
+      } else {
+        ErrorToast("Fail to add");
+      }
+
+      this.isAllocated = true;
+    });
   }
 
-  bindCurrentClientDetail(clientId: number) {
-    if (clientId) {
-      this.activeClient = this.allocatedClients.find(x => x.ClientUid == clientId);
+  bindCurrentClientDetail(client: any) {
+    if (client) {
+      this.activeAssignedClient = client.value;
+      this.employeeForm.get("AllocatedClientId").setValue(this.activeAssignedClient.ClientUid);
+      this.employeeForm.get("ActualPackage").setValue(this.activeAssignedClient.ActualPackage);
+      this.employeeForm.get("FinalPackage").setValue(this.activeAssignedClient.FinalPackage);
+      this.employeeForm.get("TakeHomeByCandidate").setValue(this.activeAssignedClient.TakeHomeByCandidate);
       this.isUpdated = true;
 
-      if (this.activeClient) {
-        //this.currentClientId = clientId;
-        this.employeeForm.get("AllocatedClientId").setValue(clientId);
-        this.employeeForm.get("ActualPackage").setValue(this.activeClient.ActualPackage);
-        this.employeeForm.get("FinalPackage").setValue(this.activeClient.FinalPackage);
-        this.employeeForm.get("TakeHomeByCandidate").setValue(this.activeClient.TakeHomeByCandidate);
-        this.allocatedClients.map(item => item["IsActiveRow"] = 0);
-        this.activeClient.IsActiveRow = 1;
+      if (this.activeAssignedClient) {
+        let clientsDetail = this.employeeForm.get("AllocatedClients") as FormArray;
+        let i = 0;
+        while(i < clientsDetail.length) {
+          clientsDetail.controls[i].get("IsActiveRow").setValue(false);
+          i++;
+        };
+        client.get("IsActiveRow").setValue(true);
       }
     }
   }
 
   deleteCurrentClient(client: any) {
-    this.activeClient = client;
+    this.activeAssignedClient = client.value;
     $("#remoteClient").modal('show');
   }
 
@@ -270,11 +339,17 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   removeClient(){
     this.http.delete(`clients/DeactivateClient`, {
-      EmployeeUid:  this.activeClient.EmployeeUid,
-      EmployeeMappedClientsUid: this.activeClient.EmployeeMappedClientsUid
+      EmployeeUid:  this.activeAssignedClient.EmployeeUid,
+      EmployeeMappedClientsUid: this.activeAssignedClient.EmployeeMappedClientsUid
     }).then(response => {
       if(response.ResponseBody) {
         this.allocatedClients = response.ResponseBody.Table;
+        if(this.allocatedClient.length > 0) {
+          let assignedClients: FormArray = this.employeeForm.get("AllocatedClients") as FormArray;
+          assignedClients.clear();
+          let apiClients: FormArray = this.fb.array(this.allocatedClients.map(x => this.buildAlocatedClients(x, (x.ClientUid == this.activeAssignedClient.ClientUid) ?? false)));
+          this.employeeForm.setControl("AllocatedClients", apiClients);
+        }
         Toast("Client de-activated successfully.");
       } else {
         ErrorToast("Fail de-activated it. Please contact to admin.");
@@ -283,6 +358,43 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       $("#remoteClient").modal('hide');
     })
   }
+
+  fireBrowserFile() {
+    this.submitted = true;
+    $("#uploadocument").click();
+  }
+
+  uploadProfilePicture(event: any) {
+    if (event.target.files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.profileURL = event.target.result;
+      }
+      this.employeeForm.patchValue({
+        ProfileImgPath: event.target.result,
+      });
+      let selectedfile = event.target.files;
+      let file = <File>selectedfile[0];
+      this.fileDetail.push({
+        name: "profile",
+        file: file
+      });
+    }
+  }
+}
+
+export class AssignedClients {
+  IsActive: boolean = false;
+  IsActiveRow: boolean = false;
+  ClientUid: number = 0;
+  ClientName: string  = null;
+  ActualPackage: number = 0.0;
+  FinalPackage: number = 0.0;
+  TakeHomeByCandidate: number = 0.0;
+  EmployeeUid: number = 0;
+  EmployeeMappedClientsUid: number = 0;
+  IsPermanent: boolean = false;
 }
 
 export class EmployeeDetail {

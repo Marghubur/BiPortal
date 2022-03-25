@@ -182,21 +182,18 @@
                     <ng-container formArrayName="Employments">
                       <div class="col-md-12 ps-2" *ngFor="let item of employment.controls; let index = index;">
                         <div [formGroupName]="index" class="col-md-12 row">
-
                           <div class="col-md-6">
                             <div class="mb-3">
                               <label class="form-label">Organization </label>
                               <input class="form-control" placeholder="Organization name" (click)="editEmployment()"
                                 name="Organization" formControlName="Organization" />
                             </div>
-
                             <div class="mb-3">
                               <label class="form-label">Designation </label>
                               <input class="form-control" placeholder="Enter Designation" (click)="editEmployment()"
                                 name="Designation" formControlName="Designation" />
                             </div>
                           </div>
-
                           <div class="col-md-6">
                             <div class="mb-3">
                               <label class="form-label">Current Salary </label>
