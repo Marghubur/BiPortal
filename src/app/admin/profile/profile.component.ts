@@ -39,10 +39,31 @@ export class ManageComponent implements OnInit {
   isItskillEdit: boolean = false;
   deleteProjectDetail: any = null;
   isDeleted: boolean = false;
-
+  isEditWorkSample: boolean = false;
+  editItSkillModal: Skills;
+  currentItSkillOnEdit: FormGroup;
+  deleteSkillDetail: any = null;
+  isDeletedSkill: boolean = false;
   editProjectModal: Project;
   currentProjectOnEdit: FormGroup;
   isEditProject: boolean = false;
+  isEditOnlineProfile: boolean = false;
+  isEditCertification: boolean = false;
+  isDeletedProfile: boolean = false;
+  isDeletedCertification: boolean = false;
+  isDeletedCWorkSample: boolean = false;
+  isEditResearch: boolean = false;
+  deletResearchValue: any = null;
+  isDeletedResearch: boolean = false;
+  isEditPresentation: boolean = false;
+  isDeletedPresentation: boolean = false;
+  isEditPatent: boolean = false;
+  isDeletedPatent: boolean = false;
+  isEditItSkill: boolean = false;
+  siteURL: string = null;
+  siteURLForm: FormGroup;
+  isSiteURLUpdate: boolean = false;
+
 
   section: any = {
     isKeySkillEdit: false,
@@ -61,15 +82,6 @@ export class ManageComponent implements OnInit {
     isCertificationEdit: false,
     isProfileEdit: false
   };
-  isKeySkillSubmit: boolean = false;
-  isEmployeeSubmit: boolean = false;
-  isEducationSubmit: boolean = false;
-  isITSkillSubmit: boolean = false;
-  isProjectSubmit: boolean = false;
-  isCarrerProfileSubmit: boolean = false;
-  isPersonalDetailSubmit: boolean = false;
-  isProfileSubmit: boolean = false;
-  isAcomplishmentSubmit: boolean = false;
   profileURL: string = "assets/images/faces/face1.jpg";
 
   manageUserForm: FormGroup;
@@ -240,15 +252,19 @@ export class ManageComponent implements OnInit {
   }
 
   addOrUpdateProject() {
-      this.currentProjectOnEdit.get("ProjectTitle").setValue(this.editProjectModal.ProjectTitle);
-      this.currentProjectOnEdit.get("ProjectDuration").setValue(this.editProjectModal.ProjectDuration);
-      this.currentProjectOnEdit.get("TechnalogyStack").setValue(this.editProjectModal.TechnalogyStack);
-      this.currentProjectOnEdit.get("ClientName").setValue(this.editProjectModal.ClientName);
-      this.currentProjectOnEdit.get("ProjectStatus").setValue(this.editProjectModal.ProjectStatus);
-      this.currentProjectOnEdit.get("RolesResponsibility").setValue(this.editProjectModal.RolesResponsibility);
-      this.currentProjectOnEdit.get("ProjectDetails").setValue(this.editProjectModal.ProjectDetails);
-      this.submitProjectDetail();
-    this.closeModal();
+    if (this.editProjectModal.ProjectTitle =='' && this.editProjectModal.ProjectDetails == '')
+      return ErrorToast("Plesae enter project title and project description")
+    this.isLoading = true;
+    this.currentProjectOnEdit.get("ProjectTitle").setValue(this.editProjectModal.ProjectTitle);
+    this.currentProjectOnEdit.get("ProjectDuration").setValue(this.editProjectModal.ProjectDuration);
+    this.currentProjectOnEdit.get("TechnalogyStack").setValue(this.editProjectModal.TechnalogyStack);
+    this.currentProjectOnEdit.get("ClientName").setValue(this.editProjectModal.ClientName);
+    this.currentProjectOnEdit.get("ProjectStatus").setValue(this.editProjectModal.ProjectStatus);
+    this.currentProjectOnEdit.get("RolesResponsibility").setValue(this.editProjectModal.RolesResponsibility);
+    this.currentProjectOnEdit.get("ProjectDetails").setValue(this.editProjectModal.ProjectDetails);
+    this.submitProjectDetail();
+    this.isLoading = false;
+    $("#editProjectModal").modal('hide');
   }
 
   get projects() {
@@ -272,34 +288,37 @@ export class ManageComponent implements OnInit {
   }
 
   deleteProject() {
+    this.isLoading = true;
     let projectValue = this.deleteProjectDetail;
     let project = this.projectsForm.get('Projects') as FormArray;
     project.removeAt(project.value.findIndex(item => item.ProjectIndex == projectValue.ProjectIndex));
     this.userModal.Projects = project.value;
     this.updateProfile();
-    this.closeModal();
+    this.isLoading = false;
+    $("#deleteProjectMOdal").modal("hide")
   }
 
-
-
-
-
+  closeProjectModal() {
+    let value = this.editProjectModal;
+    let project = this.projectsForm.get('Projects') as FormArray;
+    project.removeAt(project.value.findIndex(item => item.ProjectIndex == value.ProjectIndex));
+    this.userModal.Skills = project.value;
+    $("#editProjectModal").modal("hide");
+  }
   //----------------- Projects END'S ------------------------
-
-
-
 
 
   //----------------- technical skills form, group and add new ------------------------
 
   buildSkillsForm() {
     this.skillsForm = this.fb.group({
-      TechnicalSkills: this.fb.array(this.userModal.Skills.map(item => this.createTechnicalSkillsGroup(item)))
+      TechnicalSkills: this.fb.array(this.userModal.Skills.map((item, index) => this.createTechnicalSkillsGroup(item, index)))
     })
   }
 
-  createTechnicalSkillsGroup(skill: Skills) {
+  createTechnicalSkillsGroup(skill: Skills, index: number) {
     return this.fb.group({
+      SkillIndex: new FormControl(index),
       Language: new FormControl(skill.Language),
       Version: new FormControl(skill.Version),
       LastUsed: new FormControl(skill.LastUsed),
@@ -308,16 +327,66 @@ export class ManageComponent implements OnInit {
     })
   }
 
-  addItskill() {
-    let NewSkill = new Skills();
-    let skills = this.skillsForm.get("TechnicalSkills") as FormArray;
-    skills.push(this.createTechnicalSkillsGroup(NewSkill));
-  }
-
   get skills(): FormArray {
     return this.skillsForm.get("TechnicalSkills") as FormArray;
   }
 
+  editItSkillDetail(current: FormGroup) {
+    this.currentItSkillOnEdit = current;
+    this.editItSkillModal = current.value as Skills;
+    $("#itSkillModal").modal('show');
+    this.isEditItSkill = true;
+  }
+
+  addOrUpdateItSkill() {
+    if (this.editItSkillModal.Language == '')
+      return ErrorToast("Please enter language");
+    this.isLoading = true;
+    this.currentItSkillOnEdit.get("Language").setValue(this.editItSkillModal.Language);
+    this.currentItSkillOnEdit.get("Version").setValue(this.editItSkillModal.Version);
+    this.currentItSkillOnEdit.get("ExperienceInMonth").setValue(this.editItSkillModal.ExperienceInMonth);
+    this.currentItSkillOnEdit.get("ExperienceInYear").setValue(this.editItSkillModal.ExperienceInYear);
+    this.currentItSkillOnEdit.get("LastUsed").setValue(this.editItSkillModal.LastUsed);
+    this.currentItSkillOnEdit.get("Version").setValue(this.editItSkillModal.Version);
+    this.submitSkillDetail();
+    this.isLoading = false;
+    $("#itSkillModal").modal('hide');
+  }
+
+  addItskill() {
+    let newSkill = new Skills();
+    let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
+    this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
+    skill.push(this.currentItSkillOnEdit);
+    this.editItSkillModal = this.currentItSkillOnEdit.value as Skills;
+    $("#itSkillModal").modal("show");
+    this.isEditItSkill = true;
+  }
+
+  deleteSkillPopup(e: any) {
+    this.isDeletedSkill = true;
+    $("#deleteSkillModal").modal("show")
+    this.deleteSkillDetail = e.value;
+  }
+
+  deleteItSkill() {
+    this.isLoading = true;
+    let skillValue = this.deleteSkillDetail;
+    let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
+    skill.removeAt(skill.value.findIndex(item => item.SkillIndex == skillValue.SkillIndex));
+    this.userModal.Skills = skill.value;
+    this.updateProfile();
+    this.isLoading = false;
+    this.closeModal();
+  }
+
+  closeSkillModal() {
+    let value = this.editItSkillModal;
+    let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
+    skill.removeAt(skill.value.findIndex(item => item.SkillIndex == value.SkillIndex));
+    this.userModal.Skills = skill.value;
+    $("#itSkillModal").modal("hide");
+  }
   //----------------- technical skills END'S ------------------------
 
 
@@ -333,7 +402,7 @@ export class ManageComponent implements OnInit {
           Researchs: this.fb.array(this.userModal.Accomplishments.Research.map(item => this.buildResearchs(item))),
           Presentations: this.fb.array(this.userModal.Accomplishments.Presentation.map(item => this.buildPresentations(item))),
           Patents: this.fb.array(this.userModal.Accomplishments.Patent.map(item => this.buildPatents(item))),
-          Certifications: this.fb.array(this.userModal.Accomplishments.Certification.map(item => this.buildCertifications(item)))
+          Certifications: this.fb.array(this.userModal.Accomplishments.Certification.map((item, index) => this.buildCertifications(item)))
         })
       } else {
         this.accomplishmentsForm = this.fb.group({
@@ -350,63 +419,339 @@ export class ManageComponent implements OnInit {
 
     buildOnlieProfiles(value: string) {
       return this.fb.group({
-        OnlineProfileUrl: new FormControl(value)
+        OnlineProfile: new FormControl(value)
       });
     }
 
     buildWorkSamples(value: string) {
       return this.fb.group({
-        WorkSampleUrl: new FormControl(value)
+        WorkSample: new FormControl(value)
       });
     }
 
     buildResearchs(value: string) {
       return this.fb.group({
-        ResearchUrl: new FormControl(value)
+        Research: new FormControl(value)
       });
     }
 
     buildPresentations(value: string) {
       return this.fb.group({
-        PresentationUrl: new FormControl(value)
+        Presentation: new FormControl(value)
       });
     }
 
     buildPatents(value: string) {
       return this.fb.group({
-        PatentUrl: new FormControl(value)
+        Patent: new FormControl(value)
       });
     }
 
     buildCertifications(value: string) {
       return this.fb.group({
-        CertificationUrl: new FormControl(value)
+        Certification: new FormControl(value)
       });
     }
 
-
     addOnlieProfiles() {
-      this.onlieProfiles.push(this.buildOnlieProfiles(''));
+      this.siteURL = "";
+      this.isSiteURLUpdate = false;
+      $("#onlineProfileModal").modal("show");
+      this.isEditOnlineProfile = true;
     }
 
-    addWorkSamples() {
-      this.workSamples.push(this.buildWorkSamples(''));
+    submitOnlineProfile() {
+      if (this.siteURL != '') {
+        this.isLoading = true;
+        let onlineProfile = this.accomplishmentsForm.get("OnlineProfiles") as FormArray;
+        this.siteURLForm = this.buildOnlieProfiles(this.siteURL);
+        onlineProfile.push(this.siteURLForm);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+      } else {
+        return ErrorToast("Please enter online profile")
+      }
     }
 
-    addResearchs() {
-      this.researchs.push(this.buildResearchs(''));
+    updateOnlineProfile() {
+      this.isLoading = true;
+      this.siteURLForm.get("OnlineProfile").setValue(this.siteURL);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+      this.isSiteURLUpdate = false;
     }
 
-    addPresentations() {
-      this.presentations.push(this.buildPresentations(''));
+    editOnlineProfile(current: FormGroup) {
+      this.isSiteURLUpdate = true;
+      this.siteURLForm = current;
+      this.siteURL = current.value.OnlineProfile;
+      $("#onlineProfileModal").modal("show");
+      this.isEditOnlineProfile = true;
     }
 
-    addPatents() {
-      this.patents.push(this.buildPatents(''));
+
+    deleteOnlineProfilePopup(e: any) {
+      this.isDeletedProfile = true;
+      $("#deleteOnlineProfileModal").modal("show")
+      this.siteURL = e.value.OnlineProfile;
+    }
+
+    deleteOnlineProfile() {
+      this.isLoading = true;
+      let profile = this.accomplishmentsForm.get("OnlineProfiles") as FormArray;
+      profile.removeAt(profile.value.findIndex(item => item.OnlineProfile == this.siteURL));
+      this.userModal.Accomplishments.OnlineProfile = profile.value.map(item => item.OnlineProfile);
+      this.updateProfile();
+      this.isLoading = false;
+      this.closeModal();
     }
 
     addCertifications() {
-      this.certifications.push(this.buildCertifications(''));
+      this.siteURL = '';
+      this.isSiteURLUpdate = false;
+      $("#certificationModal").modal("show");
+      this.isEditCertification = true;
+    }
+
+    editCertification(current: FormGroup) {
+      this.isSiteURLUpdate = true;
+      this.siteURLForm = current;
+      this.siteURL = current.value.Certification;
+      $("#certificationModal").modal("show");
+      this.isEditCertification = true;
+    }
+
+    submitCertification() {
+      if (this.siteURL == '')
+      return ErrorToast("Please enter certification")
+      this.isLoading = true;
+      let certification = this.accomplishmentsForm.get("Certifications") as FormArray;
+      this.siteURLForm = this.buildCertifications(this.siteURL);
+      certification.push(this.siteURLForm);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+    }
+
+    updateCertification() {
+      this.isLoading = true;
+      this.siteURLForm.get("Certification").setValue(this.siteURL);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+      this.isSiteURLUpdate = false;
+    }
+
+    deleteCertificationPopup(e: any) {
+      this.isDeletedCertification = true;
+      $("#deleteCertificationModal").modal("show")
+      this.siteURL = e.value.Certification;
+    }
+
+    deleteCertification() {
+      this.isLoading = true;
+      let certification = this.accomplishmentsForm.get("Certifications") as FormArray;
+      certification.removeAt(certification.value.findIndex(item => item.Certification == this.siteURL));
+      this.userModal.Accomplishments.Certification = certification.value.map(item => item.Certification);
+      this.updateProfile();
+      this.isLoading = false;
+      this.closeModal();
+    }
+
+    addWorkSamples() {
+      this.siteURL = '';
+      this.isSiteURLUpdate = false;
+      $("#workSampleModal").modal("show");
+      this.isEditWorkSample = true;
+    }
+
+    editWorkSample(current: FormGroup) {
+      this.isSiteURLUpdate = true;
+      this.siteURLForm = current;
+      this.siteURL = current.value.WorkSample;
+      $("#workSampleModal").modal("show");
+      this.isEditWorkSample = true;
+    }
+
+    deleteWorkSamplePopup(e: any) {
+      this.isDeletedCWorkSample = true;
+      $("#deleteWorkSampleModal").modal("show")
+      this.siteURL = e.value.WorkSample;
+    }
+
+    deleteWorkSample() {
+      this.isLoading = true;
+      let workSample = this.accomplishmentsForm.get("WorkSamples") as FormArray;
+      workSample.removeAt(workSample.value.findIndex(item => item.WorkSample == this.siteURL));
+      this.userModal.Accomplishments.WorkSample = workSample.value.map(item => item.WorkSample);
+      this.updateProfile();
+      this.isLoading = false;
+      this.closeModal();
+    }
+
+    submitWorkSample() {
+      this.isLoading = true;
+      let workSample = this.accomplishmentsForm.get("WorkSamples") as FormArray;
+      this.siteURLForm = this.buildWorkSamples(this.siteURL);
+      workSample.push(this.siteURLForm);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+    }
+
+    updateWorkSample() {
+      this.isLoading = true;
+      this.siteURLForm.get("WorkSample").setValue(this.siteURL);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+      this.isSiteURLUpdate = false;
+    }
+
+    addResearchs() {
+      this.siteURL = '';
+      this.isSiteURLUpdate = false;
+      $("#researchModal").modal("show");
+      this.isEditResearch = true;
+    }
+
+    editResaerch(current: FormGroup) {
+      this.isSiteURLUpdate = true;
+      this.siteURLForm = current;
+      this.siteURL = current.value.Research;
+      $("#researchModal").modal("show");
+      this.isEditResearch = true;
+    }
+
+    deleteResearchPopup(e: any) {
+      this.isDeletedResearch = true;
+      $("#deleteResearchModal").modal("show")
+      this.siteURL = e.value.Research;
+    }
+
+    deleteResearch() {
+      this.isLoading = true;
+      let research = this.accomplishmentsForm.get("Researchs") as FormArray;
+      research.removeAt(research.value.findIndex(item => item.Research == this.siteURL));
+      this.userModal.Accomplishments.Research = research.value.map(item => item.Research);
+      this.updateProfile();
+      this.isLoading = false;
+      this.closeModal();
+    }
+
+    submitResearch() {
+      if (this.siteURL == '')
+        return ErrorToast("Please enter research/ journal")
+      this.isLoading = true;
+      let research = this.accomplishmentsForm.get("Researchs") as FormArray;
+      this.siteURLForm = this.buildResearchs(this.siteURL);
+      research.push(this.siteURLForm);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+    }
+
+    updateResearch() {
+      this.isLoading = true;
+      this.siteURLForm.get("Research").setValue(this.siteURL);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+      this.isSiteURLUpdate = false;
+    }
+
+    addPresentations() {
+      this.siteURL = '';
+      this.isSiteURLUpdate = false;
+      $("#presentationModal").modal("show");
+      this.isEditPresentation = true;
+    }
+
+    editPresentation(current: FormGroup) {
+      this.isSiteURLUpdate = true;
+      this.siteURLForm = current;
+      this.siteURL = current.value.Presentation;
+      $("#presentationModal").modal("show");
+      this.isEditPresentation = true;
+    }
+
+    deletePresentationPopup(e: any) {
+      this.isDeletedPresentation = true;
+      $("#deletePresentationModal").modal("show")
+      this.siteURL = e.value.Presentation;
+    }
+
+    deletePresentation() {
+      this.isLoading = true;
+      let presentation = this.accomplishmentsForm.get("Presentations") as FormArray;
+      presentation.removeAt(presentation.value.findIndex(item => item.Presentation == this.siteURL));
+      this.userModal.Accomplishments.Presentation = presentation.value.map(item => item.Presentation);
+      this.updateProfile();
+      this.isLoading = false;
+      this.closeModal();
+    }
+
+    submitPresentation() {
+      if (this.siteURL == '')
+        return ErrorToast("Please enter presentation")
+        this.isLoading = true;
+      let presentation = this.accomplishmentsForm.get("Presentations") as FormArray;
+      this.siteURLForm = this.buildPresentations(this.siteURL);
+      presentation.push(this.siteURLForm);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+    }
+
+    updatePresentation() {
+      this.isLoading = true;
+      this.siteURLForm.get("Presentation").setValue(this.siteURL);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+      this.isSiteURLUpdate = false;
+    }
+
+    addPatents() {
+      this.siteURL = '';
+      this.isSiteURLUpdate = false;
+      $("#patentModal").modal("show");
+      this.isEditPatent = true;
+    }
+
+    editPatent(current: FormGroup) {
+      this.isSiteURLUpdate = true;
+      this.siteURLForm = current;
+      this.siteURL = current.value.Patent;
+      $("#patentModal").modal("show");
+      this.isEditPatent = true;
+    }
+
+    deletePatentPopup(e: any) {
+      this.isDeletedPatent = true;
+      $("#deletePatentModal").modal("show")
+      this.siteURL = e.value.Patent;
+    }
+
+    deletePatent() {
+      this.isLoading = true;
+      let patent = this.accomplishmentsForm.get("Patents") as FormArray;
+      patent.removeAt(patent.value.findIndex(item => item.Patent == this.siteURL));
+      this.userModal.Accomplishments.Patent = patent.value.map(item => item.Patent);
+      this.updateProfile();
+      this.isLoading = false;
+      this.closeModal();
+    }
+
+    submitPatent() {
+      if (this.siteURL == '')
+        return ErrorToast("Please enter patent")
+      this.isLoading = true;
+      let patent = this.accomplishmentsForm.get("Patents") as FormArray;
+      this.siteURLForm = this.buildPatents(this.siteURL);
+      patent.push(this.siteURLForm);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+    }
+
+    updatePatent() {
+      this.isLoading = true;
+      this.siteURLForm.get("Patent").setValue(this.siteURL);
+      this.submitAccomplishmentDetail();
+      this.isLoading = false;
+      this.isSiteURLUpdate = false;
     }
 
     get onlieProfiles(): FormArray {
@@ -432,64 +777,7 @@ export class ManageComponent implements OnInit {
     get certifications(): FormArray {
       return this.accomplishmentsForm.get("Certifications") as FormArray;
     }
-
-    editPresentation() {
-      //this.section.isPresentationEdit = !this.section.isPresentationEdit;
-      $("#presentationModal").modal("show");
-    }
-
-    addNewPresentations() {
-      this.addPresentations();
-      this.editPresentation();
-    }
-
-    addNewOnlieProfiles() {
-      this.addOnlieProfiles();
-      this.editOnlineProfile();
-    }
-
-    addNewWorkSamples() {
-      this.addWorkSamples();
-      this.editWorkSample();
-    }
-
-    addNewResearchs() {
-      this.addResearchs();
-      this.editResaerch();
-    }
-
-    addNewPatents() {
-      this.addPatents();
-      this.editPatent();
-    }
-
-    addNewCertifications() {
-      this.addCertifications();
-      this.editCertification();
-    }
-
-    editOnlineProfile() {
-      $("#onlineProfileModal").modal("show");
-    }
-
-    editResaerch() {
-      $("#resarchModal").modal("show");
-    }
-
-    editWorkSample() {
-      $("#workSampleModal").modal("show");
-    }
-
-    editPatent() {
-      $("#researchModal").modal("show");
-    }
-
-    editCertification() {
-      $("#researchModal").modal("show");
-    }
-  //----------------- technical skills END'S ------------------------
-
-
+  //----------------- Accomplishment skills END'S ------------------------
 
 
   //----------------- Education form, group and add new ------------------------
@@ -631,24 +919,30 @@ export class ManageComponent implements OnInit {
   }
 
   submitPersonalDetails() {
+    this.isLoading = true;
     let userDetails = this.personalDetailForm.value;
     let languages = this.personalDetailForm.controls['Languages'].value;
     this.userModal.PersonalDetail = userDetails;
     this.updateProfile();
+    this.isLoading = false;
   }
 
   submitEmploymentDetail() {
+    this.isLoading = true;
     let employment = this.employmentForm.get("Employments").value;
     if(employment.length > 0) {
       this.userModal.Employments = employment;
     }
     this.updateProfile();
+    this.isLoading = false;
   }
 
   submitEducationDetail() {
+    this.isLoading = true;
     let educations = this.educationForm.controls['Educations'].value;
     this.userModal.Educational_Detail = educations;
     this.updateProfile();
+    this.isLoading = false;
   }
 
   submitSkillDetail() {
@@ -671,13 +965,12 @@ export class ManageComponent implements OnInit {
     let researches = this.accomplishmentsForm.controls['Researchs'].value;
     let workSamples = this.accomplishmentsForm.controls['WorkSamples'].value;
     this.userModal.Accomplishments = {
-      OnlineProfile: onlineProfiles.map(item => item.OnlineProfileUrl),
-      Certification: certifications.map(item => item.CertificationUrl),
-      Patent: patents.map(item => item.PatentUrl),
-      Presentation: presentations.map(item => item.PresentationUrl),
-      Research: researches.map(item => item.ResearchUrl),
-      WorkSample: workSamples.map(item => item.WorkSampleUrl),
-      //ProfileSummary: []
+      OnlineProfile: onlineProfiles.map(item => item.OnlineProfile),
+      Certification: certifications.map(item => item.Certification),
+      Patent: patents.map(item => item.Patent),
+      Presentation: presentations.map(item => item.Presentation),
+      Research: researches.map(item => item.Research),
+      WorkSample: workSamples.map(item => item.WorkSample),
     }
 
     this.updateProfile();
@@ -685,13 +978,15 @@ export class ManageComponent implements OnInit {
   }
 
   submitCarrerProfileDetail(){
+    this.isLoading = true;
     let carrerProfiles = this.carrerProfileForm.controls['CarrerProfile'].value;
     this.userModal.Companies = carrerProfiles;
     this.updateProfile();
+    this.isLoading = false;
   }
 
   UpdateUser() {
-    this.isLoading = true;
+   this.isLoading = true;
     this.submitted = true;
     let errroCounter = 0;
 
@@ -837,11 +1132,6 @@ export class ManageComponent implements OnInit {
     this.section.isProfileEdit = !this.section.isProfileEdit;
   }
 
-  editDetail(e: any) {
-    $("#itSkillModal").modal('show');
-    let singleSkill = e.value;
-  }
-
   closeModal() {
     $("#itSkillModal").modal('hide');
     $("#editProjectModal").modal('hide');
@@ -851,16 +1141,21 @@ export class ManageComponent implements OnInit {
     $("#presentationModal").modal("hide");
     $("#researchModal").modal("hide");
     $("#certificationModal").modal("hide");
-    $("#deleteProjectMOdal").modal("hide")
+    $("#deleteProjectMOdal").modal("hide");
+    $("#deleteOnlineProfileModal").modal("hide");
+    $("#deleteCertificationModal").modal("hide");
+    $("#deleteWorkSampleModal").modal("hide");
+    $("#deletePresentationModal").modal("hide");
+    $("#deleteResearchModal").modal("hide");
+    $("#patentModal").modal("hide");
+    $("#deletePatentModal").modal("hide");
+    $("#deleteSkillModal").modal("hide");
   }
 
   cleanFileHandler() {
-    // this.btnDisable = true;
-    // this.fileAvailable = false;
     this.uploading = false;
     $("#uploadocument").val("");
     this.isLargeFile = false;
-    // this.FilesCollection = [];
   }
 
   addNewItskill() {
@@ -1026,6 +1321,7 @@ class Skills {
   LastUsed: Date = null;
   ExperienceInYear: number = 0;
   ExperienceInMonth: number = 0;
+  SkillIndex: number = 0;
 }
 
 class Project {
@@ -1045,7 +1341,6 @@ class Project {
 }
 
 class Accomplishment {
-  //ProfileSummary: Array<string> = [];
   OnlineProfile: Array<string> = [];
   WorkSample: Array<string> = [];
   Research: Array<string> = [];
