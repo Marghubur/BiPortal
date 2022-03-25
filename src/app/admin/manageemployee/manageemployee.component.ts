@@ -4,6 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, PlaceEmpty, Toast } from 'src/providers/common-service/common.service';
+import { UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -35,9 +36,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   assignedActiveClientUid: number = 0;
   idReady: boolean = false;
   currentClientId: number = 0;
-  isCreated: boolean = false;
   isUpdated: boolean = false;
   activeClient: any = null;
+  profileURL: string = UserImage;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -78,26 +79,17 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         if (res.ResponseBody.Employee.length > 0)
           this.employeeModal = res.ResponseBody.Employee[0] as EmployeeDetail;
         this.allocatedClients = res.ResponseBody.AllocatedClients;
-        if (this.isCreated = true) {
-          this.employeeModal.ActualPackage = 0;
-          this.employeeModal.FinalPackage = 0;
-          this.employeeModal.TakeHomeByCandidate = 0;
-          this.employeeModal.AllocatedClientId = 0;
-        }
-        if (this.isCreated = false) {
-          if (this.allocatedClients != null && this.allocatedClients.length > 0) {
-            this.allocatedClients.map(item => item["IsActiveRow"] = 0);
-            let mappedClient = this.allocatedClients[0];
-            this.employeeModal.FinalPackage = mappedClient.FinalPackage;
-            this.employeeModal.ActualPackage = mappedClient.ActualPackage;
-            this.employeeModal.TakeHomeByCandidate = mappedClient.TakeHomeByCandidate;
-            this.employeeModal.AllocatedClientId = mappedClient.ClientUid;
-            this.assignedActiveClientUid = mappedClient.ClientUid;
-            this.isCreated = true;
-          }
-        }
-        if (this.allocatedClients.length > 0)
+        if(this.allocatedClients.length > 0) {
+          this.allocatedClients.map((item, index) => {
+            if(index == 0) {
+              this.activeClient = item;
+              item["IsActiveRow"] = 1;
+             } else {
+              item["IsActiveRow"] = 0;
+             }
+          });
           this.isAllocated = true;
+        }
       }
       this.bindForm();
       this.idReady = true;
@@ -210,6 +202,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.TakeHomeByCandidate = 0;
 
     if (errroCounter == 0) {
+      
+      let formData = new FormData();
+      formData.append("employeeDetail", JSON.stringify(this.employeeForm.value));
+      formData.append("allocatedClients", JSON.stringify(this.employeeForm.value));
+
       this.http.post("login/employeeregistration", this.employeeForm.value).then((response: ResponseModel) => {
         if (response.ResponseBody !== null && response.ResponseBody !== "expired") {
           Toast(response.ResponseBody);
@@ -248,7 +245,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   bindCurrentClientDetail(clientId: number) {
     if (clientId) {
       this.activeClient = this.allocatedClients.find(x => x.ClientUid == clientId);
-      this.isCreated = false;
       this.isUpdated = true;
 
       if (this.activeClient) {
