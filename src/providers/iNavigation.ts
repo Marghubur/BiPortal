@@ -11,12 +11,17 @@ export class iNavigation {
 
   constructor(private route: Router, private common: CommonService) {
     this.pageRoute = new PageRouteDetail();
-    console.log("Loaded...");
+    if (sessionStorage.getItem(NAVPARAMNAME)) {
+      this.IsNavigated = true;
+        this.pageRoute = JSON.parse(sessionStorage.getItem(NAVPARAMNAME));
+    }
   }
 
   public pushRoute(route: string, value: string = null, filter: Filter = null) {
-    if(this.IsNavigated)
+    if(this.IsNavigated) {
+      this.IsNavigated = false;
       return;
+    }
 
     if(this.pageRoute.PageName === route) {
       let elem = this.pageRoute.RouteDetail.find(x => x.Key === route);
@@ -26,7 +31,7 @@ export class iNavigation {
         this.pageRoute.RouteDetail.push({
           Key: route,
           Value: value,
-          Page1Query: filter
+          PageQuery: filter
         });
       }
     } else {
@@ -35,23 +40,27 @@ export class iNavigation {
       this.pageRoute.RouteDetail.push({
         Key: route,
         Value: value,
-        Page1Query: filter
+        PageQuery: filter
       });
     }
 
     this.IsNavigated = false;
+    sessionStorage.setItem(NAVPARAMNAME, JSON.stringify(this.pageRoute));
   }
 
-  public pushNavRoute(route: string, value: string = null) {
+  public pushNavRoute(route: string, value: string = null, filter: Filter = null) {
     let elem = this.pageRoute.RouteDetail.find(x => x.Key === route);
     if(elem) {
       this.popRoutes(route);
     } else {
       this.pageRoute.RouteDetail.push({
         Key: route,
-        Value: value
+        Value: value,
+        PageQuery: filter
       });
     }
+
+    sessionStorage.setItem(NAVPARAMNAME, JSON.stringify(this.pageRoute));
   }
 
   public popRoutes(route: string) {
@@ -79,27 +88,30 @@ export class iNavigation {
 
   public navigate(Path: string, Parameter: any, filterObject: any = null) {
     if (Path !== null) {
-      if (Parameter !== null && Parameter !== "") {
-        localStorage.setItem(Path, JSON.stringify(Parameter));
-        this.manageLocalSessionKey(Path);
-        localStorage.setItem(NAVPARAMNAME, Path);
-      }
+      // if (Parameter !== null && Parameter !== "") {
+      //   localStorage.setItem(Path, JSON.stringify(Parameter));
+      //   this.manageLocalSessionKey(Path);
+      //   localStorage.setItem(NAVPARAMNAME, Path);
+      // }
 
       this.IsNavigated = true;
-      this.pushNavRoute(Path, filterObject);
+      this.pushNavRoute(Path, Parameter, filterObject);
       this.route.navigate(["/" + Path, ]);
     } else {
       Toast("Invalid component path passed.");
     }
   }
 
-  public navigateWithArgs(Path: string, args: string, Parameter: any = null) {
+  public navigateWithArgs(Path: string, args: string, Parameter: any = null, filterObject: any = null) {
     if (Path !== null) {
-      if (Parameter !== null && Parameter !== "") {
-        localStorage.setItem(Path, JSON.stringify(Parameter));
-        this.manageLocalSessionKey(Path);
-        localStorage.setItem(NAVPARAMNAME, Path);
-      }
+      // if (Parameter !== null && Parameter !== "") {
+      //   localStorage.setItem(Path, JSON.stringify(Parameter));
+      //   this.manageLocalSessionKey(Path);
+      //   localStorage.setItem(NAVPARAMNAME, Path);
+      // }
+
+      this.IsNavigated = true;
+      this.pushNavRoute(Path, Parameter, filterObject);
       this.route.navigate(["/" + Path], { queryParams: { path: args } });
     } else {
       Toast("Invalid component path passed.");
@@ -119,10 +131,12 @@ export class iNavigation {
   public getValue(): any {
     let ParsedData = null;
     let path = this.common.GetCurrentPageName().split("?");
-    let Data: any = localStorage.getItem(path[0]);
+    let Data: any = sessionStorage.getItem(NAVPARAMNAME);
     if (Data && Data !== "") {
       try {
-        ParsedData = JSON.parse(Data);
+        this.pageRoute = JSON.parse(Data);
+        let len = this.pageRoute.RouteDetail.length;
+        ParsedData = this.pageRoute.RouteDetail[len - 1].Value;
       } catch (e) {
         console.log(JSON.stringify(e));
         Toast("Unable to get route data. Please contact admin.");
