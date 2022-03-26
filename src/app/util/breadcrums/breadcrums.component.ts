@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
   selector: 'app-breadcrums',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./breadcrums.component.scss']
 })
 export class BreadcrumsComponent implements OnInit {
-
-  constructor() { }
+  routePath: Array<any> = [];
+  constructor(private nav: iNavigation) { }
 
   ngOnInit(): void {
+    let value = this.nav.getRouteList();
+    let i = 0;
+    while(i < value.length) {
+      this.routePath.push(value[i].Key.replace("admin/", ""));
+      i++;
+    }
   }
-
 }

@@ -19,7 +19,6 @@ import { PageCache } from 'src/providers/PageCache';
 })
 export class AppComponent implements OnInit {
   title = "star-admin-angular";
-  enableAuth: boolean = false;
   pageName: string = "";
   activePage:number = 0;
 
@@ -28,40 +27,26 @@ export class AppComponent implements OnInit {
   }
 
   constructor(
-    private tokenHelper: JwtService,
     private router: Router,
     private commonService: CommonService,
-    private auto: AutoPlayService,
-    private http: AjaxService,
     private nav: iNavigation,
-    private cache: PageCache
   ) {
     this.GetScreenHeight();
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
         this.pageName = event.url.replace("/", "")
-        this.commonService.ShowLoader();
         this.commonService.SetCurrentPageName(this.pageName);
         this.nav.manageLocalSessionKey(this.pageName);
-        switch (event.url) {
-          case "/login":
-            this.enableAuth = true;
-            break;
-          default:
-            this.enableAuth = false;
-            break;
-        }
+        this.nav.pushRoute(this.pageName);
       }
     });
   }
 
   doAuthentication() {
-    this.enableAuth = true;
     this.nav.navigate(Login, null);
   }
 
   ngOnInit() {
-    this.enableAuth = false;
   }
 
   RemovePopup() {
