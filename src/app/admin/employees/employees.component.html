@@ -89,7 +89,7 @@
             <tr *ngFor="let user of employeeDetail">
               <td>{{user.EmployeeUid}}</td>
               <td>
-                <a (click)="ViewFiles(user)">{{user.FirstName}} {{user.LastName}}</a>
+                <a (click)="EditCurrent(user)">{{user.FirstName}} {{user.LastName}}</a>
                 <div class="float-end">
                   <a><span class="badge bg-primary fa fa-building-o"> &nbsp; 5</span></a>
                   <a class="ms-3" (click)="goToAttendancePage(user)">
@@ -106,8 +106,8 @@
               <td>
                 <div class="d-flex flex-row justify-content-evenly">
                   <a href="javascript:void(0)">
-                    <span class="badge bg-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"
-                        (click)="EditCurrent(user)"></i></span>
+                    <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"
+                        (click)="ViewFiles(user)"></i></span>
                   </a>
                   <a href="javascript:void(0)">
                     <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"

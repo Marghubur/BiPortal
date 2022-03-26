@@ -10,7 +10,7 @@
                 <div class="x_content mt-2 p-0">
                   <div class="col-12 row m-0 p-0 pt-3">
                     <div class="float-end">
-                      <button href="javascript:void(0)" class="float-end text-decoration-none" [disabled]="isLoading"
+                      <button class="float-end btn btn-outline-success" [disabled]="isLoading"
                         (click)="submitManageUserForm()"><i [ngClass]="{'fa fa-spinner fa-spin': isLoading}"></i>
                         {{ isLoading ? 'Wait' : 'Save' }}</button>
                     </div>

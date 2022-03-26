@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, PlaceEmpty, Toast } from 'src/providers/common-service/common.service';
-import { UserImage } from 'src/providers/constants';
+import { InsertOrUpdateSuccessfull, ProfileImage, Success, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -69,30 +69,43 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.isUpdate = true;
     } else {
       this.employeeModal = new EmployeeDetail();
-      this.initForm();
+      this.bindForm();
       this.idReady = true;
+    }
+  }
+
+  buildProfileImage(fileDetail: any) {
+    this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
+    this.employeeModal.FileId = fileDetail.FileId;
+  }
+
+  buildPageData(response: ResponseModel) {
+    if (response.ResponseBody) {
+      this.clients = response.ResponseBody.Clients;
+      if (response.ResponseBody.Employee.length > 0)
+        this.employeeModal = response.ResponseBody.Employee[0] as EmployeeDetail;
+      this.allocatedClients = response.ResponseBody.AllocatedClients;
+      let profileDetail = response.ResponseBody.FileDetail;
+      if(profileDetail.length > 0) {
+        this.buildProfileImage(profileDetail[0]);
+      }
+      if(this.allocatedClients.length > 0) {
+        this.allocatedClients.map((item, index) => {
+          if(index == 0) {
+            this.activeClient = item;
+            item["IsActiveRow"] = 1;
+           } else {
+            item["IsActiveRow"] = 0;
+           }
+        });
+        this.isAllocated = true;
+      }
     }
   }
 
   loadData(employeeId: number) {
     this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
-      if (res.ResponseBody) {
-        this.clients = res.ResponseBody.Clients;
-        if (res.ResponseBody.Employee.length > 0)
-          this.employeeModal = res.ResponseBody.Employee[0] as EmployeeDetail;
-        this.allocatedClients = res.ResponseBody.AllocatedClients;
-        if(this.allocatedClients.length > 0) {
-          this.allocatedClients.map((item, index) => {
-            if(index == 0) {
-              this.activeClient = item;
-              item["IsActiveRow"] = 1;
-             } else {
-              item["IsActiveRow"] = 0;
-             }
-          });
-          this.isAllocated = true;
-        }
-      }
+      this.buildPageData(res);
       this.bindForm();
       this.idReady = true;
     });
@@ -140,6 +153,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ActualPackage: new FormControl(null),
       FinalPackage: new FormControl(null),
       TakeHomeByCandidate: new FormControl(null),
+      FileId: new FormControl(this.employeeModal.FileId),
       AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
     });
   }
@@ -156,37 +170,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       EmployeeUid: new FormControl(this.employeeModal.EmployeeUid),
       EmployeeMappedClientsUid: new FormControl(client.EmployeeMappedClientsUid),
       IsPermanent: new FormControl(false),
-    });
-  }
-
-  initForm() {
-    this.employeeForm = this.fb.group({
-      FirstName: new FormControl("", [Validators.required]),
-      LastName: new FormControl("", [Validators.required]),
-      Mobile: new FormControl("0000000000"),
-      Email: new FormControl("xxxxx@xxx.com"),
-      SecondaryMobile: new FormControl(""),
-      FatherName: new FormControl(""),
-      MotherName: new FormControl(""),
-      SpouseName: new FormControl(""),
-      State: new FormControl(""),
-      City: new FormControl(""),
-      Pincode: new FormControl(PlaceEmpty("")),
-      Address: new FormControl(""),
-      PANNo: new FormControl(""),
-      AadharNo: new FormControl(""),
-      AccountNumber: new FormControl(""),
-      BankName: new FormControl(""),
-      IFSCCode: new FormControl(""),
-      Domain: new FormControl(""),
-      Specification: new FormControl(""),
-      ExprienceInYear: new FormControl(PlaceEmpty("")),
-      LastCompanyName: new FormControl(""),
-      IsPermanent: new FormControl(""),
-      EmployeeUid: new FormControl(""),
-      BranchName: new FormControl(""),
-      AllocatedClientName: new FormControl(""),
-      ProfileImgPath: new FormControl("")
     });
   }
 
@@ -229,15 +212,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
-      formData.append("profileImage", file);
+      formData.append(ProfileImage, file);
 
-      this.http.post("login/employeeregistration", formData).then((response: ResponseModel) => {
-        if (response.ResponseBody) {
-          Toast(response.ResponseBody);
-        } else {
-          ErrorToast("Fail to insert or update.");
-        }
-
+      this.http.post("Employee/employeeregistration", formData).then((response: ResponseModel) => {
+        this.buildPageData(response);
+        Toast(InsertOrUpdateSuccessfull);
         this.isLoading = false;
       }).catch(e => {
         this.isLoading = false;
@@ -249,7 +228,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     }
   }
 
-  addDetail(index: number) {
+  addDetail() {
     this.isAllocated = false;
     let clientId = Number(this.employeeForm.get("AllocatedClientId").value);
     if(isNaN(clientId) || clientId <= 0){
@@ -260,21 +239,21 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.activeAssignedClient.ClientUid = clientId;
     let actualPackage = Number(this.employeeForm.get("ActualPackage").value);
     if(isNaN(actualPackage)){
-      ErrorToast("Invalid client selected");
+      ErrorToast("Invalid actual package supplied");
       return;
     }
 
     this.activeAssignedClient.ActualPackage = actualPackage;
     let finalPackage = Number(this.employeeForm.get("FinalPackage").value);
     if(isNaN(finalPackage)){
-      ErrorToast("Invalid client selected");
+      ErrorToast("Invalid final package supplied");
       return;
     }
 
     this.activeAssignedClient.FinalPackage = finalPackage;
     let takeHomeByCandidate = Number(this.employeeForm.get("TakeHomeByCandidate").value);
     if(isNaN(takeHomeByCandidate)){
-      ErrorToast("Invalid client selected");
+      ErrorToast("Invalid takehome package supplied");
       return;
     }
 
@@ -284,12 +263,19 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       return;
     }
 
+    let employeeId = Number(this.employeeForm.get("EmployeeUid").value);
+    if(isNaN(employeeId) || employeeId <= 0){
+      ErrorToast("Invalid employee id selected");
+      return;
+    }
+    this.activeAssignedClient.EmployeeUid = employeeId;
+
     if(actualPackage < takeHomeByCandidate) {
       ErrorToast("Actual package must be greater that or equal to TakeHome package.")
       return;
     }
 
-    this.http.post(`employee/UpdateEmployeeDetail/${true}`, this.activeAssignedClient).then((response: ResponseModel) => {
+    this.http.post(`employee/UpdateEmployeeDetail/${this.isUpdated}`, this.activeAssignedClient).then((response: ResponseModel) => {
       if (response.ResponseBody.Table) {
         this.allocatedClients = response.ResponseBody.Table;
         if(this.allocatedClient.length > 0) {
@@ -370,10 +356,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event: any) => {
         this.profileURL = event.target.result;
-      }
-      this.employeeForm.patchValue({
-        ProfileImgPath: event.target.result,
-      });
+      };
+      // this.employeeForm.patchValue({
+      //   ProfileImgPath: event.target.result,
+      // });
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.fileDetail.push({
@@ -399,10 +385,11 @@ export class AssignedClients {
 
 export class EmployeeDetail {
   EmployeeUid: number = 0;
+  FileId: number = 0;
   FirstName: string = null;
   LastName: string = null;
-  Mobile: string = null;
-  Email: string = null;
+  Mobile: string = "XXXXXXXXXX";
+  Email: string = "example@mail.com";
   BranchName: string = null;
   SecondaryMobile: string = null;
   FatherName: string = null;
@@ -427,4 +414,5 @@ export class EmployeeDetail {
   ActualPackage: number = null;
   FinalPackage: number = null;
   TakeHomeByCandidate: number = null;
+  AllocatedClients: Array<AssignedClients> = [];
 }
