@@ -23,6 +23,7 @@ import { AttendanceComponent } from './attendance/attendance.component';
 import { ManageComponent } from './profile/profile.component';
 import { RecentComponent } from './recent/recent.component';
 import { RolesComponent } from './roles/roles.component';
+import { BreadcrumsComponent } from '../util/breadcrums/breadcrums.component';
 
 @NgModule({
   declarations: [
