@@ -27,6 +27,8 @@ export const Master = ProjectName + "_master";
 export const UserDetailName = ProjectName + "_UserDetail";
 export const DocumentPathName = "Documents";
 export const UserPathName = "User";
+export const ProfileImage = "profile";
+export const InsertOrUpdateSuccessfull = "Inserted/Updated successfully";
 
 export enum FileSystemType {
   User = 1,

@@ -229,11 +229,11 @@ a.text-underline {
 }
 
 .span-clients {
-    border: 1px solid #d9d9d9;
-    background: #845b99;
-    padding: 4px 8px;
-    border-radius: 6px;
-    color: #eee;  
+  border: 1px solid #d9d9d9;
+  background: #845b99;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: #eee;
 }
 
 .span-clients:hover {
@@ -252,12 +252,16 @@ hr {
 }
 
 .x-panel-changed {
-  min-height: auto !important;  
+  min-height: auto !important;
   padding-bottom: 0px;
 }
 
 .inactive-mode {
-    border: 1px solid #d9d9d9 !important;
-    background: #eee !important;
-    color: #bd9c9c !important;
+  border: 1px solid #d9d9d9 !important;
+  background: #eee !important;
+  color: #bd9c9c !important;
+}
+
+.img-container__box img {
+  height: 12rem;
 }
