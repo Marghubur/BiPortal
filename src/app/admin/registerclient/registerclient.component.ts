@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
+import { ProfileImage, UserImage } from 'src/providers/constants';
 
 @Component({
   selector: 'app-registerclient',
@@ -17,6 +18,8 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   isUpdating: boolean = false;
   isLoaded: boolean = false;
+  profileURL: string = UserImage;
+  fileDetail: Array<any> = [];
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -84,7 +87,8 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       BranchName: new FormControl(this.clientModal.BranchName),
       IFSC: new FormControl(this.clientModal.IFSC),
       PanNo: new FormControl(this.clientModal.PanNo),
-      AdminId: new FormControl(this.clientModal.AdminId)
+      AdminId: new FormControl(this.clientModal.AdminId),
+      FileId: new FormControl(this.clientModal.FileId)
     });
   }
 
@@ -107,6 +111,9 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     if (this.clientForm.get("Email").value === "")
       errroCounter++;
 
+    if (this.clientModal.FileId == null)
+      this.clientModal.FileId = 0;
+
     let clientDetail = this.clientForm.value;
 
     if (clientDetail.Pincode === null || clientDetail.Pincode == "")
@@ -116,7 +123,13 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
 
     if (errroCounter === 0) {
       let request: clientModal = this.clientForm.value;
-      this.http.post(`Clients/RegisterClient/${this.isUpdating}`, request).then((response: ResponseModel) => {
+      let formData = new FormData()
+      formData.append("clientDetail", JSON.stringify(request));
+      let file = null;
+      if(this.fileDetail.length > 0)
+        file = this.fileDetail[0].file;
+      formData.append(ProfileImage, file)
+      this.http.post(`Clients/RegisterClient/${this.isUpdating}`, formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.clientModal = response.ResponseBody as clientModal;
           this.initForm();
@@ -137,6 +150,30 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
 
   replaceWithOriginalValues() {
 
+  }
+
+  fireBrowserFile() {
+    this.submitted = true;
+    $("#uploadocument").click();
+  }
+
+  uploadClientLogo(event: any) {
+    if (event.target.files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.profileURL = event.target.result;
+      };
+      // this.employeeForm.patchValue({
+      //   ProfileImgPath: event.target.result,
+      // });
+      let selectedfile = event.target.files;
+      let file = <File>selectedfile[0];
+      this.fileDetail.push({
+        name: "profile",
+        file: file
+      });
+    }
   }
 }
 
@@ -164,4 +201,5 @@ class clientModal {
   PanNo: string = null;
   AdminId: number = 0
   IsActive: boolean = false;
+  FileId: number = 0;
 }

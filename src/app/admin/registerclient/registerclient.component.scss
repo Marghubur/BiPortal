@@ -1,17 +1,37 @@
 .thead-gray {
-    background: lightgray;
+  background: lightgray;
+}
+
+.gst-text {
+  font-size: 12px;
+  padding-top: 4px;
+}
+
+.calendar {
+  padding: 0.3rem 0.75rem !important;
+}
+
+.x_panel {
+  min-height: 280px;
+}
+
+.img-container__box img {
+  height: 12rem;
+}
+
+.img-container {
+  width: 12rem;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  transform: translate(0%, 0%);
+
+  &__box {
+    height: 12rem;
+    margin-bottom: 0.6rem;
+    border: 1px solid #d9d9d9;
+    width: 12rem;
+    border-radius: 4px;
   }
-  
-  .gst-text {
-    font-size: 12px;
-    padding-top: 4px;
-  }
-  
-  .calendar {
-    padding: 0.3rem 0.75rem !important;
-  }
-  
-  .x_panel{
-    min-height: 280px;
-  }
-  
+}
