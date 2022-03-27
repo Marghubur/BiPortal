@@ -1,178 +1,174 @@
 <div class="container-fluid main-container">
-    <div class="x_panel mt-2">
-        <div class="x_header">
-            <div class="x_header_title">
-                <h2>Header<small>small description</small></h2>
-            </div>
-        </div>
-        <div class="x_content mt-4">
-            <form [formGroup]="clientForm" class="col-md-12 row">
-                <div class="mb-5">
-                    <div class="col-12 row m-0">
-                        <div class="col-md-4 p-0"></div>
-                        <div class="col-md-8 p-0">
-                            <div class="col-md-12 row">
-                                <div class="col-md-4">
-                                    <label class="form-label">Client/Organization Name *</label>
-                                    <input placeholder="Client or organization name" class="form-control"
-                                        name="ClientName" formControlName="ClientName"
-                                        [ngClass]="{'error': submitted && f.ClientName.errors !=null && f.ClientName.errors.required}" />
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Primary No.# *</label>
-                                    <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="11"
-                                        [ngClass]="{'error': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
-                                        name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
-                                </div>
-                                <div class="col-md-4 pb-3">
-                                    <label class="form-label">Email Id *</label>
-                                    <input class="form-control" placeholder="Email Id"
-                                        [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}"
-                                        name="Email" formControlName="Email" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 row">
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">PAN No.#</label>
-                                    <input class="form-control" placeholder="PAN No.#" transform="upper" name="PanNo"
-                                        formControlName="PanNo" />
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">Alternate No.#</label>
-                                    <input class="form-control" placeholder="Alternate Phone No.#"
-                                        name="SecondaryPhoneNo" formControlName="SecondaryPhoneNo" />
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">FAX No.# (optional)</label>
-                                    <input class="form-control" placeholder="FAX No.#" name="Fax" transform="upper"
-                                        formControlName="Fax" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 row">
-                                <div class="col-md-4 mb-3"></div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">GSTIN No.#</label>
-                                    <input class="form-control" transform="upper" placeholder="GSTIN No." name="GSTNO"
-                                        formControlName="GSTNO" />
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">Mobile No.# (optional)</label>
-                                    <input class="form-control" placeholder="Mobile No.#" name="MobileNo"
-                                        formControlName="MobileNo" />
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12"></div>
-
-                <div class="col-12 row m-0">
-                    <div class="col-md-6">
-                        <div class="x_panel">
-                            <div class="x_header">
-                                <div class="x_header_title">
-                                    <h2>Bank Detail<small>Bank related detail for transaction.</small></h2>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-3 mb-3 row">
-                                <!-- <label class="form-label">Address *</label> -->
-                                <div class="col-md-12 mt-4">
-                                    <label class="form-label">Bank Name</label>
-                                    <input placeholder="Bank name" class="form-control" name="BankName" transform=""
-                                        formControlName="BankName" />
-                                </div>
-                                <div class="col-md-12 mt-4">
-                                    <label class="form-label">Account No.#</label>
-                                    <input placeholder="Account No.#" class="form-control" name="AccountNo"
-                                        formControlName="AccountNo" />
-                                </div>
-                                <div class="col-md-12 mt-4">
-                                    <label class="form-label">IFSC Code</label>
-                                    <input placeholder="IFSC Code" class="form-control" name="IFSC" transform="upper"
-                                        formControlName="IFSC" />
-                                </div>
-                                <div class="col-md-12 mt-4">
-                                    <label class="form-label">Branch Name (Optional)</label>
-                                    <input placeholder="Branch name" class="form-control" name="BranchName" transform=""
-                                        formControlName="BranchName" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="x_panel">
-                            <div class="x_header">
-                                <div class="x_header_title">
-                                    <h2>Organization/Client Other Detail<small>
-                                            Other detail like Address, State etc.</small></h2>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-3 mb-3 row">
-                                <div class="col-md-6 mt-4">
-                                    <label class="form-label">Country</label>
-                                    <input placeholder="Country" class="form-control" name="Country"
-                                        formControlName="Country" />
-                                </div>
-                                <div class="col-md-6 mt-4">
-                                    <label class="form-label">State</label>
-                                    <input placeholder="State" class="form-control" name="State"
-                                        formControlName="State" />
-                                </div>
-                                <div class="col-md-6 mt-4">
-                                    <label class="form-label">City</label>
-                                    <input placeholder="City" class="form-control" name="City" formControlName="City" />
-                                </div>
-                                <div class="col-md-6 mt-4">
-                                    <label class="form-label">Pincode</label>
-                                    <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6"
-                                        formControlName="Pincode" />
-                                </div>
-                                <div class="col-md-6 mt-4">
-                                    <label class="form-label">Address Line 1</label>
-                                    <input placeholder="Address Line 1" class="form-control" name="FirstAddress"
-                                        formControlName="FirstAddress" />
-                                </div>
-                                <div class="col-md-6 mt-4">
-                                    <label class="form-label">Address Line 2</label>
-                                    <input placeholder="Address Line 2" class="form-control" name="SecondAddress"
-                                        formControlName="SecondAddress" />
-                                </div>
-                                <div class="col-md-6 mt-4">
-                                    <label class="form-label">Address Line 3</label>
-                                    <input placeholder="Address Line 3" class="form-control" name="ThirdAddress"
-                                        formControlName="ThirdAddress" />
-                                </div>
-                                <div class="col-md-6 mt-4">
-                                    <label class="form-label">Address Line 4</label>
-                                    <input placeholder="Address Line 4" class="form-control" name="ForthAddress"
-                                        formControlName="ForthAddress" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-12 row m-0 pt-5">
-                    <div class="col-md-12 button groups text-end">
-                        <div class="btn-group">
-                            <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
-                        </div>
-                        <div class="btn-group ms-2">
-                            <button class="btn btn-primary" [disabled]="isLoading" (click)="generate()">
-                                <i class="fa"
-                                    [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-                                {{ isLoading ? 'Processing' : 'Submit' }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+  <div class="x_panel mt-2">
+    <div class="x_header">
+      <div class="x_header_title">
+        <h2>Client<small>add or update client</small></h2>
+      </div>
     </div>
+    <app-breadcrums></app-breadcrums>
+    <div class="x_content mt-4" *ngIf="isLoaded">
+      <form [formGroup]="clientForm" autocomplete="off" class="col-md-12 row">
+        <div class="mb-5">
+          <div class="col-12 row m-0">
+            <div class="col-md-4 p-0"></div>
+            <div class="col-md-8 p-0">
+              <div class="col-md-12 row">
+                <div class="col-md-4">
+                  <label class="form-label">Client/Organization Name *</label>
+                  <input placeholder="Client or organization name" class="form-control" name="ClientName"
+                    formControlName="ClientName"
+                    [ngClass]="{'error': submitted && f.ClientName.errors !== null && f.ClientName.errors.required}" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Primary No.# *</label>
+                  <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="11"
+                    [ngClass]="{'error': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
+                    name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
+                </div>
+                <div class="col-md-4 pb-3">
+                  <label class="form-label">Email Id *</label>
+                  <input class="form-control" placeholder="Email Id"
+                    [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}" name="Email"
+                    formControlName="Email" />
+                </div>
+              </div>
+
+              <div class="col-md-12 row">
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">PAN No.#</label>
+                  <input class="form-control" placeholder="PAN No.#" transform="upper" name="PanNo"
+                    formControlName="PanNo" />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Alternate No.#</label>
+                  <input class="form-control" placeholder="Alternate Phone No.#" name="SecondaryPhoneNo"
+                    formControlName="SecondaryPhoneNo" />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">FAX No.# (optional)</label>
+                  <input class="form-control" placeholder="FAX No.#" name="Fax" transform="upper"
+                    formControlName="Fax" />
+                </div>
+              </div>
+
+              <div class="col-md-12 row">
+                <div class="col-md-4 mb-3"></div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">GSTIN No.#</label>
+                  <input class="form-control" transform="upper" placeholder="GSTIN No." name="GSTNO"
+                    formControlName="GSTNO" />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Mobile No.# (optional)</label>
+                  <input class="form-control" placeholder="Mobile No.#" name="MobileNo" formControlName="MobileNo" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12"></div>
+
+        <div class="col-12 row m-0">
+          <div class="col-md-6">
+            <div class="x_panel">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <h2>Bank Detail<small>Bank related detail for transaction.</small></h2>
+                </div>
+              </div>
+              <div class="col-md-12 mb-3 mb-3 row">
+                <!-- <label class="form-label">Address *</label> -->
+                <div class="col-md-12 mt-4">
+                  <label class="form-label">Bank Name</label>
+                  <input placeholder="Bank name" class="form-control" name="BankName" transform=""
+                    formControlName="BankName" />
+                </div>
+                <div class="col-md-12 mt-4">
+                  <label class="form-label">Account No.#</label>
+                  <input placeholder="Account No.#" class="form-control" name="AccountNo" formControlName="AccountNo" />
+                </div>
+                <div class="col-md-12 mt-4">
+                  <label class="form-label">IFSC Code</label>
+                  <input placeholder="IFSC Code" class="form-control" name="IFSC" transform="upper"
+                    formControlName="IFSC" />
+                </div>
+                <div class="col-md-12 mt-4">
+                  <label class="form-label">Branch Name (Optional)</label>
+                  <input placeholder="Branch name" class="form-control" name="BranchName" transform=""
+                    formControlName="BranchName" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="x_panel">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <h2>Organization/Client Other Detail<small>
+                      Other detail like Address, State etc.</small></h2>
+                </div>
+              </div>
+              <div class="col-md-12 mb-3 mb-3 row">
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Country</label>
+                  <input placeholder="Country" class="form-control" name="Country" formControlName="Country" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">State</label>
+                  <input placeholder="State" class="form-control" name="State" formControlName="State" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">City</label>
+                  <input placeholder="City" class="form-control" name="City" formControlName="City" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Pincode</label>
+                  <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6"
+                    formControlName="Pincode" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Address Line 1</label>
+                  <input placeholder="Address Line 1" class="form-control" name="FirstAddress"
+                    formControlName="FirstAddress" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Address Line 2</label>
+                  <input placeholder="Address Line 2" class="form-control" name="SecondAddress"
+                    formControlName="SecondAddress" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Address Line 3</label>
+                  <input placeholder="Address Line 3" class="form-control" name="ThirdAddress"
+                    formControlName="ThirdAddress" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Address Line 4</label>
+                  <input placeholder="Address Line 4" class="form-control" name="ForthAddress"
+                    formControlName="ForthAddress" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-12 row m-0 pt-5">
+          <div class="col-md-12 button groups text-end">
+            <div class="btn-group">
+              <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+            </div>
+            <div class="btn-group ms-2">
+              <button class="btn btn-primary" [disabled]="isLoading" (click)="generate()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+                {{ isLoading ? 'Processing' : 'Submit' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

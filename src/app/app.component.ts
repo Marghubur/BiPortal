@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   Router,
   Event,
   NavigationStart,
 } from "@angular/router";
+import { Subscription } from 'rxjs';
 import { JwtService, ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { AutoPlayService } from 'src/providers/AutoPlayService';
@@ -17,10 +18,11 @@ import { PageCache } from 'src/providers/PageCache';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = "star-admin-angular";
   pageName: string = "";
   activePage:number = 0;
+  navRouter: Subscription = null;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -32,7 +34,7 @@ export class AppComponent implements OnInit {
     private nav: iNavigation,
   ) {
     this.GetScreenHeight();
-    this.router.events.subscribe((event: Event) => {
+    this.navRouter = this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
         this.pageName = event.url.replace("/", "")
         this.commonService.SetCurrentPageName(this.pageName);
@@ -40,6 +42,10 @@ export class AppComponent implements OnInit {
         this.nav.pushRoute(this.pageName);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.navRouter.unsubscribe();
   }
 
   doAuthentication() {

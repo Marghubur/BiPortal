@@ -14,8 +14,15 @@ export class BreadcrumsComponent implements OnInit {
     let value = this.nav.getRouteList();
     let i = 0;
     while(i < value.length) {
-      this.routePath.push(value[i].Key.replace("admin/", ""));
+      this.routePath.push({
+        name: value[i].Key.replace("admin/", ""),
+        path: value[i].Key
+      });
       i++;
     }
+  }
+
+  changeRouter(path: string) {
+    this.nav.navigateWithoutArgs(path);
   }
 }

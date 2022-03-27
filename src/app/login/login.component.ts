@@ -45,7 +45,11 @@ export class LoginComponent implements OnInit {
     private jwtService: JwtService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.nav.clearNavigation();
+  }
 
   switchMode() {
     this.isUserMode = !this.isUserMode;

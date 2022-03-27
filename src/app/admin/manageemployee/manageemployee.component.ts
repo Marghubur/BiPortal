@@ -15,6 +15,7 @@ declare var $: any;
 })
 export class ManageemployeeComponent implements OnInit, OnDestroy {
   model: NgbDateStruct;
+  joiningDatemodel: NgbDateStruct;
   submitted: boolean = false;
   employeeForm: FormGroup = null;
   employeeModal: EmployeeDetail = null;
@@ -68,6 +69,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.loadData(this.employeeUid);
       this.isUpdate = true;
     } else {
+      this.isUpdate = false;
       this.employeeModal = new EmployeeDetail();
       this.bindForm();
       this.idReady = true;
@@ -118,7 +120,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.employeeForm.controls["dateOfBilling"].setValue(date);
+    this.employeeForm.controls["DOB"].setValue(date);
+  }
+
+  onJoiningDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month -1, e.day);
+    this.employeeForm.get("DateOfJoining").setValue(date);
   }
 
   bindForm() {
@@ -152,6 +159,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       AllocatedClientId: new FormControl("0"),
       ActualPackage: new FormControl(null),
       FinalPackage: new FormControl(null),
+      DateOfJoining: new FormControl(this.employeeModal.DateOfJoining),
+      DOB: new FormControl(this.employeeModal.DOB),
       TakeHomeByCandidate: new FormControl(null),
       FileId: new FormControl(this.employeeModal.FileId),
       AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
@@ -203,6 +212,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.FinalPackage = 0;
     if (this.employeeModal.TakeHomeByCandidate === null)
       this.employeeModal.TakeHomeByCandidate = 0;
+    if (this.employeeModal.FileId === null)
+      this.employeeModal.FileId = 0;
 
     if (errroCounter == 0) {
 
@@ -214,7 +225,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         file = this.fileDetail[0].file;
       formData.append(ProfileImage, file);
 
-      this.http.post("Employee/employeeregistration", formData).then((response: ResponseModel) => {
+      this.http.post(`Employee/employeeregistration/${this.isUpdate}`, formData).then((response: ResponseModel) => {
         this.buildPageData(response);
         Toast(InsertOrUpdateSuccessfull);
         this.isLoading = false;
@@ -278,7 +289,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.http.post(`employee/UpdateEmployeeDetail/${this.isUpdated}`, this.activeAssignedClient).then((response: ResponseModel) => {
       if (response.ResponseBody.Table) {
         this.allocatedClients = response.ResponseBody.Table;
-        if(this.allocatedClient.length > 0) {
+        if(this.allocatedClients.length > 0) {
           let assignedClients: FormArray = this.employeeForm.get("AllocatedClients") as FormArray;
           assignedClients.clear();
           let apiClients: FormArray = this.fb.array(this.allocatedClients.map(x => this.buildAlocatedClients(x, (x.ClientUid == this.activeAssignedClient.ClientUid) ?? false)));
@@ -414,5 +425,7 @@ export class EmployeeDetail {
   ActualPackage: number = null;
   FinalPackage: number = null;
   TakeHomeByCandidate: number = null;
+  DOB: Date = null;
+  DateOfJoining: Date = null;
   AllocatedClients: Array<AssignedClients> = [];
 }

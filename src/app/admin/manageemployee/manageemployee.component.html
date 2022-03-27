@@ -26,8 +26,7 @@
                       <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
                         formControlName="ProfileImgPath" />
                       <div class="img-container__btn mt-2">
-                        <button class="btn btn-outline-success form-control"
-                          (click)="fireBrowserFile()">Browse</button>
+                        <button class="btn btn-outline-success form-control" (click)="fireBrowserFile()">Browse</button>
                       </div>
                     </div>
                   </div>
@@ -302,11 +301,12 @@
                       <form class="form-inline">
                         <div class="form-group w-100">
                           <div class="input-group w-100">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
-                              (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="joiningDate"
+                              [(ngModel)]="joiningDatemodel" (dateSelect)="onJoiningDateSelection($event)" ngbDatepicker
+                              #joiningDate="ngbDatepicker">
                             <div class="input-group-append">
-                              <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                                  class="fa fa-calendar" aria-hidden="true"></i>
+                              <button class="btn btn-outline-secondary calendar" (click)="joiningDate.toggle()"
+                                type="button"><i class="fa fa-calendar" aria-hidden="true"></i>
                               </button>
                             </div>
                           </div>

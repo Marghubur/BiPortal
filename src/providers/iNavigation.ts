@@ -17,6 +17,10 @@ export class iNavigation {
     }
   }
 
+  public clearNavigation() {
+    this.pageRoute = new PageRouteDetail();
+  }
+
   public pushRoute(route: string, value: string = null, filter: Filter = null) {
     if(this.IsNavigated) {
       this.IsNavigated = false;
@@ -67,11 +71,11 @@ export class iNavigation {
     let i = 0;
     let newRouteData = [];
     while(i < this.pageRoute.RouteDetail.length) {
-      if(this.pageRoute[i].Key === route) {
-        newRouteData.push(this.pageRoute[i]);
+      if(this.pageRoute.RouteDetail[i].Key === route) {
+        newRouteData.push(this.pageRoute.RouteDetail[i]);
         break;
       }
-      newRouteData.push(this.pageRoute[i]);
+      newRouteData.push(this.pageRoute.RouteDetail[i]);
       i++;
     }
 
@@ -88,12 +92,6 @@ export class iNavigation {
 
   public navigate(Path: string, Parameter: any, filterObject: any = null) {
     if (Path !== null) {
-      // if (Parameter !== null && Parameter !== "") {
-      //   localStorage.setItem(Path, JSON.stringify(Parameter));
-      //   this.manageLocalSessionKey(Path);
-      //   localStorage.setItem(NAVPARAMNAME, Path);
-      // }
-
       this.IsNavigated = true;
       this.pushNavRoute(Path, Parameter, filterObject);
       this.route.navigate(["/" + Path, ]);
@@ -102,14 +100,16 @@ export class iNavigation {
     }
   }
 
+  public navigateWithoutArgs(Path: string) {
+    if (Path !== null) {
+      this.route.navigate(["/" + Path, ]);
+    } else {
+      Toast("Invalid component path passed.");
+    }
+  }
+
   public navigateWithArgs(Path: string, args: string, Parameter: any = null, filterObject: any = null) {
     if (Path !== null) {
-      // if (Parameter !== null && Parameter !== "") {
-      //   localStorage.setItem(Path, JSON.stringify(Parameter));
-      //   this.manageLocalSessionKey(Path);
-      //   localStorage.setItem(NAVPARAMNAME, Path);
-      // }
-
       this.IsNavigated = true;
       this.pushNavRoute(Path, Parameter, filterObject);
       this.route.navigate(["/" + Path], { queryParams: { path: args } });
@@ -132,11 +132,13 @@ export class iNavigation {
     let ParsedData = null;
     let path = this.common.GetCurrentPageName().split("?");
     let Data: any = sessionStorage.getItem(NAVPARAMNAME);
-    if (Data && Data !== "") {
+    if (Data && path.length > 0) {
       try {
         this.pageRoute = JSON.parse(Data);
-        let len = this.pageRoute.RouteDetail.length;
-        ParsedData = this.pageRoute.RouteDetail[len - 1].Value;
+        let currentRoute = this.pageRoute.RouteDetail.find(x => x.Key === path[0]);
+        if(currentRoute) {
+          ParsedData = currentRoute.Value;
+        }
       } catch (e) {
         console.log(JSON.stringify(e));
         Toast("Unable to get route data. Please contact admin.");
@@ -145,11 +147,12 @@ export class iNavigation {
     return ParsedData;
   }
 
-  public replaceValue(data: any) {
-    if (data !== null && data !== "") {
-      localStorage.setItem(this.common.GetCurrentPageName(), JSON.stringify(data));
-    }
-  }
+  // public replaceValue(data: any) {
+  //   if (data !== null && data !== "") {
+  //     //localStorage.setItem(this.common.GetCurrentPageName(), JSON.stringify(data));
+  //     sessionStorage.setItem(this.common.GetCurrentPageName(), JSON.stringify(data));
+  //   }
+  // }
 
   public resetValue() {
     localStorage.removeItem(this.common.GetCurrentPageName());

@@ -197,6 +197,7 @@ export class BuildPdfComponent implements OnInit {
           this.model.month = billingDate.getMonth() + 1;
           this.model.year = billingDate.getFullYear();
         }
+
         this.originalBillingMonth = fileDetail.BillForMonth;
         this.generateDaysCount();
         this.manageBillDates();
@@ -206,6 +207,7 @@ export class BuildPdfComponent implements OnInit {
 
         if(this.pdfModal.actualDaysBurned < this.pdfModal.workingDay)
           this.halfDayDisable = true;
+
         if(this.editMode && editPackageAmount > 0) {
           this.packageAmount = editPackageAmount;
           this.grandTotalAmount = editGrandTotalAmount;
