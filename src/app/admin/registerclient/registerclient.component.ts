@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CommonService } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
 
@@ -15,6 +15,8 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   clientForm: FormGroup = null;
   clientModal: clientModal = null;
   isLoading: boolean = false;
+  isUpdating: boolean = false;
+  isLoaded: boolean = false;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -31,10 +33,28 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     this.clientModal = new clientModal();
     if (data !== null && data !== "") {
       this.clientModal = data as clientModal;
+      this.isUpdating = true;
+      this.loadData();
+    } else {
+      this.clientModal = new clientModal;
+      this.initForm();
+      this.isLoaded = true;
     }
-    this.initForm();
   }
 
+  loadData() {
+    this.http.get(`clients/GetClientById/${this.clientModal.ClientId}/${this.clientModal.IsActive}`).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.clientModal = response.ResponseBody;
+        this.initForm();
+      } else {
+        this.clientModal = new clientModal;
+        this.initForm();
+      }
+
+      this.isLoaded = true;
+    });
+  }
 
   get f() {
     let data = this.clientForm.controls;
@@ -96,12 +116,14 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
 
     if (errroCounter === 0) {
       let request: clientModal = this.clientForm.value;
-      this.http.post("Clients/RegisterClient", request).then((response: ResponseModel) => {
+      this.http.post(`Clients/RegisterClient/${this.isUpdating}`, request).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
-          this.nav.replaceValue(this.clientForm.value);
-          this.common.ShowToast(response.ResponseBody);
+          this.clientModal = response.ResponseBody as clientModal;
+          this.initForm();
+
+          Toast("Client Inserted/Updated successfully");
         } else {
-          this.common.ShowToast("Failed to generated, Please contact to admin.");
+          ErrorToast("Failed to generated, Please contact to admin.");
         }
         this.isLoading = false;
       }).catch(e => {
@@ -109,7 +131,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       });
     } else {
       this.isLoading = false;
-      this.common.ShowToast("All read marked fields are mandatory.");
+      ErrorToast("All read marked fields are mandatory.");
     }
   }
 
@@ -141,4 +163,5 @@ class clientModal {
   IFSC: string = null;
   PanNo: string = null;
   AdminId: number = 0
+  IsActive: boolean = false;
 }

@@ -1,13 +1,14 @@
-<ul class="nav bg-light p-2">
-    <ng-container *ngFor="let nav of routePath;let index = index; let last = last;">
-        <container-element [ngSwitch]="index">
-            <!-- the same view can be shown in more than one case -->
-            <li class="nav-item" *ngSwitchCase="index == last">
-                <a class="nav-link text-uppercase anc-link text-mutex" href="javascript:void(0)">{{nav}}</a>
-            </li>
-            <li class="nav-item" *ngSwitchDefault>
-                <a class="nav-link text-uppercase anc-link" href="javascript:void(0)"><u>{{nav}}</u> /</a>
-            </li>
-        </container-element>
-    </ng-container>
-  </ul>
+<ul class="nav nav-parent p-2">
+  <ng-container *ngFor="let nav of routePath;let index = index; let last = last;">
+    <container-element [ngSwitch]="index">
+      <!-- the same view can be shown in more than one case -->
+      <li class="nav-item" *ngSwitchCase="index == last">
+        <a class="nav-link text-uppercase anc-link text-mutex" href="javascript:void(0)">{{nav.name}}</a>
+      </li>
+      <li class="nav-item" *ngSwitchDefault>
+        <a class="nav-link text-uppercase anc-link" href="javascript:void(0)"
+          (click)="changeRouter(nav.path)"><u>{{nav.name}}</u> /</a>
+      </li>
+    </container-element>
+  </ng-container>
+</ul>
