@@ -102,13 +102,24 @@
             <tbody>
               <tr *ngFor="let clients of clients">
                 <th scope="row">{{clients.Index}}</th>
-                <td>{{clients.ClientName}}</td>
+                <td>
+                  <a href="javascript:void(0)" (click)="EditCurrent(clients)" class="client-name-link">
+                    {{clients.ClientName}}
+                  </a>
+                  <div class="float-end">
+                    <a href="javascript:void(0)" (click)="viewClientFile(clients)">
+                      <span class="ms-2 badge bg-success">
+                        <i class="fa fa-building-o zoom-2"></i>
+                      </span>
+                    </a>
+                  </div>
+                </td>
                 <td>{{clients.PrimaryPhoneNo}}</td>
                 <td>{{clients.Email}}</td>
                 <td>{{clients.City}}</td>
                 <td>{{clients.FirstAddress}}</td>
                 <td>
-                  <div class="d-flex flex-row justify-content-evenly">
+                  <div class=" d-flex flex-row justify-content-evenly">
                     <a href="javascript:void(0)">
                       <span class="badge bg-success"><i class="fa fa-pencil-square-o" aria-hidden="true"
                           (click)="EditCurrent(clients)"></i></span>

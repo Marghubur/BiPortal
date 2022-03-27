@@ -4,7 +4,7 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
-import { Clients, Documents, DocumentsPage, RegisterClient } from 'src/providers/constants';
+import { BillDetail, Clients, Documents, DocumentsPage, RegisterClient } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { DocumentUser } from '../documents/documents.component';
@@ -267,6 +267,10 @@ export class ClientsComponent implements OnInit {
 
   ClosePopup() {
     $('#deleteClient').modal('hide');
+  }
+
+  viewClientFile(client: any) {
+    this.nav.navigate(BillDetail, client)
   }
 }
 

@@ -94,7 +94,12 @@ export class BilldetailsComponent implements OnInit {
     this.employeeFile.GSTStatus = '0';
     this.employeeFile.Month = "0";
     this.basePath = this.http.GetImageBasePath();
-    this.currentEmployeeDetail = this.nav.getValue();
+    //this.currentEmployeeDetail = this.nav.getValue();
+    let data = this.nav.getValue();
+    if (data != null) {
+      this.employeeFile.ClientName = data.ClientName;
+      this.filterRecords();
+    }
     this.employeeId = 0;
     this.autoCompleteModal = {
       data: [],
@@ -242,13 +247,13 @@ export class BilldetailsComponent implements OnInit {
     }).catch(e => { console.log(e) });
   }
 
-  deleteFile(FileUid: string) {
-    let data = this.userFiles.filter(a => a.FileUid === FileUid);
-    let newData = data[0];
-    this.http.get(`OnlineDocument/DeleteData/${this.currentEmployeeDetail.EmployeeUid}`).then(response => {
-      this.common.ShowToast("File Reterive");
-    }).catch(e => { console.log(e) });
-  }
+  // deleteFile(FileUid: string) {
+  //   let data = this.userFiles.filter(a => a.FileUid === FileUid);
+  //   let newData = data[0];
+  //   this.http.get(`OnlineDocument/DeleteData/${this.currentEmployeeDetail.EmployeeUid}`).then(response => {
+  //     this.common.ShowToast("File Reterive");
+  //   }).catch(e => { console.log(e) });
+  // }
 
   ClickEvents(e: any) {
     if (e.fn)
