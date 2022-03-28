@@ -38,7 +38,6 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
   currentFile: Files = null;
   editModule: boolean = false;
   GoogleDocUrl: string = "https://docs.google.com/gview?url=%URL%&embedded=true";
-  FileUrl: string = "http://localhost:5000/Files/Documents/zaid2292_gmail_com/file_2.pdf";
   TotalRecords: number = 0;
   dtTrigger: Subject<any> = new Subject<any>();
   tableFilter: Filter;
