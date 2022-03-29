@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
-import { ProfileImage, UserImage } from 'src/providers/constants';
+import { Clients, ProfileImage, UserImage, UserType } from 'src/providers/constants';
 
 @Component({
   selector: 'app-registerclient',
@@ -20,6 +20,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   isLoaded: boolean = false;
   profileURL: string = UserImage;
   fileDetail: Array<any> = [];
+  UserTypeId: UserType= UserType.Client;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -34,21 +35,43 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     let data = this.nav.getValue();
     this.clientModal = new clientModal();
-    if (data !== null && data !== "") {
-      this.clientModal = data as clientModal;
+    if(data) {
+      if (data.client.length > 0)
+        this.clientModal = data.client[0] as clientModal;
+      this.clientModal.IsActive = true;
       this.isUpdating = true;
       this.loadData();
     } else {
       this.clientModal = new clientModal;
       this.initForm();
       this.isLoaded = true;
+
     }
+    // if (data !== null && data !== "") {
+    //   this.clientModal = data as clientModal;
+    //   this.isUpdating = true;
+    //   this.loadData();
+    // } else {
+    //   this.clientModal = new clientModal;
+    //   this.initForm();
+    //   this.isLoaded = true;
+    // }
+  }
+
+  buildProfileImage(fileDetail: any) {
+    this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
+    this.clientModal.FileId = fileDetail.FileId;
   }
 
   loadData() {
-    this.http.get(`clients/GetClientById/${this.clientModal.ClientId}/${this.clientModal.IsActive}`).then((response: ResponseModel) => {
+    this.http.get(`clients/GetClientById/${this.clientModal.ClientId}/${this.clientModal.IsActive}/${this.UserTypeId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        this.clientModal = response.ResponseBody;
+        if (response.ResponseBody.client.length > 0)
+          this.clientModal = response.ResponseBody.client[0] as clientModal;
+        let profileDetail = response.ResponseBody.file;
+        if(profileDetail.length > 0) {
+          this.buildProfileImage(profileDetail[0]);
+        }
         this.initForm();
       } else {
         this.clientModal = new clientModal;
@@ -88,7 +111,8 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       IFSC: new FormControl(this.clientModal.IFSC),
       PanNo: new FormControl(this.clientModal.PanNo),
       AdminId: new FormControl(this.clientModal.AdminId),
-      FileId: new FormControl(this.clientModal.FileId)
+      FileId: new FormControl(this.clientModal.FileId),
+      ProfileImgPath: new FormControl('')
     });
   }
 
@@ -111,8 +135,10 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     if (this.clientForm.get("Email").value === "")
       errroCounter++;
 
-    if (this.clientModal.FileId == null)
-      this.clientModal.FileId = 0;
+    if (this.clientForm.get("FileId").value == null)
+      this.clientForm.get("FileId").setValue(0);
+    if (this.clientForm.get("AdminId").value == null)
+      this.clientForm.get("AdminId").setValue(0);
 
     let clientDetail = this.clientForm.value;
 

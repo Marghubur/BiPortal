@@ -98,6 +98,10 @@ export class documentsComponent implements OnInit, OnDestroy {
 
       this.bindForm(this.currentUser);
       this.RefreshDocuments();
+      if (this.documentDetails.length  > 0)
+        this.isDocumentReady = true;
+      else
+        this.isDocumentReady = false;
   }
 
   findType(e: any) {
@@ -176,6 +180,7 @@ export class documentsComponent implements OnInit, OnDestroy {
   }
 
   RefreshDocuments() {
+    this.documentDetails = [];
     if(this.currentUser.UserId > 0 && this.currentUser.UserTypeId > 0) {
       this.http.post("OnlineDocument/GetDocumentByUserId", {
         "UserId": this.currentUser.UserId, "UserTypeId" : this.currentUser.UserTypeId
@@ -295,6 +300,7 @@ export class documentsComponent implements OnInit, OnDestroy {
 
   GetDocumentFile(fileInput: any) {
     this.FileDocuments = [];
+    this.FileDocumentList = [];
     this.FilesCollection = [];
     let selectedFiles = fileInput.target.files;
     if (selectedFiles.length > 0) {
@@ -322,6 +328,7 @@ export class documentsComponent implements OnInit, OnDestroy {
         index++;
       }
 
+      this.totalFileSize = 0;
       for(let i=0; i<selectedFiles.length; i++) {
         let filesize = Number(this.FilesCollection[i].size)
         this.totalFileSize += (filesize/1024);
@@ -355,6 +362,7 @@ export class documentsComponent implements OnInit, OnDestroy {
   }
 
   buildRoute() {
+    this.documentDetails = [];
     if(this.routeParam != '') {
       if(Object.keys(this.cachedDocumentDetails).length === 0) {
         this.cachedDocumentDetails = this.local.getLocal("localpagedata");
@@ -375,13 +383,14 @@ export class documentsComponent implements OnInit, OnDestroy {
         this.documentDetails = nav;
         this.currentFolder = this.routeParam;
         this.createPageRoute();
+        this.isDocumentReady = true;
       } else {
+        this.isDocumentReady = false;
         this.documentDetails = [];
         this.createPageRoute();
       }
       this.local.setLocal("pageroute", this.folderNav);
     }
-    this.isDocumentReady = true;
   }
 
   createPageRoute() {
@@ -463,7 +472,6 @@ export class documentsComponent implements OnInit, OnDestroy {
 
   getRelativePath(path: string): string {
     if(path) {
-      path = path.toLocaleLowerCase();
       let paths = path.split(`${environment.FolderDelimiter}`);
       if(paths.length > 0 && paths[0] === DocumentPath) {
         paths.splice(0, 1);
@@ -496,7 +504,7 @@ export class documentsComponent implements OnInit, OnDestroy {
 
   deleteFile() {
     if(this.currentDeleteMarkedItem) {
-      let fileIds = this.currentDeleteMarkedItem.FileId;
+      let fileIds = (this.currentDeleteMarkedItem.FileId).toString();
       this.http.delete(`FileMaker/DeleteFile/${this.currentUser.UserId}/${this.currentUser.UserTypeId}`, [fileIds])
       .then((response:ResponseModel) => {
         if(response.ResponseBody && response.ResponseBody.Table) {
