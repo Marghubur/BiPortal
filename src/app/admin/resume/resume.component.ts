@@ -805,7 +805,7 @@ export class ResumeComponent implements OnInit {
       let index = 0;
       while (index < this.FileDocumentList.length) {
         formData.append("file_" + index, this.FileDocumentList[index]);
-        this.BuildFilesModel(files, "file_" + index, this.FileDocumentList[index]);
+        this.BuildFilesModel(files, "file_" + index, index, this.FileDocumentList[index]);
         index++;
       }
 
@@ -820,11 +820,11 @@ export class ResumeComponent implements OnInit {
     }
   }
 
-  BuildFilesModel(filesModel: Array<Files>, uniqueKey: string, data: File) {
+  BuildFilesModel(filesModel: Array<Files>, uniqueKey: string, index: number, data: File) {
     let file = new Files();
     file.FileExtension = data.type;
     file.FileName = uniqueKey;
-    file.FileUid = uniqueKey;
+    file.FileUid = index;
     filesModel.push(file);
   }
 
@@ -855,6 +855,10 @@ export class ResumeComponent implements OnInit {
       this.candidatesData = e;
       this.getUploadedDetails();
     }
+  }
+
+  DeleteCurrent(id: number) {
+    alert("This service is unavailable.");
   }
 
   changeUploadedRecords(e: Filter) {
@@ -1025,6 +1029,6 @@ class Files {
   FileName: string = "";
   FileExtension: string = "";
   FilePath: string = "";
-  FileUid: string = "";
+  FileUid: number = 0;
   ProfileUid: string = "";
 }

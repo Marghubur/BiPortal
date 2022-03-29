@@ -4,7 +4,7 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
-import { BillDetail, Clients, Documents, DocumentsPage, RegisterClient } from 'src/providers/constants';
+import { BillDetail, Clients, Documents, DocumentsPage, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { DocumentUser } from '../documents/documents.component';
@@ -114,8 +114,9 @@ export class ClientsComponent implements OnInit {
     if (data !== null) {
       //data = data.item;
       let ClientId = data.ClientId;
+      let UserTypeId = UserType.Client
       if (ClientId !== null && ClientId !== "") {
-        this.http.get(`Clients/GetClientById/${ClientId}/${data.IsActive}`).then((response: ResponseModel) => {
+        this.http.get(`Clients/GetClientById/${ClientId}/${data.IsActive}/${UserTypeId}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             this.nav.navigate(RegisterClient, response.ResponseBody);
           }

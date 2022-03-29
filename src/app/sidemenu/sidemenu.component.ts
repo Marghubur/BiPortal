@@ -141,6 +141,24 @@ export class SidemenuComponent implements OnInit {
       this.autoPlay.InitAutoPlay();
     }, 100);
   }
+
+  toggleSection(e: any, index: number) {
+    let elems: any = document.getElementById('menu-items');
+    let h = elems.querySelectorAll('h4[name="menu-header"]');
+    let d = elems.querySelectorAll('div[name="menu-body"]');
+    let i = 0;
+    while(i < h.length) {
+      if(i === index) {
+        h[i].classList.add('collapsed');
+        d[i].classList.add('show');
+      } else {
+        h[i].classList.remove('collapsed');
+        d[i].classList.remove('show');
+      }
+      i++;
+    }
+  }
+
 }
 
 interface PopOverDetail {

@@ -86,8 +86,8 @@ export const ExcelImg = "assets/ext/excel.png";
 export const PptImg = "assets/ext/ppt.jpg";
 export const DirectoryImg = "assets/ext/directory.jpg";
 export const Images = "assets/ext/image.png";
-export const DocumentPath = "documents";
-export const UserPath = "user";
+export const DocumentPath = "Documents";
+export const UserPath = "User";
 export const UserImage = "assets/images/faces/face1.jpg";
 
 
