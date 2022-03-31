@@ -59,6 +59,10 @@ export const Attendance = 'admin/attendance';
 export const Profile = 'admin/profile';
 export const Recent = 'admin/recent';
 export const Roles = 'admin/roles';
+export const Companies = 'admin/Companies';
+export const CreateResume = 'admin/CreateResume';
+export const Recruiter = 'admin/Recruiter';
+export const Leave = 'admin/Leave'
 
 
 // *************************** file name constancts  *************

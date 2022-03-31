@@ -24,6 +24,10 @@ import { ManageComponent } from './profile/profile.component';
 import { RecentComponent } from './recent/recent.component';
 import { RolesComponent } from './roles/roles.component';
 import { BreadcrumsComponent } from '../util/breadcrums/breadcrums.component';
+import { CreateResumeComponent } from './create-resume/create-resume.component';
+import { CompaniesComponent } from './companies/companies.component';
+import { RecruiterComponent } from './recruiter/recruiter.component';
+import { LeaveComponent } from './leave/leave.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +47,11 @@ import { BreadcrumsComponent } from '../util/breadcrums/breadcrums.component';
     AttendanceComponent,
     ManageComponent,
     RecentComponent,
-    RolesComponent
+    RolesComponent,
+    CreateResumeComponent,
+    RecruiterComponent,
+    CompaniesComponent,
+    LeaveComponent
   ],
   imports: [
     CommonModule,

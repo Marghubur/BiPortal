@@ -1040,6 +1040,7 @@ export class ManageComponent implements OnInit {
   }
 
   uploadProfilePicture(event: any) {
+    this.fileDetail = [];
     if (event.target.files) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
@@ -1059,6 +1060,9 @@ export class ManageComponent implements OnInit {
   }
 
   GetDocumentFile(fileInput: any) {
+    this.fileDetail = [];
+    this.FileDocumentList = null;
+    this.FilesCollection = null;
     let selectedfile = fileInput.target.files;
     if (selectedfile.length > 0) {
       this.fileDetail = selectedfile[0];
