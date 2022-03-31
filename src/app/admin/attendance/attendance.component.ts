@@ -4,10 +4,11 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { Toast } from 'src/providers/common-service/common.service';
-import { UserType } from 'src/providers/constants';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { AccessTokenExpiredOn, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 import { ApplicationData } from '../build-pdf/build-pdf.component';
 
 @Component({
@@ -34,10 +35,13 @@ export class AttendanceComponent implements OnInit {
   isEmployeesReady: boolean = false;
   currentCommentElement: any = null;
   isSubmitted: boolean = true;
+  userDetail: UserDetail = new UserDetail();
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
-    private nav: iNavigation
+    private nav: iNavigation,
+    private local: ApplicationStorage,
+    private user: UserService
   ) {
     this.singleEmployee = new Filter();
     this.employeeDetails.placeholder = "Employee";
@@ -72,7 +76,21 @@ export class AttendanceComponent implements OnInit {
       this.userName = cachedData.FirstName + " " + cachedData.LastName;
       this.isEmployeesReady = true;
     } else {
-      Toast("Invalid user.");
+      let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
+      this.userDetail = this.user.getInstance() as UserDetail;
+      if(expiredOn === null || expiredOn === "")
+      this.userDetail["TokenExpiryDuration"] = new Date();
+      else
+      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+      let Master = this.local.get(null);
+      if(Master !== null && Master !== "") {
+        this.userDetail = Master["UserDetail"];
+        this.userId = this.userDetail.UserId;
+        this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
+        this.isEmployeesReady = true;
+      } else {
+        Toast("Invalid user. Please login again.")
+      }
     }
   }
 

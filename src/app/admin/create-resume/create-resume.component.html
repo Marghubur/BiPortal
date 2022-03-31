@@ -1,0 +1,62 @@
+<div class="col-md-12 col-sm-12 mt-5 main-container">
+  <div class="panel">
+    <div class="x_header">
+      <h2>
+        Create Resume
+      </h2>
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <div class="col-10 row p-0">
+        <form [formGroup]="resumeForm" autocomplete="off" *ngIf="isFormReady">
+          <div class="x_content mt-2 p-0">
+            <div class="col-12 row m-0 p-0 pt-3">
+              <div class="col-md-3">
+                <div class="x_header_title position-relative">
+                  <div class="img-container" (change)="uploadProfilePicture($event)">
+                    <div class="img-container__box">
+                      <img [src]="profileURL" alt="">
+                    </div>
+                    <div class="img-container__select">
+                      <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
+                        formControlName="ProfileImgPath" />
+                      <a class="fa fa-camera text-light p-1 zoom-2 text-decoration-none"
+                        (click)="fireBrowserFile()"></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <div class="col-md-12 m-0 row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">First Name *</label>
+                    <input inputtype="mandatory" class="form-control" placeholder="First Name" name="FirstName"
+                      formControlName="FirstName" />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Last Name *</label>
+                    <input class="form-control" placeholder="Last Name" name="LastName" formControlName="LastName" />
+                  </div>
+                </div>
+
+                <div class="col-md-12 m-0 row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Mobile Number </label>
+                    <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#" OnlyNumber="10"
+                      name="Mobile" formControlName="Mobile" />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Email Id </label>
+                    <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-outline-success" (click)="generateResume()">Generate Resume</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
