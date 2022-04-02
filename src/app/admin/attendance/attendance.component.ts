@@ -36,6 +36,10 @@ export class AttendanceComponent implements OnInit {
   currentCommentElement: any = null;
   isSubmitted: boolean = true;
   userDetail: UserDetail = new UserDetail();
+  clockDate: Date = new Date();
+  time = new Date();
+  intervalId;
+  DayName: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -70,6 +74,11 @@ export class AttendanceComponent implements OnInit {
     this.isFormReady = false;
     this.fromModel = null;
     this.toModel = null;
+    this.intervalId = setInterval(() => {
+      this.time = new Date();
+    }, 1000);
+    this.DayName =this.time.getDay();
+    
     let cachedData = this.nav.getValue();
     if(cachedData) {
       this.userId = cachedData.EmployeeUid;
