@@ -268,10 +268,9 @@ export class AttendanceComponent implements OnInit {
     }
 
     let data = {
-      UserId: Number(this.userId),
+      EmployeeUid: Number(this.userId),
       UserTypeId : UserType.Employee,
-      AttendenceFromDay: this.fromDate,
-      AttendenceToDay: this.toDate
+      AttendenceForMonth: this.toDate
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
@@ -381,7 +380,6 @@ export class AttendanceComponent implements OnInit {
     this.fromDate = this.getMonday(new Date(currentDate));
     if(this.fromDate) {
       this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
-      this.toDate.setDate(this.toDate.getDate() + 7);
       this.getUserAttendanceData();
     }
   }
