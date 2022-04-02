@@ -32,7 +32,8 @@
           [attr.aria-labelledby]="'heading'+i" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <ng-container *ngFor="let item of catagory.Value">
-              <a [routerLink]="['/' + item.Link]" class="nav-link a-font">
+              <a [routerLink]="['/' + item.Link]" class="nav-link a-font" [routerLinkActiveOptions]="{exact: true}"
+                routerLinkActive="active-link">
                 <i class="{{item.Icon}} me-2"></i>{{item.Catagory}}
               </a>
             </ng-container>

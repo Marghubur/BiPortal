@@ -54,6 +54,8 @@ export class LeaveComponent implements OnInit {
             }]
         },
         options: {
+          maintainAspectRatio: false,
+          responsive: true,
           scales: {
               y: {
                   beginAtZero: true
@@ -89,6 +91,7 @@ export class LeaveComponent implements OnInit {
       },
       options: {
         maintainAspectRatio: false,
+        responsive: true,
         cutout: 50,
     }
     })
@@ -285,6 +288,8 @@ export class LeaveComponent implements OnInit {
             }]
         },
         options: {
+          maintainAspectRatio: false,
+          responsive: true,
           scales: {
               y: {
                   beginAtZero: true
