@@ -389,9 +389,9 @@
                             <div class="d-inline-block mt-3" [formGroupName]="index">
                               <div class="d-inline-block me-2">
                                 <a class="btn col-info" [ngClass]="{'bg-primary': (index + 1) % 2 === 0,
-                                              'bg-secondary': (index + 1) % 3 === 0,
-                                              'bg-success': (index + 1) % 4 === 0,
-                                              'bg-danger text-white': (index + 1) % 5 === 0,
+                                              'bg-secondary ': (index + 1) % 3 === 0,
+                                              'text-light bg-success': (index + 1) % 4 === 0,
+                                              'bg-danger': (index + 1) % 5 === 0,
                                               'bg-warning': (index + 1) % 6 === 0,
                                               'text-white bg-dark': (index + 1) % 7 === 0}">
                                   <u class="fw-bold text-underline"
@@ -418,7 +418,7 @@
                             </div>
                           </ng-container>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 border-start">
                           <ng-container *ngIf="!isLanguageSeleted">
                             <div class="language-msg">Please click on any language to see their details</div>
                           </ng-container>

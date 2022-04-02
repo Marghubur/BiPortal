@@ -54,44 +54,89 @@
       </div>
     </ng-container>
     <app-breadcrums></app-breadcrums>
-    <div class="cold-md-12 row mt-4 mb-4">
+    <div class="col-md-12 row mt-4 mb-4">
       <div class="col-md-4">
         <h6>Attendance Stats</h6>
         <div class="card">
           <div class="d-flex justify-content-between">
-            <h6 class="pt-2 ps-2">
+            <h6 class="pt-3 ps-2">
               Last Week
             </h6>
             <div>
               <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
             </div>
           </div>
+          <div class="d-flex align-items-center justify-content-between pe-2 pb-2 pt-3">
+            <div class="col-md-4 d-flex align-items-center">
+              <i class="fa fa-user-circle fa-3x text-success ps-2" aria-hidden="true"></i>
+              <span class="fw-bold ps-2 last-week-team">Your</span>
+            </div>
+              <div class="col-md-4">
+                <h6>AVG HRS / DAY</h6>
+                <h6 class="pt-2"> 9h 0m</h6>
+              </div>
+              <div class="col-md-4">
+                <h6>ON TIME ARRIVAL</h6>
+                <h6 class=" pt-2">100%</h6>
+              </div>
+          </div>
+          <div class="border-top d-flex align-items-center pb-3 pt-2">
+            <div class="col-md-4 d-flex align-items-center">
+              <span class="fa-stack fa-2x ps-2 text-dark">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+              </span>
+              <span class="fw-bold ps-2 last-week-team">My Team</span>
+            </div>
+            <div class="col-md-4 pt-2">
+              <h6>7h 24m</h6>
+            </div>
+            <div class="col-md-4 pt-2">
+              <h6>81%</h6>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-md-4">
-        <h6>Timing</h6>
+        <h6>Timings</h6>
         <div class="card">
-          <div class="d-flex justify-content-between">
-            <h6 class="pt-2 ps-2">
-              Last Week
-            </h6>
-            <div>
-              <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
+          <div class="d-flex justify-content-between pb-5">
+            <div class="d-flex pt-3 ps-2">
+              <div class="text-inisde-circle" [ngClass]="{'active-circle': DayName == 1}">M</div>
+              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 2}">T</div>
+              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 3}">W</div>
+              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 4}">T</div>
+              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 5}">F</div>
+              <div class="text-inisde-circle ms-3 inactive-circle">S</div>
+              <div class="text-inisde-circle ms-3 inactive-circle">S</div>
             </div>
+            <div>
+              <i class="fa fa-search fa-lg pe-3 pt-3" aria-hidden="true"></i>
+              <i class="fa fa-qrcode fa-lg  pe-2 pt-3" aria-hidden="true"></i>
+            </div>
+          </div>
+          <h6 class="pt-5 ps-2">Today (10:00 AM - 8:00PM)</h6>
+          <div class="progress ms-2 me-2 mt-1 mb-2">
+            <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-success" role="progressbar" style="width: 11.11%" aria-valuenow="1.11" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <div class="d-flex justify-content-between ps-2 pe-2">
+            <h6>Duration: 9h 0m</h6>
+            <h6>Break: 60 Min</h6>
           </div>
         </div>
       </div>
       <div class="col-md-4">
         <h6>Actions</h6>
-        <div class="card">
-          <div class="d-flex justify-content-between">
-            <h6 class="pt-2 ps-2">
-              Last Week
-            </h6>
-            <div>
-              <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
-            </div>
+        <div class="card ps-2 pt-3 pb-5">
+          <div>
+            <h5 class="ps-3 col-md-4 border pt-2 pb-2">{{ time | date: 'hh:mm:ss a' }}</h5>
+            <h6 class="pt-2">{{time | date: 'EE dd, MMM yyyy'}}</h6>
           </div>
+          <h6 class=" text-center pb-3 pt-4">
+            Work From Home
+          </h6>
         </div>
       </div>
     </div>
