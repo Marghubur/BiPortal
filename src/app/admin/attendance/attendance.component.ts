@@ -43,7 +43,7 @@ export class AttendanceComponent implements OnInit {
   weekDaysList: Array<any> = [];
   totalHrs: number = 0;
   totalMins: number = 0;
-
+  BillingHrs: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -120,7 +120,7 @@ export class AttendanceComponent implements OnInit {
   buildTime(timeValue: number) {
     let totalTime: string = "";
     try {
-      let hours = parseInt((timeValue / 60).toFixed(0));
+      let hours = Math.trunc(timeValue/60);
       if(hours < 10) {
         totalTime = `0${hours}`;
       } else {
@@ -184,17 +184,20 @@ export class AttendanceComponent implements OnInit {
       }))
     });
 
-    this.countTotalTime(weekDaysList);
+    this.countTotalTime();
 
   }
 
-  countTotalTime(weekDaysList : Array<any>) {
+  countTotalTime() {
+    let records = this.attendenceForm.get("attendanceArray")["controls"];
     this.totalHrs = 0;
     this.totalMins = 0;
+    this.BillingHrs = 0;
     let i = 0;
-    while (i < weekDaysList.length) {
-      this.totalHrs +=  Number(weekDaysList[i].hrs) ;
-      this.totalMins +=  Number(weekDaysList[i].mins);
+    while (i < records.length) {
+      this.totalHrs +=  Number(records[i].get("UserHours").value);
+      this.totalMins +=  Number(records[i].get("UserMin").value);
+      this.BillingHrs += Number(records[i].get("Hours").value)
       i++;
     }
   }
@@ -211,11 +214,10 @@ export class AttendanceComponent implements OnInit {
     if(records && records.length >= index) {
       records[index].get("UserMin").setValue(value);
     }
-
-
+    this.countTotalTime();
   }
 
-  manageHourField(index: number, e: any) {
+  manageHourField(index: number, e: any, weekDaysList : Array<any>) {
     // let hrs = this.attendenceForm.get("UserHours").value;
     let hrs = parseInt(e.target.value);
     let value: any = "";
@@ -230,13 +232,7 @@ export class AttendanceComponent implements OnInit {
       records[index].get("UserHours").setValue(value);
     }
 
-    if(hrs > 8) {
-      let value = hrs - 8;
-      this.totalHrs = this.totalHrs + value;
-    } else {
-      let value = 8 - hrs;
-      this.totalHrs = this.totalHrs - value;
-    }
+    this.countTotalTime();
   }
 
   calculateTime(UserHours: string, UserMin: string) {
@@ -355,26 +351,28 @@ export class AttendanceComponent implements OnInit {
       let currentDate = null;
       while(index < to) {
         currentDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
-        let dateValue = new Date(currentDate.setDate(currentDate.getDate() + index));
-        let value = dateValue.getDay();
-        if (value > 0 && value < 6) {
-          weekDaysList.push({
-            date: new Date(currentDate.setDate(currentDate.getDate() + index)),
-            hrs: "08",
-            mins: "00"
-          });
-        } else {
-          weekDaysList.push({
-            date: new Date(currentDate.setDate(currentDate.getDate() + index)),
-            hrs: "00",
-            mins: "00"
-          });
-        }
+        // let dateValue = new Date(currentDate.setDate(currentDate.getDate() + index));
+        // let value = dateValue.getDay();
+        weekDaysList.push({
+          date: new Date(currentDate.setDate(currentDate.getDate() + index)),
+          hrs: "08",
+          mins: "00"
+        });
+
         currentDate = null;
         index++;
       }
     } else {
       Toast("Wrong date seleted.")
+    }
+
+    let i = 0;
+    while(i < weekDaysList.length) {
+      if (weekDaysList[i].date.getDay() == 0 || weekDaysList[i].date.getDay() == 6) {
+        weekDaysList[i].hrs = "00";
+        weekDaysList[i].mins = "00";
+      }
+      i++;
     }
     return weekDaysList;
   }
