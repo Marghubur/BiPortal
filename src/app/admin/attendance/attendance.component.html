@@ -3,10 +3,10 @@
     <ng-container *ngIf="isEmployeesReady">
       <div class="col-12 row m-0 p-0">
         <div class="col-md-4 p-0 m-0">
-          <label class="form-label">Employee Name</label>
-          <input class="form-control" type="text" readonly value="{{userName}}">
+          <label class="form-label">Select Employer</label>
+          <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}"></app-iautocomplete>
         </div>
-        <div class="col-md-8 elem-row justify-content-end">
+        <div class="col-md-6 elem-row justify-content-end">
           <div class="elem-row-item-base justify-content-end">
             <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
               Present week
@@ -225,7 +225,7 @@
                     </td>
                     <td>
                       <div class="center-badge d-flex justify-content-center">
-                        {{item.get('Hours').value}}
+                        {{item.get('BillingHours').value}}
                       </div>
                     </td>
                     <td>
@@ -241,6 +241,8 @@
                     </td>
                   </tr>
                 </ng-container>
+              </tbody>
+              <tfoot>
                 <tr>
                   <td colspan="2" class="text-end pt-5 pb-5">
                     <span class="fw-bold">
@@ -248,8 +250,10 @@
                     </span>
                   </td>
                   <td class="text-center">{{totalHrs}} : {{totalMins}}</td>
+                  <td class="text-center">{{totalHrs}} : {{totalMins}}</td>
+                  <td class="text-center"></td>
                 </tr>
-              </tbody>
+              </tfoot>
             </table>
           </div>
         </div>
