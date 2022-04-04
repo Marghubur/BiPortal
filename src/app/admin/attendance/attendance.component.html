@@ -1,20 +1,22 @@
-<div class="main-container" *ngIf="isClientLoaded">
+<div class="main-container">
   <form autocomplete="off">
     <ng-container *ngIf="isEmployeesReady">
       <div class="col-12 row m-0 p-0">
         <div class="col-md-4 p-0 m-0">
           <label class="form-label">Select Employer</label>
-          <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}"></app-iautocomplete>
+          <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+          </app-iautocomplete>
         </div>
         <div class="col-md-8 elem-row justify-content-end">
           <div class="elem-row-item-base justify-content-end">
             <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
-              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-              {{ isLoading ? 'Wait' : 'Present week' }}
+              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-calendar-o': !isLoading}"></i>
+              {{ isLoading ? 'Wait' : 'Present week'}}
             </a>
           </div>
           <div class="elem-row-item-base justify-content-end ps-2">
             <a href="javascript:void(0)" class="p-2 p-2 badge bg-success text-light head-badge">
+              <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
               My pending attendance
             </a>
           </div>
@@ -26,11 +28,11 @@
             <form class="form-inline">
               <div class="form-group">
                 <div class="input-group">
-                  <input class="form-control form-control-sm" placeholder="yyyy-mm-dd" (click)="from.toggle()" 
+                  <input class="form-control form-control-sm" placeholder="yyyy-mm-dd" (click)="from.toggle()"
                     (dateSelect)="fromDateSelection($event)" name="fromModel" [(ngModel)]="fromModel" ngbDatepicker
                     #from="ngbDatepicker">
                   <div class="input-group-append">
-                    <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()" 
+                    <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()"
                       type="button"></button>
                   </div>
                 </div>
@@ -55,8 +57,8 @@
       </div>
     </ng-container>
     <app-breadcrums></app-breadcrums>
-    <div class="col-md-12 row mt-4 mb-4">
-      <div class="col-md-4">
+    <div class="col-md-12 row mt-4 mb-4 ms-0">
+      <div class="col-md-4 ps-0">
         <h6>Attendance Stats</h6>
         <div class="card px-3 py-2">
           <div class="d-flex justify-content-between">
@@ -103,11 +105,11 @@
         <div class="card px-3 py-2">
           <div class="d-flex justify-content-between pb-5">
             <div class="d-flex pt-3 ps-2">
-              <div class="text-inisde-circle" [ngClass]="{'active-circle': DayName == 1}">M</div>
-              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 2}">T</div>
-              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 3}">W</div>
-              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 4}">T</div>
-              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 5}">F</div>
+              <div class="text-inisde-circle" [ngClass]="{'active-circle': DayValue == 1}">M</div>
+              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 2}">T</div>
+              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 3}">W</div>
+              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 4}">T</div>
+              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 5}">F</div>
               <div class="text-inisde-circle ms-3 inactive-circle">S</div>
               <div class="text-inisde-circle ms-3 inactive-circle">S</div>
             </div>
@@ -116,7 +118,7 @@
               <i class="fa fa-qrcode fa-lg  pe-2 pt-3" aria-hidden="true"></i>
             </div>
           </div>
-          <ng-container *ngIf="DayName > 0 &&  DayName < 5">
+          <ng-container *ngIf="DayValue > 0 &&  DayValue < 5">
             <h6 class="pt-5 ps-2">Today (10:00 AM - 8:00PM)</h6>
             <div class="progress ms-2 me-2 mt-1 mb-2">
               <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
@@ -131,12 +133,12 @@
               <h6>Break: 60 Min</h6>
             </div>
           </ng-container>
-          <ng-container *ngIf="DayName == 6 || DayName ==  0">
+          <ng-container *ngIf="DayValue == 6 || DayValue ==  0">
             <h4 class="text-center pt-5 pb-5">Today is Holiday</h4>
           </ng-container>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 pe-0">
         <h6>Actions</h6>
         <div class="card px-3 pt-3 pb-5">
           <div>
@@ -273,7 +275,7 @@
 </div>
 
 <!-- Client Loading loader model -->
-<div class="modal fade" id="clientLoaderModal" tabindex="-1" *ngIf="!isClientLoaded">
+<div class="modal fade" id="clientLoaderModal" tabindex="-1" *ngIf="isClientLoaded">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body f-12 text-center cog-wheel">
