@@ -1,24 +1,5 @@
 <div id="page-menu" class="page-menu mobile-mode-menu bg-white menu-items">
   <div id="menu-items">
-    <!-- <ng-container *ngFor="let catagory of Menu;let index = index;">
-      <div>
-        <h4 name="menu-header" class="accordion-header" (click)="toggleSection($event, index)">
-          <button class="accordion-button" [ngClass]="{'collapsed': index === 0}" type="button">
-            {{catagory.Name}} <span *ngIf="catagory.ParentDetail.Badge != null"
-              class="badge bg-secondary ms-3">NEW</span>
-          </button>
-        </h4>
-        <div name="menu-body" class="mb-0 accordion-collapse collapse" [ngClass]="{'collapsed show': index === 0}">
-          <div class="accordion-body">
-            <ng-container *ngFor="let item of catagory.Value">
-              <a [routerLink]="['/' + item.Link]" class="nav-link a-font">
-                <i class="{{item.Icon}} me-2"></i>{{item.Catagory}}
-              </a>
-            </ng-container>
-          </div>
-        </div>
-      </div>
-    </ng-container> -->
     <div class="accordion" id="accordionExample">
       <div class="accordion-item" *ngFor="let catagory of Menu;let i = index;">
         <h2 class="accordion-header" [id]="'heading'+i">
@@ -30,7 +11,7 @@
         </h2>
         <div [id]="'collapse'+i" class="accordion-collapse collapse" [ngClass]="{ 'show': i == 0 }"
           [attr.aria-labelledby]="'heading'+i" data-bs-parent="#accordionExample">
-          <div class="accordion-body">
+          <div class="">
             <ng-container *ngFor="let item of catagory.Value">
               <a [routerLink]="['/' + item.Link]" class="nav-link a-font" [routerLinkActiveOptions]="{exact: true}"
                 routerLinkActive="active-link">
@@ -41,41 +22,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="">
-      <h4 class="accordion-header" id="panelsStayOpen-headingTwo">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-          MANAGE USER
-        </button>
-      </h4>
-      <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
-        aria-labelledby="panelsStayOpen-headingTwo">
-        <div class="accordion-body">
-          <a [routerLink]="['/admin/manage']" routerLinkActive="router-link-active"><i class="fa fa-code me-3 pb-2"
-              aria-hidden="true"></i>Managae</a>
-          <a [routerLink]="['/admin/recent']" routerLinkActive="router-link-active" class="mt-2"><i
-              class="fa fa-retweet me-3" aria-hidden="true"></i>Recent</a>
-        </div>
-      </div>
-    </div>
-    <div class="">
-      <h4 class="accordion-header" id="panelsStayOpen-headingThree">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
-          aria-controls="panelsStayOpen-collapseThree">
-          OPERATIONS
-        </button>
-      </h4>
-      <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
-        aria-labelledby="panelsStayOpen-headingThree">
-        <div class="accordion-body">
-          <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active"><i class="fa fa-cloud-upload me-3"
-              aria-hidden="true"></i>Developments</a>
-        </div>
-      </div>
-    </div>
-  </div> -->
     <!-- <hr> -->
     <div class="title_menu ms-3 mt-3">
       <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active"><i class="fa fa-stack-overflow me-3 pb-3"

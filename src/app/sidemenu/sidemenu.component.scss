@@ -78,7 +78,12 @@ a {
 }
 
 .active-link {
-  background: #e2f1ff !important;
+  background: #1013160d !important;
   color: #00158e !important;
   font-weight: 500;
+}
+
+.nav-link{
+  margin: 0 !important;
+  padding: 0.8rem 1.6rem;
 }

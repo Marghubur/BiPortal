@@ -114,6 +114,7 @@ export class AttendanceComponent implements OnInit {
         this.employeeId = this.userDetail.UserId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
         this.isEmployeesReady = true;
+        this.loadMappedClients();
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -136,6 +137,9 @@ export class AttendanceComponent implements OnInit {
             i++;
           }
 
+          if(mappedClient.length == 1) {
+            this.clientId = mappedClient[0].ClientUid;
+          }
           Toast("Client loaded successfully.");
         } else {
           ErrorToast("Unable to get client detail. Please contact admin.");
@@ -179,9 +183,10 @@ export class AttendanceComponent implements OnInit {
     return totalTime;
   }
 
-  buildWeekForm(at: any, item: any) {
+  buildWeekForm(at: any, item: any, attendanceId: number) {
     if (item == null) {
       return this.fb.group({
+        AttendanceId: [attendanceId, Validators.required],
         UserComments: ['', Validators.required],
         Hours: [at.hrs, Validators.required],
         BillingHours: [this.buildTime(this.client.BillingHours), Validators.required],
@@ -200,6 +205,7 @@ export class AttendanceComponent implements OnInit {
       let hours = timeValues[0];
       let minutes = timeValues[1];
       return this.fb.group({
+        AttendanceId: [attendanceId, Validators.required],
         UserComments: [item.UserComments, Validators.required],
         Hours: [totalTime, Validators.required],
         BillingHours: [this.buildTime(this.client.BillingHours), Validators.required],
@@ -219,11 +225,17 @@ export class AttendanceComponent implements OnInit {
   initForm(attendanceDetail: Array<any>) {
     let weekDaysList = this.buildWeekDays();
     this.weekDaysList = weekDaysList.map(item => item.date.getDay());
+
+    let attendanceId = 0;
+    if(attendanceDetail && attendanceDetail.length > 0) {
+      attendanceId = attendanceDetail[0].AttendanceId;
+    }
+
     this.attendenceForm = this.fb.group({
       attendanceArray: this.fb.array(weekDaysList.map(item => {
         item.date.setHours(0,0,0,0);
-        let value = attendanceDetail.find(x => x.AttendanceDay - item.date === 0)
-        return this.buildWeekForm(item, value);
+        let value = attendanceDetail.find(x => new Date(x.AttendanceDay).getDate() == item.date.getDate());
+        return this.buildWeekForm(item, value, attendanceId);
       }))
     });
 
@@ -344,7 +356,7 @@ export class AttendanceComponent implements OnInit {
     .then(response => {
       if (response.ResponseBody) {
         Toast("Created/Updated successfully");
-        this.getUserAttendanceData();
+        this.initForm(response.ResponseBody);
       } else {
         Toast("Fail to inser/update, please contact to admin.");
       }
