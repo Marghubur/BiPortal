@@ -37,14 +37,9 @@ export class AttendanceComponent implements OnInit {
   intervalId;
   DayValue: number = 0;
   weekDaysList: Array<any> = [];
-  totalHrs: string = '';
-  totalMins: string = '';
-  clientId: number = 0;
-  clientDetail: autoCompleteModal = null;
-  client: any = null;
-  isLoading: boolean = false;
-  isClientLoaded: boolean = false;
-  billingHrs: string = '';
+  totalHrs: number = 0;
+  totalMins: number = 0;
+  BillingHrs: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -158,7 +153,7 @@ export class AttendanceComponent implements OnInit {
   buildTime(timeValue: number) {
     let totalTime: string = "";
     try {
-      let hours = Math.trunc((timeValue / 60));
+      let hours = Math.trunc(timeValue/60);
       if(hours < 10) {
         totalTime = `0${hours}`;
       } else {
@@ -231,32 +226,19 @@ export class AttendanceComponent implements OnInit {
       }))
     });
 
-    let records = this.attendenceForm.get("attendanceArray")["controls"];
-    let i = 0;
-    while (i < records.length) {
-      let dayValue = new Date(records[i].get("AttendanceDisplayDay").value).getDay();
-      if (dayValue == 0 || dayValue == 6) {
-        records[i].get("BillingHours").value = "00:00"
-      }
-      i++;
-    }
     this.countTotalTime();
   }
 
   countTotalTime() {
     let records = this.attendenceForm.get("attendanceArray")["controls"];
-    this.totalHrs = '';
-    this.totalMins = '';
-    this.billingHrs = '';
-    let hrsValue = 0;
-    let minsValue = 0;
-    let billingValue = 0;
-
+    this.totalHrs = 0;
+    this.totalMins = 0;
+    this.BillingHrs = 0;
     let i = 0;
     while (i < records.length) {
-      hrsValue +=  Number(records[i].get("UserHours").value) ;
-      minsValue +=  Number(records[i].get("UserMin").value);
-      billingValue +=  parseInt(records[i].get("BillingHours").value);
+      this.totalHrs +=  Number(records[i].get("UserHours").value);
+      this.totalMins +=  Number(records[i].get("UserMin").value);
+      this.BillingHrs += Number(records[i].get("Hours").value)
       i++;
     }
 
@@ -294,7 +276,8 @@ export class AttendanceComponent implements OnInit {
     this.countTotalTime();
   }
 
-  manageHourField(index: number, e: any) {
+  manageHourField(index: number, e: any, weekDaysList : Array<any>) {
+    // let hrs = this.attendenceForm.get("UserHours").value;
     let hrs = parseInt(e.target.value);
     let value: any = "";
     if (hrs > 0 ) {
@@ -431,6 +414,9 @@ export class AttendanceComponent implements OnInit {
       let currentDate = null;
       while(index < to) {
         currentDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
+        // let dateValue = new Date(currentDate.setDate(currentDate.getDate() + index));
+        // let value = dateValue.getDay();
+
         weekDaysList.push({
           date: new Date(currentDate.setDate(currentDate.getDate() + index)),
           hrs: "08",

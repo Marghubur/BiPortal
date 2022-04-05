@@ -133,7 +133,7 @@
               <h6>Break: 60 Min</h6>
             </div>
           </ng-container>
-          <ng-container *ngIf="DayValue == 6 || DayValue ==  0">
+          <ng-container *ngIf="DayName == 6 || DayName == 0">
             <h4 class="text-center pt-5 pb-5">Today is Holiday</h4>
           </ng-container>
         </div>
@@ -253,8 +253,7 @@
                     </div>
                   </td>
                   <td class="text-center">{{totalHrs}} : {{totalMins}}</td>
-                  <td class="text-center">{{billingHrs}} : 00</td>
-                  <td class="text-center"></td>
+                  <td class="text-center">{{this.BillingHrs}}</td>
                 </tr>
               </tfoot>
             </table>
