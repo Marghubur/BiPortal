@@ -4,7 +4,7 @@
       <div class="container-fluid pt-4">
         <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
           <li [ngbNavItem]="1">
-            <a ngbNavLink>Heading</a>
+            <a ngbNavLink>Me</a>
             <ng-template ngbNavContent>
               <form [formGroup]="manageUserForm" *ngIf="isFormReady">
                 <div class="x_content mt-2 p-0">
@@ -57,107 +57,107 @@
                       </div>
                     </div>
                   </div>
-
-                  <div class="x_header mt-4">
-                    <div class="x_header_title">
-                      <h2>Resume Headline</h2>
-                    </div>
-                  </div>
-
-                  <div class="col-md-12">
-                    <textarea placeholder="Resume Headline" formControlName="ResumeHeadline" name="ResumeHeadline"
-                      class="w-100 form-control lg-txtarea"></textarea>
-                  </div>
-                </div>
-
-                <div class="col-md-12 row m-0 p-0 pt-3 mt-2">
-                  <div class="x_panel">
-                    <div class="x_header">
-                      <div class="x_header_title">
-                        <h2>Attach Resume</h2>
+                  <div class="col-md-12 row m-0 p-0 pt-3 mt-2">
+                    <div class="card pt-3 mb-4 px-3">
+                      <div class="x_header border-0">
+                        <div class="x_header_title">
+                          <h2 class="fw-bold">Attach Resume</h2>
+                        </div>
+                        <h6 class="fw-normal">Resume is the most important document recruiters look for. Recruiters
+                          generally do not
+                          look at profiles without resumes.</h6>
                       </div>
-                      <small>Resume is the most important document recruiters look for. Recruiters generally do not
-                        look at profiles without resumes.</small>
-                    </div>
-                    <div class="col-md-12 mb-3 row m-0">
-                      <div class="col-md-12 mt-4 me-2 row">
-                        <div class="x_panel col-md-4">
-                          <div class="x_header">
-                            <div class="x_header_title">
-                              <div class="">
-                                <input type="file" id="uploadresume" class="d-none" (change)="GetDocumentFile($event)"
-                                  formControlName="ResumePath"
-                                  accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                  *ngIf="!uploading" />
-                                <div class="col-md-12 p-0">
-                                  <div class="table-responsive">
-                                    <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                      aria-labelledby="home-tab">
-                                      <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
-                                        aria-labelledby="home-tab">
-                                        <div id="classmasterdata" class="col-md-12">
-                                          <div name="ifilezone" class="ifilezone mb-4"
-                                            (click)="fireresumeBrowserFile()">
-                                            <div *ngIf="!uploading">
-                                              <span style="color:darkgray;display: block;margin-top: 10rem;">
-                                                Supported Formats: doc, docx, pdf upto 100 Kb
-                                              </span>
-                                            </div>
-                                            <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="uploading"
-                                              name="uploading">
-                                              <img src="assets/img/ExcelFile.png" />
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
+                      <div class="card pb-3 my-2">
+                        <input type="file" id="uploadresume" class="d-none" (change)="GetDocumentFile($event)"
+                          formControlName="ResumePath"
+                          accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                          *ngIf="!uploading" />
+                        <div class="col-md-12 p-0">
+                          <div class="table-responsive">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                              <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
+                                aria-labelledby="home-tab">
+                                <div id="classmasterdata" class="col-md-12" (click)="fireresumeBrowserFile()">
+                                  <div *ngIf="!uploading" class="d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                      <button class="btn btn-primary px-4 py-2">UPLOAD RESUME</button>
+                                      <p class="text-muted pt-2">
+                                        Supported Formats: doc, docx, pdf upto 100 Kb
+                                      </p>
                                     </div>
+                                  </div>
+                                  <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="uploading"
+                                    name="uploading">
+                                    <img src="assets/img/ExcelFile.png" />
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-8 mt-4 overflow-auto;">
-                          <table class="table" *ngIf="uploading">
-                            <thead>
-                              <tr>
-                                <th>File Name</th>
-                                <th>File Size (KB)</th>
-                                <th>File Type</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>{{fileDetail.name}}</td>
-                                <td>{{fileDetail.size / 1024 | number: '1.2-2'}}</td>
-                                <td>{{fileDetail.type}}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                          <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
-                            File size is greater than 100KB.
-                          </div>
-                          <div class="select-message" *ngIf="!uploading">
-                            <h3>
-                              Please upload your resume.
-                            </h3>
-                          </div>
-                          <div class="mt-4 float-end">
-                            <button type="button" class="btn btn-primary me-2" *ngIf="uploading"
-                              [disabled]="isLargeFile" (click)="uploadResumeFile()">
-                              <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload Resume
-                            </button>
-                            <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
-                              *ngIf="uploading">
-                              <i class="fa fa-eraser pe-2"></i> Cancel
-                            </button>
+                      </div>
+                      <div class="x_panel my-4 d-flex align-items-center justify-content-between custom-backgrnd-color">
+                        <div class="d-flex align-items-center justify-content-center py-3">
+                          <i class="fa fa-folder text-warning f-zoom" aria-hidden="true"></i>
+                          <div class="ps-3 pt-3">
+                            <h5>Don’t have a resume yet?</h5>
+                            <p>Create a job-winning resume with our simple resume builder</p>
                           </div>
                         </div>
+                        <a href="javascript:void(0)" class="text-decoration-none text-primary fw-bold pe-3">CREATE FREE
+                          RESUME</a>
                       </div>
+                      <!-- <div class="col-md-8 mt-4 overflow-auto;">
+                            <table class="table" *ngIf="uploading">
+                              <thead>
+                                <tr>
+                                  <th>File Name</th>
+                                  <th>File Size (KB)</th>
+                                  <th>File Type</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>{{fileDetail.name}}</td>
+                                  <td>{{fileDetail.size / 1024 | number: '1.2-2'}}</td>
+                                  <td>{{fileDetail.type}}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
+                              File size is greater than 100KB.
+                            </div>
+                            <div class="select-message" *ngIf="!uploading">
+                              <h3>
+                                Please upload your resume.
+                              </h3>
+                            </div>
+                            <div class="mt-4 float-end">
+                              <button type="button" class="btn btn-primary me-2" *ngIf="uploading"
+                                [disabled]="isLargeFile" (click)="uploadResumeFile()">
+                                <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload Resume
+                              </button>
+                              <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
+                                *ngIf="uploading">
+                                <i class="fa fa-eraser pe-2"></i> Cancel
+                              </button>
+                            </div>
+                          </div> -->
+                    </div>
+                  </div>
+                  <div class="card mb-3 ps-3">
+                    <div class="x_header mt-4 border-0">
+                      <div class="x_header_title">
+                        <h2 class="fw-bold">Resume Headline</h2>
+                        <i class="fa fa-pencil text-primary ps-3 fa-lg" (click)="editResumeHeadline()"></i>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <textarea placeholder="Resume Headline" formControlName="ResumeHeadline" name="ResumeHeadline"
+                        readonly class="w-100 form-control lg-txtarea border-0"></textarea>
                     </div>
                   </div>
                 </div>
-
               </form>
             </ng-template>
           </li>
@@ -375,16 +375,15 @@
               <form [formGroup]="skillsForm">
                 <div class="col-md-12">
                   <div class="x_panel">
-                    <div class="x_header">
-                      <div class="x_header_title">
-                        <h2>IT Skills</h2>
-                        <button class="btn btn-outline-primary btn-sm float-end" (click)="addNewItskill()"><i
-                            class="fa fa-plus-circle"></i> ADD ITSKILLS</button>
+                    <div class="x_header border-0">
+                      <div class="x_header_title pt-3">
+                        <h2 class="fw-bold">Key Skills</h2>
+                        <i class="fa fa-pencil ps-4 pt-2 text-primary fa-lg" (click)="editItSkillDetail()"></i>
                       </div>
                     </div>
                     <ng-container formArrayName="TechnicalSkills">
                       <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                           <ng-container *ngFor="let skills of skills.controls;let index = index">
                             <div class="d-inline-block mt-3" [formGroupName]="index">
                               <div class="d-inline-block me-2">
@@ -405,20 +404,12 @@
                                   <span class="badge bg-light text-dark ms-2">
                                     Exp: {{skills.get("ExperienceInYear").value}}
                                   </span>
-                                  <div class="ms-3 d-inline">
-                                    <a href="javascript:void(0)" class="pe-3" (click)="editItSkillDetail(skills)">
-                                      <i class="fa fa-pencil text-white"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" (click)="deleteSkillPopup(skills)">
-                                      <i class="fa fa-trash text-white"></i>
-                                    </a>
-                                  </div>
                                 </a>
                               </div>
                             </div>
                           </ng-container>
                         </div>
-                        <div class="col-md-4 border-start">
+                        <!-- <div class="col-md-4 border-start">
                           <ng-container *ngIf="!isLanguageSeleted">
                             <div class="language-msg">Please click on any language to see their details</div>
                           </ng-container>
@@ -434,9 +425,8 @@
                             <div class="language-view"><span class="fw-bold">Experience:
                               </span>{{singleSkill.ExperienceInMonth}} Months</div>
                           </ng-container>
-                        </div>
+                        </div> -->
                       </div>
-
                     </ng-container>
                   </div>
                 </div>
@@ -1007,17 +997,99 @@
   </div>
 </div>
 
+<!-- Edit Resume Headline Modal -->
+<div class="modal fade" id="resumeHeadlineModal" tabindex="-1">
+  <div class="modal-dialog modal-lg  modal-dialog-centered">
+    <div class="modal-content px-5 py-3 position-relative">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="exampleModalLabel">Resume Headline
+        </h5>
+        <div class="close-button">
+          <button type="button" [disabled]="isLoading" class="btn-close btn-sm" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+      </div>
+      <p class="ps-3">
+        It is the first thing recruiters notice in your profile. Write concisely what makes you unique and right
+        person for the job you are looking for.
+      </p>
+      <div class="modal-body">
+        <textarea placeholder="Resume Headline" [(ngModel)]="resumeHeadline" name="ResumeHeadline"
+          class="w-100 form-control lg-txtarea p-3"></textarea>
+      </div>
+      <div class="modal-footer border-0">
+        <a href="javascript:void(0)" class="pe-3 text-decoration-none" (click)="closeModal()">Cancel</a>
+        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="saveResumeHeadline()"><i
+            [ngClass]="{'fa fa-spinner fa-spin': isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Save' }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!--Skill Add Edit Modal -->
 <div class="modal fade" id="itSkillModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" [disabled]="isLoading" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content px-5 py-3 position-relative">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id=" exampleModalLabel">Key Skills</h5>
+        <div class="close-button">
+          <button type="button" [disabled]="isLoading" class="btn-close btn-sm" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
       </div>
+      <p class="ps-3">
+        Tell recruiters what you know or what you are known for e.g. Direct Marketing, Oracle, Java etc. We will send
+        you job recommendations based on these skills. Each skill is separated by a comma.
+      </p>
       <div class="modal-body" *ngIf="isEditItSkill">
-        <ng-container>
+        <h5>Skills</h5>
+        <div class="card px-3">
+          <div class="skill-popup-box ">
+            <form [formGroup]="skillsForm">
+              <ng-container formArrayName="TechnicalSkills">
+                <div class="col-md-12">
+                  <ng-container *ngFor="let skills of skills.controls;let index = index">
+                    <div class="d-inline-block mt-3" [formGroupName]="index">
+                      <div class="d-inline-block me-2">
+                        <span class="btn skill-custom-bg">
+                          <span class=" text-spannderline">{{skills.get("Language").value}}</span>
+                          <div class="ms-3 d-inline">
+                            <!-- <a href="javascript:void(0)" class="pe-3" (click)="editItSkillDetail(skills)">
+                                  <i class="fa fa-pencil text-white"></i>
+                                </a> -->
+                            <a href="javascript:void(0)" (click)="deleteSkillPopup(skills)">
+                              <i class="fa fa-times text-dark"></i>
+                            </a>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </form>
+          </div>
+          <div class="col-md-12 row mt-4">
+            <div class="col-md-3">
+              <label class="form-label">Language</label>
+              <input type="text" class="form-control my-3" placeholder="Enter your area of Expertise/Specialization"
+                [(ngModel)]="ExptLanguage">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Version</label>
+              <input type="text" class="form-control my-3" placeholder="Version" [(ngModel)]="ExptVersion">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Date</label>
+              <input type="text" class="form-control my-3" placeholder="Date" [(ngModel)]="Exptdate">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Experience</label>
+              <input type="text" class="form-control my-3" placeholder="Experience" [(ngModel)]="Expt">
+            </div>
+          </div>
+          <!-- <ng-container>
           <div class="col-md-12 row ps-2 pt-2">
             <div class="col-md-4 mb-3">
               <label class="form-label">Language </label>
@@ -1044,14 +1116,46 @@
               </div>
             </div>
           </div>
-        </ng-container>
+        </ng-container> -->
+        </div>
+        <p class="mt-5">Or you can select from the suggested set of skills</p>
+        <div class="">
+          <span class="x_panel w-auto d-inline-block">
+            CWI
+            <i class="fa fa-plus ps-3"></i>
+          </span>
+          <span class="x_panel w-auto d-inline-block ms-3">
+            Certified Welding Inspector
+            <i class="fa fa-plus ps-3"></i>
+          </span>
+          <span class="x_panel w-auto d-inline-block ms-3">
+            Bgas
+            <i class="fa fa-plus ps-3"></i>
+          </span>
+          <span class="x_panel w-auto d-inline-block ms-3">
+            NACE
+            <i class="fa fa-plus ps-3"></i>
+          </span>
+          <span class="x_panel w-auto d-inline-block ms-3">
+            IX
+            <i class="fa fa-plus ps-3"></i>
+          </span>
+          <span class="x_panel w-auto d-inline-block ms-3">
+            ASTM
+            <i class="fa fa-plus ps-3"></i>
+          </span>
+          <span class="x_panel w-auto d-inline-block">
+            Aramco
+            <i class="fa fa-plus ps-3"></i>
+          </span>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" [disabled]="isLoading" class="btn btn-secondary" data-bs-dismiss="modal"
-          (click)="closeSkillModal()">Close</button>
+      <div class="modal-footer border-0">
+        <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal"
+          aria-label="Close">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="addOrUpdateItSkill()"><i
             [ngClass]="{'fa fa-spinner fa-spin': isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Save' }}</button>
+          {{ isLoading ? 'Wait' : 'Add' }}</button>
       </div>
     </div>
   </div>
