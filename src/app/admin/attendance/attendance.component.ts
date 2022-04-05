@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';3
-import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -9,7 +9,6 @@ import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/commo
 import { AccessTokenExpiredOn, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
-import { ApplicationData } from '../build-pdf/build-pdf.component';
 declare var $: any;
 
 @Component({
@@ -19,14 +18,11 @@ declare var $: any;
 })
 export class AttendanceComponent implements OnInit {
   attendenceForm: FormGroup;
-  model: NgbDateStruct;
   date: any;
   isFormReady: boolean = false;
   attendanceArray: FormArray;
   singleEmployee: Filter = null;
-  placeholderName: string = "";
   employeeDetails: autoCompleteModal = new autoCompleteModal();
-  applicationData: ApplicationData = new ApplicationData();
   employeeId: number = 0;
   userName: string = "";
   fromModel: NgbDateStruct;
@@ -37,13 +33,13 @@ export class AttendanceComponent implements OnInit {
   currentCommentElement: any = null;
   isSubmitted: boolean = true;
   userDetail: UserDetail = new UserDetail();
-  clockDate: Date = new Date();
   time = new Date();
   intervalId;
-  DayName: number = 0;
+  DayValue: number = 0;
   weekDaysList: Array<any> = [];
   totalHrs: string = '';
   totalMins: string = '';
+  BillingHrs: number = 0;
   clientId: number = 0;
   clientDetail: autoCompleteModal = null;
   client: any = null;
@@ -55,7 +51,6 @@ export class AttendanceComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
-    private calendar: NgbCalendar,
     private local: ApplicationStorage,
     private user: UserService
   ) {
@@ -93,7 +88,7 @@ export class AttendanceComponent implements OnInit {
     this.intervalId = setInterval(() => {
       this.time = new Date();
     }, 1000);
-    this.DayName =this.time.getDay();
+    this.DayValue =this.time.getDay();
 
     let cachedData = this.nav.getValue();
     if(cachedData) {
@@ -168,7 +163,7 @@ export class AttendanceComponent implements OnInit {
   buildTime(timeValue: number) {
     let totalTime: string = "";
     try {
-      let hours = Math.trunc((timeValue / 60));
+      let hours = Math.trunc(timeValue/60);
       if(hours < 10) {
         totalTime = `0${hours}`;
       } else {
@@ -222,8 +217,6 @@ export class AttendanceComponent implements OnInit {
         UserMin: [minutes]
       });
     }
-
-
   }
 
   initForm(attendanceDetail: Array<any>) {
@@ -243,15 +236,6 @@ export class AttendanceComponent implements OnInit {
       }))
     });
 
-    let records = this.attendenceForm.get("attendanceArray")["controls"];
-    let i = 0;
-    while (i < records.length) {
-      let dayValue = new Date(records[i].get("AttendanceDisplayDay").value).getDay();
-      if (dayValue == 0 || dayValue == 6) {
-        records[i].get("BillingHours").value = "00:00"
-      }
-      i++;
-    }
     this.countTotalTime();
   }
 
@@ -306,7 +290,7 @@ export class AttendanceComponent implements OnInit {
     this.countTotalTime();
   }
 
-  manageHourField(index: number, e: any) {
+  manageHourField(index: number, e: any, weekDaysList : Array<any>) {
     // let hrs = this.attendenceForm.get("UserHours").value;
     let hrs = parseInt(e.target.value);
     let value: any = "";
@@ -335,7 +319,6 @@ export class AttendanceComponent implements OnInit {
           Toast("Please input correct working hours and minutes");
           return;
         }
-
       }
     } catch(e) {
       Toast("Invalid time used.");
@@ -449,6 +432,9 @@ export class AttendanceComponent implements OnInit {
       let currentDate = null;
       while(index < to) {
         currentDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
+        // let dateValue = new Date(currentDate.setDate(currentDate.getDate() + index));
+        // let value = dateValue.getDay();
+
         weekDaysList.push({
           date: new Date(currentDate.setDate(currentDate.getDate() + index)),
           hrs: "08",
@@ -497,7 +483,7 @@ export class AttendanceComponent implements OnInit {
       this.toDate.setDate(this.toDate.getDate() + 7);
       this.getUserAttendanceData();
     }
-    
+
     this.fromModel = { day: this.fromDate.getUTCDate(), month: this.fromDate.getUTCMonth() + 1, year: this.fromDate.getUTCFullYear()};
   }
 
@@ -513,11 +499,11 @@ export class AttendanceComponent implements OnInit {
   }
 
   presentWeek() {
-    this.isLoading = true;
     if(this.clientId > 0) {
-      this.fromModel = this.calendar.getToday();
+      this.isLoading = true;
       let currentDate = new Date().setHours(0, 0, 0, 0);
       this.fromDate = this.getMonday(new Date(currentDate));
+      this.fromModel = { day: this.fromDate.getUTCDate(), month: this.fromDate.getUTCMonth() + 1, year: this.fromDate.getUTCFullYear()};
       if(this.fromDate) {
         this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         this.toDate.setDate(this.toDate.getDate() + 7);
@@ -527,5 +513,5 @@ export class AttendanceComponent implements OnInit {
       WarningToast("Please select employer first.");
     }
     this.isLoading = false;
-  }  
+  }
 }
