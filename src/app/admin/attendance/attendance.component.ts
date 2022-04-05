@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';3
-import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
-import { ApplicationData } from '../build-pdf/build-pdf.component';
+declare var $: any;
 
 @Component({
   selector: 'app-attendance',
@@ -18,15 +18,12 @@ import { ApplicationData } from '../build-pdf/build-pdf.component';
 })
 export class AttendanceComponent implements OnInit {
   attendenceForm: FormGroup;
-  model: NgbDateStruct;
   date: any;
   isFormReady: boolean = false;
   attendanceArray: FormArray;
   singleEmployee: Filter = null;
-  placeholderName: string = "";
   employeeDetails: autoCompleteModal = new autoCompleteModal();
-  applicationData: ApplicationData = new ApplicationData();
-  userId: number = 0;
+  employeeId: number = 0;
   userName: string = "";
   fromModel: NgbDateStruct;
   toModel: NgbDateStruct;
@@ -36,10 +33,9 @@ export class AttendanceComponent implements OnInit {
   currentCommentElement: any = null;
   isSubmitted: boolean = true;
   userDetail: UserDetail = new UserDetail();
-  clockDate: Date = new Date();
   time = new Date();
   intervalId;
-  DayName: number = 0;
+  DayValue: number = 0;
   weekDaysList: Array<any> = [];
   totalHrs: number = 0;
   totalMins: number = 0;
@@ -75,19 +71,25 @@ export class AttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.clientDetail = {
+      data: [],
+      placeholder: "Select Employee"
+    }
     this.isFormReady = false;
     this.fromModel = null;
     this.toModel = null;
     this.intervalId = setInterval(() => {
       this.time = new Date();
     }, 1000);
-    this.DayName =this.time.getDay();
+    this.DayValue =this.time.getDay();
 
     let cachedData = this.nav.getValue();
     if(cachedData) {
-      this.userId = cachedData.EmployeeUid;
+      this.employeeId = cachedData.EmployeeUid;
+      this.clientId = cachedData.ClientUid;
       this.userName = cachedData.FirstName + " " + cachedData.LastName;
       this.isEmployeesReady = true;
+      this.loadMappedClients();
     } else {
       let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
       this.userDetail = this.user.getInstance() as UserDetail;
@@ -98,13 +100,44 @@ export class AttendanceComponent implements OnInit {
       let Master = this.local.get(null);
       if(Master !== null && Master !== "") {
         this.userDetail = Master["UserDetail"];
-        this.userId = this.userDetail.UserId;
+        this.employeeId = this.userDetail.UserId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
         this.isEmployeesReady = true;
+        this.loadMappedClients();
       } else {
         Toast("Invalid user. Please login again.")
       }
     }
+  }
+
+  loadMappedClients() {
+    this.isClientLoaded = true;
+    $('#clientLoaderModal').modal('show');
+    this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        let mappedClient = response.ResponseBody.AllocatedClients;
+        if(mappedClient != null && mappedClient.length > 0) {
+          let i = 0;
+          while(i < mappedClient.length) {
+            this.clientDetail.data.push({
+              text: mappedClient[i].ClientName,
+              value: mappedClient[i].ClientUid,
+            });
+            i++;
+          }
+
+          if(mappedClient.length == 1) {
+            this.clientId = mappedClient[0].ClientUid;
+          }
+          Toast("Client loaded successfully.");
+        } else {
+          ErrorToast("Unable to get client detail. Please contact admin.");
+        }
+      } else {
+        ErrorToast("Unable to get client detail. Please contact admin.");
+      }
+    });
+    this.isClientLoaded = false;
   }
 
   getMonday(d: Date) {
@@ -139,53 +172,61 @@ export class AttendanceComponent implements OnInit {
     return totalTime;
   }
 
-  buildWeekForm(at: any, item: any) {
+  buildWeekForm(at: any, item: any, attendanceId: number) {
     if (item == null) {
       return this.fb.group({
+        AttendanceId: [attendanceId, Validators.required],
         UserComments: ['', Validators.required],
         Hours: [at.hrs, Validators.required],
+        BillingHours: [this.buildTime(this.client.BillingHours), Validators.required],
         AttendenceStatus: [0, Validators.required],
         AttendanceDay: [at.date, Validators.required],
         AttendanceDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
-        UserId: [0],
+        EmployeeUid: [0],
         UserTypeId: [UserType.Employee],
         UserHours: [at.hrs],
         UserMin: [at.mins]
       });
     } else {
-      let totalTime = this.buildTime(item.hours);
+      let totalTime = this.buildTime(item.Hours);
+      let billingHours = this.buildTime(item.BillingHours);
       let timeValues = totalTime.split(":");
       let hours = timeValues[0];
       let minutes = timeValues[1];
       return this.fb.group({
-        UserComments: [item.userComments, Validators.required],
-        Hours: [this.buildTime(item.hours), Validators.required],
-        AttendenceStatus: [item.attendanceStatus, Validators.required],
+        AttendanceId: [attendanceId, Validators.required],
+        UserComments: [item.UserComments, Validators.required],
+        Hours: [totalTime, Validators.required],
+        BillingHours: [this.buildTime(this.client.BillingHours), Validators.required],
+        AttendenceStatus: [item.AttendenceStatus, Validators.required],
         AttendanceDay: [at.date, Validators.required],
         AttendanceDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
-        UserId: [item.userId],
-        UserTypeId: [item.userTypeId],
+        EmployeeUid: [item.EmployeeUid],
+        UserTypeId: [item.UserTypeId],
         UserHours: [hours],
         UserMin: [minutes]
       });
     }
-
-
   }
 
   initForm(attendanceDetail: Array<any>) {
     let weekDaysList = this.buildWeekDays();
     this.weekDaysList = weekDaysList.map(item => item.date.getDay());
+
+    let attendanceId = 0;
+    if(attendanceDetail && attendanceDetail.length > 0) {
+      attendanceId = attendanceDetail[0].AttendanceId;
+    }
+
     this.attendenceForm = this.fb.group({
       attendanceArray: this.fb.array(weekDaysList.map(item => {
         item.date.setHours(0,0,0,0);
-        let value = attendanceDetail.find(x => x.attendanceDay - item.date === 0)
-        return this.buildWeekForm(item, value);
+        let value = attendanceDetail.find(x => new Date(x.AttendanceDay).getDate() == item.date.getDate());
+        return this.buildWeekForm(item, value, attendanceId);
       }))
     });
 
     this.countTotalTime();
-
   }
 
   countTotalTime() {
@@ -199,6 +240,24 @@ export class AttendanceComponent implements OnInit {
       this.totalMins +=  Number(records[i].get("UserMin").value);
       this.BillingHrs += Number(records[i].get("Hours").value)
       i++;
+    }
+
+    if (minsValue > 0) {
+      this.totalMins = (minsValue < 10 ? `0${minsValue}` : minsValue).toString();
+    } else {
+      this.totalMins = "00";
+    }
+
+    if (hrsValue > 0) {
+      this.totalHrs = (hrsValue < 10 ? `0${hrsValue}` : hrsValue).toString();
+    } else {
+      this.totalHrs = "00";
+    }
+
+    if (billingValue > 0) {
+      this.billingHrs = (billingValue < 10 ? `0${billingValue}` : billingValue).toString();
+    } else {
+      this.billingHrs = "00";
     }
   }
 
@@ -231,7 +290,6 @@ export class AttendanceComponent implements OnInit {
     if(records && records.length >= index) {
       records[index].get("UserHours").setValue(value);
     }
-
     this.countTotalTime();
   }
 
@@ -247,7 +305,6 @@ export class AttendanceComponent implements OnInit {
           Toast("Please input correct working hours and minutes");
           return;
         }
-
       }
     } catch(e) {
       Toast("Invalid time used.");
@@ -261,8 +318,9 @@ export class AttendanceComponent implements OnInit {
     let index = 0;
     while(index < records.length) {
       records[index].Hours = this.calculateTime(records[index].UserHours, records[index].UserMin);
-      records[index].UserId = Number(this.userId);
+      records[index].EmployeeUid = Number(this.employeeId);
       records[index].AttendenceStatus = 8;
+      records[index].BillingHours = 0;
       records[index]["AttendanceDay"] = new Date(records[index]["AttendanceDay"]);
       index++;
     }
@@ -271,7 +329,7 @@ export class AttendanceComponent implements OnInit {
     .then(response => {
       if (response.ResponseBody) {
         Toast("Created/Updated successfully");
-        this.getUserAttendanceData();
+        this.initForm(response.ResponseBody);
       } else {
         Toast("Fail to inser/update, please contact to admin.");
       }
@@ -279,7 +337,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   getUserAttendanceData() {
-    if(this.userId <= 0) {
+    if(this.employeeId <= 0) {
       Toast("Invalid user selected.")
       return;
     }
@@ -295,14 +353,19 @@ export class AttendanceComponent implements OnInit {
     }
 
     let data = {
-      UserId: Number(this.userId),
+      EmployeeUid: Number(this.employeeId),
+      ClientId: Number(this.clientId),
       UserTypeId : UserType.Employee,
       AttendenceFromDay: this.fromDate,
-      AttendenceToDay: this.toDate
+      AttendenceToDay: this.toDate,
+      AttendenceForMonth: new Date()
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      this.createPageData(response.ResponseBody["Attendance"]);
+      if (response.ResponseBody) {
+        this.client = response.ResponseBody.Client;
+        this.createPageData(response.ResponseBody.AttendacneDetails);
+      }
     });
   }
 
@@ -311,9 +374,9 @@ export class AttendanceComponent implements OnInit {
       let attendance = response;
       let index = 0;
       while (index < attendance.length) {
-        let value = attendance[index].attendanceDay;
+        let value = attendance[index].AttendanceDay;
         if(value) {
-          attendance[index].attendanceDay = new Date(new Date (value).setHours(0,0,0,0));
+          attendance[index].AttendanceDay = new Date(new Date (value).setHours(0,0,0,0));
         }
         index++;
       }
@@ -353,12 +416,12 @@ export class AttendanceComponent implements OnInit {
         currentDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         // let dateValue = new Date(currentDate.setDate(currentDate.getDate() + index));
         // let value = dateValue.getDay();
+
         weekDaysList.push({
           date: new Date(currentDate.setDate(currentDate.getDate() + index)),
           hrs: "08",
           mins: "00"
         });
-
         currentDate = null;
         index++;
       }
@@ -378,12 +441,16 @@ export class AttendanceComponent implements OnInit {
   }
 
   fromDateSelection(e: NgbDateStruct) {
-    let seletedDate = `${e.year}-${e.month}-${e.day}`;
-    this.fromDate = this.getMonday(new Date(seletedDate));
-    if(this.fromDate) {
-      this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
-      this.toDate.setDate(this.toDate.getDate() + 7);
-      this.getUserAttendanceData();
+    if (this.clientId > 0) {
+      let seletedDate = `${e.year}-${e.month}-${e.day}`;
+      this.fromDate = this.getMonday(new Date(seletedDate));
+      if(this.fromDate) {
+        this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
+        this.toDate.setDate(this.toDate.getDate() + 7);
+        this.getUserAttendanceData();
+      }
+    } else {
+      WarningToast("Please select employer first.");
     }
   }
 
@@ -398,12 +465,8 @@ export class AttendanceComponent implements OnInit {
       this.toDate.setDate(this.toDate.getDate() + 7);
       this.getUserAttendanceData();
     }
-    let seletedDate = new Date(`${this.fromModel.year}-${this.fromModel.month}-${this.fromModel.day}`);
-    let dateChange = new Date (seletedDate.setDate(seletedDate.getDate() + 7));
-    this.fromModel.day = seletedDate.getDate();
 
-
-    // this.fromModel.year = dateChange.getFullYear();
+    this.fromModel = { day: this.fromDate.getUTCDate(), month: this.fromDate.getUTCMonth() + 1, year: this.fromDate.getUTCFullYear()};
   }
 
   prevWeek() {
@@ -413,15 +476,24 @@ export class AttendanceComponent implements OnInit {
       this.toDate.setDate(this.toDate.getDate() + 7);
       this.getUserAttendanceData();
     }
+
+    this.fromModel = { day: this.fromDate.getUTCDate(), month: this.fromDate.getUTCMonth() + 1, year: this.fromDate.getUTCFullYear()};
   }
 
   presentWeek() {
-    let currentDate = new Date().setHours(0, 0, 0, 0);
-    this.fromDate = this.getMonday(new Date(currentDate));
-    if(this.fromDate) {
-      this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
-      this.toDate.setDate(this.toDate.getDate() + 7);
-      this.getUserAttendanceData();
+    if(this.clientId > 0) {
+      this.isLoading = true;
+      let currentDate = new Date().setHours(0, 0, 0, 0);
+      this.fromDate = this.getMonday(new Date(currentDate));
+      this.fromModel = { day: this.fromDate.getUTCDate(), month: this.fromDate.getUTCMonth() + 1, year: this.fromDate.getUTCFullYear()};
+      if(this.fromDate) {
+        this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
+        this.toDate.setDate(this.toDate.getDate() + 7);
+        this.getUserAttendanceData();
+      }
+    } else {
+      WarningToast("Please select employer first.");
     }
+    this.isLoading = false;
   }
 }

@@ -63,7 +63,11 @@ export class ManageComponent implements OnInit {
   siteURL: string = null;
   siteURLForm: FormGroup;
   isSiteURLUpdate: boolean = false;
-
+  resumeHeadline: string = '';
+  ExptLanguage: string = '';
+  ExptVersion: number = 0;
+  Expt: number = 0;
+  Exptdate: Date = null;
 
   section: any = {
     isKeySkillEdit: false,
@@ -332,8 +336,8 @@ export class ManageComponent implements OnInit {
   }
 
   editItSkillDetail(current: FormGroup) {
-    this.currentItSkillOnEdit = current;
-    this.editItSkillModal = current.value as Skills;
+    // this.currentItSkillOnEdit = current;
+    // this.editItSkillModal = current.value as Skills;
     $("#itSkillModal").modal('show');
     this.isEditItSkill = true;
   }
@@ -342,26 +346,25 @@ export class ManageComponent implements OnInit {
     if (this.editItSkillModal.Language == '')
       return ErrorToast("Please enter language");
     this.isLoading = true;
-    this.currentItSkillOnEdit.get("Language").setValue(this.editItSkillModal.Language);
-    this.currentItSkillOnEdit.get("Version").setValue(this.editItSkillModal.Version);
-    this.currentItSkillOnEdit.get("ExperienceInMonth").setValue(this.editItSkillModal.ExperienceInMonth);
-    this.currentItSkillOnEdit.get("ExperienceInYear").setValue(this.editItSkillModal.ExperienceInYear);
-    this.currentItSkillOnEdit.get("LastUsed").setValue(this.editItSkillModal.LastUsed);
-    this.currentItSkillOnEdit.get("Version").setValue(this.editItSkillModal.Version);
+    this.currentItSkillOnEdit.get("Language").setValue(this.ExptLanguage);
+    this.currentItSkillOnEdit.get("Version").setValue(this.ExptVersion);
+    this.currentItSkillOnEdit.get("ExperienceInMonth").setValue(this.Expt);
+    this.currentItSkillOnEdit.get("ExperienceInYear").setValue(this.Expt);
+    this.currentItSkillOnEdit.get("LastUsed").setValue(this.Exptdate);
     this.submitSkillDetail();
     this.isLoading = false;
     $("#itSkillModal").modal('hide');
   }
 
-  addItskill() {
-    let newSkill = new Skills();
-    let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
-    this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
-    skill.push(this.currentItSkillOnEdit);
-    this.editItSkillModal = this.currentItSkillOnEdit.value as Skills;
-    $("#itSkillModal").modal("show");
-    this.isEditItSkill = true;
-  }
+  // addItskill() {
+  //   let newSkill = new Skills();
+  //   let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
+  //   this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
+  //   skill.push(this.currentItSkillOnEdit);
+  //   this.editItSkillModal = this.currentItSkillOnEdit.value as Skills;
+  //   $("#itSkillModal").modal("show");
+  //   this.isEditItSkill = true;
+  // }
 
   deleteSkillPopup(e: any) {
     this.isDeletedSkill = true;
@@ -1100,6 +1103,16 @@ export class ManageComponent implements OnInit {
     }
   }
 
+  saveResumeHeadline() {
+    this.manageUserForm.get("ResumeHeadline").setValue(this.resumeHeadline);
+    $('#resumeHeadlineModal').modal('hide');
+  }
+
+  editResumeHeadline() {
+    this.resumeHeadline = this.manageUserForm.get("ResumeHeadline").value;
+    $('#resumeHeadlineModal').modal('show');
+  }
+
   editEmployment() {
     this.section.isEmploymentEdit = true;
   }
@@ -1154,6 +1167,7 @@ export class ManageComponent implements OnInit {
     $("#patentModal").modal("hide");
     $("#deletePatentModal").modal("hide");
     $("#deleteSkillModal").modal("hide");
+    $("#resumeHeadlineModal").modal("hide");
   }
 
   cleanFileHandler() {
@@ -1162,10 +1176,10 @@ export class ManageComponent implements OnInit {
     this.isLargeFile = false;
   }
 
-  addNewItskill() {
-    this.addItskill();
-    $("#itSkillModal").modal('show');
-  }
+  // addNewItskill() {
+  //   this.addItskill();
+  //   $("#itSkillModal").modal('show');
+  // }
 
   reset() {
     this.manageUserForm.reset();
