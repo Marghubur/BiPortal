@@ -88,7 +88,7 @@ export class AjaxService {
           error => {
             this.commonService.HideLoaderByAjax();
             this.tokenHelper.HandleResponseStatus(error.status);
-            reject(null);
+            reject(error);
           }
         );
     });

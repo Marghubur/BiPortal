@@ -979,3 +979,17 @@ body {
   width: 100%;
   z-index: 999;
 }
+
+.title-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex: 2;
+}
+
+.modal-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}

@@ -38,7 +38,7 @@ export class BuildPdfComponent implements OnInit {
   isClientSelected: boolean = false;
   pageDataIsReady: boolean = false;
   originalBillingMonth: number = 1;
-  isEdit: boolean = false;
+  isCustome: boolean = false;
   editMode: boolean = false;
   isHalfDay: boolean = false;
   halfDayDisable: boolean = false;
@@ -133,6 +133,8 @@ export class BuildPdfComponent implements OnInit {
 
           if (this.applicationData.fileDetail.length > 0) {
             fileDetail = this.applicationData.fileDetail[0];
+            this.pdfModal.IsCustomBill = fileDetail.IsCustomBill == 0 ? false : true;
+            this.isCustome = this.pdfModal.IsCustomBill;
             this.pdfModal.receiverCompanyId = fileDetail.ClientId;
             this.pdfModal.developerId = fileDetail.EmployeeUid;
             this.pdfModal.cGST = fileDetail.CGST;
@@ -466,6 +468,7 @@ export class BuildPdfComponent implements OnInit {
       StatusId: new FormControl(this.pdfModal.StatusId),
       PaidOn: new FormControl(this.pdfModal.PaidOn),
       UpdateSeqNo: new FormControl(this.pdfModal.UpdateSeqNo),
+      IsCustomBill: new FormControl(this.pdfModal.IsCustomBill),
     });
   }
 
@@ -579,6 +582,9 @@ export class BuildPdfComponent implements OnInit {
           this.isLoading = false;
         }).catch(e => {
           this.isLoading = false;
+          if(e.error && e.error.ResponseBody) {
+            ErrorToast(e.error.ResponseBody.UserMessage);
+          }
         });
       } else {
         this.isLoading = false;
@@ -592,6 +598,7 @@ export class BuildPdfComponent implements OnInit {
 
   validateBillRequest(request: PdfModal) {
     let message = null;
+    let now = new Date();
     if(request.EmployeeId <=0){
       message = "Invalid Employee selected";
       return message;
@@ -608,15 +615,15 @@ export class BuildPdfComponent implements OnInit {
     }
 
     if (request.billForMonth) {
-      let value = new Date(`${request.billForMonth} 04, 2016 9:28 AM`).getMonth();
+      let value = new Date(`${request.billForMonth} 01, ${now.getFullYear()}`).getMonth();
       if (value < 0) {
         message = "Invalid month selected";
         return message;
       }
     }
 
-    if (request.workingDay) {
-      let value = new Date(`${request.billForMonth} 04, 2016 9:28 AM`);
+    if (request.workingDay && !this.isCustome) {
+      let value = new Date(`${request.billForMonth} 01, ${now.getFullYear()}`);
       let days = new Date(value.getFullYear(), value.getMonth() + 1, 0).getDate();
       if (days < request.workingDay) {
        return message = "Invalid No of days selected for the month" + ` ${request.billForMonth}`
@@ -742,14 +749,7 @@ export class BuildPdfComponent implements OnInit {
   }
 
   onEdit(e: any) {
-    if (e.target.checked) {
-      this.pdfModal.actualDaysBurned = 1;
-      this.pdfModal.workingDay = this.pdfModal.actualDaysBurned;
-      this.pdfForm.get("workingDay").setValue(1);
-    } else {
-      this.pdfForm.get("workingDay").setValue(this.pdfModal.workingDay);
-    }
-    this.isEdit = e.target.checked;
+    this.isCustome = e.target.checked;
   }
 
   getFixedAmount($e: any) {
@@ -764,6 +764,7 @@ export class BuildPdfComponent implements OnInit {
 class PdfModal {
   header: string = 'Staffing Bill';
   UpdateSeqNo: number = 0;
+  IsCustomBill: boolean = false;
   billForMonth: string = null;
   billNo: string = null;
   dateOfBilling: Date = new Date();

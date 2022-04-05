@@ -7,12 +7,9 @@ import { JwtService } from "./jwtService";
 
 export class AppHttpIntercepter implements HttpInterceptor {
 
-    constructor(private tokenHelper: JwtService) {
-
-    }
+    constructor(private tokenHelper: JwtService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log('Request: ' + request);
         request = this.addToken(request);
         return next.handle(request);
     }

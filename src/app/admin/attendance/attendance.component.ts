@@ -48,8 +48,9 @@ export class AttendanceComponent implements OnInit {
   clientDetail: autoCompleteModal = null;
   client: any = null;
   isLoading: boolean = false;
-  isClientLoaded: boolean = false;
   billingHrs: string = '';
+  NoClient: boolean = false;
+  isAttendanceDataLoaded: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -113,8 +114,11 @@ export class AttendanceComponent implements OnInit {
         this.userDetail = Master["UserDetail"];
         this.employeeId = this.userDetail.UserId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
-        this.isEmployeesReady = true;
-        this.loadMappedClients();
+        $('#loader').modal('show');
+        setTimeout(() => {
+          this.loadMappedClients();
+        }, 900);
+
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -122,8 +126,6 @@ export class AttendanceComponent implements OnInit {
   }
 
   loadMappedClients() {
-    this.isClientLoaded = true;
-    $('#clientLoaderModal').modal('show');
     this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         let mappedClient = response.ResponseBody.AllocatedClients;
@@ -144,11 +146,13 @@ export class AttendanceComponent implements OnInit {
         } else {
           ErrorToast("Unable to get client detail. Please contact admin.");
         }
+
+        this.isEmployeesReady = true;
+        $('#loader').modal('hide');
       } else {
         ErrorToast("Unable to get client detail. Please contact admin.");
       }
     });
-    //this.isClientLoaded = false;
   }
 
   getMonday(d: Date) {
@@ -389,9 +393,13 @@ export class AttendanceComponent implements OnInit {
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      if (response.ResponseBody) {
+      if (response.ResponseBody.AttendacneDetails) {
         this.client = response.ResponseBody.Client;
         this.createPageData(response.ResponseBody.AttendacneDetails);
+        this.isAttendanceDataLoaded = true;
+      } else {
+        this.NoClient = true;
+        this.isAttendanceDataLoaded = false;
       }
     });
   }
