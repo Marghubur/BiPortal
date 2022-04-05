@@ -302,7 +302,7 @@ table {
 }
 
 .lg-txtarea {
-  height: 5rem !important;
+  height: 6rem !important;
   padding: 0.5rem 0.8rem;
 }
 
@@ -336,4 +336,35 @@ table {
 
 .delete-msg-text {
   color: #ff6565;
+}
+
+.custom-backgrnd-color {
+  background: #fefbef;
+}
+
+.close-button {
+  position: absolute;
+  top: -17px;
+  right: -17px;
+  background: #fff;
+  color: #222;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+}
+
+.btn-close {
+  padding-top: 1px !important;
+  padding-left: 9px !important;
+  font-size: 10px !important;
+}
+
+.skill-popup-box {
+  height: 11rem !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.skill-custom-bg {
+  background: #ede8d2;
 }
