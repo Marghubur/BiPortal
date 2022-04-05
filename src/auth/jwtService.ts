@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ErrorToast, Toast } from "src/providers/common-service/common.service";
-import { AccessToken, AccessTokenExpiredOn, Login, Master, NotFound, ServerError, Success, UnAuthorize } from "src/providers/constants";
+import { AccessToken, AccessTokenExpiredOn, BadRequest, Login, Master, NotFound, ServerError, Success, UnAuthorize } from "src/providers/constants";
 import { iNavigation } from "src/providers/iNavigation";
 
 @Injectable()
@@ -66,7 +66,7 @@ export class JwtService {
               ErrorToast("Page not found. Please chech your Url.");
               break;
           case ServerError:
-              ErrorToast("Getting server error. Please contact to admin.");
+          case BadRequest:
               break;
           default:
               ErrorToast("Unknown error occured. Please contact to admin.");

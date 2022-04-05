@@ -37,9 +37,16 @@ export class AttendanceComponent implements OnInit {
   intervalId;
   DayValue: number = 0;
   weekDaysList: Array<any> = [];
-  totalHrs: number = 0;
-  totalMins: number = 0;
+  totalHrs: string = '';
+  totalMins: string = '';
   BillingHrs: number = 0;
+  clientId: number = 0;
+  clientDetail: autoCompleteModal = null;
+  client: any = null;
+  isLoading: boolean = false;
+  billingHrs: string = '';
+  NoClient: boolean = false;
+  isAttendanceDataLoaded: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -102,8 +109,11 @@ export class AttendanceComponent implements OnInit {
         this.userDetail = Master["UserDetail"];
         this.employeeId = this.userDetail.UserId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
-        this.isEmployeesReady = true;
-        this.loadMappedClients();
+        $('#loader').modal('show');
+        setTimeout(() => {
+          this.loadMappedClients();
+        }, 900);
+
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -111,8 +121,6 @@ export class AttendanceComponent implements OnInit {
   }
 
   loadMappedClients() {
-    this.isClientLoaded = true;
-    $('#clientLoaderModal').modal('show');
     this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         let mappedClient = response.ResponseBody.AllocatedClients;
@@ -133,11 +141,13 @@ export class AttendanceComponent implements OnInit {
         } else {
           ErrorToast("Unable to get client detail. Please contact admin.");
         }
+
+        this.isEmployeesReady = true;
+        $('#loader').modal('hide');
       } else {
         ErrorToast("Unable to get client detail. Please contact admin.");
       }
     });
-    this.isClientLoaded = false;
   }
 
   getMonday(d: Date) {
@@ -231,14 +241,18 @@ export class AttendanceComponent implements OnInit {
 
   countTotalTime() {
     let records = this.attendenceForm.get("attendanceArray")["controls"];
-    this.totalHrs = 0;
-    this.totalMins = 0;
-    this.BillingHrs = 0;
+    this.totalHrs = '';
+    this.totalMins = '';
+    this.billingHrs = '';
+    let hrsValue = 0;
+    let minsValue = 0;
+    let billingValue = 0;
+
     let i = 0;
     while (i < records.length) {
-      this.totalHrs +=  Number(records[i].get("UserHours").value);
-      this.totalMins +=  Number(records[i].get("UserMin").value);
-      this.BillingHrs += Number(records[i].get("Hours").value)
+      hrsValue +=  Number(records[i].get("UserHours").value) ;
+      minsValue +=  Number(records[i].get("UserMin").value);
+      billingValue +=  parseInt(records[i].get("BillingHours").value);
       i++;
     }
 
@@ -362,9 +376,13 @@ export class AttendanceComponent implements OnInit {
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      if (response.ResponseBody) {
+      if (response.ResponseBody.AttendacneDetails) {
         this.client = response.ResponseBody.Client;
         this.createPageData(response.ResponseBody.AttendacneDetails);
+        this.isAttendanceDataLoaded = true;
+      } else {
+        this.NoClient = true;
+        this.isAttendanceDataLoaded = false;
       }
     });
   }
