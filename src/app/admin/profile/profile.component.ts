@@ -66,9 +66,28 @@ export class ManageComponent implements OnInit {
   resumeHeadline: string = '';
   ExptLanguage: string = '';
   ExptVersion: number = 0;
-  Expt: number = 0;
+  ExptinYrs: number = 0;
+  ExptinMonths: number = 0;
   Exptdate: Date = null;
   isUser: boolean = true;
+  remainingNumber: number = 0;
+  Organization: string = '';
+  Designation: string = '';
+  CurrentSalary: number = 0;
+  CurrencyType: string = '';
+  Years: number = 0;
+  Months: number = 0;
+  JobProfile: string = '';
+  Experties: string = '';
+  isEdit: boolean = false;
+  indexValue: number = 0;
+  Degree_Name: string = '';
+  Course: string = '';
+  Specialization: string = '';
+  University_Name: string ='';
+  Course_Type: string = '';
+  Passout_Year: Date = null;
+  Grading_System: string = '';
 
   section: any = {
     isKeySkillEdit: false,
@@ -261,6 +280,7 @@ export class ManageComponent implements OnInit {
   }
 
   editProjectDetail(current: FormGroup) {
+    this.isEdit = true;
     this.currentProjectOnEdit = current;
     this.editProjectModal = current.value as Project;
     $("#editProjectModal").modal("show");
@@ -348,60 +368,42 @@ export class ManageComponent implements OnInit {
   }
 
   editItSkillDetail(current: FormGroup) {
-    // this.currentItSkillOnEdit = current;
-    // this.editItSkillModal = current.value as Skills;
     $("#itSkillModal").modal('show');
     this.isEditItSkill = true;
   }
 
-  addOrUpdateItSkill() {
-    if (this.editItSkillModal.Language == '')
-      return ErrorToast("Please enter language");
+  addItskill() {
     this.isLoading = true;
-    this.currentItSkillOnEdit.get("Language").setValue(this.ExptLanguage);
-    this.currentItSkillOnEdit.get("Version").setValue(this.ExptVersion);
-    this.currentItSkillOnEdit.get("ExperienceInMonth").setValue(this.Expt);
-    this.currentItSkillOnEdit.get("ExperienceInYear").setValue(this.Expt);
-    this.currentItSkillOnEdit.get("LastUsed").setValue(this.Exptdate);
+    let newSkill = new Skills();
+    if (this.ExptLanguage != '') {
+      let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
+      this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
+      this.currentItSkillOnEdit.get("Language").setValue(this.ExptLanguage);
+      this.currentItSkillOnEdit.get("Version").setValue(this.ExptVersion);
+      this.currentItSkillOnEdit.get("ExperienceInMonth").setValue(this.ExptinMonths);
+      this.currentItSkillOnEdit.get("ExperienceInYear").setValue(this.ExptinYrs);
+      this.currentItSkillOnEdit.get("LastUsed").setValue(this.Exptdate);
+      skill.push(this.currentItSkillOnEdit);
+    }
     this.submitSkillDetail();
     this.isLoading = false;
     $("#itSkillModal").modal('hide');
   }
 
-  // addItskill() {
-  //   let newSkill = new Skills();
-  //   let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
-  //   this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
-  //   skill.push(this.currentItSkillOnEdit);
-  //   this.editItSkillModal = this.currentItSkillOnEdit.value as Skills;
-  //   $("#itSkillModal").modal("show");
-  //   this.isEditItSkill = true;
-  // }
-
-  deleteSkillPopup(e: any) {
-    this.isDeletedSkill = true;
-    $("#deleteSkillModal").modal("show")
-    this.deleteSkillDetail = e.value;
-  }
-
-  deleteItSkill() {
-    this.isLoading = true;
-    let skillValue = this.deleteSkillDetail;
+  deleteItSkill(e: any) {
+    let skillValue = e.value;
     let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
     skill.removeAt(skill.value.findIndex(item => item.SkillIndex == skillValue.SkillIndex));
     this.userModal.Skills = skill.value;
-    this.updateProfile();
-    this.isLoading = false;
-    this.closeModal();
   }
 
-  closeSkillModal() {
-    let value = this.editItSkillModal;
-    let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
-    skill.removeAt(skill.value.findIndex(item => item.SkillIndex == value.SkillIndex));
-    this.userModal.Skills = skill.value;
-    $("#itSkillModal").modal("hide");
-  }
+  // closeSkillModal() {
+  //   let value = this.editItSkillModal;
+  //   let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
+  //   skill.removeAt(skill.value.findIndex(item => item.SkillIndex == value.SkillIndex));
+  //   this.userModal.Skills = skill.value;
+  //   $("#itSkillModal").modal("hide");
+  // }
   //----------------- technical skills END'S ------------------------
 
 
@@ -797,8 +799,9 @@ export class ManageComponent implements OnInit {
 
   //----------------- Education form, group and add new ------------------------
 
-  createEducationForm(item: EducationalDetail) {
+  createEducationForm(item: EducationalDetail, index: number) {
     return this.fb.group({
+      EducationIndex: new FormControl(index),
       Degree_Name: new FormControl(item.Degree_Name),
       Course: new FormControl(item.Course),
       Specialization: new FormControl(item.Specialization),
@@ -811,27 +814,63 @@ export class ManageComponent implements OnInit {
 
   buildEducationForm() {
     this.educationForm = this.fb.group({
-      Educations: this.fb.array(this.userModal.Educational_Detail.map(item => {
-        return this.createEducationForm(item)
+      Educations: this.fb.array(this.userModal.Educational_Detail.map((item, index) => {
+        return this.createEducationForm(item, index)
       }))
     })
   }
 
   addEducation() {
-    let educationFormData = {
-      Degree_Name: '',
-      Course: '',
-      Specialization: '',
-      University_Name: '',
-      Course_Type: '',
-      Passout_Year: null,
-      Grading_System: ''
-    };
-    this.education.push(this.createEducationForm(educationFormData));
+    $('#EducationModal').modal('show');
+  }
+
+  addNewEducation() {
+    let currentEducation;
+    let education = this.educationForm.get("Educations") as FormArray;
+    if (this.isEdit == false) {
+      let newEducation = new EducationalDetail();
+      currentEducation = this.createEducationForm(newEducation, education.length + 1);
+      education.push(currentEducation);
+    } else {
+      currentEducation = education.at(this.indexValue);
+    }
+    currentEducation.get("Degree_Name").setValue(this.Degree_Name);
+    currentEducation.get("Course").setValue(this.Course);
+    currentEducation.get("Specialization").setValue(this.Specialization);
+    currentEducation.get("University_Name").setValue(this.University_Name);
+    currentEducation.get("Course_Type").setValue(this.Course_Type);
+    currentEducation.get("Passout_Year").setValue(this.Passout_Year);
+    currentEducation.get("Grading_System").setValue(this.Grading_System);
+    this.submitEducationDetail();
+    this.isLoading = false;
+    $('#EducationModal').modal('hide');
   }
 
   get education(): FormArray{
     return this.educationForm.get("Educations") as FormArray
+  }
+
+  editEducation(current: FormGroup) {
+    this.isEdit = true;
+    this.currentEducationOnEdit = current;
+    this.
+    let education = edu.value;
+    this.Degree_Name = education.Degree_Name;
+    this.Course = education.Course;
+    this.Specialization = education.Specialization;
+    this.University_Name = education.University_Name;
+    this.Course_Type = education.Course_Type;
+    this.Passout_Year = education.Passout_Year;
+    this.Grading_System = education.Grading_System;
+    this.indexValue = education.EducationIndex;
+    $('#EducationModal').modal('show');
+
+    editProjectDetail(current: ) {
+      this.isEdit = true;
+      this.currentProjectOnEdit = current;
+      this.editProjectModal = current.value as Project;
+      $("#editProjectModal").modal("show");
+      this.isEditProject = true;
   }
 
   //----------------- Education END'S ------------------------
@@ -846,12 +885,13 @@ export class ManageComponent implements OnInit {
     }
 
     this.employmentForm = this.fb.group({
-      Employments: this.fb.array(this.userModal.Employments.map(item => this.createEmployment(item)))
+      Employments: this.fb.array(this.userModal.Employments.map((item, index) => this.createEmployment(item, index)))
     })
   }
 
-  createEmployment(record: Employment) {
+  createEmployment(record: Employment, index: number) {
     return this.fb.group({
+      EmploymentIndex: new FormControl(index),
       Organization: new FormControl(record.Organization),
       Designation: new FormControl(record.Designation),
       EmploymentStatus: new FormControl(record.EmploymentStatus),
@@ -869,8 +909,64 @@ export class ManageComponent implements OnInit {
   }
 
   addEmployment() {
-    let newEmployment = new Employment();
-    this.employment.push(this.createEmployment(newEmployment))
+    $('#EmploymentModal').modal('show');
+  }
+
+  createNewEmployment() {
+    let currentEmployment;
+    let employment = this.employmentForm.get("Employments") as FormArray;
+    if (this.isEdit == false) {
+      let newEmployment = new Employment();
+      currentEmployment = this.createEmployment(newEmployment, employment.length + 1);
+      employment.push(currentEmployment);
+    } else {
+      currentEmployment = employment.at(this.indexValue);
+    }
+    currentEmployment.get("Organization").setValue(this.Organization);
+    currentEmployment.get("Designation").setValue(this.Designation);
+    currentEmployment.get("Years").setValue(this.Years);
+    currentEmployment.get("Months").setValue(this.Months);
+    currentEmployment.get("CurrentSalary").setValue(this.CurrentSalary);
+    currentEmployment.get("CurrencyType").setValue(this.CurrencyType);
+    currentEmployment.get("Experties").setValue(this.Experties);
+    currentEmployment.get("JobProfile").setValue(this.JobProfile);
+    this.submitEmploymentDetail();
+    this.isLoading = false;
+    $("#EmploymentModal").modal('hide');
+  }
+
+  editEmployment(emp: any) {
+    this.isEdit = true;
+    $('#EmploymentModal').modal('show');
+    let employement = emp.value;
+    this.Organization = employement.Organization;
+    this.Designation = employement.Designation;
+    this.Years = employement.Years;
+    this.Months = employement.Months;
+    this.CurrentSalary = employement.CurrentSalary;
+    this.CurrencyType = employement.CurrencyType;
+    this.Experties = employement.Experties;
+    this.JobProfile = employement.JobProfile;
+    this.indexValue = employement.EmploymentIndex;
+  }
+
+  deleteEmploymentConfirmation() {
+    $("#deleteEmploymentModal").modal('show');
+  }
+
+  deleteEmployment() {
+    this.isLoading = true;
+    let employment = this.employmentForm.get("Employments") as FormArray;
+    employment.removeAt(employment.value.findIndex(item => item.EmploymentIndex == this.indexValue))
+    this.userModal.Employments = employment.value;
+    this.updateProfile();
+    this.isLoading = false;
+    $("#deleteEmploymentModal").modal('hide');
+    $("#EmploymentModal").modal('hide');
+  }
+
+  closeDeleteModal(){
+    $("#deleteEmploymentModal").modal('hide');
   }
 
   //----------------- Employment END'S ------------------------
@@ -1000,43 +1096,6 @@ export class ManageComponent implements OnInit {
     this.isLoading = false;
   }
 
-  UpdateUser() {
-   this.isLoading = true;
-    this.submitted = true;
-    let errroCounter = 0;
-
-    if (this.manageUserForm.get('FirstName').errors !== null)
-      errroCounter++;
-    if (this.manageUserForm.get('Email').errors !== null)
-      errroCounter++;
-    if (this.manageUserForm.get('Mobile').errors !== null)
-      errroCounter++;
-    let formValue = {};
-    let users = this.manageUserForm.value;
-
-    // if (errroCounter == 0) {
-    //   this.http.post("user/UpdateUser", this.userModal)
-    //   .then((response: ResponseModel) => {
-    //     if (response.ResponseBody !== null && response.ResponseBody !== "expired") {
-    //       Toast(response.ResponseBody);
-    //     } else {
-    //       if (response.ResponseBody !== "expired") {
-    //         Toast("Your session got expired. Log in again.");
-    //       }
-    //     }
-
-    //     this.isLoading = false;
-    //   }).catch(e => {
-    //     this.isLoading = false;
-    //     Toast("Registration fail. Please contact admin.")
-    //   });
-    // } else {
-    //   this.isLoading = false;
-    //   Toast("Please correct all the mandaroty field marded red");
-    // }
-    Toast("Update Successfully.")
-  }
-
   updateProfile() {
     this.http.post("user/UpdateUserProfile", this.userModal).then((response:ResponseModel) => {
       if (response.ResponseBody)
@@ -1125,24 +1184,8 @@ export class ManageComponent implements OnInit {
     $('#resumeHeadlineModal').modal('show');
   }
 
-  editEmployment() {
-    this.section.isEmploymentEdit = true;
-  }
-
-  editKeySkill() {
-    this.section.isKeySkillEdit = !this.section.isKeySkillEdit;
-  }
-
-  editEducation() {
-    this.section.isEducationEdit = !this.section.isEducationEdit;
-  }
-
   editItSkill() {
     this.section.isItSkillEdit = !this.section.isItSkillEdit;
-  }
-
-  editProject() {
-    this.section.isProjectsEdit = !this.section.isProjectsEdit;
   }
 
   editProfileSummary() {
@@ -1177,9 +1220,10 @@ export class ManageComponent implements OnInit {
     $("#deletePresentationModal").modal("hide");
     $("#deleteResearchModal").modal("hide");
     $("#patentModal").modal("hide");
-    $("#deletePatentModal").modal("hide");
-    $("#deleteSkillModal").modal("hide");
+    $("#EducationModal").modal("hide");
+    $("#EmploymentModal").modal("hide");
     $("#resumeHeadlineModal").modal("hide");
+
   }
 
   cleanFileHandler() {
@@ -1188,10 +1232,11 @@ export class ManageComponent implements OnInit {
     this.isLargeFile = false;
   }
 
-  // addNewItskill() {
-  //   this.addItskill();
-  //   $("#itSkillModal").modal('show');
-  // }
+  countNumberofCharacter(e: any) {
+    let value = 0;
+    value = e.target.value.length;
+    this.remainingNumber = 4000 - value;
+  }
 
   reset() {
     this.manageUserForm.reset();
