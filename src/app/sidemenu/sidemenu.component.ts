@@ -25,6 +25,8 @@ export class SidemenuComponent implements OnInit {
   Messages: Array<string> = [];
   userDetail: UserDetail = new UserDetail();
   Menu: Array<any> = [];
+  CatagoryPosition: number = 0;
+  MenuName: string = '';
 
   @Output() authentication = new EventEmitter();
 
@@ -43,7 +45,6 @@ export class SidemenuComponent implements OnInit {
     private http: AjaxService,
     private local: ApplicationStorage,
     private autoPlay: AutoPlayService,
-    private tokenHelper: JwtService,
     private user: UserService
   ) {
   }
@@ -64,6 +65,8 @@ export class SidemenuComponent implements OnInit {
       if(Master !== null && Master !== "") {
         this.IsLoggedIn = true;
         this.userDetail = Master["UserDetail"];
+        let menuItem = this.nav.getRouteList();
+        this.MenuName = menuItem[menuItem.length - 1].Key;
         this.BuildMenu(Master["Menu"]);
       }
     }
@@ -75,12 +78,17 @@ export class SidemenuComponent implements OnInit {
       let parentItems = menu.filter(x => x.Childs == null);
       if(parentItems.length > 0) {
         let filteredMenu = [];
+        let menuItems = [];
         let i = 0;
         while(i < parentItems.length) {
+          menuItems = menu.filter(x => x.Childs === parentItems[i].Catagory);
+          if(menuItems.find(x => x.Link === this.MenuName)) {
+            this.CatagoryPosition = i;
+          }
           filteredMenu.push({
             Name: parentItems[i].Catagory,
             ParentDetail: parentItems[i],
-            Value: menu.filter(x => x.Childs === parentItems[i].Catagory)
+            Value: menuItems
           });
           i++;
         }

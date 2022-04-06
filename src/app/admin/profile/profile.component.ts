@@ -68,6 +68,7 @@ export class ManageComponent implements OnInit {
   ExptVersion: number = 0;
   Expt: number = 0;
   Exptdate: Date = null;
+  isUser: boolean = true;
 
   section: any = {
     isKeySkillEdit: false,
@@ -148,13 +149,24 @@ export class ManageComponent implements OnInit {
   loadData(user: any) {
     this.http.get(`user/GetUserDetail/${this.userDetail.UserId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        let detail = res.ResponseBody.professionalUser;
-        this.profile = res.ResponseBody.profileDetail;
-        this.userModal = detail;
-        this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
-        let educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
-        this.userModal.Educational_Detail = educations;
-        this.UserId = this.userModal.UserId;
+        let roleId = res.ResponseBody.RoleId;
+        let detail = null;
+        let educations = null;
+        switch(roleId) {
+          case 1:
+            this.isUser = false;
+            break;
+          default:
+            this.isUser = true;
+            detail = res.ResponseBody.professionalUser;
+            this.profile = res.ResponseBody.profileDetail;
+            this.userModal = detail;
+            this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
+            educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
+            this.userModal.Educational_Detail = educations;
+            this.UserId = this.userModal.UserId;
+            break;
+        }
       } else {
         ErrorToast("Invalid user. Please login again.");
       }
