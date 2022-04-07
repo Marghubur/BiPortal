@@ -71,23 +71,12 @@ export class ManageComponent implements OnInit {
   Exptdate: Date = null;
   isUser: boolean = true;
   remainingNumber: number = 0;
-  Organization: string = '';
-  Designation: string = '';
-  CurrentSalary: number = 0;
-  CurrencyType: string = '';
-  Years: number = 0;
-  Months: number = 0;
-  JobProfile: string = '';
-  Experties: string = '';
   isEdit: boolean = false;
   indexValue: number = 0;
-  Degree_Name: string = '';
-  Course: string = '';
-  Specialization: string = '';
-  University_Name: string ='';
-  Course_Type: string = '';
-  Passout_Year: Date = null;
-  Grading_System: string = '';
+  editEmploymentModal: Employment;
+  editEducationModal: EducationalDetail;
+  editCarrerProfileModal: Company;
+  editPersonalDetailModal: PersonalDetail;
 
   section: any = {
     isKeySkillEdit: false,
@@ -150,6 +139,10 @@ export class ManageComponent implements OnInit {
     this.setSections();
     this.model = this.calendar.getToday();
     this.userModal = new ProfessionalUser();
+    this.editEmploymentModal = new Employment();
+    this.editEducationModal = new EducationalDetail();
+    this.editCarrerProfileModal = new Company();
+    this.editPersonalDetailModal = new PersonalDetail();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     if(expiredOn === null || expiredOn === "")
@@ -202,6 +195,7 @@ export class ManageComponent implements OnInit {
     });
   }
 
+
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
     this.personalDetailForm.controls["DOB"].setValue(date);
@@ -246,6 +240,31 @@ export class ManageComponent implements OnInit {
 
   get langauge() {
     return this.personalDetailForm.get('Languages') as FormArray;
+  }
+
+  editPersonalDetail() {
+    $('#PersonalDetailModal').modal('show');
+    let date = new Date(this.personalDetailForm.value.DOB);
+    this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+    this.editPersonalDetailModal = this.personalDetailForm.value;
+  }
+
+  submitPersonalDetails() {
+    this.isLoading = true;
+    let languages = this.personalDetailForm.controls['Languages'].value;
+    this.userModal.PersonalDetail.DOB = this.editPersonalDetailModal.DOB;
+    this.userModal.PersonalDetail.Gender = this.editPersonalDetailModal.Gender;
+    this.userModal.PersonalDetail.Address = this.editPersonalDetailModal.Address;
+    this.userModal.PersonalDetail.HomeTown = this.editPersonalDetailModal.HomeTown;
+    this.userModal.PersonalDetail.PinCode = this.editPersonalDetailModal.PinCode;
+    this.userModal.PersonalDetail.MaritalStatus = this.editPersonalDetailModal.MaritalStatus;
+    this.userModal.PersonalDetail.Category = this.editPersonalDetailModal.Category;
+    this.userModal.PersonalDetail.DifferentlyAbled = this.editPersonalDetailModal.DifferentlyAbled;
+    this.userModal.PersonalDetail.PermitUSA = this.editPersonalDetailModal.PermitUSA;
+    this.userModal.PersonalDetail.PermitOtherCountry = this.editPersonalDetailModal.PermitOtherCountry;
+    this.updateProfile();
+    $('#PersonalDetailModal').modal('hide');
+    this.isLoading = false;
   }
 
   //----------------- Personal Detail END'S ------------------------
@@ -335,10 +354,12 @@ export class ManageComponent implements OnInit {
   }
 
   closeProjectModal() {
-    let value = this.editProjectModal;
-    let project = this.projectsForm.get('Projects') as FormArray;
-    project.removeAt(project.value.findIndex(item => item.ProjectIndex == value.ProjectIndex));
-    this.userModal.Skills = project.value;
+    if (this.isEdit == false) {
+      let value = this.editProjectModal;
+      let project = this.projectsForm.get('Projects') as FormArray;
+      project.removeAt(project.value.findIndex(item => item.ProjectIndex == value.ProjectIndex));
+      this.userModal.Skills = project.value;
+    }
     $("#editProjectModal").modal("hide");
   }
   //----------------- Projects END'S ------------------------
@@ -821,6 +842,8 @@ export class ManageComponent implements OnInit {
   }
 
   addEducation() {
+    this.isEdit = false;
+    this.editEducationModal = new EducationalDetail();
     $('#EducationModal').modal('show');
   }
 
@@ -832,15 +855,15 @@ export class ManageComponent implements OnInit {
       currentEducation = this.createEducationForm(newEducation, education.length + 1);
       education.push(currentEducation);
     } else {
-      currentEducation = education.at(this.indexValue);
+      currentEducation = education.at(this.editEducationModal.EducationIndex);
     }
-    currentEducation.get("Degree_Name").setValue(this.Degree_Name);
-    currentEducation.get("Course").setValue(this.Course);
-    currentEducation.get("Specialization").setValue(this.Specialization);
-    currentEducation.get("University_Name").setValue(this.University_Name);
-    currentEducation.get("Course_Type").setValue(this.Course_Type);
-    currentEducation.get("Passout_Year").setValue(this.Passout_Year);
-    currentEducation.get("Grading_System").setValue(this.Grading_System);
+    currentEducation.get("Degree_Name").setValue(this.editEducationModal.Degree_Name);
+    currentEducation.get("Course").setValue(this.editEducationModal.Course);
+    currentEducation.get("Specialization").setValue(this.editEducationModal.Specialization);
+    currentEducation.get("University_Name").setValue(this.editEducationModal.University_Name);
+    currentEducation.get("Course_Type").setValue(this.editEducationModal.Course_Type);
+    currentEducation.get("Passout_Year").setValue(this.editEducationModal.Passout_Year);
+    currentEducation.get("Grading_System").setValue(this.editEducationModal.Grading_System);
     this.submitEducationDetail();
     this.isLoading = false;
     $('#EducationModal').modal('hide');
@@ -852,25 +875,8 @@ export class ManageComponent implements OnInit {
 
   editEducation(current: FormGroup) {
     this.isEdit = true;
-    this.currentEducationOnEdit = current;
-    this.
-    let education = edu.value;
-    this.Degree_Name = education.Degree_Name;
-    this.Course = education.Course;
-    this.Specialization = education.Specialization;
-    this.University_Name = education.University_Name;
-    this.Course_Type = education.Course_Type;
-    this.Passout_Year = education.Passout_Year;
-    this.Grading_System = education.Grading_System;
-    this.indexValue = education.EducationIndex;
+    this.editEducationModal = current.value;
     $('#EducationModal').modal('show');
-
-    editProjectDetail(current: ) {
-      this.isEdit = true;
-      this.currentProjectOnEdit = current;
-      this.editProjectModal = current.value as Project;
-      $("#editProjectModal").modal("show");
-      this.isEditProject = true;
   }
 
   //----------------- Education END'S ------------------------
@@ -909,6 +915,8 @@ export class ManageComponent implements OnInit {
   }
 
   addEmployment() {
+    this.isEdit = false;
+    this.editEmploymentModal = new Employment();
     $('#EmploymentModal').modal('show');
   }
 
@@ -916,20 +924,20 @@ export class ManageComponent implements OnInit {
     let currentEmployment;
     let employment = this.employmentForm.get("Employments") as FormArray;
     if (this.isEdit == false) {
-      let newEmployment = new Employment();
+       let newEmployment = new Employment();
       currentEmployment = this.createEmployment(newEmployment, employment.length + 1);
       employment.push(currentEmployment);
     } else {
-      currentEmployment = employment.at(this.indexValue);
+      currentEmployment = employment.at(this.editEmploymentModal.EmploymentIndex);
     }
-    currentEmployment.get("Organization").setValue(this.Organization);
-    currentEmployment.get("Designation").setValue(this.Designation);
-    currentEmployment.get("Years").setValue(this.Years);
-    currentEmployment.get("Months").setValue(this.Months);
-    currentEmployment.get("CurrentSalary").setValue(this.CurrentSalary);
-    currentEmployment.get("CurrencyType").setValue(this.CurrencyType);
-    currentEmployment.get("Experties").setValue(this.Experties);
-    currentEmployment.get("JobProfile").setValue(this.JobProfile);
+    currentEmployment.get("Organization").setValue(this.editEmploymentModal.Organization);
+    currentEmployment.get("Designation").setValue(this.editEmploymentModal.Designation);
+    currentEmployment.get("Years").setValue(this.editEmploymentModal.Years);
+    currentEmployment.get("Months").setValue(this.editEmploymentModal.Months);
+    currentEmployment.get("CurrentSalary").setValue(this.editEmploymentModal.CurrentSalary);
+    currentEmployment.get("CurrencyType").setValue(this.editEmploymentModal.CurrencyType);
+    currentEmployment.get("Experties").setValue(this.editEmploymentModal.Experties);
+    currentEmployment.get("JobProfile").setValue(this.editEmploymentModal.JobProfile);
     this.submitEmploymentDetail();
     this.isLoading = false;
     $("#EmploymentModal").modal('hide');
@@ -937,17 +945,8 @@ export class ManageComponent implements OnInit {
 
   editEmployment(emp: any) {
     this.isEdit = true;
+    this.editEmploymentModal = emp.value;
     $('#EmploymentModal').modal('show');
-    let employement = emp.value;
-    this.Organization = employement.Organization;
-    this.Designation = employement.Designation;
-    this.Years = employement.Years;
-    this.Months = employement.Months;
-    this.CurrentSalary = employement.CurrentSalary;
-    this.CurrencyType = employement.CurrencyType;
-    this.Experties = employement.Experties;
-    this.JobProfile = employement.JobProfile;
-    this.indexValue = employement.EmploymentIndex;
   }
 
   deleteEmploymentConfirmation() {
@@ -976,8 +975,9 @@ export class ManageComponent implements OnInit {
 
   //----------------- Carreer Profile form, group and add new ------------------------
 
-  createCarrerProfileForm(carrer: Company) {
+  createCarrerProfileForm(carrer: Company, index: number) {
     return this.fb.group({
+      CarrerIndex: new FormControl(index),
       Industry: new FormControl(carrer.Industry),
       Department: new FormControl(carrer.Department),
       RoleCategory: new FormControl(carrer.RoleCategory),
@@ -993,17 +993,43 @@ export class ManageComponent implements OnInit {
 
   buildCarrerProfileForm() {
     this.carrerProfileForm = this.fb.group({
-      CarrerProfile: this.fb.array(this.userModal.Companies.map(item => this.createCarrerProfileForm(item)))
+      CarrerProfile: this.fb.array(this.userModal.Companies.map((item, index) => this.createCarrerProfileForm(item, index)))
     })
   }
 
   addCarrerProfile() {
-    let newCarrer = new Company();
-    this.carrer.push(this.createCarrerProfileForm(newCarrer));
+    let currentCarrerProfile;
+    let carrerProfile = this.carrerProfileForm.get("CarrerProfile") as FormArray;
+    if (this.isEdit == false) {
+      let newCarrer = new Company();
+      currentCarrerProfile = this.createCarrerProfileForm(newCarrer, carrerProfile.length + 1);
+      carrerProfile.push(currentCarrerProfile)
+    } else {
+      currentCarrerProfile = carrerProfile.at(this.editCarrerProfileModal.CarrerIndex)
+    }
+    currentCarrerProfile.get("Industry").setValue(this.editCarrerProfileModal.Industry);
+    currentCarrerProfile.get("Department").setValue(this.editCarrerProfileModal.Department);
+    currentCarrerProfile.get("RoleCategory").setValue(this.editCarrerProfileModal.RoleCategory);
+    currentCarrerProfile.get("Role").setValue(this.editCarrerProfileModal.Role);
+    currentCarrerProfile.get("DesiredTypePermanent").setValue(this.editCarrerProfileModal.DesiredTypePermanent);
+    currentCarrerProfile.get("DesiredEmploymentType").setValue(this.editCarrerProfileModal.DesiredEmploymentType);
+    currentCarrerProfile.get("PreferredShift").setValue(this.editCarrerProfileModal.PreferredShift);
+    currentCarrerProfile.get("PreferredWorkLocation").setValue(this.editCarrerProfileModal.PreferredWorkLocation);
+    currentCarrerProfile.get("ExpectedSalary").setValue(this.editCarrerProfileModal.ExpectedSalary);
+    currentCarrerProfile.get("CurrencyType").setValue(this.editCarrerProfileModal.CurrencyType);
+    this.submitCarrerProfileDetail();
+    this.isLoading = false;
+    $("#CarrerProfileModal").modal('hide');
   }
 
   get carrer(): FormArray {
     return this.carrerProfileForm.get("CarrerProfile") as FormArray;
+  }
+
+  editCarrerProfile() {
+    this.isEdit = true;
+    $("#CarrerProfileModal").modal('show');
+    this.editCarrerProfileModal = this.carrerProfileForm.value.CarrerProfile[0];
   }
 
   //----------------- Carreer Profile END'S ------------------------
@@ -1027,15 +1053,6 @@ export class ManageComponent implements OnInit {
       ResumePath: new FormControl(''),
       FileId: new FormControl(this.userModal.FileId)
     })
-  }
-
-  submitPersonalDetails() {
-    this.isLoading = true;
-    let userDetails = this.personalDetailForm.value;
-    let languages = this.personalDetailForm.controls['Languages'].value;
-    this.userModal.PersonalDetail = userDetails;
-    this.updateProfile();
-    this.isLoading = false;
   }
 
   submitEmploymentDetail() {
@@ -1097,9 +1114,41 @@ export class ManageComponent implements OnInit {
   }
 
   updateProfile() {
-    this.http.post("user/UpdateUserProfile", this.userModal).then((response:ResponseModel) => {
-      if (response.ResponseBody)
+    this.http.post("user/UpdateUserProfile", this.userModal).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        let roleId = res.ResponseBody.RoleId;
+        let detail = null;
+        let educations = null;
+        switch(roleId) {
+          case 1:
+            this.isUser = false;
+            break;
+            default:
+              this.isUser = true;
+              detail = res.ResponseBody.professionalUser;
+              this.profile = res.ResponseBody.profileDetail;
+              this.userModal = detail;
+              this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
+              educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
+              this.userModal.Educational_Detail = educations;
+              this.UserId = this.userModal.UserId;
+              break;
+            }
         Toast("Employment Form submitted successfully")
+      } else {
+        ErrorToast("Invalid user. Please login again.");
+      }
+
+      this.initForm();
+      this.buildProjectsForm();
+      this.buildEmploymentForm();
+      this.buildEducationForm();
+      this.buildSkillsForm();
+      this.buildAccomplishmentsForm();
+      this.buildCarrerProfileForm();
+      this.buildPersonalDetailForm();
+      this.isFormReady = true;
+
     })
   }
 
@@ -1184,26 +1233,6 @@ export class ManageComponent implements OnInit {
     $('#resumeHeadlineModal').modal('show');
   }
 
-  editItSkill() {
-    this.section.isItSkillEdit = !this.section.isItSkillEdit;
-  }
-
-  editProfileSummary() {
-    this.section.isProfileSummaryEdit = !this.section.isProfileSummaryEdit;
-  }
-
-  editCarrerProfile() {
-    this.section.isCarrerProfileEdit = !this.section.isCarrerProfileEdit;
-  }
-
-  editPersonalDetail() {
-    this.section.ispersonalDetailsEdit = !this.section.ispersonalDetailsEdit;
-  }
-
-  editProfile() {
-    this.section.isProfileEdit = !this.section.isProfileEdit;
-  }
-
   closeModal() {
     $("#itSkillModal").modal('hide');
     $("#editProjectModal").modal('hide');
@@ -1220,10 +1249,12 @@ export class ManageComponent implements OnInit {
     $("#deletePresentationModal").modal("hide");
     $("#deleteResearchModal").modal("hide");
     $("#patentModal").modal("hide");
+    $("#deletePatentModal").modal("hide");
     $("#EducationModal").modal("hide");
     $("#EmploymentModal").modal("hide");
     $("#resumeHeadlineModal").modal("hide");
-
+    $("#PersonalDetailModal").modal("hide");
+    $("#CarrerProfileModal").modal("hide");
   }
 
   cleanFileHandler() {
@@ -1304,6 +1335,7 @@ class ProfessionalUser {
 }
 
 class Employment {
+  EmploymentIndex: number = 0;
   Organization: string = null;
   Designation: string = null;
   EmploymentStatus: string = null;
@@ -1328,7 +1360,8 @@ class Company {
   ExpectedSalary: string = '';
   RoleCategory: string = '';
   Designation: string = '';
-  CurrencyType: string = ''
+  CurrencyType: string = '';
+  CarrerIndex: number = 0;
 }
 
 class OtherDetail {
@@ -1368,6 +1401,7 @@ class ActivityStatus {
 }
 
 class EducationalDetail {
+  EducationIndex: number = 0;
   Degree_Name: string = '';
   Passout_Year: Date = null;
   Specialization: string = '';
