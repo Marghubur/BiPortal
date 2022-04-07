@@ -143,6 +143,7 @@ export class ManageComponent implements OnInit {
     this.editEducationModal = new EducationalDetail();
     this.editCarrerProfileModal = new Company();
     this.editPersonalDetailModal = new PersonalDetail();
+    this.editProjectModal = new Project();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     if(expiredOn === null || expiredOn === "")
@@ -300,23 +301,29 @@ export class ManageComponent implements OnInit {
 
   editProjectDetail(current: FormGroup) {
     this.isEdit = true;
-    this.currentProjectOnEdit = current;
     this.editProjectModal = current.value as Project;
     $("#editProjectModal").modal("show");
     this.isEditProject = true;
   }
 
   addOrUpdateProject() {
-    if (this.editProjectModal.ProjectTitle =='' && this.editProjectModal.ProjectDetails == '')
-      return ErrorToast("Plesae enter project title and project description")
     this.isLoading = true;
-    this.currentProjectOnEdit.get("ProjectTitle").setValue(this.editProjectModal.ProjectTitle);
-    this.currentProjectOnEdit.get("ProjectDuration").setValue(this.editProjectModal.ProjectDuration);
-    this.currentProjectOnEdit.get("TechnalogyStack").setValue(this.editProjectModal.TechnalogyStack);
-    this.currentProjectOnEdit.get("ClientName").setValue(this.editProjectModal.ClientName);
-    this.currentProjectOnEdit.get("ProjectStatus").setValue(this.editProjectModal.ProjectStatus);
-    this.currentProjectOnEdit.get("RolesResponsibility").setValue(this.editProjectModal.RolesResponsibility);
-    this.currentProjectOnEdit.get("ProjectDetails").setValue(this.editProjectModal.ProjectDetails);
+    let currentProjectOnEdit;
+    let project = this.projectsForm.get('Projects') as FormArray;
+    if (this.isEdit == false) {
+      let newProject = new Project();
+      currentProjectOnEdit = this.projectForm(newProject, project.length + 1);
+      project.push(currentProjectOnEdit);
+    } else {
+      currentProjectOnEdit = project.at(this.editProjectModal.ProjectIndex)
+    }
+    currentProjectOnEdit.get("ProjectTitle").setValue(this.editProjectModal.ProjectTitle);
+    currentProjectOnEdit.get("ProjectDuration").setValue(this.editProjectModal.ProjectDuration);
+    currentProjectOnEdit.get("TechnalogyStack").setValue(this.editProjectModal.TechnalogyStack);
+    currentProjectOnEdit.get("ClientName").setValue(this.editProjectModal.ClientName);
+    currentProjectOnEdit.get("ProjectStatus").setValue(this.editProjectModal.ProjectStatus);
+    currentProjectOnEdit.get("RolesResponsibility").setValue(this.editProjectModal.RolesResponsibility);
+    currentProjectOnEdit.get("ProjectDetails").setValue(this.editProjectModal.ProjectDetails);
     this.submitProjectDetail();
     this.isLoading = false;
     $("#editProjectModal").modal('hide');
@@ -327,11 +334,11 @@ export class ManageComponent implements OnInit {
   }
 
   addProject() {
+    this.isEdit = false;
     let newProject = new Project();
-    let project = this.projectsForm.get('Projects') as FormArray;
-    this.currentProjectOnEdit = this.projectForm(newProject, project.length + 1);
-    project.push(this.currentProjectOnEdit);
-    this.editProjectModal = this.currentProjectOnEdit.value as Project;
+
+
+    //this.editProjectModal = this.currentProjectOnEdit.value as Project;
     $("#editProjectModal").modal("show");
     this.isEditProject = true;
   }
@@ -354,12 +361,6 @@ export class ManageComponent implements OnInit {
   }
 
   closeProjectModal() {
-    if (this.isEdit == false) {
-      let value = this.editProjectModal;
-      let project = this.projectsForm.get('Projects') as FormArray;
-      project.removeAt(project.value.findIndex(item => item.ProjectIndex == value.ProjectIndex));
-      this.userModal.Skills = project.value;
-    }
     $("#editProjectModal").modal("hide");
   }
   //----------------- Projects END'S ------------------------
@@ -889,7 +890,6 @@ export class ManageComponent implements OnInit {
     if(this.userModal.Employments.length == 0) {
       this.userModal.Employments = [new Employment()];
     }
-
     this.employmentForm = this.fb.group({
       Employments: this.fb.array(this.userModal.Employments.map((item, index) => this.createEmployment(item, index)))
     })
