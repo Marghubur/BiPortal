@@ -1,7 +1,7 @@
 <div id="page-menu" class="page-menu mobile-mode-menu bg-white menu-items">
   <div id="menu-items">
     <div class="accordion" id="accordionExample">
-      <div class="accordion-item" *ngFor="let catagory of Menu;let i = index;">
+      <div class="accordion-div" *ngFor="let catagory of Menu;let i = index;">
         <h2 class="accordion-header" [id]="'heading'+i">
           <button class="accordion-button" [ngClass]="{ 'collapsed': i == CatagoryPosition }" type="button"
             data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+i" aria-expanded="true"
