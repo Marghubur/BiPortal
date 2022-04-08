@@ -946,6 +946,7 @@ export class ManageComponent implements OnInit {
   editEmployment(emp: any) {
     this.isEdit = true;
     this.editEmploymentModal = emp.value;
+    this.countNumberofCharacter(this.editEmploymentModal.JobProfile)
     $('#EmploymentModal').modal('show');
   }
 
@@ -1163,7 +1164,6 @@ export class ManageComponent implements OnInit {
   }
 
   uploadProfilePicture(event: any) {
-    this.fileDetail = [];
     if (event.target.files) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
@@ -1183,22 +1183,15 @@ export class ManageComponent implements OnInit {
   }
 
   GetDocumentFile(fileInput: any) {
-    this.fileDetail = [];
-    this.FileDocumentList = null;
-    this.FilesCollection = null;
     let selectedfile = fileInput.target.files;
     if (selectedfile.length > 0) {
-      this.fileDetail = selectedfile[0];
       let file = null;
       file = <File>selectedfile[0];
-      let item: Files = new Files();
-      item.FileName = file.name;
-      item.FileType = file.type;
-      item.FileSize = file.size;
-      item.FileExtension = file.type;
-      item.UserId = this.UserId;
-      this.FileDocumentList = item;
-      this.FilesCollection = file;
+      this.fileDetail.push ({
+        name: "resume",
+        file: file
+      });
+
       let fileSize = selectedfile[0].size/1024;
       if ( fileSize > 100) {
         this.isLargeFile = true;
@@ -1259,14 +1252,12 @@ export class ManageComponent implements OnInit {
 
   cleanFileHandler() {
     this.uploading = false;
-    $("#uploadocument").val("");
+    $("#uploadresume").val("");
     this.isLargeFile = false;
   }
 
   countNumberofCharacter(e: any) {
-    let value = 0;
-    value = e.target.value.length;
-    this.remainingNumber = 4000 - value;
+    this.remainingNumber = 4000 - e.length;
   }
 
   reset() {
@@ -1275,9 +1266,7 @@ export class ManageComponent implements OnInit {
 
   public submitManageUserForm() {
     let formData = new FormData();
-
     let userInfo = this.manageUserForm.value;
-
     this.userModal.FirstName = userInfo.FirstName;
     this.userModal.LastName = userInfo.LastName;
     this.userModal.ResumeHeadline = userInfo.ResumeHeadline;
@@ -1288,13 +1277,13 @@ export class ManageComponent implements OnInit {
       formData.append(this.fileDetail[i].name, this.fileDetail[i].file);
       i++;
     }
-
     formData.append("userInfo", JSON.stringify(this.userModal));
     this.http.post(`user/UploadProfileDetailFile/${this.userDetail.UserId}`, formData).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         Toast(response.ResponseBody);
       }
     })
+    this.fileDetail = [];
   }
 
   selectLanguage(e: any) {
