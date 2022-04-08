@@ -14,13 +14,14 @@ a {
   margin: 0px 2px;
   display: block;
 }
-.accordion {
-  overflow: auto;
-  max-height: calc(100vh - 4rem);
-}
+
 .accordion-header button {
   font-size: 14px !important;
   font-weight: 700 !important;
+}
+
+.accordion-div {
+  border-bottom: 1px solid #d9d9d9;
 }
 
 .side-panel {
@@ -33,11 +34,8 @@ a {
   max-width: 70% !important;
 }
 
-.menu-items:hover {
-  overflow: auto !important;
-}
-
 .menu-items {
+  overflow: auto !important;
   height: calc(100vh - 4rem) !important;
   border-right: 1px solid #c5c5c5;
 }
@@ -73,8 +71,8 @@ a {
 }
 
 .accordion-button:not(.collapsed) {
-  color: #00158e !important;
-  background: #e7e3f5;
+  color: #212529 !important;
+  background: #fff;
 }
 
 .active-link {
@@ -85,5 +83,5 @@ a {
 
 .nav-link{
   margin: 0 !important;
-  padding: 0.8rem 1.6rem;
+  padding: 0.7rem 1.8rem;
 }

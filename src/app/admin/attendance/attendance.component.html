@@ -1,7 +1,7 @@
 <div class="main-container">
   <form autocomplete="off">
     <ng-container *ngIf="isEmployeesReady">
-      <div class="col-12 row m-0 p-0">
+      <div class="col-12 row m-0 p-0 mb-4">
         <div class="col-md-4 p-0 m-0">
           <label class="form-label">Select Employer</label>
           <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
@@ -15,43 +15,10 @@
             </a>
           </div>
           <div class="elem-row-item-base justify-content-end ps-2">
-            <a href="javascript:void(0)" class="p-2 p-2 badge bg-success text-light head-badge">
+            <a href="javascript:void(0)" (click)="getAllPendingAttendance()" class="p-2 p-2 badge bg-success text-light head-badge">
               <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
               My pending attendance
             </a>
-          </div>
-        </div>
-      </div>
-      <div class="row m-0 mb-3">
-        <div class="col-md-8 d-flex align-items-center m-0 p-0 mt-4">
-          <div class="col-md-6 p-0">
-            <form class="form-inline">
-              <div class="form-group">
-                <div class="input-group">
-                  <input class="form-control form-control-sm" placeholder="yyyy-mm-dd" (click)="from.toggle()"
-                    (dateSelect)="fromDateSelection($event)" name="fromModel" [(ngModel)]="fromModel" ngbDatepicker
-                    #from="ngbDatepicker">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()"
-                      type="button"></button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="col-md-4 d-flex">
-            <div class="ms-2">
-              <button href="javascript:void(0)" class="btn btn-sm btn-outline-dark" [disabled]="!fromDate"
-                (click)="prevWeek()">
-                <i class="fa fa-angle-double-left pe-2"></i>Prev week
-              </button>
-            </div>
-            <div class="ms-2">
-              <button href="javascript:void(0)" class="btn btn-sm btn-success" [disabled]="!fromDate"
-                (click)="nextWeek()">
-                Next week<i class="fa fa-angle-double-right ps-2"></i>
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -77,73 +44,29 @@
                 <i class="fa fa-user-circle fa-3x text-success ps-2" aria-hidden="true"></i>
                 <span class="fw-bold ps-2 last-week-team">Your</span>
               </div>
-              <div class="d-flex align-items-center justify-content-between pe-2 pb-3 pt-3">
-                <div class="col-md-4 d-flex align-items-center">
-                  <i class="fa fa-user-circle fa-3x text-success ps-2" aria-hidden="true"></i>
-                  <span class="fw-bold ps-2 last-week-team">Your</span>
-                </div>
-                <div class="col-md-4">
-                  <h6 class="last-week-team">AVG HRS / DAY</h6>
-                  <h6 class="pt-2"> 8h 0m</h6>
-                </div>
-                <div class="col-md-4">
-                  <h6 class="last-week-team">ON TIME ARRIVAL</h6>
-                  <h6 class=" pt-2">100%</h6>
-                </div>
+              <div class="col-md-4">
+                <h6 class="last-week-team">AVG HRS / DAY</h6>
+                <h6 class="pt-2"> 8h 0m</h6>
               </div>
-              <div class="border-top d-flex align-items-center pb-1 pt-3">
-                <div class="col-md-4 d-flex align-items-center">
-                  <span class="fa-stack fa-2x ps-2 text-dark">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-users fa-stack-1x fa-inverse"></i>
-                  </span>
-                  <span class="fw-bold ps-2 last-week-team">My Team</span>
-                </div>
-                <div class="col-md-4 pt-2">
-                  <h6>7h 24m</h6>
-                </div>
-                <div class="col-md-4 pt-2">
-                  <h6>81%</h6>
-                </div>
+              <div class="col-md-4">
+                <h6 class="last-week-team">ON TIME ARRIVAL</h6>
+                <h6 class=" pt-2">100%</h6>
               </div>
             </div>
-          </div>
-          <div class="col-md-4">
-            <h6>Timings</h6>
-            <div class="card px-3 py-2">
-              <div class="d-flex justify-content-between pb-5">
-                <div class="d-flex pt-3 ps-2">
-                  <div class="text-inisde-circle" [ngClass]="{'active-circle': DayName == 1}">M</div>
-                  <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 2}">T</div>
-                  <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 3}">W</div>
-                  <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 4}">T</div>
-                  <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayName == 5}">F</div>
-                  <div class="text-inisde-circle ms-3 inactive-circle">S</div>
-                  <div class="text-inisde-circle ms-3 inactive-circle">S</div>
-                </div>
-                <div>
-                  <i class="fa fa-search fa-lg pe-3 pt-3" aria-hidden="true"></i>
-                  <i class="fa fa-qrcode fa-lg  pe-2 pt-3" aria-hidden="true"></i>
-                </div>
+            <div class="border-top d-flex align-items-center pb-1 pt-3">
+              <div class="col-md-4 d-flex align-items-center">
+                <span class="fa-stack fa-2x ps-2 text-dark">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+                </span>
+                <span class="fw-bold ps-2 last-week-team">My Team</span>
               </div>
-              <ng-container *ngIf="DayName > 0 &&  DayName < 5">
-                <h6 class="pt-5 ps-2">Today (10:00 AM - 8:00PM)</h6>
-                <div class="progress ms-2 me-2 mt-1 mb-2">
-                  <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                  <div class="progress-bar bg-success" role="progressbar" style="width: 11.11%" aria-valuenow="1.11"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                  <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="d-flex justify-content-between ps-2 pe-2">
-                  <h6>Duration: 9h 0m</h6>
-                  <h6>Break: 60 Min</h6>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="DayName == 6 || DayName ==  0">
-                <h4 class="text-center pt-5 pb-5">Today is Holiday</h4>
-              </ng-container>
+              <div class="col-md-4 pt-2">
+                <h6>7h 24m</h6>
+              </div>
+              <div class="col-md-4 pt-2">
+                <h6>81%</h6>
+              </div>
             </div>
           </div>
         </div>
@@ -180,7 +103,7 @@
                 <h6>Break: 60 Min</h6>
               </div>
             </ng-container>
-            <ng-container *ngIf="DayName == 6 || DayName == 0">
+            <ng-container *ngIf="DayValue == 6 || DayValue ==  0">
               <h4 class="text-center pt-5 pb-5">Today is Holiday</h4>
             </ng-container>
           </div>
@@ -192,6 +115,9 @@
               <h5 class="py-2 px-3 timing-box">{{ time | date: 'hh:mm:ss a' }}</h5>
               <h6 class="pt-2">{{time | date: 'EE dd, MMM yyyy'}}</h6>
             </div>
+            <h6 class=" text-center pb-2 pt-5">
+              Work From Home
+            </h6>
           </div>
         </div>
       </div>
@@ -199,108 +125,115 @@
     <ng-container [ngSwitch]="isFormReady">
       <div *ngSwitchCase="true">
         <div [formGroup]="attendenceForm" class="x_panel pt-4 attendance-form">
-          <div class="row">
-            <div class="col-md-10 text-dark">
-              <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}} <span class="fw-bold">&nbsp; to
-                &nbsp; </span> {{toDate -1 | date}}.
+          <div class="d-flex flex-row justify-content-between">
+            <div class="d-flex">
+              <div class="text-dark text-dark d-flex flex-column justify-content-center">
+                <div>
+                  <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}} 
+                  <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
+                </div>
+              </div>
+              <div class="ms-4 d-flex">
+                <div class="p-0">
+                  <form class="form-inline">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input class="form-control form-control-sm border" placeholder="yyyy-mm-dd" (click)="from.toggle()"
+                          (dateSelect)="fromDateSelection($event)" name="fromModel" [(ngModel)]="fromModel" ngbDatepicker
+                          #from="ngbDatepicker">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()"
+                            type="button"></button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="ms-2">
+                  <button href="javascript:void(0)" class="btn btn-sm btn-outline-dark" [disabled]="!fromDate"
+                    (click)="prevWeek()">
+                    <i class="fa fa-angle-double-left pe-2"></i>Prev week
+                  </button>
+                </div>
+                <div class="ms-2 me-2">
+                  <button href="javascript:void(0)" class="btn btn-sm btn-success" [disabled]="!fromDate"
+                    (click)="nextWeek()">
+                    Next week<i class="fa fa-angle-double-right ps-2"></i>
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="col-md-2 text-end">
-              <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">Submit</button>
+            <div class="text-end">
+              <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                  {{ isLoading ? 'Saving' : 'Submit' }}
+                </button>
             </div>
           </div>
           <div class="x_content">
             <table class="table-middle table table-hover">
               <thead>
                 <tr>
-                  <th width="10%">
-                    Day
-                  </th>
-                  <th width="40%">
-                    Date
-                  </th>
-                  <th width="15%" class="text-center">
-                    Burned Hour(s)
-                  </th>
-                  <th width="15%" class="text-center">
-                    Billing Hour(s)
-                  </th>
-                  <th width="20%">
-                    Comment
-                  </th>
+                  <th class="">Mon</th>
+                  <th class="">Tue</th>
+                  <th class="">Wed</th>
+                  <th class="">Thu</th>
+                  <th class="">Fri</th>
+                  <th class="">Sat</th>
+                  <th class="">Sun</th>
+                  <th class="text-center">Billing</th>
+                  <th class="text-center">Final</th>
                 </tr>
               </thead>
               <tbody formArrayName="attendanceArray">
-                <ng-container *ngFor="let item of attendenceForm.get('attendanceArray').controls;let i = index;">
-                  <tr [formGroupName]="i" [ngClass]="{'inactive-days': weekDaysList[i] > 5 || weekDaysList[i] < 1}">
-                    <td>
-                      <div class="table-cell-center highlight-font">
-                        {{item.get('AttendanceDisplayDay').value | date:'EEEE'}}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="table-cell-center" name="AttendanceDisplayDay">
-                        {{item.get('AttendanceDisplayDay').value}}
-                      </div>
-
-                      <div class="d-inline-block float-end center-badge"
-                        [ngSwitch]="item.get('AttendenceStatus').value">
-                        <div *ngSwitchCase="8">
-                          <span class="badge bg-primary ms-2">
-                            <i class="fa fa-check-square-o pe-2 pt-1 pb-1" aria-hidden="true"></i>Submitted
-                          </span>
-                          <small class="d-block text-end text-muted">
-                            {{item.get('AttendanceDay').value | date}}
-                          </small>
-                        </div>
-                        <div *ngSwitchDefault>
-                          <span class="badge bg-warning text-dark">
-                            <i class="fa fa-exclamation pe-2 pt-1 pb-1" aria-hidden="true"></i>Pending
-                          </span>
-                        </div>
-                      </div>
-
-                    </td>
-                    <td>
-                      <div class="center-badge d-flex justify-content-center">
-                        <input type="number" class="text-end" placeholder="hours" min="0" max="23"
-                          [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
-                          formControlName="UserHours" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                        <span>&nbsp;:</span>
-                        <input type="number" class="text-start" placeholder="minutes" min="0" max="59"
-                          (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
-                          onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                      </div>
-                    </td>
-                    <td>
-                      <div class="center-badge d-flex justify-content-center">
-                        {{item.get('BillingHours').value}}
-                      </div>
-                    </td>
-                    <td>
-                      <div ngbDropdown class="d-inline-block dropright">
-                        <input type="text" class="form-control input-overflow" formControlName="UserComments"
-                          placeholder="Comments" (focus)="takeComments($event)">
-                        <div class="p-0 position-absolute d-none textarea-box">
-                          <textarea class="form-control" (blur)="captureComments($event)"
-                            placeholder="enter your comments" formControlName="UserComments">
-                          </textarea>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </ng-container>
-              </tbody>
-              <tfoot>
                 <tr>
-                  <td colspan="2" class="text-end">
-                    <div class="fw-bold pt-2 pb-2">
-                      Total Hours
+                  <ng-container *ngFor="let item of attendenceForm.get('attendanceArray').controls;let i = index;">
+                    <ng-container [formGroupName]="i">
+                      <td>
+                        <div class="center-badge d-flex justify-content-start">
+                          <ng-container [ngSwitch]="item.get('AttendenceStatus').value">
+                            <span class="s" *ngSwitchCase="8">
+                              <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
+                            </span>                          
+                            <span class="" *ngSwitchDefault>
+                              <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
+                            </span>
+                          </ng-container>  
+                        
+                          <input type="number" class="ms-1 text-start" placeholder="hours" min="0" max="23"
+                            [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
+                            formControlName="UserHours" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                          <span>&nbsp;:</span>
+                          <input type="number" class="text-end" placeholder="minutes" min="0" max="59"
+                            (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            
+                          <div ngbDropdown class="d-none dropright">
+                            <input type="text" class="form-control input-overflow" formControlName="UserComments"
+                              placeholder="Comments" (focus)="takeComments($event)">
+                            <div class="p-0 position-absolute d-none textarea-box">
+                              <textarea class="form-control" (blur)="captureComments($event)"
+                                placeholder="enter your comments" formControlName="UserComments">
+                              </textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <small class="d-block text-muted">
+                          {{item.get('AttendanceDay').value | date}}
+                        </small>
+                      </td>
+                    </ng-container>
+                  </ng-container>
+                  <td>
+                    <div class="center-badge d-flex justify-content-center">
+                      08:00
                     </div>
                   </td>
-                  <td class="text-center">{{totalHrs}} : {{totalMins}}</td>
-                  <td class="text-center">{{this.BillingHrs}}</td>
+                  <td>
+                    <div class="center-badge d-flex justify-content-center">{{totalHrs}} : {{totalMins}}</div>
+                  </td>
                 </tr>
-              </tfoot>
+              </tbody>
             </table>
           </div>
         </div>
