@@ -83,17 +83,27 @@
                                 <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
                                   aria-labelledby="home-tab">
                                   <div id="classmasterdata" class="col-md-12" (click)="fireresumeBrowserFile()">
-                                    <div *ngIf="!uploading" class="d-flex align-items-center justify-content-center">
-                                      <div class="text-center">
+                                    <div *ngIf="!uploading"
+                                      class="d-flex align-items-center justify-content-center py-3">
+                                      <div class="text-center pt-4">
                                         <button class="btn btn-primary px-4 py-2">UPLOAD RESUME</button>
                                         <p class="text-muted pt-2">
                                           Supported Formats: doc, docx, pdf upto 100 Kb
                                         </p>
                                       </div>
                                     </div>
-                                    <div class="col-md-12 bg-light justify-content-center p-5" *ngIf="uploading"
-                                      name="uploading">
-                                      <img src="assets/img/ExcelFile.png" />
+                                    <div class="col-md-12 bg-light align-items-center d-flex justify-content-center p-5"
+                                      *ngIf="uploading" name="uploading">
+                                      <img src="assets/ext/file.png" class="resume-thumbnail" />
+                                    </div>
+                                    <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
+                                      File size is greater than 100KB.
+                                    </div>
+                                    <div class="mt-4 float-end">
+                                      <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
+                                        *ngIf="uploading">
+                                        <i class="fa fa-eraser pe-2"></i> Cancel
+                                      </button>
                                     </div>
                                   </div>
                                 </div>
@@ -131,9 +141,7 @@
                                   </tr>
                                 </tbody>
                               </table>
-                              <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
-                                File size is greater than 100KB.
-                              </div>
+
                               <div class="select-message" *ngIf="!uploading">
                                 <h3>
                                   Please upload your resume.
@@ -274,7 +282,6 @@
                                   <textarea name="JobProfile" rows="5" placeholder="Type here ....." readonly
                                     class="form-control" (keydown)="countNumberofCharacter($event)"
                                     formControlName="JobProfile"></textarea>
-                                  <small class="float-end">{{remainingNumber}} Character(s) Left</small>
                                 </div>
 
                                 <div class="col-md-12 mb-3">
