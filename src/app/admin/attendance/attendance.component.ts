@@ -340,18 +340,18 @@ export class AttendanceComponent implements OnInit {
       index++;
     }
 
-    this.http.post("Attendance/InsertUpdateAttendance", records)
-    .then(response => {
-      if (response.ResponseBody) {
-        Toast("Created/Updated successfully");
-        this.initForm(response.ResponseBody);
-      } else {
-        Toast("Fail to inser/update, please contact to admin.");
-      }
-      this.isLoading = false;
-    }).catch(e => {
-      this.isLoading = false;
-    });
+    // this.http.post("Attendance/InsertUpdateAttendance", records)
+    // .then(response => {
+    //   if (response.ResponseBody) {
+    //     Toast("Created/Updated successfully");
+    //     this.initForm(response.ResponseBody);
+    //   } else {
+    //     Toast("Fail to inser/update, please contact to admin.");
+    //   }
+    //   this.isLoading = false;
+    // }).catch(e => {
+    //   this.isLoading = false;
+    // });
   }
 
   getUserAttendanceData() {
@@ -407,7 +407,7 @@ export class AttendanceComponent implements OnInit {
       while (index < attendance.length) {
         let value = attendance[index].AttendanceDay;
         if(value) {
-          attendance[index].AttendanceDay = new Date(new Date (value).setHours(0,0,0,0));
+          attendance[index].AttendanceDay = new Date(value);
         }
         index++;
       }
@@ -497,7 +497,7 @@ export class AttendanceComponent implements OnInit {
       this.getUserAttendanceData();
     }
 
-    this.fromModel = { day: this.fromDate.getUTCDate(), month: this.fromDate.getUTCMonth() + 1, year: this.fromDate.getUTCFullYear()};
+    this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
   }
 
   prevWeek() {
@@ -508,7 +508,7 @@ export class AttendanceComponent implements OnInit {
       this.getUserAttendanceData();
     }
 
-    this.fromModel = { day: this.fromDate.getUTCDate(), month: this.fromDate.getUTCMonth() + 1, year: this.fromDate.getUTCFullYear()};
+    this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
   }
 
   presentWeek() {
@@ -516,7 +516,7 @@ export class AttendanceComponent implements OnInit {
       this.isLoading = true;
       let currentDate = new Date().setHours(0, 0, 0, 0);
       this.fromDate = this.getMonday(new Date(currentDate));
-      this.fromModel = { day: this.fromDate.getUTCDate(), month: this.fromDate.getUTCMonth() + 1, year: this.fromDate.getUTCFullYear()};
+      this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
       if(this.fromDate) {
         this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         this.toDate.setDate(this.toDate.getDate() + 6);
@@ -528,8 +528,10 @@ export class AttendanceComponent implements OnInit {
   }
 
   getAllPendingAttendance() {
-    this.http.get(`Attendance/GetPendingAttendanceById/${this.employeeId}`).then((response: ResponseModel) => {
-      
+    this.http.get(`Attendance/GetPendingAttendanceById/${this.employeeId}/1`).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        alert(JSON.stringify(response.ResponseBody));
+      }
     });
   }
 }

@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   isGoogleLogin: boolean = false;
   isGitHubLogin: boolean = false;
   isUserMode: boolean = true;
+  userType: string = 'employee';
 
   @Output() userAuthState = new EventEmitter();
 
@@ -64,7 +65,8 @@ export class LoginComponent implements OnInit {
         EmailId: null,
         Mobile: null,
         MediaName: null,
-        AccessToken: null
+        AccessToken: null,
+        UserTypeId: this.userType == 'employee' ? 1 : 9
       };
       let userId = this.UserForm.controls['UserId'].value;
       let password = this.UserForm.controls['Password'].value;

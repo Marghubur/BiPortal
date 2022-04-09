@@ -99,6 +99,7 @@ export const UserImage = "assets/images/faces/face1.jpg";
 export const MaxAllowedFileSize = 2048
 
 export enum UserType {
+  Admin = 9,
   Employee = 1,
   Client = 2,
   Candidate = 3,
