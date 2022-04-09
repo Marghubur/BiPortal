@@ -7,6 +7,7 @@ import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
+declare var $: any;
 
 @Component({
   selector: 'app-build-pdf',
@@ -60,7 +61,7 @@ export class BuildPdfComponent implements OnInit {
       this.initMonths();
       this.editBillDetail(data);
     } else {
-      this.getNewForm()
+      this.getNewForm();
     }
   }
 
@@ -241,8 +242,9 @@ export class BuildPdfComponent implements OnInit {
           this.pdfModal.PaidOn = null;
         }
       } else {
-        this.common.ShowToast("Not able to load page data. Please do re-login");
+        ErrorToast("Not able to load page data. Please do re-login");
       }
+
       this.initForm();
       this.pageDataIsReady = true;
     });

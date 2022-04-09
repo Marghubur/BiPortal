@@ -12,311 +12,322 @@
         </div>
       </div>
     </div>
+
     <app-breadcrums></app-breadcrums>
-    <div class="x_content mt-4" *ngIf="pageDataIsReady">
-      <form [formGroup]="pdfForm" id="gpdfform" class="col-md-12 row">
-        <div class="col-md-12 m-0 row">
-          <div class="col-md-4">
-            <label class="form-label">Developer Name *</label>
-            <select name="developerId" class="form-control" formControlName="developerId"
-              (change)="findEmployee($event)"
-              [ngClass]="{'error': submitted && f.developerName.errors !== null && f.developerName.errors?.required}">
-              <option value="0">Select Developer</option>
-              <option *ngFor="let emp of employees" value="{{emp.EmployeeUid}}">{{emp.FirstName}} {{emp.LastName}}
-              </option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">From Company *</label>
-            <select name="senderClientId" class="form-control" formControlName="senderClientId"
-              (change)="findSenderClientDetail($event)"
-              [ngClass]="{'error': submitted && f.senderClientId.errors !== null && f.senderClientId.errors.required}">
-              <option value="0">Sender Organization</option>
-              <option *ngFor="let client of applicationData.clients" value="{{client.ClientId}}">
-                {{client.ClientName}}
-              </option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">To Company *</label>
-            <select name="receiverCompanyId" class="form-control" formControlName="receiverCompanyId"
-              (change)="findReceiverClientDetail($event)"
-              [ngClass]="{'error': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
-              <option value="0">Client Organization</option>
-              <option *ngFor="let client of assignedClients" value="{{client.ClientUid}}">
-                {{client.ClientName}}
-              </option>
-            </select>
-          </div>
-        </div>
 
-        <div class="col-md-3 ms-4 mt-4 form-check">
-          <input class="form-check-input" type="checkbox" formControlName="IsCustomBill" id="flexCheckDefault" (change)="onEdit($event)">
-          <label class="form-check-label" for="flexCheckDefault">
-            Generate Custom Bill
-          </label>
-        </div>
-
-        <div class="col-12 row m-0">
-          <div class="col-md-6 mt-4">
-            <div class="x_panel">
-              <div class="x_header">
-                <div class="x_header_title">
-                  <h2>Bill<small>Bill details</small></h2>
-                </div>
+    <div [ngSwitch]="pageDataIsReady">
+      <div class="data-loading-loader" *ngSwitchCase="false">
+        <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+      </div>
+      <div *ngSwitchDefault>
+        <div class="x_content mt-4">
+          <form [formGroup]="pdfForm" id="gpdfform" class="col-md-12 row">
+            <div class="col-md-12 m-0 row">
+              <div class="col-md-4">
+                <label class="form-label">Developer Name *</label>
+                <select name="developerId" class="form-control" formControlName="developerId"
+                  (change)="findEmployee($event)"
+                  [ngClass]="{'error': submitted && f.developerName.errors !== null && f.developerName.errors?.required}">
+                  <option value="0">Select Developer</option>
+                  <option *ngFor="let emp of employees" value="{{emp.EmployeeUid}}">{{emp.FirstName}} {{emp.LastName}}
+                  </option>
+                </select>
               </div>
-              <div class="col-md-12 mb-3 row">
-                <!-- <label class="form-label">Address *</label> -->
-                <!-- <div class="col-md-6">
-                  <select name="senderClientId" class="form-control mt-3" formControlName="senderClientId"
-                    (change)="findSenderClientDetail($event)"
-                    [ngClass]="{'error': submitted && f.senderClientId.errors !== null && f.senderClientId.errors.required}">
-                    <option value="0">Sender Organization</option>
-                    <option *ngFor="let client of applicationData.clients" value="{{client.ClientId}}">
-                      {{client.ClientName}}
-                    </option>
-                  </select>
-                </div> -->
-                <div class="col-md-6 d-none">
-                  <input placeholder="GSTIN NO#" class="form-control mt-3" name="senderGSTNo"
-                    formControlName="senderGSTNo"
-                    [ngClass]="{'error': submitted && f.senderGSTNo.errors !=null && f.senderGSTNo.errors.required}" />
-                </div>
-                <div class="col-md-6 d-none">
-                  <input placeholder="First Address" class="form-control mt-4" name="senderFirstAddress"
-                    formControlName="senderFirstAddress"
-                    [ngClass]="{'error': submitted && f.senderFirstAddress.errors !=null && f.senderFirstAddress.errors.required}" />
-                </div>
-                <div class="col-md-6 d-none">
-                  <input placeholder="Second Address" class="form-control mt-4" name="senderSecondAddress"
-                    formControlName="senderSecondAddress"
-                    [ngClass]="{'error': submitted && f.senderSecondAddress.errors !=null && f.senderSecondAddress.errors.required}" />
-                </div>
-                <div class="col-md-6 d-none">
-                  <input placeholder="Primary Contact No" class="form-control mt-4" name="senderPrimaryContactNo"
-                    formControlName="senderPrimaryContactNo"
-                    [ngClass]="{'error': submitted && f.senderPrimaryContactNo.errors !=null && f.senderPrimaryContactNo.errors.required}" />
-                </div>
-                <div class="col-md-6 d-none">
-                  <input placeholder="email Id" class="form-control mt-4" name="senderEmail"
-                    formControlName="senderEmail"
-                    [ngClass]="{'error': submitted && f.senderEmail.errors !=null && f.senderEmail.errors.required}" />
-                </div>
+              <div class="col-md-4">
+                <label class="form-label">From Company *</label>
+                <select name="senderClientId" class="form-control" formControlName="senderClientId"
+                  (change)="findSenderClientDetail($event)"
+                  [ngClass]="{'error': submitted && f.senderClientId.errors !== null && f.senderClientId.errors.required}">
+                  <option value="0">Sender Organization</option>
+                  <option *ngFor="let client of applicationData.clients" value="{{client.ClientId}}">
+                    {{client.ClientName}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">To Company *</label>
+                <select name="receiverCompanyId" class="form-control" formControlName="receiverCompanyId"
+                  (change)="findReceiverClientDetail($event)"
+                  [ngClass]="{'error': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
+                  <option value="0">Client Organization</option>
+                  <option *ngFor="let client of assignedClients" value="{{client.ClientUid}}">
+                    {{client.ClientName}}
+                  </option>
+                </select>
+              </div>
+            </div>
 
-                <div class="col-md-12 mb-3 row">
-                  <div class="col-md-6">
-                    <label class="form-label">Header Title *</label>
-                    <input inputtype="mandatory" class="form-control" placeholder="Header Title"
-                      [ngClass]="{'error': submitted && f.header.errors !== null && f.header.errors.required}"
-                      name="header" formControlName="header" />
+            <div class="col-md-3 ms-4 mt-4 form-check">
+              <input class="form-check-input" type="checkbox" formControlName="IsCustomBill" id="flexCheckDefault"
+                (change)="onEdit($event)">
+              <label class="form-check-label" for="flexCheckDefault">
+                Generate Custom Bill
+              </label>
+            </div>
+
+            <div class="col-12 row m-0">
+              <div class="col-md-6 mt-4">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Bill<small>Bill details</small></h2>
+                    </div>
                   </div>
-                  <div class="col-md-6">
-                    <label class="form-label">Bill for month *</label>
-                    <select name="billForMonth" class="form-control" (change)="calculateSpecificDays($event)"
-                      [ngClass]="{'disable-field': !isClientSelected}" formControlName="billForMonth">
-                      <option *ngFor="let m of months" value="{{m.name}}">{{m.name}}</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-md-12 mt-2 row">
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Bill No. (optional)</label>
-                    <input inputtype="mandatory" class="form-control" placeholder="Bill No." name="billNo"
-                      [readonly]="!editMode" formControlName="billNo" />
-                  </div>
-                  <div class="col-md-6 pb-3 ">
-                    <label class="form-label">Date of Billing *</label>
-                    <form class="form-inline">
-                      <div class="form-group w-100">
-                        <div class="input-group w-100">
-                          <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" readonly
-                            (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
-                          <div class="input-group-append">
-                            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                                class="fa fa-calendar" aria-hidden="true"></i>
-                            </button>
-                          </div>
-                        </div>
+                  <div class="col-md-12 mb-3 row">
+                    <!-- <label class="form-label">Address *</label> -->
+                    <!-- <div class="col-md-6">
+                      <select name="senderClientId" class="form-control mt-3" formControlName="senderClientId"
+                        (change)="findSenderClientDetail($event)"
+                        [ngClass]="{'error': submitted && f.senderClientId.errors !== null && f.senderClientId.errors.required}">
+                        <option value="0">Sender Organization</option>
+                        <option *ngFor="let client of applicationData.clients" value="{{client.ClientId}}">
+                          {{client.ClientName}}
+                        </option>
+                      </select>
+                    </div> -->
+                    <div class="col-md-6 d-none">
+                      <input placeholder="GSTIN NO#" class="form-control mt-3" name="senderGSTNo"
+                        formControlName="senderGSTNo"
+                        [ngClass]="{'error': submitted && f.senderGSTNo.errors !=null && f.senderGSTNo.errors.required}" />
+                    </div>
+                    <div class="col-md-6 d-none">
+                      <input placeholder="First Address" class="form-control mt-4" name="senderFirstAddress"
+                        formControlName="senderFirstAddress"
+                        [ngClass]="{'error': submitted && f.senderFirstAddress.errors !=null && f.senderFirstAddress.errors.required}" />
+                    </div>
+                    <div class="col-md-6 d-none">
+                      <input placeholder="Second Address" class="form-control mt-4" name="senderSecondAddress"
+                        formControlName="senderSecondAddress"
+                        [ngClass]="{'error': submitted && f.senderSecondAddress.errors !=null && f.senderSecondAddress.errors.required}" />
+                    </div>
+                    <div class="col-md-6 d-none">
+                      <input placeholder="Primary Contact No" class="form-control mt-4" name="senderPrimaryContactNo"
+                        formControlName="senderPrimaryContactNo"
+                        [ngClass]="{'error': submitted && f.senderPrimaryContactNo.errors !=null && f.senderPrimaryContactNo.errors.required}" />
+                    </div>
+                    <div class="col-md-6 d-none">
+                      <input placeholder="email Id" class="form-control mt-4" name="senderEmail"
+                        formControlName="senderEmail"
+                        [ngClass]="{'error': submitted && f.senderEmail.errors !=null && f.senderEmail.errors.required}" />
+                    </div>
+
+                    <div class="col-md-12 mb-3 row">
+                      <div class="col-md-6">
+                        <label class="form-label">Header Title *</label>
+                        <input inputtype="mandatory" class="form-control" placeholder="Header Title"
+                          [ngClass]="{'error': submitted && f.header.errors !== null && f.header.errors.required}"
+                          name="header" formControlName="header" />
                       </div>
-                    </form>
+                      <div class="col-md-6">
+                        <label class="form-label">Bill for month *</label>
+                        <select name="billForMonth" class="form-control" (change)="calculateSpecificDays($event)"
+                          [ngClass]="{'disable-field': !isClientSelected}" formControlName="billForMonth">
+                          <option *ngFor="let m of months" value="{{m.name}}">{{m.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-12 mt-2 row">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Bill No. (optional)</label>
+                        <input inputtype="mandatory" class="form-control" placeholder="Bill No." name="billNo"
+                          [readonly]="!editMode" formControlName="billNo" />
+                      </div>
+                      <div class="col-md-6 pb-3 ">
+                        <label class="form-label">Date of Billing *</label>
+                        <form class="form-inline">
+                          <div class="form-group w-100">
+                            <div class="input-group w-100">
+                              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                                readonly (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
+                              <div class="input-group-append">
+                                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                                    class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <!-- <textarea rows="4" class="form-control mt-3" placeholder="Company full address" name="receiverFirstAddress"
+                      formControlName="receiverFirstAddress" [ngClass]="{'error': submitted && f.receiverFirstAddress.errors !== null && f.receiverFirstAddress.errors.required}" ></textarea> -->
                   </div>
                 </div>
-                <!-- <textarea rows="4" class="form-control mt-3" placeholder="Company full address" name="receiverFirstAddress"
-                  formControlName="receiverFirstAddress" [ngClass]="{'error': submitted && f.receiverFirstAddress.errors !== null && f.receiverFirstAddress.errors.required}" ></textarea> -->
               </div>
-            </div>
-          </div>
 
-          <div class="col-md-6 mt-4">
-            <div class="x_panel">
-              <div class="x_header">
-                <div class="x_header_title">
-                  <h2>Total<small>Total calculation</small></h2>
+              <div class="col-md-6 mt-4">
+                <div class="x_panel">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Total<small>Total calculation</small></h2>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <!-- <div class="col-md-6">
+                      <select name="receiverCompanyId" class="form-control mt-3" formControlName="receiverCompanyId"
+                        (change)="findReceiverClientDetail($event)"
+                        [ngClass]="{'error': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
+                        <option value="0">Client Organization</option>
+                        <option *ngFor="let client of assignedClients" value="{{client.ClientUid}}">
+                          {{client.ClientName}}
+                        </option>
+                      </select>
+                    </div> -->
+                    <div class="col-md-6 d-none">
+                      <input placeholder="GSTIN NO#" class="form-control mt-3" name="receiverGSTNo"
+                        formControlName="receiverGSTNo"
+                        [ngClass]="{'error': submitted && f.receiverGSTNo.errors !=null && f.receiverGSTNo.errors.required}" />
+                    </div>
+                    <div class="col-md-6 d-none">
+                      <input placeholder="First Address" class="form-control mt-4" name="receiverFirstAddress"
+                        formControlName="receiverFirstAddress"
+                        [ngClass]="{'error': submitted && f.receiverFirstAddress.errors !=null && f.receiverFirstAddress.errors.required}" />
+                    </div>
+                    <div class="col-md-6 d-none">
+                      <input placeholder="Second Address" class="form-control mt-4" name="receiverSecondAddress"
+                        formControlName="receiverSecondAddress"
+                        [ngClass]="{'error': submitted && f.receiverSecondAddress.errors !=null && f.receiverSecondAddress.errors.required}" />
+                    </div>
+                    <div class="col-md-6 d-none">
+                      <input placeholder="Primary Contact No" class="form-control mt-4" name="receiverPrimaryContactNo"
+                        formControlName="receiverPrimaryContactNo"
+                        [ngClass]="{'error': submitted && f.receiverPrimaryContactNo.errors !=null && f.receiverPrimaryContactNo.errors.required}" />
+                    </div>
+                    <div class="col-md-6 d-none">
+                      <input placeholder="email Id" class="form-control mt-4" name="receiverEmail"
+                        formControlName="receiverEmail"
+                        [ngClass]="{'error': submitted && f.receiverEmail.errors !=null && f.receiverEmail.errors.required}" />
+                    </div>
+
+                    <div class="col-md-12 mb-4 row">
+                      <div class="col-md-3 ps-4 pe-0">
+                        <label class="form-label">No. of days</label>
+                        <input type="text" class="form-control" placeholder="No. of working days" name="workingDay"
+                          OnlyNumber="2" [readonly]="!isClientSelected" (keyup)="changeWorkingDays($event)"
+                          formControlName="workingDay" />
+                      </div>
+                      <div class="col-md-3 ps-4 pe-0">
+                        <label class="form-label">Actual</label>
+                        <select name="actualDaysBurned" class="form-control"
+                          [ngClass]="{'disable-field': !isClientSelected}" formControlName="actualDaysBurned"
+                          (change)="calculateAmount($event)">
+                          <option value="0">0 Days</option>
+                          <option *ngFor="let day of days" value="{{day}}">
+                            {{day}} Days
+                          </option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-3 ps-4 pe-0">
+                        <label class="form-label">Half day</label>
+                        <select name="actualDaysBurned" class="form-control"
+                          [ngClass]="{'disable-field': !isClientSelected || !halfDayDisable}"
+                          formControlName="isHalfDay" (change)="calculateHalfDayExtraAmount($event)">
+                          <option value="0">No</option>
+                          <option value="1">Yes</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-3 ps-4 pe-0">
+                        <label class="form-label">Package *</label>
+                        <input class="form-control" placeholder="Pacakage amount" name="packageAmount"
+                          formControlName="packageAmount" (keyup)="getFixedAmount($event)"
+                          [ngClass]="{'error': submitted && f.packageAmount.errors !== null && f.packageAmount.errors.required}" />
+                      </div>
+                    </div>
+                    <div class="col-md-12 row m-0 ps-0 pe-0 pt-0">
+                      <div class="col-md-4">
+                        <label class="form-label">CGST</label>
+                        <input type="text" class="form-control" id="cgst" placeholder="CGST" name="cGST"
+                          formControlName="cGST" (keyup)="checkCGST($event)"
+                          [ngClass]="{'error': submitted && f.cGST.errors !== null && f.cGST.errors.required}"
+                          [readonly]="!isClientSelected" />
+                        <blockquote class="blockquote gst-text">
+                          <p class="text-success">CGST: {{cgstAmount}}</p>
+                        </blockquote>
+                      </div>
+                      <div class="col-md-4">
+                        <label class="form-label">SGST</label>
+                        <input type="text" class="form-control" id="sgst" placeholder="SGST" name="sGST"
+                          formControlName="sGST" (keyup)="checkSGST($event)"
+                          [ngClass]="{'error': submitted && f.sGST.errors !== null && f.sGST.errors.required}"
+                          [readonly]="!isClientSelected" />
+                        <blockquote class="blockquote gst-text">
+                          <p class="text-success">SGST: {{sgstAmount}}</p>
+                        </blockquote>
+                      </div>
+                      <div class="col-md-4">
+                        <label class="form-label">IGST</label>
+                        <input type="text" class="form-control" id="igst" placeholder="IGST" name="iGST"
+                          formControlName="iGST" (keyup)="checkIGST($event)" (keydown)="checkGST($event)"
+                          [ngClass]="{'error': submitted && f.iGST.errors !== null && f.iGST.errors.required}"
+                          [readonly]="!isClientSelected" />
+                        <blockquote class="blockquote gst-text">
+                          <p class="text-success">IGST: {{igstAmount}}</p>
+                        </blockquote>
+                      </div>
+                    </div>
+
+                    <!-- <label class="form-label">Sender address *</label> -->
+                    <!-- <textarea placeholder="Company full address" class="form-control mt-3" rows="4" name="senderAddress"
+                      formControlName="senderAddress" [ngClass]="{'error': submitted && f.senderAddress.errors !== null && f.senderAddress.errors.required}" ></textarea> -->
+                  </div>
                 </div>
               </div>
+            </div>
+
+            <div class="col-md-12 row">
+              <div class="col-md-3"></div>
+              <div class="col-md-3"></div>
+              <div class="col-md-3"></div>
+              <div class="col-md-3">
+                <label class="form-label">Grand total amount / month</label>
+                <input type="text" placeholder="Grand total amount / month" class="form-control" name="grandTotalAmount"
+                  formControlName="grandTotalAmount" [readonly]="'true'" />
+              </div>
+            </div>
+
+            <div class="col-12 row m-0 pt-5">
               <div class="col-md-12">
-                <!-- <div class="col-md-6">
-                  <select name="receiverCompanyId" class="form-control mt-3" formControlName="receiverCompanyId"
-                    (change)="findReceiverClientDetail($event)"
-                    [ngClass]="{'error': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
-                    <option value="0">Client Organization</option>
-                    <option *ngFor="let client of assignedClients" value="{{client.ClientUid}}">
-                      {{client.ClientName}}
-                    </option>
-                  </select>
-                </div> -->
-                <div class="col-md-6 d-none">
-                  <input placeholder="GSTIN NO#" class="form-control mt-3" name="receiverGSTNo"
-                    formControlName="receiverGSTNo"
-                    [ngClass]="{'error': submitted && f.receiverGSTNo.errors !=null && f.receiverGSTNo.errors.required}" />
-                </div>
-                <div class="col-md-6 d-none">
-                  <input placeholder="First Address" class="form-control mt-4" name="receiverFirstAddress"
-                    formControlName="receiverFirstAddress"
-                    [ngClass]="{'error': submitted && f.receiverFirstAddress.errors !=null && f.receiverFirstAddress.errors.required}" />
-                </div>
-                <div class="col-md-6 d-none">
-                  <input placeholder="Second Address" class="form-control mt-4" name="receiverSecondAddress"
-                    formControlName="receiverSecondAddress"
-                    [ngClass]="{'error': submitted && f.receiverSecondAddress.errors !=null && f.receiverSecondAddress.errors.required}" />
-                </div>
-                <div class="col-md-6 d-none">
-                  <input placeholder="Primary Contact No" class="form-control mt-4" name="receiverPrimaryContactNo"
-                    formControlName="receiverPrimaryContactNo"
-                    [ngClass]="{'error': submitted && f.receiverPrimaryContactNo.errors !=null && f.receiverPrimaryContactNo.errors.required}" />
-                </div>
-                <div class="col-md-6 d-none">
-                  <input placeholder="email Id" class="form-control mt-4" name="receiverEmail"
-                    formControlName="receiverEmail"
-                    [ngClass]="{'error': submitted && f.receiverEmail.errors !=null && f.receiverEmail.errors.required}" />
-                </div>
+                <table class="table table-bordered">
+                  <thead class="thead-gray">
+                    <tr>
+                      <th>S.NO#</th>
+                      <th>Developer</th>
+                      <th>Month</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>{{f.developerName.value}}</td>
+                      <td>{{f.billForMonth.value}}</td>
+                      <td>{{f.packageAmount.value}}</td>
+                      <td>{{f.grandTotalAmount.value}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-                <div class="col-md-12 mb-4 row">
-                  <div class="col-md-3 ps-4 pe-0">
-                    <label class="form-label">No. of days</label>
-                    <input type="text" class="form-control" placeholder="No. of working days" name="workingDay"
-                      OnlyNumber="2" [readonly]="!isClientSelected" (keyup)="changeWorkingDays($event)"
-                      formControlName="workingDay" />
-                  </div>
-                  <div class="col-md-3 ps-4 pe-0">
-                    <label class="form-label">Actual</label>
-                    <select name="actualDaysBurned" class="form-control"
-                      [ngClass]="{'disable-field': !isClientSelected}"
-                      formControlName="actualDaysBurned" (change)="calculateAmount($event)">
-                      <option value="0">0 Days</option>
-                      <option *ngFor="let day of days" value="{{day}}">
-                        {{day}} Days
-                      </option>
-                    </select>
-                  </div>
-
-                  <div class="col-md-3 ps-4 pe-0">
-                    <label class="form-label">Half day</label>
-                    <select name="actualDaysBurned" class="form-control"
-                      [ngClass]="{'disable-field': !isClientSelected || !halfDayDisable}"
-                      formControlName="isHalfDay" (change)="calculateHalfDayExtraAmount($event)">
-                      <option value="0">No</option>
-                      <option value="1">Yes</option>
-                    </select>
-                  </div>
-
-                  <div class="col-md-3 ps-4 pe-0">
-                    <label class="form-label">Package *</label>
-                    <input class="form-control" placeholder="Pacakage amount" name="packageAmount"
-                      formControlName="packageAmount" (keyup)="getFixedAmount($event)"
-                      [ngClass]="{'error': submitted && f.packageAmount.errors !== null && f.packageAmount.errors.required}" />
-                  </div>
+              <div class="col-md-12 button groups text-end">
+                <div class="btn-group">
+                  <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
                 </div>
-                <div class="col-md-12 row m-0 ps-0 pe-0 pt-0">
-                  <div class="col-md-4">
-                    <label class="form-label">CGST</label>
-                    <input type="text" class="form-control" id="cgst" placeholder="CGST" name="cGST"
-                      formControlName="cGST" (keyup)="checkCGST($event)"
-                      [ngClass]="{'error': submitted && f.cGST.errors !== null && f.cGST.errors.required}"
-                      [readonly]="!isClientSelected" />
-                    <blockquote class="blockquote gst-text">
-                      <p class="text-success">CGST: {{cgstAmount}}</p>
-                    </blockquote>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label">SGST</label>
-                    <input type="text" class="form-control" id="sgst" placeholder="SGST" name="sGST"
-                      formControlName="sGST" (keyup)="checkSGST($event)"
-                      [ngClass]="{'error': submitted && f.sGST.errors !== null && f.sGST.errors.required}"
-                      [readonly]="!isClientSelected" />
-                    <blockquote class="blockquote gst-text">
-                      <p class="text-success">SGST: {{sgstAmount}}</p>
-                    </blockquote>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label">IGST</label>
-                    <input type="text" class="form-control" id="igst" placeholder="IGST" name="iGST"
-                      formControlName="iGST" (keyup)="checkIGST($event)" (keydown)="checkGST($event)"
-                      [ngClass]="{'error': submitted && f.iGST.errors !== null && f.iGST.errors.required}"
-                      [readonly]="!isClientSelected" />
-                    <blockquote class="blockquote gst-text">
-                      <p class="text-success">IGST: {{igstAmount}}</p>
-                    </blockquote>
-                  </div>
+                <div class="btn-group ms-2">
+                  <button class="btn btn-primary" [disabled]="isLoading" (click)="generate()">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+                    {{ isLoading ? 'Processing' : 'Generate' }}
+                  </button>
                 </div>
-
-                <!-- <label class="form-label">Sender address *</label> -->
-                <!-- <textarea placeholder="Company full address" class="form-control mt-3" rows="4" name="senderAddress"
-                  formControlName="senderAddress" [ngClass]="{'error': submitted && f.senderAddress.errors !== null && f.senderAddress.errors.required}" ></textarea> -->
               </div>
             </div>
-          </div>
+          </form>
         </div>
-
-        <div class="col-md-12 row">
-          <div class="col-md-3"></div>
-          <div class="col-md-3"></div>
-          <div class="col-md-3"></div>
-          <div class="col-md-3">
-            <label class="form-label">Grand total amount / month</label>
-            <input type="text" placeholder="Grand total amount / month" class="form-control" name="grandTotalAmount"
-              formControlName="grandTotalAmount" [readonly]="'true'" />
-          </div>
-        </div>
-
-        <div class="col-12 row m-0 pt-5">
-          <div class="col-md-12">
-            <table class="table table-bordered">
-              <thead class="thead-gray">
-                <tr>
-                  <th>S.NO#</th>
-                  <th>Developer</th>
-                  <th>Month</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>{{f.developerName.value}}</td>
-                  <td>{{f.billForMonth.value}}</td>
-                  <td>{{f.packageAmount.value}}</td>
-                  <td>{{f.grandTotalAmount.value}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="col-md-12 button groups text-end">
-            <div class="btn-group">
-              <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
-            </div>
-            <div class="btn-group ms-2">
-              <button class="btn btn-primary" [disabled]="isLoading" (click)="generate()">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-                {{ isLoading ? 'Processing' : 'Generate' }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
+
   </div>
 </div>
 
