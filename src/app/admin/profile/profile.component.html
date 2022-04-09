@@ -88,7 +88,7 @@
                                       <div class="text-center pt-4">
                                         <button class="btn btn-primary px-4 py-2">UPLOAD RESUME</button>
                                         <p class="text-muted pt-2">
-                                          Supported Formats: doc, docx, pdf upto 100 Kb
+                                          Supported Formats: doc, docx, pdf upto 200 Kb
                                         </p>
                                       </div>
                                     </div>
@@ -97,9 +97,12 @@
                                       <img src="assets/ext/file.png" class="resume-thumbnail" />
                                     </div>
                                     <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
-                                      File size is greater than 100KB.
+                                      File size is greater than 200KB.
                                     </div>
                                     <div class="mt-4 float-end">
+                                      <button *ngIf="uploading" type="button" class="btn btn-outline-primary me-2"
+                                        [disabled]="isLargeFile" (click)="uploadResume()"><i
+                                          class="fa fa-upload pe-2"></i> Upload</button>
                                       <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
                                         *ngIf="uploading">
                                         <i class="fa fa-eraser pe-2"></i> Cancel
@@ -124,40 +127,6 @@
                             FREE
                             RESUME</a>
                         </div>
-                        <!-- <div class="col-md-8 mt-4 overflow-auto;">
-                              <table class="table" *ngIf="uploading">
-                                <thead>
-                                  <tr>
-                                    <th>File Name</th>
-                                    <th>File Size (KB)</th>
-                                    <th>File Type</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>{{fileDetail.name}}</td>
-                                    <td>{{fileDetail.size / 1024 | number: '1.2-2'}}</td>
-                                    <td>{{fileDetail.type}}</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-
-                              <div class="select-message" *ngIf="!uploading">
-                                <h3>
-                                  Please upload your resume.
-                                </h3>
-                              </div>
-                              <div class="mt-4 float-end">
-                                <button type="button" class="btn btn-primary me-2" *ngIf="uploading"
-                                  [disabled]="isLargeFile" (click)="uploadResumeFile()">
-                                  <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload Resume
-                                </button>
-                                <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
-                                  *ngIf="uploading">
-                                  <i class="fa fa-eraser pe-2"></i> Cancel
-                                </button>
-                              </div>
-                            </div> -->
                       </div>
                     </div>
                     <div class="card mb-3 ps-3">
