@@ -993,3 +993,12 @@ body {
   flex-direction: row;
   justify-content: flex-start;
 }
+
+.data-loading-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  align-items: center;
+}

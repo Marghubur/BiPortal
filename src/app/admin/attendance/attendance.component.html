@@ -10,12 +10,13 @@
         <div class="col-md-8 elem-row justify-content-end">
           <div class="elem-row-item-base justify-content-end">
             <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
-              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-calendar-o': !isLoading}"></i>
+              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
               {{ isLoading ? 'Wait' : 'Present week'}}
             </a>
           </div>
           <div class="elem-row-item-base justify-content-end ps-2">
-            <a href="javascript:void(0)" (click)="getAllPendingAttendance()" class="p-2 p-2 badge bg-success text-light head-badge">
+            <a href="javascript:void(0)" (click)="getAllPendingAttendance()"
+              class="p-2 p-2 badge bg-success text-light head-badge">
               <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
               My pending attendance
             </a>
@@ -139,8 +140,8 @@
               <h6>Actions</h6>
               <div class="card px-3 pt-3 pb-5">
                 <div>
-                  <h5 class="py-2 px-3 timing-box">{{ time | date: 'hh:mm:ss a' }}</h5>
-                  <h6 class="pt-2">{{time | date: 'EE dd, MMM yyyy'}}</h6>
+                  <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
+                  <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
                 </div>
                 <h6 class=" text-center pb-2 pt-5">
                   Work From Home
