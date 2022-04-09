@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, UserImage } from 'src/providers/constants';
+import { AccessTokenExpiredOn, ProfileImage, UserImage } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -77,6 +77,7 @@ export class ManageComponent implements OnInit {
   editEducationModal: EducationalDetail;
   editCarrerProfileModal: Company;
   editPersonalDetailModal: PersonalDetail;
+  document: any = null;
 
   section: any = {
     isKeySkillEdit: false,
@@ -172,9 +173,11 @@ export class ManageComponent implements OnInit {
           default:
             this.isUser = true;
             detail = res.ResponseBody.professionalUser;
-            this.profile = res.ResponseBody.profileDetail;
+            let profile = res.ResponseBody.profileDetail;
             this.userModal = detail;
-            this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
+            this.profile = profile.filter(x => x.FileName == ProfileImage);
+            this.document = profile.filter(x => x.FileName == "resume");
+            this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
             educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
             this.userModal.Educational_Detail = educations;
             this.UserId = this.userModal.UserId;
@@ -1052,7 +1055,8 @@ export class ManageComponent implements OnInit {
       ResumeHeadline: new FormControl(this.userModal.ResumeHeadline),
       ProfileImgPath: new FormControl(''),
       ResumePath: new FormControl(''),
-      FileId: new FormControl(this.userModal.FileId)
+      FileId: new FormControl(this.profile.FileId),
+      DocumentId: new FormControl(this.document[0].FileId)
     })
   }
 
@@ -1193,26 +1197,12 @@ export class ManageComponent implements OnInit {
       });
 
       let fileSize = selectedfile[0].size/1024;
-      if ( fileSize > 100) {
+      if ( fileSize > 200) {
         this.isLargeFile = true;
       }
       this.uploading = true;
     } else {
       ErrorToast("You are not slected the file")
-    }
-  }
-
-  uploadResumeFile() {
-    let formData = new FormData();
-    if (this.FileDocumentList != null && this.UserId > 0) {
-      formData.append(this.FileDocumentList.FileName, this.FilesCollection);
-      formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
-      this.http.upload('User/UploadResume', formData)
-      .then(response => {
-        if (response.ResponseBody) {
-          Toast("Resume Uploaded Successfully")
-        }
-      })
     }
   }
 
@@ -1262,6 +1252,24 @@ export class ManageComponent implements OnInit {
 
   reset() {
     this.manageUserForm.reset();
+  }
+
+  uploadResume() {
+    let formData = new FormData();
+    let userInfo = this.manageUserForm.value;
+    this.userModal.FirstName = userInfo.FirstName;
+    this.userModal.LastName = userInfo.LastName;
+    this.userModal.ResumeHeadline = userInfo.ResumeHeadline;
+    this.userModal.FileId = userInfo.DocumentId;
+
+    formData.append(this.fileDetail[0].name, this.fileDetail[0].file);
+    formData.append("userInfo", JSON.stringify(this.userModal));
+    this.http.post(`user/UploadResume/${this.userDetail.UserId}`, formData).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        Toast(response.ResponseBody);
+      }
+    })
+    this.fileDetail = [];
   }
 
   public submitManageUserForm() {
@@ -1411,6 +1419,7 @@ class Files {
   DocumentId: number = 0;
   FileType: string = "";
   FileSize: number = 0;
+  FileId: number =0;
 }
 
 class Skills {
