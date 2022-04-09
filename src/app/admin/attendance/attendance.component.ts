@@ -47,6 +47,8 @@ export class AttendanceComponent implements OnInit {
   billingHrs: string = '';
   NoClient: boolean = false;
   isAttendanceDataLoaded: boolean = false;
+  weekList: Array<any> = [];
+  divisionCode: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -340,18 +342,18 @@ export class AttendanceComponent implements OnInit {
       index++;
     }
 
-    // this.http.post("Attendance/InsertUpdateAttendance", records)
-    // .then(response => {
-    //   if (response.ResponseBody) {
-    //     Toast("Created/Updated successfully");
-    //     this.initForm(response.ResponseBody);
-    //   } else {
-    //     Toast("Fail to inser/update, please contact to admin.");
-    //   }
-    //   this.isLoading = false;
-    // }).catch(e => {
-    //   this.isLoading = false;
-    // });
+    this.http.post("Attendance/InsertUpdateAttendance", records)
+    .then(response => {
+      if (response.ResponseBody) {
+        Toast("Created/Updated successfully");
+        this.initForm(response.ResponseBody);
+      } else {
+        Toast("Fail to inser/update, please contact to admin.");
+      }
+      this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
+    });
   }
 
   getUserAttendanceData() {
@@ -439,15 +441,12 @@ export class AttendanceComponent implements OnInit {
 
   buildWeekDays(): Array<any> {
     let weekDaysList = [];
+    let currentDate = null;
     if((this.toDate - this.fromDate) > 0){
       let index = 0;
       let to = 7;
-      let currentDate = null;
       while(index < to) {
         currentDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
-        // let dateValue = new Date(currentDate.setDate(currentDate.getDate() + index));
-        // let value = dateValue.getDay();
-
         weekDaysList.push({
           date: new Date(currentDate.setDate(currentDate.getDate() + index)),
           hrs: "08",
@@ -490,6 +489,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   nextWeek() {
+    this.divisionCode = 1;
     this.fromDate = new Date(this.fromDate.setDate(this.fromDate.getDate() + 7));
     if (this.fromDate) {
       this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
@@ -501,6 +501,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   prevWeek() {
+    this.divisionCode = 1;
     this.fromDate = new Date(this.fromDate.setDate(this.fromDate.getDate() - 7));
     if (this.fromDate) {
       this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
@@ -513,6 +514,7 @@ export class AttendanceComponent implements OnInit {
 
   presentWeek() {
     if(this.clientId > 0) {
+      this.divisionCode = 1;
       this.isLoading = true;
       let currentDate = new Date().setHours(0, 0, 0, 0);
       this.fromDate = this.getMonday(new Date(currentDate));
@@ -527,11 +529,139 @@ export class AttendanceComponent implements OnInit {
     }    
   }
 
-  getAllPendingAttendance() {
-    this.http.get(`Attendance/GetPendingAttendanceById/${this.employeeId}/1`).then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        alert(JSON.stringify(response.ResponseBody));
+  getPendingWeek(from: Date, to: Date) {
+    if(this.clientId > 0) {
+      this.divisionCode = 1;
+      this.isLoading = true;
+      if(from && to) {
+        this.fromDate = new Date(from);
+        this.toDate = new Date(to);
+        this.getUserAttendanceData();
       }
-    });
+    } else {
+      WarningToast("Please select employer first.");
+    }    
+  }
+
+  getAllPendingAttendance() {
+    if(this.clientId > 0) {
+      this.http.get(`Attendance/GetPendingAttendanceById/${this.employeeId}/1/${this.clientId}`).then((response: ResponseModel) => {
+        if(response.ResponseBody) {
+          this.buildPendingAttendanceModal(response.ResponseBody);
+        }
+      });
+    } else {
+      WarningToast("Please select employer first.");
+    }
+  }
+
+  checkDateExists(currenDate: Date, existingDateList: Array<any>) {
+    let i = 0;
+    let date = null;
+    while(i < existingDateList.length) {
+      date = new Date(existingDateList[i]["AttendanceDay"]);
+      if(currenDate.getFullYear() == date.getFullYear() && 
+         currenDate.getMonth() == date.getMonth() && 
+         currenDate.getDate() == date.getDate()) {
+           return true;
+         }
+      i++;
+    }
+    return false;
+  }
+
+  buildPendingAttendanceModal(res: Array<any>) {
+    let now: any = new Date(new Date().setHours(0,0,0,0));
+    let startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    this.weekList = [];
+    let week: Array<any> = [];
+
+    let dayNum = 0;
+    let date = null;
+    let i = 1;
+    let index = 0;
+    let totalDays = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0).getDate();
+    let workingDate = null;
+    let isExisting = false;
+    while(i <= totalDays) {
+      workingDate = new Date(startDate.getFullYear(), startDate.getMonth(), i);
+      if(now - workingDate <= 0) {
+        if (this.weekList.length > 0) this.divisionCode = 2;
+        return;
+      }
+
+        if(this.checkDateExists(workingDate, res)) {
+          i++;
+          continue;
+      }
+      dayNum = workingDate.getDay();
+      switch(dayNum) {
+        case 1:
+          isExisting = false;
+          week = [];
+          index = 0;
+          while(index < 7){
+            date = new Date(startDate.getFullYear(), startDate.getMonth(), i + index);
+            if(this.checkDateExists(date, res)) {
+              index = 7;
+              isExisting = true;
+              break;
+            }
+            week.push({
+              date: date,
+              position: index,
+              day: date.getDay()
+            });
+            index++;
+          }
+
+          if(!isExisting) {
+            this.weekList.push({
+              weekNum: this.weekList.length + 1,
+              days: week
+            });
+          }
+          i = i + (index - 1);
+          break;
+        default:
+          isExisting = false;
+          date = new Date(startDate.getFullYear(), startDate.getMonth(), i + index);
+          dayNum = date.getDay();
+          date.setDate(date.getDate() - dayNum);
+          
+          week = [];
+          index = 0;
+          let flag = false;
+          while(index < 7){
+            date = new Date(date.getFullYear(), date.getMonth(), (date.getDate() + 1));
+            if(date.getDate() == 2 || flag){
+              if(this.checkDateExists(date, res)) {
+                index = 7;
+                isExisting = true;
+                break;
+              }
+              flag = true;
+              i++;
+            }
+
+            week.push({
+              date: date,
+              position: index,
+              day: date.getDay()
+            });
+            index++;
+          }
+
+          if(!isExisting) {
+            this.weekList.push({
+              weekNum: this.weekList.length + 1,
+              days: week
+            });
+          }
+          break;
+      }
+      i++;
+    }
+    if (this.weekList.length > 0) this.divisionCode = 2;
   }
 }
