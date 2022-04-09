@@ -10,12 +10,13 @@
         <div class="col-md-8 elem-row justify-content-end">
           <div class="elem-row-item-base justify-content-end">
             <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
-              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-calendar-o': !isLoading}"></i>
+              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
               {{ isLoading ? 'Wait' : 'Present week'}}
             </a>
           </div>
           <div class="elem-row-item-base justify-content-end ps-2">
-            <a href="javascript:void(0)" (click)="getAllPendingAttendance()" class="p-2 p-2 badge bg-success text-light head-badge">
+            <a href="javascript:void(0)" (click)="getAllPendingAttendance()"
+              class="p-2 p-2 badge bg-success text-light head-badge">
               <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
               My pending attendance
             </a>
@@ -25,7 +26,7 @@
     </ng-container>
 
     <app-breadcrums></app-breadcrums>
-    
+
     <ng-container *ngIf="isAttendanceDataLoaded">
       <div class="col-md-12 row mt-4 mb-4 ms-0">
         <div class="col-md-4 ps-0">
@@ -129,7 +130,7 @@
             <div class="d-flex">
               <div class="text-dark text-dark d-flex flex-column justify-content-center">
                 <div>
-                  <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}} 
+                  <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
                   <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
                 </div>
               </div>
@@ -138,9 +139,9 @@
                   <form class="form-inline">
                     <div class="form-group">
                       <div class="input-group">
-                        <input class="form-control form-control-sm border" placeholder="yyyy-mm-dd" (click)="from.toggle()"
-                          (dateSelect)="fromDateSelection($event)" name="fromModel" [(ngModel)]="fromModel" ngbDatepicker
-                          #from="ngbDatepicker">
+                        <input class="form-control form-control-sm border" placeholder="yyyy-mm-dd"
+                          (click)="from.toggle()" (dateSelect)="fromDateSelection($event)" name="fromModel"
+                          [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
                         <div class="input-group-append">
                           <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()"
                             type="button"></button>
@@ -166,8 +167,8 @@
             <div class="text-end">
               <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">
                 <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                  {{ isLoading ? 'Saving' : 'Submit' }}
-                </button>
+                {{ isLoading ? 'Saving' : 'Submit' }}
+              </button>
             </div>
           </div>
           <div class="x_content">
@@ -194,20 +195,21 @@
                           <ng-container [ngSwitch]="item.get('AttendenceStatus').value">
                             <span class="s" *ngSwitchCase="8">
                               <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
-                            </span>                          
+                            </span>
                             <span class="" *ngSwitchDefault>
                               <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
                             </span>
-                          </ng-container>  
-                        
+                          </ng-container>
+
                           <input type="number" class="ms-1 text-start" placeholder="hours" min="0" max="23"
                             [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
-                            formControlName="UserHours" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            formControlName="UserHours"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                           <span>&nbsp;:</span>
                           <input type="number" class="text-end" placeholder="minutes" min="0" max="59"
                             (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                            
+
                           <div ngbDropdown class="d-none dropright">
                             <input type="text" class="form-control input-overflow" formControlName="UserComments"
                               placeholder="Comments" (focus)="takeComments($event)">
@@ -242,7 +244,7 @@
         <div class="x_panel v-center">
           <div class="x_content">
             <p *ngIf="NoClient" class="h3 text-muted text-center">
-              Uhh!!!  No client allocated on your name. Please contact your maanager.
+              Uhh!!! No client allocated on your name. Please contact your maanager.
             </p>
             <p *ngIf="!NoClient" class="h3 text-muted text-center">
               Please select week date to get attendance.

@@ -1,137 +1,144 @@
 <div class="col-md-12 main-container">
-  <ng-container *ngIf="isEmpPageReady">
-    <div class="col-12 u-header curren-bg row m-0">
-      <div class="col-md-3">
-        <div class="d-inline-block c-tab" id="emp-tab">
-          <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.Active}" (click)="SwitchTab($event, 1)">
-            Active
-          </a>
-          <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.InActive}" (click)="SwitchTab($event, 0)">
-            InActive
-          </a>
-          <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.All}" (click)="SwitchTab($event, -1)">
-            All
-          </a>
-        </div>
-      </div>
-      <div class="col-md-7 pt-2 row m-0">
-        <div class="col-md-10">
-          <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-            (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
-            [(ngModel)]="anyFilter">
-        </div>
-        <div class="col-md-2">
-          <button class="btn btn-sm btn-primary filter-btn-grp" (click)="globalFilter()" (keydown.esc)="resetFilter()">
-            <i class="fa fa-filter"></i>
-          </button>
-          <button class="btn btn-sm btn-danger filter-btn-grp ms-2" (click)="resetFilter()">
-            <i class="fa fa-repeat"></i>
-          </button>
-        </div>
-      </div>
-
-      <div class="col-md-2 inline-row d-r p-0 m-0">
-        <div class="pt-1">
-          <button class="btn btn-sp btn-sm btn-lightorange" [routerLink]="['/' + manageEmployeeRouteName]"
-            routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o ms-1" aria-hidden="true"></i>
-            Add Employee
-          </button>
-        </div>
+  <div class="col-12 u-header curren-bg row m-0">
+    <div class="col-md-3">
+      <div class="d-inline-block c-tab" id="emp-tab">
+        <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.Active}" (click)="SwitchTab($event, 1)">
+          Active
+        </a>
+        <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.InActive}" (click)="SwitchTab($event, 0)">
+          InActive
+        </a>
+        <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.All}" (click)="SwitchTab($event, -1)">
+          All
+        </a>
       </div>
     </div>
-    <div class="x_panel">
-      <div class="x_header">
-        <div class="x_header_title">
-          <h2>Employee detail <small>Add or update details</small>
-          </h2>
-        </div>
+    <div class="col-md-7 pt-2 row m-0">
+      <div class="col-md-10">
+        <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+          (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
+          [(ngModel)]="anyFilter">
       </div>
-
-      <app-breadcrums></app-breadcrums>
-      <div class="x_content">
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th width="1%">#</th>
-              <th>
-                <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                  (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Name" placeholder="Search by Name">
-                <div class="col-title">
-                  Full Name
-                </div>
-              </th>
-              <th width="14%">
-                <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
-                  placeholder="Search by MobileNumber">
-                <div class="col-title">
-                  Mobile Number
-                </div>
-              </th>
-              <th width="15%">
-                <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
-                <div class="col-title">
-                  Email id
-                </div>
-              </th>
-              <th width="12%" class="text-center">
-                <button (click)="filterRecords()" class="btn btn-primary btn-sm"><i class="fa fa-search pr-2"></i>
-                  Search
-                </button>
-                <div class="col-title">
-                  Action
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of employeeDetail">
-              <td>{{user.EmployeeUid}}</td>
-              <td>
-                <a (click)="EditCurrent(user)">{{user.FirstName}} {{user.LastName}}</a>
-                <div class="float-end">
-                  <a><span class="badge bg-primary fa fa-building-o"> &nbsp; 5</span></a>
-                  <a class="ms-3" (click)="goToAttendancePage(user)">
-                    <span class="text-sm-left text-muted">Attendance</span>
-                    <span class="ms-2 badge bg-success">
-                      <i class="fa fa-id-badge"></i>
-                    </span>
-                  </a>
-                  <span class="badge bg-danger ms-3">3</span>
-                </div>
-              </td>
-              <td>{{user.Mobile}}</td>
-              <td>{{user.Email}}</td>
-              <td>
-                <div class="d-flex flex-row justify-content-evenly">
-                  <a href="javascript:void(0)">
-                    <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"
-                        (click)="ViewFiles(user)"></i></span>
-                  </a>
-                  <a href="javascript:void(0)">
-                    <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"
-                        (click)="AddEditDocuments(user)"></i></span>
-                  </a>
-                  <a href="javascript:void(0)">
-                    <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
-                        (click)="CreatePopup(user)"></i></span>
-                  </a>
-                  <!-- <a href="javascript:void(0)">
-                    <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
-                        *ngIf="isActiveEmployee == 0" (click)="CreatePopup(user)"></i></span>
-                  </a> -->
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="mt-3">
-        <app-pagination [pagination]="employeeData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+      <div class="col-md-2">
+        <button class="btn btn-sm btn-primary filter-btn-grp" (click)="globalFilter()" (keydown.esc)="resetFilter()">
+          <i class="fa fa-filter"></i>
+        </button>
+        <button class="btn btn-sm btn-danger filter-btn-grp ms-2" (click)="resetFilter()">
+          <i class="fa fa-repeat"></i>
+        </button>
       </div>
     </div>
-  </ng-container>
+
+    <div class="col-md-2 inline-row d-r p-0 m-0">
+      <div class="pt-1">
+        <button class="btn btn-sp btn-sm btn-lightorange" [routerLink]="['/' + manageEmployeeRouteName]"
+          routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o ms-1" aria-hidden="true"></i>
+          Add Employee
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="x_header_title">
+        <h2>Employee detail <small>Add or update details</small>
+        </h2>
+      </div>
+    </div>
+
+    <app-breadcrums></app-breadcrums>
+    <div [ngSwitch]="isEmpPageReady">
+      <div class="data-loading-loader" *ngSwitchCase="false">
+        <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+      </div>
+      <div *ngSwitchDefault>
+        <ng-container>
+          <div class="x_content">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th width="1%">#</th>
+                  <th>
+                    <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                      (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Name" placeholder="Search by Name">
+                    <div class="col-title">
+                      Full Name
+                    </div>
+                  </th>
+                  <th width="14%">
+                    <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
+                      placeholder="Search by MobileNumber">
+                    <div class="col-title">
+                      Mobile Number
+                    </div>
+                  </th>
+                  <th width="15%">
+                    <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
+                    <div class="col-title">
+                      Email id
+                    </div>
+                  </th>
+                  <th width="12%" class="text-center">
+                    <button (click)="filterRecords()" class="btn btn-primary btn-sm"><i class="fa fa-search pr-2"></i>
+                      Search
+                    </button>
+                    <div class="col-title">
+                      Action
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of employeeDetail">
+                  <td>{{user.EmployeeUid}}</td>
+                  <td>
+                    <a (click)="EditCurrent(user)">{{user.FirstName}} {{user.LastName}}</a>
+                    <div class="float-end">
+                      <a><span class="badge bg-primary fa fa-building-o"> &nbsp; 5</span></a>
+                      <a class="ms-3" (click)="goToAttendancePage(user)">
+                        <span class="text-sm-left text-muted">Attendance</span>
+                        <span class="ms-2 badge bg-success">
+                          <i class="fa fa-id-badge"></i>
+                        </span>
+                      </a>
+                      <span class="badge bg-danger ms-3">3</span>
+                    </div>
+                  </td>
+                  <td>{{user.Mobile}}</td>
+                  <td>{{user.Email}}</td>
+                  <td>
+                    <div class="d-flex flex-row justify-content-evenly">
+                      <a href="javascript:void(0)">
+                        <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"
+                            (click)="ViewFiles(user)"></i></span>
+                      </a>
+                      <a href="javascript:void(0)">
+                        <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"
+                            (click)="AddEditDocuments(user)"></i></span>
+                      </a>
+                      <a href="javascript:void(0)">
+                        <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
+                            (click)="CreatePopup(user)"></i></span>
+                      </a>
+                      <!-- <a href="javascript:void(0)">
+                        <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
+                            *ngIf="isActiveEmployee == 0" (click)="CreatePopup(user)"></i></span>
+                      </a> -->
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-3">
+            <app-pagination [pagination]="employeeData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- add update detail modal -->
 

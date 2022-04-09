@@ -58,8 +58,9 @@ export class ClientsComponent implements OnInit {
     });
 
     this.user = this.userService.getInstance();
-    if (this.user !== undefined && this.user !== null)
-      this.LoadData();
+    if (this.user !== undefined && this.user !== null) {
+        this.LoadData();
+    }
   }
 
   AddEditDocuments(clientId: number) {
