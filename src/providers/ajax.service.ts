@@ -6,11 +6,9 @@ import {
 } from "@angular/common/http";
 import { CommonService, Toast } from "./common-service/common.service";
 import "rxjs/add/operator/map";
-import { iNavigation } from "./iNavigation";
 import { Observable } from "rxjs";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { environment } from "src/environments/environment";
-import { Login, UnAuthorize } from "./constants";
 
 @Injectable()
 export class AjaxService {
@@ -108,7 +106,7 @@ export class AjaxService {
                 reject(null);
               }
             } catch (e) {
-              reject(null);
+              reject(e);
             }
             resolve(res.body);
             this.commonService.HideLoaderByAjax();
@@ -116,7 +114,7 @@ export class AjaxService {
           error => {
             this.commonService.HideLoaderByAjax();
             this.tokenHelper.HandleResponseStatus(error.status);
-            reject(null);
+            reject(error);
           }
         );
     });
@@ -157,7 +155,7 @@ export class AjaxService {
                 reject(null);
               }
             } catch (e) {
-              reject(null);
+              reject(e);
             }
             resolve(res);
             this.commonService.HideLoaderByAjax();
@@ -165,7 +163,7 @@ export class AjaxService {
           error => {
             this.commonService.HideLoaderByAjax();
             this.tokenHelper.HandleResponseStatus(error.status);
-            reject(null);
+            reject(error);
           }
         );
     });
@@ -193,14 +191,14 @@ export class AjaxService {
                   reject(null);
                 }
               } catch (e) {
-                reject(null);
+                reject(e);
               }
               this.commonService.HideLoaderByAjax();
             },
             error => {
               this.commonService.HideLoaderByAjax();
               this.tokenHelper.HandleResponseStatus(error.status);
-              reject(null);
+              reject(error);
             }
           );
       }
@@ -221,7 +219,7 @@ export class AjaxService {
                 reject(null);
               }
             } catch (e) {
-              reject(null);
+              reject(e);
             }
             resolve(res.body);
             this.commonService.HideLoaderByAjax();
@@ -229,7 +227,7 @@ export class AjaxService {
           error => {
             this.commonService.HideLoaderByAjax();
             this.tokenHelper.HandleResponseStatus(error.status);
-            reject(null);
+            reject(error);
           }
         );
     });

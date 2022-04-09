@@ -88,8 +88,8 @@ export class AttendanceComponent implements OnInit {
     this.intervalId = setInterval(() => {
       this.time = new Date();
     }, 1000);
-    this.DayValue =this.time.getDay();
-
+    
+    this.DayValue = this.time.getDay();
     let cachedData = this.nav.getValue();
     if(cachedData) {
       this.employeeId = cachedData.EmployeeUid;
@@ -395,6 +395,7 @@ export class AttendanceComponent implements OnInit {
 
       this.isLoading = false;
     }).catch(err => {
+      this.isLoading = false;
       WarningToast(err.error.HttpStatusMessage);
     });
   }
