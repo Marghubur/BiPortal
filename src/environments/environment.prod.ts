@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  OAuthClientId: "1084985264281-ehe21udg412eesl9p6uhksoh3s2r8d0c.apps.googleusercontent.com",
-  OAuthSecret: "7pxr3O8iM4SVSs8ozTC5tXts",
+  OAuthClientId: "589159008359-r6hdfqsp2ukdc6gvkq618rk26c52i3p1.apps.googleusercontent.com",
+  OAuthSecret: "RspdEibsTlVS0nKi4izhFu4I",
   baseUrl: "http://www.hiringbell.in:5000/api/",
   FolderDelimiter: "\/"
 };
