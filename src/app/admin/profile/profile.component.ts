@@ -1104,7 +1104,7 @@ export class ManageComponent implements OnInit {
   }
 
   updateProfile() {
-    this.http.post("user/UpdateUserProfile", this.userModal).then((res:ResponseModel) => {
+    this.http.post(`user/UpdateUserProfile/${this.userDetail.UserTypeId}`, this.userModal).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         let roleId = res.ResponseBody.RoleId;
         let detail = null;
