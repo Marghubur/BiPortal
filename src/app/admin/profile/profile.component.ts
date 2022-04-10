@@ -78,8 +78,11 @@ export class ManageComponent implements OnInit {
   editCarrerProfileModal: Company;
   editPersonalDetailModal: PersonalDetail;
   documentId: number = 0;
-  emptyEmployment: boolean = false;
-
+  isEmpData: boolean = false;
+  isEducationData: boolean = false;
+  isItSkillData: boolean = false;
+  isProjectData: boolean = false;
+  isCarrerProfileData: boolean = false;
   profileURL: string = UserImage;
 
   manageUserForm: FormGroup;
@@ -103,7 +106,6 @@ export class ManageComponent implements OnInit {
 
 
   ngOnInit(): void {
-    //this.setSections();
     this.model = this.calendar.getToday();
     this.userModal = new ProfessionalUser();
     this.editEmploymentModal = new Employment();
@@ -153,7 +155,15 @@ export class ManageComponent implements OnInit {
             this.userModal.Educational_Detail = educations;
             this.UserId = this.userModal.UserId;
             if (this.userModal.Employments.length == 0)
-              this.emptyEmployment = true;
+              this.isEmpData = true;
+            if (this.userModal.Educational_Detail.length == 0)
+              this.isEducationData = true;
+            if (this.userModal.Skills.length == 0)
+              this.isItSkillData = true;
+            if (this.userModal.Projects.length == 0)
+              this.isProjectData = true;
+            if (this.userModal.Companies.length == 0)
+              this.isCarrerProfileData = true;
             break;
         }
       } else {
@@ -183,6 +193,9 @@ export class ManageComponent implements OnInit {
 
   buildPersonalDetailForm() {
     let date = new Date(this.userModal.PersonalDetail.DOB);
+    if (date.getFullYear() == 1) {
+      date = new Date();
+    }
     this.model.year = date.getFullYear();
     this.model.month = date.getMonth() + 1;
     this.model.day = date.getDate();
