@@ -38,8 +38,8 @@
         </ng-container>
 
         <ng-container *ngIf="isRolesLoaded">
-          <div class="row mt-4 col-md-12">
-            <div class="col-md-6" *ngFor="let catagory of Menu">
+          <div class="row col-md-12">
+            <div class="col-md-6 pt-5" *ngFor="let catagory of Menu">
               <div class="card">
                 <div class="card-header header-text">
                   {{catagory.Name}}
@@ -97,13 +97,13 @@
 <div class="modal fade" id="addRole" tabindex="-1" role="dialog" aria-labelledby="createFolderTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle">New Role</h5>
       </div>
       <div class="modal-body">
         <div class="col-12">
           <form [formGroup]="addRoleForm">
-            <div class=" col-md-6">
+            <div class=" col-md-12">
               <label class="form-label">Role Name</label>
               <input type="text" class="form-control" placeholder="Role Name" formControlName="RoleName">
             </div>
@@ -115,7 +115,7 @@
           </form>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button (click)="CloseFolderPopup()" class="btn btn-sm btn-outline-danger" data-dismiss="modal">Cancel</button>
         <button (click)="AddRole()" class="btn btn-sm btn-outline-success">Add
           Role</button>

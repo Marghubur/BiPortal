@@ -511,10 +511,12 @@ export class documentsComponent implements OnInit, OnDestroy {
           let fileDetail = response.ResponseBody.Table;
           if(fileDetail && fileDetail.length > 0) {
             this.BuildFileAndFolderDetail(fileDetail);
+            this.isDocumentReady = true;
+          } else {
+            this.isDocumentReady = false;
           }
 
           $("#staticBackdrop").modal("hide");
-          this.isDocumentReady = true;;
           Toast("Deleted successfully.");
         } else {
           ErrorToast("Fail to delte the file");

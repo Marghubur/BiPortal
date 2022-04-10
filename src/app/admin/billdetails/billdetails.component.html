@@ -288,7 +288,7 @@
                       </div>
                     </div>
                   </td>
-                  <td colspan="3" class="fw-bold">
+                  <td colspan="4" class="fw-bold">
                     Rs {{TotalReceivedAmount | number : '1.2-2'}}
                   </td>
                 </tr>
@@ -309,7 +309,7 @@
 <div class="modal fade" id="gstupdateModal" tabindex="-1" *ngIf="isGSTStatusModalReady">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title">Add Or Update</h5>
         <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -382,9 +382,8 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
-
         <button class="btn btn-primary" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
@@ -399,7 +398,7 @@
 <div class="modal fade" id="addupdateModal" tabindex="-1" *ngIf="isModalReady">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title">Bill Status Update Modal</h5>
         <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -447,9 +446,8 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
-
         <button class="btn btn-primary" [disabled]="isLoading" (click)="updateRecord()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
@@ -475,7 +473,7 @@
 <div class="modal fade" id="downloadPopUp" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title">Download Bill</h5>
         <!-- <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -509,7 +507,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" (click)="closeWindow()">Close</button>
         <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
         <a class="btn btn-primary" [attr.disabled]="isLoading" (click)="downloadPdfDocx()" download>

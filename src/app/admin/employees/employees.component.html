@@ -145,7 +145,7 @@
 <div class="modal" id="addupdateModal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title">Add Or Update</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -168,9 +168,8 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
         <button class="btn btn-primary" [disabled]="isLoading" (click)="CreateDocument()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
@@ -185,7 +184,7 @@
   aria-hidden="true">
   <div class="modal-dialog  modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle" *ngIf="isActiveEmployee != 0">Are
           you want to delete the
           Employee
@@ -225,7 +224,7 @@
           </tbody>
         </table>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" (click)="ClosePopup()" class="text-decoration-none btn-light pe-3"
           data-dismiss="modal">Cancel</a>
         <a href="javascript:void(0)" (click)="DeleteCurrent(singleEmployee)" *ngIf="isActiveEmployee != 0"

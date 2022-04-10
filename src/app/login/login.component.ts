@@ -11,6 +11,7 @@ import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from './../../auth/jwtService'
 import { SocialAuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
+import { UserType } from "src/providers/constants";
 
 @Component({
   selector: "app-login",
@@ -107,7 +108,8 @@ export class LoginComponent implements OnInit {
         EmailId: null,
         Mobile: null,
         MediaName: null,
-        AccessToken: null
+        AccessToken: null,
+        UserTypeId: UserType.Candidate,
       };
       let userId = this.UserForm.controls['UserId'].value;
       let password = this.UserForm.controls['Password'].value;

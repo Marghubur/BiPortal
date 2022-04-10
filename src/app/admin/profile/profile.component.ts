@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, ProfileImage, UserImage } from 'src/providers/constants';
+import { AccessTokenExpiredOn, ProfileImage, UserImage, UserType } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -161,7 +161,7 @@ export class ManageComponent implements OnInit {
   }
 
   loadData(user: any) {
-    this.http.get(`user/GetUserDetail/${this.userDetail.UserId}`).then((res: ResponseModel) => {
+    this.http.get(`user/GetUserDetail/${this.userDetail.UserId}/${UserType.Candidate}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         let roleId = res.ResponseBody.RoleId;
         let detail = null;
