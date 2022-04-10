@@ -160,7 +160,7 @@
                         </div>
                       </div>
 
-                      <ng-container formArrayName="Employments">
+                      <ng-container formArrayName="Employments" *ngIf="!emptyEmployment">
                         <div class="col-md-12 ps-2" *ngFor="let item of employment.controls; let index = index;">
                           <div [formGroupName]="index" class="col-md-12 row">
                             <div class="col-md-6">
@@ -265,6 +265,11 @@
                           </div>
                         </div>
                       </ng-container>
+                      <div class="col-md-12 title-message" *ngIf="emptyEmployment">
+                        <div>
+                          Please Add Employment
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </form>
