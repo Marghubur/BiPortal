@@ -49,6 +49,7 @@ export class AttendanceComponent implements OnInit {
   isAttendanceDataLoaded: boolean = false;
   weekList: Array<any> = [];
   divisionCode: number = 0;
+  PendingAttendacneMessage: string = 'Select above pending attendance link to submit before end of the month.';
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -386,15 +387,17 @@ export class AttendanceComponent implements OnInit {
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
       if(response.ResponseBody.EmployeeDetail) 
         this.client = response.ResponseBody.EmployeeDetail;
-      if (response.ResponseBody.AttendacneDetails && response.ResponseBody.AttendacneDetails.length > 0) {
-        this.client = response.ResponseBody.EmployeeDetail;
-        this.createPageData(response.ResponseBody.AttendacneDetails);
-        this.isAttendanceDataLoaded = true;
-      } else {
+      else {
         this.NoClient = true;
         this.isAttendanceDataLoaded = false;
       }
 
+      if (response.ResponseBody.AttendacneDetails) {
+        this.createPageData(response.ResponseBody.AttendacneDetails);
+        this.isAttendanceDataLoaded = true;
+      }
+
+      this.divisionCode = 1;
       this.isLoading = false;
     }).catch(err => {
       this.isLoading = false;
@@ -501,7 +504,6 @@ export class AttendanceComponent implements OnInit {
   }
 
   prevWeek() {
-    this.divisionCode = 1;
     this.fromDate = new Date(this.fromDate.setDate(this.fromDate.getDate() - 7));
     if (this.fromDate) {
       this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
@@ -514,7 +516,6 @@ export class AttendanceComponent implements OnInit {
 
   presentWeek() {
     if(this.clientId > 0) {
-      this.divisionCode = 1;
       this.isLoading = true;
       let currentDate = new Date().setHours(0, 0, 0, 0);
       this.fromDate = this.getMonday(new Date(currentDate));
@@ -531,7 +532,6 @@ export class AttendanceComponent implements OnInit {
 
   getPendingWeek(from: Date, to: Date) {
     if(this.clientId > 0) {
-      this.divisionCode = 1;
       this.isLoading = true;
       if(from && to) {
         this.fromDate = new Date(from);
@@ -546,8 +546,12 @@ export class AttendanceComponent implements OnInit {
   getAllPendingAttendance() {
     if(this.clientId > 0) {
       this.http.get(`Attendance/GetPendingAttendanceById/${this.employeeId}/1/${this.clientId}`).then((response: ResponseModel) => {
-        if(response.ResponseBody) {
+        if(response.ResponseBody && response.ResponseBody.length > 0) {
+          this.PendingAttendacneMessage = 'Select above pending attendance link to submit before end of the month.';
           this.buildPendingAttendanceModal(response.ResponseBody);
+        } else {
+          this.divisionCode = 2;
+          this.PendingAttendacneMessage = "Wow!!! You don't have any pending attendace for this month.";
         }
       });
     } else {
@@ -585,14 +589,14 @@ export class AttendanceComponent implements OnInit {
     let isExisting = false;
     while(i <= totalDays) {
       workingDate = new Date(startDate.getFullYear(), startDate.getMonth(), i);
-      if(now - workingDate <= 0) {
-        if (this.weekList.length > 0) this.divisionCode = 2;
-        return;
-      }
+      // if(now - workingDate <= 0) {
+      //   if (this.weekList.length > 0) this.divisionCode = 2;
+      //   return;
+      // }
 
-        if(this.checkDateExists(workingDate, res)) {
-          i++;
-          continue;
+      if(this.checkDateExists(workingDate, res)) {
+        i++;
+        continue;
       }
       dayNum = workingDate.getDay();
       switch(dayNum) {
