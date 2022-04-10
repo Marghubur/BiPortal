@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, ProfileImage, UserImage, UserType } from 'src/providers/constants';
+import { AccessTokenExpiredOn, ProfileImage, UserImage } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -77,26 +77,14 @@ export class ManageComponent implements OnInit {
   editEducationModal: EducationalDetail;
   editCarrerProfileModal: Company;
   editPersonalDetailModal: PersonalDetail;
-  document: any = null;
-
-  section: any = {
-    isKeySkillEdit: false,
-    isEmploymentEdit: false,
-    isEducationEdit: false,
-    isItSkillEdit: false,
-    isProjectsEdit: false,
-    isProfileSummaryEdit: false,
-    isCarrerProfileEdit: false,
-    isPersonalDetailEdit: false,
-    isOnlineProfileEdit: false,
-    isResaerchEdit: false,
-    isPatentEdit: false,
-    isWorkSampleEdit: false,
-    isPresentationEdit: false,
-    isCertificationEdit: false,
-    isProfileEdit: false
-  };
+  documentId: number = 0;
+  isEmpData: boolean = false;
+  isEducationData: boolean = false;
+  isItSkillData: boolean = false;
+  isProjectData: boolean = false;
+  isCarrerProfileData: boolean = false;
   profileURL: string = UserImage;
+  profileId: number = 0;
 
   manageUserForm: FormGroup;
   educationForm: FormGroup;
@@ -116,28 +104,9 @@ export class ManageComponent implements OnInit {
     private user: UserService
   ) { }
 
-  setSections() {
-    this.section = {
-      isKeySkillEdit: false,
-      isEmploymentEdit: false,
-      isEducationEdit: false,
-      isItSkillEdit: false,
-      isProjectsEdit: false,
-      isProfileSummaryEdit: false,
-      isCarrerProfileEdit: false,
-      isPersonalDetailEdit: false,
-      isProfileEdit: false,
-      isOnlineProfileEdit: false,
-      isResaerchEdit: false,
-      isPatentEdit: false,
-      isWorkSampleEdit: false,
-      isPresentationEdit: false,
-      isCertificationEdit: false
-    }
-  }
+
 
   ngOnInit(): void {
-    this.setSections();
     this.model = this.calendar.getToday();
     this.userModal = new ProfessionalUser();
     this.editEmploymentModal = new Employment();
@@ -161,7 +130,7 @@ export class ManageComponent implements OnInit {
   }
 
   loadData(user: any) {
-    this.http.get(`user/GetUserDetail/${this.userDetail.UserId}/${UserType.Candidate}`).then((res: ResponseModel) => {
+    this.http.get(`user/GetUserDetail/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         let roleId = res.ResponseBody.RoleId;
         let detail = null;
@@ -174,13 +143,29 @@ export class ManageComponent implements OnInit {
             this.isUser = true;
             detail = res.ResponseBody.professionalUser;
             let profile = res.ResponseBody.profileDetail;
+            if (profile.length > 0) {
+              this.profile = profile.filter(x => x.FileName == ProfileImage);
+              this.profileId = this.profile[0].FileId;
+              this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
+            }
             this.userModal = detail;
-            this.profile = profile.filter(x => x.FileName == ProfileImage);
-            this.document = profile.filter(x => x.FileName == "resume");
-            this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
+            let document = profile.filter(x => x.FileName == "resume");
+            if (document.length > 0) {
+              this.documentId = document[0].FileId
+            }
             educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
             this.userModal.Educational_Detail = educations;
             this.UserId = this.userModal.UserId;
+            if (this.userModal.Employments.length == 0)
+              this.isEmpData = true;
+            if (this.userModal.Educational_Detail.length == 0)
+              this.isEducationData = true;
+            if (this.userModal.Skills.length == 0)
+              this.isItSkillData = true;
+            if (this.userModal.Projects.length == 0)
+              this.isProjectData = true;
+            if (this.userModal.Companies.length == 0)
+              this.isCarrerProfileData = true;
             break;
         }
       } else {
@@ -210,6 +195,9 @@ export class ManageComponent implements OnInit {
 
   buildPersonalDetailForm() {
     let date = new Date(this.userModal.PersonalDetail.DOB);
+    if (date.getFullYear() == 1) {
+      date = new Date();
+    }
     this.model.year = date.getFullYear();
     this.model.month = date.getMonth() + 1;
     this.model.day = date.getDate();
@@ -437,7 +425,7 @@ export class ManageComponent implements OnInit {
   //----------------- Accomplishments form, group and add new ------------------------
 
     buildAccomplishmentsForm() {
-      if(this.userModal.Accomplishments !== null) {
+      if(this.userModal.Accomplishments.Certification !== null && this.userModal.Accomplishments.OnlineProfile !== null) {
         this.accomplishmentsForm = this.fb.group({
           OnlineProfiles: this.fb.array(this.userModal.Accomplishments.OnlineProfile.map(item => this.buildOnlieProfiles(item))),
           WorkSamples: this.fb.array(this.userModal.Accomplishments.WorkSample.map(item => this.buildWorkSamples(item))),
@@ -890,9 +878,6 @@ export class ManageComponent implements OnInit {
   //----------------- Employment form, group and add new ------------------------
 
   buildEmploymentForm() {
-    if(this.userModal.Employments.length == 0) {
-      this.userModal.Employments = [new Employment()];
-    }
     this.employmentForm = this.fb.group({
       Employments: this.fb.array(this.userModal.Employments.map((item, index) => this.createEmployment(item, index)))
     })
@@ -1040,10 +1025,12 @@ export class ManageComponent implements OnInit {
 
 
   initForm() {
-    let fullName = this.userModal.Name.split(" ");
-    if(fullName.length > 0) {
-      this.userModal.FirstName = fullName[0];
-      this.userModal.LastName = fullName.splice(1, 1).join(" ");
+    if (this.userModal.Name != null && this.userModal.Name != '') {
+      let fullName = this.userModal.Name.split(" ");
+      if(fullName.length > 0) {
+        this.userModal.FirstName = fullName[0];
+        this.userModal.LastName = fullName.splice(1, 1).join(" ");
+      }
     }
 
     this.manageUserForm = this.fb .group({
@@ -1055,8 +1042,8 @@ export class ManageComponent implements OnInit {
       ResumeHeadline: new FormControl(this.userModal.ResumeHeadline),
       ProfileImgPath: new FormControl(''),
       ResumePath: new FormControl(''),
-      FileId: new FormControl(this.profile.FileId),
-      DocumentId: new FormControl(this.document[0].FileId)
+      FileId: new FormControl(this.profileId),
+      DocumentId: new FormControl(this.documentId)
     })
   }
 
@@ -1119,7 +1106,7 @@ export class ManageComponent implements OnInit {
   }
 
   updateProfile() {
-    this.http.post("user/UpdateUserProfile", this.userModal).then((res:ResponseModel) => {
+    this.http.post(`user/UpdateUserProfile/${this.userDetail.UserTypeId}`, this.userModal).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         let roleId = res.ResponseBody.RoleId;
         let detail = null;
@@ -1419,7 +1406,7 @@ class Files {
   DocumentId: number = 0;
   FileType: string = "";
   FileSize: number = 0;
-  FileId: number =0;
+  FileId: number = 0;
 }
 
 class Skills {
