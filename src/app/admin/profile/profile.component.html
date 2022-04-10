@@ -161,7 +161,7 @@
                         </div>
                       </div>
 
-                      <ng-container formArrayName="Employments">
+                      <ng-container formArrayName="Employments" *ngIf="!isEmpData">
                         <div class="col-md-12 ps-2" *ngFor="let item of employment.controls; let index = index;">
                           <div [formGroupName]="index" class="col-md-12 row">
                             <div class="col-md-6">
@@ -266,6 +266,11 @@
                           </div>
                         </div>
                       </ng-container>
+                      <div class="col-md-12 profile-message" *ngIf="isEmpData">
+                        <div>
+                          Please Add Employment Details
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -288,7 +293,7 @@
                             (click)=" addEducation()"><i class="fa fa-plus-circle pe-1"></i> ADD EDUCATION</button>
                         </div>
                       </div>
-                      <ng-container formArrayName="Educations">
+                      <ng-container formArrayName="Educations" *ngIf="!isEducationData">
                         <div class="col-md-12 ps-2 row mt-2"
                           *ngFor="let education of education.controls; let index = index;" [formGroupName]="index">
 
@@ -348,6 +353,11 @@
                           </div>
                         </div>
                       </ng-container>
+                      <div class="col-md-12 profile-message" *ngIf="isEducationData">
+                        <div>
+                          Please Add Education Details
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -366,7 +376,7 @@
                           <i class="fa fa-pencil ps-4 pt-2 text-primary fa-lg" (click)="editItSkillDetail()"></i>
                         </div>
                       </div>
-                      <ng-container formArrayName="TechnicalSkills">
+                      <ng-container formArrayName="TechnicalSkills" *ngIf="!isItSkillData">
                         <div class="row">
                           <div class="col-md-12">
                             <ng-container *ngFor="let skills of skills.controls;let index = index">
@@ -398,6 +408,11 @@
                           </div>
                         </div>
                       </ng-container>
+                      <div class="col-md-12 profile-message" *ngIf="isItSkillData">
+                        <div>
+                          Please Add ITSkills Detail
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -424,7 +439,7 @@
                         </div>
                       </div>
 
-                      <ng-container formArrayName="Projects">
+                      <ng-container formArrayName="Projects" *ngIf="!isProjectData">
                         <ng-container
                           *ngFor="let item of projectsForm.controls.Projects['controls']; let index = index;">
                           <div [formGroupName]="index" class="col-md-12 row ps-2" id="project">
@@ -469,6 +484,11 @@
                           </div>
                         </ng-container>
                       </ng-container>
+                      <div class="col-md-12 profile-message" *ngIf="isItSkillData">
+                        <div>
+                          Please Add Project Details
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -650,7 +670,7 @@
                           <i class="fa fa-pencil ps-3 pt-2 text-primary fa-lg" (click)="editCarrerProfile()"></i>
                         </div>
                       </div>
-                      <ng-container formArrayName="CarrerProfile">
+                      <ng-container formArrayName="CarrerProfile" *ngIf="!isCarrerProfileData">
                         <div class="col-md-12 row ps-2" *ngFor="let item of carrer.controls; let i = index"
                           [formGroupName]="i">
                           <div class="col-md-6">
@@ -728,6 +748,11 @@
                           </div>
                         </div>
                       </ng-container>
+                      <div class="col-md-12 profile-message" *ngIf="isCarrerProfileData">
+                        <div>
+                          Please Add Carrer Profile Details
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -1487,6 +1512,7 @@
     </div>
   </div>
 </div>
+<!-- End Delete Modal -->
 
 <!--Add or Edit Work Sample Modal -->
 <div class="modal fade" id="workSampleModal" tabindex="-1">
