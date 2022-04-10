@@ -6,7 +6,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { AddNumbers, CommonService, ErrorToast, GetStatus, MonthName, Toast, ToFixed } from 'src/providers/common-service/common.service';
-import { BuildPdf, Employees, ManageEmployee, RegisterClient } from 'src/providers/constants';
+import { BuildPdf, Employees, ManageEmployee, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { ApplicationData } from '../build-pdf/build-pdf.component';
@@ -616,7 +616,7 @@ export class BilldetailsComponent implements OnInit {
       let ClientId = data;
       let ClientIsActive = false;
       if (ClientId !== null && ClientId !== "") {
-        this.http.get(`Clients/GetClientById/${ClientId}/${ClientIsActive}`).then((response: ResponseModel) => {
+        this.http.get(`Clients/GetClientById/${ClientId}/${ClientIsActive}/${UserType.Client}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             this.nav.navigate(RegisterClient, response.ResponseBody);
           }

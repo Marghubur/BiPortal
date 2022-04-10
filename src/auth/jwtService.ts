@@ -63,7 +63,7 @@ export class JwtService {
               this.nav.navigate(Login, null);
               break;
           case NotFound:
-              ErrorToast("Page not found. Please chech your Url.");
+              ErrorToast("Page not found. Please check your Url.");
               break;
           case ServerError:
           case BadRequest:

@@ -965,7 +965,7 @@
 <div class="modal fade" id="resumeHeadlineModal" tabindex="-1">
   <div class="modal-dialog modal-lg  modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
-      <div class="modal-header border-0">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-bold" id="exampleModalLabel">Resume Headline
         </h5>
         <div class="close-button">
@@ -981,7 +981,7 @@
         <textarea placeholder="Resume Headline" [(ngModel)]="resumeHeadline" name="ResumeHeadline"
           class="w-100 form-control lg-txtarea p-3"></textarea>
       </div>
-      <div class="modal-footer border-0">
+      <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" (click)="closeModal()">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="saveResumeHeadline()"><i
             class="pe-2 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
@@ -995,7 +995,7 @@
 <div class="modal fade" id="itSkillModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
-      <div class="modal-header border-0">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-bold" id=" exampleModalLabel">Key Skills</h5>
         <div class="close-button">
           <button type="button" [disabled]="isLoading" class="btn-close btn-sm" data-bs-dismiss="modal"
@@ -1092,7 +1092,7 @@
           </span>
         </div>
       </div>
-      <div class="modal-footer border-0">
+      <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="addItskill()"><i class="pe-2 fa"
@@ -1108,7 +1108,7 @@
 <div class="modal fade" id="EmploymentModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
-      <div class="modal-header border-0">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="!isEdit">Add Employee
         </h5>
         <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="isEdit">Edit -
@@ -1225,7 +1225,7 @@
           </div>
         </ng-container>
       </div>
-      <div class="modal-footer border-0">
+      <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="createNewEmployment()"><i
@@ -1267,7 +1267,7 @@
 <div class="modal fade" id="EducationModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
-      <div class="modal-header border-0">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="!isEdit">Add Education
         </h5>
         <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="isEdit">Edit - {{editEducationModal.Degree_Name}}
@@ -1338,7 +1338,7 @@
           </div>
         </ng-container>
       </div>
-      <div class="modal-footer border-0">
+      <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="addNewEducation()"><i
@@ -1807,7 +1807,7 @@
 <div class="modal fade" id="CarrerProfileModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
-      <div class="modal-header border-0">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-bold" id=" exampleModalLabel">Career Profile
         </h5>
         <div class="close-button">
@@ -1892,7 +1892,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer border-0">
+      <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="addCarrerProfile()"><i
@@ -1908,7 +1908,7 @@
 <div class="modal fade" id="PersonalDetailModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
-      <div class="modal-header border-0">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-bold" id=" exampleModalLabel">Personal Details
         </h5>
         <div class="close-button">
@@ -2074,7 +2074,7 @@
             Language</a>
         </div> -->
       </div>
-      <div class="modal-footer border-0">
+      <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="submitPersonalDetails()"><i
