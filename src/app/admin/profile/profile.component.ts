@@ -84,6 +84,7 @@ export class ManageComponent implements OnInit {
   isProjectData: boolean = false;
   isCarrerProfileData: boolean = false;
   profileURL: string = UserImage;
+  profileId: number = 0;
 
   manageUserForm: FormGroup;
   educationForm: FormGroup;
@@ -144,6 +145,7 @@ export class ManageComponent implements OnInit {
             let profile = res.ResponseBody.profileDetail;
             if (profile.length > 0) {
               this.profile = profile.filter(x => x.FileName == ProfileImage);
+              this.profileId = this.profile[0].FileId;
               this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
             }
             this.userModal = detail;
@@ -1040,7 +1042,7 @@ export class ManageComponent implements OnInit {
       ResumeHeadline: new FormControl(this.userModal.ResumeHeadline),
       ProfileImgPath: new FormControl(''),
       ResumePath: new FormControl(''),
-      FileId: new FormControl(this.profile.FileId),
+      FileId: new FormControl(this.profileId),
       DocumentId: new FormControl(this.documentId)
     })
   }

@@ -40,8 +40,9 @@
           <div class="x_content m-4 d-flex flex-column justify-content-between">
             <div class="d-flex" *ngFor="let d of weekList;let index = index;">
               <p class="pending-list me-2">{{index + 1.}}</p>
-              <a href="javascript:void(0)" (click)="getPendingWeek(d.days[0].date, d.days[6].date)" class="pending-list">
-                <b class="me-2">Your pending attendance from:</b>
+              <a href="javascript:void(0)" (click)="getPendingWeek(d.days[0].date, d.days[6].date)"
+                class="pending-list">
+                <b>Your pending attendance from:</b>
                 <span>{{d.days[0].date | date}} - {{d.days[6].date | date}}</span>
               </a>
             </div>
@@ -139,11 +140,11 @@
             <div class="col-md-4 pe-0">
               <h6>Actions</h6>
               <div class="card px-3 pt-3 pb-5">
-                <div>
+                <div class="pb-4">
                   <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
                   <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
                 </div>
-                <h6 class=" text-center pb-2 pt-5">
+                <h6 class=" text-center pb-5 pt-5">
                   Work From Home
                 </h6>
               </div>
@@ -157,7 +158,7 @@
                 <div class="d-flex">
                   <div class="text-dark text-dark d-flex flex-column justify-content-center">
                     <div>
-                      <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}} 
+                      <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
                       <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
                     </div>
                   </div>
@@ -166,9 +167,9 @@
                       <form class="form-inline">
                         <div class="form-group">
                           <div class="input-group">
-                            <input class="form-control form-control-sm border" placeholder="yyyy-mm-dd" (click)="from.toggle()"
-                              (dateSelect)="fromDateSelection($event)" name="fromModel" [(ngModel)]="fromModel" ngbDatepicker
-                              #from="ngbDatepicker">
+                            <input class="form-control form-control-sm border" placeholder="yyyy-mm-dd"
+                              (click)="from.toggle()" (dateSelect)="fromDateSelection($event)" name="fromModel"
+                              [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
                             <div class="input-group-append">
                               <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()"
                                 type="button"></button>
@@ -194,8 +195,8 @@
                 <div class="text-end">
                   <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">
                     <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                      {{ isLoading ? 'Saving' : 'Submit' }}
-                    </button>
+                    {{ isLoading ? 'Saving' : 'Submit' }}
+                  </button>
                 </div>
               </div>
               <div class="x_content">
@@ -222,20 +223,21 @@
                               <ng-container [ngSwitch]="item.get('AttendenceStatus').value">
                                 <span class="s" *ngSwitchCase="8">
                                   <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
-                                </span>                          
+                                </span>
                                 <span class="" *ngSwitchDefault>
                                   <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
                                 </span>
-                              </ng-container>  
-                            
+                              </ng-container>
+
                               <input type="number" class="ms-1 text-start" placeholder="hours" min="0" max="23"
                                 [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
-                                formControlName="UserHours" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                formControlName="UserHours"
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                               <span>&nbsp;:</span>
                               <input type="number" class="text-end" placeholder="minutes" min="0" max="59"
                                 (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
                                 onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                                
+
                               <div ngbDropdown class="d-none dropright">
                                 <input type="text" class="form-control input-overflow" formControlName="UserComments"
                                   placeholder="Comments" (focus)="takeComments($event)">
@@ -270,7 +272,7 @@
             <div class="x_panel v-center">
               <div class="x_content">
                 <p *ngIf="NoClient" class="h3 text-muted text-center">
-                  Uhh!!!  No client allocated on your name. Please contact your maanager.
+                  Uhh!!! No client allocated on your name. Please contact your maanager.
                 </p>
                 <p *ngIf="!NoClient" class="h3 text-muted text-center">
                   Please select week date to get attendance.
@@ -281,6 +283,6 @@
         </ng-container>
       </ng-container>
     </ng-container>
-    
+
   </form>
 </div>
