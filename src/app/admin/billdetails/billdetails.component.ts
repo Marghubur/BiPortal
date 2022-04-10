@@ -400,7 +400,6 @@ export class BilldetailsComponent implements OnInit {
         this.fileLoaded = true;
         this.userFiles = response.ResponseBody["Files"];
         let emp = response.ResponseBody["Employee"];
-        this.isEmpPageReady = true;
         if (emp && emp.length > 0)
           this.employee = emp[0];
         this.fileLoaded = true;
