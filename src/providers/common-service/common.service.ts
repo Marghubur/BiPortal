@@ -543,4 +543,5 @@ export class UserDetail {
   Token: string = null;
   TokenExpiryDuration: Date = null;
   UserId: number = null;
+  UserTypeId: number = 0;
 }

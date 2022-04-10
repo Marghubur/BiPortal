@@ -368,6 +368,17 @@ table {
 .skill-custom-bg {
   background: #ede8d2;
 }
+
 .resume-thumbnail {
   width: 11rem;
+}
+
+.profile-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  align-items: center;
+  font-size: 2.3rem;
 }
