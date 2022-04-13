@@ -4,7 +4,7 @@ import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { Attendance, Documents, DocumentsPage, Employees, Files, ManageEmployee, UserType } from 'src/providers/constants';
+import { Attendance, Documents, DocumentsPage, Employees, Files, ManageEmployee, Profile, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { DocumentUser } from '../documents/documents.component';
@@ -242,6 +242,12 @@ export class EmployeesComponent implements OnInit {
           this.common.ShowToast("Got error to get data. Please contact to admin.");
         })
       }
+    }
+  }
+
+  editProfile(employee: any) {
+    if (employee != null) {
+      this.nav.navigate(Profile, employee)
     }
   }
 
