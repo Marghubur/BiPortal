@@ -589,10 +589,10 @@ export class AttendanceComponent implements OnInit {
     let isExisting = false;
     while(i <= totalDays) {
       workingDate = new Date(startDate.getFullYear(), startDate.getMonth(), i);
-      // if(now - workingDate <= 0) {
-      //   if (this.weekList.length > 0) this.divisionCode = 2;
-      //   return;
-      // }
+      if(now - workingDate <= 0) {
+        if (this.weekList.length > 0) this.divisionCode = 2;
+        return;
+      }
 
       if(this.checkDateExists(workingDate, res)) {
         i++;

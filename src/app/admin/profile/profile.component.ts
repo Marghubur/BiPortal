@@ -6,6 +6,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, ProfileImage, UserImage } from 'src/providers/constants';
+import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -101,7 +102,8 @@ export class ManageComponent implements OnInit {
     private fb: FormBuilder,
     private calendar: NgbCalendar,
     private local: ApplicationStorage,
-    private user: UserService
+    private user: UserService,
+    private nav: iNavigation
   ) { }
 
 
@@ -116,16 +118,23 @@ export class ManageComponent implements OnInit {
     this.editProjectModal = new Project();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
-    if(expiredOn === null || expiredOn === "")
-    this.userDetail["TokenExpiryDuration"] = new Date();
-    else
-    this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-    let Master = this.local.get(null);
-    if(Master !== null && Master !== "") {
-      this.userDetail = Master["UserDetail"];
-      this.loadData(this.userDetail)
+    let data = this.nav.getValue();
+    if (data == null) {
+      if(expiredOn === null || expiredOn === "")
+      this.userDetail["TokenExpiryDuration"] = new Date();
+      else
+      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+      let Master = this.local.get(null);
+      if(Master !== null && Master !== "") {
+        this.userDetail = Master["UserDetail"];
+        this.loadData(this.userDetail)
+      } else {
+        Toast("Invalid user. Please login again.")
+      }
     } else {
-      Toast("Invalid user. Please login again.")
+      this.userModal = data;
+      this.userModal.UserId = data.EmployeeUid;
+      this.initForm();
     }
   }
 
