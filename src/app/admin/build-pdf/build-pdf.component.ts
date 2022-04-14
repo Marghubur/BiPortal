@@ -579,8 +579,10 @@ export class BuildPdfComponent implements OnInit {
       let modalStatus = this.validateBillRequest(request);
       if(modalStatus == null) {
         this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
-          if(response.ResponseBody)
+          if(response.ResponseBody) {
+            $('#viewFileModal').modal('show');
             Toast("Bill pdf generated successfully");
+          }
           this.isLoading = false;
         }).catch(e => {
           this.isLoading = false;

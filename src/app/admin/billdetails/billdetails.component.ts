@@ -509,13 +509,13 @@ export class BilldetailsComponent implements OnInit {
       return ErrorToast("Please select Rasied bill date option");
 
     if (this.fromDate !== null) {
-      if (this.toDate == null) {
-        Toast("Please selete to date to get the result.")
+      if (this.toDate == null && this.RaisedBilloption == 'between') {
+        ErrorToast("Please selete to date to get the result.")
         return;
       }
       isDateFilterEnable = true;
     } else if(this.fromDate == null && this.toDate !== null) {
-      Toast("Please selete from date to get the result.")
+      ErrorToast("Please selete from date to get the result.")
       isDateFilterEnable = true;
       return;
     }
@@ -524,12 +524,24 @@ export class BilldetailsComponent implements OnInit {
       let fromDateTime = new Date(this.fromDate.year, this.fromDate.month, this.fromDate.day).getTime();
       let toDateTime = new Date(this.toDate.year, this.toDate.month, this.toDate.day).getTime();
       if (fromDateTime > toDateTime) {
-        Toast("Please select cottect From Date and To date");
+        ErrorToast("Please select cottect From Date and To date");
         return;
       } else {
         fromDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
         toDateValue = `${this.toDate.year}-${this.toDate.month}-${this.toDate.day}`;
       }
+    }
+
+    if (this.RaisedBilloption == "before") {
+      fromDateValue = '0001-1-1'
+      toDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
+      isDateFilterEnable = true;
+    }
+
+    if (this.RaisedBilloption == "after") {
+       toDateValue= '2099-1-1'
+       fromDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
+      isDateFilterEnable = true;
     }
 
     if (this.paidfromDate !== null) {
@@ -566,7 +578,7 @@ export class BilldetailsComponent implements OnInit {
         delimiter = "and";
       }else {
         return ErrorToast("Please enter correct To Bill No.");
-      } 
+      }
     }
 
     if(this.employeeFile.ClientName !== null && this.employeeFile.ClientName !== "") {
@@ -695,7 +707,7 @@ export class BilldetailsComponent implements OnInit {
   }
 
   selectBillOption() {
-    
+
   }
 
   EditCurrentDocument(userFile: any) {

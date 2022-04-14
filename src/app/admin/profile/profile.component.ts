@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, ProfileImage, UserImage } from 'src/providers/constants';
+import { AccessTokenExpiredOn, ProfileImage, UserImage, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -132,9 +132,10 @@ export class ManageComponent implements OnInit {
         Toast("Invalid user. Please login again.")
       }
     } else {
-      this.userModal = data;
-      this.userModal.UserId = data.EmployeeUid;
-      this.initForm();
+      this.userDetail = data;
+      this.userDetail.UserId = data.EmployeeUid;
+      this.userDetail.UserTypeId = UserType.Employee;
+      this.loadData(this.userDetail);
     }
   }
 
