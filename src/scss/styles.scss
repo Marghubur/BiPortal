@@ -1002,3 +1002,32 @@ body {
   text-align: center;
   align-items: center;
 }
+
+.a-btn {
+  text-decoration: none;
+  padding: 0px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 32px;
+
+  span{
+    font-weight: bold;
+    padding-left: 6px;
+    font-family: sans-serif;
+  }
+}
+
+legend {
+  float: initial !important;
+  width: auto !important;
+  padding: 0;
+  line-height: inherit;
+  font-size: 1rem !important;
+}
+
+fieldset {
+  padding: 0.6rem 1rem 1rem 1rem !important;
+  margin: 2rem 0rem 0rem 0px !important;
+  border: 1px solid #d9d9d9 !important;
+}

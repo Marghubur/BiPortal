@@ -368,7 +368,7 @@ a:hover {
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
   transition: all 0.2s linear;
-  font-size: 0.8rem !important;
+  font-size: 0.8rem;
 }
 
 #iautofill-searchfield .biginput:focus {
@@ -479,4 +479,8 @@ input:focus {
 
 .autocomplete-suggestions div:first-child {
   margin-top: 30px !important;
+}
+
+.normal {
+  font-size: 1rem !important;
 }

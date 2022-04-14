@@ -32,17 +32,30 @@
           <div class="x_header">
             <div class="x_header_title mt-3">
               <div class="row">
-                <div class="row">
-                  <div class="col-md-5 d-flex align-items-center" *ngIf="fileLoaded">
-                    <label class="form-label pe-3 mt-1">Developer *</label>
-                    <div style="width: 20rem">
+                <div class="d-flex flex-row justify-content-between">
+                  <div class="d-flex" *ngIf="fileLoaded">
+                    <label class="form-label pe-3 mt-1">Developer</label>
+                    <div class="col-md-12">
                       <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
                         (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
                       </app-iautocomplete>
                     </div>
                   </div>
-                  <div class="text-end col">
-                    <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="advancedSearchPopUp()"><i class="fa fa-filter pe-2"></i>Advanced Search</a>
+                  <div class="d-flex flex-row">
+                    <div class="text-end">
+                      <a href="javascript:void(0)" class="a-btn text-success fw-bold" (click)="refreshFilter()">
+                        <i class="fa fa-refresh">
+                          <span>Reset</span>
+                        </i>                        
+                      </a>
+                    </div>
+                    <div class="text-end">
+                      <a href="javascript:void(0)" class="a-btn text-dark fw-bold" (click)="advancedSearchPopUp()">
+                        <i class="fa fa-filter">
+                          <span>Advanced Search</span>
+                        </i>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -65,7 +78,7 @@
                 <tr>
                   <th width="6%">
                     <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="By Bill No">
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
                     <div class="col-title">
                       Bill No.#
                     </div>
@@ -161,9 +174,6 @@
                       <a href="javascript:void(0)" class="text-dark ps-1" (click)="filterRecords()">
                         <i class="fa fa-filter zoom-2"></i>
                       </a>
-                      <a href="javascript:void(0)" class="ms-2 text-danger ps-1" (click)="refreshFilter()">
-                        <i class="fa fa-refresh zoom-2"></i>
-                      </a>
                     </div>
                     <div class="col-title text-center">
                       Action
@@ -223,11 +233,6 @@
                   </td>
                   <td>
                     <div class="d-flex flex-row justify-content-around">
-                      <!-- <a href="javascript:void(0)" (click)="AddEditDocuments(employee.Mobile)">
-                      <span class="badge bg-dark">
-                        <i class="fa fa-folder" aria-hidden="true"></i>
-                      </span>
-                      </a> -->
                       <a href="javascript:void(0)">
                         <span class="badge bg-success ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true"
                             (click)="viewPdfFile(user)"></i></span>
@@ -432,92 +437,22 @@
       </div>
       <div class="modal-body ps-5 pe-4 pt-3 pb-4">
         <div class="col-md-12 row">
-          <div class="col-md-6" *ngIf="fileLoaded">
-            <label class="form-label pe-3">Developer *</label>
-            <div style="width: 35rem">
+          <div class="col-md-3" *ngIf="fileLoaded">
+            <label class="form-label pe-3">Employee</label>
+            <div>
               <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
                 (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
               </app-iautocomplete>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-3">
             <label class="form-label">
               Client Name
             </label>
             <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
               (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
           </div>
-        </div>
-        <div class="col-md-12 row pt-3">
-          <div class="col-md-4">
-            <label class="form-label">
-              Raised Bill Date Options
-            </label>
-            <select class="form-select" aria-label="Default select example" (keyup.enter)="selectBillOption()" [(ngModel)]="RaisedBilloption">
-              <option value="0">Select Option</option>
-              <option value="1">Before</option>
-              <option value="2">After</option>
-              <option value="3">Between</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="" class="form-label">Raised From</label>
-            <form class="form-inline">
-              <div class="form-group">
-                <div class="input-group">
-                  <input class="form-control" placeholder="yyyy-mm-dd"
-                    (dateSelect)="fromDateSelection($event)" name="from" [(ngModel)]="fromModel"
-                    ngbDatepicker #from="ngbDatepicker">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="from.toggle()"
-                      type="button"></button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="col-md-4" *ngIf="RaisedBilloption == '3'">
-            <label for="" class="form-label">Raised To</label>
-            <form class="form-inline">
-              <div class="form-group">
-                <div class="input-group">
-                  <input class="form-control" placeholder="yyyy-mm-dd"
-                    (dateSelect)="toDateSelection($event)" name="to" [(ngModel)]="toModel" ngbDatepicker
-                    #to="ngbDatepicker">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="to.toggle()"
-                    type="button"></button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="col-md-12 row pt-3">
-          <div class="col-md-4">
-            <label class="form-label">
-              Bill No.#
-            </label>
-            <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
-              (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="By Bill No">
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">
-              From Bill No.
-            </label>
-            <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
-              (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.FromBillNo" placeholder="By From Bill No">
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">
-              To Bill No.
-            </label>
-            <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
-              (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ToBillNo" placeholder="By To Bill No">
-          </div>
-        </div>
-        <div class="col-md-12 row pt-3">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label class="form-label">
               Month
             </label>
@@ -538,19 +473,114 @@
               <option value="12">December</option>
             </select>
           </div>
-          <div class="col-md-4">
+
+          <div class="col-md-3">
             <label class="form-label">
-              Bill Status
+              Billed Amount
             </label>
-            <select class="form-control table-filter-control" (keyup.enter)="filterRecords()"
-              (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Status">
-              <option value="0">Status</option>
-              <option value="1">Completed</option>
-              <option value="2">Pending</option>
-              <option value="3">Canceled</option>
-              <option value="7">Raised</option>
-            </select>
+            <input class="form-control table-filter-control"
+              (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
+              [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
           </div>
+        </div>
+        
+        <fieldset>
+          <legend>Filter by billing detail.</legend>
+          <p class="mark">Search bill by biling detail e.g. bill between numbers.</p>
+          <div class="col-md-12 row">
+            <div class="col-12 d-flex mb-3">
+              <div class="ms-2 me-2">
+                <input type="checkbox" name="bydate" checked> Filter between dates
+              </div>
+              <div class="ms-2 me-2">
+                <input type="checkbox" name="bydate"> Before date
+              </div>
+              <div class="ms-2 me-2">
+                <input type="checkbox" name="bydate"> After date
+              </div>
+            </div>
+
+            <div class="col-md-12 row">
+              <div class="col-md-3">
+                <label for="" class="form-label">Raised From</label>
+                <form class="form-inline">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control" placeholder="yyyy-mm-dd"
+                        (dateSelect)="fromDateSelection($event)" name="from" [(ngModel)]="fromModel"
+                        ngbDatepicker #from="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="from.toggle()"
+                          type="button"></button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+  
+              <div class="col-md-3" *ngIf="RaisedBilloption == '3'">
+                <label for="" class="form-label">Raised To</label>
+                <form class="form-inline">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control" placeholder="yyyy-mm-dd"
+                        (dateSelect)="toDateSelection($event)" name="to" [(ngModel)]="toModel" ngbDatepicker
+                        #to="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="to.toggle()"
+                        type="button"></button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="col-md-12 row mt-4">
+              <div class="col-md-3">
+                <label class="form-label">
+                  From Bill No.
+                </label>
+                <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.FromBillNo" placeholder="By From Bill No">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">
+                  To Bill No.
+                </label>
+                <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ToBillNo" placeholder="By To Bill No">
+              </div>
+  
+              <div class="col-md-3">
+                <label class="form-label">
+                  Take Home
+                </label>
+                <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome"
+                  placeholder="By Take Home">
+              </div>
+  
+              <div class="col-md-3">
+                <label class="form-label">
+                  Bill Status
+                </label>
+                <select class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Status">
+                  <option value="0">Status</option>
+                  <option value="1">Completed</option>
+                  <option value="2">Pending</option>
+                  <option value="3">Canceled</option>
+                  <option value="7">Raised</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        
+        <div class="col-md-12 row pt-3">
+
           <div class="col-md-4">
             <label class="form-label">
               GST
@@ -563,67 +593,6 @@
               <option value="3">Canceled</option>
               <option value="6">Raised</option>
             </select>
-          </div>
-        </div>
-        <div class="col-md-12 row pt-3">
-          <div class="col-md-4">
-            <label class="form-label">
-              Billed Amount
-            </label>
-            <input class="form-control table-filter-control"
-              (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
-              [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">
-              Received Amount
-            </label>
-            <input class="form-control table-filter-control"
-              (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
-              [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">
-              Take Home
-            </label>
-            <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
-              (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome"
-              placeholder="By Take Home">
-          </div>
-        </div>
-        <div class="col-md-12 row pt-3">
-          <label class="form-label">Bill Paid On</label>
-          <div class="col-md-4">
-            <label for="" class="form-label">From Date</label>
-            <form class="form-inline">
-              <div class="form-group">
-                <div class="input-group">
-                  <input class="form-control" placeholder="yyyy-mm-dd"
-                    (dateSelect)="paidfromDateSelection($event)" name="paidfrom" [(ngModel)]="paidfromModel"
-                    ngbDatepicker #paidfrom="ngbDatepicker">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="paidfrom.toggle()"
-                      type="button"></button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="col-md-4" >
-            <label for="" class="form-label">To Date</label>
-            <form class="form-inline">
-              <div class="form-group">
-                <div class="input-group">
-                  <input class="form-control" placeholder="yyyy-mm-dd"
-                    (dateSelect)="paidtoDateSelection($event)" name="paidto" [(ngModel)]="paidtoModel" ngbDatepicker
-                    #paidto="ngbDatepicker">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="paidto.toggle()"
-                    type="button"></button>
-                  </div>
-                </div>
-              </div>
-            </form>
           </div>
         </div>
       </div>
