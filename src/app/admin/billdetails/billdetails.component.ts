@@ -72,7 +72,7 @@ export class BilldetailsComponent implements OnInit {
   TotalReceivedAmount: number = 0;
   TotalBilledAmount: number = 0;
   TotalSalaryAmount: number = 0;
-  RaisedBilloption: string = '';
+  RaisedBilloption: string = '3';
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -98,9 +98,9 @@ export class BilldetailsComponent implements OnInit {
     this.RaisedBilloption = '0';
     this.employeeData = new Filter();
     this.employeeFile = new BillDetails();
-    this.employeeFile.Status = "0";
+    this.employeeFile.Status = '0';
     this.employeeFile.GSTStatus = '0';
-    this.employeeFile.Month = "0";
+    this.employeeFile.Month = '0';
     this.basePath = this.http.GetImageBasePath();
     //this.currentEmployeeDetail = this.nav.getValue();
     let data = this.nav.getValue();
@@ -307,7 +307,11 @@ export class BilldetailsComponent implements OnInit {
         else
           this.showFile(userFile);
       }
-    })
+
+      $('#pdfviewingModal').modal('hide');
+    }).catch(err => {
+      $('#pdfviewingModal').modal('hide');
+    });
   }
 
   getFileExtension(value: any) {
@@ -404,7 +408,8 @@ export class BilldetailsComponent implements OnInit {
 
         this.autoCompleteModal = {
           data: this.employeeDetails,
-          placeholder: "Select Employee"
+          placeholder: "Select Employee",
+          className: "normal"
         }
         this.fileLoaded = true;
         this.userFiles = response.ResponseBody["Files"];
@@ -804,6 +809,6 @@ export class BillDetails {
   Absent: number = 0;
   paidfromModel: string = '';
   paidtoModel: string = '';
-  FromBillNo: number = 0;
-  ToBillNo: number = 0;
+  FromBillNo: number = null;
+  ToBillNo: number = null;
 }
