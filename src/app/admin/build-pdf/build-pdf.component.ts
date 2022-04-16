@@ -7,6 +7,8 @@ import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
+import { Attendance, BillDetail } from 'src/providers/constants';
+
 declare var $: any;
 
 @Component({
@@ -43,6 +45,12 @@ export class BuildPdfComponent implements OnInit {
   editMode: boolean = false;
   isHalfDay: boolean = false;
   halfDayDisable: boolean = false;
+  downLoadFileExtension: string = ".pdf";
+  FileDetail: any = "";
+  downloadFileLink: string = "";
+  downlodFilePath: string = "";
+  basePath: string = "";
+  viewer: any = null;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -54,6 +62,7 @@ export class BuildPdfComponent implements OnInit {
   ngOnInit(): void {
     let data = this.nav.getValue();
     this.editMode = false;
+    this.basePath = this.http.GetImageBasePath();
     //----- edit mode -----
     if (data) {
       this.editMode = true;
@@ -580,6 +589,7 @@ export class BuildPdfComponent implements OnInit {
       if(modalStatus == null) {
         this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
           if(response.ResponseBody) {
+            this.downloadFile(response.ResponseBody);
             $('#viewFileModal').modal('show');
             Toast("Bill pdf generated successfully");
           }
@@ -755,6 +765,74 @@ export class BuildPdfComponent implements OnInit {
   onEdit(e: any) {
     this.isCustome = e.target.checked;
   }
+
+  getFileExtension(value: any) {
+    this.downLoadFileExtension = "." + value.target.value;
+  }
+
+  downloadFile(userFile: any) {
+    this.FileDetail = userFile;
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    //this.downloadFileLink = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
+  }
+
+  downloadPdfDocx() {
+    this.downlodFilePath = "";
+    let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
+    let employeeBillDetail = {
+      "EmployeeId": this.FileDetail.FileOwnerId,
+      "ClientId": this.FileDetail.ClientId,
+      "FileId": this.FileDetail.FileId,
+      "FilePath": this.FileDetail.FilePath,
+      "FileName": this.FileDetail.FileName,
+      "FileExtension": this.FileDetail.FileExtension
+    };
+
+    this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        if(updateFilePath !== "") {
+          this.downlodFilePath = updateFilePath;
+          $('#downloadexistingfile').click();
+          this.viewer = document.getElementById("file-container");
+          this.viewer.classList.remove('d-none');
+          this.viewer.querySelector('iframe').setAttribute('src', this.downlodFilePath);
+          var ext =this.downlodFilePath.split(".");
+          if (ext[1] == "docx") {
+            this.viewer.classList.add("d-none");
+            this.nav.navigateWithoutArgs(BillDetail);
+          }
+        }
+      }
+      $('#viewFileModal').modal('hide');
+    }).catch(e => {
+      console.log(JSON.stringify(e));
+    });
+  }
+
+  closePdfViewer() {
+    event.stopPropagation();
+    this.viewer.classList.add('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', '');
+    this.nav.navigateWithoutArgs(BillDetail);
+  }
+
+  closePopUp() {
+    $('#viewFileModal').modal('hide');
+  }
+
+  goToAttendencePage(empId: any) {
+    if (empId) {
+      let empDetail = {
+        "EmployeeUid" : empId,
+        "ClientUid" : this.clientDetail.ClientUid,
+        "FirstName": this.currentEmployee.FirstName,
+        "LastName": this.currentEmployee.LastName,
+      }
+      this.nav.navigate(Attendance, empDetail)
+    }
+
+  }
+
 
   getFixedAmount($e: any) {
     let amount = Number($e.target.value);

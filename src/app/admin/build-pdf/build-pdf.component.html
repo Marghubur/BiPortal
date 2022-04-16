@@ -56,13 +56,22 @@
                 </select>
               </div>
             </div>
-
-            <div class="col-md-3 ms-4 mt-4 form-check">
-              <input class="form-check-input" type="checkbox" formControlName="IsCustomBill" id="flexCheckDefault"
-                (change)="onEdit($event)">
-              <label class="form-check-label" for="flexCheckDefault">
-                Generate Custom Bill
-              </label>
+            <div class="col-md-12 ms-3 mt-4 row">
+              <div class="col-md-3 form-check">
+                <input class="form-check-input" type="checkbox" formControlName="IsCustomBill" id="flexCheckDefault"
+                  (change)="onEdit($event)">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Generate Custom Bill
+                </label>
+              </div>
+              <ng-container *ngIf="isClientSelected">
+                <div class="col-md-9 text-end pe-5">
+                  <a href=" javascript:void(0)" class="text-success text-danger fw-bold fs-5"
+                    (click)="goToAttendencePage(currentEmployee.EmployeeUid)">Your attendence is
+                    pending.</a>
+                  <span class="text-success text-end fw-bold fs-5">Your attendence is completed.</span>
+                </div>
+              </ng-container>
             </div>
 
             <div class="col-12 row m-0">
@@ -332,22 +341,63 @@
 </div>
 
 <!--view Pdf, Doc and Excel Modal -->
-<div class="modal fade" id="viewFileModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="viewFileModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">Download Bill</h5>
+        <!-- <button type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
       </div>
-      <div class="modal-body">
-        ...
+      <div class="modal-body f-12 text-center">
+        <div class="d-flex align-items-center justify-content-around">
+          <div class="form-check">
+            <div class="donwload-file-ext">
+              <img src="assets/ext/pdf.png" alt="">
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+              <input class="form-check-input" type="radio" name="downloadFile" value="pdf" checked
+                (change)="getFileExtension($event)">
+              <label class="form-check-label ps-3" for="downloadPdf">
+                Download Pdf
+              </label>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="donwload-file-ext">
+              <img src="assets/ext/doc.jpg" alt="">
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+              <input class="form-check-input" type="radio" value="docx" name="downloadFile"
+                (change)="getFileExtension($event)">
+              <label class="form-check-label ps-3" for="downloadDoc">
+                Download Doc
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer birder-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+      <div class="modal-footer border-top-0">
+        <a href="javascript:void(0)" class="text-decoration-none text-danger" (click)="closePopUp()">Cancel</a>
+        <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
+        <a href="javascript:void(0)" class="text-decoration-none" [attr.disabled]="isLoading"
+          (click)="downloadPdfDocx()" download>
+          <i class="fa fa-download text-light pe-2"></i> Download
+        </a>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
 </div>
 
 <!-- New type bill format start-->
