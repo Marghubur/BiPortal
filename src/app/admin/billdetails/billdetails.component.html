@@ -46,7 +46,7 @@
                       <a href="javascript:void(0)" class="a-btn text-success fw-bold" (click)="refreshFilter()">
                         <i class="fa fa-refresh">
                           <span>Reset</span>
-                        </i>                        
+                        </i>
                       </a>
                     </div>
                     <div class="text-end">
@@ -191,7 +191,7 @@
                         [ngClass]="{'blinking': user.Status == 'Raised', 'text-plain': user.Status != 'Raised'}"
                         (click)="EditClient(user.ClientId)">{{user.ClientName}}</a>
                       <div class="float-end">
-                        <a><span class="badge bg-primary">T 21</span></a>
+                        <a><span class="badge bg-primary">T {{user.NoOfDays}}</span></a>
                         <span class="badge bg-danger ms-3">A {{user.Absent}}</span>
                       </div>
                     </div>
@@ -434,6 +434,7 @@
         <h5 class="modal-title" id="exampleModalLabel">Advanced Filter</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <p class="ps-5">In advanced search you will serach everything</p>
       <div class="modal-body ps-5 pe-4 pt-3 pb-4">
         <div class="col-md-12 row">
           <div class="col-md-3" *ngIf="fileLoaded">
@@ -477,37 +478,40 @@
             <label class="form-label">
               Billed Amount
             </label>
-            <input class="form-control table-filter-control"
-              (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
-              [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
+            <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+              (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
           </div>
         </div>
-        
+
         <fieldset>
           <legend>Filter by billing detail.</legend>
           <p class="mark">Search bill by biling detail e.g. bill between numbers.</p>
           <div class="col-md-12 row">
             <div class="col-12 d-flex mb-3">
               <div class="ms-2 me-2">
-                <input type="checkbox" name="bydate" checked> Filter between dates
+                <input type="radio" name="bydate" value="0" (click)="selectBillOption($event)"> Filter between dates
               </div>
               <div class="ms-2 me-2">
-                <input type="checkbox" name="bydate"> Before date
+                <input type="radio" name="bydate" value="1" (click)="selectBillOption($event)"> Before date
               </div>
               <div class="ms-2 me-2">
-                <input type="checkbox" name="bydate"> After date
+                <input type="radio" name="bydate" value="2" (click)="selectBillOption($event)"> After date
               </div>
             </div>
 
             <div class="col-md-12 row">
               <div class="col-md-3">
-                <label for="" class="form-label">Raised From</label>
+                <ng-container [ngSwitch]="RaisedBilloption">
+                  <label class="form-label" *ngSwitchCase="0">From</label>
+                  <label class="form-label" *ngSwitchCase="1">Before Date</label>
+                  <label class="form-label" *ngSwitchCase="2">After Date</label>
+                  <label class="form-label" *ngSwitchDefault>Date</label>
+                </ng-container>
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input class="form-control" placeholder="yyyy-mm-dd"
-                        (dateSelect)="fromDateSelection($event)" name="from" [(ngModel)]="fromModel"
-                        ngbDatepicker #from="ngbDatepicker">
+                      <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="fromDateSelection($event)"
+                        name="from" [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
                       <div class="input-group-append">
                         <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="from.toggle()"
                           type="button"></button>
@@ -516,22 +520,36 @@
                   </div>
                 </form>
               </div>
-  
-              <div class="col-md-3" *ngIf="RaisedBilloption == '3'">
-                <label for="" class="form-label">Raised To</label>
+
+              <div class="col-md-3">
+                <label for="" class="form-label">To</label>
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input class="form-control" placeholder="yyyy-mm-dd"
+                      <input class="form-control" placeholder="yyyy-mm-dd" [readonly]="isReadonly"
                         (dateSelect)="toDateSelection($event)" name="to" [(ngModel)]="toModel" ngbDatepicker
                         #to="ngbDatepicker">
                       <div class="input-group-append">
                         <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="to.toggle()"
-                        type="button"></button>
+                          [disabled]="isReadonly" type="button"></button>
                       </div>
                     </div>
                   </div>
                 </form>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">
+                  GST
+                </label>
+                <select class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.GSTStatus">
+                  <option value="0">Status</option>
+                  <option value="1">Completed</option>
+                  <option value="2">Pending</option>
+                  <option value="3">Canceled</option>
+                  <option value="6">Raised</option>
+                </select>
               </div>
             </div>
 
@@ -550,16 +568,15 @@
                 <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
                   (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ToBillNo" placeholder="By To Bill No">
               </div>
-  
+
               <div class="col-md-3">
                 <label class="form-label">
                   Take Home
                 </label>
                 <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
-                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome"
-                  placeholder="By Take Home">
+                  (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome" placeholder="By Take Home">
               </div>
-  
+
               <div class="col-md-3">
                 <label class="form-label">
                   Bill Status
@@ -576,28 +593,12 @@
             </div>
           </div>
         </fieldset>
-
-        
-        <div class="col-md-12 row pt-3">
-
-          <div class="col-md-4">
-            <label class="form-label">
-              GST
-            </label>
-            <select class="form-control table-filter-control" (keyup.enter)="filterRecords()"
-              (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.GSTStatus">
-              <option value="0">Status</option>
-              <option value="1">Completed</option>
-              <option value="2">Pending</option>
-              <option value="3">Canceled</option>
-              <option value="6">Raised</option>
-            </select>
-          </div>
-        </div>
       </div>
       <div class="modal-footer border-top-0  pe-5">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetFilter()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="filterRecords()">Filter Record</button>
+        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="filterRecords()"><i
+            class="pe-2 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-filter': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Filter Record' }}</button>
       </div>
     </div>
   </div>

@@ -62,6 +62,8 @@ export class FilesComponent implements OnInit {
   TotalReceivedAmount: number = 0;
   TotalBilledAmount: number = 0;
   TotalSalaryAmount: number = 0;
+  RaisedBilloption: string = '';
+  isReadonly: boolean = true;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -353,14 +355,16 @@ export class FilesComponent implements OnInit {
     this.isEmpPageReady = false;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
+      this.TotalGSTAmount = 0;
+      this.TotalReceivedAmount = 0;
+      this.TotalBilledAmount = 0;
+      this.TotalSalaryAmount = 0;
       if (response.ResponseBody) {
-        this.TotalGSTAmount = 0;
-        this.TotalReceivedAmount = 0;
-        this.TotalBilledAmount = 0;
-        this.TotalSalaryAmount = 0;
         Toast("Record found.");
         let employees = response.ResponseBody.EmployeesList as Array<EmployeeDetail>;
         if(employees && employees.length > 0) {
+          this.isLoading = false;
+          $('#advancedSearchModal').modal('hide');
           let index = 0;
           while(index < employees.length) {
             this.employeeDetails.push({
@@ -378,30 +382,22 @@ export class FilesComponent implements OnInit {
 
         this.autoCompleteModal = {
           data: this.employeeDetails,
-          placeholder: "Select Employee"
+          placeholder: "Select Employee",
+          className: "normal"
         }
         this.fileLoaded = true;
         this.userFiles = response.ResponseBody["Files"];
-        let exts = [];
-        let i = 0;
-        while(i < this.userFiles.length) {
-          if(this.userFiles[i].FileName.indexOf(".pdf") == -1){
-            this.userFiles[i].FileName += ".pdf";
-          }
-          i++;
-        }
-
         let emp = response.ResponseBody["Employee"];
         if (emp && emp.length > 0)
           this.employee = emp[0];
         this.fileLoaded = true;
         this.billDetails = new Array<BillDetails>();
-        i =0;
+        let i =0;
         let bills : BillDetails = null;
         let GST: number = 0;
 
         if(this.userFiles !== null && this.userFiles.length > 0) {
-          this.singleEmployee.update(this.userFiles[0].Total);
+          this.singleEmployee.TotalRecords = this.userFiles[0].Total;
           while (i < this.userFiles.length) {
             bills = new BillDetails();
             bills.BillNo = this.userFiles[i].BillNo;
@@ -426,9 +422,11 @@ export class FilesComponent implements OnInit {
             bills.SalaryAmount = ToFixed(this.userFiles[i].SalaryAmount, 2);
             bills.ReceivedAmount = ToFixed((this.userFiles[i].SalaryAmount * (1 + GST)) - (this.userFiles[i].SalaryAmount /10), 2);
             bills.BilledAmount = ToFixed(this.userFiles[i].SalaryAmount * (1 + GST), 2);
-            bills.TDS = ToFixed((this.userFiles[i].SalaryAmount /10), 2);
+            bills.TDS = ToFixed(((this.userFiles[i].SalaryAmount /10)), 2);
+            bills.Name = this.userFiles[i].Name;
             bills.TakeHome = this.userFiles[i].TakeHome;
             bills.Absent = this.userFiles[i].Absents;
+            bills.NoOfDays = this.userFiles[i].NoOfDays;
             this.billDetails.push(bills);
             this.TotalGSTAmount = AddNumbers([this.TotalGSTAmount, bills.GSTAmount], 2);
             this.TotalReceivedAmount = AddNumbers([this.TotalReceivedAmount, bills.ReceivedAmount], 2);
@@ -438,9 +436,8 @@ export class FilesComponent implements OnInit {
           }
         }
       } else {
-        WarningToast("No file or folder found");
+        ErrorToast("No file or folder found");
       }
-
       this.isEmpPageReady = true;
     });
   }
@@ -453,35 +450,87 @@ export class FilesComponent implements OnInit {
     this.toDate = e; //`${e.year}-${e.month}-${e.day}`;
   }
 
+  selectBillOption(e: any) {
+    this.isReadonly = true;
+    this.RaisedBilloption = e.target.value;
+    if (this.RaisedBilloption == '0')
+      this.isReadonly = false;
+  }
+
   filterRecords() {
+    this.isLoading = true;
     let searchQuery = "";
     let delimiter = "";
     let fromDateValue = "";
     let toDateValue = "";
     let isDateFilterEnable = false;
+    let isPaidOnFilterEnable = false;
     this.singleEmployee.reset();
 
+    switch (this.RaisedBilloption) {
+      case '0':
+        this.RaisedBilloption = "between";
+        break;
+      case '1':
+        this.RaisedBilloption = "before";
+        break;
+      case '2':
+        this.RaisedBilloption = "after";
+        break;
+      default:
+        this.RaisedBilloption = '';
+        break;
+    }
+
+    if (this.fromDate !== null && this.RaisedBilloption == '0')
+      return ErrorToast("Please select Rasied bill date option");
+
     if (this.fromDate !== null) {
-      if (this.toDate == null) {
-        Toast("Please selete to date to get the result.")
+      if (this.toDate == null && this.RaisedBilloption == 'between') {
+        ErrorToast("Please selete to date to get the result.")
         return;
       }
       isDateFilterEnable = true;
     } else if(this.fromDate == null && this.toDate !== null) {
-      Toast("Please selete from date to get the result.")
+      ErrorToast("Please selete from date to get the result.")
       isDateFilterEnable = true;
       return;
     }
 
-    if (isDateFilterEnable) {
+    if (isDateFilterEnable && this.RaisedBilloption == "between") {
       let fromDateTime = new Date(this.fromDate.year, this.fromDate.month, this.fromDate.day).getTime();
       let toDateTime = new Date(this.toDate.year, this.toDate.month, this.toDate.day).getTime();
       if (fromDateTime > toDateTime) {
-        Toast("Please select cottect From Date and To date");
+        ErrorToast("Please select cottect From Date and To date");
         return;
       } else {
         fromDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
         toDateValue = `${this.toDate.year}-${this.toDate.month}-${this.toDate.day}`;
+      }
+    }
+
+    if (this.RaisedBilloption == "before") {
+      fromDateValue = '0001-1-1'
+      toDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
+      isDateFilterEnable = true;
+    }
+
+    if (this.RaisedBilloption == "after") {
+       toDateValue= '2099-1-1'
+       fromDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
+      isDateFilterEnable = true;
+    }
+
+    if (this.employeeFile.ToBillNo != 0 && this.employeeFile.FromBillNo == 0)
+      return ErrorToast("Please enter From Bill No.");
+    if (this.employeeFile.ToBillNo == 0 && this.employeeFile.FromBillNo != 0)
+      return ErrorToast("Please enter To Bill No.");
+    if (this.employeeFile.ToBillNo != 0 && this.employeeFile.FromBillNo != 0 && this.employeeFile.ToBillNo != null && this.employeeFile.FromBillNo != null) {
+      if (this.employeeFile.ToBillNo >= this.employeeFile.FromBillNo) {
+        searchQuery += ` ${delimiter} b.BillNo between ${this.employeeFile.FromBillNo} and ${this.employeeFile.ToBillNo}`;
+        delimiter = "and";
+      }else {
+        return ErrorToast("Please enter correct To Bill No.");
       }
     }
 
@@ -516,12 +565,12 @@ export class FilesComponent implements OnInit {
     }
 
     if(this.employeeFile.SalaryAmount !== null && this.employeeFile.SalaryAmount !== 0) {
-      searchQuery += ` ${delimiter} PaidAmount like '${this.employeeFile.SalaryAmount}%' `;
+      searchQuery += ` ${delimiter} b.PaidAmount like '${this.employeeFile.SalaryAmount}%' `;
       delimiter = "and";
     }
 
     if(this.employeeFile.ReceivedAmount !== null && this.employeeFile.ReceivedAmount !== 0) {
-      searchQuery += ` ${delimiter} ReceivedAmount like '${this.employeeFile.ReceivedAmount}%' `;
+      searchQuery += ` ${delimiter} PaidAmount like '${this.employeeFile.ReceivedAmount}%' `;
       delimiter = "and";
     }
 
@@ -530,10 +579,10 @@ export class FilesComponent implements OnInit {
       delimiter = "and";
     }
 
-    if(this.employeeFile.BilledAmount !== null && this.employeeFile.BilledAmount !== 0) {
-      searchQuery += ` ${delimiter} BilledAmount like '${this.employeeFile.BilledAmount}%' `;
-      delimiter = "and";
-    }
+    // if(this.employeeFile.BilledAmount !== null && this.employeeFile.BilledAmount !== 0) {
+    //   searchQuery += ` ${delimiter} BilledAmount like '${this.employeeFile.BilledAmount}%' `;
+    //   delimiter = "and";
+    // }
 
     if(this.employeeFile.Month !== null && this.employeeFile.Month !== "0") {
       let monthValue = Number(this.employeeFile.Month);
@@ -542,13 +591,39 @@ export class FilesComponent implements OnInit {
     }
 
     if(isDateFilterEnable) {
-      searchQuery += ` ${delimiter} BillUpdatedOn between '${fromDateValue}' and '${toDateValue}'`;
+      searchQuery += ` ${delimiter} b.BillUpdatedOn between '${fromDateValue}' and '${toDateValue}'`;
+      delimiter = "and";
     }
 
     if(searchQuery !== "") {
       this.singleEmployee.SearchString = `1=1 And ${searchQuery}`;
     }
 
+    this.LoadFiles();
+  }
+
+  refreshFilter() {
+    this.employeeFile.ClientName="";
+    this.employeeFile.BillNo = "";
+    this.employeeFile.Status='0';
+    this.employeeFile.GSTAmount=null;
+    this.employeeFile.GSTStatus='0';
+    this.employeeFile.SalaryAmount = null;
+    this.employeeFile.ReceivedAmount=null;
+    this.employeeFile.BilledAmount = null;
+    this.employeeFile.Month = "0";
+    this.employeeFile.FromBillNo = null;
+    this.employeeFile.ToBillNo = null;
+    this.employeeFile.TakeHome = null;
+    this.toModel = null;
+    this.RaisedBilloption = '';
+    this.fromModel = null;
+    this.toDate = null;
+    this.fromDate = null;
+    this.employeeId = this.currentEmployeeDetail.EmployeeUid;
+    this.isReadonly = true;
+    $('#checkall').prop('checked', false);
+    this.singleEmployee = new Filter();
     this.LoadFiles();
   }
 
@@ -561,18 +636,19 @@ export class FilesComponent implements OnInit {
     this.employeeFile.SalaryAmount = null;
     this.employeeFile.ReceivedAmount=null;
     this.employeeFile.BilledAmount = null;
-    this.employeeFile.Month = "";
+    this.employeeFile.Month = "0";
+    this.employeeFile.FromBillNo = null;
+    this.employeeFile.ToBillNo = null;
     this.employeeFile.TakeHome = null;
     this.toModel = null;
+    this.RaisedBilloption = '';
     this.fromModel = null;
     this.toDate = null;
     this.fromDate = null;
     this.employeeId = this.currentEmployeeDetail.EmployeeUid;
-    //this.unckeck();
-    // this.anyFilter = "";
+    this.isReadonly = true;
     $('#checkall').prop('checked', false);
     this.singleEmployee = new Filter();
-    this.LoadFiles();
   }
 
   EditCurrentDocument(userFile: any) {
@@ -604,6 +680,11 @@ export class FilesComponent implements OnInit {
     }
   }
 
+  advancedSearchPopUp() {
+    //this.resetFilter();
+    $("#advancedSearchModal").modal('show')
+  }
+
   EditClient(data: any) {
     if (data !== null) {
       let ClientId = data;
@@ -622,6 +703,7 @@ export class FilesComponent implements OnInit {
 }
 
 export class BillDetails {
+  Name: string = "";
   BillNo: string = '';
   CGST: number = 0;
   ClientId: number =0;
@@ -646,6 +728,10 @@ export class BillDetails {
   GSTStatus: string = '';
   fromModel: string = '';
   toModel: string = '';
+  Employee: string = '';
   TakeHome: number = null;
   Absent: number = 0;
+  FromBillNo: number = null;
+  ToBillNo: number = null;
+  NoOfDays: number = 0;
 }

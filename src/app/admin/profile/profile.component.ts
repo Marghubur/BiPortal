@@ -86,6 +86,12 @@ export class ManageComponent implements OnInit {
   isCarrerProfileData: boolean = false;
   profileURL: string = UserImage;
   profileId: number = 0;
+  basePath: string = "";
+  viewer: any = null;
+  resumePath: string = '';
+  resumeFileName: string = '';
+  extension: string = '';
+  isResumeUploaded: boolean = false;
 
   manageUserForm: FormGroup;
   educationForm: FormGroup;
@@ -116,6 +122,7 @@ export class ManageComponent implements OnInit {
     this.editCarrerProfileModal = new Company();
     this.editPersonalDetailModal = new PersonalDetail();
     this.editProjectModal = new Project();
+    this.basePath = this.http.GetImageBasePath();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     let data = this.nav.getValue();
@@ -161,7 +168,11 @@ export class ManageComponent implements OnInit {
             this.userModal = detail;
             let document = profile.filter(x => x.FileName == "resume");
             if (document.length > 0) {
-              this.documentId = document[0].FileId
+              this.documentId = document[0].FileId;
+              this.resumePath = document[0].FilePath;
+              this.resumeFileName = document[0].FileName;
+              this.extension = document[0].FileExtension;
+              this.isResumeUploaded = true;
             }
             educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
             this.userModal.Educational_Detail = educations;
@@ -254,7 +265,7 @@ export class ManageComponent implements OnInit {
   submitPersonalDetails() {
     this.isLoading = true;
     let languages = this.personalDetailForm.controls['Languages'].value;
-    this.userModal.PersonalDetail.DOB = this.editPersonalDetailModal.DOB;
+    this.userModal.PersonalDetail.DOB = this.personalDetailForm.value.DOB;
     this.userModal.PersonalDetail.Gender = this.editPersonalDetailModal.Gender;
     this.userModal.PersonalDetail.Address = this.editPersonalDetailModal.Address;
     this.userModal.PersonalDetail.HomeTown = this.editPersonalDetailModal.HomeTown;
@@ -310,6 +321,7 @@ export class ManageComponent implements OnInit {
   addOrUpdateProject() {
     this.isLoading = true;
     let currentProjectOnEdit;
+    this.editProjectModal = new Project();
     let project = this.projectsForm.get('Projects') as FormArray;
     if (this.isEdit == false) {
       let newProject = new Project();
@@ -336,9 +348,7 @@ export class ManageComponent implements OnInit {
 
   addProject() {
     this.isEdit = false;
-    let newProject = new Project();
-
-
+    this.editProjectModal = new Project();
     //this.editProjectModal = this.currentProjectOnEdit.value as Project;
     $("#editProjectModal").modal("show");
     this.isEditProject = true;
@@ -392,6 +402,11 @@ export class ManageComponent implements OnInit {
 
   editItSkillDetail(current: FormGroup) {
     $("#itSkillModal").modal('show');
+    this.ExptLanguage = '';
+    this.ExptVersion = null;
+    this.ExptinYrs = null;
+    this.ExptinMonths = null;
+    this.Exptdate = null;
     this.isEditItSkill = true;
   }
 
@@ -1027,8 +1042,12 @@ export class ManageComponent implements OnInit {
 
   editCarrerProfile() {
     this.isEdit = true;
-    $("#CarrerProfileModal").modal('show');
     this.editCarrerProfileModal = this.carrerProfileForm.value.CarrerProfile[0];
+    if (this.editCarrerProfileModal == null) {
+      this.isEdit = false;
+      this.editCarrerProfileModal = new Company();
+    }
+    $("#CarrerProfileModal").modal('show');
   }
 
   //----------------- Carreer Profile END'S ------------------------
@@ -1037,7 +1056,7 @@ export class ManageComponent implements OnInit {
   initForm() {
     if (this.userModal.Name != null && this.userModal.Name != '') {
       let fullName = this.userModal.Name.split(" ");
-      if(fullName.length > 0) {
+      if(fullName.length > 0 && this.userModal.FirstName == null && this.userModal.FirstName == '') {
         this.userModal.FirstName = fullName[0];
         this.userModal.LastName = fullName.splice(1, 1).join(" ");
       }
@@ -1116,6 +1135,11 @@ export class ManageComponent implements OnInit {
   }
 
   updateProfile() {
+    this.isEmpData = false;
+    this.isEducationData = false;
+    this.isItSkillData = false;
+    this.isProjectData = false;
+    this.isCarrerProfileData = false;
     this.http.post(`user/UpdateUserProfile/${this.userDetail.UserTypeId}`, this.userModal).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         let roleId = res.ResponseBody.RoleId;
@@ -1134,6 +1158,16 @@ export class ManageComponent implements OnInit {
               educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
               this.userModal.Educational_Detail = educations;
               this.UserId = this.userModal.UserId;
+              if (this.userModal.Employments.length == 0)
+                this.isEmpData = true;
+              if (this.userModal.Educational_Detail.length == 0)
+                this.isEducationData = true;
+              if (this.userModal.Skills.length == 0)
+                this.isItSkillData = true;
+              if (this.userModal.Projects.length == 0)
+                this.isProjectData = true;
+              if (this.userModal.Companies.length == 0)
+                this.isCarrerProfileData = true;
               break;
             }
         Toast("Employment Form submitted successfully")
@@ -1166,6 +1200,7 @@ export class ManageComponent implements OnInit {
 
   uploadProfilePicture(event: any) {
     if (event.target.files) {
+      this.fileDetail = [];
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event: any) => {
@@ -1261,7 +1296,7 @@ export class ManageComponent implements OnInit {
 
     formData.append(this.fileDetail[0].name, this.fileDetail[0].file);
     formData.append("userInfo", JSON.stringify(this.userModal));
-    this.http.post(`user/UploadResume/${this.userDetail.UserId}`, formData).then((response: ResponseModel) => {
+    this.http.post(`user/UploadResume/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         Toast(response.ResponseBody);
       }
@@ -1283,7 +1318,7 @@ export class ManageComponent implements OnInit {
       i++;
     }
     formData.append("userInfo", JSON.stringify(this.userModal));
-    this.http.post(`user/UploadProfileDetailFile/${this.userDetail.UserId}`, formData).then((response: ResponseModel) => {
+    this.http.post(`user/UploadProfileDetailFile/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         Toast(response.ResponseBody);
       }
@@ -1291,9 +1326,31 @@ export class ManageComponent implements OnInit {
     this.fileDetail = [];
   }
 
+  viewResume() {
+    if (this.extension == "docx") {
+      this.viewer.classList.add("d-none");
+    } else {
+      let fileLocation = `${this.basePath}${this.resumePath}/${this.resumeFileName}.${this.extension}`;
+      this.viewer = document.getElementById("file-container");
+      this.viewer.classList.remove('d-none');
+      this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+    }
+  }
+
   selectLanguage(e: any) {
     this.singleSkill = e.value;
     this.isLanguageSeleted = true;
+  }
+
+  closePdfViewer() {
+    event.stopPropagation();
+    this.viewer.classList.add('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', '');
+  }
+
+  showFile(userFile: any) {
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+
   }
 }
 
