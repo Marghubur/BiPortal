@@ -285,10 +285,16 @@ export class BilldetailsComponent implements OnInit {
   }
 
   regeneratebill(userFile: any) {
+    let fileId = Number(userFile.FileUid);
+    if(isNaN(fileId)) {
+      ErrorToast("Invalid file id supplied.");
+      return;
+    }
+
     let employeeBillDetail = {
       "EmployeeId": userFile.FileOwnerId,
       "ClientId": userFile.ClientId,
-      "FileId": userFile.FileUid,
+      "FileId": fileId,
       "FilePath": userFile.FilePath,
       "FileName": userFile.FileName,
       "FileExtension": userFile.FileExtension
@@ -324,10 +330,17 @@ export class BilldetailsComponent implements OnInit {
   downloadPdfDocx() {
     this.downlodFilePath = "";
     let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
+    
+    let fileId = Number(this.FileDetail.FileUid);
+    if(isNaN(fileId)) {
+      ErrorToast("Invalid file id supplied.");
+      return;
+    }
+    
     let employeeBillDetail = {
       "EmployeeId": this.FileDetail.FileOwnerId,
       "ClientId": this.FileDetail.ClientId,
-      "FileId": this.FileDetail.FileUid,
+      "FileId": fileId,
       "FilePath": this.FileDetail.FilePath,
       "FileName": this.FileDetail.FileName,
       "FileExtension": this.FileDetail.FileExtension
@@ -751,7 +764,7 @@ export class BillDetails {
   FileName: string = '';
   FileOwnerId: number = 0;
   FilePath: string = '';
-  FileUid: string = '';
+  FileUid: number = 0;
   GeneratedOn: string = '';
   IGST: number = 0;
   Month: string = '';

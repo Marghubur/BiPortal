@@ -42,6 +42,7 @@ import { UtilModule } from './util/util.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from "./layout/layout.module";
 import { DateFormatter } from 'src/providers/DateFormatter';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { DateFormatter } from 'src/providers/DateFormatter';
     HttpClientModule,
     BuilderModule,
     UtilModule,
+    UserModule,
     BrowserAnimationsModule,
     SocialLoginModule
   ],

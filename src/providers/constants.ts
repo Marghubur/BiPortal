@@ -1,5 +1,4 @@
 export const Login = "login";
-export const Dashboard = "dashboard";
 export const Users = "users";
 export const Sales = "sales";
 export const Setting = "setting";
@@ -46,6 +45,7 @@ export const Article = "api/blogs/article/:articleid";
 // ********************** Admin route pages  *******************
 
 export const Employees = "admin/employees";
+export const Dashboard = "admin/dashboard";
 export const Documents = "admin/documents";
 export const DocumentsPage = "admin/documentspage/:path";
 export const BuildPdf = "admin/BuildPdf";
@@ -64,6 +64,10 @@ export const Companies = 'admin/Companies';
 export const CreateResume = 'admin/CreateResume';
 export const Recruiter = 'admin/Recruiter';
 export const Leave = 'admin/Leave'
+
+// ********************** Admin route pages  *******************
+
+export const UserDashboard = "user/dashboard";
 
 
 // *************************** file name constancts  *************
@@ -99,11 +103,11 @@ export const UserImage = "assets/images/faces/face1.jpg";
 export const MaxAllowedFileSize = 2048
 
 export enum UserType {
-  Admin = 9,
-  Employee = 1,
-  Client = 2,
+  Admin = 1,
+  Employee = 2,
   Candidate = 3,
-  Other = 4
+  Client = 4,
+  Other = 5
 }
 
 export const UsersColumn = [
