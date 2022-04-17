@@ -7,7 +7,7 @@ import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
-import { Attendance, BillDetail } from 'src/providers/constants';
+import { Attendance, BillDetail, UserType } from 'src/providers/constants';
 
 declare var $: any;
 
@@ -51,6 +51,7 @@ export class BuildPdfComponent implements OnInit {
   downlodFilePath: string = "";
   basePath: string = "";
   viewer: any = null;
+  missingAttendence: boolean = false;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -106,6 +107,27 @@ export class BuildPdfComponent implements OnInit {
       this.days.push(i + 1);
       i++;
     }
+  }
+
+  getAttendance() {
+    this.missingAttendence = false;
+    let attendenceFor = {
+      "EmployeeUid": this.currentEmployee.EmployeeUid,
+      "UserTypeId": UserType.Employee,
+      "ForMonth": this.originalBillingMonth,
+      "ForYear": this.model.year
+    }
+    this.http.post("Attendance/GetAttendamceById", attendenceFor).then ((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        let missinngAtt = response.ResponseBody.MissingDate;
+        let attendanceDetail = response.ResponseBody.AttendanceDetail;
+        if (missinngAtt.length > 0 && attendanceDetail.length == 0)
+          this.missingAttendence = true;
+        else
+          this.missingAttendence = false;
+      }
+
+    })
   }
 
   editBillDetail(billDetail: any) {
@@ -351,6 +373,7 @@ export class BuildPdfComponent implements OnInit {
         this.pdfModal.actualDaysBurned = this.selectedDate.days;
         this.pdfModal.workingDay = this.selectedDate.days;
         this.pdfForm.get("workingDay").setValue(this.selectedDate.days);
+        this.getAttendance();
         this.generateDaysCount();
         this._calculateAmount(this.pdfModal.actualDaysBurned);
       }
@@ -488,6 +511,7 @@ export class BuildPdfComponent implements OnInit {
   }
 
   findEmployeeById(employeeId: any) {
+    this.isClientSelected = false;
     if (employeeId) {
       this.currentEmployee = this.employees.find(x => x.EmployeeUid === parseInt(employeeId));
       if (this.currentEmployee) {
@@ -714,6 +738,7 @@ export class BuildPdfComponent implements OnInit {
   }
 
   bindClientDetail(Id: any) {
+    this.isClientSelected = false;
     if (Id !== null) {
       let clientId: number = Number(Id);
       let client = this.applicationData.clients.find(x => x.ClientId === clientId);
@@ -741,6 +766,8 @@ export class BuildPdfComponent implements OnInit {
           this.pdfForm.get('grandTotalAmount').setValue(this.clientDetail.ActualPackage);
         }
 
+        this.getAttendance();
+
         this.isClientSelected = true;
       }
     }
@@ -757,7 +784,6 @@ export class BuildPdfComponent implements OnInit {
       this.pdfModal.workingDay = this.pdfModal.actualDaysBurned;
       this.pdfForm.get("workingDay").setValue(this.pdfModal.actualDaysBurned);
     }
-
     this.generateDaysCount();
     this._calculateAmount(this.pdfModal.actualDaysBurned);
   }

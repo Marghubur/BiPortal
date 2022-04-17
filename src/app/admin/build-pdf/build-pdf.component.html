@@ -66,10 +66,11 @@
               </div>
               <ng-container *ngIf="isClientSelected">
                 <div class="col-md-9 text-end pe-5">
-                  <a href=" javascript:void(0)" class="text-success text-danger fw-bold fs-5"
+                  <a href=" javascript:void(0)" class="text-success text-danger fw-bold fs-5" *ngIf="!missingAttendence"
                     (click)="goToAttendencePage(currentEmployee.EmployeeUid)">Your attendence is
                     pending.</a>
-                  <span class="text-success text-end fw-bold fs-5">Your attendence is completed.</span>
+                  <span class="text-success text-end fw-bold fs-5" *ngIf="missingAttendence">Your attendence is
+                    completed.</span>
                 </div>
               </ng-container>
             </div>
