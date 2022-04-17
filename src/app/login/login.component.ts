@@ -11,7 +11,7 @@ import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from './../../auth/jwtService'
 import { SocialAuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
-import { UserType } from "src/providers/constants";
+import { Dashboard, UserDashboard, UserType } from "src/providers/constants";
 
 @Component({
   selector: "app-login",
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
         Mobile: null,
         MediaName: null,
         AccessToken: null,
-        UserTypeId: this.userType == 'employee' ? 1 : 9
+        UserTypeId: this.userType == 'employee' ? UserType.Employee : UserType.Admin
       };
       let userId = this.UserForm.controls['UserId'].value;
       let password = this.UserForm.controls['Password'].value;
@@ -84,8 +84,11 @@ export class LoginComponent implements OnInit {
           if (this.commonService.IsValid(result)) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
-            Toast("Login done. Loading dashboard ...");
-            this.nav.navigate("/admin", null);
+            Toast("Please wait loading dashboard ...");
+            if(this.userType == 'employee')
+              this.nav.navigate(UserDashboard, null);
+            else
+              this.nav.navigate(Dashboard, null);
           } else {
             ErrorToast("Incorrect username or password. Please try again.");
           }
@@ -127,7 +130,7 @@ export class LoginComponent implements OnInit {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
             Toast("Login done. Loading dashboard ...");
-            this.nav.navigate("/admin", null);
+            this.nav.navigate(UserDashboard, null);
           } else {
             ErrorToast("Incorrect username or password. Please try again.");
           }

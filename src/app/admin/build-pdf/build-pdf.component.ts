@@ -805,10 +805,17 @@ export class BuildPdfComponent implements OnInit {
   downloadPdfDocx() {
     this.downlodFilePath = "";
     let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
+    
+    let fileId = Number(this.FileDetail.FileUid);
+    if(isNaN(fileId)) {
+      ErrorToast("Invalid file id supplied.");
+      return;
+    }
+    
     let employeeBillDetail = {
       "EmployeeId": this.FileDetail.FileOwnerId,
       "ClientId": this.FileDetail.ClientId,
-      "FileId": this.FileDetail.FileId,
+      "FileId": fileId,
       "FilePath": this.FileDetail.FilePath,
       "FileName": this.FileDetail.FileName,
       "FileExtension": this.FileDetail.FileExtension

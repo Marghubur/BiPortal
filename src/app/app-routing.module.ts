@@ -36,9 +36,9 @@ const routes: Routes = [
     .then(m => m.AdminModule)
   },
   {
-    path: 'api',
-    loadChildren: () => import('./builder/builder.module')
-    .then(m => m.BuilderModule)
+    path: 'user',
+    loadChildren: () => import('./user/user.module')
+    .then(m => m.UserModule)
   },
   {
     path: 'service',
