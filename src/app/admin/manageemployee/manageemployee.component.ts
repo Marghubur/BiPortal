@@ -42,6 +42,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   profileURL: string = UserImage;
   fileDetail: Array<any> = [];
   activeAssignedClient: AssignedClients = new AssignedClients();
+  ProfessuinalDetail_JSON: any = '';
 
   get f() {
     let data = this.employeeForm.controls;
@@ -66,6 +67,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.isUpdate = false;
     if (data) {
       this.employeeUid = data.EmployeeUid;
+      this.ProfessuinalDetail_JSON = data.ProfessionalDetail_Json;
       this.loadData(this.employeeUid);
       this.isUpdate = true;
     } else {
@@ -216,10 +218,13 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.FileId = 0;
 
     if (errroCounter == 0) {
-
+      if (this.ProfessuinalDetail_JSON == null) {
+        this.ProfessuinalDetail_JSON = null;
+      }
       let formData = new FormData();
       formData.append("employeeDetail", JSON.stringify(this.employeeForm.value));
       formData.append("allocatedClients", JSON.stringify(this.employeeForm.value.AllocatedClients));
+      formData.append("ProfessuinalDetail_JSON", this.ProfessuinalDetail_JSON)
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;

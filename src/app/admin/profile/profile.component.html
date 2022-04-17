@@ -84,11 +84,12 @@
                                 aria-labelledby="home-tab">
                                 <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
                                   aria-labelledby="home-tab">
-                                  <div id="classmasterdata" class="col-md-12" (click)="fireresumeBrowserFile()">
+                                  <div id="classmasterdata" class="col-md-12" *ngIf="!isResumeUploaded">
                                     <div *ngIf="!uploading"
                                       class="d-flex align-items-center justify-content-center py-3">
                                       <div class="text-center pt-4">
-                                        <button class="btn btn-primary px-4 py-2">UPLOAD RESUME</button>
+                                        <button class="btn btn-primary px-4 py-2"
+                                          (click)="fireresumeBrowserFile()">UPLOAD RESUME</button>
                                         <p class="text-muted pt-2">
                                           Supported Formats: doc, docx, pdf upto 200 Kb
                                         </p>
@@ -109,6 +110,41 @@
                                         *ngIf="uploading">
                                         <i class="fa fa-eraser pe-2"></i> Cancel
                                       </button>
+                                    </div>
+                                  </div>
+                                  <div class="row" *ngIf="isResumeUploaded">
+                                    <img src="assets/img/resume.png" alt="resume" class="resume-thumbnail"
+                                      (click)="viewResume()">
+                                    <div class="col">
+                                      <div id="classmasterdata" class="col-md-12">
+                                        <div *ngIf="!uploading"
+                                          class="d-flex align-items-center justify-content-center py-3">
+                                          <div class="text-center pt-4">
+                                            <button class="btn btn-primary px-4 py-2"
+                                              (click)="fireresumeBrowserFile()">RE-UPLOAD RESUME</button>
+                                            <p class="text-muted pt-2">
+                                              Supported Formats: doc, docx, pdf upto 200 Kb
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="col-md-12 bg-light align-items-center d-flex justify-content-center p-5"
+                                          *ngIf="uploading" name="uploading">
+                                          <img src="assets/ext/file.png" class="resume-thumbnail" />
+                                        </div>
+                                        <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
+                                          File size is greater than 200KB.
+                                        </div>
+                                        <div class="mt-4 float-end">
+                                          <button *ngIf="uploading" type="button" class="btn btn-outline-primary me-2"
+                                            [disabled]="isLargeFile" (click)="uploadResume()"><i
+                                              class="fa fa-upload pe-2"></i> Upload</button>
+                                          <button type="button" class="btn btn-outline-info"
+                                            (click)="cleanFileHandler()" *ngIf="uploading">
+                                            <i class="fa fa-eraser pe-2"></i> Cancel
+                                          </button>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -1156,44 +1192,42 @@
                 </div>
 
                 <div class="mb-3">
-                  <fieldset>
-                    <div class="row">
-                      <div class="col">
-                        <label class="form-label">Project duration in yrs</label>
-                        <select class="form-select" aria-label="Default select example"
-                          [(ngModel)]="editEmploymentModal.Years">
-                          <option value="1" selected>1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
-                          <option value="10">10</option>
-                        </select>
-                      </div>
-                      <div class="col">
-                        <label class="form-label">Project duration in Mo</label>
-                        <select class="form-select" aria-label="Default select example"
-                          [(ngModel)]="editEmploymentModal.Months">
-                          <option value="1" selected>1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
-                          <option value="10">10</option>
-                          <option value="11">11</option>
-                          <option value="12">12</option>
-                        </select>
-                      </div>
+                  <div class="row">
+                    <div class="col">
+                      <label class="form-label">Project duration in yrs</label>
+                      <select class="form-select" aria-label="Default select example"
+                        [(ngModel)]="editEmploymentModal.Years">
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                      </select>
                     </div>
-                  </fieldset>
+                    <div class="col">
+                      <label class="form-label">Project duration in Mo</label>
+                      <select class="form-select" aria-label="Default select example"
+                        [(ngModel)]="editEmploymentModal.Months">
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1356,7 +1390,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Update Project Detail</h5>
+        <h5 class="modal-title">{{isEdit ? 'Update Project Detail' : 'Add Project Detail'}}</h5>
         <button type="button" [disabled]="isLoading" class="btn-close" data-bs-dismiss="modal"
           aria-label="Close"></button>
       </div>
@@ -1804,7 +1838,7 @@
   </div>
 </div>
 
-<!--Edit Carrer Profile Modal -->
+<!--Add/ Edit Carrer Profile Modal -->
 <div class="modal fade" id="CarrerProfileModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
@@ -2086,6 +2120,16 @@
   </div>
 </div>
 <!-- End Modal -->
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
 
 <!-- pdfviewing waiting model -->
 <div class="modal fade" id="loaderModal" tabindex="-1" *ngIf="!isLoading">

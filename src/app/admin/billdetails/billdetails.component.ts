@@ -27,15 +27,12 @@ export class BilldetailsComponent implements OnInit {
   currentEmployeeDetail: EmployeeDetail = null;
   userFiles: Array<any> = [];
   fileLoaded: boolean = false;
-  tableConfiguration: tableConfig = null;
   basePath: string = "";
   viewer: any = null;
   employee: any = null;
   fromModel: NgbDateStruct;
   toModel: NgbDateStruct;
   model: NgbDateStruct;
-  paidfromModel: NgbDateStruct;
-  paidtoModel: NgbDateStruct;
   currentFileId: number = 0;
   billDetails: Array<BillDetails> = [];
   singleEmployee: Filter = null;
@@ -50,8 +47,6 @@ export class BilldetailsComponent implements OnInit {
   employeeId: number = 0;
   fromDate: any = null;
   toDate: any = null;
-  paidfromDate: any = null;
-  paidtoDate: any = null;
   currentRecordBillNo: string = "";
   gstDetailForm: FormGroup = null;
   FileDocumentList: Array<Files> = [];
@@ -72,7 +67,8 @@ export class BilldetailsComponent implements OnInit {
   TotalReceivedAmount: number = 0;
   TotalBilledAmount: number = 0;
   TotalSalaryAmount: number = 0;
-  RaisedBilloption: string = '3';
+  RaisedBilloption: string = '';
+  isReadonly: boolean = true;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -92,15 +88,14 @@ export class BilldetailsComponent implements OnInit {
   ngOnInit(): void {
     this.fromModel = null;
     this.toModel = null;
-    this.paidfromModel = null;
-    this.paidtoModel = null;
     this.model = null;
-    this.RaisedBilloption = '0';
+    this.RaisedBilloption = '';
     this.employeeData = new Filter();
     this.employeeFile = new BillDetails();
     this.employeeFile.Status = '0';
     this.employeeFile.GSTStatus = '0';
     this.employeeFile.Month = '0';
+    this.isReadonly = true;
     this.basePath = this.http.GetImageBasePath();
     //this.currentEmployeeDetail = this.nav.getValue();
     let data = this.nav.getValue();
@@ -390,6 +385,7 @@ export class BilldetailsComponent implements OnInit {
         Toast("Record found.");
         let employees = response.ResponseBody.EmployeesList as Array<EmployeeDetail>;
         if(employees && employees.length > 0) {
+          this.isLoading = false;
           $('#advancedSearchModal').modal('hide');
           let index = 0;
           while(index < employees.length) {
@@ -452,6 +448,7 @@ export class BilldetailsComponent implements OnInit {
             bills.Name = this.userFiles[i].Name;
             bills.TakeHome = this.userFiles[i].TakeHome;
             bills.Absent = this.userFiles[i].Absents;
+            bills.NoOfDays = this.userFiles[i].NoOfDays;
             this.billDetails.push(bills);
             this.TotalGSTAmount = AddNumbers([this.TotalGSTAmount, bills.GSTAmount], 2);
             this.TotalReceivedAmount = AddNumbers([this.TotalReceivedAmount, bills.ReceivedAmount], 2);
@@ -475,38 +472,28 @@ export class BilldetailsComponent implements OnInit {
     this.toDate = e; //`${e.year}-${e.month}-${e.day}`;
   }
 
-  paidfromDateSelection(e: NgbDateStruct) {
-    this.paidfromDate = e; //`${e.year}-${e.month}-${e.day}`;
-  }
-
-  paidtoDateSelection(e: NgbDateStruct) {
-    this.paidtoDate = e; //`${e.year}-${e.month}-${e.day}`;
-  }
-
   filterRecords() {
+    this.isLoading = true;
     let searchQuery = "";
     let delimiter = "";
     let fromDateValue = "";
     let toDateValue = "";
-    let RaisedBilloption = '';
-    let paidfromDateValue = "";
-    let paidtoDateValue = "";
     let isDateFilterEnable = false;
     let isPaidOnFilterEnable = false;
     this.singleEmployee.reset();
 
     switch (this.RaisedBilloption) {
+      case '0':
+        this.RaisedBilloption = "between";
+        break;
       case '1':
         this.RaisedBilloption = "before";
         break;
       case '2':
         this.RaisedBilloption = "after";
         break;
-      case '3':
-        this.RaisedBilloption = "between";
-        break;
       default:
-        this.RaisedBilloption = "0";
+        this.RaisedBilloption = '';
         break;
     }
 
@@ -549,36 +536,12 @@ export class BilldetailsComponent implements OnInit {
       isDateFilterEnable = true;
     }
 
-    if (this.paidfromDate !== null) {
-      if (this.paidtoDate == null) {
-        Toast("Please selete to date to get the result.")
-        return;
-      }
-      isPaidOnFilterEnable = true;
-    } else if(this.paidfromDate == null && this.paidtoDate !== null) {
-      Toast("Please selete paid from date to get the result.")
-      isPaidOnFilterEnable = true;
-      return;
-    }
-
-    if (isPaidOnFilterEnable) {
-      let paidfromDateTime = new Date(this.paidfromDate.year, this.paidfromDate.month, this.paidfromDate.day).getTime();
-      let paidtoDateTime = new Date(this.paidtoDate.year, this.paidtoDate.month, this.paidtoDate.day).getTime();
-      if (paidfromDateTime > paidtoDateTime) {
-        Toast("Please select cottect From Date and To date");
-        return;
-      } else {
-        paidfromDateValue = `${this.paidfromDate.year}-${this.paidfromDate.month}-${this.paidfromDate.day}`;
-        paidtoDateValue = `${this.paidtoDate.year}-${this.paidtoDate.month}-${this.paidtoDate.day}`;
-      }
-    }
-
     if (this.employeeFile.ToBillNo != 0 && this.employeeFile.FromBillNo == 0)
       return ErrorToast("Please enter From Bill No.");
     if (this.employeeFile.ToBillNo == 0 && this.employeeFile.FromBillNo != 0)
       return ErrorToast("Please enter To Bill No.");
-    if (this.employeeFile.ToBillNo != 0 && this.employeeFile.FromBillNo != 0) {
-      if (this.employeeFile.ToBillNo > this.employeeFile.FromBillNo) {
+    if (this.employeeFile.ToBillNo != 0 && this.employeeFile.FromBillNo != 0 && this.employeeFile.ToBillNo != null && this.employeeFile.FromBillNo != null) {
+      if (this.employeeFile.ToBillNo >= this.employeeFile.FromBillNo) {
         searchQuery += ` ${delimiter} b.BillNo between ${this.employeeFile.FromBillNo} and ${this.employeeFile.ToBillNo}`;
         delimiter = "and";
       }else {
@@ -643,12 +606,7 @@ export class BilldetailsComponent implements OnInit {
     }
 
     if(isDateFilterEnable) {
-      searchQuery += ` ${delimiter} BillUpdatedOn between '${fromDateValue}' and '${toDateValue}'`;
-      delimiter = "and";
-    }
-
-    if(isPaidOnFilterEnable) {
-      searchQuery += ` ${delimiter} b.PaidOn between '${paidfromDateValue}' and '${paidtoDateValue}'`;
+      searchQuery += ` ${delimiter} b.BillUpdatedOn between '${fromDateValue}' and '${toDateValue}'`;
       delimiter = "and";
     }
 
@@ -669,15 +627,16 @@ export class BilldetailsComponent implements OnInit {
     this.employeeFile.ReceivedAmount=null;
     this.employeeFile.BilledAmount = null;
     this.employeeFile.Month = "0";
-    this.employeeFile.FromBillNo = 0;
-    this.employeeFile.ToBillNo = 0;
+    this.employeeFile.FromBillNo = null;
+    this.employeeFile.ToBillNo = null;
     this.employeeFile.TakeHome = null;
     this.toModel = null;
-    this.RaisedBilloption = '0';
+    this.RaisedBilloption = '';
     this.fromModel = null;
     this.toDate = null;
     this.fromDate = null;
     this.employeeId = 0;
+    this.isReadonly = true;
     $('#checkall').prop('checked', false);
     this.singleEmployee = new Filter();
     this.LoadFiles();
@@ -693,15 +652,16 @@ export class BilldetailsComponent implements OnInit {
     this.employeeFile.ReceivedAmount=null;
     this.employeeFile.BilledAmount = null;
     this.employeeFile.Month = "0";
-    this.employeeFile.FromBillNo = 0;
-    this.employeeFile.ToBillNo = 0;
+    this.employeeFile.FromBillNo = null;
+    this.employeeFile.ToBillNo = null;
     this.employeeFile.TakeHome = null;
     this.toModel = null;
-    this.RaisedBilloption = '0';
+    this.RaisedBilloption = '';
     this.fromModel = null;
     this.toDate = null;
     this.fromDate = null;
     this.employeeId = 0;
+    this.isReadonly = true;
     $('#checkall').prop('checked', false);
     this.singleEmployee = new Filter();
   }
@@ -711,8 +671,11 @@ export class BilldetailsComponent implements OnInit {
     $("#advancedSearchModal").modal('show')
   }
 
-  selectBillOption() {
-
+  selectBillOption(e: any) {
+    this.isReadonly = true;
+    this.RaisedBilloption = e.target.value;
+    if (this.RaisedBilloption == '0')
+      this.isReadonly = false;
   }
 
   EditCurrentDocument(userFile: any) {
@@ -807,8 +770,7 @@ export class BillDetails {
   Employee: string = '';
   TakeHome: number = null;
   Absent: number = 0;
-  paidfromModel: string = '';
-  paidtoModel: string = '';
   FromBillNo: number = null;
   ToBillNo: number = null;
+  NoOfDays: number = 0;
 }
