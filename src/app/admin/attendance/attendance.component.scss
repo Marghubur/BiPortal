@@ -106,3 +106,57 @@
 .parend-h {
   min-height: 300px;
 }
+
+.nav-link.active {
+  color: #222;
+  background-color: #dcefff !important;
+  border-radius: 0px !important;
+}
+
+.nav-active {
+  color: #222;
+  border-radius: 0px !important;
+  position: relative;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.nav-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 40%;
+  border-top: 6px solid rgb(44, 135, 151);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  transform: rotate(180deg);
+}
+
+.month-btn {
+  border: 1px solid #dbdbdb !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+.custom-th {
+  font-size: 9px !important;
+}
+
+.circle {
+  position: relative;
+  background: #8cc63e;
+  border-radius: 50%;
+  width: 17px;
+  height: 17px;
+}
+
+.checkmark {
+  position: absolute;
+  transform: rotate(45deg) translate(-50%, -50%);
+  left: 28%;
+  top: 50%;
+  height: 9px;
+  width: 5px;
+  border-bottom: 3px solid white;
+  border-right: 3px solid white;
+}
