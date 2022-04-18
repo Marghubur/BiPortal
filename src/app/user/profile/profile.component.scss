@@ -1,0 +1,385 @@
+.curren-bg {
+    background-color: #4a4545 !important;
+  }
+  
+  .btn-lightorange {
+    background-color: var(--orange);
+    color: var(--light);
+  }
+  
+  .btn-lightdark {
+    background-color: #6d6d6d !important;
+    color: var(--light);
+  }
+  
+  .u-header {
+    z-index: 99999;
+    height: 3rem;
+  }
+  
+  .btn-sm {
+    height: 32px;
+    line-height: 1.2;
+    font-size: 14px;
+  }
+  
+  .btn:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .btn-sp {
+    margin: 4px 6px;
+  }
+  
+  .a-tab {
+    padding-top: 10px !important;
+    display: inline-block;
+    height: inherit;
+    color: #a2a2a2;
+    padding: 0px 1rem;
+  }
+  
+  .c-tab {
+    height: 48px;
+    position: relative;
+  }
+  
+  .tab-active {
+    border-bottom: 4px solid #eb7d25 !important;
+    color: #eee;
+  }
+  
+  .a-tab:hover {
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .d-r {
+    direction: rtl;
+  }
+  
+  .filter-input {
+    height: 2.4rem;
+  }
+  
+  .nav-link.active {
+    border-bottom: 2px solid orange;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    color: var(--gray) !important;
+  }
+  
+  .inactive {
+    color: #ccc;
+  }
+  
+  .nav-link {
+    padding: 0.2rem 1rem;
+    font-size: 14px;
+  }
+  
+  .tab-link > li:hover {
+    cursor: pointer;
+  }
+  
+  a.text-underline {
+    text-decoration: underline;
+    color: darkblue;
+  }
+  
+  .side-panel-top {
+    height: 6rem;
+  }
+  
+  .side-panel-bottom {
+    height: 2rem;
+  }
+  
+  .anc {
+    color: #757171;
+    font-size: 1rem;
+  }
+  
+  .span-clients {
+    border: 1px solid #d9d9d9;
+    background: #845b99;
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: #eee;
+  }
+  
+  .span-clients:hover {
+    cursor: pointer;
+  }
+  
+  hr {
+    margin: 0.4rem 0 !important;
+  }
+  
+  .add_button {
+    padding-top: 15px;
+  }
+  .add_button button {
+    height: 35px;
+  }
+  
+  .x-panel-changed {
+    min-height: auto !important;
+    padding-bottom: 0px;
+  }
+  
+  .inactive-mode {
+    border: 1px solid #d9d9d9 !important;
+    background: #eee !important;
+    color: #bd9c9c !important;
+  }
+  
+  .x_panel {
+    min-height: 2rem !important;
+  }
+  
+  .zoom-2 {
+    zoom: 1.2;
+  }
+  
+  .fa-camera {
+    padding: 5px !important;
+    cursor: pointer;
+  }
+  
+  .ifilezone {
+    background-image: url(/assets/img/drop-back.png) !important;
+    background-size: 100% 70%;
+    cursor: pointer;
+    border: 2px dashed #bbb;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f8f7f7;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+  
+  table {
+    counter-reset: tableCount;
+  }
+  
+  .counterCell:before {
+    content: counter(tableCount);
+    counter-increment: tableCount;
+  }
+  
+  .upload-img {
+    width: 60px;
+  }
+  
+  .file-name {
+    width: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 7rem;
+  }
+  .card-cont {
+    width: 8rem;
+  }
+  
+  .file-type {
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    margin: 10px;
+    padding: 26px;
+    text-align: center;
+    box-shadow: 2px 3px 8px -3px #444;
+  }
+  
+  .item-row {
+    display: flex;
+    flex-flow: wrap;
+  }
+  
+  .select-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #a9a9a9;
+  }
+  
+  .file-link {
+    position: absolute;
+    top: 11px;
+    right: 10px;
+  }
+  
+  .file-type {
+    position: relative;
+  }
+  
+  .f-zoom {
+    font-size: 4rem;
+  }
+  
+  .delete-content {
+    font-size: 0.9rem;
+    color: #31314a;
+  }
+  
+  .c_header {
+    border-bottom: none !important;
+    padding: 1px 8px 0px;
+    margin-top: 1rem;
+    margin-bottom: 0px !important;
+  }
+  
+  .empty-dv {
+    font-size: 1.4rem;
+    color: #a5b79a;
+    font-weight: 600;
+  }
+  
+  .content-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .content-end {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+  }
+  
+  .sm-text {
+    font-size: 0.9rem;
+  }
+  
+  .folder-action {
+    position: absolute;
+    right: 0px;
+    display: inline-block !important;
+    max-width: 2.4rem;
+    top: 0.4rem;
+  }
+  
+  .ac-dv {
+    padding: 4px 0px;
+    display: block;
+  }
+  
+  .file-action {
+    font-size: 12px;
+  }
+  
+  .navigation-link {
+    text-decoration: none;
+    color: #222;
+    font-weight: 700;
+    padding-right: 4px;
+  }
+  
+  .exp-input-box {
+    width: 46% !important;
+  }
+  
+  .add-btn {
+    font-size: 15px !important;
+    font-weight: 600;
+  }
+  
+  .border-none {
+    border: none !important;
+  }
+  
+  .form-control {
+    border: 1px solid #d9d9d9;
+    background: transparent !important;
+  }
+  
+  .edit-icon {
+    font-size: 13px;
+  }
+  
+  .lg-txtarea {
+    height: 6rem !important;
+    padding: 0.5rem 0.8rem;
+  }
+  
+  .sm-txtarea {
+    max-height: 2.4rem !important;
+  }
+  
+  .disableClick {
+    pointer-events: none;
+  }
+  
+  .col-info {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity));
+  }
+  
+  .language-view {
+    font-size: 1.2rem !important;
+    padding: 5px !important;
+  }
+  
+  .language-msg {
+    font-weight: 600;
+    font-size: 1.4rem;
+    text-align: center;
+    padding: 1rem;
+  }
+  .Detail-Project-txtarea {
+    height: 7.6rem !important;
+  }
+  
+  .delete-msg-text {
+    color: #ff6565;
+  }
+  
+  .custom-backgrnd-color {
+    background: #fefbef;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: -17px;
+    right: -17px;
+    background: #fff;
+    color: #222;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+  }
+  
+  .btn-close {
+    padding-top: 1px !important;
+    padding-left: 9px !important;
+    font-size: 10px !important;
+  }
+  
+  .skill-popup-box {
+    height: 11rem !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .skill-custom-bg {
+    background: #ede8d2;
+  }
+  
+  .resume-thumbnail {
+    width: 11rem;
+  }
+  
+  .profile-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 60vh;
+    text-align: center;
+    align-items: center;
+    font-size: 2.3rem;
+  }
+  

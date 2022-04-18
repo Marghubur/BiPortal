@@ -4,7 +4,6 @@ import { CommonService, Toast, UserDetail } from "./../../providers/common-servi
 import { AccessTokenExpiredOn, Blogs, BuildPdf, Documents, Employees, Login } from "./../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
-import { AutoPlayService } from "src/providers/AutoPlayService";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { UserService } from "src/providers/userService";
 
@@ -43,7 +42,6 @@ export class NavbarComponent implements OnInit {
     private commonService: CommonService,
     private http: AjaxService,
     private local: ApplicationStorage,
-    private autoPlay: AutoPlayService,
     private tokenHelper: JwtService,
     private user: UserService
   ) {
@@ -129,13 +127,7 @@ export class NavbarComponent implements OnInit {
   }
 
   AutoDemo() {
-    // this.commonService.SetAutoPlayValue(true);
-    // this.commonService.OperateAutoPlay();
     this.nav.navigate("/", null);
-    setTimeout(() => {
-      this.autoPlay.SetAutoPlayValue(true);
-      this.autoPlay.InitAutoPlay();
-    }, 100);
   }
 
   toggleMenu() {

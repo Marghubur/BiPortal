@@ -1,16 +1,15 @@
 import { CommonService, ErrorToast, Toast } from "./../../providers/common-service/common.service";
-import { ApplicationStorage } from "./../../providers/ApplicationStorage";
 import { AjaxService } from "src/providers/ajax.service";
 import { FormControl } from "@angular/forms";
 import { FormGroup } from "@angular/forms";
-import { Output, ViewChild } from "@angular/core";
+import { Output } from "@angular/core";
 import { EventEmitter } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
 declare var $: any;
 import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from './../../auth/jwtService'
-import { SocialAuthService } from "angularx-social-login";
-import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
+// import { SocialAuthService } from "angularx-social-login";
+// import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
 import { Dashboard, UserDashboard, UserType } from "src/providers/constants";
 
 @Component({
@@ -23,8 +22,8 @@ export class LoginComponent implements OnInit {
   initialUrl: string = "";
   catagory: any = {};
   isLoading: boolean = false;
-  isGoogleLogin: boolean = false;
-  isGitHubLogin: boolean = false;
+  // isGoogleLogin: boolean = false;
+  // isGitHubLogin: boolean = false;
   isUserMode: boolean = true;
   userType: string = 'employee';
 
@@ -43,7 +42,7 @@ export class LoginComponent implements OnInit {
     private http: AjaxService,
     private commonService: CommonService,
     private nav: iNavigation,
-    private authService: SocialAuthService,
+    // private authService: SocialAuthService,
     private jwtService: JwtService
   ) { }
 
@@ -210,45 +209,45 @@ export class LoginComponent implements OnInit {
   }
 
   refreshToken(): void {
-    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID).then(user => {
+    // this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID).then(user => {
 
-    });
+    // });
   }
 
   onGoogleSignIn() {
-    this.isGoogleLogin = true;
+    //this.isGoogleLogin = true;
     event.preventDefault();
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user: any) => {
-      if(user !== null) {
-        let userSignInDetail = {
-          UserId: 0,
-          FirstName: user.firstName,
-          LastName: user.lastName,
-          Mobile: null,
-          EmailId: user.email,
-          Address: null,
-          CompanyName: null,
-          MediaName: "google",
-          AccessToken: user.response.access_token
-        };
+    // this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user: any) => {
+    //   if(user !== null) {
+    //     let userSignInDetail = {
+    //       UserId: 0,
+    //       FirstName: user.firstName,
+    //       LastName: user.lastName,
+    //       Mobile: null,
+    //       EmailId: user.email,
+    //       Address: null,
+    //       CompanyName: null,
+    //       MediaName: "google",
+    //       AccessToken: user.response.access_token
+    //     };
 
-        this.http.post("login/SignUpViaSocialMedia", userSignInDetail).then((response: ResponseModel) => {
-          if(response.ResponseBody !== null && response.ResponseBody !== "") {
-            this.jwtService.setLoginDetail(response.ResponseBody);
-            this.commonService.ShowToast("Registration done successfully");
-            this.nav.navigate("/", null);
-          }
-          this.isGoogleLogin = false;
-        }).catch(err => {
-          this.isGoogleLogin = false;
-          this.commonService.ShowToast("Got some internal error. Please contact admin.");
-        });
-      } else {
-        this.commonService.ShowToast("Registration fail. Please contact to admin.");
-      }
-    }).catch(e => {
-      this.isGoogleLogin = false;
-    });
+    //     this.http.post("login/SignUpViaSocialMedia", userSignInDetail).then((response: ResponseModel) => {
+    //       if(response.ResponseBody !== null && response.ResponseBody !== "") {
+    //         this.jwtService.setLoginDetail(response.ResponseBody);
+    //         this.commonService.ShowToast("Registration done successfully");
+    //         this.nav.navigate("/", null);
+    //       }
+    //       this.isGoogleLogin = false;
+    //     }).catch(err => {
+    //       this.isGoogleLogin = false;
+    //       this.commonService.ShowToast("Got some internal error. Please contact admin.");
+    //     });
+    //   } else {
+    //     this.commonService.ShowToast("Registration fail. Please contact to admin.");
+    //   }
+    // }).catch(e => {
+    //   this.isGoogleLogin = false;
+    // });
   }
 
   backToHomePage() {

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Attendance, BillDetail, BuildPdf, Clients, Companies, CreateResume, Dashboard, Documents, DocumentsPage, Employees, Files, Leave, ManageEmployee, Profile, Recent, Recruiter, RegisterClient, Resume, Roles } from 'src/providers/constants';
-import { HomeComponent } from '../home/home.component';
+import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';

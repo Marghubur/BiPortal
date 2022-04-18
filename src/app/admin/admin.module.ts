@@ -17,13 +17,11 @@ import { RegisterclientComponent } from './registerclient/registerclient.compone
 import { FilesComponent } from './files/files.component';
 import { ResumeComponent } from './resume/resume.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
-import { NgxDocViewerModule } from 'ngx-doc-viewer';
-import { HomeComponent } from '../home/home.component';
+import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { ManageComponent } from './profile/profile.component';
 import { RecentComponent } from './recent/recent.component';
 import { RolesComponent } from './roles/roles.component';
-import { BreadcrumsComponent } from '../util/breadcrums/breadcrums.component';
 import { CreateResumeComponent } from './create-resume/create-resume.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { RecruiterComponent } from './recruiter/recruiter.component';
@@ -51,7 +49,8 @@ import { LeaveComponent } from './leave/leave.component';
     CreateResumeComponent,
     RecruiterComponent,
     CompaniesComponent,
-    LeaveComponent
+    LeaveComponent,
+    HomeComponent
   ],
   imports: [
     CommonModule,
@@ -59,8 +58,7 @@ import { LeaveComponent } from './leave/leave.component';
     NgbModule,
     ReactiveFormsModule,
     FormsModule,
-    UtilModule,
-    NgxDocViewerModule
+    UtilModule
   ]
 })
 export class AdminModule { }
