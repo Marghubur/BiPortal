@@ -49,7 +49,12 @@ export class AttendanceComponent implements OnInit {
   isAttendanceDataLoaded: boolean = false;
   weekList: Array<any> = [];
   divisionCode: number = 0;
+  daysInMonth: number = 0;
   PendingAttendacneMessage: string = 'Select above pending attendance link to submit before end of the month.';
+  monthName: Array<any> = [];
+  allDays: Array<any> = [];
+  changeMonth: string = '';
+  presentMonth: boolean = true;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -81,6 +86,10 @@ export class AttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    var dt = new Date();
+    var month = dt.getMonth();
+    var year = dt.getFullYear();
+    this.daysInMonth = new Date(year, month + 1, 0).getDate();
     this.clientDetail = {
       data: [],
       placeholder: "Select Employee"
@@ -91,7 +100,7 @@ export class AttendanceComponent implements OnInit {
     this.intervalId = setInterval(() => {
       this.time = new Date();
     }, 1000);
-    
+
     this.DayValue = this.time.getDay();
     let cachedData = this.nav.getValue();
     if(cachedData) {
@@ -112,15 +121,29 @@ export class AttendanceComponent implements OnInit {
         this.userDetail = Master["UserDetail"];
         this.employeeId = this.userDetail.UserId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
-        $('#loader').modal('show');
+        //$('#loader').modal('show');
+        this.loadMappedClients();
         setTimeout(() => {
-          this.loadMappedClients();
         }, 900);
 
       } else {
         Toast("Invalid user. Please login again.")
       }
     }
+    let i = 0;
+    while( i < 6) {
+      var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
+      if (month == 1) {
+        month = 12;
+        year --
+      } else {
+        month --;
+      }
+      this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
+      i++;
+    }
+
+    this.fromPresentDatea();
   }
 
   loadMappedClients() {
@@ -235,7 +258,7 @@ export class AttendanceComponent implements OnInit {
         item.date.setHours(0,0,0,0);
         let value = attendanceDetail.find(x => new Date(x.AttendanceDay).getDate() == item.date.getDate());
         return this.buildWeekForm(item, value, attendanceId);
-      }))      
+      }))
     });
 
     this.countTotalTime();
@@ -385,7 +408,7 @@ export class AttendanceComponent implements OnInit {
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      if(response.ResponseBody.EmployeeDetail) 
+      if(response.ResponseBody.EmployeeDetail)
         this.client = response.ResponseBody.EmployeeDetail;
       else {
         this.NoClient = true;
@@ -527,7 +550,7 @@ export class AttendanceComponent implements OnInit {
       }
     } else {
       WarningToast("Please select employer first.");
-    }    
+    }
   }
 
   getPendingWeek(from: Date, to: Date) {
@@ -540,7 +563,7 @@ export class AttendanceComponent implements OnInit {
       }
     } else {
       WarningToast("Please select employer first.");
-    }    
+    }
   }
 
   getAllPendingAttendance() {
@@ -564,14 +587,52 @@ export class AttendanceComponent implements OnInit {
     let date = null;
     while(i < existingDateList.length) {
       date = new Date(existingDateList[i]["AttendanceDay"]);
-      if(currenDate.getFullYear() == date.getFullYear() && 
-         currenDate.getMonth() == date.getMonth() && 
+      if(currenDate.getFullYear() == date.getFullYear() &&
+         currenDate.getMonth() == date.getMonth() &&
          currenDate.getDate() == date.getDate()) {
            return true;
          }
       i++;
     }
     return false;
+  }
+
+  fromPresentDatea() {
+    this.allDays = [];
+    this.presentMonth = true;
+    let index = 0;
+    while(index < 30) {
+      this.allDays.push(new Date(new Date().setDate(new Date().getDate() - index)));
+      index++;
+    }
+  }
+
+  getAllDays(month: string, count: number) {
+    this.presentMonth = false;
+    this.allDays = [];
+    var year = new Date().getFullYear();
+    let value = new Date(Date.parse(month + `1, ${year}`)).getMonth() + 1;
+    let index = new Date(year, value, 0).getDate();
+    let changeYrs = new Date (new Date().getFullYear() , new Date().getMonth() - 1 - count, 1).getFullYear();
+    this.changeMonth = new Date(year, value-1, 1).toLocaleString("en-us", { month: "long" }) + ", " + `${changeYrs}`;
+    let date = new Date(year, value -1, index)
+    let i = 0;
+    while(date.getMonth() ==  value - 1) {
+      if (this.allDays.length == index) {
+        break;
+      }
+      this.allDays.push(new Date(date.setDate(date.getDate() - i)));
+      if (i == 0) {
+        i++;
+      }
+
+      if (date.getDate() == 1)
+        date.getMonth() - 1;
+    }
+  }
+
+  selectOption(index: any) {
+
   }
 
   buildPendingAttendanceModal(res: Array<any>) {
@@ -632,7 +693,7 @@ export class AttendanceComponent implements OnInit {
           date = new Date(startDate.getFullYear(), startDate.getMonth(), i + index);
           dayNum = date.getDay();
           date.setDate(date.getDate() - dayNum);
-          
+
           week = [];
           index = 0;
           let flag = false;

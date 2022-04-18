@@ -92,7 +92,7 @@ export class LeaveComponent implements OnInit {
       options: {
         maintainAspectRatio: false,
         responsive: true,
-        cutout: 50,
+        cutout: 25,
     }
     })
   }
