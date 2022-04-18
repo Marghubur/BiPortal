@@ -80,25 +80,6 @@
                   {{ isLoading ? 'Signing' : 'Sing In' }}
                 </button>
               </form>
-
-              <div class="col-md-12 mt-2">
-                <h6 class="text-center mt-1 pt-1">
-                  You can also sign in with these
-                </h6>
-                <div class="text-center">
-                  <button class="btn btn-danger btn-block w-100 mb-2 mt-3" [disabled]="isGoogleLogin"
-                    (click)="onGoogleSignIn()">
-                    <i class="pe-2 fa"
-                      [ngClass]="{'fa-spin fa-spinner': isGoogleLogin, 'fa-google fa-lg': !isGoogleLogin}"></i>
-                    {{ isGoogleLogin ? 'Signing plesae wait' : 'Sign in with Google' }}
-                  </button>
-                  <button class="btn btn-primary btn-block w-100 mt-2" [disabled]="isGitHubLogin">
-                    <i class="pe-2 fa"
-                      [ngClass]="{'fa-spin fa-spinner': isGitHubLogin, 'fa-github fa-lg': !isGitHubLogin}"></i>
-                    {{ isGitHubLogin ? 'Signing plesae wait' : 'Sign in with GitHub' }}
-                  </button>
-                </div>
-              </div>
             </div>
           </ng-container>
 

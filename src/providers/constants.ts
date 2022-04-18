@@ -68,6 +68,8 @@ export const Leave = 'admin/Leave'
 // ********************** Admin route pages  *******************
 
 export const UserDashboard = "user/dashboard";
+export const UserAttendance = "user/attendance";
+export const UserProfilePage = "user/profile";
 
 
 // *************************** file name constancts  *************

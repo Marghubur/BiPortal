@@ -4,8 +4,6 @@ import { CommonService, ErrorToast, UserDetail } from "../../providers/common-se
 import { AccessTokenExpiredOn, Blogs, BuildPdf, Documents, Employees, Login } from "../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
-import { AutoPlayService } from "src/providers/AutoPlayService";
-import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { UserService } from "src/providers/userService";
 
 @Component({
@@ -44,7 +42,6 @@ export class SidemenuComponent implements OnInit {
     private commonService: CommonService,
     private http: AjaxService,
     private local: ApplicationStorage,
-    private autoPlay: AutoPlayService,
     private user: UserService
   ) {
   }
@@ -141,13 +138,7 @@ export class SidemenuComponent implements OnInit {
   }
 
   AutoDemo() {
-    // this.commonService.SetAutoPlayValue(true);
-    // this.commonService.OperateAutoPlay();
     this.nav.navigate("/", null);
-    setTimeout(() => {
-      this.autoPlay.SetAutoPlayValue(true);
-      this.autoPlay.InitAutoPlay();
-    }, 100);
   }
 
   toggleSection(e: any, index: number) {

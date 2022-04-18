@@ -5,13 +5,9 @@ import {
   NavigationStart,
 } from "@angular/router";
 import { Subscription } from 'rxjs';
-import { JwtService, ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
-import { AutoPlayService } from 'src/providers/AutoPlayService';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { Login } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { PageCache } from 'src/providers/PageCache';
 
 @Component({
   selector: 'app-root',
