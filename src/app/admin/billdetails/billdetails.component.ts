@@ -294,10 +294,7 @@ export class BilldetailsComponent implements OnInit {
     let employeeBillDetail = {
       "EmployeeId": userFile.FileOwnerId,
       "ClientId": userFile.ClientId,
-      "FileId": fileId,
-      "FilePath": userFile.FilePath,
-      "FileName": userFile.FileName,
-      "FileExtension": userFile.FileExtension
+      "FileId": fileId
     };
     this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
       let fileDetail: any = null;
@@ -340,10 +337,7 @@ export class BilldetailsComponent implements OnInit {
     let employeeBillDetail = {
       "EmployeeId": this.FileDetail.FileOwnerId,
       "ClientId": this.FileDetail.ClientId,
-      "FileId": fileId,
-      "FilePath": this.FileDetail.FilePath,
-      "FileName": this.FileDetail.FileName,
-      "FileExtension": this.FileDetail.FileExtension
+      "FileId": fileId
     };
 
     this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
