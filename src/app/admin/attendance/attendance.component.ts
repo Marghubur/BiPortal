@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';3
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
@@ -55,7 +55,6 @@ export class AttendanceComponent implements OnInit {
   allDays: Array<any> = [];
   changeMonth: string = '';
   presentMonth: boolean = true;
-
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
