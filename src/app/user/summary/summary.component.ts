@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+declare var $: any;
 
 @Component({
   selector: 'app-summary',
@@ -10,6 +11,7 @@ export class SummaryComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    $('ExceptionsModal').modal('show');
   }
 
 }
