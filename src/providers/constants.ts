@@ -71,6 +71,12 @@ export const UserDashboard = "user/dashboard";
 export const UserAttendance = "user/attendance";
 export const UserProfilePage = "user/profile";
 
+export const Summary = "user/summary";
+export const Declaration = "user/declaration";
+export const Salary = "user/salary";
+export const Preferences = "user/preferences";
+
+
 
 // *************************** file name constancts  *************
 export const Doc = "doc";
