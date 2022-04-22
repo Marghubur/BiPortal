@@ -1,1 +1,1449 @@
-<p>summary works!</p>
+
+<!--------- 1.5 Lac Exceptions Start ------->
+
+<div class="modal fade" id="ExceptionsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen p-4">
+        <div class="modal-content rounded">
+        <div class="modal-header border-bottom-0">
+            <h5 class="modal-title" id="exampleModalLabel">1.5 Lac Exemptions</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <p class=" ps-3">The aggregate amount of deductions under section 80C, section 80CCC and sub-section (1) of 80CCD</p>
+        <div class="modal-body">
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th width="6%">SECTION</th>
+                            <th width="25%">DEDUCATION NAME</th>
+                            <th width="10%">MAX LIMIT</th>
+                            <th width="15%">DECLARATION</th>
+                            <th width="15%">PROOF</th>
+                            <th width="19%">STATUS</th>
+                            <th width="10%">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">EPF (Deducted from Salary) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                                This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum 
+                                is fixed for all investments under section 80C."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">INR 21,600</td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <div class="d-flex align-items-center">
+                                    <div class="circle">
+                                        <div class="checkmark">
+                                        </div>
+                                    </div>
+                                    <span class="ps-3">Auto Accepted</span>
+                                </div>
+                            </td>
+                            <td class="align-middle"></td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">VPF (Deducted from Salary) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Employee's VPF contribution is eligible for deducation under section 80C of income tax Act.
+                                This means that your VPF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum 
+                                is fixed for all investments under section 80C."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">INR 0</td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <div class="d-flex align-items-center">
+                                    <div class="circle">
+                                        <div class="checkmark">
+                                        </div>
+                                    </div>
+                                    <span class="ps-3">Auto Accepted</span>
+                                </div>
+                            </td>
+                            <td class="align-middle"></td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">PPF <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editPPF && !isPPFSubmitted">Not Declared</span>
+                                <div *ngIf="!editPPF" class="d-flex align-items-center">
+                                    <span class="declaration-bg p-2 text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end" placeholder="Amount">
+                                </div>
+                                <span *ngIf="editPPF && isPPFSubmitted">Declared</span>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editPPF && !isPPFSubmitted">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editPPF" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                                <span *ngIf="isPPFSubmitted && editPPF">Uploaded</span>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf = "!isPPFSubmitted">Not Submitted</span>
+                                <div class="d-flex align-items-center" *ngIf = "isPPFSubmitted">
+                                    <div class="circle">
+                                        <div class="checkmark">
+                                        </div>
+                                    </div>
+                                    <span class="ps-3">Submitted</span>
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editPPF" (click)="editPPFDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editPPF">
+                                    <a href="javascript:void(0)" class="text-decoration-none" (click)="savePPFDeclaration()">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditPPF()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Senior Citizen Saving Scheme <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Investment in SCSS qualifies for deduction under Section 80C of the income tax Act. Any
+                                individual age 60 and above can invest in SCSS. Early retirees between 55 and 60 years, who either opted
+                                for the voluntary retirement scheme (VRS) or superannuation, can also invest in the scheme, provided the
+                                investment is done within amonth of receiving retirement benefits."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editSeniorCitizen">Not Declared</span>
+                                <div *ngIf="!editSeniorCitizen" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editSeniorCitizen">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editSeniorCitizen" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editSeniorCitizen" (click)="editSeniorCitizenDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editSeniorCitizen">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditSeniorCitizen()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Housing loan (Principal) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="For Home Loan, u/s 80C, deduction upto Rs 1,50,000 is allowed on Principal repayment, stamp duty &
+                                registration charges, in the year in which the actual principal amount is paid."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editHousingLoan">Not Declared</span>
+                                <div *ngIf="!editHousingLoan" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editHousingLoan">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editHousingLoan" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editHousingLoan" (click)="editHousingLoanDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editHousingLoan">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditHousingLoan()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Mutual Fund <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Investment in mutual funds for saving purpose is called Equity Linked Saving Schemes (ELSS) which qualifies
+                                for section 80C deducation. Not all mutual fund can provide 80C deduction. Exampkes of ELSS SBI Magnum Tax gain,
+                                HDFC Tax Saver, Fidelity Tax Advantage etc."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editMutualFund">Not Declared</span>
+                                <div *ngIf="!editMutualFund" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editMutualFund">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editMutualFund" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editMutualFund" (click)="editMutualFundDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editMutualFund">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditMutualFund()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">National Saving Certificate <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="The National Saving Certificate (NSC) is an investment scheme floated by the Government of India. 
+                                It offers guaranted interest and capital protection. NSC can be bought from most post office in India, and is easily
+                                accessible. Investment upto Rs 1.5 lakh in the scheme qualifies for deducation u/s 80C of the income tax Act. Furthermore, 
+                                the interest earned on the certificates are also added back to the initial investment and qualify for a tax exemption as well"></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editNationalSaving">Not Declared</span>
+                                <div *ngIf="!editNationalSaving" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editNationalSaving">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editNationalSaving" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editNationalSaving" (click)="editNationalSavingDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editNationalSaving">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditNationalSaving()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Unit Link Insurance Plan <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Unit Linked Insurance Plan (ULIP) is a combination of insurance and investment. The goal of ULIP 
+                                is to provide wealth creation along with life cover. ULIP provider invests a portion of your investment towards
+                                life insurance and rest into a fund. All ULIPs qualify as life insurance policy and the premium are exempted from
+                                income tax benefit. Deducation is available on ULIPS under section 80C, provided the sum assured is at least 10 times
+                                the annual premium"></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editUnitLink">Not Declared</span>
+                                <div *ngIf="!editUnitLink" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editUnitLink">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editUnitLink" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editUnitLink" (click)="editUnitLinkDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editUnitLink">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditUnitLink()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Life Insurance Policy <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editLifeInsurance">Not Declared</span>
+                                <div *ngIf="!editLifeInsurance" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editLifeInsurance">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editLifeInsurance" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editLifeInsurance" (click)="editLifeInsuranceDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editLifeInsurance">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditLifeInsurance()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Education Tuition Fees <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editTuitionFee">Not Declared</span>
+                                <div *ngIf="!editTuitionFee" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editTuitionFee">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editTuitionFee" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editTuitionFee" (click)="editTuitionFeeDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editTuitionFee">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditTuitionFee()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Schedule Bank FD <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editBankFD">Not Declared</span>
+                                <div *ngIf="!editBankFD" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editBankFD">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editBankFD" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editBankFD" (click)="editBankFDDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editBankFD">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditBankFD()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Post Office Time Deposit <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editPostOffice">Not Declared</span>
+                                <div *ngIf="!editPostOffice" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editPostOffice">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editPostOffice" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editPostOffice" (click)="editPostOfficeDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editPostOffice">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditPostOffice()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Deferred Annuity <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editDeferredAnnuity">Not Declared</span>
+                                <div *ngIf="!editDeferredAnnuity" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editDeferredAnnuity">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editDeferredAnnuity" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editDeferredAnnuity" (click)="editDeferredAnnuityDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editDeferredAnnuity">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditDeferredAnnuity()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Super Annuity <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editSuperAnnuity">Not Declared</span>
+                                <div *ngIf="!editSuperAnnuity" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editSuperAnnuity">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editSuperAnnuity" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editSuperAnnuity" (click)="editSuperAnnuityDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editSuperAnnuity">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditSuperAnnuity()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">NABARD notifies bond <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editNABARD">Not Declared</span>
+                                <div *ngIf="!editNABARD" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editNABARD">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editNABARD" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editNABARD" (click)="editNABARDDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editNABARD">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditNABARD()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Sukanya Samriddhi Yojna <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editSukanyaSamriddhi">Not Declared</span>
+                                <div *ngIf="!editSukanyaSamriddhi" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editSukanyaSamriddhi">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editSukanyaSamriddhi" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editSukanyaSamriddhi" (click)="editSukanyaSamriddhiDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editSukanyaSamriddhi">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditSukanyaSamriddhi()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80C <sup>$</sup></td>
+                            <td class="align-middle">Other <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editOther">Not Declared</span>
+                                <div *ngIf="!editOther" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editOther">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editOther" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editOther" (click)="editOtherDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editOther">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditOther()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80CCC <sup>$</sup></td>
+                            <td class="align-middle">Mutual Fund Pension <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editMutualPension">Not Declared</span>
+                                <div *ngIf="!editMutualPension" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editMutualPension">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editMutualPension" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editMutualPension" (click)="editMutualPensionDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editMutualPension">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditMutualPension()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80CCD(1) <sup>$</sup></td>
+                            <td class="align-middle">NPS Employee Contribution <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editNPSEmployee">Not Declared</span>
+                                <div *ngIf="!editNPSEmployee" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editNPSEmployee">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editNPSEmployee" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editNPSEmployee" (click)="editNPSEmployeeDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editNPSEmployee">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditNPSEmployee()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer border-top-0">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" (click)="gotoOtherExemptions()">Next</button>
+        </div>
+        </div>
+    </div>
+</div> 
+
+<!-----------End----------->
+
+<!------ Other Exceptions -------->
+
+<div class="modal fade" id="OtherExceptionsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen p-4">
+        <div class="modal-content rounded">
+        <div class="modal-header border-bottom-0">
+            <h5 class="modal-title" id="exampleModalLabel">Other Exemptions</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <p class=" ps-3">Other deductions under chapter VI(A) which is from 80CCD1(B) to 80U</p>
+        <div class="modal-body">
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th width="6%">SECTION</th>
+                            <th width="25%">DEDUCATION NAME</th>
+                            <th width="10%">MAX LIMIT</th>
+                            <th width="15%">DECLARATION</th>
+                            <th width="15%">PROOF</th>
+                            <th width="19%">STATUS</th>
+                            <th width="10%">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="align-middle">80CCD(1B) <sup>$</sup></td>
+                            <td class="align-middle">NPS Employee Contribution <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 50,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editNPSEmployeeAdditional">Not Declared</span>
+                                <div *ngIf="!editNPSEmployeeAdditional" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editNPSEmployeeAdditional">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editNPSEmployeeAdditional" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editNPSEmployeeAdditional" (click)="editNPSEmployeeAdditionalDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editNPSEmployeeAdditional">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditNPSEmployeeAdditional()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80CCD(2) <sup>$</sup></td>
+                            <td class="align-middle">Senior Citizen Saving Scheme <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Investment in SCSS qualifies for deduction under Section 80C of the income tax Act. Any
+                                individual age 60 and above can invest in SCSS. Early retirees between 55 and 60 years, who either opted
+                                for the voluntary retirement scheme (VRS) or superannuation, can also invest in the scheme, provided the
+                                investment is done within amonth of receiving retirement benefits."></i></td>
+                            <td class="align-middle"No Limit></td>
+                            <td class="align-middle">
+                                <span *ngIf="editNPSEmployeeOther">Not Declared</span>
+                                <div *ngIf="!editNPSEmployeeOther" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editNPSEmployeeOther">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editNPSEmployeeOther" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editNPSEmployeeOther" (click)="editNPSEmployeeOtherDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editNPSEmployeeOther">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditNPSeditNPSEmployeeOther()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80D <sup>$</sup></td>
+                            <td class="align-middle">Medical Insurance Premimum <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="For Home Loan, u/s 80C, deduction upto Rs 1,50,000 is allowed on Principal repayment, stamp duty &
+                                registration charges, in the year in which the actual principal amount is paid."></i></td>
+                            <td class="align-middle">INR 50,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editMedicalInsurance">Not Declared</span>
+                                <div *ngIf="!editMedicalInsurance" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editMedicalInsurance">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editMedicalInsurance" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editMedicalInsurance" (click)="editMedicalInsuranceDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editMedicalInsurance">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditMedicalInsurance()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80D <sup>$</sup></td>
+                            <td class="align-middle">Preventive Health Check-up<i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Investment in mutual funds for saving purpose is called Equity Linked Saving Schemes (ELSS) which qualifies
+                                for section 80C deducation. Not all mutual fund can provide 80C deduction. Exampkes of ELSS SBI Magnum Tax gain,
+                                HDFC Tax Saver, Fidelity Tax Advantage etc."></i></td>
+                            <td class="align-middle">INR 5,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editHealthCheckup">Not Declared</span>
+                                <div *ngIf="!editHealthCheckup" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editHealthCheckup">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editHealthCheckup" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editHealthCheckup" (click)="editHealthCheckupDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editHealthCheckup">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditHealthCheckup()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80D <sup>$</sup></td>
+                            <td class="align-middle">Parents Medical Insurance Premium <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="The National Saving Certificate (NSC) is an investment scheme floated by the Government of India. 
+                                It offers guaranted interest and capital protection. NSC can be bought from most post office in India, and is easily
+                                accessible. Investment upto Rs 1.5 lakh in the scheme qualifies for deducation u/s 80C of the income tax Act. Furthermore, 
+                                the interest earned on the certificates are also added back to the initial investment and qualify for a tax exemption as well"></i></td>
+                            <td class="align-middle">INR 50,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editParentInsurance">Not Declared</span>
+                                <div *ngIf="!editParentInsurance" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editParentInsurance">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editParentInsurance" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editParentInsurance" (click)="editParentInsuranceDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editParentInsurance">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditParentInsurance()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80D <sup>$</sup></td>
+                            <td class="align-middle">Parents Preventive Health Check-up <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Unit Linked Insurance Plan (ULIP) is a combination of insurance and investment. The goal of ULIP 
+                                is to provide wealth creation along with life cover. ULIP provider invests a portion of your investment towards
+                                life insurance and rest into a fund. All ULIPs qualify as life insurance policy and the premium are exempted from
+                                income tax benefit. Deducation is available on ULIPS under section 80C, provided the sum assured is at least 10 times
+                                the annual premium"></i></td>
+                            <td class="align-middle">INR 5,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editParentHealthCheckup">Not Declared</span>
+                                <div *ngIf="!editParentHealthCheckup" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editParentHealthCheckup">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editParentHealthCheckup" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editParentHealthCheckup" (click)="editParentHealthCheckupDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editParentHealthCheckup">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditParentHealthCheckup()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80DD <sup>$</sup></td>
+                            <td class="align-middle">Medical Expenditure for a Handicapped Relative <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 1,25,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editHandicapped">Not Declared</span>
+                                <div *ngIf="!editHandicapped" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editHandicapped">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editHandicapped" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editHandicapped" (click)="editHandicappedDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editHandicapped">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditHandicapped()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80DDB <sup>$</sup></td>
+                            <td class="align-middle">Medical Expenditure on Self or Dependent <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 1,00,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editSelfDependent">Not Declared</span>
+                                <div *ngIf="!editSelfDependent" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editSelfDependent">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editSelfDependent" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editSelfDependent" (click)="editSelfDependentDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editSelfDependent">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditSelfDependent()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80E <sup>$</sup></td>
+                            <td class="align-middle">Repayment of Interest on Higher Education Loan <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">No Limit</td>
+                            <td class="align-middle">
+                                <span *ngIf="editEducationLoan">Not Declared</span>
+                                <div *ngIf="!editEducationLoan" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editEducationLoan">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editEducationLoan" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editEducationLoan" (click)="editEducationLoanDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editEducationLoan">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditEducationLoan()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80EE <sup>$</sup></td>
+                            <td class="align-middle">Home Loan Interest for First Time Home Owners <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 50,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editHomeLoan">Not Declared</span>
+                                <div *ngIf="!editHomeLoan" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editHomeLoan">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editHomeLoan" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editHomeLoan" (click)="editHomeLoanDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editHomeLoan">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditHomeLoan()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80EEA <sup>$</sup></td>
+                            <td class="align-middle">Interest on loan for acquiring residential house property <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 1,50,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editHouseProperty">Not Declared</span>
+                                <div *ngIf="!editHouseProperty" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editHouseProperty">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editHouseProperty" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editHouseProperty" (click)="editHousePropertyDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editHouseProperty">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditHouseProperty()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80EEB <sup>$</sup></td>
+                            <td class="align-middle">Interest on loan for acquiring Electric Vehicle <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 1,50,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editVehicleLoan">Not Declared</span>
+                                <div *ngIf="!editVehicleLoan" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editVehicleLoan">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editVehicleLoan" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editVehicleLoan" (click)="editVehicleLoanDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editVehicleLoan">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditVehicleLoan()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80G <sup>$</sup></td>
+                            <td class="align-middle">Donations towards Social Causes (100% deducation without qualifying limit) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">No Limit</td>
+                            <td class="align-middle">
+                                <span *ngIf="editFullDonationWithoutQualifying">Not Declared</span>
+                                <div *ngIf="!editFullDonationWithoutQualifying" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editFullDonationWithoutQualifying">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editFullDonationWithoutQualifying" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editFullDonationWithoutQualifying" (click)="editFullDonationWithoutQualifyingDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editFullDonationWithoutQualifying">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditFullDonationWithoutQualifying()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80G <sup>$</sup></td>
+                            <td class="align-middle">Donations towards Social Causes (50% deducation without qualifying limit) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">No Limit</td>
+                            <td class="align-middle">
+                                <span *ngIf="editHalfDonationWithoutQualifying">Not Declared</span>
+                                <div *ngIf="!editHalfDonationWithoutQualifying" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editHalfDonationWithoutQualifying">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editHalfDonationWithoutQualifying" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editHalfDonationWithoutQualifying" (click)="editHalfDonationWithoutQualifyingDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editHalfDonationWithoutQualifying">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditHalfDonationWithoutQualifying()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80G <sup>$</sup></td>
+                            <td class="align-middle">Donations towards Social Causes (100% deducation with qualifying limit) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">No Limit</td>
+                            <td class="align-middle">
+                                <span *ngIf="editFullDonationWithQualifying">Not Declared</span>
+                                <div *ngIf="!editFullDonationWithQualifying" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editFullDonationWithQualifying">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editFullDonationWithQualifying" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editFullDonationWithQualifying" (click)="editFullDonationWithQualifyingDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editFullDonationWithQualifying">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditFullDonationWithQualifying()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80G <sup>$</sup></td>
+                            <td class="align-middle">Donations towards Social Causes (50% deducation with qualifying limit) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">No Limit</td>
+                            <td class="align-middle">
+                                <span *ngIf="editHalfDonationWithQualifying">Not Declared</span>
+                                <div *ngIf="!editHalfDonationWithQualifying" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editHalfDonationWithQualifying">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editHalfDonationWithQualifying" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editHalfDonationWithQualifying" (click)="editHalfDonationWithQualifyingDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editHalfDonationWithQualifying">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditHalfDonationWithQualifying()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80GGA <sup>$</sup></td>
+                            <td class="align-middle">Donation for Research or Rural development <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">No Limit</td>
+                            <td class="align-middle">
+                                <span *ngIf="editResearchandRural">Not Declared</span>
+                                <div *ngIf="!editResearchandRural" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editResearchandRural">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editResearchandRural" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editResearchandRural" (click)="editResearchandRuralDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editResearchandRural">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditResearchandRural()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80GGC <sup>$</sup></td>
+                            <td class="align-middle">Donation to Political parties <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">No Limit</td>
+                            <td class="align-middle">
+                                <span *ngIf="editDonationParties">Not Declared</span>
+                                <div *ngIf="!editDonationParties" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editDonationParties">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editDonationParties" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editDonationParties" (click)="editDonationPartiesDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editDonationParties">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditDonationParties()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80QQB <sup>$</sup></td>
+                            <td class="align-middle">Royalty on Book <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 3,00,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editBookRoyalty">Not Declared</span>
+                                <div *ngIf="!editBookRoyalty" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editBookRoyalty">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editBookRoyalty" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editBookRoyalty" (click)="editBookRoyaltyDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editBookRoyalty">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditBookRoyalty()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80RRB <sup>$</sup></td>
+                            <td class="align-middle">Royalty on patent <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 3,00,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editPatentRoyalty">Not Declared</span>
+                                <div *ngIf="!editPatentRoyalty" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editPatentRoyalty">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editPatentRoyalty" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editPatentRoyalty" (click)="editPatentRoyaltyDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editPatentRoyalty">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditPatentRoyalty()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80TTA <sup>$</sup></td>
+                            <td class="align-middle">Savings account interest tax <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 10,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editInterestTax">Not Declared</span>
+                                <div *ngIf="!editInterestTax" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editInterestTax">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editInterestTax" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editInterestTax" (click)="editInterestTaxDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editInterestTax">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditInterestTax()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80TTB <sup>$</sup></td>
+                            <td class="align-middle">Savings account interest tax (senior Citizens) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 50,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editInterestTaxSenior">Not Declared</span>
+                                <div *ngIf="!editInterestTaxSenior" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editInterestTaxSenior">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editInterestTaxSenior" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editInterestTaxSenior" (click)="editInterestTaxSeniorDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editInterestTaxSenior">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditInterestTaxSenior()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">80U <sup>$</sup></td>
+                            <td class="align-middle">Deducation with respect to Person suffering from Physical Disability <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle">INR 1,25,000</td>
+                            <td class="align-middle">
+                                <span *ngIf="editPhysicalDisable">Not Declared</span>
+                                <div *ngIf="!editPhysicalDisable" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editPhysicalDisable">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editPhysicalDisable" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editPhysicalDisable" (click)="editPhysicalDisableDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editPhysicalDisable">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditPhysicalDisable()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer border-top-0">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" (click)="gotoTaxSavingModal()">Next</button>
+        </div>
+        </div>
+    </div>
+</div> 
+<!-----------End----------->
+
+<!--------- Tax Saving Allowances Start ------->
+
+<div class="modal fade" id="TaxSavingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen p-4">
+        <div class="modal-content rounded">
+        <div class="modal-header border-bottom-0">
+            <h5 class="modal-title" id="exampleModalLabel">Tax Saving Allowances</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <p class=" ps-3">Following allowances are exempted from Gross for Income tax calculation only when claim is submitted against allowances.</p>
+        <div class="alert alert-warning mx-4" role="alert">
+            Tax excempted values are based on the amount allocated in your salary structure. Please check income tax calculation to view tax exempted amount.
+        </div>
+        <div class="modal-body">
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th width="6%">SECTION</th>
+                            <th width="25%">DEDUCATION NAME</th>
+                            <th width="10%">MAX LIMIT</th>
+                            <th width="15%">DECLARATION</th>
+                            <th width="15%">PROOF</th>
+                            <th width="19%">STATUS</th>
+                            <th width="10%">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="align-middle">17(2)(Viii) <sup>$</sup></td>
+                            <td class="align-middle">Medical Allowances <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                                Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editMedicalAllowance">INR 15,000</span>
+                                <div *ngIf="!editMedicalAllowance" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editMedicalAllowance">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editMedicalAllowance" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editMedicalAllowance" (click)="editMedicalAllowanceDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editMedicalAllowance">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditMedicalAllowance()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">10(5) <sup>$</sup></td>
+                            <td class="align-middle">Travel Reimbursement(LTA) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Investment in SCSS qualifies for deduction under Section 80C of the income tax Act. Any
+                                individual age 60 and above can invest in SCSS. Early retirees between 55 and 60 years, who either opted
+                                for the voluntary retirement scheme (VRS) or superannuation, can also invest in the scheme, provided the
+                                investment is done within amonth of receiving retirement benefits."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editTravelReimbursement">INR 30,000</span>
+                                <div *ngIf="!editTravelReimbursement" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editTravelReimbursement">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editTravelReimbursement" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editTravelReimbursement" (click)="editTravelReimbursementDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editTravelReimbursement">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditTravelReimbursement()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">10(14)(i) <sup>$</sup></td>
+                            <td class="align-middle">Housing loan (Principal) <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="For Home Loan, u/s 80C, deduction upto Rs 1,50,000 is allowed on Principal repayment, stamp duty &
+                                registration charges, in the year in which the actual principal amount is paid."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editCarRunning">INR 21,600</span>
+                                <div *ngIf="!editCarRunning" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editCarRunning">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editCarRunning" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editCarRunning" (click)="editCarRunningDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editCarRunning">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditCarRunning()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">10(14)(i) <sup>$</sup></td>
+                            <td class="align-middle">Telephone and Internet Allowance <i class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
+                                ngbPopover="Investment in mutual funds for saving purpose is called Equity Linked Saving Schemes (ELSS) which qualifies
+                                for section 80C deducation. Not all mutual fund can provide 80C deduction. Exampkes of ELSS SBI Magnum Tax gain,
+                                HDFC Tax Saver, Fidelity Tax Advantage etc."></i></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <span *ngIf="editInternetAllowance">INR 18,000</span>
+                                <div *ngIf="!editInternetAllowance" class="d-flex align-items-center">
+                                    <span class="declaration-bg text-dark rounded-start">INR</span>
+                                    <input type="text"  class="form-control rounded-0 rounded-end border-0" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="editInternetAllowance">No Proof</span>
+                                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="!editInternetAllowance" (click)="uploadDocument()"><i class="fa fa-paperclip"></i> Upload Document</a>
+                            </td>
+                            <td class="align-middle">
+                                Not Submitted
+                            </td>
+                            <td class="align-middle">
+                                <i class="fa fa-pencil text-muted" placement="top" ngbTooltip="Edit Declaration" *ngIf="editInternetAllowance" (click)="editInternetAllowanceDetail()"></i>
+                                <div class="d-flex align-items-center" *ngIf="!editInternetAllowance">
+                                    <a href="javascript:void(0)" class="text-decoration-none">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3" (click)="cancelEditInternetAllowance()">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer border-top-0">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" (click)="submitDeclaration()">Submit</button>
+        </div>
+        </div>
+    </div>
+</div> 
+
+<!-----------End----------->
+
+<!-- Add Attachment Popup -->
+<div class="modal fade attachment-popup" id="addAttachmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded">
+        <div class="modal-header bg-secondary text-light">
+            <h5 class="modal-title fw-normal" id="exampleModalLabel">Add Attachment</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p class="text-secondary">DECLARATION</p>
+            <p class="text-dark">PDF</p>
+            <div class="text-center rounded py-4 upload-document-container">
+                <input type="file" class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf" (change)="UploadAttachment($event)" multiple id="uploadAttachment">
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="fireFileBrowser()"><i class="fa fa-paperclip pe-2"></i> 
+                    Add Attachment <i class="fa fa-info-circle text-secondary ps-2" placement="top" ngbTooltip="You are allowed to submit only 12 file(s).
+                    Allowed format are .pdf, .jpg, .png, .doc, .txt. The file size should not exceed 2MB."></i></a>
+                <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
+                    File size is greater than 2MB.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer border-top-0">
+            <button type="button" class="btn btn-outline-danger"  data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-outline-primary" [disabled]="isLargeFile" (click)="saveAttachment()">Save</button>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- End -->
