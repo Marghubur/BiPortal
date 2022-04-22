@@ -19,7 +19,7 @@
 
 .declaration-bg {
     background: #d2d4d5;
-    padding: 0.52rem 8px;
+    padding: 0.53rem 8px;
 }
 
 .upload-document-container {
@@ -32,3 +32,88 @@
     z-index: 99999 !important;
     background: #0000008a !important;
 }
+
+/*--------------  Custom table and layout -------------------------*/
+
+.t-table {
+    position: relative;
+  }
+  
+  .t-table .t-head>.tr,
+  .t-body>.tr {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .t-table .td,
+  .th {
+    flex: 1;
+  }
+  
+  .t-table .t-head,
+  .t-body {
+    overflow-y: scroll;
+  }
+  
+  .t-border .td,
+  .th {
+    border-left: 1px solid #d9d9d9;
+  }
+  
+  .t-border .td:first-child,
+  .th:first-child {
+    border-left: none !important;
+    border-right: none !important;
+  }
+  
+  .t-border .td:last-child,
+  .th:last-child {
+    border-right: none !important;
+  }
+  
+  .t-border .tr {
+    border-bottom: 1px solid #d9d9d9;
+  }
+  
+  .t-border {
+    border: 1px solid #d9d9d9;
+  }
+  
+  .t-border>.t-body>.tr:last-child {
+    border-bottom: none !important;
+  }
+  
+  .hide-bar {
+    position: absolute;
+    width: 13px;
+    background: white;
+    right: 0px;
+    height: 3rem;
+    border-bottom: 1px solid #d9d9d9;
+  }
+  
+  .t-body {
+    height: 67vh !important;
+  }
+  
+  .t-foot {
+    border-top: 1px solid #d9d9d9;
+    padding: 1rem;
+  }
+  
+  .t-foot {
+    border-top: 1px solid #d9d9d9;
+    padding: 1rem;
+  }
+  
+  .t-table .th {
+    padding: 0.4rem;
+  }
+  
+  .t-table .td {
+    padding-left: 0.4rem;
+    padding-right: 0.2rem;
+  }
+  .tr {
+      height: 3rem;
+  }

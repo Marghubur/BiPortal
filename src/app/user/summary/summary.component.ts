@@ -64,12 +64,14 @@ export class SummaryComponent implements OnInit {
   FilesCollection: Array<any> = [];
   userDetail: UserDetail = new UserDetail();
   isPPFSubmitted: boolean = false;
+  incomeDeclaration: Array<IncomeDeclaration> = [];
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
               private http: AjaxService,) { }
 
   ngOnInit(): void {
+    this.loadData();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     if(expiredOn === null || expiredOn === "")
@@ -85,6 +87,209 @@ export class SummaryComponent implements OnInit {
     $('#ExceptionsModal').modal('show');
   }
 
+  loadData() {
+    this.incomeDeclaration.push({
+      Section: "80C",
+      Declaration: "EPF (Deducted from salary)",
+      DeductionName: null,
+      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+      is fixed for all investments under section 80C.`,
+      MaxLimit: 12600,
+      Proof: null,
+      Status: 1
+    },
+    {
+      Section: "80C",
+      Declaration: "VPF (Deducted from Salary)",
+      DeductionName: null,
+      DeductionDesc: `Employee's VPF contribution is eligible for deducation under section 80C of income tax Act.
+      This means that your VPF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum 
+      is fixed for all investments under section 80C.`,
+      MaxLimit: 0,
+      Proof: null,
+      Status: 1
+    },
+    {
+      Section: "80C",
+      Declaration: "PPF",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Senior Citizen Saving Scheme",
+      DeductionName: null,
+      DeductionDesc: `Investment in SCSS qualifies for deduction under Section 80C of the income tax Act. Any
+      individual age 60 and above can invest in SCSS. Early retirees between 55 and 60 years, who either opted
+      for the voluntary retirement scheme (VRS) or superannuation, can also invest in the scheme, provided the
+      investment is done within amonth of receiving retirement benefits.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Housing loan (Principal)",
+      DeductionName: null,
+      DeductionDesc: `For Home Loan, u/s 80C, deduction upto Rs 1,50,000 is allowed on Principal repayment, stamp duty &
+      registration charges, in the year in which the actual principal amount is paid.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Mutual Fund",
+      DeductionName: null,
+      DeductionDesc: `Investment in mutual funds for saving purpose is called Equity Linked Saving Schemes (ELSS) which qualifies
+      for section 80C deducation. Not all mutual fund can provide 80C deduction. Exampkes of ELSS SBI Magnum Tax gain,
+      HDFC Tax Saver, Fidelity Tax Advantage etc.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "National Saving Certificate",
+      DeductionName: null,
+      DeductionDesc: `The National Saving Certificate (NSC) is an investment scheme floated by the Government of India. 
+      It offers guaranted interest and capital protection. NSC can be bought from most post office in India, and is easily
+      accessible. Investment upto Rs 1.5 lakh in the scheme qualifies for deducation u/s 80C of the income tax Act. Furthermore, 
+      the interest earned on the certificates are also added back to the initial investment and qualify for a tax exemption as well.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Unit Link Insurance Plan",
+      DeductionName: null,
+      DeductionDesc: `Unit Linked Insurance Plan (ULIP) is a combination of insurance and investment. The goal of ULIP 
+      is to provide wealth creation along with life cover. ULIP provider invests a portion of your investment towards
+      life insurance and rest into a fund. All ULIPs qualify as life insurance policy and the premium are exempted from
+      income tax benefit. Deducation is available on ULIPS under section 80C, provided the sum assured is at least 10 times
+      the annual premium.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Life Insurance Policy",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Education Tuition Fees",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Schedule Bank FD",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Post Office Time Deposit",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Deferred Annuity",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Super Annuity",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "NABARD notifies bond",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Sukanya Samriddhi Yojna",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80C",
+      Declaration: "Other",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80CCC",
+      Declaration: "Mutual Fund Pension",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    },
+    {
+      Section: "80CCD(1)",
+      Declaration: "NPS Employee Contribution",
+      DeductionName: null,
+      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+      MaxLimit: null,
+      Proof: null,
+      Status: 2
+    }
+    );
+  }
   // ------- 1.5 Lac Exemptions Start ------------
 
   editPPFDetail() {
@@ -484,6 +689,7 @@ export class SummaryComponent implements OnInit {
         item.DocumentId = 0;
         //item.FilePath = this.getRelativePath(this.routeParam);
         item.ParentFolder = '';
+        item.Email = this.userDetail.EmailId;
         item.UserId = this.userDetail.UserId;
         item.UserTypeId = this.userDetail.UserTypeId;
         this.FileDocumentList.push(item);
@@ -537,4 +743,14 @@ export class SummaryComponent implements OnInit {
   }
 
 
+}
+
+interface IncomeDeclaration {
+  Section: string;
+  DeductionName: string;
+  DeductionDesc: string;
+  MaxLimit: number;
+  Declaration: string;
+  Proof: any;
+  Status: number;
 }
