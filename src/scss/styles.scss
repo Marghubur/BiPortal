@@ -1116,6 +1116,30 @@ fieldset {
   padding-left: 0.4rem;
   padding-right: 0.2rem;
 }
+
 .tr {
     height: 3rem;
+}
+
+.t-head .th {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.t-head .t-filter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.t-filter a {
+  text-decoration: none;
+  color: cadetblue;
+  font-weight: bold;
+}
+
+.t-filter i {
+  padding-top: 4px;
 }
