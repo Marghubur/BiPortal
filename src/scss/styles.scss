@@ -1090,12 +1090,12 @@ fieldset {
   width: 13px;
   background: white;
   right: 0px;
-  height: 3rem;
+  height: 4.5rem;
   border-bottom: 1px solid #d9d9d9;
 }
 
 .t-body {
-  height: 67vh !important;
+  max-height: 63vh !important;
 }
 
 .t-foot {
@@ -1118,7 +1118,7 @@ fieldset {
 }
 
 .tr {
-    height: 3rem;
+    height: 4.5rem;
 }
 
 .t-head .th {
