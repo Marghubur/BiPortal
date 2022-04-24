@@ -54,7 +54,95 @@
       <div *ngSwitchDefault>
         <ng-container>
           <div class="x_content">
-            <table class="table table-striped table-hover">
+            <div class="t-table t-border col-md-12">
+              <div class="hide-bar"></div>
+              <div class="t-head">
+                <div class="tr">
+                  <div class="th">
+                    <div class="t-filter">
+                      <a href="javascript:void()">#</a>
+                      <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                      <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="th">
+                    <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Name" placeholder="Search by Name">
+                    <div class="t-filter">
+                      <a href="javascript:void()">Full Name</a>
+                      <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                      <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="th">
+                    <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
+                      placeholder="Search by MobileNumber">
+                    <div class="t-filter">
+                      <a href="javascript:void()">Mobile Number</a>
+                      <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                      <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="th">
+                    <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                    (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
+                    <div class="t-filter">
+                      <a href="javascript:void()">Email Id</a>
+                      <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                      <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="th">ACTIONS</div>
+                </div>
+              </div>
+              <div class="t-body">
+                <div class="tr" *ngFor="let user of employeeDetail">
+                  <div class="td align-middle">{{user.EmployeeUid}}</div>
+                  <div class="td align-middle">
+                    <a (click)="EditCurrent(user)">{{user.FirstName}} {{user.LastName}}</a>
+                    <div class="float-end">
+                      <a (click)="editProfile(user)"><span class="badge bg-dark me-3"><i
+                            class="fa fa fa-user-circle-o user-edit-icon"></i></span></a>
+                      <a><span class="badge bg-primary fa fa-building-o"> &nbsp; 5</span></a>
+                      <a class="ms-3" (click)="goToAttendancePage(user)">
+                        <span class="text-sm-left text-muted">Attendance</span>
+                        <span class="ms-2 badge bg-success">
+                          <i class="fa fa-id-badge"></i>
+                        </span>
+                      </a>
+                      <span class="badge bg-danger ms-3">3</span>
+                    </div>
+                  </div>
+                  <div class="td align-middle">{{user.Mobile}}
+                  </div>
+                  <div class="td align-middle">
+                    {{user.Email}}
+                  </div>
+                  <div class="td align-middle">
+                    <div class="d-flex flex-row justify-content-evenly">
+                      <a href="javascript:void(0)">
+                        <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"
+                            (click)="ViewFiles(user)"></i></span>
+                      </a>
+                      <a href="javascript:void(0)">
+                        <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"
+                            (click)="AddEditDocuments(user)"></i></span>
+                      </a>
+                      <a href="javascript:void(0)">
+                        <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
+                            (click)="CreatePopup(user)"></i></span>
+                      </a>
+                      <!-- <a href="javascript:void(0)">
+                          <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
+                              *ngIf="isActiveEmployee == 0" (click)="CreatePopup(user)"></i></span>
+                        </a> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <!-- <table class="table table-striped table-hover">
               <thead>
                 <tr>
                   <th width="1%">#</th>
@@ -123,19 +211,15 @@
                         <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
                             (click)="CreatePopup(user)"></i></span>
                       </a>
-                      <!-- <a href="javascript:void(0)">
-                        <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
-                            *ngIf="isActiveEmployee == 0" (click)="CreatePopup(user)"></i></span>
-                      </a> -->
                     </div>
                   </td>
                 </tr>
               </tbody>
-            </table>
-          </div>
-          <div class="mt-3">
-            <app-pagination [pagination]="employeeData" (onPageChange)="GetFilterResult($event)"></app-pagination>
-          </div>
+            </table> -->
+            </div>
+            <div class="mt-3">
+              <app-pagination [pagination]="employeeData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+            </div>
         </ng-container>
       </div>
     </div>
