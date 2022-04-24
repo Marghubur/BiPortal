@@ -26,6 +26,7 @@ import { CreateResumeComponent } from './create-resume/create-resume.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { RecruiterComponent } from './recruiter/recruiter.component';
 import { LeaveComponent } from './leave/leave.component';
+import { TimesheetComponent } from './timesheet/timesheet.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { LeaveComponent } from './leave/leave.component';
     RecruiterComponent,
     CompaniesComponent,
     LeaveComponent,
-    HomeComponent
+    HomeComponent,
+    TimesheetComponent
   ],
   imports: [
     CommonModule,
