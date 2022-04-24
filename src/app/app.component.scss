@@ -99,3 +99,63 @@ pre {
   height: calc(100vh - 74px) !important;
   overflow: auto;
 }
+
+.custom-toast {
+  position: fixed;
+  border-radius: 4px;
+  font-weight: bold;
+  z-index: 999999;
+  font-size: 0.8rem;
+  top: 2rem;
+  right: 2rem;
+  max-width: 20rem;
+
+  .toast-container {
+    position: relative !important;
+    display: flex;
+    flex-direction: row-reverse;
+    padding-right: 8px;
+  }
+
+  .msg-box {
+    padding: 0.6rem 0.6rem 0.6rem 1rem;
+    margin-right: 6px;
+  }
+
+  .bullet-point {
+    width: 10px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    margin: auto !important;
+    justify-content: center;
+  }
+
+  .inner-circle {
+    width: 8px;
+    height: 8px;
+    background: yellow;
+    border-radius: 50%;
+    transform: translate(10%, 10%);
+  }
+}
+
+.custom-toast:hover {
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.custom-toast i {
+  font-size: 18px;
+  position: relative;
+  top: 3px;
+  left: -10px;
+  color: black !important;
+}
+
+.custom-toast > small {
+  right: 0px;
+  padding-left: 50px;
+  position: relative;
+  top: 2px;
+}
