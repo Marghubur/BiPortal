@@ -657,12 +657,14 @@ fieldset {
 }
 
 
-
-
 /*--------------  Custom table and layout -------------------------*/
 
 .t-table {
   position: relative;
+}
+
+.t-head > .tr:first-child {
+  padding: 1rem 0rem 0.5rem 0;
 }
 
 .t-table .t-head>.tr,
@@ -714,12 +716,12 @@ fieldset {
   width: 13px;
   background: white;
   right: 0px;
-  height: 3rem;
+  height: 4.5rem;
   border-bottom: 1px solid #d9d9d9;
 }
 
 .t-body {
-  height: 67vh !important;
+  max-height: 63vh !important;
 }
 
 .t-foot {
@@ -731,19 +733,6 @@ fieldset {
   border-top: 1px solid #d9d9d9;
   padding: 1rem;
 }
-
-.t-table .th {
-  padding: 0.4rem;
-}
-
-.t-table .td {
-  padding-left: 0.4rem;
-  padding-right: 0.2rem;
-}
-
-// .tr {
-//     height: 3rem;
-// }
 
 .t-head .th {
   display: flex;
@@ -756,6 +745,13 @@ fieldset {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.t-head .t-index {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .t-filter a {
@@ -764,6 +760,68 @@ fieldset {
   font-weight: bold;
 }
 
+.t-index a {
+  text-decoration: none;
+  color: cadetblue;
+  font-weight: bold;
+}
+
 .t-filter i {
   padding-top: 4px;
+}
+
+.t-index i {
+  padding-top: 4px;
+}
+
+.fe-1 {
+  flex: 1 !important;
+}
+
+.fe-2 {
+  flex: 2 !important;
+}
+
+.fe-3 {
+  flex: 3 !important;
+}
+
+.fe-4 {
+  flex: 4 !important;
+}
+
+.fe-5 {
+  flex: 5 !important;
+}
+
+.fe-6 {
+  flex: 6 !important;
+}
+
+.fe-7 {
+  flex: 7 !important;
+}
+
+.fe-8 {
+  flex: 8 !important;
+}
+
+.fe-9 {
+  flex: 9 !important;
+}
+
+.fe-10 {
+  flex: 10 !important;
+}
+
+.fe-0 {
+  flex: 0 1 auto !important;
+}
+
+.fe-index {
+  flex: 0.4 !important;
+}
+
+.t-list .td, .th {
+  border: none !important;
 }
