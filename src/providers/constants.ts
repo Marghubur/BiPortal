@@ -63,7 +63,8 @@ export const Roles = 'admin/roles';
 export const Companies = 'admin/Companies';
 export const CreateResume = 'admin/CreateResume';
 export const Recruiter = 'admin/Recruiter';
-export const Leave = 'admin/Leave'
+export const Leave = 'admin/leave'
+export const Timesheet = 'admin/timesheet'
 
 // ********************** Admin route pages  *******************
 
@@ -75,6 +76,8 @@ export const Summary = "user/summary";
 export const Declaration = "user/declaration";
 export const Salary = "user/salary";
 export const Preferences = "user/preferences";
+export const UserLeave = 'user/leave'
+export const UserTimesheet = 'user/timesheet'
 
 
 

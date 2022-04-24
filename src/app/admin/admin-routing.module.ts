@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Attendance, BillDetail, BuildPdf, Clients, Companies, CreateResume, Dashboard, Documents, DocumentsPage, Employees, Files, Leave, ManageEmployee, Profile, Recent, Recruiter, RegisterClient, Resume, Roles } from 'src/providers/constants';
+import { Attendance, BillDetail, BuildPdf, Clients, Companies, CreateResume, Dashboard, Documents, DocumentsPage, Employees, Files, Leave, ManageEmployee, Profile, Recent, Recruiter, RegisterClient, Resume, Roles, Timesheet } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -21,6 +21,7 @@ import { CompaniesComponent} from './companies/companies.component';
 import { CreateResumeComponent } from './create-resume/create-resume.component';
 import { RecruiterComponent } from './recruiter/recruiter.component';
 import { LeaveComponent } from './leave/leave.component';
+import { TimesheetComponent } from './timesheet/timesheet.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: Companies, component: CompaniesComponent},
   { path: CreateResume, component: CreateResumeComponent},
   { path: Recruiter, component: RecruiterComponent},
+  { path: Timesheet, component: TimesheetComponent},
   { path: Leave, component: LeaveComponent}
 ];
 
