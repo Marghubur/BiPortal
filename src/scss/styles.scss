@@ -1098,6 +1098,10 @@ fieldset {
   max-height: 63vh !important;
 }
 
+.t-body .tr:hover {
+  background-color: #efefef !important;
+}
+
 .t-foot {
   border-top: 1px solid #d9d9d9;
   padding: 1rem;
@@ -1142,4 +1146,13 @@ fieldset {
 
 .t-filter i {
   padding-top: 4px;
+}
+
+
+.fe-1 {
+  flex: 0.1 !important;
+}
+
+.fe-2 {
+  flex: 0.2 !important;
 }

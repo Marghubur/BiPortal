@@ -117,7 +117,7 @@ ul.bar_tabs > li {
 }
 
 a {
-  color: #007bff;
+  //color: #007bff;
   text-decoration: none;
   background-color: transparent;
 }
@@ -207,4 +207,9 @@ ul.bar_tabs > li > a.active {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 12rem !important;
+}
+
+.t-body {
+  max-height: 49vh !important;
+  word-break: break-all;
 }
