@@ -1,0 +1,478 @@
+<div class="main-container">
+  <form autocomplete="off">
+    <ng-container *ngIf="isEmployeesReady">
+      <div class="col-md-12 bg-light mb-3">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link text-dark " aria-current="page" href="javascript:void(0)">ATTENDENCE</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark " href="javascript:void(0)">TIMESHEET</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark nav-active" href="javascript:void(0)">LEAVE</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-12 row m-0 p-0 mb-4">
+        <div class="col-md-4 p-0 m-0">
+          <label class="form-label">Select Employer</label>
+          <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+          </app-iautocomplete>
+        </div>
+        <div class="col-md-8 elem-row justify-content-end">
+          <div class="elem-row-item-base justify-content-end">
+            <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
+              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
+              {{ isLoading ? 'Wait' : 'Present week'}}
+            </a>
+          </div>
+          <div class="elem-row-item-base justify-content-end ps-2">
+            <a href="javascript:void(0)" (click)="getAllPendingAttendance()"
+              class="p-2 p-2 badge bg-success text-light head-badge">
+              <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
+              My pending attendance
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <app-breadcrums></app-breadcrums>
+
+    <ng-container [ngSwitch]="divisionCode">
+      <ng-container *ngSwitchCase="2">
+        <div class="x_panel pt-4 attendance-form">
+          <div class="x_header">
+            <div class="x_header_title row">
+              <div class="text-dark text-dark d-flex flex-column justify-content-center">
+                <h2>Find below pending attendance list: <small>For the present month.</small></h2>
+              </div>
+            </div>
+          </div>
+          <div class="x_content m-4 d-flex flex-column justify-content-between">
+            <div class="d-flex" *ngFor="let d of weekList;let index = index;">
+              <p class="pending-list me-2">{{index + 1.}}</p>
+              <a href="javascript:void(0)" (click)="getPendingWeek(d.days[0].date, d.days[6].date)"
+                class="pending-list">
+                <b>Your pending attendance from:</b>
+                <span>{{d.days[0].date | date}} - {{d.days[6].date | date}}</span>
+              </a>
+            </div>
+
+            <div class="d-flex flex-row justify-content-center mt-5">
+              <p class="text-muted pending-info">{{PendingAttendacneMessage}}</p>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngSwitchDefault>
+        <ng-container *ngIf="isAttendanceDataLoaded">
+          <div class="col-md-12 row mt-4 mb-4 ms-0">
+            <div class="col-md-4 ps-0">
+              <h6>Attendance Stats</h6>
+              <div class="card px-3 py-2">
+                <div class="d-flex justify-content-between">
+                  <h6 class="pt-3 ps-2">
+                    Last Week
+                  </h6>
+                  <div>
+                    <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between pe-2 pb-3 pt-3">
+                  <div class="col-md-4 d-flex align-items-center">
+                    <i class="fa fa-user-circle fa-2x text-success ps-2" aria-hidden="true"></i>
+                    <span class="fw-bold ps-2 last-week-team">Your</span>
+                  </div>
+                  <div class="col-md-4">
+                    <h6 class="last-week-team">AVG HRS / DAY</h6>
+                    <h6 class="pt-2"> 8h 0m</h6>
+                  </div>
+                  <div class="col-md-4">
+                    <h6 class="last-week-team">ON TIME ARRIVAL</h6>
+                    <h6 class=" pt-2">100%</h6>
+                  </div>
+                </div>
+                <div class="border-top d-flex align-items-center pt-3">
+                  <div class="col-md-4 d-flex align-items-center">
+                    <span class="fa-stack fa-lg ps-2 text-dark">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <span class="fw-bold ps-2 last-week-team">My Team</span>
+                  </div>
+                  <div class="col-md-4 pt-2">
+                    <h6>7h 24m</h6>
+                  </div>
+                  <div class="col-md-4 pt-2">
+                    <h6>81%</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h6>Timings</h6>
+              <div class="card px-3 py-2">
+                <div class="d-flex justify-content-between pb-4">
+                  <div class="d-flex pt-3 ps-2">
+                    <div class="text-inisde-circle" [ngClass]="{'active-circle': DayValue == 1}">M</div>
+                    <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 2}">T</div>
+                    <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 3}">W</div>
+                    <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 4}">T</div>
+                    <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 5}">F</div>
+                    <div class="text-inisde-circle ms-3 inactive-circle">S</div>
+                    <div class="text-inisde-circle ms-3 inactive-circle">S</div>
+                  </div>
+                  <div>
+                    <i class="fa fa-search fa-lg pe-3 pt-3" aria-hidden="true"></i>
+                    <i class="fa fa-qrcode fa-lg  pe-2 pt-3" aria-hidden="true"></i>
+                  </div>
+                </div>
+                <ng-container *ngIf="DayValue > 0 &&  DayValue <= 5">
+                  <h6 class="pt-5 ps-2">Today (10:00 AM - 8:00PM)</h6>
+                  <div class="progress ms-2 me-2 mt-1 mb-2">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 11.11%" aria-valuenow="1.11"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <div class="d-flex justify-content-between ps-2 pe-2">
+                    <h6>Duration: 9h 0m</h6>
+                    <h6>Break: 60 Min</h6>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="DayValue == 6 || DayValue ==  0">
+                  <h4 class="text-center pt-4 pb-5">Today is Holiday</h4>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-md-4 pe-0">
+              <h6>Actions</h6>
+              <div class="card px-3 pt-3 pb-5">
+                <div class="pb-4">
+                  <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
+                  <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
+                </div>
+                <h6 class=" text-center pb-5 pt-4">
+                  Work From Home
+                </h6>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <h6 class="mt-3 text-dark">Logs & Requests</h6>
+        <div class="col-md-12 mt-3 bg-light">
+          <nav ngbNav #nav="ngbNav" class="nav-tabs">
+            <ng-container ngbNavItem>
+              <a ngbNavLink class="text-dark">Attendance Log</a>
+              <ng-template ngbNavContent>
+                <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
+                  <span class="ps-4 fw-bold" *ngIf="presentMonth">Last {{daysInMonth}} days</span>
+                  <span class="ps-4 fw-bold" *ngIf="!presentMonth">{{changeMonth}}</span>
+                  <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio20" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary month-btn" for="btnradio20"
+                      (click)="fromPresentDatea()">{{daysInMonth}} Days</label>
+                    <ng-container *ngFor="let month of monthName; let i = index">
+                      <input type="radio" class="btn-check" name="btnradio" id="btnradio{{i}}" autocomplete="off">
+                      <label class="btn btn-outline-primary month-btn" for="btnradio{{i}}"
+                        (click)="getAllDays(month, i)">{{month}}</label>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="x_panel">
+                  <table class="table table-hover table-striped">
+                    <thead>
+                      <tr>
+                        <th class="custom-th">DATE</th>
+                        <th class="custom-th">ATTENDANCE VISUAL</th>
+                        <th class="custom-th">EFFECTIVE HOURS</th>
+                        <th class="custom-th">GROSS HOURS</th>
+                        <th class="custom-th">ARRIVAL</th>
+                        <th class="custom-th">LOG</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of allDays; let index = index">
+                        <td class="align-middle">{{item | date: 'MMM d, EEE'}} <span
+                            class="badge bg-success ms-2">WFH</span> <span class="badge bg-primary ms-2">LEAVE</span>
+                          <span class="badge bg-warning ms-2">W-OFF</span> <span
+                            class="badge bg-danger ms-2">HLDY</span>
+                        </td>
+                        <td class="align-middle">
+                          <p class="pt-3">
+                            <ngb-progressbar type="info" [value]="100" style="width: 40%;"></ngb-progressbar>
+                          </p>
+                        </td>
+                        <td class="align-middle"><i class="fa fa-circle pe-3 text-info"></i> 9h 0m</td>
+                        <td class="align-middle">9h 0m</td>
+                        <td class="align-middle"><i class="fa fa-check pe-2 text-success"></i> On Time</td>
+                        <td class="align-middle">
+                          <div class="d-flex align-items-center">
+                            <div class="btn-group dropstart">
+                              <button class="btn btn-sm" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" placement="top" ngbTooltip="Absent" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="javascript:void(0)"
+                                    (click)="selectOption(index)">Apply
+                                    WFH Request</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)"
+                                    (click)="selectOption(index)">Apply
+                                    Leave</a></li>
+                              </ul>
+                            </div>
+                            <div class="circle" placement="top" ngbTooltip="Present" aria-expanded="false">
+                              <div class="checkmark">
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-template>
+            </ng-container>
+            <ng-container ngbNavItem>
+              <a ngbNavLink class="text-dark">Shift Schedule</a>
+              <ng-template ngbNavContent>
+                <div>
+                  <iframe
+                    src="https://calendar.google.com/calendar/embed?src=istiyak.bottomhalf%40gmail.com&ctz=Asia%2FKolkata"
+                    style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+                </div>
+              </ng-template>
+            </ng-container>
+            <ng-container ngbNavItem>
+              <a ngbNavLink class="text-dark">Attendence Request</a>
+              <ng-template ngbNavContent>
+                <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
+                  <span class="ps-4">Work From Home / On Duty Request</span>
+                  <div>
+                    <span class="pe-3">19 March 2022 - 02 May 2022</span>
+                    <div class="btn-group dropstart me-4">
+                      <button class="btn btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Last 7
+                            days</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Last 14
+                            days</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Last 30
+                            days</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Custom
+                            Range</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="x_panel">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th class="custom-th border-end" width="15%">DATE</th>
+                        <th class="custom-th border-end" width="10%">REQUEST TYPE</th>
+                        <th class="custom-th border-end" width="10%">REQUEST ON</th>
+                        <th class="custom-th border-end" width="25%">NOTE</th>
+                        <th class="custom-th border-end" width="10%">STATUS</th>
+                        <th class="custom-th border-end" width="15%">ACTION TAKEN BY</th>
+                        <th class="custom-th" width="10%">ACTIONS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="align-middle border-end border-bottom">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <p>Apr 15, 2022</p>
+                            <div class="d-flex align-items-center flex-column">
+                              <i class="fa fa-home fa-lg"></i>
+                              <p>1 Day</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          Work From Home
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          Apr 17, 2022
+                          <p><small>by MD Istayaque</small></p>
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          covid
+                        </td>
+                        <td class="align-middle border-end border-bottom">Approved</td>
+                        <td class="align-middle border-end border-bottom">
+                          <span>Ammanna Komp</span>
+                          <p><small>on 18-Apr-2022</small></p>
+                        </td>
+                        <td class="align-middle border-bottom">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <i class="fa fa-commenting pe-2" aria-hidden="true"></i>
+                            <div class="btn-group dropstart me-4">
+                              <button class="btn btn-sm" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="javascript:void(0)"
+                                    (click)="selectOption(index)">View
+                                    Request</a></li>
+                              </ul>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-template>
+            </ng-container>
+          </nav>
+
+          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+
+        <ng-container [ngSwitch]="isFormReady">
+          <div *ngSwitchCase="true">
+            <div [formGroup]="attendenceForm" class="x_panel pt-4 attendance-form">
+              <div class="d-flex flex-row justify-content-between">
+                <div class="d-flex">
+                  <div class="text-dark text-dark d-flex flex-column justify-content-center">
+                    <div>
+                      <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
+                      <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
+                    </div>
+                  </div>
+                  <div class="ms-4 d-flex">
+                    <div class="p-0">
+                      <form class="form-inline">
+                        <div class="form-group">
+                          <div class="input-group">
+                            <input class="form-control form-control-sm border" placeholder="yyyy-mm-dd"
+                              (click)="from.toggle()" (dateSelect)="fromDateSelection($event)" name="fromModel"
+                              [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
+                            <div class="input-group-append">
+                              <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()"
+                                type="button"></button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="ms-2">
+                      <button href="javascript:void(0)" class="btn btn-sm btn-outline-dark" [disabled]="!fromDate"
+                        (click)="prevWeek()">
+                        <i class="fa fa-angle-double-left pe-2"></i>Prev week
+                      </button>
+                    </div>
+                    <div class="ms-2 me-2">
+                      <button href="javascript:void(0)" class="btn btn-sm btn-success" [disabled]="!fromDate"
+                        (click)="nextWeek()">
+                        Next week<i class="fa fa-angle-double-right ps-2"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-end">
+                  <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                    {{ isLoading ? 'Saving' : 'Submit' }}
+                  </button>
+                </div>
+              </div>
+              <div class="x_content">
+                <table class="table-middle table table-hover">
+                  <thead>
+                    <tr>
+                      <th class="">Mon</th>
+                      <th class="">Tue</th>
+                      <th class="">Wed</th>
+                      <th class="">Thu</th>
+                      <th class="">Fri</th>
+                      <th class="">Sat</th>
+                      <th class="">Sun</th>
+                      <th class="text-center">Billing</th>
+                      <th class="text-center">Final</th>
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="attendanceArray">
+                    <tr>
+                      <ng-container *ngFor="let item of attendenceForm.get('attendanceArray').controls;let i = index;">
+                        <ng-container [formGroupName]="i">
+                          <td>
+                            <div class="center-badge d-flex justify-content-start">
+                              <ng-container [ngSwitch]="item.get('AttendenceStatus').value">
+                                <span class="s" *ngSwitchCase="8">
+                                  <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
+                                </span>
+                                <span class="" *ngSwitchDefault>
+                                  <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
+                                </span>
+                              </ng-container>
+
+                              <input type="number" class="ms-1 text-start" placeholder="hours" min="0" max="23"
+                                [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
+                                formControlName="UserHours"
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                              <span>&nbsp;:</span>
+                              <input type="number" class="text-end" placeholder="minutes" min="0" max="59"
+                                (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+
+                              <div ngbDropdown class="d-none dropright">
+                                <input type="text" class="form-control input-overflow" formControlName="UserComments"
+                                  placeholder="Comments" (focus)="takeComments($event)">
+                                <div class="p-0 position-absolute d-none textarea-box">
+                                  <textarea class="form-control" (blur)="captureComments($event)"
+                                    placeholder="enter your comments" formControlName="UserComments">
+                                  </textarea>
+                                </div>
+                              </div>
+                            </div>
+                            <small class="d-block text-muted">
+                              {{item.get('AttendanceDay').value | date}}
+                            </small>
+                          </td>
+                        </ng-container>
+                      </ng-container>
+                      <td>
+                        <div class="center-badge d-flex justify-content-center">
+                          08:00
+                        </div>
+                      </td>
+                      <td>
+                        <div class="center-badge d-flex justify-content-center">{{totalHrs}} : {{totalMins}}</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div *ngSwitchDefault class="">
+            <div class="x_panel v-center">
+              <div class="x_content">
+                <p *ngIf="NoClient" class="h3 text-muted text-center">
+                  Uhh!!! No client allocated on your name. Please contact your maanager.
+                </p>
+                <p *ngIf="!NoClient" class="h3 text-muted text-center">
+                  Please select week date to get attendance.
+                </p>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+  </form>
+</div>
