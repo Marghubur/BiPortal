@@ -89,10 +89,10 @@
   text-decoration: underline;
 }
 
-.x_content,
-.x_panel {
-  min-height: 60vh !important;
-}
+// .x_content,
+// .x_panel {
+//   max-height: 65vh !important;
+// }
 
 .col-title {
   margin-top: 1rem;
@@ -184,4 +184,8 @@ tbody.scrollContent tr.alternateRow td {
 
 .user-edit-icon {
   font-size: 13px !important;
+}
+
+.t-body {
+  max-height: 49vh !important;
 }
