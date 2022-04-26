@@ -20,16 +20,30 @@ table {
 }
 
 .upload-img {
-  width: 60px;
+  background-color: #fff;
+    height: 100%;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    -webkit-transition: opacity 200ms ease-in-out;
+    transition: opacity 200ms ease-in-out;
+    width: 100%;
 }
 
 .file-name {
-  width: 50px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 7rem;
+  width: 100%;
+  padding: 1rem 1.2rem;
+  position: absolute;
+  bottom: 0px;
+  background: white;
+  z-index: 999;
 }
+
 .card-cont {
   width: 8rem;
 }
@@ -38,9 +52,10 @@ table {
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   margin: 10px;
-  padding: 26px;
+  padding: 0px;
   text-align: center;
-  box-shadow: 2px 3px 8px -3px #444;
+  width: 15rem;
+  height: 16rem;
 }
 
 .item-row {
@@ -131,4 +146,13 @@ table {
   color: #222;
   font-weight: 700;
   padding-right: 4px;
+}
+
+.sh-icon {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  z-index: 9999;
+  width: 2rem;
+  height: 2rem;
 }
