@@ -194,3 +194,9 @@ tbody.scrollContent tr.alternateRow td {
   padding-left: .6rem;
   padding-right: .6rem;
 }
+
+.t-table .t-head,
+.t-body {
+  overflow-y: auto;
+}
+
