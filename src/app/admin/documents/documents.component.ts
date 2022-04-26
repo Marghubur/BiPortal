@@ -247,7 +247,7 @@ export class documentsComponent implements OnInit, OnDestroy {
           case PImage:
           case JImage:
           case AImage:
-            item["LocalImgPath"] = Images;
+            item["LocalImgPath"] = `${this.baseUrl}/${item.FilePath}/${item.FileName}`;
             break;
           default:
             item.IsFolderType = true;
