@@ -737,7 +737,7 @@ fieldset {
 .t-head .th {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   cursor: pointer;
 }
 
