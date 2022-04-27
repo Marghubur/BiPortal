@@ -716,7 +716,7 @@ fieldset {
   width: 13px;
   background: white;
   right: 0px;
-  height: 4.5rem;
+  height: 5.9rem;
   border-bottom: 1px solid #d9d9d9;
 }
 
@@ -737,7 +737,7 @@ fieldset {
 .t-head .th {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   cursor: pointer;
 }
 
@@ -824,4 +824,8 @@ fieldset {
 
 .t-list .td, .th {
   border: none !important;
+}
+
+.t-body > .tr:hover {
+  background-color: #efefef !important;
 }

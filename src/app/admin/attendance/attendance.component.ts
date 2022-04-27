@@ -42,6 +42,7 @@ export class AttendanceComponent implements OnInit {
   BillingHrs: number = 0;
   clientId: number = 0;
   clientDetail: autoCompleteModal = null;
+  employeesList: autoCompleteModal = new autoCompleteModal();
   client: any = null;
   isLoading: boolean = false;
   billingHrs: string = '';
@@ -55,6 +56,11 @@ export class AttendanceComponent implements OnInit {
   allDays: Array<any> = [];
   changeMonth: string = '';
   presentMonth: boolean = true;
+  EmployeeUid: number = 0;
+  cachedData: any = null;
+  isRedirected: boolean = false;
+
+
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
@@ -91,6 +97,11 @@ export class AttendanceComponent implements OnInit {
     this.daysInMonth = new Date(year, month + 1, 0).getDate();
     this.clientDetail = {
       data: [],
+      placeholder: "Select Organization"
+    }
+
+    this.employeesList = {
+      data: [],
       placeholder: "Select Employee"
     }
     this.isFormReady = false;
@@ -101,34 +112,31 @@ export class AttendanceComponent implements OnInit {
     }, 1000);
 
     this.DayValue = this.time.getDay();
-    let cachedData = this.nav.getValue();
-    if(cachedData) {
-      this.employeeId = cachedData.EmployeeUid;
-      this.clientId = cachedData.ClientUid;
-      this.userName = cachedData.FirstName + " " + cachedData.LastName;
-      this.isEmployeesReady = true;
+    this.cachedData = this.nav.getValue();
+    if(this.cachedData) {
+      this.isRedirected = true;
+      this.employeeId = this.cachedData.EmployeeUid;
+      this.clientId = this.cachedData.ClientUid;
+      this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.loadMappedClients();
     } else {
-      let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
+      this.isRedirected = false;
       this.userDetail = this.user.getInstance() as UserDetail;
-      if(expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-      else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-      if(Master !== null && Master !== "") {
-        this.userDetail = Master["UserDetail"];
-        this.employeeId = this.userDetail.UserId;
-        this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
-        //$('#loader').modal('show');
-        this.loadMappedClients();
-        setTimeout(() => {
-        }, 900);
-
-      } else {
-        Toast("Invalid user. Please login again.")
+      if(this.userDetail == null) {
+        let Master = this.local.get(null);
+        if(Master !== null && Master !== "") {
+          this.userDetail = Master["UserDetail"];
+        } else {
+          Toast("Invalid user. Please login again.");
+          return;
+        }
       }
+
+      this.employeeId = this.userDetail.UserId;
+      this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
+      this.loadMappedClients();
     }
+
     let i = 0;
     while( i < 6) {
       var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
@@ -148,23 +156,41 @@ export class AttendanceComponent implements OnInit {
   loadMappedClients() {
     this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        let mappedClient = response.ResponseBody.AllocatedClients;
-        if(mappedClient != null && mappedClient.length > 0) {
-          let i = 0;
-          while(i < mappedClient.length) {
-            this.clientDetail.data.push({
-              text: mappedClient[i].ClientName,
-              value: mappedClient[i].ClientUid,
-            });
-            i++;
+        if(response.ResponseBody.AllocatedClients && response.ResponseBody.EmployeesList) {
+          let mappedClient = response.ResponseBody.AllocatedClients;
+          if(mappedClient != null && mappedClient.length > 0) {
+            let i = 0;
+            while(i < mappedClient.length) {
+              this.clientDetail.data.push({
+                text: mappedClient[i].ClientName,
+                value: mappedClient[i].ClientUid,
+              });
+              i++;
+            }
+  
+            if(mappedClient.length == 1) {
+              this.clientId = mappedClient[0].ClientUid;
+            }
+            Toast("Client loaded successfully.");
           }
 
-          if(mappedClient.length == 1) {
-            this.clientId = mappedClient[0].ClientUid;
+          if(!this.isRedirected) {
+            this.employeesList.data = [];
+            this.employeesList.placeholder = "Employee";
+            let employees = response.ResponseBody.EmployeesList;
+            if(employees) {
+              let i = 0;
+              while(i < employees.length) {
+                this.employeesList.data.push({
+                  text: `${employees[i].FirstName} ${employees[i].LastName}`,
+                  value: employees[i].EmployeeUid
+                });
+                i++;
+              }
+            }
           }
-          Toast("Client loaded successfully.");
-        } else {
-          ErrorToast("Unable to get client detail. Please contact admin.");
+        }  else {
+          ErrorToast("Unable to load data. Please contact admin.");
         }
 
         this.isEmployeesReady = true;
