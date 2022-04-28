@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, UserType } from 'src/providers/constants';
+import { AccessTokenExpiredOn, Attendance, Leave, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -55,6 +55,8 @@ export class TimesheetComponent implements OnInit {
   allDays: Array<any> = [];
   changeMonth: string = '';
   presentMonth: boolean = true;
+  cachedData: any = null;
+
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
@@ -101,11 +103,11 @@ export class TimesheetComponent implements OnInit {
     }, 1000);
 
     this.DayValue = this.time.getDay();
-    let cachedData = this.nav.getValue();
-    if(cachedData) {
-      this.employeeId = cachedData.EmployeeUid;
-      this.clientId = cachedData.ClientUid;
-      this.userName = cachedData.FirstName + " " + cachedData.LastName;
+    this.cachedData = this.nav.getValue();
+    if(this.cachedData) {
+      this.employeeId = this.cachedData.EmployeeUid;
+      this.clientId = this.cachedData.ClientUid;
+      this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.isEmployeesReady = true;
       this.loadMappedClients();
     } else {
@@ -727,5 +729,18 @@ export class TimesheetComponent implements OnInit {
       i++;
     }
     if (this.weekList.length > 0) this.divisionCode = 2;
+  }
+
+  activateMe(elemId: string) {
+    switch(elemId) {
+      case "attendance-tab":
+        this.nav.navigate(Attendance, this.cachedData);
+      break;
+      case "timesheet-tab":
+        break;
+      case "leave-tab":
+        this.nav.navigate(Leave, this.cachedData);
+      break;
+    }
   }
 }
