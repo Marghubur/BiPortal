@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
+import { Attendance, Timesheet } from 'src/providers/constants';
+import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
   selector: 'app-leave',
@@ -7,10 +9,18 @@ import { Chart } from 'chart.js';
   styleUrls: ['./leave.component.scss']
 })
 export class LeaveComponent implements OnInit {
+  cachedData: any = null;
 
-  constructor() { }
+
+  constructor(private nav: iNavigation) { }
 
   ngOnInit(): void {
+    this.cachedData = this.nav.getValue();
+    if(this.cachedData) {
+
+    } else {
+      
+    }
     this.LeaveReportChart();
     this.LoadDoughnutchart();
     this.MonthlyStatusChart();
@@ -299,4 +309,16 @@ export class LeaveComponent implements OnInit {
     });
   }
 
+  activateMe(elemId: string) {
+    switch(elemId) {
+      case "attendance-tab":
+        this.nav.navigate(Attendance, this.cachedData);
+      break;
+      case "timesheet-tab":
+        this.nav.navigate(Timesheet, this.cachedData);
+      break;
+      case "leave-tab":
+      break;
+    }
+  }
 }

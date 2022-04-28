@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, UserType } from 'src/providers/constants';
+import { AccessTokenExpiredOn, Leave, Timesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -59,6 +59,8 @@ export class AttendanceComponent implements OnInit {
   EmployeeUid: number = 0;
   cachedData: any = null;
   isRedirected: boolean = false;
+  currentEmployee: any = null;
+  applicationData: any = [];
 
 
   constructor(private fb: FormBuilder,
@@ -156,28 +158,13 @@ export class AttendanceComponent implements OnInit {
   loadMappedClients() {
     this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        if(response.ResponseBody.AllocatedClients && response.ResponseBody.EmployeesList) {
-          let mappedClient = response.ResponseBody.AllocatedClients;
-          if(mappedClient != null && mappedClient.length > 0) {
-            let i = 0;
-            while(i < mappedClient.length) {
-              this.clientDetail.data.push({
-                text: mappedClient[i].ClientName,
-                value: mappedClient[i].ClientUid,
-              });
-              i++;
-            }
-  
-            if(mappedClient.length == 1) {
-              this.clientId = mappedClient[0].ClientUid;
-            }
-            Toast("Client loaded successfully.");
-          }
-
+        this.applicationData = response.ResponseBody;
+        if(this.applicationData.AllocatedClients && this.applicationData.EmployeesList) {
+          
           if(!this.isRedirected) {
             this.employeesList.data = [];
             this.employeesList.placeholder = "Employee";
-            let employees = response.ResponseBody.EmployeesList;
+            let employees = this.applicationData.EmployeesList;
             if(employees) {
               let i = 0;
               while(i < employees.length) {
@@ -187,6 +174,23 @@ export class AttendanceComponent implements OnInit {
                 });
                 i++;
               }
+            }
+          } else {
+            let mappedClient = this.applicationData.AllocatedClients;
+            if(mappedClient != null && mappedClient.length > 0) {
+              let i = 0;
+              while(i < mappedClient.length) {
+                this.clientDetail.data.push({
+                  text: mappedClient[i].ClientName,
+                  value: mappedClient[i].ClientUid,
+                });
+                i++;
+              }
+    
+              if(mappedClient.length == 1) {
+                this.clientId = mappedClient[0].ClientUid;
+              }
+              Toast("Client loaded successfully.");
             }
           }
         }  else {
@@ -753,5 +757,44 @@ export class AttendanceComponent implements OnInit {
       i++;
     }
     if (this.weekList.length > 0) this.divisionCode = 2;
+  }
+
+  activateMe(elemId: string) {
+    switch(elemId) {
+      case "attendance-tab":
+      break;
+      case "timesheet-tab":
+        this.nav.navigate(Timesheet, this.cachedData);
+      break;
+      case "leave-tab":
+        this.nav.navigate(Leave, this.cachedData);
+      break;
+    }
+  }
+
+  findEmployee(e: any) {
+    this.findEmployeeById(e);
+  }
+
+  findEmployeeById(employeeId: any) {
+    if (employeeId) {
+      this.currentEmployee = this.applicationData.EmployeesList.find(x => x.EmployeeUid === parseInt(employeeId));
+      if (this.currentEmployee) {
+        this.clientDetail = {
+          data: [],
+          placeholder: "Select Organization"
+        };
+
+        let assignedClients = this.applicationData.Clients.filter(x => x.EmployeeUid == this.currentEmployee.EmployeeUid);
+        let i = 0;
+        while(i < assignedClients.length) {
+          this.clientDetail.data.push({
+            text: assignedClients[i].ClientName,
+            value: assignedClients[i].ClientUid,
+          });
+          i++;
+        }   
+      }
+    }
   }
 }
