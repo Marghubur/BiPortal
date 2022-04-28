@@ -53,66 +53,76 @@
         <div *ngSwitchDefault>
           <ng-container>
             <div class="x_content">
-              <div class="t-table t-border col-md-12">
+              <div class="t-table t-list t-border col-md-12">
                 <div class="hide-bar"></div>
                 <div class="t-head">
                   <div class="tr">
-                    <div class="th">
-                      <div class="t-filter">
-                        <a href="javascript:void()">#</a>
+                    <div class="th fe-index">
+                      <div class="t-filter t-index">
+                        <a href="javascript:void()" class="pe-2">#</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
                       </div>
                     </div>
-                    <div class="th">
-                      <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                        (keyup.enter)="filterRecords()" [(ngModel)]="clientDetails.ClientName"
-                        placeholder="Search by Name">
-                      <div class="t-filter">
-                        <a href="javascript:void()">Organization Name</a>
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                    <div class="th fe-3">
+                      <div class="cell-wrapper">
+                        <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                          (keyup.enter)="filterRecords()" [(ngModel)]="clientDetails.ClientName"
+                          placeholder="Search by Name">
+                        <div class="t-filter">
+                          <a href="javascript:void()">Organization Name</a>
+                          <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        </div>
                       </div>
                     </div>
-                    <div class="th">
-                      <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.PrimaryContactNo"
-                        placeholder="Search by Contact no">
-                      <div class="t-filter">
-                        <a href="javascript:void()">Primary Contact No.#</a>
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                    <div class="th fe-2">
+                      <div class="cell-wrapper">
+                        <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
+                          (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.PrimaryContactNo"
+                          placeholder="Search by Contact no">
+                        <div class="t-filter">
+                          <a href="javascript:void()">Primary Contact No.#</a>
+                          <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        </div>
                       </div>
                     </div>
-                    <div class="th">
-                      <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.Email" placeholder="Search by Email">
-                      <div class="t-filter">
-                        <a href="javascript:void()">Email</a>
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                    <div class="th fe-2">
+                      <div class="cell-wrapper">
+                        <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
+                          (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.Email" placeholder="Search by Email">
+                        <div class="t-filter">
+                          <a href="javascript:void()">Email</a>
+                          <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        </div>
                       </div>
                     </div>
-                    <div class="th">
-                      <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.City" placeholder="Search by City">
-                      <div class="t-filter">
-                        <a href="javascript:void()">City</a>
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                    <div class="th fe-1">
+                      <div class="cell-wrapper">
+                        <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
+                          (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.City" placeholder="Search by City">
+                        <div class="t-filter">
+                          <a href="javascript:void()">City</a>
+                          <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        </div>
                       </div>
                     </div>
-                    <div class="th">
-                      <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.FirstAddress"
-                        placeholder="Search by First Address">
-                      <div class="t-filter">
-                        <a href="javascript:void()">First Address</a>
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                    <div class="th fe-2">
+                      <div class="cell-wrapper">
+                        <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
+                          (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.FirstAddress"
+                          placeholder="Search by First Address">
+                        <div class="t-filter">
+                          <a href="javascript:void()">First Address</a>
+                          <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        </div>
                       </div>
                     </div>
-                    <div class="th">
+                    <div class="th fe-1">
                       <div class="t-filter justify-content-center">
                         <a href="javascript:void(0)">ACTIONS</a>
                       </div>
@@ -120,33 +130,43 @@
                   </div>
                 </div>
                 <div class="t-body">
-                  <div class="tr" *ngFor="let clients of clients">
-                    <div class="td align-middle">{{clients.Index}}</div>
-                    <div class="td align-middle">
-                      <a href="javascript:void(0)" (click)="EditCurrent(clients)" class="client-name-link">
-                        {{clients.ClientName}}
-                      </a>
-                      <div class="float-end">
-                        <a href="javascript:void(0)" (click)="viewClientFile(clients)">
-                          <span class="ms-2 badge bg-success">
-                            <i class="fa fa-building-o zoom-2"></i>
-                          </span>
+                  <div class="tr py-2" *ngFor="let clients of clients">
+                    <div class="td align-middle text-center fe-index">{{clients.Index}}</div>
+                    <div class="td align-middle fe-3">
+                      <div class="cell-wrapper">
+                        <a href="javascript:void(0)" (click)="EditCurrent(clients)" class="client-name-link">
+                          {{clients.ClientName}}
                         </a>
+                        <div class="float-end">
+                          <a href="javascript:void(0)" (click)="viewClientFile(clients)">
+                            <span class="ms-2 badge bg-success">
+                              <i class="fa fa-building-o zoom-2"></i>
+                            </span>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                    <div class="td align-middle">
-                      {{clients.PrimaryPhoneNo}}
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{clients.PrimaryPhoneNo}}
+                      </div>
                     </div>
-                    <div class="td align-middle">
-                      {{clients.Email}}
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{clients.Email}}
+                      </div>
                     </div>
-                    <div class="td align-middle">
-                      {{clients.City}}
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{clients.City}}
+                      </div>
                     </div>
-                    <div class="td align-middle">
-                      {{clients.FirstAddress}}
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{clients.FirstAddress}}
+                      </div>
                     </div>
-                    <div class="td align-middle">
+                    <div class="td align-middle fe-1">
                       <div class=" d-flex flex-row justify-content-evenly">
                         <a href="javascript:void(0)">
                           <span class="badge bg-success"><i class="fa fa-pencil-square-o" aria-hidden="true"
