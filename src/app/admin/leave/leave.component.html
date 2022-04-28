@@ -1,4 +1,18 @@
-<div class="col-md-12 col-sm-12 mt-5 main-container">
+<div class="col-md-12 col-sm-12 main-container">
+  <div class="col-md-12 bg-light mb-3">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page" href="javascript:void(0)">ATTENDENCE</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')" href="javascript:void(0)">TIMESHEET</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark nav-active" id="leave-tab" (click)="activateMe('leave-tab')" href="javascript:void(0)">LEAVE</a>
+      </li>
+    </ul>
+  </div>
+
   <div class="x_panel">
     <div class="x_header">
       <h2>Pending Leave requests</h2>
