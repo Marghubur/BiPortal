@@ -32,3 +32,12 @@
   padding-left: .6rem !important;
   padding-right: .6rem !important;
 }
+
+.hide-bar {
+  width: 17px !important;
+  height: 3.9rem !important;
+}
+
+.t-table .t-head, .t-body {
+  overflow-y: auto;
+}
