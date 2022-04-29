@@ -68,9 +68,6 @@ export class DeclarationComponent implements OnInit {
   exemptions: Array<IncomeDeclaration> = [];
   otherExemptions: Array<IncomeDeclaration> = [];
   taxSavingAllowance: Array<IncomeDeclaration> = [];
-  exemptionModal: boolean = true;
-  otherExemptionModal: boolean = false;
-  taxSavingModal: boolean = false;
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -1039,17 +1036,11 @@ export class DeclarationComponent implements OnInit {
 
   nextDeclaration(value: string) {
     if (value == 'otherExemptions') {
-      this.exemptionModal = false;
-      this.otherExemptionModal = true;
-      this.taxSavingModal = false;
+      this.active = 2;
     } else if (value == 'exemptions') {
-      this.exemptionModal = true;
-      this.otherExemptionModal = false;
-      this.taxSavingModal = false;
+      this.active = 1;
     } else {
-      this.exemptionModal = false;
-      this.otherExemptionModal = false;
-      this.taxSavingModal = true;
+      this.active = 3;
     }
   }
 }
