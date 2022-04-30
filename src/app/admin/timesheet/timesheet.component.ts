@@ -56,6 +56,8 @@ export class TimesheetComponent implements OnInit {
   changeMonth: string = '';
   presentMonth: boolean = true;
   cachedData: any = null;
+  commentOn: any = null;
+  commentValue: string = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -634,6 +636,30 @@ export class TimesheetComponent implements OnInit {
 
   selectOption(index: any) {
 
+  }
+
+  commentPopUp(e: any) {
+    this.commentOn = e;
+    this.commentValue = '';
+    $('#commentModal').modal('show');
+  }
+
+  addComment() {
+    let clientTimeSheet = [];
+    clientTimeSheet.push({
+      ClientId : this.clientId,
+      Comments : this.commentValue
+    })
+    let commment = {
+      EmployeeUid: this.employeeId,
+      UserTypeId: UserType.Employee,
+      AttendanceDay: this.commentOn,
+      ClientTimeSheet : clientTimeSheet
+    }
+    this.http.post('Attendance/AddComment', commment).then((response: ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("submitted");
+    })
   }
 
   buildPendingAttendanceModal(res: Array<any>) {
