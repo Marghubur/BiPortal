@@ -220,7 +220,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                               <li><a class="dropdown-item" href="javascript:void(0)"
-                                  (click)="selectOption(index)">Apply
+                                  (click)="commentPopUp(item)">Apply
                                   WFH Request</a></li>
                               <li><a class="dropdown-item" href="javascript:void(0)"
                                   (click)="selectOption(index)">Apply
@@ -340,7 +340,28 @@
 
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
       </div>
-<!-- 
+
+<!-- Comment Modal Start-->
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="exampleModalLabel">Comment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" [(ngModel)]="commentValue"></textarea>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addComment()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+<!--
       <ng-container [ngSwitch]="isFormReady">
         <div *ngSwitchCase="true">
           <div [formGroup]="attendenceForm" class="x_panel pt-4 attendance-form">
