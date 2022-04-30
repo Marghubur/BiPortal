@@ -56,7 +56,6 @@ export class AttendanceComponent implements OnInit {
   allDays: Array<any> = [];
   changeMonth: string = '';
   presentMonth: boolean = true;
-  EmployeeUid: number = 0;
   cachedData: any = null;
   isRedirected: boolean = false;
   currentEmployee: any = null;
@@ -133,10 +132,10 @@ export class AttendanceComponent implements OnInit {
           return;
         }
       }
-
-      this.employeeId = this.userDetail.UserId;
-      this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
-      this.loadMappedClients();
+      
+      this.employeeId = 0;
+      this.userName = "";
+      this.loadData();
     }
 
     let i = 0;
@@ -153,6 +152,29 @@ export class AttendanceComponent implements OnInit {
     }
 
     this.fromPresentDatea();
+  }
+
+  loadData() {
+    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.applicationData = response.ResponseBody;
+        this.employeesList.data = [];
+        this.employeesList.placeholder = "Employee";
+        let employees = this.applicationData.Employees;
+        if(employees) {
+          let i = 0;
+          while(i < employees.length) {
+            this.employeesList.data.push({
+              text: `${employees[i].FirstName} ${employees[i].LastName}`,
+              value: employees[i].EmployeeUid
+            });
+            i++;
+          }
+        }
+
+        this.isEmployeesReady = true;
+      }
+    });
   }
 
   loadMappedClients() {
@@ -453,6 +475,13 @@ export class AttendanceComponent implements OnInit {
       this.isLoading = false;
     }).catch(err => {
       this.isLoading = false;
+      let currentDate = new Date().setHours(0, 0, 0, 0);
+      this.fromDate = this.getMonday(new Date(currentDate));
+      this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
+      if(this.fromDate) {
+        this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
+        this.toDate.setDate(this.toDate.getDate() + 6);
+      }
       WarningToast(err.error.HttpStatusMessage);
     });
   }
@@ -778,19 +807,21 @@ export class AttendanceComponent implements OnInit {
 
   findEmployeeById(employeeId: any) {
     if (employeeId) {
-      this.currentEmployee = this.applicationData.EmployeesList.find(x => x.EmployeeUid === parseInt(employeeId));
-      if (this.currentEmployee) {
+      this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === parseInt(employeeId));
+      if (this.currentEmployee && this.currentEmployee.ClientJson != null) {
+        this.userName = `${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
+        let clients = JSON.parse(this.currentEmployee.ClientJson);
         this.clientDetail = {
           data: [],
           placeholder: "Select Organization"
         };
 
-        let assignedClients = this.applicationData.Clients.filter(x => x.EmployeeUid == this.currentEmployee.EmployeeUid);
+        let assignedClients = this.applicationData.Clients.filter(x => clients.indexOf(x.ClientId) !== -1);
         let i = 0;
         while(i < assignedClients.length) {
           this.clientDetail.data.push({
             text: assignedClients[i].ClientName,
-            value: assignedClients[i].ClientUid,
+            value: assignedClients[i].ClientId,
           });
           i++;
         }   
