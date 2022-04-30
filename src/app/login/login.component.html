@@ -1,135 +1,220 @@
 <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
-  <div class="card card0 border-0">
-      <div class="row d-flex">
-          <div class="col-lg-6">
-              <div class="card1 pb-5">
-                  <div class="row"> <img src="https://i.imgur.com/CXQmsmF.png" class="logo"> </div>
-                  <div class="row px-3 justify-content-center mt-4 mb-5 border-line"> <img src="https://i.imgur.com/uNGdWHi.png" class="image"> </div>
+  <div class="border-0">
+    <div class="row d-flex">
+      <div class="col-md-6">
+        <div class="card1 pb-5">
+          <div class="row"> <img src="assets/images/logo.png" class="logo" alt="logo"> </div>
+          <div class="row px-3 justify-content-center mt-4 mb-5 border-line"> <img src="https://i.imgur.com/uNGdWHi.png"
+              class="image"> </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <a href="javascript:void(0)" (click)="switchMode()"
+          class="provider-mode text-decoration-none float-end fw-bold text-danger">
+          {{isUserMode === true ? 'Provider' : 'User'}}
+        </a>
+        <ng-container *ngIf="isUserMode">
+          <div class="col-lg-12">
+            <div class="card2 card border-0 px-4 py-5">
+              <div class="d-flex justify-content-between">
+                <div class="d-flex mb-4 px-3">
+                  <h6 class="mb-0 me-4 mt-2">Sign in with</h6>
+                  <div class="facebook text-center me-3">
+                    <a href="javascript:void(0)" class="fa fa-facebook text-decoration-none"></a>
+                  </div>
+                  <div class="twitter text-center me-3">
+                    <a href="javascript:void(0)" class="fa fa-twitter text-decoration-none"></a>
+                  </div>
+                  <div class="linkedin text-center me-3">
+                    <a href="javascript:void(0)" class="fa fa-linkedin text-decoration-none"></a>
+                  </div>
+                </div>
+                <div class="d-flex mb-4 ps-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input form-check-inputbox" type="radio" name="userType"
+                      [(ngModel)]="userType" id="chkemployee" value="employee">
+                    <label class="form-check-label">Employee</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input form-check-inputbox" type="radio" name="userType"
+                      [(ngModel)]="userType" id="chksystem" value="system">
+                    <label class="form-check-label">System User</label>
+                  </div>
+                </div>
               </div>
-          </div>
-          <ng-container *ngIf="isUserMode">
-            <div class="col-lg-6">
-              <div class="card2 card border-0 px-4 py-5">
-                  <div class="row mb-4 px-3">
-                      <h6 class="mb-0 mr-4 mt-2">Sign in with</h6>
-                      <div class="facebook text-center mr-3">
-                          <div class="fa fa-facebook"></div>
-                      </div>
-                      <div class="twitter text-center mr-3">
-                          <div class="fa fa-twitter"></div>
-                      </div>
-                      <div class="linkedin text-center mr-3">
-                          <div class="fa fa-linkedin"></div>
-                      </div>
-                  </div>
-                  <div class="d-flex mb-4">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="userType" [(ngModel)]="userType"
-                      id="chkemployee" value="employee">
-                      <label class="form-check-label">Employee</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="userType" [(ngModel)]="userType" id="chksystem" value="system">
-                      <label class="form-check-label">System User</label>
-                    </div>
-                  </div>
-                  <div class="row px-3 mb-4">
-                      <div class="line"></div> <small class="or text-center">Or</small>
-                      <div class="line"></div>
-                  </div>
-                  <form [formGroup]="UserForm" (ngSubmit)="LoginProvider()" class="mt-1">
-                    <div class="row px-3"> <label class="mb-1">
-                      <h6 class="mb-0 text-sm">Email Address</h6>
-                      </label> <input class="mb-4" placeholder="Email or Mobile Number" name="UserId" formControlName="UserId">
-                    </div>
-                    <div class="row px-3">
-                      <label class="mb-1">
-                        <h6 class="mb-0 text-sm">Password</h6>
-                      </label>
-                      <input type="password" placeholder="Password" name="Password" formControlName="Password">
-                    </div>
-                    <div class="row px-3 mb-4">
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                          <input id="chk1" type="checkbox" name="chk" class="custom-control-input">
-                          <label for="chk1" class="custom-control-label text-sm">I agree to our Terms of Service</label>
-                        </div>
-                        <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
-                    </div>
-                    <div class="row mb-3 px-3">
-                      <button type="submit" [disabled]="isLoading" class="btn btn-blue text-center">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                        {{ isLoading ? 'Signing' : 'Sing In' }}</button>
-                    </div>
-                  </form>
-                  <div class="row mb-4 px-3"> <small class="font-weight-bold">Don't have an account? <a class="text-danger ">Register</a></small> </div>
+              <div class="row pe-1 ps-3 mb-4">
+                <div class="line"></div> <small class="or text-center">Or</small>
+                <div class="line"></div>
               </div>
+              <form [formGroup]="UserForm" (ngSubmit)="LoginProvider()" class="mt-1">
+                <div class="row pe-1 ps-3"> <label class="mb-1">
+                    <h6 class="mb-0 text-sm">Email Address</h6>
+                  </label> <input class="mb-4" placeholder="Email or Mobile Number" name="UserId"
+                    formControlName="UserId">
+                </div>
+                <div class="row pe-1 ps-3">
+                  <label class="mb-1">
+                    <h6 class="mb-0 text-sm">Password</h6>
+                  </label>
+                  <input type="password" placeholder="Password" name="Password" formControlName="Password">
+                </div>
+                <div class="d-flex pe-1 ps-3 pt-3 mb-4 col-md-12 justify-content-between">
+                  <div class="form-check d-flex">
+                    <input class="form-check-input form-check-inputbox" type="checkbox" id="gridCheck">
+                    <label class="form-check-label ps-2" for="gridCheck">
+                      I agree to our Terms of Service
+                    </label>
+                  </div>
+                  <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+                </div>
+                <div class="row mb-3 px-3">
+                  <button type="submit" [disabled]="isLoading" class="btn btn-blue text-center">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                    {{ isLoading ? 'Signing' : 'Sing In' }}</button>
+                </div>
+              </form>
+              <div class="row mb-4 px-3"> <small class="fw-bold register-msg">Don't have an account? <a class="text-danger ">
+                    Register</a></small> </div>
             </div>
-          </ng-container>
+          </div>
+        </ng-container>
 
-          <ng-container *ngIf="!isUserMode">
-            <div class="col-lg-6">
-              <div class="card2 card border-0 px-4 py-5">
-                  <div class="row mb-4 px-3">
-                      <h6 class="mb-0 mr-4 mt-2">Sign in with</h6>
-                      <div class="facebook text-center mr-3">
-                          <div class="fa fa-facebook"></div>
-                      </div>
-                      <div class="twitter text-center mr-3">
-                          <div class="fa fa-twitter"></div>
-                      </div>
-                      <div class="linkedin text-center mr-3">
-                          <div class="fa fa-linkedin"></div>
-                      </div>
+        <ng-container *ngIf="!isUserMode">
+          <div class="col-lg-12">
+            <div class="card2 card border-0 px-4 py-5">
+              <div class="col-md-4 card p-4 signin-container d-none">
+                <form [formGroup]="UserForm" (ngSubmit)="SignupUser()" class="mt-1">
+                  <div class="form-group">
+                    <label class="form-label">Email id</label>
+                    <input class="form-control" placeholder="Email id" name="UserId" formControlName="UserId">
                   </div>
-                  <div class="d-flex mb-4">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="userType" [(ngModel)]="userType"
-                      id="chkemployee" value="employee">
-                      <label class="form-check-label">Employee</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="userType" [(ngModel)]="userType" id="chksystem" value="system">
-                      <label class="form-check-label">System User</label>
-                    </div>
+                  <div class="form-group mt-3">
+                    <label class="form-label">Mobile No</label>
+                    <input class="form-control" placeholder="Mobile No" name="MobileNo" formControlName="MobileNo">
                   </div>
-                  <div class="row px-3 mb-4">
-                      <div class="line"></div> <small class="or text-center">Or</small>
-                      <div class="line"></div>
+                  <div class="form-group mt-3">
+                    <label class="form-label">Password</label>
+                    <input class="form-control" placeholder="Password" name="Password" formControlName="Password">
                   </div>
-                  <form [formGroup]="UserForm" (ngSubmit)="LoginUser()" class="mt-1">
-                    <div class="row px-3"> <label class="mb-1">
-                      <h6 class="mb-0 text-sm">Email Address</h6>
-                      </label> <input class="mb-4" placeholder="Email or Mobile Number" name="UserId" formControlName="UserId">
-                    </div>
-                    <div class="row px-3">
-                      <label class="mb-1">
-                        <h6 class="mb-0 text-sm">Password</h6>
-                      </label>
-                      <input type="password" placeholder="Password" name="Password" formControlName="Password">
-                    </div>
-                    <div class="row px-3 mb-4">
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                          <input id="chk1" type="checkbox" name="chk" class="custom-control-input">
-                          <label for="chk1" class="custom-control-label text-sm">I agree to our Terms of Service</label>
-                        </div>
-                        <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
-                    </div>
-                    <div class="row mb-3 px-3">
-                      <button type="submit" [disabled]="isLoading" class="btn btn-blue text-center">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                        {{ isLoading ? 'Signing' : 'Sing In' }}</button>
-                    </div>
-                  </form>
-                  <div class="row mb-4 px-3"> <small class="font-weight-bold">Don't have an account? <a class="text-danger ">Register</a></small> </div>
+                  <div class="form-group mt-3">
+                    <label class="form-label">Confirm Password</label>
+                    <input class="form-control" placeholder="ConfirmPassword" name="ConfirmPassword"
+                      formControlName="ConfirmPassword">
+                  </div>
+                  <button class="btn btn-primary" [disabled]="isLoading" type="submit">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-plus': !isLoading}"></i>
+                    {{ isLoading ? 'Signing' : 'Sign Up' }}
+                  </button>
+                </form>
               </div>
+              <div class="d-flex mb-4 px-3">
+                <h6 class="mb-0 me-4 mt-2">Sign in with</h6>
+                <div class="facebook text-center me-3">
+                  <a href="javascript:void(0)" class="fa fa-facebook text-decoration-none"></a>
+                </div>
+                <div class="twitter text-center me-3">
+                  <a href="javascript:void(0)" class="fa fa-twitter text-decoration-none"></a>
+                </div>
+                <div class="linkedin text-center me-3">
+                  <a href="javascript:void(0)" class="fa fa-linkedin text-decoration-none"></a>
+                </div>
+              </div>
+              <div class="row px-3 mb-4">
+                <div class="line"></div> <small class="or text-center">Or</small>
+                <div class="line"></div>
+              </div>
+              <form [formGroup]="UserForm" (ngSubmit)="LoginUser()" class="mt-1">
+                <div class="row px-3"> <label class="mb-1">
+                    <h6 class="mb-0 text-sm">Email Address</h6>
+                  </label> <input class="mb-4" placeholder="Email or Mobile Number" name="UserId"
+                    formControlName="UserId">
+                </div>
+                <div class="row px-3">
+                  <label class="mb-1">
+                    <h6 class="mb-0 text-sm">Password</h6>
+                  </label>
+                  <input type="password" placeholder="Password" name="Password" formControlName="Password">
+                </div>
+                <div class="d-flex px-3 pt-3 mb-4 col-md-12 justify-content-between">
+                  <div class="form-check d-flex">
+                    <input class="form-check-input form-check-inputbox" type="checkbox" id="gridCheck">
+                    <label class="form-check-label ps-2" for="gridCheck">
+                      I agree to our Terms of Service
+                    </label>
+                  </div>
+                  <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+                </div>
+                <div class="row mb-3 px-3">
+                  <button type="submit" [disabled]="isLoading" class="btn btn-blue text-center">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                    {{ isLoading ? 'Signing' : 'Sing In' }}</button>
+                </div>
+              </form>
+              <div class="row mb-4 px-3"> <small class="fw-bold register-msg">Don't have an account? <a class="text-danger ">
+                    Register</a></small> </div>
             </div>
-          </ng-container>
-      </div>
-      <div class="bg-blue py-4">
-          <div class="row px-3"> <small class="ml-4 ml-sm-5 mb-2">Copyright &copy; 2019. All rights reserved.</small>
-              <div class="social-contact ml-4 ml-sm-auto"> <span class="fa fa-facebook mr-4 text-sm"></span> <span class="fa fa-google-plus mr-4 text-sm"></span> <span class="fa fa-linkedin mr-4 text-sm"></span> <span class="fa fa-twitter mr-4 mr-sm-5 text-sm"></span> </div>
           </div>
+        </ng-container>
+
+        <ng-container>
+          <div class="col-md-10 d-flex justify-content-center d-none">
+            <div id="signup" class="col-md-6 dnone card p-4 mt-5">
+              <h3 class="signup-space text-center text-warning">
+                OnlineDataBuilder
+              </h3>
+              <form (submit)="SignupUser()" [formGroup]="UserForm">
+                <div class="col-md-12 d-inline-block">
+                  <div class="form-group">
+                    <label for="UserName">Username</label>
+                    <input type="text" class="form-control" id="UserId" formControlName="UserId" placeholder="Enter username">
+                  </div>
+                  <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" id="Password" formControlName="Password"
+                      placeholder="Enter password">
+                  </div>
+                  <div class="form-group">
+                    <label for="ConfirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="ConfirmPassword" formControlName="ConfirmPassword"
+                      placeholder="Configrm password">
+                  </div>
+                  <div class="form-group">
+                    <label for="shopname">Shop Name</label>
+                    <input type="text" class="form-control" id="ShopName" formControlName="ShopName"
+                      placeholder="Enter your shop full name">
+                  </div>
+                  <div class="form-group">
+                    <label for="MobileNo">Mobile no#.</label>
+                    <input type="text" class="form-control" id="MobileNo" formControlName="MobileNo"
+                      (keydown)="AllowMobilenoOnly($event)" placeholder="Enter mobile no #.">
+                  </div>
+                  <div class="form-group">
+                    <label for="registrationCode">Registration Code</label>
+                    <input type="text" class="form-control" id="registrationCode" formControlName="RegistrationCode"
+                      placeholder="Enter your registration code.">
+                  </div>
+                  <div class="form-group anc-signin">
+                    <a href="javascript:void()">
+                      <b>Login</b>
+                    </a>
+                  </div>
+                  <button color="warn" class="w-100 mb-2" type="submit">Sign
+                    Up</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </ng-container>
       </div>
+    </div>
+  </div>
+</div>
+<div class="bg-blue py-4">
+  <div class="d-flex justify-content-between px-3">
+    <small class="ms-4 ms-sm-5 mb-2">Copyright &copy; 2019. All rights reserved.</small>
+    <div class="social-contact ms-4 ms-sm-auto"> <span class="fa fa-facebook me-4 text-sm"></span> <span
+        class="fa fa-google-plus me-4 text-sm"></span> <span class="fa fa-linkedin me-4 text-sm"></span> <span
+        class="fa fa-twitter me-4 me-sm-5 text-sm"></span> </div>
   </div>
 </div>
 
