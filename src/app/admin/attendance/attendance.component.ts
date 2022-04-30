@@ -475,6 +475,13 @@ export class AttendanceComponent implements OnInit {
       this.isLoading = false;
     }).catch(err => {
       this.isLoading = false;
+      let currentDate = new Date().setHours(0, 0, 0, 0);
+      this.fromDate = this.getMonday(new Date(currentDate));
+      this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
+      if(this.fromDate) {
+        this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
+        this.toDate.setDate(this.toDate.getDate() + 6);
+      }
       WarningToast(err.error.HttpStatusMessage);
     });
   }
