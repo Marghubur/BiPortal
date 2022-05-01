@@ -1,9 +1,24 @@
-<div class="col-md-12 toast-container" [ngClass]="className" (click)="closeToast()">
-  <div class="bullet-point">
-    <div class="inner-circle"></div>
-  </div>
-  <div class="msg-box">
-    <span id="toastmessage">
+<div class="col-md-12 d-flex align-items-center toast-container" [ngClass]="className" (click)="closeToast()">
+  <ng-container *ngIf="className == 'error-toast'">
+    <div class="px-2">
+      <i class="fa fa-ban fa-lg text-light" aria-hidden="true"></i>
+    </div>
+  </ng-container>
+  <!-- <ng-container >
+    <div class="px-2">
+      <i class="fa fa-exclamation-triangle fa-lg text-warning" aria-hidden="true"></i>
+    </div>
+  </ng-container> -->
+  <ng-container *ngIf="className == 'success-toast'">
+    <div class="px-2">
+      <div class="circle">
+        <div class="checkmark">
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <div class="msg-box p-2">
+    <span id="toastmessage" class="pb-3">
       {{errorMessage}}
     </span>
   </div>
