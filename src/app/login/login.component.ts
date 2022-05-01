@@ -253,4 +253,12 @@ export class LoginComponent implements OnInit {
   backToHomePage() {
     this.nav.navigate("/", null);
   }
+
+  enableSystem() {
+    this.userType = "system";
+  }
+
+  enableEmployee() {
+    this.userType = "employee";
+  }
 }
