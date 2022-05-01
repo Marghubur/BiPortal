@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, PlaceEmpty, Toast } from 'src/providers/common-service/common.service';
@@ -43,7 +44,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   fileDetail: Array<any> = [];
   activeAssignedClient: AssignedClients = new AssignedClients();
   ProfessuinalDetail_JSON: any = '';
-
+  managerList: autoCompleteModal = null; 
+  
   get f() {
     let data = this.employeeForm.controls;
     return data;
@@ -61,6 +63,14 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.managerList = new autoCompleteModal();
+    this.managerList.data = [];
+    this.managerList.placeholder = "Reporting Manager";
+    this.managerList.data.push({
+      value: 0,
+      text: "Default Manager"
+    });
+
     this.model = this.calendar.getToday();
     let data = this.nav.getValue();
     this.employeeUid = 0;
@@ -109,6 +119,24 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   loadData(employeeId: number) {
     this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
+      if(res.ResponseBody.EmployeesList) {
+        this.managerList.data = [];
+        this.managerList.placeholder = "Reporting Manager";
+        this.managerList.data.push({
+          value: 0,
+          text: "Default Manager"
+        });
+
+        let i = 0;
+        let managers = res.ResponseBody.EmployeesList;
+        while(i < managers.length) {
+          this.managerList.data.push({
+            value: managers[i].EmployeeUid,
+            text: `${managers[i].FirstName} ${managers[i].LastName}`
+          });
+          i++;
+        }
+      }
       this.buildPageData(res);
       this.bindForm();
       this.idReady = true;
@@ -165,6 +193,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       DOB: new FormControl(this.employeeModal.DOB),
       TakeHomeByCandidate: new FormControl(null),
       FileId: new FormControl(this.employeeModal.FileId),
+      ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId),
       AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
     });
   }
@@ -432,5 +461,6 @@ export class EmployeeDetail {
   TakeHomeByCandidate: number = null;
   DOB: Date = null;
   DateOfJoining: Date = null;
+  ReportingManagerId: number = null;
   AllocatedClients: Array<AssignedClients> = [];
 }
