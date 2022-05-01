@@ -87,6 +87,14 @@
                 </div>
 
                 <div class="col-md-12 m-0 row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Reporting manager</label>
+                    <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId" name="ReportingManagerId">
+                    </app-iautocomplete>
+                  </div>
+                </div>
+
+                <div class="col-md-12 m-0 row">
                   <div class="col-12 p-3 pt-4">
                     <p>Select your gender</p>
                     <div class="col-12 row">
@@ -312,11 +320,6 @@
                           </div>
                         </div>
                       </form>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                      <label class="form-label">Client Name</label>
-                      <input class="form-control" placeholder="Client Name" name="AllocatedClientName"
-                        formControlName="AllocatedClientName" />
                     </div>
                   </div>
                 </div>
