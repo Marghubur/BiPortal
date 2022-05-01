@@ -61,6 +61,7 @@ export class BuildPdfComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.viewer = document.getElementById("file-container");
     let data = this.nav.getValue();
     this.editMode = false;
     this.basePath = this.http.GetImageBasePath();
@@ -804,49 +805,20 @@ export class BuildPdfComponent implements OnInit {
 
   downloadPdfDocx() {
     this.downlodFilePath = "";
-    let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
-    
-    let fileId = Number(this.FileDetail.FileUid);
-    if(isNaN(fileId)) {
-      ErrorToast("Invalid file id supplied.");
-      return;
+    if(this.FileDetail.FileId > 0) {
+      let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
+      this.viewer.classList.remove('d-none');
+      this.viewer.querySelector('iframe').setAttribute('src', updateFilePath);
+    } else {
+      ErrorToast("There was some error on file generation. Please contact to admin.");
     }
-    
-    let employeeBillDetail = {
-      "EmployeeId": this.FileDetail.FileOwnerId,
-      "ClientId": this.FileDetail.ClientId,
-      "FileId": fileId,
-      "FilePath": this.FileDetail.FilePath,
-      "FileName": this.FileDetail.FileName,
-      "FileExtension": this.FileDetail.FileExtension
-    };
-
-    this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
-      if (response.ResponseBody) {
-        if(updateFilePath !== "") {
-          this.downlodFilePath = updateFilePath;
-          $('#downloadexistingfile').click();
-          this.viewer = document.getElementById("file-container");
-          this.viewer.classList.remove('d-none');
-          this.viewer.querySelector('iframe').setAttribute('src', this.downlodFilePath);
-          var ext =this.downlodFilePath.split(".");
-          if (ext[1] == "docx") {
-            this.viewer.classList.add("d-none");
-            this.nav.navigateWithoutArgs(BillDetail);
-          }
-        }
-      }
-      $('#viewFileModal').modal('hide');
-    }).catch(e => {
-      console.log(JSON.stringify(e));
-    });
   }
 
   closePdfViewer() {
     event.stopPropagation();
     this.viewer.classList.add('d-none');
     this.viewer.querySelector('iframe').setAttribute('src', '');
-    this.nav.navigateWithoutArgs(BillDetail);
+    this.getNewForm();
   }
 
   closePopUp() {

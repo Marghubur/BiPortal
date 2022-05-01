@@ -60,6 +60,7 @@ export class AttendanceComponent implements OnInit {
   isRedirected: boolean = false;
   currentEmployee: any = null;
   applicationData: any = [];
+  enablePermissionButton: boolean = false;
 
 
   constructor(private fb: FormBuilder,
@@ -306,7 +307,7 @@ export class AttendanceComponent implements OnInit {
 
     this.attendenceForm = this.fb.group({
       attendanceArray: this.fb.array(weekDaysList.map(item => {
-        item.date.setHours(0,0,0,0);
+        // item.date.setHours(0,0,0,0);
         let value = attendanceDetail.find(x => new Date(x.AttendanceDay).getDate() == item.date.getDate());
         return this.buildWeekForm(item, value, attendanceId);
       }))
@@ -459,16 +460,23 @@ export class AttendanceComponent implements OnInit {
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      if(response.ResponseBody.EmployeeDetail)
+      if(response.ResponseBody) {
+        if(response.ResponseBody.EmployeeDetail)
         this.client = response.ResponseBody.EmployeeDetail;
-      else {
-        this.NoClient = true;
-        this.isAttendanceDataLoaded = false;
-      }
+        else {
+          this.NoClient = true;
+          this.isAttendanceDataLoaded = false;
+        }
 
-      if (response.ResponseBody.AttendacneDetails) {
-        this.createPageData(response.ResponseBody.AttendacneDetails);
-        this.isAttendanceDataLoaded = true;
+        if (response.ResponseBody.AttendacneDetails) {
+          this.enablePermissionButton = true;
+          let blockedAttendance = response.ResponseBody.AttendacneDetails.filter(x => x.IsOpen === false);
+          if(blockedAttendance.length > 0) {
+            this.enablePermissionButton = false;
+          }
+          this.createPageData(response.ResponseBody.AttendacneDetails);
+          this.isAttendanceDataLoaded = true;
+        }
       }
 
       this.divisionCode = 1;
