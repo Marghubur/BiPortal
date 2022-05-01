@@ -193,13 +193,13 @@
                     </div>
                   </div>
                   <div class="text-end">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">
+                    <button type="button" class="btn btn-primary btn-sm" [disabled]="isBlocked" (click)="onSubmit()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
                       {{ isLoading ? 'Saving' : 'Submit' }}
                     </button>
                   </div>
                 </div>
-                <div class="x_content">
+                <div class="x_content mt-4">
                   <table class="table-middle table table-hover">
                     <thead>
                       <tr>
@@ -265,6 +265,29 @@
                       </tr>
                     </tbody>
                   </table>
+
+                  <div *ngIf="isBlocked" class="mt-5 d-flex flex-column justify-content-center">
+                    <div class="text-center">
+                      <h2>Instruction</h2>
+                      <div>
+                        <p>
+                          Attendance for the week you are requesting is currently blocked. 
+                          As per company guide lines you need to submit your timesheet before end of every week.
+                        </p>
+
+                        <p>If you want to raise a request to admin please leave your comments and submit it by using below form.</p>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="mt-2">
+                          <button class="btn btn-info btn-sm">
+                            <i class="fa fa-paper-plane-o pe-2" aria-hidden="true"></i>
+                            Request
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
