@@ -213,14 +213,35 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-end">
-                  <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                    {{ isLoading ? 'Saving' : 'Submit' }}
-                  </button>
+                <div class="d-flex">
+                  <div class="ms-1 me-1">
+                    <button type="button" [ngClass]="{'btn-danger' : enablePermissionButton, 'btn-success': !enablePermissionButton}" 
+                      class="btn btn-sm" (click)="onSubmit()">
+                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                      {{ enablePermissionButton ? 'Disable' : 'Enable' }}
+                    </button>
+                  </div>
+                  <div class="ms-1 me-1">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">
+                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                      {{ isLoading ? 'Saving' : 'Submit' }}
+                    </button>
+                  </div>
                 </div>
               </div>
               <div class="x_content">
+                <div class="d-flex flex-direction-column justify-content-center mt-5">
+                  <div class="text-center w-100">
+                    <p class="lead mark text-success" *ngIf="enablePermissionButton">
+                      Given week is open, candidate can submit their timesheet.
+                      To block this week please use the above disable button.
+                    </p>
+                    <p class="lead mark text-danger" *ngIf="!enablePermissionButton">
+                      Given week is closed, candidate can't submit their timesheet. 
+                      To unblock this week please use the above enable button.
+                    </p>
+                  </div>
+                </div>
                 <table class="table-middle table table-hover">
                   <thead>
                     <tr>
