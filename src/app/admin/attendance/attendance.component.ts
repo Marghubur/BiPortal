@@ -429,6 +429,7 @@ export class AttendanceComponent implements OnInit {
       this.isLoading = false;
     }).catch(e => {
       this.isLoading = false;
+      ErrorToast("You have permission to submit only current week attendance.");
     });
   }
 

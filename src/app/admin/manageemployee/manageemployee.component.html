@@ -88,7 +88,25 @@
 
                 <div class="col-md-12 m-0 row">
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">Reporting manager</label>
+                    <label class="form-label">Designation</label>
+                    <select name="DesignationId" class="form-control" formControlName="DesignationId">
+                      <option value="-1">Select Designation</option>
+                      <option value="0">Other</option>
+                      <option value="1">Project Manager</option>
+                      <option value="2">Architect</option>
+                      <option value="3">Networking</option>
+                      <option value="4">Full stack Developer</option>
+                      <option value="5">Backend (Server side) Developer</option>
+                      <option value="6">Database Developer</option>
+                      <option value="7">Frontend (UI) Developer</option>
+                      <option value="8">System Engineer</option>
+                      <option value="9">Associate Engineer</option>
+                      <option value="10">Test Lead</option>
+                      <option value="11">Tester</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Reporting Manager</label>
                     <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId" name="ReportingManagerId">
                     </app-iautocomplete>
                   </div>
