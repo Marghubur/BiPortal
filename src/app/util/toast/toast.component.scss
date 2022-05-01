@@ -1,0 +1,28 @@
+.toast-container {
+    width: max-content;
+    max-width: 100%;
+    pointer-events: none;
+    padding: 1px;
+}
+
+.msg-box {
+    .msg {
+        padding: 10px 40px 10px 10px;
+        border-radius: 0px 3px 3px 0px;
+    }
+}
+
+.icon-box {
+    padding: 10px;
+
+    i {
+        zoom: 1.6;
+    }
+}
+
+a.close-item {
+    position: absolute;
+    top: 4px;
+    right: 10px;
+    color: #444;
+}
