@@ -15,7 +15,7 @@ export class BreadcrumsComponent implements OnInit {
     let i = 0;
     while(i < value.length) {
       this.routePath.push({
-        name: value[i].Key.replace("admin/", ""),
+        name: value[i].Key.replace("admin/", "").replace("user/", ""),
         path: value[i].Key
       });
       i++;

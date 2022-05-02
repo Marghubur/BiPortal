@@ -194,6 +194,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       TakeHomeByCandidate: new FormControl(null),
       FileId: new FormControl(this.employeeModal.FileId),
       ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId),
+      DesignationId: new FormControl(this.employeeModal.DesignationId),
       AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
     });
   }
@@ -462,5 +463,6 @@ export class EmployeeDetail {
   DOB: Date = null;
   DateOfJoining: Date = null;
   ReportingManagerId: number = null;
+  DesignationId: number = -1;
   AllocatedClients: Array<AssignedClients> = [];
 }

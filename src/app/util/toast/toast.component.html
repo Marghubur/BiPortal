@@ -1,25 +1,21 @@
-<div class="col-md-12 d-flex align-items-center toast-container" [ngClass]="className" (click)="closeToast()">
-  <ng-container *ngIf="className == 'error-toast'">
-    <div class="px-2">
-      <i class="fa fa-ban fa-lg text-light" aria-hidden="true"></i>
+<div class="col-md-12 toast-container" [ngClass]="className">
+  <div class="msg-box position-relative d-flex flex-row justify-content-start">
+    <div id="success-box" class="d-none bg-success d-flex flex-column justify-content-center icon-box">
+      <i class="fa fa-check" aria-hidden="true"></i>
     </div>
-  </ng-container>
-  <!-- <ng-container >
-    <div class="px-2">
-      <i class="fa fa-exclamation-triangle fa-lg text-warning" aria-hidden="true"></i>
+    <div id="error-box" class="d-none bg-danger d-flex flex-column justify-content-center icon-box">
+      <i class="fa fa-times" aria-hidden="true"></i>
     </div>
-  </ng-container> -->
-  <ng-container *ngIf="className == 'success-toast'">
-    <div class="px-2">
-      <div class="circle">
-        <div class="checkmark">
-        </div>
-      </div>
+    <div id="warning-box" class="d-none bg-warning d-flex flex-column justify-content-center icon-box">
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
     </div>
-  </ng-container>
-  <div class="msg-box p-2">
-    <span id="toastmessage" class="pb-3">
-      {{errorMessage}}
-    </span>
+    <div class="msg bg-light d-flex flex-column justify-content-center text-dark">
+      <span id="toastmessage">
+        {{errorMessage}}
+      </span>
+    </div>
+    <a href="javascript:void(0)" class="close-item">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </a>
   </div>
 </div>

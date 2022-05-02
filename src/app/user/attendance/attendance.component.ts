@@ -50,7 +50,7 @@ export class AttendanceComponent implements OnInit {
   weekList: Array<any> = [];
   divisionCode: number = 0;
   PendingAttendacneMessage: string = 'Select above pending attendance link to submit before end of the month.';
-  enablePermissionButton: boolean = false;
+  isBlocked: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -113,11 +113,7 @@ export class AttendanceComponent implements OnInit {
         this.userDetail = Master["UserDetail"];
         this.employeeId = this.userDetail.UserId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
-        $('#loader').modal('show');
-        setTimeout(() => {
-          this.loadMappedClients();
-        }, 900);
-
+        this.loadMappedClients();
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -331,6 +327,7 @@ export class AttendanceComponent implements OnInit {
 
   onSubmit(){
     this.isLoading = true;
+    this.isBlocked = false;
     let values = JSON.stringify(this.attendenceForm.get("attendanceArray").value);
     let records: Array<any> = JSON.parse(values);
     let index = 0;
@@ -355,6 +352,8 @@ export class AttendanceComponent implements OnInit {
       this.isLoading = false;
     }).catch(e => {
       this.isLoading = false;
+      this.isBlocked = true;
+      ErrorToast("You have permission to submit only current week attendance.");
     });
   }
 
@@ -393,15 +392,15 @@ export class AttendanceComponent implements OnInit {
         this.isAttendanceDataLoaded = false;
       }
 
-      if (response.ResponseBody.AttendacneDetails) {
-        this.enablePermissionButton = true;
-        let blockedAttendance = response.ResponseBody.AttendacneDetails.filter(x => x.IsOpen === false);
-        if(blockedAttendance.length > 0) {
-          this.enablePermissionButton = false;
-        }
-        this.createPageData(response.ResponseBody.AttendacneDetails);
-        this.isAttendanceDataLoaded = true;
-      }
+      // if (response.ResponseBody.AttendacneDetails) {
+      //   this.enablePermissionButton = true;
+      //   let blockedAttendance = response.ResponseBody.AttendacneDetails.filter(x => x.IsOpen === false);
+      //   if(blockedAttendance.length > 0) {
+      //     this.enablePermissionButton = false;
+      //   }
+      //   this.createPageData(response.ResponseBody.AttendacneDetails);
+      //   this.isAttendanceDataLoaded = true;
+      // }
 
       this.divisionCode = 1;
       this.isLoading = false;
