@@ -64,7 +64,11 @@ export const Companies = 'admin/Companies';
 export const CreateResume = 'admin/CreateResume';
 export const Recruiter = 'admin/Recruiter';
 export const Leave = 'admin/leave'
-export const Timesheet = 'admin/timesheet'
+export const Timesheet = 'admin/timesheet';
+export const AdminSummary = "admin/summary";
+export const AdminDeclaration = "admin/declaration";
+export const AdminSalary = "admin/salary";
+export const AdminPreferences = "admin/preferences";
 
 // ********************** Admin route pages  *******************
 
