@@ -24,9 +24,9 @@
           </div>
         </div>
       </ng-container>
-  
+
       <app-breadcrums></app-breadcrums>
-  
+
       <ng-container [ngSwitch]="divisionCode">
         <ng-container *ngSwitchCase="2">
           <div class="x_panel pt-4 attendance-form">
@@ -46,14 +46,14 @@
                   <span>{{d.days[0].date | date}} - {{d.days[6].date | date}}</span>
                 </a>
               </div>
-  
+
               <div class="d-flex flex-row justify-content-center mt-5">
                 <p class="text-muted pending-info">{{PendingAttendacneMessage}}</p>
               </div>
             </div>
           </div>
         </ng-container>
-  
+
         <ng-container *ngSwitchDefault>
           <ng-container *ngIf="isAttendanceDataLoaded">
             <div class="col-md-12 row mt-4 mb-4 ms-0">
@@ -228,7 +228,7 @@
                                     <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
                                   </span>
                                 </ng-container>
-  
+
                                 <input type="number" class="ms-1 text-start" placeholder="hours" min="0" max="23"
                                   [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
                                   formControlName="UserHours"
@@ -237,7 +237,7 @@
                                 <input type="number" class="text-end" placeholder="minutes" min="0" max="59"
                                   (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
                                   onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-  
+
                                 <div ngbDropdown class="d-none dropright">
                                   <input type="text" class="form-control input-overflow" formControlName="UserComments"
                                     placeholder="Comments" (focus)="takeComments($event)">
@@ -271,7 +271,7 @@
                       <h2>Instruction</h2>
                       <div>
                         <p>
-                          Attendance for the week you are requesting is currently blocked. 
+                          Attendance for the week you are requesting is currently blocked.
                           As per company guide lines you need to submit your timesheet before end of every week.
                         </p>
 
@@ -306,7 +306,6 @@
           </ng-container>
         </ng-container>
       </ng-container>
-  
+
     </form>
   </div>
-  

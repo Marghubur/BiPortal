@@ -18,7 +18,7 @@ export class ToastComponent implements OnInit {
   }
 
   ErrorToast(msg: string) {
-    this.className = "success-toast";
+    this.className = "error-toast";
     this.errorMessage = msg;
   }
 

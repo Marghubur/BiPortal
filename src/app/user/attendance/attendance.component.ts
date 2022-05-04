@@ -92,7 +92,7 @@ export class AttendanceComponent implements OnInit {
     this.intervalId = setInterval(() => {
       this.time = new Date();
     }, 1000);
-    
+
     this.DayValue = this.time.getDay();
     let cachedData = this.nav.getValue();
     if(cachedData) {
@@ -232,7 +232,7 @@ export class AttendanceComponent implements OnInit {
         item.date.setHours(0,0,0,0);
         let value = attendanceDetail.find(x => new Date(x.AttendanceDay).getDate() == item.date.getDate());
         return this.buildWeekForm(item, value, attendanceId);
-      }))      
+      }))
     });
 
     this.countTotalTime();
@@ -385,17 +385,22 @@ export class AttendanceComponent implements OnInit {
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      if(response.ResponseBody.EmployeeDetail) 
+      if(response.ResponseBody.EmployeeDetail)
         this.client = response.ResponseBody.EmployeeDetail;
       else {
         this.NoClient = true;
         this.isAttendanceDataLoaded = false;
       }
 
-      if (response.ResponseBody.AttendacneDetails) {
-        this.createPageData(response.ResponseBody.AttendacneDetails);
-        this.isAttendanceDataLoaded = true;
-      }
+      // if (response.ResponseBody.AttendacneDetails) {
+      //   this.enablePermissionButton = true;
+      //   let blockedAttendance = response.ResponseBody.AttendacneDetails.filter(x => x.IsOpen === false);
+      //   if(blockedAttendance.length > 0) {
+      //     this.enablePermissionButton = false;
+      //   }
+      //   this.createPageData(response.ResponseBody.AttendacneDetails);
+      //   this.isAttendanceDataLoaded = true;
+      // }
 
       this.divisionCode = 1;
       this.isLoading = false;
@@ -403,6 +408,39 @@ export class AttendanceComponent implements OnInit {
       this.isLoading = false;
       WarningToast(err.error.HttpStatusMessage);
     });
+  }
+
+  enablePermissionRequest() {
+    this.isLoading = true;
+    if(this.employeeId <= 0) {
+      Toast("Invalid user selected.")
+      return;
+    }
+
+    if(!this.fromDate) {
+      Toast("Invalid from and to date seleted.")
+      return;
+    }
+
+    if(!this.toDate) {
+      Toast("Invalid from and to date seleted.")
+      return;
+    }
+
+    let data = {
+      EmployeeUid: Number(this.employeeId),
+      ClientId: Number(this.clientId),
+      UserTypeId : UserType.Employee,
+      AttendenceFromDay: this.fromDate,
+      AttendenceToDay: this.toDate,
+      ForYear: this.fromDate.getFullYear(),
+      ForMonth: this.fromDate.getMonth() + 1
+    }
+
+    this.http.post("Attendance/EnablePermission", data).then((response: ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Enable Permission");
+    })
   }
 
   createPageData(response: any) {
@@ -527,7 +565,7 @@ export class AttendanceComponent implements OnInit {
       }
     } else {
       WarningToast("Please select employer first.");
-    }    
+    }
   }
 
   getPendingWeek(from: Date, to: Date) {
@@ -540,7 +578,7 @@ export class AttendanceComponent implements OnInit {
       }
     } else {
       WarningToast("Please select employer first.");
-    }    
+    }
   }
 
   getAllPendingAttendance() {
@@ -564,8 +602,8 @@ export class AttendanceComponent implements OnInit {
     let date = null;
     while(i < existingDateList.length) {
       date = new Date(existingDateList[i]["AttendanceDay"]);
-      if(currenDate.getFullYear() == date.getFullYear() && 
-         currenDate.getMonth() == date.getMonth() && 
+      if(currenDate.getFullYear() == date.getFullYear() &&
+         currenDate.getMonth() == date.getMonth() &&
          currenDate.getDate() == date.getDate()) {
            return true;
          }
@@ -632,7 +670,7 @@ export class AttendanceComponent implements OnInit {
           date = new Date(startDate.getFullYear(), startDate.getMonth(), i + index);
           dayNum = date.getDay();
           date.setDate(date.getDate() - dayNum);
-          
+
           week = [];
           index = 0;
           let flag = false;

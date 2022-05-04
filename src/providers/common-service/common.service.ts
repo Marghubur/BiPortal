@@ -444,9 +444,9 @@ export function Toast(message: string, timeSpan: number = 5) {
     $Toast.classList.add("success-toast");
     $Toast.classList.remove("error-toast");
     $Toast.classList.remove("warning-toast");
-    
+
     $Toast.classList.remove("d-none");
-    
+
     document.getElementById("toastmessage").innerHTML = message;
     document.getElementById("success-box").classList.remove("d-none");
     document.getElementById("warning-box").classList.add("d-none");
@@ -464,14 +464,14 @@ export function ErrorToast(message: string, timeSpan: number = 10) {
     $Toast.classList.remove("success-toast");
     $Toast.classList.add("error-toast");
     $Toast.classList.remove("warning-toast");
-    
+
     $Toast.classList.remove("d-none");
 
     document.getElementById("toastmessage").innerHTML = message;
     document.getElementById("success-box").classList.add("d-none");
     document.getElementById("warning-box").classList.add("d-none");
     document.getElementById("error-box").classList.remove("d-none");
-    
+
     setTimeout(() => {
       HideToast();
     }, timeSpan * 998);
