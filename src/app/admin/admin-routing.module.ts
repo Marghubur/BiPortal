@@ -1,8 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Attendance, BillDetail, BuildPdf, Clients, Companies, CreateResume, Dashboard, Documents, DocumentsPage, Employees, Files, Leave, ManageEmployee, Profile, Recent, Recruiter, RegisterClient, Resume, Roles, Timesheet } from 'src/providers/constants';
+import { AdminDeclaration,
+  AdminPreferences,
+  AdminSalary,
+  AdminSummary,
+  Attendance,
+  BillDetail,
+  BuildPdf,
+  Clients,
+  Companies,
+  CreateResume,
+  Dashboard,
+  Documents,
+  DocumentsPage,
+  Employees,
+  Files,
+  Leave,
+  ManageEmployee,
+  Profile,
+  Recent,
+  Recruiter,
+  RegisterClient,
+  Resume,
+  Roles,
+  Timesheet
+} from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
-import { AdminComponent } from './admin.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
 import { BuildPdfComponent } from './build-pdf/build-pdf.component';
@@ -22,6 +45,10 @@ import { CreateResumeComponent } from './create-resume/create-resume.component';
 import { RecruiterComponent } from './recruiter/recruiter.component';
 import { LeaveComponent } from './leave/leave.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
+import { SummaryComponent } from './summary/summary.component';
+import { PreferencesComponent } from './preferences/preferences.component';
+import { SalaryComponent } from './salary/salary.component';
+import { DeclarationComponent } from './declaration/declaration.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -44,6 +71,10 @@ const routes: Routes = [
   { path: CreateResume, component: CreateResumeComponent},
   { path: Recruiter, component: RecruiterComponent},
   { path: Timesheet, component: TimesheetComponent},
+  { path: AdminSummary, component: SummaryComponent},
+  { path: AdminPreferences, component: PreferencesComponent},
+  { path: AdminSalary, component: SalaryComponent},
+  { path: AdminDeclaration, component: DeclarationComponent},
   { path: Leave, component: LeaveComponent}
 ];
 

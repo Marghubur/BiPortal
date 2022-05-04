@@ -27,6 +27,10 @@ import { CompaniesComponent } from './companies/companies.component';
 import { RecruiterComponent } from './recruiter/recruiter.component';
 import { LeaveComponent } from './leave/leave.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
+import { SummaryComponent } from './summary/summary.component';
+import { DeclarationComponent } from './declaration/declaration.component';
+import { SalaryComponent } from './salary/salary.component';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +56,11 @@ import { TimesheetComponent } from './timesheet/timesheet.component';
     CompaniesComponent,
     LeaveComponent,
     HomeComponent,
-    TimesheetComponent
+    TimesheetComponent,
+    SummaryComponent,
+    DeclarationComponent,
+    SalaryComponent,
+    PreferencesComponent
   ],
   imports: [
     CommonModule,
