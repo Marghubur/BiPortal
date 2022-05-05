@@ -1,4 +1,20 @@
 <div class="col-12 full-v main-container">
+  <div class="col-md-12 bg-light mb-3">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('salary-tab')" href="javascript:void(0)">SALARY</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')" href="javascript:void(0)">SUMMARY</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">Preference</a>
+      </li>
+    </ul>
+  </div>
   <div class="col-12 x_panel p-0 m-0">
     <app-breadcrums></app-breadcrums>
     <div class="right-panel col-md-12 p-0">

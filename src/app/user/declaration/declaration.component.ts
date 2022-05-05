@@ -4,7 +4,8 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn } from 'src/providers/constants';
+import { AccessTokenExpiredOn, Declaration, Preferences, Salary, Summary } from 'src/providers/constants';
+import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -68,9 +69,11 @@ export class DeclarationComponent implements OnInit {
   exemptions: Array<IncomeDeclaration> = [];
   otherExemptions: Array<IncomeDeclaration> = [];
   taxSavingAllowance: Array<IncomeDeclaration> = [];
+  cachedData: any = null;
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
+              private nav: iNavigation,
               private http: AjaxService,) { }
 
   ngOnInit(): void {
@@ -1041,6 +1044,22 @@ export class DeclarationComponent implements OnInit {
       this.active = 1;
     } else {
       this.active = 3;
+    }
+  }
+
+  activateMe(ele: string) {
+    switch(ele) {
+      case "declaration-tab":
+        break;
+      case "salary-tab":
+        this.nav.navigate(Salary, this.cachedData);
+        break;
+      case "summary-tab":
+        this.nav.navigate(Summary, this.cachedData);
+        break;
+      case "preference-tab":
+        this.nav.navigate(Preferences, this.cachedData);
+        break;
     }
   }
 }
