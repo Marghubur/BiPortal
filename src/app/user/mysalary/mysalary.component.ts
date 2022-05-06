@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Declaration, Preferences, Summary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-mysalary',
@@ -15,6 +16,10 @@ export class MysalaryComponent implements OnInit {
   monthlyTaxAmount: MonthlyTax;
   cachedData: any = null;
   myAnnualSalary: MyAnnualSalary = new MyAnnualSalary();
+  salaryDetail: boolean = true;
+  isLoading: boolean = false;
+  salaryBreakup: Array<SalaryBreakup> = [];
+  salaryDeducation: Array<SalaryDeduction> = [];
 
   constructor(private nav: iNavigation) { }
 
@@ -22,6 +27,10 @@ export class MysalaryComponent implements OnInit {
     var dt = new Date();
     var month = 4;
     var year = dt.getFullYear();
+    let data = this.nav.getValue();
+    if (data == 'income-tax'){
+      this.active = 3
+    }
     let i = 0;
     while( i < 12) {
       var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
@@ -242,8 +251,72 @@ export class MysalaryComponent implements OnInit {
       Other: 21600,
       Total: 2145600,
       Effective: new Date(),
-      PFperMonth: 1800
+      PFperMonth: 1800,
+      Perks: 0,
+      SalaryMonth: 177000
     }
+
+    this.salaryBreakup.push({
+      Details: "Basic",
+      Monthly: 70800,
+      Annually: 849600
+    },
+    {
+      Details: "Conveyance Allowance",
+      Monthly: 1600,
+      Annually: 19200
+    },
+    {
+      Details: "HRA",
+      Monthly: 28320,
+      Annually: 339840
+    },
+    {
+      Details: "Medical Allowance",
+      Monthly: 1250,
+      Annually: 15000
+    },
+    {
+      Details: "Car Running Allowance",
+      Monthly: 1800,
+      Annually: 21600
+    },
+    {
+      Details: "Telephone and Internet Allowance",
+      Monthly: 1500,
+      Annually: 18000
+    },
+    {
+      Details: "Travel Reimbursement (LTA)",
+      Monthly: 2500,
+      Annually: 30000
+    },
+    {
+      Details: "Shift Allowance",
+      Monthly: 1500,
+      Annually: 18000
+    },
+    {
+      Details: "Special Allowance",
+      Monthly: 67730,
+      Annually: 812760
+    },
+    {
+      Details: "Total",
+      Monthly: 177000,
+      Annually: 2121000
+    });
+
+    this.salaryDeducation.push({
+      Deduction: 'PF Employee',
+      Monthly: 1800,
+      Annually: 15000
+    },
+    {
+      Deduction: 'NET PAY',
+      Monthly: 175200,
+      Annually: 2102400
+    })
   }
 
   activateMe(ele: string) {
@@ -262,7 +335,17 @@ export class MysalaryComponent implements OnInit {
     }
   }
 
+  viewSalary() {
+    this.salaryDetail = !this.salaryDetail;
+  }
 
+  salaryBreakupPopup() {
+    $('#fullSalaryDetail').modal('show');
+  }
+
+  closeSalaryDetails() {
+    $('#fullSalaryDetail').modal('hide');
+  }
 
 }
 
@@ -309,5 +392,19 @@ class MyAnnualSalary {
   Other: number = 0;
   Total: number = 0;
   Effective: Date = null;
-  PFperMonth: number = 0
+  PFperMonth: number = 0;
+  Perks: number = 0;
+  SalaryMonth: number = 0
+}
+
+class SalaryBreakup {
+  Details: string = '';
+  Monthly: number = 0;
+  Annually: number = 0;
+}
+
+class SalaryDeduction {
+  Deduction: string = '';
+  Monthly: number = 0;
+  Annually: number = 0;
 }

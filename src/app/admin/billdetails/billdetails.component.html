@@ -239,9 +239,10 @@
                     </div>
                   </div>
                   <div class="td align-middle fe-1">
-                    <div class="cell-wrapper">
+                    <div class="cell-wrapper text-center">
                       <a href="javascript:void(0)" class="h-font" (click)="UpdateCurrent(user.FileUid)">
-                        {{user.Status}}
+                        <i class="fa" [ngClass]="{'fa-check fa-lg text-success': user.Status == 'Completed', 'fa-times text-danger fa-lg': user.Status == 'Canceled', 'fa-clock-o text-dark': user.Status == 'Raised', 'fa-exclamation-triangle fa-lg text-warning': user.Status == 'Pending', 'fa-ban fa-lg text-danger': user.Status == 'Rejected'}"></i>
+                        <!-- {{user.Status}} -->
                       </a>
                     </div>
                   </div>

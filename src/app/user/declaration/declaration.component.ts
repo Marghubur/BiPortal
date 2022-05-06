@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { Files } from 'src/app/admin/documents/documents.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Declaration, Preferences, Salary, Summary } from 'src/providers/constants';
+import { AccessTokenExpiredOn, Form12B, FreeTaxFilling, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
+import 'bootstrap';
 declare var $: any;
 
 @Component({
@@ -14,7 +15,7 @@ declare var $: any;
   templateUrl: './declaration.component.html',
   styleUrls: ['./declaration.component.scss']
 })
-export class DeclarationComponent implements OnInit {
+export class DeclarationComponent implements OnInit, AfterViewChecked {
   active = 1;
   editPPF: boolean = true;
   editSeniorCitizen: boolean = true;
@@ -70,6 +71,9 @@ export class DeclarationComponent implements OnInit {
   otherExemptions: Array<IncomeDeclaration> = [];
   taxSavingAllowance: Array<IncomeDeclaration> = [];
   cachedData: any = null;
+  taxAmount: TaxAmount = new TaxAmount();
+  myDeclaration: Array<MyDeclaration> = [];
+  year: number = 0;
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -78,6 +82,8 @@ export class DeclarationComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    var dt = new Date();
+    this.year = dt.getFullYear();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     if(expiredOn === null || expiredOn === "")
@@ -90,6 +96,10 @@ export class DeclarationComponent implements OnInit {
     } else {
       ErrorToast("Invalid user. Please login again.")
     }
+  }
+
+  ngAfterViewChecked(): void {
+    $('[data-toggle = "tooltip"]').tooltip();
   }
 
   loadData() {
@@ -592,6 +602,53 @@ export class DeclarationComponent implements OnInit {
       Proof: null,
       Status: 2
     });
+
+    this.taxAmount =  {
+      NetTaxableAmount: 2050000,
+      TotalTaxPayable: 444600,
+      TaxAlreadyPaid: 37050
+    };
+
+    this.myDeclaration.push({
+      Declaration: "1.5 Lac Exemptions",
+      NoOfDeclaration: 2,
+      AmountDeclared: 21600,
+      ProofSUbmitted: 0,
+      AmountRejected: 0,
+      AmountAccepted: 0
+    },
+    {
+      Declaration: "Other Exemptions",
+      NoOfDeclaration: 0,
+      AmountDeclared: 0,
+      ProofSUbmitted: 0,
+      AmountRejected: 0,
+      AmountAccepted: 0
+    },
+    {
+      Declaration: "Tax Saving Allowance",
+      NoOfDeclaration: 0,
+      AmountDeclared: 0,
+      ProofSUbmitted: 0,
+      AmountRejected: 0,
+      AmountAccepted: 0
+    },
+    {
+      Declaration: "House Property",
+      NoOfDeclaration: 0,
+      AmountDeclared: 0,
+      ProofSUbmitted: 0,
+      AmountRejected: 0,
+      AmountAccepted: 0
+    },
+    {
+      Declaration: "Income From Other Sources",
+      NoOfDeclaration: 0,
+      AmountDeclared: 0,
+      ProofSUbmitted: 0,
+      AmountRejected: 0,
+      AmountAccepted: 0
+    })
   }
 
 
@@ -1062,6 +1119,29 @@ export class DeclarationComponent implements OnInit {
         break;
     }
   }
+
+  activeTab(e: string) {
+    switch(e) {
+      case "declaration-tab":
+        break;
+      case "previous-income-tab":
+        this.nav.navigate(PreviousIncome, this.cachedData);
+        break;
+      case "form-12-tab":
+        this.nav.navigate(Form12B, this.cachedData);
+        break;
+      case "free-tax-tab":
+        this.nav.navigate(FreeTaxFilling, this.cachedData);
+        break;
+      case "tax-saving-tab":
+        this.nav.navigate(TaxSavingInvestment, this.cachedData);
+        break;
+    }
+  }
+
+  gotoTaxSection(value: string) {
+    this.nav.navigate(Salary, value)
+  }
 }
 
 interface IncomeDeclaration {
@@ -1072,5 +1152,20 @@ interface IncomeDeclaration {
   Declaration: number;
   Proof: any;
   Status: number;
+}
+
+class TaxAmount {
+  NetTaxableAmount: number = 0;
+  TotalTaxPayable: number = 0;
+  TaxAlreadyPaid: number = 0;
+}
+
+class MyDeclaration {
+  Declaration: string = '';
+  NoOfDeclaration: number = 0;
+  AmountDeclared: number =0;
+  ProofSUbmitted: number = 0;
+  AmountRejected: number = 0;
+  AmountAccepted: number = 0;
 }
 

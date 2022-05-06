@@ -67,5 +67,28 @@
 }
 
 .current-circle {
-  padding: 25px 8px;
+  padding: 30px 11px;
+}
+
+.cell-wrapper {
+  padding-left: .6rem;
+  padding-right: .6rem;
+}
+
+.hide-bar {
+  width: 17px !important;
+  height: 2.95rem !important;
+}
+
+.t-body > .tr:last-child {
+  font-weight: 700 !important;
+  color: #222 !important;
+}
+
+.arrow-left {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right:10px solid #6c757d;
 }

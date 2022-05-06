@@ -66,3 +66,25 @@
   border-right: 6px solid transparent;
   transform: rotate(180deg);
 }
+
+.new-nav-active {
+  color: #222 !important;
+  border-radius: 0px !important;
+  position: relative !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+}
+
+.new-nav-active::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 15% !important;
+  width: 70%;
+  height: 3px;
+  background: #8cc63e;
+}
+
+.tooltip-inner {
+  max-width: 100% !important;
+}

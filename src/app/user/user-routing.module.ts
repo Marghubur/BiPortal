@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Declaration, Preferences, Profile, Salary, Summary, UserAttendance, UserDashboard, UserLeave, UserProfilePage, UserTimesheet } from 'src/providers/constants';
+import { Declaration, Form12B, FreeTaxFilling, Preferences, PreviousIncome, Profile, Salary, Summary, TaxSavingInvestment, UserAttendance, UserDashboard, UserLeave, UserProfilePage, UserTimesheet } from 'src/providers/constants';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { DeclarationComponent } from './declaration/declaration.component';
 import { MysalaryComponent } from './mysalary/mysalary.component';
@@ -10,6 +10,10 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 import { PreferencesComponent } from './preferences/preferences.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import { LeaveComponent } from './leave/leave.component';
+import { PreviousincomeComponent } from './previousincome/previousincome.component';
+import { Form12BBComponent } from './form12-bb/form12-bb.component';
+import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
+import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
 
 const routes: Routes = [
   { path: '', component: UserDashboardComponent},
@@ -21,7 +25,12 @@ const routes: Routes = [
   { path: Preferences, component: PreferencesComponent},
   { path: UserLeave, component: LeaveComponent},
   { path: UserTimesheet, component: TimesheetComponent},
-  { path: UserProfilePage, component: ProfileComponent}
+  { path: UserProfilePage, component: ProfileComponent},
+  { path: PreviousIncome, component: PreviousincomeComponent},
+  { path: Form12B, component: Form12BBComponent},
+  { path: FreeTaxFilling, component: FreetaxfillingComponent},
+  { path: TaxSavingInvestment, component: TaxsavinginvestmentComponent},
+
 ];
 
 @NgModule({

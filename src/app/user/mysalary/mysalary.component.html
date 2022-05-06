@@ -27,38 +27,86 @@
                 <div class="mt-4 alert alert-info fs-6" role="alert">
                   Your Income and tax liability computed as per Old income taax regiime. To learn more, and switch to New income tax regime, <a href="javscript:void(0)" class="text-decoration-none">click here.</a>
                 </div>
-                <div class="d-flex mt-5 ms-5">
-                  <div class="bg-info text-light rounded-circle current-circle">
-                    <span class="fw-bold">CURRENT</span>
+                <div class="d-flex mt-5 ms-5 mb-3">
+                  <div class="col-md-2">
+                    <div class="bg-info text-light rounded-circle current-circle col-md-5">
+                      <span class="fw-bold">CURRENT</span>
+                    </div>
                   </div>
-                  <div class="col-md-8 bg-secondary text-light d-flex align-items-center ms-4">
-                    <div class="pe-2 ps-4">
-                      <small>ANNUAL</small>
-                      <p class="fw-bold mb-0">INR {{myAnnualSalary.Annual}}</p>
+                  <div class="col-md-8 ms-4">
+                    <div class="bg-secondary text-light d-flex align-items-center py-3">
+                      <div class="pe-2 ps-4">
+                        <small>ANNUAL</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Annual}}</p>
+                      </div>
+                      <span class="fs-5 px-3">+</span>
+                      <div class="px-2">
+                        <small>BONUS</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Bonus}}</p>
+                      </div>
+                      <span class="fs-5 px-3">+</span>
+                      <div class="px-2">
+                        <small>Other</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Other}}</p>
+                      </div>
+                      <span class="fs-5 px-3">=</span>
+                      <div class="px-2">
+                        <small>Total</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Total}}</p>
+                      </div>
+                      <div class="ms-auto me-3">
+                        <a href="javascript:void(0)">
+                          <i class="fa fa-refresh text-light" aria-hidden="true"></i>
+                        </a>
+                        <button type="btn" class="btn btn-outline-light btn-sm ms-3" (click)="viewSalary()">
+                          <i class="fa" [ngClass]="{'fa-angle-down': salaryDetail, 'fa-angle-up': !salaryDetail}" aria-hidden="true"></i>
+                        </button>
+                      </div>
                     </div>
-                    <span class="fs-5 px-3">+</span>
-                    <div class="px-2">
-                      <small>BONUS</small>
-                      <p class="fw-bold mb-0">INR {{myAnnualSalary.Bonus}}</p>
-                    </div>
-                    <span class="fs-5 px-3">+</span>
-                    <div class="px-2">
-                      <small>Other</small>
-                      <p class="fw-bold mb-0">INR {{myAnnualSalary.Other}}</p>
-                    </div>
-                    <span class="fs-5 px-3">=</span>
-                    <div class="px-2">
-                      <small>Total</small>
-                      <p class="fw-bold mb-0">INR {{myAnnualSalary.Total}}</p>
-                    </div>
-                    <div class="ms-auto me-3">
-                      <a href="javascript:void(0)">
-                        <i class="fa fa-refresh text-light" aria-hidden="true"></i>
-                      </a>
-                      <button type="btn" class="btn btn-outline-light btn-sm ms-3">
-                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                      </button>
-                    </div>
+                    <ng-container *ngIf="!salaryDetail">
+                      <div class="border border-secondary">
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            REGULAR SALARY:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Total}} </span><span class="ps-3"><a href="javascript:void(0)" class="text-decoration-none" (click)="salaryBreakupPopup()">SALARY BREAKUP</a></span>
+                          </p>
+                        </div>
+                        <div class="row ps-3 mt-1">
+                          <div class="col-md-4">
+                            <small class="fw-bold">SALARY / MONTH</small>
+                            <p class="text-dark pt-2">INR{{myAnnualSalary.SalaryMonth}} </p>
+                          </div>
+                          <div class="col-md-4">
+                            <small class="fw-bold">EFFECTIVE</small>
+                            <p class="pt-2">{{myAnnualSalary.Effective | date}}</p>
+                          </div>
+                        </div>
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            BONUS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Bonus}} </span>
+                          </p>
+                        </div>
+                        <div class="text-center py-2">
+                          <ng-container *ngIf="myAnnualSalary.Bonus == 0">No bonus added</ng-container>
+                        </div>
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            OTHER:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Other}} </span>
+                          </p>
+                        </div>
+                        <div class=" ps-3 mt-1">
+                          <small class="fw-bold">PF - EMPLOYER / MONTH</small>
+                          <p class="pt-2">INR {{myAnnualSalary.PFperMonth}}</p>
+                        </div>
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            PERKS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Perks}} </span>
+                          </p>
+                        </div>
+                        <div class="text-center py-2">
+                          <ng-container *ngIf="myAnnualSalary.Perks == 0">No perks are assigned</ng-container>
+                        </div>
+                      </div>
+                    </ng-container>
                   </div>
                 </div>
               </ng-template>
@@ -498,6 +546,102 @@
           <div [ngbNavOutlet]="nav" class="mt-2"></div>
         </div>
       </ng-container>
+    </div>
+  </div>
+</div>
+
+<!-- Full Salary Deatils -->
+<div class="modal fade" id="fullSalaryDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title fs-4 text-dark" id="exampleModalLabel">SALARY BREAKUP</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="t-table t-list t-border col-md-12">
+          <div class="hide-bar alert-primary"></div>
+          <div class="t-head alert-primary">
+            <div class="tr fw-bold text-dark">
+              <div class="th fe-4">
+                <div class="cell-wrapper">
+                  DETAILS
+                </div>
+              </div>
+              <div class="th fe-2">
+                MONTHLY
+              </div>
+              <div class="th fe-2">
+                ANNUALLY
+              </div>
+            </div>
+          </div>
+          <div class="t-body overflow-hidden">
+            <div class="tr py-2" *ngFor="let salary of salaryBreakup">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  {{salary.Details}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  <span *ngIf="salary.Details == 'Total'">INR </span>
+                  {{salary.Monthly}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  <span *ngIf="salary.Details == 'Total'">INR </span>
+                  {{salary.Annually}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="t-table t-list t-border col-md-12 mt-4">
+          <div class="hide-bar alert-primary"></div>
+          <div class="t-head alert-primary">
+            <div class="tr fw-bold text-dark">
+              <div class="th fe-4">
+                <div class="cell-wrapper">
+                  DEDUCATION
+                </div>
+              </div>
+              <div class="th fe-2">
+                MONTHLY
+              </div>
+              <div class="th fe-2">
+                ANNUALLY
+              </div>
+            </div>
+          </div>
+          <div class="t-body overflow-hidden">
+            <div class="tr py-2" *ngFor="let deduction of salaryDeducation">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  {{deduction.Deduction}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  <span *ngIf="deduction.Deduction == 'NET PAY'">INR </span>
+                  {{deduction.Monthly}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  <span *ngIf="deduction.Deduction == 'NET PAY'">INR </span>
+                  {{deduction.Annually}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="ps-3 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if any).</p>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-outline-success px-4" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>

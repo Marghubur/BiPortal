@@ -75,14 +75,16 @@ export const AdminPreferences = "admin/preferences";
 export const UserDashboard = "user/dashboard";
 export const UserAttendance = "user/attendance";
 export const UserProfilePage = "user/profile";
-
+export const UserTimesheet = "user/timesheet";
 export const Summary = "user/summary";
 export const Declaration = "user/declaration";
 export const Salary = "user/salary";
 export const Preferences = "user/preferences";
-export const UserLeave = 'user/leave'
-export const UserTimesheet = 'user/timesheet'
-
+export const UserLeave = 'user/leave';
+export const PreviousIncome = 'user/previousincome';
+export const Form12B = 'user/form12b';
+export const FreeTaxFilling = 'user/freetaxfilling';
+export const TaxSavingInvestment = 'user/taxsavinginvestment';
 
 
 // *************************** file name constancts  *************
