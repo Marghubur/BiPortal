@@ -1,0 +1,59 @@
+<div class="col-12 full-v main-container">
+  <div class="col-md-12 bg-light mb-3">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('salary-tab')" href="javascript:void(0)">SALARY</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')" href="javascript:void(0)">SUMMARY</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">Preference</a>
+      </li>
+    </ul>
+  </div>
+  <div class="col-12 x_panel p-0 m-0">
+    <app-breadcrums></app-breadcrums>
+    <div class="right-panel col-md-12 p-0">
+      <div class="col-md-12 bg-light mb-3 mt-3">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link new-nav-link text-dark" id="attendance-tab" (click)="activeTab('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark new-nav-active" id="timesheet-tab" (click)="activeTab('previous-income-tab')" href="javascript:void(0)">Previous Income</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('form-12-tab')" href="javascript:void(0)">Form 12 BB</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')" href="javascript:void(0)">Free Tax Filling</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('tax-saving-tab')" href="javascript:void(0)">Tax Saving Investment</a>
+          </li>
+        </ul>
+      </div>
+      <ng-container>
+        <div class="container-fluid pt-4">
+          <div class="uc-page text-center d-flex flex-column justify-content-center">
+            <div class="text-center">
+              <img src="../../../assets/images/uc.jpg">
+            </div>
+            <blockquote class="mt-4 blockquote text-center">
+              <p>
+                Welcome to HIRINGBELL online account and HRM management system.
+                This page is under construction.
+              </p>
+              <footer class="blockquote-footer">Powered By: <cite title="Source Title">BottomHalf Pvt. Ltd.</cite>
+              </footer>
+            </blockquote>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

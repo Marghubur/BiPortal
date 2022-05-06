@@ -69,6 +69,10 @@ export const AdminSummary = "admin/summary";
 export const AdminDeclaration = "admin/declaration";
 export const AdminSalary = "admin/salary";
 export const AdminPreferences = "admin/preferences";
+export const AdminPreviousIncome = 'admin/previousincome';
+export const AdminForm12B = 'admin/form12b';
+export const AdminFreeTaxFilling = 'admin/freetaxfilling';
+export const AdminTaxSavingInvestment = 'admin/taxsavinginvestment';
 
 // ********************** Admin route pages  *******************
 
