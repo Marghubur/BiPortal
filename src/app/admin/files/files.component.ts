@@ -11,7 +11,6 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 import { Files } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
-
 declare var $: any;
 
 @Component({
@@ -318,13 +317,13 @@ export class FilesComponent implements OnInit {
   downloadPdfDocx() {
     this.downlodFilePath = "";
     let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
-    
+
     let fileId = Number(this.FileDetail.FileUid);
     if(isNaN(fileId)) {
       ErrorToast("Invalid file id supplied.");
       return;
     }
-    
+
     let employeeBillDetail = {
       "EmployeeId": this.FileDetail.FileOwnerId,
       "ClientId": this.FileDetail.ClientId,

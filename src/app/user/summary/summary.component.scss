@@ -1,34 +1,37 @@
-.circle {
-    position: relative;
-    background: #8cc63e;
-    border-radius: 50%;
-    width: 15px;
-    height: 15px;
-}
-  
-.checkmark {
-    position: absolute;
-    transform: rotate(45deg) translate(-50%, -50%);
-    left: 25%;
-    top: 48%;
-    height: 9px;
-    width: 5px;
-    border-bottom: 3px solid white;
-    border-right: 3px solid white;
+.nav-link.active {
+  color: #222;
+  background-color: #dcefff !important;
+  border-radius: 0px !important;
 }
 
-.declaration-bg {
-    background: #d2d4d5;
-    padding: 0.53rem 8px;
+.nav-active {
+  color: #222;
+  border-radius: 0px !important;
+  position: relative;
+  cursor: pointer;
+  font-weight: 500;
 }
 
-.upload-document-container {
-    background: #c1e2f28f;
-    border: 2px solid #85cef2fa;
-    border-style: dashed;
+.nav-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 40%;
+  border-top: 6px solid rgb(44, 135, 151);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  transform: rotate(180deg);
 }
 
-.attachment-popup {
-    z-index: 99999 !important;
-    background: #0000008a !important;
+.rupee-container {
+  width: 25px;
+  height: 25px;
+  border: 2px solid #06adff;
+  border-radius: 50%;
+}
+
+.fa-inr {
+  top: 3px;
+  left: 6px;
+  color: #06adff;
 }

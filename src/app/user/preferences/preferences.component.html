@@ -1,457 +1,135 @@
 <div class="col-12 full-v main-container">
+  <div class="col-md-12 bg-light mb-3">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('salary-tab')" href="javascript:void(0)">SALARY</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')" href="javascript:void(0)">SUMMARY</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark nav-active" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">Preference</a>
+      </li>
+    </ul>
+  </div>
   <div class="col-12 x_panel p-0 m-0">
-    <!-- <app-breadcrums></app-breadcrums> -->
+    <app-breadcrums></app-breadcrums>
     <div class="right-panel col-md-12 p-0">
       <ng-container>
-        <div class="container-fluid pt-4">
-          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-            <li [ngbNavItem]="1">
-              <a ngbNavLink>My Salary</a>
-              <ng-template ngbNavContent>
-                <p>
-                  Raw denim you probably haven't heard of them jean shorts
-                  Austin. Nesciunt tofu stumptown aliqua, retro synth master
-                  cleanse. Mustache cliche tempor, williamsburg carles vegan
-                  helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher
-                  synth. Cosby sweater eu banh mi, qui irure terry richardson ex
-                  squid. Aliquip placeat salvia cillum iphone. Seitan aliquip
-                  quis cardigan american apparel, butcher voluptate nisi qui.
-                </p>
-              </ng-template>
-            </li>
-            <li [ngbNavItem]="2">
-              <a ngbNavLink>Pay Slips</a>
-              <ng-template ngbNavContent>
-                <p>
-                  Exercitation +1 labore velit, blog sartorial PBR leggings next
-                  level wes anderson artisan four loko farm-to-table craft beer
-                  twee. Qui photo booth letterpress, commodo enim craft beer
-                  mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo
-                  nostrud organic, assumenda labore aesthetic magna delectus
-                  mollit. Keytar helvetica VHS salvia yr, vero magna velit
-                  sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                  anderson 8-bit, sustainable jean shorts beard ut DIY ethical
-                  culpa terry richardson biodiesel. Art party scenester
-                  stumptown, tumblr butcher vero sint qui sapiente accusamus
-                  tattooed echo park.
-                </p>
-              </ng-template>
-            </li>
-            <li [ngbNavItem]="3">
-              <a ngbNavLink>Income Tax</a>
-              <ng-template ngbNavContent>
-                <div class="custom-bg mt-3">
-                  <p class="fs-4 pt-3 ps-3">
-                    Income Tax Computation <i class="fa fa-download ps-3"></i>
-                  </p>
-                  <p class="ps-3">
-                    View complete breakup of payments, deductions and declarations. You can analyze how income tax is
-                    being
-                    calculated and what is the TDS every month.
-                  </p>
-                  <div class="card mb-3">
-                    <div class="py-3 ps-3">
-                      <p class="fs-5 text-dark"><i class="fa fa-bullhorn pe-3" aria-hidden="true"></i>Important!</p>
-                      <ul class="ps-5">
-                        <li>
-                          Current Income tax calculation is considering <span class="fw-bold">DECLARED</span> amounts of
-                          Investment Declaration irrespective on approval status
-                        </li>
-                        <li>
-                          Your Income and tax liability is being computed as per <span class="fw-bold">Old income tax
-                            regime.</span>
-                        </li>
-                      </ul>
-                    </div>
+        <div class="container-fluid row">
+          <div class="col-md-6 mt-4">
+            <div class="card">
+              <div class="card-header fs-5 text-dark">
+                PAN Information
+              </div>
+              <div class="ps-3 pt-4">
+                <div class="row">
+                  <div class="col-md-4">
+                    <small>NAME ON PAN CARD</small>
+                    <p class="text-dark">{{PanInformation.NameOnCard}}</p>
                   </div>
-                  <div class="card border-0 mb-3">
-                    <ng-container>
-                      <div class="t-table t-list border-0 col-md-12 bg-white">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr border-bottom-0">
-                            <div class="th ps-2">NET TAXABLE INCOME</div>
-                            <div class="th">GROSS INCOME TAX</div>
-                            <div class="th">TOTAL SURCHARGE & CESS</div>
-                            <div class="th">NET INCOME TAX PAYABLE</div>
-                            <div class="th">TAX PAID TILL NOW</div>
-                            <div class="th fe-1">REMAINING TAX TO BE PAID</div>
-                          </div>
-                        </div>
-                        <div class="t-head overflow-hidden">
-                          <div class="tr text-dark py-2">
-                            <div class="th ps-2">INR 2050000</div>
-                            <div class="th ps-2">INR 427500</div>
-                            <div class="th ps-2">INR 17100</div>
-                            <div class="th ps-2">INR 444600</div>
-                            <div class="th ps-2">INR 37050</div>
-                            <div class="th ps-2">INR 407550</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="d-flex py-3 align-items-center">
-                        <div class="pointable-text ms-2 px-2">A</div>
-                        <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Gross Earnings from Employment</h5>
-                      </div>
-                      <div class="t-table t-list t-border col-md-12 bg-white">
-                        <div class="ps-2 pt-4 pb-2 row">
-                          <div class="col d-flex align-items-center">
-                            <div class="previous-employer-indicator indicator"></div>
-                            <p class="p-0 m-0 ps-2">Income from Previous Employer</p>
-                          </div>
-                          <div class="col d-flex align-items-center">
-                            <div class="curent-employer-indicator indicator"></div>
-                            <p class="p-0 m-0 ps-2">Income from Current Employer (imported)</p>
-                          </div>
-                          <div class="col d-flex align-items-center">
-                            <div class="project-salary-indicator indicator"></div>
-                            <p class="p-0 m-0 ps-2">Projected Salary</p>
-                          </div>
-                        </div>
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3 custom-bg border-top">
-                            <div class="th ps-2 fe-3">
-                              <div class="cell-erapping">
-                                SALARY BREAKUP
-                              </div>
-                            </div>
-                            <div class="th">
-                              <div class="cell-wrapper">
-                                Total
-                              </div>
-                            </div>
-                            <div class="th" *ngFor="let item of taxCalender">
-                              <div class="cell-wrapper">
-                                <div class="d-flex align-items-center">
-                                  <span>{{item.month}} {{item.year}}</span>
-                                  <div class="curent-employer-indicator indicator ms-1"></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="t-body overflow-hidden">
-                          <div class="tr text-dark py-3" *ngFor="let item of grossEarning">
-                            <div class="td ps-2 fe-3">
-                              <div class="cell-wrapper">
-                                {{item.salaryBreakup}}
-                              </div>
-                            </div>
-                            <div class="td">
-                              <div class="cell-wrapper">
-                                {{item.total}}
-                              </div>
-                            </div>
-                            <div class="td ps-3">
-                              <div class="cell-wrapper">
-                                {{item.april}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.may}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.june}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.july}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.aug}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.sep}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.oct}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.nov}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.dec}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.jan}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.feb}}
-                              </div>
-                            </div>
-                            <div class="td ps-1">
-                              <div class="cell-wrapper">
-                                {{item.march}}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container>
-
-                    <ng-container>
-                      <div class="d-flex py-3 align-items-center">
-                        <div class="pointable-text ms-2 px-2">B</div>
-                        <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Taxable Income from all Heads</h5>
-                      </div>
-                      <div class="d-flex py-3 align-items-center ps-4">
-                        <div class="pointable-text ms-2 px-2">IS</div>
-                        <h6 class="fw-bold text-dark ps-2 pb-0 mb-0">Taxable Income from all Heads</h6>
-                      </div>
-                      <div class="t-table t-list t-border bg-white">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3 ">
-                            <div class="th ps-3">Total Salary Receiived</div>
-                            <div class="th pe-3 text-end">2124000</div>
-                          </div>
-                          <div class="tr py-3 border-bottom-0">
-                            <div class="th fw-bold ps-3">Total</div>
-                            <div class="th fw-bold pe-3 text-end">2124000</div>
-                          </div>
-                        </div>
-                      </div>
-                      <h6 class="ms-5 py-3 text-dark">Less: Section 16 Tax Exemptions</h6>
-                      <div class="t-table t-border t-list bg-white ms-5">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3">
-                            <div class="th ps-3">16(iii)</div>
-                            <div class="th ps-3">Professional/Employment Tax</div>
-                            <div class="th ps-3">View Details</div>
-                            <div class="th pe-3 text-end">2400</div>
-                          </div>
-                          <div class="tr py-3 ">
-                            <div class="th ps-3">16(ia)</div>
-                            <div class="th ps-3">Standard Deducation</div>
-                            <div class="th ps-3"></div>
-                            <div class="th pe-3 text-end">50000</div>
-                          </div>
-                          <div class="tr py-3 border-bottom-0">
-                            <div class="th ps-3 fw-bold">Total</div>
-                            <div class="th ps-3"></div>
-                            <div class="th ps-3"></div>
-                            <div class="th pe-3 text-end fw-bold">52400</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="t-table t-border t-list bg-white ms-4 mt-3">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3 border-bottom-0">
-                            <div class="th fw-bold ps-3">Taxable Amount under Head "Salaries</div>
-                            <div class="th fw-bold pe-3 text-end">2071600</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="t-table t-border t-list bg-white mt-3">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3 border-bottom-0">
-                            <div class="th fw-bold ps-3">Total Gross from all Heads</div>
-                            <div class="th fw-bold pe-3 text-end">2071600</div>
-                          </div>
-                        </div>
-                      </div>
-                      <h6 class="ms-4 fw-bold mt-3">Less: 1.5 Lac Tax Exemption (Section 80C + Others)</h6>
-                      <div class="t-table t-border t-list bg-white ms-4">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3 custom-bg">
-                            <div class="th ps-3">SECTION</div>
-                            <div class="th ps-3">ALLOWANCE</div>
-                            <div class="th ps-3"></div>
-                            <div class="th pe-3">DECLARED AMOUNT</div>
-                            <div class="th pe-3 text-end">DEDUCTABLE AMOUNT</div>
-                          </div>
-                          <div class="tr py-3 ">
-                            <div class="th ps-3">80C</div>
-                            <div class="th ps-3">EPF (Deducted from Salary)</div>
-                            <div class="th ps-3">View Details</div>
-                            <div class="th ps-3">21600</div>
-                            <div class="th pe-3 text-end">21600</div>
-                          </div>
-                          <div class="tr py-3 border-bottom-0">
-                            <div class="th ps-3 fw-bold">Total</div>
-                            <div class="th ps-3"></div>
-                            <div class="th ps-3"></div>
-                            <div class="th ps-3"></div>
-                            <div class="th pe-3 text-end fw-bold">21600</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="t-table t-border t-list mt-3">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3">
-                            <div class="th fw-bold ps-3">Total Taxable Amount</div>
-                            <div class="th fw-bold pe-3 text-end">2050000</div>
-                          </div>
-                          <div class="tr py-3 border-bottom-0">
-                            <div class="th ps-3">Net taxable income is</div>
-                            <div class="th pe-3 text-end">2050000</div>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <ng-container>
-                      <div class="d-flex py-3 align-items-center">
-                        <div class="pointable-text ms-2 px-2">P</div>
-                        <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Tax Calculation</h5>
-                      </div>
-                      <div class="t-table t-list t-border col-md-12 bg-white">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3 custom-bg">
-                            <div class="th ps-2">TAXABLE INCOME SLAB</div>
-                            <div class="th text-end pe-3">TAX AMOUNT</div>
-                          </div>
-                        </div>
-                        <div class="t-body overflow-hidden">
-                          <div class="tr tax-slab text-dark py-3" *ngFor="let item of taxSlab">
-                            <div class="td ps-1">{{item.taxableincomeslab}}</div>
-                            <div class="td ps-1 text-end pe-3">{{item.taxamount}}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <ng-container>
-                      <div class="d-flex py-3 align-items-center">
-                        <div class="pointable-text ms-2 px-2">Q</div>
-                        <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Surcharge & Cess</h5>
-                      </div>
-                      <div class="t-table t-list t-border col-md-12 bg-white">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3">
-                            <div class="th ps-2">Health and Education Cess - 4% of Gross Income Tax and Surcharge</div>
-                            <div class="th pe-3 text-end">17100</div>
-                          </div>
-                          <div class="tr border-bottom-0 py-3">
-                            <div class="th ps-2 fw-bold">Total Surcharge & Cess</div>
-                            <div class="th pe-3 text-end fw-bold">17100</div>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <ng-container>
-                      <div class="d-flex py-3 align-items-center">
-                        <div class="pointable-text ms-2 px-2">T</div>
-                        <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Net Income Tax Payable</h5>
-                      </div>
-                      <div class="t-table t-list t-border col-md-12 bg-white">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3">
-                            <div class="th ps-2">
-                              <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <div class="pointable-text ms-2 px-2">P</div>
-                                  <p class="fw-bold text-dark ps-2 pb-0 mb-0">Tax Calculation</p>
-                                </div>
-                                <span class="px-2">+</span>
-                                <div class="d-flex align-items-center">
-                                  <div class="pointable-text ms-2 px-2">Q</div>
-                                  <p class="fw-bold text-dark ps-2 pb-0 mb-0">Surcharge & Cess</p>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="th pe-3 text-end">444600</div>
-                          </div>
-                          <div class="tr border-bottom-0 py-3">
-                            <div class="th ps-2">Net tax amount of 444600 after round Off is</div>
-                            <div class="th pe-3 text-end">444600</div>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <ng-container>
-                      <div class="d-flex py-3 align-items-center">
-                        <div class="pointable-text ms-2 px-2">U</div>
-                        <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Cumulative Tax Deductions Details</h5>
-                      </div>
-                      <div class="t-table t-list t-border col-md-12 bg-white">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr border-bottom-0 py-3">
-                            <div class="th ps-2 fw-bold">Tax Paid Till Now</div>
-                            <div class="th pe-3 fw-bold text-end">37050</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="t-table mt-3 t-list t-border col-md-12 bg-white">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr border-bottom-0 py-3">
-                            <div class="th ps-2 fw-bold">Remaining Tax To Be Paid</div>
-                            <div class="th pe-3 fw-bold text-end">407550</div>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <ng-container>
-                      <div class="d-flex py-3 align-items-center">
-                        <div class="pointable-text ms-2 px-2">V</div>
-                        <h5 class="text-dark fw-bold ps-2 pb-0 mb-0">Month on Month Tax Deductions Details</h5>
-                      </div>
-                      <div class="t-table t-list t-border mb-3 col-md-12 bg-white">
-                        <div class="t-head overflow-hidden custom-bg">
-                          <div class="tr py-3">
-                            <div class="th ps-2 fe-2">Month</div>
-                            <div class="th" *ngFor="let item of taxCalender">
-                              <div class="d-flex align-items-center">
-                                <span>{{item.month}} {{item.year}}</span>
-                                <div class="curent-employer-indicator indicator ms-1"></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="t-body border-bottom overflow-hidden">
-                          <div class="tr py-3">
-                            <div class="td ps-2 fe-2">Monthly Total Tax</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.april}}</div>
-                            <div class="td ps-2">{{monthlyTaxAmount.may}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.june}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.july}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.aug}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.sep}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.oct}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.nov}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.dec}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.jan}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.feb}}</div>
-                            <div class="td ps-1">{{monthlyTaxAmount.march}}</div>
-                          </div>
-                        </div>
-                        <div class="ps-2 py-3 row">
-                          <div class="col d-flex align-items-center">
-                            <div class="previous-employer-indicator indicator"></div>
-                            <p class="p-0 m-0 ps-2">Tax Deduction from previous employer</p>
-                          </div>
-                          <div class="col d-flex align-items-center">
-                            <div class="curent-employer-indicator indicator"></div>
-                            <p class="p-0 m-0 ps-2">Imported Tax Deduction from current employer</p>
-                          </div>
-                          <div class="col d-flex align-items-center">
-                            <div class="project-salary-indicator indicator"></div>
-                            <p class="p-0 m-0 ps-2">Projected Income Tax</p>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container>
+                  <div class="col-md-4">
+                    <small>PAN NUMBER</small>
+                    <p class="text-dark">{{PanInformation.PANNumber}}</p>
+                  </div>
+                  <div class="col-md-3">
+                    <small>DATE OF BIRTH</small>
+                    <p class="text-dark">{{PanInformation.DOB | date}}</p>
                   </div>
                 </div>
-              </ng-template>
-            </li>
-          </ul>
-
-          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                <div>
+                  <small>FATHER / SPOUSE NAME</small>
+                  <p class="text-dark">{{PanInformation.FatherName}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mt-4">
+            <div class="card">
+              <div class="card-header fs-5 text-dark">
+                Salary Deposit
+              </div>
+              <div class="ps-3 pt-4">
+                <small>SALARY PAYMENT MODE</small>
+                <p class="text-dark">{{salaryDeposit.PaymentMode}}</p>
+                <h5 class="text-dark pb-1">Bank Information</h5>
+                <div class="row">
+                  <div class="col-md-4">
+                    <small>BANK</small>
+                    <p class="text-dark">{{salaryDeposit.Bank}}</p>
+                  </div>
+                  <div class="col-md-4">
+                    <small>ACCOUNT NUMBER</small>
+                    <p class="text-dark">{{salaryDeposit.ACNumber}}</p>
+                  </div>
+                  <div class="col-md-3">
+                    <small>IFSC CODE</small>
+                    <p class="text-dark">{{salaryDeposit.IFSCCode}}</p>
+                  </div>
+                </div>
+                <div class="pb-3">
+                  <small>NAME OF THE ACCOUNT</small>
+                  <p class="text-dark">{{salaryDeposit.NameOnAccount}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mt-4 mb-4">
+            <div class="card custom-card-height">
+              <div class="card-header fs-5 text-dark">
+                Statutory Information
+              </div>
+              <div class="ps-3 pt-4">
+                <h5 class="text-dark pb-1">PF Account Information</h5>
+                <small>PF Status</small>
+                <p class="text-dark">{{satutoryInformation.PFStatus}}</p>
+                <div class="row">
+                  <div class="col-md-4">
+                    <small>PF NUMBER</small>
+                    <p class="text-dark">{{satutoryInformation.PFNumber}}</p>
+                  </div>
+                  <div class="col-md-4">
+                    <small>UNIVERSAL ACCOUNT NUMBER</small>
+                    <p class="text-dark">{{satutoryInformation.UniversalACNumber}}</p>
+                  </div>
+                  <div class="col-md-3">
+                    <small>PF JON DATE</small>
+                    <p class="text-dark">{{satutoryInformation.PFJoinDate | date}}</p>
+                  </div>
+                </div>
+                <h5 class="text-dark pt-3 pb-1">ESI Account Information</h5>
+                <small>NAME OF THE ACCOUNT</small>
+                <p class="text-dark">{{satutoryInformation.NameOfAcccount}}</p>
+                <h5 class="text-dark pt-3 pb-1">PT Details</h5>
+                <div class="row">
+                  <div class="col-md-4">
+                    <small>STATE</small>
+                    <p class="text-dark">{{satutoryInformation.State}}</p>
+                  </div>
+                  <div class="col-md-4">
+                    <small>REGISTERED LLOCAATION</small>
+                    <p class="text-dark">{{satutoryInformation.RegisteredLocation}}</p>
+                  </div>
+                </div>
+                <h5 class="text-dark pt-3 pb-1">LWF DETAILS</h5>
+                <small>LWF STATUS</small>
+                <p class="text-dark">{{satutoryInformation.LWFStatus}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mt-4 mb-4">
+            <div class="card custom-card-height">
+              <div class="card-header fs-5 text-dark">
+                Identity Information
+              </div>
+              <div class="alert alert-primary mt-4 mx-3" role="alert">
+                Aadhar details are not available
+              </div>
+            </div>
+          </div>
         </div>
       </ng-container>
     </div>
