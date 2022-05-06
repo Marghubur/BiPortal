@@ -31,6 +31,10 @@ import { SummaryComponent } from './summary/summary.component';
 import { DeclarationComponent } from './declaration/declaration.component';
 import { SalaryComponent } from './salary/salary.component';
 import { PreferencesComponent } from './preferences/preferences.component';
+import { PreviousincomeComponent } from './previousincome/previousincome.component';
+import { Form12BbComponent } from './form12-bb/form12-bb.component';
+import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
+import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +64,11 @@ import { PreferencesComponent } from './preferences/preferences.component';
     SummaryComponent,
     DeclarationComponent,
     SalaryComponent,
-    PreferencesComponent
+    PreferencesComponent,
+    PreviousincomeComponent,
+    Form12BbComponent,
+    FreetaxfillingComponent,
+    TaxsavinginvestmentComponent
   ],
   imports: [
     CommonModule,

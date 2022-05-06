@@ -1,9 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminDeclaration,
+  AdminForm12B,
+  AdminFreeTaxFilling,
   AdminPreferences,
+  AdminPreviousIncome,
   AdminSalary,
   AdminSummary,
+  AdminTaxSavingInvestment,
   Attendance,
   BillDetail,
   BuildPdf,
@@ -49,6 +53,10 @@ import { SummaryComponent } from './summary/summary.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { SalaryComponent } from './salary/salary.component';
 import { DeclarationComponent } from './declaration/declaration.component';
+import { PreviousincomeComponent } from './previousincome/previousincome.component';
+import { Form12BbComponent } from './form12-bb/form12-bb.component';
+import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
+import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -75,7 +83,11 @@ const routes: Routes = [
   { path: AdminPreferences, component: PreferencesComponent},
   { path: AdminSalary, component: SalaryComponent},
   { path: AdminDeclaration, component: DeclarationComponent},
-  { path: Leave, component: LeaveComponent}
+  { path: Leave, component: LeaveComponent},
+  { path: AdminPreviousIncome, component: PreviousincomeComponent},
+  { path: AdminForm12B, component: Form12BbComponent},
+  { path: AdminFreeTaxFilling, component: FreetaxfillingComponent},
+  { path: AdminTaxSavingInvestment, component: TaxsavinginvestmentComponent},
 ];
 
 @NgModule({

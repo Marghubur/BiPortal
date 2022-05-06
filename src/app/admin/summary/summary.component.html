@@ -1,21 +1,69 @@
 <div class="col-12 full-v main-container">
+  <div class="col-md-12 bg-light mb-3">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('salary-tab')" href="javascript:void(0)">SALARY</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark nav-active" id="leave-tab" (click)="activateMe('summary-tab')" href="javascript:void(0)">SUMMARY</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">Preference</a>
+      </li>
+    </ul>
+  </div>
   <div class="col-12 x_panel p-0 m-0">
     <app-breadcrums></app-breadcrums>
     <div class="right-panel col-md-12 p-0">
       <ng-container>
-        <div class="container-fluid pt-4">
-          <div class="uc-page text-center d-flex flex-column justify-content-center">
-            <div class="text-center">
-              <img src="../../../assets/images/uc.jpg">
+        <div class="container-fluid pt-4 row">
+          <div class="col-md-6 mt-4">
+            <div class="card">
+              <div class="card-header py-3 d-flex fs-5 text-dark align-items-center">
+                <div class="position-relative rupee-container me-3">
+                  <i class="fa fa-inr position-absolute" aria-hidden="true"></i>
+                </div>
+                <p class="fs-5 mb-0">Salary Summary -</p>
+                <div class="ms-auto">
+                  <span role="button" class="px-2 py-1 bg-secondary rounded text-light"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+                  <span role="button" class="px-2 py-1 bg-secondary rounded text-light ms-1"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+              </div>
+              <div class="ps-3 pt-4">
+                <div class="row">
+                  <div class="col-md-6">
+                    <small class="fs-6">WORKING DAYS</small>
+                    <p class="text-dark"></p>
+                  </div>
+                  <div class="col-md-6">
+                    <small class="fs-6">LOSS OF DAYS</small>
+                    <p class="text-dark"></p>
+                  </div>
+                  <div class="col-md-6">
+                    <small class="fs-6">PAYMENT MODE</small>
+                    <p class="text-dark"></p>
+                  </div>
+                  <div class="col-md-6">
+                    <a href="javascript:void(0)" class="text-decoration-none">View Pay Slip</a>
+                  </div>
+                </div>
+              </div>
             </div>
-            <blockquote class="mt-4 blockquote text-center">
-              <p>
-                Welcome to HIRINGBELL online account and HRM management system.
-                This page is under construction.
-              </p>
-              <footer class="blockquote-footer">Powered By: <cite title="Source Title">BottomHalf Pvt. Ltd.</cite>
-              </footer>
-            </blockquote>
+          </div>
+          <div class="col-md-6 mt-4">
+            <div class="card">
+              <div class="card-header py-3 d-flex fs-5 text-dark align-items-center">
+                <i class="fa fa-bell text-primary pe-3" aria-hidden="true"></i>
+                <p class="fs-5 mb-0">Alert & Notifications</p>
+              </div>
+              <div class="ps-3 pt-4 d-flex">
+                <i class=" fa fa-circle-o text-primary fa-2x pe-4"></i>
+                <p class="fs-5">If you haven't filed your previous year taxes, you can now file taxes for free online. <a href="javascript:void(0)" class="text-decoration-none">Click here</a></p>
+              </div>
+            </div>
           </div>
         </div>
       </ng-container>
