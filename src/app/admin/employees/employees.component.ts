@@ -125,6 +125,12 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
+  arrangeDetails(FieldName: string, Order: string) {
+    this.employeeData = new Filter();
+    this.employeeData.SortBy = FieldName +" "+ Order;
+    this.LoadData()
+  }
+
   filterRecords() {
     let searchQuery = "";
     let delimiter = "";

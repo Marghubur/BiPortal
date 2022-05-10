@@ -20,13 +20,17 @@ export class MysalaryComponent implements OnInit {
   isLoading: boolean = false;
   salaryBreakup: Array<SalaryBreakup> = [];
   salaryDeducation: Array<SalaryDeduction> = [];
+  currentYear: number = 0;
+  incomeTaxSlab: Array<IncomeTaxSlab> =[];
+  paySlipSchedule: Array<any> = [];
 
   constructor(private nav: iNavigation) { }
 
   ngOnInit(): void {
     var dt = new Date();
-    var month = 4;
-    var year = dt.getFullYear();
+    var month = 3;
+    this.currentYear = dt.getFullYear();
+    var years = dt.getFullYear();
     let data = this.nav.getValue();
     if (data == 'income-tax'){
       this.active = 3
@@ -36,17 +40,18 @@ export class MysalaryComponent implements OnInit {
       var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
       if (month == 12) {
         month = 1;
-        year ++
+        years ++
       } else {
         month ++;
       }
       this.taxCalender.push({
-        month: new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
-        year: Number(year.toString().slice(-2))
+        month: new Date(years, mnth, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
+        year: Number(years.toString().slice(-2))
       });
       i++;
     }
 
+    this.payslip();
 
     this.grossEarning.push({
       salaryBreakup: 'Basic',
@@ -316,7 +321,82 @@ export class MysalaryComponent implements OnInit {
       Deduction: 'NET PAY',
       Monthly: 175200,
       Annually: 2102400
+    });
+
+    this.incomeTaxSlab.push({
+      taxSlab: 'Income Upto 2,50,000',
+      rate: 'NIL'
+    },
+    {
+      taxSlab: 'Income between 2,50,001 to 5,00,000',
+      rate: '5% (Tax rebate of Rs 12,500 available under secction 87A'
+    },
+    {
+      taxSlab: 'Income between 5,00,001 to 7,50,000',
+      rate: '10%'
+    },
+    {
+      taxSlab: 'Income between 7,50,001 to 10,00,000',
+      rate: '15%'
+    },
+    {
+      taxSlab: 'Income between 10,00,001 to 12,50,000',
+      rate: '20%'
+    },
+    {
+      taxSlab: 'Income between 12,50,001 to 15,00,000',
+      rate: '25%'
+    },
+    {
+      taxSlab: 'Income above 15,00,000',
+      rate: '30%'
     })
+  }
+
+  payslip() {
+    var date = new Date();
+    let mnth= date.getMonth();
+    let years = date.getFullYear();
+    let i =0;
+    while (i < date.getMonth()) {
+      if (mnth == 1) {
+        mnth = 12;
+        years --
+      } else {
+        mnth --;
+      }
+      this.paySlipSchedule.push({
+        paySlipMonth: new Date(years, mnth, 1).toLocaleString("en-us", { month: 'short'}),
+        paySlipYear: years
+      })
+      i++;
+    }
+  }
+
+  allPaySlip(e: any) {
+    let yearValue = Number (e.target.value);
+    if (yearValue == new Date().getFullYear()) {
+      this.paySlipSchedule = []
+      this.payslip();
+    } else {
+      this.paySlipSchedule = []
+      var date = new Date();
+      let mnth= 12;
+      let years = date.getFullYear() - 1;
+      let i =0;
+      while (i < 12) {
+        if (mnth == 1) {
+          mnth = 12;
+        } else {
+          mnth --;
+        }
+        this.paySlipSchedule.push({
+          paySlipMonth: new Date(years, mnth, 1).toLocaleString("en-us", { month: 'short'}),
+          paySlipYear: years
+        })
+        i++;
+      }
+    }
   }
 
   activateMe(ele: string) {
@@ -347,6 +427,10 @@ export class MysalaryComponent implements OnInit {
     $('#fullSalaryDetail').modal('hide');
   }
 
+  newIncomeTaxRegimePopUp() {
+    $('#newIncomeTaxRegime').modal('show');
+  }
+
 }
 
 class GrossEarning {
@@ -371,7 +455,7 @@ class TaxSlab {
   taxamount: number = 0;
 }
 
-class MonthlyTax {
+export class MonthlyTax {
   april: number = 0;
   may: number = 0;
   june: number = 0;
@@ -407,4 +491,9 @@ class SalaryDeduction {
   Deduction: string = '';
   Monthly: number = 0;
   Annually: number = 0;
+}
+
+class IncomeTaxSlab {
+  taxSlab: string = '';
+  rate: string = '';
 }

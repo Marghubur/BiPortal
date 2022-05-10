@@ -9,10 +9,13 @@ import { iNavigation } from 'src/providers/iNavigation';
 })
 export class FreetaxfillingComponent implements OnInit {
   cachedData: any = null;
+  currentYear: number = 0;
 
   constructor(private nav: iNavigation) { }
 
   ngOnInit(): void {
+    var date = new Date();
+    this.currentYear = date.getFullYear();
   }
 
   activateMe(ele: string) {

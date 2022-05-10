@@ -56,7 +56,7 @@ export class NavbarComponent implements OnInit {
     else
       this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
 
-    if(this.userDetail.TokenExpiryDuration.getTime() - (new Date()).getTime() <= 0 && expiredOn !== null) {
+    if(this.userDetail.TokenExpiryDuration.getTime() - (new Date()).getTime() >= 0 && expiredOn !== null) {
       this.http.post("login/AuthenticateUser", this.userDetail).then(
         (response: ResponseModel) => {
           if(response.ResponseBody !== null) {

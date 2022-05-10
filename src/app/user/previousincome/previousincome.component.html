@@ -39,21 +39,52 @@
       </div>
       <ng-container>
         <div class="container-fluid pt-4">
-          <div class="uc-page text-center d-flex flex-column justify-content-center">
-            <div class="text-center">
-              <img src="../../../assets/images/uc.jpg">
+          <h5 class="text-dark">Previous Employment Details</h5>
+          <p class="mb-0">Previous Employment details are necessary Wen employee change their job, this declaration is required for income tax computation.</p>
+          <div class="t-table t-list t-border mb-3 col-md-12 bg-white">
+            <div class="t-head overflow-hidden custom-bg">
+              <div class="tr bg-light py-3">
+                <div class="th ps-2">MONTH</div>
+                <div class="th ps-2">GROSS</div>
+                <div class="th ps-2">BASIC</div>
+                <div class="th ps-2">Month</div>
+                <div class="th ps-2">HOUSE RENT</div>
+                <div class="th ps-2">EMPLOYEE PR</div>
+                <div class="th ps-2">ESI</div>
+                <div class="th ps-2">LWF</div>
+                <div class="th ps-2">LWF EMPLOYEE</div>
+                <div class="th ps-2">PROFESSIONAL</div>
+                <div class="th ps-2">INCOME TAX</div>
+                <div class="th ps-2">OTHER TAX</div>
+                <div class="th ps-2">OTHER TAX F</div>
+                <div class="th ps-2">OTHER TAXAB</div>
+              </div>
             </div>
-            <blockquote class="mt-4 blockquote text-center">
-              <p>
-                Welcome to HIRINGBELL online account and HRM management system.
-                This page is under construction.
-              </p>
-              <footer class="blockquote-footer">Powered By: <cite title="Source Title">BottomHalf Pvt. Ltd.</cite>
-              </footer>
-            </blockquote>
+            <div class="t-body border-bottom">
+              <div class="tr py-3" *ngFor="let item of previousEmploymentDetail">
+                <div class="td ps-2">{{item.Month}} {{currentYear - 1}}</div>
+                <div class="td ps-2">{{item.Gross}}</div>
+                <div class="td ps-2">{{item.Basic}}</div>
+                <div class="td ps-2">{{item.HouseRent}}</div>
+                <div class="td ps-2">{{item.EmployeePR}}</div>
+                <div class="td ps-2">{{item.ESI}}</div>
+                <div class="td ps-2">{{item.LWF}}</div>
+                <div class="td ps-2">{{item.LWFEmp}}</div>
+                <div class="td ps-2">{{item.Professional}}</div>
+                <div class="td ps-2">{{item.IncomeTax}}</div>
+                <div class="td ps-2">{{item.OtherTax}}</div>
+                <div class="td ps-2">{{item.OtherTaxF}}</div>
+                <div class="td ps-2">{{item.OtherTaxable}}</div>
+              </div>
+              <div class="bg-light py-2">
+                <span class="ps-3">Total Items: {{total}}</span>
+              </div>
+            </div>
           </div>
         </div>
       </ng-container>
     </div>
   </div>
 </div>
+
+

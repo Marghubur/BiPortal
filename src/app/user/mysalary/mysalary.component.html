@@ -25,7 +25,7 @@
               <a ngbNavLink>My Salary</a>
               <ng-template ngbNavContent>
                 <div class="mt-4 alert alert-info fs-6" role="alert">
-                  Your Income and tax liability computed as per Old income taax regiime. To learn more, and switch to New income tax regime, <a href="javscript:void(0)" class="text-decoration-none">click here.</a>
+                  Your Income and tax liability computed as per Old income taax regiime. To learn more, and switch to New income tax regime, <a href="javscript:void(0)" (click)="newIncomeTaxRegimePopUp()" class="text-decoration-none">click here.</a>
                 </div>
                 <div class="d-flex mt-5 ms-5 mb-3">
                   <div class="col-md-2">
@@ -114,28 +114,54 @@
             <li [ngbNavItem]="2">
               <a ngbNavLink>Pay Slips</a>
               <ng-template ngbNavContent>
-                <p>
-                  Exercitation +1 labore velit, blog sartorial PBR leggings next
-                  level wes anderson artisan four loko farm-to-table craft beer
-                  twee. Qui photo booth letterpress, commodo enim craft beer
-                  mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo
-                  nostrud organic, assumenda labore aesthetic magna delectus
-                  mollit. Keytar helvetica VHS salvia yr, vero magna velit
-                  sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                  anderson 8-bit, sustainable jean shorts beard ut DIY ethical
-                  culpa terry richardson biodiesel. Art party scenester
-                  stumptown, tumblr butcher vero sint qui sapiente accusamus
-                  tattooed echo park.
-                </p>
+                <h5 class="text-dark ps-3">Pay Slips</h5>
+                <p class="mb-0 ps-3">Here you can manage all hiringBell payslips for applicable years.</p>
+                <div class="d-flex px-3 justify-content-between">
+                  <div class="col-md-2 pt-3 pe-3">
+                    <select class="form-select" (change)="allPaySlip($event)">
+                      <option value="{{currentYear}}"  selected>Year {{currentYear}}</option>
+                      <option value="{{currentYear - 1}}" >Year {{currentYear - 1}}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <button class="btn btn-outline-success"><i class="fa fa-download pe-3"></i> April {{currentYear}} Pay Slip</button>
+                  </div>
+                </div>
+                <div class="row mx-3 my-3">
+                  <div class="col-md-2 card">
+                    <p class="mb-0 py-2">PAYSLIPS</p>
+                    <div class="card border-0" *ngFor="let item of paySlipSchedule">
+                      <a href="javaascript:void(0)" class=" text-decoration-none py-2 fs-5 text-dark border-top">{{item.paySlipMonth}} {{item.paySlipYear}}</a>
+                    </div>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="d-none file-container" id="file-container">
+                      <div class="text-end">
+                        <a  class="close_view">
+                          <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                      <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+                    </div>
+                  </div>
+                </div>
               </ng-template>
             </li>
             <li [ngbNavItem]="3">
               <a ngbNavLink>Income Tax</a>
               <ng-template ngbNavContent>
                 <div class="custom-bg mt-3">
-                  <p class="fs-4 pt-3 ps-3">
-                    Income Tax Computation <i class="fa fa-download ps-3"></i>
-                  </p>
+                  <div class="d-flex justify-content-between">
+                    <p class="fs-4 pt-3 ps-3">
+                      Income Tax Computation <i class="fa fa-download ps-3"></i>
+                    </p>
+                    <div class="pt-3 pe-3">
+                      <select class="form-select">
+                        <option value="currentyear" selected>APR {{currentYear}} - MAR {{currentYear +1}}</option>
+                        <option value="previousyear">APR {{currentYear - 1}} - MAR {{currentYear}}</option>
+                      </select>
+                    </div>
+                  </div>
                   <p class="ps-3">
                     View complete breakup of payments, deductions and declarations. You can analyze how income tax is
                     being
@@ -558,7 +584,7 @@
         <h5 class="modal-title fs-4 text-dark" id="exampleModalLabel">SALARY BREAKUP</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body px-5">
         <div class="t-table t-list t-border col-md-12">
           <div class="hide-bar alert-primary"></div>
           <div class="t-head alert-primary">
@@ -638,10 +664,100 @@
           </div>
         </div>
       </div>
-      <p class="ps-3 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if any).</p>
-      <div class="modal-footer border-top-0">
+      <p class="ps-5 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if any).</p>
+      <div class="modal-footer border-top-0 pe-5">
         <button type="button" class="btn btn-outline-success px-4" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- New Income Tax regime Modal Start-->
+<div class="modal fade" id="newIncomeTaxRegime" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content mx-3">
+      <div class="sticky-modal-header">
+        <div class="modal-header bg-secondary text-white">
+          <h5 class="modal-title" id="exampleModalLabel">Switch to Section 115BAC</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="card py-3 ps-3 shadow-lg">
+          Here you can read the details of new tax regime (section 115BAC) and then decide if you would like to switch to the new regime.
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="alert mb-0 alert-info">Section 115BAC is optional Indiviiduals will have the options to pay taxes as per new tax sales from FY {{currentYear - 2}} - {{currentYear -1}} onwards.</p>
+        <div class="btn-group py-3" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+          <label class="btn btn-outline-primary" for="btnradio1">Switch to New Tax Regime (Section 115BAC)</label>
+
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+          <label class="btn btn-outline-primary ms-3" for="btnradio2">Continue with Current Tax Regime</label>
+        </div>
+        <p class="mb-0 fs-5 text-dark">Income Tax Slabs for Individuals of any age group under new tax regime - Applicable to FY {{currentYear -2}} - {{currentYear -1}} (AY {{currentYear -2}} - {{currentYear -1}})</p>
+        <p class="mb-0 py-2">As proposed in the union budget 2020, In the Income tax Act, the following section shall be interested with effect from 1st day of April 2020.</p>
+        <div class="t-table t-list t-border col-md-12 mt-4">
+          <div class="t-head alert-primary overflow-hidden">
+            <div class="tr bg-light fw-bold text-dark">
+              <div class="th">
+                <div class="cell-wrapper">
+                  INCOME TAX SLAB
+                </div>
+              </div>
+              <div class="th">
+                TAX RATE
+              </div>
+            </div>
+          </div>
+          <div class="t-head overflow-hidden">
+            <div class="tr py-3" *ngFor="let slab of incomeTaxSlab">
+              <div class="td">
+                <div class="cell-wrapper">
+                  {{slab.taxSlab}}
+                </div>
+              </div>
+              <div class="td">
+                <div class="cell-wrapper">
+                  {{slab.rate}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul>
+          <li class="text-dark py-2">The tax calculated on the basis of such rates will be subject to health and education cess of 4%.</li>
+          <li class="text-dark py-2">Any individual option to be taxed under the new tax regime from FY {{currentYear - 2}} - {{currentYear - 1}} onwards will have to give up certain exemptions and deductions..</li>
+        </ul>
+        <h5 class="text-dark">Here is the list of exemptions and deductions that a taxpayer will have to give up while choosing the new tax regime.</h5>
+        <ul>
+          <li class="text-dark py-2">Leave Travel Allowance (LTA)</li>
+          <li class="text-dark py-2">House Rent Allowance (HRA)</li>
+          <li class="text-dark py-2">Conveyance</li>
+          <li class="text-dark py-2">Daily expenses in the course of employment</li>
+          <li class="text-dark py-2">Relocation allowance</li>
+          <li class="text-dark py-2">Helper allowance</li>
+          <li class="text-dark py-2">Children education allowance</li>
+          <li class="text-dark py-2">Other special allowance [Section 10(14)]</li>
+          <li class="text-dark py-2">Standard deduction</li>
+          <li class="text-dark py-2">Professional tax</li>
+          <li class="text-dark py-2">Interest on housing loan (Section 24)</li>
+          <li class="text-dark py-2">Chapter VI-A dedcution (80C, 80D, 80E and so on) (Except Section 80CCCD(2) and 80JJA).</li>
+        </ul>
+        <div class="alert alert-warning">Options to choose new tax regime can be exercised on or before 20 May {{currentYear}}</div>
+        <p class="mb-0">To find out which tax regime suits you best, <a href="javascript:void(0)" class="text-decoration-none">click here</a></p>
+        <div class="btn-group py-3" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="btnradio3" id="btnradio3" autocomplete="off" checked>
+          <label class="btn btn-outline-primary" for="btnradio3">Switch to New Tax Regime (Section 115BAC)</label>
+
+          <input type="radio" class="btn-check" name="btnradio3" id="btnradio4" autocomplete="off">
+          <label class="btn btn-outline-primary ms-3" for="btnradio4">Continue with Current Tax Regime</label>
+        </div>
+      </div>
+      <!-- <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+<!-- End -->

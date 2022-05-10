@@ -9,10 +9,13 @@ import { iNavigation } from 'src/providers/iNavigation';
 })
 export class Form12BBComponent implements OnInit {
   cachedData: any = null;
+  FinacialYear: number = 0;
 
   constructor(private nav: iNavigation) { }
 
   ngOnInit(): void {
+    let date = new Date();
+    this.FinacialYear = date.getFullYear();
   }
 
   activateMe(ele: string) {

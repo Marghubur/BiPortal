@@ -39,18 +39,22 @@
       </div>
       <ng-container>
         <div class="container-fluid pt-4">
-          <div class="uc-page text-center d-flex flex-column justify-content-center">
-            <div class="text-center">
-              <img src="../../../assets/images/uc.jpg">
+          <h5 class="text-dark ps-3">Form 12 BB</h5>
+          <p class="mb-0 ps-3">Form 12BB is a provisional statement that has details about your proposed investments and Expenses thar are Income Tax deductible.</p>
+          <div class="card py-3 ps-3">
+            <p class="mb-0">Select the financial year and generate the form 12BB</p>
+            <div class="d-flex py-2 mt-2">
+              <div class="">
+                <select class="form-select">
+                  <option selected>Select Financial Year</option>
+                  <option value="currentyear">APR {{FinacialYear}} - MAR {{FinacialYear +1}}</option>
+                  <option value="previousyear">APR {{FinacialYear - 1}} - MAR {{FinacialYear}}</option>
+                </select>
+              </div>
+              <div class="ms-3">
+                <button type="button" class="btn btn-primary">Generate Form 12BB</button>
+              </div>
             </div>
-            <blockquote class="mt-4 blockquote text-center">
-              <p>
-                Welcome to HIRINGBELL online account and HRM management system.
-                This page is under construction.
-              </p>
-              <footer class="blockquote-footer">Powered By: <cite title="Source Title">BottomHalf Pvt. Ltd.</cite>
-              </footer>
-            </blockquote>
           </div>
         </div>
       </ng-container>
