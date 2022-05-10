@@ -12,36 +12,50 @@ declare var $:any;
 export class HomeComponent implements OnInit {
   userId: number = 0;
   employeeUid: number = 0;
-  userName: string = "";
   isPageReady: boolean = false;
+  userName: string = "";
+  clientBillPayment: Array<any> = [];
+  gstPaymentDetail: Array<any> = [];
+  employeeAttandenceDetail: Array<any> = [];
+  totalPendingPayment: number = 0;
 
   constructor(private http: AjaxService) { }
 
   ngOnInit() {
+    this.getDeatils();
     this.LoadChartData();
     this.LoadLineChart();
     this.LoadDoughnutchart();
     this.LeaveReportChart();
-    //this.getDeatils();
   }
 
 
   getDeatils() {
+    this.isPageReady = false;
     let data = {
       "UserId" : 6,
       "EmployeeUid": 6,
       "AttendenceFromDay": "2021-09-03 20:49:08.000000",
       "AttendenceToDay": "2022-02-24 20:49:08.000000"
     }
-    this.http.post("Dashboard/GetEmployeeDeatils", data)
+    this.http.post("Dashboard/GetSystemDashboard", data)
     .then(response => {
       if (response.ResponseBody) {
-        Toast(response.ResponseBody);
+        this.totalPendingPayment = 0;
+        this.clientBillPayment = response.ResponseBody.BillDetail
+        this.getDeatils = response.ResponseBody.GSTDetail
+        this.employeeAttandenceDetail = response.ResponseBody.AttendaceDetail;
+        let i = 0;
+        while(i < this.clientBillPayment.length) {
+          this.totalPendingPayment =
+          i++;
+        }
+        Toast("Loaded successfully.");
+        this.isPageReady = true;
       } else {
         Toast("Fail to inser/update, please contact to admin.");
       }
     })
-
   }
 
   LoadLineChart() {
