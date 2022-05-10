@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { Chart } from "chart.js";
 import { AjaxService } from "src/providers/ajax.service";
 import { Toast } from "src/providers/common-service/common.service";
+import { BillDetail } from "src/providers/constants";
+import { iNavigation } from "src/providers/iNavigation";
 declare var $:any;
 
 @Component({
@@ -19,13 +21,15 @@ export class HomeComponent implements OnInit {
   employeeAttandenceDetail: Array<any> = [];
   totalPendingPayment: number = 0;
   totalGSTAmount: number = 0;
+  monthlyGrossIncomeDetail: Array<number> = [];
+  months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  constructor(private http: AjaxService) { }
+  constructor(private http: AjaxService,
+              private nav:iNavigation) { }
 
   ngOnInit() {
     this.getDeatils();
     this.LoadChartData();
-    this.LoadLineChart();
     this.LoadDoughnutchart();
     this.LeaveReportChart();
   }
@@ -43,9 +47,31 @@ export class HomeComponent implements OnInit {
     .then(response => {
       if (response.ResponseBody) {
         this.totalPendingPayment = 0;
+        this.totalGSTAmount = 0;
         this.clientBillPayment = response.ResponseBody.BillDetail
-        this.getDeatils = response.ResponseBody.GSTDetail
+        this.gstPaymentDetail = response.ResponseBody.GSTDetail
         this.employeeAttandenceDetail = response.ResponseBody.AttendaceDetail;
+        let incomeDetail = response.ResponseBody.YearGrossIncome;
+        if(incomeDetail && incomeDetail.length > 0) {
+          let i = 1;
+          let elem = null;
+          let amount: number = 0;
+          while(i <= 12) {
+            elem = incomeDetail.find(x => x.BillForMonth == i);
+            if(elem != null) {
+              amount = Number(elem["PaidAmount"]);
+              if (!isNaN(amount)) {
+                this.monthlyGrossIncomeDetail.push(amount);
+              } else {
+                this.monthlyGrossIncomeDetail.push(0);
+              }
+            } else {
+              this.monthlyGrossIncomeDetail.push(0);
+            }
+            i++;
+          }
+        }
+
         let i = 0;
         while(i < this.clientBillPayment.length) {
           this.totalPendingPayment += this.clientBillPayment[i].PaidAmount;
@@ -53,16 +79,26 @@ export class HomeComponent implements OnInit {
         }
 
         let index = 0;
-        while(index < this.getDeatils.length) {
-          this.totalGSTAmount += this.getDeatils[i].amount;
+        while(index < this.gstPaymentDetail.length) {
+          this.totalGSTAmount += this.gstPaymentDetail[index].amount;
           index++;
         }
-        Toast("Loaded successfully.");
+        this.LoadLineChart();
         this.isPageReady = true;
+        Toast("Loaded successfully.");
       } else {
         Toast("Fail to inser/update, please contact to admin.");
       }
+
     })
+  }
+
+  editPendingPayment() {
+    let billDetails = {
+      BillStatusId: this.clientBillPayment[0].BillStatusId,
+      BillForMonth: this.clientBillPayment[0].BillForMonth,
+    }
+    this.nav.navigate(BillDetail, billDetails);
   }
 
   LoadLineChart() {
@@ -71,12 +107,12 @@ export class HomeComponent implements OnInit {
     const myChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['January','February','March','April','May','June'],
+        labels: this.months,
         datasets: [{
-          label: 'My First dataset',
+          label: '2022 income to company',
           backgroundColor: 'rgb(255, 99, 132)',
           borderColor: 'rgb(255, 99, 132)',
-          data: [0, 10, 5, 2, 20, 30, 45]
+          data: this.monthlyGrossIncomeDetail
       }]
       }
     })
