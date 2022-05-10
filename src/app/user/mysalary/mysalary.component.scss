@@ -92,3 +92,9 @@
   border-bottom: 10px solid transparent;
   border-right:10px solid #6c757d;
 }
+
+.sticky-modal-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 999;
+}

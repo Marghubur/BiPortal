@@ -60,9 +60,9 @@
                 <div class="tr">
                   <div class="th fe-index">
                     <div class="t-index">
-                      <a href="javascript:void()" class="pe-2">#</a>
                       <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                       <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                      <a href="javascript:void()" class="ps-3">#</a>
                     </div>
                   </div>
                   <div class="th fe-5">
@@ -70,9 +70,9 @@
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
                         (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Name" placeholder="Search by Name">
                       <div class="t-filter">
-                        <a href="javascript:void()">Full Name</a>
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-asc" aria-hidden="true" (click)="arrangeDetails('FirstName', 'Asc')"></i>
+                        <i class="fa fa-sort-amount-desc" (click)="arrangeDetails('FirstName', 'Desc')" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-3">Full Name</a>
                       </div>
                     </div>
                   </div>
@@ -82,9 +82,9 @@
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
                         placeholder="Search by MobileNumber">
                       <div class="t-filter">
-                        <a href="javascript:void()">Mobile Number</a>
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-asc" aria-hidden="true" (click)="arrangeDetails('Mobile', 'Asc')"></i>
+                        <i class="fa fa-sort-amount-desc" aria-hidden="true" (click)="arrangeDetails('Mobile', 'Desc')"></i>
+                        <a href="javascript:void()" class="ps-3">Mobile Number</a>
                       </div>
                     </div>
                   </div>
@@ -93,9 +93,9 @@
                       <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
                       <div class="t-filter">
-                        <a href="javascript:void()">Email Id</a>
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-asc" aria-hidden="true" (click)="arrangeDetails('Email', 'Asc')"></i>
+                        <i class="fa fa-sort-amount-desc" aria-hidden="true" (click)="arrangeDetails('Email', 'Desc')"></i>
+                        <a href="javascript:void()" class="ps-3">Email Id</a>
                       </div>
                     </div>
                   </div>
@@ -138,17 +138,14 @@
                   </div>
                   <div class="td align-middle fe-1">
                     <div class="d-flex flex-row justify-content-evenly">
-                      <a href="javascript:void(0)">
-                        <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"
-                            (click)="ViewFiles(user)"></i></span>
+                      <a href="javascript:void(0)" (click)="ViewFiles(user)">
+                        <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"></i></span>
                       </a>
-                      <a href="javascript:void(0)">
-                        <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"
-                            (click)="AddEditDocuments(user)"></i></span>
+                      <a href="javascript:void(0)" (click)="AddEditDocuments(user)">
+                        <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"></i></span>
                       </a>
-                      <a href="javascript:void(0)">
-                        <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
-                            (click)="CreatePopup(user)"></i></span>
+                      <a href="javascript:void(0)" (click)="CreatePopup(user)">
+                        <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
                       </a>
                       <!-- <a href="javascript:void(0)">
                           <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
@@ -327,12 +324,12 @@
         </table>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" (click)="ClosePopup()" class="text-decoration-none btn-light pe-3"
+        <a href="javascript:void(0)" (click)="ClosePopup()" class="text-decoration-none btn-white pe-3"
           data-dismiss="modal">Cancel</a>
         <a href="javascript:void(0)" (click)="DeleteCurrent(singleEmployee)" *ngIf="isActiveEmployee != 0"
-          class="text-decoration-none btn-light text-primary">Delete</a>
+          class="text-decoration-none btn-white text-primary">Delete</a>
         <a href="javascript:void(0)" (click)="DeactivatedEmployee(singleEmployee)" *ngIf="isActiveEmployee == 0"
-          class="text-decoration-none btn-light text-primary">Activate</a>
+          class="text-decoration-none btn-white text-primary">Activate</a>
       </div>
     </div>
   </div>

@@ -8,6 +8,7 @@ import { AccessTokenExpiredOn, Form12B, FreeTaxFilling, Preferences, PreviousInc
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
+import { MonthlyTax } from '../mysalary/mysalary.component';
 declare var $: any;
 
 @Component({
@@ -74,6 +75,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   taxAmount: TaxAmount = new TaxAmount();
   myDeclaration: Array<MyDeclaration> = [];
   year: number = 0;
+  taxCalender: Array<any> = [];
+  monthlyTaxAmount: MonthlyTax;
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -83,6 +86,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.loadData();
     var dt = new Date();
+    var month = 3;
+    var year = dt.getFullYear();
     this.year = dt.getFullYear();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
@@ -95,6 +100,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.userDetail = Master["UserDetail"];
     } else {
       ErrorToast("Invalid user. Please login again.")
+    }
+
+    let i = 0;
+    while( i < 12) {
+      var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
+      if (month == 12) {
+        month = 1;
+        year ++
+      } else {
+        month ++;
+      }
+      this.taxCalender.push({
+        month: new Date(year, mnth, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
+        year: Number(year.toString().slice(-2))
+      });
+      i++;
     }
   }
 
@@ -606,7 +627,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.taxAmount =  {
       NetTaxableAmount: 2050000,
       TotalTaxPayable: 444600,
-      TaxAlreadyPaid: 37050
+      TaxAlreadyPaid: 37050,
+      RemainingTaxAMount: 444600 - 37050
     };
 
     this.myDeclaration.push({
@@ -648,7 +670,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       ProofSUbmitted: 0,
       AmountRejected: 0,
       AmountAccepted: 0
-    })
+    });
+
+    this.monthlyTaxAmount = {
+      april: 37050,
+      may: 37050,
+      june: 37050,
+      july: 37050,
+      aug: 37050,
+      sep: 37050,
+      oct: 37050,
+      nov: 37050,
+      dec: 37050,
+      jan: 37050,
+      feb: 37050,
+      march: 37050
+    };
   }
 
 
@@ -1158,6 +1195,7 @@ class TaxAmount {
   NetTaxableAmount: number = 0;
   TotalTaxPayable: number = 0;
   TaxAlreadyPaid: number = 0;
+  RemainingTaxAMount: number = 0;
 }
 
 class MyDeclaration {

@@ -59,9 +59,9 @@
                   <div class="tr">
                     <div class="th fe-index">
                       <div class="t-filter t-index">
-                        <a href="javascript:void()" class="pe-2">#</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-3">#</a>
                       </div>
                     </div>
                     <div class="th fe-3">
@@ -70,9 +70,9 @@
                           (keyup.enter)="filterRecords()" [(ngModel)]="clientDetails.ClientName"
                           placeholder="Search by Name">
                         <div class="t-filter">
-                          <a href="javascript:void()">Organization Name</a>
                           <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                           <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                          <a href="javascript:void()" class="ps-3">Organization Name</a>
                         </div>
                       </div>
                     </div>
@@ -82,9 +82,9 @@
                           (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.PrimaryContactNo"
                           placeholder="Search by Contact no">
                         <div class="t-filter">
-                          <a href="javascript:void()">Primary Contact No.#</a>
                           <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                           <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                          <a href="javascript:void()" class="ps-3">Primary Contact No.#</a>
                         </div>
                       </div>
                     </div>
@@ -93,9 +93,9 @@
                         <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
                           (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.Email" placeholder="Search by Email">
                         <div class="t-filter">
-                          <a href="javascript:void()">Email</a>
                           <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                           <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                          <a href="javascript:void()" class="ps-3">Email</a>
                         </div>
                       </div>
                     </div>
@@ -104,9 +104,9 @@
                         <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
                           (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.City" placeholder="Search by City">
                         <div class="t-filter">
-                          <a href="javascript:void()">City</a>
                           <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                           <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                          <a href="javascript:void()" class="ps-3">City</a>
                         </div>
                       </div>
                     </div>
@@ -116,14 +116,14 @@
                           (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.FirstAddress"
                           placeholder="Search by First Address">
                         <div class="t-filter">
-                          <a href="javascript:void()">First Address</a>
                           <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                           <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                          <a href="javascript:void()" class="ps-3">First Address</a>
                         </div>
                       </div>
                     </div>
                     <div class="th fe-1">
-                      <div class="t-filter justify-content-center">
+                      <div class="t-filter d-block text-center">
                         <a href="javascript:void(0)">ACTIONS</a>
                       </div>
                     </div>
@@ -299,7 +299,7 @@
         <h5 class="text-center"> You can't delete Client. This service is unavailable.</h5>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" (click)="ClosePopup()" class="text-decoration-none btn-light pe-3"
+        <a href="javascript:void(0)" (click)="ClosePopup()" class="text-decoration-none btn-white pe-3"
           data-dismiss="modal">Cancel</a>
         <!-- <a href="javascript:void(0)" (click)="DeleteCurrent(singleClient)"
           class="text-decoration-none btn-light text-primary">Delete</a> -->

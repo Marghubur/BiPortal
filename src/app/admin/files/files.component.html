@@ -68,9 +68,9 @@
                       <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
                       <div class="t-filter">
-                        <a href="javascript:void()">Bill No.#</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-3">Bill No.#</a>
                       </div>
                     </div>
                   </div>
@@ -79,9 +79,9 @@
                       <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                       (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
                       <div class="t-filter">
-                        <a href="javascript:void()">Client Name</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-3">Client Name</a>
                       </div>
                     </div>
                   </div>
@@ -96,18 +96,18 @@
                         <option value="7">Raised</option>
                       </select>
                       <div class="t-filter">
-                        <a href="javascript:void()">Status</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-3">Status</a>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
                       <div class="t-filter">
-                        <a href="javascript:void()">Paid On</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-3">Paid On</a>
                       </div>
                     </div>
                   </div>
@@ -130,9 +130,9 @@
                         <option value="12">December</option>
                       </select>
                       <div class="t-filter">
-                        <a href="javascript:void()">Month</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-3">Month</a>
                       </div>
                     </div>
                   </div>
@@ -142,9 +142,9 @@
                       (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
                       [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
                       <div class="t-filter">
-                        <a href="javascript:void()">Billed Amt</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-2">Billed Amt</a>
                       </div>
                     </div>
                   </div>
@@ -154,9 +154,9 @@
                       (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
                       [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
                       <div class="t-filter">
-                        <a href="javascript:void()">Received</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-3">Received</a>
                       </div>
                     </div>
                   </div>
@@ -165,9 +165,9 @@
                       <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome" placeholder="By Take Home">
                       <div class="t-filter">
-                        <a href="javascript:void()">Take Home</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-2">Take Home</a>
                       </div>
                     </div>
                   </div>
@@ -182,9 +182,9 @@
                         <option value="6">Raised</option>
                       </select>
                       <div class="t-filter">
-                        <a href="javascript:void()">GST</a>
                         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                        <a href="javascript:void()" class="ps-3">GST</a>
                       </div>
                     </div>
                   </div>
@@ -194,7 +194,7 @@
                         <i class="fa fa-filter zoom-2"></i>
                       </a>
                     </div>
-                   <div class="t-filter justify-content-center">
+                   <div class="t-filter d-block text-center">
                      <a href="javascript:void(0)">ACTIONS</a>
                    </div>
                   </div>
@@ -273,13 +273,11 @@
                   </div>
                   <div class="td align-middle">
                     <div class="d-flex flex-row justify-content-around">
-                      <a href="javascript:void(0)">
-                        <span class="badge bg-success ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true"
-                            (click)="viewPdfFile(user)"></i></span>
+                      <a href="javascript:void(0)" (click)="viewPdfFile(user)">
+                        <span class="badge bg-success ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
                       </a>
-                      <a href="javascript:void(0)">
-                        <span class="badge bg-primary ms-1 me-1"><i class="fa fa-download" aria-hidden="true"
-                            (click)="downloadFile(user)"></i></span>
+                      <a href="javascript:void(0)" (click)="downloadFile(user)">
+                        <span class="badge bg-primary ms-1 me-1"><i class="fa fa-download" aria-hidden="true"></i></span>
                       </a>
                     </div>
                   </div>
@@ -487,7 +485,7 @@
 <div class="modal fade" id="gstupdateModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title">Add Or Update</h5>
         <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -560,9 +558,8 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
-
         <button class="btn btn-primary" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
@@ -755,7 +752,7 @@
 <div class="modal fade" id="addupdateModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title">Bill Status Update Modal</h5>
         <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -803,9 +800,8 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
-
         <button class="btn btn-primary" [disabled]="isLoading" (click)="updateRecord()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
@@ -831,7 +827,7 @@
 <div class="modal fade" id="downloadPopUp" tabindex="-1" *ngIf="isDownloadModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title">Download Bill</h5>
         <!-- <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -865,7 +861,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" (click)="closeWindow()">Close</button>
         <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
         <a class="btn btn-primary" [disabled]="isLoading" (click)="downloadPdfDocx()" download>
