@@ -9,7 +9,8 @@ import { AllownumberDirective } from './directives/allownumber.directive';
 import { TransformDirective } from './directives/transform.directive';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
-import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component"
+import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component";
+import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component'
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component"
     TransformDirective,
     PaginationComponent,
     IautocompleteComponent,
-    BreadcrumsComponent
+    BreadcrumsComponent,
+    PreLoadTableComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component"
     TransformDirective,
     PaginationComponent,
     BreadcrumsComponent,
-    IautocompleteComponent
+    IautocompleteComponent,
+    PreLoadTableComponent
   ]
 })
 export class UtilModule { }
