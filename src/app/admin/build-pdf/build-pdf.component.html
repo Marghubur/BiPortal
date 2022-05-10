@@ -1,6 +1,6 @@
 <!-- Old Build Pdf start from herea -->
 <!-- Remove d-none to see old build pdf -->
-<div class="container-fluid main-container">
+<div class="container-fluid main-container" [ngClass]="{'preload': !pageDataIsReady}">
   <div class="x_panel">
     <div class="x_header">
       <div class="x_header_title row">
@@ -77,13 +77,13 @@
 
             <div class="col-12 row m-0">
               <div class="col-md-6 mt-4">
-                <div class="x_panel">
+                <div class="x_panel skeleton">
                   <div class="x_header">
                     <div class="x_header_title">
                       <h2>Bill<small>Bill details</small></h2>
                     </div>
                   </div>
-                  <div class="col-md-12 mb-3 row">
+                  <div class="col-md-12 mb-3 row vhide">
                     <!-- <label class="form-label">Address *</label> -->
                     <!-- <div class="col-md-6">
                       <select name="senderClientId" class="form-control mt-3" formControlName="senderClientId"

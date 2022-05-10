@@ -1,4 +1,4 @@
-<div class="main-container">
+<div class="main-container" [ngClass]="{'preload': !isClientFound}">
   <div class="col-md-12">
     <div class="col-12 u-header curren-bg row m-0 my-3">
       <div class="col-md-3">
@@ -47,8 +47,10 @@
       </div>
       <app-breadcrums></app-breadcrums>
       <div [ngSwitch]="isClientFound">
-        <div class="data-loading-loader" *ngSwitchCase="false">
-          <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+        <div *ngSwitchCase="false">
+          <div class="mt-5">
+            <app-pre-load-table></app-pre-load-table>
+          </div>
         </div>
         <div *ngSwitchDefault>
           <ng-container>

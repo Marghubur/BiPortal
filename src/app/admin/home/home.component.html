@@ -90,18 +90,18 @@
       <div class="col-md-8">
 
         <div class="">
-          <div class="skeleton">
+          <div class="skeleton rounded-top">
             <h4 class="vhide pt-2 fs-6 font-weight-bolder">Yearly Performance Chart</h4>
             <small class="vhide text-muted">Compnany monthly performance at a glance</small>
           </div>
-          <div class="d-block skeleton">
+          <div class="d-block skeleton rounded-bottom">
             <div class="vhide">
               <canvas id="lineChart" width="200" height="60"></canvas>
             </div>
           </div>
         </div>
 
-        <div class="mt-5 skeleton">
+        <div class="mt-5 skeleton rounded">
           <div class="vhide">
             <h4 class="pt-2 fs-6 font-weight-bolder">Performance Line Chart</h4>
             <small class="text-muted">Lorem Ipsum is simply dummy text of the printing</small>
@@ -114,7 +114,7 @@
         </div>
 
         <div class="row flex-grow mt-2">
-          <div class="col-12 skeleton grid-margin stretch-card">
+          <div class="col-12 skeleton rounded grid-margin stretch-card">
             <div class="card vhide card-rounded table-darkBGImg">
               <div class="card-body-p">
                 <div class="col-sm-8">
@@ -495,7 +495,7 @@
 
         <div class="d-flex flex-column">
           <div class="row flex-grow">
-            <div class="col-md-12 skeleton grid-margin stretch-card">
+            <div class="col-md-12 skeleton grid-margin stretch-card rounded">
               <div class="card bg-primary vhide card-rounded">
                 <div class="card-body pb-0">
                   <h4 class="card-title card-title-dash text-white mb-4">Status Summary</h4>
@@ -577,7 +577,56 @@
           </div>
         </div>
 
-        <div class="x_panel skeleton">
+        <div class="x_panel skeleton rounded">
+          <div class="row vhide">
+            <div class="col-lg-12">
+              <div class="d-flex justify-content-between align-items-center">
+                <h4 class="card-title-dash">Pending payment (Receive)</h4>
+                <div class="add-items d-flex mb-0">
+                  <button class="btn" (click)="editPendingPayment()">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="list-wrapper">
+                <ul class="todo-list todo-list-rounded">
+                  <li *ngFor="let p of clientBillPayment" class="d-block">
+                    <div class="form-check w-100" *ngIf="p.BillStatusId == 1 || p.BillStatusId == 2">
+                      <label class="">
+                        {{p.ClientName}} &nbsp;
+                        <small>[{{p.FirstName}}]</small>
+                      </label>
+                      <div class="d-flex mt-2">
+                        <div class="text-small me-3">
+                          {{p.BillUpdatedOn | date}}
+                        </div>
+                        <div [ngSwitch]="p.BillStatusId">
+                          <div *ngSwitchCase="1" class="badge badge-opacity-success me-3">
+                            Done
+                          </div>
+                          <div *ngSwitchDefault class="badge badge-opacity-warning me-3">
+                            Due
+                          </div>
+                        </div>
+                        <i class="mdi mdi-flag ms-2 flag-color"></i>
+                      </div>
+                    </div>
+                    <div class="form-check w-100" *ngIf="p.BillStatusId != 1 || p.BillStatusId != 2">
+                      There are no pending payments.
+                    </div>
+                  </li>
+                </ul>
+                <div class="ps-4 mt-2 fw-bold text-dark">
+                  <label>
+                    Total: &#8377; {{this.totalPendingPayment | number : '1.2-2'}}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="x_panel skeleton rounded">
           <div class="row vhide">
             <div class="col-lg-12">
               <div class="d-flex justify-content-between align-items-center">
@@ -623,53 +672,7 @@
           </div>
         </div>
 
-        <div class="x_panel skeleton">
-          <div class="row vhide">
-            <div class="col-lg-12">
-              <div class="d-flex justify-content-between align-items-center">
-                <h4 class="card-title-dash">Pending payment (Receive)</h4>
-                <div class="add-items d-flex mb-0">
-                  <button class="btn" (click)="editPendingPayment()">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="list-wrapper">
-                <ul class="todo-list todo-list-rounded">
-                  <li *ngFor="let p of clientBillPayment" class="d-block">
-                    <div class="form-check w-100">
-                      <label class="">
-                        {{p.ClientName}} &nbsp;
-                        <small>[{{p.FirstName}}]</small>
-                      </label>
-                      <div class="d-flex mt-2">
-                        <div class="text-small me-3">
-                          {{p.BillUpdatedOn | date}}
-                        </div>
-                        <div [ngSwitch]="p.BillStatusId">
-                          <div *ngSwitchCase="1" class="badge badge-opacity-success me-3">
-                            Done
-                          </div>
-                          <div *ngSwitchDefault class="badge badge-opacity-warning me-3">
-                            Due
-                          </div>
-                        </div>
-                        <i class="mdi mdi-flag ms-2 flag-color"></i>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-                <div class="ps-4 mt-2 fw-bold text-dark">
-                  <label>
-                    Total: &#8377; {{this.totalPendingPayment | number : '1.2-2'}}
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="skeleton">
+        <div class="skeleton rounded">
           <div class="x_panel vhide">
             <div>
               <h4 class="pt-2 fs-6 font-weight-bolder">Type By Amount</h4>
@@ -682,7 +685,7 @@
           </div>
         </div>
 
-        <div class="mt-2 skeleton">
+        <div class="mt-2 skeleton rounded">
           <div class="x_panel vhide">
             <div>
               <h4 class="pt-2 fs-6 font-weight-bolder">Performance Line Chart</h4>

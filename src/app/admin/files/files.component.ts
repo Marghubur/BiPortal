@@ -63,6 +63,7 @@ export class FilesComponent implements OnInit {
   TotalSalaryAmount: number = 0;
   RaisedBilloption: string = '';
   isReadonly: boolean = true;
+  calculateAmount: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -130,6 +131,10 @@ export class FilesComponent implements OnInit {
       this.singleEmployee = e;
       this.LoadFiles();
     }
+  }
+
+  calculation(){
+    this.calculateAmount = true;
   }
 
   updateRecord() {
