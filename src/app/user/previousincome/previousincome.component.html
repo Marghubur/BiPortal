@@ -44,37 +44,34 @@
           <div class="t-table t-list t-border mb-3 col-md-12 bg-white">
             <div class="t-head overflow-hidden custom-bg">
               <div class="tr bg-light py-3">
-                <div class="th ps-2">MONTH</div>
-                <div class="th ps-2">GROSS</div>
-                <div class="th ps-2">BASIC</div>
-                <div class="th ps-2">Month</div>
-                <div class="th ps-2">HOUSE RENT</div>
-                <div class="th ps-2">EMPLOYEE PR</div>
-                <div class="th ps-2">ESI</div>
-                <div class="th ps-2">LWF</div>
-                <div class="th ps-2">LWF EMPLOYEE</div>
-                <div class="th ps-2">PROFESSIONAL</div>
-                <div class="th ps-2">INCOME TAX</div>
-                <div class="th ps-2">OTHER TAX</div>
-                <div class="th ps-2">OTHER TAX F</div>
-                <div class="th ps-2">OTHER TAXAB</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Month">MON</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Gross">GROSS</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Basic">BASIC</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="House Rental Allowance">HR</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Employee Provident Fund">EMP PR</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="ESI">ESI</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="LWF">LWF</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="LWF Employer">LWF EMP</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Professtional Tax">PRO </div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Income Tax">IT</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Tax Free Components">OTHER TAX</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Taxable Components">OTHER TAXAB</div>
               </div>
             </div>
-            <div class="t-body border-bottom">
+            <div class="t-body border-bottom overflow-hidden">
               <div class="tr py-3" *ngFor="let item of previousEmploymentDetail">
-                <div class="td ps-2">{{item.Month}} {{currentYear - 1}}</div>
-                <div class="td ps-2">{{item.Gross}}</div>
-                <div class="td ps-2">{{item.Basic}}</div>
-                <div class="td ps-2">{{item.HouseRent}}</div>
-                <div class="td ps-2">{{item.EmployeePR}}</div>
-                <div class="td ps-2">{{item.ESI}}</div>
-                <div class="td ps-2">{{item.LWF}}</div>
-                <div class="td ps-2">{{item.LWFEmp}}</div>
-                <div class="td ps-2">{{item.Professional}}</div>
-                <div class="td ps-2">{{item.IncomeTax}}</div>
-                <div class="td ps-2">{{item.OtherTax}}</div>
-                <div class="td ps-2">{{item.OtherTaxF}}</div>
-                <div class="td ps-2">{{item.OtherTaxable}}</div>
+                <div class="td ps-3">{{item.Month | slice: 0:3}} {{currentYear - 1}}</div>
+                <div class="td ps-3">{{item.Gross}}</div>
+                <div class="td ps-3">{{item.Basic}}</div>
+                <div class="td ps-3">{{item.HouseRent}}</div>
+                <div class="td ps-3">{{item.EmployeePR}}</div>
+                <div class="td ps-3">{{item.ESI}}</div>
+                <div class="td ps-3">{{item.LWF}}</div>
+                <div class="td ps-3">{{item.LWFEmp}}</div>
+                <div class="td ps-3">{{item.Professional}}</div>
+                <div class="td ps-3">{{item.IncomeTax}}</div>
+                <div class="td ps-3">{{item.OtherTax}}</div>
+                <div class="td ps-3">{{item.OtherTaxable}}</div>
               </div>
               <div class="bg-light py-2">
                 <span class="ps-3">Total Items: {{total}}</span>

@@ -8,7 +8,7 @@ import { AccessTokenExpiredOn, Form12B, FreeTaxFilling, Preferences, PreviousInc
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
-import { MonthlyTax } from '../mysalary/mysalary.component';
+import { MonthlyTax } from '../incometax/incometax.component';
 declare var $: any;
 
 @Component({
