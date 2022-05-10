@@ -100,7 +100,11 @@ export class BilldetailsComponent implements OnInit {
     //this.currentEmployeeDetail = this.nav.getValue();
     let data = this.nav.getValue();
     if (data != null) {
-      this.employeeFile.ClientName = data.ClientName;
+      if (data.ClientName) {
+        this.employeeFile.ClientName = data.ClientName;
+      }
+      this.employeeFile.Status = data.BillStatusId;
+      this.employeeFile.Month = data.BillForMonth;
       this.filterRecords();
     }
     this.employeeId = 0;
@@ -327,13 +331,13 @@ export class BilldetailsComponent implements OnInit {
   downloadPdfDocx() {
     this.downlodFilePath = "";
     let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
-    
+
     let fileId = Number(this.FileDetail.FileUid);
     if(isNaN(fileId)) {
       ErrorToast("Invalid file id supplied.");
       return;
     }
-    
+
     let employeeBillDetail = {
       "EmployeeId": this.FileDetail.FileOwnerId,
       "ClientId": this.FileDetail.ClientId,

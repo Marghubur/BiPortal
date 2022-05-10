@@ -26,8 +26,8 @@
             <div class="numbers">
               <p class="text-sm mb-0 text-capitalize font-weight-bold">Pending GST</p>
               <h5 class="font-weight-bolder mb-0">
-                &#8377; 53,000
-                <span class="text-success text-sm font-weight-bolder">+55%</span>
+                &#8377; {{totalGSTAmount | number : '1.2-2'}}
+                <!-- <span class="text-success text-sm font-weight-bolder">+55%</span> -->
               </h5>
             </div>
             <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
@@ -629,7 +629,7 @@
               <div class="d-flex justify-content-between align-items-center">
                 <h4 class="card-title-dash">Pending payment (Receive)</h4>
                 <div class="add-items d-flex mb-0">
-                  <button class="btn">
+                  <button class="btn" (click)="editPendingPayment()">
                     <i class="fa fa-pencil" aria-hidden="true"></i>
                   </button>
                 </div>
@@ -659,9 +659,9 @@
                     </div>
                   </li>
                 </ul>
-                <div class="ps-4 mt-2">
+                <div class="ps-4 mt-2 fw-bold text-dark">
                   <label>
-                    Total: &#8377; 150000
+                    Total: &#8377; {{this.totalPendingPayment | number : '1.2-2'}}
                   </label>
                 </div>
               </div>

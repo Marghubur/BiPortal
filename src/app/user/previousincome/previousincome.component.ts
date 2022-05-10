@@ -1,19 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { Declaration, Form12B, FreeTaxFilling, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
+import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
+import { Declaration, Form12B, FreeTaxFilling, Preferences, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import 'bootstrap';
+declare var $: any;
 
 @Component({
   selector: 'app-previousincome',
   templateUrl: './previousincome.component.html',
   styleUrls: ['./previousincome.component.scss']
 })
-export class PreviousincomeComponent implements OnInit {
+export class PreviousincomeComponent implements OnInit, AfterViewChecked {
   cachedData: any = null;
   previousEmploymentDetail: Array<PreviousEmploymentDetail> = [];
   currentYear: number = 0;
   total: number = 0;
 
   constructor(private nav: iNavigation) { }
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle="tooltip"]').tooltip();
+  }
 
   ngOnInit(): void {
     this.currentYear = new Date().getFullYear();
@@ -29,7 +34,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -44,7 +48,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -59,7 +62,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -74,7 +76,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -89,7 +90,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -104,7 +104,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -119,7 +118,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -134,7 +132,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -149,7 +146,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -164,7 +160,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -179,7 +174,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     },
     {
@@ -194,7 +188,6 @@ export class PreviousincomeComponent implements OnInit {
       Professional: 0,
       IncomeTax: 0,
       OtherTax: 0,
-      OtherTaxF: null,
       OtherTaxable: null
     });
 
@@ -250,6 +243,5 @@ class PreviousEmploymentDetail {
   Professional: number = 0;
   IncomeTax: number = 0;
   OtherTax: number = 0;
-  OtherTaxF: number = null;
   OtherTaxable: number = null;
 }

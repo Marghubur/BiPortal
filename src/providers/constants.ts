@@ -89,6 +89,9 @@ export const PreviousIncome = 'user/previousincome';
 export const Form12B = 'user/form12b';
 export const FreeTaxFilling = 'user/freetaxfilling';
 export const TaxSavingInvestment = 'user/taxsavinginvestment';
+export const PaySlip = 'user/payslip';
+export const IncomeTax = 'user/incometax';
+
 
 
 // *************************** file name constancts  *************
