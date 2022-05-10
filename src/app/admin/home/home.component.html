@@ -26,7 +26,7 @@
             <div class="numbers">
               <p class="text-sm mb-0 text-capitalize font-weight-bold">Pending GST</p>
               <h5 class="font-weight-bolder mb-0">
-                &#8377; 53,000
+                &#8377; {{totalGSTAmount}}
                 <span class="text-success text-sm font-weight-bolder">+55%</span>
               </h5>
             </div>
@@ -657,9 +657,9 @@
                     </div>
                   </li>
                 </ul>
-                <div class="ps-4 mt-2">
+                <div class="ps-4 mt-2 fw-bold text-dark">
                   <label>
-                    Total: &#8377; 150000
+                    Total: &#8377; {{this.totalPendingPayment}}
                   </label>
                 </div>
               </div>

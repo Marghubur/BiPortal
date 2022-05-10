@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit {
   gstPaymentDetail: Array<any> = [];
   employeeAttandenceDetail: Array<any> = [];
   totalPendingPayment: number = 0;
+  totalGSTAmount: number = 0;
 
   constructor(private http: AjaxService) { }
 
@@ -47,8 +48,14 @@ export class HomeComponent implements OnInit {
         this.employeeAttandenceDetail = response.ResponseBody.AttendaceDetail;
         let i = 0;
         while(i < this.clientBillPayment.length) {
-          this.totalPendingPayment =
+          this.totalPendingPayment += this.clientBillPayment[i].PaidAmount;
           i++;
+        }
+
+        let index = 0;
+        while(index < this.getDeatils.length) {
+          this.totalGSTAmount += this.getDeatils[i].amount;
+          index++;
         }
         Toast("Loaded successfully.");
         this.isPageReady = true;
