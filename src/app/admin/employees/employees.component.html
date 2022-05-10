@@ -1,4 +1,4 @@
-<div class="col-md-12 main-container">
+<div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
   <div class="col-12 u-header curren-bg row m-0 my-3">
     <div class="col-md-3">
       <div class="d-inline-block c-tab" id="emp-tab">
@@ -47,9 +47,12 @@
     </div>
 
     <app-breadcrums></app-breadcrums>
+
     <div [ngSwitch]="isEmpPageReady">
-      <div class="data-loading-loader" *ngSwitchCase="false">
-        <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+      <div *ngSwitchCase="false">
+        <div class="mt-5">
+          <app-pre-load-table></app-pre-load-table>
+        </div>
       </div>
       <div *ngSwitchDefault>
         <ng-container>
@@ -70,8 +73,10 @@
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
                         (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Name" placeholder="Search by Name">
                       <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true" (click)="arrangeDetails('FirstName', 'Asc')"></i>
-                        <i class="fa fa-sort-amount-desc" (click)="arrangeDetails('FirstName', 'Desc')" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-asc" aria-hidden="true"
+                          (click)="arrangeDetails('FirstName', 'Asc')"></i>
+                        <i class="fa fa-sort-amount-desc" (click)="arrangeDetails('FirstName', 'Desc')"
+                          aria-hidden="true"></i>
                         <a href="javascript:void()" class="ps-3">Full Name</a>
                       </div>
                     </div>
@@ -82,8 +87,10 @@
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
                         placeholder="Search by MobileNumber">
                       <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true" (click)="arrangeDetails('Mobile', 'Asc')"></i>
-                        <i class="fa fa-sort-amount-desc" aria-hidden="true" (click)="arrangeDetails('Mobile', 'Desc')"></i>
+                        <i class="fa fa-sort-amount-asc" aria-hidden="true"
+                          (click)="arrangeDetails('Mobile', 'Asc')"></i>
+                        <i class="fa fa-sort-amount-desc" aria-hidden="true"
+                          (click)="arrangeDetails('Mobile', 'Desc')"></i>
                         <a href="javascript:void()" class="ps-3">Mobile Number</a>
                       </div>
                     </div>
@@ -93,8 +100,10 @@
                       <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
                       <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true" (click)="arrangeDetails('Email', 'Asc')"></i>
-                        <i class="fa fa-sort-amount-desc" aria-hidden="true" (click)="arrangeDetails('Email', 'Desc')"></i>
+                        <i class="fa fa-sort-amount-asc" aria-hidden="true"
+                          (click)="arrangeDetails('Email', 'Asc')"></i>
+                        <i class="fa fa-sort-amount-desc" aria-hidden="true"
+                          (click)="arrangeDetails('Email', 'Desc')"></i>
                         <a href="javascript:void()" class="ps-3">Email Id</a>
                       </div>
                     </div>
@@ -115,7 +124,8 @@
                       <div class="float-end">
                         <a href="javascript:void(0)" (click)="editProfile(user)"><span class="badge bg-dark me-3"><i
                               class="fa fa fa-user-circle-o user-edit-icon"></i></span></a>
-                        <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o"> &nbsp; 5</span></a>
+                        <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o"> &nbsp;
+                            5</span></a>
                         <a href="javascript:void(0)" class="ms-3" (click)="goToAttendancePage(user)">
                           <span class="text-sm-left text-muted">Attendance</span>
                           <span class="ms-2 badge bg-success">
