@@ -69,6 +69,7 @@ export class BilldetailsComponent implements OnInit {
   TotalSalaryAmount: number = 0;
   RaisedBilloption: string = '';
   isReadonly: boolean = true;
+  calculateAmount: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -204,6 +205,10 @@ export class BilldetailsComponent implements OnInit {
       return;
     }
     $("#uploadocument").click();
+  }
+
+  calculation(){
+    this.calculateAmount = true;
   }
 
   submitGSTStatusDetail() {
