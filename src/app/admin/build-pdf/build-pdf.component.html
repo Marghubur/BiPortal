@@ -1,5 +1,3 @@
-<!-- Old Build Pdf start from herea -->
-<!-- Remove d-none to see old build pdf -->
 <div class="container-fluid main-container" [ngClass]="{'preload': !pageDataIsReady}">
   <div class="x_panel">
     <div class="x_header">
@@ -84,17 +82,6 @@
                     </div>
                   </div>
                   <div class="col-md-12 mb-3 row vhide">
-                    <!-- <label class="form-label">Address *</label> -->
-                    <!-- <div class="col-md-6">
-                      <select name="senderClientId" class="form-control mt-3" formControlName="senderClientId"
-                        (change)="findSenderClientDetail($event)"
-                        [ngClass]="{'error': submitted && f.senderClientId.errors !== null && f.senderClientId.errors.required}">
-                        <option value="0">Sender Organization</option>
-                        <option *ngFor="let client of applicationData.clients" value="{{client.ClientId}}">
-                          {{client.ClientName}}
-                        </option>
-                      </select>
-                    </div> -->
                     <div class="col-md-6 d-none">
                       <input placeholder="GSTIN NO#" class="form-control mt-3" name="senderGSTNo"
                         formControlName="senderGSTNo"
@@ -128,12 +115,20 @@
                           [ngClass]="{'error': submitted && f.header.errors !== null && f.header.errors.required}"
                           name="header" formControlName="header" />
                       </div>
-                      <div class="col-md-6">
-                        <label class="form-label">Bill for month *</label>
-                        <select name="billForMonth" class="form-control" (change)="calculateSpecificDays($event)"
-                          [ngClass]="{'disable-field': !isClientSelected}" formControlName="billForMonth">
-                          <option *ngFor="let m of months" value="{{m.name}}">{{m.name}}</option>
-                        </select>
+                      <div class="col-md-6 row m-0 p-0">
+                        <div class="col-md-6">
+                          <label class="form-label">Billng month*</label>
+                          <select name="billForMonth" class="form-control" (change)="calculateSpecificDays($event)"
+                            [ngClass]="{'disable-field': !isClientSelected}" formControlName="billForMonth">
+                            <option *ngFor="let m of months" value="{{m.name}}">{{m.name}}</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Billng year*</label>
+                          <input inputtype="mandatory" class="form-control" placeholder="Year"
+                            [ngClass]="{'error': submitted && f.header.errors !== null && f.header.errors.required}"
+                            name="billYear" formControlName="billYear" />
+                        </div>
                       </div>
                     </div>
                     <div class="col-md-12 mt-2 row">
@@ -159,8 +154,6 @@
                         </form>
                       </div>
                     </div>
-                    <!-- <textarea rows="4" class="form-control mt-3" placeholder="Company full address" name="receiverFirstAddress"
-                      formControlName="receiverFirstAddress" [ngClass]="{'error': submitted && f.receiverFirstAddress.errors !== null && f.receiverFirstAddress.errors.required}" ></textarea> -->
                   </div>
                 </div>
               </div>
@@ -173,16 +166,6 @@
                     </div>
                   </div>
                   <div class="col-md-12">
-                    <!-- <div class="col-md-6">
-                      <select name="receiverCompanyId" class="form-control mt-3" formControlName="receiverCompanyId"
-                        (change)="findReceiverClientDetail($event)"
-                        [ngClass]="{'error': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
-                        <option value="0">Client Organization</option>
-                        <option *ngFor="let client of assignedClients" value="{{client.ClientUid}}">
-                          {{client.ClientName}}
-                        </option>
-                      </select>
-                    </div> -->
                     <div class="col-md-6 d-none">
                       <input placeholder="GSTIN NO#" class="form-control mt-3" name="receiverGSTNo"
                         formControlName="receiverGSTNo"
