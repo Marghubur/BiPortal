@@ -84,6 +84,7 @@ export class BuildPdfComponent implements OnInit {
     this.pdfModal.workingDay = this.daysInMonth((new Date()).getMonth() + 1);
     this.pdfModal.actualDaysBurned = this.pdfModal.workingDay;
     this.originalBillingMonth = this.model.month;
+    this.pdfModal.billYear = new Date().getFullYear();
     this.manageBillDates();
     this.employees = [];
     this.loadPageLevelData();
@@ -234,6 +235,10 @@ export class BuildPdfComponent implements OnInit {
         }
 
         this.originalBillingMonth = fileDetail.BillForMonth;
+        this.pdfModal.billYear = fileDetail.BillYear;
+        if(fileDetail.BillYear == null) {
+          this.pdfModal.billYear = new Date().getFullYear();
+        }
         this.generateDaysCount();
         this.manageBillDates();
         this.initForm();
@@ -462,6 +467,7 @@ export class BuildPdfComponent implements OnInit {
     this.pdfForm = this.fb.group({
       header: new FormControl(this.pdfModal.header, [Validators.required]),
       billForMonth: new FormControl(this.pdfModal.billForMonth, [Validators.required]),
+      billYear: new FormControl(this.pdfModal.billYear, [Validators.required]),
       billNo: new FormControl(this.pdfModal.billNo),
       cGST: new FormControl(this.pdfModal.cGST),
       sGST: new FormControl(this.pdfModal.sGST),
@@ -549,8 +555,13 @@ export class BuildPdfComponent implements OnInit {
     this.isLoading = true;
     this.submitted = true;
     let errroCounter = 0;
+    let billingYear: any = 0;
 
     if (this.pdfForm.get('billForMonth').errors !== null)
+      errroCounter++;
+
+    billingYear = Number(this.pdfForm.get('billYear').value);
+    if (this.pdfForm.get('billYear').errors !== null)
       errroCounter++;
     if (this.pdfForm.get('packageAmount').errors !== null)
       errroCounter++;
@@ -601,7 +612,7 @@ export class BuildPdfComponent implements OnInit {
     this.pdfForm.get('sGstAmount').setValue(this.sgstAmount);
     this.pdfForm.get('igstAmount').setValue(this.igstAmount);
     this.pdfForm.get('grandTotalAmount').setValue(this.grandTotalAmount);
-    this.pdfForm.get("billingMonth").setValue(new Date(this.model.year, this.originalBillingMonth - 1, 1));
+    this.pdfForm.get("billingMonth").setValue(new Date(billingYear, this.originalBillingMonth - 1, 1));
 
     if (errroCounter === 0) {
       this.pdfForm.get("daysAbsent").setValue(worksDays - burnDays);
@@ -853,6 +864,7 @@ class PdfModal {
   UpdateSeqNo: number = 0;
   IsCustomBill: boolean = false;
   billForMonth: string = null;
+  billYear: number = null;
   billNo: string = null;
   dateOfBilling: Date = new Date();
   daysAbsent: number = 0;

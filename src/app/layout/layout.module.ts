@@ -28,7 +28,6 @@ import { AjaxService } from '../../providers/ajax.service';
     FormsModule,
     HttpClientModule,
     NgChartsModule
-
   ],
   providers: [
     AppService,
