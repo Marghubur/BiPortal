@@ -32,7 +32,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DateFormatter } from 'src/providers/DateFormatter';
 import { LoginComponent } from './login/login.component';
 import { LayoutModule } from './layout/layout.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
