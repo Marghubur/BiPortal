@@ -31,6 +31,11 @@ export class ClientsComponent implements OnInit {
   anyFilter: string = "";
   singleClient: any = null;
   isActiveClient: number = 1;
+  orderByNameAsc: boolean = null;
+  orderByMobileAsc: boolean = null;
+  orderByEmailAsc: boolean = null;
+  orderByCityAsc: boolean = null;
+  orderByFirstAddressAsc: boolean = null;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -108,6 +113,28 @@ export class ClientsComponent implements OnInit {
         this.isClientFound = true;
       });
     }
+  }
+
+  arrangeDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'Asc';
+    } else {
+      Order = 'Desc';
+    }
+    if (FieldName == 'ClientName')
+      this.orderByNameAsc = !flag;
+    if (FieldName == 'PrimaryPhoneNo')
+      this.orderByMobileAsc = !flag;
+    if (FieldName == 'Email')
+      this.orderByEmailAsc = !flag;
+    if (FieldName == 'City')
+      this.orderByCityAsc = !flag;
+    if (FieldName == 'FirstAddress')
+      this.orderByFirstAddressAsc = !flag;
+    this.clientsData = new Filter();
+    this.clientsData.SortBy = FieldName +" "+ Order;
+    this.LoadData()
   }
 
 

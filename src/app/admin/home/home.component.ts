@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
   totalGSTAmount: number = 0;
   monthlyGrossIncomeDetail: Array<number> = [];
   months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  isPaymenyPending: boolean = false;
 
   constructor(private http: AjaxService,
               private nav:iNavigation) { }
@@ -37,6 +38,7 @@ export class HomeComponent implements OnInit {
 
   getDeatils() {
     this.isPageReady = false;
+    this.isPaymenyPending = false;
     let data = {
       "UserId" : 6,
       "EmployeeUid": 6,
@@ -48,8 +50,8 @@ export class HomeComponent implements OnInit {
       if (response.ResponseBody) {
         this.totalPendingPayment = 0;
         this.totalGSTAmount = 0;
-        this.clientBillPayment = response.ResponseBody.BillDetail
-        this.gstPaymentDetail = response.ResponseBody.GSTDetail
+        this.clientBillPayment = response.ResponseBody.BillDetail;
+        this.gstPaymentDetail = response.ResponseBody.GSTDetail;
         this.employeeAttandenceDetail = response.ResponseBody.AttendaceDetail;
         let incomeDetail = response.ResponseBody.YearGrossIncome;
         if(incomeDetail && incomeDetail.length > 0) {
@@ -75,6 +77,7 @@ export class HomeComponent implements OnInit {
         let i = 0;
         while(i < this.clientBillPayment.length) {
           this.totalPendingPayment += this.clientBillPayment[i].PaidAmount;
+          this.isPaymenyPending = true;
           i++;
         }
 
@@ -83,6 +86,7 @@ export class HomeComponent implements OnInit {
           this.totalGSTAmount += this.gstPaymentDetail[index].amount;
           index++;
         }
+
         this.LoadLineChart();
         this.isPageReady = true;
         Toast("Loaded successfully.");

@@ -22,7 +22,9 @@
         </div>
       </div>
     </div>
-    <app-breadcrums></app-breadcrums>
+    <div class="px-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
     <div [ngSwitch]="isEmpPageReady">
       <div *ngSwitchCase="false">
         <div class="mt-5">
@@ -43,7 +45,7 @@
                       </app-iautocomplete>
                     </div>
                   </div>
-                  <div class="d-flex flex-row">
+                  <div class="d-flex flex-row align-items-center">
                     <div class="text-end">
                       <a href="javascript:void(0)" class="a-btn text-success fw-bold" (click)="refreshFilter()">
                         <i class="fa fa-refresh">
@@ -53,7 +55,7 @@
                     </div>
                     <div class="text-end">
                       <a href="javascript:void(0)" class="text-dark ps-1" (click)="filterRecords()">
-                        <i class="fa fa-filter zoom-2"></i>
+                        <i class="fa fa-filter"></i>
                       </a>
                     </div>
                     <div class="text-end">
@@ -89,10 +91,10 @@
                     <div class="cell-wrapper">
                       <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
-                      <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                        <a href="javascript:void()" class="ps-3">Bill No.#</a>
+                      <div class="t-filter" (click)="arrangeDetails(orderByBillNoAsc, 'BillNo')">
+                        <a href="javascript:void()" class="pe-2">Bill No.#</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByBillNoAsc == null || !orderByBillNoAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByBillNoAsc == null || orderByBillNoAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -100,10 +102,10 @@
                     <div class="cell-wrapper">
                       <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                       (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
-                      <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                        <a href="javascript:void()" class="ps-3">Client Name</a>
+                      <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ClientName')">
+                        <a href="javascript:void()" class="pe-2">Client Name</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -117,19 +119,17 @@
                         <option value="3">Canceled</option>
                         <option value="7">Raised</option>
                       </select>
-                      <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                        <a href="javascript:void()" class="ps-3">Status</a>
+                      <div class="t-filter" (click)="arrangeDetails(orderByBillStatusAsc, 'BillStatusId')">
+                        <a href="javascript:void()" class="pe-2">Status</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByBillStatusAsc == null || !orderByBillStatusAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByBillStatusAsc == null || orderByBillStatusAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
                       <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                        <a href="javascript:void()" class="ps-3">Paid On</a>
+                        <a href="javascript:void()" class="pe-2">Paid On</a>
                       </div>
                     </div>
                   </div>
@@ -151,10 +151,10 @@
                         <option value="11">November</option>
                         <option value="12">December</option>
                       </select>
-                      <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                        <a href="javascript:void()" class="ps-3">Month</a>
+                      <div class="t-filter" (click)="arrangeDetails(orderByMonthAsc, 'BillForMonth')">
+                        <a href="javascript:void()" class="pe-2">Month</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByMonthAsc == null || !orderByMonthAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByMonthAsc == null || orderByMonthAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -164,8 +164,6 @@
                       (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
                       [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
                       <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
                         <a href="javascript:void()" class="ps-2">Billed Amt</a>
                       </div>
                     </div>
@@ -176,9 +174,7 @@
                       (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
                       [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
                       <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                        <a href="javascript:void()" class="ps-3">Received</a>
+                        <a href="javascript:void()" class="pe-2">Received</a>
                       </div>
                     </div>
                   </div>
@@ -187,9 +183,7 @@
                       <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome" placeholder="By Take Home">
                       <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                        <a href="javascript:void()" class="ps-2">Take Home</a>
+                        <a href="javascript:void()" class="pe-2">Take Home</a>
                       </div>
                     </div>
                   </div>
@@ -203,10 +197,10 @@
                         <option value="3">Canceled</option>
                         <option value="6">Raised</option>
                       </select>
-                      <div class="t-filter">
-                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                        <a href="javascript:void()" class="ps-3">GST</a>
+                      <div class="t-filter" (click)="arrangeDetails(orderByGSTStatusAsc, 'GSTStatus')">
+                        <a href="javascript:void()" class="pe-2">GST</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByGSTStatusAsc == null || !orderByGSTStatusAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByGSTStatusAsc == null || orderByGSTStatusAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -260,11 +254,11 @@
                   <div class="td align-middle fe-1">
                     <div class="cell-wrapper text-center">
                       <a href="javascript:void(0)" class="h-font" (click)="UpdateCurrent(user.FileUid)">
-                        <i class="fa fa-check fa-lg text-success" *ngIf="user.Status == 'Completed'"></i>
-                        <i class="fa" [ngClass]="{'fa-check fa-lg text-success': user.Status == 'Completed', 'fa-times text-danger fa-lg': user.Status == 'Canceled', 'fa-clock-o text-dark': user.Status == 'Raised', 'fa-exclamation-triangle fa-lg text-warning': user.Status == 'Pending', 'fa-ban fa-lg text-danger': user.Status == 'Rejected'}"></i>
-                        <i class="fa" [ngClass]="{'fa-check fa-lg text-success': user.Status == 'Completed', 'fa-times text-danger fa-lg': user.Status == 'Canceled', 'fa-clock-o text-dark': user.Status == 'Raised', 'fa-exclamation-triangle fa-lg text-warning': user.Status == 'Pending', 'fa-ban fa-lg text-danger': user.Status == 'Rejected'}"></i>
-                        <i class="fa" [ngClass]="{'fa-check fa-lg text-success': user.Status == 'Completed', 'fa-times text-danger fa-lg': user.Status == 'Canceled', 'fa-clock-o text-dark': user.Status == 'Raised', 'fa-exclamation-triangle fa-lg text-warning': user.Status == 'Pending', 'fa-ban fa-lg text-danger': user.Status == 'Rejected'}"></i>
-
+                        <i class="fa fa-check fa-lg text-success" *ngIf="user.Status == 'Completed'" data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
+                        <i class="fa fa-times text-danger fa-lg" *ngIf="user.Status == 'Canceled'" data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
+                        <i class="fa fa-clock-o text-dark" *ngIf="user.Status == 'Raised'" data-bs-toggle="tooltip" data-bs-placement="right" title="Raised"></i>
+                        <i class="fa fa-exclamation-triangle fa-lg text-warning" *ngIf="user.Status == 'Pending'" data-bs-toggle="tooltip" data-bs-placement="right" title="Pending"></i>
+                        <i class="fa fa-ban fa-lg text-danger" *ngIf="user.Status == 'Rejected'" data-bs-toggle="tooltip" data-bs-placement="right" title="Rejected"></i>
                         <!-- <i class="fa" [ngClass]="{'fa-check fa-lg text-success': user.Status == 'Completed', 'fa-times text-danger fa-lg': user.Status == 'Canceled', 'fa-clock-o text-dark': user.Status == 'Raised', 'fa-exclamation-triangle fa-lg text-warning': user.Status == 'Pending', 'fa-ban fa-lg text-danger': user.Status == 'Rejected'}"></i> -->
                         <!-- {{user.Status}} -->
                       </a>
@@ -272,12 +266,12 @@
                   </div>
                   <div class="td align-middle fe-1">
                     <div class="cell-wrapper">
-                      {{user.PaidOn}}
+                      {{user.PaidOn | date}}
                     </div>
                   </div>
                   <div class="td align-middle fe-1">
                     <div class="cell-wrapper">
-                      {{user.Month}}
+                      {{user.Month | slice: 0:3}}
                     </div>
                   </div>
                   <div class="td align-middle fe-1">
@@ -307,7 +301,12 @@
                   <div class="td align-middle fe-1">
                     <div class="cell-wrapper">
                       <a href="javascript:void(0)" class="h-font" (click)="updateGSTStatus(user.BillNo, user.GSTAmount)">
-                        {{user.GSTStatus}}
+                        <i class="fa fa-check fa-lg text-success" *ngIf="user.GSTStatus == 'Completed'" data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
+                        <i class="fa fa-times text-danger fa-lg" *ngIf="user.GSTStatus == 'Canceled'" data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
+                        <i class="fa fa-clock-o text-dark" *ngIf="user.GSTStatus == 'Raised'" data-bs-toggle="tooltip" data-bs-placement="right" title="Raised"></i>
+                        <i class="fa fa-exclamation-triangle fa-lg text-warning" *ngIf="user.GSTStatus == 'Pending'" data-bs-toggle="tooltip" data-bs-placement="right" title="Pending"></i>
+                        <i class="fa fa-ban fa-lg text-danger" *ngIf="user.GSTStatus == 'Rejected'" data-bs-toggle="tooltip" data-bs-placement="right" title="Rejected"></i>
+                        <!-- {{user.GSTStatus}} -->
                       </a>
                     </div>
                   </div>

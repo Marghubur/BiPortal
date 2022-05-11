@@ -13,7 +13,9 @@
       </div>
     </div>
 
-    <app-breadcrums></app-breadcrums>
+    <div class="px-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
 
     <div [ngSwitch]="pageDataIsReady">
       <div class="data-loading-loader" *ngSwitchCase="false">

@@ -5,7 +5,9 @@
         <h2>Client<small>add or update client</small></h2>
       </div>
     </div>
-    <app-breadcrums></app-breadcrums>
+    <div class="px-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
     <div class="x_content mt-4" *ngIf="isLoaded">
       <form [formGroup]="clientForm" autocomplete="off" class="col-md-12 row">
         <div class="mb-5">
