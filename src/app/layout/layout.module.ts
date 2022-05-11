@@ -13,7 +13,6 @@ import { PageCache } from '../../providers/PageCache';
 import { HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { AjaxService } from '../../providers/ajax.service';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -28,9 +27,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    NgChartsModule,
-    NgbModule
-
+    NgChartsModule
   ],
   providers: [
     AppService,
