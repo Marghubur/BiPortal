@@ -16,7 +16,9 @@
     </ul>
   </div>
   <div class="col-12 x_panel p-0 m-0">
-    <app-breadcrums></app-breadcrums>
+    <div class="px-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
     <div class="right-panel col-md-12 p-0">
       <ng-container>
         <div class="container-fluid pt-4 row">
@@ -47,7 +49,7 @@
                     <p class="text-dark fw-bold">Bank Transfer</p>
                   </div>
                   <div class="col-md-6 mt-auto mb-3">
-                    <a href="javascript:void(0)" class="text-decoration-none">View Pay Slip</a>
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="viewPaySlip()">View Pay Slip</a>
                   </div>
                 </div>
               </div>

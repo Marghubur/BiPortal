@@ -61,15 +61,6 @@ input::-ms-input-placeholder {
   border-right: 4px solid #17c417;
 }
 
-// ::-webkit-scrollbar {
-//   width: 8px;
-// }
-
-::selection {
-  background-color: #cce2ff;
-  color: rgba(0, 0, 0, 0.87);
-}
-
 .success-toast {
   background: green;
   color: #fff;
@@ -544,14 +535,6 @@ input[type="number"]::-webkit-outer-spin-button {
 
 // ---------------------------- body ------------------------------------
 
-body ::-webkit-scrollbar-thumb {
-  cursor: pointer;
-  border-radius: 5px;
-  background: rgba(0, 0, 0, 0.25);
-  -webkit-transition: color 0.2s ease;
-  transition: color 0.2s ease;
-}
-
 html,
 body {
   height: 100%;
@@ -860,3 +843,25 @@ fieldset {
   }
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a79898;
+  border-radius: 8px;
+}
+
+// caret symbol in dropdown
+
+.dropdown-toggle::after {
+  content: none !important;
+}
+
+.dropdown-toggle::before {
+  content: none !important;
+}

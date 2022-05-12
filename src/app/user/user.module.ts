@@ -20,6 +20,7 @@ import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginv
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import { LeaveComponent } from './leave/leave.component';
 import { PreferencesComponent } from './preferences/preferences.component';
+import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { PreferencesComponent } from './preferences/preferences.component';
     TaxsavinginvestmentComponent,
     TimesheetComponent,
     LeaveComponent,
-    PreferencesComponent
+    PreferencesComponent,
+    TaxcalculationComponent
   ],
   imports: [
     CommonModule,

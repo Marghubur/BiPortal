@@ -31,7 +31,11 @@ export class EmployeesComponent implements OnInit {
   employeeDetails: employeeModel = null;
   singleEmployee: any = null;
   isActiveEmployee: number = 1;
-  isActiveTab: any = {}
+  isActiveTab: any = {};
+  orderByNameAsc: boolean = null;
+  orderByMobileAsc: boolean = null;
+  orderByEmailAsc: boolean = null;
+
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -125,7 +129,19 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
-  arrangeDetails(FieldName: string, Order: string) {
+  arrangeDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'Asc';
+    } else {
+      Order = 'Desc';
+    }
+    if (FieldName == 'FirstName')
+      this.orderByNameAsc = !flag;
+    if (FieldName == 'Mobile')
+      this.orderByMobileAsc = !flag;
+    if (FieldName == 'Email')
+      this.orderByEmailAsc = !flag;
     this.employeeData = new Filter();
     this.employeeData.SortBy = FieldName +" "+ Order;
     this.LoadData()

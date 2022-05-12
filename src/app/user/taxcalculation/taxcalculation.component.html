@@ -1,0 +1,154 @@
+<div class="col-12 full-v main-container">
+  <div class="col-12 x_panel p-0 m-0">
+    <div class="px-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
+    <div class="right-panel col-md-12 p-0">
+      <div class="container-fluid pt-4 pb-4">
+        <p class="fs-1 text-dark text-center">Income Tax Calculator - FY {{currentYear}} - {{currentYear + 1}}</p>
+        <p class="text-center fs-5">E-file tax returns in 7 minutes for <span class="fw-bold">Free</span> - <a href="javascript:void(0)" class="text-decoration-none">File ITR Now</a></p>
+        <form [formGroup]="taxCalculationForm">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+            <li [ngbNavItem]="1">
+              <a ngbNavLink>Basic Details</a>
+              <ng-template ngbNavContent>
+                <div class="mx-3">
+                  <p class="pt-2 pb-4"><i>See how the latest budget impacts your tax calculation. Updated as per latest budgest on 1 February, {{currentYear}}</i></p>
+                  <h6 class="fw-bold text-dark">Which Financial Year do you want to calculate taxes for?</h6>
+                  <div class="form-check ps-5 pt-2">
+                    <input class="form-check-input" type="radio" name="FinancialYear" id="gridRadios1" value="cuurentYear" formControlName="FinancialYear">
+                    <label class="form-check-label fw-bold" for="gridRadios1">
+                      FY {{currentYear}} - {{currentYear + 1}} <span class="badge bg-warning text-dark fw-bold">Latest Budget</span> (Return to be filed between 1st April {{currentYear + 1}} - 31st March {{currentYear + 2}})
+                    </label>
+                  </div>
+                  <div class="form-check ps-5 py-2">
+                    <input class="form-check-input" type="radio" name="FinancialYear" id="gridRadios2" value="previousYear" formControlName="FinancialYear">
+                    <label class="form-check-label fw-bold" for="gridRadios2">
+                      FY {{currentYear - 1}} - {{currentYear}} (Return to be filed between 1st April {{currentYear}} - 31st March {{currentYear + 1}})
+                    </label>
+                  </div>
+                  <h6 class="fw-bold text-dark pt-3">Your age</h6>
+                  <div class="form-check ps-5 pt-2">
+                    <input class="form-check-input" type="radio" name="Age" id="gridRadios3" value="0to60" formControlName="Age">
+                    <label class="form-check-label fw-bold" for="gridRadios3">
+                      0 to 60
+                    </label>
+                  </div>
+                  <div class="form-check ps-5 py-2">
+                    <input class="form-check-input" type="radio" name="Age" id="gridRadios4" value="60to80" formControlName="Age">
+                    <label class="form-check-label fw-bold" for="gridRadios4">
+                      60 to 80
+                    </label>
+                  </div>
+                  <div class="form-check ps-5 py-2">
+                    <input class="form-check-input" type="radio" name="Age" id="gridRadios5" value="80&above" formControlName="Age">
+                    <label class="form-check-label fw-bold" for="gridRadios5">
+                      80 & above
+                    </label>
+                  </div>
+                  <div class="text-center">
+                    <button class="btn btn-outline-success" (click)="navigateTab('IncomeDetails')">Go to Next Step</button>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+              <a ngbNavLink>Income Details</a>
+              <ng-template ngbNavContent>
+                <div class="row mx-3">
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Income from Salary <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Salary before reducing exemptions (HRS, LTA), standard deduction & professional tax"></i></label>
+                    <input type="number" class="form-control" formControlName="IncomeSalary" >
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Exemptions & Deductions from Salary <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="HRA, LTA, Standard Deduction etc."></i></label>
+                    <input type="number" class="form-control" formControlName="DeductionSalary">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Income from Interest<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Include interest from saving banks, deposits and other interest"></i></label>
+                    <input type="number" class="form-control" formControlName="IncomeInterest">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Other Income<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Includes taxable freelancing income or any other taxable income"></i></label>
+                    <input type="number" class="form-control" formControlName="OtherIncome">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Interest Paid on Home Loan <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Interest paid on housing loan taken for sewlf-occupied property"></i></label>
+                    <input type="number" class="form-control" formControlName="InterestHomeLoan">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Rental Income Received <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Annual rent received on let-out property"></i></label>
+                    <input type="number" class="form-control" formControlName="RentalIncome">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Interest Paid on Loan <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Interest paid on housing loan taken for rented/let-out property"></i></label>
+                    <input type="number" class="form-control" formControlName="InterestLoan">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Income from Digital Assets <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Net Income from Digital Assets, taxed at 30%"></i></label>
+                    <input type="number" class="form-control" formControlName="IncomeDigitalAssets">
+                  </div>
+                </div>
+                <div class="text-center mt-4">
+                  <button class="btn btn-outline-success" (click)="navigateTab('Deductions')">Go to Next Step</button>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="3">
+              <a ngbNavLink>Deductions</a>
+              <ng-template ngbNavContent>
+                <div class="row mx-3">
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Basic Deduction - 80C <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Amount invested/paid in tax saving instruments such as PPF, ELSS mutual funds, LIC premium, etc."></i></label>
+                    <input type="number" class="form-control" formControlName="BasicDeduction">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Interest from Deposits - 80TTA <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Amount of interest income on deposit in savings account (includes fixed/recurring deposit interest in case of senior citizem)"></i></label>
+                    <input type="number" class="form-control" formControlName="InterestDeposit">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Medical Insurance - 80D<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Medical premium & preventive health checkup fees paid for self & family including parents"></i></label>
+                    <input type="number" class="form-control" formControlName="MedicalInsurance">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Donations to Charity - 80G<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Amount paid as donation to charitable institutions or certain recognized funds"></i></label>
+                    <input type="number" class="form-control" formControlName="DonationCharity">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Interest on Education Loan - 80E <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Amount of interest paid on loan taken for higher education"></i></label>
+                    <input type="number" class="form-control" formControlName="InterestEducationLoan">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Interest on Housing Loan - 80EEA <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Amount of interest paid on housing loan sanctioned during FY {{currentYear - 3}} - {{currentYear - 2}}"></i></label>
+                    <input type="number" class="form-control" formControlName="InterestHousingLoan">
+                  </div>
+                  <div class="col-md-6 pt-3">
+                    <label class="form-label text-dark fw-bold">Employee's contribution to NPS - 80CCD <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Includes voluntary contriburion to National Pension Scheme (NPS) under section 80CCD(1) and 80CCD(1B)"></i></label>
+                    <input type="number" class="form-control" formControlName="EmployeeContribution">
+                  </div>
+                </div>
+                <div class="text-center mt-3">
+                  <button class="btn btn-outline-success" (click)="calculateTax()">Calculate</button>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="4">
+              <a ngbNavLink>Summary</a>
+              <ng-template ngbNavContent>
+                <h6 class="fw-bold text-end">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="gotoIstTab()">Try the calculator again</a>
+                </h6>
+                <p class="text-center">Not so fast! Please enter your salary and deductions details to help us calculate your tax implications.</p>
+                <div class="text-center">
+                  <button class="btn btn-info fw-bold" (click)="navigateTab('BasicDetails')">Try again</button>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        </form>
+
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>

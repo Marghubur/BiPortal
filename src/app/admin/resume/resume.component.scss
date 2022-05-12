@@ -227,3 +227,7 @@ ul.bar_tabs > li > a.active {
 .t-filter {
   justify-content: flex-start !important;
 }
+
+.t-filter:hover {
+  font-weight: 800!important;
+}

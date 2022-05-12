@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
@@ -11,6 +11,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 import { Files } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
+import 'bootstrap';
 declare var $: any;
 
 @Component({
@@ -18,7 +19,7 @@ declare var $: any;
   templateUrl: './files.component.html',
   styleUrls: ['./files.component.scss']
 })
-export class FilesComponent implements OnInit {
+export class FilesComponent implements OnInit, AfterViewChecked {
   documentForm: FormGroup = null;
   filterbox: boolean = false;
   isLoading: boolean = false;
@@ -64,6 +65,11 @@ export class FilesComponent implements OnInit {
   RaisedBilloption: string = '';
   isReadonly: boolean = true;
   calculateAmount: boolean = false;
+  orderByNameAsc: boolean = null;
+  orderByBillStatusAsc: boolean = null;
+  orderByMonthAsc: boolean = null;
+  orderByGSTStatusAsc: boolean = null;
+  orderByBillNoAsc: boolean = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -76,6 +82,9 @@ export class FilesComponent implements OnInit {
       value: '0',
       text: 'Select Employee'
     }];
+  }
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle="tooltip"]').tooltip();
   }
 
   ngOnInit(): void {
@@ -111,6 +120,28 @@ export class FilesComponent implements OnInit {
     });
 
     this.LoadFiles();
+  }
+
+  arrangeDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'Asc';
+    } else {
+      Order = 'Desc';
+    }
+    if (FieldName == 'BillNo')
+      this.orderByBillNoAsc = !flag;
+    if (FieldName == 'ClientName')
+      this.orderByNameAsc = !flag;
+    if (FieldName == 'BillStatusId')
+      this.orderByBillStatusAsc = !flag;
+    if (FieldName == 'BillForMonth')
+      this.orderByMonthAsc = !flag;
+    if (FieldName == 'GSTStatus')
+      this.orderByGSTStatusAsc = !flag;
+    this.singleEmployee = new Filter();
+    this.singleEmployee.SortBy = FieldName +" "+ Order;
+    this.LoadFiles()
   }
 
   alterResultSet(e: any) {

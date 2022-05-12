@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Declaration, Preferences, Salary } from 'src/providers/constants';
+import { AccessTokenExpiredOn, Declaration, PaySlip, Preferences, Salary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -112,6 +112,10 @@ export class SummaryComponent implements OnInit {
   convertNumberToMonth(year: number, mnth: number) {
     let value = new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" });
     return value;
+  }
+
+  viewPaySlip() {
+    this.nav.navigate(PaySlip, null);
   }
 
   activateMe(ele: string) {

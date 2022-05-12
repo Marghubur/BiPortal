@@ -35,6 +35,7 @@ import { PreviousincomeComponent } from './previousincome/previousincome.compone
 import { Form12BbComponent } from './form12-bb/form12-bb.component';
 import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
 import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
+import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginv
     PreviousincomeComponent,
     Form12BbComponent,
     FreetaxfillingComponent,
-    TaxsavinginvestmentComponent
+    TaxsavinginvestmentComponent,
+    TaxcalculationComponent
   ],
   imports: [
     CommonModule,

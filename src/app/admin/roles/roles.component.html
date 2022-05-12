@@ -19,7 +19,9 @@
             </button>
           </div>
         </div>
-        <app-breadcrums></app-breadcrums>
+        <div class="px-1">
+          <app-breadcrums></app-breadcrums>
+        </div>
 
         <div class="col-12 row m-0 pt-3">
           <div class="col-md-4">
@@ -62,23 +64,27 @@
                               'fullaccess': item.get('Permission').value == 1
                             }">{{getPermessionName(item.get('Permission').value)}}</label>
 
-                          <button class="btn btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                          </button>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                (click)="selectPermission(0, index)">Block Access</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                (click)="selectPermission(2, index)">Read
-                                only</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                (click)="selectPermission(3, index)">Read &
-                                Write</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                (click)="selectPermission(1, index)">Full
-                                Access</a></li>
-                          </ul>
+                          <div class="col">
+                            <div ngbDropdown class="d-inline-block">
+                              <button type="button" class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle>
+                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                              </button>
+                              <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                <button ngbDropdownItem>
+                                  <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(0, index)">Block Access</a>
+                                </button>
+                                <button ngbDropdownItem>
+                                  <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(2, index)">Read only</a>
+                                </button>
+                                <button ngbDropdownItem>
+                                  <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(3, index)">Read & Write</a>
+                                </button>
+                                <button ngbDropdownItem>
+                                  <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(1, index)">Full Access</a>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </ng-container>

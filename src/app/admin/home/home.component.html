@@ -588,10 +588,10 @@
                   </button>
                 </div>
               </div>
-              <div class="list-wrapper">
+              <div class="list-wrapper" *ngIf="isPaymenyPending">
                 <ul class="todo-list todo-list-rounded">
                   <li *ngFor="let p of clientBillPayment" class="d-block">
-                    <div class="form-check w-100" *ngIf="p.BillStatusId == 1 || p.BillStatusId == 2">
+                    <div class="form-check w-100" >
                       <label class="">
                         {{p.ClientName}} &nbsp;
                         <small>[{{p.FirstName}}]</small>
@@ -611,16 +611,16 @@
                         <i class="mdi mdi-flag ms-2 flag-color"></i>
                       </div>
                     </div>
-                    <div class="form-check w-100" *ngIf="p.BillStatusId != 1 || p.BillStatusId != 2">
-                      There are no pending payments.
-                    </div>
                   </li>
                 </ul>
-                <div class="ps-4 mt-2 fw-bold text-dark">
+                <div class="ps-4 mt-2 fw-bold text-dark" >
                   <label>
                     Total: &#8377; {{this.totalPendingPayment | number : '1.2-2'}}
                   </label>
                 </div>
+              </div>
+              <div class="form-check w-100 fw-bold text-primary fs-4 py-5" *ngIf="!isPaymenyPending">
+                There are no pending payments.
               </div>
             </div>
           </div>

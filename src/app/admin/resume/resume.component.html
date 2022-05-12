@@ -1,7 +1,7 @@
 <div class="col-md-12 main-container" [ngClass]="{'preload': !isRecordAvailable}">
   <div class="x_panel">
     <div class="x_header">
-      <div class="x_header_title">
+      <div class="x_header_title ps-1 pe-2">
         <h2>Upload Files <small>Add files</small>
         </h2>
         <div class="float-end d-inline create-link">
@@ -13,7 +13,9 @@
         </div>
       </div>
     </div>
-    <app-breadcrums></app-breadcrums>
+    <div class="mx-2 pe-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
     <div [ngSwitch]="isRecordAvailable">
       <div *ngSwitchCase="false">
         <div class="mt-5">
@@ -25,18 +27,18 @@
           <div class="col-md-12 p-0 mt-3">
             <div class="x_content">
               <div class="x_header_title">
-                <h5>Available Candidates
+                <h5 class="ps-1">Available Candidates
                   <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal"><i
                       class="ms-4 fa fa-upload"></i></a>
                 </h5>
               </div>
               <div class="mb-4 row m-0">
-                <div class="col-md-9">
+                <div class="col-md-9 ps-1">
                   <input type="text" class="form-control form-control-sm" (keyup.enter)="globalFilter()"
                     (keydown.esc)="resetFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
                     [(ngModel)]="anyFilter">
                 </div>
-                <div class="col-md-3 text-end">
+                <div class="col-md-3 text-end pe-2">
                   <button class="btn btn-primary filter-btn-grp btn-sm" (click)="globalFilter()">
                     <i class="fa fa-filter me-1"></i> Filter
                   </button>
@@ -53,8 +55,6 @@
                       <div class="tr">
                         <div class="th fe-index">
                           <div class="t-filter t-index">
-                            <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
                             <a href="javascript:void()" class="ps-3">#</a>
                           </div>
                         </div>
@@ -62,10 +62,10 @@
                           <div class="cell-wrapper">
                             <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
                                 (keydown.esc)="resetFilter()" [(ngModel)]="resumeFile.Name" placeholder="Search by Name">
-                            <div class="t-filter">
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                              <a href="javascript:void()" class="ps-3">Name</a>
+                            <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'Name')">
+                              <a href="javascript:void()" class="pe-2">Name</a>
+                              <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                              <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -74,10 +74,10 @@
                             <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
                                 (keydown.esc)="resetFilter()" [(ngModel)]="resumeFile.Phone_Number"
                                 placeholder="Mobile No">
-                            <div class="t-filter">
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                              <a href="javascript:void()" class="ps-3">Mobile</a>
+                            <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Phone_Number')">
+                              <a href="javascript:void()" class="pe-2">Mobile</a>
+                              <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
+                              <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -86,19 +86,17 @@
                             <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
                                 (keydown.esc)="resetFilter()" [(ngModel)]="resumeFile.Email_ID"
                                 placeholder="Search by Email Id">
-                            <div class="t-filter">
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                              <a href="javascript:void()" class="ps-3">Email</a>
+                            <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email_ID')">
+                              <a href="javascript:void()" class="pe-2">Email</a>
+                              <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
+                              <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
                         <div class="th fe-1">
                           <div class="cell-wrapper">
                             <input class="form-control table-filter-control">
-                            <div class="t-filter">
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
+                            <div class="t-filter" >
                               <a href="javascript:void()" class="ps-3">Speciality</a>
                             </div>
                           </div>
@@ -108,10 +106,10 @@
                             <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
                             (keydown.esc)="resetFilter()" [(ngModel)]="resumeFile.Job_Title"
                             placeholder="By Job Title">
-                            <div class="t-filter">
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                              <a href="javascript:void()" class="ps-3">Title</a>
+                            <div class="t-filter" (click)="arrangeDetails(orderBySpecialityAsc, 'Job_Title')">
+                              <a href="javascript:void()" class="pe-2">Title</a>
+                              <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderBySpecialityAsc == null || !orderBySpecialityAsc }" aria-hidden="true"></i>
+                              <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderBySpecialityAsc == null || orderBySpecialityAsc }" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -120,10 +118,10 @@
                             <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
                                 (keydown.esc)="resetFilter()" [(ngModel)]="resumeFile.Preferred_Locations"
                                 placeholder="By Location">
-                            <div class="t-filter">
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                              <a href="javascript:void()" class="ps-3">Location</a>
+                            <div class="t-filter" (click)="arrangeDetails(orderByLocationAsc, 'Preferred_Locations')">
+                              <a href="javascript:void()" class="pe-2">Location</a>
+                              <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByLocationAsc == null || !orderByLocationAsc }" aria-hidden="true"></i>
+                              <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByLocationAsc == null || orderByLocationAsc }" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -132,10 +130,10 @@
                             <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
                                 (keydown.esc)="resetFilter()" [(ngModel)]="resumeFile.Total_Experience"
                                 placeholder="By Exp">
-                            <div class="t-filter">
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                              <a href="javascript:void()"  class="ps-3">Exp (mo)</a>
+                            <div class="t-filter" (click)="arrangeDetails(orderByExpAsc, 'Total_Experience')">
+                              <a href="javascript:void()"  class="pe-2">Exp (mo)</a>
+                              <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByExpAsc == null || !orderByExpAsc }" aria-hidden="true"></i>
+                              <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByExpAsc == null || orderByExpAsc }" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -144,10 +142,10 @@
                             <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
                                 (keydown.esc)="resetFilter()" [(ngModel)]="resumeFile.Notice_Period"
                                 placeholder="Notice Period">
-                            <div class="t-filter">
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
-                              <a href="javascript:void()" class="ps-3">Notice</a>
+                            <div class="t-filter" (click)="arrangeDetails(orderByNoticeAsc, 'Notice_Period')">
+                              <a href="javascript:void()" class="pe-2">Notice</a>
+                              <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByNoticeAsc == null || !orderByNoticeAsc }" aria-hidden="true"></i>
+                              <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByNoticeAsc == null || orderByNoticeAsc }" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>

@@ -44,8 +44,9 @@
         </div>
       </div>
     </ng-container>
-
-    <app-breadcrums></app-breadcrums>
+    <div class="px-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
 
     <ng-container [ngSwitch]="divisionCode">
       <ng-container *ngSwitchCase="2">
@@ -215,7 +216,7 @@
                 </div>
                 <div class="d-flex">
                   <div class="ms-1 me-1">
-                    <button type="button" [ngClass]="{'btn-danger' : enablePermissionButton, 'btn-success': !enablePermissionButton}" 
+                    <button type="button" [ngClass]="{'btn-danger' : enablePermissionButton, 'btn-success': !enablePermissionButton}"
                       class="btn btn-sm" (click)="onSubmit()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
                       {{ enablePermissionButton ? 'Disable' : 'Enable' }}
@@ -237,7 +238,7 @@
                       To block this week please use the above disable button.
                     </p>
                     <p class="lead mark text-danger" *ngIf="!enablePermissionButton">
-                      Given week is closed, candidate can't submit their timesheet. 
+                      Given week is closed, candidate can't submit their timesheet.
                       To unblock this week please use the above enable button.
                     </p>
                   </div>

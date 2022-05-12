@@ -50,6 +50,15 @@ export class ResumeComponent implements OnInit {
   FileDocumentList: Array<any> = [];
   candidatesData: Filter = null;
   uploadedCandidatesData: Filter = null;
+  orderByNameAsc: boolean = null;
+  orderByMobileAsc: boolean = null;
+  orderByEmailAsc: boolean = null;
+  orderBySpecialityAsc: boolean = null;
+  orderByTitleAsc: boolean = null;
+  orderByExpAsc: boolean = null;
+  orderByLocationAsc: boolean = null;
+  orderByNoticeAsc: boolean = null;
+
 
   constructor(
     private http: AjaxService,
@@ -113,6 +122,32 @@ export class ResumeComponent implements OnInit {
     wb.SheetNames.push(ws_name);
     wb.Sheets[ws_name] = this.ws;
     this.wbout = write(wb, { bookType: "xlsx", bookSST: true, type: "binary" });
+  }
+
+  arrangeDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'Asc';
+    } else {
+      Order = 'Desc';
+    }
+    if (FieldName == 'Name')
+      this.orderByNameAsc = !flag;
+    if (FieldName == 'Phone_Number')
+      this.orderByMobileAsc = !flag;
+    if (FieldName == 'Email_ID')
+      this.orderByEmailAsc = !flag;
+    if (FieldName == 'Job_Title')
+      this.orderBySpecialityAsc = !flag;
+    if (FieldName == 'Preferred_Locations')
+      this.orderByLocationAsc = !flag;
+    if (FieldName == 'Total_Experience')
+      this.orderByExpAsc = !flag;
+    if (FieldName == 'Notice_Period')
+      this.orderByNoticeAsc = !flag;
+    this.candidatesData = new Filter();
+    this.candidatesData.SortBy = FieldName +" "+ Order;
+    this.getUploadedDetails()
   }
 
   readExcelData(e: any) {
