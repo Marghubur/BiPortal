@@ -1,4 +1,4 @@
-<div id="page-menu" class="page-menu mobile-mode-menu bg-white menu-items">
+<div id="page-menu" class="position-relative page-menu mobile-mode-menu bg-white menu-items">
   <div id="menu-items">
     <div class="accordion" id="accordionExample">
       <div class="accordion-div" *ngFor="let catagory of Menu;let i = index;">
@@ -64,3 +64,16 @@
       </div>
     </div>
   </div>
+
+  <div class="w-100 position-absolute bg-secondary" class="menu-footer">
+    <a href="javascript:void(0)">
+      <i class="fa fa-flag" aria-hidden="true"></i>
+    </a>
+    <a href="javascript:void(0)">
+      <i class="fa fa-info-circle" aria-hidden="true"></i>
+    </a>
+    <a href="javascript:void(0)" (click)="LogoutUser()">
+      <i class="fa fa-sign-out" aria-hidden="true"></i>
+    </a>
+  </div>
+</div>
