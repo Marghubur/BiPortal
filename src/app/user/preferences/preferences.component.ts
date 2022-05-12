@@ -47,13 +47,13 @@ export class PreferencesComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigate(Declaration, this.cachedData);
+        this.nav.navigateRoot(Declaration, this.cachedData);
       break;
       case "salary-tab":
-        this.nav.navigate(Salary, this.cachedData);
+        this.nav.navigateRoot(Salary, this.cachedData);
       break;
       case "summary-tab":
-        this.nav.navigate(Summary, this.cachedData);
+        this.nav.navigateRoot(Summary, this.cachedData);
       break;
       case "preference-tab":
         break;

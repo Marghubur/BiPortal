@@ -135,15 +135,15 @@ export class MysalaryComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigate(Declaration, this.cachedData);
+        this.nav.navigateRoot(Declaration, this.cachedData);
         break;
       case "salary-tab":
         break;
       case "summary-tab":
-        this.nav.navigate(Summary, this.cachedData);
+        this.nav.navigateRoot(Summary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigate(Preferences, this.cachedData);
+        this.nav.navigateRoot(Preferences, this.cachedData);
         break;
     }
   }
@@ -153,10 +153,10 @@ export class MysalaryComponent implements OnInit {
       case "MySalary":
         break;
       case "PaySlips":
-        this.nav.navigate(PaySlip, this.cachedData);
+        this.nav.navigateRoot(PaySlip, this.cachedData);
         break;
       case "IncomeTax":
-        this.nav.navigate(IncomeTax, this.cachedData);
+        this.nav.navigateRoot(IncomeTax, this.cachedData);
         break;
     }
   }
@@ -167,7 +167,7 @@ export class MysalaryComponent implements OnInit {
 
   gotoTaxCalculation() {
     $('#newIncomeTaxRegime').modal('hide');
-    this.nav.navigate(Taxcalculation, null);
+    this.nav.navigateRoot(Taxcalculation, null);
   }
 
   viewSalary() {

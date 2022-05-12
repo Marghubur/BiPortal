@@ -100,6 +100,21 @@ export class iNavigation {
     }
   }
 
+  public navigateRoot(Path: string, Parameter: any, filterObject: any = null) {
+    if (Path !== null) {
+      this.IsNavigated = true;
+      this.pageRoute.RouteDetail = [];
+      this.pageRoute.RouteDetail.push({
+        Key: Path,
+        Value: Parameter,
+        PageQuery: filterObject
+      });
+      this.route.navigate(["/" + Path, ]);
+    } else {
+      Toast("Invalid component path passed.");
+    }
+  }
+
   public navigateWithoutArgs(Path: string) {
     if (Path !== null) {
       this.route.navigate(["/" + Path, ]);
