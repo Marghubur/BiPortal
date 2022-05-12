@@ -350,18 +350,47 @@
 
 <!-- Comment Modal Start-->
 <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">Comment</h5>
+      <div class="modal-header bg-secondary text-white border-bottom-0">
+        <h5 class="modal-title" id="exampleModalLabel">Work From Home Request</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body px-4">
+        <div class="d-flex position-relative">
+          <div class="col-md-8 d-flex">
+            <div class="col-md-6 ps-2 py-3 border">
+              <small>START DATE</small>
+              <p class="mb-0 text-dark fs-5">{{today | date}}</p>
+            </div>
+            <div class="col-md-6 pe-3 py-3 border text-end">
+              <small>END DATE</small>
+              <p class="mb-0 text-dark fs-5">{{today | date}}</p>
+            </div>
+          </div>
+        </div>
+        <span class="px-3 py-2 day-wfh">1day WFH</span>
+        <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
+        <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio10" autocomplete="off" checked value="fullday">
+          <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
+
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio11" autocomplete="off" value="firsthalf">
+          <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
+
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio12" autocomplete="off" value="secondhalf">
+          <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
+        </div>
+        <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
         <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" [(ngModel)]="commentValue"></textarea>
+        <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify</p>
+        <input type="text" class="form-control" placeholder="Search Employee">
+        <p class="mb-0">These employees will be notified through email when you WFH request is approved.</p>
       </div>
-      <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="addComment()">Save</button>
+
+      <div class="modal-footer border-top-0 pe-4">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addComment()">Request</button>
       </div>
     </div>
   </div>

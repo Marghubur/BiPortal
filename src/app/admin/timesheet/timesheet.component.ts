@@ -58,6 +58,7 @@ export class TimesheetComponent implements OnInit {
   cachedData: any = null;
   commentOn: any = null;
   commentValue: string = null;
+  today: Date = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -92,6 +93,7 @@ export class TimesheetComponent implements OnInit {
     var dt = new Date();
     var month = dt.getMonth();
     var year = dt.getFullYear();
+    this.today = new Date();
     this.daysInMonth = new Date(year, month + 1, 0).getDate();
     this.clientDetail = {
       data: [],
