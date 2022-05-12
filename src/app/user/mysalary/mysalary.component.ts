@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Declaration, IncomeTax, PaySlip, Preferences, Summary } from 'src/providers/constants';
+import { Declaration, IncomeTax, PaySlip, Preferences, Salary, Summary, Taxcalculation } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -24,11 +24,6 @@ export class MysalaryComponent implements OnInit {
   ngOnInit(): void {
     var dt = new Date();
     this.currentYear = dt.getFullYear();
-    let data = this.nav.getValue();
-    if (data == 'income-tax'){
-      this.active = 3
-    }
-
     this.myAnnualSalary = {
       Annual: 2124000,
       Bonus: 0,
@@ -132,6 +127,11 @@ export class MysalaryComponent implements OnInit {
     })
   }
 
+  continueCurrentTaxRegime() {
+    this.nav.navigate(Salary, null);
+    $('#newIncomeTaxRegime').modal('hide');
+  }
+
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
@@ -161,6 +161,15 @@ export class MysalaryComponent implements OnInit {
     }
   }
 
+  salaryStructureHistory() {
+    $('#slaryStructureHistory').modal('show');
+  }
+
+  gotoTaxCalculation() {
+    $('#newIncomeTaxRegime').modal('hide');
+    this.nav.navigate(Taxcalculation, null);
+  }
+
   viewSalary() {
     this.salaryDetail = !this.salaryDetail;
   }
@@ -176,6 +185,7 @@ export class MysalaryComponent implements OnInit {
   newIncomeTaxRegimePopUp() {
     $('#newIncomeTaxRegime').modal('show');
   }
+
 
 }
 

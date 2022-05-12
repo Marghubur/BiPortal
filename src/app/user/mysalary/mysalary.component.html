@@ -71,7 +71,7 @@
                   </div>
                   <div class="ms-auto me-3">
                     <a href="javascript:void(0)">
-                      <i class="fa fa-refresh text-light" aria-hidden="true"></i>
+                      <i class="fa fa-refresh text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
                     </a>
                     <button type="btn" class="btn btn-outline-light btn-sm ms-3" (click)="viewSalary()">
                       <i class="fa" [ngClass]="{'fa-angle-down': salaryDetail, 'fa-angle-up': !salaryDetail}" aria-hidden="true"></i>
@@ -130,6 +130,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Full Salary Deatils -->
 <div class="modal fade" id="fullSalaryDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -246,7 +247,7 @@
           <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
           <label class="btn btn-outline-primary" for="btnradio1">Switch to New Tax Regime (Section 115BAC)</label>
 
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" (click)="continueCurrentTaxRegime()">
           <label class="btn btn-outline-primary ms-3" for="btnradio2">Continue with Current Tax Regime</label>
         </div>
         <p class="mb-0 fs-5 text-dark">Income Tax Slabs for Individuals of any age group under new tax regime - Applicable to FY {{currentYear -2}} - {{currentYear -1}} (AY {{currentYear -2}} - {{currentYear -1}})</p>
@@ -299,12 +300,12 @@
           <li class="text-dark py-2">Chapter VI-A dedcution (80C, 80D, 80E and so on) (Except Section 80CCCD(2) and 80JJA).</li>
         </ul>
         <div class="alert alert-warning">Options to choose new tax regime can be exercised on or before 20 May {{currentYear}}</div>
-        <p class="mb-0">To find out which tax regime suits you best, <a href="javascript:void(0)" class="text-decoration-none">click here</a></p>
+        <p class="mb-0">To find out which tax regime suits you best, <a href="javascript:void(0)" class="text-decoration-none" (click)="gotoTaxCalculation()">click here</a></p>
         <div class="btn-group py-3" role="group" aria-label="Basic radio toggle button group">
           <input type="radio" class="btn-check" name="btnradio3" id="btnradio3" autocomplete="off" checked>
           <label class="btn btn-outline-primary" for="btnradio3">Switch to New Tax Regime (Section 115BAC)</label>
 
-          <input type="radio" class="btn-check" name="btnradio3" id="btnradio4" autocomplete="off">
+          <input type="radio" class="btn-check" name="btnradio3" id="btnradio4" autocomplete="off" (click)="continueCurrentTaxRegime()">
           <label class="btn btn-outline-primary ms-3" for="btnradio4">Continue with Current Tax Regime</label>
         </div>
       </div>
@@ -312,6 +313,45 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
       </div> -->
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+<!-- Salary structutr Change History -->
+<div class="modal fade" id="slaryStructureHistory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header bg-dark border-bottom-0">
+        <h5 class="modal-title" id="exampleModalLabel">Salary structure Change History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="bg-secondary text-light d-flex align-items-center py-3">
+          <div class="pe-2 ps-4">
+            <small>ANNUAL</small>
+            <p class="fw-bold mb-0">INR {{myAnnualSalary.Annual}}</p>
+          </div>
+          <div class="px-2">
+            <small>SALARY / MONTH</small>
+            <p class="fw-bold mb-0">INR {{myAnnualSalary.SalaryMonth}}</p>
+          </div>
+          <div class="px-2">
+            <small>EFFECTIVE</small>
+            <p class="fw-bold mb-0">INR {{myAnnualSalary.Other}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col">
+  <div ngbDropdown class="d-inline-block">
+    <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <button ngbDropdownItem>Action - 1</button>
+      <button ngbDropdownItem>Another Action</button>
+      <button ngbDropdownItem>Something else is here</button>
     </div>
   </div>
 </div>

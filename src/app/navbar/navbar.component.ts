@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit {
   userDetail: UserDetail = new UserDetail();
   Menu: Array<any> = [];
   TineMenu: boolean = false;
+  collapsed = true;
 
   @Output() authentication = new EventEmitter();
 

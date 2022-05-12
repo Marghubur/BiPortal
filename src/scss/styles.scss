@@ -855,3 +855,13 @@ fieldset {
   background: #a79898;
   border-radius: 8px;
 }
+
+// caret symbol in dropdown
+
+.dropdown-toggle::after {
+  content: none !important;
+}
+
+.dropdown-toggle::before {
+  content: none !important;
+}

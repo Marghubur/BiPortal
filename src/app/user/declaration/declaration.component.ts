@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Form12B, FreeTaxFilling, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
+import { AccessTokenExpiredOn, Form12B, FreeTaxFilling, IncomeTax, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -1177,7 +1177,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   gotoTaxSection(value: string) {
-    this.nav.navigate(Salary, value)
+    this.nav.navigate(IncomeTax, value)
   }
 }
 
