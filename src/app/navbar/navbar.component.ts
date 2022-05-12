@@ -108,7 +108,6 @@ export class NavbarComponent implements OnInit {
   }
 
   LogoutUser() {
-
     this.nav.logout();
     Toast("Log out successfully");
     this.nav.navigate("/", null);

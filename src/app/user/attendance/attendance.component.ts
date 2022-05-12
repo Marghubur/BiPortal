@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, UserType } from 'src/providers/constants';
+import { AccessTokenExpiredOn, Attendance, Leave, Timesheet, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -51,6 +51,7 @@ export class AttendanceComponent implements OnInit {
   divisionCode: number = 0;
   PendingAttendacneMessage: string = 'Select above pending attendance link to submit before end of the month.';
   isBlocked: boolean = false;
+  cachedData: any = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -94,11 +95,11 @@ export class AttendanceComponent implements OnInit {
     }, 1000);
 
     this.DayValue = this.time.getDay();
-    let cachedData = this.nav.getValue();
-    if(cachedData) {
-      this.employeeId = cachedData.EmployeeUid;
-      this.clientId = cachedData.ClientUid;
-      this.userName = cachedData.FirstName + " " + cachedData.LastName;
+    this.cachedData = this.nav.getValue();
+    if(this.cachedData) {
+      this.employeeId = this.cachedData.EmployeeUid;
+      this.clientId = this.cachedData.ClientUid;
+      this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.isEmployeesReady = true;
       this.loadMappedClients();
     } else {
@@ -705,5 +706,18 @@ export class AttendanceComponent implements OnInit {
       i++;
     }
     if (this.weekList.length > 0) this.divisionCode = 2;
+  }
+
+  activateMe(elemId: string) {
+    switch(elemId) {
+      case "attendance-tab":
+      break;
+      case "timesheet-tab":
+        this.nav.navigateRoot(UserTimesheet, this.cachedData);
+      break;
+      case "leave-tab":
+        this.nav.navigateRoot(UserLeave, this.cachedData);
+      break;
+    }
   }
 }

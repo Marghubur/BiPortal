@@ -85,3 +85,21 @@ a {
   margin: 0 !important;
   padding: 0.7rem 1.8rem;
 }
+
+.menu-footer {
+  bottom: 0px;
+  position: absolute;
+  background: #eee;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+
+  a {
+    color: #444;
+    padding: 0.5rem;
+    zoom: 1.1;
+    flex: 1;
+    text-align: center;
+  }
+}

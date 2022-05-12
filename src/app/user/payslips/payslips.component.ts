@@ -23,15 +23,15 @@ export class PayslipsComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigate(Declaration, this.cachedData);
+        this.nav.navigateRoot(Declaration, this.cachedData);
         break;
       case "salary-tab":
         break;
       case "summary-tab":
-        this.nav.navigate(Summary, this.cachedData);
+        this.nav.navigateRoot(Summary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigate(Preferences, this.cachedData);
+        this.nav.navigateRoot(Preferences, this.cachedData);
         break;
     }
   }
@@ -39,12 +39,12 @@ export class PayslipsComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "MySalary":
-        this.nav.navigate(Salary, this.cachedData);
+        this.nav.navigateRoot(Salary, this.cachedData);
         break;
       case "PaySlips":
         break;
       case "IncomeTax":
-        this.nav.navigate(IncomeTax, this.cachedData);
+        this.nav.navigateRoot(IncomeTax, this.cachedData);
         break;
     }
   }

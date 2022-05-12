@@ -121,15 +121,15 @@ export class SummaryComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigate(Declaration, this.cachedData);
+        this.nav.navigateRoot(Declaration, this.cachedData);
         break;
       case "salary-tab":
-        this.nav.navigate(Salary, this.cachedData);
+        this.nav.navigateRoot(Salary, this.cachedData);
         break;
       case "summary-tab":
         break;
       case "preference-tab":
-        this.nav.navigate(Preferences, this.cachedData);
+        this.nav.navigateRoot(Preferences, this.cachedData);
         break;
     }
   }

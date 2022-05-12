@@ -1,6 +1,6 @@
 import { ApplicationStorage } from "../../providers/ApplicationStorage";
 import { AjaxService } from "../../providers/ajax.service";
-import { CommonService, ErrorToast, UserDetail } from "../../providers/common-service/common.service";
+import { CommonService, ErrorToast, Toast, UserDetail } from "../../providers/common-service/common.service";
 import { AccessTokenExpiredOn, Blogs, BuildPdf, Documents, Employees, Login } from "../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
@@ -118,13 +118,6 @@ export class SidemenuComponent implements OnInit {
 
   }
 
-  LogoutUser() {
-
-    this.nav.logout();
-    this.commonService.ShowToast("Log out successfully");
-    window.location.reload();
-  }
-
   NavigatetoHome() {
     this.nav.navigate("", null);
   }
@@ -158,6 +151,11 @@ export class SidemenuComponent implements OnInit {
     }
   }
 
+  LogoutUser() {
+    this.nav.logout();
+    Toast("Log out successfully");
+    this.nav.navigate("/", null);
+  }
 }
 
 interface PopOverDetail {

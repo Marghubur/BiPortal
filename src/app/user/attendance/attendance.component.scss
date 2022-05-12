@@ -3,7 +3,7 @@
     background: transparent;
     z-index: 90;
   }
-  
+
   .attendance-form textarea {
     border: 1px solid #161616;
     border-radius: 4px;
@@ -11,7 +11,7 @@
     //padding: 6px 10px;
     z-index: 999 !important;
   }
-  
+
   .attendance-form textarea:focus {
     border: 1px solid #161616;
     border-radius: 4px;
@@ -19,45 +19,45 @@
     //padding: 6px 10px;
     z-index: 998 !important;
   }
-  
+
   .employee-label {
     width: 12rem;
   }
-  
+
   .btn-design {
     height: 32px;
     border: 1px solid #d9d9d9;
     border-radius: 0px 4px 4px 0px;
   }
-  
+
   .input-overflow {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .center-badge {
     padding-top: 0.4rem !important;
   }
-  
+
   .center-badge input {
     width: 1.5rem !important;
   }
-  
+
   .highlight-font {
     font-weight: 600;
     color: #838689;
   }
-  
+
   .head-badge {
     text-decoration: none;
     font-weight: 500 !important;
   }
-  
+
   .textarea-box {
     z-index: 9999 !important;
   }
-  
+
   .text-inisde-circle {
     width: 20px;
     height: 20px;
@@ -66,43 +66,68 @@
     font-size: 12px;
     border: 1px solid #222;
   }
-  
+
   .inactive-circle {
     background: #910000;
     color: #fff;
     border: none !important;
   }
-  
+
   .active-circle {
     background: #286845;
     color: #fff;
     border: none !important;
   }
-  
+
   .last-week-team {
     font-size: 12px !important;
   }
-  
+
   .timing-box {
     display: inline-block;
     border: 1px solid #adacac;
   }
-  
+
   .inactive-days {
     background: #efeed6;;
   }
-  
+
   .pending-list {
     color: darkblue;
     font-size: 1rem;
   }
-  
+
   .pending-info {
     font-size: 1.6rem;
     width: 50%;
     text-align: center;
   }
-  
+
   .parend-h {
     min-height: 300px;
+  }
+
+  .nav-link.active {
+    color: #222;
+    background-color: #dcefff !important;
+    border-radius: 0px !important;
+  }
+
+  .nav-active {
+    color: #222;
+    border-radius: 0px !important;
+    position: relative;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .nav-active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 40%;
+    border-top: 6px solid rgb(44, 135, 151);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    transform: rotate(180deg);
   }
