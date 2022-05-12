@@ -215,37 +215,21 @@
                       <td class="align-middle"><i class="fa fa-check pe-2 text-success"></i> On Time</td>
                       <td class="align-middle">
                         <div class="d-flex align-items-center">
-                          <div class="btn-group dropstart">
-                            <button class="btn btn-sm" type="button" id="dropdownMenuButton1"
-                              data-bs-toggle="dropdown" placement="top" ngbTooltip="Absent" aria-expanded="false">
-                              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                              <li><a class="dropdown-item" href="javascript:void(0)"
-                                  (click)="commentPopUp(item)">Apply
-                                  WFH Request</a></li>
-                              <li><a class="dropdown-item" href="javascript:void(0)"
-                                  (click)="selectOption(index)">Apply
-                                  Leave</a></li>
-                            </ul>
-                          </div>
                           <div class="col">
                             <div ngbDropdown class="d-inline-block" >
-                              <button type="button" class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle>
+                              <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Absent" id="dropdownBasic1" ngbDropdownToggle>
                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                               </button>
                               <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
                                 <button ngbDropdownItem>
-                                  <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(0, index)">Block Access</a>
+                                  <a class="dropdown-item" href="javascript:void(0)"
+                                  (click)="commentPopUp(item)">Apply
+                                  WFH Request</a>
                                 </button>
                                 <button ngbDropdownItem>
-                                  <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(2, index)">Read only</a>
-                                </button>
-                                <button ngbDropdownItem>
-                                  <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(3, index)">Read & Write</a>
-                                </button>
-                                <button ngbDropdownItem>
-                                  <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(1, index)">Full Access</a>
+                                  <a class="dropdown-item" href="javascript:void(0)"
+                                  (click)="selectOption(index)">Apply
+                                  Leave</a>
                                 </button>
                               </div>
                             </div>
