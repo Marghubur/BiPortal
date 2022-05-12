@@ -42,7 +42,7 @@
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/xlsx/dist/xlsx.full.min.js",
               "node_modules/jszip/dist/jszip.js",
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
