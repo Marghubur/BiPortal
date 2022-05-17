@@ -7,7 +7,7 @@ import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
-import { Attendance, BillDetail, UserType } from 'src/providers/constants';
+import { Attendance, UserType } from 'src/providers/constants';
 
 declare var $: any;
 
@@ -817,11 +817,16 @@ export class BuildPdfComponent implements OnInit {
   downloadPdfDocx() {
     this.downlodFilePath = "";
     if(this.FileDetail.FileId > 0) {
+      this.FileDetail.FileName = this.FileDetail.FileName.replace(/\.[^/.]+$/, "");
       let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
+      this.viewer = document.getElementById("file-container");
       this.viewer.classList.remove('d-none');
       this.viewer.querySelector('iframe').setAttribute('src', updateFilePath);
     } else {
       ErrorToast("There was some error on file generation. Please contact to admin.");
+    }
+    if (this.downLoadFileExtension == 'docx') {
+      this.closePdfViewer();
     }
   }
 

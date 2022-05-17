@@ -36,6 +36,7 @@ export class ClientsComponent implements OnInit {
   orderByEmailAsc: boolean = null;
   orderByCityAsc: boolean = null;
   orderByFirstAddressAsc: boolean = null;
+  isFileFound: boolean = false;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -68,10 +69,13 @@ export class ClientsComponent implements OnInit {
     }
   }
 
-  AddEditDocuments(clientId: number) {
+  AddEditDocuments(client: any) {
     let userDetail: DocumentUser = new DocumentUser();
     userDetail.PageName = Clients;
-    userDetail.UserId = clientId;
+    userDetail.UserId = client.ClientId;
+    userDetail.Name = client.ClientName;
+    userDetail.Email = client.Email;
+    userDetail.Mobile = client.PrimaryPhoneNo;
     this.nav.navigate(Documents, userDetail);
   }
 
@@ -91,6 +95,7 @@ export class ClientsComponent implements OnInit {
 
   LoadData() {
     this.isClientFound = false;
+    this.isFileFound = false;
     let filter: Filter = new Filter();
     let Mobile = '';
     let Email = '';
@@ -103,12 +108,15 @@ export class ClientsComponent implements OnInit {
     if (Mobile !== "" || Email !== "") {
       filter.SearchString = `1 `;
       this.http.post("Clients/GetClients", this.clientsData).then((response: ResponseModel) => {
-        this.clients = response.ResponseBody;
-        if (this.clients.length > 0) {
-          this.clientsData.TotalRecords = this.clients[0].Total;
-          this.isClientFound = true;
-        } else {
-          this.clientsData.TotalRecords = 0;
+        if (response.ResponseBody) {
+          this.clients = response.ResponseBody;
+          if (this.clients.length > 0) {
+            this.clientsData.TotalRecords = this.clients[0].Total;
+            this.isClientFound = true;
+            this.isFileFound = true;
+          } else {
+            this.clientsData.TotalRecords = 0;
+          }
         }
         this.isClientFound = true;
       });

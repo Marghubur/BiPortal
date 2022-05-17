@@ -132,60 +132,67 @@
                   </div>
                 </div>
                 <div class="t-body">
-                  <div class="tr py-2" *ngFor="let clients of clients">
-                    <div class="td align-middle text-center fe-index">{{clients.Index}}</div>
-                    <div class="td align-middle fe-3">
-                      <div class="cell-wrapper">
-                        <a href="javascript:void(0)" (click)="EditCurrent(clients)" class="client-name-link">
-                          {{clients.ClientName}}
-                        </a>
-                        <div class="float-end">
-                          <a href="javascript:void(0)" (click)="viewClientFile(clients)">
-                            <span class="ms-2 badge bg-success">
-                              <i class="fa fa-building-o zoom-2"></i>
+                  <ng-container *ngIf="isFileFound">
+                    <div class="tr py-2" *ngFor="let clients of clients">
+                      <div class="td align-middle text-center fe-index">{{clients.Index}}</div>
+                      <div class="td align-middle fe-3">
+                        <div class="cell-wrapper">
+                          <a href="javascript:void(0)" (click)="EditCurrent(clients)" class="client-name-link">
+                            {{clients.ClientName}}
+                          </a>
+                          <div class="float-end">
+                            <a href="javascript:void(0)" (click)="viewClientFile(clients)">
+                              <span class="ms-2 badge bg-success">
+                                <i class="fa fa-building-o zoom-2"></i>
+                              </span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="td align-middle fe-2">
+                        <div class="cell-wrapper">
+                          {{clients.PrimaryPhoneNo}}
+                        </div>
+                      </div>
+                      <div class="td align-middle fe-2">
+                        <div class="cell-wrapper">
+                          {{clients.Email}}
+                        </div>
+                      </div>
+                      <div class="td align-middle fe-1">
+                        <div class="cell-wrapper">
+                          {{clients.City}}
+                        </div>
+                      </div>
+                      <div class="td align-middle fe-2">
+                        <div class="cell-wrapper">
+                          {{clients.FirstAddress}}
+                        </div>
+                      </div>
+                      <div class="td align-middle fe-1">
+                        <div class=" d-flex flex-row justify-content-evenly">
+                          <a href="javascript:void(0)">
+                            <span class="badge bg-success"><i class="fa fa-pencil-square-o" aria-hidden="true"
+                                (click)="EditCurrent(clients)"></i></span>
+                          </a>
+                          <a href="javascript:void(0)" (click)="AddEditDocuments(clients)">
+                            <span class="badge bg-dark">
+                              <i class="fa fa-folder" aria-hidden="true"></i>
                             </span>
+                          </a>
+                          <a href="javascript:void(0)" (click)="CreatePopup()">
+                            <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
                           </a>
                         </div>
                       </div>
                     </div>
-                    <div class="td align-middle fe-2">
-                      <div class="cell-wrapper">
-                        {{clients.PrimaryPhoneNo}}
-                      </div>
-                    </div>
-                    <div class="td align-middle fe-2">
-                      <div class="cell-wrapper">
-                        {{clients.Email}}
-                      </div>
-                    </div>
-                    <div class="td align-middle fe-1">
-                      <div class="cell-wrapper">
-                        {{clients.City}}
-                      </div>
-                    </div>
-                    <div class="td align-middle fe-2">
-                      <div class="cell-wrapper">
-                        {{clients.FirstAddress}}
-                      </div>
-                    </div>
-                    <div class="td align-middle fe-1">
-                      <div class=" d-flex flex-row justify-content-evenly">
-                        <a href="javascript:void(0)">
-                          <span class="badge bg-success"><i class="fa fa-pencil-square-o" aria-hidden="true"
-                              (click)="EditCurrent(clients)"></i></span>
-                        </a>
-                        <a href="javascript:void(0)" (click)="AddEditDocuments(clients.ClientId)">
-                          <span class="badge bg-dark">
-                            <i class="fa fa-folder" aria-hidden="true"></i>
-                          </span>
-                        </a>
-                        <a href="javascript:void(0)" (click)="CreatePopup()">
-                          <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+                  </ng-container>
                 </div>
+                <ng-container  *ngIf="!isFileFound">
+                  <div class="custom-height fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                    File Not Found
+                  </div>
+                </ng-container>
               </div>
               <!-- <table class="table table-striped table-hover">
                     <thead>

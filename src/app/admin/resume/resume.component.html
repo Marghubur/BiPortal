@@ -163,83 +163,90 @@
                       </div>
                     </div>
                     <div class="t-body">
-                      <div class="tr py-2" *ngFor="let item of ProfessionalUserDetail">
-                        <div class="td align-middle text-center fe-index">{{item.UserId}}</div>
-                        <div class="td align-middle fe-2">
-                          <div class="cell-wrapper">
-                            <a (click)="EditCurrent(user)">{{item.Name}}</a>
-                            <div class="float-end">
-                              <a href=""><span (click)="EditCurrent(user)" class="badge bg-primary">
-                                  <i class="fa fa-pencil-square-o"></i>
+                      <ng-container *ngIf="isFileFound">
+                        <div class="tr py-2" *ngFor="let item of ProfessionalUserDetail">
+                          <div class="td align-middle text-center fe-index">{{item.UserId}}</div>
+                          <div class="td align-middle fe-2">
+                            <div class="cell-wrapper">
+                              <a (click)="EditCurrent(user)">{{item.Name}}</a>
+                              <div class="float-end">
+                                <a href=""><span (click)="EditCurrent(user)" class="badge bg-primary">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                  </span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="td align-middle fe-1">
+                            <div class="cell-wrapper">
+                              {{item.Phone_Number}}
+                            </div>
+                          </div>
+                          <div class="td align-middle fe-2">
+                            <div class="cell-wrapper">
+                              {{item.Email_ID}}
+                            </div>
+                          </div>
+                          <div class="td align-middle fe-1">
+                            <div class="cell-wrapper">
+                              SKILLS
+                              <div class="float-end ms-1">
+                                <a href="">
+                                  <span class="badge bg-primary"><i (click)="EditCurrent(item.UserId)"
+                                      class="fa fa-code"></i>&nbsp;
+                                    5</span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="td align-middle fe-1">
+                            <div class="cell-wrapper">
+                              {{item.Job_Title}}
+                            </div>
+                          </div>
+                          <div class="td align-middle fe-1">
+                            <div class="cell-wrapper">
+                              NA
+                            </div>
+                          </div>
+                          <div class="td align-middle fe-1">
+                            <div class="cell-wrapper">
+                              {{item.Total_Experience}}
+                            </div>
+                          </div>
+                          <div class="td align-middle fe-1">
+                            <div class="cell-wrapper">
+                              {{item.Notice_Period}}
+                            </div>
+                          </div>
+                          <div class="td align-middle fe-1">
+                            <div class="d-flex flex-row justify-content-around">
+                              <a href="">
+                                <span class="badge bg-danger">
+                                  <i class="fa fa-trash" aria-hidden="true" (click)="DeleteCurrent(item.UserId)"></i>
+                                </span>
+                              </a>
+                              <a href="javascript:void(0)" (click)="AddEditDocuments(item)">
+                                <span class="badge bg-dark">
+                                  <i class="fa fa-folder" aria-hidden="true"></i>
+                                </span>
+                              </a>
+                              <a href="">
+                                <span class="badge bg-info ms-1">
+                                  <input type="file" id="browsfile" multiple class="d-none"
+                                    (change)="GetDocumentFile($event)" />
+                                  <i class="fa fa-cloud-upload" aria-hidden="true" (click)="uploadResume()"></i>
                                 </span>
                               </a>
                             </div>
                           </div>
                         </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.Phone_Number}}
-                          </div>
+                      </ng-container>
+                      <ng-container  *ngIf="!isFileFound">
+                        <div class="custom-height fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                          File Not Found
                         </div>
-                        <div class="td align-middle fe-2">
-                          <div class="cell-wrapper">
-                            {{item.Email_ID}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            SKILLS
-                            <div class="float-end ms-1">
-                              <a href="">
-                                <span class="badge bg-primary"><i (click)="EditCurrent(item.UserId)"
-                                    class="fa fa-code"></i>&nbsp;
-                                  5</span>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.Job_Title}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            NA
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.Total_Experience}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.Notice_Period}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="d-flex flex-row justify-content-around">
-                            <a href="">
-                              <span class="badge bg-danger">
-                                <i class="fa fa-trash" aria-hidden="true" (click)="DeleteCurrent(item.UserId)"></i>
-                              </span>
-                            </a>
-                            <a href="javascript:void(0)" (click)="AddEditDocuments(item)">
-                              <span class="badge bg-dark">
-                                <i class="fa fa-folder" aria-hidden="true"></i>
-                              </span>
-                            </a>
-                            <a href="">
-                              <span class="badge bg-info ms-1">
-                                <input type="file" id="browsfile" multiple class="d-none"
-                                  (change)="GetDocumentFile($event)" />
-                                <i class="fa fa-cloud-upload" aria-hidden="true" (click)="uploadResume()"></i>
-                              </span>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
+                      </ng-container>
                     </div>
                   </div>
                 </div>

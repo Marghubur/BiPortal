@@ -351,7 +351,8 @@ export class EmployeesComponent implements OnInit {
     userDetail.Mobile = user.Mobile;
     userDetail.Email = user.Email;
     userDetail.PageName = Employees;
-    userDetail.UserId = user.EmployeeUid
+    userDetail.UserId = user.EmployeeUid,
+    userDetail.Name = user.FirstName +" "+ user.LastName
     this.nav.navigate(Documents, userDetail);
   }
 }
@@ -383,6 +384,7 @@ export class employeeModel {
   Email: string = '';
   Total: number = 0;
   EmployeeUid: number = 0;
+  FirstName?: string = '';
 }
 
 
