@@ -58,6 +58,7 @@ export class ResumeComponent implements OnInit {
   orderByExpAsc: boolean = null;
   orderByLocationAsc: boolean = null;
   orderByNoticeAsc: boolean = null;
+  isFileFound: boolean = false;
 
 
   constructor(
@@ -682,6 +683,7 @@ export class ResumeComponent implements OnInit {
 
   getUploadedDetails() {
     this.isRecordAvailable = false;
+    this.isFileFound = false;
     this.ProfessionalUserDetail = [];
     this.http.post("OnlineDocument/GetUploadedRecords", this.candidatesData)
     .then((response: ResponseModel) => {
@@ -689,6 +691,7 @@ export class ResumeComponent implements OnInit {
         this.ProfessionalUserDetail = response.ResponseBody.Table;
         if(this.ProfessionalUserDetail.length > 0) {
           this.candidatesData.TotalRecords = this.ProfessionalUserDetail[0].Total;
+          this.isFileFound = true;
         } else {
           this.candidatesData.TotalRecords = 0;
         }

@@ -10,7 +10,6 @@ import { environment } from "src/environments/environment";
 import { ActivatedRoute } from '@angular/router';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { DomSanitizer } from '@angular/platform-browser';
-
 declare var $:any;
 
 @Component({
@@ -499,6 +498,7 @@ export class documentsComponent implements OnInit, OnDestroy {
         }
         index++;
       }
+    $('#staticBackdrop').modal('show');
     }
   }
 
@@ -515,12 +515,12 @@ export class documentsComponent implements OnInit, OnDestroy {
           } else {
             this.isDocumentReady = false;
           }
-
           $("#staticBackdrop").modal("hide");
           Toast("Deleted successfully.");
         } else {
           ErrorToast("Fail to delte the file");
         }
+        $("#staticBackdrop").modal("hide");
       });
     }
   }

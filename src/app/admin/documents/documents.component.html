@@ -33,7 +33,7 @@
       </div>
     </div>
   </div>
-  <div class="px-1">
+  <div class="px-0">
     <app-breadcrums></app-breadcrums>
   </div>
   <div class="x_panel">
@@ -80,7 +80,7 @@
           <ng-container *ngIf="!folders.IsFolder">
             <div class="file-type mt-2 mb-2">
               <a href="javascript:void(0)" class="sh-icon" data-bs-toggle="modal"
-                (click)="selectItemForDelete(folders.FileId)" data-bs-target="#staticBackdrop">
+                (click)="selectItemForDelete(folders.FileId)" >
                 <i class="fa fa-trash text-danger"></i>
               </a>
               <!-- <div class="file-link col-md-12">
@@ -115,8 +115,8 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="createFolder" tabindex="-1" role="dialog" aria-labelledby="createFolderTitle"
+<!-- New Folder Modal -->
+<div class="modal fade" id="createFolder"  role="dialog" aria-labelledby="createFolderTitle"
   aria-hidden="true">
   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -129,17 +129,18 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" (click)="CloseFolderPopup()" class="text-decoration-none btn-light pe-3"
+        <a href="javascript:void(0)" (click)="CloseFolderPopup()" class="text-decoration-none text-danger btn-white pe-3"
           data-dismiss="modal">Cancel</a>
         <a href="javascript:void(0)" (click)="CreateNewfolder()"
-          class="text-decoration-none btn-light text-primary">Create</a>
+          class="text-decoration-none btn-white text-primary">Create</a>
       </div>
     </div>
   </div>
 </div>
+<!-- End Model -->
 
 <!-- Modal -->
-<div class="modal fade" id="showDocx" tabindex="-1" role="dialog" aria-labelledby="showDocx" aria-hidden="true">
+<div class="modal fade" id="showDocx"  role="dialog" aria-labelledby="showDocx" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -152,18 +153,18 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" (click)="CloseDocxViewer()" class="text-decoration-none btn-light pe-3">Close</a>
+        <a href="javascript:void(0)" (click)="CloseDocxViewer()" class="text-decoration-none btn-white pe-3">Close</a>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!-- Delete Model -->
+<div class="modal fade" id="staticBackdrop"  role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="staticBackdropLabel">Delete file(s)</h5>
+        <h5 class="modal-title" >Delete file(s)</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
@@ -177,24 +178,23 @@
         </ng-container>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" class="text-decoration-none btn-light pe-3" data-bs-dismiss="modal">Close</a>
+        <a href="javascript:void(0)" class="text-decoration-none text-danger btn-white pe-3" data-bs-dismiss="modal">Close</a>
         <a href="javascript:void(0)" (click)="deleteFile()"
-          class="text-decoration-none btn-light text-primary">Delete</a>
+          class="text-decoration-none btn-white text-primary">Delete</a>
       </div>
     </div>
   </div>
 </div>
 
-
 <!-- Modal -->
-<div class="modal fade" id="staticBackdropDown" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="staticBackdropDown" data-bs-backdrop="static" data-bs-keyboard="false"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog  modal-fullscreen p-4 ">
     <div class="modal-content rounded-3">
       <div class="modal-header border-bottom-0">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">aqbalwaris@gmail.com
+      <div class="modal-body">
         <div class="x_panel">
           <div class="x_header">
             <div class="x_header_title row">
@@ -212,9 +212,9 @@
                   <select class="form-select" aria-label="Default select example" formControlName="userTypeId"
                     [ngClass]="{'error': submitted && f.userTypeId.errors !== null && f.userTypeId.errors.required}">
                     <option value="0">Type</option>
-                    <option value="1">Employee</option>
-                    <option value="2">Client</option>
+                    <option value="2">Employee</option>
                     <option value="3">Candidate</option>
+                    <option value="4">Client</option>
                   </select>
                 </div>
                 <div class="col-md-4">

@@ -70,6 +70,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   orderByMonthAsc: boolean = null;
   orderByGSTStatusAsc: boolean = null;
   orderByBillNoAsc: boolean = null;
+  isFileFound: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -401,6 +402,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
 
   LoadFiles() {
     this.isEmpPageReady = false;
+    this.isFileFound = false;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       this.TotalGSTAmount = 0;
@@ -482,6 +484,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
             this.TotalSalaryAmount = AddNumbers([bills.SalaryAmount, this.TotalSalaryAmount], 2);
             i++;
           }
+          this.isFileFound = true;
         }
       } else {
         ErrorToast("No file or folder found");
