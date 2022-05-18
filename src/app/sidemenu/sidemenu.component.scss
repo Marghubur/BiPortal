@@ -89,14 +89,14 @@ a {
 .menu-footer {
   bottom: 0px;
   position: absolute;
-  background: #eee;
+  background: darkslateblue;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   width: 100%;
 
   a {
-    color: #444;
+    color: #eee;
     padding: 0.5rem;
     zoom: 1.1;
     flex: 1;

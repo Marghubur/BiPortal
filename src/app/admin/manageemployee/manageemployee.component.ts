@@ -44,8 +44,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   fileDetail: Array<any> = [];
   activeAssignedClient: AssignedClients = new AssignedClients();
   ProfessuinalDetail_JSON: any = '';
-  managerList: autoCompleteModal = null; 
-  
+  managerList: autoCompleteModal = null;
+
   get f() {
     let data = this.employeeForm.controls;
     return data;
@@ -83,6 +83,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     } else {
       this.isUpdate = false;
       this.employeeModal = new EmployeeDetail();
+      this.employeeModal.ReportingManagerId = 0;
       this.bindForm();
       this.idReady = true;
     }
@@ -262,7 +263,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
       this.http.post(`Employee/employeeregistration/${this.isUpdate}`, formData).then((response: ResponseModel) => {
         this.buildPageData(response);
-        Toast(InsertOrUpdateSuccessfull);
+        if(this.isUpdate)
+          Toast("Profile updated successfully");
+        else
+          Toast("Registration done successfully");
         this.isLoading = false;
       }).catch(e => {
         this.isLoading = false;

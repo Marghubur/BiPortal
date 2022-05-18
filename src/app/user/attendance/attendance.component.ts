@@ -393,15 +393,11 @@ export class AttendanceComponent implements OnInit {
         this.isAttendanceDataLoaded = false;
       }
 
-      // if (response.ResponseBody.AttendacneDetails) {
-      //   this.enablePermissionButton = true;
-      //   let blockedAttendance = response.ResponseBody.AttendacneDetails.filter(x => x.IsOpen === false);
-      //   if(blockedAttendance.length > 0) {
-      //     this.enablePermissionButton = false;
-      //   }
-      //   this.createPageData(response.ResponseBody.AttendacneDetails);
-      //   this.isAttendanceDataLoaded = true;
-      // }
+      if (response.ResponseBody.AttendacneDetails) {
+        let blockedAttendance = response.ResponseBody.AttendacneDetails.filter(x => x.IsOpen === false);
+        this.createPageData(response.ResponseBody.AttendacneDetails);
+        this.isAttendanceDataLoaded = true;
+      }
 
       this.divisionCode = 1;
       this.isLoading = false;
