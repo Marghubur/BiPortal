@@ -93,6 +93,7 @@ export const TaxSavingInvestment = 'user/taxsavinginvestment';
 export const PaySlip = 'user/payslip';
 export const IncomeTax = 'user/incometax';
 export const Taxcalculation = 'user/taxcalculation';
+export const ResetPassword = 'user/resetpassword';
 
 
 

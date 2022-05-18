@@ -21,6 +21,7 @@ import { TimesheetComponent } from './timesheet/timesheet.component';
 import { LeaveComponent } from './leave/leave.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
+import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { TaxcalculationComponent } from './taxcalculation/taxcalculation.compone
     TimesheetComponent,
     LeaveComponent,
     PreferencesComponent,
-    TaxcalculationComponent
+    TaxcalculationComponent,
+    ResetpasswordComponent
   ],
   imports: [
     CommonModule,
