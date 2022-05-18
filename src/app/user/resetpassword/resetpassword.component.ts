@@ -19,8 +19,8 @@ export class ResetpasswordComponent implements OnInit {
   initForm() {
     this.resetPasswordForm = this.fb.group({
       oldPassword: new FormControl ('', [Validators.required]),
-      newPassword: new FormControl ('', [Validators.required, Validators.maxLength(20), Validators.minLength(6), Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])")]),
-      confirmPassword: new FormControl ('', [Validators.required, Validators.maxLength(20), Validators.minLength(6), Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])")])
+      newPassword: new FormControl ('', [Validators.required, Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{6,20}$/)]),
+      confirmPassword: new FormControl ('', [Validators.required, Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{6,20}$/)])
     }, {
       validator: confirmPasswordValidator('newPassword', 'confirmPassword')
     })
