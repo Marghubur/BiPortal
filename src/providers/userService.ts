@@ -44,6 +44,7 @@ export class Filter {
     ShowPageNo: number = 5;
     ActivePageNumber: number = 1;
     isReUseSame: boolean = false;
+    isActive?: boolean = true;
 
     update(total: any) {
       if(!isNaN(Number(total))) {
