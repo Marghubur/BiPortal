@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminDeclaration,
+import { AdimResetPassword, AdminDeclaration,
   AdminForm12B,
   AdminFreeTaxFilling,
   AdminPreferences,
@@ -57,6 +57,7 @@ import { PreviousincomeComponent } from './previousincome/previousincome.compone
 import { Form12BbComponent } from './form12-bb/form12-bb.component';
 import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
 import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
+import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -88,6 +89,7 @@ const routes: Routes = [
   { path: AdminForm12B, component: Form12BbComponent},
   { path: AdminFreeTaxFilling, component: FreetaxfillingComponent},
   { path: AdminTaxSavingInvestment, component: TaxsavinginvestmentComponent},
+  { path: AdimResetPassword, component: ResetpasswordComponent}
 ];
 
 @NgModule({

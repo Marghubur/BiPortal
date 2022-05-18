@@ -36,6 +36,7 @@ import { Form12BbComponent } from './form12-bb/form12-bb.component';
 import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
 import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
 import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
+import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { TaxcalculationComponent } from './taxcalculation/taxcalculation.compone
     Form12BbComponent,
     FreetaxfillingComponent,
     TaxsavinginvestmentComponent,
-    TaxcalculationComponent
+    TaxcalculationComponent,
+    ResetpasswordComponent
   ],
   imports: [
     CommonModule,
