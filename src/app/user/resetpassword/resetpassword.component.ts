@@ -15,7 +15,7 @@ import { confirmPasswordValidator } from './confirmedpassword.validator'
 })
 export class ResetpasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
-  subitted: boolean = false;
+  submitted: boolean = false;
   isLoading: boolean = false;
   isLogOut: boolean = false;
   isPasswordChanged: boolean = false;
@@ -54,7 +54,7 @@ export class ResetpasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    this.subitted = true;
+    this.submitted = true;
     this.isLoading = true;
     this.isPasswordChanged = false;
     if (this.resetPasswordForm.invalid) {
@@ -97,7 +97,7 @@ export class ResetpasswordComponent implements OnInit {
 
   onReset() {
     this.resetPasswordForm.reset();
-    this.subitted = false;
+    this.submitted = false;
     this.isLoading = false;
     this.isPasswordChanged = false;
   }

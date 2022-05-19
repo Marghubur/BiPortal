@@ -17,9 +17,7 @@
   </div>
   <div class="col-12 x_panel p-0 m-0">
     <div class="px-1">
-      <div class="px-1">
-        <app-breadcrums></app-breadcrums>
-      </div>
+      <app-breadcrums></app-breadcrums>
     </div>
     <div class="right-panel col-md-12 p-0">
       <div class="col-md-12 bg-light mb-3 mt-3">
@@ -42,20 +40,26 @@
         </ul>
       </div>
       <ng-container>
-        <div class="container-fluid pt-4">
-          <div class="uc-page text-center d-flex flex-column justify-content-center">
-            <div class="text-center">
-              <img src="../../../assets/images/uc.jpg">
+        <div class="container-fluid pt-4 ps-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <h5 class="text-dark">Free Tax Filling</h5>
+              <p class="mb-0">You can use Clear Tax (our partner) to e-file your ITR free of cost.</p>
             </div>
-            <blockquote class="mt-4 blockquote text-center">
-              <p>
-                Welcome to HIRINGBELL online account and HRM management system.
-                This page is under construction.
-              </p>
-              <footer class="blockquote-footer">Powered By: <cite title="Source Title">BottomHalf Pvt. Ltd.</cite>
-              </footer>
-            </blockquote>
+            <button class="btn btn-primary">Free Tax File</button>
           </div>
+          <div class="card ps-3 py-3 my-3">
+            <p class="mb-0 fs-6">We've partnered with ClearTax, largest tax platform in India.</p>
+            <p class="mb-0 fs-6 py-2">e-File your ITR completely free of cost</p>
+            <ul>
+              <li class="fs-6 py-2">Upload your Form - 16 pdf</li>
+              <li class="fs-6 py-2">Preview your return, created by Cleartax automatically</li>
+              <li class="fs-6 py-2">Done with e-filling in just 5-7 mins.</li>
+            </ul>
+            <p class="mb-0 pb-2 fs-6">Due date to file your ITR for FY {{currentYear - 2}} - {{currentYear - 1}} (AY {{currentYear - 1}} - {{currentYear}}) is <span class="fw-bold text-dark">December 31, {{currentYear - 1}}</span></p>
+            <h6 class="fw-bold text-dark pt-2">Happy Filing !</h6>
+          </div>
+          <p class="fs-6">A service offering from our partner <span class="fw-bold text-dark">cleartax</span></p>
         </div>
       </ng-container>
     </div>

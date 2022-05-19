@@ -2,32 +2,6 @@
   background-color: #efefef !important;
 }
 
-.pointable-text {
-  background-color: #008dbb;
-  color: #fff;
-  border-radius: 4px;
-}
-
-.indicator {
-  padding: 5px;
-  border-radius: 3px;
-}
-.previous-employer-indicator {
-  background-color: #008dbb;
-}
-
-.curent-employer-indicator {
-  background-color: #a9a10b;;
-}
-
-.project-salary-indicator {
-  background-color: #1100ff;;
-}
-
-.t-body {
-  max-height: 100vh !important;
-}
-
 .t-head .th {
     cursor: default;
 }
@@ -67,12 +41,12 @@
 }
 
 .current-circle {
-  padding: 30px 11px;
-}
-
-.cell-wrapper {
-  padding-left: .6rem;
-  padding-right: .6rem;
+  width: 8rem;
+  height: 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .hide-bar {
@@ -85,10 +59,30 @@
   color: #222 !important;
 }
 
-.arrow-left {
-  width: 0;
-  height: 0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right:10px solid #6c757d;
+.new-nav-active {
+  color: #222 !important;
+  border-radius: 0px !important;
+  position: relative !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+}
+
+.new-nav-active::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 15% !important;
+  width: 70%;
+  height: 3px;
+  background: #8cc63e;
+}
+
+.sticky-modal-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 999;
+}
+
+.slaryStructureHistory {
+  z-index: 1051 !important;
 }

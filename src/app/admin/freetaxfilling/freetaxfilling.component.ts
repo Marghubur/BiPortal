@@ -9,10 +9,14 @@ import { iNavigation } from 'src/providers/iNavigation';
 })
 export class FreetaxfillingComponent implements OnInit {
   cachedData: any = null;
+  currentYear: number = 0;
+
 
   constructor(private nav: iNavigation) { }
 
   ngOnInit(): void {
+    var date = new Date();
+    this.currentYear = date.getFullYear();
   }
 
   activateMe(ele: string) {
@@ -20,13 +24,13 @@ export class FreetaxfillingComponent implements OnInit {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigate(AdminSalary, this.cachedData);
+        this.nav.navigateRoot(AdminSalary, this.cachedData);
         break;
       case "summary-tab":
-        this.nav.navigate(AdminSummary, this.cachedData);
+        this.nav.navigateRoot(AdminSummary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigate(AdminPreferences, this.cachedData);
+        this.nav.navigateRoot(AdminPreferences, this.cachedData);
         break;
     }
   }
@@ -34,18 +38,18 @@ export class FreetaxfillingComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "declaration-tab":
-        this.nav.navigate(AdminDeclaration, this.cachedData);
+        this.nav.navigateRoot(AdminDeclaration, this.cachedData);
         break;
       case "previous-income-tab":
-        this.nav.navigate(AdminPreviousIncome, this.cachedData);
+        this.nav.navigateRoot(AdminPreviousIncome, this.cachedData);
         break;
       case "form-12-tab":
-        this.nav.navigate(AdminForm12B, this.cachedData);
+        this.nav.navigateRoot(AdminForm12B, this.cachedData);
         break;
       case "free-tax-tab":
         break;
       case "tax-saving-tab":
-        this.nav.navigate(AdminTaxSavingInvestment, this.cachedData);
+        this.nav.navigateRoot(AdminTaxSavingInvestment, this.cachedData);
         break;
     }
   }

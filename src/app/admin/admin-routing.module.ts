@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdimResetPassword, AdminDeclaration,
+import { AdminResetPassword, AdminDeclaration,
   AdminForm12B,
   AdminFreeTaxFilling,
   AdminPreferences,
@@ -27,7 +27,10 @@ import { AdimResetPassword, AdminDeclaration,
   RegisterClient,
   Resume,
   Roles,
-  Timesheet
+  Timesheet,
+  AdminIncomeTax,
+  AdminPaySlip,
+  AdminTaxcalculation
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -58,6 +61,9 @@ import { Form12BbComponent } from './form12-bb/form12-bb.component';
 import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
 import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { IncometaxComponent } from './incometax/incometax.component';
+import { PayslipComponent } from './payslip/payslip.component';
+import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -89,7 +95,10 @@ const routes: Routes = [
   { path: AdminForm12B, component: Form12BbComponent},
   { path: AdminFreeTaxFilling, component: FreetaxfillingComponent},
   { path: AdminTaxSavingInvestment, component: TaxsavinginvestmentComponent},
-  { path: AdimResetPassword, component: ResetpasswordComponent}
+  { path: AdminResetPassword, component: ResetpasswordComponent},
+  { path: AdminIncomeTax, component: IncometaxComponent},
+  { path: AdminPaySlip, component: PayslipComponent},
+  { path: AdminTaxcalculation, component: TaxcalculationComponent}
 ];
 
 @NgModule({

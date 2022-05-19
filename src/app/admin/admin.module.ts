@@ -37,6 +37,8 @@ import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.compone
 import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
 import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { IncometaxComponent } from './incometax/incometax.component';
+import { PayslipComponent } from './payslip/payslip.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,9 @@ import { ResetpasswordComponent } from './resetpassword/resetpassword.component'
     FreetaxfillingComponent,
     TaxsavinginvestmentComponent,
     TaxcalculationComponent,
-    ResetpasswordComponent
+    ResetpasswordComponent,
+    IncometaxComponent,
+    PayslipComponent
   ],
   imports: [
     CommonModule,

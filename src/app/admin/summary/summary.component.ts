@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminDeclaration, AdminPreferences, AdminSalary } from 'src/providers/constants';
+import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary } from 'src/providers/constants';
 import { Files } from 'src/app/admin/documents/documents.component';
 import { BillDetails } from 'src/app/admin/files/files.component';
 import { ResponseModel } from 'src/auth/jwtService';
@@ -25,7 +25,10 @@ export class SummaryComponent implements OnInit {
   userFiles: Array<any> = [];
   billDetails: Array<BillDetails> = [];
   userDetail: UserDetail = new UserDetail();
-
+  currentMonth: number = 0;
+  currentYear: number = 0;
+  salarySummary: any = {};
+  monthName: string = '';
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -41,6 +44,10 @@ export class SummaryComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    let date = new Date();
+    this.currentMonth = date.getMonth();
+    this.currentYear = date.getFullYear();
+    this.monthName = this.convertNumberToMonth(this.currentYear, this.currentMonth);
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     if(expiredOn === null || expiredOn === "")
       this.userDetail["TokenExpiryDuration"] = new Date();
@@ -62,19 +69,8 @@ export class SummaryComponent implements OnInit {
       if (response.ResponseBody) {
         Toast("Record found.");
         this.userFiles = response.ResponseBody["Files"];
-        this.billDetails = new Array<BillDetails>();
-        let i =0;
-        let bills : BillDetails = null;
-        let GST: number = 0;
-
         if(this.userFiles !== null && this.userFiles.length > 0) {
-          this.singleEmployee.TotalRecords = this.userFiles[0].Total;
-          while (i < this.userFiles.length) {
-            bills = new BillDetails();
-            bills.Absent = this.userFiles[i].Absents;
-            bills.NoOfDays = this.userFiles[i].NoOfDays;
-            i++;
-          }
+          this.salarySummary = this.userFiles.filter(x => x.Month == this.currentMonth -1 && x.Status != 'Rejected')[0];
         }
       } else {
         ErrorToast("No file or folder found");
@@ -82,18 +78,59 @@ export class SummaryComponent implements OnInit {
     });
   }
 
+  nextSummary() {
+    if (this.currentMonth != new Date().getMonth()) {
+      this.currentMonth = Number((((this.currentMonth + 1) < 9 ? "" : "0") + this.currentMonth));
+      if (this.currentMonth == 12) {
+        this.currentMonth = 1;
+        this.currentYear ++
+      } else {
+        this.currentMonth ++;
+      }
+      this.monthName =  new Date(this.currentYear, this.currentMonth-1, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
+      this.LoadFiles();
+    } else {
+      ErrorToast("You can get only previous month Salary Summary")
+    }
+  }
+
+  previousSummary() {
+    if (this.currentMonth != new Date(new Date().setMonth(new Date().getMonth() - 2)).getMonth()) {
+      this.currentMonth = Number((((this.currentMonth + 1) > 9 ? "" : "0") + this.currentMonth));
+      if (this.currentMonth == 1) {
+        this.currentMonth = 12;
+        this.currentYear --
+      } else {
+        this.currentMonth --;
+      }
+      this.monthName = new Date(this.currentYear, this.currentMonth-1, 1).toLocaleString("en-us", { month: "short" }); // result: Aug
+      this.LoadFiles();
+    } else {
+      ErrorToast("You can't get Salary Summary more than 3 month back.")
+    }
+  }
+
+  convertNumberToMonth(year: number, mnth: number) {
+    let value = new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" });
+    return value;
+  }
+
+  viewPaySlip() {
+    this.nav.navigate(AdminPaySlip, null);
+  }
+
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigate(AdminDeclaration, this.cachedData);
+        this.nav.navigateRoot(Declaration, this.cachedData);
         break;
       case "salary-tab":
-        this.nav.navigate(AdminSalary, this.cachedData);
+        this.nav.navigateRoot(Salary, this.cachedData);
         break;
       case "summary-tab":
         break;
       case "preference-tab":
-        this.nav.navigate(AdminPreferences, this.cachedData);
+        this.nav.navigateRoot(Preferences, this.cachedData);
         break;
     }
   }

@@ -105,6 +105,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.employeeFile.Status = '0';
     this.employeeFile.GSTStatus = '0';
     this.employeeFile.Month = '0';
+    this.employeeId = 0;
     this.isReadonly = true;
     this.basePath = this.http.GetImageBasePath();
     //this.currentEmployeeDetail = this.nav.getValue();
@@ -113,11 +114,10 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       if (data.ClientName) {
         this.employeeFile.ClientName = data.ClientName;
       }
-      this.employeeFile.Status = data.BillStatusId;
-      this.employeeFile.Month = data.BillForMonth;
+      // this.employeeFile.Status = data.BillStatusId;
+      // this.employeeFile.Month = data.BillForMonth;
       this.filterRecords();
     }
-    this.employeeId = 0;
     this.autoCompleteModal = {
       data: [],
       placeholder: "All result"

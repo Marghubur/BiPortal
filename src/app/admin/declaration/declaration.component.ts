@@ -4,10 +4,11 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, AdminForm12B, AdminFreeTaxFilling, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment } from 'src/providers/constants';
+import { AccessTokenExpiredOn, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
+import { MonthlyTax } from '../incometax/incometax.component';
 declare var $: any;
 
 @Component({
@@ -15,7 +16,7 @@ declare var $: any;
   templateUrl: './declaration.component.html',
   styleUrls: ['./declaration.component.scss']
 })
-export class DeclarationComponent implements OnInit , AfterViewChecked {
+export class DeclarationComponent implements OnInit, AfterViewChecked {
   active = 1;
   editPPF: boolean = true;
   editSeniorCitizen: boolean = true;
@@ -74,27 +75,47 @@ export class DeclarationComponent implements OnInit , AfterViewChecked {
   taxAmount: TaxAmount = new TaxAmount();
   myDeclaration: Array<MyDeclaration> = [];
   year: number = 0;
+  taxCalender: Array<any> = [];
+  monthlyTaxAmount: MonthlyTax;
 
   constructor(private local: ApplicationStorage,
-              private user: UserService,
-              private nav: iNavigation,
-              private http: AjaxService,) { }
+    private user: UserService,
+    private nav: iNavigation,
+    private http: AjaxService,) { }
 
   ngOnInit(): void {
     this.loadData();
     var dt = new Date();
+    var month = 3;
+    var year = dt.getFullYear();
     this.year = dt.getFullYear();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
-    if(expiredOn === null || expiredOn === "")
+    if (expiredOn === null || expiredOn === "")
       this.userDetail["TokenExpiryDuration"] = new Date();
     else
-     this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-    if(Master !== null && Master !== "") {
+      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+    let Master = this.local.get(null);
+    if (Master !== null && Master !== "") {
       this.userDetail = Master["UserDetail"];
     } else {
       ErrorToast("Invalid user. Please login again.")
+    }
+
+    let i = 0;
+    while (i < 12) {
+      var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
+      if (month == 12) {
+        month = 1;
+        year++
+      } else {
+        month++;
+      }
+      this.taxCalender.push({
+        month: new Date(year, mnth, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
+        year: Number(year.toString().slice(-2))
+      });
+      i++;
     }
   }
 
@@ -108,505 +129,506 @@ export class DeclarationComponent implements OnInit , AfterViewChecked {
       DeductionName: "EPF (Deducted from salary)",
       Declaration: 12600,
       DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
       MaxLimit: null,
       Proof: null,
       Status: 1
     },
-    {
-      Section: "80C",
-      DeductionName: "VPF (Deducted from Salary)",
-      Declaration: 0,
-      DeductionDesc: `Employee's VPF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your VPF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 1
-    },
-    {
-      Section: "80C",
-      DeductionName: "PPF",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Senior Citizen Saving Scheme",
-      Declaration: null,
-      DeductionDesc: `Investment in SCSS qualifies for deduction under Section 80C of the income tax Act. Any
-      individual age 60 and above can invest in SCSS. Early retirees between 55 and 60 years, who either opted
-      for the voluntary retirement scheme (VRS) or superannuation, can also invest in the scheme, provided the
-      investment is done within amonth of receiving retirement benefits.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Housing loan (Principal)",
-      Declaration: null,
-      DeductionDesc: `For Home Loan, u/s 80C, deduction upto Rs 1,50,000 is allowed on Principal repayment, stamp duty &
-      registration charges, in the year in which the actual principal amount is paid.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Mutual Fund",
-      Declaration: null,
-      DeductionDesc: `Investment in mutual funds for saving purpose is called Equity Linked Saving Schemes (ELSS) which qualifies
-      for section 80C deducation. Not all mutual fund can provide 80C deduction. Exampkes of ELSS SBI Magnum Tax gain,
-      HDFC Tax Saver, Fidelity Tax Advantage etc.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "National Saving Certificate",
-      Declaration: null,
-      DeductionDesc: `The National Saving Certificate (NSC) is an investment scheme floated by the Government of India.
-      It offers guaranted interest and capital protection. NSC can be bought from most post office in India, and is easily
-      accessible. Investment upto Rs 1.5 lakh in the scheme qualifies for deducation u/s 80C of the income tax Act. Furthermore,
-      the interest earned on the certificates are also added back to the initial investment and qualify for a tax exemption as well.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Unit Link Insurance Plan",
-      Declaration: null,
-      DeductionDesc: `Unit Linked Insurance Plan (ULIP) is a combination of insurance and investment. The goal of ULIP
-      is to provide wealth creation along with life cover. ULIP provider invests a portion of your investment towards
-      life insurance and rest into a fund. All ULIPs qualify as life insurance policy and the premium are exempted from
-      income tax benefit. Deducation is available on ULIPS under section 80C, provided the sum assured is at least 10 times
-      the annual premium.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Life Insurance Policy",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Education Tuition Fees",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Schedule Bank FD",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Post Office Time Deposit",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Deferred Annuity",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Super Annuity",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "NABARD notifies bond",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Sukanya Samriddhi Yojna",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80C",
-      DeductionName: "Other",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80CCC",
-      DeductionName: "Mutual Fund Pension",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80CCD(1)",
-      DeductionName: "NPS Employee Contribution",
-      Declaration: null,
-      DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
-      Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
-      MaxLimit: null,
-      Proof: null,
-      Status: 2
-    });
+      {
+        Section: "80C",
+        DeductionName: "VPF (Deducted from Salary)",
+        Declaration: 0,
+        DeductionDesc: `Employee's VPF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your VPF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 1
+      },
+      {
+        Section: "80C",
+        DeductionName: "PPF",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Senior Citizen Saving Scheme",
+        Declaration: null,
+        DeductionDesc: `Investment in SCSS qualifies for deduction under Section 80C of the income tax Act. Any
+                  individual age 60 and above can invest in SCSS. Early retirees between 55 and 60 years, who either opted
+                  for the voluntary retirement scheme (VRS) or superannuation, can also invest in the scheme, provided the
+                  investment is done within amonth of receiving retirement benefits.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Housing loan (Principal)",
+        Declaration: null,
+        DeductionDesc: `For Home Loan, u/s 80C, deduction upto Rs 1,50,000 is allowed on Principal repayment, stamp duty &
+                  registration charges, in the year in which the actual principal amount is paid.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Mutual Fund",
+        Declaration: null,
+        DeductionDesc: `Investment in mutual funds for saving purpose is called Equity Linked Saving Schemes (ELSS) which qualifies
+                  for section 80C deducation. Not all mutual fund can provide 80C deduction. Exampkes of ELSS SBI Magnum Tax gain,
+                  HDFC Tax Saver, Fidelity Tax Advantage etc.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "National Saving Certificate",
+        Declaration: null,
+        DeductionDesc: `The National Saving Certificate (NSC) is an investment scheme floated by the Government of India.
+                  It offers guaranted interest and capital protection. NSC can be bought from most post office in India, and is easily
+                  accessible. Investment upto Rs 1.5 lakh in the scheme qualifies for deducation u/s 80C of the income tax Act. Furthermore,
+                  the interest earned on the certificates are also added back to the initial investment and qualify for a tax exemption as well.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Unit Link Insurance Plan",
+        Declaration: null,
+        DeductionDesc: `Unit Linked Insurance Plan (ULIP) is a combination of insurance and investment. The goal of ULIP
+                  is to provide wealth creation along with life cover. ULIP provider invests a portion of your investment towards
+                  life insurance and rest into a fund. All ULIPs qualify as life insurance policy and the premium are exempted from
+                  income tax benefit. Deducation is available on ULIPS under section 80C, provided the sum assured is at least 10 times
+                  the annual premium.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Life Insurance Policy",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Education Tuition Fees",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Schedule Bank FD",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Post Office Time Deposit",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Deferred Annuity",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Super Annuity",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "NABARD notifies bond",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Sukanya Samriddhi Yojna",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80C",
+        DeductionName: "Other",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80CCC",
+        DeductionName: "Mutual Fund Pension",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80CCD(1)",
+        DeductionName: "NPS Employee Contribution",
+        Declaration: null,
+        DeductionDesc: `All deposit made in Public Provident Fund (PPF) are deductible under Section 80C of the income tax Act.
+                  Also, the accumulated amount and interest is exempted drom tax at the time of withdrawal.`,
+        MaxLimit: null,
+        Proof: null,
+        Status: 2
+      });
 
     this.otherExemptions.push({
       Section: "80CCD(2)",
       DeductionName: "NPS Employee Contribution",
       Declaration: null,
       DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
       MaxLimit: "50,000",
       Proof: null,
       Status: 2
     },
-    {
-      Section: "80CCD(1B)",
-      DeductionName: "Senior Citizen Saving Scheme",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "No Limit",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80D",
-      DeductionName: "Medical Insurance Premimum",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "50,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80D",
-      DeductionName: "Preventive Health Check-up",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "5,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80D",
-      DeductionName: "Parents Medical Insurance Premium",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "50,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80D",
-      DeductionName: "Parents Preventive Health Check-up",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "5,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80DD",
-      DeductionName: "Medical Expenditure for a Handicapped Relative",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "1,25,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80DDB",
-      DeductionName: "Medical Expenditure on Self or Dependent",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "1,00,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80E",
-      DeductionName: "Repayment of Interest on Higher Education Loan",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "No Limit",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80EE",
-      DeductionName: "Home Loan Interest for First Time Home Owners",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "50,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80EEA",
-      DeductionName: "Interest on loan for acquiring residential house property",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "1,50,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80EEB",
-      DeductionName: "Interest on loan for acquiring Electric Vehicle",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "1,50,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80G",
-      DeductionName: "Donations towards Social Causes (100% deducation without qualifying limit)",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "No Limit",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80G",
-      DeductionName: "Donations towards Social Causes (50% deducation without qualifying limit)",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "No Limit",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80G",
-      DeductionName: "Donations towards Social Causes (100% deducation with qualifying limit)",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "No Limit",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80G",
-      DeductionName: "Donations towards Social Causes (50% deducation with qualifying limit)",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "No Limit",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80GGA",
-      DeductionName: "Donation for Research or Rural development",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "No Limit",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80GGC",
-      DeductionName: "Donation to Political parties",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "No Limit",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80QQB",
-      DeductionName: "Royalty on Book",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "3,00,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80RRB",
-      DeductionName: "Royalty on patent",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "3,00,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80TTA",
-      DeductionName: "Savings account interest tax",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "10,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80TTB",
-      DeductionName: "Savings account interest tax (senior Citizens)",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "50,000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "80U",
-      DeductionName: "Deducation with respect to Person suffering from Physical Disability",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "1,25,00",
-      Proof: null,
-      Status: 2
-    });
+      {
+        Section: "80CCD(1B)",
+        DeductionName: "Senior Citizen Saving Scheme",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "No Limit",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80D",
+        DeductionName: "Medical Insurance Premimum",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "50,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80D",
+        DeductionName: "Preventive Health Check-up",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "5,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80D",
+        DeductionName: "Parents Medical Insurance Premium",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "50,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80D",
+        DeductionName: "Parents Preventive Health Check-up",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "5,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80DD",
+        DeductionName: "Medical Expenditure for a Handicapped Relative",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "1,25,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80DDB",
+        DeductionName: "Medical Expenditure on Self or Dependent",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "1,00,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80E",
+        DeductionName: "Repayment of Interest on Higher Education Loan",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "No Limit",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80EE",
+        DeductionName: "Home Loan Interest for First Time Home Owners",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "50,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80EEA",
+        DeductionName: "Interest on loan for acquiring residential house property",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "1,50,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80EEB",
+        DeductionName: "Interest on loan for acquiring Electric Vehicle",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "1,50,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80G",
+        DeductionName: "Donations towards Social Causes (100% deducation without qualifying limit)",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "No Limit",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80G",
+        DeductionName: "Donations towards Social Causes (50% deducation without qualifying limit)",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "No Limit",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80G",
+        DeductionName: "Donations towards Social Causes (100% deducation with qualifying limit)",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "No Limit",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80G",
+        DeductionName: "Donations towards Social Causes (50% deducation with qualifying limit)",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "No Limit",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80GGA",
+        DeductionName: "Donation for Research or Rural development",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "No Limit",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80GGC",
+        DeductionName: "Donation to Political parties",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "No Limit",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80QQB",
+        DeductionName: "Royalty on Book",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "3,00,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80RRB",
+        DeductionName: "Royalty on patent",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "3,00,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80TTA",
+        DeductionName: "Savings account interest tax",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "10,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80TTB",
+        DeductionName: "Savings account interest tax (senior Citizens)",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "50,000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "80U",
+        DeductionName: "Deducation with respect to Person suffering from Physical Disability",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "1,25,00",
+        Proof: null,
+        Status: 2
+      });
 
     this.taxSavingAllowance.push({
       Section: "17(2)(Viii)",
       DeductionName: "Medical Allowances",
       Declaration: null,
       DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
       MaxLimit: "15000",
       Proof: null,
       Status: 2
     },
-    {
-      Section: "10(5)",
-      DeductionName: "Travel Reimbursement(LTA)",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "30000",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "10(14)(i)",
-      DeductionName: "Housing loan (Principal)",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "21600",
-      Proof: null,
-      Status: 2
-    },
-    {
-      Section: "10(14)(i)",
-      DeductionName: "Telephone and Internet Allowance",
-      Declaration: null,
-      DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
-      This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
-      is fixed for all investments under section 80C.`,
-      MaxLimit: "18000",
-      Proof: null,
-      Status: 2
-    });
+      {
+        Section: "10(5)",
+        DeductionName: "Travel Reimbursement(LTA)",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "30000",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "10(14)(i)",
+        DeductionName: "Housing loan (Principal)",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "21600",
+        Proof: null,
+        Status: 2
+      },
+      {
+        Section: "10(14)(i)",
+        DeductionName: "Telephone and Internet Allowance",
+        Declaration: null,
+        DeductionDesc: `Employee's PF contribution is eligible for deducation under section 80C of income tax Act.
+                  This means that your PF contribution is exempted under section 80C.Maximum exemption of 1.5 lakh per annum
+                  is fixed for all investments under section 80C.`,
+        MaxLimit: "18000",
+        Proof: null,
+        Status: 2
+      });
 
-    this.taxAmount =  {
+    this.taxAmount = {
       NetTaxableAmount: 2050000,
       TotalTaxPayable: 444600,
-      TaxAlreadyPaid: 37050
+      TaxAlreadyPaid: 37050,
+      RemainingTaxAMount: 444600 - 37050
     };
 
     this.myDeclaration.push({
@@ -617,38 +639,53 @@ export class DeclarationComponent implements OnInit , AfterViewChecked {
       AmountRejected: 0,
       AmountAccepted: 0
     },
-    {
-      Declaration: "Other Exemptions",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "Tax Saving Allowance",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "House Property",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "Income From Other Sources",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    })
+      {
+        Declaration: "Other Exemptions",
+        NoOfDeclaration: 0,
+        AmountDeclared: 0,
+        ProofSUbmitted: 0,
+        AmountRejected: 0,
+        AmountAccepted: 0
+      },
+      {
+        Declaration: "Tax Saving Allowance",
+        NoOfDeclaration: 0,
+        AmountDeclared: 0,
+        ProofSUbmitted: 0,
+        AmountRejected: 0,
+        AmountAccepted: 0
+      },
+      {
+        Declaration: "House Property",
+        NoOfDeclaration: 0,
+        AmountDeclared: 0,
+        ProofSUbmitted: 0,
+        AmountRejected: 0,
+        AmountAccepted: 0
+      },
+      {
+        Declaration: "Income From Other Sources",
+        NoOfDeclaration: 0,
+        AmountDeclared: 0,
+        ProofSUbmitted: 0,
+        AmountRejected: 0,
+        AmountAccepted: 0
+      });
+
+    this.monthlyTaxAmount = {
+      april: 37050,
+      may: 37050,
+      june: 37050,
+      july: 37050,
+      aug: 37050,
+      sep: 37050,
+      oct: 37050,
+      nov: 37050,
+      dec: 37050,
+      jan: 37050,
+      feb: 37050,
+      march: 37050
+    };
   }
 
 
@@ -1036,7 +1073,7 @@ export class DeclarationComponent implements OnInit , AfterViewChecked {
         let item: Files = new Files();
         item.FileName = file.name;
         item.FileType = file.type;
-        item.FileSize = (Number(file.size)/1024);
+        item.FileSize = (Number(file.size) / 1024);
         item.FileExtension = file.type;
         item.DocumentId = 0;
         //item.FilePath = this.getRelativePath(this.routeParam);
@@ -1054,7 +1091,7 @@ export class DeclarationComponent implements OnInit , AfterViewChecked {
         fileSize += selectedFile[i].size / 1024;
         i++;
       }
-      if ( fileSize > 2048) {
+      if (fileSize > 2048) {
         this.isLargeFile = true;
         this.fileDetail = [];
       }
@@ -1086,7 +1123,7 @@ export class DeclarationComponent implements OnInit , AfterViewChecked {
       }
       formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
       formData.append('UserDetail', JSON.stringify(this.userDetail));
-      this.http.post(`User/UploadDeclaration/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response:ResponseModel) => {
+      this.http.post(`User/UploadDeclaration/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
         if (response.ResponseBody)
           Toast("Declaration Uploaded Successfully.")
       })
@@ -1105,42 +1142,42 @@ export class DeclarationComponent implements OnInit , AfterViewChecked {
   }
 
   activateMe(ele: string) {
-    switch(ele) {
+    switch (ele) {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigate(AdminSalary, this.cachedData);
+        this.nav.navigateRoot(AdminSalary, this.cachedData);
         break;
       case "summary-tab":
-        this.nav.navigate(AdminSummary, this.cachedData);
+        this.nav.navigateRoot(AdminSummary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigate(AdminPreferences, this.cachedData);
+        this.nav.navigateRoot(AdminPreferences, this.cachedData);
         break;
     }
   }
 
   activeTab(e: string) {
-    switch(e) {
+    switch (e) {
       case "declaration-tab":
         break;
       case "previous-income-tab":
-        this.nav.navigate(AdminPreviousIncome, this.cachedData);
+        this.nav.navigateRoot(AdminPreviousIncome, this.cachedData);
         break;
       case "form-12-tab":
-        this.nav.navigate(AdminForm12B, this.cachedData);
+        this.nav.navigateRoot(AdminForm12B, this.cachedData);
         break;
       case "free-tax-tab":
-        this.nav.navigate(AdminFreeTaxFilling, this.cachedData);
+        this.nav.navigateRoot(AdminFreeTaxFilling, this.cachedData);
         break;
       case "tax-saving-tab":
-        this.nav.navigate(AdminTaxSavingInvestment, this.cachedData);
+        this.nav.navigateRoot(AdminTaxSavingInvestment, this.cachedData);
         break;
     }
   }
 
   gotoTaxSection(value: string) {
-    this.nav.navigate(AdminSalary, value)
+    this.nav.navigateRoot(AdminIncomeTax, value)
   }
 }
 
@@ -1158,12 +1195,13 @@ class TaxAmount {
   NetTaxableAmount: number = 0;
   TotalTaxPayable: number = 0;
   TaxAlreadyPaid: number = 0;
+  RemainingTaxAMount: number = 0;
 }
 
 class MyDeclaration {
   Declaration: string = '';
   NoOfDeclaration: number = 0;
-  AmountDeclared: number =0;
+  AmountDeclared: number = 0;
   ProofSUbmitted: number = 0;
   AmountRejected: number = 0;
   AmountAccepted: number = 0;
