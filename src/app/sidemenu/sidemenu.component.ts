@@ -25,6 +25,7 @@ export class SidemenuComponent implements OnInit {
   Menu: Array<any> = [];
   CatagoryPosition: number = 0;
   MenuName: string = '';
+  admin: boolean = true;
 
   @Output() authentication = new EventEmitter();
 
@@ -48,6 +49,7 @@ export class SidemenuComponent implements OnInit {
 
   ngOnInit() {
     this.IsLoggedIn = false;
+    this.admin = true;
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     if(expiredOn === null || expiredOn === "")
@@ -62,6 +64,10 @@ export class SidemenuComponent implements OnInit {
       if(Master !== null && Master !== "") {
         this.IsLoggedIn = true;
         this.userDetail = Master["UserDetail"];
+        if (this.userDetail.UserTypeId == 2) {
+          this.admin = false;
+        }
+
         let menuItem = this.nav.getRouteList();
         this.MenuName = menuItem[menuItem.length - 1].Key;
         this.BuildMenu(Master["Menu"]);

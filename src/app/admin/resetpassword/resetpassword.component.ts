@@ -75,6 +75,7 @@ export class ResetpasswordComponent implements OnInit {
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
         Toast(response.ResponseBody);
+        this.onReset();
         this.isPasswordChanged = true;
       } else {
         ErrorToast("Unable to update your password");
