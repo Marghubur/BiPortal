@@ -130,7 +130,11 @@ export class EmployeesComponent implements OnInit {
       this.employeeDetail = response.ResponseBody;
       let i =0;
       while (i < this.employeeDetail.length) {
-        this.employeeDetail[i].ClientJson = JSON.parse(this.employeeDetail[i].ClientJson)
+        let value  = JSON.parse(this.employeeDetail[i].ClientJson)
+        if (value == null)
+          this.employeeDetail[i].ClientJson = [];
+        else
+          this.employeeDetail[i].ClientJson = value;
         i++;
       }
       if (this.employeeDetail.length > 0) {
