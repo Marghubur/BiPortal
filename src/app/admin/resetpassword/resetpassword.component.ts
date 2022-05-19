@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { confirmPasswordValidator } from 'src/app/user/resetpassword/confirmedpassword.validator';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -7,7 +8,7 @@ import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/comm
 import { AccessTokenExpiredOn } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
-import { confirmPasswordValidator } from './confirmedpassword.validator'
+
 @Component({
   selector: 'app-resetpassword',
   templateUrl: './resetpassword.component.html',
@@ -61,6 +62,7 @@ export class ResetpasswordComponent implements OnInit {
       this.isLoading = false;
       return;
     }
+
     let password = {
       Password: this.resetPasswordForm.controls['oldPassword'].value,
       NewPassword: this.resetPasswordForm.controls['newPassword'].value,

@@ -242,15 +242,7 @@ export class EmployeesComponent implements OnInit {
         this.http.delete(`Employee/DeleteEmployeeById/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             Toast("Employee Activated successfully");
-            this.employeeDetail = response.ResponseBody;
-            if (this.employeeDetail.length > 0) {
-              this.employeeData.TotalRecords = this.employeeDetail[0].Total;
-              this.isEmpPageReady = true;
-            } else {
-              this.employeeData.TotalRecords = 0;
-            }
-            this.employeeData.ActivePageNumber = 1;
-            this.isEmpPageReady = true;
+            this.LoadData();
           }
         });
       }
