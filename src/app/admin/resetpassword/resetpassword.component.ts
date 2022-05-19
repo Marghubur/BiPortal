@@ -16,7 +16,7 @@ import { UserService } from 'src/providers/userService';
 })
 export class ResetpasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
-  subitted: boolean = false;
+  submitted: boolean = false;
   isLoading: boolean = false;
   isLogOut: boolean = false;
   isPasswordChanged: boolean = false;
@@ -47,15 +47,15 @@ export class ResetpasswordComponent implements OnInit {
   initForm() {
     this.resetPasswordForm = this.fb.group({
       oldPassword: new FormControl ('', [Validators.required]),
-      newPassword: new FormControl ('', [Validators.required, Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{6,20}$/)]),
-      confirmPassword: new FormControl ('', [Validators.required, Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{6,20}$/)])
+      newPassword: new FormControl ('', [Validators.required, Validators.pattern("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,20}$")]),
+      confirmPassword: new FormControl ('', [Validators.required, Validators.pattern("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,20}$")])
     }, {
       validator: confirmPasswordValidator('newPassword', 'confirmPassword')
     })
   }
 
   onSubmit() {
-    this.subitted = true;
+    this.submitted = true;
     this.isLoading = true;
     this.isPasswordChanged = false;
     if (this.resetPasswordForm.invalid) {
@@ -99,7 +99,7 @@ export class ResetpasswordComponent implements OnInit {
 
   onReset() {
     this.resetPasswordForm.reset();
-    this.subitted = false;
+    this.submitted = false;
     this.isLoading = false;
     this.isPasswordChanged = false;
   }

@@ -50,7 +50,15 @@
       </div>
       <ng-container>
         <div class="container-fluid pt-4">
-          <h5 class="text-dark">Declaration</h5>
+          <div class="d-flex justify-content-between">
+            <h5 class="text-dark">Declaration</h5>
+            <div class="pt-3 pe-3">
+              <select class="form-select">
+                <option value="currentyear" selected>APR {{year}} - MAR {{year +1}}</option>
+                <option value="previousyear">APR {{year - 1}} - MAR {{year}}</option>
+              </select>
+            </div>
+          </div>
           <div class="card my-3">
             <div class="d-flex text-dark fs-4 pt-3 align-items-center ps-3">
               <i class=" fa fa-lightbulb-o"></i>
@@ -169,7 +177,74 @@
                       </div>
                     </div>
                   </div>
-
+                  <div class="py-3">
+                    <h5 class="text-dark ps-2 pb-0 mb-0">Month on Month Tax Deductions Details</h5>
+                    <p class="mb-0 ps-2">Below deduction are based on your declared amount. Tax amount may chnage based on th amount approved.</p>
+                  </div>
+                  <div class="col-md-12 row mb-4">
+                    <div class="col-md-4">
+                      <div class="card py-3 ps-3">
+                        <p class="mb-0">TOTAL TAX PAYABLE</p>
+                        <p class="text-dark fs-2 mb-0">INR {{taxAmount.TotalTaxPayable}}</p>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="card py-3 ps-3">
+                        <p class="mb-0">TAX PAID TILL NOW</p>
+                        <p class="text-dark fs-2 mb-0">INR {{taxAmount.TaxAlreadyPaid}}</p>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="card py-3 ps-3">
+                        <p class="mb-0">REMAINING TAX AMOUNT</p>
+                        <p class="text-dark fs-2 mb-0">INR {{taxAmount.RemainingTaxAMount}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="t-table t-list t-border mb-3 col-md-12 bg-white">
+                    <div class="t-head overflow-hidden custom-bg">
+                      <div class="tr bg-light py-3">
+                        <div class="th ps-2 fe-2">Month</div>
+                        <div class="th" *ngFor="let item of taxCalender">
+                          <div class="d-flex align-items-center">
+                            <span>{{item.month}} {{item.year}}</span>
+                            <div class="curent-employer-indicator indicator ms-1"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="t-body border-bottom overflow-hidden">
+                      <div class="tr py-3">
+                        <div class="td ps-2 fe-2">Monthly Total Tax</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.april}}</div>
+                        <div class="td ps-2">{{monthlyTaxAmount.may}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.june}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.july}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.aug}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.sep}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.oct}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.nov}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.dec}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.jan}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.feb}}</div>
+                        <div class="td ps-1">{{monthlyTaxAmount.march}}</div>
+                      </div>
+                    </div>
+                    <div class="ps-2 py-3 row">
+                      <div class="col d-flex align-items-center">
+                        <div class="previous-employer-indicator indicator"></div>
+                        <p class="p-0 m-0 ps-2">Tax Deduction from previous employer</p>
+                      </div>
+                      <div class="col d-flex align-items-center">
+                        <div class="curent-employer-indicator indicator"></div>
+                        <p class="p-0 m-0 ps-2">Imported Tax Deduction from current employer</p>
+                      </div>
+                      <div class="col d-flex align-items-center">
+                        <div class="project-salary-indicator indicator"></div>
+                        <p class="p-0 m-0 ps-2">Projected Income Tax</p>
+                      </div>
+                    </div>
+                  </div>
                 </ng-container>
               </ng-template>
             </li>

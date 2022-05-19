@@ -41,21 +41,130 @@
       </div>
       <ng-container>
         <div class="container-fluid pt-4">
-          <div class="uc-page text-center d-flex flex-column justify-content-center">
-            <div class="text-center">
-              <img src="../../../assets/images/uc.jpg">
+          <h5 class="text-dark ps-3">Form 12 BB</h5>
+          <p class="mb-0 ps-3">Form 12BB is a provisional statement that has details about your proposed investments and Expenses thar are Income Tax deductible.</p>
+          <div class="card py-3 ps-3">
+            <p class="mb-0">Select the financial year and generate the form 12BB</p>
+            <div class="d-flex py-2 mt-2">
+              <div class="">
+                <select class="form-select">
+                  <option selected>Select Financial Year</option>
+                  <option value="currentyear">APR {{FinacialYear}} - MAR {{FinacialYear +1}}</option>
+                  <option value="previousyear">APR {{FinacialYear - 1}} - MAR {{FinacialYear}}</option>
+                </select>
+              </div>
+              <div class="ms-3">
+                <button type="button" class="btn btn-primary">Generate Form 12BB</button>
+              </div>
             </div>
-            <blockquote class="mt-4 blockquote text-center">
-              <p>
-                Welcome to HIRINGBELL online account and HRM management system.
-                This page is under construction.
-              </p>
-              <footer class="blockquote-footer">Powered By: <cite title="Source Title">BottomHalf Pvt. Ltd.</cite>
-              </footer>
-            </blockquote>
           </div>
         </div>
       </ng-container>
+
+      <!-- Form 12BB Start -->
+      <div style="padding-left: 40px; padding-right: 40px; padding-top: 40x; padding-bottom: 40px;">
+        <h3 style="text-align: center; font-size: 30px; font-weight: 700;">INCOME-TAX RULES, 1962</h3>
+        <p style="text-align: center; font-size: 25px;">FORM NO. 12BB</p>
+        <p style="text-align: center; font-size: 22px;">(See rule 26C)</p>
+        <h4 style="text-align: center; font-size: 25px; font-weight: 700;">Statement showing particulaes of claims by an employee for deduction of tax under section 192</h4>
+        <p style="font-size: 16px;">1. Name and address of the employee: </p>
+        <p style="font-size: 16px;">2. Permanent Account Number:</p>
+        <p style="font-size: 16px;">3. Financial year: {{FinacialYear}} - {{FinacialYear + 1}}</p>
+        <table>
+          <thead>
+            <tr>
+              <td style="font-weight: 700; text-align: center; font-size: 25px;" colspan="4">DEATILS OF CLAIMS AND EVIDENCE THEREOF</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="text-align: center">
+              <td>Sl. No</td>
+              <td>Nature of Claim</td>
+              <td>Amount (Rs.)</td>
+              <td>Evidence / particulars</td>
+            </tr>
+            <tr style="text-align: center">
+              <td>(1)</td>
+              <td>(2)</td>
+              <td>(3)</td>
+              <td>(4)</td>
+            </tr>
+            <tr>
+              <td style="text-align: center">1.</td>
+              <td>
+                <p>House Rent Allowance</p>
+                <p style="padding-left: 15px">(i) Rent paid to the landlord</p>
+                <p style="padding-left: 15px">(ii) Name of the landlord</p>
+                <p style="padding-left: 15px">(iii) Address of the landlord</p>
+                <p style="padding-left: 15px">(iv) Permanent Account Number of the landlord</p>
+                <p style="padding-left: 15px"> Note: Permanent Account Number shall be furnished if the aggregate rent paid during the previous year exceeds one lakh rupees</p>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td style="text-align: center">2.</td>
+              <td>
+                <p>Leave travel concessions or assistance</p>
+              </td>
+              <td>0</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td style="text-align: center">3.</td>
+              <td>
+                <p>Deduction of interest on borrowing</p>
+                <p style="padding-left: 15px">(i) Interest payable/paid to the lender</p>
+                <p style="padding-left: 15px">(ii) Name of the lender</p>
+                <p style="padding-left: 15px">(iii) Address of the lender</p>
+                <p style="padding-left: 15px">(iv) Permanent Account Number of the lender</p>
+                <p style="padding-left: 25px"> (a) Financial Institition (if available)</p>
+                <p style="padding-left: 25px"> (a) Employer (if available)</p>
+                <p style="padding-left: 25px"> (a) Others</p>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td style="text-align: center">4.</td>
+              <td>
+                <p>Deduction under Chapter VI-A</p>
+                <p style="padding-left: 15px">(A) Sections 80C, 80CCC and 80CCD</p>
+                <p style="padding-left: 25px">(1) Section 80C</p>
+                <p style="padding-left: 15px; padding-top: 8px; padding-bottom: 8px;">(a) EPF (Deducted from Salary)</p>
+                <p style="padding-left: 15px">(B) Other sections (eg. 80E, 80G, 80TTA .. etc) under VI-A</p>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td colspan="3" style="text-align: center;">VERIFICATION</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td colspan="3" style="padding-top: 8px;">I, ......................,son/daughter of ............... do hereby certify that the information given above is complete and correct.</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td style="padding-top: 8px">Place .....................</td>
+              <td colspan="2"></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td style="padding-top: 8px">Date .....................</td>
+              <td style="padding-top: 8px" colspan="2">(signature of employee)</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td style="padding-top: 8px">Designation .....................</td>
+              <td style="padding-top: 8px" colspan="2">Full Name:...................</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- End -->
+
     </div>
   </div>
 </div>

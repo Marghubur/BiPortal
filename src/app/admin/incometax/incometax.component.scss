@@ -1,0 +1,95 @@
+.new-nav-active {
+  color: #222 !important;
+  border-radius: 0px !important;
+  position: relative !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+}
+
+.new-nav-active::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 15% !important;
+  width: 70%;
+  height: 3px;
+  background: #8cc63e;
+}
+
+.nav-link.active {
+  color: #222;
+  background-color: #dcefff !important;
+  border-radius: 0px !important;
+}
+
+.nav-active {
+  color: #222;
+  border-radius: 0px !important;
+  position: relative;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.nav-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 40%;
+  border-top: 6px solid rgb(44, 135, 151);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  transform: rotate(180deg);
+}
+
+.custom-bg {
+  background-color: #efefef !important;
+}
+
+.t-body {
+  max-height: 100vh !important;
+}
+
+.t-head .th {
+  cursor: default;
+}
+
+.tax-slab:last-child {
+  font-weight: 600 !important;
+}
+
+.cell-wrapper {
+  padding-left: .6rem;
+  padding-right: .6rem;
+}
+
+.hide-bar {
+  width: 17px !important;
+  height: 2.95rem !important;
+}
+
+.t-body > .tr:last-child {
+  font-weight: 700 !important;
+  color: #222 !important;
+}
+
+.pointable-text {
+  background-color: #008dbb;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.indicator {
+  padding: 5px;
+  border-radius: 3px;
+}
+.previous-employer-indicator {
+  background-color: #008dbb;
+}
+
+.curent-employer-indicator {
+  background-color: #a9a10b;;
+}
+
+.project-salary-indicator {
+  background-color: #1100ff;;
+}

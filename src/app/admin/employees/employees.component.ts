@@ -128,6 +128,11 @@ export class EmployeesComponent implements OnInit {
       isActive: this.isActiveEmployee
     }).then((response: ResponseModel) => {
       this.employeeDetail = response.ResponseBody;
+      let i =0;
+      while (i < this.employeeDetail.length) {
+        this.employeeDetail[i].ClientJson = JSON.parse(this.employeeDetail[i].ClientJson)
+        i++;
+      }
       if (this.employeeDetail.length > 0) {
         this.employeeData.TotalRecords = this.employeeDetail[0].Total;
         this.isEmpPageReady = true;
@@ -396,6 +401,7 @@ export class employeeModel {
   Total: number = 0;
   EmployeeUid: number = 0;
   FirstName?: string = '';
+  ClientJson?: any = null;
 }
 
 

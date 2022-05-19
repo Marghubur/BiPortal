@@ -73,8 +73,10 @@ export const AdminPreviousIncome = 'admin/previousincome';
 export const AdminForm12B = 'admin/form12b';
 export const AdminFreeTaxFilling = 'admin/freetaxfilling';
 export const AdminTaxSavingInvestment = 'admin/taxsavinginvestment';
-export const AdminTaxcalculation = 'user/taxcalculation';
-export const AdimResetPassword = 'admin/resetpassword'
+export const AdminTaxcalculation = 'admin/taxcalculation';
+export const AdminResetPassword = 'admin/resetpassword';
+export const AdminIncomeTax = 'admin/incometax';
+export const AdminPaySlip = 'admin/payslip';
 
 // ********************** Admin route pages  *******************
 
