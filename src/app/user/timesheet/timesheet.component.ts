@@ -52,7 +52,6 @@ export class TimesheetComponent implements OnInit {
   daysInMonth: number = 0;
   PendingAttendacneMessage: string = 'Select above pending attendance link to submit before end of the month.';
   monthName: Array<any> = [];
-  allDays: Array<any> = [];
   changeMonth: string = '';
   presentMonth: boolean = true;
   cachedData: any = null;
@@ -60,6 +59,10 @@ export class TimesheetComponent implements OnInit {
   commentValue: string = null;
   today: Date = null;
   tomorrow: Date = null;
+
+
+
+  currentDays: Array<any> = [];
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -108,6 +111,19 @@ export class TimesheetComponent implements OnInit {
       this.time = new Date();
     }, 1000);
 
+    let i = 0;
+    while( i < 6) {
+      var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
+      if (month == 1) {
+        month = 12;
+        year --
+      } else {
+        month --;
+      }
+      this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
+      i++;
+    }
+
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
     if(this.cachedData) {
@@ -137,49 +153,65 @@ export class TimesheetComponent implements OnInit {
         Toast("Invalid user. Please login again.")
       }
     }
-    let i = 0;
-    while( i < 6) {
-      var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
-      if (month == 1) {
-        month = 12;
-        year --
-      } else {
-        month --;
-      }
-      this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
-      i++;
-    }
+  }
 
-    this.fromPresentDatea();
+  bindAttendace(data: Array<any>) {
+    if(data && data.length > 0) {
+      this.currentDays = [];
+      this.presentMonth = true;
+      let index = 0;
+      while(index < data.length) {
+        data[index].AttendanceDay = new Date(data[index].AttendanceDay);
+        // this.currentDays.push(new Date(new Date().setDate(new Date().getDate() - index)));
+        index++;
+      }
+
+      this.currentDays = data;
+    } else {
+      WarningToast("Unable to bind data. Please contact admin.");
+    }
   }
 
   loadMappedClients() {
-    this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        let mappedClient = response.ResponseBody.AllocatedClients;
-        if(mappedClient != null && mappedClient.length > 0) {
-          let i = 0;
-          while(i < mappedClient.length) {
-            this.clientDetail.data.push({
-              text: mappedClient[i].ClientName,
-              value: mappedClient[i].ClientUid,
-            });
-            i++;
-          }
+    this.isLoading = true;
+    if(this.employeeId <= 0) {
+      Toast("Invalid user selected.")
+      return;
+    }
 
-          if(mappedClient.length == 1) {
-            this.clientId = mappedClient[0].ClientUid;
-          }
-          Toast("Client loaded successfully.");
-        } else {
-          ErrorToast("Unable to get client detail. Please contact admin.");
-        }
+    let now = new Date();
+    this.fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    this.toDate = now;
 
-        this.isEmployeesReady = true;
-        $('#loader').modal('hide');
-      } else {
-        ErrorToast("Unable to get client detail. Please contact admin.");
+    let data = {
+      EmployeeUid: Number(this.employeeId),
+      ClientId: Number(this.clientId),
+      UserTypeId : UserType.Employee,
+      AttendenceFromDay: this.fromDate,
+      AttendenceToDay: this.toDate,
+      ForYear: this.fromDate.getFullYear(),
+      ForMonth: this.fromDate.getMonth() + 1
+    }
+
+    this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
+      if(response.ResponseBody.EmployeeDetail)
+        this.client = response.ResponseBody.EmployeeDetail;
+      else {
+        this.NoClient = true;
+        this.isAttendanceDataLoaded = false;
       }
+
+      if (response.ResponseBody.AttendacneDetails) {
+        this.bindAttendace(response.ResponseBody.AttendacneDetails);
+        this.createPageData(response.ResponseBody.AttendacneDetails);
+        this.isAttendanceDataLoaded = true;
+      }
+
+      this.divisionCode = 1;
+      this.isLoading = false;
+    }).catch(err => {
+      this.isLoading = false;
+      WarningToast(err.error.HttpStatusMessage);
     });
   }
 
@@ -604,19 +636,9 @@ export class TimesheetComponent implements OnInit {
     return false;
   }
 
-  fromPresentDatea() {
-    this.allDays = [];
-    this.presentMonth = true;
-    let index = 0;
-    while(index < 30) {
-      this.allDays.push(new Date(new Date().setDate(new Date().getDate() - index)));
-      index++;
-    }
-  }
-
-  getAllDays(month: string, count: number) {
+  getcurrentDays(month: string, count: number) {
     this.presentMonth = false;
-    this.allDays = [];
+    this.currentDays = [];
     var year = new Date().getFullYear();
     let value = new Date(Date.parse(month + `1, ${year}`)).getMonth() + 1;
     let index = new Date(year, value, 0).getDate();
@@ -625,10 +647,10 @@ export class TimesheetComponent implements OnInit {
     let date = new Date(year, value -1, index)
     let i = 0;
     while(date.getMonth() ==  value - 1) {
-      if (this.allDays.length == index) {
+      if (this.currentDays.length == index) {
         break;
       }
-      this.allDays.push(new Date(date.setDate(date.getDate() - i)));
+      this.currentDays.push(new Date(date.setDate(date.getDate() - i)));
       if (i == 0) {
         i++;
       }

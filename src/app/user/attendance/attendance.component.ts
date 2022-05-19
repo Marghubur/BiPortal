@@ -188,15 +188,15 @@ export class AttendanceComponent implements OnInit {
       return this.fb.group({
         AttendanceId: [attendanceId, Validators.required],
         UserComments: ['', Validators.required],
-        TotalMinutes: [at.hrs, Validators.required],
+        TotalMinutes: [0, Validators.required],
         BillingHours: [this.buildTime(this.client.BillingHours), Validators.required],
-        AttendenceStatus: [0, Validators.required],
+        AttendenceStatus: [-1, Validators.required],
         AttendanceDay: [at.date, Validators.required],
         AttendanceDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
         EmployeeUid: [0],
         UserTypeId: [UserType.Employee],
-        UserHours: [at.hrs],
-        UserMin: [at.mins]
+        UserHours: ["00"],
+        UserMin: ["00"]
       });
     } else {
       let totalTime = this.buildTime(item.TotalMinutes);
@@ -250,8 +250,12 @@ export class AttendanceComponent implements OnInit {
 
     let i = 0;
     while (i < records.length) {
-      hrsValue +=  Number(records[i].get("UserHours").value) ;
-      minsValue +=  Number(records[i].get("UserMin").value);
+      let day = Number(new Date(records[i].get("AttendanceDay").value).getDay());
+      if(!isNaN(day) && day !== 6 && day !== 0) {
+        hrsValue +=  Number(records[i].get("UserHours").value);
+        minsValue +=  Number(records[i].get("UserMin").value);
+      }
+
       billingValue +=  parseInt(records[i].get("BillingHours").value);
       i++;
     }
@@ -487,7 +491,7 @@ export class AttendanceComponent implements OnInit {
         currentDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         weekDaysList.push({
           date: new Date(currentDate.setDate(currentDate.getDate() + index)),
-          hrs: "08",
+          hrs: "00",
           mins: "00"
         });
         currentDate = null;
