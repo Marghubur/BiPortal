@@ -127,9 +127,10 @@ export class TimesheetComponent implements OnInit {
         this.employeeId = this.userDetail.UserId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
         //$('#loader').modal('show');
+
         this.loadMappedClients();
         setTimeout(() => {
-        }, 900);
+        }, 2000);
 
       } else {
         Toast("Invalid user. Please login again.")
@@ -152,6 +153,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   loadMappedClients() {
+    this.isEmployeesReady = false;
     this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         let mappedClient = response.ResponseBody.AllocatedClients;

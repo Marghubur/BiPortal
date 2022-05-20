@@ -99,11 +99,13 @@ export class AttendanceComponent implements OnInit {
     this.daysInMonth = new Date(year, month + 1, 0).getDate();
     this.clientDetail = {
       data: [],
+      className: "disabled-input",
       placeholder: "Select Organization"
     }
 
     this.employeesList = {
       data: [],
+      className: "disabled-input",
       placeholder: "Select Employee"
     }
     this.isFormReady = false;
@@ -133,7 +135,7 @@ export class AttendanceComponent implements OnInit {
           return;
         }
       }
-      
+
       this.employeeId = 0;
       this.userName = "";
       this.loadData();
@@ -156,6 +158,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   loadData() {
+    this.isEmployeesReady = false;
     this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
       if(response.ResponseBody) {
         this.applicationData = response.ResponseBody;
@@ -172,6 +175,7 @@ export class AttendanceComponent implements OnInit {
             i++;
           }
         }
+        this.employeesList.className = "";
 
         this.isEmployeesReady = true;
       }
@@ -183,7 +187,7 @@ export class AttendanceComponent implements OnInit {
       if(response.ResponseBody) {
         this.applicationData = response.ResponseBody;
         if(this.applicationData.AllocatedClients && this.applicationData.EmployeesList) {
-          
+
           if(!this.isRedirected) {
             this.employeesList.data = [];
             this.employeesList.placeholder = "Employee";
@@ -209,7 +213,7 @@ export class AttendanceComponent implements OnInit {
                 });
                 i++;
               }
-    
+
               if(mappedClient.length == 1) {
                 this.clientId = mappedClient[0].ClientUid;
               }
@@ -698,10 +702,6 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
-  selectOption(index: any) {
-
-  }
-
   buildPendingAttendanceModal(res: Array<any>) {
     let now: any = new Date(new Date().setHours(0,0,0,0));
     let startDate = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -811,19 +811,28 @@ export class AttendanceComponent implements OnInit {
   }
 
   findEmployee(e: any) {
-    this.findEmployeeById(e);
+    this.clientDetail = {
+      data: [],
+      className: "disabled-input",
+      placeholder: "Select Organization"
+    }
+    setTimeout(() => {
+      this.findEmployeeById(e);
+    }, 2000)
   }
 
   findEmployeeById(employeeId: any) {
     if (employeeId) {
+      this.clientId =0;
       this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === parseInt(employeeId));
       if (this.currentEmployee && this.currentEmployee.ClientJson != null) {
         this.userName = `${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
         let clients = JSON.parse(this.currentEmployee.ClientJson);
         this.clientDetail = {
           data: [],
+          className: "",
           placeholder: "Select Organization"
-        };
+        }
 
         let assignedClients = this.applicationData.Clients.filter(x => clients.indexOf(x.ClientId) !== -1);
         let i = 0;
@@ -833,7 +842,8 @@ export class AttendanceComponent implements OnInit {
             value: assignedClients[i].ClientId,
           });
           i++;
-        }   
+        }
+
       }
     }
   }

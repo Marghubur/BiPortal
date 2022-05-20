@@ -866,3 +866,9 @@ fieldset {
 .dropdown-toggle::before {
   content: none !important;
 }
+
+.disabled-input {
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+  background: #e5dede !important;
+}
