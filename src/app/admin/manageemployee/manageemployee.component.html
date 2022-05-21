@@ -92,8 +92,7 @@
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Designation</label>
                     <select name="DesignationId" class="form-control" formControlName="DesignationId">
-                      <option value="-1">Select Designation</option>
-                      <option value="0">Other</option>
+                      <option value="0">Select Designation</option>
                       <option value="1">Project Manager</option>
                       <option value="2">Architect</option>
                       <option value="3">Networking</option>
@@ -105,17 +104,40 @@
                       <option value="9">Associate Engineer</option>
                       <option value="10">Test Lead</option>
                       <option value="11">Tester</option>
+                      <option value="12">Other</option>
                     </select>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Reporting Manager</label>
-                    <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId" name="ReportingManagerId">
+                    <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId"
+                      name="ReportingManagerId">
                     </app-iautocomplete>
                   </div>
                 </div>
 
                 <div class="col-md-12 m-0 row">
-                  <div class="col-12 p-3 pt-4">
+                  <div class="col-md-6">
+                    <label class="form-label">Role</label>
+                    <select name="DesignationId" class="form-control" formControlName="AccessLevelId">
+                      <option value="0">Allocate role</option>
+                      <option *ngFor="let item of userRoles" [value]="item.AccessLevelId">
+                        {{item.RoleName}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">User Type</label>
+                    <select name="DesignationId" class="form-control" formControlName="UserTypeId">
+                      <option value="0">Select User Type</option>
+                      <option value="1">Admin</option>
+                      <option value="2">Employee</option>
+                      <option value="3">Client</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-12 m-0 row">
+                  <div class="col-6 p-3 pt-4">
                     <p>Select your gender</p>
                     <div class="col-12 row">
                       <div>

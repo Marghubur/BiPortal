@@ -648,7 +648,7 @@ export class TimesheetComponent implements OnInit {
     $('#commentModal').modal('show');
   }
 
-  addComment() {
+  submitAttendance() {
     let clientTimeSheet = [];
     clientTimeSheet.push({
       ClientId : this.clientId,
@@ -660,7 +660,7 @@ export class TimesheetComponent implements OnInit {
       AttendanceDay: this.commentOn,
       ClientTimeSheet : clientTimeSheet
     }
-    this.http.post('Attendance/AddComment', commment).then((response: ResponseModel) => {
+    this.http.post('Attendance/SubmitAttendance', commment).then((response: ResponseModel) => {
       if (response.ResponseBody)
         Toast("submitted");
     })

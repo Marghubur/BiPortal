@@ -243,29 +243,32 @@
                                 <span class="s" *ngSwitchCase="8">
                                   <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
                                 </span>
+                                <span class="s" *ngSwitchCase="-1">
+                                  <i class="fa fa-ban text-danger pt-1 pb-1" aria-hidden="true"></i>
+                                </span>
                                 <span class="" *ngSwitchDefault>
                                   <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
                                 </span>
-                              </ng-container>
 
-                              <input type="number" class="ms-1 text-start" placeholder="hours" min="0" max="23"
-                                [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
-                                formControlName="UserHours"
-                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                              <span>&nbsp;:</span>
-                              <input type="number" class="text-end" placeholder="minutes" min="0" max="59"
-                                (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
-                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                <input type="number" class="ms-1 text-start" placeholder="hours" min="0" max="23"
+                                  [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
+                                  formControlName="UserHours"
+                                  onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                <span>&nbsp;:</span>
+                                <input type="number" class="text-end" placeholder="minutes" min="0" max="59"
+                                  (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
+                                  onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 
-                              <div ngbDropdown class="d-none dropright">
-                                <input type="text" class="form-control input-overflow" formControlName="UserComments"
-                                  placeholder="Comments" (focus)="takeComments($event)">
-                                <div class="p-0 position-absolute d-none textarea-box">
-                                  <textarea class="form-control" (blur)="captureComments($event)"
-                                    placeholder="enter your comments" formControlName="UserComments">
+                                <div ngbDropdown class="d-none dropright">
+                                  <input type="text" class="form-control input-overflow" formControlName="UserComments"
+                                    placeholder="Comments" (focus)="takeComments($event)">
+                                  <div class="p-0 position-absolute d-none textarea-box">
+                                    <textarea class="form-control" (blur)="captureComments($event)"
+                                      placeholder="enter your comments" formControlName="UserComments">
                                     </textarea>
+                                  </div>
                                 </div>
-                              </div>
+                              </ng-container>
                             </div>
                             <small class="d-block text-muted">
                               {{item.get('AttendanceDay').value | date}}
