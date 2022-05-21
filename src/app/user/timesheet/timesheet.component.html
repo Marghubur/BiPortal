@@ -38,12 +38,12 @@
             <ng-template ngbNavContent>
               <div class="x_panel">
                 <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
-                  <span class="ps-4 fw-bold" *ngIf="presentMonth">Last {{daysInMonth}} days</span>
+                  <span class="ps-4 fw-bold" *ngIf="presentMonth">Last {{currentDays.length}} days</span>
                   <span class="ps-4 fw-bold" *ngIf="!presentMonth">{{changeMonth}}</span>
                   <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio20" autocomplete="off" checked>
-                    <label class="btn btn-outline-primary month-btn" for="btnradio20"
-                      (click)="fromPresentDatea()">{{daysInMonth}} Days</label>
+                    <label class="btn btn-outline-primary month-btn" for="btnradio20">{{currentDays.length}}
+                      Days</label>
                     <ng-container *ngFor="let month of monthName; let i = index">
                       <input type="radio" class="btn-check" name="btnradio" id="btnradio{{i}}" autocomplete="off">
                       <label class="btn btn-outline-primary month-btn" for="btnradio{{i}}"
@@ -66,7 +66,6 @@
                     <tbody>
                       <tr *ngFor="let item of currentDays; let index = index">
                         <td class="align-middle">{{item.AttendanceDay | date: 'MMM d, EEE'}}
-                          <span>{{item.PresentDayStatus}}</span>
                           <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
                             <span class="badge bg-primary ms-2" *ngSwitchCase="2">WFH</span>
                             <span class="badge bg-info ms-2" *ngSwitchCase="5">LEAVE</span>
@@ -83,7 +82,18 @@
                         </td>
                         <td class="align-middle"><i class="fa fa-circle pe-3 text-info"></i> 9h 0m</td>
                         <td class="align-middle">9h 0m</td>
-                        <td class="align-middle"><i class="fa fa-check pe-2 text-success"></i> On Time</td>
+                        <td class="align-middle">
+                          <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
+                            <span class=" ms-2" *ngSwitchCase="2">
+                              <i class="fa fa-check pe-2 text-success"></i> 9h 0m
+                            </span>
+                            <span class=" ms-2" *ngSwitchCase="3">Weeked</span>
+                            <span class=" ms-2" *ngSwitchCase="1">
+                              <i class="fa fa-check pe-2 text-success"></i> On Time
+                            </span>
+                            <span class="ms-2" *ngSwitchDefault>Not Submitted</span>
+                          </div>
+                        </td>
                         <td class="align-middle">
                           <div class="d-flex align-items-center">
                             <div class="col">
@@ -106,9 +116,26 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="circle" placement="top" ngbTooltip="Present" aria-expanded="false">
-                              <div class="checkmark">
-                              </div>
+                            <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
+
+                              <span class=" ms-2" *ngSwitchCase="3">
+                                <div placement="top" ngbTooltip="Weekend" aria-expanded="false">
+                                  <i class="fa zoom-2 fa-gift text-primary" aria-hidden="true"></i>
+                                </div>
+                              </span>
+
+                              <ng-container *ngSwitchDefault>
+                                <span class="ms-2" *ngIf="item.IsTimeAttendacneApproved">
+                                  <div placement="top" ngbTooltip="Approved" aria-expanded="false">
+                                    <i class="fa fa-check-square-o zoom-2 text-success" aria-hidden="true"></i>
+                                  </div>
+                                </span>
+                                <span class="ms-2" *ngIf="!item.IsTimeAttendacneApproved">
+                                  <div placement="top" ngbTooltip="Pending" aria-expanded="false">
+                                    <i class="fa fa-clock-o zoom-2 text-warning" aria-hidden="true"></i>
+                                  </div>
+                                </span>
+                              </ng-container>
                             </div>
                           </div>
                         </td>
@@ -266,6 +293,9 @@
               <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
               <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue"
                 [(ngModel)]="commentValue"></textarea>
+              <div class="alert alert-danger" *ngIf="isComment">
+                Comment is required.
+              </div>
               <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify</p>
               <input type="text" class="form-control" placeholder="Search Employee">
               <p class="mb-0">These employees will be notified through email when you WFH request is approved.</p>
@@ -273,7 +303,10 @@
 
             <div class="modal-footer border-top-0 pe-4">
               <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-primary" (click)="addComment()">Request</button>
+              <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="submitAttendance()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                {{ isLoading ? 'Wait' : 'Request' }}
+              </button>
             </div>
           </div>
         </div>

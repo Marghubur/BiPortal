@@ -4,13 +4,16 @@
       <div class="col-md-12 bg-light mb-3">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page" href="javascript:void(0)">ATTENDENCE</a>
+            <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page"
+              href="javascript:void(0)">ATTENDENCE</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark nav-active" id="timesheet-tab" (click)="activateMe('timesheet-tab')" href="javascript:void(0)">TIMESHEET</a>
+            <a class="nav-link text-dark nav-active" id="timesheet-tab" (click)="activateMe('timesheet-tab')"
+              href="javascript:void(0)">TIMESHEET</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('leave-tab')" href="javascript:void(0)">LEAVE</a>
+            <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('leave-tab')"
+              href="javascript:void(0)">LEAVE</a>
           </li>
         </ul>
       </div>
@@ -202,8 +205,7 @@
                     <tr *ngFor="let item of allDays; let index = index">
                       <td class="align-middle">{{item | date: 'MMM d, EEE'}} <span
                           class="badge bg-success ms-2">WFH</span> <span class="badge bg-primary ms-2">LEAVE</span>
-                        <span class="badge bg-warning ms-2">W-OFF</span> <span
-                          class="badge bg-danger ms-2">HLDY</span>
+                        <span class="badge bg-warning ms-2">W-OFF</span> <span class="badge bg-danger ms-2">HLDY</span>
                       </td>
                       <td class="align-middle">
                         <p class="pt-3">
@@ -216,20 +218,19 @@
                       <td class="align-middle">
                         <div class="d-flex align-items-center">
                           <div class="col">
-                            <div ngbDropdown class="d-inline-block" >
-                              <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Absent" id="dropdownBasic1" ngbDropdownToggle>
+                            <div ngbDropdown class="d-inline-block">
+                              <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Absent"
+                                id="dropdownBasic1" ngbDropdownToggle>
                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                               </button>
                               <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
                                 <button ngbDropdownItem>
-                                  <a class="dropdown-item" href="javascript:void(0)"
-                                  (click)="commentPopUp(item)">Apply
-                                  WFH Request</a>
+                                  <a class="dropdown-item" href="javascript:void(0)" (click)="commentPopUp(item)">Apply
+                                    WFH Request</a>
                                 </button>
                                 <button ngbDropdownItem>
-                                  <a class="dropdown-item" href="javascript:void(0)"
-                                  (click)="selectOption(index)">Apply
-                                  Leave</a>
+                                  <a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Apply
+                                    Leave</a>
                                 </button>
                               </div>
                             </div>
@@ -325,13 +326,12 @@
                         <div class="d-flex justify-content-center align-items-center">
                           <i class="fa fa-commenting pe-2" aria-hidden="true"></i>
                           <div class="btn-group dropstart me-4">
-                            <button class="btn btn-sm" type="button" id="dropdownMenuButton1"
-                              data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                              aria-expanded="false">
                               <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                              <li><a class="dropdown-item" href="javascript:void(0)"
-                                  (click)="selectOption(index)">View
+                              <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">View
                                   Request</a></li>
                             </ul>
                           </div>
@@ -348,56 +348,60 @@
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
       </div>
 
-<!-- Comment Modal Start-->
-<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-secondary text-white border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">Work From Home Request</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body px-4">
-        <div class="d-flex position-relative">
-          <div class="col-md-8 d-flex">
-            <div class="col-md-6 ps-2 py-3 border">
-              <small>START DATE</small>
-              <p class="mb-0 text-dark fs-5">{{today | date}}</p>
+      <!-- Comment Modal Start-->
+      <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-header bg-secondary text-white border-bottom-0">
+              <h5 class="modal-title" id="exampleModalLabel">Work From Home Request</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="col-md-6 pe-3 py-3 border text-end">
-              <small>END DATE</small>
-              <p class="mb-0 text-dark fs-5">{{today | date}}</p>
+            <div class="modal-body px-4">
+              <div class="d-flex position-relative">
+                <div class="col-md-8 d-flex">
+                  <div class="col-md-6 ps-2 py-3 border">
+                    <small>START DATE</small>
+                    <p class="mb-0 text-dark fs-5">{{today | date}}</p>
+                  </div>
+                  <div class="col-md-6 pe-3 py-3 border text-end">
+                    <small>END DATE</small>
+                    <p class="mb-0 text-dark fs-5">{{today | date}}</p>
+                  </div>
+                </div>
+              </div>
+              <span class="px-3 py-2 day-wfh">1day WFH</span>
+              <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
+              <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio10" autocomplete="off" checked
+                  value="fullday">
+                <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio11" autocomplete="off"
+                  value="firsthalf">
+                <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio12" autocomplete="off"
+                  value="secondhalf">
+                <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
+              </div>
+              <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
+              <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue"
+                [(ngModel)]="commentValue"></textarea>
+              <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify</p>
+              <input type="text" class="form-control" placeholder="Search Employee">
+              <p class="mb-0">These employees will be notified through email when you WFH request is approved.</p>
+            </div>
+
+            <div class="modal-footer border-top-0 pe-4">
+              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" (click)="submitAttendance()">Request</button>
             </div>
           </div>
         </div>
-        <span class="px-3 py-2 day-wfh">1day WFH</span>
-        <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
-        <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio10" autocomplete="off" checked value="fullday">
-          <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
-
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio11" autocomplete="off" value="firsthalf">
-          <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
-
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio12" autocomplete="off" value="secondhalf">
-          <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
-        </div>
-        <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
-        <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" [(ngModel)]="commentValue"></textarea>
-        <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify</p>
-        <input type="text" class="form-control" placeholder="Search Employee">
-        <p class="mb-0">These employees will be notified through email when you WFH request is approved.</p>
       </div>
+      <!-- End -->
 
-      <div class="modal-footer border-top-0 pe-4">
-        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="addComment()">Request</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End -->
-
-<!--
+      <!--
       <ng-container [ngSwitch]="isFormReady">
         <div *ngSwitchCase="true">
           <div [formGroup]="attendenceForm" class="x_panel pt-4 attendance-form">

@@ -45,6 +45,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   activeAssignedClient: AssignedClients = new AssignedClients();
   ProfessuinalDetail_JSON: any = '';
   managerList: autoCompleteModal = null;
+  userRoles: Array<any> = [];
 
   get f() {
     let data = this.employeeForm.controls;
@@ -99,6 +100,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.clients = response.ResponseBody.Clients;
       if (response.ResponseBody.Employee.length > 0)
         this.employeeModal = response.ResponseBody.Employee[0] as EmployeeDetail;
+
+      if(response.ResponseBody.Roles)
+        this.userRoles = response.ResponseBody.Roles;
+
       this.allocatedClients = response.ResponseBody.AllocatedClients;
       let profileDetail = response.ResponseBody.FileDetail;
       if(profileDetail.length > 0) {
@@ -131,10 +136,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         let i = 0;
         let managers = res.ResponseBody.EmployeesList;
         while(i < managers.length) {
-          this.managerList.data.push({
-            value: managers[i].EmployeeUid,
-            text: `${managers[i].FirstName} ${managers[i].LastName}`
-          });
+          if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
+            this.managerList.data.push({
+              value: managers[i].EmployeeUid,
+              text: `${managers[i].FirstName} ${managers[i].LastName}`
+            });
+          }
           i++;
         }
       }
@@ -194,6 +201,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       DOB: new FormControl(this.employeeModal.DOB),
       TakeHomeByCandidate: new FormControl(null),
       FileId: new FormControl(this.employeeModal.FileId),
+      AccessLevelId: new FormControl(this.employeeModal.AccessLevelId),
+      UserTypeId: new FormControl(this.employeeModal.UserTypeId),
       ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId),
       DesignationId: new FormControl(this.employeeModal.DesignationId),
       AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
@@ -468,5 +477,7 @@ export class EmployeeDetail {
   DateOfJoining: Date = null;
   ReportingManagerId: number = null;
   DesignationId: number = -1;
+  AccessLevelId: number = 0;
+  UserTypeId: number = 0;
   AllocatedClients: Array<AssignedClients> = [];
 }
