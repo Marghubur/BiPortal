@@ -688,6 +688,10 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.isReadonly = true;
     $('#checkall').prop('checked', false);
     this.singleEmployee = new Filter();
+    this.autoCompleteModal = {
+      data: [],
+      placeholder: "All result"
+    };
     this.LoadFiles();
   }
 
@@ -713,6 +717,10 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.isReadonly = true;
     $('#checkall').prop('checked', false);
     this.singleEmployee = new Filter();
+    this.autoCompleteModal = {
+      data: [],
+      placeholder: "All result"
+    };
   }
 
   advancedSearchPopUp() {

@@ -201,7 +201,7 @@ export class EmployeesComponent implements OnInit {
   globalFilter() {
     let searchQuery = "";
     this.employeeData.reset();
-    this.employeeData.SearchString = ` FirstName like '${this.anyFilter}%' OR LastName like '${this.anyFilter}%' OR Email like '%${this.anyFilter}%' OR Mobile like '${this.anyFilter}%'`;
+    this.employeeData.SearchString = ` Global like ${this.anyFilter}`;
 
     this.LoadData();
   }

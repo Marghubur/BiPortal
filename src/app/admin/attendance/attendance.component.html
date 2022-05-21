@@ -1,50 +1,52 @@
 <div class="main-container">
   <form autocomplete="off">
-    <ng-container *ngIf="isEmployeesReady">
-      <div class="col-md-12 bg-light mb-3">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page" href="javascript:void(0)">ATTENDENCE</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')" href="javascript:void(0)">TIMESHEET</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('leave-tab')" href="javascript:void(0)">LEAVE</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-12 row m-0 p-0 mb-4">
-        <div class="col-md-8 row m-0 p-0">
-          <div class="col-md-4" *ngIf="!isRedirected">
-            <label class="form-label">Employee Name *</label>
-            <app-iautocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId" [ngModelOptions]="{standalone: true}">
-            </app-iautocomplete>
+    <div class="col-md-12 bg-light mb-3">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page" href="javascript:void(0)">ATTENDENCE</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')" href="javascript:void(0)">TIMESHEET</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('leave-tab')" href="javascript:void(0)">LEAVE</a>
+        </li>
+      </ul>
+    </div>
+    <div [ngClass]="{'preload': !isEmployeesReady}">
+      <div class="col-12 row m-0 p-0 mb-4 skeleton">
+        <ng-container *ngIf="isEmployeesReady">
+          <div class="col-md-8 row m-0 p-0 vhide">
+            <div class="col-md-4" *ngIf="!isRedirected">
+              <label class="form-label">Employee Name *</label>
+              <app-iautocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId" [ngModelOptions]="{standalone: true}">
+              </app-iautocomplete>
+            </div>
+            <div class="col-md-4 p-0 m-0">
+              <label class="form-label">Select Organization</label>
+              <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+              </app-iautocomplete>
+            </div>
           </div>
-          <div class="col-md-4 p-0 m-0">
-            <label class="form-label">Select Organization</label>
-            <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
-            </app-iautocomplete>
+        </ng-container>
+          <div class="col-md-4 vhide elem-row justify-content-end">
+            <div class="elem-row-item-base justify-content-end">
+              <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
+                <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
+                {{ isLoading ? 'Wait' : 'Present week'}}
+              </a>
+            </div>
+            <div class="elem-row-item-base justify-content-end ps-2">
+              <a href="javascript:void(0)" (click)="getAllPendingAttendance()"
+                class="p-2 p-2 badge bg-success text-light head-badge">
+                <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
+                My pending attendance
+              </a>
+            </div>
           </div>
         </div>
-        <div class="col-md-4 elem-row justify-content-end">
-          <div class="elem-row-item-base justify-content-end">
-            <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
-              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
-              {{ isLoading ? 'Wait' : 'Present week'}}
-            </a>
-          </div>
-          <div class="elem-row-item-base justify-content-end ps-2">
-            <a href="javascript:void(0)" (click)="getAllPendingAttendance()"
-              class="p-2 p-2 badge bg-success text-light head-badge">
-              <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
-              My pending attendance
-            </a>
-          </div>
-        </div>
       </div>
-    </ng-container>
-    <div>
+    <div *ngIf="isEmployeesReady">
       <app-breadcrums></app-breadcrums>
     </div>
 
@@ -311,9 +313,9 @@
               </div>
             </div>
           </div>
-          <div *ngSwitchDefault class="">
-            <div class="x_panel d-flex flex-direction-column justify-content-center">
-              <div class="x_content">
+          <div *ngSwitchDefault [ngClass]="{'preload': !isEmployeesReady}">
+            <div class="x_panel d-flex flex-direction-column justify-content-center skeleton">
+              <div class="x_content vhide">
                 <p *ngIf="NoClient" class="h3 text-muted text-center">
                   Uhh!!! No client allocated on your name. Please contact your maanager.
                 </p>
@@ -326,6 +328,5 @@
         </ng-container>
       </ng-container>
     </ng-container>
-
   </form>
 </div>

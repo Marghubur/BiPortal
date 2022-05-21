@@ -47,20 +47,22 @@
                   </div>
                   <div class="d-flex flex-row align-items-center">
                     <div class="text-end">
-                      <a href="javascript:void(0)" class="a-btn text-success fw-bold" (click)="refreshFilter()">
+                      <a href="javascript:void(0)" class="a-btn text-danger fw-bold" (click)="refreshFilter()">
                         <i class="fa fa-refresh">
                           <span>Reset</span>
                         </i>
                       </a>
                     </div>
                     <div class="text-end">
-                      <a href="javascript:void(0)" class="text-dark ps-1" (click)="filterRecords()">
-                        <i class="fa fa-filter"></i>
+                      <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
+                        <i class="fa fa-filter">
+                          <span>Filter</span>
+                        </i>
                       </a>
                     </div>
                     <div class="text-end">
                       <a href="javascript:void(0)" class="pe-0 a-btn text-dark fw-bold" (click)="advancedSearchPopUp()">
-                        <i class="fa fa-filter">
+                        <i class="fa fa-search">
                           <span>Advanced Search</span>
                         </i>
                       </a>
@@ -81,142 +83,143 @@
             <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
           </div>
           <!-- End pdf view modal -->
-          <ng-container  *ngIf="isFileFound">
-            <div class="x_content">
-              <div class="t-table t-list t-border col-md-12">
-                <div class="hide-bar"></div>
-                <div class="t-head">
-                  <div class="tr">
-                    <div class="th fe-1">
-                      <div class="cell-wrapper">
-                        <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
-                        <div class="t-filter" (click)="arrangeDetails(orderByBillNoAsc, 'BillNo')">
-                          <a href="javascript:void()" class="pe-2">Bill No.#</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByBillNoAsc == null || !orderByBillNoAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByBillNoAsc == null || orderByBillNoAsc }" aria-hidden="true"></i>
-                        </div>
+
+        <div class="x_content">
+            <div class="t-table t-list t-border col-md-12">
+              <div class="hide-bar"></div>
+              <div class="t-head">
+                <div class="tr">
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
+                      <div class="t-filter" (click)="arrangeDetails(orderByBillNoAsc, 'BillNo')">
+                        <a href="javascript:void()" class="pe-2">Bill No.#</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByBillNoAsc == null || !orderByBillNoAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByBillNoAsc == null || orderByBillNoAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
-                    <div class="th fe-2">
-                      <div class="cell-wrapper">
-                        <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
-                        <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ClientName')">
-                          <a href="javascript:void()" class="pe-2">Client Name</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1">
-                      <div class="cell-wrapper">
-                        <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Status">
-                          <option value="0">Status</option>
-                          <option value="1">Completed</option>
-                          <option value="2">Pending</option>
-                          <option value="3">Canceled</option>
-                          <option value="7">Raised</option>
-                        </select>
-                        <div class="t-filter" (click)="arrangeDetails(orderByBillStatusAsc, 'BillStatusId')">
-                          <a href="javascript:void()" class="pe-2">Status</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByBillStatusAsc == null || !orderByBillStatusAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByBillStatusAsc == null || orderByBillStatusAsc }" aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1">
-                      <div class="cell-wrapper">
-                        <div class="t-filter">
-                          <a href="javascript:void()" class="pe-2">Paid On</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1">
-                      <div class="cell-wrapper">
-                        <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Month">
-                          <option value="0" selected>Month</option>
-                          <option value="1">January</option>
-                          <option value="2">February</option>
-                          <option value="3">March</option>
-                          <option value="4">April</option>
-                          <option value="5">May</option>
-                          <option value="6">June</option>
-                          <option value="7">July</option>
-                          <option value="8">August</option>
-                          <option value="9">September</option>
-                          <option value="10">October</option>
-                          <option value="11">November</option>
-                          <option value="12">December</option>
-                        </select>
-                        <div class="t-filter" (click)="arrangeDetails(orderByMonthAsc, 'BillForMonth')">
-                          <a href="javascript:void()" class="pe-2">Month</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByMonthAsc == null || !orderByMonthAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByMonthAsc == null || orderByMonthAsc }" aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1">
-                      <div class="cell-wrapper">
-                        <input class="form-control table-filter-control form-control-sm" readonly
-                        (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
-                        [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
-                        <div class="t-filter">
-                          <a href="javascript:void()" class="ps-2">Billed Amt</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1">
-                      <div class="cell-wrapper">
-                        <input class="form-control table-filter-control form-control-sm" readonly
-                        (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
-                        [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
-                        <div class="t-filter">
-                          <a href="javascript:void()" class="pe-2">Received</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1">
-                      <div class="cell-wrapper">
-                        <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()" readonly
-                          (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome" placeholder="By Take Home">
-                        <div class="t-filter">
-                          <a href="javascript:void()" class="pe-2">Take Home</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1">
-                      <div class="cell-wrapper">
-                        <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.GSTStatus">
-                          <option value="0">Status</option>
-                          <option value="1">Completed</option>
-                          <option value="2">Pending</option>
-                          <option value="3">Canceled</option>
-                          <option value="6">Raised</option>
-                        </select>
-                        <div class="t-filter" (click)="arrangeDetails(orderByGSTStatusAsc, 'GSTStatus')">
-                          <a href="javascript:void()" class="pe-2">GST</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByGSTStatusAsc == null || !orderByGSTStatusAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByGSTStatusAsc == null || orderByGSTStatusAsc }" aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- <div class="th">
-                      <div class="d-flex justify-content-around">
-                        <a href="javascript:void(0)" class="text-dark ps-1" (click)="filterRecords()">
-                          <i class="fa fa-filter zoom-2"></i>
-                        </a>
-                      </div>
-                     <div class="t-filter d-block text-center">
-                       <a href="javascript:void(0)">ACTIONS</a>
-                     </div>
-                    </div> -->
                   </div>
+                  <div class="th fe-2">
+                    <div class="cell-wrapper">
+                      <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
+                      <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ClientName')">
+                        <a href="javascript:void()" class="pe-2">Client Name</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Status">
+                        <option value="0">Status</option>
+                        <option value="1">Completed</option>
+                        <option value="2">Pending</option>
+                        <option value="3">Canceled</option>
+                        <option value="7">Raised</option>
+                      </select>
+                      <div class="t-filter" (click)="arrangeDetails(orderByBillStatusAsc, 'BillStatusId')">
+                        <a href="javascript:void()" class="pe-2">Amount</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByBillStatusAsc == null || !orderByBillStatusAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByBillStatusAsc == null || orderByBillStatusAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Paid On</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Month">
+                        <option value="0" selected>Month</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                      </select>
+                      <div class="t-filter" (click)="arrangeDetails(orderByMonthAsc, 'BillForMonth')">
+                        <a href="javascript:void()" class="pe-2">Month</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByMonthAsc == null || !orderByMonthAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByMonthAsc == null || orderByMonthAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control table-filter-control form-control-sm" readonly
+                      (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
+                      [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="ps-2">Billed Amt</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control table-filter-control form-control-sm" readonly
+                      (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
+                      [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Received</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()" readonly
+                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome" placeholder="By Take Home">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Take Home</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.GSTStatus">
+                        <option value="0">Status</option>
+                        <option value="1">Completed</option>
+                        <option value="2">Pending</option>
+                        <option value="3">Canceled</option>
+                        <option value="6">Raised</option>
+                      </select>
+                      <div class="t-filter justify-content-between" (click)="arrangeDetails(orderByGSTStatusAsc, 'GSTStatus')">
+                        <a href="javascript:void()" class="pe-2">GST</a>
+                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByGSTStatusAsc == null || !orderByGSTStatusAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByGSTStatusAsc == null || orderByGSTStatusAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="th">
+                    <div class="d-flex justify-content-around">
+                      <a href="javascript:void(0)" class="text-dark ps-1" (click)="filterRecords()">
+                        <i class="fa fa-filter zoom-2"></i>
+                      </a>
+                    </div>
+                   <div class="t-filter d-block text-center">
+                     <a href="javascript:void(0)">ACTIONS</a>
+                   </div>
+                  </div> -->
                 </div>
-                <div class="t-body custom-height">
+              </div>
+              <div class="t-body custom-height">
+                <ng-container  *ngIf="isFileFound">
                   <div class="tr py-2" *ngFor="let user of billDetails">
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
@@ -299,7 +302,7 @@
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
-                      <div class="cell-wrapper">
+                      <div class="cell-wrapper text-center">
                         <a href="javascript:void(0)" class="h-font" (click)="updateGSTStatus(user.BillNo, user.GSTAmount)">
                           <i class="fa fa-check fa-lg text-success" *ngIf="user.GSTStatus == 'Completed'" data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
                           <i class="fa fa-times text-danger fa-lg" *ngIf="user.GSTStatus == 'Canceled'" data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
@@ -323,236 +326,239 @@
                       </div>
                     </div> -->
                   </div>
-                </div>
+                </ng-container>
+                <ng-container  *ngIf="!isFileFound">
+                  <div class="custom-height fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                    Record Not Found
+                  </div>
+                </ng-container>
               </div>
-              <!-- <table class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th width="6%">
-                      <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
-                      <div class="col-title">
-                        Bill No.#
-                      </div>
-                    </th>
-                    <th>
-                      <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
-                      <div class="col-title">
-                        Client Name
-                      </div>
-                    </th>
-                    <th width="8%">
-                      <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Status">
-                        <option value="0">Status</option>
-                        <option value="1">Completed</option>
-                        <option value="2">Pending</option>
-                        <option value="3">Canceled</option>
-                        <option value="7">Raised</option>
-                      </select>
-                      <div class="col-title">
-                        Status
-                      </div>
-                    </th>
-                    <th width="8%">
-                      <div class="col-title">
-                        Paid On
-                      </div>
-                    </th>
-                    <th width="8%">
-                      <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Month">
-                        <option value="0" selected>Month</option>
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                      </select>
-                      <div class="col-title">
-                        Month
-                      </div>
-                    </th>
-                    <th width="14%">
-                      <input class="form-control table-filter-control form-control-sm" readonly
-                        (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
-                        [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
-                      <div class="col-title">
-                        Billed Amount
-                      </div>
-                    </th>
-                    <th width="10%">
-                      <input class="form-control table-filter-control form-control-sm" readonly
-                        (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
-                        [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
-                      <div class="col-title">
-                        Received
-                      </div>
-                    </th>
-                    <th width="8%">
-                      <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome" placeholder="By Take Home">
-                      <div class="col-title">
-                        Take Home
-                      </div>
-                    </th>
-                    <th width="7%">
-                      <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.GSTStatus">
-                        <option value="0">Status</option>
-                        <option value="1">Completed</option>
-                        <option value="2">Pending</option>
-                        <option value="3">Canceled</option>
-                        <option value="6">Raised</option>
-                      </select>
-                      <div class="col-title">
-                        GST
-                      </div>
-                    </th>
-                    <th class="text-center" width="7%">
-                      <div class="d-flex justify-content-around">
-                        <a href="javascript:void(0)" class="text-dark ps-1" (click)="filterRecords()">
-                          <i class="fa fa-filter zoom-2"></i>
-                        </a>
-                      </div>
-                      <div class="col-title text-center">
-                        Action
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let user of billDetails">
-                    <td>
-                      <a href="javascript:void(0)" (click)="EditCurrentDocument(user)">{{user.BillNo}}</a>
-                    </td>
-                    <td>
-                      <div>
-                        <a href="javascript:void(0)"
-                          [ngClass]="{'blinking': user.Status == 'Raised', 'text-plain': user.Status != 'Raised'}"
-                          (click)="EditClient(user.ClientId)">{{user.ClientName}}</a>
-                        <div class="float-end">
-                          <a><span class="badge bg-primary">T {{user.NoOfDays}}</span></a>
-                          <span class="badge bg-danger ms-3">A {{user.Absent}}</span>
-                        </div>
-                      </div>
-                      <small class="text-muted"><a href="javascript:void(0)" class="text-muted"
-                          (click)="EditEmployee(user.FileOwnerId)">{{user.Name}}</a>
-                      </small>
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)" class="h-font" (click)="UpdateCurrent(user.FileUid)">
-                        {{user.Status}}
+            </div>
+            <!-- <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th width="6%">
+                    <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
+                    <div class="col-title">
+                      Bill No.#
+                    </div>
+                  </th>
+                  <th>
+                    <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
+                    <div class="col-title">
+                      Client Name
+                    </div>
+                  </th>
+                  <th width="8%">
+                    <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Status">
+                      <option value="0">Status</option>
+                      <option value="1">Completed</option>
+                      <option value="2">Pending</option>
+                      <option value="3">Canceled</option>
+                      <option value="7">Raised</option>
+                    </select>
+                    <div class="col-title">
+                      Status
+                    </div>
+                  </th>
+                  <th width="8%">
+                    <div class="col-title">
+                      Paid On
+                    </div>
+                  </th>
+                  <th width="8%">
+                    <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Month">
+                      <option value="0" selected>Month</option>
+                      <option value="1">January</option>
+                      <option value="2">February</option>
+                      <option value="3">March</option>
+                      <option value="4">April</option>
+                      <option value="5">May</option>
+                      <option value="6">June</option>
+                      <option value="7">July</option>
+                      <option value="8">August</option>
+                      <option value="9">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">December</option>
+                    </select>
+                    <div class="col-title">
+                      Month
+                    </div>
+                  </th>
+                  <th width="14%">
+                    <input class="form-control table-filter-control form-control-sm" readonly
+                      (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
+                      [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
+                    <div class="col-title">
+                      Billed Amount
+                    </div>
+                  </th>
+                  <th width="10%">
+                    <input class="form-control table-filter-control form-control-sm" readonly
+                      (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
+                      [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
+                    <div class="col-title">
+                      Received
+                    </div>
+                  </th>
+                  <th width="8%">
+                    <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome" placeholder="By Take Home">
+                    <div class="col-title">
+                      Take Home
+                    </div>
+                  </th>
+                  <th width="7%">
+                    <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.GSTStatus">
+                      <option value="0">Status</option>
+                      <option value="1">Completed</option>
+                      <option value="2">Pending</option>
+                      <option value="3">Canceled</option>
+                      <option value="6">Raised</option>
+                    </select>
+                    <div class="col-title">
+                      GST
+                    </div>
+                  </th>
+                  <th class="text-center" width="7%">
+                    <div class="d-flex justify-content-around">
+                      <a href="javascript:void(0)" class="text-dark ps-1" (click)="filterRecords()">
+                        <i class="fa fa-filter zoom-2"></i>
                       </a>
-                    </td>
-                    <td>{{user.PaidOn}}</td>
-                    <td>{{user.Month}}</td>
-                    <td>
-                      <div>
-                        <b>{{user.BilledAmount | number : '1.2-2'}}</b>
-                        <div class="d-flex flex-column">
-                          <small class="s-item text-muted me-2">[A] {{user.SalaryAmount | number : '1.2-2'}}</small>
-                          <small class="s-item text-muted">[G] {{user.GSTAmount | number : '1.2-2'}}</small>
-                        </div>
+                    </div>
+                    <div class="col-title text-center">
+                      Action
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of billDetails">
+                  <td>
+                    <a href="javascript:void(0)" (click)="EditCurrentDocument(user)">{{user.BillNo}}</a>
+                  </td>
+                  <td>
+                    <div>
+                      <a href="javascript:void(0)"
+                        [ngClass]="{'blinking': user.Status == 'Raised', 'text-plain': user.Status != 'Raised'}"
+                        (click)="EditClient(user.ClientId)">{{user.ClientName}}</a>
+                      <div class="float-end">
+                        <a><span class="badge bg-primary">T {{user.NoOfDays}}</span></a>
+                        <span class="badge bg-danger ms-3">A {{user.Absent}}</span>
                       </div>
-                    </td>
-                    <td>
-                      <b>{{user.ReceivedAmount | number : '1.2-2'}}</b>
-                      <div>
-                        <small class="text-muted">[- 10% TDS]</small>
+                    </div>
+                    <small class="text-muted"><a href="javascript:void(0)" class="text-muted"
+                        (click)="EditEmployee(user.FileOwnerId)">{{user.Name}}</a>
+                    </small>
+                  </td>
+                  <td>
+                    <a href="javascript:void(0)" class="h-font" (click)="UpdateCurrent(user.FileUid)">
+                      {{user.Status}}
+                    </a>
+                  </td>
+                  <td>{{user.PaidOn}}</td>
+                  <td>{{user.Month}}</td>
+                  <td>
+                    <div>
+                      <b>{{user.BilledAmount | number : '1.2-2'}}</b>
+                      <div class="d-flex flex-column">
+                        <small class="s-item text-muted me-2">[A] {{user.SalaryAmount | number : '1.2-2'}}</small>
+                        <small class="s-item text-muted">[G] {{user.GSTAmount | number : '1.2-2'}}</small>
                       </div>
-                    </td>
-                    <td>
-                      {{user.TakeHome | number : '1.2-2'}}
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)" class="h-font" (click)="updateGSTStatus(user.BillNo, user.GSTAmount)">
-                        {{user.GSTStatus}}
+                    </div>
+                  </td>
+                  <td>
+                    <b>{{user.ReceivedAmount | number : '1.2-2'}}</b>
+                    <div>
+                      <small class="text-muted">[- 10% TDS]</small>
+                    </div>
+                  </td>
+                  <td>
+                    {{user.TakeHome | number : '1.2-2'}}
+                  </td>
+                  <td>
+                    <a href="javascript:void(0)" class="h-font" (click)="updateGSTStatus(user.BillNo, user.GSTAmount)">
+                      {{user.GSTStatus}}
+                    </a>
+                  </td>
+                  <td>
+                    <div class="d-flex flex-row justify-content-around">
+                      <a href="javascript:void(0)">
+                        <span class="badge bg-success ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true"
+                            (click)="viewPdfFile(user)"></i></span>
                       </a>
-                    </td>
-                    <td>
-                      <div class="d-flex flex-row justify-content-around">
-                        <a href="javascript:void(0)">
-                          <span class="badge bg-success ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true"
-                              (click)="viewPdfFile(user)"></i></span>
-                        </a>
-                        <a href="javascript:void(0)">
-                          <span class="badge bg-primary ms-1 me-1"><i class="fa fa-download" aria-hidden="true"
-                              (click)="downloadFile(user)"></i></span>
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="5" class="fw-bold">
-                      Total Amount
-                    </td>
-                    <td>
-                      <div class="fw-bold">
-                        Rs {{TotalBilledAmount | number : '1.2-2'}}
-                        <div>
-                          <small class="s-item text-muted me-2 d-block">[A] {{ TotalSalaryAmount | number :
-                            '1.2-2'}}</small>
-                          <small class="s-item text-muted">[G] {{TotalGSTAmount | number : '1.2-2'}}</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td colspan="4" class="fw-bold">
-                      Rs {{TotalReceivedAmount | number : '1.2-2'}}
-                    </td>
-                  </tr>
-                </tbody>
-              </table> -->
-              <div class="t-table t-list t-border col-md-12">
-                <div class="hide-bar"></div>
-                <div class="t-head">
-                  <div class="tr">
-                    <div class="th fe-1 justify-content-center align-items-center">
-                      <button class="btn btn-success btn-sm" (click)="calculation()">Calculate Amt</button>
+                      <a href="javascript:void(0)">
+                        <span class="badge bg-primary ms-1 me-1"><i class="fa fa-download" aria-hidden="true"
+                            (click)="downloadFile(user)"></i></span>
+                      </a>
                     </div>
-                    <div class="th fe-2"></div>
-                    <div class="th fe-1"></div>
-                    <div class="th fe-1"></div>
-                    <div class="th fe-1"></div>
-                    <div class="th fe-1 justify-content-center align-items-center">
-                      <div class="fw-bold d-flex flex-column" *ngIf="calculateAmount">
-                        Rs {{TotalBilledAmount | number : '1.2-2'}}
-                        <div>
-                          <small class="s-item text-muted me-2 d-block">[A] {{ TotalSalaryAmount | number :
-                            '1.2-2'}}</small>
-                          <small class="s-item text-muted">[G] {{TotalGSTAmount | number : '1.2-2'}}</small>
-                        </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="5" class="fw-bold">
+                    Total Amount
+                  </td>
+                  <td>
+                    <div class="fw-bold">
+                      Rs {{TotalBilledAmount | number : '1.2-2'}}
+                      <div>
+                        <small class="s-item text-muted me-2 d-block">[A] {{ TotalSalaryAmount | number :
+                          '1.2-2'}}</small>
+                        <small class="s-item text-muted">[G] {{TotalGSTAmount | number : '1.2-2'}}</small>
                       </div>
                     </div>
-                    <div class="th fe-1 justify-content-center align-items-center">
-                      <span class="fw-bold text-dark" *ngIf="calculateAmount">Rs {{TotalReceivedAmount | number : '1.2-2'}}</span>
+                  </td>
+                  <td colspan="4" class="fw-bold">
+                    Rs {{TotalReceivedAmount | number : '1.2-2'}}
+                  </td>
+                </tr>
+              </tbody>
+            </table> -->
+          <ng-container  *ngIf="isFileFound">
+            <div class="t-table t-list t-border col-md-12">
+              <div class="hide-bar"></div>
+              <div class="t-head">
+                <div class="tr">
+                  <div class="th fe-1 justify-content-start align-items-start">
+                    <button class="btn btn-success btn-sm" (click)="calculation()">Calculate Amt</button>
+                  </div>
+                  <div class="th fe-2"></div>
+                  <div class="th fe-1"></div>
+                  <div class="th fe-1"></div>
+                  <div class="th fe-1"></div>
+                  <div class="th fe-1 justify-content-center align-items-start">
+                    <div class="fw-bold d-flex flex-column ps-2" *ngIf="calculateAmount">
+                      Rs {{TotalBilledAmount | number : '1.2-2'}}
+                      <div>
+                        <small class="s-item text-muted me-2 d-block">[A] {{ TotalSalaryAmount | number :
+                          '1.2-2'}}</small>
+                        <small class="s-item text-muted">[G] {{TotalGSTAmount | number : '1.2-2'}}</small>
+                      </div>
                     </div>
-                    <div class="th fe-1">
-                    </div>
-                    <div class="th fe-1">
-                    </div>
+                  </div>
+                  <div class="th fe-1  justify-content-start">
+                    <span class="fw-bold text-dark ps-2" *ngIf="calculateAmount">Rs {{TotalReceivedAmount | number : '1.2-2'}}</span>
+                  </div>
+                  <div class="th fe-1">
+                  </div>
+                  <div class="th fe-1">
                   </div>
                 </div>
               </div>
             </div>
           </ng-container>
-          <ng-container  *ngIf="!isFileFound">
-            <div class="custom-height fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-              Record Not Found
-            </div>
-          </ng-container>
-          <div class="mt-3 ps-2">
-            <app-pagination [pagination]="singleEmployee" (onPageChange)="GetFilterResult($event)"></app-pagination>
-          </div>
-        </ng-container>
+
+        </div>
+        <div class="mt-3 ps-2">
+          <app-pagination [pagination]="singleEmployee" (onPageChange)="GetFilterResult($event)"></app-pagination>
+        </div>
+      </ng-container>
       </div>
     </div>
   </div>

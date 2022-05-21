@@ -71,6 +71,8 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   orderByGSTStatusAsc: boolean = null;
   orderByBillNoAsc: boolean = null;
   isFileFound: boolean = false;
+  isGSTStatusModalReady: boolean = false;
+
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
