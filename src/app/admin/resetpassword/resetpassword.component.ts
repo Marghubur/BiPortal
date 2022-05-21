@@ -21,6 +21,10 @@ export class ResetpasswordComponent implements OnInit {
   isLogOut: boolean = false;
   isPasswordChanged: boolean = false;
   userDetail: UserDetail = new UserDetail();
+  password: string = 'password';
+  showPassword: boolean = false;
+  pass: string = 'pass';
+  showConfirmPassword: boolean = false;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -102,6 +106,16 @@ export class ResetpasswordComponent implements OnInit {
     this.submitted = false;
     this.isLoading = false;
     this.isPasswordChanged = false;
+  }
+
+  passwordShow(e: any) {
+    if (this.password === 'password') {
+      this.password = 'text';
+      this.showPassword = true;
+    } else {
+      this.password = 'password';
+      this.showPassword = false;
+    }
   }
 
 }

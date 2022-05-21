@@ -40,8 +40,7 @@
                   <div class="d-flex" *ngIf="fileLoaded">
                     <label class="form-label pe-3 mt-1">Developer</label>
                     <div class="col-md-12">
-                      <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
-                        (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                      <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
                       </app-iautocomplete>
                     </div>
                   </div>
@@ -62,7 +61,7 @@
                     </div>
                     <div class="text-end">
                       <a href="javascript:void(0)" class="pe-0 a-btn text-dark fw-bold" (click)="advancedSearchPopUp()">
-                        <i class="fa fa-bolt">
+                        <i class="fa fa-search">
                           <span>Advanced Search</span>
                         </i>
                       </a>
@@ -83,12 +82,12 @@
             <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
           </div>
           <!-- End pdf view modal -->
-            <div class="x_content">
+          <div class="x_content">
               <div class="t-table t-list t-border col-md-12">
                 <div class="hide-bar"></div>
                 <div class="t-head">
                   <div class="tr">
-                    <div class="th fe-3">
+                    <div class="th fe-1">
                       <div class="cell-wrapper">
                         <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                           (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
@@ -121,9 +120,9 @@
                           <option value="7">Raised</option>
                         </select>
                         <div class="t-filter" (click)="arrangeDetails(orderByBillStatusAsc, 'BillStatusId')">
-                          <a href="javascript:void()" class="pe-2">Status</a>
+                          <a href="javascript:void()" class="pe-2">Amount</a>
                           <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByBillStatusAsc == null || !orderByBillStatusAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByBillStatusAsc == null || orderByBillStatusAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByBillStatusAsc == null || orderByBillStatusAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -198,10 +197,10 @@
                           <option value="3">Canceled</option>
                           <option value="6">Raised</option>
                         </select>
-                        <div class="t-filter" (click)="arrangeDetails(orderByGSTStatusAsc, 'GSTStatus')">
+                        <div class="t-filter justify-content-between" (click)="arrangeDetails(orderByGSTStatusAsc, 'GSTStatus')">
                           <a href="javascript:void()" class="pe-2">GST</a>
                           <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByGSTStatusAsc == null || !orderByGSTStatusAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByGSTStatusAsc == null || orderByGSTStatusAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByGSTStatusAsc == null || orderByGSTStatusAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -220,7 +219,7 @@
                 <div class="t-body custom-height">
                   <ng-container  *ngIf="isFileFound">
                     <div class="tr py-2" *ngFor="let user of billDetails">
-                      <div class="td align-middle fe-3">
+                      <div class="td align-middle fe-1">
                         <div class="cell-wrapper">
                           <div class="d-flex flex-row justify-content-between">
                             <a href="javascript:void(0)" (click)="EditCurrentDocument(user)">{{user.BillNo}}</a>
@@ -254,7 +253,7 @@
                         </div>
                       </div>
                       <div class="td align-middle fe-1">
-                        <div class="cell-wrapper">
+                        <div class="cell-wrapper text-center">
                           <a href="javascript:void(0)" class="h-font" (click)="UpdateCurrent(user.FileUid)">
                             <i class="fa fa-check fa-lg text-success" *ngIf="user.Status == 'Completed'" data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
                             <i class="fa fa-times text-danger fa-lg" *ngIf="user.Status == 'Canceled'" data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
@@ -301,7 +300,7 @@
                         </div>
                       </div>
                       <div class="td align-middle fe-1">
-                        <div class="cell-wrapper">
+                        <div class="cell-wrapper text-center">
                           <a href="javascript:void(0)" class="h-font" (click)="updateGSTStatus(user.BillNo, user.GSTAmount)">
                             <i class="fa fa-check fa-lg text-success" *ngIf="user.GSTStatus == 'Completed'" data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
                             <i class="fa fa-times text-danger fa-lg" *ngIf="user.GSTStatus == 'Canceled'" data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
@@ -524,15 +523,15 @@
                 <div class="hide-bar"></div>
                 <div class="t-head">
                   <div class="tr">
-                    <div class="th fe-3 justify-content-center align-items-start">
+                    <div class="th fe-1 justify-content-start align-items-start">
                       <button class="btn btn-success btn-sm" (click)="calculation()">Calculate Amt</button>
                     </div>
                     <div class="th fe-2"></div>
                     <div class="th fe-1"></div>
                     <div class="th fe-1"></div>
                     <div class="th fe-1"></div>
-                    <div class="th fe-1 ps-4 justify-content-center align-items-start">
-                      <div class="fw-bold d-flex flex-column" *ngIf="calculateAmount">
+                    <div class="th fe-1 justify-content-center align-items-start">
+                      <div class="fw-bold d-flex flex-column ps-2" *ngIf="calculateAmount">
                         Rs {{TotalBilledAmount | number : '1.2-2'}}
                         <div>
                           <small class="s-item text-muted me-2 d-block">[A] {{ TotalSalaryAmount | number :
@@ -542,7 +541,7 @@
                       </div>
                     </div>
                     <div class="th fe-1  justify-content-start">
-                      <span class="fw-bold text-dark ps" *ngIf="calculateAmount">Rs {{TotalReceivedAmount | number : '1.2-2'}}</span>
+                      <span class="fw-bold text-dark ps-2" *ngIf="calculateAmount">Rs {{TotalReceivedAmount | number : '1.2-2'}}</span>
                     </div>
                     <div class="th fe-1">
                     </div>
@@ -768,7 +767,7 @@
             <label class="form-label">
               Billed Amount
             </label>
-            <input class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+            <input class="form-control table-filter-control" (keyup.enter)="filterRecords()" readonly
               (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
           </div>
         </div>

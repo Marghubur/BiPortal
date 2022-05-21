@@ -266,10 +266,14 @@
   justify-content: flex-start !important;
 }
 
-.fe-1 {
+.cutom-width-1 {
+  flex: 0.3 !important;
+}
+
+.cutom-width-2 {
   flex: 0.4 !important;
 }
 
-.fe-3 {
-  flex: 0.4 !important;
+.custom-width-5 {
+  flex: 0.5 !important;
 }

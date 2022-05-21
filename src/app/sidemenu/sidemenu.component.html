@@ -37,6 +37,17 @@
     <div class="text-center w-75 ms-3 mt-3 pb-4">
       You're in a team-managed project Learn more
     </div>
+    <div class="w-100 position-absolute bg-secondary" class="menu-footer">
+      <a href="javascript:void(0)">
+        <i class="fa fa-flag" aria-hidden="true"></i>
+      </a>
+      <a href="javascript:void(0)">
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+      </a>
+      <a href="javascript:void(0)" (click)="LogoutUser()">
+        <i class="fa fa-sign-out" aria-hidden="true"></i>
+      </a>
+    </div>
   </div>
 
   <div id="tine-menu" class="small-menu-items">
@@ -67,15 +78,5 @@
     </div>
   </div>
 
-  <div class="w-100 position-absolute bg-secondary" class="menu-footer">
-    <a href="javascript:void(0)">
-      <i class="fa fa-flag" aria-hidden="true"></i>
-    </a>
-    <a href="javascript:void(0)">
-      <i class="fa fa-info-circle" aria-hidden="true"></i>
-    </a>
-    <a href="javascript:void(0)" (click)="LogoutUser()">
-      <i class="fa fa-sign-out" aria-hidden="true"></i>
-    </a>
-  </div>
+
 </div>
