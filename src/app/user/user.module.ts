@@ -22,6 +22,8 @@ import { LeaveComponent } from './leave/leave.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { NotificationComponent } from './notification/notification.component';
+import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import { ResetpasswordComponent } from './resetpassword/resetpassword.component'
     LeaveComponent,
     PreferencesComponent,
     TaxcalculationComponent,
-    ResetpasswordComponent
+    ResetpasswordComponent,
+    NotificationComponent,
+    ApprovalRequestComponent
   ],
   imports: [
     CommonModule,
