@@ -57,8 +57,14 @@ export class TimesheetComponent implements OnInit {
   presentMonth: boolean = true;
   cachedData: any = null;
   commentOn: any = null;
+
+
+
   commentValue: string = null;
   today: Date = null;
+  tomorrow: Date = null;
+  isComment: boolean = false;
+  currentDays: Array<any> = [];
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
