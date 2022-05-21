@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Declaration, Form12B, FreeTaxFilling, IncomeTax, PaySlip, Preferences, PreviousIncome, Profile, ResetPassword, Salary, Summary, Taxcalculation, TaxSavingInvestment, UserAttendance, UserDashboard, UserLeave, UserProfilePage, UserTimesheet } from 'src/providers/constants';
+import { ApprovalRequest, Notification, Declaration, Form12B, FreeTaxFilling, IncomeTax, PaySlip, Preferences, PreviousIncome, Profile, ResetPassword, Salary, Summary, Taxcalculation, TaxSavingInvestment, UserAttendance, UserDashboard, UserLeave, UserProfilePage, UserTimesheet } from 'src/providers/constants';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { DeclarationComponent } from './declaration/declaration.component';
 import { MysalaryComponent } from './mysalary/mysalary.component';
@@ -18,6 +18,8 @@ import { PayslipsComponent } from './payslips/payslips.component';
 import { IncometaxComponent } from './incometax/incometax.component';
 import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { NotificationComponent } from './notification/notification.component';
+import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 
 const routes: Routes = [
   { path: '', component: UserDashboardComponent},
@@ -37,6 +39,8 @@ const routes: Routes = [
   { path: PaySlip, component: PayslipsComponent},
   { path: IncomeTax, component: IncometaxComponent},
   { path: Taxcalculation, component: TaxcalculationComponent},
+  { path: Notification, component: NotificationComponent},
+  { path: ApprovalRequest, component: ApprovalRequestComponent},
   { path: ResetPassword, component: ResetpasswordComponent}
 ];
 
