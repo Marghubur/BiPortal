@@ -97,6 +97,8 @@ export const PaySlip = 'user/payslip';
 export const IncomeTax = 'user/incometax';
 export const Taxcalculation = 'user/taxcalculation';
 export const ResetPassword = 'user/resetpassword';
+export const Notification = 'user/notification';
+export const ApprovalRequest = 'user/request';
 
 
 
