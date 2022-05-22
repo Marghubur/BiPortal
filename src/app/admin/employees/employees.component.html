@@ -20,7 +20,7 @@
           [(ngModel)]="anyFilter">
       </div>
       <div class="col-md-2">
-        <button class="btn btn-sm btn-primary filter-btn-grp" (click)="globalFilter()" (keydown.esc)="resetFilter()">
+        <button class="btn btn-sm btn-primary-c filter-btn-grp" (click)="globalFilter()" (keydown.esc)="resetFilter()">
           <i class="fa fa-filter"></i>
         </button>
         <button class="btn btn-sm btn-danger filter-btn-grp ms-2" (click)="resetFilter()">
@@ -74,8 +74,10 @@
                         (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Name" placeholder="Search by Name">
                       <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
                         <a href="javascript:void()" class="pe-2">Full Name</a>
-                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -86,8 +88,10 @@
                         placeholder="Search by MobileNumber">
                       <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
                         <a href="javascript:void()" class="pe-2">Mobile Number</a>
-                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -95,10 +99,12 @@
                     <div class="cell-wrapper">
                       <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
-                        <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
+                      <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
                         <a href="javascript:void()" class="pe-2">Email Id</a>
-                        <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true" ></i>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -115,14 +121,15 @@
                     </div>
                     <div class="td align-middle fe-5">
                       <div class="cell-wrapper">
-                        <a href="javascript:void(0)" (click)="EditCurrent(user)">{{user.FirstName}} {{user.LastName}}</a>
+                        <a href="javascript:void(0)" (click)="EditCurrent(user)">{{user.FirstName}}
+                          {{user.LastName}}</a>
                         <div class="float-end">
                           <a href="javascript:void(0)" (click)="editProfile(user)"><span class="badge bg-dark me-3"><i
                                 class="fa fa fa-user-circle-o user-edit-icon"></i></span></a>
                           <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o"> &nbsp;
-                            <span></span>
-                            <span *ngIf="user.ClientJson.length > 0">{{user.ClientJson.length}}</span>
-                            <span *ngIf="user.ClientJson.length == 0">0</span></span></a>
+                              <span></span>
+                              <span *ngIf="user.ClientJson.length > 0">{{user.ClientJson.length}}</span>
+                              <span *ngIf="user.ClientJson.length == 0">0</span></span></a>
                           <a href="javascript:void(0)" class="ms-3" (click)="goToAttendancePage(user)">
                             <span class="text-sm-left text-muted">Attendance</span>
                             <span class="ms-2 badge bg-success">
@@ -196,7 +203,7 @@
                     </div>
                   </th>
                   <th width="12%" class="text-center">
-                    <button (click)="filterRecords()" class="btn btn-primary btn-sm"><i class="fa fa-search pr-2"></i>
+                    <button (click)="filterRecords()" class="btn btn-primary-c btn-sm"><i class="fa fa-search pr-2"></i>
                       Search
                     </button>
                     <div class="col-title">
@@ -282,7 +289,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary" [disabled]="isLoading" (click)="CreateDocument()">
+        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateDocument()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
@@ -297,11 +304,13 @@
   <div class="modal-dialog  modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle" *ngIf="isActiveEmployee == true">Are
+        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle" *ngIf="isActiveEmployee == true">
+          Are
           you want to delete the
           Employee
         </h5>
-        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle" *ngIf="isActiveEmployee == false">Are
+        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle" *ngIf="isActiveEmployee == false">
+          Are
           you want to active the
           Employee
         </h5>

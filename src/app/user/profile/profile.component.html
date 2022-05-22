@@ -90,7 +90,7 @@
                                     <div *ngIf="!uploading"
                                       class="d-flex align-items-center justify-content-center py-3">
                                       <div class="text-center pt-4">
-                                        <button class="btn btn-primary px-4 py-2"
+                                        <button class="btn btn-primary-c px-4 py-2"
                                           (click)="fireresumeBrowserFile()">UPLOAD RESUME</button>
                                         <p class="text-muted pt-2">
                                           Supported Formats: doc, docx, pdf upto 200 Kb
@@ -122,7 +122,7 @@
                                         <div *ngIf="!uploading"
                                           class="d-flex align-items-center justify-content-center py-3">
                                           <div class="text-center pt-4">
-                                            <button class="btn btn-primary px-4 py-2"
+                                            <button class="btn btn-primary-c px-4 py-2"
                                               (click)="fireresumeBrowserFile()">RE-UPLOAD RESUME</button>
                                             <p class="text-muted pt-2">
                                               Supported Formats: doc, docx, pdf upto 200 Kb
@@ -628,7 +628,7 @@
                           <p>Add links to your Online presentations (e.g. Slideshare presentation links etc.).</p>
                           <ng-container *ngFor="let item of presentations.controls;let index = index">
                             <div class="col-md-12 mt-3" [formGroupName]="index">
-                              <div class="col-md-12 btn btn-primary">
+                              <div class="col-md-12 btn btn-primary-c">
                                 <span class="fw-bold float-start">{{item.get("Presentation").value}}</span>
                                 <div class="ms-3 float-end d-inline-block">
                                   <a href="javascript:void(0)" class="pe-3" (click)="editPresentation(item)">
@@ -1022,7 +1022,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" (click)="closeModal()">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="saveResumeHeadline()"><i
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="saveResumeHeadline()"><i
             class="pe-2 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add / Update' }}</button>
       </div>
@@ -1134,7 +1134,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="addItskill()"><i class="pe-2 fa"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="addItskill()"><i class="pe-2 fa"
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add/Apply Changes' }}</button>
       </div>
@@ -1265,7 +1265,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="createNewEmployment()"><i
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="createNewEmployment()"><i
             class="pe-2 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add / Update' }}</button>
       </div>
@@ -1378,7 +1378,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="addNewEducation()"><i
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="addNewEducation()"><i
             class="pe-2 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add / Update' }}</button>
       </div>
@@ -1452,7 +1452,7 @@
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3"
           (click)="closeProjectModal()">Cancel</a>
-        <button type=" button" [disabled]="isLoading" class="btn btn-primary" (click)="addOrUpdateProject()"><i
+        <button type=" button" [disabled]="isLoading" class="btn btn-primary-c" (click)="addOrUpdateProject()"><i
             class="pe-2 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add / Update' }}</button>
       </div>
@@ -1510,11 +1510,11 @@
       </div>
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="submitOnlineProfile()"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitOnlineProfile()"
           *ngIf="!isSiteURLUpdate"><i class="pe-2 fa"
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="updateOnlineProfile()"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="updateOnlineProfile()"
           *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
@@ -1570,11 +1570,11 @@
       </div>
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="submitWorkSample()"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitWorkSample()"
           *ngIf="!isSiteURLUpdate"><i class="pe-2 fa"
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="updateWorkSample()"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="updateWorkSample()"
           *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
@@ -1628,11 +1628,11 @@
       </div>
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="submitResearch()"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitResearch()"
           *ngIf="!isSiteURLUpdate"><i class="pe-2 fa"
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
-        <button type="button" class="btn btn-primary" (click)="updateResearch()" *ngIf="isSiteURLUpdate"><i
+        <button type="button" class="btn btn-primary-c" (click)="updateResearch()" *ngIf="isSiteURLUpdate"><i
             [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
@@ -1687,11 +1687,11 @@
       </div>
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="submitCertification()"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitCertification()"
           *ngIf="!isSiteURLUpdate"><i class="pe-2 fa"
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="updateCertification()"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="updateCertification()"
           *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
@@ -1745,11 +1745,11 @@
       </div>
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="submitPresentation()"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitPresentation()"
           *ngIf="!isSiteURLUpdate"><i class="pe-2 fa"
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="updatePresentation()"
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="updatePresentation()"
           *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
@@ -1802,11 +1802,11 @@
       </div>
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
-        <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="submitPatent()"
+        <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitPatent()"
           *ngIf="!isSiteURLUpdate"><i class="pe-2 fa"
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
-        <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="updatePatent()"
+        <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="updatePatent()"
           *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
@@ -1932,7 +1932,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="addCarrerProfile()"><i
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="addCarrerProfile()"><i
             class="pe-2 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add / Update' }}</button>
       </div>
@@ -2068,7 +2068,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="pe-3 text-decoration-none" data-bs-dismiss=" modal" (click)="closeModal()"
           aria-label="Close">Cancel</a>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary" (click)="submitPersonalDetails()"><i
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitPersonalDetails()"><i
             class="pe-2 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add / Update' }}</button>
       </div>

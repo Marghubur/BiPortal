@@ -21,7 +21,8 @@
             [(ngModel)]="anyFilter">
         </div>
         <div class="col-md-2">
-          <button class="btn btn-sm btn-primary filter-btn-grp" (click)="globalFilter()" (keydown.esc)="resetFilter()">
+          <button class="btn btn-sm btn-primary-c filter-btn-grp" (click)="globalFilter()"
+            (keydown.esc)="resetFilter()">
             <i class="fa fa-filter"></i>
           </button>
           <button class="btn btn-sm btn-danger filter-btn-grp ms-2" (click)="resetFilter()">
@@ -73,8 +74,10 @@
                           placeholder="Search by Name">
                         <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ClientName')">
                           <a href="javascript:void()" class="pe-2">Organization Name</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -83,10 +86,14 @@
                         <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
                           (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.PrimaryContactNo"
                           placeholder="Search by Contact no">
-                          <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'PrimaryPhoneNo')">
+                        <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'PrimaryPhoneNo')">
                           <a href="javascript:void()" class="pe-2">Primary Contact No.#</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }"
+                            aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }"
+                            aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -96,8 +103,10 @@
                           (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.Email" placeholder="Search by Email">
                         <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
                           <a href="javascript:void()" class="pe-2">Email</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -107,8 +116,10 @@
                           (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.City" placeholder="Search by City">
                         <div class="t-filter" (click)="arrangeDetails(orderByCityAsc, 'City')">
                           <a href="javascript:void()" class="pe-3">City</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByCityAsc == null || !orderByCityAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByCityAsc == null || orderByCityAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByCityAsc == null || !orderByCityAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByCityAsc == null || orderByCityAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -119,8 +130,12 @@
                           placeholder="Search by First Address">
                         <div class="t-filter" (click)="arrangeDetails(orderByFirstAddressAsc, 'FirstAddress')">
                           <a href="javascript:void()" class="pe-3">First Address</a>
-                          <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByFirstAddressAsc == null || !orderByFirstAddressAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByFirstAddressAsc == null || orderByFirstAddressAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByFirstAddressAsc == null || !orderByFirstAddressAsc }"
+                            aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByFirstAddressAsc == null || orderByFirstAddressAsc }"
+                            aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -193,7 +208,7 @@
                     </div>
                   </ng-container>
                 </div>
-                <ng-container  *ngIf="!isFileFound">
+                <ng-container *ngIf="!isFileFound">
                   <div class="custom-height fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                     Record Not Found
                   </div>
@@ -242,7 +257,7 @@
                           </div>
                         </th>
                         <th width="10%" class="text-center">
-                          <button (click)="filterRecords()" class="btn btn-primary btn-sm"><i
+                          <button (click)="filterRecords()" class="btn btn-primary-c btn-sm"><i
                               class="fa fa-search pr-2"></i></button>
                           <div class="col-title">
                             Action

@@ -80,7 +80,7 @@
           <ng-container *ngIf="!folders.IsFolder">
             <div class="file-type mt-2 mb-2">
               <a href="javascript:void(0)" class="sh-icon" data-bs-toggle="modal"
-                (click)="selectItemForDelete(folders.FileId)" >
+                (click)="selectItemForDelete(folders.FileId)">
                 <i class="fa fa-trash text-danger"></i>
               </a>
               <!-- <div class="file-link col-md-12">
@@ -116,8 +116,7 @@
 </div>
 
 <!-- New Folder Modal -->
-<div class="modal fade" id="createFolder"  role="dialog" aria-labelledby="createFolderTitle"
-  aria-hidden="true">
+<div class="modal fade" id="createFolder" role="dialog" aria-labelledby="createFolderTitle" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -129,8 +128,8 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" (click)="CloseFolderPopup()" class="text-decoration-none text-danger btn-white pe-3"
-          data-dismiss="modal">Cancel</a>
+        <a href="javascript:void(0)" (click)="CloseFolderPopup()"
+          class="text-decoration-none text-danger btn-white pe-3" data-dismiss="modal">Cancel</a>
         <a href="javascript:void(0)" (click)="CreateNewfolder()"
           class="text-decoration-none btn-white text-primary">Create</a>
       </div>
@@ -140,7 +139,7 @@
 <!-- End Model -->
 
 <!-- Modal -->
-<div class="modal fade" id="showDocx"  role="dialog" aria-labelledby="showDocx" aria-hidden="true">
+<div class="modal fade" id="showDocx" role="dialog" aria-labelledby="showDocx" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -160,11 +159,11 @@
 </div>
 
 <!-- Delete Model -->
-<div class="modal fade" id="staticBackdrop"  role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" >Delete file(s)</h5>
+        <h5 class="modal-title">Delete file(s)</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
@@ -178,7 +177,8 @@
         </ng-container>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" class="text-decoration-none text-danger btn-white pe-3" data-bs-dismiss="modal">Close</a>
+        <a href="javascript:void(0)" class="text-decoration-none text-danger btn-white pe-3"
+          data-bs-dismiss="modal">Close</a>
         <a href="javascript:void(0)" (click)="deleteFile()"
           class="text-decoration-none btn-white text-primary">Delete</a>
       </div>
@@ -263,7 +263,7 @@
                       </div>
                     </div>
                     <div class="mt-4">
-                      <button type="button" class="btn btn-primary me-2" (click)="SubmitFiles()"
+                      <button type="button" class="btn btn-primary-c me-2" (click)="SubmitFiles()"
                         [disabled]="btnDisable ||isLargeFile">
                         <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
                       </button>

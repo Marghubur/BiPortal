@@ -2,16 +2,20 @@
   <div class="col-md-12 bg-light mb-3">
     <ul class="nav">
       <li class="nav-item">
-        <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+        <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('declaration-tab')"
+          aria-current="page" href="javascript:void(0)">DECLARATION</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('salary-tab')" href="javascript:void(0)">SALARY</a>
+        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('salary-tab')"
+          href="javascript:void(0)">SALARY</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')" href="javascript:void(0)">SUMMARY</a>
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')"
+          href="javascript:void(0)">SUMMARY</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">Preference</a>
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')"
+          href="javascript:void(0)">Preference</a>
       </li>
     </ul>
   </div>
@@ -23,26 +27,32 @@
       <div class="col-md-12 bg-light mb-3 mt-3">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link new-nav-link text-dark" id="attendance-tab" (click)="activeTab('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+            <a class="nav-link new-nav-link text-dark" id="attendance-tab" (click)="activeTab('declaration-tab')"
+              aria-current="page" href="javascript:void(0)">DECLARATION</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" id="timesheet-tab" (click)="activeTab('previous-income-tab')" href="javascript:void(0)">Previous Income</a>
+            <a class="nav-link text-dark" id="timesheet-tab" (click)="activeTab('previous-income-tab')"
+              href="javascript:void(0)">Previous Income</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark new-nav-active" id="leave-tab" (click)="activeTab('form-12-tab')" href="javascript:void(0)">Form 12 BB</a>
+            <a class="nav-link text-dark new-nav-active" id="leave-tab" (click)="activeTab('form-12-tab')"
+              href="javascript:void(0)">Form 12 BB</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')" href="javascript:void(0)">Free Tax Filling</a>
+            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')"
+              href="javascript:void(0)">Free Tax Filling</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('tax-saving-tab')" href="javascript:void(0)">Tax Saving Investment</a>
+            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('tax-saving-tab')"
+              href="javascript:void(0)">Tax Saving Investment</a>
           </li>
         </ul>
       </div>
       <ng-container>
         <div class="container-fluid pt-4">
           <h5 class="text-dark ps-3">Form 12 BB</h5>
-          <p class="mb-0 ps-3">Form 12BB is a provisional statement that has details about your proposed investments and Expenses thar are Income Tax deductible.</p>
+          <p class="mb-0 ps-3">Form 12BB is a provisional statement that has details about your proposed investments and
+            Expenses thar are Income Tax deductible.</p>
           <div class="card py-3 ps-3">
             <p class="mb-0">Select the financial year and generate the form 12BB</p>
             <div class="d-flex py-2 mt-2">
@@ -54,7 +64,7 @@
                 </select>
               </div>
               <div class="ms-3">
-                <button type="button" class="btn btn-primary">Generate Form 12BB</button>
+                <button type="button" class="btn btn-primary-c">Generate Form 12BB</button>
               </div>
             </div>
           </div>
@@ -66,14 +76,16 @@
         <h3 style="text-align: center; font-size: 30px; font-weight: 700;">INCOME-TAX RULES, 1962</h3>
         <p style="text-align: center; font-size: 25px;">FORM NO. 12BB</p>
         <p style="text-align: center; font-size: 22px;">(See rule 26C)</p>
-        <h4 style="text-align: center; font-size: 25px; font-weight: 700;">Statement showing particulaes of claims by an employee for deduction of tax under section 192</h4>
+        <h4 style="text-align: center; font-size: 25px; font-weight: 700;">Statement showing particulaes of claims by an
+          employee for deduction of tax under section 192</h4>
         <p style="font-size: 16px;">1. Name and address of the employee: </p>
         <p style="font-size: 16px;">2. Permanent Account Number:</p>
         <p style="font-size: 16px;">3. Financial year: {{FinacialYear}} - {{FinacialYear + 1}}</p>
         <table>
           <thead>
             <tr>
-              <td style="font-weight: 700; text-align: center; font-size: 25px;" colspan="4">DEATILS OF CLAIMS AND EVIDENCE THEREOF</td>
+              <td style="font-weight: 700; text-align: center; font-size: 25px;" colspan="4">DEATILS OF CLAIMS AND
+                EVIDENCE THEREOF</td>
             </tr>
           </thead>
           <tbody>
@@ -97,7 +109,8 @@
                 <p style="padding-left: 15px">(ii) Name of the landlord</p>
                 <p style="padding-left: 15px">(iii) Address of the landlord</p>
                 <p style="padding-left: 15px">(iv) Permanent Account Number of the landlord</p>
-                <p style="padding-left: 15px"> Note: Permanent Account Number shall be furnished if the aggregate rent paid during the previous year exceeds one lakh rupees</p>
+                <p style="padding-left: 15px"> Note: Permanent Account Number shall be furnished if the aggregate rent
+                  paid during the previous year exceeds one lakh rupees</p>
               </td>
               <td></td>
               <td></td>
@@ -143,7 +156,8 @@
             </tr>
             <tr>
               <td></td>
-              <td colspan="3" style="padding-top: 8px;">I, ......................,son/daughter of ............... do hereby certify that the information given above is complete and correct.</td>
+              <td colspan="3" style="padding-top: 8px;">I, ......................,son/daughter of ............... do
+                hereby certify that the information given above is complete and correct.</td>
             </tr>
             <tr>
               <td></td>

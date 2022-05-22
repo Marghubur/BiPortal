@@ -3,13 +3,16 @@
     <div class="col-md-12 bg-light mb-3">
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page" href="javascript:void(0)">ATTENDENCE</a>
+          <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('attendance-tab')"
+            aria-current="page" href="javascript:void(0)">ATTENDENCE</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')" href="javascript:void(0)">TIMESHEET</a>
+          <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')"
+            href="javascript:void(0)">TIMESHEET</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('leave-tab')" href="javascript:void(0)">LEAVE</a>
+          <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('leave-tab')"
+            href="javascript:void(0)">LEAVE</a>
         </li>
       </ul>
     </div>
@@ -19,7 +22,8 @@
           <div class="col-md-8 row m-0 p-0 vhide">
             <div class="col-md-4" *ngIf="!isRedirected">
               <label class="form-label">Employee Name *</label>
-              <app-iautocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId" [ngModelOptions]="{standalone: true}">
+              <app-iautocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
+                [ngModelOptions]="{standalone: true}">
               </app-iautocomplete>
             </div>
             <div class="col-md-4 p-0 m-0">
@@ -29,23 +33,23 @@
             </div>
           </div>
         </ng-container>
-          <div class="col-md-4 vhide elem-row justify-content-end">
-            <div class="elem-row-item-base justify-content-end">
-              <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
-                <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
-                {{ isLoading ? 'Wait' : 'Present week'}}
-              </a>
-            </div>
-            <div class="elem-row-item-base justify-content-end ps-2">
-              <a href="javascript:void(0)" (click)="getAllPendingAttendance()"
-                class="p-2 p-2 badge bg-success text-light head-badge">
-                <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
-                My pending attendance
-              </a>
-            </div>
+        <div class="col-md-4 vhide elem-row justify-content-end">
+          <div class="elem-row-item-base justify-content-end">
+            <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
+              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
+              {{ isLoading ? 'Wait' : 'Present week'}}
+            </a>
+          </div>
+          <div class="elem-row-item-base justify-content-end ps-2">
+            <a href="javascript:void(0)" (click)="getAllPendingAttendance()"
+              class="p-2 p-2 badge bg-success text-light head-badge">
+              <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
+              My pending attendance
+            </a>
           </div>
         </div>
       </div>
+    </div>
     <div *ngIf="isEmployeesReady">
       <app-breadcrums></app-breadcrums>
     </div>
@@ -218,14 +222,15 @@
                 </div>
                 <div class="d-flex">
                   <div class="ms-1 me-1">
-                    <button type="button" [ngClass]="{'btn-danger' : enablePermissionButton, 'btn-success': !enablePermissionButton}"
+                    <button type="button"
+                      [ngClass]="{'btn-danger' : enablePermissionButton, 'btn-success': !enablePermissionButton}"
                       class="btn btn-sm" (click)="onSubmit()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
                       {{ enablePermissionButton ? 'Disable' : 'Enable' }}
                     </button>
                   </div>
                   <div class="ms-1 me-1">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">
+                    <button type="button" class="btn btn-primary-c btn-sm" (click)="onSubmit()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
                       {{ isLoading ? 'Saving' : 'Submit' }}
                     </button>
