@@ -212,7 +212,7 @@
                   </div>
                 </div>
                 <div class="text-end">
-                  <button type="button" class="btn btn-primary btn-sm" [disabled]="isBlocked" (click)="onSubmit()">
+                  <button type="button" class="btn btn-primary-c btn-sm" [disabled]="isBlocked" (click)="onSubmit()">
                     <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
                     {{ isLoading ? 'Saving' : 'Submit' }}
                   </button>

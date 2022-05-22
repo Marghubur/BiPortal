@@ -13,8 +13,11 @@
             <button class="btn btn-sm btn-outline-primary float-end ms-3" (click)="addRolePopUp()">
               <i class="fa fa-plus-square-o pe-2" aria-hidden="true"></i>Add Role
             </button>
-            <button class="btn btn-outline-success btn-sm float-end" [disabled]="ispermissionAdding || !isRolesLoaded" (click)="submitRole()">
-              <i class="fa  pe-2" [ngClass]="{'fa-sign-in': !ispermissionAdding, 'fa-spin fa-spinner': ispermissionAdding}" aria-hidden="true"></i>
+            <button class="btn btn-outline-success btn-sm float-end" [disabled]="ispermissionAdding || !isRolesLoaded"
+              (click)="submitRole()">
+              <i class="fa  pe-2"
+                [ngClass]="{'fa-sign-in': !ispermissionAdding, 'fa-spin fa-spinner': ispermissionAdding}"
+                aria-hidden="true"></i>
               {{ispermissionAdding ? 'Wait' : 'Save' }}
             </button>
           </div>
@@ -44,7 +47,9 @@
             <div class="col-md-12 pt-5 skeleton" *ngFor="let catagory of Menu; let i = index;">
               <div class="vhide">
                 <div>
-                  <button class="w-100 btn btn-primary text-start" (click)="collapseOpenClose('collapseExample'+i)" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseExample'+i" aria-expanded="false" [attr.aria-controls]="'collapseExample'+i">
+                  <button class="w-100 btn btn-primary-c text-start" (click)="collapseOpenClose('collapseExample'+i)"
+                    type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseExample'+i"
+                    aria-expanded="false" [attr.aria-controls]="'collapseExample'+i">
                     {{catagory.Name}}
                     <i class="fa fa-caret-up float-end"></i>
                   </button>
@@ -76,16 +81,20 @@
                                   </button>
                                   <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
                                     <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(0, index)">Block Access</a>
+                                      <a class="dropdown-item" href="javascript:void(0)"
+                                        (click)="selectPermission(0, index)">Block Access</a>
                                     </button>
                                     <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(2, index)">Read only</a>
+                                      <a class="dropdown-item" href="javascript:void(0)"
+                                        (click)="selectPermission(2, index)">Read only</a>
                                     </button>
                                     <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(3, index)">Read & Write</a>
+                                      <a class="dropdown-item" href="javascript:void(0)"
+                                        (click)="selectPermission(3, index)">Read & Write</a>
                                     </button>
                                     <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)" (click)="selectPermission(1, index)">Full Access</a>
+                                      <a class="dropdown-item" href="javascript:void(0)"
+                                        (click)="selectPermission(1, index)">Full Access</a>
                                     </button>
                                   </div>
                                 </div>
@@ -131,8 +140,9 @@
       <div class="modal-footer border-top-0">
         <button (click)="CloseFolderPopup()" class="btn btn-sm btn-outline-danger" data-dismiss="modal">Cancel</button>
         <button (click)="AddRole()" [disabled]="isLoading" class="btn btn-sm btn-outline-success">
-          <i class="fa pe-2" [ngClass]="{'fa-plus': !isLoading, 'fa-spin fa-spinner': isLoading}" aria-hidden="true"></i>
-              {{isLoading ? 'Wait' : 'Add Role' }}
+          <i class="fa pe-2" [ngClass]="{'fa-plus': !isLoading, 'fa-spin fa-spinner': isLoading}"
+            aria-hidden="true"></i>
+          {{isLoading ? 'Wait' : 'Add Role' }}
         </button>
       </div>
     </div>
