@@ -52,8 +52,8 @@
               <p class="mb-0 pb-1">Updated <span class="fw-bold text-success">{{item.RequestedOn | date}}</span> by
                 {{item.Email}}</p>
               <div class="d-flex my-2">
-                <button class="btn btn-sm btn-primary-c"><i class="fa pe-2 fa-repeat" aria-hidden="true"></i>Action</button>
-                <button class="btn btn-sm btn-secondary ms-2"><i class="fa fa-list pe-2"></i> View</button>
+                <button class="btn btn-sm btn-primary-c"><i class="fa pe-1 fa-repeat" aria-hidden="true"></i>Action</button>
+                <button class="btn btn-sm btn-secondary ms-2"><i class="fa fa-list pe-1"></i> View</button>
                 <div class="d-flex ms-3">
                   <div class="col">
                     <select class="form-select">
@@ -62,7 +62,7 @@
                     </select>
                   </div>
                   <button class="btn btn-sm btn-success ms-3">
-                    <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                    <i class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Save' }}
                   </button>
                 </div>
