@@ -1,1 +1,137 @@
-<p>approval-request works!</p>
+<div class="main-container">
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="x_header_title">
+        <h2 class="fw-bold text-dark">Request</h2>
+      </div>
+    </div>
+    <div>
+      <app-breadcrums></app-breadcrums>
+    </div>
+    <div class="mt-3">
+      <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+        <li [ngbNavItem]="1">
+          <a ngbNavLink>Leave</a>
+          <ng-template ngbNavContent>
+            <div class="row bg-light py-3 border-bottom">
+              <div class="col-md-6 fw-bold text-dark">Description</div>
+              <div class="col-md-2 fw-bold text-dark">Type</div>
+              <div class="col-md-3 fw-bold text-dark">Notifies</div>
+              <div class="col-md-1 fw-bold text-dark">State</div>
+            </div>
+            <ng-container *ngFor="let item of request">
+              <div class="row py-3 border-bottom leave-box">
+                <div class="col-md-6">
+                  <p class="mb-0 fw-bold fs-6">Leave Request by {{item.UserName}}</p>
+                  <span>{{item.Message}}</span>
+                </div>
+                <div class="col-md-2">
+                  Leave Request
+                  <p class="mb-0"><span class="badge bg-primary">{{item.ProjectName}}</span></p>
+                </div>
+                <div class="col-md-3">
+                  {{item.UserName}}
+                  <p class="mb-0">{{item.Email}}</p>
+                  <p class="mb-0">{{item.Mobile}}</p>
+                </div>
+                <div class="col-md-1">{{item.Status}}</div>
+                <div class="d-flex my-1">
+                  <button (click)="openPopup('Reject', item)"class="btn btn-danger btn-sm">Reject</button>
+                  <button (click)="openPopup('Approved', item)"class="btn btn-success ms-2 btn-sm">Approved</button>
+                  <div class="d-flex ps-3">
+                    <div class="col">
+                      <select class="form-select" (change)="openPopup('othermember', item)">
+                        <option selected>Re-Assigned to</option>
+                        <option value="other">Other member</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a ngbNavLink>TimeSheet</a>
+          <ng-template ngbNavContent>
+            <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
+              farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
+              ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
+              helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson
+              8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
+              stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink>Project</a>
+          <ng-template ngbNavContent>
+            <p>Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh elit id diam. Nulla facilisi.
+              Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis, luctus eget tincidunt eu, congue et odio.
+              Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu, et molestie lectus ultrices et. Sed diam urna,
+              egestas ut ipsum vel, volutpat volutpat neque. Praesent fringilla tortor arcu. Vivamus faucibus nisl enim, nec
+              tristique ipsum euismod facilisis. Morbi ut bibendum est, eu tincidunt odio. Orci varius natoque penatibus et
+              magnis dis parturient montes, nascetur ridiculus mus. Mauris aliquet odio ac lorem aliquet ultricies in eget
+              neque. Phasellus nec tortor vel tellus pulvinar feugiat.</p>
+          </ng-template>
+        </li>
+      </ul>
+
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="leaveModal" tabindex="-1" aria-labelledby="leaveModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0 pt-4">
+        <ng-container [ngSwitch]="modalHeader">
+          <h5 *ngSwitchCase="'Reject'" class="modal-title ps-4" id="leaveModalLabel">Request rejected confirmation</h5>
+          <h5 *ngSwitchCase="'Approved'" class="modal-title ps-4" id="leaveModalLabel">Request approved confirmation</h5>
+          <h5 *ngSwitchCase="'othermember'" class="modal-title ps-4" id="leaveModalLabel">Assign to other member</h5>
+        </ng-container>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5">
+        <div class="row bg-light py-3 border-bottom">
+          <div class="col-md-6 fw-bold text-dark">Description</div>
+          <div class="col-md-2 fw-bold text-dark">Type</div>
+          <div class="col-md-3 fw-bold text-dark">Notifies</div>
+          <div class="col-md-1 fw-bold text-dark">State</div>
+        </div>
+        <div class="row py-3">
+          <div class="col-md-6">
+            <p class="mb-0 fw-bold fs-6">Leave Request by {{singleLeave.UserName}}</p>
+            <!-- <input type="text" class="form-control" name="message" [(ngModel)]="editedMessage" value="{{singleLeave.Message}}"> -->
+            <span>{{singleLeave.Message}}</span>
+          </div>
+          <div class="col-md-2">
+            Leave Request
+            <p class="mb-0"><span class="badge bg-primary">{{singleLeave.ProjectName}}</span></p>
+          </div>
+          <div class="col-md-3">
+            {{singleLeave.UserName}}
+            <p class="mb-0">{{singleLeave.Email}}</p>
+            <p class="mb-0">{{singleLeave.Mobile}}</p>
+          </div>
+          <div class="col-md-1">{{singleLeave.AssigneeId}}</div>
+        </div>
+        <div class="col-md-6 mb-3" *ngIf="modalHeader == 'othermember'">
+          <label class="form-label">Reporting Manager</label>
+          <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId"
+            name="ReportingManagerId">
+          </app-iautocomplete>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="submitRequest()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                    {{ isLoading ? 'Wait' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

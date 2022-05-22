@@ -84,7 +84,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     } else {
       this.isUpdate = false;
       this.employeeModal = new EmployeeDetail();
-      this.employeeModal.ReportingManagerId = 0;
+      this.employeeModal.ReportingManagerId = null;
+      this.employeeModal.DesignationId = null;
       this.bindForm();
       this.idReady = true;
     }
@@ -169,7 +170,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   bindForm() {
     this.employeeForm = this.fb.group({
       FirstName: new FormControl(this.employeeModal.FirstName, [Validators.required]),
-      LastName: new FormControl(this.employeeModal.LastName),
+      LastName: new FormControl(this.employeeModal.LastName, [Validators.required]),
       Mobile: new FormControl(this.employeeModal.Mobile),
       Email: new FormControl(this.employeeModal.Email),
       SecondaryMobile: new FormControl(this.employeeModal.SecondaryMobile),
@@ -201,10 +202,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       DOB: new FormControl(this.employeeModal.DOB),
       TakeHomeByCandidate: new FormControl(null),
       FileId: new FormControl(this.employeeModal.FileId),
-      AccessLevelId: new FormControl(this.employeeModal.AccessLevelId),
-      UserTypeId: new FormControl(this.employeeModal.UserTypeId),
-      ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId),
-      DesignationId: new FormControl(this.employeeModal.DesignationId),
+      AccessLevelId: new FormControl(this.employeeModal.AccessLevelId, [Validators.required]),
+      UserTypeId: new FormControl(this.employeeModal.UserTypeId, [Validators.required]),
+      ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId, [Validators.required]),
+      DesignationId: new FormControl(this.employeeModal.DesignationId, [Validators.required]),
       AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
     });
   }
@@ -235,7 +236,26 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
     if (this.employeeForm.get('FirstName').errors !== null)
       errroCounter++;
+    if (this.employeeForm.get('LastName').errors !== null)
+      errroCounter++;
     if (this.employeeForm.get('Email').errors !== null)
+      errroCounter++;
+    if (this.employeeForm.get('DesignationId').errors !== null)
+      errroCounter++;
+    if (this.employeeForm.get('ReportingManagerId').errors !== null) {
+      this.managerList = new autoCompleteModal();
+      this.managerList.data = [];
+      this.managerList.className = "error-field";
+      this.managerList.placeholder = "Reporting Manager";
+      this.managerList.data.push({
+        value: 0,
+        text: "Default Manager"
+      });
+      errroCounter++;
+    }
+    if (this.employeeForm.get('AccessLevelId').errors !== null)
+      errroCounter++;
+    if (this.employeeForm.get('UserTypeId').errors !== null)
       errroCounter++;
     if (this.employeeForm.get('Mobile').errors !== null)
       errroCounter++;
@@ -279,11 +299,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }).catch(e => {
         this.isLoading = false;
-        Toast("Registration fail. Please contact admin.")
+        ErrorToast("Registration fail. Please contact admin.")
       });
     } else {
       this.isLoading = false;
-      Toast("Please correct all the mandaroty field marded red");
+      ErrorToast("Please correct all the mandaroty field marded red");
     }
   }
 
@@ -475,9 +495,9 @@ export class EmployeeDetail {
   TakeHomeByCandidate: number = null;
   DOB: Date = null;
   DateOfJoining: Date = null;
-  ReportingManagerId: number = null;
-  DesignationId: number = -1;
-  AccessLevelId: number = 0;
-  UserTypeId: number = 0;
+  ReportingManagerId: number = -1;
+  DesignationId: number = null;
+  AccessLevelId: number = null;
+  UserTypeId: number = null;
   AllocatedClients: Array<AssignedClients> = [];
 }

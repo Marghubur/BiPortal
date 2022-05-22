@@ -39,14 +39,14 @@
                   <div class="col-md-6 mb-3">
                     <label class="form-label">First Name *</label>
                     <input inputtype="mandatory" class="form-control" placeholder="First Name" transform=""
-                      [ngClass]="{'error': submitted && f.FirstName.errors !== null && f.FirstName.errors.required}"
+                      [ngClass]="{'error-field': submitted && f.FirstName.errors !== null && f.FirstName.errors.required}"
                       name="FirstName" formControlName="FirstName" />
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Last Name *</label>
                     <input class="form-control" placeholder="Last Name" name="LastName" formControlName="LastName"
                       transform=""
-                      [ngClass]="{'error': submitted && f.LastName.errors !== null && f.LastName.errors.required}" />
+                      [ngClass]="{'error-field': submitted && f.LastName.errors !== null && f.LastName.errors.required}" />
                   </div>
                 </div>
 
@@ -54,13 +54,13 @@
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Mobile Number </label>
                     <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#"
-                      [ngClass]="{'error': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}"
+                      [ngClass]="{'error-field': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}"
                       OnlyNumber="10" name="Mobile" formControlName="Mobile" />
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Email Id </label>
                     <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email"
-                      [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}" />
+                      [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.Email.errors.required}" />
                   </div>
                 </div>
 
@@ -91,8 +91,8 @@
                 <div class="col-md-12 m-0 row">
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Designation</label>
-                    <select name="DesignationId" class="form-control" formControlName="DesignationId">
-                      <option value="0">Select Designation</option>
+                    <select name="DesignationId" class="form-control" formControlName="DesignationId" [ngClass]="{'error-field': submitted && f.DesignationId.errors !== null && f.DesignationId.errors.required}" >
+                      <option value="">Select Designation</option>
                       <option value="1">Project Manager</option>
                       <option value="2">Architect</option>
                       <option value="3">Networking</option>
@@ -118,8 +118,8 @@
                 <div class="col-md-12 m-0 row">
                   <div class="col-md-6">
                     <label class="form-label">Role</label>
-                    <select name="DesignationId" class="form-control" formControlName="AccessLevelId">
-                      <option value="0">Allocate role</option>
+                    <select name="AccessLevelId" class="form-control" formControlName="AccessLevelId" [ngClass]="{'error-field': submitted && f.AccessLevelId.errors !== null && f.AccessLevelId.errors.required}">
+                      <option value="">Allocate role</option>
                       <option *ngFor="let item of userRoles" [value]="item.AccessLevelId">
                         {{item.RoleName}}
                       </option>
@@ -127,8 +127,8 @@
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">User Type</label>
-                    <select name="DesignationId" class="form-control" formControlName="UserTypeId">
-                      <option value="0">Select User Type</option>
+                    <select name="UserTypeId" class="form-control" formControlName="UserTypeId" [ngClass]="{'error-field': submitted && f.UserTypeId.errors !== null && f.UserTypeId.errors.required}">
+                      <option value="">Select User Type</option>
                       <option value="1">Admin</option>
                       <option value="2">Employee</option>
                       <option value="3">Client</option>
