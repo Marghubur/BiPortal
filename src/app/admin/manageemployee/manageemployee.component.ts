@@ -79,7 +79,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (data) {
       this.employeeUid = data.EmployeeUid;
       this.ProfessuinalDetail_JSON = data.ProfessionalDetail_Json;
-      this.loadData(this.employeeUid);
       this.isUpdate = true;
     } else {
       this.isUpdate = false;
@@ -89,6 +88,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.bindForm();
       this.idReady = true;
     }
+    this.loadData(this.employeeUid);
   }
 
   buildProfileImage(fileDetail: any) {

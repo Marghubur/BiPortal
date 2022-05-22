@@ -3,7 +3,7 @@
     <div class="x_header">
       <div class="x_header_title">
         <h2 class="fw-bold text-dark"><i class="fa fa-bullhorn pe-3 fa-lg"></i> Notifications</h2>
-        <button class="btn float-end btn-primary-c"><i class="fa fa-plus-circle pe-2"></i> Create notification</button>
+        <button class="btn float-end btn-primary-c" (click)="createNotificationPopUp()"><i class="fa fa-plus-circle pe-2"></i> Create notification</button>
       </div>
     </div>
     <div>
@@ -32,8 +32,10 @@
             </select>
           </div>
         </div>
-        <div class="col text-end pe-3 text-success fs-6">
-          <i class="fa fa-filter pe-2"></i> <span>Filter</span>
+        <div class="col text-end pe-3 fs-6">
+          <a href="javascript:void(0)" class="text-decoration-none text-success">
+            <i class="fa fa-filter pe-2"></i> <span>Filter</span>
+          </a>
         </div>
       </div>
     </div>
@@ -50,9 +52,9 @@
               <p class="mb-0 pb-1">Updated <span class="fw-bold text-success">{{item.RequestedOn | date}}</span> by
                 {{item.Email}}</p>
               <div class="d-flex my-2">
-                <button class="btn btn-sm btn-primary-c">Action</button>
-                <button class="btn btn-sm btn-secondary ms-2">View</button>
-                <div class="d-flex ms-3 border-info rounded border">
+                <button class="btn btn-sm btn-primary-c"><i class="fa pe-2 fa-repeat" aria-hidden="true"></i>Action</button>
+                <button class="btn btn-sm btn-secondary ms-2"><i class="fa fa-list pe-2"></i> View</button>
+                <div class="d-flex ms-3">
                   <div class="col">
                     <select class="form-select">
                       <option selected>Choose...</option>
@@ -60,7 +62,7 @@
                     </select>
                   </div>
                   <button class="btn btn-sm btn-success ms-3">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                    <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Save' }}
                   </button>
                 </div>
@@ -70,19 +72,19 @@
         </div>
         <div class="col-md-2">
           <div class="border-bottom right-box pt-3">
-            <p class="mb-0 pb-2"><span class="fw-bold fs-6 pe-2">7,989</span> <small>sent</small> <sup><i
+            <p class="mb-0 pb-2"><span class="fw-bold fs-5 pe-2">7,989</span> <small class="fs-6">sent</small> <sup><i
                   class="fa fa-question-circle ps-2 fa-lg"></i></sup></p>
-            <p class="mb-0 pb-2"><span class="fw-bold fs-6 pe-2">7,989</span> <small>confirm receipts</small> <sup><i
+            <p class="mb-0 pb-2"><span class="fw-bold fs-5 pe-2">7,989</span> <small class="fs-6">confirm receipts</small> <sup><i
                   class="fa fa-question-circle ps-2 fa-lg"></i></sup></p>
-            <p class="mb-0 pb-2"><span class="fw-bold fs-6 pe-2">7,989</span> <small>clicks (25.6%CTR)</small> <sup><i
+            <p class="mb-0 pb-2"><span class="fw-bold fs-5 pe-2">7,989</span> <small class="fs-6">clicks (25.6%CTR)</small> <sup><i
                   class="fa fa-question-circle ps-2 fa-lg"></i></sup></p>
           </div>
           <div class="border-bottom right-box pt-3">
-            <p class="mb-0 pb-2">Last 30 Days</p>
+            <p class="mb-0 pb-2 fs-5">Last 30 Days</p>
             <p>No data</p>
           </div>
           <div class="right-box pt-3">
-            <p class="mb-0 pb-2">Last 30 Days</p>
+            <p class="mb-0 pb-2 fs-5">Last 30 Days</p>
             <p>No data</p>
           </div>
         </div>
@@ -90,3 +92,28 @@
     </div>
   </div>
 </div>
+
+<!-- End -->
+
+<!-- Create Notification Modaql -->
+<div class="modal fade" id="createNotification" tabindex="-1" aria-labelledby="createNotificationLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="createNotificationLabel">Create Notification</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-c" [disabled]="isCreateNotification">
+          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isCreateNotification, 'fa-floppy-o': !isCreateNotification}"></i>
+                    {{ isCreateNotification ? 'Wait' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end -->

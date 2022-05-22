@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   // isGoogleLogin: boolean = false;
   // isGitHubLogin: boolean = false;
   isUserMode: boolean = true;
-  userType: string = 'employee';
+  userType: string = 'system';
 
   @Output() userAuthState = new EventEmitter();
 

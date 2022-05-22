@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
+declare var $: any;
 
 @Component({
   selector: 'app-notification',
@@ -9,6 +10,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 export class NotificationComponent implements OnInit {
   notification: Array<EmployeeNotification> = [];
   isLoading: boolean = false;
+  isCreateNotification: boolean = false;
 
   constructor(private http: AjaxService) { }
 
@@ -65,6 +67,10 @@ export class NotificationComponent implements OnInit {
       NotificationId: 1,
       Message: "You've been missing out on our latest stuff!"
     }]
+  }
+
+  createNotificationPopUp() {
+    $('#createNotification').modal('show');
   }
 
 }

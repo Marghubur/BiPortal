@@ -47,8 +47,7 @@
             <div class="col-md-12 pt-5 skeleton" *ngFor="let catagory of Menu; let i = index;">
               <div class="vhide">
                 <div>
-                  <button class="w-100 btn btn-primary-c text-start" (click)="collapseOpenClose('collapseExample'+i)"
-                    type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseExample'+i"
+                  <button class="w-100 btn btn-primary-c text-start" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseExample'+i"
                     aria-expanded="false" [attr.aria-controls]="'collapseExample'+i">
                     {{catagory.Name}}
                     <i class="fa fa-caret-up float-end"></i>

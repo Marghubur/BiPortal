@@ -816,9 +816,7 @@ export class AttendanceComponent implements OnInit {
       className: "disabled-input",
       placeholder: "Select Organization"
     }
-    setTimeout(() => {
-      this.findEmployeeById(e);
-    }, 2000)
+    this.findEmployeeById(e);
   }
 
   findEmployeeById(employeeId: any) {
