@@ -21,6 +21,8 @@ export class RolesComponent implements OnInit {
   PermissionValue: number = 0;
   Roles: Array<any> = [];
   addRoleForm: FormGroup;
+  isLoading: boolean = false;
+  ispermissionAdding: boolean = false;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService) { }
@@ -106,6 +108,8 @@ export class RolesComponent implements OnInit {
     }
   }
 
+
+
   selectPermission(i: any, position: number) {
     let items = this.rolesForm.controls["menuItems"] as FormArray;
     let elem: FormGroup = items.controls[position] as FormGroup;
@@ -127,6 +131,7 @@ export class RolesComponent implements OnInit {
   }
 
   submitRole() {
+    this.ispermissionAdding = true;
     let RolesAndMenu = {};
     let items = this.rolesForm.controls["menuItems"] as FormArray;
     let access = this.rolesForm.controls['accessLevel'] as FormControl;
@@ -139,8 +144,9 @@ export class RolesComponent implements OnInit {
 
     this.http.post("Roles/AddUpdatePermission", RolesAndMenu).then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        Toast("Permission added or updated successfully")
+        Toast("Permission added or updated successfully");
       }
+      this.ispermissionAdding = false;
     });
   }
 
@@ -160,15 +166,18 @@ export class RolesComponent implements OnInit {
   }
 
   AddRole() {
+    this.isLoading = true;
     let formValue = this.addRoleForm.value;
     if (formValue) {
-      this.http.post("Roles/AddRole", formValue).then((response:ResponseModel) => {
+      this.http.post("Roles/AddRole", formValue).then((response: ResponseModel) => {
         if (response.ResponseBody) {
-          Toast("Role added successfully")
-          this.Roles = response.ResponseBody['Table']
+          Toast("Role added successfully");
+          this.Roles = response.ResponseBody['Table'];
         }
-      })
+        this.isLoading = false;
+      });
+      $('#addRole').modal('hide');
     };
-    this.CloseFolderPopup();
+    this.isLoading = false;
   }
 }
