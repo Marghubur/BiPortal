@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, Attendance, Leave, UserAttendance, UserLeave, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter, UserService } from 'src/providers/userService';
+import { UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -229,9 +227,12 @@ export class TimesheetComponent implements OnInit {
           current.PresentDayStatus = 2;
         }
         this.isLoading = false;
-        $('#commentModal').modal('hide');
-        Toast("submitted");
+        Toast("Wow!!!  Your attendance submitted successfully.");
+      } else {
+        ErrorToast(response.ResponseBody, 20);
       }
+
+      $('#commentModal').modal('hide');
     })
   }
 
