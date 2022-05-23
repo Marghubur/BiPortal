@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     this.isUserMode = !this.isUserMode;
   }
 
-  LoginProvider() {
+  UserLogin() {
     this.isLoading = true;
     if (this.UserForm.valid) {
       this.isLoading = true;
@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit {
         }
 
         request.Password = password;
-        this.http.login("Login/AuthenticateProvider", request).then((result: ResponseModel) => {
+        this.http.login("Login/AuthenticateUser", request).then((result: ResponseModel) => {
           if (this.commonService.IsValid(result)) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
@@ -88,48 +88,6 @@ export class LoginComponent implements OnInit {
               this.nav.navigate(UserDashboard, null);
             else
               this.nav.navigate(Dashboard, null);
-          } else {
-            ErrorToast("Incorrect username or password. Please try again.");
-          }
-          this.isLoading = false;
-        }).catch(e => {
-          this.isLoading = false;
-        });
-      }
-    } else {
-      this.isLoading = false;
-    }
-  }
-
-  LoginUser() {
-    this.isLoading = true;
-    if (this.UserForm.valid) {
-      this.isLoading = true;
-      let request = {
-        Password: null,
-        EmailId: null,
-        Mobile: null,
-        MediaName: null,
-        AccessToken: null,
-        UserTypeId: UserType.Candidate,
-      };
-      let userId = this.UserForm.controls['UserId'].value;
-      let password = this.UserForm.controls['Password'].value;
-
-      if (userId !== "" && password !== "") {
-        if(userId.indexOf("@") !== -1) {
-          request.EmailId = userId;
-        } else {
-          request.Mobile = userId;
-        }
-
-        request.Password = password;
-        this.http.login("Login/AuthenticateUser", request).then((result: ResponseModel) => {
-          if (this.commonService.IsValid(result)) {
-            let Data = result.ResponseBody;
-            this.jwtService.setLoginDetail(Data);
-            Toast("Loading dashboard please wait...");
-            this.nav.navigate(UserDashboard, null);
           } else {
             ErrorToast("Incorrect username or password. Please try again.");
           }
