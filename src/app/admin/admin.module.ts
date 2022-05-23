@@ -39,6 +39,8 @@ import { TaxcalculationComponent } from './taxcalculation/taxcalculation.compone
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { IncometaxComponent } from './incometax/incometax.component';
 import { PayslipComponent } from './payslip/payslip.component';
+import { ApprovalRequestComponent } from './approval-request/approval-request.component';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,9 @@ import { PayslipComponent } from './payslip/payslip.component';
     TaxcalculationComponent,
     ResetpasswordComponent,
     IncometaxComponent,
-    PayslipComponent
+    PayslipComponent,
+    ApprovalRequestComponent,
+    NotificationComponent
   ],
   imports: [
     CommonModule,
