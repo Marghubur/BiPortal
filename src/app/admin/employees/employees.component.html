@@ -159,7 +159,9 @@
                           <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"></i></span>
                         </a>
                         <a href="javascript:void(0)" (click)="CreatePopup(user)">
-                          <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+                          <span class="badge" [ngClass]="{'bg-danger': isActiveEmployee, 'bg-success':!isActiveEmployee}">
+                            <i class="fa" [ngClass]="{'fa-trash-o': isActiveEmployee, 'fa-random': !isActiveEmployee}" aria-hidden="true"></i>
+                          </span>
                         </a>
                         <!-- <a href="javascript:void(0)">
                             <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
