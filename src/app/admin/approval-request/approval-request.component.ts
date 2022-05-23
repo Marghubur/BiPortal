@@ -31,104 +31,13 @@ export class ApprovalRequestComponent implements OnInit {
       text: "Default Manager"
     });
 
-    this.request = [{
-      ApprovalRequestId: 1,
-      Email: "marghub12@gmail.com",
-      AssigneeId: 1,
-      Mobile: "8293437694",
-      UserName: "Marghub",
-      RequestedOn: new Date(),
-      UserTypeId: 1,
-      UserId: 7,
-      Message: "You've been missing out on our latest stuff!",
-      FromDate: new Date(),
-      ToDate: new Date(),
-      ProjectId: 1,
-      ProjectName: 'HiringBell'
-    },
-    {
-      ApprovalRequestId: 1,
-      Email: "marghub12@gmail.com",
-      AssigneeId: 1,
-      Mobile: "8293437694",
-      UserName: "Marghub",
-      RequestedOn: new Date(),
-      UserTypeId: 1,
-      UserId: 7,
-      Message: "You've been no missing out on our latest stuff!",
-      FromDate: new Date(),
-      ToDate: new Date(),
-      ProjectId: 1,
-      ProjectName: 'HiringBell'
-    },
-    {
-      ApprovalRequestId: 1,
-      Email: "marghub12@gmail.com",
-      AssigneeId: 1,
-      Mobile: "8293437694",
-      UserName: "Marghub",
-      RequestedOn: new Date(),
-      UserTypeId: 1,
-      UserId: 7,
-      Message: "You've been missing out on our latest stuff!",
-      FromDate: new Date(),
-      ToDate: new Date(),
-      ProjectId: 1,
-      ProjectName: 'HiringBell'
-    },
-    {
-      ApprovalRequestId: 1,
-      Email: "marghub12@gmail.com",
-      AssigneeId: 1,
-      Mobile: "8293437694",
-      UserName: "Marghub",
-      RequestedOn: new Date(),
-      UserTypeId: 1,
-      UserId: 7,
-      Message: "You've been missing out on our latest stuff!",
-      FromDate: new Date(),
-      ToDate: new Date(),
-      ProjectId: 1,
-      ProjectName: 'HiringBell'
-    },
-    {
-      ApprovalRequestId: 1,
-      Email: "marghub12@gmail.com",
-      AssigneeId: 1,
-      Mobile: "8293437694",
-      UserName: "Marghub",
-      RequestedOn: new Date(),
-      UserTypeId: 1,
-      UserId: 7,
-      Message: "You've been missing out on our latest stuff!",
-      FromDate: new Date(),
-      ToDate: new Date(),
-      ProjectId: 1,
-      ProjectName: 'HiringBell'
-    },
-    {
-      ApprovalRequestId: 1,
-      Email: "marghub12@gmail.com",
-      AssigneeId: 1,
-      Mobile: "8293437694",
-      UserName: "Marghub",
-      RequestedOn: new Date(),
-      UserTypeId: 1,
-      UserId: 7,
-      Message: "You've been missing out on our latest stuff!",
-      FromDate: new Date(),
-      ToDate: new Date(),
-      ProjectId: 1,
-      ProjectName: 'HiringBell'
-    }]
-
     this.loadData();
   }
 
   loadData() {
-    this.http.get(`Request/GetPendingRequests/${1}`).then(response => {
+    this.http.get(`Request/GetPendingRequests/${0}`).then(response => {
       if(response.ResponseBody) {
-        this.request = response.ResponseBody.Table[0];
+        this.request = response.ResponseBody.Table;
       } else {
         ErrorToast("Fail to fetch data. Please contact to admin.");
       }

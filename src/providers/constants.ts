@@ -77,6 +77,8 @@ export const AdminTaxcalculation = 'admin/taxcalculation';
 export const AdminResetPassword = 'admin/resetpassword';
 export const AdminIncomeTax = 'admin/incometax';
 export const AdminPaySlip = 'admin/payslip';
+export const AdminNotification = 'admin/notification';
+export const AdminApprovalRequest = 'admin/request';
 
 // ********************** Admin route pages  *******************
 

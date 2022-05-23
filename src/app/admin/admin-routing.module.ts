@@ -30,7 +30,9 @@ import { AdminResetPassword, AdminDeclaration,
   Timesheet,
   AdminIncomeTax,
   AdminPaySlip,
-  AdminTaxcalculation
+  AdminTaxcalculation,
+  AdminNotification,
+  AdminApprovalRequest
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -64,6 +66,8 @@ import { ResetpasswordComponent } from './resetpassword/resetpassword.component'
 import { IncometaxComponent } from './incometax/incometax.component';
 import { PayslipComponent } from './payslip/payslip.component';
 import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
+import { NotificationComponent } from './notification/notification.component';
+import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -98,6 +102,8 @@ const routes: Routes = [
   { path: AdminResetPassword, component: ResetpasswordComponent},
   { path: AdminIncomeTax, component: IncometaxComponent},
   { path: AdminPaySlip, component: PayslipComponent},
+  { path: AdminNotification, component: NotificationComponent},
+  { path: AdminApprovalRequest, component: ApprovalRequestComponent},
   { path: AdminTaxcalculation, component: TaxcalculationComponent}
 ];
 

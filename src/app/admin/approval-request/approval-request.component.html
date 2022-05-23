@@ -1,0 +1,158 @@
+<div class="main-container">
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="x_header_title">
+        <h2 class="fw-bold text-dark">Request</h2>
+      </div>
+    </div>
+    <div>
+      <app-breadcrums></app-breadcrums>
+    </div>
+    <div class="mt-3">
+      <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+        <li [ngbNavItem]="1">
+          <a ngbNavLink>TimeSheet</a>
+          <ng-template ngbNavContent>
+            <div class="row bg-light py-3 border-bottom px-3">
+              <div class="col-md-6 fw-bold text-dark">Description</div>
+              <div class="col-md-2 fw-bold text-dark">Type</div>
+              <div class="col-md-3 fw-bold text-dark">Notifies</div>
+              <div class="col-md-1 fw-bold text-dark">State</div>
+            </div>
+            <ng-container *ngFor="let item of request">
+              <div class="row py-3 border-bottom px-3 leave-box">
+                <div class="col-md-6">
+                  <p class="mb-0 fs-5">Request by
+                    <span class="text-primary-c">{{item.UserName}}</span>
+                  </p>
+                  <span>
+                    <span class="fw-bold">Message:</span>
+                    {{item.Message}}
+                  </span>
+                </div>
+                <div class="col-md-2">
+                  Timesheet approval Request
+                  <p class="mb-0">
+                    <span class="badge bg-primary">
+                      Project: &nbsp;
+                      <ng-container *ngIf="item.ProjectName == '' || item.ProjectName == null">
+                        NA
+                      </ng-container>
+                      <ng-container *ngIf="item.ProjectName != ''">
+                        {{item.ProjectName}}
+                      </ng-container>
+                    </span>
+                  </p>
+                  <p class="mb-0">
+                    <span class="badge bg-success">
+                      Manager &nbsp;
+                      <ng-container *ngIf="item.AssigneeId == 0">
+                        NA
+                      </ng-container>
+                      <ng-container *ngIf="item.AssigneeId != 0">
+                        {{item.AssigneeId}}
+                      </ng-container>
+                    </span>
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  {{item.UserName}}
+                  <p class="mb-0">{{item.Email}}</p>
+                  <p class="mb-0">{{item.Mobile}}</p>
+                </div>
+                <div class="col-md-1">{{item.Status}}</div>
+                <div class="d-flex my-1">
+                  <button (click)="openPopup('Reject', item)" class="btn btn-danger btn-sm"><i
+                      class="fa fa-ban pe-1"></i> Reject</button>
+                  <button (click)="openPopup('Approved', item)" class="btn btn-success ms-2 btn-sm"><i
+                      class="fa fa-check pe-1"></i> Approved</button>
+                  <div class="d-flex ps-3">
+                    <div class="col">
+                      <select class="form-select" (change)="openPopup('othermember', item)">
+                        <option selected>Re-Assigned to</option>
+                        <option value="other">Other member</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a ngbNavLink>Leave</a>
+          <ng-template ngbNavContent>
+            <div class="x_panel d-flex align-items-center justify-content-center">
+              <h2 class=" text-dark">No Record Found...</h2>
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink>Project</a>
+          <ng-template ngbNavContent>
+            <div class="x_panel d-flex align-items-center justify-content-center">
+              <h2 class=" text-dark">No Record Found...</h2>
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="leaveModal" tabindex="-1" aria-labelledby="leaveModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0 pt-4">
+        <ng-container [ngSwitch]="modalHeader">
+          <h5 *ngSwitchCase="'Reject'" class="modal-title ps-4" id="leaveModalLabel">Request rejected confirmation</h5>
+          <h5 *ngSwitchCase="'Approved'" class="modal-title ps-4" id="leaveModalLabel">Request approved confirmation
+          </h5>
+          <h5 *ngSwitchCase="'othermember'" class="modal-title ps-4" id="leaveModalLabel">Assign to other member</h5>
+        </ng-container>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5">
+        <div class="row bg-light py-3 border-bottom">
+          <div class="col-md-6 fw-bold text-dark">Description</div>
+          <div class="col-md-2 fw-bold text-dark">Type</div>
+          <div class="col-md-3 fw-bold text-dark">Notifies</div>
+          <div class="col-md-1 fw-bold text-dark">State</div>
+        </div>
+        <div class="row py-3">
+          <div class="col-md-6">
+            <p class="mb-0 fw-bold fs-6">Leave Request by {{singleLeave.UserName}}</p>
+            <!-- <input type="text" class="form-control" name="message" [(ngModel)]="editedMessage" value="{{singleLeave.Message}}"> -->
+            <span>{{singleLeave.Message}}</span>
+          </div>
+          <div class="col-md-2">
+            Leave Request
+            <p class="mb-0"><span class="badge bg-primary">{{singleLeave.ProjectName}}</span></p>
+          </div>
+          <div class="col-md-3">
+            {{singleLeave.UserName}}
+            <p class="mb-0">{{singleLeave.Email}}</p>
+            <p class="mb-0">{{singleLeave.Mobile}}</p>
+          </div>
+          <div class="col-md-1">{{singleLeave.AssigneeId}}</div>
+        </div>
+        <div class="col-md-6 mb-3" *ngIf="modalHeader == 'othermember'">
+          <label class="form-label">Reporting Manager</label>
+          <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId" name="ReportingManagerId">
+          </app-iautocomplete>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="submitRequest()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
