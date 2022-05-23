@@ -276,7 +276,7 @@ export class EmployeesComponent implements OnInit {
     if (item !== null) {
       let EmpId = item.EmployeeUid;
       if (EmpId !== null && EmpId !== "") {
-        this.http.get(`Employee/GetEmployeeById/${EmpId}/${item.IsActive}`).then((response: ResponseModel) => {
+        this.http.get(`Employee/GetEmployeeById/${EmpId}/${this.isActiveEmployee}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             this.nav.navigate(ManageEmployee, response.ResponseBody);
           }
