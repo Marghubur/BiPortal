@@ -35,28 +35,21 @@
         <ng-container>
           <div class="x_header">
             <div class="x_header_title mt-3">
-              <div class="row">
-                <div class="d-flex flex-row justify-content-between">
-                  <div class="d-flex" *ngIf="fileLoaded">
+              <div class="d-flex justify-content-between">
+                <div class="row justify-content-between col-md-7">
+                  <div class="d-flex col-md-6" *ngIf="fileLoaded">
                     <label class="form-label pe-3 mt-1">Developer</label>
-                    <div class="col-md-12">
+                    <div class="col-md-9">
                       <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
                         (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
                       </app-iautocomplete>
                     </div>
                   </div>
-                  <div class="d-flex flex-row align-items-center">
+                  <div class="d-flex col-md-6 flex-row align-items-center">
                     <div class="text-end">
                       <a href="javascript:void(0)" class="a-btn text-danger fw-bold" (click)="refreshFilter()">
                         <i class="fa fa-refresh">
                           <span>Reset</span>
-                        </i>
-                      </a>
-                    </div>
-                    <div class="text-end">
-                      <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
-                        <i class="fa fa-filter">
-                          <span>Filter</span>
                         </i>
                       </a>
                     </div>
@@ -68,6 +61,13 @@
                       </a>
                     </div>
                   </div>
+                </div>
+                <div class="text-end">
+                  <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
+                    <i class="fa fa-filter">
+                      <span>Filter</span>
+                    </i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -126,14 +126,8 @@
                         <option value="3">Canceled</option>
                         <option value="7">Raised</option>
                       </select>
-                      <div class="t-filter" (click)="arrangeDetails(orderByBillStatusAsc, 'BillStatusId')">
-                        <a href="javascript:void()" class="pe-2">Amount</a>
-                        <i class="fa fa-sort-amount-asc"
-                          [ngClass]="{'d-none': orderByBillStatusAsc == null || !orderByBillStatusAsc }"
-                          aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
-                          [ngClass]="{'d-none': orderByBillStatusAsc == null || orderByBillStatusAsc }"
-                          aria-hidden="true"></i>
+                      <div class="t-filter align-items-center justify-content-center">
+                        <a href="javascript:void()" class="pe-2">IsPaid</a>
                       </div>
                     </div>
                   </div>
@@ -211,28 +205,21 @@
                         <option value="3">Canceled</option>
                         <option value="6">Raised</option>
                       </select>
-                      <div class="t-filter justify-content-between"
-                        (click)="arrangeDetails(orderByGSTStatusAsc, 'GSTStatus')">
+                      <div class="t-filter justify-content-center align-items-center">
                         <a href="javascript:void()" class="pe-2">GST</a>
-                        <i class="fa fa-sort-amount-asc"
-                          [ngClass]="{'d-none': orderByGSTStatusAsc == null || !orderByGSTStatusAsc }"
-                          aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
-                          [ngClass]="{'d-none': orderByGSTStatusAsc == null || orderByGSTStatusAsc }"
-                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <!-- <div class="th">
-                    <div class="d-flex justify-content-around">
-                      <a href="javascript:void(0)" class="text-dark ps-1" (click)="filterRecords()">
-                        <i class="fa fa-filter zoom-2"></i>
-                      </a>
-                    </div>
-                   <div class="t-filter d-block text-center">
-                     <a href="javascript:void(0)">ACTIONS</a>
-                   </div>
-                  </div> -->
+                      <div class="d-flex justify-content-around">
+                        <a href="javascript:void(0)" class="text-dark ps-1" (click)="filterRecords()">
+                          <i class="fa fa-filter zoom-2"></i>
+                        </a>
+                      </div>
+                     <div class="t-filter d-block text-center">
+                       <a href="javascript:void(0)">ACTIONS</a>
+                     </div>
+                    </div> -->
                 </div>
               </div>
               <div class="t-body custom-height">
@@ -696,7 +683,7 @@
             <label class="form-label pe-3">Employee</label>
             <div>
               <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
-                (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                (keyup.enter)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
               </app-iautocomplete>
             </div>
           </div>
@@ -777,7 +764,7 @@
               </div>
 
               <div class="col-md-3">
-                <label for="" class="form-label">Raised To</label>
+                <label for="" class="form-label">To</label>
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">

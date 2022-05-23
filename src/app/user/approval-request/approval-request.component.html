@@ -13,14 +13,14 @@
         <li [ngbNavItem]="1">
           <a ngbNavLink>Leave</a>
           <ng-template ngbNavContent>
-            <div class="row bg-light py-3 border-bottom">
+            <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
               <div class="col-md-3 fw-bold text-dark">Notifies</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngFor="let item of request">
-              <div class="row py-3 border-bottom leave-box">
+              <div class="row py-3 border-bottom px-3 leave-box">
                 <div class="col-md-6">
                   <p class="mb-0 fw-bold fs-6">Leave Request by {{item.UserName}}</p>
                   <span>{{item.Message}}</span>
@@ -36,8 +36,8 @@
                 </div>
                 <div class="col-md-1">{{item.Status}}</div>
                 <div class="d-flex my-1">
-                  <button (click)="openPopup('Reject', item)"class="btn btn-danger btn-sm">Reject</button>
-                  <button (click)="openPopup('Approved', item)"class="btn btn-success ms-2 btn-sm">Approved</button>
+                  <button (click)="openPopup('Reject', item)"class="btn btn-danger btn-sm"><i class="fa fa-ban pe-1"></i> Reject</button>
+                  <button (click)="openPopup('Approved', item)"class="btn btn-success ms-2 btn-sm"><i class="fa fa-check pe-1"></i> Approved</button>
                   <div class="d-flex ps-3">
                     <div class="col">
                       <select class="form-select" (change)="openPopup('othermember', item)">
@@ -54,24 +54,17 @@
         <li [ngbNavItem]="2">
           <a ngbNavLink>TimeSheet</a>
           <ng-template ngbNavContent>
-            <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
-              farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
-              ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-              helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson
-              8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
-              stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+            <div class="x_panel d-flex align-items-center justify-content-center">
+              <h2 class=" text-dark">No Record Found...</h2>
+            </div>
           </ng-template>
         </li>
         <li [ngbNavItem]="3">
           <a ngbNavLink>Project</a>
           <ng-template ngbNavContent>
-            <p>Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh elit id diam. Nulla facilisi.
-              Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis, luctus eget tincidunt eu, congue et odio.
-              Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu, et molestie lectus ultrices et. Sed diam urna,
-              egestas ut ipsum vel, volutpat volutpat neque. Praesent fringilla tortor arcu. Vivamus faucibus nisl enim, nec
-              tristique ipsum euismod facilisis. Morbi ut bibendum est, eu tincidunt odio. Orci varius natoque penatibus et
-              magnis dis parturient montes, nascetur ridiculus mus. Mauris aliquet odio ac lorem aliquet ultricies in eget
-              neque. Phasellus nec tortor vel tellus pulvinar feugiat.</p>
+            <div class="x_panel d-flex align-items-center justify-content-center">
+              <h2 class=" text-dark">No Record Found...</h2>
+            </div>
           </ng-template>
         </li>
       </ul>

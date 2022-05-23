@@ -57,6 +57,10 @@ export class TimesheetComponent implements OnInit {
   presentMonth: boolean = true;
   cachedData: any = null;
   commentOn: any = null;
+  currentEmployee: any = null;
+  applicationData: any = [];
+  employeesList: autoCompleteModal = new autoCompleteModal();
+
 
 
 
@@ -103,6 +107,13 @@ export class TimesheetComponent implements OnInit {
     this.daysInMonth = new Date(year, month + 1, 0).getDate();
     this.clientDetail = {
       data: [],
+      className: "disabled-input",
+      placeholder: "Select Organization"
+    }
+
+    this.employeesList = {
+      data: [],
+      className: "disabled-input",
       placeholder: "Select Employee"
     }
     this.isFormReady = false;
@@ -120,6 +131,7 @@ export class TimesheetComponent implements OnInit {
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.isEmployeesReady = true;
       this.loadMappedClients();
+      this.loadData();
     } else {
       let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
       this.userDetail = this.user.getInstance() as UserDetail;
@@ -133,10 +145,10 @@ export class TimesheetComponent implements OnInit {
         this.employeeId = this.userDetail.UserId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
         //$('#loader').modal('show');
-
+        this.employeeId =0;
+        this.loadData();
         this.loadMappedClients();
-        setTimeout(() => {
-        }, 2000);
+
 
       } else {
         Toast("Invalid user. Please login again.")
@@ -159,32 +171,57 @@ export class TimesheetComponent implements OnInit {
   }
 
   loadMappedClients() {
+    // this.isEmployeesReady = false;
+    // this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
+    //   if(response.ResponseBody) {
+    //     let mappedClient = response.ResponseBody.AllocatedClients;
+    //     if(mappedClient != null && mappedClient.length > 0) {
+    //       let i = 0;
+    //       while(i < mappedClient.length) {
+    //         this.clientDetail.data.push({
+    //           text: mappedClient[i].ClientName,
+    //           value: mappedClient[i].ClientUid,
+    //         });
+    //         i++;
+    //       }
+
+    //       if(mappedClient.length == 1) {
+    //         this.clientId = mappedClient[0].ClientUid;
+    //       }
+    //       Toast("Client loaded successfully.");
+    //     } else {
+    //       ErrorToast("Unable to get client detail. Please contact admin.");
+    //     }
+
+    //     this.isEmployeesReady = true;
+    //     $('#loader').modal('hide');
+    //   } else {
+    //     ErrorToast("Unable to get client detail. Please contact admin.");
+    //   }
+    // });
+  }
+
+  loadData() {
     this.isEmployeesReady = false;
-    this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
+    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        let mappedClient = response.ResponseBody.AllocatedClients;
-        if(mappedClient != null && mappedClient.length > 0) {
+        this.applicationData = response.ResponseBody;
+        this.employeesList.data = [];
+        this.employeesList.placeholder = "Employee";
+        let employees = this.applicationData.Employees;
+        if(employees) {
           let i = 0;
-          while(i < mappedClient.length) {
-            this.clientDetail.data.push({
-              text: mappedClient[i].ClientName,
-              value: mappedClient[i].ClientUid,
+          while(i < employees.length) {
+            this.employeesList.data.push({
+              text: `${employees[i].FirstName} ${employees[i].LastName}`,
+              value: employees[i].EmployeeUid
             });
             i++;
           }
-
-          if(mappedClient.length == 1) {
-            this.clientId = mappedClient[0].ClientUid;
-          }
-          Toast("Client loaded successfully.");
-        } else {
-          ErrorToast("Unable to get client detail. Please contact admin.");
         }
+        this.employeesList.className = "";
 
         this.isEmployeesReady = true;
-        $('#loader').modal('hide');
-      } else {
-        ErrorToast("Unable to get client detail. Please contact admin.");
       }
     });
   }
@@ -765,6 +802,47 @@ export class TimesheetComponent implements OnInit {
       i++;
     }
     if (this.weekList.length > 0) this.divisionCode = 2;
+  }
+
+  findEmployee(e: any) {
+    this.clientDetail = {
+      data: [],
+      className: "disabled-input",
+      placeholder: "Select Organization"
+    }
+    this.findEmployeeById(e);
+  }
+
+  findEmployeeById(employeeId: any) {
+    if (employeeId) {
+      this.clientId =0;
+      this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === parseInt(employeeId));
+      if (this.currentEmployee && this.currentEmployee.ClientJson != null) {
+        this.userName = `${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
+        let clients = JSON.parse(this.currentEmployee.ClientJson);
+        this.clientDetail = {
+          data: [],
+          className: "",
+          placeholder: "Select Organization"
+        }
+
+        let assignedClients = this.applicationData.Clients.filter(x => clients.indexOf(x.ClientId) !== -1);
+        let i = 0;
+        while(i < assignedClients.length) {
+          this.clientDetail.data.push({
+            text: assignedClients[i].ClientName,
+            value: assignedClients[i].ClientId,
+          });
+          i++;
+        }
+
+        if (assignedClients.length  == 1)
+          this.clientId = assignedClients[0].ClientId;
+        else
+          this.clientId = 0;
+
+      }
+    }
   }
 
   activateMe(elemId: string) {
