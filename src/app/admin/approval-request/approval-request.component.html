@@ -4,7 +4,7 @@
       <div class="x_header_title d-flex justify-content-between">
         <h2 class=" fw-bold text-dark">Request</h2>
         <div class="d-flex">
-          <select class="form-select" (change)="filterRequest($event)">
+          <select class="form-select" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
             <option selected value="2">Pending</option>
             <option value="9">Approved</option>
             <option value="5">Rejected</option>
