@@ -3,6 +3,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ItemStatus } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -19,6 +20,7 @@ export class ApprovalRequestComponent implements OnInit {
   managerList: autoCompleteModal = null;
   requestType: number = 0;
   editedMessage: string = '';
+  itemStatus: number = 0;
 
   constructor(private http: AjaxService) { }
 
@@ -30,14 +32,14 @@ export class ApprovalRequestComponent implements OnInit {
       value: 0,
       text: "Default Manager"
     });
-
+    this.itemStatus = 2;
     this.loadData();
   }
 
   loadData() {
-    this.http.get(`Request/GetPendingRequests/${0}`).then(response => {
+    this.http.get(`Request/GetPendingRequests/${0}/${this.itemStatus}`).then(response => {
       if(response.ResponseBody) {
-        this.request = response.ResponseBody.Table;
+        this.request = response.ResponseBody;
       } else {
         ErrorToast("Fail to fetch data. Please contact to admin.");
       }
@@ -62,22 +64,51 @@ export class ApprovalRequestComponent implements OnInit {
     }
   }
 
-  submitRequest() {
-    this.isLoading = false;
+  filterRequest(e: any) {
+    this.itemStatus =Number(e.target.value);
+    this.loadData();
+  }
+
+  submitRequest(header: string) {
+    this.isLoading = true;
+    let statusId = 0;
+    let endPoint = '';
+    try{
+      switch(header) {
+        case 'Approved':
+          statusId = ItemStatus.Approved;
+          endPoint = `Request/ApprovalAction`;
+          break;
+        case 'Rejected':
+          statusId = ItemStatus.Rejected;
+          endPoint = `Request/ApprovalAction`;
+          break;
+        case 'Othermember':
+          endPoint = `Request/ReAssigneToOtherManager/0`;
+          break;
+        default:
+          throw 'Invalid option selected.';
+          break;
+      }
+    } catch(e) {
+      ErrorToast(e);
+    }
+
+    //this.isLoading = false;
     let request = {
       ApprovalRequestId: this.singleLeave.ApprovalRequestId,
       RequestType: this.requestType,
       NewAssigneeId: this.singleLeave.AssigneeId,
-      DesignationId: this.singleLeave.UserTypeId
+      DesignationId: this.singleLeave.UserTypeId,
+      RequestStatusId: statusId
     }
 
-    this.http.post("", request).then((response:ResponseModel) => {
+    this.http.put(endPoint, request).then((response:ResponseModel) => {
       if (response.ResponseBody)
         Toast("Submitted Successfully");
       this.isLoading = true;
     })
   }
-
 }
 
 export class ApprovalRequest {
@@ -94,4 +125,5 @@ export class ApprovalRequest {
 	AssigneeId:number = null;
 	ProjectId:number = null;
 	ProjectName:string = '';
+  RequestStatusId: number = 0;
 }
