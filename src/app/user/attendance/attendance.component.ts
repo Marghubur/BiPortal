@@ -221,7 +221,7 @@ export class AttendanceComponent implements OnInit {
       return;
     }
     this.http.post('Attendance/SubmitAttendance', commment).then((response: ResponseModel) => {
-      if (response.ResponseBody && response.ResponseBody === "updated") {
+      if (response.ResponseBody && response.ResponseBody === "updated" || response.ResponseBody === "inserted") {
         let current = this.currentDays.find(x => x.AttendanceDay === this.currentAttendance.AttendanceDay);
         if(current) {
           current.PresentDayStatus = 2;

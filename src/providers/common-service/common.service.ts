@@ -1,4 +1,4 @@
-import { Home, TableSampleData, AutoPlayMessages } from "./../constants";
+import { Home } from "./../constants";
 import { Injectable, ElementRef } from "@angular/core";
 import { ApplicationStorage } from "./../ApplicationStorage";
 import * as $ from 'jquery';
@@ -366,34 +366,6 @@ export class CommonService {
   ManageArrow(ArrowId: string, Action: any) {
     if (Action) {
       $("#" + ArrowId).removeClass("d-none");
-    }
-  }
-
-  OperateAutoPlay() {
-    this.PageLevelCounter++;
-    let ContentPosition = [
-      {
-        title: "home",
-        style: { right: "310px", top: "370px" }
-      },
-      {
-        title: "tablesampledata",
-        style: { right: "310px", top: "170px" }
-      }
-    ];
-
-    let Messages: any = [];
-    Messages = AutoPlayMessages[this.PageLevelCounter - 1];
-    if (this.IsValid(Messages)) {
-      let NewStyle = {};
-      let Style = ContentPosition.filter(x => x.title === this.CurrentPageName);
-      if (Style.length > 0) {
-        NewStyle = Style[0].style;
-      }
-
-      this.AutoPlayEventManager(Messages.highlight);
-      this.ManageArrow("bouncing_arrow", true);
-      this.GenerateMessage(Messages.message, NewStyle);
     }
   }
 
