@@ -592,9 +592,10 @@
                 <ul class="todo-list todo-list-rounded">
                   <li *ngFor="let p of clientBillPayment" class="d-block">
                     <div class="form-check w-100">
-                      <label class="">
+                      <label class="d-block">
                         {{p.ClientName}} &nbsp;
                         <small>[{{p.FirstName}}]</small>
+                        <span class="float-end">&#8377; {{p.PaidAmount}}</span>
                       </label>
                       <div class="d-flex mt-2">
                         <div class="text-small me-3">
