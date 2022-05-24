@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
 import { ResponseModel } from 'src/auth/jwtService';
@@ -8,6 +8,7 @@ import { Attendance, Documents, DocumentsPage, Employees, Files, ManageEmployee,
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { DocumentUser } from '../documents/documents.component';
+import 'bootstrap';
 declare var $: any;
 
 @Component({
@@ -15,7 +16,7 @@ declare var $: any;
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.scss']
 })
-export class EmployeesComponent implements OnInit {
+export class EmployeesComponent implements OnInit, AfterViewChecked {
   documentForm: FormGroup = null;
   user: UserDetail = null;
   documents: Array<OnlineDocModel> = [];
@@ -48,6 +49,9 @@ export class EmployeesComponent implements OnInit {
     private nav: iNavigation,
     private common: CommonService
   ) { }
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle="tooltip"]').tooltip();
+  }
 
   ngOnInit(): void {
     this.isActiveTab = {
@@ -130,7 +134,7 @@ export class EmployeesComponent implements OnInit {
       this.employeeDetail = response.ResponseBody;
       let i =0;
       while (i < this.employeeDetail.length) {
-        let value  = JSON.parse(this.employeeDetail[i].ClientJson)
+        let value  = JSON.parse(this.employeeDetail[i].ClientJson);
         if (value == null)
           this.employeeDetail[i].ClientJson = [];
         else
@@ -406,6 +410,7 @@ export class employeeModel {
   EmployeeUid: number = 0;
   FirstName?: string = '';
   ClientJson?: any = null;
+  IsActive?: boolean = null;
 }
 
 

@@ -109,20 +109,6 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.isReadonly = true;
     this.basePath = this.http.GetImageBasePath();
     //this.currentEmployeeDetail = this.nav.getValue();
-    let data = this.nav.getValue();
-    if (data != null) {
-      if (data.ClientName) {
-        this.employeeFile.ClientName = data.ClientName;
-      }
-      // this.employeeFile.Status = data.BillStatusId;
-      // this.employeeFile.Month = data.BillForMonth;
-      this.filterRecords();
-    }
-    this.autoCompleteModal = {
-      data: [],
-      placeholder: "All result"
-    }
-
     this.gstDetailForm = this.fb.group({
       GstId: new FormControl(0),
       Billno: new FormControl("", Validators.required),
@@ -138,8 +124,22 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       UpdatedOn: new FormControl(new Date(), Validators.required),
       Notes: new FormControl("")
     });
-
-    this.LoadFiles();
+    this.autoCompleteModal = {
+      data: [],
+      placeholder: "All result"
+    }
+    let data = this.nav.getValue();
+    if (data != null) {
+      if (data.ClientName) {
+        this.employeeFile.ClientName = data.ClientName;
+      } else {
+        this.employeeFile.Status = data.BillStatusId;
+        this.employeeFile.Month = data.BillForMonth;
+      }
+      this.filterRecords();
+    } else {
+      this.LoadFiles();
+    }
   }
 
   arrangeDetails(flag: any, FieldName: string) {
