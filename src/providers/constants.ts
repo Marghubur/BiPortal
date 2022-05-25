@@ -79,6 +79,11 @@ export const AdminIncomeTax = 'admin/incometax';
 export const AdminPaySlip = 'admin/payslip';
 export const AdminNotification = 'admin/notification';
 export const AdminApprovalRequest = 'admin/request';
+export const Settings = 'admin/settings';
+export const CompanySettings = 'admin/company_settings';
+export const Payroll = 'admin/payroll';
+export const LeavesAndHoliday = 'admin/leaves_n_holidays';
+export const Expenses = 'admin/expenses';
 
 // ********************** Admin route pages  *******************
 
