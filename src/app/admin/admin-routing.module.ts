@@ -32,7 +32,12 @@ import { AdminResetPassword, AdminDeclaration,
   AdminPaySlip,
   AdminTaxcalculation,
   AdminNotification,
-  AdminApprovalRequest
+  AdminApprovalRequest,
+  Settings,
+  CompanySettings,
+  Payroll,
+  LeavesAndHoliday,
+  Expenses
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -68,6 +73,11 @@ import { PayslipComponent } from './payslip/payslip.component';
 import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
 import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
+import { SettingsComponent } from './settings/settings.component';
+import { CompaySettingsComponent } from './compay-settings/compay-settings.component';
+import { PayrollComponent } from './payroll/payroll.component';
+import { LeavesAndHolidaysComponent } from './leaves-and-holidays/leaves-and-holidays.component';
+import { ExpensesComponent } from './expenses/expenses.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -104,6 +114,11 @@ const routes: Routes = [
   { path: AdminPaySlip, component: PayslipComponent},
   { path: AdminNotification, component: NotificationComponent},
   { path: AdminApprovalRequest, component: ApprovalRequestComponent},
+  { path: Settings, component: SettingsComponent},
+  { path: CompanySettings, component: CompaySettingsComponent},
+  { path: Payroll, component: PayrollComponent},
+  { path: LeavesAndHoliday, component: LeavesAndHolidaysComponent},
+  { path: Expenses, component: ExpensesComponent},
   { path: AdminTaxcalculation, component: TaxcalculationComponent}
 ];
 

@@ -1,13 +1,10 @@
 <div class="col-12 full-v main-container" [ngClass]="{'preload': !isRolesLoaded}">
-  <div class="col-md-12 row m-0 p-0">
-    <h4 class="p-0">Manage Role</h4>
-  </div>
   <div>
     <form [formGroup]="rolesForm">
       <div class="x_panel">
         <div class="x_header">
           <div class="x_header_title">
-            <h2>Employment
+            <h2>Roles <small>Manage user roles.</small>
               <i class="fa text-dark edit-icon ps-2"></i>
             </h2>
             <button class="btn btn-sm btn-outline-primary float-end ms-3" (click)="addRolePopUp()">
@@ -47,8 +44,9 @@
             <div class="col-md-12 pt-5 skeleton" *ngFor="let catagory of Menu; let i = index;">
               <div class="vhide">
                 <div>
-                  <button class="w-100 btn btn-primary-c text-start" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseExample'+i"
-                    aria-expanded="false" [attr.aria-controls]="'collapseExample'+i">
+                  <button class="w-100 btn btn-primary-c text-start" type="button" data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#collapseExample'+i" aria-expanded="false"
+                    [attr.aria-controls]="'collapseExample'+i">
                     {{catagory.Name}}
                     <i class="fa fa-caret-up float-end"></i>
                   </button>

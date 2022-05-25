@@ -41,6 +41,11 @@ import { IncometaxComponent } from './incometax/incometax.component';
 import { PayslipComponent } from './payslip/payslip.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { NotificationComponent } from './notification/notification.component';
+import { SettingsComponent } from './settings/settings.component';
+import { CompaySettingsComponent } from './compay-settings/compay-settings.component';
+import { PayrollComponent } from './payroll/payroll.component';
+import { LeavesAndHolidaysComponent } from './leaves-and-holidays/leaves-and-holidays.component';
+import { ExpensesComponent } from './expenses/expenses.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +85,12 @@ import { NotificationComponent } from './notification/notification.component';
     IncometaxComponent,
     PayslipComponent,
     ApprovalRequestComponent,
-    NotificationComponent
+    NotificationComponent,
+    SettingsComponent,
+    CompaySettingsComponent,
+    PayrollComponent,
+    LeavesAndHolidaysComponent,
+    ExpensesComponent
   ],
   imports: [
     CommonModule,
