@@ -93,7 +93,7 @@ export class ApprovalRequestComponent implements OnInit {
           break;
         case 'Rejected':
           statusId = ItemStatus.Rejected;
-          endPoint = `Request/ApprovalAction`;
+          endPoint = `Request/RejectAction`;
           break;
         case 'Othermember':
           endPoint = `Request/ReAssigneToOtherManager`;
