@@ -45,6 +45,7 @@ export class ApprovalRequestComponent implements OnInit {
       this.itemStatus = 2;
       this.loadData();
     }
+    this.getManager();
   }
 
   loadData() {
@@ -57,6 +58,32 @@ export class ApprovalRequestComponent implements OnInit {
       }
     }).catch(e => {
       ErrorToast("Fail to fetch data. Please contact to admin.");
+    });
+  }
+
+  getManager() {
+    let employeeId = 0;
+    this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
+      if(res.ResponseBody.EmployeesList) {
+        this.managerList.data = [];
+        this.managerList.placeholder = "Reporting Manager";
+        this.managerList.data.push({
+          value: 0,
+          text: "Default Manager"
+        });
+
+        let i = 0;
+        let managers = res.ResponseBody.EmployeesList;
+        while(i < managers.length) {
+          if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
+            this.managerList.data.push({
+              value: managers[i].EmployeeUid,
+              text: `${managers[i].FirstName} ${managers[i].LastName}`
+            });
+          }
+          i++;
+        }
+      }
     });
   }
 
