@@ -76,6 +76,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   orderByGSTStatusAsc: boolean = null;
   orderByBillNoAsc: boolean = null;
   isFileFound: boolean = false;
+  isError: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -182,8 +183,11 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   }
 
   updateRecord() {
+    this.isError = true;
+    this.isLoading = true;
     let errorCount = 0;
-    if (this.documentForm.get("StatusId").errors) {
+    if (this.documentForm.get("StatusId").value == 0) {
+      this.isError = true;
       errorCount++;
     } else {
       let value = this.documentForm.get("StatusId").value;
@@ -203,8 +207,9 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
         this.closeWindow();
       });
     } else {
-      Toast("Status and Update is mandatory fields.");
+      ErrorToast("Status is mandatory fields.");
     }
+    this.isLoading = false;
   }
 
   GetDocumentFile(fileInput: any) {
@@ -244,9 +249,11 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
 
   submitGSTStatusDetail() {
     let errorCount = 0;
+    this.isLoading = true;
     this.isUploading = true;
 
-    if (this.gstDetailForm.get("Gststatus").errors) {
+    if (this.gstDetailForm.get("Gststatus").value == 0) {
+      this.isError = true;
       errorCount++;
     }
 
@@ -278,8 +285,9 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
         this.closeWindow();
       });
     } else {
-      Toast("Please fill all mandatory fields.");
+      ErrorToast("Please fill all mandatory fields.");
     }
+    this.isLoading = false;
   }
 
   editFile(FileUid: string) {
@@ -399,9 +407,9 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     });
   }
 
-
   UpdateCurrent(FileUid: number) {
     this.currentFileId = Number(FileUid);
+    this.isError = false;
     this.isModalReady = true;
     $('#addupdateModal').modal('show');
   }
@@ -756,6 +764,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       let amount = Number(GSTAmount);
       if(!isNaN(amount)) {
         this.gstDetailForm.get("Amount").setValue(amount);
+        this.isError = false;
         $('#gstupdateModal').modal('show');
       } else {
         Toast("Invalid GST amount");

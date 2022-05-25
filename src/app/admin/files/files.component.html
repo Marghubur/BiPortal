@@ -318,12 +318,14 @@
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
                           <i class="fa fa-times text-danger fa-lg" *ngIf="user.GSTStatus == 'Canceled'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
-                          <i class="fa fa-clock-o text-dark" *ngIf="user.GSTStatus == 'Raised'" data-bs-toggle="tooltip"
+                          <i class="fa fa-clock-o fa-lg text-dark" *ngIf="user.GSTStatus == 'Raised'" data-bs-toggle="tooltip"
                             data-bs-placement="right" title="Raised"></i>
                           <i class="fa fa-exclamation-triangle fa-lg text-warning" *ngIf="user.GSTStatus == 'Pending'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Pending"></i>
                           <i class="fa fa-ban fa-lg text-danger" *ngIf="user.GSTStatus == 'Rejected'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Rejected"></i>
+                          <i class="fa fa-lg fa-calendar-times-o text-primary" *ngIf="user.GSTStatus == 'Not Generated'"
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="Not Generated"></i>
                           <!-- {{user.GSTStatus}} -->
                         </a>
                       </div>
@@ -580,15 +582,12 @@
   </div>
 </div>
 
-<!-- add update detail modal -->
+<!-- add update GST detail modal -->
 <div class="modal fade" id="gstupdateModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title">Add Or Update</h5>
-        <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <h5 class="modal-title">Add or Update GST Status</h5>
       </div>
       <div class="modal-body f-12">
         <div class="col-md-12">
@@ -655,12 +654,13 @@
               </div>
             </div>
           </div>
+          <p class="ps-3 mb-0 text-danger fw-bold" *ngIf="isError">GST Status is manditory</p>
         </div>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
@@ -847,15 +847,12 @@
 </div>
 
 
-<!-- add update detail modal -->
+<!-- add update Bill Status Details detail modal -->
 <div class="modal fade" id="addupdateModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title">Bill Status Update Modal</h5>
-        <button type="button" class="close" (click)="closeWindow()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
       <div class="modal-body f-12">
         <div class="col-md-12">
@@ -868,7 +865,7 @@
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
                   <option value="3">Canceled</option>
-                  <option value="4">Not Generated</option>
+                  <!-- <option value="4">Not Generated</option> -->
                   <option value="5">Rejected</option>
                   <option value="7">Bill Raised</option>
                 </select>
@@ -896,13 +893,14 @@
                 <textarea name="Notes" rows="3" formControlName="Notes" class="form-control"></textarea>
               </div>
             </div>
+            <p *ngIf="isError fw-bold" class="ps-3 text-danger fw-bold pb-0 pt-3">File Status is manditory</p>
           </div>
         </div>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="updateRecord()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
