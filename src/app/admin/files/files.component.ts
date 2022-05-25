@@ -72,6 +72,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   orderByBillNoAsc: boolean = null;
   isFileFound: boolean = false;
   isGSTStatusModalReady: boolean = false;
+  isError: boolean = false;
 
 
   constructor(private fb: FormBuilder,
@@ -111,18 +112,22 @@ export class FilesComponent implements OnInit, AfterViewChecked {
       GstId: new FormControl(0),
       Billno: new FormControl("", Validators.required),
       Gststatus: new FormControl("0", Validators.required),
-      Paidon: new FormControl("", Validators.required),
+      Paidon: new FormControl(new Date()),
       Paidby: new FormControl("0"),
       Amount: new FormControl(0)
     });
 
     this.documentForm = this.fb.group({
       StatusId: new FormControl(0, Validators.required),
-      UpdatedOn: new FormControl(new Date(), Validators.required),
+      UpdatedOn: new FormControl(new Date()),
       Notes: new FormControl("")
     });
 
     this.LoadFiles();
+  }
+
+  get f() {
+    return this.documentForm.controls;
   }
 
   arrangeDetails(flag: any, FieldName: string) {
@@ -172,8 +177,11 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   }
 
   updateRecord() {
+    this.isError = true;
+    this.isLoading = true;
     let errorCount = 0;
-    if (this.documentForm.get("StatusId").errors) {
+    if (this.documentForm.get("StatusId").value == 0) {
+      this.isError = true;
       errorCount++;
     } else {
       let value = this.documentForm.get("StatusId").value;
@@ -193,8 +201,9 @@ export class FilesComponent implements OnInit, AfterViewChecked {
         this.closeWindow();
       });
     } else {
-      Toast("Status and Update is mandatory fields.");
+      ErrorToast("Status is mandatory fields.");
     }
+    this.isLoading = false;
   }
 
   GetDocumentFile(fileInput: any) {
@@ -230,9 +239,11 @@ export class FilesComponent implements OnInit, AfterViewChecked {
 
   submitGSTStatusDetail() {
     let errorCount = 0;
+    this.isLoading = true;
     this.isUploading = true;
 
-    if (this.gstDetailForm.get("Gststatus").errors) {
+    if (this.gstDetailForm.get("Gststatus").value == 0) {
+      this.isError = true;
       errorCount++;
     }
 
@@ -264,8 +275,9 @@ export class FilesComponent implements OnInit, AfterViewChecked {
         this.closeWindow();
       });
     } else {
-      Toast("Please fill all mandatory fields.");
+      ErrorToast("Please fill all mandatory fields.");
     }
+    this.isLoading = false;
   }
 
   editFile(FileUid: string) {
@@ -393,6 +405,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
 
   UpdateCurrent(FileUid: number) {
     this.currentFileId = Number(FileUid);
+    this.isError = false;
     $('#addupdateModal').modal('show');
   }
 
@@ -724,6 +737,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
       let amount = Number(GSTAmount);
       if(!isNaN(amount)) {
         this.gstDetailForm.get("Amount").setValue(amount);
+        this.isError = false;
         $('#gstupdateModal').modal('show');
       } else {
         Toast("Invalid GST amount");

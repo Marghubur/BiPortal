@@ -121,16 +121,15 @@
                     </div>
                     <div class="td align-middle fe-5">
                       <div class="cell-wrapper">
-                        <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit employee" (click)="EditCurrent(user)">{{user.FirstName}}
-                          {{user.LastName}}</a>
+                        <a href="javascript:void(0)" (click)="EditCurrent(user)">{{user.FirstName}} {{user.LastName}}</a>
                         <div class="float-end">
-                          <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit profgile" (click)="editProfile(user)"><span class="badge bg-dark me-3"><i
+                          <a href="javascript:void(0)" (click)="editProfile(user)"><span class="badge bg-dark me-3"><i
                                 class="fa fa fa-user-circle-o user-edit-icon"></i></span></a>
-                          <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="No of Active Client"><span class="badge bg-primary fa fa-building-o"> &nbsp;
+                          <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o"> &nbsp;
                               <span></span>
                               <span *ngIf="user.ClientJson.length > 0">{{user.ClientJson.length}}</span>
                               <span *ngIf="user.ClientJson.length == 0">0</span></span></a>
-                          <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="view attendance" class="ms-3" (click)="goToAttendancePage(user)">
+                          <a href="javascript:void(0)" class="ms-3" (click)="goToAttendancePage(user)">
                             <span class="text-sm-left text-muted">Attendance</span>
                             <span class="ms-2 badge bg-success">
                               <i class="fa fa-id-badge"></i>
@@ -152,21 +151,21 @@
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="d-flex flex-row justify-content-evenly">
-                        <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="View bills" (click)="ViewFiles(user)">
+                        <a href="javascript:void(0)" (click)="ViewFiles(user)">
                           <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"></i></span>
                         </a>
-                        <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="view documents" (click)="AddEditDocuments(user)">
+                        <a href="javascript:void(0)" (click)="AddEditDocuments(user)">
                           <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"></i></span>
                         </a>
                         <a href="javascript:void(0)" (click)="CreatePopup(user)">
                           <ng-container [ngSwitch]="user.IsActive">
                             <span *ngSwitchCase="true">
-                              <span class="badge bg-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Click to delete employee">
+                              <span class="badge bg-danger">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                               </span>
                             </span>
                             <span *ngSwitchDefault>
-                              <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Click to active employee">
+                              <span class="badge bg-success">
                                 <i class="fa fa-random" aria-hidden="true"></i>
                               </span>
                             </span>

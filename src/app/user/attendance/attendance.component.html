@@ -86,8 +86,9 @@
                         <td class="align-middle">
                           <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
                             <span class=" ms-2" *ngSwitchCase="3">Week off</span>
-                            <span class=" ms-2" *ngSwitchCase="0">Not applied</span>
-                            <span class=" ms-2" *ngSwitchCase="1">
+                            <span class=" ms-2" *ngSwitchCase="1">Not applied</span>
+                            <span class=" ms-2" *ngSwitchCase="2">-----</span>
+                            <span class=" ms-2" *ngSwitchCase="0">
                               <i class="fa fa-check pe-2 text-success"></i> On Time
                             </span>
 
@@ -101,8 +102,14 @@
                               </div>
                             </span>
                             <span class="ms-2" *ngSwitchCase="0">
-                              <div placement="top" ngbTooltip="Pending" aria-expanded="false">
-                                <i class="fa fa-clock-o pe-2 text-warning"></i> Applied
+                              <div placement="top" ngbTooltip="waiting" aria-expanded="false" *ngIf="item.PresentDayStatus == 2">
+                                <i class="fa fa-clock-o pe-2 text-warning"></i> waiting...
+                              </div>
+                              <div placement="top" ngbTooltip="waiting" aria-expanded="false" *ngIf="item.PresentDayStatus == 0">
+                                <i class="fa fa-clock-o pe-2 text-warning"></i> Not Applied
+                              </div>
+                              <div placement="top" ngbTooltip="waiting" aria-expanded="false" *ngIf="item.PresentDayStatus == 3">
+                                <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
                               </div>
                             </span>
                           </span>
