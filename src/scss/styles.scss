@@ -20,6 +20,8 @@ pre {
   --bg-color: #f9eeee;
   --scrollbarBG: #cfd8dc;
   --thumbBG: #90a4ae;
+  --primary: #337ab7;
+  --primary-dark: #286090;
 }
 
 /* You can add global styles to this file, and also import other style files */
@@ -878,28 +880,54 @@ fieldset {
 
 .btn-primary-c {
   color: #fff!important;
-  background-color: #337ab7!important;
+  background-color: var(--primary) !important;
   border-color: #2e6da4!important;
 }
 
 .btn-primary-dark {
   color: #fff!important;
-  background-color: #286090!important;
+  background-color: var(--primary-dark)!important;
   border-color: #204d74!important;
 }
 
 .btn-primary-c:hover {
   color: #fff!important;
-  background-color: #286090!important;
+  background-color: var(--primary-dark)!important;
   border-color: #204d74!important;
 }
 
 
 .text-primary-c {
-  color: #286090!important;
+  color: var(--primary)!important;
+}
+
+.text-primary-dc {
+  color: var(--primary-dark)!important;
+}
+
+.bg-c {
+  background-color: var(--primary)!important;
+}
+
+.bg-active:active {
+  background-color: var(--primary)!important;
+}
+
+.bg-dc {
+  background-color: var(--primary-dark)!important;
 }
 
 
 .mh-auto {
   min-height: auto !important;
+}
+
+
+.btn-toggle {
+  border: 1px solid var(--primary-dark) !important;
+  border-radius: 3px;
+
+  button {
+    border-radius: 3px;
+  }
 }

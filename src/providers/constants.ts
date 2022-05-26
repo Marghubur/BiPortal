@@ -83,6 +83,7 @@ export const Settings = 'admin/settings';
 export const CompanySettings = 'admin/company_settings';
 export const Payroll = 'admin/payroll';
 export const LeavesAndHoliday = 'admin/leaves_n_holidays';
+export const PFESISetup = 'admin/pfesisetup';
 export const Expenses = 'admin/expenses';
 
 // ********************** Admin route pages  *******************

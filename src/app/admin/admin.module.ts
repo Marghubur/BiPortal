@@ -46,6 +46,7 @@ import { CompaySettingsComponent } from './compay-settings/compay-settings.compo
 import { PayrollComponent } from './payroll/payroll.component';
 import { LeavesAndHolidaysComponent } from './leaves-and-holidays/leaves-and-holidays.component';
 import { ExpensesComponent } from './expenses/expenses.component';
+import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { ExpensesComponent } from './expenses/expenses.component';
     CompaySettingsComponent,
     PayrollComponent,
     LeavesAndHolidaysComponent,
-    ExpensesComponent
+    ExpensesComponent,
+    PfEsiSetupComponent
   ],
   imports: [
     CommonModule,

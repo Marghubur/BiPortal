@@ -1,0 +1,174 @@
+<div class="col-12 full-v main-container">
+  <div>
+    <form>
+      <div class="x_panel">
+        <div class="x_header">
+          <div class="x_header_title">
+            <h2>
+              PF & ESI
+              <small>Setup PF & ESI rules and value.</small>
+              <i class="fa text-dark edit-icon ps-2"></i>
+            </h2>
+          </div>
+        </div>
+
+        <div class="px-1">
+          <app-breadcrums></app-breadcrums>
+        </div>
+
+        <div class="col-12 p-2 mt-4">
+          <p class="fs-5 fw-bold text-primary-dc">PROVIDENT FUND & ESI SETTING</p>
+          <label>These setting will be used for the different calculatin like, Salary, GST etc.</label>
+
+          <div class="mx-4">
+            <div class="d-flex flex-row mt-5">
+              <div class="fe-1 fs-5 fw-bold">Provident fund status</div>
+              <div class="fe-5">
+                <div class="btn-group btn-toggle" role="group" aria-label="Basic radio toggle button group">
+                  <input type="radio" class="btn-check" name="btnradio" id="on" autocomplete="off" checked>
+                  <label class="btn btn-outline-primary" for="on">On</label>
+
+                  <input type="radio" class="btn-check" name="btnradio" id="off" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="off">Off</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <p>PF CONTRIBUTION</p>
+              <div>
+                <blockquote>
+                  <label class="fs-4">Statutory minimun monthly basic for PF Calculation</label>
+                  <ul class="list-border-0 list-group">
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                      Limit PF amount to Statutory minimum Salary for all employees.
+                    </li>
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                      Allow PF calculated as percentage of Basic Salary beyond Statutory Minimum.
+                      <ul class="list-border-0 list-group">
+                        <li class="list-group-item">
+                          <input type="checkbox" name="" id="">
+                          Allow overriding of PF at salary structure level.
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                      Pay Employer Contribution of Provident Fund outside the Gross Salary of an Employee
+                      <ul class="list-border-0 list-group">
+                        <li class="list-group-item">
+                          <input type="checkbox" name="" id="">
+                          Limit employer's PF contribution amount maximum of
+                          <div class="mx-4 col-md-2 d-inline-block">
+                            <input class="form-control">
+                          </div> Monthly
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                      Hide PF Employer in Payslip (and exclude from gross earnings calculation in Payslip)
+                    </li>
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                      Pay Other Chargs of Provident Fund outisde the Gross Salry of an Employee
+                    </li>
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                      Allow employees to contribute towards VPF
+                    </li>
+                  </ul>
+                </blockquote>
+              </div>
+            </div>
+
+            <div class="d-flex flex-row mt-5">
+              <div class="fe-1 fs-5 fw-bold">ESI status</div>
+              <div class="fe-5">
+                <div class="btn-group btn-toggle" role="group" aria-label="Basic radio toggle button group">
+                  <input type="radio" class="btn-check" name="btnradio" id="on" autocomplete="off" checked>
+                  <label class="btn btn-outline-primary" for="on">On</label>
+
+                  <input type="radio" class="btn-check" name="btnradio" id="off" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="off">Off</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <p>ESI CONTRIBUTION</p>
+              <div>
+                <ul class="list-border-0 li-spacing list-group">
+                  <li class="list-group-item">
+                    Maximum monthly gross salary eligible for ESI
+                    <i class="mx-4 fa fa-info-circle"></i>
+                    <div class="col-md-2 d-inline-block">
+                      <input class="form-control">
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    ESI Employee Contribution is
+                    <div class="mx-4 col-md-2 d-inline-block">
+                      <input class="form-control">
+                    </div>
+                    of gross Salary
+                  </li>
+                  <li class="list-group-item">
+                    ESI Employer Contribution is
+                    <div class="mx-4 col-md-2 d-inline-block">
+                      <input class="form-control">
+                    </div>
+                    of gross Salary
+                  </li>
+                  <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Allow overriding of ESI at salary structure level.
+                    <i class="fa fa-info-circle"></i>
+                  </li>
+                  <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Pay Employer Contribution of ESI outside the Gross Salary of an Employee
+                    <i class="fa fa-info-circle"></i>
+                  </li>
+                  <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Hide ESI Employer in Payslip (and exlude from gross earnings calculation in Payslip)
+                    <i class="fa fa-info-circle"></i>
+                  </li>
+                  <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Exclude employer's share from gross in ESI calculation
+                    <i class="fa fa-info-circle"></i>
+                  </li>
+                  <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Exclude Employee Gratuity contribution from gross in ESI calculation
+                    <i class="fa fa-info-circle"></i>
+                  </li>
+                  <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Restrict ESI Gross to Statutory Gross during the contribution period
+                    <i class="fa fa-info-circle"></i>
+                  </li>
+                  <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Include Bonuses and One-Time payments in gross for ESI eligibility calculation
+                    <i class="fa fa-info-circle"></i>
+                  </li>
+                  <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Include Bonuses and One-Time payments in gross for ESI Contribution calculation
+                    <i class="fa fa-info-circle"></i>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

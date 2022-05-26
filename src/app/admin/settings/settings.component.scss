@@ -1,0 +1,19 @@
+.circle-dv {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  background-color: #337ab7;
+  color: whitesmoke;
+}
+
+.list-group-item.active {
+  background-color: #337ab7!important;
+
+  i {
+    color: white !important;
+  }
+}
+
+.h-bg {
+  background: floralwhite;
+}
