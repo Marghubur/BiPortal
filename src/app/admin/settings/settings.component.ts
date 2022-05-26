@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PFESISetup } from 'src/providers/constants';
+import { CompanySettings, PFESISetup } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -9,6 +9,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 })
 export class SettingsComponent implements OnInit {
   PfNEsiPage: string = PFESISetup;
+  CompanyInfoPage: string = CompanySettings
 
 
   constructor(
@@ -22,6 +23,9 @@ export class SettingsComponent implements OnInit {
     switch(pageName) {
       case PFESISetup:
         this.nav.navigate(PFESISetup, null);
+        break;
+      case CompanySettings:
+        this.nav.navigate(CompanySettings, null);
         break;
     }
   }
