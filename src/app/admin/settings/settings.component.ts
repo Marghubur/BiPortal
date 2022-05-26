@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CompanySettings, PFESISetup } from 'src/providers/constants';
-import { Payroll, PFESISetup } from 'src/providers/constants';
+import { CompanySettings, Payroll, PFESISetup } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
