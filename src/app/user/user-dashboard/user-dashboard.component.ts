@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Chart } from "chart.js";
 import { AjaxService } from "src/providers/ajax.service";
-import { Toast } from "src/providers/common-service/common.service";
+import { ApplicationStorage } from "src/providers/ApplicationStorage";
+import { Toast, UserDetail } from "src/providers/common-service/common.service";
+import { AccessTokenExpiredOn } from "src/providers/constants";
+import { UserService } from "src/providers/userService";
 declare var $:any;
 
 @Component({
@@ -14,160 +17,117 @@ export class UserDashboardComponent implements OnInit {
   employeeUid: number = 0;
   userName: string = "";
   isPageReady: boolean = false;
+  employeeDetails: any = null;
+  allocatedClients: Array<any> = [];
+  paySlipsmonth: Array<any> = [];
+  currentPayslip: any = null;
+  isActive: boolean = false;
 
-  constructor(private http: AjaxService) { }
+  constructor(private http: AjaxService,
+              private local: ApplicationStorage,
+              private user: UserService) { }
 
   ngOnInit() {
-    this.LoadChartData();
-    this.LoadLineChart();
-    this.LoadDoughnutchart();
-    this.LeaveReportChart();
-    //this.getDeatils();
+    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
+    let userDetail = this.user.getInstance() as UserDetail;
+    if(expiredOn === null || expiredOn === "")
+    userDetail["TokenExpiryDuration"] = new Date();
+    else
+    userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+    let Master = this.local.get(null);
+    if(Master !== null && Master !== "") {
+      userDetail = Master["UserDetail"];
+      this.employeeUid = userDetail.UserId;
+      this.getEmpDetails();
+    } else {
+      Toast("Invalid user. Please login again.")
+    }
+    this.getAllPayslips();
+    this.paySlipsChart();
+    this.paySlipsmonth[0].isActive = false;
+    this.currentPayslip = {
+        month: this.paySlipsmonth[0].months,
+        year: this.paySlipsmonth[0].years,
+      }
   }
 
+  getAllPayslips() {
+    let month = new Date().getMonth()+1;
+    let year = new Date().getFullYear();
+    let date = new Date();
+    let i =0;
+    while (i < 4) {
+      if (month == 1) {
+        month = 12;
+        year --;
+      } else {
+        month --;
+      }
+      this.paySlipsmonth.push({
+        months: new Date(year, month-1, 1).toLocaleString("en-us", { month: "long"}),
+        years: year,
+        isActive: true
+      })
+      i++;
+    };
+  }
 
-  getDeatils() {
-    let data = {
-      "UserId" : 6,
-      "EmployeeUid": 6,
-      "AttendenceFromDay": "2021-09-03 20:49:08.000000",
-      "AttendenceToDay": "2022-02-24 20:49:08.000000"
-    }
-    this.http.post("Dashboard/GetEmployeeDeatils", data)
+  getEmpDetails() {
+    this.http.get(`Employee/GetManageEmployeeDetail/${this.employeeUid}`)
     .then(response => {
       if (response.ResponseBody) {
-        Toast(response.ResponseBody);
+        if (response.ResponseBody) {
+          let data = response.ResponseBody;
+          this.employeeDetails = data.Employee[0];
+          this.allocatedClients = data.AllocatedClients;
+          Toast("Dashboard is loading ......");
+        }
       } else {
         Toast("Fail to inser/update, please contact to admin.");
       }
     })
-
   }
 
-  LoadLineChart() {
-    let elem: any = document.getElementById('lineChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['January','February','March','April','May','June'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: 'rgb(255, 99, 132)',
-          borderColor: 'rgb(255, 99, 132)',
-          data: [0, 10, 5, 2, 20, 30, 45]
-      }]
-      }
-    })
-  }
-
-  LeaveReportChart(){
-    let elem: any = document.getElementById('leaveReportChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                barThickness: 30,
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
-          }
-      }
-    });
-  }
-
-  LoadDoughnutchart() {
-    let elem: any = document.getElementById('doughnutchart');
+  paySlipsChart() {
+    let elem: any = document.getElementById('paySlipChart');
     const ctx = elem.getContext('2d');
     const myChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: ['Red','Blue','Yellow'],
+        //labels: ['118 Days Available'],
         datasets: [{
           label: 'My First dataset',
           backgroundColor: [
-            'rgb(255, 99, 132)',
-            'rgb(54, 162, 235)',
-            'rgb(255, 205, 86)'
+            'rgb(33, 85, 205)',
+            'rgb(168, 92, 249)'
           ],
+          borderWidth: 0,
           borderColor: 'rgb(255, 99, 132)',
-          data: [100, 100, 50],
-          hoverOffset: 4
-      }]
-      }
+          data: [80, 20],
+          hoverOffset: 4,
+          hoverBackgroundColor: [
+            'rgb(33, 85, 205)',
+            'rgb(168, 92, 249)'
+          ],
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        cutout: 65
+    }
     })
-  }
+  };
 
-  LoadChartData() {
-    let elem: any = document.getElementById('myChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange', 'Red', 'Blue', 'Yellow', 'Green'],
-            datasets: [{
-                label: '# of Votes',
-                barThickness: 30,
-                data: [12, 19, 3, 5, 2, 3, 4, 5, 6, 7],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
-          }
-      }
-    });
+  yourPayslipMonth(index: number) {
+    this.isActive = false;
+    this.currentPayslip = {
+      month: this.paySlipsmonth[index].months,
+      year: this.paySlipsmonth[index].years
+    };
+    var value = document.querySelectorAll("ul .payslip");
+    for (let i=0; i <value.length; i++) {
+      value[i].classList.remove('active');
+    }
+    value[index].classList.add('active')
   }
 }
