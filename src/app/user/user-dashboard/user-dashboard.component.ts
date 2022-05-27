@@ -128,6 +128,6 @@ export class UserDashboardComponent implements OnInit {
     for (let i=0; i <value.length; i++) {
       value[i].classList.remove('active');
     }
-    value[index].classList.add('active')
+    value[index].classList.add('active');
   }
 }
