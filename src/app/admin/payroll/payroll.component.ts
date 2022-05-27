@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 declare var $: any;
 
 @Component({
@@ -7,10 +8,17 @@ declare var $: any;
   styleUrls: ['./payroll.component.scss']
 })
 export class PayrollComponent implements OnInit {
+  payRollForm: FormGroup;
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
+  }
+
+  initForm() {
+    this.payRollForm = this.fb.group({
+
+    })
   }
 
   saveSettingModelOpen() {
