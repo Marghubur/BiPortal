@@ -25,14 +25,11 @@ export class SettingsComponent implements OnInit {
       case PFESISetup:
         this.nav.navigate(PFESISetup, null);
         break;
-<<<<<<< HEAD
       case CompanySettings:
         this.nav.navigate(CompanySettings, null);
         break;
-=======
       case Payroll:
         this.nav.navigate(Payroll, null);
->>>>>>> main
     }
   }
 }
