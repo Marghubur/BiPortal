@@ -18,118 +18,120 @@
           <span>PAYROLL CYCLE SETTING</span>
           <button class="float-end btn btn-outline-success" (click)="saveSettingModelOpen()"><i class="fa fa-cog pe-2"></i>Save</button>
         </h4>
-        <div class="card bg-light p-3">
-          <div class="row px-2 py-2">
-            <div class="col-md-3">
-              <label for="" class="form-label fs-6">Pay Frequency</label>
-            </div>
-            <div class="col-md-3">
-              <select class="form-select">
-                <option value="0">Select</option>
-                <option value="0">Monthly</option>
-              </select>
-            </div>
-          </div>
-          <div class="row px-2 py-2">
-            <div class="col-md-3">
-              <label for="" class="form-label fs-6">Which pay cycle do you want to start using HiringBell for
-                Payroll</label>
-            </div>
-            <div class="col-md-3">
-              <select class="form-select">
-                <option value="0">Select</option>
-                <option value="0">Aug</option>
-              </select>
-            </div>
-            <div class="col">
-              <a href="javascript:void(0)" class="text-decoration-none fw-bold">cancel</a>
-            </div>
-          </div>
-          <div class="row px-2 py-2">
-            <div class="col-md-3">
-              <label for="" class="form-label fs-6">Which day did the pay period end in Aug</label>
-            </div>
-            <div class="col-md-3">
-              <select class="form-select">
-                <option value="0">Select</option>
-                <option value="0">SEP 2</option>
-              </select>
-            </div>
-          </div>
-          <div class="row px-2 py-2">
-            <div class="col-md-3">
-              <label for="" class="form-label fs-6">The pay day for the period SEP 3 - OCT 2 is</label>
-            </div>
-            <div class="col-md-3">
-              <select class="form-select">
-                <option value="0">Select a Pay day for the period</option>
-                <option value="0">Monthly</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <h4 class="fw-bold text-dark my-3 px-2 py-3">
-          <span>PAYROLL PERIOD CALCULATION</span>
-        </h4>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card bg-light p-3">
-              <div class="row px-2 py-2">
-                <div class="col-md-4">
-                  <label for="" class="form-label fs-6">Pay Day in a month</label>
-                </div>
-                <div class="col-md-3">
-                  <select class="form-select">
-                    <option value="0">Select working days</option>
-                    <option value="1">Actual Days in month</option>
-                    <option value="2">30</option>
-                  </select>
-                </div>
+        <form [formGroup]="payrollForm">
+          <div class="card bg-light p-3">
+            <div class="row px-2 py-2">
+              <div class="col-md-3">
+                <label for="" class="form-label fs-6">Pay Frequency</label>
               </div>
-              <div class="row px-2 py-2">
-                <div class="col-md-4">
-                  <label for="" class="form-label fs-6">Exclude Weekly offs</label>
-                </div>
-                <div class="col-md-3">
-                  <input class="form-check-input" type="radio" name="IsExcludeWeekly" id="IsExcludeWeekly1">
-                  <label class="form-check-label ps-2" for="IsExcludeWeekly1">
-                    Yes
-                  </label>
-                  <input class="form-check-input ms-4" type="radio" name="IsExcludeWeekly" id="IsExcludeWeekly1">
-                  <label class="form-check-label ps-2" for="IsExcludeWeekly1">
-                    No
-                  </label>
-                </div>
+              <div class="col-md-3">
+                <select class="form-select" formControlName="PayFrequency">
+                  <option value="0">Select</option>
+                  <option value="0">Monthly</option>
+                </select>
               </div>
-              <div class="row px-2 py-2">
-                <div class="col-md-4">
-                  <label for="" class="form-label fs-6">Exclude Holidays</label>
-                </div>
-                <div class="col-md-3">
-                  <input class="form-check-input" type="radio" name="IsExcludeHoliday" id="IsExcludeHoliday1">
-                  <label class="form-check-label ps-2" for="IsExcludeHoliday1">
-                    Yes
-                  </label>
-                  <input class="form-check-input ms-4" type="radio" name="IsExcludeHoliday" id="IsExcludeHoliday1">
-                  <label class="form-check-label ps-2" for="IsExcludeHoliday1">
-                    No
-                  </label>
-                </div>
+            </div>
+            <div class="row px-2 py-2">
+              <div class="col-md-3">
+                <label for="" class="form-label fs-6">Which pay cycle do you want to start using HiringBell for
+                  Payroll</label>
+              </div>
+              <div class="col-md-3">
+                <select class="form-select" formControlName="PayCycleStart">
+                  <option value="0">Select</option>
+                  <option value="0">Aug</option>
+                </select>
+              </div>
+              <div class="col">
+                <a href="javascript:void(0)" class="text-decoration-none fw-bold">cancel</a>
+              </div>
+            </div>
+            <div class="row px-2 py-2">
+              <div class="col-md-3">
+                <label for="" class="form-label fs-6">Which day did the pay period end in Aug</label>
+              </div>
+              <div class="col-md-3">
+                <select class="form-select" formControlName="PayPeriodEnd">
+                  <option value="0">Select</option>
+                  <option value="0">SEP 2</option>
+                </select>
+              </div>
+            </div>
+            <div class="row px-2 py-2">
+              <div class="col-md-3">
+                <label for="" class="form-label fs-6">The pay day for the period SEP 3 - OCT 2 is</label>
+              </div>
+              <div class="col-md-3">
+                <select class="form-select" formControlName="PayDayPeriod">
+                  <option value="0">Select a Pay day for the period</option>
+                  <option value="0">Monthly</option>
+                </select>
               </div>
             </div>
           </div>
-          <div class="col-md-6 pb-3">
-            <h4 class="text-dark">NOTE:</h4>
-            <p class="mb-0">Calculation of number of days for a given pay period has significant impact when deducting salary for Loss of Pay due to Leave or other reason.</p>
-            <p class="mb-0">Ex: Loss of Pay for 1 day for an employee salary is Rs 30,000/month is calculated as below.</p>
-            <p class="mb-0 pt-2">Loss of Pay when days = 30</p>
-            <p class="mb-0 pb-2">-> Rs 30,000/30 = Rs 1000</p>
-            <p class="mb-0">Loss of Pay when days are calculated excluding Weekends</p>
-            <p class="mb-0">Let's say there are 8 Saturday & Sunday in month.</p>
-            <p class="mb-0">Effective days = 30 - 8 = 22 days</p>
-            <p class="mb-0">Loss of Pay = Rs 30,000 = Rs 1364.</p>
+          <h4 class="fw-bold text-dark my-3 px-2 py-3">
+            <span>PAYROLL PERIOD CALCULATION</span>
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card bg-light p-3">
+                <div class="row px-2 py-2">
+                  <div class="col-md-4">
+                    <label for="" class="form-label fs-6">Pay Day in a month</label>
+                  </div>
+                  <div class="col-md-3">
+                    <select class="form-select" formControlName="PayDayinMonth">
+                      <option value="0">Select working days</option>
+                      <option value="1">Actual Days in month</option>
+                      <option value="2">30</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row px-2 py-2">
+                  <div class="col-md-4">
+                    <label for="" class="form-label fs-6">Exclude Weekly offs</label>
+                  </div>
+                  <div class="col-md-3">
+                    <input class="form-check-input" value="true" formControlName="IsExcludeWeekly" type="radio" name="IsExcludeWeekly" id="IsExcludeWeekly1">
+                    <label class="form-check-label ps-2" for="IsExcludeWeekly1">
+                      Yes
+                    </label>
+                    <input class="form-check-input ms-4" value="false" formControlName="IsExcludeWeekly" type="radio" name="IsExcludeWeekly" id="IsExcludeWeekly1">
+                    <label class="form-check-label ps-2" for="IsExcludeWeekly1">
+                      No
+                    </label>
+                  </div>
+                </div>
+                <div class="row px-2 py-2">
+                  <div class="col-md-4">
+                    <label for="" class="form-label fs-6">Exclude Holidays</label>
+                  </div>
+                  <div class="col-md-3">
+                    <input class="form-check-input" value="true" formControlName="IsExcludeHoliday" type="radio" name="IsExcludeHoliday" id="IsExcludeHoliday1">
+                    <label class="form-check-label ps-2" for="IsExcludeHoliday1">
+                      Yes
+                    </label>
+                    <input class="form-check-input ms-4" value="false" formControlName="IsExcludeHoliday" type="radio" name="IsExcludeHoliday" id="IsExcludeHoliday1">
+                    <label class="form-check-label ps-2" for="IsExcludeHoliday1">
+                      No
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 pb-3">
+              <h4 class="text-dark">NOTE:</h4>
+              <p class="mb-0">Calculation of number of days for a given pay period has significant impact when deducting salary for Loss of Pay due to Leave or other reason.</p>
+              <p class="mb-0">Ex: Loss of Pay for 1 day for an employee salary is Rs 30,000/month is calculated as below.</p>
+              <p class="mb-0 pt-2">Loss of Pay when days = 30</p>
+              <p class="mb-0 pb-2">-> Rs 30,000/30 = Rs 1000</p>
+              <p class="mb-0">Loss of Pay when days are calculated excluding Weekends</p>
+              <p class="mb-0">Let's say there are 8 Saturday & Sunday in month.</p>
+              <p class="mb-0">Effective days = 30 - 8 = 22 days</p>
+              <p class="mb-0">Loss of Pay = Rs 30,000 = Rs 1364.</p>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </form>
   </div>
@@ -156,7 +158,7 @@
       </div>
       <div class="modal-footer border-top-0 px-4">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c"><i class="fa fa-cog pe-2"></i> Yes, Change cycle</button>
+        <button type="button" class="btn btn-primary-c" (click)="savePayRollSetting()"><i class="fa fa-cog pe-2"></i> Yes, Change cycle</button>
       </div>
     </div>
   </div>
