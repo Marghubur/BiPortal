@@ -11,68 +11,70 @@
       <app-breadcrums></app-breadcrums>
     </div>
     <div class="container">
-      <div class="position-relative col-md-6">
-        <div class="d-flex align-items-center justify-content-between my-3 progress-new-bar">
-          <div class="progress-step active rounded-circle position-relative" (click)="activePage(1)">
-            <span class="position-absolute step-count text-white fw-bold">1</span>
-            <div class="step-info-active step-info">COMPANY INFO</div>
-          </div>
-          <div class="progress-step rounded-circle position-relative" (click)="activePage(2)">
-            <span class="position-absolute step-count text-white fw-bold">2</span>
-            <div class=" step-info">BANK ACCOUNTS</div>
-          </div>
-          <div class="progress-step rounded-circle position-relative" (click)="activePage(3)">
-            <span class="position-absolute step-count text-white fw-bold">3</span>
-            <div class=" step-info">COMPANY LOCATIONS</div>
-          </div>
-        </div>
-      </div>
-      <ng-container *ngIf="ActivatedPage == 1">
-        <div class="mt-5">
-          <button class=" btn my-2 me-1 btn-outline-success float-end"><i class="fa fa-cog pe-2"></i>Save & Continue</button>
-          <h6 class="mb-0 py-3">Please provide the company information. This is the company that pays for the Payroll.</h6>
-          <div class="col-md-3">
-            <label for="" class="foem-label pb-2 fw-bold">SELECT LEGAL ENTITY</label>
-            <select class="form-select">
-              <option value="0">Select Legal Entity</option>
-              <option value="1">CS TEST</option>
-            </select>
-          </div>
-          <div class="row py-3">
-            <label for="" class="form-label fw-bold">AUTHORIZED SIGNATURE</label>
-            <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-plus pe-2"></i>Add New Signature</a>
-          </div>
-          <div class="py-2">
-            <label for="" class="form-label fw-bold">COMPANY INFORMATION</label>
-            <div class="row col-md-6 py-2">
-              <div class="col-md-6 py-1">
-                <label for="" class="form-label">LEGAL NAME OF THE COMPANY</label>
-                <input type="text" class="form-control">
-              </div>
-              <div class="col-md-6 py-1">
-                <label for="" class="form-label">TYPE OF BUSINESS</label>
-                <input type="text" class="form-control">
-              </div>
-              <div class="col-md-6 py-1">
-                <label for="" class="form-label">DATE OF INFORMATION</label>
-                <input type="text" class="form-control">
-              </div>
-              <div class="col-md-6 py-1">
-                <label for="" class="form-label">REGISTERED OFFICE ADDRESS</label>
-                <input type="text" class="form-control">
-              </div>
+      <form [formGroup]="companyInformationForm">
+        <div class="position-relative col-md-6">
+          <div class="d-flex align-items-center justify-content-between my-3 progress-new-bar">
+            <div class="progress-step active rounded-circle position-relative" (click)="activePage(1)">
+              <span class="position-absolute step-count text-white fw-bold">1</span>
+              <div class="step-info-active step-info">COMPANY INFO</div>
+            </div>
+            <div class="progress-step rounded-circle position-relative" (click)="activePage(2)">
+              <span class="position-absolute step-count text-white fw-bold">2</span>
+              <div class=" step-info">BANK ACCOUNTS</div>
+            </div>
+            <div class="progress-step rounded-circle position-relative" (click)="activePage(3)">
+              <span class="position-absolute step-count text-white fw-bold">3</span>
+              <div class=" step-info">COMPANY LOCATIONS</div>
             </div>
           </div>
         </div>
-      </ng-container>
-      <ng-container *ngIf="ActivatedPage == 2">
-        <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Save & Continue</button>
-        <h6 class="mb-0 py-3 mt-5">BANK ACCOUNT INFORMATION.</h6>
-      </ng-container>
-      <ng-container *ngIf="ActivatedPage == 3">
-        <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Submit</button>
-        <h6 class="mb-0 mt-5 py-3">COMPANY LOCATION</h6>
-      </ng-container>
+        <ng-container *ngIf="ActivatedPage == 1">
+          <div class="mt-5">
+            <button class=" btn my-2 me-1 btn-outline-success float-end"><i class="fa fa-cog pe-2"></i>Save & Continue</button>
+            <h6 class="mb-0 py-3">Please provide the company information. This is the company that pays for the Payroll.</h6>
+            <div class="col-md-3">
+              <label for="" class="foem-label pb-2 fw-bold">SELECT LEGAL ENTITY</label>
+              <select class="form-select" formControlName="LegalEntity">
+                <option value="0">Select Legal Entity</option>
+                <option value="1">CS TEST</option>
+              </select>
+            </div>
+            <div class="row py-3">
+              <label for="" class="form-label fw-bold">AUTHORIZED SIGNATURE</label>
+              <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-plus pe-2"></i>Add New Signature</a>
+            </div>
+            <div class="py-2">
+              <label for="" class="form-label fw-bold">COMPANY INFORMATION</label>
+              <div class="row col-md-6 py-2">
+                <div class="col-md-6 py-1">
+                  <label for="" class="form-label">LEGAL NAME OF THE COMPANY</label>
+                  <input type="text" class="form-control" formControlName="CompanyLegalName">
+                </div>
+                <div class="col-md-6 py-1">
+                  <label for="" class="form-label">TYPE OF BUSINESS</label>
+                  <input type="text" class="form-control" formControlName="BusinessType">
+                </div>
+                <div class="col-md-6 py-1">
+                  <label for="" class="form-label">DATE OF INFORMATION</label>
+                  <input type="text" class="form-control" formControlName="InformationDate">
+                </div>
+                <div class="col-md-6 py-1">
+                  <label for="" class="form-label">REGISTERED OFFICE ADDRESS</label>
+                  <input type="text" class="form-control" formControlName="RegisteredAddress">
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="ActivatedPage == 2">
+          <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Save & Continue</button>
+          <h6 class="mb-0 py-3 mt-5">BANK ACCOUNT INFORMATION.</h6>
+        </ng-container>
+        <ng-container *ngIf="ActivatedPage == 3">
+          <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Submit</button>
+          <h6 class="mb-0 mt-5 py-3">COMPANY LOCATION</h6>
+        </ng-container>
+      </form>
     </div>
   </div>
 </div>

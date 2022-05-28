@@ -30,11 +30,11 @@
                     <div class="fe-1 pe-3 fs-5 fw-bold">Provident fund status</div>
                     <div class="fe-1">
                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="btn-check" value="PFbtnOn" name="PFbtn" id="btnradio1"
+                        <input type="radio" class="btn-check" formControlName="PFEnable" value="true" name="PFEnable" id="btnradio1"
                           autocomplete="off" checked>
                         <label class="btn btn-outline-primary" for="btnradio1">On</label>
 
-                        <input type="radio" class="btn-check" value="PFbtnOff" name="PFbtn" id="btnradio2"
+                        <input type="radio" class="btn-check" formControlName="PFEnable" value="false" name="PFEnable" id="btnradio2"
                           autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio2">Off</label>
                       </div>
@@ -65,11 +65,11 @@
                           </li>
                           <li class="list-group-item pb-0">
                             <input class="form-check-input me-1" formControlName="PfEmployerContribution"
-                              type="checkbox" value="" aria-label="...">
+                              type="checkbox" value="true" aria-label="...">
                             Pay Employer Contribution of Provident Fund outside the Gross Salary of an Employee
                             <ul class="list-border-0 list-group">
                               <li class="list-group-item pt-3 d-flex align-items-center">
-                                <input type="radio" value="true" class="form-check-input">
+                                <input type="radio" value="true" class="form-check-input" formControlName="IsEmployerPFLimit">
                                 <span class="ps-1">Limit employer's PF contribution amount maximum of</span>
                                 <div class="mx-4 col-md-2 d-inline-block">
                                   <input class="form-control" name="EmployerPFLimit" formControlName="EmployerPFLimit">
@@ -104,11 +104,11 @@
                     <div class="fe-1 fs-5 fw-bold">ESI status</div>
                     <div class="fe-1">
                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="btn-check" value="EsibtnOn" name="Esibtn" id="btnradio3"
+                        <input type="radio" class="btn-check" formControlName="EsiEnable" value="true" name="EsiEnable" id="btnradio3"
                           autocomplete="off" checked>
-                        <label class="btn btn-outline-primary" for="btnradio3">On</label>
+                        <label class="btn btn-outline-primary"  for="btnradio3">On</label>
 
-                        <input type="radio" class="btn-check" value="EsibtnOff" name="Esibtn" id="btnradio4"
+                        <input type="radio" class="btn-check" formControlName="EsiEnable" value="false" name="EsiEnable" id="btnradio4"
                           autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio4">Off</label>
                       </div>

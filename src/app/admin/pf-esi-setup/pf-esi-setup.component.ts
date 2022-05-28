@@ -52,16 +52,16 @@ export class PfEsiSetupComponent implements OnInit {
 
 
     this.pfesi = {
-      PFEnable: pfData.IsActive,
-      PfAmountLimit: pfesidata.PF_Limit_Amount_Statutory,
+      PFEnable: pfData.IsActive.toString(),
+      PfAmountLimit: pfesidata.PF_Limit_Amount_Statutory.toString(),
       IsPfInPercentage: pfData.CalculateInPercentage,
-      AllowOverridingPf: pfesidata.PF_Allow_overriding,
+      AllowOverridingPf: pfesidata.PF_Allow_overriding.toString(),
       PfEmployerContribution: pfesidata.PF_EmployerContribution_Outside_GS,
       EmployerPFLimit: pfData.EmployerContribution,
       HidePfEmployer: pfData.IncludeInPayslip,
       PayOtherCharges: pfesidata.PF_OtherChgarges_Outside_GS,
       AllowVPF: pfesidata.PF_Employess_Contribute_VPF,
-      EsiEnable: esiData.IsActive,
+      EsiEnable: esiData.IsActive.toString(),
       EligibilitySalaryForESI: esiData.Amount,
       EsiEmployeeContribution: esiData.EmployeeContribution,
       EsiEmployerContribution: esiData.EmployerContribution,
@@ -72,7 +72,8 @@ export class PfEsiSetupComponent implements OnInit {
       EsiExcludeEmployee: pfesidata.ESI_Exclude_EmpGratuity_fromGross,
       RestrictEsi: pfesidata.ESI_Restrict_Statutory,
       IncludeBonusEsiEligibility: pfesidata.ESI_IncludeBonuses_OTP_inGross_Eligibility,
-      IncludeBonusEsiContribution: pfesidata.ESI_IncludeBonuses_OTP_inGross_Calculation
+      IncludeBonusEsiContribution: pfesidata.ESI_IncludeBonuses_OTP_inGross_Calculation,
+      IsEmployerPFLimit: pfesidata.PF_IsEmployerPFLimit.toString()
     };
   }
 
@@ -98,7 +99,8 @@ export class PfEsiSetupComponent implements OnInit {
       EsiEmployerContributionOuside: new FormControl(this.pfesi.EsiEmployerContributionOuside),
       RestrictEsi: new FormControl(this.pfesi.RestrictEsi),
       IncludeBonusEsiEligibility: new FormControl(this.pfesi.IncludeBonusEsiEligibility),
-      IncludeBonusEsiContribution: new FormControl(this.pfesi.IncludeBonusEsiContribution)
+      IncludeBonusEsiContribution: new FormControl(this.pfesi.IncludeBonusEsiContribution),
+      IsEmployerPFLimit: new FormControl(this.pfesi.IsEmployerPFLimit)
     })
   }
 
@@ -135,7 +137,8 @@ export class PfEsiSetupComponent implements OnInit {
       ESI_Exclude_EmpGratuity_fromGross: data.EsiExcludeEmployee,
       ESI_Restrict_Statutory: data.RestrictEsi,
       ESI_IncludeBonuses_OTP_inGross_Eligibility: data.IncludeBonusEsiEligibility,
-      ESI_IncludeBonuses_OTP_inGross_Calculation: data.IncludeBonusEsiContribution
+      ESI_IncludeBonuses_OTP_inGross_Calculation: data.IncludeBonusEsiContribution,
+      PF_IsEmployerPFLimit: data.IsEmployerPFLimit
     }
 
     let formData = new FormData();
@@ -151,16 +154,16 @@ export class PfEsiSetupComponent implements OnInit {
 
 
 interface Ipfesi {
-  PFEnable: boolean;
-  PfAmountLimit: boolean;
+  PFEnable: string;
+  PfAmountLimit: string;
   IsPfInPercentage: boolean;
-  AllowOverridingPf: boolean;
+  AllowOverridingPf: string;
   PfEmployerContribution: boolean;
   EmployerPFLimit: number;
   HidePfEmployer: boolean;
   PayOtherCharges: boolean;
   AllowVPF: boolean;
-  EsiEnable: boolean;
+  EsiEnable: string;
   EligibilitySalaryForESI: number;
   EsiEmployeeContribution: number;
   EsiEmployerContribution: number;
@@ -172,6 +175,7 @@ interface Ipfesi {
   IncludeBonusEsiEligibility: boolean;
   IncludeBonusEsiContribution: boolean;
   EsiEmployerContributionOuside: boolean;
+  IsEmployerPFLimit: string;
 }
 
 interface Ipfesisetting {
@@ -188,4 +192,5 @@ interface Ipfesisetting {
   ESI_Restrict_Statutory: boolean;
   ESI_IncludeBonuses_OTP_inGross_Eligibility: boolean;
   ESI_IncludeBonuses_OTP_inGross_Calculation: boolean;
+  PF_IsEmployerPFLimit: boolean;
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-compay-settings',
@@ -7,10 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CompaySettingsComponent implements OnInit {
   ActivatedPage: number = 1;
-  constructor() { }
+  companyInformationForm: FormGroup;
+  companyInformation: CompanyInformationClass = new CompanyInformationClass();
+
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.ActivatedPage = 1;
+    this.initForm();
+  }
+
+  initForm() {
+    this.companyInformationForm = this.fb.group({
+      LegalEntity: new FormControl(this.companyInformation.LegalEntity),
+      Signature: new FormControl(this.companyInformation.Signature),
+      CompanyLegalName: new FormControl(this.companyInformation.CompanyLegalName),
+      BusinessType: new FormControl(this.companyInformation.BusinessType),
+      InformationDate: new FormControl(this.companyInformation.InformationDate),
+      RegisteredAddress: new FormControl(this.companyInformation.RegisteredAddress)
+    })
   }
 
   activePage(page: number) {
@@ -35,4 +51,13 @@ export class CompaySettingsComponent implements OnInit {
     stepCount[page-1].classList.add('step-info-active');
   }
 
+}
+
+class CompanyInformationClass {
+  LegalEntity: string = '0';
+  Signature: string = '';
+  CompanyLegalName: string = '';
+  BusinessType: string = '';
+  InformationDate: string = '';
+  RegisteredAddress: string = '';
 }
