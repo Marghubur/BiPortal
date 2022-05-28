@@ -21,8 +21,8 @@ export class PayrollComponent implements OnInit {
       PayPeriodEnd : '0',
       PayDayinMonth : '0',
       PayDayPeriod : '0',
-      IsExcludeWeekly: 'true',
-      IsExcludeHoliday: 'true'
+      IsExcludeWeekly: true,
+      IsExcludeHoliday: true
     }
   }
 
@@ -33,8 +33,8 @@ export class PayrollComponent implements OnInit {
       PayPeriodEnd: new FormControl(this.payRoll.PayPeriodEnd),
       PayDayinMonth: new FormControl(this.payRoll.PayDayinMonth),
       IsExcludeWeekly: new FormControl(this.payRoll.IsExcludeWeekly),
-      IsExcludeHoliday: new FormControl(this.payRoll.IsExcludeHoliday),
-      PayDayPeriod: new FormControl (this.payRoll.PayDayPeriod)
+      IsExcludeHoliday: new FormControl(this.payRoll.IsExcludeHoliday? 'true' : ''),
+      PayDayPeriod: new FormControl (this.payRoll.PayDayPeriod? 'true' : '')
     })
   };
 
@@ -54,6 +54,6 @@ class PayRollClass {
   PayPeriodEnd: string = '0';
   PayDayinMonth: string = '0';
   PayDayPeriod: string = '0';
-  IsExcludeWeekly: string = 'true';
-  IsExcludeHoliday: string = 'true';
+  IsExcludeWeekly: boolean = null;
+  IsExcludeHoliday: boolean = null;
 }
