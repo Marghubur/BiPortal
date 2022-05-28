@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 
@@ -36,8 +37,9 @@ export class PfEsiSetupComponent implements OnInit {
   }
 
   buildData(data: Array<any>) {
-    let pfData = data.find(x => x.ComponentId == "PF");
-    let esiData = data.find(x => x.ComponentId == "ESI");
+    let pfData = data["SalaryComponent"].find(x => x.ComponentId == "PF");
+    let esiData = data["SalaryComponent"].find(x => x.ComponentId == "ESI");
+    let pfesidata:Ipfesisetting = data["PfEsiSettings"]
 
     let employeeAmount = 0;
     if(esiData.EmployeeContribution)
@@ -47,27 +49,30 @@ export class PfEsiSetupComponent implements OnInit {
     if(esiData.EmployerContribution)
       employerAmount = esiData.Amount;
 
+
+
     this.pfesi = {
-      PFEnable: false,
-      PfAmountLimit: 10,
+      PFEnable: pfData.IsActive,
+      PfAmountLimit: pfesidata.PF_Limit_Amount_Statutory,
       IsPfInPercentage: pfData.CalculateInPercentage,
-      AllowOverridingPf: false,
-      PfEmployerContribution: true,
-      EmployerPFLimit: pfData.Amount,
-      HidePfEmployer: false,
-      PayOtherCharges: false,
-      AllowVPF: false,
-      EsiEnable: false,
+      AllowOverridingPf: pfesidata.PF_Allow_overriding,
+      PfEmployerContribution: pfesidata.PF_EmployerContribution_Outside_GS,
+      EmployerPFLimit: pfData.EmployerContribution,
+      HidePfEmployer: pfData.IncludeInPayslip,
+      PayOtherCharges: pfesidata.PF_OtherChgarges_Outside_GS,
+      AllowVPF: pfesidata.PF_Employess_Contribute_VPF,
+      EsiEnable: esiData.IsActive,
       EligibilitySalaryForESI: esiData.Amount,
-      EsiEmployeeContribution: employeeAmount,
-      EsiEmployerContribution: employerAmount,
-      AllowOverridingEsi: false,
-      HideEsiEmployer: false,
-      EsiExcludeEmployer: false,
-      EsiExcludeEmployee: false,
-      RestrictEsi: false,
-      IncludeBonusEsiEligibility: false,
-      IncludeBonusEsiContribution: false
+      EsiEmployeeContribution: esiData.EmployeeContribution,
+      EsiEmployerContribution: esiData.EmployerContribution,
+      EsiEmployerContributionOuside: pfesidata.ESI_EmployerContribution_Outside_GS,
+      AllowOverridingEsi: pfesidata.ESI_Allow_overriding,
+      HideEsiEmployer: esiData.IncludeInPayslip,
+      EsiExcludeEmployer: pfesidata.ESI_Exclude_EmployerShare_fromGross,
+      EsiExcludeEmployee: pfesidata.ESI_Exclude_EmpGratuity_fromGross,
+      RestrictEsi: pfesidata.ESI_Restrict_Statutory,
+      IncludeBonusEsiEligibility: pfesidata.ESI_IncludeBonuses_OTP_inGross_Eligibility,
+      IncludeBonusEsiContribution: pfesidata.ESI_IncludeBonuses_OTP_inGross_Calculation
     };
   }
 
@@ -90,6 +95,7 @@ export class PfEsiSetupComponent implements OnInit {
       HideEsiEmployer: new FormControl(this.pfesi.HideEsiEmployer),
       EsiExcludeEmployer: new FormControl(this.pfesi.EsiExcludeEmployer),
       EsiExcludeEmployee: new FormControl(this.pfesi.EsiExcludeEmployee),
+      EsiEmployerContributionOuside: new FormControl(this.pfesi.EsiEmployerContributionOuside),
       RestrictEsi: new FormControl(this.pfesi.RestrictEsi),
       IncludeBonusEsiEligibility: new FormControl(this.pfesi.IncludeBonusEsiEligibility),
       IncludeBonusEsiContribution: new FormControl(this.pfesi.IncludeBonusEsiContribution)
@@ -97,14 +103,56 @@ export class PfEsiSetupComponent implements OnInit {
   }
 
   submitPFESISetting() {
-    console.log(this.PFandESIForm.value);
+    let data:Ipfesi = this.PFandESIForm.value;
+
+    var ESISetting = {
+      ComponentId: 'ESI',
+      Amount: data.EligibilitySalaryForESI,
+      EmployeeContribution: data.EsiEmployeeContribution,
+      EmployerContribution: data.EsiEmployerContribution,
+      IsActive: data.EsiEnable,
+      IsDeductions: true,
+      IncludeInPayslip: data.HidePfEmployer
+    };
+    var PFSetting = {
+      ComponentId: 'PF',
+      CalculateInPercentage: data.IsPfInPercentage,
+      EmployerContribution: data.EmployerPFLimit,
+      IsActive: data.PFEnable,
+      IsDeductions: true,
+      IncludeInPayslip: data.HideEsiEmployer
+    }
+    var PFESISetting = {
+      PfEsi_setting_Id: 1,
+      PF_Limit_Amount_Statutory: data.PfAmountLimit,
+      PF_Allow_overriding: data.AllowOverridingPf,
+      PF_EmployerContribution_Outside_GS: data.PfEmployerContribution,
+      PF_OtherChgarges_Outside_GS: data.PayOtherCharges,
+      PF_Employess_Contribute_VPF: data.AllowVPF,
+      ESI_Allow_overriding: data.AllowOverridingEsi,
+      ESI_EmployerContribution_Outside_GS: data.EsiEmployerContributionOuside,
+      ESI_Exclude_EmployerShare_fromGross: data.EsiExcludeEmployer,
+      ESI_Exclude_EmpGratuity_fromGross: data.EsiExcludeEmployee,
+      ESI_Restrict_Statutory: data.RestrictEsi,
+      ESI_IncludeBonuses_OTP_inGross_Eligibility: data.IncludeBonusEsiEligibility,
+      ESI_IncludeBonuses_OTP_inGross_Calculation: data.IncludeBonusEsiContribution
+    }
+
+    let formData = new FormData();
+    formData.append('PFSetting', JSON.stringify(PFSetting));
+    formData.append('ESISetting', JSON.stringify(ESISetting));
+    formData.append('PFESISetting', JSON.stringify(PFESISetting));
+    this.http.post('Settings/PfEsiSetting', formData).then((response:ResponseModel) => {
+      if (response.ResponseBody)
+        Toast("Setting changed")
+    })
   }
 }
 
 
 interface Ipfesi {
   PFEnable: boolean;
-  PfAmountLimit: number;
+  PfAmountLimit: boolean;
   IsPfInPercentage: boolean;
   AllowOverridingPf: boolean;
   PfEmployerContribution: boolean;
@@ -123,4 +171,21 @@ interface Ipfesi {
   RestrictEsi: boolean;
   IncludeBonusEsiEligibility: boolean;
   IncludeBonusEsiContribution: boolean;
+  EsiEmployerContributionOuside: boolean;
+}
+
+interface Ipfesisetting {
+  PfEsi_setting_Id: number,
+  PF_Limit_Amount_Statutory: boolean;
+	PF_Allow_overriding: boolean;
+  PF_EmployerContribution_Outside_GS: boolean;
+  PF_OtherChgarges_Outside_GS: boolean;
+	PF_Employess_Contribute_VPF: boolean;
+  ESI_Allow_overriding: boolean;
+  ESI_EmployerContribution_Outside_GS: boolean;
+  ESI_Exclude_EmployerShare_fromGross: boolean;
+  ESI_Exclude_EmpGratuity_fromGross: boolean;
+  ESI_Restrict_Statutory: boolean;
+  ESI_IncludeBonuses_OTP_inGross_Eligibility: boolean;
+  ESI_IncludeBonuses_OTP_inGross_Calculation: boolean;
 }
