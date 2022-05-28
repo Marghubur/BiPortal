@@ -38,7 +38,8 @@ import { AdminResetPassword, AdminDeclaration,
   Payroll,
   LeavesAndHoliday,
   Expenses,
-  PFESISetup
+  PFESISetup,
+  CompanyInfo
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -80,6 +81,7 @@ import { PayrollComponent } from './payroll/payroll.component';
 import { LeavesAndHolidaysComponent } from './leaves-and-holidays/leaves-and-holidays.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
+import { CompanyInfoComponent } from './company-info/company-info.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -118,6 +120,7 @@ const routes: Routes = [
   { path: AdminApprovalRequest, component: ApprovalRequestComponent},
   { path: Settings, component: SettingsComponent},
   { path: CompanySettings, component: CompaySettingsComponent},
+  { path: CompanyInfo, component: CompanyInfoComponent},
   { path: Payroll, component: PayrollComponent},
   { path: LeavesAndHoliday, component: LeavesAndHolidaysComponent},
   { path: PFESISetup, component: PfEsiSetupComponent},
