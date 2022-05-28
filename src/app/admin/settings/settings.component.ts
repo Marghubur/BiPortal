@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CompanySettings, Payroll, PFESISetup } from 'src/providers/constants';
+import { CompanyInfo, Payroll, PFESISetup } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -9,7 +9,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 })
 export class SettingsComponent implements OnInit {
   PfNEsiPage: string = PFESISetup;
-  CompanyInfoPage: string = CompanySettings
+  CompanyInfoPage: string = CompanyInfo
 
   PayRollPage: string = Payroll
 
@@ -25,8 +25,8 @@ export class SettingsComponent implements OnInit {
       case PFESISetup:
         this.nav.navigate(PFESISetup, null);
         break;
-      case CompanySettings:
-        this.nav.navigate(CompanySettings, null);
+      case CompanyInfo:
+        this.nav.navigate(CompanyInfo, null);
         break;
       case Payroll:
         this.nav.navigate(Payroll, null);

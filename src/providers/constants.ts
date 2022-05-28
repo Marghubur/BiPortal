@@ -80,6 +80,7 @@ export const AdminPaySlip = 'admin/payslip';
 export const AdminNotification = 'admin/notification';
 export const AdminApprovalRequest = 'admin/request';
 export const Settings = 'admin/settings';
+export const CompanyInfo = 'admin/company_info';
 export const CompanySettings = 'admin/company_settings';
 export const Payroll = 'admin/payroll';
 export const LeavesAndHoliday = 'admin/leaves_n_holidays';

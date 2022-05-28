@@ -47,6 +47,7 @@ import { PayrollComponent } from './payroll/payroll.component';
 import { LeavesAndHolidaysComponent } from './leaves-and-holidays/leaves-and-holidays.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
+import { CompanyInfoComponent } from './company-info/company-info.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +93,8 @@ import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
     PayrollComponent,
     LeavesAndHolidaysComponent,
     ExpensesComponent,
-    PfEsiSetupComponent
+    PfEsiSetupComponent,
+    CompanyInfoComponent
   ],
   imports: [
     CommonModule,

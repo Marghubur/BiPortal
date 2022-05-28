@@ -52,7 +52,7 @@ export class PfEsiSetupComponent implements OnInit {
 
 
     this.pfesi = {
-      PFEnable: pfData.IsActive.toString(),
+      PFEnable: pfData.IsActive,
       PfAmountLimit: pfesidata.PF_Limit_Amount_Statutory.toString(),
       IsPfInPercentage: pfData.CalculateInPercentage,
       AllowOverridingPf: pfesidata.PF_Allow_overriding.toString(),
@@ -79,7 +79,7 @@ export class PfEsiSetupComponent implements OnInit {
 
   initForm() {
     this.PFandESIForm = this.fb.group({
-      PFEnable: new FormControl (this.pfesi.PFEnable),
+      PFEnable: new FormControl (this.pfesi.PFEnable ? 'true' : 'false'),
       PfAmountLimit: new FormControl(this.pfesi.PfAmountLimit),
       IsPfInPercentage: new FormControl(this.pfesi.IsPfInPercentage),
       AllowOverridingPf: new FormControl (this.pfesi.AllowOverridingPf),
@@ -154,7 +154,7 @@ export class PfEsiSetupComponent implements OnInit {
 
 
 interface Ipfesi {
-  PFEnable: string;
+  PFEnable: boolean;
   PfAmountLimit: string;
   IsPfInPercentage: boolean;
   AllowOverridingPf: string;
