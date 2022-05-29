@@ -183,7 +183,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   }
 
   updateRecord() {
-    this.isError = true;
+    this.isError = false;
     this.isLoading = true;
     let errorCount = 0;
     if (this.documentForm.get("StatusId").value == 0) {

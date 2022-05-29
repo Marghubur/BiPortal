@@ -10,9 +10,15 @@
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="container mt-5">
+    <div class="my-3 px-2">
       <form [formGroup]="companyInformationForm">
-        <div class="position-relative col-md-6">
+        <div class="col-md-4 mb-4 mt-2">
+          <select class="form-select" (change)="findCompany($event)">
+            <option value="0">Select Company</option>
+            <option value="{{org.OrganizationId}}" *ngFor="let org of OrganizationDetails">{{org.LegalNameOfCompany}}</option>
+          </select>
+        </div>
+        <!-- <div class="position-relative col-md-6">
           <div class="d-flex align-items-center justify-content-between my-3 progress-new-bar">
             <div class="progress-step active rounded-circle position-relative" (click)="activePage(1)">
               <span class="position-absolute step-count text-white fw-bold">1</span>
@@ -27,6 +33,12 @@
               <div class=" step-info">COMPANY LOCATIONS</div>
             </div>
           </div>
+        </div> -->
+        <div class="progress-step col-md-6 mx-3 my-2">
+          <div class="custom-progress" id="progress"></div>
+          <div class="progress-step-item active" (click)="activePage(1)" data-title="COMPANY INFO"></div>
+          <div class="progress-step-item" (click)="activePage(2)" data-title="BANK ACCOUNT"></div>
+          <div class="progress-step-item" (click)="activePage(3)" data-title="COMPANY LOCATIONS"></div>
         </div>
         <ng-container *ngIf="ActivatedPage == 1">
           <div class="mt-5">
@@ -53,35 +65,39 @@
               <div class="row col-md-6 py-2">
                 <div class="col-md-6 py-1">
                   <label for="" class="form-label">LEGAL NAME OF THE COMPANY</label>
-                  <input type="text" class="form-control" placeholder="COMPANY FULL NAME"
-                    formControlName="CompanyLegalName">
+                  <input type="text" class="form-control" placeholder="COMPANY FULL NAME" [ngClass]="{'error-field': submitted && f['LegalNameOfCompany'].errors !== null && f['LegalNameOfCompany'].errors['required']}"
+                    formControlName="LegalNameOfCompany">
                 </div>
                 <div class="col-md-6 py-1">
                   <label for="" class="form-label">TYPE OF BUSINESS</label>
-                  <input type="text" class="form-control" placeholder="TYPE OF BUSINESS" formControlName="BusinessType">
+                  <input type="text" class="form-control" placeholder="TYPE OF BUSINESS" formControlName="TypeOfBusiness">
                 </div>
                 <div class="col-md-6 py-1">
                   <label for="" class="form-label">DATE OF INFORMATION</label>
                   <input type="text" class="form-control" placeholder="DATE OF INFORMATION"
-                    formControlName="InformationDate">
+                    formControlName="InCorporationDate">
                 </div>
                 <div class="col-md-6 py-1">
                   <label for="" class="form-label">REGISTERED OFFICE ADDRESS</label>
                   <input type="text" class="form-control" placeholder="REGISTERED OFFICE ADDRESS"
-                    formControlName="RegisteredAddress">
+                    formControlName="FullAddress">
                 </div>
               </div>
             </div>
           </div>
         </ng-container>
         <ng-container *ngIf="ActivatedPage == 2">
-          <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Save &
-            Continue</button>
-          <h6 class="mb-0 py-3 mt-5">BANK ACCOUNT INFORMATION.</h6>
+          <div>
+            <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Save &
+              Continue</button>
+            <h6 class="mb-0 py-3 mt-5">BANK ACCOUNT INFORMATION.</h6>
+          </div>
         </ng-container>
         <ng-container *ngIf="ActivatedPage == 3">
-          <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Submit</button>
-          <h6 class="mb-0 mt-5 py-3">COMPANY LOCATION</h6>
+          <div>
+            <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Submit</button>
+            <h6 class="mb-0 mt-5 py-3">COMPANY LOCATION</h6>
+          </div>
         </ng-container>
       </form>
     </div>
