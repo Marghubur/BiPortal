@@ -123,7 +123,7 @@ export class CompanyDetailComponent implements OnInit {
         if (response.ResponseBody !== null) {
           this.organizationModal = response.ResponseBody as organizationModal;
           this.initForm();
-          Toast("organization Inserted/Updated successfully");
+          Toast("Organization detail updated successfully");
         } else {
           ErrorToast("Failed to generated, Please contact to admin.");
         }
