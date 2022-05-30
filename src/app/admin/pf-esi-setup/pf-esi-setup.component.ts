@@ -77,10 +77,13 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
     if(esiData.EmployerContribution)
       employerAmount = esiData.Amount;
 
+    if (pfesidata ==null)
+        pfesidata = new pfesisetting();
+
     this.pfesi = {
+      IsAllowOverridingPf: pfesidata.IsPF_Allow_overriding,
       PFEnable: pfData.IsActive,
       IsPfCalculateInPercentage: pfData.CalculateInPercentage,
-      IsAllowOverridingPf: pfesidata.IsPF_Allow_overriding,
       IsPfAmountLimitStatutory: pfesidata.IsPF_Limit_Amount_Statutory,
       IsPfEmployerContribution: pfesidata.IsPF_EmployerContribution_Outside_GS,
       EmployerPFLimit: pfData.EmployerContribution,
@@ -108,7 +111,7 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
       PFEnable: new FormControl (this.pfesi.PFEnable? 'true' : 'false'),
       IsPfAmountLimitStatutory: new FormControl(this.pfesi.IsPfAmountLimitStatutory),
       IsPfCalculateInPercentage: new FormControl(this.pfesi.IsPfCalculateInPercentage),
-      IsAllowOverridingPf: new FormControl (this.pfesi.IsAllowOverridingPf? 'true' : ''),
+      IsAllowOverridingPf: new FormControl (this.pfesi.IsAllowOverridingPf),
       IsPfEmployerContribution: new FormControl (this.pfesi.IsPfEmployerContribution),
       EmployerPFLimit: new FormControl (this.pfesi.EmployerPFLimit),
       IsHidePfEmployer: new FormControl (this.pfesi.IsHidePfEmployer),
@@ -126,13 +129,22 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
       IsRestrictEsi: new FormControl(this.pfesi.IsRestrictEsi),
       IsIncludeBonusEsiEligibility: new FormControl(this.pfesi.IsIncludeBonusEsiEligibility),
       IsIncludeBonusEsiContribution: new FormControl(this.pfesi.IsIncludeBonusEsiContribution),
-      IsEmployerPFLimitContribution: new FormControl(this.pfesi.IsEmployerPFLimitContribution? 'true' : '')
+      IsEmployerPFLimitContribution: new FormControl(this.pfesi.IsEmployerPFLimitContribution)
     })
   }
 
   submitPFESISetting() {
     this.isLoading = true;
     let data:Ipfesi = this.PFandESIForm.value;
+
+    if (data.IsPfEmployerContribution == false) {
+      data.IsEmployerPFLimitContribution = false;
+      data.EmployerPFLimit = 0;
+    }
+
+    if (data.IsPfCalculateInPercentage == false)
+      data.IsAllowOverridingPf = false;
+
 
     var ESISetting = {
       ComponentId: 'ESI',
@@ -179,22 +191,27 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
     this.isLoading = false;
   }
 
-  enableChildList(e: boolean) {
-    if (e == false) {
-      document.querySelector('[name="IsAllowOverridingPf"]').removeAttribute("disabled");
-    } else {
+  enableChildList(e: any) {
+    let data = e.target.checked;
+    if (data == false) {
       document.querySelector('[name="IsAllowOverridingPf"]').setAttribute("disabled", '');
-      document.querySelector('[name="IsAllowOverridingPf"]').setAttribute("value", '');
+      let value = document.querySelector('[name="IsAllowOverridingPf"]')as HTMLInputElement;
+      value.checked = false;
+    } else {
+      document.querySelector('[name="IsAllowOverridingPf"]').removeAttribute("disabled");
     }
     this.isallowChild = !this.isallowChild;
   }
 
-  allowPFContribution(e: boolean) {
-    if (e == false) {
-      document.querySelector('[name="IsEmployerPFLimitContribution"]').removeAttribute("disabled");
-    } else {
+  allowPFContribution(e: any) {
+    let data = e.target.checked;
+    if (data == false) {
       document.querySelector('[name="IsEmployerPFLimitContribution"]').setAttribute("disabled", '');
+      let value = document.querySelector('[name="IsEmployerPFLimitContribution"]')as HTMLInputElement;
+      value.checked = false;
       this.isallowPFamount = false;
+    } else {
+      document.querySelector('[name="IsEmployerPFLimitContribution"]').removeAttribute("disabled");
     }
     this.isallowPFLimit = !this.isallowPFLimit;
   }
@@ -230,19 +247,19 @@ interface Ipfesi {
   IsEmployerPFLimitContribution: boolean;
 }
 
-interface Ipfesisetting {
-  PfEsi_setting_Id: number,
-  IsPF_Limit_Amount_Statutory: boolean;
-	IsPF_Allow_overriding: boolean;
-  IsPF_EmployerContribution_Outside_GS: boolean;
-  IsPF_OtherChgarges: boolean;
-	IsPFAllowVPF: boolean;
-  IsESI_Allow_overriding: boolean;
-  IsESI_EmployerContribution_Outside_GS: boolean;
-  IsESI_Exclude_EmployerShare: boolean;
-  IsESI_Exclude_EmpGratuity: boolean;
-  IsESI_Restrict_Statutory: boolean;
-  IsESI_IncludeBonuses_Eligibility: boolean;
-  IsESI_IncludeBonuses_Calculation: boolean;
-  IsPF_Employer_LimitContribution: boolean;
+class pfesisetting {
+  PfEsi_setting_Id: number =0;
+  IsPF_Limit_Amount_Statutory: boolean = false;
+	IsPF_Allow_overriding: boolean = false;
+  IsPF_EmployerContribution_Outside_GS: boolean = false;
+  IsPF_OtherChgarges: boolean = false;
+	IsPFAllowVPF: boolean = false;
+  IsESI_Allow_overriding: boolean = false;
+  IsESI_EmployerContribution_Outside_GS: boolean = false;
+  IsESI_Exclude_EmployerShare: boolean = false;
+  IsESI_Exclude_EmpGratuity: boolean = false;
+  IsESI_Restrict_Statutory: boolean = false;
+  IsESI_IncludeBonuses_Eligibility: boolean = false;
+  IsESI_IncludeBonuses_Calculation: boolean = false;
+  IsPF_Employer_LimitContribution: boolean = false;
 }

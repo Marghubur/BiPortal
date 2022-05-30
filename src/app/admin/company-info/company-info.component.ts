@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
+import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+declare var $: any;
 
 @Component({
   selector: 'app-company-info',
@@ -15,6 +17,7 @@ export class CompanyInfoComponent implements OnInit {
   companyInformation: CompanyInformationClass = new CompanyInformationClass();
   OrganizationDetails: Array<any> = [];
   submitted: boolean = false;
+  model: NgbDateStruct;
 
   constructor(
     private fb: FormBuilder,
@@ -41,14 +44,6 @@ export class CompanyInfoComponent implements OnInit {
     })
   }
 
-  findCompany(e: any) {
-    let value = e.target.value;
-    this.companyInformation = new CompanyInformationClass();
-    if (value  != '0')
-      this.companyInformation = this.OrganizationDetails.find (x => x.OrganizationId == value);
-    this.initForm()
-  }
-
   initForm() {
     this.companyInformationForm = this.fb.group({
       OrganizationId: new FormControl(this.companyInformation.OrganizationId),
@@ -59,6 +54,22 @@ export class CompanyInfoComponent implements OnInit {
       InCorporationDate: new FormControl(this.companyInformation.InCorporationDate),
       FullAddress: new FormControl(this.companyInformation.FullAddress)
     })
+  }
+
+  findCompany(e: any) {
+    let value = e.target.value;
+    this.companyInformation = new CompanyInformationClass();
+    if (value  != '0') {
+      this.companyInformation = this.OrganizationDetails.find (x => x.OrganizationId == value);
+      let date = new Date(this.companyInformation.InCorporationDate)
+      this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+    }
+    this.initForm();
+  }
+
+  onDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.companyInformationForm.controls["InCorporationDate"].setValue(date);
   }
 
   activePage(page: number) {
@@ -85,6 +96,14 @@ export class CompanyInfoComponent implements OnInit {
       };
     }
     document.getElementById('progress').style.width = ((page - 1) *50).toString() + '%';
+  }
+
+  AddSigntureModel() {
+    $('#addSignature').modal('show');
+  }
+
+  addSignature() {
+
   }
 
   updateDetail() {
