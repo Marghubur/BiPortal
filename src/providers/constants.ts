@@ -80,10 +80,12 @@ export const AdminPaySlip = 'admin/payslip';
 export const AdminNotification = 'admin/notification';
 export const AdminApprovalRequest = 'admin/request';
 export const Settings = 'admin/settings';
-export const CompanyInfo = 'admin/company_info';
-export const CompanySettings = 'admin/company_settings';
+export const CompanyInfo = 'admin/company-info';
+export const CompanyDetail = 'admin/company-detail';
+export const CompanyAccounts = 'admin/company-accounts';
+export const CompanySettings = 'admin/company-settings';
 export const Payroll = 'admin/payroll';
-export const LeavesAndHoliday = 'admin/leaves_n_holidays';
+export const LeavesAndHoliday = 'admin/leaves-holidays';
 export const PFESISetup = 'admin/pfesisetup';
 export const Expenses = 'admin/expenses';
 

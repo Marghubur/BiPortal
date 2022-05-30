@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CompanyInfo, Payroll, PFESISetup } from 'src/providers/constants';
+import { CompanyAccounts, CompanyDetail, CompanyInfo, CompanySettings, Payroll, PFESISetup } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -10,6 +10,9 @@ import { iNavigation } from 'src/providers/iNavigation';
 export class SettingsComponent implements OnInit {
   PfNEsiPage: string = PFESISetup;
   CompanyInfoPage: string = CompanyInfo
+  ManageCompanyDetail: string = CompanyDetail;
+  ManageCompanyAccounts: string = CompanyAccounts;
+  menuItem: any = {};
 
   PayRollPage: string = Payroll
 
@@ -18,6 +21,12 @@ export class SettingsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.menuItem = {
+      CS: true,
+      PR: false,
+      LAH: false,
+      EX: false
+    }
   }
 
   redirectTo(pageName: string) {
@@ -30,6 +39,36 @@ export class SettingsComponent implements OnInit {
         break;
       case Payroll:
         this.nav.navigate(Payroll, null);
+      case CompanyDetail:
+        this.nav.navigate(CompanyDetail, null);
+        break;
+      case CompanyAccounts:
+        this.nav.navigate(CompanyAccounts, null);
+        break;
+    }
+  }
+
+  changeMdneu(code: string) {
+    this.menuItem = {
+      CS: false,
+      PR: false,
+      LAH: false,
+      EX: false
+    };
+
+    switch(code) {
+      case 'CS':
+        this.menuItem.CS = true;
+        break;
+      case 'PR':
+        this.menuItem.PR = true;
+        break;
+      case 'LAH':
+        this.menuItem.LAH = true;
+        break;
+      case 'EX':
+        this.menuItem.EX = true;
+        break;
     }
   }
 }

@@ -50,6 +50,25 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
     let esiData = data["SalaryComponent"].find(x => x.ComponentId == "ESI");
     let pfesidata = data["PfEsiSettings"];
 
+    if(pfesidata == null) {
+      pfesidata = {
+        PfEsi_setting_Id: null,
+        IsPF_Limit_Amount_Statutory: false,
+        IsPF_Allow_overriding: false,
+        IsPF_EmployerContribution_Outside_GS: false,
+        IsPF_OtherChgarges: false,
+        IsPFAllowVPF: false,
+        IsESI_Allow_overriding: false,
+        IsESI_EmployerContribution_Outside_GS: false,
+        IsESI_Exclude_EmployerShare: false,
+        IsESI_Exclude_EmpGratuity: false,
+        IsESI_Restrict_Statutory: false,
+        IsESI_IncludeBonuses_Eligibility: false,
+        IsESI_IncludeBonuses_Calculation: false,
+        IsPF_Employer_LimitContribution: false
+      };
+    }
+
     let employeeAmount = 0;
     if(esiData.EmployeeContribution)
       employeeAmount = esiData.Amount;

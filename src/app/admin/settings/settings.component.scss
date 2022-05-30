@@ -6,8 +6,9 @@
   color: whitesmoke;
 }
 
-.list-group-item.active {
+a.active {
   background-color: #337ab7!important;
+  color: #eee!important;
 
   i {
     color: white !important;
