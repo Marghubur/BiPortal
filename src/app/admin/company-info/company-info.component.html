@@ -13,9 +13,9 @@
     <div class="my-3 px-5">
       <form [formGroup]="companyInformationForm">
         <div class="col-md-4 mb-4 mt-2">
-          <select class="form-select" (change)="findCompany($event)">
+          <select class="form-select" (change)="findCompany($event)" formControlName="OrganizationId" [disabled]="OrganizationDetails.length == 1">
             <option value="0">Select Company</option>
-            <option value="{{org.OrganizationId}}" *ngFor="let org of OrganizationDetails">{{org.LegalNameOfCompany}}</option>
+            <option value="{{org.OrganizationId}}" *ngFor="let org of OrganizationDetails">{{org.OrganizationName}}</option>
           </select>
         </div>
         <div class="progress-step col-md-6 mx-3 my-2">
@@ -25,7 +25,7 @@
           <div class="progress-step-item" (click)="activePage(3)" data-title="COMPANY LOCATIONS"></div>
         </div>
         <ng-container *ngIf="ActivatedPage == 1">
-          <div class="mt-5">
+          <div class="box">
             <button (click)="updateDetail()" class=" btn my-2 me-1 btn-outline-success float-end">
               <i class="fa fa-cog pe-2"></i>
               Save & Continue

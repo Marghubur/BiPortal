@@ -22,6 +22,7 @@ export class CompanyDetailComponent implements OnInit {
   fileDetail: Array<any> = [];
   UserTypeId: UserType= UserType.Client;
   organizationId: number = 0;
+  singleOrganization: any = null;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -47,7 +48,8 @@ export class CompanyDetailComponent implements OnInit {
   loadData() {
     this.http.get("Settings/GetOrganizationInfo").then((response: ResponseModel) => {
       if(response.ResponseBody && response.ResponseBody.length === 1) {
-          this.organizationModal = response.ResponseBody[0] as organizationModal;
+          this.organizationModal = response.ResponseBody[0];
+          this.singleOrganization = this.organizationModal;
       } else {
         this.organizationModal = new organizationModal;
         this.organizationModal.OrganizationName = "Select Organization";
@@ -75,7 +77,7 @@ export class CompanyDetailComponent implements OnInit {
       FirstAddress: new FormControl(this.organizationModal.FirstAddress),
       SecondAddress: new FormControl(this.organizationModal.SecondAddress),
       ThirdAddress: new FormControl(this.organizationModal.ThirdAddress),
-      ForthAddress: new FormControl(this.organizationModal.ForthAddress),
+      FourthAddress: new FormControl(this.organizationModal.FourthAddress),
       Pincode: new FormControl(this.organizationModal.Pincode === 0 ? null : this.organizationModal.Pincode),
       City: new FormControl(this.organizationModal.City),
       State: new FormControl(this.organizationModal.State),
@@ -112,8 +114,13 @@ export class CompanyDetailComponent implements OnInit {
     organizationDetail.IsActive = true;
 
     if (errroCounter === 0) {
-      let request: organizationModal = this.organizationForm.value;
-      let formData = new FormData()
+      let request = this.organizationForm.value;
+      request.LegalEntity = this.singleOrganization.LegalEntity;
+      request.LegalNameOfCompany =  this.singleOrganization.LegalNameOfCompany;
+      request.TypeOfBusiness = this.singleOrganization.TypeOfBusiness;
+      request.InCorporationDateb = this.singleOrganization.InCorporationDateb;
+      request.FullAddress =this.singleOrganization.FullAddress;
+      // let formData = new FormData()
       // formData.append("organizationDetail", JSON.stringify(request));
       // let file = null;
       // if(this.fileDetail.length > 0)
@@ -174,7 +181,7 @@ class organizationModal {
   FirstAddress: string = null;
   SecondAddress: string = null;
   ThirdAddress: string = null;
-  ForthAddress: string = null;
+  FourthAddress: string = null;
   Pincode: number = 0;
   City: string = null;
   State: string = null;
