@@ -48,28 +48,28 @@
                         <ul class="list-border-0 list-group">
                           <li class="list-group-item">
                             <input class="form-check-input me-1" formControlName="IsPfAmountLimitStatutory" type="checkbox"
-                              value="" aria-label="...">
+                               aria-label="...">
                             Limit PF amount to Statutory minimum Salary for all employees.
                           </li>
                           <li class="list-group-item pb-0">
                             <input class="form-check-input me-1" formControlName="IsPfCalculateInPercentage" type="checkbox"
-                             aria-label="..." (click)="enableChildList(isallowChild)">
+                             aria-label="..." (click)="enableChildList($event)">
                             Allow PF calculated as percentage of Basic Salary beyond Statutory Minimum.
                             <ul class="list-border-0 list-group">
                               <li class="list-group-item pt-3">
-                                <input type="radio" name="IsAllowOverridingPf" value="true" disabled id="allowPFoverriding"
+                                <input type="checkbox" name="IsAllowOverridingPf"  disabled id="allowPFoverriding"
                                   formControlName="IsAllowOverridingPf" class="form-check-input">
                                 Allow overriding of PF at salary structure level.
                               </li>
                             </ul>
                           </li>
                           <li class="list-group-item pb-0">
-                            <input class="form-check-input me-1" formControlName="IsPfEmployerContribution" (click)="allowPFContribution(isallowPFLimit)"
-                              type="checkbox" value="true" aria-label="...">
+                            <input class="form-check-input me-1" formControlName="IsPfEmployerContribution" (click)="allowPFContribution($event)"
+                              type="checkbox"  aria-label="...">
                             Pay Employer Contribution of Provident Fund outside the Gross Salary of an Employee
                             <ul class="list-border-0 list-group">
                               <li class="list-group-item pt-3 d-flex align-items-center">
-                                <input type="radio" value="true" class="form-check-input" (click)="enablePfAmount(isallowPFamount)" name="IsEmployerPFLimitContribution" formControlName="IsEmployerPFLimitContribution" disabled>
+                                <input type="checkbox" disabled class="form-check-input" (click)="enablePfAmount(isallowPFamount)" name="IsEmployerPFLimitContribution" formControlName="IsEmployerPFLimitContribution" disabled>
                                 <span class="ps-1">Limit employer's PF contribution amount maximum of</span>
                                 <div class="mx-4 col-md-2 d-inline-block">
                                   <input class="form-control" [readonly]="!isallowPFamount" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" name="EmployerPFLimit" formControlName="EmployerPFLimit">
