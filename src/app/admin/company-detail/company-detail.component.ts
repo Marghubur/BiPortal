@@ -36,8 +36,6 @@ export class CompanyDetailComponent implements OnInit {
   ngOnInit(): void {
     this.organizationModal = new organizationModal();
     this.loadData();
-    this.initForm();
-    this.isLoaded = true;
     this.organizationId = 0;
   }
 
@@ -48,19 +46,14 @@ export class CompanyDetailComponent implements OnInit {
 
   loadData() {
     this.http.get("Settings/GetOrganizationInfo").then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        if (response.ResponseBody.organization.length > 0)
-          this.organizationModal = response.ResponseBody.organization[0] as organizationModal;
-        let profileDetail = response.ResponseBody.file;
-        if(profileDetail.length > 0) {
-          this.buildProfileImage(profileDetail[0]);
-        }
-        this.initForm();
+      if(response.ResponseBody && response.ResponseBody.length === 1) {
+          this.organizationModal = response.ResponseBody[0] as organizationModal;
       } else {
         this.organizationModal = new organizationModal;
-        this.initForm();
+        this.organizationModal.OrganizationName = "Select Organization";
       }
 
+      this.initForm();
       this.isLoaded = true;
     });
   }
@@ -72,8 +65,8 @@ export class CompanyDetailComponent implements OnInit {
 
   initForm() {
     this.organizationForm = this.fb.group({
-      OrganizationId: new FormControl(this.organizationModal.organizationId),
-      OrganizationName: new FormControl(this.organizationModal.organizationName, [Validators.required]),
+      OrganizationId: new FormControl(this.organizationModal.OrganizationId),
+      OrganizationName: new FormControl(this.organizationModal.OrganizationName, [Validators.required]),
       MobileNo: new FormControl(this.organizationModal.MobileNo),
       PrimaryPhoneNo: new FormControl(this.organizationModal.PrimaryPhoneNo),
       SecondaryPhoneNo: new FormControl(this.organizationModal.SecondaryPhoneNo),
@@ -171,8 +164,8 @@ export class CompanyDetailComponent implements OnInit {
 }
 
 class organizationModal {
-  organizationId: number = 0;
-  organizationName: string = null;
+  OrganizationId: number = 0;
+  OrganizationName: string = null;
   MobileNo: string = null;
   PrimaryPhoneNo: string = null;
   SecondaryPhoneNo: string = null;

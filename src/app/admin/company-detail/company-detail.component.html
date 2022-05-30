@@ -15,6 +15,7 @@
           <app-breadcrums></app-breadcrums>
         </div>
         <div class="x_content mt-4" *ngIf="isLoaded">
+          <div>{{organizationModal.OrganizationName}}</div>
           <form [formGroup]="organizationForm" autocomplete="off" class="col-md-12 row">
             <div class="mb-5">
               <div class="col-12 row m-0">
@@ -26,7 +27,8 @@
                         <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
                           formControlName="ProfileImgPath" />
                         <div class="img-container__btn mt-2">
-                          <button class="btn btn-outline-success form-control" (click)="fireBrowserFile()">Browse</button>
+                          <button class="btn btn-outline-success form-control"
+                            (click)="fireBrowserFile()">Browse</button>
                         </div>
                       </div>
                     </div>
@@ -49,8 +51,8 @@
                     <div class="col-md-4 pb-3">
                       <label class="form-label">Email Id *</label>
                       <input class="form-control" placeholder="Email Id"
-                        [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}" name="Email"
-                        formControlName="Email" />
+                        [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}"
+                        name="Email" formControlName="Email" />
                     </div>
                   </div>
 
