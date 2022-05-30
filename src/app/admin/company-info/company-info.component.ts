@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 declare var $: any;
 
@@ -19,10 +19,8 @@ export class CompanyInfoComponent implements OnInit {
   submitted: boolean = false;
   model: NgbDateStruct;
 
-  constructor(
-    private fb: FormBuilder,
-    private http: AjaxService
-  ) { }
+  constructor(private fb: FormBuilder,
+              private http: AjaxService) { }
 
   get f () {
     return this.companyInformationForm.controls;
@@ -30,8 +28,9 @@ export class CompanyInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.ActivatedPage = 1;
-    this.companyInformation.LegalEntity = '';
+    this.companyInformation = new CompanyInformationClass();
     this.initForm();
+    this.companyInformation.LegalEntity = '';
     this.loadData();
   }
 
@@ -40,6 +39,12 @@ export class CompanyInfoComponent implements OnInit {
       if (response.ResponseBody ) {
         Toast("Record found.")
         this.OrganizationDetails = response.ResponseBody;
+        if (this.OrganizationDetails.length == 1) {
+          this.companyInformation = this.OrganizationDetails[0];
+          let date = new Date(this.companyInformation.InCorporationDate);
+          this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          this.initForm();
+        }
       }
     })
   }
@@ -63,6 +68,8 @@ export class CompanyInfoComponent implements OnInit {
       this.companyInformation = this.OrganizationDetails.find (x => x.OrganizationId == value);
       let date = new Date(this.companyInformation.InCorporationDate)
       this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+    } else {
+      ErrorToast("Please select organization.")
     }
     this.initForm();
   }
@@ -109,9 +116,16 @@ export class CompanyInfoComponent implements OnInit {
   updateDetail() {
     this.submitted = true;
     let request:CompanyInformationClass = this.companyInformationForm.value;
-    request.OrganizationName = 'Test';
-    request.InCorporationDate = new Date(request.InCorporationDate);
-    this.http.post("Settings/InsertUpdateCompanyDetail", request)
+    if (request.OrganizationId <= 0)
+      ErrorToast("Invalid Organization");
+    let value = this.OrganizationDetails.find (x => x.OrganizationId == request.OrganizationId);
+    value.LegalEntity = request.LegalEntity;
+    value.LegalNameOfCompany = request.LegalNameOfCompany;
+    value.TypeOfBusiness = request.TypeOfBusiness;
+    value.InCorporationDate = request.InCorporationDate;
+    value.FullAddress = request.FullAddress;
+
+    this.http.post("Settings/InsertUpdateCompanyDetail", value)
     .then(res => {
       if(res.ResponseBody) {
         Toast("Detail inserted/updated successfully.");
@@ -128,5 +142,4 @@ class CompanyInformationClass {
   InCorporationDate: Date = null;
   FullAddress: string = '';
   OrganizationId: number = 0;
-  OrganizationName: string = ''
 }
