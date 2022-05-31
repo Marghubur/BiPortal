@@ -170,7 +170,7 @@ export class CompanyDetailComponent implements OnInit {
   }
 }
 
-class organizationModal {
+export class organizationModal {
   OrganizationId: number = 0;
   OrganizationName: string = null;
   MobileNo: string = null;

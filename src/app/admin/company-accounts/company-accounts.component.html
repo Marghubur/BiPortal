@@ -17,6 +17,12 @@
         <div class="x_content mt-4" *ngIf="isLoaded">
           <form [formGroup]="organizationAccountsForm" autocomplete="off" class="col-md-12 row">
             <div class="col-12 row m-0">
+              <div class="col-md-4 mb-4 mt-2">
+                <select class="form-select" (change)="findCompanyAccounts($event)" formControlName="OrganizationId" >
+                  <option value="0">Select Company</option>
+                  <option value="{{org.OrganizationId}}" *ngFor="let org of OrganizationDetails">{{org.OrganizationName}}</option>
+                </select>
+              </div>
               <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_header">
@@ -25,26 +31,49 @@
                     </div>
                   </div>
                   <div class="col-md-12 mb-3 mb-3 row">
-                    <!-- <label class="form-label">Address *</label> -->
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-4 mt-4">
                       <label class="form-label">Bank Name</label>
                       <input placeholder="Bank name" class="form-control" name="BankName" transform=""
                         formControlName="BankName" />
                     </div>
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-4 mt-4">
                       <label class="form-label">Account No.#</label>
-                      <input placeholder="Account No.#" OnlyNumber="11" class="form-control" name="AccountNumber"
+                      <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNumber"
                         formControlName="AccountNumber" />
                     </div>
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-4 mt-4">
                       <label class="form-label">IFSCCode Code</label>
                       <input placeholder="IFSCCode Code" class="form-control" name="IFSCCode" transform="upper"
                         formControlName="IFSCCode" />
                     </div>
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-4 mt-4">
                       <label class="form-label">Branch Name (Optional)</label>
                       <input placeholder="Branch name" class="form-control" name="Branch" transform=""
                         formControlName="Branch" />
+                    </div>
+                  </div>
+                </div>
+                <div class="x_panel mt-3">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Other Details<small>Company other deatils.</small></h2>
+                    </div>
+                  </div>
+                  <div class="col-md-12 mb-3 mb-3 row">
+                    <div class="col-md-4 mt-4">
+                      <label class="form-label">PAN No.</label>
+                      <input placeholder="PAN Number" class="form-control" name="PANNumber" transform="upper"
+                        formControlName="PANNumber" />
+                    </div>
+                    <div class="col-md-4 mt-4">
+                      <label class="form-label">GSTIN No.#</label>
+                      <input placeholder="GSTIN No.#" class="form-control" name="GSTINNumber"
+                        formControlName="GSTINNumber" />
+                    </div>
+                    <div class="col-md-4 mt-4">
+                      <label class="form-label">Trade Liecence No.</label>
+                      <input placeholder="Trade Liecence Number" class="form-control" name="TradeLiecenceNumber" transform="upper"
+                        formControlName="TradeLiecenceNumber" />
                     </div>
                   </div>
                 </div>
