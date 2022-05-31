@@ -16,7 +16,8 @@
         </div>
         <h4 class="fw-bold text-dark my-3 px-2 py-3">
           <span>PAYROLL CYCLE SETTING</span>
-          <button class="float-end btn btn-outline-success" (click)="saveSettingModelOpen()"><i class="fa fa-cog pe-2"></i>Save</button>
+          <button class="float-end btn btn-outline-success" (click)="saveSettingModelOpen()"><i
+              class="fa fa-cog pe-2"></i>Save</button>
         </h4>
         <form [formGroup]="payrollForm">
           <div class="card bg-light p-3">
@@ -27,7 +28,9 @@
               <div class="col-md-3">
                 <select class="form-select" formControlName="PayFrequency">
                   <option value="0">Select</option>
-                  <option value="0">Monthly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="daily">Daily</option>
+                  <option value="hourly">Hourly</option>
                 </select>
               </div>
             </div>
@@ -37,9 +40,9 @@
                   Payroll</label>
               </div>
               <div class="col-md-3">
-                <select class="form-select" formControlName="PayCycleStart">
+                <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth">
                   <option value="0">Select</option>
-                  <option value="0">Aug</option>
+                  <option *ngFor="let i of months" [value]="i">{{i}}</option>
                 </select>
               </div>
               <div class="col">
@@ -48,23 +51,33 @@
             </div>
             <div class="row px-2 py-2">
               <div class="col-md-3">
-                <label for="" class="form-label fs-6">Which day did the pay period end in Aug</label>
+                <label for="" class="form-label fs-6">Which day did the pay period end in {{payPeriodMonth}}</label>
               </div>
               <div class="col-md-3">
                 <select class="form-select" formControlName="PayPeriodEnd">
-                  <option value="0">Select</option>
-                  <option value="0">SEP 2</option>
+                  <option value="0">Select date.</option>
+                  <ng-container *ngIf="enableDays">
+                    <option *ngFor="let day of days" [value]="day.value">{{day.text}}</option>
+                  </ng-container>
                 </select>
               </div>
             </div>
             <div class="row px-2 py-2">
               <div class="col-md-3">
-                <label for="" class="form-label fs-6">The pay day for the period SEP 3 - OCT 2 is</label>
+                <label for="" class="form-label fs-6">The pay day for the period is {{payPeriodMonth}} {{payPeriodDate}}
+                  -
+                  {{nextMonth}} {{payPeriodDate}}</label>
               </div>
               <div class="col-md-3">
                 <select class="form-select" formControlName="PayDayPeriod">
                   <option value="0">Select a Pay day for the period</option>
-                  <option value="0">Monthly</option>
+                  <option value="Sunday">Sunday</option>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thusday">Thusday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
                 </select>
               </div>
             </div>
@@ -92,11 +105,13 @@
                     <label for="" class="form-label fs-6">Exclude Weekly offs</label>
                   </div>
                   <div class="col-md-3">
-                    <input class="form-check-input" value="true" formControlName="IsExcludeWeekly" type="radio" name="IsExcludeWeekly" id="IsExcludeWeekly1">
+                    <input class="form-check-input" value="true" formControlName="IsExcludeWeekly" type="radio"
+                      name="IsExcludeWeekly" id="IsExcludeWeekly1">
                     <label class="form-check-label ps-2" for="IsExcludeWeekly1">
                       Yes
                     </label>
-                    <input class="form-check-input ms-4" value="false" formControlName="IsExcludeWeekly" type="radio" name="IsExcludeWeekly" id="IsExcludeWeekly1">
+                    <input class="form-check-input ms-4" value="false" formControlName="IsExcludeWeekly" type="radio"
+                      name="IsExcludeWeekly" id="IsExcludeWeekly1">
                     <label class="form-check-label ps-2" for="IsExcludeWeekly1">
                       No
                     </label>
@@ -107,11 +122,13 @@
                     <label for="" class="form-label fs-6">Exclude Holidays</label>
                   </div>
                   <div class="col-md-3">
-                    <input class="form-check-input" value="true" formControlName="IsExcludeHoliday" type="radio" name="IsExcludeHoliday" id="IsExcludeHoliday1">
+                    <input class="form-check-input" value="true" formControlName="IsExcludeHoliday" type="radio"
+                      name="IsExcludeHoliday" id="IsExcludeHoliday1">
                     <label class="form-check-label ps-2" for="IsExcludeHoliday1">
                       Yes
                     </label>
-                    <input class="form-check-input ms-4" value="false" formControlName="IsExcludeHoliday" type="radio" name="IsExcludeHoliday" id="IsExcludeHoliday1">
+                    <input class="form-check-input ms-4" value="false" formControlName="IsExcludeHoliday" type="radio"
+                      name="IsExcludeHoliday" id="IsExcludeHoliday1">
                     <label class="form-check-label ps-2" for="IsExcludeHoliday1">
                       No
                     </label>
@@ -121,8 +138,10 @@
             </div>
             <div class="col-md-6 pb-3">
               <h4 class="text-dark">NOTE:</h4>
-              <p class="mb-0">Calculation of number of days for a given pay period has significant impact when deducting salary for Loss of Pay due to Leave or other reason.</p>
-              <p class="mb-0">Ex: Loss of Pay for 1 day for an employee salary is Rs 30,000/month is calculated as below.</p>
+              <p class="mb-0">Calculation of number of days for a given pay period has significant impact when deducting
+                salary for Loss of Pay due to Leave or other reason.</p>
+              <p class="mb-0">Ex: Loss of Pay for 1 day for an employee salary is Rs 30,000/month is calculated as
+                below.</p>
               <p class="mb-0 pt-2">Loss of Pay when days = 30</p>
               <p class="mb-0 pb-2">-> Rs 30,000/30 = Rs 1000</p>
               <p class="mb-0">Loss of Pay when days are calculated excluding Weekends</p>
@@ -138,7 +157,8 @@
 </div>
 
 <!--Confirmation Modal -->
-<div class="modal fade" id="saveConfirmationModal" tabindex="-1" aria-labelledby="saveConfirmationLabel" aria-hidden="true">
+<div class="modal fade" id="saveConfirmationModal" tabindex="-1" aria-labelledby="saveConfirmationLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -151,14 +171,17 @@
         <div class="form-check">
           <input class="form-check-input" type="checkbox">
           <label class="form-check-label" for="invalidCheck">
-            All imported employees salary data (if any) for previous months will be lost. You will have to re-import all previous salary data.
+            All imported employees salary data (if any) for previous months will be lost. You will have to re-import all
+            previous salary data.
           </label>
         </div>
-        <p class="mb-0">If you are not sure about this process of have any questions, please reach out to support suppory@hiringbell.com</p>
+        <p class="mb-0">If you are not sure about this process of have any questions, please reach out to support
+          suppory@hiringbell.com</p>
       </div>
       <div class="modal-footer border-top-0 px-4">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="savePayRollSetting()"><i class="fa fa-cog pe-2"></i> Yes, Change cycle</button>
+        <button type="button" class="btn btn-primary-c" (click)="savePayRollSetting()"><i class="fa fa-cog pe-2"></i>
+          Yes, Change cycle</button>
       </div>
     </div>
   </div>

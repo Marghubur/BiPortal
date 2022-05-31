@@ -39,6 +39,7 @@ export class SettingsComponent implements OnInit {
         break;
       case Payroll:
         this.nav.navigate(Payroll, null);
+        break;
       case CompanyDetail:
         this.nav.navigate(CompanyDetail, null);
         break;
