@@ -4,6 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { DateFormatter } from 'src/providers/DateFormatter';
 declare var $: any;
 
 @Component({
@@ -18,9 +19,12 @@ export class CompanyInfoComponent implements OnInit {
   OrganizationDetails: Array<any> = [];
   submitted: boolean = false;
   model: NgbDateStruct;
+  signURL: string = '';
+  fileDetail: any = null;
 
   constructor(private fb: FormBuilder,
-              private http: AjaxService) { }
+              private http: AjaxService,
+              private dateFormat: DateFormatter) { }
 
   get f () {
     return this.companyInformationForm.controls;
@@ -57,7 +61,8 @@ export class CompanyInfoComponent implements OnInit {
       LegalNameOfCompany: new FormControl(this.companyInformation.LegalNameOfCompany, [Validators.required]),
       TypeOfBusiness: new FormControl(this.companyInformation.TypeOfBusiness),
       InCorporationDate: new FormControl(this.companyInformation.InCorporationDate),
-      FullAddress: new FormControl(this.companyInformation.FullAddress)
+      FullAddress: new FormControl(this.companyInformation.FullAddress),
+      SignaturePath: new FormControl('')
     })
   }
 
@@ -105,12 +110,24 @@ export class CompanyInfoComponent implements OnInit {
     document.getElementById('progress').style.width = ((page - 1) *50).toString() + '%';
   }
 
-  AddSigntureModel() {
-    $('#addSignature').modal('show');
+  fireBrowserFile() {
+    $('#uploasignature').click();
   }
 
-  addSignature() {
-
+  uploadorganizationsign(event: any) {
+    if (event.target.files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.signURL = event.target.result;
+      };
+      let selectedfile = event.target.files;
+      let file = <File>selectedfile[0];
+      this.fileDetail = {
+        name: "sign",
+        file: file
+      };
+    }
   }
 
   updateDetail() {
