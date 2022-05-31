@@ -16,22 +16,6 @@
         </div>
         <div class="x_content mt-4" *ngIf="isLoaded">
           <form [formGroup]="organizationAccountsForm" autocomplete="off" class="col-md-12 row">
-            <div class="mb-5">
-              <div class="col-12 row m-0">
-                <div class="col-md-12 row">
-                  <div class="col-md-4 mb-3">
-                    <label class="form-label">GSTIN No.#</label>
-                    <input class="form-control" transform="upper" placeholder="GSTIN No." name="GSTNO" formControlName="GSTNO" />
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <label class="form-label">PAN No.#</label>
-                    <input class="form-control" placeholder="PAN No.#" transform="upper" name="PanNo" formControlName="PanNo" />
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
             <div class="col-12 row m-0">
               <div class="col-md-12">
                 <div class="x_panel">
@@ -49,17 +33,18 @@
                     </div>
                     <div class="col-md-6 mt-4">
                       <label class="form-label">Account No.#</label>
-                      <input placeholder="Account No.#" OnlyNumber="11" class="form-control" name="AccountNo" formControlName="AccountNo" />
+                      <input placeholder="Account No.#" OnlyNumber="11" class="form-control" name="AccountNumber"
+                        formControlName="AccountNumber" />
                     </div>
                     <div class="col-md-6 mt-4">
-                      <label class="form-label">IFSC Code</label>
-                      <input placeholder="IFSC Code" class="form-control" name="IFSC" transform="upper"
-                        formControlName="IFSC" />
+                      <label class="form-label">IFSCCode Code</label>
+                      <input placeholder="IFSCCode Code" class="form-control" name="IFSCCode" transform="upper"
+                        formControlName="IFSCCode" />
                     </div>
                     <div class="col-md-6 mt-4">
                       <label class="form-label">Branch Name (Optional)</label>
-                      <input placeholder="Branch name" class="form-control" name="BranchName" transform=""
-                        formControlName="BranchName" />
+                      <input placeholder="Branch name" class="form-control" name="Branch" transform=""
+                        formControlName="Branch" />
                     </div>
                   </div>
                 </div>
