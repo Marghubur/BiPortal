@@ -13,7 +13,7 @@
     <div class="my-3 px-5">
       <form [formGroup]="companyInformationForm">
         <div class="col-md-4 mb-4 mt-2">
-          <select class="form-select" (change)="findCompany($event)" formControlName="OrganizationId" [disabled]="OrganizationDetails.length == 1">
+          <select class="form-select" (change)="findCompany($event)" formControlName="OrganizationId" [disabled]="OrganizationDetails.length == 1" >
             <option value="0">Select Company</option>
             <option value="{{org.OrganizationId}}" *ngFor="let org of OrganizationDetails">{{org.OrganizationName}}</option>
           </select>
@@ -40,20 +40,12 @@
               </select>
             </div>
             <div class="row col-md-6 py-3">
-              <label for="" class="form-label fw-bold">AUTHORIZED SIGNATURE</label>
-              <div class="col-md-6">
-                <div class="row">
-                  <div class="rounded mx-3 rounded-circle bg-primary signature d-flex align-items-center justify-content-center">
-                    <span class="fs-4 fw-bold text-white">M</span>
-                  </div>
-                  <div class="rounded rounded-circle bg-primary signature d-flex align-items-center justify-content-center">
-                    <span class="fs-4 fw-bold text-white">M</span>
-                  </div>
-                </div>
+              <div class="col-md-6" (change)="uploadorganizationsign($event)">
+                <input type="file" class="d-none" id="uploasignature" accept=".jpg, .jpeg, .png" formControlName="SignaturePath">
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowserFile()"><i class="fa fa-plus pe-2"></i>{{signURL == ''? "Add New": "Modify"}} Signature</a>
               </div>
-              <div class="col">
-                <a href="javascript:void(0)" class="text-decoration-none" (click)="AddSigntureModel()"><i class="fa fa-plus pe-2"></i>Add New
-                  Signature</a>
+              <div class="col-md-6 border sign-container" [ngClass]="{'d-none': signURL == ''}">
+                <img [attr.src]="signURL" alt="" class="img-fluid ">
               </div>
             </div>
             <div class="py-2">
@@ -110,24 +102,3 @@
     </div>
   </div>
 </div>
-
-<!-- Add Signature Modal -->
-<div class="modal fade" id="addSignature" tabindex="-1" aria-labelledby="addSignatureLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addSignatureLabel">Add Signature</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <label for="" class="form-label">Signature</label>
-        <input type="text" class="form-control" placeholder="Enter your signature here">
-      </div>
-      <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="addSignature()">Add Signature</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End -->
