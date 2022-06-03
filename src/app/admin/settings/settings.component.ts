@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CompanyAccounts, CompanyDetail, CompanyInfo, CompanySettings, Payroll, PFESISetup } from 'src/providers/constants';
+import { CompanyAccounts, CompanyDetail, CompanyInfo, CompanySettings, CustomSalaryStructure, Payroll, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -12,6 +12,8 @@ export class SettingsComponent implements OnInit {
   CompanyInfoPage: string = CompanyInfo
   ManageCompanyDetail: string = CompanyDetail;
   ManageCompanyAccounts: string = CompanyAccounts;
+  SalaryStructure: string = SalaryComponentStructure;
+  CustomSalary: string = CustomSalaryStructure;
   menuItem: any = {};
 
   PayRollPage: string = Payroll
@@ -45,6 +47,12 @@ export class SettingsComponent implements OnInit {
         break;
       case CompanyAccounts:
         this.nav.navigate(CompanyAccounts, null);
+        break;
+      case SalaryComponentStructure:
+        this.nav.navigate(SalaryComponentStructure, null)
+        break;
+      case CustomSalaryStructure:
+        this.nav.navigate(CustomSalaryStructure, null);
         break;
     }
   }

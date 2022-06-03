@@ -1,0 +1,267 @@
+<div class="col-12 full-v main-container">
+  <div class="x_panel mt-2">
+    <div class="x_header">
+      <div class="x_header_title">
+        <h2>  SALARY COMPONENT AND STRUCTURE</h2>
+      </div>
+    </div>
+    <div class="px-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
+   <div class="col-md-12 d-flex align-items-center justify-content-center">
+    <div class="progress-step col-md-3 my-2">
+      <div class="custom-progress" id="progressbar"></div>
+      <div class="progress-step-item active" (click)="activePage(1)" data-title="RECURING COMPONENTS"></div>
+      <div class="progress-step-item" (click)="activePage(2)" data-title="ADHOC COMPONENTS"></div>
+    </div>
+   </div>
+    <div class="box px-3">
+      <div class="d-flex flex-column">
+        <div class="mb-3">
+          <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage+1)">{{ActivatedPage == 1? 'Continue': 'Save'}}</button>
+        </div>
+        <div class="col-md-12">
+          <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i>Add Component</button>
+          <div class="col-md-3 float-end">
+            <div class="form-group has-search">
+              <span class="fa fa-search form-control-feedback"></span>
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="ActivatedPage == 1">
+        <div class="t-table t-list t-border col-md-12 my-3">
+          <div class="hide-bar bg-light"></div>
+          <div class="t-head bg-light fw-bold">
+            <div class="tr">
+              <div class="th text-truncate ps-3">
+                COMPONENT NAME
+              </div>
+              <div class="th text-truncate ps-3">
+                TYPE
+              </div>
+              <div class="th text-truncate ps-3">
+                TAX EXEMPT
+              </div>
+              <div class="th text-truncate ps-3">
+                MAX LIMIT(YEAR)
+              </div>
+              <div class="th text-truncate ps-3">
+                REQUIRE DOCS
+              </div>
+              <div class="th text-truncate ps-3">
+                INDIVIDUAL OVERRIDE
+              </div>
+              <div class="th text-truncate ps-3">
+                ACTIONS
+              </div>
+            </div>
+          </div>
+          <div class="t-body custom-height">
+            <div class="tr py-2" *ngFor="let item of salaryConfirmation">
+              <div class="td ps-3 text-truncate">
+                <span class="badge bg-success me-2">ON</span>{{item.ComponentName}}
+              </div>
+              <div class="td ps-3 text-truncate">
+                {{item.Type}}
+              </div>
+              <div class="td ps-3 text-truncate">
+                {{item.TaxExempt}}
+                <small class="text-muted d-block">{{item.Section}}</small>
+              </div>
+              <div class="td ps-3 text-truncate">
+                {{item.MaxLimit}}
+              </div>
+              <div class="td ps-3 text-truncate">
+                <ng-container *ngIf="item.RequireDocs == true">Yes</ng-container>
+                <ng-container *ngIf="item.RequireDocs == false">No</ng-container>
+              </div>
+              <div class="td ps-3 text-truncate">
+                <ng-container *ngIf="item.IndividualOverride == true">Allowed</ng-container>
+                <ng-container *ngIf="item.IndividualOverride == false">Not Allowed</ng-container>
+              </div>
+              <div class="td ps-3">
+                <a href="javascript:void(0)" (click)="openEditModal(item)" class="text-decoration-none"><i class="fa fa-pencil pe-2"></i> Edit</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="ActivatedPage == 2"></ng-container>
+    </div>
+  </div>
+</div>
+
+<!-- Add Component Modal -->
+<div class="modal fade" id="AddComponentModal" tabindex="-1" aria-labelledby="AddComponentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title ps-4" id="AddComponentModalLabel">LIBRARY OF RECURRING COMPONENTS</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="addComponentForm">
+        <div class="modal-body px-5">
+          <div class="t-table t-list t-border col-md-12 my-3">
+            <div class="hide-bar bg-light"></div>
+            <div class="t-head bg-light fw-bold">
+              <div class="tr">
+                <div class="th fe-2 text-truncate ps-3">
+                  COMPONENT NAME
+                </div>
+                <div class="th text-truncate ps-3">
+                  TYPE
+                </div>
+                <div class="th text-truncate ps-3">
+                  TAX EXEMPT
+                </div>
+                <div class="th text-truncate ps-3">
+                  MAX LIMIT(YEAR)
+                </div>
+                <div class="th text-truncate ps-3">
+                  Require Docs
+                </div>
+                <div class="th text-truncate ps-3">
+                  ACTIONS
+                </div>
+              </div>
+            </div>
+            <div class="t-body custom-height">
+              <div class="tr py-2" *ngFor="let item of salaryConfirmation">
+                <div class="td fe-2 ps-3 text-truncate">
+                  <span class="badge bg-success me-2">ON</span>{{item.ComponentName}}
+                </div>
+                <div class="td ps-3 text-truncate">
+                  {{item.Type}}
+                </div>
+                <div class="td ps-3 text-truncate">
+                  {{item.TaxExempt}}
+                  <small class="text-muted d-block">{{item.Section}}</small>
+                </div>
+                <div class="td ps-3 text-truncate">
+                  {{item.MaxLimit}}
+                </div>
+                <div class="td ps-3 text-truncate">
+                  <ng-container *ngIf="item.RequireDocs == true">Yes</ng-container>
+                  <ng-container *ngIf="item.RequireDocs == false">No</ng-container>
+                </div>
+                <div class="td ps-3">
+                  <input class="form-check-input" type="checkbox" value="" (click)="getComponentData(item)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addComponents()">
+            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Save' }}
+          </button>
+        </div>
+        </form>
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+<!-- Edit Salary Component Modal -->
+<div class="modal fade" id="editSalaryMoadl" tabindex="-1" aria-labelledby="editSalaryMoadlLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title ps-4" id="editSalaryMoadlLabel">Edit Salary Component- {{currentSalaryComponent.Type}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5">
+        <form [formGroup]="editSalaryComponent">
+          <div class="col-md-4 mb-4">
+            <label class="form-label">COMPONENT TYPE <i class="fa fa-exclamation-circle text-secondary ps-2"></i></label>
+            <select class="form-select" formControlName="ComponentType">
+              <option value="Fixed" selected>Fixed</option>
+              <option value="Allowance">Allowance</option>
+              <option value="Deduction">Deduction</option>
+            </select>
+          </div>
+          <div class="form-check my-2">
+            <input class="form-check-input" formControlName="IsComponentEnable" type="checkbox" value="" id="flexCheckChecked">
+            <label class="form-check-label" for="flexCheckChecked">
+              This component is enabled. This component cannot be disabled as it is used in salary structures.
+            </label>
+          </div>
+          <div class="row">
+            <div class="col-md-5 my-2">
+              <label for="" class="form-label">NAME OF THE COMPONENT</label>
+              <input type="text" class="form-control" formControlName="ComponentName" readonly>
+            </div>
+            <div class="col-md-5 my-2">
+              <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
+              <input type="text" class="form-control" formControlName="MaximumLimit">
+            </div>
+          </div>
+          <div>
+            <blockquote>
+              <ul class="list-border-0 list-group">
+                <ng-container *ngIf="!isFixedType">
+                  <li class="list-group-item pb-0 ps-0">
+                    <div class="d-flex align-items-center">
+                      <input class="form-check-input me-1" type="checkbox"
+                      aria-label="...">
+                      This component is Tax exempt (not taxable). Income tax Section
+                      <div class=" col-md-2 d-inline-block ms-3">
+                        <input type="text" class="form-control form-control-sm" formControlName="Section" readonly>
+                      </div>
+                      <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                    </div>
+                    <ul class="list-border-0 list-group">
+                      <li class="list-group-item pt-3">
+                        <input type="checkbox"  disabled class="form-check-input">
+                        Required submission of document proof (or bills) to claim for tax exemption.
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="list-group-item ps-0">
+                    <input class="form-check-input me-1" type="checkbox"
+                       aria-label="...">
+                    Include this component in arrears calculation. <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                  </li>
+                  <li class="list-group-item ps-0">
+                    <input class="form-check-input" type="checkbox">
+                    Loss of pay due to employee attendance will affect this component..
+                  </li>
+                  <li class="list-group-item pb-0 ps-0">
+                    <input class="form-check-input me-1" type="checkbox"
+                    aria-label="...">
+                    This component is paid separately
+                    <ul class="list-border-0 list-group">
+                      <li class="list-group-item pt-3 d-flex align-items-center">
+                        <input type="checkbox"  disabled class="form-check-input me-1">
+                        Hide component in Payslip (and exclude from gross earnings calculation in Payslip)
+                        <div class="mx-4 col-md-2 d-inline-block">
+                          <input type="text" class="form-control form-control-sm" readonly>
+                        </div>
+                        <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                      </li>
+                    </ul>
+                  </li>
+                </ng-container>
+                <li class="list-group-item ps-0">
+                  <input class="form-check-input" type="checkbox" formControlName="IsAllowtoOverride">
+                  Allow this component value to be customized and overridden at employee level.
+                </li>
+              </ul>
+            </blockquote>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary-c" [disabled]="isLoading">
+          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Update' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
