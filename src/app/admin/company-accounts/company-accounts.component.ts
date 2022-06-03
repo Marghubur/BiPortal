@@ -63,6 +63,7 @@ export class CompanyAccountsComponent implements OnInit {
       AccountNumber: new FormControl(this.organizationAccountModal.AccountNumber),
       BankName: new FormControl(this.organizationAccountModal.BankName),
       Branch: new FormControl(this.organizationAccountModal.Branch),
+      BranchCode: new FormControl(this.organizationAccountModal.BranchCode),
       IFSCCode: new FormControl(this.organizationAccountModal.IFSCCode),
       PANNumber: new FormControl(this.organizationAccountModal.PANNumber),
       IsUser: new FormControl(this.organizationAccountModal.IsUser),
@@ -127,7 +128,7 @@ export class CompanyAccountsComponent implements OnInit {
 
 }
 
-class organizationAccountModal {
+export class organizationAccountModal {
   OrganizationId: number = 0;
   GSTINNumber: string = null;
   AccountNumber: string = null;
@@ -137,4 +138,5 @@ class organizationAccountModal {
   PANNumber: string = null;
   IsUser: boolean = false;
   TradeLiecenceNumber: string = '';
+  BranchCode: string = '';
 }

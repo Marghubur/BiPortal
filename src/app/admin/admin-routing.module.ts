@@ -41,7 +41,9 @@ import { AdminResetPassword, AdminDeclaration,
   PFESISetup,
   CompanyInfo,
   CompanyDetail,
-  CompanyAccounts
+  CompanyAccounts,
+  SalaryComponentStructure,
+  CustomSalaryStructure
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -86,6 +88,8 @@ import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
 import { CompanyDetailComponent } from './company-detail/company-detail.component';
 import { CompanyAccountsComponent } from './company-accounts/company-accounts.component';
+import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
+import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -131,7 +135,9 @@ const routes: Routes = [
   { path: Expenses, component: ExpensesComponent},
   { path: CompanyDetail, component: CompanyDetailComponent},
   { path: CompanyAccounts, component: CompanyAccountsComponent},
-  { path: AdminTaxcalculation, component: TaxcalculationComponent}
+  { path: AdminTaxcalculation, component: TaxcalculationComponent},
+  { path: SalaryComponentStructure, component: SalarycomponentStructureComponent},
+  { path: CustomSalaryStructure, component: CustomsalaryStructureComponent}
 ];
 
 @NgModule({

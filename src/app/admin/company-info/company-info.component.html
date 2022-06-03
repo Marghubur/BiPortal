@@ -26,13 +26,13 @@
         </div>
         <ng-container *ngIf="ActivatedPage == 1">
           <div class="box">
-            <button (click)="updateDetail()" class=" btn my-2 me-1 btn-outline-success float-end">
+            <button  class=" btn my-2 me-1 btn-outline-success float-end" (click)="activePage(2)">
               <i class="fa fa-cog pe-2"></i>
               Save & Continue
             </button>
             <h6 class="mb-0 py-3">Please provide the company information. This is the company that pays for the Payroll.
             </h6>
-            <div class="col-md-3">
+            <div class="col-md-3 my-2">
               <label for="" class="foem-label pb-2 fw-bold">SELECT LEGAL ENTITY</label>
               <select class="form-select" formControlName="LegalEntity">
                 <option value="">Select Legal Entity</option>
@@ -50,17 +50,17 @@
             </div>
             <div class="py-2">
               <label for="" class="form-label fw-bold">COMPANY INFORMATION</label>
-              <div class="row col-md-6 py-2">
-                <div class="col-md-6 py-1">
+              <div class="row col-md-6">
+                <div class="col-md-6 my-2">
                   <label for="" class="form-label">LEGAL NAME OF THE COMPANY</label>
                   <input type="text" class="form-control" placeholder="COMPANY FULL NAME" [ngClass]="{'error-field': submitted && f['LegalNameOfCompany'].errors !== null && f['LegalNameOfCompany'].errors['required']}"
                     formControlName="LegalNameOfCompany">
                 </div>
-                <div class="col-md-6 py-1">
+                <div class="col-md-6 my-2">
                   <label for="" class="form-label">TYPE OF BUSINESS</label>
                   <input type="text" class="form-control" placeholder="TYPE OF BUSINESS" formControlName="TypeOfBusiness">
                 </div>
-                <div class="col-md-6 py-1">
+                <div class="col-md-6 my-2">
                   <label for="" class="form-label">DATE OF INFORMATION</label>
                   <form class="form-inline">
                     <div class="form-group w-100">
@@ -76,7 +76,7 @@
                     </div>
                   </form>
                 </div>
-                <div class="col-md-6 py-1">
+                <div class="col-md-6 my-2">
                   <label for="" class="form-label">REGISTERED OFFICE ADDRESS</label>
                   <input type="text" class="form-control" placeholder="REGISTERED OFFICE ADDRESS"
                     formControlName="FullAddress">
@@ -86,16 +86,71 @@
           </div>
         </ng-container>
         <ng-container *ngIf="ActivatedPage == 2">
-          <div>
-            <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Save &
-              Continue</button>
+          <div class="box">
+            <button class="float-end btn my-2 me-1 btn-outline-success" (click)="activePage(3)"><i class="fa fa-cog pe-2"></i>Continue</button>
             <h6 class="mb-0 py-3 mt-5">BANK ACCOUNT INFORMATION.</h6>
+             <div class="row">
+                <div class="col-md-4 my-2">
+                  <label for="" class="form-label">Account Number</label>
+                  <input type="text" class="form-control" readonly [value]="BankDetails.AccountNumber">
+                </div>
+                <div class="col-md-4 my-2">
+                  <label for="" class="form-label">Bank Name</label>
+                  <input type="text" readonly [value]="BankDetails.BankName" class="form-control">
+                </div>
+                <div class="col-md-4 my-2">
+                  <label for="" class="form-label">Branch Name</label>
+                  <input type="text" readonly [value]="BankDetails.Branch" class="form-control">
+                </div>
+                <div class="col-md-4 my-2">
+                  <label for="" class="form-label">Branch Code</label>
+                  <input type="text" readonly [value]="BankDetails.BranchCode" class="form-control">
+                </div>
+                <div class="col-md-4 my-2">
+                  <label for="" class="form-label">IFSC Code</label>
+                  <input type="text" readonly [value]="BankDetails.IFSCCode" class="form-control">
+                </div>
+                <div class="col-md-4 my-2">
+                  <label for="" class="form-label">GSTIN Number</label>
+                  <input type="text" readonly [value]="BankDetails.GSTINNumber" class="form-control">
+                </div>
+                <div class="col-md-4 my-2">
+                  <label for="" class="form-label">TradeLiecence Number</label>
+                  <input type="text" readonly [value]="BankDetails.TradeLiecenceNumber" class="form-control">
+                </div>
+                <div class="col-md-4 my-2">
+                  <label for="" class="form-label">PAN Number</label>
+                  <input type="text" readonly [value]="BankDetails.PANNumber" class="form-control">
+                </div>
+             </div>
           </div>
         </ng-container>
         <ng-container *ngIf="ActivatedPage == 3">
-          <div>
-            <button class="float-end btn my-2 me-1 btn-outline-success"><i class="fa fa-cog pe-2"></i>Submit</button>
+          <div class="box">
+            <button class="float-end btn my-2 me-1 btn-outline-success" (click)="updateDetail()"><i class="fa fa-cog pe-2"></i>Submit</button>
             <h6 class="mb-0 mt-5 py-3">COMPANY LOCATION</h6>
+            <div class="row">
+              <div class="col-md-4 my-2">
+                <label for="" class="form-label">First Address</label>
+                <input type="text" readonly class="form-control" [value]="companyInformation.FirstAddress">
+              </div>
+              <div class="col-md-4 my-2">
+                <label for="" class="form-label">Second Address</label>
+                <input type="text" readonly class="form-control" [value]="companyInformation.SecondAddress">
+              </div>
+              <div class="col-md-4 my-2">
+                <label for="" class="form-label">Third Address</label>
+                <input type="text" readonly class="form-control" [value]="companyInformation.ThirdAddress">
+              </div>
+              <div class="col-md-4 my-2">
+                <label for="" class="form-label">Fourth Address</label>
+                <input type="text" readonly class="form-control" [value]="companyInformation.FourthAddress">
+              </div>
+              <div class="col-md-4 my-2">
+                <label for="" class="form-label">Full Address</label>
+                <input type="text" readonly class="form-control" [value]="companyInformation.FullAddress">
+              </div>
+            </div>
           </div>
         </ng-container>
       </form>

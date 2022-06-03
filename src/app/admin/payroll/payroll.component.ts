@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ResponseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
+import { Toast } from 'src/providers/common-service/common.service';
 declare var $: any;
 
 @Component({
@@ -19,7 +22,8 @@ export class PayrollComponent implements OnInit {
   nextMonth: string = null;
   payPeriodDate: string = null;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+              private http: AjaxService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -98,7 +102,14 @@ export class PayrollComponent implements OnInit {
   };
 
   savePayRollSetting() {
-    console.log(this.payrollForm.value);
+    let value:PayRollClass = this.payrollForm.value;
+    if (value) {
+      this.http.post('Settings/InsertUpdatePayrollSetting', value).then((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          Toast("Submitted Successfully.")
+        }
+      })
+    }
     $('#saveConfirmationModal').modal('hide');
   }
   saveSettingModelOpen() {

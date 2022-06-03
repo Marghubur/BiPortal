@@ -5,6 +5,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DateFormatter } from 'src/providers/DateFormatter';
+import { organizationAccountModal } from '../company-accounts/company-accounts.component';
 declare var $: any;
 
 @Component({
@@ -21,6 +22,7 @@ export class CompanyInfoComponent implements OnInit {
   model: NgbDateStruct;
   signURL: string = '';
   fileDetail: any = null;
+  BankDetails: organizationAccountModal = null;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -84,10 +86,24 @@ export class CompanyInfoComponent implements OnInit {
     this.companyInformationForm.controls["InCorporationDate"].setValue(date);
   }
 
+  findBankDetails() {
+    if (this.companyInformation.OrganizationId > 0) {
+      this.http.get(`Settings/GetOrganizationAccountsInfo/${this.companyInformation.OrganizationId}`).then((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          this.BankDetails = response.ResponseBody;
+          Toast("Record found.")
+        }
+      })
+    } else {
+      ErrorToast("Invalid Organization Selected.");
+    }
+  }
+
   activePage(page: number) {
     switch (page) {
       case 2:
         this.ActivatedPage = 2;
+        this.findBankDetails();
         break;
       case 3:
         this.ActivatedPage = 3;
