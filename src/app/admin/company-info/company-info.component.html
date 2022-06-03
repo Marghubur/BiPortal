@@ -26,7 +26,7 @@
         </div>
         <ng-container *ngIf="ActivatedPage == 1">
           <div class="box">
-            <button  class=" btn my-2 me-1 btn-outline-success float-end" (click)="activePage(2)">
+            <button  class=" btn my-2 me-1 btn-outline-success float-end" (click)="updateDetail()">
               <i class="fa fa-cog pe-2"></i>
               Save & Continue
             </button>
@@ -40,12 +40,21 @@
               </select>
             </div>
             <div class="row col-md-6 py-3">
-              <div class="col-md-6" (change)="uploadorganizationsign($event)">
-                <input type="file" class="d-none" id="uploasignature" accept=".jpg, .jpeg, .png" formControlName="SignaturePath">
-                <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowserFile()"><i class="fa fa-plus pe-2"></i>{{signURL == ''? "Add New": "Modify"}} Signature</a>
+              <div class="col-md-6" (change)="signwithStamp($event)">
+                <input type="file" class="d-none" id="uploasignature" accept=".jpg, .jpeg, .png" formControlName="SignWithStamp">
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowserFile()"><i class="fa fa-plus pe-2"></i>{{signURL == ''? "Add New": "Modify"}} Signature with stamp</a>
               </div>
               <div class="col-md-6 border sign-container" [ngClass]="{'d-none': signURL == ''}">
                 <img [attr.src]="signURL" alt="" class="img-fluid ">
+              </div>
+            </div>
+            <div class="row col-md-6 py-3">
+              <div class="col-md-6" (change)="signwithoutStamp($event)">
+                <input type="file" class="d-none" id="uploasignwithoutstamp" accept=".jpg, .jpeg, .png" formControlName="SignWithoutStamp">
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowsersign()"><i class="fa fa-plus pe-2"></i>{{signURL == ''? "Add New": "Modify"}} Signature without stamp</a>
+              </div>
+              <div class="col-md-6 border sign-container" [ngClass]="{'d-none': signwithoutstamp == ''}">
+                <img [attr.src]="signwithoutstamp" alt="" class="img-fluid ">
               </div>
             </div>
             <div class="py-2">
