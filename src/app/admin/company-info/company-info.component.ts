@@ -28,6 +28,7 @@ export class CompanyInfoComponent implements OnInit {
   FileDocuments: Array<any> = [];
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
+  organizationId: number = 0;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -46,15 +47,18 @@ export class CompanyInfoComponent implements OnInit {
   }
 
   loadData() {
+    this.organizationId = 0;
     this.http.get("Settings/GetOrganizationInfo").then((response: ResponseModel) => {
       if (response.ResponseBody ) {
         Toast("Record found.")
         this.OrganizationDetails = response.ResponseBody;
         if (this.OrganizationDetails.length == 1) {
           this.companyInformation = this.OrganizationDetails[0];
+          this.organizationId = this.companyInformation.OrganizationId;
           let date = new Date(this.companyInformation.InCorporationDate);
           this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
           this.initForm();
+          this.findBankDetails();
         }
       }
     })
@@ -76,15 +80,18 @@ export class CompanyInfoComponent implements OnInit {
 
   findCompany(e: any) {
     let value = e.target.value;
+    this.organizationId = 0;
     this.companyInformation = new CompanyInformationClass();
     if (value  != '0') {
       this.companyInformation = this.OrganizationDetails.find (x => x.OrganizationId == value);
+      this.organizationId = this.companyInformation.OrganizationId;
       let date = new Date(this.companyInformation.InCorporationDate)
       this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
     } else {
       ErrorToast("Please select organization.")
     }
     this.initForm();
+    this.findBankDetails();
   }
 
   onDateSelection(e: NgbDateStruct) {
@@ -94,7 +101,7 @@ export class CompanyInfoComponent implements OnInit {
 
   findBankDetails() {
     if (this.companyInformation.OrganizationId > 0) {
-      this.http.get(`Settings/GetOrganizationAccountsInfo/${this.companyInformation.OrganizationId}`).then((response:ResponseModel) => {
+      this.http.get(`Settings/GetOrganizationAccountsInfo/${this.organizationId}`).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.BankDetails = response.ResponseBody;
           Toast("Record found.")
@@ -109,12 +116,11 @@ export class CompanyInfoComponent implements OnInit {
     switch (page) {
       case 2:
         this.ActivatedPage = 2;
-        this.findBankDetails();
         break;
       case 3:
         this.ActivatedPage = 3;
         break;
-      default:
+      case 1:
         this.ActivatedPage = 1;
         break;
     }
@@ -207,8 +213,6 @@ export class CompanyInfoComponent implements OnInit {
         i++;
       }
     }
-
-
     this.http.post("Settings/InsertUpdateCompanyDetail", formData)
     .then(res => {
       if(res.ResponseBody) {
