@@ -12,8 +12,8 @@ declare var $: any;
 })
 export class SalarycomponentStructureComponent implements OnInit {
   ActivatedPage: number = 1;
-  salaryConfirmation: Array<SalaryConfirmation> = [];
-  currentSalaryComponent: SalaryConfirmation = null;
+  salaryComponentFields: Array<SalaryComponentFields> = [];
+  currentSalaryComponent: SalaryComponentFields = null;
   editSalaryComponent: FormGroup;
   addComponentForm: FormGroup;
   isFixedType: boolean = false;
@@ -25,10 +25,10 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   ngOnInit(): void {
     this.ActivatedPage = 1;
-    this.currentSalaryComponent = new SalaryConfirmation();
+    this.currentSalaryComponent = new SalaryComponentFields();
     this.salaryComponent();
     this.addSalaryComponent();
-    this.salaryConfirmation = [{
+    this.salaryComponentFields = [{
       ComponentName: "Basic",
       Type: "Fixed",
       TaxExempt: "Taxable",
@@ -36,7 +36,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "HRA",
@@ -46,7 +47,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "MA",
@@ -56,7 +58,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       RequireDocs: true,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "Convevance Allowance",
@@ -66,7 +69,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "Special Allowance",
@@ -76,7 +80,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "Accident Insurance",
@@ -87,7 +92,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: false,
       IsAllowtoOverride: false,
-      IsComponentEnable: false
+      IsComponentEnable: false,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "PF Employer",
@@ -98,7 +104,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: false,
       IsAllowtoOverride: false,
-      IsComponentEnable: false
+      IsComponentEnable: false,
+      ComponentValueIn: 0
     },{
       ComponentName: "Telephone Allowance",
       Type: "Deduction",
@@ -108,7 +115,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: false,
       IsAllowtoOverride: false,
-      IsComponentEnable: false
+      IsComponentEnable: false,
+      ComponentValueIn: 0
     },{
       ComponentName: "Food Deduction",
       Type: "Deduction",
@@ -118,7 +126,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: false,
       IsAllowtoOverride: false,
-      IsComponentEnable: false
+      IsComponentEnable: false,
+      ComponentValueIn: 0
     }]
   }
 
@@ -171,7 +180,7 @@ export class SalarycomponentStructureComponent implements OnInit {
     this.isLoading = false;
   }
 
-  getComponentData(data: SalaryConfirmation) {
+  getComponentData(data: SalaryComponentFields) {
     if (data) {
       // this.recurringComponent.push({
       //   text: `${data.ComponentName}`,
@@ -207,7 +216,7 @@ export class SalarycomponentStructureComponent implements OnInit {
   }
 }
 
-export class SalaryConfirmation {
+export class SalaryComponentFields {
   ComponentName: string = '';
   Type: string = '';
   TaxExempt: string = '';
@@ -216,6 +225,7 @@ export class SalaryConfirmation {
   IndividualOverride: boolean = false;
   IsComponentEnable: boolean = true;
   IsAllowtoOverride: boolean = true;
+  ComponentValueIn: number = 0;
   Section?: string = '';
 }
 
