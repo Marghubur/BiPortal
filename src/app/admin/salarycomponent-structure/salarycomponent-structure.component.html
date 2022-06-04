@@ -2,26 +2,28 @@
   <div class="x_panel mt-2">
     <div class="x_header">
       <div class="x_header_title">
-        <h2>  SALARY COMPONENT AND STRUCTURE</h2>
+        <h2> SALARY COMPONENT AND STRUCTURE</h2>
       </div>
     </div>
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-   <div class="col-md-12 d-flex align-items-center justify-content-center">
-    <div class="progress-step col-md-3 my-2">
-      <div class="custom-progress" id="progressbar"></div>
-      <div class="progress-step-item active" (click)="activePage(1)" data-title="RECURING COMPONENTS"></div>
-      <div class="progress-step-item" (click)="activePage(2)" data-title="ADHOC COMPONENTS"></div>
+    <div class="col-md-12 d-flex align-items-center justify-content-center">
+      <div class="progress-step col-md-3 my-2">
+        <div class="custom-progress" id="progressbar"></div>
+        <div class="progress-step-item active" (click)="activePage(1)" data-title="RECURING COMPONENTS"></div>
+        <div class="progress-step-item" (click)="activePage(2)" data-title="ADHOC COMPONENTS"></div>
+      </div>
     </div>
-   </div>
     <div class="box px-3">
       <div class="d-flex flex-column">
         <div class="mb-3">
-          <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage+1)">{{ActivatedPage == 1? 'Continue': 'Save'}}</button>
+          <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage+1)">{{ActivatedPage == 1?
+            'Continue': 'Save'}}</button>
         </div>
         <div class="col-md-12 d-flex">
-          <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i>Add Component</button>
+          <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i>Add
+            Component</button>
           <div class="col-md-6 row">
             <div class="col-md-3">
               <select class="form-select">
@@ -93,7 +95,8 @@
                 <ng-container *ngIf="item.IndividualOverride == false">Not Allowed</ng-container>
               </div>
               <div class="td ps-3">
-                <a href="javascript:void(0)" (click)="openEditModal(item)" class="text-decoration-none"><i class="fa fa-pencil pe-2"></i> Edit</a>
+                <a href="javascript:void(0)" (click)="openEditModal(item)" class="text-decoration-none"><i
+                    class="fa fa-pencil pe-2"></i> Edit</a>
               </div>
             </div>
           </div>
@@ -105,7 +108,8 @@
 </div>
 
 <!-- Add Component Modal -->
-<div class="modal fade" id="AddComponentModal" tabindex="-1" aria-labelledby="AddComponentModalLabel" aria-hidden="true">
+<div class="modal fade" id="AddComponentModal" tabindex="-1" aria-labelledby="AddComponentModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -139,7 +143,7 @@
               </div>
             </div>
             <div class="t-body custom-height">
-              <div class="tr py-2" *ngFor="let item of salaryConfirmation">
+              <div class="tr py-2" *ngFor="let item of salaryComponentFields">
                 <div class="td fe-2 ps-3 text-truncate">
                   <span class="badge bg-success me-2">ON</span>{{item.ComponentName}}
                 </div>
@@ -171,7 +175,7 @@
             {{ isLoading ? 'Wait' : 'Save' }}
           </button>
         </div>
-        </form>
+      </form>
     </div>
   </div>
 </div>
@@ -182,13 +186,15 @@
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title ps-4" id="editSalaryMoadlLabel">Edit Salary Component- {{currentSalaryComponent.Type}}</h5>
+        <h5 class="modal-title ps-4" id="editSalaryMoadlLabel">Edit Salary Component- {{currentSalaryComponent.Type}}
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body px-5">
         <form [formGroup]="editSalaryComponent">
           <div class="col-md-4 mb-4">
-            <label class="form-label">COMPONENT TYPE <i class="fa fa-exclamation-circle text-secondary ps-2"></i></label>
+            <label class="form-label">COMPONENT TYPE <i
+                class="fa fa-exclamation-circle text-secondary ps-2"></i></label>
             <select class="form-select" formControlName="ComponentType">
               <option value="Fixed" selected>Fixed</option>
               <option value="Allowance">Allowance</option>
@@ -196,7 +202,8 @@
             </select>
           </div>
           <div class="form-check my-2">
-            <input class="form-check-input" formControlName="IsComponentEnable" type="checkbox" value="" id="flexCheckChecked">
+            <input class="form-check-input" formControlName="IsComponentEnable" type="checkbox" value=""
+              id="flexCheckChecked">
             <label class="form-check-label" for="flexCheckChecked">
               This component is enabled. This component cannot be disabled as it is used in salary structures.
             </label>
@@ -217,8 +224,7 @@
                 <ng-container *ngIf="!isFixedType">
                   <li class="list-group-item pb-0 ps-0">
                     <div class="d-flex align-items-center">
-                      <input class="form-check-input me-1" type="checkbox"
-                      aria-label="...">
+                      <input class="form-check-input me-1" type="checkbox" aria-label="...">
                       This component is Tax exempt (not taxable). Income tax Section
                       <div class=" col-md-2 d-inline-block ms-3">
                         <input type="text" class="form-control form-control-sm" formControlName="Section" readonly>
@@ -227,27 +233,26 @@
                     </div>
                     <ul class="list-border-0 list-group">
                       <li class="list-group-item pt-3">
-                        <input type="checkbox"  disabled class="form-check-input">
+                        <input type="checkbox" disabled class="form-check-input">
                         Required submission of document proof (or bills) to claim for tax exemption.
                       </li>
                     </ul>
                   </li>
                   <li class="list-group-item ps-0">
-                    <input class="form-check-input me-1" type="checkbox"
-                       aria-label="...">
-                    Include this component in arrears calculation. <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                    <input class="form-check-input me-1" type="checkbox" aria-label="...">
+                    Include this component in arrears calculation. <i
+                      class="fa fa-exclamation-circle text-secondary ps-2"></i>
                   </li>
                   <li class="list-group-item ps-0">
                     <input class="form-check-input" type="checkbox">
                     Loss of pay due to employee attendance will affect this component..
                   </li>
                   <li class="list-group-item pb-0 ps-0">
-                    <input class="form-check-input me-1" type="checkbox"
-                    aria-label="...">
+                    <input class="form-check-input me-1" type="checkbox" aria-label="...">
                     This component is paid separately
                     <ul class="list-border-0 list-group">
                       <li class="list-group-item pt-3 d-flex align-items-center">
-                        <input type="checkbox"  disabled class="form-check-input me-1">
+                        <input type="checkbox" disabled class="form-check-input me-1">
                         Hide component in Payslip (and exclude from gross earnings calculation in Payslip)
                         <div class="mx-4 col-md-2 d-inline-block">
                           <input type="text" class="form-control form-control-sm" readonly>

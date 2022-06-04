@@ -2,34 +2,36 @@
   <div class="x_panel mt-2">
     <div class="x_header">
       <div class="x_header_title">
-        <h2>  SALARY COMPONENT AND STRUCTURE</h2>
+        <h2> SALARY COMPONENT AND STRUCTURE</h2>
       </div>
     </div>
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-   <div class="col-md-12">
-     <div class="d-flex my-3">
-      <div class="col-md-9 d-flex align-items-center justify-content-center">
-        <div class="progress-step col-md-5 my-2">
-          <div class="custom-progress" id="progressbar"></div>
-          <div class="progress-step-item active" (click)="activePage(1)" data-title="RANGE BASED"></div>
-          <div class="progress-step-item" (click)="activePage(2)" data-title="CUSTOM STRUCTURE"></div>
-          <div class="progress-step-item" (click)="activePage(3)" data-title="DAILY WAGES"></div>
+    <div class="col-md-12">
+      <div class="d-flex my-3">
+        <div class="col-md-9 d-flex align-items-center justify-content-center">
+          <div class="progress-step col-md-5 my-2">
+            <div class="custom-progress" id="progressbar"></div>
+            <div class="progress-step-item active" (click)="activePage(1)" data-title="RANGE BASED"></div>
+            <div class="progress-step-item" (click)="activePage(2)" data-title="CUSTOM STRUCTURE"></div>
+            <div class="progress-step-item" (click)="activePage(3)" data-title="DAILY WAGES"></div>
+          </div>
+        </div>
+        <div class="col-md-3 text-end pe-1">
+          <button class="btn btn-outline-primary" [disabled]="ActivatedPage == 1"
+            (click)="activePage(ActivatedPage-1)">Back</button>
+          <button class="btn btn-outline-success ms-3" (click)="activePage(ActivatedPage+1)">{{ActivatedPage == 3 ?
+            'Submit': 'Continue'}}</button>
         </div>
       </div>
-      <div class="col-md-3 text-end pe-1">
-        <button class="btn btn-outline-primary" [disabled]="ActivatedPage == 1" (click)="activePage(ActivatedPage-1)">Back</button>
-        <button class="btn btn-outline-success ms-3" (click)="activePage(ActivatedPage+1)">{{ActivatedPage == 3 ? 'Submit': 'Continue'}}</button>
-      </div>
-     </div>
-     <ng-container *ngIf="ActivatedPage == 1">
-       <div class="row mt-5">
-         <div class="col-md-2 my-2" *ngFor="let item of salaryStructureType">
-           <div class="card py-4">
-             <h5 class="text-center">{{item.TypeName}}</h5>
-             <p class="mb-0 text-truncate text-center">{{item.MinAmount}} - {{item.MaxAmount}}</p>
-             <div ngbDropdown class="d-inline-block menu-btn">
+      <ng-container *ngIf="ActivatedPage == 1">
+        <div class="row mt-5">
+          <div class="col-md-2 my-2" *ngFor="let item of salaryStructureType">
+            <div class="card py-4">
+              <h5 class="text-center">{{item.TypeName}}</h5>
+              <p class="mb-0 text-truncate text-center">{{item.MinAmount}} - {{item.MaxAmount}}</p>
+              <div ngbDropdown class="d-inline-block menu-btn">
                 <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
                   <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
                 </button>
@@ -78,7 +80,8 @@
           <textarea [readonly]="!isEditStructure" class="form-control" placeholder="Decsription"></textarea>
         </div>
         <div class="d-flex justify-content-between mx-1 my-4">
-          <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add Component</button>
+          <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add
+            Component</button>
           <div class="form-check">
             <input class="form-check-input" type="checkbox">
             <label class="form-check-label">
@@ -102,7 +105,7 @@
             </div>
           </div>
           <div class="t-body custom-height">
-            <div class="tr py-2" *ngFor="let item of salaryConfirmation">
+            <div class="tr py-2" *ngFor="let item of salaryComponentFields">
               <div class="td ps-3 text-truncate">
                 {{item.ComponentName}}
               </div>
@@ -116,7 +119,7 @@
                       <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                      <button ngbDropdownItem (click)="updateCalcModel()">
+                      <button ngbDropdownItem (click)="updateCalcModel(item)">
                         <a class="dropdown-item" href="javascript:void(0)">Update Calculation</a>
                       </button>
                     </div>
@@ -126,145 +129,147 @@
             </div>
           </div>
         </div>
-     </ng-container>
-     <ng-container *ngIf="ActivatedPage == 2">
-      <div class="col-md-12 mt-5">
-        <button class="btn btn-outline-primary" (click)="addSalaryStrutModal()">Create Custom Salary Structure</button>
-        <div class="col-md-3 float-end">
-        <div class="form-group has-search">
-          <span class="fa fa-search form-control-feedback"></span>
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        </div>
-      </div>
-      <div class="t-table t-list t-border col-md-12 my-3">
-        <div class="hide-bar bg-light"></div>
-        <div class="t-head bg-light fw-bold">
-          <div class="tr">
-            <div class="th text-truncate fe-2 ps-3">
-              SALARY STRUCTURE NAME
-            </div>
-            <div class="th fe-2 text-truncate ps-3">
-              NO.OF EMPLOYEES
-            </div>
-            <div class="th fe-2 text-truncate ps-3">
-              CREATED ON
-            </div>
-            <div class="th fe-2 text-truncate ps-3">
-              LAST MODIFIED ON
-            </div>
-            <div class="th text-truncate ps-3">
-              ACTION
+      </ng-container>
+      <ng-container *ngIf="ActivatedPage == 2">
+        <div class="col-md-12 mt-5">
+          <button class="btn btn-outline-primary" (click)="addSalaryStrutModal()">Create Custom Salary
+            Structure</button>
+          <div class="col-md-3 float-end">
+            <div class="form-group has-search">
+              <span class="fa fa-search form-control-feedback"></span>
+              <input type="text" class="form-control" placeholder="Search">
             </div>
           </div>
         </div>
-        <div class="t-body custom-height">
-          <div class="tr py-2" *ngFor="let item of customSalaryStructure">
-            <div class="td fe-2 ps-3 text-truncate">
-              {{item.SalaryStructureName}}
+        <div class="t-table t-list t-border col-md-12 my-3">
+          <div class="hide-bar bg-light"></div>
+          <div class="t-head bg-light fw-bold">
+            <div class="tr">
+              <div class="th text-truncate fe-2 ps-3">
+                SALARY STRUCTURE NAME
+              </div>
+              <div class="th fe-2 text-truncate ps-3">
+                NO.OF EMPLOYEES
+              </div>
+              <div class="th fe-2 text-truncate ps-3">
+                CREATED ON
+              </div>
+              <div class="th fe-2 text-truncate ps-3">
+                LAST MODIFIED ON
+              </div>
+              <div class="th text-truncate ps-3">
+                ACTION
+              </div>
             </div>
-            <div class="td fe-2 ps-3 text-truncate">
-              {{item.NoOfEmployee}}
-            </div>
-            <div class="td fe-2 ps-3 text-truncate">
-              {{item.CreatedBy}}
-              <p class="mb-0"><small>{{item.CreatedOn | date}}</small></p>
-            </div>
-            <div class="td fe-2 ps-3 text-truncate">
-              {{item.ModifiedBy}}
-              <p class="mb-0"><small>{{item.ModifiedOn | date}}</small></p>
-            </div>
-            <div class="td ps-3">
-              <div ngbDropdown class="d-inline-block" placement="bottom-end">
-                <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                  <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
-                </button>
-                <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                  <button ngbDropdownItem (click)="updateCalcModel()">
-                    <a class="dropdown-item" href="javascript:void(0)">Update Salary Structure</a>
+          </div>
+          <div class="t-body custom-height">
+            <div class="tr py-2" *ngFor="let item of customSalaryStructure">
+              <div class="td fe-2 ps-3 text-truncate">
+                {{item.SalaryStructureName}}
+              </div>
+              <div class="td fe-2 ps-3 text-truncate">
+                {{item.NoOfEmployee}}
+              </div>
+              <div class="td fe-2 ps-3 text-truncate">
+                {{item.CreatedBy}}
+                <p class="mb-0"><small>{{item.CreatedOn | date}}</small></p>
+              </div>
+              <div class="td fe-2 ps-3 text-truncate">
+                {{item.ModifiedBy}}
+                <p class="mb-0"><small>{{item.ModifiedOn | date}}</small></p>
+              </div>
+              <div class="td ps-3">
+                <div ngbDropdown class="d-inline-block" placement="bottom-end">
+                  <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
+                    <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
                   </button>
+                  <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                    <button ngbDropdownItem (click)="updateCalcModel()">
+                      <a class="dropdown-item" href="javascript:void(0)">Update Salary Structure</a>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-     </ng-container>
-     <ng-container *ngIf="ActivatedPage == 3">
-      <div class="col-md-12 mt-5">
-        <button class="btn btn-outline-primary" (click)="addDailyStrutModal()">Create Custom Daily Structure</button>
-        <div class="col-md-3 float-end">
-          <div class="form-group has-search">
-            <span class="fa fa-search form-control-feedback"></span>
-            <input type="text" class="form-control" placeholder="Search">
-          </div>
-        </div>
-      </div>
-      <div class="t-table t-list t-border col-md-12 my-3">
-        <div class="hide-bar bg-light"></div>
-        <div class="t-head bg-light fw-bold">
-          <div class="tr">
-            <div class="th text-truncate fe-2 ps-3">
-              SALARY STRUCTURE NAME
-            </div>
-            <div class="th text-truncate fe-2 ps-3">
-              Remuneration Type
-            </div>
-            <div class="th fe-2 text-truncate ps-3">
-              NO.OF EMPLOYEES
-            </div>
-            <div class="th fe-2 text-truncate ps-3">
-              CREATED ON
-            </div>
-            <div class="th fe-2 text-truncate ps-3">
-              LAST MODIFIED ON
-            </div>
-            <div class="th text-truncate ps-3">
-              ACTION
+      </ng-container>
+      <ng-container *ngIf="ActivatedPage == 3">
+        <div class="col-md-12 mt-5">
+          <button class="btn btn-outline-primary" (click)="addDailyStrutModal()">Create Custom Daily Structure</button>
+          <div class="col-md-3 float-end">
+            <div class="form-group has-search">
+              <span class="fa fa-search form-control-feedback"></span>
+              <input type="text" class="form-control" placeholder="Search">
             </div>
           </div>
         </div>
-        <div class="t-body custom-height">
-          <div class="tr py-2" *ngFor="let item of dailyWages">
-            <div class="td fe-2 ps-3 text-truncate">
-              {{item.SalaryStructureName}}
+        <div class="t-table t-list t-border col-md-12 my-3">
+          <div class="hide-bar bg-light"></div>
+          <div class="t-head bg-light fw-bold">
+            <div class="tr">
+              <div class="th text-truncate fe-2 ps-3">
+                SALARY STRUCTURE NAME
+              </div>
+              <div class="th text-truncate fe-2 ps-3">
+                Remuneration Type
+              </div>
+              <div class="th fe-2 text-truncate ps-3">
+                NO.OF EMPLOYEES
+              </div>
+              <div class="th fe-2 text-truncate ps-3">
+                CREATED ON
+              </div>
+              <div class="th fe-2 text-truncate ps-3">
+                LAST MODIFIED ON
+              </div>
+              <div class="th text-truncate ps-3">
+                ACTION
+              </div>
             </div>
-            <div class="td fe-2 ps-3 text-truncate">
-              {{item.RemunerationType}}
-            </div>
-            <div class="td fe-2 ps-3 text-truncate">
-              {{item.NoOfEmployee}}
-            </div>
-            <div class="td fe-2 ps-3 text-truncate">
-              {{item.CreatedBy}}
-              <p class="mb-0"><small>{{item.CreatedOn | date}}</small></p>
-            </div>
-            <div class="td fe-2 ps-3 text-truncate">
-              {{item.ModifiedBy}}
-              <p class="mb-0"><small>{{item.ModifiedOn | date}}</small></p>
-            </div>
-            <div class="td ps-3">
-              <div ngbDropdown class="d-inline-block" placement="bottom-end">
-                <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                  <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
-                </button>
-                <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                  <button ngbDropdownItem (click)="updateCalcModel()">
-                    <a class="dropdown-item" href="javascript:void(0)">Update Salary Structure</a>
+          </div>
+          <div class="t-body custom-height">
+            <div class="tr py-2" *ngFor="let item of dailyWages">
+              <div class="td fe-2 ps-3 text-truncate">
+                {{item.SalaryStructureName}}
+              </div>
+              <div class="td fe-2 ps-3 text-truncate">
+                {{item.RemunerationType}}
+              </div>
+              <div class="td fe-2 ps-3 text-truncate">
+                {{item.NoOfEmployee}}
+              </div>
+              <div class="td fe-2 ps-3 text-truncate">
+                {{item.CreatedBy}}
+                <p class="mb-0"><small>{{item.CreatedOn | date}}</small></p>
+              </div>
+              <div class="td fe-2 ps-3 text-truncate">
+                {{item.ModifiedBy}}
+                <p class="mb-0"><small>{{item.ModifiedOn | date}}</small></p>
+              </div>
+              <div class="td ps-3">
+                <div ngbDropdown class="d-inline-block" placement="bottom-end">
+                  <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
+                    <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
                   </button>
+                  <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                    <button ngbDropdownItem (click)="updateCalcModel()">
+                      <a class="dropdown-item" href="javascript:void(0)">Update Salary Structure</a>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-     </ng-container>
-   </div>
+      </ng-container>
+    </div>
   </div>
 </div>
 
 <!--Add Component Modal -->
-<div class="modal fade" id="addComponentModal" tabindex="-1" aria-labelledby="addComponentModalLabel" aria-hidden="true">
+<div class="modal fade" id="addComponentModal" tabindex="-1" aria-labelledby="addComponentModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -300,7 +305,7 @@
             </div>
           </div>
           <div class="t-body custom-height">
-            <div class="tr py-2" *ngFor="let item of salaryConfirmation">
+            <div class="tr py-2" *ngFor="let item of salaryComponentFields">
               <div class="td ps-3 text-truncate">
                 {{item.ComponentName}}
               </div>
@@ -331,22 +336,40 @@
 <!-- End -->
 
 <!--Update Calculation Basic Modal -->
-<div class="modal fade" id="updateCalculationModal" tabindex="-1" aria-labelledby="updateCalculationModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateCalculationModal" tabindex="-1" aria-labelledby="updateCalculationModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="updateCalculationModalLabel">Update Calculation Basic</h5>
+        <h5 class="modal-title" id="updateCalculationModalLabel">Component [{{componentFields.ComponentName}}] Update
+          Calculation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-md-4">
-            <label class="form-label">Available Components</label>
-            <input type="text" placeholder="Search for salary component" class="form-control">
+            <h5 class="form-label">Components Name</h5>
+            <h6 class="text-bold text-underline">
+              <p>{{componentFields.ComponentName}}</p>
+            </h6>
+            <label>Normanlly it would lie between 40 to 50 percent of the CTC salary.</label>
           </div>
           <div class="col-md-8">
-            <label for="" class="form-label">Please enter the formula for calculation</label>
-            <textarea class="form-control" placeholder="Enter Calculation Formula"></textarea>
+            <div class="col-md-12 form-group">
+              <label class="form-label">Calculation Type</label>
+              <select name="CalculationType" class="form-control" [(ngModel)]="componentFields.ComponentValueIn">
+                <option value="0">Pick calculation type</option>
+                <option value="1">In percent value</option>
+                <option value="2">In fixed value</option>
+              </select>
+            </div>
+            <div class="col-md-12 form-group mt-3">
+              <label for="" class="form-label">Value</label>
+              <input class="form-control" [(ngModel)]="componentFields.MaxLimit" name="Value"
+                placeholder="Enter value here">
+            </div>
+          </div>
+          <div class="col-md-12 mt-5">
             <h6 class="pt-4">Use Standard Javascript notaion for formuila expression</h6>
             <p class="mb-0">Ex. ([Basic] - 0.40) - 1200</p>
             <p class="mb-0">Ex. ([Gross] - [Basic]) * 0.4</p>
@@ -355,7 +378,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" (click)="updateValue()">Save changes</button>
       </div>
     </div>
   </div>
@@ -363,11 +386,13 @@
 <!-- End -->
 
 <!-- Create Custom Salary Structure Modal -->
-<div class="modal fade" id="addCustomSalaryModal" tabindex="-1" aria-labelledby="addCustomSalaryModalLabel" aria-hidden="true">
+<div class="modal fade" id="addCustomSalaryModal" tabindex="-1" aria-labelledby="addCustomSalaryModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title px-4" id="addCustomSalaryModalLabel">Create custom salary structure by choosing applicable components and configuring respective calculation</h5>
+        <h5 class="modal-title px-4" id="addCustomSalaryModalLabel">Create custom salary structure by choosing
+          applicable components and configuring respective calculation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body px-5">
@@ -380,27 +405,29 @@
             </div>
             <div class="my-2">
               <label for="" class="form-label">Description</label>
-              <textarea placeholder="This salary structure will be assigned to employees who are interns and are not eligible for PF deduction" class="form-control"></textarea>
+              <textarea
+                placeholder="This salary structure will be assigned to employees who are interns and are not eligible for PF deduction"
+                class="form-control"></textarea>
             </div>
             <h5 class="py-2">Configure PF & ESI for this structure</h5>
             <blockquote>
               <ul class="list-border-0 list-group">
                 <li class="list-group-item ps-0">
-                  <input class="form-check-input me-1" type="checkbox"
-                      aria-label="...">
-                  Provident Fund (PF) is applicable for this salary structure. <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                  <input class="form-check-input me-1" type="checkbox" aria-label="...">
+                  Provident Fund (PF) is applicable for this salary structure. <i
+                    class="fa fa-exclamation-circle text-secondary ps-2"></i>
                 </li>
                 <li class="list-group-item ps-0">
                   <input class="form-check-input" type="checkbox">
-                  Employee State Insurance (ESI) is applicable for this salary structure. <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                  Employee State Insurance (ESI) is applicable for this salary structure. <i
+                    class="fa fa-exclamation-circle text-secondary ps-2"></i>
                 </li>
                 <li class="list-group-item pb-0 ps-0">
-                  <input class="form-check-input me-1" type="checkbox"
-                  aria-label="...">
+                  <input class="form-check-input me-1" type="checkbox" aria-label="...">
                   This component is paid separately
                   <ul class="list-border-0 list-group">
                     <li class="list-group-item pt-3 d-flex align-items-center">
-                      <input type="checkbox"  disabled class="form-check-input me-1">
+                      <input type="checkbox" disabled class="form-check-input me-1">
                       Deduct flat income tax
                       <div class="mx-4 col-md-2 d-inline-block">
                         <input type="text" class="form-control form-control-sm" OnlyNumber="2">
@@ -409,7 +436,8 @@
                     </li>
                     <li class="list-group-item">
                       <input class="form-check-input" type="checkbox">
-                      Deduct income tax based on income tax slabs (this will consider earnings and declarations of employees to calculate income tax)
+                      Deduct income tax based on income tax slabs (this will consider earnings and declarations of
+                      employees to calculate income tax)
                     </li>
                   </ul>
                 </li>
@@ -418,7 +446,8 @@
           </div>
           <div class="col-md-5">
             <div class="d-flex justify-content-between mx-1 my-4">
-              <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add Component</button>
+              <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add
+                Component</button>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox">
                 <label class="form-check-label">
@@ -442,7 +471,7 @@
                 </div>
               </div>
               <div class="t-body addcomp-in-modal">
-                <div class="tr py-2" *ngFor="let item of salaryConfirmation">
+                <div class="tr py-2" *ngFor="let item of salaryComponentFields">
                   <div class="td fe-2 ps-3 text-truncate">
                     {{item.ComponentName}}
                   </div>
@@ -467,7 +496,8 @@
               </div>
             </div>
             <p class="mb-0">
-              <a href="javascript:void(0)" class="text-decoration-none"> <i class="fa fa-plus pe-2"></i>Add Hourly Pay calculation for OT</a><i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+              <a href="javascript:void(0)" class="text-decoration-none"> <i class="fa fa-plus pe-2"></i>Add Hourly Pay
+                calculation for OT</a><i class="fa fa-exclamation-circle text-secondary ps-2"></i>
             </p>
             <div class="alert alert-secondary py-2 mt-3 mb-0 col-md-12" role="alert">
               No hourly pay calculation added for OT.
@@ -485,11 +515,13 @@
 <!-- End -->
 
 <!-- Create Daily Salary Structure Modal -->
-<div class="modal fade" id="addDailySalaryModal" tabindex="-1" aria-labelledby="addDailySalaryModalLabel" aria-hidden="true">
+<div class="modal fade" id="addDailySalaryModal" tabindex="-1" aria-labelledby="addDailySalaryModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title px-4" id="addDailySalaryModalLabel">Create custom salary structure by choosing applicable components and configuring respective calculation</h5>
+        <h5 class="modal-title px-4" id="addDailySalaryModalLabel">Create custom salary structure by choosing applicable
+          components and configuring respective calculation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body px-5">
@@ -506,27 +538,29 @@
             </div>
             <div class="my-2">
               <label for="" class="form-label">Description</label>
-              <textarea placeholder="This salary structure will be assigned to employees who are interns and are not eligible for PF deduction" class="form-control"></textarea>
+              <textarea
+                placeholder="This salary structure will be assigned to employees who are interns and are not eligible for PF deduction"
+                class="form-control"></textarea>
             </div>
             <h5 class="py-2">Configure PF & ESI for this structure</h5>
             <blockquote>
               <ul class="list-border-0 list-group">
                 <li class="list-group-item ps-0">
-                  <input class="form-check-input me-1" type="checkbox"
-                      aria-label="...">
-                  Provident Fund (PF) is applicable for this salary structure. <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                  <input class="form-check-input me-1" type="checkbox" aria-label="...">
+                  Provident Fund (PF) is applicable for this salary structure. <i
+                    class="fa fa-exclamation-circle text-secondary ps-2"></i>
                 </li>
                 <li class="list-group-item ps-0">
                   <input class="form-check-input" type="checkbox">
-                  Employee State Insurance (ESI) is applicable for this salary structure. <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                  Employee State Insurance (ESI) is applicable for this salary structure. <i
+                    class="fa fa-exclamation-circle text-secondary ps-2"></i>
                 </li>
                 <li class="list-group-item pb-0 ps-0">
-                  <input class="form-check-input me-1" type="checkbox"
-                  aria-label="...">
+                  <input class="form-check-input me-1" type="checkbox" aria-label="...">
                   This component is paid separately
                   <ul class="list-border-0 list-group">
                     <li class="list-group-item pt-3 d-flex align-items-center">
-                      <input type="checkbox"  disabled class="form-check-input me-1">
+                      <input type="checkbox" disabled class="form-check-input me-1">
                       Deduct flat income tax
                       <div class="mx-4 col-md-2 d-inline-block">
                         <input type="text" class="form-control form-control-sm" OnlyNumber="2">
@@ -535,7 +569,8 @@
                     </li>
                     <li class="list-group-item">
                       <input class="form-check-input" type="checkbox">
-                      Deduct income tax based on income tax slabs (this will consider earnings and declarations of employees to calculate income tax)
+                      Deduct income tax based on income tax slabs (this will consider earnings and declarations of
+                      employees to calculate income tax)
                     </li>
                   </ul>
                 </li>
@@ -544,7 +579,8 @@
           </div>
           <div class="col-md-5">
             <div class="d-flex justify-content-between mx-1 my-4">
-              <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add Component</button>
+              <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add
+                Component</button>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox">
                 <label class="form-check-label">
@@ -568,7 +604,7 @@
                 </div>
               </div>
               <div class="t-body addcomp-in-modal">
-                <div class="tr py-2" *ngFor="let item of salaryConfirmation">
+                <div class="tr py-2" *ngFor="let item of salaryComponentFields">
                   <div class="td fe-2 ps-3 text-truncate">
                     {{item.ComponentName}}
                   </div>
@@ -593,7 +629,8 @@
               </div>
             </div>
             <p class="mb-0">
-              <a href="javascript:void(0)" class="text-decoration-none"> <i class="fa fa-plus pe-2"></i>Add Hourly Pay calculation for OT</a><i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+              <a href="javascript:void(0)" class="text-decoration-none"> <i class="fa fa-plus pe-2"></i>Add Hourly Pay
+                calculation for OT</a><i class="fa fa-exclamation-circle text-secondary ps-2"></i>
             </p>
             <div class="alert alert-secondary py-2 mt-3 mb-0 col-md-12" role="alert">
               No hourly pay calculation added for OT.

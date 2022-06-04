@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SalaryConfirmation } from '../salarycomponent-structure/salarycomponent-structure.component';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { SalaryComponentFields } from '../salarycomponent-structure/salarycomponent-structure.component';
 declare var $: any;
 
 @Component({
@@ -11,11 +12,36 @@ export class CustomsalaryStructureComponent implements OnInit {
   ActivatedPage: number = 1;
   salaryStructureType: Array<SalaryStructureType> = null;
   isEditStructure: boolean = false;
-  salaryConfirmation: Array<SalaryConfirmation> = [];
+  salaryComponentFields: Array<SalaryComponentFields> = [];
+  componentFields: SalaryComponentFields = new SalaryComponentFields();
   customSalaryStructure: Array<CustomSalaryStructure> = [];
   dailyWages: Array<DailyWagesStructure> = []
+  salaryAndDeduction: FormGroup;
+  salaryComponent: FormGroup;
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
+
+  initForm() {
+    this.salaryAndDeduction = this.fb.group({
+      salaryComponents: this.fb.array(this.salaryComponentFields.map(item => {
+        return this.createNewComponent(item)
+      }))
+    });
+  }
+
+  createNewComponent(elem: SalaryComponentFields): FormGroup {
+    return this.fb.group({
+      ComponentName: elem.ComponentName,
+      Type: elem.Type,
+      TaxExempt: elem.TaxExempt,
+      MaxLimit: elem.MaxLimit,
+      RequireDocs: elem.RequireDocs,
+      IndividualOverride: elem.IndividualOverride,
+      IsAllowtoOverride: elem.IsAllowtoOverride,
+      IsComponentEnable: elem.IsComponentEnable,
+      ComponentValueIn: elem.ComponentValueIn
+    });
+  }
 
   ngOnInit(): void {
     this.salaryStructureType = [{
@@ -53,7 +79,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       MinAmount: 'Rs 800001',
       MaxAmount: 'Rs 1000000'
     }];
-    this.salaryConfirmation = [{
+
+    this.salaryComponentFields = [{
       ComponentName: "Basic",
       Type: "Fixed",
       TaxExempt: "Taxable",
@@ -61,7 +88,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "HRA",
@@ -71,7 +99,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "MA",
@@ -81,7 +110,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       RequireDocs: true,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "Convevance Allowance",
@@ -91,7 +121,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "Special Allowance",
@@ -101,7 +132,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: true,
       IsAllowtoOverride: true,
-      IsComponentEnable: true
+      IsComponentEnable: true,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "Accident Insurance",
@@ -112,7 +144,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: false,
       IsAllowtoOverride: false,
-      IsComponentEnable: false
+      IsComponentEnable: false,
+      ComponentValueIn: 0
     },
     {
       ComponentName: "PF Employer",
@@ -123,7 +156,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: false,
       IsAllowtoOverride: false,
-      IsComponentEnable: false
+      IsComponentEnable: false,
+      ComponentValueIn: 0
     },{
       ComponentName: "Telephone Allowance",
       Type: "Deduction",
@@ -133,7 +167,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: false,
       IsAllowtoOverride: false,
-      IsComponentEnable: false
+      IsComponentEnable: false,
+      ComponentValueIn: 0
     },{
       ComponentName: "Food Deduction",
       Type: "Deduction",
@@ -143,8 +178,11 @@ export class CustomsalaryStructureComponent implements OnInit {
       RequireDocs: false,
       IndividualOverride: false,
       IsAllowtoOverride: false,
-      IsComponentEnable: false
+      IsComponentEnable: false,
+      ComponentValueIn: 0
     }];
+
+
     this.dailyWages = [{
       SalaryStructureName: 'Stehphe-II',
       NoOfEmployee: 1,
@@ -229,7 +267,9 @@ export class CustomsalaryStructureComponent implements OnInit {
       CreatedOn: new Date(),
       ModifiedBy: 'Admin',
       ModifiedOn: new Date(),
-    }]
+    }];
+
+    this.initForm();
   }
 
   editStructure() {
@@ -272,7 +312,8 @@ export class CustomsalaryStructureComponent implements OnInit {
     $('#addComponentModal').modal('show');
   }
 
-  updateCalcModel() {
+  updateCalcModel(item: SalaryComponentFields) {
+    this.componentFields = item;
     $('#updateCalculationModal').modal('show');
   }
 
@@ -284,6 +325,17 @@ export class CustomsalaryStructureComponent implements OnInit {
     $('#addDailySalaryModal').modal('show');
   }
 
+  updateValue() {
+    let items = this.salaryAndDeduction.controls["salaryComponents"] as FormArray;
+    if(items) {
+      items.controls.map(elem => {
+        if(elem.value.ComponentName === this.componentFields.ComponentName) {
+          elem.get("MaxLimit").setValue(this.componentFields.MaxLimit);
+          elem.get("ComponentValueIn").setValue(this.componentFields.ComponentValueIn);
+        }
+      });
+    }
+  }
 }
 
 class SalaryStructureType {
