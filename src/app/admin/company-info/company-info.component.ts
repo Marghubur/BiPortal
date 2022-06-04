@@ -6,6 +6,7 @@ import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DateFormatter } from 'src/providers/DateFormatter';
 import { organizationAccountModal } from '../company-accounts/company-accounts.component';
+import { Files } from '../documents/documents.component';
 declare var $: any;
 
 @Component({
@@ -21,8 +22,12 @@ export class CompanyInfoComponent implements OnInit {
   submitted: boolean = false;
   model: NgbDateStruct;
   signURL: string = '';
-  fileDetail: any = null;
+  fileDetail: Array<any> = null;
   BankDetails: organizationAccountModal = null;
+  signwithoutstamp: string = '';
+  FileDocuments: Array<any> = [];
+  FileDocumentList: Array<Files> = [];
+  FilesCollection: Array<any> = [];
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -64,7 +69,8 @@ export class CompanyInfoComponent implements OnInit {
       TypeOfBusiness: new FormControl(this.companyInformation.TypeOfBusiness),
       InCorporationDate: new FormControl(this.companyInformation.InCorporationDate),
       FullAddress: new FormControl(this.companyInformation.FullAddress),
-      SignaturePath: new FormControl('')
+      SignWithStamp: new FormControl(''),
+      SignWithoutStamp: new FormControl('')
     })
   }
 
@@ -130,7 +136,11 @@ export class CompanyInfoComponent implements OnInit {
     $('#uploasignature').click();
   }
 
-  uploadorganizationsign(event: any) {
+  fireBrowsersign() {
+    $('#uploasignwithoutstamp').click();
+  }
+
+  signwithStamp(event: any) {
     if (event.target.files) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
@@ -139,10 +149,41 @@ export class CompanyInfoComponent implements OnInit {
       };
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
-      this.fileDetail = {
-        name: "sign",
-        file: file
+      let item: Files = new Files();
+      item.FileName = "signwithStamp";
+      item.FileType = file.type;
+      item.FileSize = (Number(file.size)/1024);
+      item.FileExtension = file.type;
+      item.DocumentId = 0;
+      item.ParentFolder = '';
+      this.FileDocumentList.push(item);
+      this.FilesCollection.push(file);
+    }
+  }
+
+  signwithoutStamp(event: any) {
+    if (event.target.files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.signwithoutstamp = event.target.result;
       };
+      let selectedfile = event.target.files;
+      // let file = <File>selectedfile[0];
+      // this.fileDetail.push({
+      //   name: "signwithoutstamp",
+      //   file: file
+      // });
+      let file = <File>selectedfile[0];
+      let item: Files = new Files();
+      item.FileName = "signwithoutStamp";
+      item.FileType = file.type;
+      item.FileSize = (Number(file.size)/1024);
+      item.FileExtension = file.type;
+      item.DocumentId = 0;
+      item.ParentFolder = '';
+      this.FileDocumentList.push(item);
+      this.FilesCollection.push(file);
     }
   }
 
@@ -157,8 +198,18 @@ export class CompanyInfoComponent implements OnInit {
     value.TypeOfBusiness = request.TypeOfBusiness;
     value.InCorporationDate = request.InCorporationDate;
     value.FullAddress = request.FullAddress;
+    let formData = new FormData();
+    formData.append("CompanyInfo", JSON.stringify(value));
+    if (this.FileDocumentList.length > 0){
+      let i = 0;
+      while (i < this.FileDocumentList.length) {
+        formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
+        i++;
+      }
+    }
 
-    this.http.post("Settings/InsertUpdateCompanyDetail", value)
+
+    this.http.post("Settings/InsertUpdateCompanyDetail", formData)
     .then(res => {
       if(res.ResponseBody) {
         Toast("Detail inserted/updated successfully.");

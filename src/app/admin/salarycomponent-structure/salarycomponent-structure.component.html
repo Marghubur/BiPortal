@@ -21,13 +21,24 @@
           <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage+1)">{{ActivatedPage == 1?
             'Continue': 'Save'}}</button>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-12 d-flex">
           <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i>Add
             Component</button>
-          <div class="col-md-3 float-end">
-            <div class="form-group has-search">
-              <span class="fa fa-search form-control-feedback"></span>
-              <input type="text" class="form-control" placeholder="Search">
+          <div class="col-md-6 row">
+            <div class="col-md-3">
+              <select class="form-select">
+                <option value="">Select Type</option>
+                <option value="">All</option>
+                <option value="">Fixed</option>
+                <option value="">Deduction</option>
+                <option value="">Allowance</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input type="text" class="form-control" placeholder="Search">
+              </div>
             </div>
           </div>
         </div>
