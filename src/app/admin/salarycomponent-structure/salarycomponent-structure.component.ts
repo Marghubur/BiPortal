@@ -29,7 +29,8 @@ export class SalarycomponentStructureComponent implements OnInit {
     this.salaryComponent();
     this.addSalaryComponent();
     this.salaryComponentFields = [{
-      ComponentName: "Basic",
+      ComponentDescription: "Basic",
+      ComponentId: "BS",
       Type: "Fixed",
       TaxExempt: "Taxable",
       MaxLimit: "Auto Calculated",
@@ -37,97 +38,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       IndividualOverride: true,
       IsAllowtoOverride: true,
       IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "HRA",
-      Type: "Fixed",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "Auto Calculated",
-      RequireDocs: false,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "MA",
-      Type: "Allowance",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "2,50,000",
-      RequireDocs: true,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "Convevance Allowance",
-      Type: "Allowance",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "50,000",
-      RequireDocs: false,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "Special Allowance",
-      Type: "Allowance",
-      TaxExempt: "Taxable",
-      MaxLimit: "Auto Calculated",
-      RequireDocs: false,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "Accident Insurance",
-      Type: "Deduction",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "50,000",
-      Section: "Section 10(14)(i)",
-      RequireDocs: false,
-      IndividualOverride: false,
-      IsAllowtoOverride: false,
-      IsComponentEnable: false,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "PF Employer",
-      Type: "Deduction",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "21,600",
-      Section: "Section 10(14)(i)",
-      RequireDocs: false,
-      IndividualOverride: false,
-      IsAllowtoOverride: false,
-      IsComponentEnable: false,
-      ComponentValueIn: 0
-    },{
-      ComponentName: "Telephone Allowance",
-      Type: "Deduction",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "2,50,000",
-      Section: "Section 10(14)(ii)",
-      RequireDocs: false,
-      IndividualOverride: false,
-      IsAllowtoOverride: false,
-      IsComponentEnable: false,
-      ComponentValueIn: 0
-    },{
-      ComponentName: "Food Deduction",
-      Type: "Deduction",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "50,000",
-      Section: "Section 16(iii)",
-      RequireDocs: false,
-      IndividualOverride: false,
-      IsAllowtoOverride: false,
-      IsComponentEnable: false,
-      ComponentValueIn: 0
+      PercentageValue: 0,
+      CalculateInPercentage: false
     }]
   }
 
@@ -148,7 +60,7 @@ export class SalarycomponentStructureComponent implements OnInit {
     this.editSalaryComponent = this.fb.group({
       ComponentType: new FormControl(this.currentSalaryComponent.Type),
       IsComponentEnable: new FormControl(this.currentSalaryComponent.IsComponentEnable),
-      ComponentName: new FormControl(this.currentSalaryComponent.ComponentName),
+      ComponentName: new FormControl(this.currentSalaryComponent.ComponentDescription),
       MaximumLimit: new FormControl(this.currentSalaryComponent.MaxLimit),
       IsAllowtoOverride: new FormControl(this.currentSalaryComponent.IsAllowtoOverride),
       Section: new FormControl(this.currentSalaryComponent.Section)
@@ -217,15 +129,17 @@ export class SalarycomponentStructureComponent implements OnInit {
 }
 
 export class SalaryComponentFields {
-  ComponentName: string = '';
+  ComponentDescription: string = '';
+  ComponentId: string = "";
   Type: string = '';
   TaxExempt: string = '';
-  MaxLimit: string = '';
+  MaxLimit: string = null;
+  PercentageValue: number = null;
   RequireDocs: boolean = false;
   IndividualOverride: boolean = false;
   IsComponentEnable: boolean = true;
   IsAllowtoOverride: boolean = true;
-  ComponentValueIn: number = 0;
+  CalculateInPercentage: boolean = false;
   Section?: string = '';
 }
 

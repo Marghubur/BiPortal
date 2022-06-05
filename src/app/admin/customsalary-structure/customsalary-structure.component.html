@@ -50,85 +50,95 @@
             </div>
           </div>
         </div>
-        <div class="row my-2 px-3 py-2 align-items-center mb-0 pb-0">
-          <ng-container *ngIf="!isEditStructure">
-            <div class="alert alert-primary py-2 mb-0 col-md-8" role="alert">
-              Salary Structure is in read only mode. Click on 'Edit Structure' to make chnages.
-            </div>
-          </ng-container>
-          <ng-container *ngIf="isEditStructure">
-            <div class="alert alert-warning py-2 mb-0 col-md-8" role="alert">
-              Salary Structure is in edit mode. Click on Save to save structure.
-            </div>
-          </ng-container>
-          <div class="col-md-3">
+
+        <form [formGroup]="salaryAndDeduction" *ngIf="isReady">
+          <div class="row my-2 px-3 py-2 align-items-center mb-0 pb-0">
             <ng-container *ngIf="!isEditStructure">
-              <button class="btn btn-outline-primary" (click)="editStructure()">Edit Structure</button>
+              <div class="alert alert-primary py-2 mb-0 col-md-8" role="alert">
+                Salary Structure is in read only mode. Click on 'Edit Structure' to make chnages.
+              </div>
             </ng-container>
             <ng-container *ngIf="isEditStructure">
-              <button class="btn btn-outline-danger me-2" (click)="cancleEditStructure()">Cancel</button>
-              <button class="btn btn-outline-success">Save</button>
+              <div class="alert alert-warning py-2 mb-0 col-md-8" role="alert">
+                Salary Structure is in edit mode. Click on Save to save structure.
+              </div>
             </ng-container>
-          </div>
-        </div>
-        <div class="col-md-12 my-3">
-          <label for="" class="form-label">Structure Name</label>
-          <input type="text" [readonly]="!isEditStructure" class="form-control" placeholder="Structure Name">
-        </div>
-        <div class="col-md-12 my-3">
-          <label for="" class="form-label">Description</label>
-          <textarea [readonly]="!isEditStructure" class="form-control" placeholder="Decsription"></textarea>
-        </div>
-        <div class="d-flex justify-content-between mx-1 my-4">
-          <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add
-            Component</button>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox">
-            <label class="form-check-label">
-              This structure is eligible for Flexible Benefit PLan (FBP)
-            </label>
-          </div>
-        </div>
-        <div class="t-table t-list t-border col-md-12 my-3">
-          <div class="hide-bar bg-light"></div>
-          <div class="t-head bg-light fw-bold">
-            <div class="tr">
-              <div class="th text-truncate ps-3">
-                COMPONENT NAME
-              </div>
-              <div class="th text-truncate ps-3">
-                ANNUAL CALCULATION
-              </div>
-              <div class="th text-truncate ps-3" *ngIf="isEditStructure">
-                ACTIONS
-              </div>
-            </div>
-          </div>
-          <div class="t-body custom-height">
-            <div class="tr py-2" *ngFor="let item of salaryComponentFields">
-              <div class="td ps-3 text-truncate">
-                {{item.ComponentName}}
-              </div>
-              <div class="td ps-3 text-truncate">
-                {{item.TaxExempt}}
-              </div>
+            <div class="col-md-3">
+              <ng-container *ngIf="!isEditStructure">
+                <button class="btn btn-outline-primary" (click)="editStructure()">Edit Structure</button>
+              </ng-container>
               <ng-container *ngIf="isEditStructure">
-                <div class="td ps-3">
-                  <div ngbDropdown class="d-inline-block" placement="bottom-end">
-                    <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                      <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
-                    </button>
-                    <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                      <button ngbDropdownItem (click)="updateCalcModel(item)">
-                        <a class="dropdown-item" href="javascript:void(0)">Update Calculation</a>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <button class="btn btn-outline-danger me-2" (click)="cancleEditStructure()">Cancel</button>
+                <button class="btn btn-outline-success">Save</button>
               </ng-container>
             </div>
           </div>
-        </div>
+          <div class="col-md-12 my-3">
+            <label for="" class="form-label">Structure Name</label>
+            <input type="text" [readonly]="!isEditStructure" class="form-control" placeholder="Structure Name">
+          </div>
+          <div class="col-md-12 my-3">
+            <label for="" class="form-label">Description</label>
+            <textarea [readonly]="!isEditStructure" class="form-control" placeholder="Decsription"></textarea>
+          </div>
+          <div class="d-flex justify-content-between mx-1 my-4">
+            <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add
+              Component</button>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox">
+              <label class="form-check-label">
+                This structure is eligible for Flexible Benefit PLan (FBP)
+              </label>
+            </div>
+          </div>
+
+          <ng-container formArrayName="salaryComponents">
+            <div class="t-table t-list t-border col-md-12 my-3">
+              <div class="hide-bar bg-light"></div>
+              <div class="t-head bg-light fw-bold">
+                <div class="tr">
+                  <div class="th text-truncate ps-3">
+                    COMPONENT NAME
+                  </div>
+                  <div class="th text-truncate ps-3">
+                    ANNUAL CALCULATION
+                  </div>
+                  <div class="th text-truncate ps-3" *ngIf="isEditStructure">
+                    ACTIONS
+                  </div>
+                </div>
+              </div>
+              <div class="t-body custom-height">
+                <div class="tr py-2" *ngFor="let item of components.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="td ps-3 text-truncate">
+                      {{item.get("ComponentDescription").value}}
+                    </div>
+                    <div class="td ps-3 text-truncate">
+                      {{item.get("TaxExempt").value}}
+                    </div>
+                    <ng-container *ngIf="isEditStructure">
+                      <div class="td ps-3">
+                        <div ngbDropdown class="d-inline-block" placement="bottom-end">
+                          <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
+                            <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
+                          </button>
+                          <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                            <button ngbDropdownItem (click)="updateCalcModel(item.value)">
+                              <a class="dropdown-item" href="javascript:void(0)">Update Calculation</a>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+        </form>
+
       </ng-container>
       <ng-container *ngIf="ActivatedPage == 2">
         <div class="col-md-12 mt-5">
@@ -341,7 +351,8 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="updateCalculationModalLabel">Component [{{componentFields.ComponentName}}] Update
+        <h5 class="modal-title" id="updateCalculationModalLabel">Component [{{componentFields.ComponentDescription}}]
+          Update
           Calculation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -350,14 +361,14 @@
           <div class="col-md-4">
             <h5 class="form-label">Components Name</h5>
             <h6 class="text-bold text-underline">
-              <p>{{componentFields.ComponentName}}</p>
+              <p>{{componentFields.ComponentDescription}}</p>
             </h6>
             <label>Normanlly it would lie between 40 to 50 percent of the CTC salary.</label>
           </div>
           <div class="col-md-8">
             <div class="col-md-12 form-group">
               <label class="form-label">Calculation Type</label>
-              <select name="CalculationType" class="form-control" [(ngModel)]="componentFields.ComponentValueIn">
+              <select name="CalculationType" class="form-control" [(ngModel)]="componentFields.CalculateInPercentage">
                 <option value="0">Pick calculation type</option>
                 <option value="1">In percent value</option>
                 <option value="2">In fixed value</option>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { SalaryComponentFields } from '../salarycomponent-structure/salarycomponent-structure.component';
 declare var $: any;
 
@@ -17,9 +19,18 @@ export class CustomsalaryStructureComponent implements OnInit {
   customSalaryStructure: Array<CustomSalaryStructure> = [];
   dailyWages: Array<DailyWagesStructure> = []
   salaryAndDeduction: FormGroup;
-  salaryComponent: FormGroup;
+  salaryComponents: FormArray;
+  isReady: boolean = false;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private http: AjaxService
+  ) { }
+
+  get components(): FormArray {
+    let data = this.salaryAndDeduction.get("salaryComponents") as FormArray;
+    return data;
+  }
 
   initForm() {
     this.salaryAndDeduction = this.fb.group({
@@ -31,7 +42,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   createNewComponent(elem: SalaryComponentFields): FormGroup {
     return this.fb.group({
-      ComponentName: elem.ComponentName,
+      ComponentDescription: elem.ComponentDescription,
       Type: elem.Type,
       TaxExempt: elem.TaxExempt,
       MaxLimit: elem.MaxLimit,
@@ -39,195 +50,52 @@ export class CustomsalaryStructureComponent implements OnInit {
       IndividualOverride: elem.IndividualOverride,
       IsAllowtoOverride: elem.IsAllowtoOverride,
       IsComponentEnable: elem.IsComponentEnable,
-      ComponentValueIn: elem.ComponentValueIn
+      CalculateInPercentage: elem.CalculateInPercentage,
+      ComponentId: elem.ComponentId
+    });
+  }
+
+  loadData() {
+    this.http.get("SalaryComponent/GetSalaryComponentsDetail").then(res => {
+      if(res.ResponseBody) {
+        let data = res.ResponseBody;
+        let i = 0;
+        this.salaryComponentFields = [];
+        while(i < data.length) {
+          this.salaryComponentFields.push({
+            ComponentDescription: data[i]["ComponentDescription"],
+            ComponentId: data[i]["ComponentId"],
+            Type: data[i]["Type"],
+            TaxExempt: data[i]["TaxExempt"],
+            MaxLimit: data[i]["Amount"],
+            RequireDocs: data[i]["RequireDocs"],
+            IndividualOverride: data[i]["IndividualOverride"],
+            IsAllowtoOverride: data[i]["IsAllowtoOverride"],
+            IsComponentEnable: data[i]["IsComponentEnable"],
+            PercentageValue: data[i]["PercentageValue"],
+            CalculateInPercentage: data[i]["CalculateInPercentage"]
+          });
+          i++;
+        }
+
+        this.initForm();
+        this.isReady = true;
+        Toast("Salary components loaded successfully.");
+      } else {
+        ErrorToast("Salary components loaded successfully.");
+      }
     });
   }
 
   ngOnInit(): void {
+    this.loadData();
+
     this.salaryStructureType = [{
       TypeName: 'Class A',
       MinAmount: 'Rs 0',
       MaxAmount: 'Rs 400000'
-    },
-    {
-      TypeName: 'Class B',
-      MinAmount: 'Rs 400001',
-      MaxAmount: 'Rs 480000'
-    },
-    {
-      TypeName: 'Class C',
-      MinAmount: 'Rs 480001',
-      MaxAmount: 'Rs 600000'
-    },
-    {
-      TypeName: 'Class D',
-      MinAmount: 'Rs 600001',
-      MaxAmount: 'Rs 800000'
-    },
-    {
-      TypeName: 'Class E',
-      MinAmount: 'Rs 800001',
-      MaxAmount: 'Rs 1000000'
-    },
-    {
-      TypeName: 'Class E',
-      MinAmount: 'Rs 800001',
-      MaxAmount: 'Rs 1000000'
-    },
-    {
-      TypeName: 'Class E',
-      MinAmount: 'Rs 800001',
-      MaxAmount: 'Rs 1000000'
     }];
 
-    this.salaryComponentFields = [{
-      ComponentName: "Basic",
-      Type: "Fixed",
-      TaxExempt: "Taxable",
-      MaxLimit: "Auto Calculated",
-      RequireDocs: false,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "HRA",
-      Type: "Fixed",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "Auto Calculated",
-      RequireDocs: false,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "MA",
-      Type: "Allowance",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "2,50,000",
-      RequireDocs: true,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "Convevance Allowance",
-      Type: "Allowance",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "50,000",
-      RequireDocs: false,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "Special Allowance",
-      Type: "Allowance",
-      TaxExempt: "Taxable",
-      MaxLimit: "Auto Calculated",
-      RequireDocs: false,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "Accident Insurance",
-      Type: "Deduction",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "50,000",
-      Section: "Section 10(14)(i)",
-      RequireDocs: false,
-      IndividualOverride: false,
-      IsAllowtoOverride: false,
-      IsComponentEnable: false,
-      ComponentValueIn: 0
-    },
-    {
-      ComponentName: "PF Employer",
-      Type: "Deduction",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "21,600",
-      Section: "Section 10(14)(i)",
-      RequireDocs: false,
-      IndividualOverride: false,
-      IsAllowtoOverride: false,
-      IsComponentEnable: false,
-      ComponentValueIn: 0
-    },{
-      ComponentName: "Telephone Allowance",
-      Type: "Deduction",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "2,50,000",
-      Section: "Section 10(14)(ii)",
-      RequireDocs: false,
-      IndividualOverride: false,
-      IsAllowtoOverride: false,
-      IsComponentEnable: false,
-      ComponentValueIn: 0
-    },{
-      ComponentName: "Food Deduction",
-      Type: "Deduction",
-      TaxExempt: "Tax Exempt",
-      MaxLimit: "50,000",
-      Section: "Section 16(iii)",
-      RequireDocs: false,
-      IndividualOverride: false,
-      IsAllowtoOverride: false,
-      IsComponentEnable: false,
-      ComponentValueIn: 0
-    }];
-
-
-    this.dailyWages = [{
-      SalaryStructureName: 'Stehphe-II',
-      NoOfEmployee: 1,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-      RemunerationType: 'String'
-    },
-    {
-      SalaryStructureName: 'M-Dummy',
-      NoOfEmployee: 5,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-      RemunerationType: 'String'
-    },
-    {
-      SalaryStructureName: 'Custom Salary Structure',
-      NoOfEmployee: 1,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-      RemunerationType: 'String'
-    },
-    {
-      SalaryStructureName: 'Roma',
-      NoOfEmployee: 1,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-      RemunerationType: 'String'
-    },
-    {
-      SalaryStructureName: 'Stehphe-II',
-      NoOfEmployee: 1,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-      RemunerationType: 'String'
-    }];
     this.customSalaryStructure = [{
       SalaryStructureName: 'Stehphe-II',
       NoOfEmployee: 1,
@@ -329,9 +197,9 @@ export class CustomsalaryStructureComponent implements OnInit {
     let items = this.salaryAndDeduction.controls["salaryComponents"] as FormArray;
     if(items) {
       items.controls.map(elem => {
-        if(elem.value.ComponentName === this.componentFields.ComponentName) {
+        if(elem.value.ComponentName === this.componentFields.ComponentDescription) {
           elem.get("MaxLimit").setValue(this.componentFields.MaxLimit);
-          elem.get("ComponentValueIn").setValue(this.componentFields.ComponentValueIn);
+          elem.get("ComponentValueIn").setValue(this.componentFields.ComponentDescription);
         }
       });
     }
