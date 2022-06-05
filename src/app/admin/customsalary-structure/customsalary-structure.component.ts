@@ -21,6 +21,8 @@ export class CustomsalaryStructureComponent implements OnInit {
   salaryAndDeduction: FormGroup;
   salaryComponents: FormArray;
   isLoading: boolean = false;
+  isReady: boolean = false;
+  componentsAvailable: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -29,18 +31,46 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   get components(): FormArray {
     let data = this.salaryAndDeduction.get("salaryComponents") as FormArray;
+    //console.log(JSON.stringify(data.controls));
     return data;
+  }
+
+  saveChanges() {
+    console.log(this.salaryAndDeduction.value);
+  }
+
+  addComponents() {
+    this.componentsAvailable = false;
+    let elems: FormArray = this.buildFormArray();
+    (this.salaryAndDeduction.get("salaryComponents") as FormArray).controls = elems.controls;
+    $('#addComponentModal').modal('hide');
   }
 
   initForm() {
     this.salaryAndDeduction = this.fb.group({
-      salaryComponents: this.fb.array(this.salaryComponentFields.map(item => {
-        return this.createNewComponent(item)
-      }))
+      salaryComponents: this.buildFormArray()
     });
   }
 
+  buildFormArray(): FormArray {
+    let elems: FormArray = this.fb.array([]);
+    let i = 0;
+    while(i < this.salaryComponentFields.length) {
+      if(this.salaryComponentFields[i].IsActive) {
+        elems.push(this.createNewComponent(this.salaryComponentFields[i]));
+      }
+      i++;
+    }
+
+    if(elems.controls.length > 0)
+    this.componentsAvailable = true;
+    return elems;
+  }
+
   createNewComponent(elem: SalaryComponentFields): FormGroup {
+    if(elem.TaxExempt == null || elem.TaxExempt == "")
+      elem.TaxExempt = "NA";
+
     return this.fb.group({
       ComponentDescription: elem.ComponentDescription,
       Type: elem.Type,
@@ -51,7 +81,9 @@ export class CustomsalaryStructureComponent implements OnInit {
       IsAllowtoOverride: elem.IsAllowtoOverride,
       IsComponentEnable: elem.IsComponentEnable,
       CalculateInPercentage: elem.CalculateInPercentage,
-      ComponentId: elem.ComponentId
+      ComponentId: elem.ComponentId,
+      Formula: elem.Formula,
+      IsActive: elem.IsActive
     });
   }
 
@@ -65,13 +97,15 @@ export class CustomsalaryStructureComponent implements OnInit {
           this.salaryComponentFields.push({
             ComponentDescription: data[i]["ComponentDescription"],
             ComponentId: data[i]["ComponentId"],
-            Type: data[i]["Type"],
+            Type: data[i]["SubComponentTypeId"],
             TaxExempt: data[i]["TaxExempt"],
-            MaxLimit: data[i]["Amount"],
-            RequireDocs: data[i]["RequireDocs"],
-            IndividualOverride: data[i]["IndividualOverride"],
-            IsAllowtoOverride: data[i]["IsAllowtoOverride"],
-            IsComponentEnable: data[i]["IsComponentEnable"],
+            Formula: data[i]["Formula"],
+            MaxLimit: data[i]["MaxLimit"],
+            RequireDocs: false,
+            IndividualOverride: false,
+            IsAllowtoOverride: false,
+            IsComponentEnable: false,
+            IsActive: data[i]["IsActive"],
             PercentageValue: data[i]["PercentageValue"],
             CalculateInPercentage: data[i]["CalculateInPercentage"]
           });
@@ -79,7 +113,7 @@ export class CustomsalaryStructureComponent implements OnInit {
         }
 
         this.initForm();
-        this.isLoading = true;
+        this.isReady = true;
         Toast("Salary components loaded successfully.");
       } else {
         ErrorToast("Salary components loaded successfully.");
@@ -198,13 +232,15 @@ export class CustomsalaryStructureComponent implements OnInit {
     let items = this.salaryAndDeduction.controls["salaryComponents"] as FormArray;
     if(items) {
       items.controls.map(elem => {
-        if(elem.value.ComponentName === this.componentFields.ComponentDescription) {
-          elem.get("MaxLimit").setValue(this.componentFields.MaxLimit);
-          elem.get("ComponentValueIn").setValue(this.componentFields.ComponentDescription);
+        if(elem.value.ComponentDescription === this.componentFields.ComponentDescription) {
+          elem.get("Formula").setValue(this.componentFields.Formula);
+          elem.get("CalculateInPercentage").setValue(this.componentFields.CalculateInPercentage);
         }
       });
     }
+
     this.isLoading = false;
+    $('#updateCalculationModal').modal('hide');
   }
 }
 

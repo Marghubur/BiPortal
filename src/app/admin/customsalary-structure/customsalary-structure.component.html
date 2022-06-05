@@ -69,7 +69,7 @@
               </ng-container>
               <ng-container *ngIf="isEditStructure">
                 <button class="btn btn-outline-danger me-2" (click)="cancleEditStructure()">Cancel</button>
-                <button class="btn btn-outline-success">Save</button>
+                <button class="btn btn-outline-success" (click)="saveChanges()">Save</button>
               </ng-container>
             </div>
           </div>
@@ -109,30 +109,37 @@
                 </div>
               </div>
               <div class="t-body custom-height">
-                <div class="tr py-2" *ngFor="let item of components.controls; let i = index">
-                  <ng-container [formGroupName]="i">
-                    <div class="td ps-3 text-truncate">
-                      {{item.get("ComponentDescription").value}}
-                    </div>
-                    <div class="td ps-3 text-truncate">
-                      {{item.get("TaxExempt").value}}
-                    </div>
-                    <ng-container *ngIf="isEditStructure">
-                      <div class="td ps-3">
-                        <div ngbDropdown class="d-inline-block" placement="bottom-end">
-                          <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                            <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
-                          </button>
-                          <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                            <button ngbDropdownItem (click)="updateCalcModel(item.value)">
-                              <a class="dropdown-item" href="javascript:void(0)">Update Calculation</a>
+                <ng-container *ngIf="componentsAvailable">
+                  <div class="tr py-2" *ngFor="let item of components.controls; let i = index">
+                    <ng-container [formGroupName]="i">
+                      <div class="td ps-3 text-truncate">
+                        {{item.get("ComponentDescription").value}}
+                      </div>
+                      <div class="td ps-3 text-truncate">
+                        {{item.get("Formula").value}}
+                      </div>
+                      <ng-container *ngIf="isEditStructure">
+                        <div class="td ps-3">
+                          <div ngbDropdown class="d-inline-block" placement="bottom-end">
+                            <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
+                              <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
                             </button>
+                            <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                              <button ngbDropdownItem (click)="updateCalcModel(item.value)">
+                                <a class="dropdown-item" href="javascript:void(0)">Update Calculation</a>
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </ng-container>
                     </ng-container>
-                  </ng-container>
-                </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!componentsAvailable">
+                  <div class="col-md-12 my-5 py-5 d-flex flex-column justify-content-center text-center">
+                    <h4>Please add component first.</h4>
+                  </div>
+                </ng-container>
               </div>
             </div>
           </ng-container>
@@ -317,7 +324,7 @@
           <div class="t-body custom-height">
             <div class="tr py-2" *ngFor="let item of salaryComponentFields">
               <div class="td ps-3 text-truncate">
-                {{item.ComponentName}}
+                {{item.ComponentDescription}}
               </div>
               <div class="td ps-3 text-truncate">
                 {{item.Type}}
@@ -330,7 +337,7 @@
                 {{item.MaxLimit}}
               </div>
               <div class="td ps-3">
-                <input class="form-check-input" type="checkbox" value="">
+                <input class="form-check-input" [(ngModel)]="item.IsActive" type="checkbox" value="">
               </div>
             </div>
           </div>
@@ -338,7 +345,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c">Add</button>
+        <button type="button" class="btn btn-primary-c" (click)="addComponents()">Add</button>
       </div>
     </div>
   </div>
@@ -376,8 +383,9 @@
             </div>
             <div class="col-md-12 form-group mt-3">
               <label for="" class="form-label">Value</label>
-              <input class="form-control" [readonly]="componentFields.ComponentValueIn == 0" [(ngModel)]="componentFields.MaxLimit" name="Value"
-                placeholder="Enter value here">
+              <textarea class="form-control" [readonly]="componentFields.Formula" [(ngModel)]="componentFields.Formula"
+                name="Value" placeholder="Enter value here">
+              </textarea>
             </div>
           </div>
           <div class="col-md-12 mt-5">
@@ -490,7 +498,7 @@
                     {{item.ComponentName}}
                   </div>
                   <div class="td fe-2 ps-3 text-truncate">
-                    {{item.TaxExempt}}
+                    {{item.Formula}}
                   </div>
                   <ng-container>
                     <div class="td ps-3">
