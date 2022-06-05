@@ -20,7 +20,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   dailyWages: Array<DailyWagesStructure> = []
   salaryAndDeduction: FormGroup;
   salaryComponents: FormArray;
-  isReady: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -79,7 +79,7 @@ export class CustomsalaryStructureComponent implements OnInit {
         }
 
         this.initForm();
-        this.isReady = true;
+        this.isLoading = true;
         Toast("Salary components loaded successfully.");
       } else {
         ErrorToast("Salary components loaded successfully.");
@@ -194,6 +194,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   updateValue() {
+    this.isLoading = true;
     let items = this.salaryAndDeduction.controls["salaryComponents"] as FormArray;
     if(items) {
       items.controls.map(elem => {
@@ -203,6 +204,7 @@ export class CustomsalaryStructureComponent implements OnInit {
         }
       });
     }
+    this.isLoading = false;
   }
 }
 

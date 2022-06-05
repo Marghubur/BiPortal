@@ -26,9 +26,9 @@
         </div>
         <ng-container *ngIf="ActivatedPage == 1">
           <div class="box">
-            <button  class=" btn my-2 me-1 btn-outline-success float-end" (click)="updateDetail()">
+            <button  class=" btn my-2 me-1 btn-outline-success float-end" (click)="activePage(ActivatedPage+1)">
               <i class="fa fa-cog pe-2"></i>
-              Save & Continue
+              Continue
             </button>
             <h6 class="mb-0 py-3">Please provide the company information. This is the company that pays for the Payroll.
             </h6>
