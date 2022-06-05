@@ -120,13 +120,13 @@ export class CompanyDetailComponent implements OnInit {
       request.TypeOfBusiness = this.singleOrganization.TypeOfBusiness;
       request.InCorporationDateb = this.singleOrganization.InCorporationDateb;
       request.FullAddress =this.singleOrganization.FullAddress;
-      // let formData = new FormData()
-      // formData.append("organizationDetail", JSON.stringify(request));
-      // let file = null;
-      // if(this.fileDetail.length > 0)
-      //   file = this.fileDetail[0].file;
-      // formData.append(ProfileImage, file)
-      this.http.post("Settings/InsertUpdateCompanyDetail", request).then((response: ResponseModel) => {
+      let formData = new FormData()
+      formData.append("CompanyInfo", JSON.stringify(request));
+      let file = null;
+      if(this.fileDetail.length > 0)
+        file = this.fileDetail[0].file;
+      formData.append('CompanyLogo', file)
+      this.http.post("Settings/InsertUpdateCompanyDetail", formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.organizationModal = response.ResponseBody as organizationModal;
           this.initForm();
@@ -163,7 +163,7 @@ export class CompanyDetailComponent implements OnInit {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.fileDetail.push({
-        name: "profile",
+        name: "logo",
         file: file
       });
     }
