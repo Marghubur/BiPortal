@@ -39,7 +39,9 @@ export class SalarycomponentStructureComponent implements OnInit {
       IsAllowtoOverride: true,
       IsComponentEnable: true,
       PercentageValue: 0,
-      CalculateInPercentage: false
+      CalculateInPercentage: false,
+      Formula: null,
+      IsActive: false
     }]
   }
 
@@ -141,5 +143,7 @@ export class SalaryComponentFields {
   IsAllowtoOverride: boolean = true;
   CalculateInPercentage: boolean = false;
   Section?: string = '';
+  Formula: string = null;
+  IsActive: boolean = false;
 }
 
