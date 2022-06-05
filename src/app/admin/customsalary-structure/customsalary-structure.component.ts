@@ -23,6 +23,9 @@ export class CustomsalaryStructureComponent implements OnInit {
   isLoading: boolean = false;
   isReady: boolean = false;
   componentsAvailable: boolean = false;
+  ComponentName: string = '';
+  OpertaionType: string = '';
+  CalculationValue: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -208,6 +211,22 @@ export class CustomsalaryStructureComponent implements OnInit {
       }
       document.getElementById('progressbar').style.width = ((page - 1) *50).toString() + '%';
     }
+  }
+
+  componentName(e: any) {
+    let value = e.target.value;
+    if (value)
+      this.ComponentName =value;
+  }
+
+  operationType(e: any) {
+    let value = e.target.value;
+    if (value)
+      this.OpertaionType =value;
+  }
+
+  generateFormula() {
+    this.componentFields.Formula =`([${this.ComponentName}] ${this.OpertaionType} ${this.CalculationValue})`;
   }
 
   addComponentModal() {
