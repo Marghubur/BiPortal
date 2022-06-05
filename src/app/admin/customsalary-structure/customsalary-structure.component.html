@@ -365,34 +365,57 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-4">
-            <h5 class="form-label">Components Name</h5>
-            <h6 class="text-bold text-underline">
-              <p>{{componentFields.ComponentDescription}}</p>
-            </h6>
+          <div class="col-md-8">
+            <div class="d-flex">
+              <h5 class="form-label">Components Name : {{componentFields.ComponentDescription}}</h5>
+            </div>
             <label>Normanlly it would lie between 40 to 50 percent of the CTC salary.</label>
           </div>
-          <div class="col-md-8">
-            <div class="col-md-12 form-group">
-              <label class="form-label">Calculation Type</label>
-              <select name="CalculationType" class="form-control" [(ngModel)]="componentFields.CalculateInPercentage">
-                <option value="0">Pick calculation type</option>
-                <option value="1">In percent value</option>
-                <option value="2">In fixed value</option>
-              </select>
-            </div>
-            <div class="col-md-12 form-group mt-3">
-              <label for="" class="form-label">Value</label>
-              <textarea class="form-control" [readonly]="componentFields.Formula" [(ngModel)]="componentFields.Formula"
-                name="Value" placeholder="Enter value here">
-              </textarea>
-            </div>
+          <div class="col-md-4 form-group">
+            <label class="form-label">Calculation Type</label>
+            <select name="CalculationType" class="form-control" [(ngModel)]="componentFields.CalculateInPercentage">
+              <option value="1">Pick calculation type</option>
+              <option value="2">In percent value</option>
+              <option value="3">In fixed value</option>
+            </select>
           </div>
-          <div class="col-md-12 mt-5">
-            <h6 class="pt-4">Use Standard Javascript notaion for formuila expression</h6>
-            <p class="mb-0">Ex. ([Basic] - 0.40) - 1200</p>
-            <p class="mb-0">Ex. ([Gross] - [Basic]) * 0.4</p>
+        </div>
+        <div class="col-md-12 row">
+          <div class="col-md-4 form-group">
+            <label class="form-label">Component Name</label>
+            <select  class="form-control" (change)="componentName($event)">
+              <option value="0">Select Component Name</option>
+              <option value="gross">Gross</option>
+              <option value="ctc">CTC</option>
+              <option value="net">Net</option>
+            </select>
           </div>
+          <div class="col-md-4 form-group">
+            <label class="form-label">Operator</label>
+            <select  class="form-control" (change)="operationType($event)">
+              <option value="0">Select Operation</option>
+              <option value="x">Multiply</option>
+              <option value="/">Divide</option>
+              <option value="-">Subtract</option>
+              <option value="+">Add</option>
+              <option value="%">Percentage</option>
+            </select>
+          </div>
+          <div class="col-md-4 ">
+            <label class="form-label">Value</label>
+            <input type="text" class="form-control" [(ngModel)]="CalculationValue" name="CalculationValue" (keyup.enter)="generateFormula()">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="col-md-12 form-group mt-3">
+            <label for="" class="form-label">Formula</label>
+            <h6 class="form-label py-2 fw-bold" >{{componentFields.Formula}}</h6>
+          </div>
+        </div>
+        <div class="col-md-12 mt-5">
+          <h6 class="pt-4">Use Standard Javascript notaion for formuila expression</h6>
+          <p class="mb-0">Ex. ([Basic] - 0.40) - 1200</p>
+          <p class="mb-0">Ex. ([Gross] - [Basic]) * 0.4</p>
         </div>
       </div>
       <div class="modal-footer border-top-0">
