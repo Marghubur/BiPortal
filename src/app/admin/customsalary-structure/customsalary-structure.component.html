@@ -29,7 +29,7 @@
         <div class="row mt-5">
           <div class="col-md-2 my-2" *ngFor="let item of salaryStructureType">
             <div class="card py-4">
-              <h5 class="text-center">{{item.TypeName}}</h5>
+              <h5 class="text-center">{{item.GroupName}}</h5>
               <p class="mb-0 text-truncate text-center">{{item.MinAmount}} - {{item.MaxAmount}}</p>
               <div ngbDropdown class="d-inline-block menu-btn">
                 <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
@@ -380,10 +380,10 @@
             </select>
           </div>
         </div>
-        <div class="col-md-12 row">
+        <div class="col-md-12 mt-5 row">
           <div class="col-md-4 form-group">
             <label class="form-label">Component Name</label>
-            <select  class="form-control" (change)="componentName($event)">
+            <select class="form-control" (change)="componentName($event)">
               <option value="0">Select Component Name</option>
               <option value="gross">Gross</option>
               <option value="ctc">CTC</option>
@@ -392,9 +392,9 @@
           </div>
           <div class="col-md-4 form-group">
             <label class="form-label">Operator</label>
-            <select  class="form-control" (change)="operationType($event)">
+            <select class="form-control" (change)="operationType($event)">
               <option value="0">Select Operation</option>
-              <option value="x">Multiply</option>
+              <option value="*">Multiply</option>
               <option value="/">Divide</option>
               <option value="-">Subtract</option>
               <option value="+">Add</option>
@@ -403,13 +403,16 @@
           </div>
           <div class="col-md-4 ">
             <label class="form-label">Value</label>
-            <input type="text" class="form-control" [(ngModel)]="CalculationValue" name="CalculationValue" (keyup.enter)="generateFormula()">
+            <input type="text" class="form-control" [(ngModel)]="CalculationValue" name="CalculationValue"
+              (keyup.enter)="generateFormula()">
           </div>
         </div>
         <div class="col-md-12">
           <div class="col-md-12 form-group mt-3">
             <label for="" class="form-label">Formula</label>
-            <h6 class="form-label py-2 fw-bold" >{{componentFields.Formula}}</h6>
+            <div class="border">
+              <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
+            </div>
           </div>
         </div>
         <div class="col-md-12 mt-5">
@@ -491,8 +494,8 @@
           </div>
           <div class="col-md-5">
             <div class="d-flex justify-content-between mx-1 my-4">
-              <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add
-                Component</button>
+              <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2">
+                </i> Add Component</button>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox">
                 <label class="form-check-label">
