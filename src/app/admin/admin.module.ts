@@ -52,6 +52,7 @@ import { CompanyDetailComponent } from './company-detail/company-detail.componen
 import { CompanyAccountsComponent } from './company-accounts/company-accounts.component';
 import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
 import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
+import { PayrollComponentsComponent } from './payroll-components/payroll-components.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { CustomsalaryStructureComponent } from './customsalary-structure/customs
     CompanyDetailComponent,
     CompanyAccountsComponent,
     SalarycomponentStructureComponent,
-    CustomsalaryStructureComponent
+    CustomsalaryStructureComponent,
+    PayrollComponentsComponent
   ],
   imports: [
     CommonModule,

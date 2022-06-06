@@ -1,0 +1,177 @@
+<div class="col-12 full-v main-container">
+  <div>
+    <div class="x_panel">
+      <div class="x_header">
+        <div class="x_header_title">
+          <h2>PAYROLL COMPONENTS</h2>
+        </div>
+      </div>
+      <div class="px-1">
+        <app-breadcrums></app-breadcrums>
+      </div>
+      <div class="my-3">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+          <li [ngbNavItem]="1">
+            <a ngbNavLink>RECURRING COMPONENTS</a>
+            <ng-template ngbNavContent>
+              <div class="px-2 pt-3">
+                <h4>Recurring Components Library</h4>
+                <p class="mb-0">In this Section you can create all the recurring salary components in your Organization components like Basic, HRA, Special Allowance are system defined and can't be edited or removed.</p>
+                <div class="col-md-12 my-4">
+                  <button class="btn btn-primary-c" (click)="newComponentPopUp()"><i class="fa fa-plus pe-2"></i> ADD NEW COMPONENT</button>
+                  <div class="col-md-3 float-end">
+                    <div class="form-group has-search">
+                      <span class="fa fa-search form-control-feedback"></span>
+                      <input type="text" class="form-control" placeholder="Search Component">
+                    </div>
+                  </div>
+                </div>
+                <div class="t-table t-list t-border col-md-12 my-3">
+                  <div class="hide-bar bg-light"></div>
+                  <div class="t-head bg-light fw-bold">
+                    <div class="tr">
+                      <div class="th text-truncate ps-3">
+                        COMPONENT NAME
+                      </div>
+                      <div class="th text-truncate ps-3">
+                        TYPE
+                      </div>
+                      <div class="th text-truncate ps-3">
+                        TAX EXEMPT
+                      </div>
+                      <div class="th text-truncate ps-3">
+                        MAX LIMIT(YEAR)
+                      </div>
+                      <div class="th text-truncate ps-3">
+                        REQUIRE DOCS
+                      </div>
+                      <div class="th text-truncate ps-3">
+                        ACTIONS
+                      </div>
+                    </div>
+                  </div>
+                  <div class="t-body custom-height">
+                    <div class="tr py-2" >
+                      <div class="td ps-3 text-truncate">
+                      </div>
+                      <div class="td ps-3 text-truncate">
+                      </div>
+                      <div class="td ps-3 text-truncate">
+                      </div>
+                      <div class="td ps-3 text-truncate">
+                      </div>
+                      <div class="td ps-3 text-truncate">
+                      </div>
+                      <div class="td ps-3">
+                        <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-pencil pe-lg-1"></i> Edit</a>
+                        <a href="javascript:void(0)" class="text-decoration-none ps-3 text-danger"><i class="fa fa-trash-o pe-1"></i> Delete</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink>AD HOC CPOMPONENTS</a>
+            <ng-template ngbNavContent>
+              <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
+                farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
+                ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
+                helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson
+                8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
+                stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+            </ng-template>
+          </li>
+        </ul>
+
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Add New Component Modal -->
+<div class="modal fade" id="NewComponentModal" tabindex="-1" aria-labelledby="NewComponentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="NewComponentModalLabel">ADD NEW SALARY COMPONENT - </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="NewSalaryForm">
+          <div class="col-md-12 mt-3">
+            <label for="" class="form-label">COMPONENT TYPE</label>
+            <div class="col-md-4">
+              <select class="form-select" formControlName="Type" (change)="selectComponentType($event)">
+                <option value="0">Select Componet Type</option>
+                <option value="allowance">Allowance</option>
+                <option value="reimbursable">Reimbursable Component</option>
+                <option value="rembursement">Rembursement</option>
+              </select>
+            </div>
+            <ng-container [ngSwitch]="ComponentType">
+              <div *ngSwitchCase="'rembursement'">
+                <div class="alert alert-primary my-3 py-2 mb-0 col-md-12" role="alert">
+                  Reimbursement - is part of employee CTC, the paid amount is never displayed in Form 16 and income tax computation. The unpaid amount is paid as part of Special allowance.
+                </div>
+              </div>
+              <div *ngSwitchCase="'reimbursable'">
+                <div class="alert alert-primary my-3 py-2 mb-0 col-md-12" role="alert">
+                  Reimbursable component - is part of employees CTC and is displayed as exempted/non-exempted amount in Form 16 and income tax computation.
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div class="row col-md-12">
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">COMPONENT NAME</label>
+              <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
+              <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9" class="form-control">
+            </div>
+            <div class="col-md-12 mt-3">
+              <label for="" class="form-label">COMPONENT DESCRIPTION</label>
+              <textarea type="text" formControlName="CompoentDescription" placeholder="Component Description" class="form-control"></textarea>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-check mt-3">
+              <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt" (click)="enableTaxExempt($event)">
+              <label class="form-check-label">
+                This component is tax exemption(non taxable)
+              </label>
+            </div>
+            <div class="row mx-2">
+              <div class="col-md-6 mt-2">
+                <label for="" class="form-label">INCOME TAX SECTION</label>
+                <input type="text" [readonly]="!isLoading" formControlName="Section" placeholder="Enter Income Tax Section" class="form-control">
+              </div>
+              <div class="col-md-6 mt-2">
+                <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
+                <input type="text" [readonly]="!isLoading" formControlName="SectionMaxLimit" placeholder="Section Maximum Limit" class="form-control">
+              </div>
+            </div>
+            <div class="form-check mt-3" *ngIf="ComponentType == 'reimbursable'">
+              <input class="form-check-input" formControlName="RequireDocs" type="checkbox" value="">
+              <label class="form-check-label">
+                Requires employee to submit proof fotr reimbursements.
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
+          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                    {{ isLoading ? 'Wait' : 'Create Salary Group' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->

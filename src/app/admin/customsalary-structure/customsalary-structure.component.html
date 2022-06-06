@@ -730,11 +730,11 @@
             </div>
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">Minimum Amount</label>
-              <input type="text" [ngClass]="{'error-field': submitted && f.MinAmount.errors !== null && f.MinAmount.errors.required}" placeholder="Enter Minimum Amount" formControlName="MinAmount" class="form-control">
+              <input type="text" OnlyNumber="9" [ngClass]="{'error-field': submitted && f.MinAmount.errors !== null && f.MinAmount.errors.required}" placeholder="Enter Minimum Amount" formControlName="MinAmount" class="form-control">
             </div>
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">Maximum Amount</label>
-              <input type="text" [ngClass]="{'error-field': submitted && f.MaxAmount.errors !== null && f.MaxAmount.errors.required}" placeholder="Enter Maximum Amount" formControlName="MaxAmount" class="form-control">
+              <input type="text" OnlyNumber="9" [ngClass]="{'error-field': submitted && f.MaxAmount.errors !== null && f.MaxAmount.errors.required}" placeholder="Enter Maximum Amount" formControlName="MaxAmount" class="form-control">
             </div>
           </div>
         </form>
