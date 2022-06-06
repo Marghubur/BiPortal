@@ -39,7 +39,26 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   saveChanges() {
-    console.log(this.salaryAndDeduction.value);
+    let values: any = this.salaryAndDeduction.get("salaryComponents");
+    if(values && values.controls.length > 0) {
+      let i = 0;
+      let items = [];
+      while(i < values.controls.length) {
+        items.push(values.controls[i].value);
+        i++;
+      }
+
+      if(items.length > 0) {
+        this.http.post("SalaryComponent/UpdateSalaryComponents", items)
+        .then(res => {
+          if(res.ResponseBody) {
+            Toast("Updated successfully");
+          } else {
+            Toast("Fail to pdated records");
+          }
+        });
+      }
+    }
   }
 
   addComponents() {
@@ -90,7 +109,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     });
   }
 
-  loadData() {
+  loadSalaryComponentDetail() {
     this.http.get("SalaryComponent/GetSalaryComponentsDetail").then(res => {
       if(res.ResponseBody) {
         let data = res.ResponseBody;
@@ -124,14 +143,20 @@ export class CustomsalaryStructureComponent implements OnInit {
     });
   }
 
+  loadData() {
+    this.salaryStructureType = [];
+    this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
+      if(res.ResponseBody) {
+        this.salaryStructureType = res.ResponseBody;
+        Toast("Salary components loaded successfully.");
+      } else {
+        ErrorToast("Salary components loaded successfully.");
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.loadData();
-
-    this.salaryStructureType = [{
-      TypeName: 'Class A',
-      MinAmount: 'Rs 0',
-      MaxAmount: 'Rs 400000'
-    }];
 
     this.customSalaryStructure = [{
       SalaryStructureName: 'Stehphe-II',
@@ -264,9 +289,12 @@ export class CustomsalaryStructureComponent implements OnInit {
 }
 
 class SalaryStructureType {
-  TypeName: string = '';
-  MinAmount: string = '';
-  MaxAmount: string = '';
+  SalaryGroupId: number = null;
+  ComponentId: string = null;
+  GroupName: string = null;
+  GroupDescription: string = null;
+  MinAmount: number = null;
+  MaxAmount: number = null;
 }
 
 class CustomSalaryStructure {
