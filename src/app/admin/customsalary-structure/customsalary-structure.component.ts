@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { SalaryComponentFields } from '../salarycomponent-structure/salarycomponent-structure.component';
@@ -26,6 +26,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   ComponentName: string = '';
   OpertaionType: string = '';
   CalculationValue: string = '';
+  submitted: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -39,6 +40,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   saveChanges() {
+    this.submitted = true;
     console.log(this.salaryAndDeduction.value);
   }
 
@@ -51,6 +53,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   initForm() {
     this.salaryAndDeduction = this.fb.group({
+      StructureName: new FormControl (),
       salaryComponents: this.buildFormArray()
     });
   }
@@ -126,7 +129,9 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-
+    this.ComponentName = '0';
+    this.OpertaionType = "0";
+    this.CalculationValue = null;
     this.salaryStructureType = [{
       TypeName: 'Class A',
       MinAmount: 'Rs 0',
@@ -235,6 +240,9 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   updateCalcModel(item: SalaryComponentFields) {
     this.componentFields = item;
+    this.CalculationValue = '',
+    this.OpertaionType = '0',
+    this.ComponentName = '0',
     $('#updateCalculationModal').modal('show');
   }
 

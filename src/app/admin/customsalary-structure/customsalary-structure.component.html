@@ -52,34 +52,34 @@
         </div>
 
         <form [formGroup]="salaryAndDeduction" *ngIf="isReady">
-          <div class="row my-2 px-3 py-2 align-items-center mb-0 pb-0">
-            <ng-container *ngIf="!isEditStructure">
-              <div class="alert alert-primary py-2 mb-0 col-md-8" role="alert">
-                Salary Structure is in read only mode. Click on 'Edit Structure' to make chnages.
-              </div>
-            </ng-container>
-            <ng-container *ngIf="isEditStructure">
-              <div class="alert alert-warning py-2 mb-0 col-md-8" role="alert">
-                Salary Structure is in edit mode. Click on Save to save structure.
-              </div>
-            </ng-container>
-            <div class="col-md-3">
+          <ng-container *ngIf="!isEditStructure">
+            <div class="alert alert-primary my-3 py-2 mb-0 col-md-12" role="alert">
+              Salary Structure is in read only mode. Click on 'Edit Structure' to make chnages.
+            </div>
+          </ng-container>
+          <ng-container *ngIf="isEditStructure">
+            <div class="alert alert-warning my-3 py-2 mb-0 col-md-12" role="alert">
+              Salary Structure is in edit mode. Click on Save to save structure.
+            </div>
+          </ng-container>
+          <div class="row">
+            <div class="col-md-12 mt-3">
               <ng-container *ngIf="!isEditStructure">
-                <button class="btn btn-outline-primary" (click)="editStructure()">Edit Structure</button>
+                <button class="btn btn-outline-primary float-end" (click)="editStructure()">Edit Structure</button>
               </ng-container>
               <ng-container *ngIf="isEditStructure">
                 <button class="btn btn-outline-danger me-2" (click)="cancleEditStructure()">Cancel</button>
                 <button class="btn btn-outline-success" (click)="saveChanges()">Save</button>
               </ng-container>
             </div>
-          </div>
-          <div class="col-md-12 my-3">
-            <label for="" class="form-label">Structure Name</label>
-            <input type="text" [readonly]="!isEditStructure" class="form-control" placeholder="Structure Name">
-          </div>
-          <div class="col-md-12 my-3">
-            <label for="" class="form-label">Description</label>
-            <textarea [readonly]="!isEditStructure" class="form-control" placeholder="Decsription"></textarea>
+            <div class="col-md-6 mb-3">
+              <label for="" class="form-label">Structure Name</label>
+              <input type="text" formControlName="StructureName" [readonly]="!isEditStructure" class="form-control" placeholder="Structure Name">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="" class="form-label">Description</label>
+              <textarea [readonly]="!isEditStructure" class="form-control" placeholder="Decsription"></textarea>
+            </div>
           </div>
           <div class="d-flex justify-content-between mx-1 my-4">
             <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i> Add
@@ -120,7 +120,7 @@
                       </div>
                       <ng-container *ngIf="isEditStructure">
                         <div class="td ps-3">
-                          <div ngbDropdown class="d-inline-block" placement="bottom-end">
+                          <div ngbDropdown class="d-inline-block" placement="right-end">
                             <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
                               <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
                             </button>
@@ -345,7 +345,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="addComponents()">Add</button>
+        <button type="button" class="btn btn-primary-c" (click)="addComponents()"><i class="fa fa-plus pe-2"></i> Add</button>
       </div>
     </div>
   </div>
@@ -374,7 +374,7 @@
           <div class="col-md-4 form-group">
             <label class="form-label">Calculation Type</label>
             <select name="CalculationType" class="form-control" [(ngModel)]="componentFields.CalculateInPercentage">
-              <option value="1">Pick calculation type</option>
+              <option value="" >Pick calculation type</option>
               <option value="2">In percent value</option>
               <option value="3">In fixed value</option>
             </select>
@@ -383,7 +383,7 @@
         <div class="col-md-12 row">
           <div class="col-md-4 form-group">
             <label class="form-label">Component Name</label>
-            <select  class="form-control" (change)="componentName($event)">
+            <select  class="form-control" [(ngModel)]="ComponentName">
               <option value="0">Select Component Name</option>
               <option value="gross">Gross</option>
               <option value="ctc">CTC</option>
@@ -392,7 +392,7 @@
           </div>
           <div class="col-md-4 form-group">
             <label class="form-label">Operator</label>
-            <select  class="form-control" (change)="operationType($event)">
+            <select  class="form-control" [(ngModel)]="OpertaionType">
               <option value="0">Select Operation</option>
               <option value="x">Multiply</option>
               <option value="/">Divide</option>
@@ -403,7 +403,7 @@
           </div>
           <div class="col-md-4 ">
             <label class="form-label">Value</label>
-            <input type="text" class="form-control" [(ngModel)]="CalculationValue" name="CalculationValue" (keyup.enter)="generateFormula()">
+            <input type="text" class="form-control" [(ngModel)]="CalculationValue" name="CalculationValue" (keyup)="generateFormula()">
           </div>
         </div>
         <div class="col-md-12">
