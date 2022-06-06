@@ -29,6 +29,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   CalculationValue: string = '';
   submitted: boolean = false;
   SalaryGroupForm: FormGroup;
+  selectedSalaryStructure: SalaryStructureType = null;
 
   constructor(
     private fb: FormBuilder,
@@ -120,7 +121,9 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.SalaryGroupForm = this.fb.group({
       ComponentId: new FormControl('', [Validators.required]),
       GroupName: new FormControl('', [Validators.required]),
-      GroupDescription: new FormControl('', [Validators.required])
+      GroupDescription: new FormControl('', [Validators.required]),
+      MinAmount: new FormControl(0, [Validators.required]),
+      MaxAmount: new FormControl(0, [Validators.required])
     })
   }
 
@@ -171,12 +174,15 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadData();
+    this.salaryStructureType = [];
+    this.selectedSalaryStructure = new SalaryStructureType();
+    this.isEditStructure = false;
     this.ComponentName = '0';
     this.OpertaionType = "0";
     this.CalculationValue = null;
     this.salaryGroup();
-    this.salaryStructureType = [];
+    this.loadSalaryComponentDetail()
+    this.loadData();
 
     this.customSalaryStructure = [{
       SalaryStructureName: 'Stehphe-II',
@@ -261,18 +267,20 @@ export class CustomsalaryStructureComponent implements OnInit {
   addSalaryGroup() {
     this.isLoading = true;
     this.submitted = true;
-    let value = this.SalaryGroupForm.value;
+    let value:SalaryStructureType = this.SalaryGroupForm.value;
     if (value) {
-      this.http.post("SalaryComponent/AddorUpdateSalaryGroup", value).then ((response:ResponseModel) => {
+      this.http.post("SalaryComponent/AddSalaryGroup", value).then ((response:ResponseModel) => {
         if (response.ResponseBody) {
-          Toast("Salary Group added suuccessfully.")
+          this.salaryStructureType = response.ResponseBody;
+          Toast("Salary Group added suuccessfully.");
+          $('#addSalaryGroupModal').modal('hide');
         } else {
           ErrorToast("Unable to add salary group.")
         }
       })
-    }
+    } else
+      ErrorToast("Please correct all the mandaroty field marded red");
     this.isLoading = false;
-    ErrorToast("Please correct all the mandaroty field marded red");
   }
 
   generateFormula() {
@@ -281,6 +289,15 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   addComponentModal() {
     $('#addComponentModal').modal('show');
+  }
+
+  selectSalaryGroup(item: SalaryStructureType) {
+    this.isEditStructure = false;
+    if (item) {
+      this.selectedSalaryStructure = this.salaryStructureType.find(x => x.ComponentId == item.ComponentId);
+    } else {
+      ErrorToast("Please select salary group.")
+    }
   }
 
   updateCalcModel(item: SalaryComponentFields) {
