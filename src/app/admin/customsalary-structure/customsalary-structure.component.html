@@ -9,14 +9,12 @@
       <app-breadcrums></app-breadcrums>
     </div>
     <div class="col-md-12">
-      <div class="d-flex my-3">
-        <div class="col-md-9 d-flex align-items-center justify-content-center">
-          <div class="progress-step col-md-5 my-2">
-            <div class="custom-progress" id="progressbar"></div>
-            <div class="progress-step-item active" (click)="activePage(1)" data-title="RANGE BASED"></div>
-            <div class="progress-step-item" (click)="activePage(2)" data-title="CUSTOM STRUCTURE"></div>
-            <div class="progress-step-item" (click)="activePage(3)" data-title="DAILY WAGES"></div>
-          </div>
+      <div class="d-flex my-3 ms-2 align-items-center">
+        <div class="progress-step col-md-9 my-2">
+          <div class="custom-progress" id="progressbar"></div>
+          <div class="progress-step-item active" (click)="activePage(1)" data-title="RANGE BASED"></div>
+          <div class="progress-step-item" (click)="activePage(2)" data-title="CUSTOM STRUCTURE"></div>
+          <div class="progress-step-item" (click)="activePage(3)" data-title="DAILY WAGES"></div>
         </div>
         <div class="col-md-3 text-end pe-1">
           <button class="btn btn-outline-primary" [disabled]="ActivatedPage == 1"
@@ -27,28 +25,38 @@
       </div>
       <ng-container *ngIf="ActivatedPage == 1">
         <div class="row mt-5">
-          <div class="col-md-2 my-2" *ngFor="let item of salaryStructureType">
-            <div class="card py-4">
-              <h5 class="text-center">{{item.TypeName}}</h5>
-              <p class="mb-0 text-truncate text-center">{{item.MinAmount}} - {{item.MaxAmount}}</p>
-              <div ngbDropdown class="d-inline-block menu-btn">
-                <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                  <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
-                </button>
-                <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                  <button ngbDropdownItem>
-                    <a class="dropdown-item" href="javascript:void(0)">Split/Create New Range</a>
+          <div class="col-md-12 my-3 me-2">
+            <button class="btn btn-primary-c float-end" (click)="addSalaryGroupModal()"><i class="fa fa-plus pe-2"></i> Add Salary Group</button>
+          </div>
+          <ng-container *ngIf="salaryStructureType.length > 0">
+            <div class="col-md-2 my-2" *ngFor="let item of salaryStructureType">
+              <div class="card py-4">
+                <h5 class="text-center">{{item.TypeName}}</h5>
+                <p class="mb-0 text-truncate text-center">{{item.MinAmount}} - {{item.MaxAmount}}</p>
+                <div ngbDropdown class="d-inline-block menu-btn">
+                  <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
+                    <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
                   </button>
-                  <button ngbDropdownItem>
-                    <a class="dropdown-item" href="javascript:void(0)">Change Upper Limit</a>
-                  </button>
-                  <button ngbDropdownItem>
-                    <a class="dropdown-item" href="javascript:void(0)">Delete Range</a>
-                  </button>
+                  <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                    <button ngbDropdownItem>
+                      <a class="dropdown-item" href="javascript:void(0)">Split/Create New Range</a>
+                    </button>
+                    <button ngbDropdownItem>
+                      <a class="dropdown-item" href="javascript:void(0)">Change Upper Limit</a>
+                    </button>
+                    <button ngbDropdownItem>
+                      <a class="dropdown-item" href="javascript:void(0)">Delete Range</a>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </ng-container>
+          <ng-container *ngIf="salaryStructureType.length == 0">
+            <div class="col-md-12 my-4 py-4 d-flex flex-column justify-content-center text-center">
+              <h4>Please add salary group first.</h4>
+            </div>
+          </ng-container>
         </div>
 
         <form [formGroup]="salaryAndDeduction" *ngIf="isReady">
@@ -148,7 +156,7 @@
 
       </ng-container>
       <ng-container *ngIf="ActivatedPage == 2">
-        <div class="col-md-12 mt-5">
+        <div class="col-md-12 mt-5 pt-3">
           <button class="btn btn-outline-primary" (click)="addSalaryStrutModal()">Create Custom Salary
             Structure</button>
           <div class="col-md-3 float-end">
@@ -212,7 +220,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="ActivatedPage == 3">
-        <div class="col-md-12 mt-5">
+        <div class="col-md-12 mt-5 pt-3">
           <button class="btn btn-outline-primary" (click)="addDailyStrutModal()">Create Custom Daily Structure</button>
           <div class="col-md-3 float-end">
             <div class="form-group has-search">
@@ -686,6 +694,45 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+<!-- Add Salary Group Modal -->
+<div class="modal fade" id="addSalaryGroupModal" tabindex="-1" aria-labelledby="addClassModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title px-4" id="addClassModalLabel">Create Salary Group</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5">
+        <form [formGroup]="SalaryGroupForm">
+          <div class="col-md-12 row m-0 p-0">
+            <div class="col-md-6 mt-2">
+              <label for="" class="form-label">Component Id</label>
+              <input type="text" [ngClass]="{'error-field': submitted && f.ComponentId.errors !== null && f.ComponentId.errors.required}" placeholder="Enter Component Id" formControlName="ComponentId" class="form-control">
+            </div>
+            <div class="col-md-6 mt-2">
+              <label for="" class="form-label">Group Name</label>
+              <input type="text" [ngClass]="{'error-field': submitted && f.GroupName.errors !== null && f.GroupName.errors.required}" placeholder="Enter Group Name" formControlName="GroupName" class="form-control">
+            </div>
+            <div class="col-md-12 mt-3">
+              <label for="" class="form-label">Group Description</label>
+              <textarea type="text" [ngClass]="{'error-field': submitted && f.GroupDescription.errors !== null && f.GroupDescription.errors.required}" placeholder="Enter Group Description" formControlName="GroupDescription" class="form-control"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0 me-3">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-c" (click)="addSalaryGroup()">
+          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                    {{ isLoading ? 'Wait' : 'Create Salary Group' }}
+        </button>
       </div>
     </div>
   </div>

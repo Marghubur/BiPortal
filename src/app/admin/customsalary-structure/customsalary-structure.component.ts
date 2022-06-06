@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { SalaryComponentFields } from '../salarycomponent-structure/salarycomponent-structure.component';
@@ -27,6 +28,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   OpertaionType: string = '';
   CalculationValue: string = '';
   submitted: boolean = false;
+  SalaryGroupForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -37,6 +39,10 @@ export class CustomsalaryStructureComponent implements OnInit {
     let data = this.salaryAndDeduction.get("salaryComponents") as FormArray;
     //console.log(JSON.stringify(data.controls));
     return data;
+  }
+
+  get f() {
+    return this.SalaryGroupForm.controls;
   }
 
   saveChanges() {
@@ -93,6 +99,14 @@ export class CustomsalaryStructureComponent implements OnInit {
     });
   }
 
+  salaryGroup() {
+    this.SalaryGroupForm = this.fb.group({
+      ComponentId: new FormControl('', [Validators.required]),
+      GroupName: new FormControl('', [Validators.required]),
+      GroupDescription: new FormControl('', [Validators.required])
+    })
+  }
+
   loadData() {
     this.http.get("SalaryComponent/GetSalaryComponentsDetail").then(res => {
       if(res.ResponseBody) {
@@ -132,11 +146,10 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.ComponentName = '0';
     this.OpertaionType = "0";
     this.CalculationValue = null;
-    this.salaryStructureType = [{
-      TypeName: 'Class A',
-      MinAmount: 'Rs 0',
-      MaxAmount: 'Rs 400000'
-    }];
+    this.salaryGroup();
+    this.salaryStructureType = [
+
+    ];
 
     this.customSalaryStructure = [{
       SalaryStructureName: 'Stehphe-II',
@@ -218,16 +231,21 @@ export class CustomsalaryStructureComponent implements OnInit {
     }
   }
 
-  componentName(e: any) {
-    let value = e.target.value;
-    if (value)
-      this.ComponentName =value;
-  }
-
-  operationType(e: any) {
-    let value = e.target.value;
-    if (value)
-      this.OpertaionType =value;
+  addSalaryGroup() {
+    this.isLoading = true;
+    this.submitted = true;
+    let value = this.SalaryGroupForm.value;
+    if (value) {
+      this.http.post("SalaryComponent/AddorUpdateSalaryGroup", value).then ((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          Toast("Salary Group added suuccessfully.")
+        } else {
+          ErrorToast("Unable to add salary group.")
+        }
+      })
+    }
+    this.isLoading = false;
+    ErrorToast("Please correct all the mandaroty field marded red");
   }
 
   generateFormula() {
@@ -252,6 +270,10 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   addDailyStrutModal() {
     $('#addDailySalaryModal').modal('show');
+  }
+
+  addSalaryGroupModal() {
+    $('#addSalaryGroupModal').modal('show');
   }
 
   updateValue() {
