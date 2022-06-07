@@ -43,7 +43,8 @@ import { AdminResetPassword, AdminDeclaration,
   CompanyDetail,
   CompanyAccounts,
   SalaryComponentStructure,
-  CustomSalaryStructure
+  CustomSalaryStructure,
+  PayrollComponents
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -90,6 +91,7 @@ import { CompanyDetailComponent } from './company-detail/company-detail.componen
 import { CompanyAccountsComponent } from './company-accounts/company-accounts.component';
 import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
 import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
+import { PayrollComponentsComponent } from './payroll-components/payroll-components.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -137,7 +139,8 @@ const routes: Routes = [
   { path: CompanyAccounts, component: CompanyAccountsComponent},
   { path: AdminTaxcalculation, component: TaxcalculationComponent},
   { path: SalaryComponentStructure, component: SalarycomponentStructureComponent},
-  { path: CustomSalaryStructure, component: CustomsalaryStructureComponent}
+  { path: CustomSalaryStructure, component: CustomsalaryStructureComponent},
+  { path: PayrollComponents, component: PayrollComponentsComponent}
 ];
 
 @NgModule({

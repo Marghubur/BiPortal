@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { SalaryComponentFields } from '../salarycomponent-structure/salarycomponent-structure.component';
@@ -26,6 +27,9 @@ export class CustomsalaryStructureComponent implements OnInit {
   ComponentName: string = '';
   OpertaionType: string = '';
   CalculationValue: string = '';
+  submitted: boolean = false;
+  SalaryGroupForm: FormGroup;
+  selectedSalaryStructure: SalaryStructureType = null;
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +40,10 @@ export class CustomsalaryStructureComponent implements OnInit {
     let data = this.salaryAndDeduction.get("salaryComponents") as FormArray;
     //console.log(JSON.stringify(data.controls));
     return data;
+  }
+
+  get f() {
+    return this.SalaryGroupForm.controls;
   }
 
   saveChanges() {
@@ -70,6 +78,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   initForm() {
     this.salaryAndDeduction = this.fb.group({
+      StructureName: new FormControl (),
       salaryComponents: this.buildFormArray()
     });
   }
@@ -107,6 +116,15 @@ export class CustomsalaryStructureComponent implements OnInit {
       Formula: elem.Formula,
       IsActive: elem.IsActive
     });
+  }
+  salaryGroup() {
+    this.SalaryGroupForm = this.fb.group({
+      ComponentId: new FormControl('', [Validators.required]),
+      GroupName: new FormControl('', [Validators.required]),
+      GroupDescription: new FormControl('', [Validators.required]),
+      MinAmount: new FormControl(0, [Validators.required]),
+      MaxAmount: new FormControl(0, [Validators.required])
+    })
   }
 
   loadSalaryComponentDetail() {
@@ -156,6 +174,14 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.salaryStructureType = [];
+    this.selectedSalaryStructure = new SalaryStructureType();
+    this.isEditStructure = false;
+    this.ComponentName = '0';
+    this.OpertaionType = "0";
+    this.CalculationValue = null;
+    this.salaryGroup();
+    this.loadSalaryComponentDetail()
     this.loadData();
 
     this.customSalaryStructure = [{
@@ -238,16 +264,23 @@ export class CustomsalaryStructureComponent implements OnInit {
     }
   }
 
-  componentName(e: any) {
-    let value = e.target.value;
-    if (value)
-      this.ComponentName =value;
-  }
-
-  operationType(e: any) {
-    let value = e.target.value;
-    if (value)
-      this.OpertaionType =value;
+  addSalaryGroup() {
+    this.isLoading = true;
+    this.submitted = true;
+    let value:SalaryStructureType = this.SalaryGroupForm.value;
+    if (value) {
+      this.http.post("SalaryComponent/AddSalaryGroup", value).then ((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          this.salaryStructureType = response.ResponseBody;
+          Toast("Salary Group added suuccessfully.");
+          $('#addSalaryGroupModal').modal('hide');
+        } else {
+          ErrorToast("Unable to add salary group.")
+        }
+      })
+    } else
+      ErrorToast("Please correct all the mandaroty field marded red");
+    this.isLoading = false;
   }
 
   generateFormula() {
@@ -258,8 +291,20 @@ export class CustomsalaryStructureComponent implements OnInit {
     $('#addComponentModal').modal('show');
   }
 
+  selectSalaryGroup(item: SalaryStructureType) {
+    this.isEditStructure = false;
+    if (item) {
+      this.selectedSalaryStructure = this.salaryStructureType.find(x => x.ComponentId == item.ComponentId);
+    } else {
+      ErrorToast("Please select salary group.")
+    }
+  }
+
   updateCalcModel(item: SalaryComponentFields) {
     this.componentFields = item;
+    this.CalculationValue = '',
+    this.OpertaionType = '0',
+    this.ComponentName = '0',
     $('#updateCalculationModal').modal('show');
   }
 
@@ -269,6 +314,10 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   addDailyStrutModal() {
     $('#addDailySalaryModal').modal('show');
+  }
+
+  addSalaryGroupModal() {
+    $('#addSalaryGroupModal').modal('show');
   }
 
   updateValue() {

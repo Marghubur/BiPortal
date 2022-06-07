@@ -80,6 +80,7 @@ export const AdminResetPassword = 'admin/resetpassword';
 export const AdminIncomeTax = 'admin/incometax';
 export const AdminPaySlip = 'admin/payslip';
 export const AdminNotification = 'admin/notification';
+export const PayrollComponents = 'admin/payrollcomponents';
 export const AdminApprovalRequest = 'admin/request';
 export const Settings = 'admin/settings';
 export const CompanyInfo = 'admin/company-info';
