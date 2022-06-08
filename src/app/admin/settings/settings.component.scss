@@ -6,13 +6,19 @@
   color: whitesmoke;
 }
 
-a.active {
-  background-color: #337ab7!important;
-  color: #eee!important;
+.nav-tabs a {
+  color: #b9b6b6;
+}
 
-  i {
-    color: white !important;
-  }
+.nav-tabs a.active {
+  // background-color: #337ab7!important;
+  // color: #eee!important;
+  font-weight: 500;
+  color: #444 !important;
+
+  // i {
+  //   color: white !important;
+  // }
 }
 
 .h-bg {
