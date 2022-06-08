@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CompanyAccounts, CompanyDetail, CompanyInfo, CompanySettings, CustomSalaryStructure, Payroll, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { organizationModal } from '../company-detail/company-detail.component';
+declare var $: any;
 
 @Component({
   selector: 'app-settings',
@@ -15,6 +17,10 @@ export class SettingsComponent implements OnInit {
   SalaryStructure: string = SalaryComponentStructure;
   CustomSalary: string = CustomSalaryStructure;
   menuItem: any = {};
+  active: number = 1;
+  groupActiveId: number = 1;
+  organization: Array<organizationModal> = [];
+  isLoading: boolean = false;
 
   PayRollPage: string = Payroll
 
@@ -24,12 +30,13 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.menuItem = {
-      CS: true,
-      PR: false,
+      CS: false,
+      PR: true,
       LAH: false,
       EX: false
     }
   }
+
 
   redirectTo(pageName: string) {
     switch(pageName) {
@@ -79,6 +86,14 @@ export class SettingsComponent implements OnInit {
         this.menuItem.EX = true;
         break;
     }
+  }
+
+  openModalToAddNewCompany() {
+    $('#NewComponentModal').modal('show');
+  }
+
+  addNewCompany() {
+
   }
 }
 
