@@ -36,28 +36,28 @@ export class PayrollComponentsComponent implements OnInit {
       ComponentName: new FormControl(''),
       Type: new FormControl(''),
       TaxExempt: new FormControl(''),
-      MaxLimit: new FormControl(''),
+      MaxLimit: new FormControl(0),
       RequireDocs: new FormControl(false),
-      CompoentDescription: new FormControl(''),
+      ComponentDescription: new FormControl(''),
       Section: new FormControl(''),
-      SectionMaxLimit: new FormControl('')
+      SectionMaxLimit: new FormControl(0)
     });
   }
 
   initadhocForm() {
     this.AdhocForm = this.fb.group({
       ComponentName: new FormControl(''),
-      CompoentDescription: new FormControl(''),
+      ComponentDescription: new FormControl(''),
       TaxExempt: new FormControl(''),
       Section: new FormControl(''),
-      SectionMaxLimit: new FormControl('')
+      SectionMaxLimit: new FormControl(0)
     });
   }
 
   initdeductionForm() {
     this.DeductionForm = this.fb.group({
       ComponentName: new FormControl(''),
-      CompoentDescription: new FormControl(''),
+      ComponentDescription: new FormControl(''),
       IsAffectinGross: new FormControl(false)
     });
   }
@@ -65,7 +65,7 @@ export class PayrollComponentsComponent implements OnInit {
   initbonusForm() {
     this.BonusForm = this.fb.group({
       ComponentName: new FormControl(''),
-      CompoentDescription: new FormControl('')
+      ComponentDescription: new FormControl('')
     });
   }
 
@@ -94,9 +94,9 @@ export class PayrollComponentsComponent implements OnInit {
 
   addNewComp() {
     this.isLoading = true;
-    let value = this.NewSalaryForm.value;
+    let value:PayrollComponentsModal = this.NewSalaryForm.value;
     if (value) {
-      this.http.post("", value).then((response:ResponseModel) => {
+      this.http.post("SalaryComponent/AddRecurringComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           Toast("Component added successfully.")
         } else
@@ -110,7 +110,7 @@ export class PayrollComponentsComponent implements OnInit {
     this.isLoading = true;
     let value = this.AdhocForm.value;
     if (value) {
-      this.http.post("", value).then((response:ResponseModel) => {
+      this.http.post("SalaryComponent/AddAdhocComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           Toast("Component added successfully.")
         } else
@@ -124,7 +124,7 @@ export class PayrollComponentsComponent implements OnInit {
     this.isLoading = true;
     let value = this.DeductionForm.value;
     if (value) {
-      this.http.post("", value).then((response:ResponseModel) => {
+      this.http.post("SalaryComponent/AddDeductionComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           Toast("Component added successfully.")
         } else
@@ -138,7 +138,7 @@ export class PayrollComponentsComponent implements OnInit {
     this.isLoading = true;
     let value = this.BonusForm.value;
     if (value) {
-      this.http.post("", value).then((response:ResponseModel) => {
+      this.http.post("SalaryComponent/AddBonusComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           Toast("Component added successfully.")
         } else
@@ -163,8 +163,8 @@ class PayrollComponentsModal {
   TaxExempt: string = null;
   MaxLimit: number = null;
   RequireDocs: boolean = null;
-  CompoentDescription: string = null;
+  ComponentDescription: string = null;
   Section: string = null;
-  SectionMaxLimit: number = null;
+  SectionMaxLimit: number = 0;
   IsAffectinGross: boolean = null;
 }
