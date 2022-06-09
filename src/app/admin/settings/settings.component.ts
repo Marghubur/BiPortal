@@ -30,6 +30,8 @@ export class SettingsComponent implements OnInit {
   model: NgbDateStruct;
   Companys: Array<CompanyGroup> = [];
   CompanyId: number = 0;
+  isPageReady: boolean = false;
+  currentCompnay: CompanyGroup = null;
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -60,7 +62,7 @@ export class SettingsComponent implements OnInit {
         this.nav.navigate(CompanyInfo, this.CompanyId);
         break;
       case Payroll:
-        this.nav.navigate(Payroll, null);
+        this.nav.navigate(Payroll, this.currentCompnay);
         break;
       case CompanyDetail:
         this.nav.navigate(CompanyDetail, this.CompanyId);
@@ -111,11 +113,13 @@ export class SettingsComponent implements OnInit {
   }
 
   loadData() {
+    this.isPageReady = false;
     this.http.get("Company/GetAllCompany").then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.Companys = response.ResponseBody;
         if(this.Companys && this.Companys.length > 0) {
-          this.CompanyId = this.Companys[0].CompanyId;
+          this.currentCompnay = this.Companys[0];
+          this.CompanyId = this.currentCompnay.CompanyId;
           Toast("Compnay list loaded successfully");
         } else {
           Toast("No compnay found under current organization. Please add one.");
@@ -123,16 +127,16 @@ export class SettingsComponent implements OnInit {
       } else {
         ErrorToast("Record not found.")
       }
+      this.isPageReady = true;
     })
   }
 
   initForm() {
     this.companyGroupForm = this.fb.group({
-      CompanyId: new FormControl(0),
-      OrganizationName: new FormControl('', [Validators.required]),
-      CompanyName: new FormControl('', [Validators.required]),
-      CompanyDetail: new FormControl('', [Validators.required]),
-      InCorporationDate: new FormControl('', [Validators.required])
+      OrganizationName: new FormControl(''),
+      CompanyName: new FormControl(''),
+      CompanyDetail: new FormControl(''),
+      InCorporationDate: new FormControl('')
     })
   }
 
@@ -158,16 +162,10 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  changeTab(index: number, id: number) {
-    $('#loader').modal('show');
-    setTimeout(() => {
-      this.newChangeMthod(index, id);
-    }, 1000);
-
-  }
-
-  newChangeMthod(index: number, id: number) {
-    if(index >= 0 && id > 0) {
+  changeTab(index: number, item: CompanyGroup) {
+    this.isPageReady = false;
+    this.currentCompnay = this.Companys[0];
+    if(index >= 0 &&  item.CompanyId > 0) {
       let result = document.querySelectorAll('.list-group-item > a');
       let i = 0;
       while (i < result.length) {
@@ -175,11 +173,11 @@ export class SettingsComponent implements OnInit {
         i++;
       }
       result[index].classList.add('active-tab');
-      this.CompanyId = id;
+      this.CompanyId =  item.CompanyId;
+      this.isPageReady = true;
     } else {
       ErrorToast("Please select a company.")
     }
-    $('#loader').modal('hide');
   }
 }
 

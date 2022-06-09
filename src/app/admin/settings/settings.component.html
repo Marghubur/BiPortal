@@ -55,13 +55,24 @@
                           <ng-container *ngFor="let item of Companys; let i =index">
                             <li
                               class="list-group-item border-0 p-0 my-2 d-flex justify-content-between align-items-start">
-                              <a href="javascript:void(0)" (click)="changeTab(i, item.CompanyId)"
+                              <a href="javascript:void(0)" (click)="changeTab(i, item)"
                                 [ngClass]="{'active-tab': i == 0}"
                                 class="d-block w-100 px-3 text-decoration-none text-dark">
                                 <div class="d-flex flex-row w-100 justify-content-between">
                                   <div class="ms-2 col-md-8 me-auto py-4">
-                                    <div class="fw-bold fs-6">{{item.OrganizationName}}</div>
-                                    {{item.CompanyName}}
+                                    <div class="fw-bold fs-6">{{item.CompanyName}}</div>
+                                    <ng-container *ngIf="item.FullAddress == null">
+                                      <div class="row">
+                                        <div class="col-md-2">Addr.:</div>
+                                        <div class="col-md-10 ps-3">NA</div>
+                                      </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="item.FullAddress != null">
+                                      <div class="row">
+                                        <div class="col-md-2">Addr.:</div>
+                                        <div class="col-md-10 ps-3">{{item.FullAddress | slice: 0:43}}...</div>
+                                      </div>
+                                    </ng-container>
                                   </div>
                                   <div class="col-md-3 d-flex flex-column justify-content-center">
                                     <p class="mb-0">0</p>
@@ -76,7 +87,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-9 col-sm-12 pe-0">
+                <div class="col-md-9 col-sm-12 pe-0" [ngClass]="{'preload': !isPageReady}">
                   <ng-container>
                     <div class="x_panel">
                       <div class="x_header">
@@ -100,8 +111,8 @@
                                         </p>
                                       </div>
                                       <div class="col-md-12 mt-4">
-                                        <div class="row m-0">
-                                          <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="row m-0 skeleton">
+                                          <div class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
                                             <div class="d-flex flex-row justify-content-center">
                                               <div>
                                                 <div
@@ -112,7 +123,7 @@
                                               </div>
                                             </div>
                                           </div>
-                                          <div class=" col-md-10 h-bg py-3">
+                                          <div class="vhide col-md-10 h-bg py-3">
                                             <div class="d-flex flex-row w-100 justify-content-between">
                                               <div class="ms-2 fe-4 me-auto py-4">
                                                 <a href="javascript:void(0)" class="text-decoration-none"
@@ -132,8 +143,8 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="row m-0">
-                                          <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="row m-0 skeleton">
+                                          <div class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
                                             <div class="d-flex flex-row justify-content-center">
                                               <div>
                                                 <div
@@ -144,7 +155,7 @@
                                               </div>
                                             </div>
                                           </div>
-                                          <div class="col-md-10 h-bg py-3">
+                                          <div class="col-md-10 h-bg py-3 vhide">
                                             <div class="d-flex flex-row w-100 justify-content-between">
                                               <div class="ms-2 fe-4 me-auto py-4">
                                                 <a href="javascript:void(0)" (click)="redirectTo(PayRollPage)"
@@ -163,8 +174,8 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="row m-0">
-                                          <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="row m-0 skeleton">
+                                          <div class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
                                             <div class="d-flex flex-row justify-content-center">
                                               <div>
                                                 <div
@@ -175,7 +186,7 @@
                                               </div>
                                             </div>
                                           </div>
-                                          <div class="col-md-10 h-bg py-3">
+                                          <div class="col-md-10 vhide h-bg py-3">
                                             <div class="d-flex flex-row w-100 justify-content-between">
                                               <div class="ms-2 fe-4 me-auto py-4">
                                                 <a href="javascript:void(0)" (click)="redirectTo(PfNEsiPage)"
@@ -194,8 +205,8 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="row m-0">
-                                          <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="row m-0 skeleton">
+                                          <div class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
                                             <div class="d-flex flex-row justify-content-center">
                                               <div>
                                                 <div
@@ -206,7 +217,7 @@
                                               </div>
                                             </div>
                                           </div>
-                                          <div class="col-md-10 h-bg py-3">
+                                          <div class="col-md-10 vhide h-bg py-3">
                                             <div class="d-flex flex-row w-100 justify-content-between">
                                               <div class="ms-2 fe-4 me-auto py-4">
                                                 <a href="javascript:void(0)" class="text-decoration-none"
@@ -225,8 +236,8 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="row m-0">
-                                          <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="row m-0 skeleton">
+                                          <div class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
                                             <div class="d-flex flex-row justify-content-center">
                                               <div>
                                                 <div
@@ -237,7 +248,7 @@
                                               </div>
                                             </div>
                                           </div>
-                                          <div class="col-md-10 h-bg py-3">
+                                          <div class="col-md-10 vhide h-bg py-3">
                                             <div class="d-flex flex-row w-100 justify-content-between">
                                               <div class="ms-2 fe-4 me-auto py-4">
                                                 <a href="javascript:void(0)" class="text-decoration-none"
@@ -264,7 +275,7 @@
                                 </ng-container>
                                 <ng-container *ngIf="Companys.length == 0">
                                   <div
-                                    class="col-md-12 my-4 py-4 d-flex flex-column justify-content-center text-center">
+                                    class="col-md-12 x_panel border-0 d-flex flex-column justify-content-center text-center">
                                     <h4>Please add salary group first.</h4>
                                   </div>
                                 </ng-container>
@@ -455,7 +466,6 @@
             <h5 class="modal-title" id="NewCompanyModalLabel">ADD NEW COMPANY GROUP</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-
           <div class="modal-body">
             <form [formGroup]="companyGroupForm">
               <div class="row col-md-12">
@@ -463,13 +473,13 @@
                   <label for="" class="form-label">ORGANIZATION NAME</label>
                   <input
                     [ngClass]="{'error-field': submitted && f.OrganizationName.errors !== null && f.OrganizationName.errors.required}"
-                    formControlName="OrganizationName" type="text" placeholder="Organization Name" class="form-control">
+                    formControlName="OrganizationName" transform="upper" type="text" placeholder="Organization Name" class="form-control">
                 </div>
                 <div class="col-md-6 mt-3">
                   <label for="" class="form-label">COMPANY NAME</label>
                   <input
                     [ngClass]="{'error-field': submitted && f.CompanyName.errors !== null && f.CompanyName.errors.required}"
-                    formControlName="CompanyName" type="text" placeholder="Company Name" class="form-control">
+                    formControlName="CompanyName" transform="upper" type="text" placeholder="Company Name" class="form-control">
                 </div>
               </div>
               <div class="row col-md-12">
@@ -488,7 +498,6 @@
                     <div class="col-12">
                       <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)"
-                          [ngClass]="{'error-field': submitted && f.DateOfIncorporation.errors !== null && f.DateOfIncorporation.errors.required}"
                           name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
                         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
                             class="fa fa-calendar"></i></button>
@@ -511,17 +520,5 @@
     </div>
     <!-- End -->
 
-  </div>
-</div>
-
-<!-- Loader -->
-<div class="modal fade" id="loader" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body modal-container f-12 text-center cog-wheel">
-        <img src="assets/images/cog.gif" alt="">
-        <h6 class="modal-title title-message">Please Wait ........</h6>
-      </div>
-    </div>
   </div>
 </div>
