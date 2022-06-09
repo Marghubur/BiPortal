@@ -114,8 +114,12 @@ export class SettingsComponent implements OnInit {
     this.http.get("Company/GetAllCompany").then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.Companys = response.ResponseBody;
-        this.CompanyId = this.Companys[0].CompanyId;
-        Toast("Record found.");
+        if(this.Companys && this.Companys.length > 0) {
+          this.CompanyId = this.Companys[0].CompanyId;
+          Toast("Compnay list loaded successfully");
+        } else {
+          Toast("No compnay found under current organization. Please add one.");
+        }
       } else {
         ErrorToast("Record not found.")
       }
@@ -147,9 +151,11 @@ export class SettingsComponent implements OnInit {
         }
         else
           ErrorToast("Fail to add company group. Please contact to admin.");
+
+        this.submitted = false;
+        this.isLoading = false;
       });
     }
-    this.isLoading = false;
   }
 
   changeTab(index: number, id: number) {
