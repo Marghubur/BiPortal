@@ -7,6 +7,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DateFormatter } from 'src/providers/DateFormatter';
 import { organizationAccountModal } from '../company-accounts/company-accounts.component';
 import { Files } from '../documents/documents.component';
+import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
 @Component({
@@ -28,11 +29,12 @@ export class CompanyInfoComponent implements OnInit {
   FileDocuments: Array<any> = [];
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
-  organizationId: number = 0;
+  CompanyId: number = 0;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
-              private dateFormat: DateFormatter) { }
+              private dateFormat: DateFormatter,
+              private nav: iNavigation) { }
 
   get f () {
     return this.companyInformationForm.controls;
@@ -41,32 +43,34 @@ export class CompanyInfoComponent implements OnInit {
   ngOnInit(): void {
     this.ActivatedPage = 1;
     this.companyInformation = new CompanyInformationClass();
-    this.initForm();
     this.companyInformation.LegalEntity = '';
-    this.loadData();
+    let data = this.nav.getValue();
+    if (data > 0) {
+      this.CompanyId = data;
+      this.initForm();
+      this.loadData();
+    } else {
+      ErrorToast("Select company first.")
+    }
   }
 
   loadData() {
-    this.organizationId = 0;
-    this.http.get("Settings/GetOrganizationInfo").then((response: ResponseModel) => {
+    this.http.get(`Company/GetCompanyById/${this.CompanyId}`).then((response: ResponseModel) => {
       if (response.ResponseBody ) {
         Toast("Record found.")
-        this.OrganizationDetails = response.ResponseBody;
-        if (this.OrganizationDetails.length == 1) {
-          this.companyInformation = this.OrganizationDetails[0];
-          this.organizationId = this.companyInformation.OrganizationId;
-          let date = new Date(this.companyInformation.InCorporationDate);
-          this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-          this.initForm();
-          this.findBankDetails();
-        }
+        this.companyInformation = response.ResponseBody;
+        this.CompanyId = this.companyInformation.CompanyId;
+        let date = new Date(this.companyInformation.InCorporationDate);
+        this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        this.initForm();
+        this.findBankDetails();
       }
     })
   }
 
   initForm() {
     this.companyInformationForm = this.fb.group({
-      OrganizationId: new FormControl(this.companyInformation.OrganizationId),
+      CompanyId: new FormControl(this.companyInformation.CompanyId),
       LegalEntity: new FormControl(this.companyInformation.LegalEntity),
       Signature: new FormControl(this.companyInformation.Signature),
       LegalNameOfCompany: new FormControl(this.companyInformation.LegalNameOfCompany, [Validators.required]),
@@ -78,21 +82,21 @@ export class CompanyInfoComponent implements OnInit {
     })
   }
 
-  findCompany(e: any) {
-    let value = e.target.value;
-    this.organizationId = 0;
-    this.companyInformation = new CompanyInformationClass();
-    if (value  != '0') {
-      this.companyInformation = this.OrganizationDetails.find (x => x.OrganizationId == value);
-      this.organizationId = this.companyInformation.OrganizationId;
-      let date = new Date(this.companyInformation.InCorporationDate)
-      this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-    } else {
-      ErrorToast("Please select organization.")
-    }
-    this.initForm();
-    this.findBankDetails();
-  }
+  // findCompany(e: any) {
+  //   let value = e.target.value;
+  //   this.CompanyId = 0;
+  //   this.companyInformation = new CompanyInformationClass();
+  //   if (value  != '0') {
+  //     this.companyInformation = this.OrganizationDetails.find (x => x.CompanyId == value);
+  //     this.CompanyId = this.companyInformation.CompanyId;
+  //     let date = new Date(this.companyInformation.InCorporationDate)
+  //     this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+  //   } else {
+  //     ErrorToast("Please select organization.")
+  //   }
+  //   this.initForm();
+  //   this.findBankDetails();
+  // }
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
@@ -100,8 +104,8 @@ export class CompanyInfoComponent implements OnInit {
   }
 
   findBankDetails() {
-    if (this.companyInformation.OrganizationId > 0) {
-      this.http.get(`Settings/GetOrganizationAccountsInfo/${this.organizationId}`).then((response:ResponseModel) => {
+    if (this.companyInformation.CompanyId > 0) {
+      this.http.get(`Settings/GetOrganizationAccountsInfo/${this.CompanyId}`).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.BankDetails = response.ResponseBody;
           Toast("Record found.")
@@ -196,9 +200,9 @@ export class CompanyInfoComponent implements OnInit {
   updateDetail() {
     this.submitted = true;
     let request:CompanyInformationClass = this.companyInformationForm.value;
-    if (request.OrganizationId <= 0)
+    if (request.CompanyId <= 0)
       ErrorToast("Invalid Organization");
-    let value = this.OrganizationDetails.find (x => x.OrganizationId == request.OrganizationId);
+    let value = this.companyInformation;
     value.LegalEntity = request.LegalEntity;
     value.LegalNameOfCompany = request.LegalNameOfCompany;
     value.TypeOfBusiness = request.TypeOfBusiness;
@@ -213,9 +217,13 @@ export class CompanyInfoComponent implements OnInit {
         i++;
       }
     }
-    this.http.post("Settings/InsertUpdateCompanyDetail", formData)
+    this.http.post("Company/UpdateCompanyDetails", formData)
     .then(res => {
       if(res.ResponseBody) {
+        this.companyInformation = res.ResponseBody;
+        let date = new Date(this.companyInformation.InCorporationDate);
+        this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        this.initForm();
         Toast("Detail inserted/updated successfully.");
       }
     });
@@ -229,5 +237,6 @@ class CompanyInformationClass {
   TypeOfBusiness: string = '';
   InCorporationDate: Date = null;
   FullAddress: string = '';
-  OrganizationId: number = 0;
+  CompanyId: number = 0;
+  CompanyName: string = '';
 }

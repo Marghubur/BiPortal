@@ -21,7 +21,7 @@ export class CompanyDetailComponent implements OnInit {
   profileURL: string = UserImage;
   fileDetail: Array<any> = [];
   UserTypeId: UserType= UserType.Client;
-  organizationId: number = 0;
+  CompanyId: number = 0;
   singleOrganization: any = null;
 
   constructor(private http: AjaxService,
@@ -30,14 +30,15 @@ export class CompanyDetailComponent implements OnInit {
     private nav: iNavigation
   ) { }
 
-  // ngOnDestroy() {
-  //   this.nav.resetValue();
-  // }
-
   ngOnInit(): void {
     this.organizationModal = new organizationModal();
-    this.loadData();
-    this.organizationId = 0;
+    let data = this.nav.getValue();
+    if (data > 0) {
+      this.CompanyId = data;
+      this.loadData();
+    } else {
+      ErrorToast("Please select a company.")
+    }
   }
 
   buildProfileImage(fileDetail: any) {
@@ -46,16 +47,14 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get("Settings/GetOrganizationInfo").then((response: ResponseModel) => {
-      if(response.ResponseBody && response.ResponseBody.length === 1) {
-          this.organizationModal = response.ResponseBody[0];
+    this.http.get(`Company/GetCompanyById/${this.CompanyId}`).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+          this.organizationModal = response.ResponseBody;
           this.singleOrganization = this.organizationModal;
+          this.initForm();
       } else {
-        this.organizationModal = new organizationModal;
-        this.organizationModal.OrganizationName = "Select Organization";
+        ErrorToast("Fail to get the data.")
       }
-
-      this.initForm();
       this.isLoaded = true;
     });
   }
@@ -67,8 +66,8 @@ export class CompanyDetailComponent implements OnInit {
 
   initForm() {
     this.organizationForm = this.fb.group({
-      OrganizationId: new FormControl(this.organizationModal.OrganizationId),
-      OrganizationName: new FormControl(this.organizationModal.OrganizationName, [Validators.required]),
+      CompanyId: new FormControl(this.organizationModal.CompanyId),
+      CompanyName: new FormControl(this.organizationModal.CompanyName, [Validators.required]),
       MobileNo: new FormControl(this.organizationModal.MobileNo),
       PrimaryPhoneNo: new FormControl(this.organizationModal.PrimaryPhoneNo),
       SecondaryPhoneNo: new FormControl(this.organizationModal.SecondaryPhoneNo),
@@ -98,7 +97,7 @@ export class CompanyDetailComponent implements OnInit {
     this.isLoading = true;
     let errroCounter = 0;
 
-    if (this.organizationForm.get("OrganizationName").value === "")
+    if (this.organizationForm.get("CompanyName").value === "")
       errroCounter++;
 
     if (this.organizationForm.get("FileId").value == null)
@@ -120,13 +119,15 @@ export class CompanyDetailComponent implements OnInit {
       request.TypeOfBusiness = this.singleOrganization.TypeOfBusiness;
       request.InCorporationDateb = this.singleOrganization.InCorporationDateb;
       request.FullAddress =this.singleOrganization.FullAddress;
+      request.OrganizationName = this.singleOrganization.OrganizationName;
+      request.CompanyDetail = this.singleOrganization.CompanyDetail;
       let formData = new FormData()
       formData.append("CompanyInfo", JSON.stringify(request));
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
       formData.append('CompanyLogo', file)
-      this.http.post("Settings/InsertUpdateCompanyDetail", formData).then((response: ResponseModel) => {
+      this.http.post("Company/UpdateCompanyDetails", formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.organizationModal = response.ResponseBody as organizationModal;
           this.initForm();
@@ -173,6 +174,8 @@ export class CompanyDetailComponent implements OnInit {
 export class organizationModal {
   OrganizationId: number = 0;
   OrganizationName: string = null;
+  CompanyId: number  =0;
+  CompanyName: string = '';
   MobileNo: string = null;
   PrimaryPhoneNo: string = null;
   SecondaryPhoneNo: string = null;
@@ -195,4 +198,5 @@ export class organizationModal {
   AdminId: number = 0
   IsActive: boolean = false;
   FileId: number = 0;
+  CompanyDetail: string = '';
 }

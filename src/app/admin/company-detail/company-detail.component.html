@@ -15,7 +15,7 @@
           <app-breadcrums></app-breadcrums>
         </div>
         <div class="x_content mt-4" *ngIf="isLoaded">
-          <div>{{organizationModal.OrganizationName}}</div>
+          <div>{{organizationModal.CompanyName}}</div>
           <form [formGroup]="organizationForm" autocomplete="off" class="col-md-12 row">
             <div class="mb-5">
               <div class="col-12 row m-0">
@@ -37,10 +37,10 @@
                 <div class="col-md-8 p-0">
                   <div class="col-md-12 row">
                     <div class="col-md-4">
-                      <label class="form-label">Organization Name *</label>
-                      <input placeholder="Organization name" class="form-control" name="OrganizationName" transform="upper"
-                        formControlName="OrganizationName"
-                        [ngClass]="{'error-field': submitted && f.OrganizationName.errors !== null && f.OrganizationName.errors.required}" />
+                      <label class="form-label">Company Name *</label>
+                      <input placeholder="Organization name" class="form-control" name="CompanyName" transform="upper"
+                        formControlName="CompanyName"
+                        [ngClass]="{'error-field': submitted && f.CompanyName.errors !== null && f.CompanyName.errors.required}" />
                     </div>
                     <div class="col-md-4">
                       <label class="form-label">Primary No.# *</label>
