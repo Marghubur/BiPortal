@@ -8,10 +8,10 @@ export class TransformDirective {
 
   @Input() transform;
 
-  @HostListener('keydown', ['$event']) onKeyUp(e) {
+  @HostListener('keyup', ['$event']) onKeyUp(e) {
     if (this.transform === 'upper')
       e.target.value = e.target.value.toUpperCase();
-    else if(this.transform === 'lower') 
+    else if(this.transform === 'lower')
       e.target.value = e.target.value.toLowerCase();
     else
       e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
