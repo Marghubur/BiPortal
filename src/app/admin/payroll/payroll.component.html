@@ -19,138 +19,127 @@
           <button class="float-end btn btn-outline-success" (click)="saveSettingModelOpen()"><i
               class="fa fa-cog pe-2"></i>Save</button>
         </h4>
-        <form [formGroup]="payrollForm">
-          <div class="card bg-light p-3">
-            <div class="row px-2 py-2">
-              <div class="col-md-3">
-                <label for="" class="form-label fs-6">Pay Frequency</label>
-              </div>
-              <div class="col-md-3">
-                <select class="form-select" formControlName="PayFrequency">
-                  <option value="0">Select</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="daily">Daily</option>
-                  <option value="hourly">Hourly</option>
-                </select>
-              </div>
-            </div>
-            <div class="row px-2 py-2">
-              <div class="col-md-3">
-                <label for="" class="form-label fs-6">Which pay cycle do you want to start using HiringBell for
-                  Payroll</label>
-              </div>
-              <div class="col-md-3">
-                <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth">
-                  <option value="0">Select</option>
-                  <option *ngFor="let i of months" [value]="i">{{i}}</option>
-                </select>
-              </div>
-              <div class="col">
-                <a href="javascript:void(0)" class="text-decoration-none fw-bold">cancel</a>
-              </div>
-            </div>
-            <div class="row px-2 py-2">
-              <div class="col-md-3">
-                <label for="" class="form-label fs-6">Which day did the pay period end in {{payPeriodMonth}}</label>
-              </div>
-              <div class="col-md-3">
-                <select class="form-select" formControlName="PayPeriodEnd">
-                  <option value="0">Select date.</option>
-                  <ng-container *ngIf="enableDays">
-                    <option *ngFor="let day of days" [value]="day.value">{{day.text}}</option>
-                  </ng-container>
-                </select>
-              </div>
-            </div>
-            <div class="row px-2 py-2">
-              <div class="col-md-3">
-                <label for="" class="form-label fs-6">The pay day for the period is {{payPeriodMonth}} {{payPeriodDate}}
-                  -
-                  {{nextMonth}} {{payPeriodDate}}</label>
-              </div>
-              <div class="col-md-3">
-                <select class="form-select" formControlName="PayDayPeriod">
-                  <option value="0">Select a Pay day for the period</option>
-                  <option value="Sunday">Sunday</option>
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thusday">Thusday</option>
-                  <option value="Friday">Friday</option>
-                  <option value="Saturday">Saturday</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <h4 class="fw-bold text-dark my-3 px-2 py-3">
-            <span>PAYROLL PERIOD CALCULATION</span>
-          </h4>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="card bg-light p-3">
-                <div class="row px-2 py-2">
-                  <div class="col-md-4">
-                    <label for="" class="form-label fs-6">Pay Day in a month</label>
-                  </div>
-                  <div class="col-md-3">
-                    <select class="form-select" formControlName="PayDayinMonth">
-                      <option value="0">Select working days</option>
-                      <option value="1">Actual Days in month</option>
-                      <option value="2">30</option>
-                    </select>
-                  </div>
+
+        <ng-container *ngIf="isReady">
+          <form [formGroup]="payrollForm">
+            <div class="card bg-light p-3">
+              <div class="row px-2 py-2">
+                <div class="col-md-3">
+                  <label for="" class="form-label fs-6">Pay Frequency</label>
                 </div>
-                <div class="row px-2 py-2">
-                  <div class="col-md-4">
-                    <label for="" class="form-label fs-6">Exclude Weekly offs</label>
-                  </div>
-                  <div class="col-md-3">
-                    <input class="form-check-input" value="true" formControlName="IsExcludeWeekly" type="radio"
-                      name="IsExcludeWeekly" id="IsExcludeWeekly1">
-                    <label class="form-check-label ps-2" for="IsExcludeWeekly1">
-                      Yes
-                    </label>
-                    <input class="form-check-input ms-4" value="false" formControlName="IsExcludeWeekly" type="radio"
-                      name="IsExcludeWeekly" id="IsExcludeWeekly1">
-                    <label class="form-check-label ps-2" for="IsExcludeWeekly1">
-                      No
-                    </label>
-                  </div>
+                <div class="col-md-3">
+                  <select class="form-select" formControlName="PayFrequency">
+                    <option value="0">Select</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="daily">Daily</option>
+                    <option value="hourly">Hourly</option>
+                  </select>
                 </div>
-                <div class="row px-2 py-2">
-                  <div class="col-md-4">
-                    <label for="" class="form-label fs-6">Exclude Holidays</label>
-                  </div>
-                  <div class="col-md-3">
-                    <input class="form-check-input" value="true" formControlName="IsExcludeHoliday" type="radio"
-                      name="IsExcludeHoliday" id="IsExcludeHoliday1">
-                    <label class="form-check-label ps-2" for="IsExcludeHoliday1">
-                      Yes
-                    </label>
-                    <input class="form-check-input ms-4" value="false" formControlName="IsExcludeHoliday" type="radio"
-                      name="IsExcludeHoliday" id="IsExcludeHoliday1">
-                    <label class="form-check-label ps-2" for="IsExcludeHoliday1">
-                      No
-                    </label>
-                  </div>
+              </div>
+              <div class="row px-2 py-2">
+                <div class="col-md-3">
+                  <label for="" class="form-label fs-6">Which pay cycle do you want to start using HiringBell for
+                    Payroll</label>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth">
+                    <option value="0">Select</option>
+                    <option *ngFor="let mon of months;let i = index;" [value]="i + 1">{{mon}}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <a href="javascript:void(0)" class="text-decoration-none fw-bold">cancel</a>
+                </div>
+              </div>
+              <div class="row px-2 py-2">
+                <div class="col-md-3">
+                  <label for="" class="form-label fs-6">Which day did the pay period end in {{payPeriodMonth}}</label>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select" formControlName="PayCycleDayOfMonth">
+                    <option value="0">Select date</option>
+                    <ng-container *ngIf="enableDays">
+                      <option *ngFor="let day of days" [value]="day.value">{{day.text}}</option>
+                    </ng-container>
+                  </select>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 pb-3">
-              <h4 class="text-dark">NOTE:</h4>
-              <p class="mb-0">Calculation of number of days for a given pay period has significant impact when deducting
-                salary for Loss of Pay due to Leave or other reason.</p>
-              <p class="mb-0">Ex: Loss of Pay for 1 day for an employee salary is Rs 30,000/month is calculated as
-                below.</p>
-              <p class="mb-0 pt-2">Loss of Pay when days = 30</p>
-              <p class="mb-0 pb-2">-> Rs 30,000/30 = Rs 1000</p>
-              <p class="mb-0">Loss of Pay when days are calculated excluding Weekends</p>
-              <p class="mb-0">Let's say there are 8 Saturday & Sunday in month.</p>
-              <p class="mb-0">Effective days = 30 - 8 = 22 days</p>
-              <p class="mb-0">Loss of Pay = Rs 30,000 = Rs 1364.</p>
+            <h4 class="fw-bold text-dark my-3 px-2 py-3">
+              <span>PAYROLL PERIOD CALCULATION</span>
+            </h4>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card bg-light p-3">
+                  <div class="row px-2 py-2">
+                    <div class="col-md-4">
+                      <label for="" class="form-label fs-6">Payment type</label>
+                    </div>
+                    <div class="col-md-3">
+                      <select class="form-select" formControlName="PayCalculationId">
+                        <option value="0">Select payment type</option>
+                        <option value="1">Actual Days in month</option>
+                        <option value="2">Weekday only</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row px-2 py-2">
+                    <div class="col-md-4">
+                      <label for="" class="form-label fs-6">Exclude Weekly offs</label>
+                    </div>
+                    <div class="col-md-3">
+                      <input class="form-check-input" value="true" formControlName="IsExcludeWeeklyOffs" type="radio"
+                        name="IsExcludeWeeklyOffs">
+                      <label class="form-check-label ps-2" for="IsExcludeWeeklyOffs">
+                        Yes
+                      </label>
+                      <input class="form-check-input ms-4" value="false" formControlName="IsExcludeWeeklyOffs"
+                        type="radio" name="IsExcludeWeeklyOffs">
+                      <label class="form-check-label ps-2" for="IsExcludeWeeklyOffs">
+                        No
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row px-2 py-2">
+                    <div class="col-md-4">
+                      <label for="" class="form-label fs-6">Exclude Holidays</label>
+                    </div>
+                    <div class="col-md-3">
+                      <input class="form-check-input" value="true" formControlName="IsExcludeHolidays" type="radio"
+                        name="IsExcludeHolidays">
+                      <label class="form-check-label ps-2" for="IsExcludeHolidays">
+                        Yes
+                      </label>
+                      <input class="form-check-input ms-4" value="false" formControlName="IsExcludeHolidays"
+                        type="radio" name="IsExcludeHolidays">
+                      <label class="form-check-label ps-2" for="IsExcludeHolidays">
+                        No
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 pb-3">
+                <h4 class="text-dark">NOTE:</h4>
+                <p class="mb-0">Calculation of number of days for a given pay period has significant impact when
+                  deducting
+                  salary for Loss of Pay due to Leave or other reason.</p>
+                <p class="mb-0">Ex: Loss of Pay for 1 day for an employee salary is Rs 30,000/month is calculated as
+                  below.</p>
+                <p class="mb-0 pt-2">Loss of Pay when days = 30</p>
+                <p class="mb-0 pb-2">-> Rs 30,000/30 = Rs 1000</p>
+                <p class="mb-0">Loss of Pay when days are calculated excluding Weekends</p>
+                <p class="mb-0">Let's say there are 8 Saturday & Sunday in month.</p>
+                <p class="mb-0">Effective days = 30 - 8 = 22 days</p>
+                <p class="mb-0">Loss of Pay = Rs 30,000 = Rs 1364.</p>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </ng-container>
+        <ng-container *ngIf="!isReady">
+          <div>Fail to get current company payroll detail. Please contact to admin.</div>
+        </ng-container>
+
       </div>
     </form>
   </div>
