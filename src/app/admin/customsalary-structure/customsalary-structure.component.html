@@ -123,7 +123,7 @@
                     <div class="tr py-2" *ngFor="let item of components.controls; let i = index">
                       <ng-container [formGroupName]="i">
                         <div class="td ps-3 text-truncate">
-                          {{item.get("ComponentDescription").value}}
+                          {{item.get("ComponentId").value}}
                         </div>
                         <div class="td ps-3 text-truncate">
                           {{item.get("Formula").value}}
@@ -334,7 +334,7 @@
           <div class="t-body custom-height">
             <div class="tr py-2" *ngFor="let item of salaryComponentFields">
               <div class="td ps-3 text-truncate">
-                {{item.ComponentDescription}}
+                {{item.ComponentId}}
               </div>
               <div class="td ps-3 text-truncate">
                 {{item.Type}}
@@ -368,7 +368,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="updateCalculationModalLabel">Component [{{componentFields.ComponentDescription}}]
+        <h5 class="modal-title" id="updateCalculationModalLabel">Component [{{componentFields.ComponentId}}]
           Update
           Calculation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -377,7 +377,7 @@
         <div class="row">
           <div class="col-md-8">
             <div class="d-flex">
-              <h5 class="form-label">Components Name : {{componentFields.ComponentDescription}}</h5>
+              <h5 class="form-label">Components Name : {{componentFields.ComponentId}}</h5>
             </div>
             <label>Normanlly it would lie between 40 to 50 percent of the CTC salary.</label>
           </div>
@@ -419,7 +419,7 @@
         <div class="col-md-12">
           <div class="col-md-12 form-group mt-3">
             <label for="" class="form-label">Formula</label>
-            <div class="border">
+            <div class="border form-control">
               <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
             </div>
           </div>

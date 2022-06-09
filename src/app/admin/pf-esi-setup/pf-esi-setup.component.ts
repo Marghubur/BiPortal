@@ -69,13 +69,30 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
       };
     }
 
-    let employeeAmount = 0;
-    if(esiData.EmployeeContribution)
-      employeeAmount = esiData.Amount;
+    // let employeeAmount = 0;
+    // if(esiData.EmployeeContribution)
+    //   employeeAmount = esiData.Amount;
 
-    let employerAmount = 0;
-    if(esiData.EmployerContribution)
-      employerAmount = esiData.Amount;
+    // let employerAmount = 0;
+    // if(esiData.EmployerContribution)
+    //   employerAmount = esiData.Amount;
+
+    if (pfData ==null) {
+      pfData = new Ipfesi();
+      pfData.IsActive = false;
+      pfData.CalculateInPercentage = false;
+      pfData.EmployerContribution = 0;
+      pfData.IncludeInPayslip = false;
+    }
+
+    if (esiData ==null) {
+      esiData = new Ipfesi();
+      esiData.IsActive = false;
+      esiData.MaxLimit = 0;
+      esiData.EmployeeContribution = 0;
+      esiData.EmployerContribution = 0;
+      esiData.IncludeInPayslip = false;
+    }
 
     if (pfesidata ==null)
         pfesidata = new pfesisetting();
@@ -91,7 +108,7 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
       IsPayOtherCharges: pfesidata.IsPF_OtherChgarges,
       IsAllowVPF: pfesidata.IsPFAllowVPF,
       EsiEnable: esiData.IsActive,
-      EligibilitySalaryForESI: esiData.Amount,
+      EligibilitySalaryForESI: esiData.MaxLimit,
       EsiEmployeeContribution: esiData.EmployeeContribution,
       EsiEmployerContribution: esiData.EmployerContribution,
       IsEsiEmployerContributionOutside: pfesidata.IsESI_EmployerContribution_Outside_GS,
@@ -148,7 +165,7 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
 
     var ESISetting = {
       ComponentId: 'ESI',
-      Amount: data.EligibilitySalaryForESI,
+      MaxLimit: data.EligibilitySalaryForESI,
       EmployeeContribution: data.EsiEmployeeContribution,
       EmployerContribution: data.EsiEmployerContribution,
       IsActive: data.EsiEnable,
@@ -222,29 +239,29 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
 }
 
 
-interface Ipfesi {
-  PFEnable: boolean;
-  IsPfAmountLimitStatutory: boolean;
-  IsPfCalculateInPercentage: boolean;
-  IsAllowOverridingPf: boolean;
-  IsPfEmployerContribution: boolean;
-  EmployerPFLimit: number;
-  IsHidePfEmployer: boolean;
-  IsPayOtherCharges: boolean;
-  IsAllowVPF: boolean;
-  EsiEnable: boolean;
-  EligibilitySalaryForESI: number;
-  EsiEmployeeContribution: number;
-  EsiEmployerContribution: number;
-  IsAllowOverridingEsi: boolean;
-  IsHideEsiEmployer: boolean;
-  IsEsiExcludeEmployerShare: boolean;
-  IsEsiExcludeEmployeeGratuity: boolean;
-  IsRestrictEsi: boolean;
-  IsIncludeBonusEsiEligibility: boolean;
-  IsIncludeBonusEsiContribution: boolean;
-  IsEsiEmployerContributionOutside: boolean;
-  IsEmployerPFLimitContribution: boolean;
+class Ipfesi {
+  PFEnable: boolean = null;
+  IsPfAmountLimitStatutory: boolean = null;
+  IsPfCalculateInPercentage: boolean = null;
+  IsAllowOverridingPf: boolean = null;
+  IsPfEmployerContribution: boolean = null;
+  EmployerPFLimit: number = null;
+  IsHidePfEmployer: boolean = null;
+  IsPayOtherCharges: boolean = null;
+  IsAllowVPF: boolean = null;
+  EsiEnable: boolean = null;
+  EligibilitySalaryForESI: number = null;
+  EsiEmployeeContribution: number = null;
+  EsiEmployerContribution: number = null;
+  IsAllowOverridingEsi: boolean = null;
+  IsHideEsiEmployer: boolean = null;
+  IsEsiExcludeEmployerShare: boolean = null;
+  IsEsiExcludeEmployeeGratuity: boolean = null;
+  IsRestrictEsi: boolean = null;
+  IsIncludeBonusEsiEligibility: boolean = null;
+  IsIncludeBonusEsiContribution: boolean = null;
+  IsEsiEmployerContributionOutside: boolean = null;
+  IsEmployerPFLimitContribution: boolean = null;
 }
 
 class pfesisetting {

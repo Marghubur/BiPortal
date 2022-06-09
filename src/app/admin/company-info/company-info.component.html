@@ -62,7 +62,7 @@
               <div class="row col-md-6">
                 <div class="col-md-6 my-2">
                   <label for="" class="form-label">LEGAL NAME OF THE COMPANY</label>
-                  <input type="text" class="form-control" placeholder="COMPANY FULL NAME" [ngClass]="{'error-field': submitted && f['LegalNameOfCompany'].errors !== null && f['LegalNameOfCompany'].errors['required']}"
+                  <input type="text" transform="upper" class="form-control" placeholder="COMPANY FULL NAME" [ngClass]="{'error-field': submitted && f['LegalNameOfCompany'].errors !== null && f['LegalNameOfCompany'].errors['required']}"
                     formControlName="LegalNameOfCompany">
                 </div>
                 <div class="col-md-6 my-2">
