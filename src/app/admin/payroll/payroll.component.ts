@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
 @Component({
@@ -14,24 +15,32 @@ export class PayrollComponent implements OnInit {
   payrollForm: FormGroup;
   payRoll:PayRoll = new PayRoll();
   days: Array<any> = [];
-  enableDays: boolean = false;
   months: Array<any> = ['JANUARY', 'FEBUARY', 'MARCH', 'APRIL', 'MAY',
   'JUNE', 'JULY', 'AUGEST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
   payDay: Array<any> = [];
   payPeriodMonth: string = null;
-  nextMonth: string = null;
   payPeriodDate: string = null;
   isReady: boolean = false;
+  compnayDetail: any = null;
 
-  constructor(private fb: FormBuilder,
-              private http: AjaxService) { }
+  constructor(
+    private fb: FormBuilder,
+    private http: AjaxService,
+    private nav: iNavigation
+  ) { }
 
   ngOnInit(): void {
-    this.loadPayrollSetting();
+    this.prefixDays();
+    this.compnayDetail = this.nav.getValue();
+    if(this.compnayDetail != null) {
+      this.loadPayrollSetting();
+    } else {
+      ErrorToast("Getter some internal issue. Please login again or contact to admin.");
+    }
   }
 
   loadPayrollSetting() {
-    this.http.get(`Settings/GetPayrollSetting/${1}`).then(res => {
+    this.http.get(`Settings/GetPayrollSetting/${this.compnayDetail.CompanyId}`).then(res => {
       if(res.ResponseBody) {
         this.payRoll = res.ResponseBody;
         this.initForm();
@@ -45,52 +54,37 @@ export class PayrollComponent implements OnInit {
 
   onPayCycleChanged(e: any) {
     this.payPeriodMonth = e.target.value;
-    if(this.payPeriodMonth) {
-      let index = this.months.indexOf(this.payPeriodMonth);
+  }
 
-      if(index == 11)
-        this.nextMonth = this.months[1];
-      else
-        this.nextMonth = this.months[index + 1];
-      let presentMonthDays = new Date(new Date().getFullYear(), index + 1, 0).getDate();
-      this.enableDays = false;
-      this.days = [];
-      this.days.push({
-        value: 32,
-        text: 'Last day of month'
-      }, {
-        value: 33,
-        text: 'First day of month'
-      });
+  prefixDays() {
+    let presentMonthDays = 31;
+    this.days = [];
 
-      let i = 1;
-      let prefix = '';
-      while(i <= presentMonthDays) {
-        switch(i) {
-        case 1:
-        case 21:
-          prefix = 'st';
-          break;
-        case 2:
-        case 22:
-          prefix = 'nd';
-          break;
-        case 3:
-        case 33:
-          prefix = 'rd';
-          break;
-        default:
-          prefix = 'th';
-          break;
-        }
-        this.days.push({
-          value: i,
-          text: `${i}${prefix} ${this.payPeriodMonth}`
-        });
-        i++;
+    let i = 1;
+    let prefix = '';
+    while(i <= presentMonthDays) {
+      switch(i) {
+      case 1:
+      case 21:
+        prefix = 'st';
+        break;
+      case 2:
+      case 22:
+        prefix = 'nd';
+        break;
+      case 3:
+      case 33:
+        prefix = 'rd';
+        break;
+      default:
+        prefix = 'th';
+        break;
       }
-
-      this.enableDays = true;
+      this.days.push({
+        value: i,
+        text: `${i}${prefix}`
+      });
+      i++;
     }
   }
 
@@ -103,8 +97,8 @@ export class PayrollComponent implements OnInit {
       OrganizationId: new FormControl(this.payRoll.OrganizationId),
       PayCycleDayOfMonth: new FormControl(this.payRoll.PayCycleDayOfMonth),
       PayCalculationId: new FormControl (this.payRoll.PayCalculationId),
-      IsExcludeWeeklyOffs: new FormControl (this.payRoll.IsExcludeWeeklyOffs),
-      IsExcludeHolidays: new FormControl (this.payRoll.IsExcludeHolidays)
+      IsExcludeWeeklyOffs: new FormControl (this.payRoll.IsExcludeWeeklyOffs ? 'true': 'false'),
+      IsExcludeHolidays: new FormControl (this.payRoll.IsExcludeHolidays ? 'true': 'false')
     })
   };
 

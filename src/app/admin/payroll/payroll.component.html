@@ -53,14 +53,13 @@
               </div>
               <div class="row px-2 py-2">
                 <div class="col-md-3">
-                  <label for="" class="form-label fs-6">Which day did the pay period end in {{payPeriodMonth}}</label>
+                  <label for="" class="form-label fs-6">Pay cycle date in every month</label>
                 </div>
                 <div class="col-md-3">
                   <select class="form-select" formControlName="PayCycleDayOfMonth">
-                    <option value="0">Select date</option>
-                    <ng-container *ngIf="enableDays">
-                      <option *ngFor="let day of days" [value]="day.value">{{day.text}}</option>
-                    </ng-container>
+                    <option value="">Select date</option>
+                    <option value="0">Last day of month</option>
+                    <option *ngFor="let day of days" [value]="day.value">{{day.text}}</option>
                   </select>
                 </div>
               </div>

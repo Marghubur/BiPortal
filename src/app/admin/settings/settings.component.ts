@@ -39,6 +39,7 @@ export class SettingsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.currentCompnay = new CompanyGroup();
     this.loadData();
     this.initForm();
     this.menuItem = {
@@ -107,6 +108,12 @@ export class SettingsComponent implements OnInit {
     $('#NewCompanyModal').modal('show');
   }
 
+  editCompanyDetail(current: CompanyGroup) {
+    this.currentCompnay = current;
+    this.initForm();
+    $('#NewCompanyModal').modal('show');
+  }
+
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
     this.companyGroupForm.controls["InCorporationDate"].setValue(date);
@@ -133,24 +140,54 @@ export class SettingsComponent implements OnInit {
 
   initForm() {
     this.companyGroupForm = this.fb.group({
-      OrganizationName: new FormControl(''),
-      CompanyName: new FormControl(''),
-      CompanyDetail: new FormControl(''),
-      InCorporationDate: new FormControl('')
+      OrganizationName: new FormControl(this.currentCompnay.OrganizationName, [Validators.required]),
+      CompanyName: new FormControl(this.currentCompnay.CompanyName, [Validators.required]),
+      CompanyDetail: new FormControl(this.currentCompnay.CompanyDetail, [Validators.required]),
+      InCorporationDate: new FormControl(this.currentCompnay.InCorporationDate, [Validators.required]),
+      Email: new FormControl(this.currentCompnay.Email, Validators.required),
+      CompanyId: new FormControl(this.currentCompnay.CompanyId, Validators.required)
     })
   }
 
   addNewCompany() {
     this.isLoading = true;
     this.submitted = true;
-    if (this.companyGroupForm.invalid)
+    if (this.companyGroupForm.invalid) {
+      this.isLoading = false;
       return;
+    }
     let value:CompanyGroup = this.companyGroupForm.value;
     if (value) {
       this.http.post("Company/AddCompanyGroup", value).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.Companys = response.ResponseBody;
           Toast("Company Group added successfully.");
+          $('#NewCompanyModal').modal('hide');
+        }
+        else
+          ErrorToast("Fail to add company group. Please contact to admin.");
+
+        this.submitted = false;
+        this.isLoading = false;
+      });
+    }
+  }
+
+  updateCompany() {
+    this.isLoading = true;
+    this.submitted = true;
+    if (this.companyGroupForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
+
+    this.Companys = [];
+    let value:CompanyGroup = this.companyGroupForm.value;
+    if (value) {
+      this.http.put(`Company/UpdateCompanyGroup/${value.CompanyId}`, value).then((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          this.Companys = response.ResponseBody;
+          Toast("Company detail updated successfully.");
           $('#NewCompanyModal').modal('hide');
         }
         else
@@ -187,6 +224,7 @@ class CompanyGroup {
   CompanyName: string = null;
   CompanyDetail: string = null;
   InCorporationDate: Date = null;
+  Email: string = null;
 }
 interface Payroll {
 
