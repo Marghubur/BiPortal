@@ -153,7 +153,8 @@ export enum UserType {
   Employee = 2,
   Candidate = 3,
   Client = 4,
-  Other = 5
+  Other = 5,
+  Compnay = 6
 }
 
 export enum ItemStatus

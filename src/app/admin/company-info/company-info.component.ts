@@ -8,6 +8,7 @@ import { DateFormatter } from 'src/providers/DateFormatter';
 import { organizationAccountModal } from '../company-accounts/company-accounts.component';
 import { Files } from '../documents/documents.component';
 import { iNavigation } from 'src/providers/iNavigation';
+import { environment } from 'src/environments/environment';
 declare var $: any;
 
 @Component({
@@ -32,6 +33,7 @@ export class CompanyInfoComponent implements OnInit {
   CompanyId: number = 0;
   OrganizationId: number = 0;
   isLoading: boolean = false;
+  imageBasePath: string = null;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -43,6 +45,7 @@ export class CompanyInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.imageBasePath = this.http.GetImageBasePath();
     this.ActivatedPage = 1;
     this.companyInformation = new CompanyInformationClass();
     this.companyInformation.LegalEntity = '';
@@ -58,9 +61,23 @@ export class CompanyInfoComponent implements OnInit {
 
   loadData() {
     this.http.get(`Company/GetCompanyById/${this.CompanyId}`).then((response: ResponseModel) => {
-      if (response.ResponseBody ) {
+      if (response.ResponseBody && response.ResponseBody.OrganizationDetail) {
         Toast("Record found.")
-        this.companyInformation = response.ResponseBody;
+        this.companyInformation = response.ResponseBody.OrganizationDetail;
+
+        this.fileDetail = [];
+        if(response.ResponseBody.Files && response.ResponseBody.Files.length > 0) {
+          this.fileDetail = response.ResponseBody.Files;
+
+          response.ResponseBody.Files.map(item => {
+            if(item.FileName.toLowerCase() == "signwithstamp") {
+              this.signURL = `${this.imageBasePath}/${item.FilePath}/${item.FileName}.${item.FileExtension}`;
+            } else {
+              this.signwithoutstamp = `${this.imageBasePath}/${item.FilePath}/${item.FileName}.${item.FileExtension}`;
+            }
+          });
+        }
+
         this.CompanyId = this.companyInformation.CompanyId;
         let date = new Date(this.companyInformation.InCorporationDate);
         this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};

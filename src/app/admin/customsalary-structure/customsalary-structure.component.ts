@@ -14,7 +14,6 @@ declare var $: any;
 export class CustomsalaryStructureComponent implements OnInit {
   ActivatedPage: number = 1;
   salaryStructureType: Array<SalaryStructureType> = null;
-  isEditStructure: boolean = false;
   salaryComponentFields: Array<SalaryComponentFields> = [];
   componentFields: SalaryComponentFields = new SalaryComponentFields();
   customSalaryStructure: Array<CustomSalaryStructure> = [];
@@ -177,7 +176,6 @@ export class CustomsalaryStructureComponent implements OnInit {
   ngOnInit(): void {
     this.salaryStructureType = [];
     this.selectedSalaryStructure = new SalaryStructureType();
-    this.isEditStructure = false;
     this.ComponentName = '0';
     this.OpertaionType = "0";
     this.CalculationValue = null;
@@ -227,14 +225,6 @@ export class CustomsalaryStructureComponent implements OnInit {
     }];
 
     this.initForm();
-  }
-
-  editStructure() {
-    this.isEditStructure = true;
-  }
-
-  cancleEditStructure() {
-    this.isEditStructure = false;
   }
 
   activePage(page: number) {
@@ -298,7 +288,6 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   selectSalaryGroup(item: SalaryStructureType) {
-    this.isEditStructure = false;
     if (item) {
       this.selectedSalaryStructure = this.salaryStructureType.find(x => x.GroupName == item.GroupName);
       this.isSalaryGrpSelected = true;
