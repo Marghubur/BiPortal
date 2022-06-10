@@ -30,6 +30,8 @@ export class CompanyInfoComponent implements OnInit {
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
   CompanyId: number = 0;
+  OrganizationId: number = 0;
+  isLoading: boolean = false;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -82,30 +84,15 @@ export class CompanyInfoComponent implements OnInit {
     })
   }
 
-  // findCompany(e: any) {
-  //   let value = e.target.value;
-  //   this.CompanyId = 0;
-  //   this.companyInformation = new CompanyInformationClass();
-  //   if (value  != '0') {
-  //     this.companyInformation = this.OrganizationDetails.find (x => x.CompanyId == value);
-  //     this.CompanyId = this.companyInformation.CompanyId;
-  //     let date = new Date(this.companyInformation.InCorporationDate)
-  //     this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-  //   } else {
-  //     ErrorToast("Please select organization.")
-  //   }
-  //   this.initForm();
-  //   this.findBankDetails();
-  // }
-
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
     this.companyInformationForm.controls["InCorporationDate"].setValue(date);
   }
 
   findBankDetails() {
-    if (this.companyInformation.CompanyId > 0) {
-      this.http.get(`Settings/GetOrganizationAccountsInfo/${this.CompanyId}`).then((response:ResponseModel) => {
+    this.OrganizationId =1;
+    if (this.CompanyId > 0 && this.OrganizationId > 0) {
+      this.http.get(`Company/GetCompanyBankDetail/${this.OrganizationId}/${this.CompanyId}`).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.BankDetails = response.ResponseBody;
           Toast("Record found.")
@@ -199,6 +186,7 @@ export class CompanyInfoComponent implements OnInit {
 
   updateDetail() {
     this.submitted = true;
+    this.isLoading = true;
     let request:CompanyInformationClass = this.companyInformationForm.value;
     if (request.CompanyId <= 0)
       ErrorToast("Invalid Organization");
@@ -225,6 +213,7 @@ export class CompanyInfoComponent implements OnInit {
         this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         this.initForm();
         Toast("Detail inserted/updated successfully.");
+        this.isLoading = false;
       }
     });
   }
@@ -239,4 +228,5 @@ class CompanyInformationClass {
   FullAddress: string = '';
   CompanyId: number = 0;
   CompanyName: string = '';
+  OrganizationId: number = 0;
 }

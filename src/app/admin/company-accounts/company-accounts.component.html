@@ -18,10 +18,7 @@
           <form [formGroup]="organizationAccountsForm" autocomplete="off" class="col-md-12 row">
             <div class="col-12 row m-0">
               <div class="col-md-4 mb-4 mt-2">
-                <select class="form-select" (change)="findCompanyAccounts($event)" formControlName="OrganizationId" >
-                  <option value="0">Select Company</option>
-                  <option value="{{org.OrganizationId}}" *ngFor="let org of OrganizationDetails">{{org.OrganizationName}}</option>
-                </select>
+                <label for="" class="form-control">{{CurrentCompany.CompanyName}}</label>
               </div>
               <div class="col-md-12">
                 <div class="x_panel">

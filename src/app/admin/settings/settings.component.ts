@@ -69,7 +69,7 @@ export class SettingsComponent implements OnInit {
         this.nav.navigate(CompanyDetail, this.CompanyId);
         break;
       case CompanyAccounts:
-        this.nav.navigate(CompanyAccounts, this.CompanyId);
+        this.nav.navigate(CompanyAccounts, this.currentCompnay);
         break;
       case SalaryComponentStructure:
         this.nav.navigate(SalaryComponentStructure, null)
@@ -110,6 +110,8 @@ export class SettingsComponent implements OnInit {
 
   editCompanyDetail(current: CompanyGroup) {
     this.currentCompnay = current;
+    let date = new Date(this.currentCompnay.InCorporationDate);
+    this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
     this.initForm();
     $('#NewCompanyModal').modal('show');
   }
