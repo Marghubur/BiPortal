@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { Settings } from 'src/providers/constants';
+import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
 @Component({
@@ -12,6 +14,7 @@ declare var $: any;
 })
 export class PayrollComponentsComponent implements OnInit {
   active = 1;
+  activetab = 2;
   NewSalaryForm: FormGroup;
   AdhocForm: FormGroup;
   DeductionForm: FormGroup;
@@ -24,7 +27,8 @@ export class PayrollComponentsComponent implements OnInit {
   submitted: boolean = false;
 
   constructor(private fb: FormBuilder,
-              private http: AjaxService) { }
+              private http: AjaxService,
+              private nav:iNavigation) { }
 
   ngOnInit(): void {
     this.ComponentType = '';
@@ -33,6 +37,10 @@ export class PayrollComponentsComponent implements OnInit {
     this.initadhocForm();
     this.initdeductionForm();
     this.initbonusForm();
+  }
+
+  navigate() {
+    this.nav.navigate(Settings, null)
   }
 
   loadData() {
