@@ -28,21 +28,21 @@ export class SalarycomponentStructureComponent implements OnInit {
     this.currentSalaryComponent = new SalaryComponentFields();
     this.salaryComponent();
     this.addSalaryComponent();
-    this.salaryComponentFields = [{
-      ComponentDescription: "Basic",
-      ComponentId: "BS",
-      Type: "Fixed",
-      TaxExempt: "Taxable",
-      MaxLimit: "Auto Calculated",
-      RequireDocs: false,
-      IndividualOverride: true,
-      IsAllowtoOverride: true,
-      IsComponentEnable: true,
-      PercentageValue: 0,
-      CalculateInPercentage: false,
-      Formula: null,
-      IsActive: false
-    }]
+    // this.salaryComponentFields = [{
+    //   ComponentDescription: "Basic",
+    //   ComponentId: "BS",
+    //   Type: "Fixed",
+    //   TaxExempt: "Taxable",
+    //   MaxLimit: "Auto Calculated",
+    //   RequireDocs: false,
+    //   IndividualOverride: true,
+    //   IsAllowtoOverride: true,
+    //   IsComponentEnable: true,
+    //   PercentageValue: 0,
+    //   CalculateInPercentage: false,
+    //   Formula: null,
+    //   IsActive: false
+    // }]
   }
 
   openEditModal(data: any) {
@@ -145,5 +145,9 @@ export class SalaryComponentFields {
   Section?: string = '';
   Formula: string = null;
   IsActive: boolean = false;
+  EmployerContribution: number = 0;
+  EmployeeContribution: number = 0;
+  IncludeInPayslip: boolean = false;
+  IsOpted: boolean = false;
 }
 

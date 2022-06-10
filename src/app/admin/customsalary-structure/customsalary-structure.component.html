@@ -92,6 +92,9 @@
                       COMPONENT NAME
                     </div>
                     <div class="th text-truncate ps-3">
+                      TAX EXEMPT
+                    </div>
+                    <div class="th text-truncate ps-3">
                       ANNUAL CALCULATION
                     </div>
                     <div class="th text-truncate ps-3">
@@ -107,20 +110,14 @@
                           {{item.get("ComponentId").value}} ({{item.get("ComponentDescription").value}})
                         </div>
                         <div class="td ps-3 text-truncate">
-                          {{item.get("Formula").value}}
+                          {{item.get("TaxExempt").value}}
+                        </div>
+                        <div class="td ps-3 text-truncate">
+                          <span class="badge bg-primary">{{item.get("Formula").value}}</span>
                         </div>
                         <ng-container>
                           <div class="td ps-3">
-                            <div ngbDropdown class="d-inline-block" placement="right-end">
-                              <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                                <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
-                              </button>
-                              <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                                <button ngbDropdownItem (click)="updateCalcModel(item.value)">
-                                  <a class="dropdown-item" href="javascript:void(0)">Update Calculation</a>
-                                </button>
-                              </div>
-                            </div>
+                            <a class="text-decoration-none text-dark" href="javascript:void(0)" (click)="updateCalcModel(item.value)"><i class="fa fa-ellipsis-h fa-lg" aria-hidden="true"></i></a>
                           </div>
                         </ng-container>
                       </ng-container>
@@ -261,7 +258,7 @@
                     <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
                   </button>
                   <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                    <button ngbDropdownItem (click)="updateCalcModel()">
+                    <button ngbDropdownItem (click)="updateCalcModel(item)">
                       <a class="dropdown-item" href="javascript:void(0)">Update Salary Structure</a>
                     </button>
                   </div>
@@ -348,78 +345,112 @@
 <div class="modal fade" id="updateCalculationModal" tabindex="-1" aria-labelledby="updateCalculationModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="updateCalculationModalLabel">Component [{{componentFields.ComponentId}}]
-          Update
-          Calculation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-8">
-            <div class="d-flex">
-              <h5 class="form-label">Components Name : {{componentFields.ComponentId}}</h5>
+    <div class="modal-content px-3">
+      <form [formGroup]="updateComponentForm">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="updateCalculationModalLabel">Component [{{componentFields.ComponentId}}]
+            Update
+            Calculation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="d-flex">
+                <h5 class="form-label">Components Name : {{componentFields.ComponentId}}</h5>
+              </div>
+              <label>Normanlly it would lie between 40 to 50 percent of the CTC salary.</label>
             </div>
-            <label>Normanlly it would lie between 40 to 50 percent of the CTC salary.</label>
-          </div>
-          <div class="col-md-4 form-group">
-            <label class="form-label">Calculation Type</label>
-            <select name="CalculationType" class="form-control" [(ngModel)]="componentFields.CalculateInPercentage">
-              <option value="">Pick calculation type</option>
-              <option value="2">In percent value</option>
-              <option value="3">In fixed value</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-12 mt-5 row">
-          <div class="col-md-4 form-group">
-            <label class="form-label">Component Name</label>
-            <select class="form-control" [(ngModel)]="ComponentName">
-              <option value="0">Select Component Name</option>
-              <option value="gross">Gross</option>
-              <option value="ctc">CTC</option>
-              <option value="net">Net</option>
-            </select>
-          </div>
-          <div class="col-md-4 form-group">
-            <label class="form-label">Operator</label>
-            <select class="form-control" [(ngModel)]="OpertaionType">
-              <option value="0">Select Operation</option>
-              <option value="*">Multiply</option>
-              <option value="/">Divide</option>
-              <option value="-">Subtract</option>
-              <option value="+">Add</option>
-              <option value="%">Percentage</option>
-            </select>
-          </div>
-          <div class="col-md-4 ">
-            <label class="form-label">Value</label>
-            <input type="text" class="form-control" [(ngModel)]="CalculationValue" name="CalculationValue"
-              (keyup)="generateFormula()">
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="col-md-12 form-group mt-3">
-            <label for="" class="form-label">Formula</label>
-            <div class="border form-control">
-              <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
+            <div class="col-md-4 form-group">
+              <label class="form-label">Calculation Type</label>
+              <select formControlName="CalculateInPercentage" class="form-control" >
+                <option value="">Pick calculation type</option>
+                <option value="2">In percent value</option>
+                <option value="3">In fixed value</option>
+              </select>
             </div>
           </div>
+          <div class="col-md-12 mt-5 row">
+            <div class="col-md-4 form-group">
+              <label class="form-label">Component Name</label>
+              <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="ComponentName">
+                <option value="0">Select Component Name</option>
+                <option value="gross">Gross</option>
+                <option value="ctc">CTC</option>
+                <option value="net">Net</option>
+              </select>
+            </div>
+            <div class="col-md-4 form-group">
+              <label class="form-label">Operator</label>
+              <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="OpertaionType">
+                <option value="0">Select Operation</option>
+                <option value="*">Multiply</option>
+                <option value="/">Divide</option>
+                <option value="-">Subtract</option>
+                <option value="+">Add</option>
+                <option value="%">Percentage</option>
+              </select>
+            </div>
+            <div class="col-md-4 ">
+              <label class="form-label">Value</label>
+              <input type="text" class="form-control" formControlName="MaxLimit"
+                (keyup)="generateFormula()">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="col-md-12 form-group mt-3">
+              <label for="" class="form-label">Formula</label>
+              <div class="border form-control">
+                <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mt-3">
+              <input class="form-check-input" type="checkbox" formControlName="TaxExempt">
+              <label class="form-check-label ms-2">
+                Tax Exempt
+              </label>
+            </div>
+            <div class="col-md-4 mt-3">
+              <input class="form-check-input" type="checkbox" formControlName="IncludeInPayslip">
+              <label class="form-check-label ms-2">
+                Include In Payslip
+              </label>
+            </div>
+            <div class="col-md-4 mt-3">
+              <input class="form-check-input" type="checkbox" formControlName="IsOpted">
+              <label class="form-check-label ms-2">
+                Is Opted
+              </label>
+            </div>
+            <div class="col-md-4 mt-3">
+              <input class="form-control" type="text" formControlName="EmployeeContribution">
+              <label class="form-check-label ms-2">
+                EmployeeContribution
+              </label>
+            </div>
+            <div class="col-md-4 mt-3">
+              <input class="form-control" type="text" formControlName="EmployerContribution">
+              <label class="form-check-label ms-2">
+                EmployerContribution
+              </label>
+            </div>
+          </div>
+          <div class="col-md-12 mt-5">
+            <h6 class="pt-4">Use Standard Javascript notaion for formuila expression</h6>
+            <p class="mb-0">Ex. ([Basic] - 0.40) - 1200</p>
+            <p class="mb-0">Ex. ([Gross] - [Basic]) * 0.4</p>
+          </div>
         </div>
-        <div class="col-md-12 mt-5">
-          <h6 class="pt-4">Use Standard Javascript notaion for formuila expression</h6>
-          <p class="mb-0">Ex. ([Basic] - 0.40) - 1200</p>
-          <p class="mb-0">Ex. ([Gross] - [Basic]) * 0.4</p>
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary-c" (click)="updateValue()">
+            <i class="fa pe-3" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+            {{isLoading ? 'wait': 'Save Changes'}}
+          </button>
         </div>
-      </div>
-      <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="updateValue()">
-          <i class="fa pe-3" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          {{isLoading ? 'wait': 'Save Changes'}}
-        </button>
-      </div>
+      </form>
     </div>
   </div>
 </div>

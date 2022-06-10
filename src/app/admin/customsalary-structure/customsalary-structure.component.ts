@@ -15,7 +15,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   ActivatedPage: number = 1;
   salaryStructureType: Array<SalaryStructureType> = null;
   salaryComponentFields: Array<SalaryComponentFields> = [];
-  componentFields: SalaryComponentFields = new SalaryComponentFields();
+  componentFields: UpdateSalaryComponent = new UpdateSalaryComponent();
   customSalaryStructure: Array<CustomSalaryStructure> = [];
   dailyWages: Array<DailyWagesStructure> = []
   salaryAndDeduction: FormGroup;
@@ -30,6 +30,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   SalaryGroupForm: FormGroup;
   selectedSalaryStructure: SalaryStructureType = null;
   isSalaryGrpSelected: boolean = false;
+  updateComponentForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -100,7 +101,9 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   createNewComponent(elem: SalaryComponentFields): FormGroup {
     if(elem.TaxExempt == null || elem.TaxExempt == "")
-      elem.TaxExempt = "NA";
+      elem.TaxExempt = "false";
+    if(elem.Formula == null || elem.Formula == "")
+      elem.Formula = "NA";
 
     return this.fb.group({
       ComponentDescription: elem.ComponentDescription,
@@ -114,7 +117,12 @@ export class CustomsalaryStructureComponent implements OnInit {
       CalculateInPercentage: elem.CalculateInPercentage,
       ComponentId: elem.ComponentId,
       Formula: elem.Formula,
-      IsActive: elem.IsActive
+      IsActive: elem.IsActive,
+      EmployeeContribution: elem.EmployeeContribution,
+      EmployerContribution: elem.EmployerContribution,
+      IsOpted: elem.IsOpted,
+      IncludeInPayslip: elem.IncludeInPayslip,
+      PercentageValue: elem.PercentageValue
     });
   }
   salaryGroup() {
@@ -147,7 +155,11 @@ export class CustomsalaryStructureComponent implements OnInit {
             IsComponentEnable: false,
             IsActive: data[i]["IsActive"],
             PercentageValue: data[i]["PercentageValue"],
-            CalculateInPercentage: data[i]["CalculateInPercentage"]
+            CalculateInPercentage: data[i]["CalculateInPercentage"],
+            EmployerContribution: data[i]["EmployerContribution"],
+            IncludeInPayslip: data[i]["IncludeInPayslip"],
+            IsOpted: data[i]["IsOpted"],
+            EmployeeContribution: data[i]["EmployeeContribution"]
           });
           i++;
         }
@@ -177,6 +189,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.salaryStructureType = [];
     this.selectedSalaryStructure = new SalaryStructureType();
     this.ComponentName = '0';
+    this.updateComponentDeatils();
     this.OpertaionType = "0";
     this.CalculationValue = null;
     this.salaryGroup();
@@ -280,7 +293,8 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   generateFormula() {
-    this.componentFields.Formula =`([${this.ComponentName}] ${this.OpertaionType} ${this.CalculationValue})`;
+    let value = this.updateComponentForm.get('MaxLimit').value
+    this.componentFields.Formula =`([${this.ComponentName}] ${this.OpertaionType} ${Number(value)})`;
   }
 
   addComponentModal() {
@@ -296,11 +310,13 @@ export class CustomsalaryStructureComponent implements OnInit {
     }
   }
 
-  updateCalcModel(item: SalaryComponentFields) {
+  updateCalcModel(item: UpdateSalaryComponent) {
     this.componentFields = item;
-    this.CalculationValue = '',
-    this.OpertaionType = '0',
-    this.ComponentName = '0',
+    if(this.componentFields.CalculateInPercentage == true) {
+      this.componentFields.MaxLimit = this.componentFields.PercentageValue;
+    }
+
+    this.updateComponentDeatils();
     $('#updateCalculationModal').modal('show');
   }
 
@@ -316,16 +332,57 @@ export class CustomsalaryStructureComponent implements OnInit {
     $('#addSalaryGroupModal').modal('show');
   }
 
+  updateComponentDeatils() {
+    this.updateComponentForm = this.fb.group({
+      CalculateInPercentage: new FormControl (this.componentFields.CalculateInPercentage == false ? '3': '2'),
+      TaxExempt: new FormControl (this.componentFields.TaxExempt == 'true'? true: false),
+      MaxLimit: new FormControl (this.componentFields.MaxLimit),
+      Formula: new FormControl (this.componentFields.Formula),
+      EmployeeContribution: new FormControl (this.componentFields.EmployeeContribution),
+      EmployerContribution: new FormControl (this.componentFields.EmployerContribution),
+      IsOpted: new FormControl (this.componentFields.IsOpted),
+      IncludeInPayslip: new FormControl (this.componentFields.IncludeInPayslip)
+    })
+  }
+
   updateValue() {
     this.isLoading = true;
+    let value = this.updateComponentForm.value;
+    value.Formula = this.componentFields.Formula;
+    switch (value.CalculateInPercentage) {
+      case '2':
+        value.CalculateInPercentage = true;
+        break;
+      case '3':
+        value.CalculateInPercentage = false;
+        break;
+    }
+
     let items = this.salaryAndDeduction.controls["salaryComponents"] as FormArray;
     if(items) {
       items.controls.map(elem => {
         if(elem.value.ComponentDescription === this.componentFields.ComponentDescription) {
           elem.get("Formula").setValue(this.componentFields.Formula);
           elem.get("CalculateInPercentage").setValue(this.componentFields.CalculateInPercentage);
+          elem.get("TaxExempt").setValue(value.TaxExempt);
+          elem.get("MaxLimit").setValue(this.componentFields.MaxLimit);
+          elem.get("EmployeeContribution").setValue(value.EmployeeContribution);
+          elem.get("EmployerContribution").setValue(value.EmployerContribution);
+          elem.get("IsOpted").setValue(value.IsOpted);
+          elem.get("IncludeInPayslip").setValue(value.IncludeInPayslip);
+          if (value.CalculateInPercentage = true) {
+            elem.get("PercentageValue").setValue(value.MaxLimit);
+            elem.get("MaxLimit").setValue(0);
+          } else {
+            elem.get("MaxLimit").setValue(value.MaxLimit);
+            elem.get("PercentageValue").setValue(0);
+          }
         }
       });
+      this.http.put(`Settings/UpdateSalaryComponentDetail/${this.componentFields.ComponentId}`, value).then((response:ResponseModel) => {
+        if (response.ResponseBody)
+          Toast('Updated Successfully')
+      })
     }
 
     this.isLoading = false;
@@ -359,4 +416,18 @@ class DailyWagesStructure {
   ModifiedBy: string = '';
   ModifiedOn: Date = null;
   RemunerationType: string = '';
+}
+
+class UpdateSalaryComponent {
+  CalculateInPercentage: boolean = false;
+  TaxExempt: string = '';
+  MaxLimit: number = 0;
+  Formula: string = '';
+  EmployeeContribution: boolean = false;
+  EmployerContribution: boolean = false;
+  IsOpted: boolean = false;
+  IncludeInPayslip: boolean = false;
+  ComponentId: number = 0;
+  ComponentDescription: string = '';
+  PercentageValue: number = 0;
 }
