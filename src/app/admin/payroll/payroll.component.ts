@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { Payroll } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -32,8 +33,11 @@ export class PayrollComponent implements OnInit {
   ngOnInit(): void {
     this.prefixDays();
     this.compnayDetail = this.nav.getValue();
+    this.payRoll = new PayRoll();
     if(this.compnayDetail != null) {
+      this.isReady = true;
       this.loadPayrollSetting();
+      this.initForm();
     } else {
       ErrorToast("Getter some internal issue. Please login again or contact to admin.");
     }

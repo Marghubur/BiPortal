@@ -13,10 +13,11 @@
     <div class="my-3 px-5">
       <form [formGroup]="companyInformationForm">
         <div class="col-md-4 mb-4 mt-2">
-          <select class="form-select" formControlName="CompanyId" disabled>
+          <!-- <select class="form-select" formControlName="CompanyId" disabled>
             <option value="0">Select Company</option>
             <option value="{{companyInformation.CompanyId}}">{{companyInformation.CompanyName}}</option>
-          </select>
+          </select> -->
+          <label for="" class="form-control bg-muted">{{companyInformation.CompanyName}}</label>
         </div>
         <div class="progress-step col-md-6 mx-3 my-2">
           <div class="custom-progress" id="progress"></div>
@@ -72,7 +73,7 @@
                 </div>
                 <div class="col-md-6 my-2">
                   <label for="" class="form-label">TYPE OF BUSINESS</label>
-                  <input type="text" class="form-control" transform="upper" placeholder="TYPE OF BUSINESS"
+                  <input type="text" class="form-control" transform="upper" transform="upper" placeholder="TYPE OF BUSINESS"
                     formControlName="TypeOfBusiness">
                 </div>
                 <div class="col-md-6 my-2">
@@ -93,13 +94,15 @@
                 </div>
                 <div class="col-md-6 my-2">
                   <label for="" class="form-label">REGISTERED OFFICE ADDRESS</label>
-                  <input type="text" class="form-control" placeholder="REGISTERED OFFICE ADDRESS"
+                  <input type="text" class="form-control" placeholder="REGISTERED OFFICE ADDRESS" transform="upper"
                     formControlName="FullAddress">
                 </div>
               </div>
             </div>
-            <button class="float-end btn my-2 me-1 btn-outline-success" (click)="updateDetail()"><i
-                class="fa fa-cog pe-2"></i>Submit</button>
+            <button class="btn btn-primary-c float-end mb-3" [disabled]="isLoading" (click)="updateDetail()">
+              <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
+              {{ isLoading ? 'Processing' : 'Submit' }}
+            </button>
           </div>
         </ng-container>
         <ng-container *ngIf="ActivatedPage == 2">
@@ -151,24 +154,24 @@
             <button class="float-end btn my-2 me-1 btn-outline-success" (click)="activePage(2)"><i
                 class="fa fa-arrow-left pe-2"></i>Previous</button>
             <h6 class="mb-0 mt-5 py-3">COMPANY LOCATION</h6>
-            <div class="row">
-              <div class="col-md-4 my-2">
+            <div class="row col-md-6">
+              <div class="col-md-12 my-2">
                 <label for="" class="form-label">First Address :</label>
                 <label for="" class="form-label ps-3">{{companyInformation.FirstAddress}}</label>
               </div>
-              <div class="col-md-4 my-2">
+              <div class="col-md-12 my-2">
                 <label for="" class="form-label">Second Address :</label>
                 <label for="" class="form-label ps-3">{{companyInformation.SecondAddress}}</label>
               </div>
-              <div class="col-md-4 my-2">
+              <div class="col-md-12 my-2">
                 <label for="" class="form-label">Third Address :</label>
                 <label for="" class="form-label ps-3">{{companyInformation.ThirdAddress}}</label>
               </div>
-              <div class="col-md-4 my-2">
+              <div class="col-md-12 my-2">
                 <label for="" class="form-label">Fourth Address :</label>
                 <label for="" class="form-label ps-3">{{companyInformation.FourthAddress}}</label>
               </div>
-              <div class="col-md-4 my-2">
+              <div class="col-md-12 my-2">
                 <label for="" class="form-label">Full Address :</label>
                 <label for="" class="form-label ps-3">{{companyInformation.FullAddress}}</label>
               </div>
