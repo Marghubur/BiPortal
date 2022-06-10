@@ -67,11 +67,12 @@ export class CompanyDetailComponent implements OnInit {
   initForm() {
     this.organizationForm = this.fb.group({
       CompanyId: new FormControl(this.organizationModal.CompanyId),
+      OrganizationName: new FormControl(this.organizationModal.OrganizationName, [Validators.required]),
       CompanyName: new FormControl(this.organizationModal.CompanyName, [Validators.required]),
       MobileNo: new FormControl(this.organizationModal.MobileNo),
       PrimaryPhoneNo: new FormControl(this.organizationModal.PrimaryPhoneNo),
       SecondaryPhoneNo: new FormControl(this.organizationModal.SecondaryPhoneNo),
-      Email: new FormControl(this.organizationModal.Email),
+      Email: new FormControl(this.organizationModal.Email, [Validators.required]),
       Fax: new FormControl(this.organizationModal.Fax),
       FirstAddress: new FormControl(this.organizationModal.FirstAddress),
       SecondAddress: new FormControl(this.organizationModal.SecondAddress),
@@ -98,6 +99,10 @@ export class CompanyDetailComponent implements OnInit {
     let errroCounter = 0;
 
     if (this.organizationForm.get("CompanyName").value === "")
+      errroCounter++;
+    if (this.organizationForm.get("OrganizationName").value === "")
+      errroCounter++;
+    if (this.organizationForm.get("Email").value === "")
       errroCounter++;
 
     if (this.organizationForm.get("FileId").value == null)

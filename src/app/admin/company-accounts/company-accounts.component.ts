@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
@@ -58,7 +58,7 @@ export class CompanyAccountsComponent implements OnInit {
     this.organizationAccountsForm = this.fb.group({
       CompanyId: new FormControl(this.CompanyAccountDetail.CompanyId),
       GSTINNumber: new FormControl(this.CompanyAccountDetail.GSTINNumber),
-      AccountNumber: new FormControl(this.CompanyAccountDetail.AccountNumber),
+      AccountNumber: new FormControl(this.CompanyAccountDetail.AccountNumber, [Validators.required]),
       BankName: new FormControl(this.CompanyAccountDetail.BankName),
       Branch: new FormControl(this.CompanyAccountDetail.Branch),
       BranchCode: new FormControl(this.CompanyAccountDetail.BranchCode),

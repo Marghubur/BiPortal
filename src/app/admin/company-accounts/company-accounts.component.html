@@ -5,7 +5,7 @@
         <div class="x_header">
           <div class="x_header_title">
             <h2>
-              Company Detail
+              Company Accounts Detail
               <small>Compnay critical details like: Bank account, PAN etc.</small>
               <i class="fa text-dark edit-icon ps-2"></i>
             </h2>
@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">Account No.#</label>
-                      <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNumber"
+                      <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNumber" [ngClass]="{'error-field': submitted && f.AccountNumber.errors !== null && f.AccountNumber.errors.required}"
                         formControlName="AccountNumber" />
                     </div>
                     <div class="col-md-4 my-2">
