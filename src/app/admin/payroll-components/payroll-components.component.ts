@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
@@ -19,28 +19,64 @@ export class PayrollComponentsComponent implements OnInit {
   ComponentType: string = '';
   isLoading: boolean = false;
   isTaxExempt: boolean = false;
+  RecurringComponent: Array<any> = [];
+  CurrentRecurringComponent: PayrollComponentsModal = new PayrollComponentsModal();
+  submitted: boolean = false;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService) { }
 
   ngOnInit(): void {
     this.ComponentType = '';
+    this.loadData()
     this.initForm();
     this.initadhocForm();
     this.initdeductionForm();
     this.initbonusForm();
   }
 
+  loadData() {
+    this.http.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
+      if (response.ResponseBody && response.ResponseBody.length > 0) {
+        this.RecurringComponent = response.ResponseBody;
+        let i =0;
+        while(i < this.RecurringComponent.length) {
+          this.componentType(this.RecurringComponent[i].ComponentTypeId, i);
+          i++;
+        }
+        Toast("Record found");
+      }
+    })
+  }
+
+  componentType(value: number, i: number) {
+    switch (value) {
+      case 2:
+        this.RecurringComponent[i].ComponentTypeId = "Allowance"
+        break;
+      case 3:
+        this.RecurringComponent[i].ComponentTypeId = "Rembursement"
+        break;
+      case 4:
+        this.RecurringComponent[i].ComponentTypeId = "Reimbursable"
+        break;
+    }
+  }
+
+  get f() {
+    return this.NewSalaryForm.controls;
+  }
+
   initForm() {
     this.NewSalaryForm = this.fb.group({
-      ComponentName: new FormControl(''),
-      Type: new FormControl(''),
-      TaxExempt: new FormControl(''),
-      MaxLimit: new FormControl(0),
-      RequireDocs: new FormControl(false),
-      ComponentDescription: new FormControl(''),
-      Section: new FormControl(''),
-      SectionMaxLimit: new FormControl(0)
+      ComponentName: new FormControl(this.CurrentRecurringComponent.ComponentId, [Validators.required]),
+      Type: new FormControl(this.CurrentRecurringComponent.Type, [Validators.required]),
+      TaxExempt: new FormControl(this.CurrentRecurringComponent.TaxExempt),
+      MaxLimit: new FormControl(this.CurrentRecurringComponent.MaxLimit),
+      RequireDocs: new FormControl(this.CurrentRecurringComponent.RequireDocs),
+      ComponentDescription: new FormControl(this.CurrentRecurringComponent.ComponentDescription),
+      Section: new FormControl(this.CurrentRecurringComponent.Section),
+      SectionMaxLimit: new FormControl(this.CurrentRecurringComponent.SectionMaxLimit)
     });
   }
 
@@ -77,6 +113,9 @@ export class PayrollComponentsComponent implements OnInit {
   }
 
   newComponentPopUp() {
+    this.submitted = false;
+    this.CurrentRecurringComponent = new PayrollComponentsModal();
+    this.initForm();
     $('#NewComponentModal').modal('show');
   }
 
@@ -92,16 +131,62 @@ export class PayrollComponentsComponent implements OnInit {
     $('#CreateBonusModal').modal('show');
   }
 
+  editRecurring(item: any) {
+    if (item) {
+      this.CurrentRecurringComponent = item;
+      switch (item.ComponentTypeId) {
+        case 'Allowance':
+          this.CurrentRecurringComponent.Type = "2"
+          break;
+        case "Rembursement":
+          this.CurrentRecurringComponent.Type = "3"
+          break;
+        case "Reimbursable":
+          this.CurrentRecurringComponent.Type = "4"
+          break;
+      }
+      if(item.TaxExempt == 'true')
+        this.isTaxExempt = true;
+      else
+        this.isTaxExempt = false;
+      this.initForm();
+      $('#NewComponentModal').modal('show');
+    } else {
+      ErrorToast("Please select salary component first.")
+    }
+  }
+
   addNewComp() {
     this.isLoading = true;
-    let value:PayrollComponentsModal = this.NewSalaryForm.value;
-    if (value) {
-      this.http.post("SalaryComponent/AddRecurringComponents", value).then((response:ResponseModel) => {
-        if (response.ResponseBody) {
-          Toast("Component added successfully.")
-        } else
-          ErrorToast("Fail to add component. Please contact to admin.")
-      })
+    this.submitted = true;
+    let errroCounter = 0;
+
+    if (this.NewSalaryForm.get('ComponentName').errors !== null)
+      errroCounter++;
+    if (this.NewSalaryForm.get('Type').value == '0')
+      errroCounter++;
+    if (errroCounter == 0) {
+      let value:PayrollComponentsModal = this.NewSalaryForm.value;
+      if (value) {
+        this.http.post("SalaryComponent/AddUpdateRecurringComponents", value).then((response:ResponseModel) => {
+          if (response.ResponseBody) {
+            let data = response.ResponseBody;
+            if (data.length > 0) {
+              this.RecurringComponent = data;
+              let i =0;
+              while(i < this.RecurringComponent.length) {
+                this.componentType(this.RecurringComponent[i].ComponentTypeId, i);
+                i++;
+              }
+              this.NewSalaryForm.reset();
+            }
+            $('#NewComponentModal').modal('hide');
+            Toast("Component added successfully.");
+          } else
+            ErrorToast("Fail to add component. Please contact to admin.");
+          this.submitted = false;
+        })
+      }
     }
     this.isLoading = false;
   }
@@ -140,6 +225,7 @@ export class PayrollComponentsComponent implements OnInit {
     if (value) {
       this.http.post("SalaryComponent/AddBonusComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody) {
+          $('#CreateDeductionModal').modal('hide');
           Toast("Component added successfully.")
         } else
           ErrorToast("Fail to add component. Please contact to admin.")
@@ -159,12 +245,13 @@ export class PayrollComponentsComponent implements OnInit {
 
 class PayrollComponentsModal {
   ComponentName: string = null;
-  Type: string = null;
-  TaxExempt: string = null;
-  MaxLimit: number = null;
-  RequireDocs: boolean = null;
+  Type: string = '';
+  TaxExempt: boolean = false;
+  MaxLimit: number = 0;
+  RequireDocs: boolean = false;
   ComponentDescription: string = null;
   Section: string = null;
   SectionMaxLimit: number = 0;
-  IsAffectinGross: boolean = null;
+  IsAffectinGross: boolean = false;
+  ComponentId: string = '';
 }

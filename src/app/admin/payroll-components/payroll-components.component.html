@@ -51,19 +51,24 @@
                     </div>
                   </div>
                   <div class="t-body custom-height">
-                    <div class="tr py-2" >
+                    <div class="tr py-2" *ngFor="let item of RecurringComponent">
                       <div class="td ps-3 text-truncate">
+                        {{item.ComponentId}}
                       </div>
                       <div class="td ps-3 text-truncate">
+                        {{item.ComponentTypeId}}
                       </div>
                       <div class="td ps-3 text-truncate">
+                        {{item.TaxExempt}}
                       </div>
                       <div class="td ps-3 text-truncate">
+                        {{item.MaxLimit}}
                       </div>
                       <div class="td ps-3 text-truncate">
+                        {{item.RequireDocs}}
                       </div>
                       <div class="td ps-3">
-                        <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-pencil pe-lg-1"></i> Edit</a>
+                        <a href="javascript:void(0)" class="text-decoration-none" (click)="editRecurring(item)"><i class="fa fa-pencil pe-lg-1"></i> Edit</a>
                         <a href="javascript:void(0)" class="text-decoration-none ps-3 text-danger"><i class="fa fa-trash-o pe-1"></i> Delete</a>
                       </div>
                     </div>
@@ -136,7 +141,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="NewComponentModalLabel">ADD NEW SALARY COMPONENT - {{ComponentType | uppercase}}</h5>
+        <h5 class="modal-title" id="NewComponentModalLabel">{{CurrentRecurringComponent.ComponentId == ''? 'Add NEW ': 'Update'}} SALARY COMPONENT - {{ComponentType | uppercase}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -144,11 +149,11 @@
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">COMPONENT TYPE</label>
             <div class="col-md-4">
-              <select class="form-select" formControlName="Type" (change)="selectComponentType($event)">
+              <select class="form-select" [ngClass]="{'error-field': submitted && f.Type.errors !== null && f.Type.errors.required}" formControlName="Type" (change)="selectComponentType($event)">
                 <option value="">Select Componet Type</option>
-                <option value="allowance">Allowance</option>
-                <option value="reimbursable">Reimbursable Component</option>
-                <option value="rembursement">Rembursement</option>
+                <option value="2">Allowance</option>
+                <option value="4">Reimbursable Component</option>
+                <option value="3">Rembursement</option>
               </select>
             </div>
             <ng-container [ngSwitch]="ComponentType">
@@ -167,7 +172,7 @@
           <div class="row col-md-12">
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != ''" [ngClass]="{'error-field': submitted && f.ComponentName.errors !== null && f.ComponentName.errors.required}" formControlName="ComponentName" placeholder="Component Name" class="form-control">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
@@ -206,10 +211,18 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-                    {{ isLoading ? 'Wait' : 'Create Salary Group' }}
-        </button>
+        <ng-container *ngIf="CurrentRecurringComponent.ComponentId == ''">
+          <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
+            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                      {{ isLoading ? 'Wait' : 'Update Salary Group' }}
+          </button>
+        </ng-container>
+        <ng-container *ngIf="CurrentRecurringComponent.ComponentId != ''">
+          <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
+            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                      {{ isLoading ? 'Wait' : 'Create Salary Group' }}
+          </button>
+        </ng-container>
       </div>
     </div>
   </div>
