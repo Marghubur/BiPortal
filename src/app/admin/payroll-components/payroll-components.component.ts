@@ -140,6 +140,7 @@ export class PayrollComponentsComponent implements OnInit {
   }
 
   editRecurring(item: any) {
+    this.submitted = false;
     if (item) {
       this.CurrentRecurringComponent = item;
       switch (item.ComponentTypeId) {
@@ -151,6 +152,9 @@ export class PayrollComponentsComponent implements OnInit {
           break;
         case "Reimbursable":
           this.CurrentRecurringComponent.Type = "4"
+          break;
+        case 0:
+          this.CurrentRecurringComponent.Type = ""
           break;
       }
       if(item.TaxExempt == 'true')
@@ -171,9 +175,9 @@ export class PayrollComponentsComponent implements OnInit {
 
     if (this.NewSalaryForm.get('ComponentName').errors !== null)
       errroCounter++;
-    if (this.NewSalaryForm.get('Type').value == '0')
+    if (this.NewSalaryForm.get('Type').errors !== null)
       errroCounter++;
-    if (errroCounter == 0) {
+    if (errroCounter === 0) {
       let value:PayrollComponentsModal = this.NewSalaryForm.value;
       if (value) {
         this.http.post("SalaryComponent/AddUpdateRecurringComponents", value).then((response:ResponseModel) => {

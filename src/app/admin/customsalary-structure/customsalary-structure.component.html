@@ -37,13 +37,10 @@
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
                       <button ngbDropdownItem>
-                        <a class="dropdown-item" href="javascript:void(0)">Split/Create New Range</a>
+                        <a class="dropdown-item" href="javascript:void(0)">Edit Salary Group</a>
                       </button>
                       <button ngbDropdownItem>
-                        <a class="dropdown-item" href="javascript:void(0)">Change Upper Limit</a>
-                      </button>
-                      <button ngbDropdownItem>
-                        <a class="dropdown-item" href="javascript:void(0)">Delete Range</a>
+                        <a class="dropdown-item" href="javascript:void(0)">Delete Salaary Group</a>
                       </button>
                     </div>
                   </div>
@@ -58,8 +55,7 @@
           </ng-container>
           <div class="vhide col-md-12 me-2">
             <button class="btn btn-primary-c float-end mt-2" (click)="addSalaryGroupModal()"><i
-                class="fa fa-plus pe-2"></i> Add
-              Salary Group</button>
+                class="fa fa-plus pe-2"></i> Add Salary Group</button>
           </div>
         </div>
         <ng-container *ngIf="salaryStructureType.length > 0 && isSalaryGrpSelected">
@@ -363,7 +359,7 @@
             </div>
             <div class="col-md-4 form-group">
               <label class="form-label">Calculation Type</label>
-              <select formControlName="CalculateInPercentage" class="form-control" >
+              <select formControlName="CalculateInPercentage" [ngClass]="{'error-field': submitted && m['CalculateInPercentage'].errors !== null && m['CalculateInPercentage'].errors['required']}" class="form-control" >
                 <option value="">Pick calculation type</option>
                 <option value="2">In percent value</option>
                 <option value="3">In fixed value</option>
@@ -393,7 +389,7 @@
             </div>
             <div class="col-md-4 ">
               <label class="form-label">Value</label>
-              <input type="text" class="form-control" formControlName="MaxLimit" [ngClass]="{'error-field': submitted && m['MaxLimit'].errors !== null && m['MaxLimit'].errors['required']}"
+              <input type="text" class="form-control" formControlName="MaxLimit" [ngClass]="{'error-field': submitted && m['MaxLimit'].errors !== null && (m['MaxLimit'].errors['required'] || m['MaxLimit'].errors['numberZero'])}"
                 (keyup)="generateFormula()">
             </div>
           </div>
@@ -745,13 +741,13 @@
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">Minimum Amount</label>
               <input type="text" OnlyNumber="9"
-                [ngClass]="{'error-field': submitted && f.MinAmount.errors !== null && f.MinAmount.errors.required}"
+                [ngClass]="{'error-field': submitted && f.MinAmount.errors !== null && (f.MinAmount.errors.required || f.MinAmount.errors.numberZero)}"
                 placeholder="Enter Minimum Amount" formControlName="MinAmount" class="form-control">
             </div>
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">Maximum Amount</label>
               <input type="text" OnlyNumber="9"
-                [ngClass]="{'error-field': submitted && f.MaxAmount.errors !== null && f.MaxAmount.errors.required}"
+                [ngClass]="{'error-field': submitted && f.MaxAmount.errors !== null && (f.MaxAmount.errors.required || f.MinAmount.errors.numberZero)}"
                 placeholder="Enter Maximum Amount" formControlName="MaxAmount" class="form-control">
             </div>
           </div>

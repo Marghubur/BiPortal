@@ -42,8 +42,8 @@
                     Payroll</label>
                 </div>
                 <div class="col-md-3">
-                  <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth">
-                    <option value="0">Select</option>
+                  <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth" [ngClass]="{'error-field': submitted && f['PayCycleMonth'].errors !== null && f['PayCycleMonth'].errors['required']}">
+                    <option value="">Select</option>
                     <option *ngFor="let mon of months;let i = index;" [value]="i + 1">{{mon}}</option>
                   </select>
                 </div>
@@ -56,7 +56,7 @@
                   <label for="" class="form-label fs-6">Pay cycle date in every month</label>
                 </div>
                 <div class="col-md-3">
-                  <select class="form-select" formControlName="PayCycleDayOfMonth">
+                  <select class="form-select" formControlName="PayCycleDayOfMonth" [ngClass]="{'error-field': submitted && f['PayCycleDayOfMonth'].errors !== null && f['PayCycleDayOfMonth'].errors['required']}">
                     <option value="">Select date</option>
                     <option value="0">Last day of month</option>
                     <option *ngFor="let day of days" [value]="day.value">{{day.text}}</option>
@@ -75,8 +75,8 @@
                       <label for="" class="form-label fs-6">Payment type</label>
                     </div>
                     <div class="col-md-4">
-                      <select class="form-select" formControlName="PayCalculationId">
-                        <option value="0">Select payment type</option>
+                      <select class="form-select" formControlName="PayCalculationId" [ngClass]="{'error-field': submitted && f['PayCalculationId'].errors !== null && f['PayCalculationId'].errors['required']}">
+                        <option value="">Select payment type</option>
                         <option value="1">Actual Days in month</option>
                         <option value="2">Weekday only</option>
                       </select>

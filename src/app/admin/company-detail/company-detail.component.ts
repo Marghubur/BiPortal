@@ -49,7 +49,8 @@ export class CompanyDetailComponent implements OnInit {
   loadData() {
     this.http.get(`Company/GetCompanyById/${this.CompanyId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-          this.organizationModal = response.ResponseBody;
+          this.organizationModal = response.ResponseBody.OrganizationDetail;
+          let file = response.ResponseBody.Files;
           this.singleOrganization = this.organizationModal;
           this.initForm();
       } else {

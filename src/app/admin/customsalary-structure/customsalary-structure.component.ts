@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
@@ -131,9 +131,9 @@ export class CustomsalaryStructureComponent implements OnInit {
       ComponentId: new FormControl(''),
       GroupName: new FormControl('', [Validators.required]),
       GroupDescription: new FormControl('', [Validators.required]),
-      MinAmount: new FormControl(0, [Validators.required]),
-      MaxAmount: new FormControl(0, [Validators.required])
-    })
+      MinAmount: new FormControl(0, [Validators.required, numberZero]),
+      MaxAmount: new FormControl(0, [Validators.required, numberZero])
+    });
   }
 
   loadSalaryComponentDetail() {
@@ -274,12 +274,18 @@ export class CustomsalaryStructureComponent implements OnInit {
   addSalaryGroup() {
     this.isLoading = true;
     this.submitted = true;
-    if (this.SalaryGroupForm.invalid) {
-      this.isLoading = false;
-      return;
-    }
+    let errorCounter = 0;
+    if (this.SalaryGroupForm.get('GroupName').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('GroupDescription').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MinAmount').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MaxAmount').value !== null)
+      errorCounter++;
+
     let value:SalaryStructureType = this.SalaryGroupForm.value;
-    if (value) {
+    if (value && errorCounter === 0) {
       this.http.post("SalaryComponent/AddSalaryGroup", value).then ((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.salaryStructureType = response.ResponseBody;
@@ -290,8 +296,9 @@ export class CustomsalaryStructureComponent implements OnInit {
           ErrorToast("Unable to add salary group.")
         }
       })
-    } else
+    } else {
       ErrorToast("Please correct all the mandaroty field marded red");
+    }
     this.isLoading = false;
   }
 
@@ -321,9 +328,21 @@ export class CustomsalaryStructureComponent implements OnInit {
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
     let value = item.Formula.split(' ');
-    this.componentFields.FormulaBasedOn = value[0].slice(2, (value[0].length -1));
-    this.componentFields.Operator = value[1]
+    if (value.length > 0) {
+      let formulabasedon = (value[0].length -1);
+      if (formulabasedon) {
+        this.componentFields.FormulaBasedOn = value[0].slice(2, (value[0].length -1));
+      } else {
+        this.componentFields.FormulaBasedOn = '';
+      }
+      if (value[1]) {
+        this.componentFields.Operator = value[1];
+      } else {
+        this.componentFields.Operator = '';
+      }
+    }
     this.updateComponentDeatils();
+    this.submitted = false;
     $('#updateCalculationModal').modal('show');
   }
 
@@ -336,6 +355,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   addSalaryGroupModal() {
+    this.submitted = false;
     $('#addSalaryGroupModal').modal('show');
   }
 
@@ -347,7 +367,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.updateComponentForm = this.fb.group({
       CalculateInPercentage: new FormControl (this.componentFields.CalculateInPercentage == false ? '3': '2'),
       TaxExempt: new FormControl (this.componentFields.TaxExempt == 'true'? true: false),
-      MaxLimit: new FormControl (this.componentFields.MaxLimit, [Validators.required]),
+      MaxLimit: new FormControl (this.componentFields.MaxLimit, [Validators.required, numberZero]),
       Formula: new FormControl (this.componentFields.Formula),
       EmployeeContribution: new FormControl (this.componentFields.EmployeeContribution),
       EmployerContribution: new FormControl (this.componentFields.EmployerContribution),
@@ -365,14 +385,15 @@ export class CustomsalaryStructureComponent implements OnInit {
     let value = this.updateComponentForm.value;
     value.Formula = this.componentFields.Formula;
     let errorCounter = 0;
-    if (this.updateComponentForm.get('MaxLimit').value <= 0)
+    if (this.updateComponentForm.get('MaxLimit').errors != null)
       errorCounter++;
-    if (this.updateComponentForm.get('FormulaBasedOn').value === null || this.updateComponentForm.get('FormulaBasedOn').value === '')
+    if (this.updateComponentForm.get('FormulaBasedOn').errors !== null )
       errorCounter++;
-    if (this.updateComponentForm.get('Operator').value === null || this.updateComponentForm.get('Operator').value === '')
+    if (this.updateComponentForm.get('Operator').errors !== null)
       errorCounter++;
-    // if (this.updateComponentForm.get().value === null || this.updateComponentForm.get().value === '')
-    //   errorCounter++;
+    if (this.updateComponentForm.get('CalculateInPercentage').value === null || this.updateComponentForm.get('CalculateInPercentage').value === '')
+      errorCounter++;
+
     if (errorCounter === 0) {
       switch (value.CalculateInPercentage) {
         case '2':
@@ -458,4 +479,12 @@ class UpdateSalaryComponent {
   PercentageValue: number = 0;
   Operator: string = '';
   FormulaBasedOn: string = '';
+}
+
+export function numberZero(control:AbstractControl): {[key: string]: any} | null {
+  const value = control.value;
+  if (value <=0)
+    return {'numberZero': true}
+  else
+    null;
 }
