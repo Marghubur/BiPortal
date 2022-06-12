@@ -28,8 +28,8 @@
                   <label for="" class="form-label fs-6">Pay Frequency</label>
                 </div>
                 <div class="col-md-3">
-                  <select class="form-select" formControlName="PayFrequency">
-                    <option value="0">Select</option>
+                  <select class="form-select" formControlName="PayFrequency" [ngClass]="{'error-field': submitted && f['PayFrequency'].errors !== null && f['PayFrequency'].errors['required']}">
+                    <option value="">Select</option>
                     <option value="monthly">Monthly</option>
                     <option value="daily">Daily</option>
                     <option value="hourly">Hourly</option>
@@ -74,7 +74,7 @@
                     <div class="col-md-4">
                       <label for="" class="form-label fs-6">Payment type</label>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                       <select class="form-select" formControlName="PayCalculationId">
                         <option value="0">Select payment type</option>
                         <option value="1">Actual Days in month</option>

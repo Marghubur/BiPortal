@@ -79,6 +79,9 @@ export class CompanyAccountsComponent implements OnInit {
     this.submitted = true;
     this.isLoading = true;
     let errroCounter = 0;
+
+    if (this.organizationAccountsForm.get("AccountNumber").value === "" || this.organizationAccountsForm.get("AccountNumber").value === null)
+      errroCounter++;
     if (errroCounter === 0) {
       let request: organizationAccountModal = this.organizationAccountsForm.value;
       request.OrganizationId = this.OrganizationId;

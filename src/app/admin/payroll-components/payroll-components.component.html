@@ -247,13 +247,13 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <ng-container *ngIf="CurrentRecurringComponent.ComponentId == ''">
+        <ng-container *ngIf="CurrentRecurringComponent.ComponentId != ''">
           <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
             <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
                       {{ isLoading ? 'Wait' : 'Update Salary Group' }}
           </button>
         </ng-container>
-        <ng-container *ngIf="CurrentRecurringComponent.ComponentId != ''">
+        <ng-container *ngIf="CurrentRecurringComponent.ComponentId == ''">
           <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
             <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
                       {{ isLoading ? 'Wait' : 'Create Salary Group' }}

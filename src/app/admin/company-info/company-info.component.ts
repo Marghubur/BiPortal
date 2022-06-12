@@ -205,6 +205,10 @@ export class CompanyInfoComponent implements OnInit {
     this.submitted = true;
     this.isLoading = true;
     let request:CompanyInformationClass = this.companyInformationForm.value;
+    if (this.companyInformationForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
     if (request.CompanyId <= 0)
       ErrorToast("Invalid Organization");
     let value = this.companyInformation;

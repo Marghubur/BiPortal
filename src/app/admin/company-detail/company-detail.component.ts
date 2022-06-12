@@ -98,11 +98,11 @@ export class CompanyDetailComponent implements OnInit {
     this.isLoading = true;
     let errroCounter = 0;
 
-    if (this.organizationForm.get("CompanyName").value === "")
+    if (this.organizationForm.get("CompanyName").value === "" || this.organizationForm.get("CompanyName").value === null)
       errroCounter++;
-    if (this.organizationForm.get("OrganizationName").value === "")
+    if (this.organizationForm.get("OrganizationName").value === "" || this.organizationForm.get("OrganizationName").value === null)
       errroCounter++;
-    if (this.organizationForm.get("Email").value === "")
+    if (this.organizationForm.get("Email").value === "" || this.organizationForm.get("Email").value === null)
       errroCounter++;
 
     if (this.organizationForm.get("FileId").value == null)
