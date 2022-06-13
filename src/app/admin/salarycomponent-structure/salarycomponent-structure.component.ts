@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 declare var $: any;
 
 @Component({
@@ -19,6 +19,8 @@ export class SalarycomponentStructureComponent implements OnInit {
   isFixedType: boolean = false;
   recurringComponent:Array<any> = [];
   isLoading: boolean = false;
+  componentTypeId: number = -1;
+  isReade: boolean = false;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService) { }
@@ -28,21 +30,23 @@ export class SalarycomponentStructureComponent implements OnInit {
     this.currentSalaryComponent = new SalaryComponentFields();
     this.salaryComponent();
     this.addSalaryComponent();
-    // this.salaryComponentFields = [{
-    //   ComponentDescription: "Basic",
-    //   ComponentId: "BS",
-    //   Type: "Fixed",
-    //   TaxExempt: "Taxable",
-    //   MaxLimit: "Auto Calculated",
-    //   RequireDocs: false,
-    //   IndividualOverride: true,
-    //   IsAllowtoOverride: true,
-    //   IsComponentEnable: true,
-    //   PercentageValue: 0,
-    //   CalculateInPercentage: false,
-    //   Formula: null,
-    //   IsActive: false
-    // }]
+  }
+
+  loadOnChange() {
+    this.isReade = false;
+    this.http.get(`Settings/FetchComponentDetailById/${this.componentTypeId}`)
+    .then(res => {
+      if(res.ResponseBody) {
+        if(res.ResponseBody.length > 0) {
+          this.salaryComponentFields = res.ResponseBody
+          Toast("Component structure table loaded successfully.");
+        } else {
+          WarningToast("0 item found under this catagroy. Please add one.");
+        }
+
+        this.isReade = false;
+      }
+    });
   }
 
   openEditModal(data: any) {
@@ -65,9 +69,13 @@ export class SalarycomponentStructureComponent implements OnInit {
       ComponentName: new FormControl(this.currentSalaryComponent.ComponentDescription),
       MaximumLimit: new FormControl(this.currentSalaryComponent.MaxLimit),
       IsAllowtoOverride: new FormControl(this.currentSalaryComponent.IsAllowtoOverride),
-      Section: new FormControl(this.currentSalaryComponent.Section)
+      Section: new FormControl(this.currentSalaryComponent.Section),
+      IsActive: new FormControl(this.currentSalaryComponent.IsActive),
+      TaxExempt: new FormControl(this.currentSalaryComponent.TaxExempt),
+      RequireDocs: new FormControl(this.currentSalaryComponent.RequireDocs)
     })
   }
+
   addSalaryComponent() {
     this.addComponentForm = this.fb.group({
       ComponentType: new FormControl(''),
@@ -127,6 +135,25 @@ export class SalarycomponentStructureComponent implements OnInit {
       }
       document.getElementById('progressbar').style.width = ((page - 1) *100).toString() + '%';
     }
+  }
+
+  updateChanges() {
+    this.isLoading = true;
+    let value = this.editSalaryComponent.value;
+
+    this.salaryComponentFields = [];
+    this.http.put(`Settings/EnableSalaryComponentDetail/${this.currentSalaryComponent.ComponentId}`, value)
+    .then(res => {
+      if(res.ResponseBody) {
+        this.salaryComponentFields = res.ResponseBody
+        Toast("Component detail updated successfully");
+      } else {
+        Toast("Fail to update. Please contact to admin.");
+      }
+
+      this.isLoading = false;
+      $('#editSalaryMoadl').modal('hide');
+    });
   }
 }
 
