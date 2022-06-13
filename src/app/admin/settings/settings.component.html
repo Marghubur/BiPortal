@@ -21,7 +21,7 @@
             <ng-template ngbNavContent>
               <div class="col-md-12 m-0 p-0 row">
                 <div class="col-md-3 col-sm-12 ps-0 ">
-                  <div class="x_panel p-0 vh-100 overflow-auto">
+                  <div class="x_panel p-0">
                     <div class="x_header p-3">
                       <div class="x_header_title d-flex flex-row justify-content-between">
                         <h5 class="text-primary-c m-0">
@@ -423,7 +423,7 @@
               </div>
             </ng-template>
           </li>
-          <li [ngbNavItem]="2">
+          <li [ngbNavItem]="2" (click)="redirectTo(PayrollComponent)">
             <a ngbNavLink>COMPONENTS</a>
             <ng-template ngbNavContent>
               <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
@@ -468,7 +468,7 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content px-4">
           <div class="modal-header border-bottom-0">
-            <h5 class="modal-title" id="NewCompanyModalLabel">ADD NEW COMPANY GROUP</h5>
+            <h5 class="modal-title" id="NewCompanyModalLabel">{{currentCompnay.CompanyId > 0 ? 'Update': 'ADD NEW'}} COMPANY GROUP</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -530,7 +530,7 @@
                 {{ isLoading ? 'Wait' : 'Update Company Group' }}
               </button>
             </ng-container>
-            <ng-container *ngIf="currentCompnay.CompanyId == null || currentCompnay.CompanyId <= 0">
+            <ng-container *ngIf="currentCompnay.CompanyId == null && currentCompnay.CompanyId <= 0">
               <button type="button" class="btn btn-primary-c" (click)="addNewCompany()">
                 <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
                 {{ isLoading ? 'Wait' : 'Create Company Group' }}

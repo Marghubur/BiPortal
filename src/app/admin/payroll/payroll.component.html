@@ -1,4 +1,4 @@
-<div class="col-12 full-v main-container">
+<div class="col-12 full-v main-container" [ngClass]="{'preload': !isPageReady}">
   <div>
     <form>
       <div class="x_panel">
@@ -22,28 +22,28 @@
 
         <ng-container *ngIf="isReady">
           <form [formGroup]="payrollForm">
-            <div class="card bg-light p-3">
-              <div class="row px-2 py-2">
+            <div class="card bg-light p-3 skeleton">
+              <div class="row px-2 py-2 vhide">
                 <div class="col-md-3">
                   <label for="" class="form-label fs-6">Pay Frequency</label>
                 </div>
                 <div class="col-md-3">
-                  <select class="form-select" formControlName="PayFrequency">
-                    <option value="0">Select</option>
+                  <select class="form-select" formControlName="PayFrequency" [ngClass]="{'error-field': submitted && f['PayFrequency'].errors !== null && f['PayFrequency'].errors['required']}">
+                    <option value="">Select</option>
                     <option value="monthly">Monthly</option>
                     <option value="daily">Daily</option>
                     <option value="hourly">Hourly</option>
                   </select>
                 </div>
               </div>
-              <div class="row px-2 py-2">
+              <div class="row px-2 py-2 vhide">
                 <div class="col-md-3">
                   <label for="" class="form-label fs-6">Which pay cycle do you want to start using HiringBell for
                     Payroll</label>
                 </div>
                 <div class="col-md-3">
-                  <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth">
-                    <option value="0">Select</option>
+                  <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth" [ngClass]="{'error-field': submitted && f['PayCycleMonth'].errors !== null && f['PayCycleMonth'].errors['required']}">
+                    <option value="">Select</option>
                     <option *ngFor="let mon of months;let i = index;" [value]="i + 1">{{mon}}</option>
                   </select>
                 </div>
@@ -51,12 +51,12 @@
                   <a href="javascript:void(0)" class="text-decoration-none fw-bold">cancel</a>
                 </div>
               </div>
-              <div class="row px-2 py-2">
+              <div class="row px-2 py-2 vhide">
                 <div class="col-md-3">
                   <label for="" class="form-label fs-6">Pay cycle date in every month</label>
                 </div>
                 <div class="col-md-3">
-                  <select class="form-select" formControlName="PayCycleDayOfMonth">
+                  <select class="form-select" formControlName="PayCycleDayOfMonth" [ngClass]="{'error-field': submitted && f['PayCycleDayOfMonth'].errors !== null && f['PayCycleDayOfMonth'].errors['required']}">
                     <option value="">Select date</option>
                     <option value="0">Last day of month</option>
                     <option *ngFor="let day of days" [value]="day.value">{{day.text}}</option>
@@ -67,16 +67,16 @@
             <h4 class="fw-bold text-dark my-3 px-2 py-3">
               <span>PAYROLL PERIOD CALCULATION</span>
             </h4>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="card bg-light p-3">
+            <div class="row ">
+              <div class="col-md-6 skeleton">
+                <div class="card bg-light p-3 vhide">
                   <div class="row px-2 py-2">
                     <div class="col-md-4">
                       <label for="" class="form-label fs-6">Payment type</label>
                     </div>
-                    <div class="col-md-3">
-                      <select class="form-select" formControlName="PayCalculationId">
-                        <option value="0">Select payment type</option>
+                    <div class="col-md-4">
+                      <select class="form-select" formControlName="PayCalculationId" [ngClass]="{'error-field': submitted && f['PayCalculationId'].errors !== null && f['PayCalculationId'].errors['required']}">
+                        <option value="">Select payment type</option>
                         <option value="1">Actual Days in month</option>
                         <option value="2">Weekday only</option>
                       </select>

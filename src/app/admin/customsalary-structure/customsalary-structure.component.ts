@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
@@ -15,7 +15,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   ActivatedPage: number = 1;
   salaryStructureType: Array<SalaryStructureType> = null;
   salaryComponentFields: Array<SalaryComponentFields> = [];
-  componentFields: SalaryComponentFields = new SalaryComponentFields();
+  componentFields: UpdateSalaryComponent = new UpdateSalaryComponent();
   customSalaryStructure: Array<CustomSalaryStructure> = [];
   dailyWages: Array<DailyWagesStructure> = []
   salaryAndDeduction: FormGroup;
@@ -30,6 +30,8 @@ export class CustomsalaryStructureComponent implements OnInit {
   SalaryGroupForm: FormGroup;
   selectedSalaryStructure: SalaryStructureType = null;
   isSalaryGrpSelected: boolean = false;
+  updateComponentForm: FormGroup;
+  isPageReady: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -100,7 +102,9 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   createNewComponent(elem: SalaryComponentFields): FormGroup {
     if(elem.TaxExempt == null || elem.TaxExempt == "")
-      elem.TaxExempt = "NA";
+      elem.TaxExempt = "false";
+    if(elem.Formula == null || elem.Formula == "")
+      elem.Formula = "NA";
 
     return this.fb.group({
       ComponentDescription: elem.ComponentDescription,
@@ -114,20 +118,28 @@ export class CustomsalaryStructureComponent implements OnInit {
       CalculateInPercentage: elem.CalculateInPercentage,
       ComponentId: elem.ComponentId,
       Formula: elem.Formula,
-      IsActive: elem.IsActive
+      IsActive: elem.IsActive,
+      EmployeeContribution: elem.EmployeeContribution,
+      EmployerContribution: elem.EmployerContribution,
+      IsOpted: elem.IsOpted,
+      IncludeInPayslip: elem.IncludeInPayslip,
+      PercentageValue: elem.PercentageValue
     });
   }
+
   salaryGroup() {
     this.SalaryGroupForm = this.fb.group({
-      ComponentId: new FormControl(''),
-      GroupName: new FormControl('', [Validators.required]),
-      GroupDescription: new FormControl('', [Validators.required]),
-      MinAmount: new FormControl(0, [Validators.required]),
-      MaxAmount: new FormControl(0, [Validators.required])
-    })
+      ComponentId: new FormControl(this.selectedSalaryStructure.ComponentId),
+      GroupName: new FormControl(this.selectedSalaryStructure.GroupName, [Validators.required]),
+      GroupDescription: new FormControl(this.selectedSalaryStructure.GroupDescription, [Validators.required]),
+      MinAmount: new FormControl(this.selectedSalaryStructure.MinAmount, [Validators.required, numberZero]),
+      MaxAmount: new FormControl(this.selectedSalaryStructure.MaxAmount, [Validators.required, numberZero]),
+      SalaryGroupId: new FormControl(this.selectedSalaryStructure.SalaryGroupId)
+    });
   }
 
   loadSalaryComponentDetail() {
+    this.isPageReady = false;
     this.http.get("SalaryComponent/GetSalaryComponentsDetail").then(res => {
       if(res.ResponseBody) {
         let data = res.ResponseBody;
@@ -137,7 +149,7 @@ export class CustomsalaryStructureComponent implements OnInit {
           this.salaryComponentFields.push({
             ComponentDescription: data[i]["ComponentDescription"],
             ComponentId: data[i]["ComponentId"],
-            Type: data[i]["SubComponentTypeId"],
+            Type: data[i]["ComponentTypeId"],
             TaxExempt: data[i]["TaxExempt"],
             Formula: data[i]["Formula"],
             MaxLimit: data[i]["MaxLimit"],
@@ -147,11 +159,17 @@ export class CustomsalaryStructureComponent implements OnInit {
             IsComponentEnable: false,
             IsActive: data[i]["IsActive"],
             PercentageValue: data[i]["PercentageValue"],
-            CalculateInPercentage: data[i]["CalculateInPercentage"]
+            CalculateInPercentage: data[i]["CalculateInPercentage"],
+            EmployerContribution: data[i]["EmployerContribution"],
+            IncludeInPayslip: data[i]["IncludeInPayslip"],
+            IsOpted: data[i]["IsOpted"],
+            EmployeeContribution: data[i]["EmployeeContribution"],
+            Section: data[i]["Section"]
           });
           i++;
         }
 
+        this.isPageReady = true;
         this.initForm();
         this.isReady = true;
         Toast("Salary components loaded successfully.");
@@ -177,6 +195,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.salaryStructureType = [];
     this.selectedSalaryStructure = new SalaryStructureType();
     this.ComponentName = '0';
+    this.updateComponentDeatils();
     this.OpertaionType = "0";
     this.CalculationValue = null;
     this.salaryGroup();
@@ -255,15 +274,29 @@ export class CustomsalaryStructureComponent implements OnInit {
     }
   }
 
+  ediitSalaryGrouop(item: any) {
+    if (item) {
+      this.selectedSalaryStructure = item;
+      this.salaryGroup();
+      $('#addSalaryGroupModal').modal('show');
+    }
+  }
+
   addSalaryGroup() {
     this.isLoading = true;
     this.submitted = true;
-    if (this.SalaryGroupForm.invalid) {
-      this.isLoading = false;
-      return;
-    }
+    let errorCounter = 0;
+    if (this.SalaryGroupForm.get('GroupName').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('GroupDescription').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MinAmount').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MaxAmount').errors !== null)
+      errorCounter++;
+
     let value:SalaryStructureType = this.SalaryGroupForm.value;
-    if (value) {
+    if (value && errorCounter === 0) {
       this.http.post("SalaryComponent/AddSalaryGroup", value).then ((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.salaryStructureType = response.ResponseBody;
@@ -274,13 +307,52 @@ export class CustomsalaryStructureComponent implements OnInit {
           ErrorToast("Unable to add salary group.")
         }
       })
-    } else
+    } else {
       ErrorToast("Please correct all the mandaroty field marded red");
+    }
+    this.isLoading = false;
+  }
+
+  updateSalaryGroup() {
+    this.isLoading = true;
+    this.submitted = true;
+    let errorCounter = 0;
+    if (this.SalaryGroupForm.get('GroupName').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('GroupDescription').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MinAmount').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MaxAmount').errors !== null)
+      errorCounter++;
+
+    let value:SalaryStructureType = this.SalaryGroupForm.value;
+    if (value.SalaryGroupId <= 0) {
+      ErrorToast("Please select a Salary Group first.");
+      errorCounter++;
+    }
+    if (value && errorCounter === 0) {
+      this.http.post("SalaryComponent/UpdateSalaryGroup", value).then ((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          this.salaryStructureType = response.ResponseBody;
+          Toast("Salary Group added suuccessfully.");
+          this.SalaryGroupForm.reset();
+          $('#addSalaryGroupModal').modal('hide');
+        } else {
+          ErrorToast("Unable to add salary group.")
+        }
+      })
+    } else {
+      ErrorToast("Please correct all the mandaroty field marded red");
+    }
     this.isLoading = false;
   }
 
   generateFormula() {
-    this.componentFields.Formula =`([${this.ComponentName}] ${this.OpertaionType} ${this.CalculationValue})`;
+    let value = this.updateComponentForm.get('MaxLimit').value;
+    let name = this.updateComponentForm.get('FormulaBasedOn').value;
+    let operator = this.updateComponentForm.get('Operator').value;
+    this.componentFields.Formula =`([${name}] ${operator} ${Number(value)})`;
   }
 
   addComponentModal() {
@@ -296,11 +368,27 @@ export class CustomsalaryStructureComponent implements OnInit {
     }
   }
 
-  updateCalcModel(item: SalaryComponentFields) {
+  updateCalcModel(item: UpdateSalaryComponent) {
     this.componentFields = item;
-    this.CalculationValue = '',
-    this.OpertaionType = '0',
-    this.ComponentName = '0',
+    if(this.componentFields.CalculateInPercentage == true) {
+      this.componentFields.MaxLimit = this.componentFields.PercentageValue;
+    }
+    let value = item.Formula.split(' ');
+    if (value.length > 0) {
+      let formulabasedon = (value[0].length -1);
+      if (formulabasedon) {
+        this.componentFields.FormulaBasedOn = value[0].slice(2, (value[0].length -1));
+      } else {
+        this.componentFields.FormulaBasedOn = '';
+      }
+      if (value[1]) {
+        this.componentFields.Operator = value[1];
+      } else {
+        this.componentFields.Operator = '';
+      }
+    }
+    this.updateComponentDeatils();
+    this.submitted = false;
     $('#updateCalculationModal').modal('show');
   }
 
@@ -313,23 +401,85 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   addSalaryGroupModal() {
+    this.submitted = false;
     $('#addSalaryGroupModal').modal('show');
   }
 
+  get m () {
+    return this.updateComponentForm.controls;
+  }
+
+  updateComponentDeatils() {
+    this.updateComponentForm = this.fb.group({
+      CalculateInPercentage: new FormControl (this.componentFields.CalculateInPercentage == false ? '3': '2'),
+      TaxExempt: new FormControl (this.componentFields.TaxExempt == 'true'? true: false),
+      MaxLimit: new FormControl (this.componentFields.MaxLimit, [Validators.required, numberZero]),
+      Formula: new FormControl (this.componentFields.Formula),
+      EmployeeContribution: new FormControl (this.componentFields.EmployeeContribution),
+      EmployerContribution: new FormControl (this.componentFields.EmployerContribution),
+      IsOpted: new FormControl (this.componentFields.IsOpted),
+      IncludeInPayslip: new FormControl (this.componentFields.IncludeInPayslip),
+      FormulaBasedOn: new FormControl (this.componentFields.FormulaBasedOn, [Validators.required]),
+      Operator: new FormControl (this.componentFields.Operator, [Validators.required])
+    })
+  }
+
+
   updateValue() {
     this.isLoading = true;
-    let items = this.salaryAndDeduction.controls["salaryComponents"] as FormArray;
-    if(items) {
-      items.controls.map(elem => {
-        if(elem.value.ComponentDescription === this.componentFields.ComponentDescription) {
-          elem.get("Formula").setValue(this.componentFields.Formula);
-          elem.get("CalculateInPercentage").setValue(this.componentFields.CalculateInPercentage);
-        }
-      });
-    }
+    this.submitted = true;
+    let value = this.updateComponentForm.value;
+    value.Formula = this.componentFields.Formula;
+    let errorCounter = 0;
+    if (this.updateComponentForm.get('MaxLimit').errors != null)
+      errorCounter++;
+    if (this.updateComponentForm.get('FormulaBasedOn').errors !== null )
+      errorCounter++;
+    if (this.updateComponentForm.get('Operator').errors !== null)
+      errorCounter++;
+    if (this.updateComponentForm.get('CalculateInPercentage').value === null || this.updateComponentForm.get('CalculateInPercentage').value === '')
+      errorCounter++;
 
+    if (errorCounter === 0) {
+      switch (value.CalculateInPercentage) {
+        case '2':
+          value.CalculateInPercentage = true;
+          break;
+        case '3':
+          value.CalculateInPercentage = false;
+          break;
+      }
+
+      let items = this.salaryAndDeduction.controls["salaryComponents"] as FormArray;
+      if(items) {
+        items.controls.map(elem => {
+          if(elem.value.ComponentDescription === this.componentFields.ComponentDescription) {
+            elem.get("Formula").setValue(this.componentFields.Formula);
+            elem.get("CalculateInPercentage").setValue(this.componentFields.CalculateInPercentage);
+            elem.get("TaxExempt").setValue(value.TaxExempt);
+            elem.get("MaxLimit").setValue(this.componentFields.MaxLimit);
+            elem.get("EmployeeContribution").setValue(value.EmployeeContribution);
+            elem.get("EmployerContribution").setValue(value.EmployerContribution);
+            elem.get("IsOpted").setValue(value.IsOpted);
+            elem.get("IncludeInPayslip").setValue(value.IncludeInPayslip);
+            if (value.CalculateInPercentage = true) {
+              elem.get("PercentageValue").setValue(value.MaxLimit);
+              elem.get("MaxLimit").setValue(0);
+            } else {
+              elem.get("MaxLimit").setValue(value.MaxLimit);
+              elem.get("PercentageValue").setValue(0);
+            }
+          }
+        });
+        this.http.put(`Settings/UpdateSalaryComponentDetail/${this.componentFields.ComponentId}`, value).then((response:ResponseModel) => {
+          if (response.ResponseBody)
+            Toast('Updated Successfully')
+          $('#updateCalculationModal').modal('hide');
+        })
+      }
+    }
+    this.submitted = true;
     this.isLoading = false;
-    $('#updateCalculationModal').modal('hide');
   }
 }
 
@@ -359,4 +509,28 @@ class DailyWagesStructure {
   ModifiedBy: string = '';
   ModifiedOn: Date = null;
   RemunerationType: string = '';
+}
+
+class UpdateSalaryComponent {
+  CalculateInPercentage: boolean = false;
+  TaxExempt: string = '';
+  MaxLimit: number = 0;
+  Formula: string = '';
+  EmployeeContribution: boolean = false;
+  EmployerContribution: boolean = false;
+  IsOpted: boolean = false;
+  IncludeInPayslip: boolean = false;
+  ComponentId: number = 0;
+  ComponentDescription: string = '';
+  PercentageValue: number = 0;
+  Operator: string = '';
+  FormulaBasedOn: string = '';
+}
+
+export function numberZero(control:AbstractControl): {[key: string]: any} | null {
+  const value = control.value;
+  if (value <=0)
+    return {'numberZero': true}
+  else
+    null;
 }

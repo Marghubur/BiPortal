@@ -4,7 +4,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { CompanyAccounts, CompanyDetail, CompanyInfo, CompanySettings, CustomSalaryStructure, Payroll, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
+import { CompanyAccounts, CompanyDetail, CompanyInfo, CompanySettings, CustomSalaryStructure, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -20,6 +20,7 @@ export class SettingsComponent implements OnInit {
   ManageCompanyAccounts: string = CompanyAccounts;
   SalaryStructure: string = SalaryComponentStructure;
   CustomSalary: string = CustomSalaryStructure;
+  PayrollComponent: string = PayrollComponents;
   PayRollPage: string = Payroll
   menuItem: any = {};
   active: number = 1;
@@ -77,6 +78,9 @@ export class SettingsComponent implements OnInit {
       case CustomSalaryStructure:
         this.nav.navigate(CustomSalaryStructure, null);
         break;
+      case PayrollComponents:
+        this.nav.navigate(PayrollComponents, null);
+        break;
     }
   }
 
@@ -105,6 +109,8 @@ export class SettingsComponent implements OnInit {
   }
 
   openModalToAddNewCompany() {
+    this.currentCompnay =new CompanyGroup();
+    this.initForm();
     $('#NewCompanyModal').modal('show');
   }
 
@@ -222,11 +228,11 @@ export class SettingsComponent implements OnInit {
 
 class CompanyGroup {
   CompanyId: number = 0;
-  OrganizationName: string = null;
-  CompanyName: string = null;
-  CompanyDetail: string = null;
+  OrganizationName: string = '';
+  CompanyName: string = '';
+  CompanyDetail: string = '';
   InCorporationDate: Date = null;
-  Email: string = null;
+  Email: string = '';
 }
 interface Payroll {
 
