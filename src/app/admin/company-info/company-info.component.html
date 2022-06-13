@@ -112,39 +112,38 @@
             <button class="float-end btn my-2 me-1 btn-outline-success" (click)="activePage(1)"><i
                 class="fa fa-arrow-left pe-2"></i>Previous</button>
             <h6 class="mb-0 py-3 mt-5">BANK ACCOUNT INFORMATION.</h6>
-            <div class="row">
-              <div class="col-md-4 my-2">
-                <label for="" class="form-label">Account Number :</label>
-                <label for="" class="form-label ps-3">{{BankDetails.AccountNumber}}</label>
+            <div class="">
+              <div class="col-md-4 row my-2">
+                <div class="form-label col-md-6 fw-bold">Account Number :</div>
+                <div class="form-label col-md-6">{{BankDetails.AccountNumber}}</div>
               </div>
-              <div class="col-md-4 my-2">
-                <label for="" class="form-label">Bank Name :</label>
-                <label for="" class="form-label ps-3">{{BankDetails.BankName}}</label>
+              <div class="col-md-4 row my-2">
+                <div class="form-label col-md-6 fw-bold">Bank Name :</div>
+                <div class="form-label col-md-6">{{BankDetails.BankName}}</div>
               </div>
-              <div class="col-md-4 my-2">
-                <label for="" class="form-label">Branch Name :</label>
-                <label for="" class="form-label ps-3">{{BankDetails.Branch}}</label>
+              <div class="col-md-4 row my-2">
+                <div class="form-label col-md-6 fw-bold">Branch Name :</div>
+                <div class="form-label col-md-6">{{BankDetails.Branch}}</div>
               </div>
-              <div class="col-md-4 my-2">
-                <label for="" class="form-label">Branch Code :</label>
-                <label for="" class="form-label ps-3">{{BankDetails.Branch}}</label>
+              <div class="col-md-4 row my-2">
+                <div class="form-label col-md-6 fw-bold">Branch Code :</div>
+                <div class="form-label col-md-6">{{BankDetails.Branch}}</div>
               </div>
-              <div class="col-md-4 my-2">
-                <label for="" class="form-label">IFSC Code :</label>
-                <label for="" class="form-label ps-3">{{BankDetails.IFSCCode}}</label>
+              <div class="col-md-4 row my-2">
+                <div class="form-label col-md-6 fw-bold">IFSC Code :</div>
+                <div class="form-label col-md-6">{{BankDetails.IFSCCode}}</div>
               </div>
-              <div class="col-md-4"></div>
-              <div class="col-md-4 my-2">
-                <label for="" class="form-label">GSTIN Number :</label>
-                <label for="" class="form-label ps-3">{{BankDetails.GSTINNumber}}</label>
+              <div class="col-md-4 row my-2">
+                <div class="form-label col-md-6 fw-bold">GSTIN Number :</div>
+                <div class="form-label col-md-6">{{BankDetails.GSTINNumber}}</div>
               </div>
-              <div class="col-md-4 my-2">
-                <label for="" class="form-label">TradeLiecence Number :</label>
-                <label for="" class="form-label ps-3">{{BankDetails.TradeLiecenceNumber}}</label>
+              <div class="col-md-4 row my-2">
+                <div class="form-label col-md-6 fw-bold">TradeLiecence Number :</div>
+                <div class="form-label col-md-6">{{BankDetails.TradeLiecenceNumber}}</div>
               </div>
-              <div class="col-md-4 my-2">
-                <label for="" class="form-label">PAN Number :</label>
-                <label for="" class="form-label ps-3">{{BankDetails.PANNumber}}</label>
+              <div class="col-md-4 row my-2">
+                <div class="form-label col-md-6 fw-bold">PAN Number :</div>
+                <div class="form-label col-md-6">{{BankDetails.PANNumber}}</div>
               </div>
             </div>
           </div>
@@ -154,26 +153,61 @@
             <button class="float-end btn my-2 me-1 btn-outline-success" (click)="activePage(2)"><i
                 class="fa fa-arrow-left pe-2"></i>Previous</button>
             <h6 class="mb-0 mt-5 py-3">COMPANY LOCATION</h6>
-            <div class="row col-md-6">
-              <div class="col-md-12 my-2">
-                <label for="" class="form-label">First Address :</label>
-                <label for="" class="form-label ps-3">{{companyInformation.FirstAddress}}</label>
+            <div class="">
+              <div class="col-md-4 my-2 row">
+                <div class="form-label fw-bold col-md-6">First Address :</div>
+                <div class="form-label col-md-6">
+                  <ng-container *ngIf="companyInformation.FirstAddress != null || companyInformation.FirstAddress != ''">
+                    {{companyInformation.FirstAddress}}
+                  </ng-container>
+                  <ng-container *ngIf="companyInformation.FirstAddress == null || companyInformation.FirstAddress == ''">
+                    NA
+                  </ng-container>
+                </div>
               </div>
-              <div class="col-md-12 my-2">
-                <label for="" class="form-label">Second Address :</label>
-                <label for="" class="form-label ps-3">{{companyInformation.SecondAddress}}</label>
+              <div class="col-md-4 my-2 row">
+                <div class="form-label fw-bold col-md-6">Second Address :</div>
+                <div class="form-label col-md-6">
+                  <ng-container *ngIf="companyInformation.SecondAddress != null || companyInformation.SecondAddress != ''">
+                    {{companyInformation.SecondAddress}}
+                  </ng-container>
+                  <ng-container *ngIf="companyInformation.SecondAddress == null || companyInformation.SecondAddress == ''">
+                    NA
+                  </ng-container>
+                </div>
               </div>
-              <div class="col-md-12 my-2">
-                <label for="" class="form-label">Third Address :</label>
-                <label for="" class="form-label ps-3">{{companyInformation.ThirdAddress}}</label>
+              <div class="col-md-4 my-2 row">
+                <div class="form-label fw-bold col-md-6">Third Address :</div>
+                <div class="form-label col-md-6">
+                  <ng-container *ngIf="companyInformation.ThirdAddress != null || companyInformation.ThirdAddress != ''">
+                    {{companyInformation.ThirdAddress}}
+                  </ng-container>
+                  <ng-container *ngIf="companyInformation.ThirdAddress == null || companyInformation.ThirdAddress == ''">
+                    NA
+                  </ng-container>
+                </div>
               </div>
-              <div class="col-md-12 my-2">
-                <label for="" class="form-label">Fourth Address :</label>
-                <label for="" class="form-label ps-3">{{companyInformation.FourthAddress}}</label>
+              <div class="col-md-4 my-2 row">
+                <div class="form-label fw-bold col-md-6">Fourth Address :</div>
+                <div class="form-label col-md-6">
+                  <ng-container *ngIf="companyInformation.FourthAddress != null || companyInformation.FourthAddress != ''">
+                    {{companyInformation.FourthAddress}}
+                  </ng-container>
+                  <ng-container *ngIf="companyInformation.FourthAddress == null || companyInformation.FourthAddress == ''">
+                    NA
+                  </ng-container>
+                </div>
               </div>
-              <div class="col-md-12 my-2">
-                <label for="" class="form-label">Full Address :</label>
-                <label for="" class="form-label ps-3">{{companyInformation.FullAddress}}</label>
+              <div class="col-md-4 my-2 row">
+                <div class="form-label fw-bold col-md-6">Full Address :</div>
+                <div class="form-label col-md-6">
+                  <ng-container *ngIf="companyInformation.FullAddress != null || companyInformation.FullAddress != ''">
+                    {{companyInformation.FullAddress}}
+                  </ng-container>
+                  <ng-container *ngIf="companyInformation.FullAddress == null || companyInformation.FullAddress == ''">
+                    NA
+                  </ng-container>
+                </div>
               </div>
             </div>
           </div>

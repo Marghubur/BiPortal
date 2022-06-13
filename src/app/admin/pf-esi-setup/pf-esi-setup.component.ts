@@ -170,7 +170,7 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
       EmployerContribution: data.EsiEmployerContribution,
       IsActive: data.EsiEnable,
       IsDeductions: true,
-      IncludeInPayslip: data.IsHidePfEmployer
+      IncludeInPayslip: data.IsHideEsiEmployer
     };
     var PFSetting = {
       ComponentId: 'PF',
@@ -178,7 +178,7 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
       EmployerContribution: data.EmployerPFLimit,
       IsActive: data.PFEnable,
       IsDeductions: true,
-      IncludeInPayslip: data.IsHideEsiEmployer
+      IncludeInPayslip: data.IsHidePfEmployer
     }
     var PFESISetting = {
       PfEsi_setting_Id: 1,
