@@ -37,7 +37,7 @@
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
                       <button ngbDropdownItem>
-                        <a class="dropdown-item" href="javascript:void(0)">Edit Salary Group</a>
+                        <a class="dropdown-item" href="javascript:void(0)" (click)="ediitSalaryGrouop(item)">Edit Salary Group</a>
                       </button>
                       <button ngbDropdownItem>
                         <a class="dropdown-item" href="javascript:void(0)">Delete Salaary Group</a>
@@ -311,11 +311,21 @@
                 {{item.ComponentId}}
               </div>
               <div class="td ps-3 text-truncate">
-                {{item.Type}}
+                <ng-container [ngSwitch]="item.Type">
+                  <ng-container *ngSwitchCase="2">Allowance</ng-container>
+                  <ng-container *ngSwitchCase="1">Fixed</ng-container>
+                  <ng-container *ngSwitchCase="3">Rembursment</ng-container>
+                  <ng-container *ngSwitchCase="4">Reimursable</ng-container>
+                </ng-container>
               </div>
               <div class="td ps-3 text-truncate">
-                {{item.TaxExempt}}
-                <small class="text-muted d-block">{{item.Section}}</small>
+                <ng-conatiner [ngSwitch]="item.TaxExempt">
+                  <ng-conatiner *ngSwitchCase="'true'">
+                    Tax Exempt
+                    <small class="text-muted d-block">Section {{item.Section}}</small>
+                  </ng-conatiner>
+                  <ng-conatiner *ngSwitchCase="'false'">Taxable</ng-conatiner>
+                </ng-conatiner>
               </div>
               <div class="td ps-3 text-truncate">
                 {{item.MaxLimit}}
@@ -719,7 +729,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title px-4" id="addClassModalLabel">Create Salary Group</h5>
+        <h5 class="modal-title px-4" id="addClassModalLabel">{{selectedSalaryStructure.SalaryGroupId > 0 ? 'Update': 'Create'}} Salary Group</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body px-5">
@@ -755,10 +765,18 @@
       </div>
       <div class="modal-footer border-top-0 me-3">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="addSalaryGroup()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Create Salary Group' }}
-        </button>
+        <ng-container *ngIf="selectedSalaryStructure.SalaryGroupId > 0">
+          <button type="button" class="btn btn-primary-c" (click)="updateSalaryGroup()">
+            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Update Salary Group' }}
+          </button>
+        </ng-container>
+        <ng-container *ngIf="selectedSalaryStructure.SalaryGroupId == 0">
+          <button type="button" class="btn btn-primary-c" (click)="addSalaryGroup()">
+            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Create Salary Group' }}
+          </button>
+        </ng-container>
       </div>
     </div>
   </div>

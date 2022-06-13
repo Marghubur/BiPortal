@@ -126,13 +126,15 @@ export class CustomsalaryStructureComponent implements OnInit {
       PercentageValue: elem.PercentageValue
     });
   }
+
   salaryGroup() {
     this.SalaryGroupForm = this.fb.group({
-      ComponentId: new FormControl(''),
-      GroupName: new FormControl('', [Validators.required]),
-      GroupDescription: new FormControl('', [Validators.required]),
-      MinAmount: new FormControl(0, [Validators.required, numberZero]),
-      MaxAmount: new FormControl(0, [Validators.required, numberZero])
+      ComponentId: new FormControl(this.selectedSalaryStructure.ComponentId),
+      GroupName: new FormControl(this.selectedSalaryStructure.GroupName, [Validators.required]),
+      GroupDescription: new FormControl(this.selectedSalaryStructure.GroupDescription, [Validators.required]),
+      MinAmount: new FormControl(this.selectedSalaryStructure.MinAmount, [Validators.required, numberZero]),
+      MaxAmount: new FormControl(this.selectedSalaryStructure.MaxAmount, [Validators.required, numberZero]),
+      SalaryGroupId: new FormControl(this.selectedSalaryStructure.SalaryGroupId)
     });
   }
 
@@ -147,7 +149,7 @@ export class CustomsalaryStructureComponent implements OnInit {
           this.salaryComponentFields.push({
             ComponentDescription: data[i]["ComponentDescription"],
             ComponentId: data[i]["ComponentId"],
-            Type: data[i]["SubComponentTypeId"],
+            Type: data[i]["ComponentTypeId"],
             TaxExempt: data[i]["TaxExempt"],
             Formula: data[i]["Formula"],
             MaxLimit: data[i]["MaxLimit"],
@@ -161,7 +163,8 @@ export class CustomsalaryStructureComponent implements OnInit {
             EmployerContribution: data[i]["EmployerContribution"],
             IncludeInPayslip: data[i]["IncludeInPayslip"],
             IsOpted: data[i]["IsOpted"],
-            EmployeeContribution: data[i]["EmployeeContribution"]
+            EmployeeContribution: data[i]["EmployeeContribution"],
+            Section: data[i]["Section"]
           });
           i++;
         }
@@ -271,6 +274,14 @@ export class CustomsalaryStructureComponent implements OnInit {
     }
   }
 
+  ediitSalaryGrouop(item: any) {
+    if (item) {
+      this.selectedSalaryStructure = item;
+      this.salaryGroup();
+      $('#addSalaryGroupModal').modal('show');
+    }
+  }
+
   addSalaryGroup() {
     this.isLoading = true;
     this.submitted = true;
@@ -281,12 +292,47 @@ export class CustomsalaryStructureComponent implements OnInit {
       errorCounter++;
     if (this.SalaryGroupForm.get('MinAmount').errors !== null)
       errorCounter++;
-    if (this.SalaryGroupForm.get('MaxAmount').value !== null)
+    if (this.SalaryGroupForm.get('MaxAmount').errors !== null)
       errorCounter++;
 
     let value:SalaryStructureType = this.SalaryGroupForm.value;
     if (value && errorCounter === 0) {
       this.http.post("SalaryComponent/AddSalaryGroup", value).then ((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          this.salaryStructureType = response.ResponseBody;
+          Toast("Salary Group added suuccessfully.");
+          this.SalaryGroupForm.reset();
+          $('#addSalaryGroupModal').modal('hide');
+        } else {
+          ErrorToast("Unable to add salary group.")
+        }
+      })
+    } else {
+      ErrorToast("Please correct all the mandaroty field marded red");
+    }
+    this.isLoading = false;
+  }
+
+  updateSalaryGroup() {
+    this.isLoading = true;
+    this.submitted = true;
+    let errorCounter = 0;
+    if (this.SalaryGroupForm.get('GroupName').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('GroupDescription').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MinAmount').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MaxAmount').errors !== null)
+      errorCounter++;
+
+    let value:SalaryStructureType = this.SalaryGroupForm.value;
+    if (value.SalaryGroupId <= 0) {
+      ErrorToast("Please select a Salary Group first.");
+      errorCounter++;
+    }
+    if (value && errorCounter === 0) {
+      this.http.post("SalaryComponent/UpdateSalaryGroup", value).then ((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.salaryStructureType = response.ResponseBody;
           Toast("Salary Group added suuccessfully.");

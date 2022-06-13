@@ -109,6 +109,8 @@ export class SettingsComponent implements OnInit {
   }
 
   openModalToAddNewCompany() {
+    this.currentCompnay =new CompanyGroup();
+    this.initForm();
     $('#NewCompanyModal').modal('show');
   }
 
@@ -226,11 +228,11 @@ export class SettingsComponent implements OnInit {
 
 class CompanyGroup {
   CompanyId: number = 0;
-  OrganizationName: string = null;
-  CompanyName: string = null;
-  CompanyDetail: string = null;
+  OrganizationName: string = '';
+  CompanyName: string = '';
+  CompanyDetail: string = '';
   InCorporationDate: Date = null;
-  Email: string = null;
+  Email: string = '';
 }
 interface Payroll {
 

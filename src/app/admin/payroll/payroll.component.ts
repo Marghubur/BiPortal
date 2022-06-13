@@ -24,6 +24,7 @@ export class PayrollComponent implements OnInit {
   isReady: boolean = false;
   compnayDetail: any = null;
   submitted: boolean = false;
+  isPageReady: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -45,13 +46,16 @@ export class PayrollComponent implements OnInit {
   }
 
   loadPayrollSetting() {
+    this.isPageReady = false;
     this.http.get(`Settings/GetPayrollSetting/${this.compnayDetail.CompanyId}`).then(res => {
       if(res.ResponseBody) {
         this.payRoll = res.ResponseBody;
         this.initForm();
         this.isReady = true;
+        this.isPageReady = true;
         Toast("Payroll detail fetched successfully.");
       } else {
+        this.isPageReady = true;
         ErrorToast("Fail to fetch payroll detail. Please contact to admin.");
       }
     });
