@@ -19,49 +19,6 @@ declare var $: any;
 export class DeclarationComponent implements OnInit, AfterViewChecked {
   active = 1;
   editPPF: boolean = true;
-  editSeniorCitizen: boolean = true;
-  editHousingLoan: boolean = true;
-  editMutualFund: boolean = true;
-  editNationalSaving: boolean = true;
-  editUnitLink: boolean = true;
-  editLifeInsurance: boolean = true;
-  editTuitionFee: boolean = true;
-  editBankFD: boolean = true;
-  editPostOffice: boolean = true;
-  editDeferredAnnuity: boolean = true;
-  editSuperAnnuity: boolean = true;
-  editNABARD: boolean = true;
-  editSukanyaSamriddhi: boolean = true;
-  editOther: boolean = true;
-  editMutualPension: boolean = true;
-  editNPSEmployee: boolean = true;
-  editNPSEmployeeAdditional: boolean = true;
-  editNPSEmployeeOther: boolean = true;
-  editMedicalInsurance: boolean = true;
-  editHealthCheckup: boolean = true;
-  editParentInsurance: boolean = true;
-  editParentHealthCheckup: boolean = true;
-  editHandicapped: boolean = true;
-  editSelfDependent: boolean = true;
-  editEducationLoan: boolean = true;
-  editHomeLoan: boolean = true;
-  editHouseProperty: boolean = true;
-  editVehicleLoan: boolean = true;
-  editFullDonationWithoutQualifying: boolean = true;
-  editHalfDonationWithoutQualifying: boolean = true;
-  editFullDonationWithQualifying: boolean = true;
-  editHalfDonationWithQualifying: boolean = true;
-  editResearchandRural: boolean = true;
-  editDonationParties: boolean = true;
-  editBookRoyalty: boolean = true;
-  editPatentRoyalty: boolean = true;
-  editInterestTax: boolean = true;
-  editInterestTaxSenior: boolean = true;
-  editPhysicalDisable: boolean = true;
-  editMedicalAllowance: boolean = true;
-  editTravelReimbursement: boolean = true;
-  editCarRunning: boolean = true;
-  editInternetAllowance: boolean = true;
   fileDetail: Array<any> = [];
   isLargeFile: boolean = false;
   FileDocumentList: Array<Files> = [];
@@ -77,7 +34,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   year: number = 0;
   taxCalender: Array<any> = [];
   monthlyTaxAmount: MonthlyTax;
-  AllComponent: Array<any> = [];
+  allComponentDetails: Array<any> = [];
+  currentComponentDetails: Array<any> = [];
+  filterValue: string = '';
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -85,6 +44,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     private http: AjaxService,) { }
 
   ngOnInit(): void {
+    this.filterValue = '';
     this.loadData();
     var dt = new Date();
     var month = 3;
@@ -124,15 +84,24 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $('[data-bs-toggle = "tooltip"]').tooltip();
   }
 
+  filterDeduction() {
+    // let value = e.target.value;
+    let value = this.filterValue.toLocaleUpperCase();
+    if (value) {
+      this.currentComponentDetails = this.allComponentDetails.filter(x => x.Section == value || x.ComponentId == value);
+    }
+  }
+
+  resetFilter() {
+    this.filterValue = '';
+    this.currentComponentDetails = this.allComponentDetails;
+  }
+
   loadData() {
     this.http.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
-        this.AllComponent = response.ResponseBody;
-        let i =0;
-        // while(i < this.AllComponent.length) {
-        //   this.componentType(this.AllComponent[i].ComponentTypeId, i);
-        //   i++;
-        // }
+        this.allComponentDetails = response.ResponseBody;
+        this.currentComponentDetails = response.ResponseBody;
         Toast("Record found");
       }
     })
@@ -703,383 +672,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
 
-  // ------- 1.5 Lac Exemptions Start ------------
-
-  editPPFDetail() {
-    this.editPPF = false;
-  }
-
-  cancelEditPPF() {
-    this.editPPF = true;
-  }
-
-  editSeniorCitizenDetail() {
-    this.editSeniorCitizen = false;
-  }
-
-  cancelEditSeniorCitizen() {
-    this.editSeniorCitizen = true;
-  }
-
-  editHousingLoanDetail() {
-    this.editHousingLoan = false;
-  }
-
-  cancelEditHousingLoan() {
-    this.editHousingLoan = true;
-  }
-
-  editMutualFundDetail() {
-    this.editMutualFund = false;
-  }
-
-  cancelEditMutualFund() {
-    this.editMutualFund = true;
-  }
-
-  editNationalSavingDetail() {
-    this.editNationalSaving = false;
-  }
-
-  cancelEditNationalSaving() {
-    this.editNationalSaving = true;
-  }
-
-  editUnitLinkDetail() {
-    this.editUnitLink = false;
-  }
-
-  cancelEditUnitLink() {
-    this.editUnitLink = true;
-  }
-
-  editLifeInsuranceDetail() {
-    this.editLifeInsurance = false;
-  }
-
-  cancelEditLifeInsurance() {
-    this.editLifeInsurance = true;
-  }
-
-  editTuitionFeeDetail() {
-    this.editTuitionFee = false;
-  }
-
-  cancelEditTuitionFee() {
-    this.editTuitionFee = true;
-  }
-
-  editBankFDDetail() {
-    this.editBankFD = false;
-  }
-
-  cancelEditBankFD() {
-    this.editBankFD = true;
-  }
-
-  editPostOfficeDetail() {
-    this.editPostOffice = false;
-  }
-
-  cancelEditPostOffice() {
-    this.editPostOffice = true;
-  }
-
-  editDeferredAnnuityDetail() {
-    this.editDeferredAnnuity = false;
-  }
-
-  cancelEditDeferredAnnuity() {
-    this.editDeferredAnnuity = true;
-  }
-
-  editSuperAnnuityDetail() {
-    this.editSuperAnnuity = false;
-  }
-
-  cancelEditSuperAnnuity() {
-    this.editSuperAnnuity = true;
-  }
-
-  editNABARDDetail() {
-    this.editNABARD = false;
-  }
-
-  cancelEditNABARD() {
-    this.editNABARD = true;
-  }
-
-  editSukanyaSamriddhiDetail() {
-    this.editSukanyaSamriddhi = false;
-  }
-
-  cancelEditSukanyaSamriddhi() {
-    this.editSukanyaSamriddhi = true;
-  }
-
-  editOtherDetail() {
-    this.editOther = false;
-  }
-
-  cancelEditOther() {
-    this.editOther = true;
-  }
-
-  editMutualPensionDetail() {
-    this.editMutualPension = false;
-  }
-
-  cancelEditMutualPension() {
-    this.editMutualPension = true;
-  }
-
-  editNPSEmployeeDetail() {
-    this.editNPSEmployee = false;
-  }
-
-  cancelEditNPSEmployee() {
-    this.editNPSEmployee = true;
-  }
-
-  // --------   1.5 Lac Exemptions End ----------------
-
-  // --------    OtherExemptions Start----------
-
-  editNPSEmployeeAdditionalDetail() {
-    this.editNPSEmployeeAdditional = false;
-  }
-
-  cancelEditNPSEmployeeAdditional() {
-    this.editNPSEmployeeAdditional = true;
-  }
-
-  editNPSEmployeeOtherDetail() {
-    this.editNPSEmployeeOther = false;
-  }
-
-  cancelEditNPSEmployeeOther() {
-    this.editNPSEmployeeOther = true;
-  }
-
-  editMedicalInsuranceDetail() {
-    this.editMedicalInsurance = false;
-  }
-
-  cancelEditMedicalInsurance() {
-    this.editMedicalInsurance = true;
-  }
-
-  editHealthCheckupDetail() {
-    this.editHealthCheckup = false;
-  }
-
-  cancelEditHealthCheckup() {
-    this.editHealthCheckup = true;
-  }
-
-  editParentInsuranceDetail() {
-    this.editParentInsurance = false;
-  }
-
-  cancelEditParentInsurance() {
-    this.editParentInsurance = true;
-  }
-
-  editParentHealthCheckupDetail() {
-    this.editParentHealthCheckup = false;
-  }
-
-  cancelEditParentHealthCheckup() {
-    this.editParentHealthCheckup = true;
-  }
-
-  editHandicappedDetail() {
-    this.editHandicapped = false;
-  }
-
-  cancelEditHandicapped() {
-    this.editHandicapped = true;
-  }
-
-  editSelfDependentDetail() {
-    this.editSelfDependent = false;
-  }
-
-  cancelEditSelfDependent() {
-    this.editSelfDependent = true;
-  }
-
-  editEducationLoanDetail() {
-    this.editEducationLoan = false;
-  }
-
-  cancelEditEducationLoan() {
-    this.editEducationLoan = true;
-  }
-
-  editHomeLoanDetail() {
-    this.editHomeLoan = false;
-  }
-
-  cancelEditHomeLoan() {
-    this.editHomeLoan = true;
-  }
-
-  editHousePropertyDetail() {
-    this.editHouseProperty = false;
-  }
-
-  cancelEditHouseProperty() {
-    this.editHouseProperty = true;
-  }
-
-  editVehicleLoanDetail() {
-    this.editVehicleLoan = false;
-  }
-
-  cancelEditVehicleLoan() {
-    this.editVehicleLoan = true;
-  }
-
-  editFullDonationWithoutQualifyingDetail() {
-    this.editFullDonationWithoutQualifying = false;
-  }
-
-  cancelEditFullDonationWithoutQualifying() {
-    this.editFullDonationWithoutQualifying = true;
-  }
-
-  editHalfDonationWithoutQualifyingDetail() {
-    this.editHalfDonationWithoutQualifying = false;
-  }
-
-  cancelEditHalfDonationWithoutQualifying() {
-    this.editHalfDonationWithoutQualifying = true;
-  }
-
-  editFullDonationWithQualifyingDetail() {
-    this.editFullDonationWithQualifying = false;
-  }
-
-  cancelEditFullDonationWithQualifying() {
-    this.editFullDonationWithQualifying = true;
-  }
-
-  editHalfDonationWithQualifyingDetail() {
-    this.editHalfDonationWithQualifying = false;
-  }
-
-  cancelEditHalfDonationWithQualifying() {
-    this.editHalfDonationWithQualifying = true;
-  }
-
-  editResearchandRuralDetail() {
-    this.editResearchandRural = false;
-  }
-
-  cancelEditResearchandRural() {
-    this.editResearchandRural = true;
-  }
-
-  editDonationPartiesDetail() {
-    this.editDonationParties = false;
-  }
-
-  cancelEditDonationParties() {
-    this.editDonationParties = true;
-  }
-
-  editBookRoyaltyDetail() {
-    this.editBookRoyalty = false;
-  }
-
-  cancelEditBookRoyalty() {
-    this.editBookRoyalty = true;
-  }
-
-  editPatentRoyaltyDetail() {
-    this.editPatentRoyalty = false;
-  }
-
-  cancelEditPatentRoyalty() {
-    this.editPatentRoyalty = true;
-  }
-
-  editTravelReimbursementDetail() {
-    this.editTravelReimbursement = false;
-  }
-
-  cancelEditTravelReimbursement() {
-    this.editTravelReimbursement = true;
-  }
-
-  editCarRunningDetail() {
-    this.editCarRunning = false;
-  }
-
-  cancelEditCarRunning() {
-    this.editCarRunning = true;
-  }
-
-  editPhysicalDisableDetail() {
-    this.editPhysicalDisable = false;
-  }
-
-  cancelEditPhysicalDisable() {
-    this.editPhysicalDisable = true;
-  }
-
-  // ------------ End Other Exemptions -------------
-
-  // ------- Tax Saving Allowance Start -----------
-
-  editMedicalAllowanceDetail() {
-    this.editMedicalAllowance = false;
-  }
-
-  cancelEditMedicalAllowance() {
-    this.editMedicalAllowance = true;
-  }
-
-  editInterestTaxDetail() {
-    this.editInterestTax = false;
-  }
-
-  cancelEditInterestTax() {
-    this.editInterestTax = true;
-  }
-
-  editInterestTaxSeniorDetail() {
-    this.editInterestTaxSenior = false;
-  }
-
-  cancelEditInterestTaxSenior() {
-    this.editInterestTaxSenior = true;
-  }
-
-  editInternetAllowanceDetail() {
-    this.editInternetAllowance = false;
-  }
-
-  cancelEditInternetAllowance() {
-    this.editInternetAllowance = true;
-  }
-
-  // --------- End -------------
-
-  componentType(value: number, i: number) {
-    switch (value) {
-      case 2:
-        this.AllComponent[i].ComponentTypeId = "Allowance"
-        break;
-      case 3:
-        this.AllComponent[i].ComponentTypeId = "Rembursement"
-        break;
-      case 4:
-        this.AllComponent[i].ComponentTypeId = "Reimbursable"
-        break;
-    }
-  }
 
   submitDeclaration() {
 
