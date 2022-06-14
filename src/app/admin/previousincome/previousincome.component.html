@@ -2,16 +2,20 @@
   <div class="col-md-12 bg-light mb-3">
     <ul class="nav">
       <li class="nav-item">
-        <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+        <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('declaration-tab')"
+          aria-current="page" href="javascript:void(0)">DECLARATION</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('salary-tab')" href="javascript:void(0)">SALARY</a>
+        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('salary-tab')"
+          href="javascript:void(0)">SALARY</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')" href="javascript:void(0)">SUMMARY</a>
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')"
+          href="javascript:void(0)">SUMMARY</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">Preference</a>
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')"
+          href="javascript:void(0)">Preference</a>
       </li>
     </ul>
   </div>
@@ -23,41 +27,52 @@
       <div class="col-md-12 bg-light mb-3 mt-3">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link new-nav-link text-dark" id="attendance-tab" (click)="activeTab('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+            <a class="nav-link new-nav-link text-dark" id="attendance-tab" (click)="activeTab('declaration-tab')"
+              aria-current="page" href="javascript:void(0)">Declaration</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark new-nav-active" id="timesheet-tab" (click)="activeTab('previous-income-tab')" href="javascript:void(0)">Previous Income</a>
+            <a class="nav-link text-dark new-nav-active" id="timesheet-tab" (click)="activeTab('previous-income-tab')"
+              href="javascript:void(0)">Previous Income</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('form-12-tab')" href="javascript:void(0)">Form 12 BB</a>
+            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('form-12-tab')"
+              href="javascript:void(0)">Form 12 BB</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')" href="javascript:void(0)">Free Tax Filling</a>
+            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')"
+              href="javascript:void(0)">Free Tax Filling</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('tax-saving-tab')" href="javascript:void(0)">Tax Saving Investment</a>
+            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('tax-saving-tab')"
+              href="javascript:void(0)">Tax Saving Investment</a>
           </li>
         </ul>
       </div>
       <ng-container>
         <div class="container-fluid pt-4">
           <h5 class="text-dark">Previous Employment Details</h5>
-          <p class="mb-0">Previous Employment details are necessary Wen employee change their job, this declaration is required for income tax computation.</p>
+          <p class="mb-0">Previous Employment details are necessary Wen employee change their job, this declaration is
+            required for income tax computation.</p>
           <div class="t-table t-list t-border mb-3 col-md-12 bg-white">
             <div class="t-head overflow-hidden custom-bg">
               <div class="tr bg-light py-3">
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Month">MON</div>
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Gross">GROSS</div>
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Basic">BASIC</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="House Rental Allowance">HR</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Employee Provident Fund">EMP PR</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="House Rental Allowance">HR
+                </div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Employee Provident Fund">
+                  EMP PR</div>
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="ESI">ESI</div>
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="LWF">LWF</div>
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="LWF Employer">LWF EMP</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Professtional Tax">PRO </div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Professtional Tax">PRO
+                </div>
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Income Tax">IT</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Tax Free Components">OTHER TAX</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Taxable Components">OTHER TAXAB</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Tax Free Components">
+                  OTHER TAX</div>
+                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Taxable Components">
+                  OTHER TAXAB</div>
               </div>
             </div>
             <div class="t-body border-bottom overflow-hidden">
@@ -85,5 +100,3 @@
     </div>
   </div>
 </div>
-
-
