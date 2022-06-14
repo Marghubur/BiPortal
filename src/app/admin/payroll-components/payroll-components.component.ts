@@ -25,6 +25,9 @@ export class PayrollComponentsComponent implements OnInit {
   RecurringComponent: Array<any> = [];
   CurrentRecurringComponent: PayrollComponentsModal = new PayrollComponentsModal();
   submitted: boolean = false;
+  AdhocAllowance: Array<PayrollComponentsModal> = [];
+  AdhocDeduction: Array<PayrollComponentsModal> = [];
+  AdhocBonus: Array<PayrollComponentsModal> = [];
   movableComponent: Array<any> = [];
 
   constructor(private fb: FormBuilder,
@@ -47,7 +50,10 @@ export class PayrollComponentsComponent implements OnInit {
   loadData() {
     this.http.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
-        this.RecurringComponent = response.ResponseBody.filter(x => x.IsAdHoc == false);
+        this.RecurringComponent = response.ResponseBody.filter (x => x.IsAdHoc == false);
+        this.AdhocAllowance =  response.ResponseBody.filter (x => x.IsAdHoc == true && x.AdHocId == 1);
+        this.AdhocBonus =  response.ResponseBody.filter (x => x.IsAdHoc == true && x.AdHocId == 2);
+        this.AdhocDeduction =  response.ResponseBody.filter (x => x.IsAdHoc == true && x.AdHocId == 3);
         let i =0;
         while(i < this.RecurringComponent.length) {
           this.componentType(this.RecurringComponent[i].ComponentTypeId, i);
@@ -99,6 +105,7 @@ export class PayrollComponentsComponent implements OnInit {
       MaxLimit: new FormControl(this.CurrentRecurringComponent.MaxLimit),
       RequireDocs: new FormControl(this.CurrentRecurringComponent.RequireDocs),
       ComponentDescription: new FormControl(this.CurrentRecurringComponent.ComponentDescription),
+      ComponentFullName: new FormControl(this.CurrentRecurringComponent.ComponentFullName),
       Section: new FormControl(this.CurrentRecurringComponent.Section),
       SectionMaxLimit: new FormControl(this.CurrentRecurringComponent.SectionMaxLimit)
     });
@@ -108,9 +115,12 @@ export class PayrollComponentsComponent implements OnInit {
     this.AdhocForm = this.fb.group({
       ComponentName: new FormControl(''),
       ComponentDescription: new FormControl(''),
-      TaxExempt: new FormControl(''),
+      ComponentFullName: new FormControl(''),
+      TaxExempt: new FormControl(false),
       Section: new FormControl(''),
-      SectionMaxLimit: new FormControl(0)
+      IsAdhoc: new FormControl(true),
+      SectionMaxLimit: new FormControl(0),
+      AdHocId: new FormControl(1)
     });
   }
 
@@ -118,14 +128,20 @@ export class PayrollComponentsComponent implements OnInit {
     this.DeductionForm = this.fb.group({
       ComponentName: new FormControl(''),
       ComponentDescription: new FormControl(''),
-      IsAffectinGross: new FormControl(false)
+      ComponentFullName: new FormControl(''),
+      IsAffectinGross: new FormControl(false),
+      IsAdhoc: new FormControl(true),
+      AdHocId: new FormControl(3)
     });
   }
 
   initbonusForm() {
     this.BonusForm = this.fb.group({
       ComponentName: new FormControl(''),
-      ComponentDescription: new FormControl('')
+      ComponentDescription: new FormControl(''),
+      ComponentFullName: new FormControl(''),
+      IsAdhoc: new FormControl(true),
+      AdHocId: new FormControl(2)
     });
   }
 
@@ -148,11 +164,11 @@ export class PayrollComponentsComponent implements OnInit {
   }
 
   BonusPopUp() {
-    $('#CreateDeductionModal').modal('show');
+    $('#CreateBonusModal').modal('show');
   }
 
   DeductionPopUp() {
-    $('#CreateBonusModal').modal('show');
+    $('#CreateDeductionModal').modal('show');
   }
 
   editRecurring(item: any) {
@@ -224,10 +240,12 @@ export class PayrollComponentsComponent implements OnInit {
     let value = this.AdhocForm.value;
     if (value) {
       this.http.post("SalaryComponent/AddAdhocComponents", value).then((response:ResponseModel) => {
-        if (response.ResponseBody) {
+        if (response.ResponseBody && response.ResponseBody.length > 0) {
+          this.AdhocAllowance = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 1);
+          $('#CreateAdhocModal').modal('hide');
           Toast("Component added successfully.")
         } else
-          ErrorToast("Fail to add component. Please contact to admin.")
+          ErrorToast("Fail to add adhoc allowance component. Please contact to admin.")
       })
     }
     this.isLoading = false;
@@ -238,10 +256,12 @@ export class PayrollComponentsComponent implements OnInit {
     let value = this.DeductionForm.value;
     if (value) {
       this.http.post("SalaryComponent/AddDeductionComponents", value).then((response:ResponseModel) => {
-        if (response.ResponseBody) {
+        if (response.ResponseBody && response.ResponseBody.length > 0) {
+          this.AdhocDeduction = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 3);
+          $('#CreateDeductionModal').modal('hide');
           Toast("Component added successfully.")
         } else
-          ErrorToast("Fail to add component. Please contact to admin.")
+          ErrorToast("Fail to add deduction component. Please contact to admin.")
       })
     }
     this.isLoading = false;
@@ -252,11 +272,12 @@ export class PayrollComponentsComponent implements OnInit {
     let value = this.BonusForm.value;
     if (value) {
       this.http.post("SalaryComponent/AddBonusComponents", value).then((response:ResponseModel) => {
-        if (response.ResponseBody) {
-          $('#CreateDeductionModal').modal('hide');
+        if (response.ResponseBody && response.ResponseBody.length > 0) {
+          this.AdhocBonus = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 3);
+          $('#CreateBonusModal').modal('hide');
           Toast("Component added successfully.")
         } else
-          ErrorToast("Fail to add component. Please contact to admin.")
+          ErrorToast("Fail to add bonus component. Please contact to admin.")
       })
     }
     this.isLoading = false;
@@ -271,7 +292,7 @@ export class PayrollComponentsComponent implements OnInit {
   }
 }
 
-class PayrollComponentsModal {
+export class PayrollComponentsModal {
   ComponentName: string = null;
   Type: string = '';
   TaxExempt: boolean = false;
@@ -282,4 +303,7 @@ class PayrollComponentsModal {
   SectionMaxLimit: number = 0;
   IsAffectinGross: boolean = false;
   ComponentId: string = '';
+  ComponentFullName: string = '';
+  AdhocId: number = 0;
+  IsAdhoc: boolean = false;
 }

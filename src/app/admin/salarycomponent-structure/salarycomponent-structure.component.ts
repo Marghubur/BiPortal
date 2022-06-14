@@ -176,5 +176,6 @@ export class SalaryComponentFields {
   EmployeeContribution: number = 0;
   IncludeInPayslip: boolean = false;
   IsOpted: boolean = false;
+  ComponentFullName: string = '';
 }
 

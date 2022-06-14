@@ -77,6 +77,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   year: number = 0;
   taxCalender: Array<any> = [];
   monthlyTaxAmount: MonthlyTax;
+  AllComponent: Array<any> = [];
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -124,6 +125,19 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   loadData() {
+    this.http.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
+      if (response.ResponseBody && response.ResponseBody.length > 0) {
+        this.AllComponent = response.ResponseBody;
+        let i =0;
+        while(i < this.AllComponent.length) {
+          this.componentType(this.AllComponent[i].ComponentTypeId, i);
+          i++;
+        }
+        Toast("Record found");
+      }
+    })
+
+
     this.exemptions.push({
       Section: "80C",
       DeductionName: "EPF (Deducted from salary)",
@@ -1052,6 +1066,20 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   // --------- End -------------
+
+  componentType(value: number, i: number) {
+    switch (value) {
+      case 2:
+        this.AllComponent[i].ComponentTypeId = "Allowance"
+        break;
+      case 3:
+        this.AllComponent[i].ComponentTypeId = "Rembursement"
+        break;
+      case 4:
+        this.AllComponent[i].ComponentTypeId = "Reimbursable"
+        break;
+    }
+  }
 
   submitDeclaration() {
 

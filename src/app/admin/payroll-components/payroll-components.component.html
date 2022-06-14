@@ -26,7 +26,9 @@
                   <ng-template ngbNavContent>
                     <div class="px-2 pt-3">
                       <h4>Recurring Components Library</h4>
-                      <p class="mb-0">In this Section you can create all the recurring salary components in your Organization components like Basic, HRA, Special Allowance are system defined and can't be edited or removed.</p>
+                      <p class="mb-0">In this Section you can create all the recurring salary components in your
+                        Organization components like Basic, HRA, Special Allowance are system defined and can't be
+                        edited or removed.</p>
                       <div class="col-md-12 my-4">
                         <button class="btn btn-primary-c" (click)="newComponentPopUp()"><i class="fa fa-plus pe-2"></i> ADD NEW COMPONENT</button>
                         <button class="btn btn-success ms-2"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to Add Hoc Component</button>
@@ -92,8 +94,10 @@
                               {{item.RequireDocs}}
                             </div>
                             <div class="td ps-3">
-                              <a href="javascript:void(0)" class="text-decoration-none" (click)="editRecurring(item)"><i class="fa fa-pencil pe-lg-1"></i> Edit</a>
-                              <a href="javascript:void(0)" class="text-decoration-none ps-3 text-danger"><i class="fa fa-trash-o pe-1"></i> Delete</a>
+                              <a href="javascript:void(0)" class="text-decoration-none" (click)="editRecurring(item)"><i
+                                  class="fa fa-pencil pe-lg-1"></i> Edit</a>
+                              <a href="javascript:void(0)" class="text-decoration-none ps-3 text-danger"><i
+                                  class="fa fa-trash-o pe-1"></i> Delete</a>
                             </div>
                           </div>
                         </div>
@@ -116,39 +120,46 @@
                             <h5 class="fw-bold">ADHOC ALLOWANCES</h5>
                             <p class="mb-0">These are components that can be configured to be taxable or tax exempt.</p>
                             <ul class="list-group my-3">
-                              <li class="list-group-item">
-                                <span class="fs-6">align-middle</span>
-                                <span class="alert alert-danger py-0 float-end m-0">Taxable</span>
-                                <span class="alert alert-success py-0 float-end m-0">Non-Taxable</span>
+                              <li class="list-group-item" *ngFor="let item of AdhocAllowance">
+                                <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
+                                <span class="alert alert-danger py-0 float-end m-0"
+                                  *ngIf="item.TaxExempt">Taxable</span>
+                                <span class="alert alert-success py-0 float-end m-0" *ngIf="!item.TaxExempt">Non-Taxable
+                                  -
+                                  {{item.Section}}</span>
                               </li>
                             </ul>
                             <p class="mb-0 my-3">
-                              <a href="javascript:void(0)" class="text-decoration-none" (click)="AdhocPopUp()"><i class="fa fa-plus pe-2"></i>Add Adhoc Allowance</a>
+                              <a href="javascript:void(0)" class="text-decoration-none" (click)="AdhocPopUp()"><i
+                                  class="fa fa-plus pe-2"></i>Add Adhoc Allowance</a>
                             </p>
                           </div>
                           <div class="col-md-12 mt-5 py-5">
                             <h5 class="fw-bold">BONUSES</h5>
                             <p class="mb-0">Bonuses are one time payments made to an employee and are taxable.</p>
                             <ul class="list-group my-3">
-                              <li class="list-group-item">
-                                <span class="fs-6">align-middle</span>
+                              <li class="list-group-item" *ngFor="let item of AdhocBonus">
+                                <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
                               </li>
                             </ul>
                             <p class="mb-0 my-3">
-                              <a href="javascript:void(0)" class="text-decoration-none" (click)="DeductionPopUp()"><i class="fa fa-plus pe-2"></i>Add Bonuses</a>
+                              <a href="javascript:void(0)" class="text-decoration-none" (click)="BonusPopUp()"><i
+                                  class="fa fa-plus pe-2"></i>Add Bonuses</a>
                             </p>
                           </div>
                         </div>
                         <div class="col-md-4">
                           <h5 class="f-bold">DEDUCTIONS</h5>
-                          <p class="mb-0">Deductions are component used to deductfrom net salary of employee in a moonth Ex. Laptop Damange charges etc.</p>
+                          <p class="mb-0">Deductions are component used to deductfrom net salary of employee in a moonth
+                            Ex. Laptop Damange charges etc.</p>
                           <ul class="list-group my-3">
-                            <li class="list-group-item">
-                              <span class="fs-6">align-middle</span>
+                            <li class="list-group-item" *ngFor="let item of AdhocDeduction">
+                              <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
                             </li>
                           </ul>
                           <p class="mb-0 my-3">
-                            <a href="javascript:void(0)" class="text-decoration-none" (click)="BonusPopUp()"><i class="fa fa-plus pe-2"></i>AddDeduction</a>
+                            <a href="javascript:void(0)" class="text-decoration-none" (click)="DeductionPopUp()()"><i
+                                class="fa fa-plus pe-2"></i>AddDeduction</a>
                           </p>
                         </div>
                       </div>
@@ -183,18 +194,18 @@
         <div [ngbNavOutlet]="nav" class="col-12 mt-2"></div>
       </ul>
 
-
-
     </div>
   </div>
 </div>
 
 <!--Add New Component Modal -->
-<div class="modal fade" id="NewComponentModal" tabindex="-1" aria-labelledby="NewComponentModalLabel" aria-hidden="true">
+<div class="modal fade" id="NewComponentModal" tabindex="-1" aria-labelledby="NewComponentModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="NewComponentModalLabel">{{CurrentRecurringComponent.ComponentId == ''? 'Add NEW ': 'Update'}} SALARY COMPONENT - {{ComponentType | uppercase}}</h5>
+        <h5 class="modal-title" id="NewComponentModalLabel">{{CurrentRecurringComponent.ComponentId == ''? 'Add NEW ':
+          'Update'}} SALARY COMPONENT - {{ComponentType | uppercase}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -202,7 +213,9 @@
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">COMPONENT TYPE</label>
             <div class="col-md-4">
-              <select class="form-select" [ngClass]="{'error-field': submitted && f.Type.errors !== null && f.Type.errors.required}" formControlName="Type" (change)="selectComponentType($event)">
+              <select class="form-select"
+                [ngClass]="{'error-field': submitted && f.Type.errors !== null && f.Type.errors.required}"
+                formControlName="Type" (change)="selectComponentType($event)">
                 <option value="">Select Componet Type</option>
                 <option value="2">Allowance</option>
                 <option value="4">Reimbursable Component</option>
@@ -212,33 +225,45 @@
             <ng-container [ngSwitch]="ComponentType">
               <div *ngSwitchCase="'rembursement'">
                 <div class="alert alert-primary my-3 py-2 mb-0 col-md-12" role="alert">
-                  Reimbursement - is part of employee CTC, the paid amount is never displayed in Form 16 and income tax computation. The unpaid amount is paid as part of Special allowance.
+                  Reimbursement - is part of employee CTC, the paid amount is never displayed in Form 16 and income tax
+                  computation. The unpaid amount is paid as part of Special allowance.
                 </div>
               </div>
               <div *ngSwitchCase="'reimbursable'">
                 <div class="alert alert-primary my-3 py-2 mb-0 col-md-12" role="alert">
-                  Reimbursable component - is part of employees CTC and is displayed as exempted/non-exempted amount in Form 16 and income tax computation.
+                  Reimbursable component - is part of employees CTC and is displayed as exempted/non-exempted amount in
+                  Form 16 and income tax computation.
                 </div>
               </div>
             </ng-container>
           </div>
           <div class="row col-md-12">
-            <div class="col-md-6 mt-3">
+            <div class="col-md-4 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != ''" [ngClass]="{'error-field': submitted && f.ComponentName.errors !== null && f.ComponentName.errors.required}" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != ''"
+                [ngClass]="{'error-field': submitted && f.ComponentName.errors !== null && f.ComponentName.errors.required}"
+                formControlName="ComponentName" placeholder="Component Name" class="form-control">
             </div>
-            <div class="col-md-6 mt-3">
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">COMPONENT FULL NAME</label>
+              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name"
+                class="form-control">
+            </div>
+            <div class="col-md-4 mt-3">
               <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
-              <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9" class="form-control">
+              <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9"
+                class="form-control">
             </div>
             <div class="col-md-12 mt-3">
               <label for="" class="form-label">COMPONENT DESCRIPTION</label>
-              <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description" class="form-control"></textarea>
+              <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
+                class="form-control"></textarea>
             </div>
           </div>
           <div class="col-md-12">
             <div class="form-check mt-3">
-              <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt" (click)="enableTaxExempt($event)">
+              <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt"
+                (click)="enableTaxExempt($event)">
               <label class="form-check-label">
                 This component is tax exemption(non taxable)
               </label>
@@ -246,11 +271,13 @@
             <div class="row mx-2">
               <div class="col-md-6 mt-2">
                 <label for="" class="form-label">INCOME TAX SECTION</label>
-                <input type="text" [readonly]="!isTaxExempt" formControlName="Section" placeholder="Enter Income Tax Section" class="form-control">
+                <input type="text" [readonly]="!isTaxExempt" formControlName="Section"
+                  placeholder="Enter Income Tax Section" class="form-control">
               </div>
               <div class="col-md-6 mt-2">
                 <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
-                <input type="text" [readonly]="!isTaxExempt" OnlyNumber="9"formControlName="SectionMaxLimit" placeholder="Section Maximum Limit" class="form-control">
+                <input type="text" [readonly]="!isTaxExempt" OnlyNumber="9" formControlName="SectionMaxLimit"
+                  placeholder="Section Maximum Limit" class="form-control">
               </div>
             </div>
             <div class="form-check mt-3" *ngIf="ComponentType == 'reimbursable'">
@@ -267,13 +294,13 @@
         <ng-container *ngIf="CurrentRecurringComponent.ComponentId != ''">
           <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
             <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-                      {{ isLoading ? 'Wait' : 'Update Salary Group' }}
+            {{ isLoading ? 'Wait' : 'Update Salary Group' }}
           </button>
         </ng-container>
         <ng-container *ngIf="CurrentRecurringComponent.ComponentId == ''">
           <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
             <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-                      {{ isLoading ? 'Wait' : 'Create Salary Group' }}
+            {{ isLoading ? 'Wait' : 'Create Salary Group' }}
           </button>
         </ng-container>
       </div>
@@ -287,21 +314,30 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="CreateAdhocModalLabel">Create Adhoc Allowances</h5>
+        <h5 class="modal-title" id="CreateAdhocModalLabel">CREATE ADHOC ALLOWANCE</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="AdhocForm">
-          <div class="col-md-6 mt-3">
-            <label for="" class="form-label">COMPONENT NAME</label>
-            <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+          <div class="row">
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">COMPONENT NAME</label>
+              <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">COMPONENT FULL NAME</label>
+              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name"
+                class="form-control">
+            </div>
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">COMPONENT DESCRIPTION</label>
-            <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description" class="form-control"></textarea>
+            <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
+              class="form-control"></textarea>
           </div>
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt" (click)="enableTaxExempt($event)">
+            <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt"
+              (click)="enableTaxExempt($event)">
             <label class="form-check-label">
               THIS TAX EXEMPTIONS
             </label>
@@ -313,7 +349,8 @@
             </div>
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
-              <input type="text" OnlyNumber="9"formControlName="SectionMaxLimit" placeholder="Section Maximum Limit" class="form-control">
+              <input type="text" OnlyNumber="9" formControlName="SectionMaxLimit" placeholder="Section Maximum Limit"
+                class="form-control">
             </div>
           </div>
         </form>
@@ -322,7 +359,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="addNewAdhocAllowance()">
           <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-                    {{ isLoading ? 'Wait' : 'Create Adhoc Allowance' }}
+          {{ isLoading ? 'Wait' : 'Create Adhoc Allowance' }}
         </button>
       </div>
     </div>
@@ -331,7 +368,8 @@
 <!-- End -->
 
 <!-- Create Deduction Modal -->
-<div class="modal fade" id="CreateDeductionModal" tabindex="-1" aria-labelledby="CreateDeductionModalLabel" aria-hidden="true">
+<div class="modal fade" id="CreateDeductionModal" tabindex="-1" aria-labelledby="CreateDeductionModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
@@ -340,13 +378,21 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="DeductionForm">
-          <div class="col-md-6 mt-3">
-            <label for="" class="form-label">COMPONENT NAME</label>
-            <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+          <div class="row">
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">COMPONENT NAME</label>
+              <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">COMPONENT FULL NAME</label>
+              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name"
+                class="form-control">
+            </div>
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">COMPONENT DESCRIPTION</label>
-            <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description" class="form-control"></textarea>
+            <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
+              class="form-control"></textarea>
           </div>
           <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" value="" formControlName="IsAffectinGross">
@@ -360,7 +406,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="addNewDeduction()">
           <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-                    {{ isLoading ? 'Wait' : 'Create Deduction' }}
+          {{ isLoading ? 'Wait' : 'Create Deduction' }}
         </button>
       </div>
     </div>
@@ -378,13 +424,21 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="BonusForm">
-          <div class="col-md-6 mt-3">
-            <label for="" class="form-label">COMPONENT NAME</label>
-            <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+          <div class="row">
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">COMPONENT NAME</label>
+              <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">COMPONENT FULL NAME</label>
+              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name"
+                class="form-control">
+            </div>
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">COMPONENT DESCRIPTION</label>
-            <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description" class="form-control"></textarea>
+            <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
+              class="form-control"></textarea>
           </div>
         </form>
       </div>
@@ -392,7 +446,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="addNewBonus()">
           <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-                    {{ isLoading ? 'Wait' : 'Create Bonus' }}
+          {{ isLoading ? 'Wait' : 'Create Bonus' }}
         </button>
       </div>
     </div>

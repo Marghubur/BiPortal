@@ -37,7 +37,8 @@
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
                       <button ngbDropdownItem>
-                        <a class="dropdown-item" href="javascript:void(0)" (click)="ediitSalaryGrouop(item)">Edit Salary Group</a>
+                        <a class="dropdown-item" href="javascript:void(0)" (click)="ediitSalaryGrouop(item)">Edit Salary
+                          Group</a>
                       </button>
                       <button ngbDropdownItem>
                         <a class="dropdown-item" href="javascript:void(0)">Delete Salaary Group</a>
@@ -103,7 +104,7 @@
                     <div class="tr py-2" *ngFor="let item of components.controls; let i = index">
                       <ng-container [formGroupName]="i">
                         <div class="td ps-3 text-truncate">
-                          {{item.get("ComponentId").value}} ({{item.get("ComponentDescription").value}})
+                          {{item.get("ComponentId").value}} ({{item.get("ComponentFullName").value}})
                         </div>
                         <div class="td ps-3 text-truncate">
                           {{item.get("TaxExempt").value}}
@@ -113,7 +114,9 @@
                         </div>
                         <ng-container>
                           <div class="td ps-3">
-                            <a class="text-decoration-none text-dark" href="javascript:void(0)" (click)="updateCalcModel(item.value)"><i class="fa fa-ellipsis-h fa-lg" aria-hidden="true"></i></a>
+                            <a class="text-decoration-none text-dark" href="javascript:void(0)"
+                              (click)="updateCalcModel(item.value)"><i class="fa fa-ellipsis-h fa-lg"
+                                aria-hidden="true"></i></a>
                           </div>
                         </ng-container>
                       </ng-container>
@@ -308,7 +311,7 @@
           <div class="t-body custom-height">
             <div class="tr py-2" *ngFor="let item of salaryComponentFields">
               <div class="td ps-3 text-truncate">
-                {{item.ComponentId}}
+                {{item.ComponentId}} ({{item.ComponentFullName}})
               </div>
               <div class="td ps-3 text-truncate">
                 <ng-container [ngSwitch]="item.Type">
@@ -369,7 +372,9 @@
             </div>
             <div class="col-md-4 form-group">
               <label class="form-label">Calculation Type</label>
-              <select formControlName="CalculateInPercentage" [ngClass]="{'error-field': submitted && m['CalculateInPercentage'].errors !== null && m['CalculateInPercentage'].errors['required']}" class="form-control" >
+              <select formControlName="CalculateInPercentage"
+                [ngClass]="{'error-field': submitted && m['CalculateInPercentage'].errors !== null && m['CalculateInPercentage'].errors['required']}"
+                class="form-control">
                 <option value="">Pick calculation type</option>
                 <option value="2">In percent value</option>
                 <option value="3">In fixed value</option>
@@ -379,7 +384,8 @@
           <div class="col-md-12 mt-5 row">
             <div class="col-md-4 form-group">
               <label class="form-label">Component Name</label>
-              <select class="form-control" formControlName="FormulaBasedOn" [ngClass]="{'error-field': submitted && m['FormulaBasedOn'].errors !== null && m['FormulaBasedOn'].errors['required']}">
+              <select class="form-control" formControlName="FormulaBasedOn"
+                [ngClass]="{'error-field': submitted && m['FormulaBasedOn'].errors !== null && m['FormulaBasedOn'].errors['required']}">
                 <option value="">Select Component Name</option>
                 <option value="gross">Gross</option>
                 <option value="ctc">CTC</option>
@@ -388,7 +394,8 @@
             </div>
             <div class="col-md-4 form-group">
               <label class="form-label">Operator</label>
-              <select class="form-control" formControlName="Operator" [ngClass]="{'error-field': submitted && m['Operator'].errors !== null && m['Operator'].errors['required']}">
+              <select class="form-control" formControlName="Operator"
+                [ngClass]="{'error-field': submitted && m['Operator'].errors !== null && m['Operator'].errors['required']}">
                 <option value="">Select Operation</option>
                 <option value="*">Multiply</option>
                 <option value="/">Divide</option>
@@ -399,7 +406,8 @@
             </div>
             <div class="col-md-4 ">
               <label class="form-label">Value</label>
-              <input type="text" class="form-control" formControlName="MaxLimit" [ngClass]="{'error-field': submitted && m['MaxLimit'].errors !== null && (m['MaxLimit'].errors['required'] || m['MaxLimit'].errors['numberZero'])}"
+              <input type="text" class="form-control" formControlName="MaxLimit"
+                [ngClass]="{'error-field': submitted && m['MaxLimit'].errors !== null && (m['MaxLimit'].errors['required'] || m['MaxLimit'].errors['numberZero'])}"
                 (keyup)="generateFormula()">
             </div>
           </div>
@@ -729,7 +737,8 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title px-4" id="addClassModalLabel">{{selectedSalaryStructure.SalaryGroupId > 0 ? 'Update': 'Create'}} Salary Group</h5>
+        <h5 class="modal-title px-4" id="addClassModalLabel">{{selectedSalaryStructure.SalaryGroupId > 0 ? 'Update':
+          'Create'}} Salary Group</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body px-5">
