@@ -66,7 +66,7 @@
                               <div class="form-check">
                                 <input class="form-check-input me-3" type="checkbox" (click)="addToAdhoc(item)">
                                 <label class="form-check-label" for="flexCheckDefault">
-                                  {{item.ComponentId}} ({{item.ComponentDescription}})
+                                  {{item.ComponentId}} ({{item.ComponentFullName}})
                                 </label>
                               </div>
                             </div>
@@ -158,7 +158,7 @@
                             </li>
                           </ul>
                           <p class="mb-0 my-3">
-                            <a href="javascript:void(0)" class="text-decoration-none" (click)="DeductionPopUp()()"><i
+                            <a href="javascript:void(0)" class="text-decoration-none" (click)="DeductionPopUp()"><i
                                 class="fa fa-plus pe-2"></i>AddDeduction</a>
                           </p>
                         </div>
