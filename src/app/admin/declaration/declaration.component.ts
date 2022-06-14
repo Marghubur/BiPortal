@@ -121,7 +121,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    $('[data-toggle = "tooltip"]').tooltip();
+    $('[data-bs-toggle = "tooltip"]').tooltip();
   }
 
   loadData() {
@@ -129,10 +129,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
         this.AllComponent = response.ResponseBody;
         let i =0;
-        while(i < this.AllComponent.length) {
-          this.componentType(this.AllComponent[i].ComponentTypeId, i);
-          i++;
-        }
+        // while(i < this.AllComponent.length) {
+        //   this.componentType(this.AllComponent[i].ComponentTypeId, i);
+        //   i++;
+        // }
         Toast("Record found");
       }
     })
@@ -1161,11 +1161,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   nextDeclaration(value: string) {
     if (value == 'otherExemptions') {
-      this.active = 2;
-    } else if (value == 'exemptions') {
-      this.active = 1;
-    } else {
       this.active = 3;
+    } else if (value == 'exemptions') {
+      this.active = 2;
+    } else {
+      this.active = 4;
     }
   }
 

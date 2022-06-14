@@ -487,12 +487,12 @@ export class CustomsalaryStructureComponent implements OnInit {
 }
 
 class SalaryStructureType {
-  SalaryGroupId: number = null;
+  SalaryGroupId: number = 0;
   ComponentId: string = null;
   GroupName: string = null;
   GroupDescription: string = null;
-  MinAmount: number = null;
-  MaxAmount: number = null;
+  MinAmount: number = 0;
+  MaxAmount: number = 0;
 }
 
 class CustomSalaryStructure {
@@ -533,7 +533,7 @@ class UpdateSalaryComponent {
 
 export function numberZero(control:AbstractControl): {[key: string]: any} | null {
   const value = control.value;
-  if (value <=0)
+  if (value <0)
     return {'numberZero': true}
   else
     null;

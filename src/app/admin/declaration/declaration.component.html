@@ -321,7 +321,7 @@
                       </div>
                     </div>
                     <div class="t-body">
-                      <div class="tr py-2" *ngFor="let r of exemptions; let i=index">
+                      <div class="tr py-2" *ngFor="let r of AllComponent; let i=index">
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
                             {{r.Section}} <sup>$</sup>
@@ -329,9 +329,9 @@
                         </div>
                         <div class="td align-middle fe-3">
                           <div class="cell-wrapper">
-                            {{r.DeductionName}} <a href="javascript:void(0)" class="text-decoration-none"><i
-                                class="fa fa-question-circle ps-3 text-secondary text-justify" placement="end"
-                                ngbPopover="{{r.DeductionDesc}}"></i></a>
+                            {{r.ComponentId}} ({{r.ComponentFullName}}) <a href="javascript:void(0)" class="text-decoration-none"><i
+                                class="fa fa-question-circle ps-3 text-secondary text-justify" data-bs-toggle="tooltip" data-bs-placement="right"
+                                title='{{r.ComponentDescription}}'></i></a>
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
@@ -347,14 +347,13 @@
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            <span *ngIf="r.Proof == null">No Proof</span>
-                            <span *ngIf="r.Proof != null">{{r.Proof}}</span>
+                            <span>{{r.RequireDocs ? 'Yes' : 'No'}}</span>
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
                             <div class="d-flex align-items-center">
-                              <ng-container *ngIf="r.Status == 1">
+                              <ng-container *ngIf="r.Status != 2">
                                 <div class="circle">
                                   <div class="checkmark">
                                   </div>
@@ -381,7 +380,7 @@
                   </div>
                   <div class="modal-footer border-top-0">
                     <button type="button" class="btn btn-outline-success"
-                      (click)="nextDeclaration('otherExemptions')">Next</button>
+                      (click)="nextDeclaration('otherExemptions')">Next<i class="fa fa-arrow-right ps-2"></i></button>
                   </div>
                 </ng-container>
               </ng-template>
@@ -511,9 +510,9 @@
                   </div>
                   <div class="modal-footer border-top-0">
                     <button type="button" class="btn btn-outline-primary"
-                      (click)="nextDeclaration('exemptions')">Prev</button>
+                      (click)="nextDeclaration('exemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
                     <button type="button" class="btn btn-outline-success"
-                      (click)="nextDeclaration('taxSavingAllowance')">Next</button>
+                      (click)="nextDeclaration('taxSavingAllowance')">Next <i class="fa fa-arrow-right ps-2"></i></button>
                   </div>
                 </ng-container>
               </ng-template>
@@ -653,7 +652,7 @@
                   </div>
                   <div class="modal-footer border-top-0">
                     <button type="button" class="btn btn-outline-primary"
-                      (click)="nextDeclaration('otherExemptions')">Prev</button>
+                      (click)="nextDeclaration('otherExemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
                     <button type="button" class="btn btn-outline-success" (click)="submitDeclaration()">Submit</button>
                   </div>
                 </ng-container>

@@ -462,7 +462,7 @@
       </div>
     </form>
 
-    <!--Add New Component Modal -->
+    <!--Add New Company Modal -->
     <div class="modal fade" id="NewCompanyModal" tabindex="-1" aria-labelledby="NewCompanyModalLabel"
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -530,7 +530,7 @@
                 {{ isLoading ? 'Wait' : 'Update Company Group' }}
               </button>
             </ng-container>
-            <ng-container *ngIf="currentCompnay.CompanyId == null && currentCompnay.CompanyId <= 0">
+            <ng-container *ngIf="currentCompnay.CompanyId <= 0">
               <button type="button" class="btn btn-primary-c" (click)="addNewCompany()">
                 <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
                 {{ isLoading ? 'Wait' : 'Create Company Group' }}
@@ -541,6 +541,5 @@
       </div>
     </div>
     <!-- End -->
-
   </div>
 </div>
