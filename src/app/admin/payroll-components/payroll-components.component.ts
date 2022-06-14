@@ -25,6 +25,7 @@ export class PayrollComponentsComponent implements OnInit {
   RecurringComponent: Array<any> = [];
   CurrentRecurringComponent: PayrollComponentsModal = new PayrollComponentsModal();
   submitted: boolean = false;
+  movableComponent: Array<any> = [];
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -46,7 +47,7 @@ export class PayrollComponentsComponent implements OnInit {
   loadData() {
     this.http.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
-        this.RecurringComponent = response.ResponseBody;
+        this.RecurringComponent = response.ResponseBody.filter(x => x.IsAdHoc == false);
         let i =0;
         while(i < this.RecurringComponent.length) {
           this.componentType(this.RecurringComponent[i].ComponentTypeId, i);
@@ -55,6 +56,21 @@ export class PayrollComponentsComponent implements OnInit {
         Toast("Record found");
       }
     })
+  }
+
+  addToAdhoc(item: any) {
+    if (item) {
+      this.movableComponent.push({
+        ComponentId: item.ComponentId,
+        IsAdHoc: true
+      });
+    }
+  }
+
+  moveToAdhoc() {
+    if (this.movableComponent.length > 0) {
+
+    }
   }
 
   componentType(value: number, i: number) {

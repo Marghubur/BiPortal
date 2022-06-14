@@ -29,6 +29,7 @@
                       <p class="mb-0">In this Section you can create all the recurring salary components in your Organization components like Basic, HRA, Special Allowance are system defined and can't be edited or removed.</p>
                       <div class="col-md-12 my-4">
                         <button class="btn btn-primary-c" (click)="newComponentPopUp()"><i class="fa fa-plus pe-2"></i> ADD NEW COMPONENT</button>
+                        <button class="btn btn-success ms-2"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to Add Hoc Component</button>
                         <div class="col-md-3 float-end">
                           <div class="form-group has-search">
                             <span class="fa fa-search form-control-feedback"></span>
@@ -40,7 +41,7 @@
                         <div class="hide-bar bg-light"></div>
                         <div class="t-head bg-light fw-bold">
                           <div class="tr">
-                            <div class="th text-truncate ps-3">
+                            <div class="th text-truncate ps-3 fe-2">
                               COMPONENT NAME
                             </div>
                             <div class="th text-truncate ps-3">
@@ -48,9 +49,6 @@
                             </div>
                             <div class="th text-truncate ps-3">
                               TAX EXEMPT
-                            </div>
-                            <div class="th text-truncate ps-3">
-                              MAX LIMIT(YEAR)
                             </div>
                             <div class="th text-truncate ps-3">
                               REQUIRE DOCS
@@ -62,17 +60,33 @@
                         </div>
                         <div class="t-body custom-height">
                           <div class="tr py-2" *ngFor="let item of RecurringComponent">
-                            <div class="td ps-3 text-truncate">
-                              {{item.ComponentId}}
+                            <div class="td ps-3 text-truncate fe-2">
+                              <div class="form-check">
+                                <input class="form-check-input me-3" type="checkbox" (click)="addToAdhoc(item)">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                  {{item.ComponentId}} ({{item.ComponentDescription}})
+                                </label>
+                              </div>
                             </div>
                             <div class="td ps-3 text-truncate">
-                              {{item.ComponentTypeId}}
+                              <div [ngSwitch]="item.ComponentTypeId">
+                                <div *ngSwitchCase="2">Allowance</div>
+                                <div *ngSwitchCase="3">Rembursment</div>
+                                <div *ngSwitchCase="4">Reimursable</div>
+                                <div *ngSwitchDefault>Application for all.</div>
+                              </div>
                             </div>
                             <div class="td ps-3 text-truncate">
-                              {{item.TaxExempt}}
-                            </div>
-                            <div class="td ps-3 text-truncate">
-                              {{item.MaxLimit}}
+                              <div [ngSwitch]="item.TaxExempt">
+                                <div *ngSwitchCase="1">
+                                  <b class="me-2">Yes</b>
+                                  <small class="ps-2 badge bg-warning">{{item.Section}}</small>
+                                </div>
+                                <div *ngSwitchDefault>
+                                  No
+                                  <small class="ps-2 text-muted d-block">{{item.Section}}</small>
+                                </div>
+                              </div>
                             </div>
                             <div class="td ps-3 text-truncate">
                               {{item.RequireDocs}}
@@ -91,8 +105,11 @@
                   <a ngbNavLink>AD HOC CPOMPONENTS</a>
                   <ng-template ngbNavContent>
                     <div class="px-2 pt-3">
-                      <h4>Ad Hoc Components Library</h4>
-                      <p class="mb-0">In this Section you can create all the ad hoc components that gets paid in your organization. Adhoc components are salary components that are typically not paid as regular monthly components.</p>
+                      <div class="d-flex justify-content-between">
+                        <h4>Ad Hoc Components Library</h4>
+                        <button class="btn btn-success"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to Recurring Component</button>
+                      </div>
+                      <p class="mb-0 py-2">In this Section you can create all the ad hoc components that gets paid in your organization. Adhoc components are salary components that are typically not paid as regular monthly components.</p>
                       <div class="row my-4 justify-content-between">
                         <div class="col-md-4">
                           <div class="col-md-12">
