@@ -108,6 +108,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
     return this.fb.group({
       ComponentDescription: elem.ComponentDescription,
+      ComponentFullName: elem.ComponentFullName,
       Type: elem.Type,
       TaxExempt: elem.TaxExempt,
       MaxLimit: elem.MaxLimit,
@@ -147,6 +148,7 @@ export class CustomsalaryStructureComponent implements OnInit {
         this.salaryComponentFields = [];
         while(i < data.length) {
           this.salaryComponentFields.push({
+            ComponentFullName: data[i]["ComponentFullName"],
             ComponentDescription: data[i]["ComponentDescription"],
             ComponentId: data[i]["ComponentId"],
             Type: data[i]["ComponentTypeId"],
@@ -454,6 +456,7 @@ export class CustomsalaryStructureComponent implements OnInit {
       if(items) {
         items.controls.map(elem => {
           if(elem.value.ComponentDescription === this.componentFields.ComponentDescription) {
+            elem.get("ComponentFullName").setValue(this.componentFields.ComponentFullName);
             elem.get("Formula").setValue(this.componentFields.Formula);
             elem.get("CalculateInPercentage").setValue(this.componentFields.CalculateInPercentage);
             elem.get("TaxExempt").setValue(value.TaxExempt);
@@ -522,6 +525,7 @@ class UpdateSalaryComponent {
   IncludeInPayslip: boolean = false;
   ComponentId: number = 0;
   ComponentDescription: string = '';
+  ComponentFullName: string = '';
   PercentageValue: number = 0;
   Operator: string = '';
   FormulaBasedOn: string = '';
