@@ -37,6 +37,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   allComponentDetails: Array<any> = [];
   currentComponentDetails: Array<any> = [];
   filterValue: string = '';
+  editException: boolean = false;
+  declaredValue: number = 0;
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -673,12 +675,27 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
 
 
-  submitDeclaration() {
+  editPPFDetail() {
+    this.editPPF = false;
+  }
 
+  cancelEditPPF() {
+    this.editPPF = true;
+  }
+
+  editDeclaration(e: any) {
+    this.declaredValue = 0;
+    this.editException = true;
+    let current = e.target;
+    let elem = current.closest('div[name="table-row"]')
+    elem.querySelector('div[name="view-control"]').classList.add('d-none');
+    elem.querySelector('div[name="edit-control"]').classList.remove('d-none');
+    elem.querySelector('i[name="edit-declaration"]').classList.add('d-none');
+    elem.querySelector('div[name="cancel-declaration"]').classList.remove('d-none');
   }
 
   uploadDocument() {
-    $('#addAttachmentModal').modal('show');
+    $("#addAttachmentModal").click();
   }
 
   UploadAttachment(fileInput: any) {
@@ -720,6 +737,19 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  closeDeclaration(e: any) {
+    this.declaredValue = 0;
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    this.editException = true;
+    let current = e.target;
+    let elem = current.closest('div[name="table-row"]')
+    elem.querySelector('div[name="view-control"]').classList.remove('d-none');
+    elem.querySelector('div[name="edit-control"]').classList.add('d-none');
+    elem.querySelector('i[name="edit-declaration"]').classList.remove('d-none');
+    elem.querySelector('div[name="cancel-declaration"]').classList.add('d-none');
+  }
+
   fireFileBrowser() {
     $("#uploadAttachment").click();
   }
@@ -728,26 +758,30 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $('#addAttachmentModal').modal('hide');
   }
 
-  savePPFDeclaration() {
-    this.saveDeclaration();
-    this.isPPFSubmitted = true;
-  }
-
-  saveDeclaration() {
-    let formData = new FormData();
-    if (this.FileDocumentList.length > 0 && this.userDetail.UserId > 0) {
-      let i = 0;
-      while (i < this.FileDocumentList.length) {
-        formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
-        i++;
+  saveDeclaration(item: any, e: any) {
+    if (this.declaredValue >0) {
+      let value = {
+        ComponentId: item.ComponentId,
+        DeclaredValue: this.declaredValue
       }
-      formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
-      formData.append('UserDetail', JSON.stringify(this.userDetail));
-      this.http.post(`User/UploadDeclaration/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
-        if (response.ResponseBody)
-          Toast("Declaration Uploaded Successfully.")
-      })
-      this.editPPF = true;
+      let formData = new FormData();
+      if (this.FileDocumentList.length > 0 && this.userDetail.UserId > 0) {
+        let i = 0;
+        while (i < this.FileDocumentList.length) {
+          formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
+          i++;
+        }
+        formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
+        formData.append('declaration', JSON.stringify(value));
+        this.http.post(`Employee/UploadDeclaration/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
+          if (response.ResponseBody && response.ResponseBody.length > 0) {
+            this.allComponentDetails = response.ResponseBody;
+            Toast("Declaration Uploaded Successfully.");
+            this.closeDeclaration(e);
+          }
+        })
+        this.editPPF = true;
+      }
     }
   }
 
