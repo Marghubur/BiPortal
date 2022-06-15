@@ -255,10 +255,21 @@
               <a ngbNavLink>1.5 Lac Exemptions</a>
               <ng-template ngbNavContent>
                 <ng-container>
-                  <h5 class="ps-3">1.5 Lac Exemptions</h5>
-                  <p class=" ps-3">
-                    The aggregate amount of deductions under section 80C, section 80CCC and sub-section (1) of 80CCD
-                  </p>
+                  <div class="row justify-content-between my-3">
+                    <div class="col-md-8">
+                      <h5 class="ps-3">1.5 Lac Exemptions</h5>
+                      <p class=" ps-3">
+                        The aggregate amount of deductions under section 80C, section 80CCC and sub-section (1) of 80CCD
+                      </p>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="" class="form-label">Search perform on section and deduction name.</label>
+                      <div class="form-group has-search">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input type="text" class="form-control" [(ngModel)]="filterValue" transform="upper"placeholder="Search" (keyup.enter)="filterDeduction()" (keyup.esc)="resetFilter()">
+                      </div>
+                    </div>
+                  </div>
                   <div class="t-table t-list t-border col-md-12">
                     <div class="hide-bar"></div>
                     <div class="t-head">
@@ -267,8 +278,6 @@
                           <div class="cell-wrapper">
                             <div class="t-filter">
                               <a href="javascript:void()">SECTION</a>
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -276,8 +285,6 @@
                           <div class="cell-wrapper">
                             <div class="t-filter">
                               <a href="javascript:void()">DEDUCATION NAME</a>
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -285,17 +292,13 @@
                           <div class="cell-wrapper">
                             <div class="t-filter">
                               <a href="javascript:void()">MAX LIMIT</a>
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
-                        <div class="th fe-2">
+                        <div class="th fe-1">
                           <div class="cell-wrapper">
                             <div class="t-filter">
                               <a href="javascript:void()">DECLARATION</a>
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -303,8 +306,6 @@
                           <div class="cell-wrapper">
                             <div class="t-filter">
                               <a href="javascript:void()">PROOF</a>
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -312,8 +313,6 @@
                           <div class="cell-wrapper">
                             <div class="t-filter">
                               <a href="javascript:void()">STATUS</a>
-                              <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc d-none" aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
@@ -321,7 +320,7 @@
                       </div>
                     </div>
                     <div class="t-body">
-                      <div class="tr py-2" name="table-row" *ngFor="let r of AllComponent; let i=index">
+                      <div class="tr py-2" *ngFor="let r of currentComponentDetails; let i=index">
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
                             {{r.Section}} <sup>$</sup>

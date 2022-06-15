@@ -34,9 +34,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   year: number = 0;
   taxCalender: Array<any> = [];
   monthlyTaxAmount: MonthlyTax;
-  AllComponent: Array<any> = [];
+  allComponentDetails: Array<any> = [];
+  currentComponentDetails: Array<any> = [];
+  filterValue: string = '';
   editException: boolean = false;
   declaredValue: number = 0;
+  EmployeeId: number = 0;
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -44,6 +47,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     private http: AjaxService,) { }
 
   ngOnInit(): void {
+    this.filterValue = '';
+    this.EmployeeId = 8;
     this.loadData();
     var dt = new Date();
     var month = 3;
@@ -83,10 +88,24 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $('[data-bs-toggle = "tooltip"]').tooltip();
   }
 
+  filterDeduction() {
+    // let value = e.target.value;
+    let value = this.filterValue.toLocaleUpperCase();
+    if (value) {
+      this.currentComponentDetails = this.allComponentDetails.filter(x => x.Section == value || x.ComponentId == value);
+    }
+  }
+
+  resetFilter() {
+    this.filterValue = '';
+    this.currentComponentDetails = this.allComponentDetails;
+  }
+
   loadData() {
-    this.http.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
+    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
-        this.AllComponent = response.ResponseBody;
+        this.allComponentDetails = response.ResponseBody;
+        this.currentComponentDetails = response.ResponseBody;
         Toast("Record found");
       }
     })
@@ -745,8 +764,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     if (this.declaredValue >0) {
       let value = {
         ComponentId: item.ComponentId,
-        DeclaredValue: this.declaredValue
+        DeclaredValue: this.declaredValue,
+        EmployeeId: this.EmployeeId
       }
+      let EmployeeDeclarationId = 0;
       let formData = new FormData();
       if (this.FileDocumentList.length > 0 && this.userDetail.UserId > 0) {
         let i = 0;
@@ -754,11 +775,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
           i++;
         }
-        formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         formData.append('declaration', JSON.stringify(value));
-        this.http.post(`Employee/UploadDeclaration/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
+        formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+        formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
+        this.http.post(`Declaration/UpdateDeclarationDetail/${EmployeeDeclarationId}}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody && response.ResponseBody.length > 0) {
-            this.AllComponent = response.ResponseBody;
+            this.allComponentDetails = response.ResponseBody;
             Toast("Declaration Uploaded Successfully.");
             this.closeDeclaration(e);
           }
