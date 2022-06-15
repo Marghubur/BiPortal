@@ -43,6 +43,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   EmployeeDeclarationId: number = 0;
   FirstSectionIsReady: boolean = false;
   presentRow: any = null;
+  attachmentForDeclaration: string = '';
+  employeeEmail: string = '';
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -112,6 +114,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.allComponentDetails = response.ResponseBody.SalaryComponentItems;
           this.currentComponentDetails = response.ResponseBody.SalaryComponentItems;
           this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
+          this.employeeEmail = response.ResponseBody.Email;
         }
 
         Toast("Declaration detail loaded successfully");
@@ -704,8 +707,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.presentRow.querySelector('input[name="DeclaratedValue"]').focus();
   }
 
-  uploadDocument() {
-    $("#addAttachmentModal").click();
+  uploadDocument(item: any) {
+    if (item) {
+      this.attachmentForDeclaration = item.ComponentId ;
+      this.isLargeFile = false;
+      $("#addAttachmentModal").modal('show');
+    }
   }
 
   UploadAttachment(fileInput: any) {
@@ -718,16 +725,15 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       while (index < selectedFile.length) {
         file = <File>selectedFile[index];
         let item: Files = new Files();
-        item.FileName = file.name;
+        item.FileName = this.attachmentForDeclaration;
         item.FileType = file.type;
         item.FileSize = (Number(file.size) / 1024);
         item.FileExtension = file.type;
         item.DocumentId = 0;
         //item.FilePath = this.getRelativePath(this.routeParam);
         item.ParentFolder = '';
-        item.Email = this.userDetail.EmailId;
-        item.UserId = this.userDetail.UserId;
-        item.UserTypeId = this.userDetail.UserTypeId;
+        item.Email = this.employeeEmail;
+        item.UserId = this.EmployeeId;
         this.FileDocumentList.push(item);
         this.FilesCollection.push(file);
         index++;
@@ -745,6 +751,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     } else {
       ErrorToast("You are not slected the file")
     }
+  }
+
+  closeAttachmentModal() {
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    $("#addAttachmentModal").modal('hide');
   }
 
   closeDeclaration(e: any) {
@@ -774,21 +786,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       let value = {
         ComponentId: item.ComponentId,
         DeclaredValue: declaredValue,
-        EmployeeId: this.EmployeeId
+        EmployeeId: this.EmployeeId,
+        Email: this.employeeEmail
       }
 
       let formData = new FormData();
       if (this.allComponentDetails.EmployeeDeclarationId > 0 && this.allComponentDetails.EmployeeId > 0) {
-        if (this.FileDocumentList.length > 0) {
-          let i = 0;
-          while (i < this.FileDocumentList.length) {
-            formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
-            i++;
-          }
-          formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
-          formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
-        }
         formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+      }
+      if (this.FileDocumentList.length > 0) {
+        let i = 0;
+        while (i < this.FileDocumentList.length) {
+          formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
+          i++;
+        }
+        //formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+        //formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
       }
 
       this.FirstSectionIsReady = false;
