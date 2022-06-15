@@ -3,8 +3,8 @@ import { Files } from 'src/app/admin/documents/documents.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment, ExemptionsSections } from 'src/providers/constants';
+import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
+import { AccessTokenExpiredOn, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -39,8 +39,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   exemptionComponent: Array<any> = [];
   filterValue: string = '';
   editException: boolean = false;
-  declaredValue: number = 0;
   EmployeeId: number = 0;
+  EmployeeDeclarationId: number = 0;
+  FirstSectionIsReady: boolean = false;
+  presentRow: any = null;
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -103,26 +105,19 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   loadData() {
+    this.FirstSectionIsReady = false;
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
-      if (response.ResponseBody) {
-        let data = JSON.parse(response.ResponseBody.DeclarationDetail);
-        if (data.length > 0) {
-          this.allComponentDetails = response.ResponseBody;
-          this.currentComponentDetails = data;
-          for (let i = 0; i < ExemptionsSections.length; i++) {
-            let value = data.filter(x => x.Section == ExemptionsSections[i]);
-            if (i > 0) {
-              this.exemptionComponent[0].concat(value);
-            }
-            else {
-              this.exemptionComponent.push(value);
-            }
-          }
+      if (response.ResponseBody && response.ResponseBody.SalaryComponentItems) {
+        if(response.ResponseBody.SalaryComponentItems.length > 0) {
+          this.allComponentDetails = response.ResponseBody.SalaryComponentItems;
+          this.currentComponentDetails = response.ResponseBody.SalaryComponentItems;
+          this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
         }
-        Toast("Record found");
+
+        Toast("Declaration detail loaded successfully");
+        this.FirstSectionIsReady = true;
       }
     })
-
 
     this.exemptions.push({
       Section: "80C",
@@ -639,38 +634,38 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       AmountRejected: 0,
       AmountAccepted: 0
     },
-      {
-        Declaration: "Other Exemptions",
-        NoOfDeclaration: 0,
-        AmountDeclared: 0,
-        ProofSUbmitted: 0,
-        AmountRejected: 0,
-        AmountAccepted: 0
-      },
-      {
-        Declaration: "Tax Saving Allowance",
-        NoOfDeclaration: 0,
-        AmountDeclared: 0,
-        ProofSUbmitted: 0,
-        AmountRejected: 0,
-        AmountAccepted: 0
-      },
-      {
-        Declaration: "House Property",
-        NoOfDeclaration: 0,
-        AmountDeclared: 0,
-        ProofSUbmitted: 0,
-        AmountRejected: 0,
-        AmountAccepted: 0
-      },
-      {
-        Declaration: "Income From Other Sources",
-        NoOfDeclaration: 0,
-        AmountDeclared: 0,
-        ProofSUbmitted: 0,
-        AmountRejected: 0,
-        AmountAccepted: 0
-      });
+    {
+      Declaration: "Other Exemptions",
+      NoOfDeclaration: 0,
+      AmountDeclared: 0,
+      ProofSUbmitted: 0,
+      AmountRejected: 0,
+      AmountAccepted: 0
+    },
+    {
+      Declaration: "Tax Saving Allowance",
+      NoOfDeclaration: 0,
+      AmountDeclared: 0,
+      ProofSUbmitted: 0,
+      AmountRejected: 0,
+      AmountAccepted: 0
+    },
+    {
+      Declaration: "House Property",
+      NoOfDeclaration: 0,
+      AmountDeclared: 0,
+      ProofSUbmitted: 0,
+      AmountRejected: 0,
+      AmountAccepted: 0
+    },
+    {
+      Declaration: "Income From Other Sources",
+      NoOfDeclaration: 0,
+      AmountDeclared: 0,
+      ProofSUbmitted: 0,
+      AmountRejected: 0,
+      AmountAccepted: 0
+    });
 
     this.monthlyTaxAmount = {
       april: 37050,
@@ -699,14 +694,14 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   editDeclaration(e: any) {
-    this.declaredValue = 0;
     this.editException = true;
     let current = e.target;
-    let elem = current.closest('div[name="table-row"]')
-    elem.querySelector('div[name="view-control"]').classList.add('d-none');
-    elem.querySelector('div[name="edit-control"]').classList.remove('d-none');
-    elem.querySelector('i[name="edit-declaration"]').classList.add('d-none');
-    elem.querySelector('div[name="cancel-declaration"]').classList.remove('d-none');
+    this.presentRow = current.closest('div[name="table-row"]')
+    this.presentRow.querySelector('div[name="view-control"]').classList.add('d-none');
+    this.presentRow.querySelector('div[name="edit-control"]').classList.remove('d-none');
+    this.presentRow.querySelector('i[name="edit-declaration"]').classList.add('d-none');
+    this.presentRow.querySelector('div[name="cancel-declaration"]').classList.remove('d-none');
+    this.presentRow.querySelector('input[name="DeclaratedValue"]').focus();
   }
 
   uploadDocument() {
@@ -753,7 +748,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   closeDeclaration(e: any) {
-    this.declaredValue = 0;
     this.FileDocumentList = [];
     this.FilesCollection = [];
     this.editException = true;
@@ -774,13 +768,15 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   saveDeclaration(item: any, e: any) {
-    if (this.declaredValue >0) {
+    let declaredValue = this.presentRow.querySelector('input[name="DeclaratedValue"]').value;
+    declaredValue = Number(declaredValue);
+    if (!isNaN(declaredValue) && declaredValue > 0) {
       let value = {
         ComponentId: item.ComponentId,
-        DeclaredValue: this.declaredValue,
-        EmployeeId: this.allComponentDetails.EmployeeId
+        DeclaredValue: declaredValue,
+        EmployeeId: this.EmployeeId
       }
-      let EmployeeDeclarationId = 0;
+
       let formData = new FormData();
       if (this.allComponentDetails.EmployeeDeclarationId > 0 && this.allComponentDetails.EmployeeId > 0) {
         if (this.FileDocumentList.length > 0) {
@@ -792,16 +788,28 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
           formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         }
-        formData.append('declaration', JSON.stringify(value));
-        this.http.put(`Declaration/UpdateDeclarationDetail/${this.allComponentDetails.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
-          if (response.ResponseBody && response.ResponseBody.length > 0) {
-            this.allComponentDetails = response.ResponseBody;
-            Toast("Declaration Uploaded Successfully.");
-            this.closeDeclaration(e);
-          }
-        })
-        this.editPPF = true;
+        formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
       }
+
+      this.FirstSectionIsReady = false;
+      formData.append('declaration', JSON.stringify(value));
+      formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
+      this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
+        if (response.ResponseBody) {
+          if(response.ResponseBody.length > 0) {
+            this.allComponentDetails = response.ResponseBody;
+            this.currentComponentDetails = response.ResponseBody;
+          }
+
+          this.closeDeclaration(e);
+          Toast("Declaration Uploaded Successfully.");
+          this.FirstSectionIsReady = true;
+        }
+      });
+
+      this.editPPF = true;
+    } else {
+      WarningToast("Only numeric value is allowed");
     }
   }
 

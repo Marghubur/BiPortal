@@ -57,7 +57,6 @@ export class AjaxService {
             }
           },
           (error: HttpErrorResponse) => {
-            this.commonService.HideLoaderByAjax();
             this.tokenHelper.HandleResponseStatus(error.status);
             reject(false);
           });
@@ -66,7 +65,6 @@ export class AjaxService {
 
   post(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.commonService.ShowLoaderByAjax();
       this.http
         .post(environment.baseUrl + Url, Param, {
           observe: "response"
@@ -81,10 +79,8 @@ export class AjaxService {
               reject(null);
             }
             resolve(res.body);
-            this.commonService.HideLoaderByAjax();
           },
           error => {
-            this.commonService.HideLoaderByAjax();
             this.tokenHelper.HandleResponseStatus(error.status);
             reject(error);
           }
@@ -94,7 +90,6 @@ export class AjaxService {
 
   put(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.commonService.ShowLoaderByAjax();
       this.http
         .put(environment.baseUrl + Url, Param, {
           observe: "response"
@@ -109,10 +104,8 @@ export class AjaxService {
               reject(e);
             }
             resolve(res.body);
-            this.commonService.HideLoaderByAjax();
           },
           error => {
-            this.commonService.HideLoaderByAjax();
             this.tokenHelper.HandleResponseStatus(error.status);
             reject(error);
           }
@@ -122,7 +115,6 @@ export class AjaxService {
 
   postRequest(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.commonService.ShowLoaderByAjax();
       this.http
         .post(Url, Param, {
           observe: "response"
@@ -141,7 +133,6 @@ export class AjaxService {
 
   delete(Url: string, Param?: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.commonService.ShowLoaderByAjax();
       this.http.delete(environment.baseUrl + Url, {
         headers: {
           observe: "response",
@@ -171,7 +162,6 @@ export class AjaxService {
 
   login(Url: string, Param: any): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
-      this.commonService.ShowLoaderByAjax();
       if (this.commonService.IsValid(Param)) {
         this.http
           .post(environment.baseUrl + Url, Param, {
@@ -193,10 +183,8 @@ export class AjaxService {
               } catch (e) {
                 reject(e);
               }
-              this.commonService.HideLoaderByAjax();
             },
             error => {
-              this.commonService.HideLoaderByAjax();
               this.tokenHelper.HandleResponseStatus(error.status);
               reject(error);
             }
@@ -207,7 +195,6 @@ export class AjaxService {
 
   upload(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.commonService.ShowLoaderByAjax();
       this.http
         .post(environment.baseUrl + Url, Param, {
           observe: "response"
@@ -222,10 +209,8 @@ export class AjaxService {
               reject(e);
             }
             resolve(res.body);
-            this.commonService.HideLoaderByAjax();
           },
           error => {
-            this.commonService.HideLoaderByAjax();
             this.tokenHelper.HandleResponseStatus(error.status);
             reject(error);
           }
