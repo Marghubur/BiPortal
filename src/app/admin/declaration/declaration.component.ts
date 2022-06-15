@@ -39,6 +39,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   filterValue: string = '';
   editException: boolean = false;
   declaredValue: number = 0;
+  EmployeeId: number = 0;
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -47,6 +48,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.filterValue = '';
+    this.EmployeeId = 8;
     this.loadData();
     var dt = new Date();
     var month = 3;
@@ -100,7 +102,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   loadData() {
-    this.http.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
+    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
         this.allComponentDetails = response.ResponseBody;
         this.currentComponentDetails = response.ResponseBody;
@@ -762,8 +764,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     if (this.declaredValue >0) {
       let value = {
         ComponentId: item.ComponentId,
-        DeclaredValue: this.declaredValue
+        DeclaredValue: this.declaredValue,
+        EmployeeId: this.EmployeeId
       }
+      let EmployeeDeclarationId = 0;
       let formData = new FormData();
       if (this.FileDocumentList.length > 0 && this.userDetail.UserId > 0) {
         let i = 0;
@@ -771,9 +775,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
           i++;
         }
-        formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         formData.append('declaration', JSON.stringify(value));
-        this.http.post(`Employee/UploadDeclaration/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
+        formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+        formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
+        this.http.post(`Declaration/UpdateDeclarationDetail/${EmployeeDeclarationId}}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody && response.ResponseBody.length > 0) {
             this.allComponentDetails = response.ResponseBody;
             Toast("Declaration Uploaded Successfully.");
