@@ -252,7 +252,7 @@
             </li>
 
             <li [ngbNavItem]="2">
-              <a ngbNavLink>1.5 Lac Exemptions</a>
+              <a ngbNavLink (click)="loadSectionData(1)">1.5 Lac Exemptions</a>
               <ng-template ngbNavContent>
                 <ng-container>
                   <div class="row justify-content-between my-3">
@@ -320,7 +320,7 @@
                         <div class="th fe-1 text-center">ACTIONS</div>
                       </div>
                     </div>
-                    <div class="t-body" *ngIf="FirstSectionIsReady">
+                    <div class="t-body" *ngIf="SectionIsReady">
                       <div class="tr py-2" name="table-row" *ngFor="let r of currentComponentDetails; let i=index">
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
@@ -408,7 +408,7 @@
             </li>
 
             <li [ngbNavItem]="3">
-              <a ngbNavLink>Other Exemptions</a>
+              <a ngbNavLink (click)="loadSectionData(2)">Other Exemptions</a>
               <ng-template ngbNavContent>
                 <ng-container>
                   <div class="row justify-content-between my-3">
@@ -475,7 +475,7 @@
                         <div class="th fe-1">ACTIONS</div>
                       </div>
                     </div>
-                    <div class="t-body">
+                    <div class="t-body" *ngIf="SectionIsReady">
                       <div class="tr py-2" *ngFor="let r of currentComponentDetails; let i=index">
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
@@ -563,7 +563,7 @@
             </li>
 
             <li [ngbNavItem]="4">
-              <a ngbNavLink>Tax Saving Allowances</a>
+              <a ngbNavLink (click)="loadSectionData(3)">Tax Saving Allowances</a>
               <ng-template ngbNavContent>
                 <ng-container>
                   <div class="row justify-content-between my-3">
@@ -634,7 +634,7 @@
                         <div class="th fe-1">ACTIONS</div>
                       </div>
                     </div>
-                    <div class="t-body">
+                    <div class="t-body" *ngIf="SectionIsReady">
                       <div class="tr py-2" *ngFor="let r of currentComponentDetails; let i=index">
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">

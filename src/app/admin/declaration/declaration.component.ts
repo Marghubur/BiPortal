@@ -41,7 +41,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   editException: boolean = false;
   EmployeeId: number = 0;
   EmployeeDeclarationId: number = 0;
-  FirstSectionIsReady: boolean = false;
+  SectionIsReady: boolean = false;
   presentRow: any = null;
   attachmentForDeclaration: string = '';
   employeeEmail: string = '';
@@ -107,8 +107,34 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.currentComponentDetails = this.allComponentDetails;
   }
 
+  prepareDeclarationData(tabIndex: number) {
+    let filterItems = null;
+    switch(tabIndex) {
+      case 1:
+        filterItems = this.sections.ExemptionDeclaration
+        break;
+      case 2:
+        filterItems = this.sections.OtherDeclaration
+        break;
+      case 3:
+        filterItems = this.sections.TaxSavingAlloance
+        break;
+    }
+
+    this.currentComponentDetails = [];
+    let items = null;
+    let i = 0;
+    while(i < filterItems.length) {
+      items = this.allComponentDetails.filter(x => x.Section == filterItems[i]);
+      if(items && items.length > 0) {
+        this.currentComponentDetails = this.currentComponentDetails.concat(items);
+      }
+      i++;
+    }
+  }
+
   loadData() {
-    this.FirstSectionIsReady = false;
+    this.SectionIsReady = false;
     let exemptionSection = ["80C", "80G"]
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.SalaryComponentItems) {
@@ -120,20 +146,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.sections = response.ResponseBody.Sections;
         }
 
-        this.currentComponentDetails = [];
-        let filterItems = this.sections.ExemptionDeclaration;
-        let items = null;
-        let i = 0;
-        while(i < filterItems.length) {
-          items = this.allComponentDetails.filter(x => x.Section == filterItems[i]);
-          if(items && items.length > 0) {
-            this.currentComponentDetails = this.currentComponentDetails.concat(items);
-          }
-          i++;
-        }
-
         Toast("Declaration detail loaded successfully");
-        this.FirstSectionIsReady = true;
+        this.SectionIsReady = true;
       }
     })
 
@@ -317,7 +331,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
             i++;
           }
         }
-        this.FirstSectionIsReady = false;
+        this.SectionIsReady = false;
         formData.append('declaration', JSON.stringify(value));
         formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
@@ -329,7 +343,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
             this.closeDeclaration(e);
             Toast("Declaration Uploaded Successfully.");
-            this.FirstSectionIsReady = true;
+            this.SectionIsReady = true;
           }
         });
       }
@@ -347,6 +361,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     } else {
       this.active = 4;
     }
+  }
+
+  loadSectionData(value: number) {
+    this.SectionIsReady = false;
+    this.prepareDeclarationData(value);
+    this.SectionIsReady = true;
   }
 
   activateMe(ele: string) {
