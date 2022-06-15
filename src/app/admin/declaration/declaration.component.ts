@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment } from 'src/providers/constants';
+import { AccessTokenExpiredOn, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment, ExemptionsSections } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -34,8 +34,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   year: number = 0;
   taxCalender: Array<any> = [];
   monthlyTaxAmount: MonthlyTax;
-  allComponentDetails: Array<any> = [];
+  allComponentDetails: any = {};
   currentComponentDetails: Array<any> = [];
+  exemptionComponent: Array<any> = [];
   filterValue: string = '';
   editException: boolean = false;
   declaredValue: number = 0;
@@ -103,9 +104,21 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   loadData() {
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
-      if (response.ResponseBody && response.ResponseBody.length > 0) {
-        this.allComponentDetails = response.ResponseBody;
-        this.currentComponentDetails = response.ResponseBody;
+      if (response.ResponseBody) {
+        let data = JSON.parse(response.ResponseBody.DeclarationDetail);
+        if (data.length > 0) {
+          this.allComponentDetails = response.ResponseBody;
+          this.currentComponentDetails = data;
+          for (let i = 0; i < ExemptionsSections.length; i++) {
+            let value = data.filter(x => x.Section == ExemptionsSections[i]);
+            if (i > 0) {
+              this.exemptionComponent[0].concat(value);
+            }
+            else {
+              this.exemptionComponent.push(value);
+            }
+          }
+        }
         Toast("Record found");
       }
     })
@@ -765,20 +778,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       let value = {
         ComponentId: item.ComponentId,
         DeclaredValue: this.declaredValue,
-        EmployeeId: this.EmployeeId
+        EmployeeId: this.allComponentDetails.EmployeeId
       }
       let EmployeeDeclarationId = 0;
       let formData = new FormData();
-      if (this.FileDocumentList.length > 0 && this.userDetail.UserId > 0) {
-        let i = 0;
-        while (i < this.FileDocumentList.length) {
-          formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
-          i++;
+      if (this.allComponentDetails.EmployeeDeclarationId > 0 && this.allComponentDetails.EmployeeId > 0) {
+        if (this.FileDocumentList.length > 0) {
+          let i = 0;
+          while (i < this.FileDocumentList.length) {
+            formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
+            i++;
+          }
+          formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+          formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         }
         formData.append('declaration', JSON.stringify(value));
-        formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
-        formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
-        this.http.post(`Declaration/UpdateDeclarationDetail/${EmployeeDeclarationId}}`, formData).then((response: ResponseModel) => {
+        this.http.put(`Declaration/UpdateDeclarationDetail/${this.allComponentDetails.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody && response.ResponseBody.length > 0) {
             this.allComponentDetails = response.ResponseBody;
             Toast("Declaration Uploaded Successfully.");
