@@ -146,6 +146,14 @@ export const UserPath = "User";
 export const UserImage = "assets/images/faces/face1.jpg";
 
 
+// *************************** Tax DEclaration  *************
+export const ExemptionsSections = ["80C", "80CCC", "80CCD(1)"];
+export const OtherExemptionSection = ["80CCD(1B)", "80CCD2", "80D", "80DD", "80DDB", "80E", "80EE", "80EEA", "80EEB", "80G", "80GGA", "80GGC", "80QQB", "80RRB", "80TTA", "80TTB", "80U"];
+export const TaxSavingAllpwanceSections = ["17(2)(viii)", "10(5)", "10(14)(i)", "10(14)(i)"];
+
+
+
+
 export const MaxAllowedFileSize = 2048
 
 export enum UserType {

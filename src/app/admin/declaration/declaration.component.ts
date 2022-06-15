@@ -34,8 +34,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   year: number = 0;
   taxCalender: Array<any> = [];
   monthlyTaxAmount: MonthlyTax;
-  allComponentDetails: Array<any> = [];
+  allComponentDetails: any = {};
   currentComponentDetails: Array<any> = [];
+  exemptionComponent: Array<any> = [];
   filterValue: string = '';
   editException: boolean = false;
   EmployeeId: number = 0;
@@ -777,11 +778,15 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       }
 
       let formData = new FormData();
-      if (this.FileDocumentList.length > 0 && this.userDetail.UserId > 0) {
-        let i = 0;
-        while (i < this.FileDocumentList.length) {
-          formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
-          i++;
+      if (this.allComponentDetails.EmployeeDeclarationId > 0 && this.allComponentDetails.EmployeeId > 0) {
+        if (this.FileDocumentList.length > 0) {
+          let i = 0;
+          while (i < this.FileDocumentList.length) {
+            formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
+            i++;
+          }
+          formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+          formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         }
         formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
       }
