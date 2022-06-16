@@ -9,6 +9,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
 import { MonthlyTax } from '../incometax/incometax.component';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 declare var $: any;
 
 @Component({
@@ -18,7 +19,9 @@ declare var $: any;
 })
 export class DeclarationComponent implements OnInit, AfterViewChecked {
   active = 1;
-  editPPF: boolean = true;
+  rentResidenceForm: FormGroup;
+  isPanEnable: boolean = false;
+  isSignDeclareEnable: boolean = false;
   fileDetail: Array<any> = [];
   isLargeFile: boolean = false;
   FileDocumentList: Array<Files> = [];
@@ -46,14 +49,19 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   attachmentForDeclaration: string = '';
   employeeEmail: string = '';
   sections: any = null;
+  totalFileSize: number = 0;
+  rentalPage: number = 0;
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
+    private fb: FormBuilder,
     private nav: iNavigation,
     private http: AjaxService,) { }
 
   ngOnInit(): void {
     this.filterValue = '';
+    this.rentalPage =1;
+    this.rentedResidence();
     this.EmployeeId = 8;
     this.loadData();
     var dt = new Date();
@@ -215,14 +223,24 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     };
   }
 
-
-
-  editPPFDetail() {
-    this.editPPF = false;
+  rentedResidence() {
+    this.rentResidenceForm = this.fb.group({
+      RentedFrom: new FormControl(''),
+      RentedTo: new FormControl(''),
+      TotalRent: new FormControl(''),
+      Address: new FormControl(''),
+      City: new FormControl(''),
+      OwnerName: new FormControl (''),
+      IsPanNumber: new FormControl (false),
+      PanNumber: new FormControl (''),
+      IsOwnerAddress: new FormControl (false),
+      OwnerType: new FormControl (''),
+      IsSignedDeclaration: new FormControl (false)
+    })
   }
 
-  cancelEditPPF() {
-    this.editPPF = true;
+  submitRentResidence() {
+    console.log(this.rentResidenceForm.value);
   }
 
   editDeclaration(e: any) {
@@ -233,8 +251,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.presentRow.querySelector('div[name="edit-control"]').classList.remove('d-none');
     this.presentRow.querySelector('i[name="edit-declaration"]').classList.add('d-none');
     this.presentRow.querySelector('div[name="cancel-declaration"]').classList.remove('d-none');
-    this.presentRow.querySelector('a[name="upload-proof"]').classList.remove('pe-none');
-    this.presentRow.querySelector('a[name="upload-proof"]').classList.remove('pe-auto');
+    this.presentRow.querySelector('a[name="upload-proof"]').classList.remove('pe-none', 'text-decoration-none', 'text-muted');
+    this.presentRow.querySelector('a[name="upload-proof"]').classList.add('pe-auto', 'fw-bold');
     this.presentRow.querySelector('input[name="DeclaratedValue"]').focus();
   }
 
@@ -269,13 +287,55 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.FilesCollection.push(file);
         index++;
       };
-      let fileSize = 0;
+      this.totalFileSize = 0;
       let i = 0;
       while (i < selectedFile.length) {
-        fileSize += selectedFile[i].size / 1024;
+        this.totalFileSize += selectedFile[i].size / 1024;
         i++;
       }
-      if (fileSize > 2048) {
+      if (this.totalFileSize > 2048) {
+        this.isLargeFile = true;
+        this.fileDetail = [];
+      }
+    } else {
+      ErrorToast("You are not slected the file")
+    }
+  }
+
+  fireuploadreceipt() {
+    $("#uploadreceipt").click();
+  }
+
+  uploadReceipts(fileInput: any) {
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    let selectedFile = fileInput.target.files;
+    if (selectedFile.length > 0) {
+      let index = 0;
+      let file = null;
+      while (index < selectedFile.length) {
+        file = <File>selectedFile[index];
+        let item: Files = new Files();
+        item.FileName = this.attachmentForDeclaration;
+        item.FileType = file.type;
+        item.FileSize = (Number(file.size) / 1024);
+        item.FileExtension = file.type;
+        item.DocumentId = 0;
+        //item.FilePath = this.getRelativePath(this.routeParam);
+        item.ParentFolder = '';
+        item.Email = this.employeeEmail;
+        item.UserId = this.EmployeeId;
+        this.FileDocumentList.push(item);
+        this.FilesCollection.push(file);
+        index++;
+      };
+      this.totalFileSize = 0;
+      let i = 0;
+      while (i < selectedFile.length) {
+        this.totalFileSize += selectedFile[i].size / 1024;
+        i++;
+      }
+      if (this.totalFileSize > 2048) {
         this.isLargeFile = true;
         this.fileDetail = [];
       }
@@ -347,10 +407,29 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           }
         });
       }
-      this.editPPF = true;
     } else {
       WarningToast("Only numeric value is allowed");
     }
+  }
+
+  rentedDecalrationPopup() {
+    $('#rentedResidenceModal').modal('show');
+  }
+
+  signDeclFieldEnable(e: any) {
+    let value = e.target.checked;
+    if (value == true)
+      this.isSignDeclareEnable = true;
+    else
+      this.isSignDeclareEnable = false;
+  }
+
+  panFieldEnable(e: any) {
+    let value = e.target.checked;
+    if (value == true)
+      this.isPanEnable = true;
+    else
+      this.isPanEnable = false;
   }
 
   nextDeclaration(value: string) {
@@ -402,6 +481,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.nav.navigateRoot(AdminTaxSavingInvestment, this.cachedData);
         break;
     }
+  }
+
+  navRentalpage(item: number) {
+    if (item == 1)
+      this.rentalPage = 1;
+    else
+      this.rentalPage = 2;
   }
 
   gotoTaxSection(value: string) {

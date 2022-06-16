@@ -822,8 +822,210 @@
   </div>
 </div>
 
-<!-- Add Attachment Popup -->
+<!-- Attachment Modal -->
 <div class="modal fade attachment-popup" id="addAttachmentModal" tabindex="-1" aria-labelledby="addAttachmentModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl p-5 ">
+    <div class="modal-content rounded-3 px-4">
+      <div class="modal-header">
+        <h5 class="modal-title fw-normal" id="addAttachmentModalLabel">Add Attachment for {{attachmentForDeclaration}}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-12 row m-0">
+          <div class="col-md-4 card mt-4 me-2">
+            <div class="">
+              <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
+              <div class="col-md-12 p-0">
+                <div class="table-responsive">
+                  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1" aria-labelledby="home-tab">
+                      <div id="classmasterdata" class="col-md-12">
+                        <div name="ifilezone" class="ifilezone mb-4" (click)="fireFileBrowser()">
+                          <div>
+                            <img class="img-thumbnail" src="assets/img/drop-back.png" />
+                          </div>
+                          <div class="col-md-12 bg-light justify-content-center p-5 d-none" name="uploading">
+                            <img src="assets/img/ExcelFile.png" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="my-4">
+              <button type="button" class="btn btn-primary-c me-2" (click)="saveAttachment()"
+                [disabled]="isLargeFile || FilesCollection.length == 0">
+                <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
+              </button>
+              <button type="button" class="btn btn-outline-info" (click)="closeAttachmentModal()">
+                <i class="fa fa-eraser pe-2"></i> Cancel
+              </button>
+            </div>
+          </div>
+          <div class="col-md-7 mt-4 overflow-auto" style="height: 33vh">
+            <table class="table" *ngIf="FilesCollection.length > 0">
+              <thead>
+                <tr>
+                  <th width="8%">#</th>
+                  <th>File Name</th>
+                  <th width="15%">File Size (KB)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of FilesCollection">
+                  <td class="counterCell"></td>
+                  <td>{{item.name}}</td>
+                  <td>{{item.size/1024 | number: '1.2-2'}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
+                  <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
+              File size is greater than 2028KB i.e 2 MB, so please remove some file
+            </div>
+            <div class="select-message" *ngIf="FilesCollection.length == 0">
+              <h3>
+                Please upload at least one file and You will see their details here.
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- rented residence modal -->
+<div class="modal fade" id="rentedResidenceModal" tabindex="-1" aria-labelledby="rentedResidenceModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="rentedResidenceModalLabel">Add Rented Residence</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="rentResidenceForm">
+          <ng-container *ngIf="rentalPage == 1">
+            <h5>Rental Deatils</h5>
+            <div class="row">
+              <div class="col-md-6 mt-3">
+                <label class="form-label">From</label>
+                <select class="form-select" formControlName="RentedFrom">
+                  <option value="">Select from date</option>
+                  <option [value]="item.month+item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">To</label>
+                <select class="form-select" formControlName="RentedTo">
+                  <option value="">Select to date</option>
+                  <option [value]="item.month+item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12 mt-3">
+              <label class="form-label">Address</label>
+              <textarea formControlName="Address" placeholder="Address" class="form-control"></textarea>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mt-3">
+                <label class="form-label">City</label>
+                <input type="text" formControlName="City" placeholder="City" class="form-control">
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Total Rent</label>
+                <div class="form-group has-search">
+                  <span class="fa fa-inr form-control-feedback"></span>
+                  <input type="text" class="form-control" formControlName="TotalRent" placeholder="Total Rent"
+                    OnlyNumber="9">
+                </div>
+              </div>
+            </div>
+            <div>
+              <input type="file" class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf"
+                (change)="uploadReceipts($event)" multiple id="uploadreceipt">
+              <a href="javascript:void(0)" (click)="fireuploadreceipt()" class="text-decoration-none"><i
+                  class="fa fa-paperclip pe-2 pt-3"></i>Rent Receipts or Agreement <i
+                  class="fa fa-exclamation-circle ps-2 text-secondary"></i></a>
+            </div>
+            <div class="modal-footer border-top-0">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i>
+                Cancel</button>
+              <button type="button" class="btn btn-primary-c" (click)="navRentalpage(2)"><i
+                  class="fa fa-arrow-right pe-2"></i> Next</button>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="rentalPage == 2">
+            <h5>Owner Name</h5>
+            <div class="col-md-6 mt-3">
+              <label class="form-label">Owner Name</label>
+              <input type="text" class="form-control" placeholder="Owner Name" formControlName="OwnerName">
+            </div>
+            <div class="form-check d-flex align-items-center col-md-6 mt-3">
+              <input class="form-check-input" type="checkbox" (click)="panFieldEnable($event)"
+                formControlName="IsPanNumber">
+              <label class="form-check-label px-2">
+                PAN Number
+              </label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="PAN Number" [readonly]="!isPanEnable"
+                  formControlName="PanNumber">
+              </div>
+            </div>
+            <div class="form-check col-md-6 mt-3">
+              <input class="form-check-input" type="checkbox" formControlName="IsOwnerAddress">
+              <label class="form-check-label">
+                Owner address same as rental address
+              </label>
+            </div>
+            <div class="col-md-12 mt-3">
+              <label class="form-label">Address</label>
+              <textarea type="text" formControlName="Address" placeholder="OwnerAddress" class="form-control"
+                formControlName=""></textarea>
+            </div>
+            <div class="form-check mt-3">
+              <input class="form-check-input" formControlName="IsSignedDeclaration"
+                (click)="signDeclFieldEnable($event)" type="checkbox">
+              <label class="form-check-label">
+                Signed Declaration Letter. You can use this <a href="javascript:void(0)"
+                  class="text-decoration-none">Declaration Format. <i
+                    class="fa fa-exclamation-circle ps-2 text-secondary"></i></a>
+              </label>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Owner Type</label>
+                <select class="form-select" [disabled]="!isSignDeclareEnable" formControlName="OwnerType">
+                  <option value="">Select Land lord Type</option>
+                </select>
+                <a href="javascript:void(0)" class="text-decoration-none"><i
+                    class="fa fa-paperclip pe-2 pt-3"></i>Upload declaration letter</a>
+              </div>
+            </div>
+            <div class="modal-footer border-top-0">
+              <button type="button" class="btn btn-secondary" (click)="navRentalpage(1)"><i
+                  class="fa fa-arrow-left pe-2"></i> Back</button>
+              <button type="button" class="btn btn-primary-c" (click)="submitRentResidence()"><i
+                  class="fa fa-save pe-2"></i> Save</button>
+            </div>
+          </ng-container>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end -->
+
+<!-- Add Attachment Popup -->
+<!-- <div class="modal fade attachment-popup" id="addAttachmentModal" tabindex="-1" aria-labelledby="addAttachmentModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded">
@@ -853,5 +1055,5 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- End -->
