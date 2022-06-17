@@ -469,7 +469,8 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content px-4">
           <div class="modal-header border-bottom-0">
-            <h5 class="modal-title" id="NewCompanyModalLabel">{{currentCompnay.CompanyId > 0 ? 'Update': 'ADD NEW'}} COMPANY GROUP</h5>
+            <h5 class="modal-title" id="NewCompanyModalLabel">{{currentCompnay.CompanyId > 0 ? 'Update': 'ADD NEW'}}
+              COMPANY GROUP</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -479,15 +480,15 @@
                   <label for="" class="form-label">ORGANIZATION NAME</label>
                   <input
                     [ngClass]="{'error-field': submitted && f.OrganizationName.errors !== null && f.OrganizationName.errors.required}"
-                    formControlName="OrganizationName" transform="upper" type="text" placeholder="Organization Name"
-                    class="form-control">
+                    formControlName="OrganizationName" oninput="this.value = this.value.toUpperCase()" type="text"
+                    placeholder="Organization Name" class="form-control">
                 </div>
                 <div class="col-md-6 mt-3">
                   <label for="" class="form-label">COMPANY NAME</label>
                   <input
                     [ngClass]="{'error-field': submitted && f.CompanyName.errors !== null && f.CompanyName.errors.required}"
-                    formControlName="CompanyName" transform="upper" type="text" placeholder="Company Name"
-                    class="form-control">
+                    formControlName="CompanyName" oninput="this.value = this.value.toUpperCase()" type="text"
+                    placeholder="Company Name" class="form-control">
                 </div>
               </div>
               <div class="row col-md-12">
@@ -504,8 +505,8 @@
                   <label for="" class="form-label">COMPANY EMAIL</label>
                   <input
                     [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.CompanyName.errors.required}"
-                    formControlName="Email" transform="upper" type="Email" placeholder="Company Email"
-                    class="form-control">
+                    formControlName="Email" oninput="this.value = this.value.toUpperCase()" type="Email"
+                    placeholder="Company Email" class="form-control">
                 </div>
                 <div class="col-md-6 mt-2">
                   <label for="" class="form-label">DATE OF INCORPORATION</label>

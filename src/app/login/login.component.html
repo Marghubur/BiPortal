@@ -21,10 +21,6 @@
         </div>
         <div class="col-md-4 d-flex flex-column justify-content-center">
           <div class="">
-            <!-- <a href="javascript:void(0)" (click)="switchMode()"
-              class="provider-mode text-decoration-none float-end fw-bold text-danger">
-              {{isUserMode === true ? 'Provider' : 'User'}}
-            </a> -->
             <ng-container *ngIf="isUserMode">
               <div class="col-lg-12">
                 <div class="card2 card border-0 px-4 py-5">
@@ -32,28 +28,25 @@
                     <div class="login-box-header btn-primary-dark">
                       <div class="active role-box" (click)="enableEmployee()"
                         [ngClass]="{'active': userType == 'employee'}">
-                        <!-- <input class="form-check-input form-check-inputbox" type="radio" name="userType"
-                          [(ngModel)]="userType" id="chkemployee" value="employee"> -->
                         <label class="form-check-label">Employee</label>
                       </div>
                       <div class="role-box" (click)="enableSystem()" [ngClass]="{'active': userType == 'system'}">
-                        <!-- <input class="form-check-input form-check-inputbox" type="radio" name="userType"
-                          [(ngModel)]="userType" id="chksystem" value="system"> -->
                         <label class="form-check-label">System User</label>
                       </div>
                     </div>
                   </div>
-                  <form [formGroup]="UserForm" (ngSubmit)="UserLogin()" class="mt-1">
+                  <div class="mt-1">
                     <div class="row pe-1 ps-3"> <label class="mb-1">
                         <h6 class="mb-0 text-sm">Email Address</h6>
-                      </label> <input class="mb-4" placeholder="Email or Mobile Number" name="UserId"
-                        formControlName="UserId">
+                      </label> <input class="mb-4" id="EmailOrMobile" placeholder="Email or Mobile Number"
+                        name="UserId">
                     </div>
                     <div class="row pe-1 ps-3">
                       <label class="mb-1">
                         <h6 class="mb-0 text-sm">Password</h6>
                       </label>
-                      <input type="password" placeholder="Password" name="Password" formControlName="Password">
+                      <input type="password" (keyup.enter)="UserLogin()" placeholder="Password" id="Password"
+                        name="Password">
                     </div>
                     <div class="d-flex pe-1 ps-3 pt-3 mb-4 col-md-12 justify-content-between">
                       <div class="form-check d-flex">
@@ -62,146 +55,18 @@
                           I agree to our Terms of Service
                         </label>
                       </div>
-                      <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+                      <a href="javascript:void(0)" class="ml-auto mb-0 text-sm">Forgot Password?</a>
                     </div>
                     <div class="row mb-3 px-3">
-                      <button type="submit" [disabled]="isLoading" class="btn btn-primary-dark text-center">
+                      <button type="button" (click)="UserLogin()" [disabled]="isLoading"
+                        class="btn btn-primary-dark text-center">
                         <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
                         {{ isLoading ? 'Signing' : 'Sing In' }}</button>
                     </div>
-                  </form>
+                  </div>
                   <div class="row mb-4 px-3"> <small class="fw-bold register-msg">Don't have an account? <a
-                        class="text-danger ">
+                        class="text-danger" href="javascript:void(0)">
                         Register</a></small> </div>
-                </div>
-              </div>
-            </ng-container>
-
-            <ng-container *ngIf="!isUserMode">
-              <div class="col-lg-12">
-                <div class="card2 card border-0 px-4 py-5">
-                  <div class="col-md-4 card p-4 signin-container d-none">
-                    <form [formGroup]="UserForm" (ngSubmit)="SignupUser()" class="mt-1">
-                      <div class="form-group">
-                        <label class="form-label">Email id</label>
-                        <input class="form-control" placeholder="Email id" name="UserId" formControlName="UserId">
-                      </div>
-                      <div class="form-group mt-3">
-                        <label class="form-label">Mobile No</label>
-                        <input class="form-control" placeholder="Mobile No" name="MobileNo" formControlName="MobileNo">
-                      </div>
-                      <div class="form-group mt-3">
-                        <label class="form-label">Password</label>
-                        <input class="form-control" placeholder="Password" name="Password" formControlName="Password">
-                      </div>
-                      <div class="form-group mt-3">
-                        <label class="form-label">Confirm Password</label>
-                        <input class="form-control" placeholder="ConfirmPassword" name="ConfirmPassword"
-                          formControlName="ConfirmPassword">
-                      </div>
-                      <button class="btn btn-primary-c" [disabled]="isLoading" type="submit">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-plus': !isLoading}"></i>
-                        {{ isLoading ? 'Signing' : 'Sign Up' }}
-                      </button>
-                    </form>
-                  </div>
-                  <div class="d-flex mb-4 px-3">
-                    <h6 class="mb-0 me-4 mt-2">Sign in with</h6>
-                    <div class="facebook text-center me-3">
-                      <a href="javascript:void(0)" class="fa fa-facebook text-decoration-none"></a>
-                    </div>
-                    <div class="twitter text-center me-3">
-                      <a href="javascript:void(0)" class="fa fa-twitter text-decoration-none"></a>
-                    </div>
-                    <div class="linkedin text-center me-3">
-                      <a href="javascript:void(0)" class="fa fa-linkedin text-decoration-none"></a>
-                    </div>
-                  </div>
-                  <div class="row px-3 mb-4">
-                    <div class="line"></div> <small class="or text-center">Or</small>
-                    <div class="line"></div>
-                  </div>
-                  <form [formGroup]="UserForm" (ngSubmit)="LoginUser()" class="mt-1">
-                    <div class="row px-3"> <label class="mb-1">
-                        <h6 class="mb-0 text-sm">Email Address</h6>
-                      </label> <input class="mb-4" placeholder="Email or Mobile Number" name="UserId"
-                        formControlName="UserId">
-                    </div>
-                    <div class="row px-3">
-                      <label class="mb-1">
-                        <h6 class="mb-0 text-sm">Password</h6>
-                      </label>
-                      <input type="password" placeholder="Password" name="Password" formControlName="Password">
-                    </div>
-                    <div class="d-flex px-3 pt-3 mb-4 col-md-12 justify-content-between">
-                      <div class="form-check d-flex">
-                        <input class="form-check-input form-check-inputbox" type="checkbox" id="gridCheck">
-                        <label class="form-check-label ps-2" for="gridCheck">
-                          I agree to our Terms of Service
-                        </label>
-                      </div>
-                      <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
-                    </div>
-                    <div class="row mb-3 px-3">
-                      <button type="submit" [disabled]="isLoading" class="btn btn-blue text-center">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                        {{ isLoading ? 'Signing' : 'Sing In' }}</button>
-                    </div>
-                  </form>
-                  <div class="row mb-4 px-3"> <small class="fw-bold register-msg">Don't have an account? <a
-                        class="text-danger ">
-                        Register</a></small> </div>
-                </div>
-              </div>
-            </ng-container>
-
-            <ng-container>
-              <div class="col-md-10 d-flex justify-content-center d-none">
-                <div id="signup" class="col-md-6 dnone card p-4 mt-5">
-                  <h3 class="signup-space text-center text-warning">
-                    OnlineDataBuilder
-                  </h3>
-                  <form (submit)="SignupUser()" [formGroup]="UserForm">
-                    <div class="col-md-12 d-inline-block">
-                      <div class="form-group">
-                        <label for="UserName">Username</label>
-                        <input type="text" class="form-control" id="UserId" formControlName="UserId"
-                          placeholder="Enter username">
-                      </div>
-                      <div class="form-group">
-                        <label for="Password">Password</label>
-                        <input type="password" class="form-control" id="Password" formControlName="Password"
-                          placeholder="Enter password">
-                      </div>
-                      <div class="form-group">
-                        <label for="ConfirmPassword">Confirm Password</label>
-                        <input type="password" class="form-control" id="ConfirmPassword"
-                          formControlName="ConfirmPassword" placeholder="Configrm password">
-                      </div>
-                      <div class="form-group">
-                        <label for="shopname">Shop Name</label>
-                        <input type="text" class="form-control" id="ShopName" formControlName="ShopName"
-                          placeholder="Enter your shop full name">
-                      </div>
-                      <div class="form-group">
-                        <label for="MobileNo">Mobile no#.</label>
-                        <input type="text" class="form-control" id="MobileNo" formControlName="MobileNo"
-                          (keydown)="AllowMobilenoOnly($event)" placeholder="Enter mobile no #.">
-                      </div>
-                      <div class="form-group">
-                        <label for="registrationCode">Registration Code</label>
-                        <input type="text" class="form-control" id="registrationCode" formControlName="RegistrationCode"
-                          placeholder="Enter your registration code.">
-                      </div>
-                      <div class="form-group anc-signin">
-                        <a href="javascript:void()">
-                          <b>Login</b>
-                        </a>
-                      </div>
-                      <button color="warn" class="w-100 mb-2" type="submit">Sign
-                        Up</button>
-                    </div>
-                  </form>
                 </div>
               </div>
             </ng-container>
@@ -218,169 +83,4 @@
           class="fa fa-twitter me-4 me-sm-5 text-sm"></span> </div>
     </div>
   </div>
-
-  <!-- <div class="col-md-12 feedback">
-    <div class="w-100">
-      <div class="col-12 row m-0 justify-content-center">
-        <div id="signin">
-          <h3 class="mt-4 text-center text-warning">
-            Create a New Account
-          </h3>
-          <div class="text-center">
-            Come join our community! Let's set up your account. Don't have and account?
-            <a href="javascript:void(0)" (click)="backToHomePage()">Sign Up now</a>
-          </div>
-
-          <a href="javascript:void(0)" (click)="switchMode()" class="provider-mode text-decoration-none">
-            {{isUserMode === true ? 'Provider' : 'User'}}
-          </a>
-
-          <div class="col-12 row m-0 center-big">
-            <ng-container *ngIf="isUserMode">
-              <div class="col-md-4 card p-4 signin-container d-none">
-                <form [formGroup]="UserForm" (ngSubmit)="SignupUser()" class="mt-1">
-                  <div class="form-group">
-                    <label class="form-label">Email id</label>
-                    <input class="form-control" placeholder="Email id" name="UserId" formControlName="UserId">
-                  </div>
-                  <div class="form-group mt-3">
-                    <label class="form-label">Mobile No</label>
-                    <input class="form-control" placeholder="Mobile No" name="MobileNo" formControlName="MobileNo">
-                  </div>
-                  <div class="form-group mt-3">
-                    <label class="form-label">Password</label>
-                    <input class="form-control" placeholder="Password" name="Password" formControlName="Password">
-                  </div>
-                  <div class="form-group mt-3">
-                    <label class="form-label">Confirm Password</label>
-                    <input class="form-control" placeholder="ConfirmPassword" name="ConfirmPassword"
-                      formControlName="ConfirmPassword">
-                  </div>
-                  <button class="btn btn-primary-c" [disabled]="isLoading" type="submit">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-plus': !isLoading}"></i>
-                    {{ isLoading ? 'Signing' : 'Sign Up' }}
-                  </button>
-                </form>
-              </div>
-
-              <div class="col-md-4 card p-4 signin-container">
-                <div class="title d-flex flex-column justify-context-center text-center">
-                  HIRINGBELL
-                </div>
-                <div class="d-flex mb-4">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="userType" [(ngModel)]="userType"
-                    id="chkemployee" value="employee">
-                    <label class="form-check-label">Employee</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="userType" [(ngModel)]="userType" id="chksystem" value="system">
-                    <label class="form-check-label">System User</label>
-                  </div>
-                </div>
-
-                <form [formGroup]="UserForm" (ngSubmit)="LoginProvider()" class="mt-1">
-                  <div class="form-group">
-                    <label class="form-label">Email or Mobile Number</label>
-                    <input class="form-control" placeholder="Email or Mobile Number" name="UserId" formControlName="UserId">
-                  </div>
-                  <div class="form-group mt-3">
-                    <label class="form-label">Password</label>
-                    <input class="form-control" type="password" placeholder="Password" name="Password"
-                      formControlName="Password">
-                  </div>
-                  <div class="form-check mt-3">
-                    <input class="form-check-input" type="checkbox" checked>
-                    <label class="check_box">
-                      By submitting the form you agree to our Terms of Service
-                    </label>
-                  </div>
-
-                  <button class="btn btn-primary-c" [disabled]="isLoading" type="submit">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                    {{ isLoading ? 'Signing' : 'Sing In' }}
-                  </button>
-                </form>
-              </div>
-            </ng-container>
-
-            <ng-container *ngIf="!isUserMode">
-              <div class="col-md-4 card p-4 signin-container">
-                <form [formGroup]="UserForm" (ngSubmit)="LoginUser()" class="mt-1">
-                  <div class="form-group">
-                    <label class="form-label">Email or Mobile Number</label>
-                    <input class="form-control" placeholder="Email or Mobile Number" name="UserId" formControlName="UserId">
-                  </div>
-                  <div class="form-group mt-3">
-                    <label class="form-label">Password</label>
-                    <input class="form-control" type="password" placeholder="Password" name="Password"
-                      formControlName="Password">
-                  </div>
-                  <div class="form-check mt-3">
-                    <input class="form-check-input" type="checkbox" checked>
-                    <label class="check_box">
-                      By submitting the form you agree to our Terms of Service
-                    </label>
-                  </div>
-
-                  <button class="btn btn-primary-c" [disabled]="isLoading" type="submit">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                    {{ isLoading ? 'Signing' : 'Sing In' }}
-                  </button>
-                </form>
-              </div>
-            </ng-container>
-          </div>
-
-        </div>
-      </div>
-      <div class="col-md-10 d-flex justify-content-center">
-        <div id="signup" class="col-md-6 dnone card p-4 mt-5">
-          <h3 class="signup-space text-center text-warning">
-            OnlineDataBuilder
-          </h3>
-          <form (submit)="SignupUser()" [formGroup]="UserForm">
-            <div class="col-md-12 d-inline-block">
-              <div class="form-group">
-                <label for="UserName">Username</label>
-                <input type="text" class="form-control" id="UserId" formControlName="UserId" placeholder="Enter username">
-              </div>
-              <div class="form-group">
-                <label for="Password">Password</label>
-                <input type="password" class="form-control" id="Password" formControlName="Password"
-                  placeholder="Enter password">
-              </div>
-              <div class="form-group">
-                <label for="ConfirmPassword">Confirm Password</label>
-                <input type="password" class="form-control" id="ConfirmPassword" formControlName="ConfirmPassword"
-                  placeholder="Configrm password">
-              </div>
-              <div class="form-group">
-                <label for="shopname">Shop Name</label>
-                <input type="text" class="form-control" id="ShopName" formControlName="ShopName"
-                  placeholder="Enter your shop full name">
-              </div>
-              <div class="form-group">
-                <label for="MobileNo">Mobile no#.</label>
-                <input type="text" class="form-control" id="MobileNo" formControlName="MobileNo"
-                  (keydown)="AllowMobilenoOnly($event)" placeholder="Enter mobile no #.">
-              </div>
-              <div class="form-group">
-                <label for="registrationCode">Registration Code</label>
-                <input type="text" class="form-control" id="registrationCode" formControlName="RegistrationCode"
-                  placeholder="Enter your registration code.">
-              </div>
-              <div class="form-group anc-signin">
-                <a href="javascript:void()">
-                  <b>Login</b>
-                </a>
-              </div>
-              <button color="warn" class="w-100 mb-2" type="submit">Sign
-                Up</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>

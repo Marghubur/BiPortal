@@ -11,7 +11,8 @@
         <div class="x_header">
           <div class="x_header_title d-flex justify-content-between align-items-center">
             <h2>Employee<small>Details</small></h2>
-            <a href="javascript:void(0)" (click)="salryBreakupPopup()" class="text-decoration-none fw-bold"><i class="fa fa-money pe-1"></i> Salary Breakup</a>
+            <a href="javascript:void(0)" (click)="salryBreakupPopup()" class="text-decoration-none fw-bold"><i
+                class="fa fa-money pe-1"></i> Salary Breakup</a>
           </div>
         </div>
 
@@ -324,13 +325,13 @@
                   <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                     <div class="col-md-6 mb-3">
                       <label class="form-label">PAN No. #</label>
-                      <input class="form-control" placeholder="PAN card no.#" name="PANNo" transform="upper"
-                        formControlName="PANNo" />
+                      <input class="form-control" placeholder="PAN card no.#" name="PANNo"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="PANNo" />
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Aadhar No. #</label>
-                      <input class="form-control" placeholder="Aadhar No. #" name="AadharNo" transform="upper"
-                        formControlName="AadharNo" />
+                      <input class="form-control" placeholder="Aadhar No. #" name="AadharNo"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="AadharNo" />
                     </div>
                     <div class="col-md-12 mb-3">
                       <label class="form-label">Bank Account No.#</label>
@@ -344,13 +345,13 @@
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">IFSC Code</label>
-                      <input class="form-control" placeholder="IFSC Code" name="IFSCCode" transform="upper"
-                        formControlName="IFSCCode" />
+                      <input class="form-control" placeholder="IFSC Code" name="IFSCCode"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="IFSCCode" />
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Branch (Optional)</label>
-                      <input class="form-control" placeholder="Branch name" name="BranchName" transform="upper"
-                        formControlName="BranchName" />
+                      <input class="form-control" placeholder="Branch name" name="BranchName"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="BranchName" />
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Date of joining</label>
@@ -476,7 +477,8 @@
                 </div>
                 <div class="td align-middle fe-2">
                   <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ConveyanceAnnually">
+                    <input type="text" class="form-control border-0" OnlyNumber="9"
+                      formControlName="ConveyanceAnnually">
                   </div>
                 </div>
               </div>
@@ -521,7 +523,8 @@
                 </div>
                 <div class="td align-middle fe-2">
                   <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="CarRunningAnnually">
+                    <input type="text" class="form-control border-0" OnlyNumber="9"
+                      formControlName="CarRunningAnnually">
                   </div>
                 </div>
               </div>
@@ -664,9 +667,11 @@
           </div>
         </form>
       </div>
-      <p class="ps-5 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if any).</p>
+      <p class="ps-5 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if
+        any).</p>
       <div class="modal-footer border-top-0 pe-5">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-1"></i> Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-1"></i>
+          Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="saveSalaryBreakup()">
           <i class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-save': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Save' }}

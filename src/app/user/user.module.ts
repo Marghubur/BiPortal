@@ -24,6 +24,7 @@ import { TaxcalculationComponent } from './taxcalculation/taxcalculation.compone
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
+import { CommonService } from 'src/providers/common-service/common.service';
 
 
 @NgModule({
@@ -55,6 +56,9 @@ import { ApprovalRequestComponent } from './approval-request/approval-request.co
     FormsModule,
     UserRoutingModule,
     UtilModule
+  ],
+  providers: [
+    CommonService
   ]
 })
 export class UserModule { }

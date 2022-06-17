@@ -430,7 +430,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   updateComponentDeatils() {
     this.updateComponentForm = this.fb.group({
       CalculateInPercentage: new FormControl (this.componentFields.CalculateInPercentage == false ? '3': '2'),
-      TaxExempt: new FormControl (this.componentFields.TaxExempt == 'true'? true: false),
+      TaxExempt: new FormControl (this.componentFields.TaxExempt),
       MaxLimit: new FormControl (this.componentFields.MaxLimit, [Validators.required, numberZero]),
       Formula: new FormControl (this.componentFields.Formula),
       EmployeeContribution: new FormControl (this.componentFields.EmployeeContribution),
@@ -563,7 +563,7 @@ class DailyWagesStructure {
 
 class UpdateSalaryComponent {
   CalculateInPercentage: boolean = false;
-  TaxExempt: string = '';
+  TaxExempt: boolean = false;
   MaxLimit: number = 0;
   Formula: string = '';
   EmployeeContribution: boolean = false;

@@ -1,15 +1,11 @@
-import { CommonService, ErrorToast, Toast } from "./../../providers/common-service/common.service";
+import { ErrorToast, Toast } from "./../../providers/common-service/common.service";
 import { AjaxService } from "src/providers/ajax.service";
-import { FormControl } from "@angular/forms";
-import { FormGroup } from "@angular/forms";
 import { Output } from "@angular/core";
 import { EventEmitter } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
 declare var $: any;
 import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from './../../auth/jwtService'
-// import { SocialAuthService } from "angularx-social-login";
-// import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
 import { Dashboard, UserDashboard, UserType } from "src/providers/constants";
 
 @Component({
@@ -22,27 +18,23 @@ export class LoginComponent implements OnInit {
   initialUrl: string = "";
   catagory: any = {};
   isLoading: boolean = false;
-  // isGoogleLogin: boolean = false;
-  // isGitHubLogin: boolean = false;
   isUserMode: boolean = true;
   userType: string = 'system';
 
   @Output() userAuthState = new EventEmitter();
 
-  UserForm = new FormGroup({
-    UserId: new FormControl(""),
-    Password: new FormControl(""),
-    ConfirmPassword: new FormControl(""),
-    RegistrationCode: new FormControl(""),
-    ShopName: new FormControl(""),
-    MobileNo: new FormControl("")
-  });
+  UserForm = {
+    UserId: "",
+    Password: "",
+    ConfirmPassword: "",
+    RegistrationCode: "",
+    ShopName: "",
+    MobileNo: ""
+  };
 
   constructor(
     private http: AjaxService,
-    private commonService: CommonService,
     private nav: iNavigation,
-    // private authService: SocialAuthService,
     private jwtService: JwtService
   ) { }
 
@@ -58,7 +50,7 @@ export class LoginComponent implements OnInit {
 
   UserLogin() {
     this.isLoading = true;
-    if (this.UserForm.valid) {
+    if (this.UserForm) {
       this.isLoading = true;
       let request = {
         Password: null,
@@ -68,22 +60,22 @@ export class LoginComponent implements OnInit {
         AccessToken: null,
         UserTypeId: this.userType == 'employee' ? UserType.Employee : UserType.Admin
       };
-      let userId = this.UserForm.controls['UserId'].value;
-      let password = this.UserForm.controls['Password'].value;
+      let userId: any = document.getElementById("EmailOrMobile");
+      let password: any = document.getElementById("Password");
 
-      if (userId !== "" && password !== "") {
-        if(userId.indexOf("@") !== -1) {
-          request.EmailId = userId;
+      if (userId.value !== "" && password.value !== "") {
+        if(userId.value.indexOf("@") !== -1) {
+          request.EmailId = userId.value;
         } else {
-          request.Mobile = userId;
+          request.Mobile = userId.value;
         }
 
-        request.Password = password;
+        request.Password = password.value;
         this.http.login("Login/AuthenticateUser", request).then((result: ResponseModel) => {
-          if (this.commonService.IsValid(result)) {
+          if (result.ResponseBody) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
-            Toast("Please wait loading dashboard ...");
+            Toast("Please wait loading dashboard ...", 10);
             if(this.userType == 'employee')
               this.nav.navigate(UserDashboard, null);
             else
@@ -102,12 +94,12 @@ export class LoginComponent implements OnInit {
   }
 
   ResetSignUpForm() {
-    this.UserForm.controls["UserId"].setValue("");
-    this.UserForm.controls["Password"].setValue("");
-    this.UserForm.controls["ConfirmPassword"].setValue("");
-    this.UserForm.controls["RegistrationCode"].setValue("");
-    this.UserForm.controls["ShopName"].setValue("");
-    this.UserForm.controls["Mobile"].setValue("");
+    this.UserForm.UserId = '';
+    this.UserForm.Password = '';
+    this.UserForm.ConfirmPassword = '';
+    this.UserForm.RegistrationCode = '';
+    this.UserForm.ShopName = '';
+    this.UserForm.MobileNo = null;
 
     $("#signup").hide();
     $("#signin").fadeIn();
@@ -115,30 +107,26 @@ export class LoginComponent implements OnInit {
 
   SignupUser() {
     this.isLoading = true;
-    if (this.UserForm.valid) {
-      let UserSighupData = this.UserForm.getRawValue();
-      if (UserSighupData.Password === UserSighupData.ConfirmPassword) {
-        this.http.post("Authentication/ShopSigup", UserSighupData).then(
-          result => {
-            if (this.commonService.IsValidString(result)) {
-              this.commonService.ShowToast("Registration done successfully");
-              this.ResetSignUpForm();
-            }
-            this.isLoading = false;
-          },
-          error => {
-            this.isLoading = false;
-            this.commonService.ShowToast(
-              "Registration fail. Please contact to admin."
-            );
-          }
-        );
-      } else {
-        this.isLoading = false;
-        this.commonService.ShowToast(
-          "Password and Confirmpassword is not matching."
-        );
-      }
+    if (this.UserForm) {
+      // let UserSighupData = this.UserForm.getRawValue();
+      // if (UserSighupData.Password === UserSighupData.ConfirmPassword) {
+      //   this.http.post("Authentication/ShopSigup", UserSighupData).then(
+      //     result => {
+      //       if (result.ResponseBody) {
+      //         // this.commonService.ShowToast("Registration done successfully");
+      //         this.ResetSignUpForm();
+      //       }
+      //       this.isLoading = false;
+      //     },
+      //     error => {
+      //       this.isLoading = false;
+      //       // this.commonService.ShowToast("Registration fail. Please contact to admin.");
+      //     }
+      //   );
+      // } else {
+      //   this.isLoading = false;
+      //   // this.commonService.ShowToast("Password and Confirmpassword is not matching.");
+      // }
     } else {
       this.isLoading = false;
     }
@@ -146,9 +134,9 @@ export class LoginComponent implements OnInit {
 
   AllowMobilenoOnly(e: any) {
     let $e: any = event;
-    if (!this.commonService.MobileNumberFormat(e.which, $($e.currentTarget).val().length)) {
-      if (e.which !== 9) $e.preventDefault();
-    }
+    // if (!this.commonService.MobileNumberFormat(e.which, $($e.currentTarget).val().length)) {
+    //   if (e.which !== 9) $e.preventDefault();
+    // }
   }
 
   EnableSignup() {

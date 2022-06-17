@@ -37,7 +37,7 @@
                         <div class="col-md-3 float-end">
                           <div class="form-group has-search">
                             <span class="fa fa-search form-control-feedback"></span>
-                            <input type="text" class="form-control" transform="upper"
+                            <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
                               (keydown.esc)="reloadAllRecurring($event)" (keyup.enter)="filterRecords($event)"
                               placeholder="Search Component">
                           </div>
@@ -265,30 +265,31 @@
           <div class="row col-md-12">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != '' || ComponentType == ''" transform="upper"
+              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != '' || ComponentType == ''"
+                oninput="this.value = this.value.toUpperCase()"
                 [ngClass]="{'error-field': submitted && f.ComponentName.errors !== null && f.ComponentName.errors.required}"
                 formControlName="ComponentName" placeholder="Component Name" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
-              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name" transform="upper" [readonly]="ComponentType == ''"
-                class="form-control">
+              <input type="text" formControlName="ComponentFullName" [readonly]="ComponentType == ''"
+                placeholder="Component Full Name" oninput="this.value = this.value.toUpperCase()" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
-              <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9" [readonly]="ComponentType == ''"
-                class="form-control">
+              <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9"
+                [readonly]="ComponentType == ''" class="form-control">
             </div>
             <div class="col-md-12 mt-3">
               <label for="" class="form-label">COMPONENT DESCRIPTION</label>
-              <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description" [readonly]="ComponentType == ''"
-                class="form-control"></textarea>
+              <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
+                [readonly]="ComponentType == ''" class="form-control"></textarea>
             </div>
           </div>
           <div class="col-md-12">
             <div class="form-check mt-3">
-              <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt" [disabled]="ComponentType == ''"
-                (click)="enableTaxExempt($event)">
+              <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt"
+                [disabled]="ComponentType == ''" (click)="enableTaxExempt($event)">
               <label class="form-check-label">
                 This component is tax exemption(non taxable)
               </label>
@@ -347,13 +348,13 @@
           <div class="row">
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" formControlName="ComponentName" transform="upper" placeholder="Component Name"
-                class="form-control">
+              <input type="text" formControlName="ComponentName" oninput="this.value = this.value.toUpperCase()"
+                placeholder="Component Name" class="form-control">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
-              <input type="text" formControlName="ComponentFullName" transform="upper" placeholder="Component Full Name"
-                class="form-control">
+              <input type="text" formControlName="ComponentFullName" oninput="this.value = this.value.toUpperCase()"
+                placeholder="Component Full Name" class="form-control">
             </div>
           </div>
           <div class="col-md-12 mt-3">
@@ -407,13 +408,13 @@
           <div class="row">
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" formControlName="ComponentName" transform="upper" placeholder="Component Name"
-                class="form-control">
+              <input type="text" formControlName="ComponentName" oninput="this.value = this.value.toUpperCase()"
+                placeholder="Component Name" class="form-control">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
-              <input type="text" formControlName="ComponentFullName" transform="upper" placeholder="Component Full Name"
-                class="form-control">
+              <input type="text" formControlName="ComponentFullName" oninput="this.value = this.value.toUpperCase()"
+                placeholder="Component Full Name" class="form-control">
             </div>
           </div>
           <div class="col-md-12 mt-3">
@@ -454,13 +455,13 @@
           <div class="row">
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" formControlName="ComponentName" transform="upper" placeholder="Component Name"
-                class="form-control">
+              <input type="text" formControlName="ComponentName" oninput="this.value = this.value.toUpperCase()"
+                placeholder="Component Name" class="form-control">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
-              <input type="text" formControlName="ComponentFullName" transform="upper" placeholder="Component Full Name"
-                class="form-control">
+              <input type="text" formControlName="ComponentFullName" oninput="this.value = this.value.toUpperCase()"
+                placeholder="Component Full Name" class="form-control">
             </div>
           </div>
           <div class="col-md-12 mt-3">

@@ -4,7 +4,6 @@ import {
   HttpResponse,
   HttpErrorResponse
 } from "@angular/common/http";
-import { CommonService, Toast } from "./common-service/common.service";
 import "rxjs/add/operator/map";
 import { Observable } from "rxjs";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
@@ -16,8 +15,7 @@ export class AjaxService {
 
   constructor(
     private tokenHelper: JwtService,
-    private http: HttpClient,
-    private commonService: CommonService
+    private http: HttpClient
   ) {
     if (environment.production) {
       console.log("[Bottomhalf]: Bottomhalf/builder Running");
@@ -33,16 +31,13 @@ export class AjaxService {
 
   LoadStaticJson(StaticUrl: string): Observable<any> {
     let JsonData = this.http.get(StaticUrl);
-    this.commonService.HideLoader();
     return JsonData;
   }
 
   get(Url: string, IsLoaderRequired: boolean = true): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
       if (IsLoaderRequired) {
-        this.commonService.ShowLoaderByAjax();
       } else {
-        this.commonService.ShowLoaderByAjax();
       }
       return this.http
         .get(environment.baseUrl + Url, {
@@ -149,10 +144,8 @@ export class AjaxService {
               reject(e);
             }
             resolve(res);
-            this.commonService.HideLoaderByAjax();
           },
           error => {
-            this.commonService.HideLoaderByAjax();
             this.tokenHelper.HandleResponseStatus(error.status);
             reject(error);
           }
@@ -162,34 +155,32 @@ export class AjaxService {
 
   login(Url: string, Param: any): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
-      if (this.commonService.IsValid(Param)) {
-        this.http
-          .post(environment.baseUrl + Url, Param, {
-            observe: "response"
-          })
-          .subscribe(
-            (res: HttpResponse<any>) => {
-              try {
-                if (this.tokenHelper.IsValidResponse(res.body)) {
-                  let loginData: ResponseModel = res.body;
-                  if (this.tokenHelper.setLoginDetail(loginData.ResponseBody)) {
-                    resolve(res.body);
-                  } else {
-                    resolve(null);
-                  }
+      this.http
+        .post(environment.baseUrl + Url, Param, {
+          observe: "response"
+        })
+        .subscribe(
+          (res: HttpResponse<any>) => {
+            try {
+              if (this.tokenHelper.IsValidResponse(res.body)) {
+                let loginData: ResponseModel = res.body;
+                if (this.tokenHelper.setLoginDetail(loginData.ResponseBody)) {
+                  resolve(res.body);
                 } else {
-                  reject(null);
+                  resolve(null);
                 }
-              } catch (e) {
-                reject(e);
+              } else {
+                reject(null);
               }
-            },
-            error => {
-              this.tokenHelper.HandleResponseStatus(error.status);
-              reject(error);
+            } catch (e) {
+              reject(e);
             }
-          );
-      }
+          },
+          error => {
+            this.tokenHelper.HandleResponseStatus(error.status);
+            reject(error);
+          }
+        );
     });
   }
 
@@ -217,4 +208,28 @@ export class AjaxService {
         );
     });
   }
+}
+
+
+export class ColumnMapping {
+  ClassName?: string = null;
+  ColumnName: string = null;
+  DisplayName: string = null;
+  IsHidden?: boolean = false;
+  PageName?: string = null;
+  Style?: string = null;
+}
+
+export interface iconConfig {
+  iconName: string;
+  fn?: Function
+}
+
+export class tableConfig {
+  header: Array<ColumnMapping> = [];
+  data: Array<any> = [];
+  link: Array<iconConfig> = [];
+  templates: Array<any> = [];
+  totalRecords?: number = null;
+  isEnableAction?: boolean = false;
 }

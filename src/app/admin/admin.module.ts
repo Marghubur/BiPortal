@@ -53,6 +53,8 @@ import { CompanyAccountsComponent } from './company-accounts/company-accounts.co
 import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
 import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 import { PayrollComponentsComponent } from './payroll-components/payroll-components.component';
+import { CommonService } from 'src/providers/common-service/common.service';
+import { DateFormatter } from 'src/providers/DateFormatter';
 
 @NgModule({
   declarations: [
@@ -113,6 +115,10 @@ import { PayrollComponentsComponent } from './payroll-components/payroll-compone
     ReactiveFormsModule,
     FormsModule,
     UtilModule
+  ],
+  providers: [
+    CommonService,
+    DateFormatter
   ]
 })
 export class AdminModule { }

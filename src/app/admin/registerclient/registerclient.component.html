@@ -51,8 +51,8 @@
               <div class="col-md-12 row">
                 <div class="col-md-4 mb-3">
                   <label class="form-label">PAN No.#</label>
-                  <input class="form-control" placeholder="PAN No.#" transform="upper" name="PanNo"
-                    formControlName="PanNo" />
+                  <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()"
+                    name="PanNo" formControlName="PanNo" />
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Alternate No.#</label>
@@ -61,8 +61,8 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">FAX No.# (optional)</label>
-                  <input class="form-control" placeholder="FAX No.#" name="Fax" transform="upper"
-                    formControlName="Fax" />
+                  <input class="form-control" placeholder="FAX No.#" name="Fax"
+                    oninput="this.value = this.value.toUpperCase()" formControlName="Fax" />
                 </div>
               </div>
 
@@ -70,8 +70,8 @@
                 <div class="col-md-4 mb-3"></div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">GSTIN No.#</label>
-                  <input class="form-control" transform="upper" placeholder="GSTIN No." name="GSTNO"
-                    formControlName="GSTNO" />
+                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No."
+                    name="GSTNO" formControlName="GSTNO" />
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Mobile No.# (optional)</label>
@@ -107,8 +107,8 @@
                 </div>
                 <div class="col-md-12 mt-4">
                   <label class="form-label">IFSC Code</label>
-                  <input placeholder="IFSC Code" class="form-control" name="IFSC" transform="upper"
-                    formControlName="IFSC" />
+                  <input placeholder="IFSC Code" class="form-control" name="IFSC"
+                    oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" />
                 </div>
                 <div class="col-md-12 mt-4">
                   <label class="form-label">Branch Name (Optional)</label>

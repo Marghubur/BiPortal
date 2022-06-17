@@ -67,13 +67,15 @@
               <div class="row col-md-6">
                 <div class="col-md-6 my-2">
                   <label for="" class="form-label">LEGAL NAME OF THE COMPANY</label>
-                  <input type="text" transform="upper" class="form-control" placeholder="COMPANY FULL NAME"
+                  <input type="text" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                    placeholder="COMPANY FULL NAME"
                     [ngClass]="{'error-field': submitted && f['LegalNameOfCompany'].errors !== null && f['LegalNameOfCompany'].errors['required']}"
                     formControlName="LegalNameOfCompany">
                 </div>
                 <div class="col-md-6 my-2">
                   <label for="" class="form-label">TYPE OF BUSINESS</label>
-                  <input type="text" class="form-control" transform="upper" transform="upper" placeholder="TYPE OF BUSINESS"
+                  <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
+                    oninput="this.value = this.value.toUpperCase()" placeholder="TYPE OF BUSINESS"
                     formControlName="TypeOfBusiness">
                 </div>
                 <div class="col-md-6 my-2">
@@ -94,8 +96,8 @@
                 </div>
                 <div class="col-md-6 my-2">
                   <label for="" class="form-label">REGISTERED OFFICE ADDRESS</label>
-                  <input type="text" class="form-control" placeholder="REGISTERED OFFICE ADDRESS" transform="upper"
-                    formControlName="FullAddress">
+                  <input type="text" class="form-control" placeholder="REGISTERED OFFICE ADDRESS"
+                    oninput="this.value = this.value.toUpperCase()" formControlName="FullAddress">
                 </div>
               </div>
             </div>
@@ -157,10 +159,12 @@
               <div class="col-md-4 my-2 row">
                 <div class="form-label fw-bold col-md-6">First Address :</div>
                 <div class="form-label col-md-6">
-                  <ng-container *ngIf="companyInformation.FirstAddress != null || companyInformation.FirstAddress != ''">
+                  <ng-container
+                    *ngIf="companyInformation.FirstAddress != null || companyInformation.FirstAddress != ''">
                     {{companyInformation.FirstAddress}}
                   </ng-container>
-                  <ng-container *ngIf="companyInformation.FirstAddress == null || companyInformation.FirstAddress == ''">
+                  <ng-container
+                    *ngIf="companyInformation.FirstAddress == null || companyInformation.FirstAddress == ''">
                     NA
                   </ng-container>
                 </div>
@@ -168,10 +172,12 @@
               <div class="col-md-4 my-2 row">
                 <div class="form-label fw-bold col-md-6">Second Address :</div>
                 <div class="form-label col-md-6">
-                  <ng-container *ngIf="companyInformation.SecondAddress != null || companyInformation.SecondAddress != ''">
+                  <ng-container
+                    *ngIf="companyInformation.SecondAddress != null || companyInformation.SecondAddress != ''">
                     {{companyInformation.SecondAddress}}
                   </ng-container>
-                  <ng-container *ngIf="companyInformation.SecondAddress == null || companyInformation.SecondAddress == ''">
+                  <ng-container
+                    *ngIf="companyInformation.SecondAddress == null || companyInformation.SecondAddress == ''">
                     NA
                   </ng-container>
                 </div>
@@ -179,10 +185,12 @@
               <div class="col-md-4 my-2 row">
                 <div class="form-label fw-bold col-md-6">Third Address :</div>
                 <div class="form-label col-md-6">
-                  <ng-container *ngIf="companyInformation.ThirdAddress != null || companyInformation.ThirdAddress != ''">
+                  <ng-container
+                    *ngIf="companyInformation.ThirdAddress != null || companyInformation.ThirdAddress != ''">
                     {{companyInformation.ThirdAddress}}
                   </ng-container>
-                  <ng-container *ngIf="companyInformation.ThirdAddress == null || companyInformation.ThirdAddress == ''">
+                  <ng-container
+                    *ngIf="companyInformation.ThirdAddress == null || companyInformation.ThirdAddress == ''">
                     NA
                   </ng-container>
                 </div>
@@ -190,10 +198,12 @@
               <div class="col-md-4 my-2 row">
                 <div class="form-label fw-bold col-md-6">Fourth Address :</div>
                 <div class="form-label col-md-6">
-                  <ng-container *ngIf="companyInformation.FourthAddress != null || companyInformation.FourthAddress != ''">
+                  <ng-container
+                    *ngIf="companyInformation.FourthAddress != null || companyInformation.FourthAddress != ''">
                     {{companyInformation.FourthAddress}}
                   </ng-container>
-                  <ng-container *ngIf="companyInformation.FourthAddress == null || companyInformation.FourthAddress == ''">
+                  <ng-container
+                    *ngIf="companyInformation.FourthAddress == null || companyInformation.FourthAddress == ''">
                     NA
                   </ng-container>
                 </div>
