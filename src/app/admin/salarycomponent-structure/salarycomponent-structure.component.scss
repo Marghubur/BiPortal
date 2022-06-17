@@ -39,25 +39,25 @@
   top: calc(100% + 0.5rem);
 }
 .active {
-  background-color: #7200ff !important;
+  background-color: #337ab7 !important;
   color: #ffff;
   z-index: 99;
 }
 
 .active::after {
-  color: #7200ff ;
+  color: #337ab7 ;
   font-weight: 700;
 }
 
 .fill-success {
-  border: 2px solid #7200ff;
+  border: 2px solid #337ab7;
   background-color: #fff;
   color: #222;
   font-weight: 700;
 }
 
 .custom-progress {
-  background-color: #7200ff;
+  background-color: #337ab7;
   width: 0%;
   transition: 0.3s;
 }
