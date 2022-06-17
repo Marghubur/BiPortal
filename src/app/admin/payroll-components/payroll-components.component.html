@@ -30,12 +30,15 @@
                         Organization components like Basic, HRA, Special Allowance are system defined and can't be
                         edited or removed.</p>
                       <div class="col-md-12 my-4">
-                        <button class="btn btn-primary-c" (click)="newComponentPopUp()"><i class="fa fa-plus pe-2"></i> ADD NEW COMPONENT</button>
-                        <button class="btn btn-success ms-2"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to Add Hoc Component</button>
+                        <button class="btn btn-primary-c" (click)="newComponentPopUp()"><i class="fa fa-plus pe-2"></i>
+                          ADD NEW COMPONENT</button>
+                        <button class="btn btn-success ms-2"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to
+                          Add Hoc Component</button>
                         <div class="col-md-3 float-end">
                           <div class="form-group has-search">
                             <span class="fa fa-search form-control-feedback"></span>
-                            <input type="text" class="form-control" placeholder="Search Component">
+                            <input type="text" class="form-control" (keydown.esc)="reloadAllRecurring($event)"
+                              (keyup.enter)="filterRecords($event)" placeholder="Search Component">
                           </div>
                         </div>
                       </div>
@@ -65,7 +68,7 @@
                             <div class="td ps-3 text-truncate fe-2">
                               <div class="form-check">
                                 <input class="form-check-input me-3" type="checkbox" (click)="addToAdhoc(item)">
-                                <label class="form-check-label" for="flexCheckDefault">
+                                <label class="form-check-label text-truncate" for="flexCheckDefault">
                                   {{item.ComponentId}} ({{item.ComponentFullName}})
                                 </label>
                               </div>
@@ -82,7 +85,7 @@
                               <div [ngSwitch]="item.TaxExempt">
                                 <div *ngSwitchCase="1">
                                   <b class="me-2">Yes</b>
-                                  <small class="ps-2 badge bg-warning">{{item.Section}}</small>
+                                  <small class="ps-2 badge bg-primary">{{item.Section}}</small>
                                 </div>
                                 <div *ngSwitchDefault>
                                   No
@@ -111,9 +114,12 @@
                     <div class="px-2 pt-3">
                       <div class="d-flex justify-content-between">
                         <h4>Ad Hoc Components Library</h4>
-                        <button class="btn btn-success"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to Recurring Component</button>
+                        <button class="btn btn-success"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to
+                          Recurring Component</button>
                       </div>
-                      <p class="mb-0 py-2">In this Section you can create all the ad hoc components that gets paid in your organization. Adhoc components are salary components that are typically not paid as regular monthly components.</p>
+                      <p class="mb-0 py-2">In this Section you can create all the ad hoc components that gets paid in
+                        your organization. Adhoc components are salary components that are typically not paid as regular
+                        monthly components.</p>
                       <div class="row my-4 justify-content-between">
                         <div class="col-md-4">
                           <div class="col-md-12">
@@ -217,8 +223,9 @@
                 [ngClass]="{'error-field': submitted && f.Type.errors !== null && f.Type.errors.required}"
                 formControlName="Type" (change)="selectComponentType($event)">
                 <option value="">Select Componet Type</option>
+                <option value="2">Fixed</option>
                 <option value="2">Allowance</option>
-                <option value="4">Reimbursable Component</option>
+                <option value="4">Reimbursable</option>
                 <option value="3">Rembursement</option>
               </select>
             </div>
@@ -294,13 +301,13 @@
         <ng-container *ngIf="CurrentRecurringComponent.ComponentId != ''">
           <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
             <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-            {{ isLoading ? 'Wait' : 'Update Salary Group' }}
+            {{ isLoading ? 'Wait' : 'Update Component' }}
           </button>
         </ng-container>
         <ng-container *ngIf="CurrentRecurringComponent.ComponentId == ''">
           <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
             <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-            {{ isLoading ? 'Wait' : 'Create Salary Group' }}
+            {{ isLoading ? 'Wait' : 'Create Component' }}
           </button>
         </ng-container>
       </div>

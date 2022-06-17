@@ -29,7 +29,7 @@
           </div>
           <div class="form-group ms-2">
             <div class="col-md-12 row">
-              <div class="col-md-6">
+              <!-- <div class="col-md-6">
                 <select class="form-select" (change)="loadOnChange()" [(ngModel)]="componentTypeId">
                   <option value="-1">Select Type</option>
                   <option value="0">All</option>
@@ -38,7 +38,7 @@
                   <option value="3">Rembursment</option>
                   <option value="4">Reimursable</option>
                 </select>
-              </div>
+              </div> -->
               <div class="col-md-6">
                 <div class="form-group has-search">
                   <span class="fa fa-search form-control-feedback"></span>
@@ -75,15 +75,15 @@
             </div>
           </div>
           <div class="t-body custom-height">
-            <ng-container *ngIf="salaryComponentFields.length > 0">
-              <div class="tr py-2" *ngFor="let item of salaryComponentFields">
+            <ng-container *ngIf="salaryComponentActiveFields.length > 0">
+              <div class="tr py-2" *ngFor="let item of salaryComponentActiveFields">
                 <div class="td ps-3 text-truncate fe-2">
                   <div [ngSwitch]="item.IsActive">
                     <div *ngSwitchCase="1">
-                      <span class="badge bg-success me-2">ON</span>{{item.ComponentDescription}}
+                      <span class="badge bg-success me-2">ON</span>{{item.ComponentId}} ({{item.ComponentFullName}})
                     </div>
                     <div *ngSwitchDefault>
-                      <span class="badge bg-danger me-2">OFF</span>{{item.ComponentDescription}}
+                      <span class="badge bg-danger me-2">OFF</span>{{item.ComponentId}} ({{item.ComponentFullName}})
                     </div>
                   </div>
                 </div>
@@ -99,7 +99,7 @@
                   <div [ngSwitch]="item.TaxExempt">
                     <div *ngSwitchCase="1">
                       <b class="me-2">Yes</b>
-                      <small class="ps-2 badge bg-warning">{{item.Section}}</small>
+                      <small class="ps-2 badge bg-primary">{{item.Section}}</small>
                     </div>
                     <div *ngSwitchDefault>
                       No
@@ -113,16 +113,18 @@
                 </div>
                 <div class="td ps-3 text-truncate">
                   <ng-container *ngIf="item.IndividualOverride == true">Allowed</ng-container>
-                  <ng-container *ngIf="item.IndividualOverride == false">Not Allowed</ng-container>
+                  <ng-container *ngIf="item.IndividualOverride != true">Not Allowed</ng-container>
                 </div>
                 <div class="td ps-3">
                   <a href="javascript:void(0)" (click)="openEditModal(item)" class="text-decoration-none"><i
-                      class="fa fa-pencil pe-2"></i> Edit</a>
+                      class="fa fa-pencil pe-1"></i> Edit</a>
+                  <a href="javascript:void(0)" (click)="openEditModal(item)"
+                    class="ps-4 text-decoration-none text-danger"><i class="fa fa-trash pe-1"></i> Delete</a>
                 </div>
               </div>
             </ng-container>
 
-            <ng-container *ngIf="salaryComponentFields.length == 0">
+            <ng-container *ngIf="salaryComponentActiveFields.length == 0">
               <div class="col-12 d-flex flex-column justify-content-center text-center p-5">
                 <h5>No component is available. Please add component using below button.</h5>
               </div>
@@ -134,6 +136,94 @@
     </div>
   </div>
 </div>
+
+<!--Add Component Modal -->
+<div class="modal fade" id="addComponentModal" tabindex="-1" aria-labelledby="addComponentModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="addComponentModalLabel">Add Salary Component</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-3 float-end">
+          <div class="form-group has-search">
+            <span class="fa fa-search form-control-feedback"></span>
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+        </div>
+        <form [formGroup]="addComponentForm">
+          <div class="t-table mt-5 t-list t-border col-md-12 my-3">
+            <div class="hide-bar bg-light"></div>
+            <div class="t-head bg-light fw-bold">
+              <div class="tr">
+                <div class="th  fe-3 text-truncate ps-3">
+                  COMPONENT NAME
+                </div>
+                <div class="th text-truncate ps-3">
+                  TYPE
+                </div>
+                <div class="th text-truncate ps-3">
+                  TAX EXEMPT
+                </div>
+                <div class="th text-truncate ps-3">
+                  REQUIRE DOCS
+                </div>
+                <div class="th text-truncate ps-3">
+                  INDIVIDUAL OVERRIDE
+                </div>
+                <div class="th text-truncate ps-3">
+                  ACTIONS
+                </div>
+              </div>
+            </div>
+            <div class="t-body custom-height">
+              <div class="tr py-2" *ngFor="let item of salaryComponentFields">
+                <div class="td fe-3 ps-3 text-truncate">
+                  {{item.ComponentId}} ({{item.ComponentFullName}})
+                </div>
+                <div class="td ps-3 text-truncate">
+                  <ng-container [ngSwitch]="item.ComponentTypeId">
+                    <ng-container *ngSwitchCase="2">Allowance</ng-container>
+                    <ng-container *ngSwitchCase="1">Fixed</ng-container>
+                    <ng-container *ngSwitchCase="3">Rembursment</ng-container>
+                    <ng-container *ngSwitchCase="4">Reimursable</ng-container>
+                  </ng-container>
+                </div>
+                <div class="td ps-3 text-truncate">
+                  <ng-conatiner [ngSwitch]="item.TaxExempt">
+                    <ng-conatiner *ngSwitchCase="true">
+                      Tax Exempt
+                      <small class="text-muted d-block">Section {{item.Section}}</small>
+                    </ng-conatiner>
+                    <ng-conatiner *ngSwitchCase="false">Taxable</ng-conatiner>
+                  </ng-conatiner>
+                </div>
+                <div class="td ps-3 text-truncate">
+                  {{item.RequireDocs}}
+                </div>
+                <div class="td ps-3 text-truncate">
+                  {{item.IsAllowtoOverride}}
+                </div>
+                <div class="td ps-3">
+                  <input class="form-check-input" [checked]="item.IsActive == true" type="checkbox"
+                    (click)="addComponent($event, item)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-c" (click)="submitComponents()"><i class="fa fa-plus pe-2"></i>
+          Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->
 
 
 <!-- Edit Salary Component Modal -->
@@ -160,7 +250,7 @@
             </div>
             <div class="col-md-5 my-2">
               <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
-              <input type="text" class="form-control" formControlName="MaximumLimit">
+              <input type="text" class="form-control" formControlName="MaxLimit">
             </div>
           </div>
           <div>
