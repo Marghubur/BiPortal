@@ -114,7 +114,8 @@ export class PayrollComponentsComponent implements OnInit {
       ComponentFullName: new FormControl(this.CurrentRecurringComponent.ComponentFullName),
       Section: new FormControl(this.CurrentRecurringComponent.Section),
       SectionMaxLimit: new FormControl(this.CurrentRecurringComponent.SectionMaxLimit),
-      IsAdHoc: new FormControl(this.CurrentRecurringComponent.IsAdHoc)
+      IsAdHoc: new FormControl(this.CurrentRecurringComponent.IsAdHoc),
+      ComponentCatagoryId: new FormControl(this.CurrentRecurringComponent.ComponentCatagoryId == 1? '1': this.CurrentRecurringComponent.ComponentCatagoryId == 6? '6': '')
     });
   }
 
@@ -171,6 +172,7 @@ export class PayrollComponentsComponent implements OnInit {
 
   newComponentPopUp() {
     this.submitted = false;
+    this.ComponentType = '';
     this.CurrentRecurringComponent = new PayrollComponentsModal();
     this.initForm();
     $('#NewComponentModal').modal('show');
@@ -232,6 +234,8 @@ export class PayrollComponentsComponent implements OnInit {
       errroCounter++;
     if (this.NewSalaryForm.get('Type').errors !== null)
       errroCounter++;
+    if (this.NewSalaryForm.get('ComponentCatagoryId').errors !== null)
+      errroCounter++;
     if (errroCounter === 0) {
       let value:PayrollComponentsModal = this.NewSalaryForm.value;
       if (value) {
@@ -240,6 +244,7 @@ export class PayrollComponentsComponent implements OnInit {
             let data = response.ResponseBody;
             if (data.length > 0) {
               this.RecurringComponent = data;
+              this.AllComponents = data;
               let i =0;
               while(i < this.RecurringComponent.length) {
                 this.componentType(this.RecurringComponent[i].ComponentTypeId, i);
@@ -348,4 +353,5 @@ export class PayrollComponentsModal {
   ComponentFullName: string = '';
   AdHocId: number = 0;
   IsAdHoc: boolean = false;
+  ComponentCatagoryId: number = 0;
 }

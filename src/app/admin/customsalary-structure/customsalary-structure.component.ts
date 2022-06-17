@@ -570,7 +570,7 @@ class UpdateSalaryComponent {
   EmployerContribution: boolean = false;
   IsOpted: boolean = false;
   IncludeInPayslip: boolean = false;
-  ComponentId: number = 0;
+  ComponentId: string = '';
   ComponentDescription: string = '';
   ComponentFullName: string = '';
   PercentageValue: number = 0;
@@ -580,7 +580,7 @@ class UpdateSalaryComponent {
 
 export function numberZero(control:AbstractControl): {[key: string]: any} | null {
   const value = control.value;
-  if (value <0)
+  if (value < 0)
     return {'numberZero': true}
   else
     null;
