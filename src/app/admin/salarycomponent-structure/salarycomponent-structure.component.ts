@@ -155,6 +155,14 @@ export class SalarycomponentStructureComponent implements OnInit {
     }
   }
 
+  inactiveComponentModal(item: any) {
+    $('#inactiveComponentModal').modal('show');
+  }
+
+  inactiveComponent() {
+
+  }
+
   updateChanges() {
     this.isLoading = true;
     this.isReady = true;

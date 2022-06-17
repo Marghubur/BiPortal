@@ -664,11 +664,13 @@
           </div>
         </form>
       </div>
-      <p class="ps-5 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if
-        any).</p>
+      <p class="ps-5 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if any).</p>
       <div class="modal-footer border-top-0 pe-5">
-        <button type="button" class="btn btn-outline-danger px-4" data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-        <button type="button" class="btn btn-outline-success px-4" data-bs-dismiss="modal" (click)="saveSalaryBreakup()"><i class="fa fa-save pe-1"></i> Save</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-1"></i> Close</button>
+        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="saveSalaryBreakup()">
+          <i class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-save': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Save' }}
+        </button>
       </div>
     </div>
   </div>

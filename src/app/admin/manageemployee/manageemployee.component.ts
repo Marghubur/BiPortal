@@ -66,7 +66,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.salaryBreakup = ["Basic", "Conveyance Allowance","HRA","Medical Allowance","Car Running Allowance","Telephone and Internet Allowance","Travel Reimbursement (LTA)","Shift Allowance", "Special Allowance"]
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
     this.initForm();
@@ -466,12 +465,17 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     });
   }
 
-  get salary() {
-    return this.salaryBreakupForm.controls;
-  }
-
   saveSalaryBreakup() {
-    console.log(this.salaryBreakupForm.value)
+    this.isLoading = true;
+    let value = this.salaryBreakupForm.value;
+    if (value) {
+      this.http.post(`/${this.employeeUid}`, value).then(res => {
+        if (res.ResponseBody) {
+          Toast("Salary breakup added successfully.")
+        }
+        this.isLoading = false;
+      })
+    }
   }
 
 
