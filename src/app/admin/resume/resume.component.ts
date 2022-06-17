@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { tableConfig } from 'src/app/util/dynamic-table/dynamic-table.component';
-import { AjaxService } from 'src/providers/ajax.service';
+import { AjaxService, tableConfig } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { Doc, FlatFile, Pdf, Resume, Txt, UserType, Zip } from 'src/providers/constants';
+import { Resume, UserType } from 'src/providers/constants';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
 import { iNavigation } from 'src/providers/iNavigation';

@@ -107,7 +107,7 @@
                 <div class="hide-bar bg-light"></div>
                 <div class="t-head bg-light fw-bold">
                   <div class="tr">
-                    <div class="th text-truncate ps-3">
+                    <div class="th text-truncate ps-3 fe-2">
                       COMPONENT NAME
                     </div>
                     <div class="th text-truncate ps-3">
@@ -125,11 +125,14 @@
                   <ng-container *ngIf="componentsAvailable">
                     <div class="tr py-2" *ngFor="let item of components.controls; let i = index">
                       <ng-container [formGroupName]="i">
-                        <div class="td ps-3 text-truncate">
+                        <div class="td ps-3 text-truncate fe-2">
                           {{item.get("ComponentId").value}} ({{item.get("ComponentFullName").value}})
                         </div>
                         <div class="td ps-3 text-truncate">
-                          {{item.get("TaxExempt").value}}
+                          <ng-container [ngSwitch]="item.get('TaxExempt').value">
+                            <span *ngSwitchCase="true">Tax Exempt</span>
+                            <span *ngSwitchDefault="false">Taxable</span>
+                          </ng-container>
                         </div>
                         <div class="td ps-3 text-truncate">
                           <span class="badge bg-primary">{{item.get("Formula").value}}</span>
@@ -306,7 +309,7 @@
         <div class="col-md-3 float-end">
           <div class="form-group has-search">
             <span class="fa fa-search form-control-feedback"></span>
-            <input type="text" class="form-control" transform="upper" placeholder="Search"
+            <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Search"
               (keyup.esc)="resetSalaryFilter($event)" (keyup.enter)="filterSalaryComponent($event)">
           </div>
         </div>
@@ -788,7 +791,7 @@
           <div class="col-md-12 row m-0 p-0">
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">Group Name</label>
-              <input type="text" transform="upper"
+              <input type="text" oninput="this.value = this.value.toUpperCase()"
                 [ngClass]="{'error-field': submitted && f.GroupName.errors !== null && f.GroupName.errors.required}"
                 placeholder="Enter Group Name" formControlName="GroupName" class="form-control">
             </div>

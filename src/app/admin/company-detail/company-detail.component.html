@@ -41,14 +41,14 @@
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Company Name *</label>
-                      <input placeholder="Organization name" class="form-control" name="CompanyName" transform="upper"
-                        formControlName="CompanyName"
+                      <input placeholder="Organization name" class="form-control" name="CompanyName"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="CompanyName"
                         [ngClass]="{'error-field': submitted && f.CompanyName.errors !== null && f.CompanyName.errors.required}" />
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Primary No.# *</label>
-                      <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="11"
-                        name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
+                      <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="11" name="PrimaryPhoneNo"
+                        formControlName="PrimaryPhoneNo" />
                     </div>
                     <div class="col-md-4 pb-3">
                       <label class="form-label">Email Id *</label>
@@ -61,13 +61,13 @@
                   <div class="col-md-12 row">
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Alternate No.#</label>
-                      <input class="form-control" placeholder="Alternate Phone No.#" name="SecondaryPhoneNo" OnlyNumber="11"
-                        formControlName="SecondaryPhoneNo" />
+                      <input class="form-control" placeholder="Alternate Phone No.#" name="SecondaryPhoneNo"
+                        OnlyNumber="11" formControlName="SecondaryPhoneNo" />
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">FAX No.# (optional)</label>
-                      <input class="form-control" placeholder="FAX No.#" name="Fax" transform="upper"
-                        formControlName="Fax" />
+                      <input class="form-control" placeholder="FAX No.#" name="Fax"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="Fax" />
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Mobile No.# (optional)</label>
@@ -93,15 +93,18 @@
                   <div class="col-md-12 mb-3 mb-3 row">
                     <div class="col-md-4 mt-4">
                       <label class="form-label">Country</label>
-                      <input placeholder="Country" class="form-control" name="Country" transform="upper" formControlName="Country" />
+                      <input placeholder="Country" class="form-control" name="Country"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="Country" />
                     </div>
                     <div class="col-md-4 mt-4">
                       <label class="form-label">State</label>
-                      <input placeholder="State" class="form-control" name="State" transform="upper" formControlName="State" />
+                      <input placeholder="State" class="form-control" name="State"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="State" />
                     </div>
                     <div class="col-md-4 mt-4">
                       <label class="form-label">City</label>
-                      <input placeholder="City" class="form-control" name="City" transform="upper" formControlName="City" />
+                      <input placeholder="City" class="form-control" name="City"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="City" />
                     </div>
                     <div class="col-md-4 mt-4">
                       <label class="form-label">Pincode</label>
@@ -110,23 +113,23 @@
                     </div>
                     <div class="col-md-4 mt-4">
                       <label class="form-label">Address Line 1</label>
-                      <input placeholder="Address Line 1" class="form-control" name="FirstAddress" transform="upper"
-                        formControlName="FirstAddress" />
+                      <input placeholder="Address Line 1" class="form-control" name="FirstAddress"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="FirstAddress" />
                     </div>
                     <div class="col-md-4 mt-4">
                       <label class="form-label">Address Line 2</label>
-                      <input placeholder="Address Line 2" class="form-control" name="SecondAddress" transform="upper"
-                        formControlName="SecondAddress" />
+                      <input placeholder="Address Line 2" class="form-control" name="SecondAddress"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="SecondAddress" />
                     </div>
                     <div class="col-md-4 mt-4">
                       <label class="form-label">Address Line 3</label>
-                      <input placeholder="Address Line 3" class="form-control" name="ThirdAddress" transform="upper"
-                        formControlName="ThirdAddress" />
+                      <input placeholder="Address Line 3" class="form-control" name="ThirdAddress"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="ThirdAddress" />
                     </div>
                     <div class="col-md-4 mt-4">
                       <label class="form-label">Address Line 4</label>
-                      <input placeholder="Address Line 4" class="form-control" name="FourthAddress" transform="upper"
-                        formControlName="FourthAddress" />
+                      <input placeholder="Address Line 4" class="form-control" name="FourthAddress"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="FourthAddress" />
                     </div>
                   </div>
                 </div>

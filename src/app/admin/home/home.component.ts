@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit {
 
         this.LoadLineChart();
         this.isPageReady = true;
-        Toast("Loaded successfully.");
+        Toast("Your dashboard loaded successfully.", 1);
       } else {
         Toast("Fail to inser/update, please contact to admin.");
       }

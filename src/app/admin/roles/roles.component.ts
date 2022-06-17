@@ -12,7 +12,7 @@ declare var $:any;
 })
 export class RolesComponent implements OnInit {
   rolesForm: FormGroup;
-  profileURL: string = "assets/images/faces/face1.jpg";
+  profileURL: string = "assets/images/faces/face.jpg";
   isRolesLoaded: boolean = false;
   Menu: Array<any> = [];
   roleMenuForm: FormGroup;

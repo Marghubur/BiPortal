@@ -8,17 +8,21 @@ import { Component, OnInit } from '@angular/core';
 export class ToastComponent implements OnInit {
   className: string = "";
   errorMessage: string = "";
+  toastElem: any = null;
+
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
   Toast() {
-    this.className = "success-toast";
+    this.toastElem = document.getElementById("app-toast");
+    this.toastElem.classList.add("success-toast");
   }
 
   ErrorToast(msg: string) {
-    this.className = "error-toast";
+    this.toastElem.classList.add("error-toast");
     this.errorMessage = msg;
   }
 

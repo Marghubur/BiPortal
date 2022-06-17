@@ -143,7 +143,7 @@ export const DirectoryImg = "assets/ext/directory.jpg";
 export const Images = "assets/ext/image.png";
 export const DocumentPath = "Documents";
 export const UserPath = "User";
-export const UserImage = "assets/images/faces/face1.jpg";
+export const UserImage = "assets/images/faces/face.jpg";
 
 
 

@@ -30,23 +30,24 @@
                   <div class="col-md-12 mb-3 mb-3 row">
                     <div class="col-md-4 my-2">
                       <label class="form-label">Bank Name</label>
-                      <input placeholder="Bank name" class="form-control" name="BankName" transform="upper"
-                        formControlName="BankName" />
+                      <input placeholder="Bank name" class="form-control" name="BankName"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="BankName" />
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">Account No.#</label>
-                      <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNumber" [ngClass]="{'error-field': submitted && f.AccountNumber.errors !== null && f.AccountNumber.errors.required}"
+                      <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNumber"
+                        [ngClass]="{'error-field': submitted && f.AccountNumber.errors !== null && f.AccountNumber.errors.required}"
                         formControlName="AccountNumber" />
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">IFSCCode Code</label>
-                      <input placeholder="IFSCCode Code" class="form-control" name="IFSCCode" transform="upper"
-                        formControlName="IFSCCode" />
+                      <input placeholder="IFSCCode Code" class="form-control" name="IFSCCode"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="IFSCCode" />
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">Branch Name</label>
-                      <input placeholder="Branch name" class="form-control" name="Branch" transform="upper"
-                        formControlName="Branch" />
+                      <input placeholder="Branch name" class="form-control" name="Branch"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="Branch" />
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">Branch Code</label>
@@ -64,18 +65,18 @@
                   <div class="col-md-12 mb-3 mb-3 row">
                     <div class="col-md-4 my-2">
                       <label class="form-label">PAN No.</label>
-                      <input placeholder="PAN Number" class="form-control" name="PANNumber" transform="upper"
-                        formControlName="PANNumber" />
+                      <input placeholder="PAN Number" class="form-control" name="PANNumber"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="PANNumber" />
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">GSTIN No.#</label>
-                      <input placeholder="GSTIN No.#" class="form-control" name="GSTINNumber" transform="upper"
-                        formControlName="GSTINNumber" />
+                      <input placeholder="GSTIN No.#" class="form-control" name="GSTINNumber"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="GSTINNumber" />
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">Trade Liecence No.</label>
-                      <input placeholder="Trade Liecence Number" class="form-control" name="TradeLiecenceNumber" transform="upper"
-                        formControlName="TradeLiecenceNumber" />
+                      <input placeholder="Trade Liecence Number" class="form-control" name="TradeLiecenceNumber"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="TradeLiecenceNumber" />
                     </div>
                   </div>
                 </div>

@@ -15,7 +15,7 @@ declare var $: any;
 })
 export class FeedbacksComponent implements OnInit {
   CommentsData: Array<any> = [];
-  FeedbackForm: FormGroup;
+  // FeedbackForm: FormGroup;
   IsCommentReady: boolean = false;
   constructor(
     private userService: UserService,
@@ -24,15 +24,15 @@ export class FeedbacksComponent implements OnInit {
     private storage: ApplicationStorage
   ) {
     this.GetRecentComments();
-    this.FeedbackForm = new FormGroup({
-      TITLE: new FormControl(""),
-      Comments: new FormControl(""),
-      CommentsUid: new FormControl(""),
-      Email: new FormControl(""),
-      Company: new FormControl(""),
-      UserName: new FormControl(""),
-      CreatedOn: new FormControl("")
-    });
+    // this.FeedbackForm = new FormGroup({
+    //   TITLE: new FormControl(""),
+    //   Comments: new FormControl(""),
+    //   CommentsUid: new FormControl(""),
+    //   Email: new FormControl(""),
+    //   Company: new FormControl(""),
+    //   UserName: new FormControl(""),
+    //   CreatedOn: new FormControl("")
+    // });
   }
 
   ngOnInit() { }
@@ -82,13 +82,13 @@ export class FeedbacksComponent implements OnInit {
 
   SubmitCommetform() {
     let InValidField: Array<string> = [];
-    if (this.FeedbackForm.value["Comments"] === "") {
-      InValidField.push("comments");
-    }
+    // if (this.FeedbackForm.value["Comments"] === "") {
+    //   InValidField.push("comments");
+    // }
 
-    if (this.FeedbackForm.value["UserName"] === "") {
-      InValidField.push("username");
-    }
+    // if (this.FeedbackForm.value["UserName"] === "") {
+    //   InValidField.push("username");
+    // }
 
     if (InValidField.length > 0) {
       let index = 0;
@@ -102,29 +102,29 @@ export class FeedbacksComponent implements OnInit {
         $('#username').removeClass('error-field')
       }, 10 * 1000);
     } else {
-      this.http
-        .post("PostUserComments", this.FeedbackForm.value)
-        .then(result => {
-          if (this.commonService.IsValid(result)) {
-            if (this.commonService.IsValid(result)) {
-              if (typeof result["Table"] !== "undefined") {
-                this.IsCommentReady = true;
-                this.CommentsData = result["Table"];
-              }
-              this.commonService.ShowToast(
-                "Your comments submittedt successfully."
-              );
-              this.CleanUpForm();
-            } else {
-              this.commonService.ShowToast("Not able to fetch recent comments");
-            }
-          } else {
-            this.commonService.ShowToast("Unable to post your comments now.");
-          }
-        })
-        .catch(e => {
-          this.commonService.ShowToast("Unable to post your comments now.");
-        });
+      // this.http
+      //   .post("PostUserComments", this.FeedbackForm.value)
+      //   .then(result => {
+      //     if (this.commonService.IsValid(result)) {
+      //       if (this.commonService.IsValid(result)) {
+      //         if (typeof result["Table"] !== "undefined") {
+      //           this.IsCommentReady = true;
+      //           this.CommentsData = result["Table"];
+      //         }
+      //         this.commonService.ShowToast(
+      //           "Your comments submittedt successfully."
+      //         );
+      //         this.CleanUpForm();
+      //       } else {
+      //         this.commonService.ShowToast("Not able to fetch recent comments");
+      //       }
+      //     } else {
+      //       this.commonService.ShowToast("Unable to post your comments now.");
+      //     }
+      //   })
+      //   .catch(e => {
+      //     this.commonService.ShowToast("Unable to post your comments now.");
+      //   });
     }
   }
 
