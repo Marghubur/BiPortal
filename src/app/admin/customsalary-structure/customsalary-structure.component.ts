@@ -3,6 +3,8 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { PayrollComponents } from 'src/providers/constants';
+import { iNavigation } from 'src/providers/iNavigation';
 import { SalaryComponentFields } from '../salarycomponent-structure/salarycomponent-structure.component';
 declare var $: any;
 
@@ -15,6 +17,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   ActivatedPage: number = 1;
   salaryStructureType: Array<SalaryStructureType> = null;
   salaryComponentFields: Array<SalaryComponentFields> = [];
+  allComponentFields: Array<SalaryComponentFields> = [];
   componentFields: UpdateSalaryComponent = new UpdateSalaryComponent();
   customSalaryStructure: Array<CustomSalaryStructure> = [];
   dailyWages: Array<DailyWagesStructure> = []
@@ -32,15 +35,17 @@ export class CustomsalaryStructureComponent implements OnInit {
   isSalaryGrpSelected: boolean = false;
   updateComponentForm: FormGroup;
   isPageReady: boolean = false;
+  filterText: string = "";
+  payrollCompoent: string = PayrollComponents;
 
   constructor(
     private fb: FormBuilder,
-    private http: AjaxService
+    private http: AjaxService,
+    private nav:iNavigation
   ) { }
 
   get components(): FormArray {
     let data = this.salaryAndDeduction.get("salaryComponents") as FormArray;
-    //console.log(JSON.stringify(data.controls));
     return data;
   }
 
@@ -80,7 +85,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   initForm() {
     this.salaryAndDeduction = this.fb.group({
-      StructureName: new FormControl (),
+      StructureName: new FormControl(),
       salaryComponents: this.buildFormArray()
     });
   }
@@ -88,11 +93,22 @@ export class CustomsalaryStructureComponent implements OnInit {
   buildFormArray(): FormArray {
     let elems: FormArray = this.fb.array([]);
     let i = 0;
-    while(i < this.salaryComponentFields.length) {
-      if(this.salaryComponentFields[i].IsActive) {
-        elems.push(this.createNewComponent(this.salaryComponentFields[i]));
+    let text = this.filterText.trim();
+    if(this.filterText.trim().length > 0) {
+      while(i < this.salaryComponentFields.length) {
+        if(this.salaryComponentFields[i].IsActive &&
+          this.salaryComponentFields[i].ComponentFullName.toLowerCase().indexOf(text) != -1) {
+          elems.push(this.createNewComponent(this.salaryComponentFields[i]));
+        }
+        i++;
       }
-      i++;
+    } else {
+      while(i < this.salaryComponentFields.length) {
+        if(this.salaryComponentFields[i].IsActive) {
+          elems.push(this.createNewComponent(this.salaryComponentFields[i]));
+        }
+        i++;
+      }
     }
 
     if(elems.controls.length > 0)
@@ -170,7 +186,7 @@ export class CustomsalaryStructureComponent implements OnInit {
           });
           i++;
         }
-
+        this.allComponentFields = this.salaryComponentFields;
         this.isPageReady = true;
         this.initForm();
         this.isReady = true;
@@ -201,7 +217,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.OpertaionType = "0";
     this.CalculationValue = null;
     this.salaryGroup();
-    this.loadSalaryComponentDetail()
+    this.loadSalaryComponentDetail();
     this.loadData();
 
     this.customSalaryStructure = [{
@@ -484,6 +500,37 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.submitted = true;
     this.isLoading = false;
   }
+
+  navigateTo(name: string) {
+    if (name == PayrollComponents)
+      this.nav.navigate(PayrollComponents, null);
+  }
+
+  filterRecords(e: any) {
+    this.isReady = false;
+    this.initForm();
+    e.preventDefault();
+    this.isReady = true;
+  }
+
+  clearFilter(e: any) {
+    this.isReady = false;
+    this.filterText = "";
+    this.initForm();
+    this.isReady = true;
+  }
+
+  filterSalaryComponent(event: any) {
+    let value = event.target.value.toUpperCase();
+    if (value) {
+      this.salaryComponentFields =  this.allComponentFields.filter(x => x.ComponentId == value || x.ComponentFullName == value)
+    }
+  }
+
+  resetSalaryFilter(e: any) {
+    e.target.value = '';
+    this.salaryComponentFields = this.allComponentFields;
+  }
 }
 
 class SalaryStructureType {
@@ -528,7 +575,7 @@ class UpdateSalaryComponent {
   ComponentFullName: string = '';
   PercentageValue: number = 0;
   Operator: string = '';
-  FormulaBasedOn: string = '';
+  FormulaBasedOn: string = 'CTC';
 }
 
 export function numberZero(control:AbstractControl): {[key: string]: any} | null {
