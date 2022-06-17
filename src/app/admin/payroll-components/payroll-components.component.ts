@@ -23,12 +23,14 @@ export class PayrollComponentsComponent implements OnInit {
   isLoading: boolean = false;
   isTaxExempt: boolean = false;
   RecurringComponent: Array<any> = [];
+  AllComponents: Array<any> = [];
   CurrentRecurringComponent: PayrollComponentsModal = new PayrollComponentsModal();
   submitted: boolean = false;
   AdhocAllowance: Array<PayrollComponentsModal> = [];
   AdhocDeduction: Array<PayrollComponentsModal> = [];
   AdhocBonus: Array<PayrollComponentsModal> = [];
   movableComponent: Array<any> = [];
+  isReady = false;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -48,18 +50,22 @@ export class PayrollComponentsComponent implements OnInit {
   }
 
   loadData() {
+    this.isReady = false;
     this.http.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
-        this.RecurringComponent = response.ResponseBody.filter (x => x.IsAdHoc == false);
-        this.AdhocAllowance =  response.ResponseBody.filter (x => x.IsAdHoc == true && x.AdHocId == 1);
-        this.AdhocBonus =  response.ResponseBody.filter (x => x.IsAdHoc == true && x.AdHocId == 2);
-        this.AdhocDeduction =  response.ResponseBody.filter (x => x.IsAdHoc == true && x.AdHocId == 3);
+        this.AllComponents = response.ResponseBody;
+        this.RecurringComponent = this.AllComponents.filter (x => x.IsAdHoc == false);
+        this.AdhocAllowance =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 1);
+        this.AdhocBonus =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 2);
+        this.AdhocDeduction =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 3);
         let i =0;
         while(i < this.RecurringComponent.length) {
           this.componentType(this.RecurringComponent[i].ComponentTypeId, i);
           i++;
         }
+
         Toast("Record found");
+        this.isReady = true;
       }
     })
   }
@@ -310,6 +316,21 @@ export class PayrollComponentsComponent implements OnInit {
       this.isTaxExempt = true;
     else
       this.isTaxExempt = false;
+  }
+
+  filterRecords(e: any) {
+    this.isReady = false;
+    let text = e.target.value.toLowerCase();
+    this.RecurringComponent = this.AllComponents.filter (x => x.IsAdHoc == false
+      && x.ComponentFullName.toLowerCase().indexOf(text) != -1);
+    this.isReady = true;
+  }
+
+  reloadAllRecurring(e: any) {
+    this.isReady = false;
+    e.target.value = '';
+    this.RecurringComponent = this.AllComponents.filter (x => x.IsAdHoc == false);
+    this.isReady = true;
   }
 }
 
