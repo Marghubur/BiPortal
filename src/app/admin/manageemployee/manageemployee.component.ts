@@ -46,6 +46,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   ProfessuinalDetail_JSON: any = '';
   managerList: autoCompleteModal = null;
   userRoles: Array<any> = [];
+  salaryBreakup: Array<any> = [];
+  salaryBreakupForm: FormGroup = null;;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -64,8 +66,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.salaryBreakup = ["Basic", "Conveyance Allowance","HRA","Medical Allowance","Car Running Allowance","Telephone and Internet Allowance","Travel Reimbursement (LTA)","Shift Allowance", "Special Allowance"]
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
+    this.initForm();
     this.managerList.placeholder = "Reporting Manager";
     this.managerList.data.push({
       value: 0,
@@ -89,6 +93,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.idReady = true;
     }
     this.loadData(this.employeeUid);
+
   }
 
   buildProfileImage(fileDetail: any) {
@@ -423,6 +428,29 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       $("#remoteClient").modal('hide');
     })
   }
+
+  salryBreakupPopup() {
+    $('#fullSalaryDetail').modal('show');
+  }
+
+  initForm() {
+    this.salaryBreakupForm = this.fb.group({
+      salaryDetail: this.fb.array([(this.salaryBreakup.map(items => this.buildFormArray(items)) )])
+    });
+  }
+
+  get salary(): FormArray {
+    return this.salaryBreakupForm.get('salaryDetail') as FormArray;
+  }
+
+  buildFormArray(items: string): FormGroup {
+    return this.fb.group({
+      SalaryComponent: new FormControl(items),
+      Monthly: new FormControl(0),
+      Annually: new FormControl(0)
+    })
+  }
+
 
   fireBrowserFile() {
     this.submitted = true;

@@ -9,8 +9,9 @@
 
       <div class="x_panel mt-2">
         <div class="x_header">
-          <div class="x_header_title">
+          <div class="x_header_title d-flex justify-content-between align-items-center">
             <h2>Employee<small>Details</small></h2>
+            <a href="javascript:void(0)" (click)="salryBreakupPopup()" class="text-decoration-none fw-bold"><i class="fa fa-money pe-1"></i> Salary Breakup</a>
           </div>
         </div>
 
@@ -416,6 +417,64 @@
         <a href="javascript:void(0)" class="text-decoration-none btn-light pe-3" data-bs-dismiss="modal">Close</a>
         <a href="javascript:void(0)" (click)="removeClient()"
           class="text-decoration-none btn-light text-primary">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="fullSalaryDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title fs-4 text-dark" id="exampleModalLabel">SALARY BREAKUP</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5">
+        <form [formGroup]="salaryBreakupForm">
+          <div class="t-table t-list t-border col-md-12">
+            <div class="hide-bar alert-primary"></div>
+            <div class="t-head alert-primary">
+              <div class="tr fw-bold text-dark">
+                <div class="th fe-4">
+                  <div class="cell-wrapper">
+                    DETAILS
+                  </div>
+                </div>
+                <div class="th fe-2">
+                  MONTHLY
+                </div>
+                <div class="th fe-2">
+                  ANNUALLY
+                </div>
+              </div>
+            </div>
+            <div class="t-body overflow-hidden" formArrayName="salaryDetail">
+              <ng-container >
+                <div class="tr py-2" *ngFor="let salary of salary.controls; let i=index" [formGroupName]="i">
+                  <div class="td align-middle fe-4">
+                    {{salary.get("SalaryComponent").value}}
+                  </div>
+                  <div class="td align-middle fe-2">
+                    <div class="cell-wrapper">
+                      <input type="text" class="form-control" OnlyNumber="9" formControlName="Monthly">
+                    </div>
+                  </div>
+                  <div class="td align-middle fe-2">
+                    <div class="cell-wrapper">
+                      <input type="text" class="form-control" OnlyNumber="9" formControlName="Annually">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </form>
+      </div>
+      <p class="ps-5 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if
+        any).</p>
+      <div class="modal-footer border-top-0 pe-5">
+        <button type="button" class="btn btn-outline-success px-4" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
