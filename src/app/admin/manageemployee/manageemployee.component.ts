@@ -66,7 +66,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.salaryBreakup = ["Basic", "Conveyance Allowance","HRA","Medical Allowance","Car Running Allowance","Telephone and Internet Allowance","Travel Reimbursement (LTA)","Shift Allowance", "Special Allowance"]
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
     this.initForm();
@@ -435,20 +434,48 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.salaryBreakupForm = this.fb.group({
-      salaryDetail: this.fb.array([(this.salaryBreakup.map(items => this.buildFormArray(items)) )])
+      BasicMonthly: new FormControl(0),
+      BasicAnnually: new FormControl(0),
+      ConveyanceMonthly: new FormControl(0),
+      ConveyanceAnnually: new FormControl(0),
+      HRAMonthly: new FormControl(0),
+      HRAAnnually: new FormControl(0),
+      MedicalMonthly: new FormControl(0),
+      MedicalAnnually: new FormControl(0),
+      CarRunningMonthly: new FormControl(0),
+      CarRunningAnnually: new FormControl(0),
+      InternetMonthly: new FormControl(0),
+      InternetAnnually: new FormControl(0),
+      TravelMonthly: new FormControl(0),
+      TravelAnnually: new FormControl(0),
+      ShiftMonthly: new FormControl(0),
+      ShiftAnnually: new FormControl(0),
+      SpecialMonthly: new FormControl(0),
+      SpecialAnnually: new FormControl(0),
+      GrossMonthly: new FormControl(0),
+      GrossAnnually: new FormControl(0),
+      InsuranceMonthly: new FormControl(0),
+      InsuranceAnnually: new FormControl(0),
+      PFMonthly: new FormControl(0),
+      PFAnnually: new FormControl(0),
+      GratuityMonthly: new FormControl(0),
+      GratuityAnnually: new FormControl(0),
+      CTCMonthly: new FormControl(0),
+      CTCAnnually: new FormControl(0)
     });
   }
 
-  get salary(): FormArray {
-    return this.salaryBreakupForm.get('salaryDetail') as FormArray;
-  }
-
-  buildFormArray(items: string): FormGroup {
-    return this.fb.group({
-      SalaryComponent: new FormControl(items),
-      Monthly: new FormControl(0),
-      Annually: new FormControl(0)
-    })
+  saveSalaryBreakup() {
+    this.isLoading = true;
+    let value = this.salaryBreakupForm.value;
+    if (value) {
+      this.http.post(`/${this.employeeUid}`, value).then(res => {
+        if (res.ResponseBody) {
+          Toast("Salary breakup added successfully.")
+        }
+        this.isLoading = false;
+      })
+    }
   }
 
 
@@ -528,4 +555,36 @@ export class EmployeeDetail {
   AccessLevelId: number = null;
   UserTypeId: number = null;
   AllocatedClients: Array<AssignedClients> = [];
+}
+
+class SalaryBreakupDetails {
+  EmployeeId: number  =0;
+  BasicMonthly: number = 0;
+  BasicAnnually: number = 0;
+  ConveyanceMonthly: number = 0;
+  ConveyanceAnnually: number = 0;
+  HRAMonthly: number = 0;
+  HRAAnnually: number = 0;
+  MedicalMonthly: number = 0;
+  MedicalAnnually: number = 0;
+  CarRunningMonthly: number = 0;
+  CarRunningAnnually: number = 0;
+  InternetMonthly: number = 0;
+  InternetAnnually: number = 0;
+  TravelMonthly: number = 0;
+  TravelAnnually: number = 0;
+  ShiftMonthly: number = 0;
+  ShiftAnnually: number = 0;
+  SpecialMonthly: number = 0;
+  SpecialAnnually: number = 0;
+  GrossMonthly: number = 0;
+  GrossAnnually: number = 0;
+  InsuranceMonthly: number = 0;
+  InsuranceAnnually: number = 0;
+  PFMonthly: number = 0;
+  PFAnnually: number = 0;
+  GratuityMonthly: number = 0;
+  GratuityAnnually: number = 0;
+  CTCMonthly: number = 0;
+  CTCAnnually: number = 0
 }
