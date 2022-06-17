@@ -23,6 +23,7 @@ export class SalarycomponentStructureComponent implements OnInit {
   componentTypeId: number = -1;
   isReady: boolean = false;
   AddActiveComponent: Array<SalaryComponentFields> = [];
+  inactiveComponentDeatil: SalaryComponentFields = new SalaryComponentFields();
 
   constructor(private fb: FormBuilder,
               private http: AjaxService) { }
@@ -30,8 +31,8 @@ export class SalarycomponentStructureComponent implements OnInit {
   ngOnInit(): void {
     this.ActivatedPage = 1;
     this.currentSalaryComponent = new SalaryComponentFields();
-    this.salaryComponent();
     this.loadOnChange();
+    this.salaryComponent();
   }
 
   loadOnChange() {
@@ -89,7 +90,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       Section: new FormControl(this.currentSalaryComponent.Section),
       IsActive: new FormControl(this.currentSalaryComponent.IsActive),
       TaxExempt: new FormControl(this.currentSalaryComponent.TaxExempt),
-      RequireDocs: new FormControl(this.currentSalaryComponent.RequireDocs)
+      RequireDocs: new FormControl(this.currentSalaryComponent.RequireDocs),
+      ComponentCatagoryId: new FormControl(this.currentSalaryComponent.ComponentCatagoryId),
     })
   }
 
@@ -97,13 +99,16 @@ export class SalarycomponentStructureComponent implements OnInit {
   addComponent(event: any, item: any) {
     if (event.target.checked == true) {
       item.IsActive = true;
+      item.ComponentCatagoryId = 1;
       this.AddActiveComponent.push(item)
     } else {
       let current = this.AddActiveComponent.find(x => x.ComponentId == item.ComponentId);
       if(current) {
         current.IsActive = false;
+        item.ComponentCatagoryId = 0;
       } else {
         item.IsActive = false;
+        item.ComponentCatagoryId = 0;
         this.AddActiveComponent.push(item)
       }
     }
@@ -156,11 +161,26 @@ export class SalarycomponentStructureComponent implements OnInit {
   }
 
   inactiveComponentModal(item: any) {
+    this.inactiveComponentDeatil = item;
     $('#inactiveComponentModal').modal('show');
   }
 
   inactiveComponent() {
+    this.inactiveComponentDeatil.IsActive = false;
+    this.inactiveComponentDeatil.ComponentCatagoryId = 0;
+    this.http.put(`Settings/EnableSalaryComponentDetail/${this.inactiveComponentDeatil.ComponentId}`, this.inactiveComponentDeatil)
+    .then(res => {
+      if(res.ResponseBody) {
+        this.bindData(res.ResponseBody);
+        $('#inactiveComponentModal').modal('hide');
+        Toast("Component detail updated successfully");
+      } else {
+        Toast("Fail to update. Please contact to admin.");
+      }
 
+      this.isLoading = false;
+      $('#editSalaryMoadl').modal('hide');
+    });
   }
 
   updateChanges() {
@@ -181,6 +201,18 @@ export class SalarycomponentStructureComponent implements OnInit {
       this.isLoading = false;
       $('#editSalaryMoadl').modal('hide');
     });
+  }
+
+  filterComponent(e: any) {
+    let value = e.target.value.toUpperCase();
+    if (value) {
+      this.salaryComponentActiveFields = this.salaryComponentActiveFields.filter(x => x.ComponentId == value || x.ComponentFullName == value);
+    }
+  }
+
+  resetFilter(e: any) {
+    e.target.value = '';
+    this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsActive);
   }
 }
 
@@ -204,5 +236,6 @@ export class SalaryComponentFields {
   IncludeInPayslip: boolean = false;
   IsOpted: boolean = false;
   ComponentFullName: string = '';
+  ComponentCatagoryId?: number = 0;
 }
 

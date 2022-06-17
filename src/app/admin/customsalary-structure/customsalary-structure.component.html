@@ -414,7 +414,7 @@
 
             <div class="col-md-1 form-group">
               <label class="form-label">OPT</label>
-              <select class="form-control" formControlName="Operator"
+              <select class="form-control" formControlName="Operator" (change)="generateFormula()"
                 [ngClass]="{'error-field': submitted && m['Operator'].errors !== null && m['Operator'].errors['required']}">
                 <option value="-">-</option>
                 <option value="+">+</option>
@@ -429,7 +429,7 @@
 
             <div class="col-md-4 form-group">
               <label class="form-label">Salary</label>
-              <select class="form-control" formControlName="FormulaBasedOn"
+              <select class="form-control" formControlName="FormulaBasedOn" (change)="generateFormula()"
                 [ngClass]="{'error-field': submitted && m['FormulaBasedOn'].errors !== null && m['FormulaBasedOn'].errors['required']}">
                 <option value="gross">Gross</option>
                 <option value="ctc">CTC</option>
@@ -445,38 +445,40 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-4 mt-3">
-              <input class="form-check-input" type="checkbox" formControlName="TaxExempt">
-              <label class="form-check-label ms-2">
-                Tax Exempt
-              </label>
+          <ng-container *ngIf="componentFields.ComponentId == 'PF' || componentFields.ComponentId =='EPF'">
+            <div class="row">
+              <div class="col-md-4 mt-3">
+                <input class="form-check-input" type="checkbox" formControlName="TaxExempt">
+                <label class="form-check-label ms-2">
+                  Tax Exempt
+                </label>
+              </div>
+              <div class="col-md-4 mt-3">
+                <input class="form-check-input" type="checkbox" formControlName="IncludeInPayslip">
+                <label class="form-check-label ms-2">
+                  Include In Payslip
+                </label>
+              </div>
+              <div class="col-md-4 mt-3">
+                <input class="form-check-input" type="checkbox" formControlName="IsOpted">
+                <label class="form-check-label ms-2">
+                  Is Opted
+                </label>
+              </div>
+              <div class="col-md-4 mt-3">
+                <input class="form-control" type="text" formControlName="EmployeeContribution">
+                <label class="form-check-label ms-2">
+                  EmployeeContribution
+                </label>
+              </div>
+              <div class="col-md-4 mt-3">
+                <input class="form-control" type="text" formControlName="EmployerContribution">
+                <label class="form-check-label ms-2">
+                  EmployerContribution
+                </label>
+              </div>
             </div>
-            <div class="col-md-4 mt-3">
-              <input class="form-check-input" type="checkbox" formControlName="IncludeInPayslip">
-              <label class="form-check-label ms-2">
-                Include In Payslip
-              </label>
-            </div>
-            <div class="col-md-4 mt-3">
-              <input class="form-check-input" type="checkbox" formControlName="IsOpted">
-              <label class="form-check-label ms-2">
-                Is Opted
-              </label>
-            </div>
-            <div class="col-md-4 mt-3">
-              <input class="form-control" type="text" formControlName="EmployeeContribution">
-              <label class="form-check-label ms-2">
-                EmployeeContribution
-              </label>
-            </div>
-            <div class="col-md-4 mt-3">
-              <input class="form-control" type="text" formControlName="EmployerContribution">
-              <label class="form-check-label ms-2">
-                EmployerContribution
-              </label>
-            </div>
-          </div>
+          </ng-container>
           <div class="col-md-12 mt-5">
             <h6 class="pt-4">Use Standard Javascript notaion for formuila expression</h6>
             <p class="mb-0">Ex. ([Basic] - 0.40) - 1200</p>
