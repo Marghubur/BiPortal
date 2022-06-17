@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
@@ -13,6 +13,7 @@ declare var $: any;
 export class SalarycomponentStructureComponent implements OnInit {
   ActivatedPage: number = 1;
   salaryComponentFields: Array<SalaryComponentFields> = [];
+  salaryComponentActiveFields: Array<SalaryComponentFields> = [];
   currentSalaryComponent: SalaryComponentFields = null;
   editSalaryComponent: FormGroup;
   addComponentForm: FormGroup;
@@ -20,7 +21,8 @@ export class SalarycomponentStructureComponent implements OnInit {
   recurringComponent:Array<any> = [];
   isLoading: boolean = false;
   componentTypeId: number = -1;
-  isReade: boolean = false;
+  isReady: boolean = false;
+  AddActiveComponent: Array<SalaryComponentFields> = [];
 
   constructor(private fb: FormBuilder,
               private http: AjaxService) { }
@@ -29,24 +31,39 @@ export class SalarycomponentStructureComponent implements OnInit {
     this.ActivatedPage = 1;
     this.currentSalaryComponent = new SalaryComponentFields();
     this.salaryComponent();
-    this.addSalaryComponent();
+    this.loadOnChange();
   }
 
   loadOnChange() {
-    this.isReade = false;
-    this.http.get(`Settings/FetchComponentDetailById/${this.componentTypeId}`)
+    this.isReady = false;
+    this.http.get(`Settings/FetchActiveComponents`)
     .then(res => {
       if(res.ResponseBody) {
         if(res.ResponseBody.length > 0) {
           this.salaryComponentFields = res.ResponseBody
+          this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsActive);
           Toast("Component structure table loaded successfully.");
         } else {
           WarningToast("0 item found under this catagroy. Please add one.");
         }
 
-        this.isReade = false;
+        this.isReady = false;
       }
     });
+  }
+
+  bindData(data: any) {
+    if(data) {
+      if(data.length > 0) {
+        this.salaryComponentFields = data
+        this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsActive);
+        Toast("Component structure table loaded successfully.");
+      } else {
+        WarningToast("0 item found under this catagroy. Please add one.");
+      }
+
+      this.isReady = false;
+    }
   }
 
   openEditModal(data: any) {
@@ -59,15 +76,15 @@ export class SalarycomponentStructureComponent implements OnInit {
   }
 
   addComponentModal() {
-    $('#AddComponentModal').modal('show');
+    $('#addComponentModal').modal('show');
   }
 
   salaryComponent() {
     this.editSalaryComponent = this.fb.group({
       ComponentType: new FormControl(this.currentSalaryComponent.Type),
       IsComponentEnable: new FormControl(this.currentSalaryComponent.IsComponentEnable),
-      ComponentName: new FormControl(this.currentSalaryComponent.ComponentDescription),
-      MaximumLimit: new FormControl(this.currentSalaryComponent.MaxLimit),
+      ComponentName: new FormControl(this.currentSalaryComponent.ComponentFullName),
+      MaxLimit: new FormControl(this.currentSalaryComponent.MaxLimit),
       IsAllowtoOverride: new FormControl(this.currentSalaryComponent.IsAllowtoOverride),
       Section: new FormControl(this.currentSalaryComponent.Section),
       IsActive: new FormControl(this.currentSalaryComponent.IsActive),
@@ -76,24 +93,29 @@ export class SalarycomponentStructureComponent implements OnInit {
     })
   }
 
-  addSalaryComponent() {
-    this.addComponentForm = this.fb.group({
-      ComponentType: new FormControl(''),
-      IsComponentEnable: new FormControl(''),
-      ComponentName: new FormControl(''),
-      MaximumLimit: new FormControl(''),
-      Section: new FormControl(''),
-      TaxExempt: new FormControl('')
-    })
-  }
 
-  addComponents() {
+  addComponent(event: any, item: any) {
+    if (event.target.checked == true) {
+      item.IsActive = true;
+      this.AddActiveComponent.push(item)
+    } else {
+      let current = this.AddActiveComponent.find(x => x.ComponentId == item.ComponentId);
+      if(current) {
+        current.IsActive = false;
+      } else {
+        item.IsActive = false;
+        this.AddActiveComponent.push(item)
+      }
+    }
+  }
+  submitComponents() {
     this.isLoading = true;
-    if (this.recurringComponent.length > 0) {
-      this.http.post("Settings/InsertUpdateSalaryStructure", this.recurringComponent).then((response:ResponseModel) => {
+    if (this.AddActiveComponent.length > 0) {
+      this.http.post("Settings/ActivateCurrentComponent", this.AddActiveComponent).then((response:ResponseModel) => {
         if (response.ResponseBody) {
+          this.bindData(response.ResponseBody);
           Toast("Component Added Successfully");
-          $('#AddComponentModal').modal('hide');
+          $('#addComponentModal').modal('hide');
         }
       })
     } else {
@@ -104,10 +126,6 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   getComponentData(data: SalaryComponentFields) {
     if (data) {
-      // this.recurringComponent.push({
-      //   text: `${data.ComponentName}`,
-      //   value: data
-      // });
       this.recurringComponent.push(data);
     }
   }
@@ -139,13 +157,14 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   updateChanges() {
     this.isLoading = true;
+    this.isReady = true;
     let value = this.editSalaryComponent.value;
 
     this.salaryComponentFields = [];
     this.http.put(`Settings/EnableSalaryComponentDetail/${this.currentSalaryComponent.ComponentId}`, value)
     .then(res => {
       if(res.ResponseBody) {
-        this.salaryComponentFields = res.ResponseBody
+        this.bindData(res.ResponseBody);
         Toast("Component detail updated successfully");
       } else {
         Toast("Fail to update. Please contact to admin.");
