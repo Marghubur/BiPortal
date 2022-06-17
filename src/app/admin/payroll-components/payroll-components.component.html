@@ -76,12 +76,7 @@
                                 </div>
                               </div>
                               <div class="td ps-3 text-truncate">
-                                <div [ngSwitch]="item.ComponentTypeId">
-                                  <div *ngSwitchCase="2">Allowance</div>
-                                  <div *ngSwitchCase="3">Rembursment</div>
-                                  <div *ngSwitchCase="4">Reimursable</div>
-                                  <div *ngSwitchDefault>Application for all.</div>
-                                </div>
+                                {{item.ComponentTypeId}}
                               </div>
                               <div class="td ps-3 text-truncate">
                                 <div [ngSwitch]="item.TaxExempt">
@@ -90,7 +85,7 @@
                                     <small class="ps-2 badge bg-warning text-dark">{{item.Section}}</small>
                                   </div>
                                   <div *ngSwitchDefault>
-                                    No Tax Exempt
+                                    Taxable
                                     <small class="ps-2 text-muted d-block">{{item.Section}}</small>
                                   </div>
                                 </div>
@@ -106,10 +101,11 @@
                               </div>
                             </div>
                           </ng-container>
-                          <ng-container *ngIf="RecurringComponent.length <= 0"></ng-container>
-                          <div class="py-5 my-5 d-flex align-items-center justify-content-center">
-                            <h5 class="fw-bold">No Recurruing Component Found.</h5>
-                          </div>
+                          <ng-container *ngIf="RecurringComponent.length <= 0">
+                            <div class="py-5 my-5 d-flex align-items-center justify-content-center">
+                              <h5 class="fw-bold">No Recurruing Component Found.</h5>
+                            </div>
+                          </ng-container>
                         </div>
                       </div>
                     </div>
@@ -224,17 +220,32 @@
       <div class="modal-body">
         <form [formGroup]="NewSalaryForm">
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label">COMPONENT TYPE</label>
-            <div class="col-md-4">
-              <select class="form-select"
-                [ngClass]="{'error-field': submitted && f.Type.errors !== null && f.Type.errors.required}"
-                formControlName="Type" (change)="selectComponentType($event)">
-                <option value="">Select Componet Type</option>
-                <option value="2">Fixed</option>
-                <option value="2">Allowance</option>
-                <option value="4">Reimbursable</option>
-                <option value="3">Rembursement</option>
-              </select>
+            <div class="row">
+              <div class="col-md-4 me-1">
+                <label for="" class="form-label">COMPONENT TYPE</label>
+                <div class="col-md-12">
+                  <select class="form-select"
+                    [ngClass]="{'error-field': submitted && f.Type.errors !== null && f.Type.errors.required}"
+                    formControlName="Type" (change)="selectComponentType($event)">
+                    <option value="">Select Componet Type</option>
+                    <option value="2">Allowance</option>
+                    <option value="4">Reimbursable</option>
+                    <option value="3">Rembursement</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="" class="form-label">COMPONENT CATEGORY</label>
+                <div class="col-md-12">
+                  <select class="form-select"
+                    [ngClass]="{'error-field': submitted && f.ComponentCatagoryId.errors !== null && f.ComponentCatagoryId.errors.required}"
+                    formControlName="ComponentCatagoryId" (change)="selectComponentType($event)">
+                    <option value="">Select Componet Type</option>
+                    <option value="1">Fixed</option>
+                    <option value="6">Adhoc</option>
+                  </select>
+                </div>
+              </div>
             </div>
             <ng-container [ngSwitch]="ComponentType">
               <div *ngSwitchCase="'rembursement'">
@@ -254,29 +265,29 @@
           <div class="row col-md-12">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != ''" transform="upper"
+              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != '' || ComponentType == ''" transform="upper"
                 [ngClass]="{'error-field': submitted && f.ComponentName.errors !== null && f.ComponentName.errors.required}"
                 formControlName="ComponentName" placeholder="Component Name" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
-              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name" transform="upper"
+              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name" transform="upper" [readonly]="ComponentType == ''"
                 class="form-control">
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
-              <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9"
+              <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9" [readonly]="ComponentType == ''"
                 class="form-control">
             </div>
             <div class="col-md-12 mt-3">
               <label for="" class="form-label">COMPONENT DESCRIPTION</label>
-              <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
+              <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description" [readonly]="ComponentType == ''"
                 class="form-control"></textarea>
             </div>
           </div>
           <div class="col-md-12">
             <div class="form-check mt-3">
-              <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt"
+              <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt" [disabled]="ComponentType == ''"
                 (click)="enableTaxExempt($event)">
               <label class="form-check-label">
                 This component is tax exemption(non taxable)
