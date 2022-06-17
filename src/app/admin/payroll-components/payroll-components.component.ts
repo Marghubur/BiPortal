@@ -277,6 +277,8 @@ export class PayrollComponentsComponent implements OnInit {
   addNewDeduction() {
     this.isLoading = true;
     let value = this.DeductionForm.value;
+    value.AdHocId = 3;
+    value.IsAdHoc = true;
     if (value) {
       this.http.post("SalaryComponent/AddDeductionComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody.length > 0) {
@@ -293,6 +295,8 @@ export class PayrollComponentsComponent implements OnInit {
   addNewBonus() {
     this.isLoading = true;
     let value: PayrollComponentsModal = this.BonusForm.value;
+    value.AdHocId = 2;
+    value.IsAdHoc = true;
     if (value) {
       this.http.post("SalaryComponent/AddBonusComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody.length > 0) {

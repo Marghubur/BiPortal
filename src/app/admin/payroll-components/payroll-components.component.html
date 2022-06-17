@@ -84,11 +84,11 @@
                             <div class="td ps-3 text-truncate">
                               <div [ngSwitch]="item.TaxExempt">
                                 <div *ngSwitchCase="1">
-                                  <b class="me-2">Yes</b>
-                                  <small class="ps-2 badge bg-primary">{{item.Section}}</small>
+                                  <b class="me-2">Tax Exempt</b>
+                                  <small class="ps-2 badge bg-warning">{{item.Section}}</small>
                                 </div>
                                 <div *ngSwitchDefault>
-                                  No
+                                  No Tax Exempt
                                   <small class="ps-2 text-muted d-block">{{item.Section}}</small>
                                 </div>
                               </div>
@@ -247,13 +247,13 @@
           <div class="row col-md-12">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != ''"
+              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != ''" transform="upper"
                 [ngClass]="{'error-field': submitted && f.ComponentName.errors !== null && f.ComponentName.errors.required}"
                 formControlName="ComponentName" placeholder="Component Name" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
-              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name"
+              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name" transform="upper"
                 class="form-control">
             </div>
             <div class="col-md-4 mt-3">
@@ -329,11 +329,12 @@
           <div class="row">
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+              <input type="text" formControlName="ComponentName" transform="upper" placeholder="Component Name"
+                class="form-control">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
-              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name"
+              <input type="text" formControlName="ComponentFullName" transform="upper" placeholder="Component Full Name"
                 class="form-control">
             </div>
           </div>
@@ -388,11 +389,12 @@
           <div class="row">
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+              <input type="text" formControlName="ComponentName" transform="upper" placeholder="Component Name"
+                class="form-control">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
-              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name"
+              <input type="text" formControlName="ComponentFullName" transform="upper" placeholder="Component Full Name"
                 class="form-control">
             </div>
           </div>
@@ -434,11 +436,12 @@
           <div class="row">
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" formControlName="ComponentName" placeholder="Component Name" class="form-control">
+              <input type="text" formControlName="ComponentName" transform="upper" placeholder="Component Name"
+                class="form-control">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
-              <input type="text" formControlName="ComponentFullName" placeholder="Component Full Name"
+              <input type="text" formControlName="ComponentFullName" transform="upper" placeholder="Component Full Name"
                 class="form-control">
             </div>
           </div>
