@@ -425,7 +425,7 @@
 
 
 <div class="modal fade" id="fullSalaryDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title fs-4 text-dark" id="exampleModalLabel">SALARY BREAKUP</h5>
@@ -433,233 +433,296 @@
       </div>
       <div class="modal-body px-5">
         <form [formGroup]="salaryBreakupForm">
-          <div class="t-table t-list t-border col-md-12">
-            <div class="hide-bar alert-primary"></div>
-            <div class="t-head alert-primary">
-              <div class="tr fw-bold text-dark">
-                <div class="th fe-4">
-                  <div class="cell-wrappe ps-2">
-                    DETAILS
+          <div class="t-table t-list t-border col-md-12 mb-3">
+            <div class="t-body">
+              <div class="tr py-2">
+                <div class="td align-middle fe-4 ps-2 fw-bold text-dark">
+                  Expected CTC of Employee
+                </div>
+                <div class="td align-middle fe-2">
+                  <div class="cell-wrapper mx-2 d-flex align-items-center">
+                    <label for="" class="form-label pe-2 mb-0">Monthly</label>
+                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ExpectedCTCMonthly">
                   </div>
                 </div>
-                <div class="th fe-2">
-                  MONTHLY
+                <div class="td align-middle fe-2">
+                  <div class="cell-wrapper mx-2 d-flex align-items-center">
+                    <label for="" class="form-label pe-2 mb-0">Annually</label>
+                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ExpectedCTCAnnually">
+                  </div>
                 </div>
-                <div class="th fe-2">
-                  ANNUALLY
+                <button class="btn btn-outline-success ms-3"><i class="fa fa-calculator pe-2"></i> Calculate</button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="t-table t-list t-border col-md-12">
+                <div class="hide-bar alert-primary"></div>
+                <div class="t-head alert-primary">
+                  <div class="tr fw-bold text-dark">
+                    <div class="th fe-4">
+                      <div class="cell-wrappe ps-2">
+                        DETAILS
+                      </div>
+                    </div>
+                    <div class="th fe-2">
+                      MONTHLY
+                    </div>
+                    <div class="th fe-2">
+                      ANNUALLY
+                    </div>
+                  </div>
+                </div>
+                <div class="t-body">
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Basic
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="BasicMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="BasicAnnually">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Conveyance Allowance
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ConveyanceMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="ConveyanceAnnually">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      HRA
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="HRAMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="HRAAnnually">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Medical Allowance
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="MedicalMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="MedicalAnnually">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Shift Allowance
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ShiftMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ShiftAnnually">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2 fw-bold text-dark">
+                      Special Allowance
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="SpecialMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="SpecialAnnually">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr py-2 border-top-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Car Running Allowance
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="CarRunningMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="CarRunningAnnually">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Telephone and Internet Allowance
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InternetMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InternetAnnually">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Food Coupons
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="FoodMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="FoodAnnually">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Travel Reimbursement (LTA)
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="TravelMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="TravelAnnually">
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="t-body">
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Basic
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="BasicMonthly">
+            <div class="col-md-6">
+              <div class="t-table t-list t-border col-md-12">
+                <div class="hide-bar alert-primary"></div>
+                <div class="t-head alert-primary">
+                  <div class="tr fw-bold text-dark">
+                    <div class="th fe-4">
+                      <div class="cell-wrappe ps-2">
+                        DETAILS
+                      </div>
+                    </div>
+                    <div class="th fe-2">
+                      MONTHLY
+                    </div>
+                    <div class="th fe-2">
+                      ANNUALLY
+                    </div>
                   </div>
                 </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="BasicAnnually">
+                <div class="t-body">
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2 fw-bold text-dark">
+                      Gross Compensation
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GrossMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GrossAnnually">
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Conveyance Allowance
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ConveyanceMonthly">
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Employer Contribution towards Insurance
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InsuranceMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InsuranceAnnually">
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9"
-                      formControlName="ConveyanceAnnually">
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Employer Contribution towards PF
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="PFMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="PFAnnually">
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  HRA
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="HRAMonthly">
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2">
+                      Employer Contribution towards Gratuity
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GratuityMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GratuityAnnually">
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="HRAAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Medical Allowance
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="MedicalMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="MedicalAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Car Running Allowance
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="CarRunningMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9"
-                      formControlName="CarRunningAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Telephone and Internet Allowance
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InternetMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InternetAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Travel Reimbursement (LTA)
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="TravelMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="TravelAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Shift Allowance
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ShiftMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ShiftAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Special Allowance
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="SpecialMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="SpecialAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Gross Compensation
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GrossMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GrossAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Employer Contribution towards Insurance
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InsuranceMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InsuranceAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Employer Contribution towards PF
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="PFMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="PFAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  Employer Contribution towards Gratuity
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GratuityMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GratuityAnnually">
-                  </div>
-                </div>
-              </div>
-              <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2">
-                  CTC
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="CTCMonthly">
-                  </div>
-                </div>
-                <div class="td align-middle fe-2">
-                  <div class="cell-wrapper mx-2">
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="CTCAnnually">
+                  <div class="tr py-2">
+                    <div class="td align-middle fe-4 ps-2 fw-bold text-dark">
+                      CTC
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="CTCMonthly">
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper mx-2">
+                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="CTCAnnually">
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

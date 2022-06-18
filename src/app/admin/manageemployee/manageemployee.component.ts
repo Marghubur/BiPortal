@@ -460,6 +460,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       PFAnnually: new FormControl(0),
       GratuityMonthly: new FormControl(0),
       GratuityAnnually: new FormControl(0),
+      FoodMonthly: new FormControl(0),
+      FoodAnnually: new FormControl(0),
+      ExpectedCTCMonthly: new FormControl(0),
+      ExpectedCTCAnnually: new FormControl(0),
       CTCMonthly: new FormControl(0),
       CTCAnnually: new FormControl(0)
     });
@@ -586,5 +590,9 @@ class SalaryBreakupDetails {
   GratuityMonthly: number = 0;
   GratuityAnnually: number = 0;
   CTCMonthly: number = 0;
-  CTCAnnually: number = 0
+  CTCAnnually: number = 0;
+  ExpectedCTCMonthly: number = 0;
+  ExpectedCTCAnnually: number = 0;
+  FoodMonthly: number = 0;
+  FoodAnnually: number = 0;
 }
