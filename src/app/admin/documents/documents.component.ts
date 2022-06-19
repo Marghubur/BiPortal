@@ -649,6 +649,7 @@ export class Files {
   LocalImgPath: string = "";
   UserId: number = 0;
   FileName: string = "";
+  AlternateName: string = null;
   FileExtension: string = "";
   FilePath: string = "";
   FileUid: number = 0;

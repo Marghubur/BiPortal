@@ -506,6 +506,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       });
     }
   }
+
+  calculateSalary() {
+
+  }
 }
 
 export class AssignedClients {
