@@ -433,25 +433,27 @@
       </div>
       <div class="modal-body px-5">
         <form [formGroup]="salaryBreakupForm">
-          <div class="t-table t-list t-border col-md-12 mb-3">
+          <div class="t-table t-list col-md-12 mb-3">
             <div class="t-body">
               <div class="tr py-2">
-                <div class="td align-middle fe-4 ps-2 fw-bold text-dark">
+                <div class="td align-middle fe-4 ps-2 fw-bold text-dark d-flex flex-column justify-content-between">
                   Expected CTC of Employee
                 </div>
                 <div class="td align-middle fe-2">
                   <div class="cell-wrapper mx-2 d-flex align-items-center">
                     <label for="" class="form-label pe-2 mb-0">Monthly</label>
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ExpectedCTCMonthly">
+                    <input type="text" class="form-control" OnlyNumber="9" formControlName="ExpectedCTCMonthly">
                   </div>
                 </div>
                 <div class="td align-middle fe-2">
                   <div class="cell-wrapper mx-2 d-flex align-items-center">
                     <label for="" class="form-label pe-2 mb-0">Annually</label>
-                    <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ExpectedCTCAnnually">
+                    <input type="text" class="form-control" OnlyNumber="9" formControlName="ExpectedCTCAnnually">
                   </div>
                 </div>
-                <button class="btn btn-outline-success ms-3"><i class="fa fa-calculator pe-2"></i> Calculate</button>
+                <button class="btn btn-outline-success ms-3" (click)="calculateSalary()">
+                  <i class="fa fa-calculator pe-2"></i> Calculate
+                </button>
               </div>
             </div>
           </div>
@@ -496,7 +498,8 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="ConveyanceMonthly">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="ConveyanceMonthly">
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
@@ -527,12 +530,14 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="MedicalMonthly">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="MedicalMonthly">
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="MedicalAnnually">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="MedicalAnnually">
                       </div>
                     </div>
                   </div>
@@ -557,12 +562,14 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="SpecialMonthly">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="SpecialMonthly">
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="SpecialAnnually">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="SpecialAnnually">
                       </div>
                     </div>
                   </div>
@@ -572,7 +579,8 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="CarRunningMonthly">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="CarRunningMonthly">
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
@@ -588,12 +596,14 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InternetMonthly">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="InternetMonthly">
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InternetAnnually">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="InternetAnnually">
                       </div>
                     </div>
                   </div>
@@ -623,14 +633,15 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="TravelAnnually">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="TravelAnnually">
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 d-flex flex-column justify-content-between">
               <div class="t-table t-list t-border col-md-12">
                 <div class="hide-bar alert-primary"></div>
                 <div class="t-head alert-primary">
@@ -670,12 +681,14 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InsuranceMonthly">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="InsuranceMonthly">
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="InsuranceAnnually">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="InsuranceAnnually">
                       </div>
                     </div>
                   </div>
@@ -700,15 +713,22 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GratuityMonthly">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="GratuityMonthly">
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper mx-2">
-                        <input type="text" class="form-control border-0" OnlyNumber="9" formControlName="GratuityAnnually">
+                        <input type="text" class="form-control border-0" OnlyNumber="9"
+                          formControlName="GratuityAnnually">
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div class="t-table t-list t-border col-md-12">
+                <div class="t-body">
                   <div class="tr py-2">
                     <div class="td align-middle fe-4 ps-2 fw-bold text-dark">
                       CTC

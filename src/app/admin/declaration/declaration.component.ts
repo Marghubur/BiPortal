@@ -51,6 +51,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   sections: any = null;
   totalFileSize: number = 0;
   rentalPage: number = 0;
+  declarationFiles: Array<Files> = [];
+  slectedDeclarationnFile: Array<Files> = [];
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -153,6 +155,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
           this.sections = response.ResponseBody.Sections;
         }
+        if (response.ResponseBody && response.ResponseBody.FileDetails.length > 0)
+          this.declarationFiles = response.ResponseBody.FileDetails;
 
         Toast("Declaration detail loaded successfully");
         this.SectionIsReady = true;
@@ -252,14 +256,18 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.presentRow.querySelector('i[name="edit-declaration"]').classList.add('d-none');
     this.presentRow.querySelector('div[name="cancel-declaration"]').classList.remove('d-none');
     this.presentRow.querySelector('a[name="upload-proof"]').classList.remove('pe-none', 'text-decoration-none', 'text-muted');
-    this.presentRow.querySelector('a[name="upload-proof"]').classList.add('pe-auto', 'fw-bold');
+    this.presentRow.querySelector('a[name="upload-proof"]').classList.add('pe-auto', 'fw-bold', 'text-primary-c');
     this.presentRow.querySelector('input[name="DeclaratedValue"]').focus();
   }
 
   uploadDocument(item: any) {
+    this.slectedDeclarationnFile = [];
     if (item) {
       this.attachmentForDeclaration = item.ComponentId ;
       this.isLargeFile = false;
+      let currentDeclaration = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item.ComponentId);
+      if (currentDeclaration.length > 0)
+        this.slectedDeclarationnFile = currentDeclaration;
       $("#addAttachmentModal").modal('show');
     }
   }
@@ -274,7 +282,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       while (index < selectedFile.length) {
         file = <File>selectedFile[index];
         let item: Files = new Files();
-        item.FileName = this.attachmentForDeclaration;
+        item.FileName = file.name;
+        item.AlternateName = this.attachmentForDeclaration;
         item.FileType = file.type;
         item.FileSize = (Number(file.size) / 1024);
         item.FileExtension = file.type;
@@ -285,6 +294,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         item.UserId = this.EmployeeId;
         this.FileDocumentList.push(item);
         this.FilesCollection.push(file);
+        if (this.slectedDeclarationnFile.length > 0)
+          this.slectedDeclarationnFile.push(item);
         index++;
       };
       this.totalFileSize = 0;
@@ -304,6 +315,36 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   fireuploadreceipt() {
     $("#uploadreceipt").click();
+  }
+
+  fireBrowser() {
+    $("#modifyAttachment").click();
+  }
+
+  ModifyAttachment(fileInput: any, fileId: number) {
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    let selectedFile = fileInput.target.files;
+    if (selectedFile) {
+      let file = null;
+      file = <File>selectedFile[0];
+      let item: Files = new Files();
+      item.FileName = this.attachmentForDeclaration;
+      item.FileType = file.type;
+      item.FileSize = (Number(file.size) / 1024);
+      item.FileExtension = file.type;
+      item.DocumentId = 0;
+      item.FileUid = fileId;
+      item.ParentFolder = '';
+      item.Email = this.employeeEmail;
+      item.UserId = this.EmployeeId;
+      this.FileDocumentList.push(item);
+      this.FilesCollection.push(file);
+      this.totalFileSize = 0;
+      this.totalFileSize += selectedFile[0].size / 1024;
+    } else {
+      ErrorToast("You are not slected the file")
+    }
   }
 
   uploadReceipts(fileInput: any) {
@@ -358,9 +399,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     let elem = current.closest('div[name="table-row"]')
     elem.querySelector('div[name="view-control"]').classList.remove('d-none');
     elem.querySelector('div[name="edit-control"]').classList.add('d-none');
-    this.presentRow.querySelector('a[name="upload-proof"]').classList.add('pe-none');
     elem.querySelector('i[name="edit-declaration"]').classList.remove('d-none');
     elem.querySelector('div[name="cancel-declaration"]').classList.add('d-none');
+    elem.querySelector('a[name="upload-proof"]').classList.remove('pe-auto', 'fw-bold', 'text-primary-c');
+    elem.querySelector('a[name="upload-proof"]').classList.add('pe-none', 'text-decoration-none', 'text-muted');
   }
 
   fireFileBrowser() {

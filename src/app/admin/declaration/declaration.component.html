@@ -376,8 +376,8 @@
                                   </span>
                                 </div>
                                 <div *ngSwitchDefault>
-                                  <a href="javascript:void(0)" name="upload-proof"
-                                    class="text-primary-c pe-none fw-bold" (click)="uploadDocument(r)">
+                                  <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none"
+                                    (click)="uploadDocument(r)">
                                     <i class="fa fa-paperclip pe-2"></i>Upload
                                   </a>
                                 </div>
@@ -870,30 +870,69 @@
             </div>
           </div>
           <div class="col-md-7 mt-4 overflow-auto" style="height: 33vh">
-            <table class="table" *ngIf="FilesCollection.length > 0">
-              <thead>
-                <tr>
-                  <th width="8%">#</th>
-                  <th>File Name</th>
-                  <th width="15%">File Size (KB)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of FilesCollection">
-                  <td class="counterCell"></td>
-                  <td>{{item.name}}</td>
-                  <td>{{item.size/1024 | number: '1.2-2'}}</td>
-                </tr>
-                <tr>
-                  <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
-                  <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
-                </tr>
-              </tbody>
-            </table>
+            <ng-container *ngIf="slectedDeclarationnFile.length > 0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th width="8%">#</th>
+                    <th>File Name</th>
+                    <th width="25%">File Size (KB)</th>
+                    <td width="10%">Action</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of slectedDeclarationnFile">
+                    <td class="counterCell"></td>
+                    <td>{{item.FileName}}</td>
+                    <td>
+                      <ng-container *ngIf="item.FileSize > 0">
+                        {{item.FileSize/1024 | number: '1.2-2'}}
+                      </ng-container>
+                      <ng-container *ngIf="item.FileSize == null || item.FileSize <= 0">
+                        ---
+                      </ng-container>
+                    </td>
+                    <td>
+                      <input type="file" id="modifyAttachment" class="d-none"
+                        (change)="ModifyAttachment($event, item.FileId)" />
+                      <a href="javascript:void(0)" (click)="fireBrowser()" class="text-decoration-none"> <i
+                          class="fa fa-pencil text-primary"></i></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
+                    <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-container>
+            <ng-container *ngIf="slectedDeclarationnFile.length == 0">
+              <table class="table" *ngIf="FilesCollection.length > 0">
+                <thead>
+                  <tr>
+                    <th width="8%">#</th>
+                    <th>File Name</th>
+                    <th width="15%">File Size (KB)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of FilesCollection">
+                    <td class="counterCell"></td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.size/1024 | number: '1.2-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
+                    <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-container>
+
             <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
               File size is greater than 2028KB i.e 2 MB, so please remove some file
             </div>
-            <div class="select-message" *ngIf="FilesCollection.length == 0">
+            <div class="select-message" *ngIf="FilesCollection.length == 0  && slectedDeclarationnFile.length == 0">
               <h3>
                 Please upload at least one file and You will see their details here.
               </h3>
