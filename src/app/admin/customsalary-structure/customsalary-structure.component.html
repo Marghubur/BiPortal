@@ -408,7 +408,8 @@
                 {{item.MaxLimit}}
               </div>
               <div class="td ps-3">
-                <input class="form-check-input" [checked]="item.IsActive == true" (click)="selectToAddComponent($event, item)" type="checkbox" value="">
+                <input class="form-check-input" [checked]="item.IsActive == true"
+                  (click)="selectToAddComponent($event, item)" type="checkbox" value="">
               </div>
             </div>
           </div>
@@ -444,7 +445,7 @@
               </div>
               <label>Normanlly it would lie between 40 to 50 percent of the CTC salary.</label>
             </div>
-            <div class="col-md-4 form-group">
+            <!-- <div class="col-md-4 form-group">
               <label class="form-label">Calculation Type</label>
               <select formControlName="CalculateInPercentage"
                 [ngClass]="{'error-field': submitted && m['CalculateInPercentage'].errors !== null && m['CalculateInPercentage'].errors['required']}"
@@ -453,9 +454,9 @@
                 <option value="2">In percent value</option>
                 <option value="3">In fixed value</option>
               </select>
-            </div>
+            </div> -->
           </div>
-          <div class="col-md-12 mt-5 row">
+          <!-- <div class="col-md-12 mt-5 row">
             <div class="col-md-4 ">
               <label class="form-label">Value</label>
               <input type="text" class="form-control" formControlName="MaxLimit"
@@ -495,7 +496,40 @@
                 <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
               </div>
             </div>
+          </div> -->
+
+          <div class="col-12 mt-4 row">
+            <div class="col-md-4">
+              <div class="list-group" name="formulaComponent">
+                <a href="javascript:void(0)" (click)="formulaAppliedOn('ctc')"
+                  class="list-group-item list-group-item-action" aria-current="true">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">CTC</h5>
+                  </div>
+                  <p class="mb-1">Formula will be applied on CTC</p>
+                </a>
+                <a href="javascript:void(0)" (click)="formulaAppliedOn('gross')"
+                  class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">GROSS</h5>
+                  </div>
+                  <p class="mb-1">Formula will be applied on CTC</p>
+                </a>
+                <a href="javascript:void(0)" (click)="formulaAppliedOn('net')"
+                  class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">NET</h5>
+                  </div>
+                  <p class="mb-1">Formula will be applied on CTC</p>
+                </a>
+              </div>
+            </div>
+            <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
+              (keypress)="addFormula()">
+              {{componentFields.Formula}}
+            </div>
           </div>
+
           <ng-container *ngIf="componentFields.ComponentId == 'PF' || componentFields.ComponentId =='EPF'">
             <div class="row">
               <div class="col-md-4 mt-3">
@@ -530,10 +564,16 @@
               </div>
             </div>
           </ng-container>
-          <div class="col-md-12 mt-5">
-            <h6 class="pt-4">Use Standard Javascript notaion for formuila expression</h6>
-            <p class="mb-0">Ex. ([Basic] - 0.40) - 1200</p>
-            <p class="mb-0">Ex. ([Gross] - [Basic]) * 0.4</p>
+
+          <div class="border-0 mt-2 form-control">
+            <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
+          </div>
+
+          <div class="col-md-12 mt-2">
+            <h6>Use proper mathamatics symbol for your formula</h6>
+            <p class="mb-0">Ex. If you want to put formula for Basic salary on CTC, first click on CTC and then:</p>
+            <p class="mb-0">Formula looks like: 40 % [CTC] </p>
+            <p class="mb-0">(i.e. 40 percent of CTC will be used)</p>
           </div>
         </div>
         <div class="modal-footer border-top-0">

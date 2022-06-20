@@ -203,3 +203,18 @@ a {
 .footer-top {
   z-index: 999;
 }
+
+
+.log-vh {
+  height: calc(100vh - 56px);
+}
+
+.log-vh-95 {
+  height: calc(95vh - 56px);
+}
+
+.footer-section {
+  height: 56px;
+  position: fixed;
+  width: 100%;
+}
