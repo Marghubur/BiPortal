@@ -8,6 +8,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { read, utils, WorkBook, write } from 'xlsx';
 import { DocumentUser } from '../documents/documents.component';
+declare var $: any;
 
 @Component({
   selector: 'app-resume',
@@ -183,6 +184,10 @@ export class ResumeComponent implements OnInit {
         }
       });
     }
+  }
+
+  openExcelUploadModal() {
+    $('#myModal').modal('show');
   }
 
   GetMappedColumns() {

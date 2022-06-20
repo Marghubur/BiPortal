@@ -515,7 +515,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
           this.isFileFound = true;
         }
       } else {
-        this.common.ShowToast("No file or folder found");
+        ErrorToast("No file or folder found");
       }
       this.isEmpPageReady = true;
     });
