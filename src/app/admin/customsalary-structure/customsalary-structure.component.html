@@ -150,59 +150,6 @@
                 </ng-container>
               </div>
             </div>
-            <!-- <ng-container formArrayName="salaryComponents">
-              <div class="t-table t-list t-border col-md-12 my-3">
-                <div class="hide-bar bg-light"></div>
-                <div class="t-head bg-light fw-bold">
-                  <div class="tr">
-                    <div class="th text-truncate ps-3 fe-2">
-                      COMPONENT NAME
-                    </div>
-                    <div class="th text-truncate ps-3">
-                      TAX EXEMPT
-                    </div>
-                    <div class="th text-truncate ps-3">
-                      ANNUAL CALCULATION
-                    </div>
-                    <div class="th text-truncate ps-3">
-                      ACTIONS
-                    </div>
-                  </div>
-                </div>
-                <div class="t-body custom-height">
-                  <ng-container *ngIf="componentsAvailable">
-                    <div class="tr py-2" *ngFor="let item of components.controls; let i = index">
-                      <ng-container [formGroupName]="i">
-                        <div class="td ps-3 text-truncate fe-2">
-                          {{item.get("ComponentId").value}} ({{item.get("ComponentFullName").value}})
-                        </div>
-                        <div class="td ps-3 text-truncate">
-                          <ng-container [ngSwitch]="item.get('TaxExempt').value">
-                            <span *ngSwitchCase="true">Tax Exempt</span>
-                            <span *ngSwitchDefault="false">Taxable</span>
-                          </ng-container>
-                        </div>
-                        <div class="td ps-3 text-truncate">
-                          <span class="badge bg-primary">{{item.get("Formula").value}}</span>
-                        </div>
-                        <ng-container>
-                          <div class="td ps-3">
-                            <a class="text-decoration-none text-dark" href="javascript:void(0)"
-                              (click)="updateCalcModel(item.value)"><i class="fa fa-ellipsis-h fa-lg"
-                                aria-hidden="true"></i></a>
-                          </div>
-                        </ng-container>
-                      </ng-container>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngIf="!componentsAvailable">
-                    <div class=" col-md-12 my-5 py-5 d-flex flex-column justify-content-center text-center">
-                      <h4 class="">Please add component first.</h4>
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </ng-container> -->
           </ng-container>
         </ng-container>
 
@@ -358,7 +305,7 @@
           <div class="form-group has-search">
             <span class="fa fa-search form-control-feedback"></span>
             <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-              (keyup.esc)="resetSalaryFilter($event)" (keyup.enter)="filterSalaryComponent($event)">
+              (keyup.Tab)="resetSalaryFilter($event)" (keyup.enter)="filterSalaryComponent($event)">
           </div>
         </div>
         <div class="t-table mt-5 t-list t-border col-md-12 my-3">
@@ -430,160 +377,68 @@
   aria-labelledby="updateCalculationModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-3">
-      <form [formGroup]="updateComponentForm">
-        <div class="modal-header border-bottom-0">
-          <h5 class="modal-title" id="updateCalculationModalLabel">Component [{{componentFields.ComponentId}}]
-            Update
-            Calculation</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-8">
-              <div class="d-flex">
-                <h5 class="form-label">Components Name : {{componentFields.ComponentId}}</h5>
-              </div>
-              <label>Normanlly it would lie between 40 to 50 percent of the CTC salary.</label>
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="updateCalculationModalLabel">Component [{{componentFields.ComponentId}}]
+          Update
+          Calculation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="d-flex">
+              <h5 class="form-label">Components Name : {{componentFields.ComponentId}}</h5>
             </div>
-            <!-- <div class="col-md-4 form-group">
-              <label class="form-label">Calculation Type</label>
-              <select formControlName="CalculateInPercentage"
-                [ngClass]="{'error-field': submitted && m['CalculateInPercentage'].errors !== null && m['CalculateInPercentage'].errors['required']}"
-                class="form-control">
-                <option value="">Pick calculation type</option>
-                <option value="2">In percent value</option>
-                <option value="3">In fixed value</option>
-              </select>
-            </div> -->
-          </div>
-          <!-- <div class="col-md-12 mt-5 row">
-            <div class="col-md-4 ">
-              <label class="form-label">Value</label>
-              <input type="text" class="form-control" formControlName="MaxLimit"
-                [ngClass]="{'error-field': submitted && m['MaxLimit'].errors !== null && (m['MaxLimit'].errors['required'] || m['MaxLimit'].errors['numberZero'])}"
-                (keyup)="generateFormula()">
-            </div>
-
-            <div class="col-md-1 form-group">
-              <label class="form-label">OPT</label>
-              <select class="form-control" formControlName="Operator" (change)="generateFormula()"
-                [ngClass]="{'error-field': submitted && m['Operator'].errors !== null && m['Operator'].errors['required']}">
-                <option value="-">-</option>
-                <option value="+">+</option>
-                <option value="%">%</option>
-              </select>
-            </div>
-
-            <div class="col-md-1 d-flex flex-column justify-content-center text-center form-group">
-              <div class="fe-1"></div>
-              <div class="fe-1 d-flex flex-column justify-content-center">OF</div>
-            </div>
-
-            <div class="col-md-4 form-group">
-              <label class="form-label">Salary</label>
-              <select class="form-control" formControlName="FormulaBasedOn" (change)="generateFormula()"
-                [ngClass]="{'error-field': submitted && m['FormulaBasedOn'].errors !== null && m['FormulaBasedOn'].errors['required']}">
-                <option value="gross">Gross</option>
-                <option value="ctc">CTC</option>
-                <option value="net">Net</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="col-md-12 form-group mt-3">
-              <label for="" class="form-label">Formula</label>
-              <div class="border form-control">
-                <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
-              </div>
-            </div>
-          </div> -->
-
-          <div class="col-12 mt-4 row">
-            <div class="col-md-4">
-              <div class="list-group" name="formulaComponent">
-                <a href="javascript:void(0)" (click)="formulaAppliedOn('ctc')"
-                  class="list-group-item list-group-item-action" aria-current="true">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">CTC</h5>
-                  </div>
-                  <p class="mb-1">Formula will be applied on CTC</p>
-                </a>
-                <a href="javascript:void(0)" (click)="formulaAppliedOn('gross')"
-                  class="list-group-item list-group-item-action">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">GROSS</h5>
-                  </div>
-                  <p class="mb-1">Formula will be applied on CTC</p>
-                </a>
-                <a href="javascript:void(0)" (click)="formulaAppliedOn('net')"
-                  class="list-group-item list-group-item-action">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">NET</h5>
-                  </div>
-                  <p class="mb-1">Formula will be applied on CTC</p>
-                </a>
-              </div>
-            </div>
-            <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
-              (keypress)="addFormula()">
-              {{componentFields.Formula}}
-            </div>
-          </div>
-
-          <ng-container *ngIf="componentFields.ComponentId == 'PF' || componentFields.ComponentId =='EPF'">
-            <div class="row">
-              <div class="col-md-4 mt-3">
-                <input class="form-check-input" type="checkbox" formControlName="TaxExempt">
-                <label class="form-check-label ms-2">
-                  Tax Exempt
-                </label>
-              </div>
-              <div class="col-md-4 mt-3">
-                <input class="form-check-input" type="checkbox" formControlName="IncludeInPayslip">
-                <label class="form-check-label ms-2">
-                  Include In Payslip
-                </label>
-              </div>
-              <div class="col-md-4 mt-3">
-                <input class="form-check-input" type="checkbox" formControlName="IsOpted">
-                <label class="form-check-label ms-2">
-                  Is Opted
-                </label>
-              </div>
-              <div class="col-md-4 mt-3">
-                <input class="form-control" type="text" formControlName="EmployeeContribution">
-                <label class="form-check-label ms-2">
-                  EmployeeContribution
-                </label>
-              </div>
-              <div class="col-md-4 mt-3">
-                <input class="form-control" type="text" formControlName="EmployerContribution">
-                <label class="form-check-label ms-2">
-                  EmployerContribution
-                </label>
-              </div>
-            </div>
-          </ng-container>
-
-          <div class="border-0 mt-2 form-control">
-            <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
-          </div>
-
-          <div class="col-md-12 mt-2">
-            <h6>Use proper mathamatics symbol for your formula</h6>
-            <p class="mb-0">Ex. If you want to put formula for Basic salary on CTC, first click on CTC and then:</p>
-            <p class="mb-0">Formula looks like: 40 % [CTC] </p>
-            <p class="mb-0">(i.e. 40 percent of CTC will be used)</p>
+            <label>Normanlly it would lie between 40 to 50 percent of the CTC salary.</label>
           </div>
         </div>
-        <div class="modal-footer border-top-0">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary-c" (click)="updateValue()">
-            <i class="fa pe-3" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-            {{isLoading ? 'wait': 'Save Changes'}}
-          </button>
+        <div class="col-12 mt-4 row">
+          <div class="col-md-4">
+            <div class="list-group" name="formulaComponent">
+              <a href="javascript:void(0)" (click)="formulaAppliedOn('ctc')"
+                class="list-group-item list-group-item-action" aria-current="true">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">CTC</h5>
+                </div>
+                <p class="mb-1">Formula will be applied on CTC</p>
+              </a>
+              <a href="javascript:void(0)" (click)="formulaAppliedOn('gross')"
+                class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">GROSS</h5>
+                </div>
+                <p class="mb-1">Formula will be applied on CTC</p>
+              </a>
+              <a href="javascript:void(0)" (click)="formulaAppliedOn('net')"
+                class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">NET</h5>
+                </div>
+                <p class="mb-1">Formula will be applied on CTC</p>
+              </a>
+            </div>
+          </div>
+          <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
+            (keydown)="addFormula()">
+          </div>
         </div>
-      </form>
+        <div class="border-0 mt-2 form-control">
+          <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
+        </div>
+        <div class="col-md-12 mt-2">
+          <h6>Use proper mathamatics symbol for your formula</h6>
+          <p class="mb-0">Ex. If you want to put formula for Basic salary on CTC, first click on CTC and then:</p>
+          <p class="mb-0">Formula looks like: 40 % [CTC] </p>
+          <p class="mb-0">(i.e. 40 percent of CTC will be used)</p>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-c" (click)="updateValue()">
+          <i class="fa pe-3" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          {{isLoading ? 'wait': 'Save Changes'}}
+        </button>
+      </div>
     </div>
   </div>
 </div>
