@@ -318,8 +318,8 @@
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
                           <i class="fa fa-times text-danger fa-lg" *ngIf="user.GSTStatus == 'Canceled'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
-                          <i class="fa fa-clock-o fa-lg text-dark" *ngIf="user.GSTStatus == 'Raised'" data-bs-toggle="tooltip"
-                            data-bs-placement="right" title="Raised"></i>
+                          <i class="fa fa-clock-o fa-lg text-dark" *ngIf="user.GSTStatus == 'Raised'"
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="Raised"></i>
                           <i class="fa fa-exclamation-triangle fa-lg text-warning" *ngIf="user.GSTStatus == 'Pending'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Pending"></i>
                           <i class="fa fa-ban fa-lg text-danger" *ngIf="user.GSTStatus == 'Rejected'"
@@ -583,7 +583,7 @@
 </div>
 
 <!-- add update GST detail modal -->
-<div class="modal fade" id="gstupdateModal" tabindex="-1">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="gstupdateModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -669,7 +669,8 @@
 </div>
 
 <!-- Advanced Search model -->
-<div class="modal fade" id="advancedSearchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="advancedSearchModal" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header border-bottom-0 ps-5 pt-4">
@@ -848,7 +849,7 @@
 
 
 <!-- add update Bill Status Details detail modal -->
-<div class="modal fade" id="addupdateModal" tabindex="-1">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addupdateModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -909,7 +910,8 @@
 </div>
 
 <!-- pdfviewing waiting model -->
-<div class="modal fade" id="pdfviewingModal" tabindex="-1" *ngIf="isPdfGenerating">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="pdfviewingModal" tabindex="-1"
+  *ngIf="isPdfGenerating">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body f-12 text-center cog-wheel">
@@ -921,7 +923,8 @@
 </div>
 
 <!-- Download file model -->
-<div class="modal fade" id="downloadPopUp" tabindex="-1" *ngIf="isDownloadModal">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="downloadPopUp" tabindex="-1"
+  *ngIf="isDownloadModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
