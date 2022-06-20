@@ -62,7 +62,7 @@
           </div>
         </div>
         <ng-container *ngIf="salaryStructureType.length > 0 && isSalaryGrpSelected">
-          <form [formGroup]="salaryAndDeduction" *ngIf="isReady">
+          <ng-container *ngIf="isReady">
             <div class="mt-3">
               <div class="col-md-6 mb-3">
                 <h5 class="form-label">Group Name: {{selectedSalaryStructure.GroupName}}</h5>
@@ -203,7 +203,7 @@
                 </div>
               </div>
             </ng-container> -->
-          </form>
+          </ng-container>
         </ng-container>
 
       </ng-container>
@@ -408,7 +408,7 @@
                 {{item.MaxLimit}}
               </div>
               <div class="td ps-3">
-                <input class="form-check-input" [(ngModel)]="item.IsActive" type="checkbox" value="">
+                <input class="form-check-input" [checked]="item.IsActive == true" (click)="selectToAddComponent($event, item)" type="checkbox" value="">
               </div>
             </div>
           </div>
