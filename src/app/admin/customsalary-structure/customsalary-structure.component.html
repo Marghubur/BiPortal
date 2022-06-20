@@ -128,8 +128,8 @@
                     </div>
                     <div class="td ps-3 text-truncate">
                       <ng-container [ngSwitch]="item.TaxExempt">
-                        <span *ngSwitchCase="true">Tax Exempt</span>
-                        <span *ngSwitchDefault="false">Taxable</span>
+                        <div *ngSwitchCase="true">Tax Exempt</div>
+                        <div *ngSwitchDefault>Taxable</div>
                       </ng-container>
                     </div>
                     <div class="td ps-3 text-truncate">
@@ -138,8 +138,7 @@
                     <ng-container>
                       <div class="td ps-3">
                         <a class="text-decoration-none text-dark" href="javascript:void(0)"
-                          (click)="updateCalcModel(item.value)"><i class="fa fa-ellipsis-h fa-lg"
-                            aria-hidden="true"></i></a>
+                          (click)="updateCalcModel(item)"><i class="fa fa-ellipsis-h fa-lg" aria-hidden="true"></i></a>
                       </div>
                     </ng-container>
                   </div>

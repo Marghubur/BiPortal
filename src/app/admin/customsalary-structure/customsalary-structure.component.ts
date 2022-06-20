@@ -101,6 +101,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       } else {
         ErrorToast("Unable to add salary group.")
       }
+
+      this.componentsAvailable = true;
     })
 
     $('#addComponentModal').modal('hide');
@@ -409,6 +411,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   selectSalaryGroup(item: SalaryStructureType) {
     if (item) {
+      this.isSalaryGrpSelected = false;
       this.http.get(`SalaryComponent/GetSalaryGroupComponents/${item.SalaryGroupId}`)
       .then(res => {
         if (res.ResponseBody) {
@@ -416,7 +419,6 @@ export class CustomsalaryStructureComponent implements OnInit {
           for (let index = 0; index < value.length; index++) {
             value[index].IsActive = true;
           }
-          //let value = res.ResponseBody.map(x => x.IsActive == true);
           this.groupComponents = value;
           this.isSalaryGrpSelected = true;
           Toast("Salary group record found");
@@ -433,7 +435,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     if(this.componentFields.CalculateInPercentage == true) {
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
-    let value = item.Formula.split(' ');
+    let value = item.Formula != null ? item.Formula.split(' ') : '';
     if (value.length > 0) {
       let formulabasedon = (value[0].length -1);
       if (formulabasedon) {
