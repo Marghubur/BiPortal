@@ -30,7 +30,8 @@
           <div class="col-md-3">
             <div class="form-group has-search">
               <span class="fa fa-search form-control-feedback"></span>
-              <input type="text" class="form-control" placeholder="Search" (keydown.enter)="filterComponent($event)" (keydown.esc)="resetFilter($event)">
+              <input type="text" class="form-control" placeholder="Search" (keydown.enter)="filterComponent($event)"
+                (keydown.esc)="resetFilter($event)">
             </div>
           </div>
         </div>
@@ -124,8 +125,8 @@
 </div>
 
 <!--Add Component Modal -->
-<div class="modal fade" id="addComponentModal" tabindex="-1" aria-labelledby="addComponentModalLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addComponentModal" tabindex="-1"
+  aria-labelledby="addComponentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -213,7 +214,8 @@
 
 
 <!-- Edit Salary Component Modal -->
-<div class="modal fade" id="editSalaryMoadl" tabindex="-1" aria-labelledby="editSalaryMoadlLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="editSalaryMoadl" tabindex="-1"
+  aria-labelledby="editSalaryMoadlLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -306,7 +308,8 @@
 </div>
 
 <!--Deactive Salary Component Modal -->
-<div class="modal fade" id="inactiveComponentModal" tabindex="-1" aria-labelledby="inactiveComponentModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="inactiveComponentModal" tabindex="-1"
+  aria-labelledby="inactiveComponentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
@@ -315,10 +318,12 @@
       </div>
       <div class="modal-body">
         <h5>Are you want to inactive</h5>
-        <h5 class="text-danger">{{inactiveComponentDeatil.ComponentId}} - {{inactiveComponentDeatil.ComponentFullName}}</h5>
+        <h5 class="text-danger">{{inactiveComponentDeatil.ComponentId}} - {{inactiveComponentDeatil.ComponentFullName}}
+        </h5>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i>
+          Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="inactiveComponent()">
           <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-caret-square-o-right': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Inactive' }}

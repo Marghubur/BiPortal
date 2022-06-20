@@ -121,7 +121,8 @@
                     </div>
                     <div class="td align-middle fe-5">
                       <div class="cell-wrapper">
-                        <a href="javascript:void(0)" (click)="EditCurrent(user)">{{user.FirstName}} {{user.LastName}}</a>
+                        <a href="javascript:void(0)" (click)="EditCurrent(user)">{{user.FirstName}}
+                          {{user.LastName}}</a>
                         <div class="float-end">
                           <a href="javascript:void(0)" (click)="editProfile(user)"><span class="badge bg-dark me-3"><i
                                 class="fa fa fa-user-circle-o user-edit-icon"></i></span></a>
@@ -309,17 +310,19 @@
 </div>
 
 <!-- Active and Deactive  Model -->
-<div class="modal fade" id="deleteEmployee" tabindex="-1" role="dialog" aria-labelledby="deleteTitleTitle"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="deleteEmployee" tabindex="-1"
+  role="dialog" aria-labelledby="deleteTitleTitle" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle" *ngIf="singleEmployee?.IsActive== true">
+        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle"
+          *ngIf="singleEmployee?.IsActive== true">
           Are
           you want to delete the
           Employee
         </h5>
-        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle" *ngIf="singleEmployee?.IsActive== false">
+        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle"
+          *ngIf="singleEmployee?.IsActive== false">
           Are
           you want to active the
           Employee
@@ -360,8 +363,8 @@
           data-dismiss="modal">Cancel</a>
         <a href="javascript:void(0)" (click)="DeleteCurrent(singleEmployee)" *ngIf="singleEmployee?.IsActive == true"
           class="text-decoration-none btn-white text-primary">Delete</a>
-        <a href="javascript:void(0)" (click)="DeactivatedEmployee(singleEmployee)" *ngIf="singleEmployee?.IsActive == false"
-          class="text-decoration-none btn-white text-primary">Activate</a>
+        <a href="javascript:void(0)" (click)="DeactivatedEmployee(singleEmployee)"
+          *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary">Activate</a>
       </div>
     </div>
   </div>

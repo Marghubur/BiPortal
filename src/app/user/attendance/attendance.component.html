@@ -102,13 +102,16 @@
                               </div>
                             </span>
                             <span class="ms-2" *ngSwitchCase="0">
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false" *ngIf="item.PresentDayStatus == 2">
+                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                                *ngIf="item.PresentDayStatus == 2">
                                 <i class="fa fa-clock-o pe-2 text-warning"></i> waiting...
                               </div>
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false" *ngIf="item.PresentDayStatus == 0">
+                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                                *ngIf="item.PresentDayStatus == 0">
                                 <i class="fa fa-clock-o pe-2 text-warning"></i> Not Applied
                               </div>
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false" *ngIf="item.PresentDayStatus == 3">
+                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                                *ngIf="item.PresentDayStatus == 3">
                                 <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
                               </div>
                             </span>
@@ -269,7 +272,8 @@
       </div>
 
       <!-- Comment Modal Start-->
-      <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="commentModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content">
             <div class="modal-header border-bottom-0">

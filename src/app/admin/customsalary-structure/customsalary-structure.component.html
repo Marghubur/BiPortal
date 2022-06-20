@@ -102,7 +102,56 @@
               </div>
             </div>
 
-            <ng-container formArrayName="salaryComponents">
+            <div class="t-table t-list t-border col-md-12 my-3">
+              <div class="hide-bar bg-light"></div>
+              <div class="t-head bg-light fw-bold">
+                <div class="tr">
+                  <div class="th text-truncate ps-3 fe-2">
+                    COMPONENT NAME
+                  </div>
+                  <div class="th text-truncate ps-3">
+                    TAX EXEMPT
+                  </div>
+                  <div class="th text-truncate ps-3">
+                    ANNUAL CALCULATION
+                  </div>
+                  <div class="th text-truncate ps-3">
+                    ACTIONS
+                  </div>
+                </div>
+              </div>
+              <div class="t-body custom-height">
+                <ng-container *ngIf="componentsAvailable">
+                  <div class="tr py-2" *ngFor="let item of groupComponents">
+                    <div class="td ps-3 text-truncate fe-2">
+                      {{item.ComponentId}} ({{item.ComponentFullName}})
+                    </div>
+                    <div class="td ps-3 text-truncate">
+                      <ng-container [ngSwitch]="item.TaxExempt">
+                        <span *ngSwitchCase="true">Tax Exempt</span>
+                        <span *ngSwitchDefault="false">Taxable</span>
+                      </ng-container>
+                    </div>
+                    <div class="td ps-3 text-truncate">
+                      <span class="badge bg-primary">{{item.Formula}}</span>
+                    </div>
+                    <ng-container>
+                      <div class="td ps-3">
+                        <a class="text-decoration-none text-dark" href="javascript:void(0)"
+                          (click)="updateCalcModel(item.value)"><i class="fa fa-ellipsis-h fa-lg"
+                            aria-hidden="true"></i></a>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!componentsAvailable">
+                  <div class=" col-md-12 my-5 py-5 d-flex flex-column justify-content-center text-center">
+                    <h4 class="">Please add component first.</h4>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <!-- <ng-container formArrayName="salaryComponents">
               <div class="t-table t-list t-border col-md-12 my-3">
                 <div class="hide-bar bg-light"></div>
                 <div class="t-head bg-light fw-bold">
@@ -154,7 +203,7 @@
                   </ng-container>
                 </div>
               </div>
-            </ng-container>
+            </ng-container> -->
           </form>
         </ng-container>
 
@@ -297,8 +346,8 @@
 </div>
 
 <!--Add Component Modal -->
-<div class="modal fade" id="addComponentModal" tabindex="-1" aria-labelledby="addComponentModalLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addComponentModal" tabindex="-1"
+  aria-labelledby="addComponentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -377,8 +426,8 @@
 <!-- End -->
 
 <!--Update Calculation Basic Modal -->
-<div class="modal fade" id="updateCalculationModal" tabindex="-1" aria-labelledby="updateCalculationModalLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="updateCalculationModal" tabindex="-1"
+  aria-labelledby="updateCalculationModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-3">
       <form [formGroup]="updateComponentForm">
@@ -502,8 +551,8 @@
 <!-- End -->
 
 <!-- Create Custom Salary Structure Modal -->
-<div class="modal fade" id="addCustomSalaryModal" tabindex="-1" aria-labelledby="addCustomSalaryModalLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addCustomSalaryModal" tabindex="-1"
+  aria-labelledby="addCustomSalaryModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -639,8 +688,8 @@
 <!-- End -->
 
 <!-- Create Daily Salary Structure Modal -->
-<div class="modal fade" id="addDailySalaryModal" tabindex="-1" aria-labelledby="addDailySalaryModalLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addDailySalaryModal" tabindex="-1"
+  aria-labelledby="addDailySalaryModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -780,7 +829,8 @@
 <!-- End -->
 
 <!-- Add Salary Group Modal -->
-<div class="modal fade" id="addSalaryGroupModal" tabindex="-1" aria-labelledby="addClassModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addSalaryGroupModal" tabindex="-1"
+  aria-labelledby="addClassModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
