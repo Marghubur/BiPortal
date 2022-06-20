@@ -38,6 +38,8 @@ export class CustomsalaryStructureComponent implements OnInit {
   filterText: string = "";
   payrollCompoent: string = PayrollComponents;
   groupComponents: Array<any> = [];
+  groupAllComponents: Array<any> = [];
+  activeComponent: Array<any> = [];
 
   constructor(
     private fb: FormBuilder,
@@ -77,13 +79,24 @@ export class CustomsalaryStructureComponent implements OnInit {
     }
   }
 
+  selectToAddComponent(event: any, item: any) {
+    if (event.target.checked == true) {
+      let index = this.activeComponent.indexOf(item.ComponentId);
+        if (index > -1)
+          ErrorToast("Component already added. Please select another component.");
+        else
+          this.activeComponent.push(item.ComponentId)
+    } else {
+        let index = this.activeComponent.indexOf(item.ComponentId);
+        if (index > -1)
+          this.activeComponent.splice(index, 1);
+    }
+  }
+
   addComponents() {
     this.componentsAvailable = false;
-    let elems: FormArray = this.buildFormArray();
-    (this.salaryAndDeduction.get("salaryComponents") as FormArray).controls = elems.controls;
-
     let updateStructure: SalaryStructureType = {
-      ComponentIdList: elems.value.map(x => { return x.ComponentId }),
+      ComponentIdList: this.activeComponent,
       ComponentId: null,
       GroupDescription: this.selectedSalaryStructure.GroupDescription,
       GroupName: this.selectedSalaryStructure.GroupName,
@@ -95,78 +108,15 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.http.post("SalaryComponent/UpdateSalaryGroupComponents", updateStructure).then ((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.groupComponents = response.ResponseBody;
+        this.groupAllComponents = response.ResponseBody;
         Toast("Salary Group added suuccessfully.");
         this.SalaryGroupForm.reset();
-        $('#addSalaryGroupModal').modal('hide');
+        this.componentsAvailable = true;
       } else {
         ErrorToast("Unable to add salary group.")
       }
-
-      this.componentsAvailable = true;
     })
-
     $('#addComponentModal').modal('hide');
-  }
-
-  initForm() {
-    this.salaryAndDeduction = this.fb.group({
-      StructureName: new FormControl(),
-      salaryComponents: this.buildFormArray()
-    });
-  }
-
-  buildFormArray(): FormArray {
-    let elems: FormArray = this.fb.array([]);
-    let i = 0;
-    let text = this.filterText.trim();
-    if(this.filterText.trim().length > 0) {
-      while(i < this.salaryComponentFields.length) {
-        if(this.salaryComponentFields[i].IsActive &&
-          this.salaryComponentFields[i].ComponentFullName.toLowerCase().indexOf(text) != -1) {
-          elems.push(this.createNewComponent(this.salaryComponentFields[i]));
-        }
-        i++;
-      }
-    } else {
-      while(i < this.salaryComponentFields.length) {
-        if(this.salaryComponentFields[i].IsActive) {
-          elems.push(this.createNewComponent(this.salaryComponentFields[i]));
-        }
-        i++;
-      }
-    }
-
-    if(elems.controls.length > 0)
-    this.componentsAvailable = true;
-    return elems;
-  }
-
-  createNewComponent(elem: SalaryComponentFields): FormGroup {
-    if(elem.TaxExempt == null || elem.TaxExempt == "")
-      elem.TaxExempt = "false";
-    if(elem.Formula == null || elem.Formula == "")
-      elem.Formula = "NA";
-
-    return this.fb.group({
-      ComponentDescription: elem.ComponentDescription,
-      ComponentFullName: elem.ComponentFullName,
-      Type: elem.Type,
-      TaxExempt: elem.TaxExempt,
-      MaxLimit: elem.MaxLimit,
-      RequireDocs: elem.RequireDocs,
-      IndividualOverride: elem.IndividualOverride,
-      IsAllowtoOverride: elem.IsAllowtoOverride,
-      IsComponentEnable: elem.IsComponentEnable,
-      CalculateInPercentage: elem.CalculateInPercentage,
-      ComponentId: elem.ComponentId,
-      Formula: elem.Formula,
-      IsActive: elem.IsActive,
-      EmployeeContribution: elem.EmployeeContribution,
-      EmployerContribution: elem.EmployerContribution,
-      IsOpted: elem.IsOpted,
-      IncludeInPayslip: elem.IncludeInPayslip,
-      PercentageValue: elem.PercentageValue
-    });
   }
 
   salaryGroup() {
@@ -213,7 +163,6 @@ export class CustomsalaryStructureComponent implements OnInit {
         }
         this.allComponentFields = this.salaryComponentFields;
         this.isPageReady = true;
-        this.initForm();
         this.isReady = true;
         Toast("Salary components loaded successfully.");
       } else {
@@ -285,8 +234,6 @@ export class CustomsalaryStructureComponent implements OnInit {
       ModifiedBy: 'Admin',
       ModifiedOn: new Date(),
     }];
-
-    this.initForm();
   }
 
   activePage(page: number) {
@@ -406,6 +353,17 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   addComponentModal() {
+    let i = 0;
+    this.salaryComponentFields = this.allComponentFields;
+    while (i < this.salaryComponentFields.length) {
+      for (let index = 0; index < this.activeComponent.length; index++) {
+        let value = this.salaryComponentFields.filter(x => x.ComponentId == this.activeComponent[index]);
+        if (value) {
+          value[0].IsActive = true;
+        }
+      }
+      i++;
+    }
     $('#addComponentModal').modal('show');
   }
 
@@ -417,10 +375,12 @@ export class CustomsalaryStructureComponent implements OnInit {
         if (res.ResponseBody) {
           let value = res.ResponseBody;
           for (let index = 0; index < value.length; index++) {
-            value[index].IsActive = true;
+            this.activeComponent.push(value[index].ComponentId);
           }
           this.groupComponents = value;
+          this.groupAllComponents = value;
           this.isSalaryGrpSelected = true;
+          this.componentsAvailable = true;
           Toast("Salary group record found");
         }
       })
@@ -511,35 +471,11 @@ export class CustomsalaryStructureComponent implements OnInit {
           value.CalculateInPercentage = false;
           break;
       }
-
-      let items = this.salaryAndDeduction.controls["salaryComponents"] as FormArray;
-      if(items) {
-        items.controls.map(elem => {
-          if(elem.value.ComponentDescription === this.componentFields.ComponentDescription) {
-            elem.get("ComponentFullName").setValue(this.componentFields.ComponentFullName);
-            elem.get("Formula").setValue(this.componentFields.Formula);
-            elem.get("CalculateInPercentage").setValue(this.componentFields.CalculateInPercentage);
-            elem.get("TaxExempt").setValue(value.TaxExempt);
-            elem.get("MaxLimit").setValue(this.componentFields.MaxLimit);
-            elem.get("EmployeeContribution").setValue(value.EmployeeContribution);
-            elem.get("EmployerContribution").setValue(value.EmployerContribution);
-            elem.get("IsOpted").setValue(value.IsOpted);
-            elem.get("IncludeInPayslip").setValue(value.IncludeInPayslip);
-            if (value.CalculateInPercentage = true) {
-              elem.get("PercentageValue").setValue(value.MaxLimit);
-              elem.get("MaxLimit").setValue(0);
-            } else {
-              elem.get("MaxLimit").setValue(value.MaxLimit);
-              elem.get("PercentageValue").setValue(0);
-            }
-          }
-        });
         this.http.put(`Settings/UpdateSalaryComponentDetail/${this.componentFields.ComponentId}`, value).then((response:ResponseModel) => {
           if (response.ResponseBody)
             Toast('Updated Successfully')
           $('#updateCalculationModal').modal('hide');
         })
-      }
     }
     this.submitted = true;
     this.isLoading = false;
@@ -552,15 +488,17 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   filterRecords(e: any) {
     this.isReady = false;
-    this.initForm();
-    e.preventDefault();
+    let value = e.target.value.toUpperCase();
+    if (value) {
+      this.groupComponents =  this.groupAllComponents.filter(x => x.ComponentId == value || x.ComponentFullName == value)
+    }
     this.isReady = true;
   }
 
   clearFilter(e: any) {
     this.isReady = false;
-    this.filterText = "";
-    this.initForm();
+    e.target.value = '';
+    this.groupComponents = this.groupAllComponents;
     this.isReady = true;
   }
 
