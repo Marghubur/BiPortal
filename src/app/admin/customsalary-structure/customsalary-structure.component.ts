@@ -40,6 +40,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   groupComponents: Array<any> = [];
   groupAllComponents: Array<any> = [];
   activeComponent: Array<any> = [];
+  addedFormula: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -345,11 +346,43 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.isLoading = false;
   }
 
+  formulaAppliedOn(item: string) {
+    if (item && item != '') {
+      let index = 0;
+      switch (item) {
+        case 'ctc':
+          index = 0;
+          break;
+        case 'gross':
+          index = 1;
+          break;
+        case 'net':
+          index = 2;
+          break;
+      }
+
+      let elem = document.querySelectorAll('div[name="formulaComponent"] a');
+      let i = 0;
+      while (i < elem.length) {
+        elem[i].classList.remove('active');
+        i++;
+      }
+      elem[index].classList.add('active');
+      this.updateComponentForm.get('FormulaBasedOn').setValue(item.toLocaleUpperCase());
+      this.generateFormula();
+
+      document.getElementById("addedFormula").focus();
+    }
+  }
+
   generateFormula() {
-    let value = this.updateComponentForm.get('MaxLimit').value;
     let name = this.updateComponentForm.get('FormulaBasedOn').value;
-    let operator = this.updateComponentForm.get('Operator').value;
-    this.componentFields.Formula =`([${name}] ${operator} ${Number(value)})`;
+    this.componentFields.Formula =`(${this.addedFormula} [${name}])`;
+  }
+
+  addFormula() {
+    let elem = document.querySelector('[name="addedFormula"]');
+
   }
 
   addComponentModal() {
