@@ -76,12 +76,6 @@ export class PayrollComponentsComponent implements OnInit {
         this.AdhocAllowance =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 1);
         this.AdhocBonus =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 2);
         this.AdhocDeduction =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 3);
-        let i =0;
-        while(i < this.RecurringComponent.length) {
-          this.componentType(this.RecurringComponent[i].ComponentTypeId, i);
-          i++;
-        }
-
         Toast("Record found");
         this.isReady = true;
       }
@@ -103,20 +97,6 @@ export class PayrollComponentsComponent implements OnInit {
     }
   }
 
-  componentType(value: number, i: number) {
-    switch (value) {
-      case 2:
-        this.RecurringComponent[i].ComponentTypeId = "Allowance"
-        break;
-      case 3:
-        this.RecurringComponent[i].ComponentTypeId = "Rembursement"
-        break;
-      case 4:
-        this.RecurringComponent[i].ComponentTypeId = "Reimbursable"
-        break;
-    }
-  }
-
   get f() {
     return this.NewSalaryForm.controls;
   }
@@ -124,7 +104,7 @@ export class PayrollComponentsComponent implements OnInit {
   initForm() {
     this.NewSalaryForm = this.fb.group({
       ComponentName: new FormControl(this.CurrentRecurringComponent.ComponentId, [Validators.required]),
-      Type: new FormControl(this.CurrentRecurringComponent.Type, [Validators.required]),
+      ComponentTypeId: new FormControl(this.CurrentRecurringComponent.ComponentTypeId, [Validators.required]),
       TaxExempt: new FormControl(this.CurrentRecurringComponent.TaxExempt),
       MaxLimit: new FormControl(this.CurrentRecurringComponent.MaxLimit),
       RequireDocs: new FormControl(this.CurrentRecurringComponent.RequireDocs),
@@ -218,20 +198,7 @@ export class PayrollComponentsComponent implements OnInit {
       this.CurrentRecurringComponent = item;
       if (item.ComponentTypeId != 0)
         this.ComponentType = item.ComponentTypeId;
-      switch (item.ComponentTypeId) {
-        case 'Allowance':
-          this.CurrentRecurringComponent.Type = "2"
-          break;
-        case "Rembursement":
-          this.CurrentRecurringComponent.Type = "3"
-          break;
-        case "Reimbursable":
-          this.CurrentRecurringComponent.Type = "4"
-          break;
-        case 0:
-          this.CurrentRecurringComponent.Type = ""
-          break;
-      }
+
       if(item.TaxExempt == 'true')
         this.isTaxExempt = true;
       else
@@ -250,7 +217,7 @@ export class PayrollComponentsComponent implements OnInit {
 
     if (this.NewSalaryForm.get('ComponentName').errors !== null)
       errroCounter++;
-    if (this.NewSalaryForm.get('Type').errors !== null)
+    if (this.NewSalaryForm.get('ComponentTypeId').errors !== null)
       errroCounter++;
     if (this.NewSalaryForm.get('ComponentCatagoryId').errors !== null)
       errroCounter++;
@@ -263,11 +230,6 @@ export class PayrollComponentsComponent implements OnInit {
             if (data.length > 0) {
               this.RecurringComponent = data;
               this.AllComponents = data;
-              let i =0;
-              while(i < this.RecurringComponent.length) {
-                this.componentType(this.RecurringComponent[i].ComponentTypeId, i);
-                i++;
-              }
               this.NewSalaryForm.reset();
             }
             $('#NewComponentModal').modal('hide');
@@ -497,11 +459,6 @@ export class PayrollComponentsComponent implements OnInit {
           if (data.length > 0) {
             this.RecurringComponent = data;
             this.AllComponents = data;
-            let i =0;
-            while(i < this.RecurringComponent.length) {
-              this.componentType(this.RecurringComponent[i].ComponentTypeId, i);
-              i++;
-            }
             this.cleanFileHandler();
             $('#excelSheetModal').modal('hide');
             Toast("Data Uploaded successfull");
@@ -519,7 +476,7 @@ export class PayrollComponentsComponent implements OnInit {
 
 export class PayrollComponentsModal {
   ComponentName: string = null;
-  Type: string = '';
+  ComponentTypeId: number = 0;
   TaxExempt: boolean = false;
   MaxLimit: number = 0;
   RequireDocs: boolean = false;
