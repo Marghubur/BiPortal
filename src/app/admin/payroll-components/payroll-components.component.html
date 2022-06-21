@@ -34,7 +34,9 @@
                           ADD NEW COMPONENT</button>
                         <button class="btn btn-success ms-2"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to
                           Add Hoc Component</button>
-                        <a href="javascript:void(0)" class="text-decoration-none text-dark ms-3" (click)="excelSheetModal()"><i class="fa fa-plus pe-2" aria-hidden="true"></i>Add Excel Sheet</a>
+                        <a href="javascript:void(0)" class="text-decoration-none text-dark ms-3"
+                          (click)="excelSheetModal()"><i class="fa fa-plus pe-2" aria-hidden="true"></i>Add Excel
+                          Sheet</a>
                         <div class="col-md-3 float-end">
                           <div class="form-group has-search">
                             <span class="fa fa-search form-control-feedback"></span>
@@ -228,8 +230,8 @@
                 <div class="col-md-12">
                   <select class="form-select"
                     [ngClass]="{'error-field': submitted && f.Type.errors !== null && f.Type.errors.required}"
-                    formControlName="Type" (change)="selectComponentType($event)">
-                    <option value="">Select Componet Type</option>
+                    formControlName="ComponentTypeId" (change)="selectComponentType($event)">
+                    <option value="0">Select Componet Type</option>
                     <option value="2">Allowance</option>
                     <option value="4">Reimbursable</option>
                     <option value="3">Rembursement</option>
@@ -241,7 +243,7 @@
                 <div class="col-md-12">
                   <select class="form-select"
                     [ngClass]="{'error-field': submitted && f.ComponentCatagoryId.errors !== null && f.ComponentCatagoryId.errors.required}"
-                    formControlName="ComponentCatagoryId" (change)="selectComponentType($event)">
+                    formControlName="ComponentCatagoryId">
                     <option value="">Select Componet Type</option>
                     <option value="1">Fixed</option>
                     <option value="6">Adhoc</option>
