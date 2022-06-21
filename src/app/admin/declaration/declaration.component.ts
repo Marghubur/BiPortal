@@ -133,34 +133,43 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
     this.currentComponentDetails = [];
     let items = null;
-    let i = 0;
-    while(i < filterItems.length) {
-      items = this.allComponentDetails.filter(x => x.Section == filterItems[i]);
-      if(items && items.length > 0) {
-        this.currentComponentDetails = this.currentComponentDetails.concat(items);
+
+    if(this.allComponentDetails && this.allComponentDetails.length > 0) {
+      let i = 0;
+      while(i < filterItems.length) {
+        items = this.allComponentDetails.filter(x => x.Section == filterItems[i]);
+        if(items && items.length > 0) {
+          this.currentComponentDetails = this.currentComponentDetails.concat(items);
+        }
+        i++;
       }
-      i++;
     }
   }
 
   loadData() {
     this.SectionIsReady = false;
-    let exemptionSection = ["80C", "80G"]
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
-      if (response.ResponseBody && response.ResponseBody.SalaryComponentItems) {
-        if(response.ResponseBody.SalaryComponentItems.length > 0) {
+      if (response.ResponseBody) {
+        if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
           this.allComponentDetails = response.ResponseBody.SalaryComponentItems;
           this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
           this.employeeEmail = response.ResponseBody.Email;
 
           this.sections = response.ResponseBody.Sections;
         }
+
+        if(response.ResponseBody.Sections)
+          this.sections = response.ResponseBody.Sections;
+        else
+          this.sections = [];
+
         if (response.ResponseBody && response.ResponseBody.FileDetails.length > 0)
           this.declarationFiles = response.ResponseBody.FileDetails;
 
         Toast("Declaration detail loaded successfully");
-        this.SectionIsReady = true;
       }
+
+      this.SectionIsReady = true;
     })
 
     this.taxAmount = {

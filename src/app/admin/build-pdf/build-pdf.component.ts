@@ -129,6 +129,7 @@ export class BuildPdfComponent implements OnInit {
           this.missingAttendence = false;
       }
 
+      this.isClientSelected = true;
     })
   }
 
@@ -779,8 +780,6 @@ export class BuildPdfComponent implements OnInit {
         }
 
         this.getAttendance();
-
-        this.isClientSelected = true;
       }
     }
   }
