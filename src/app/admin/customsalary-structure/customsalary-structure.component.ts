@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { PayrollComponents } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { SalaryComponentFields } from '../salarycomponent-structure/salarycomponent-structure.component';
@@ -385,7 +385,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     while (i < this.salaryComponentFields.length) {
       for (let index = 0; index < this.activeComponent.length; index++) {
         let value = this.salaryComponentFields.filter(x => x.ComponentId == this.activeComponent[index]);
-        if (value) {
+        if (value.length > 0) {
           value[0].IsActive = true;
         }
       }
