@@ -5,7 +5,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, PlaceEmpty, Toast } from 'src/providers/common-service/common.service';
-import { InsertOrUpdateSuccessfull, ProfileImage, Success, UserImage } from 'src/providers/constants';
+import { ProfileImage, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -47,7 +47,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   managerList: autoCompleteModal = null;
   userRoles: Array<any> = [];
   salaryBreakup: Array<any> = [];
-  salaryBreakupForm: FormGroup = null;;
+  salaryBreakupForm: FormGroup = null;
+  companyGroup: Array<any> = [];
+  companyGroupId: number = 0;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -69,6 +71,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
     this.initForm();
+    this.getBreakupDetail();
     this.managerList.placeholder = "Reporting Manager";
     this.managerList.data.push({
       value: 0,
@@ -430,6 +433,36 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   salryBreakupPopup() {
     $('#fullSalaryDetail').modal('show');
+  }
+
+  selectCompanyGroup(event: any) {
+    let value = Number(event.target.value);
+    if (value > 0)
+      this.companyGroupId = value;
+  }
+
+  getBreakupDetail() {
+    this.http.get("Company/GetAllCompany").then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        let Companys = response.ResponseBody;
+        if(Companys && Companys.length > 0) {
+          if (Companys.length == 1) {
+            this.companyGroup.push ({
+              CompanyName: Companys[0].CompanyName,
+              CompanyId: Companys[0].CompanyId
+            })
+            this.companyGroupId = 0;
+          } else {
+            this.companyGroup = Companys;
+          }
+          Toast("Compnay list loaded successfully");
+        } else {
+          Toast("No compnay found under current organization. Please add one.");
+        }
+      } else {
+        ErrorToast("Record not found.")
+      }
+    })
   }
 
   initForm() {
