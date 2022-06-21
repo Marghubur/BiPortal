@@ -343,13 +343,13 @@
                 </ng-container>
               </div>
               <div class="td ps-3 text-truncate">
-                <ng-conatiner [ngSwitch]="item.TaxExempt">
-                  <ng-conatiner *ngSwitchCase="'true'">
+                <ng-container [ngSwitch]="item.TaxExempt">
+                  <div *ngSwitchCase="true">
                     Tax Exempt
-                    <small class="text-muted d-block">Section {{item.Section}}</small>
-                  </ng-conatiner>
-                  <ng-conatiner *ngSwitchCase="'false'">Taxable</ng-conatiner>
-                </ng-conatiner>
+                    Section {{item.Section}
+                  </div>
+                  <div *ngSwitchDefault>Taxable</div>
+                </ng-container>
               </div>
               <div class="td ps-3 text-truncate">
                 {{item.MaxLimit}}

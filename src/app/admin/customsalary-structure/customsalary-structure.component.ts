@@ -422,12 +422,22 @@ export class CustomsalaryStructureComponent implements OnInit {
     if(this.componentFields.CalculateInPercentage == true) {
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
-    if (this.componentFields.Formula){
-      let tag = document.getElementById('addedFormula');
-      tag.innerText = `${this.componentFields.Formula}`
-      this.componentFields.Formula =`${this.componentFields.Formula}`;
-      tag.focus();
+    let elem = document.querySelectorAll('div[name="formulaComponent"] a');
+    let i = 0;
+    while (i < elem.length) {
+      elem[i].classList.remove('active');
+      i++;
     }
+
+    let tag = document.getElementById('addedFormula');
+    if (this.componentFields.Formula){
+      tag.innerText = `${this.componentFields.Formula}`;
+      this.componentFields.Formula =`${this.componentFields.Formula}`;
+    } else {
+      tag.innerText = '';
+      this.componentFields.Formula = '';
+    }
+    tag.focus();
     this.submitted = false;
     $('#updateCalculationModal').modal('show');
   }
