@@ -434,18 +434,23 @@
       </div>
       <div class="modal-body px-5">
         <form [formGroup]="salaryBreakupForm">
-          <div class="col-md-12 row m-0 p-0 justify-content-end">
-            <div class="col-md-3 mb-3">
+          <div class="col-md-12 row m-0 p-0 justify-content-between">
+            <div class="col-md-3 mb-3 m-0 p-0">
               <select class="form-select">
-                <option value="">Please select organization</option>
-                <option value="">BottomHalf Pvt. Ltd.</option>
+                <option value="0">Please select organization</option>
+                <option value="1">BottomHalf Pvt. Ltd.</option>
               </select>
             </div>
-            <div class="col-md-3 mb-3">
-              <select class="form-select">
-                <option value="">Please select company</option>
-                <option value="">BottomHalf Pvt. Ltd.</option>
-              </select>
+            <div class="col-md-4 mb-3 m-0 p-0 row">
+              <div class="col-md-2">
+                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+              </div>
+              <div class="col-md-10">
+                <select class="form-select" (change)="selectCompanyGroup($event)">
+                  <option value="0">Please select company</option>
+                  <option [value]="item.CompanyId" *ngFor="let item of companyGroup">{{item.CompanyName}}</option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="t-table t-list col-md-12 mb-3">

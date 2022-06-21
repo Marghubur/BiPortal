@@ -443,7 +443,7 @@ export class PayrollComponentsComponent implements OnInit {
     let i = 0;
     while (i < this.SalaryComponentsDetail.length) {
       let componentId = this.SalaryComponentsDetail.filter(x => x.ComponentId == this.SalaryComponentsDetail[i].ComponentId);
-      let componentname = this.SalaryComponentsDetail.filter(x => x.ComponentFullName == this.SalaryComponentsDetail[i].ComponentFullName);
+      let componentname = this.SalaryComponentsDetail.filter(x => x.ComponentFullName == this.SalaryComponentsDetail[i].ComponentFullName && x.Section == this.SalaryComponentsDetail[i].Section);
       if (componentId.length > 1 || componentname.length > 1) {
         ErrorToast("Component Name or Component Full Name are duplicate.");
         errroCounter ++;

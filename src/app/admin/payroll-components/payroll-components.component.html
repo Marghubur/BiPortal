@@ -79,8 +79,12 @@
                                 </div>
                               </div>
                               <div class="td ps-3 text-truncate">
-                                <ng-container *ngIf="item.ComponentTypeId != 0">{{item.ComponentTypeId}}</ng-container>
-                                <ng-container *ngIf="item.ComponentTypeId == 0">None</ng-container>
+                                <ng-container [ngSwitch]="item.ComponentTypeId">
+                                  <div *ngSwitchCase="2">Allowance</div>
+                                  <div *ngSwitchCase="3">Rembursment</div>
+                                  <div *ngSwitchCase="4">Reimursable</div>
+                                  <div *ngSwitchDefault>-----</div>
+                                </ng-container>
                               </div>
                               <div class="td ps-3 text-truncate">
                                 <div [ngSwitch]="item.TaxExempt">
