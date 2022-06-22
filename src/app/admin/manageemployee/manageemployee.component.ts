@@ -50,6 +50,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   salaryBreakupForm: FormGroup = null;
   companyGroup: Array<any> = [];
   companyGroupId: number = 0;
+  salaryGroup: Array<any> = [];
+  salaryGroupId: number = 0;
+  isCompanyGroupSelected: boolean = false;
+  isSalaryGroup: boolean = false;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -437,8 +441,49 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   selectCompanyGroup(event: any) {
     let value = Number(event.target.value);
-    if (value > 0)
+    if (value > 0) {
       this.companyGroupId = value;
+      this.findSalaryGroup();
+    }
+  }
+
+  findSalaryGroup() {
+    this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
+      if(res.ResponseBody) {
+        this.salaryGroup = res.ResponseBody;
+        Toast("Salary components loaded successfully.");
+      } else {
+        ErrorToast("Salary components loaded successfully.");
+      }
+    });
+  }
+
+  selectSalaryGroup(event: any) {
+    this.isSalaryGroup = true;
+    let value = Number(event.target.value);
+    if (value > 0) {
+      this.salaryGroupId = value;
+      this.salaryGroupDetail();
+    }
+  }
+
+  salaryGroupDetail() {
+    if (this.salaryGroupId > 0) {
+      this.isSalaryGroup = true;
+      this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryGroupId}`)
+      .then(res => {
+        if (res.ResponseBody) {
+          let value = res.ResponseBody;
+          let data = value.filter(x => x.ComponentCatagoryId == 1);
+          this.isSalaryGroup = false;
+          this.isCompanyGroupSelected = true;
+          Toast("Salary group record found");
+        }
+      })
+    } else {
+      this.isSalaryGroup = false;
+      ErrorToast("Please select salary group.")
+    }
   }
 
   getBreakupDetail() {
@@ -502,6 +547,19 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     });
   }
 
+  calculateSalary() {
+    let monthlyCTC = this.salaryBreakupForm.get("ExpectedCTCMonthly").value;
+    let data = [];
+    let i = 0;
+    while (i < data.length) {
+      let formula = data[i].formula;
+      if (formula && formula != '') {
+        
+      }
+      i++;
+    }
+  }
+
   saveSalaryBreakup() {
     this.isLoading = true;
     let value = this.salaryBreakupForm.value;
@@ -538,10 +596,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         file: file
       });
     }
-  }
-
-  calculateSalary() {
-
   }
 }
 
