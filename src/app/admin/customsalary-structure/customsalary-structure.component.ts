@@ -358,6 +358,9 @@ export class CustomsalaryStructureComponent implements OnInit {
         case 'net':
           index = 2;
           break;
+        case 'basic':
+          index = 3;
+          break;
       }
 
       let elem = document.querySelectorAll('div[name="formulaComponent"] a');
