@@ -88,7 +88,15 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     }];
   }
   ngAfterViewChecked(): void {
-    $('[data-bs-toggle="tooltip"]').tooltip();
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+    // $('[data-bs-toggle="tooltip"]').on('mouseleave', function () {
+    //   $(this).tooltip('dispose');
+    // });
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('dispose');
+    });
   }
 
   ngOnInit(): void {
@@ -177,7 +185,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   }
 
   updateRecord() {
-    this.isError = true;
+    this.isError = false;
     this.isLoading = true;
     let errorCount = 0;
     if (this.documentForm.get("StatusId").value == 0) {
@@ -196,6 +204,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
       this.http.post(`OnlineDocument/UpdateRecord/${this.currentFileId}`, this.documentForm.value).then(response => {
         if (response.ResponseBody) {
           this.LoadFiles();
+          this.refreshFilter();
           Toast(response.ResponseBody);
         }
         this.closeWindow();
@@ -269,10 +278,11 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     if (errorCount === 0) {
       this.http.upload(`Bill/UpdateGstStatus/${this.currentRecordBillNo}`, formData).then(response => {
         if (response.ResponseBody) {
+          this.LoadFiles();
+          this.closeWindow();
+          this.refreshFilter();
           Toast(response.ResponseBody);
         }
-        this.LoadFiles();
-        this.closeWindow();
       });
     } else {
       ErrorToast("Please fill all mandatory fields.");
@@ -403,13 +413,55 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  UpdateCurrent(FileUid: number) {
-    this.currentFileId = Number(FileUid);
+  UpdateCurrent(item: any) {
+    if (item) {
+    switch (item.Status) {
+      case 'Completed':
+        item.Status = '1';
+        break;
+      case 'Pending':
+        item.Status = '2';
+        break;
+      case 'Canceled':
+        item.Status = '3';
+        break;
+      case 'Rejected':
+        item.Status = '5';
+        break;
+      case 'Raised':
+        item.Status = '7';
+        break;
+    }
+    this.currentFileId = item.FileUid;
+    this.employeeFile = item;
     this.isError = false;
+    this.updateBillPaidOn();
     $('#addupdateModal').modal('show');
+    }
+  }
+
+  updateBillPaidOn() {
+    this.documentForm = this.fb.group({
+      StatusId: new FormControl(this.employeeFile.Status, Validators.required),
+      UpdatedOn: new FormControl(new Date(), Validators.required),
+      Notes: new FormControl("")
+    });
+  }
+
+  gstPaidOn() {
+    this.gstDetailForm = this.fb.group({
+      //GstId: new FormControl(0),
+      Billno: new FormControl(this.employeeFile.BillNo, Validators.required),
+      Gststatus: new FormControl(this.employeeFile.GSTStatus, Validators.required),
+      //Status: new FormControl("0", Validators.required),
+      Paidon: new FormControl(new Date(), Validators.required),
+      Paidby: new FormControl("0"),
+      Amount: new FormControl(this.employeeFile.GSTAmount)
+    });
   }
 
   closeWindow() {
+    this.refreshFilter()
     $('#addupdateModal').modal('hide');
     $('#gstupdateModal').modal('hide');
     $('#downloadPopUp').modal('hide');
@@ -471,7 +523,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
             } else {
               GST = 0;
             }
-            bills.GSTStatus = GetStatus(this.userFiles[i].GstStatus);
+            bills.GSTStatus = (this.userFiles[i].GstStatus);
             bills.GSTAmount = ToFixed(this.userFiles[i].SalaryAmount * GST, 2);
             bills.ClientId = this.userFiles[i].ClientId;
             bills.ClientName = this.userFiles[i].ClientName;
@@ -483,7 +535,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
             bills.GeneratedOn = this.userFiles[i].GeneratedOn;
             bills.Month = MonthName(this.userFiles[i].Month);
             bills.PaidOn = this.userFiles[i].PaidOn;
-            bills.Status = this.userFiles[i].Status;
+            bills.Status = this.userFiles[i].BillStatusId;
             bills.SalaryAmount = ToFixed(this.userFiles[i].SalaryAmount, 2);
             bills.ReceivedAmount = ToFixed((this.userFiles[i].SalaryAmount * (1 + GST)) - (this.userFiles[i].SalaryAmount /10), 2);
             bills.BilledAmount = ToFixed(this.userFiles[i].SalaryAmount * (1 + GST), 2);
@@ -727,21 +779,20 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.filterbox = !this.filterbox;
   }
 
-  updateGSTStatus(BillNo: string, GSTAmount: string) {
-    if(BillNo) {
+  updateGSTStatus(item: any) {
+    if(item) {
+      this.isGSTStatusModalReady = true;
+      this.employeeFile = item;
       this.model = this.calendar.getToday();
       let selectedDate = new Date(this.model.year, this.model.month - 1, this.model.day);
       this.gstDetailForm.get("Paidon").setValue(selectedDate);
-      this.currentRecordBillNo = BillNo;
-      this.gstDetailForm.get("Billno").setValue(BillNo);
-      let amount = Number(GSTAmount);
-      if(!isNaN(amount)) {
-        this.gstDetailForm.get("Amount").setValue(amount);
-        this.isError = false;
-        $('#gstupdateModal').modal('show');
-      } else {
-        Toast("Invalid GST amount");
-      }
+      this.currentRecordBillNo = item.BillNo;
+      // this.gstDetailForm.get("Billno").setValue(BillNo);
+      // let amount = Number(GSTAmount);
+      //this.gstDetailForm.get("Amount").setValue(GSTAmount);
+      this.isError = false;
+      this.gstPaidOn();
+      $('#gstupdateModal').modal('show');
     } else {
       Toast("Invalid record. No bill no#. found.");
     }
