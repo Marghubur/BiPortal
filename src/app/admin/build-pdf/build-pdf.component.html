@@ -83,6 +83,110 @@
               </div>
 
               <div class="blur-this">
+                <div class="col-md-12 px-3 mt-3" *ngIf="allAttendance.length > 0">
+                  <div class="t-table border-cell t-list t-border col-md-12">
+                    <div class="t-head overflow-hidden">
+                      <div class="tr">
+                        <div class="th fe-1 text-center" *ngFor="let day of dayList">
+                          <div [ngSwitch]="day">
+                            <div class="fw-bold p-2 bg-ant" *ngSwitchCase="1">Monday</div>
+                            <div class="fw-bold p-2 bg-ant" *ngSwitchCase="2">Tuesday</div>
+                            <div class="fw-bold p-2 bg-ant" *ngSwitchCase="3">Wednesday</div>
+                            <div class="fw-bold p-2 bg-ant" *ngSwitchCase="4">Thusday</div>
+                            <div class="fw-bold p-2 bg-ant" *ngSwitchCase="5">Friday</div>
+                            <div class="fw-bold p-2 bg-ant" *ngSwitchCase="6">Saturday</div>
+                            <div class="fw-bold p-2 bg-ant" *ngSwitchDefault>Sunday</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="t-body overflow-hidden">
+                      <ng-container>
+                        <div class="tr py-2">
+                          <ng-container *ngFor="let item of allAttendance | slice:0:7">
+                            <div class="td align-middle text-center">
+                              <div class="cell-wrapper">
+                                {{item.AttendanceDay | date}}
+                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                  <i class="ps-2 text-success fa fa-check"></i>
+                                </ng-container>
+                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                  <i class="ps-2 text-danger fa fa-close"></i>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="tr py-2">
+                          <ng-container *ngFor="let item of allAttendance | slice:7:14">
+                            <div class="td align-middle text-center">
+                              <div class="cell-wrapper">
+                                {{item.AttendanceDay | date}}
+                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                  <i class="ps-2 text-success fa fa-check"></i>
+                                </ng-container>
+                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                  <i class="ps-2 text-danger fa fa-close"></i>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="tr py-2">
+                          <ng-container *ngFor="let item of allAttendance | slice:14:21">
+                            <div class="td align-middle text-center">
+                              <div class="cell-wrapper">
+                                {{item.AttendanceDay | date}}
+                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                  <i class="ps-2 text-success fa fa-check"></i>
+                                </ng-container>
+                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                  <i class="ps-2 text-danger fa fa-close"></i>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="tr py-2">
+                          <ng-container *ngFor="let item of allAttendance | slice:21:28">
+                            <div class="td align-middle text-center">
+                              <div class="cell-wrapper">
+                                {{item.AttendanceDay | date}}
+                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                  <i class="ps-2 text-success fa fa-check"></i>
+                                </ng-container>
+                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                  <i class="ps-2 text-danger fa fa-close"></i>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="tr py-2">
+                          <ng-container *ngFor="let item of allAttendance | slice:28:31">
+                            <div class="td align-middle text-center">
+                              <div class="cell-wrapper">
+                                {{item.AttendanceDay | date}}
+                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                  <i class="text-success fa fa-check"></i>
+                                </ng-container>
+                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                  <i class="text-danger fa fa-close"></i>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <div class="td align-middle text-center"
+                            [ngClass]="{'fe-5': allAttendance.length == 30, 'fe-4': allAttendance.length == 31, 'fe-7': allAttendance.length == 28, 'fe-6': allAttendance.length == 29}">
+                            <div class="cell-wrapper">
+                              <span class="d-none">{{item}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-12 row m-0">
                   <div class="col-md-6 mt-4">
                     <div class="x_panel skeleton">

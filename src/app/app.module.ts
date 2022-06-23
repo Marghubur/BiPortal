@@ -28,30 +28,21 @@ import { UserService } from 'src/providers/userService';
     AppComponent,
     FooterComponent,
     ToastComponent,
-    // FeedbacksComponent,
-    // JoinString,
     LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule,
-    // FormsModule,
-    // ReactiveFormsModule,
     HttpClientModule,
-    // UtilModule,
     BrowserAnimationsModule,
     LayoutModule
   ],
   providers: [
     AjaxService,
-    // ApplicationStorage,
     iNavigation,
-    // PageCache,
     JwtService,
     UserService,
-    // DateFormatter,
-    // FullDateFormatter,
     MetaServices,
     {
       provide: HTTP_INTERCEPTORS,

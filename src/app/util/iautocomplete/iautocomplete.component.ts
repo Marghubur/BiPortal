@@ -600,8 +600,11 @@ export class pairData {
   text: string = "";
 }
 export class autoCompleteModal {
+  constructor(text: string = 'Select your option') {
+    this.placeholder = text;
+  }
   data: Array<pairData> = [];
-  className?: string = null;
+  className?: string = 'disabled-input';
   placeholder?: string = null;
   tabindex?: any = null;
 }

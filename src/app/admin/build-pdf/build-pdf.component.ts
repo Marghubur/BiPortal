@@ -52,6 +52,8 @@ export class BuildPdfComponent implements OnInit {
   basePath: string = "";
   viewer: any = null;
   missingAttendence: boolean = false;
+  allAttendance: Array<any> = [];
+  dayList: Array<any> = [];
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -113,6 +115,7 @@ export class BuildPdfComponent implements OnInit {
 
   getAttendance() {
     this.missingAttendence = false;
+    this.allAttendance = [];
     let attendenceFor = {
       "EmployeeUid": this.currentEmployee.EmployeeUid,
       "UserTypeId": UserType.Employee,
@@ -123,15 +126,67 @@ export class BuildPdfComponent implements OnInit {
       if (response.ResponseBody) {
         let missinngAtt = response.ResponseBody.MissingDate;
         let attendanceDetail = response.ResponseBody.AttendanceDetail;
-        if (missinngAtt.length > 0 && attendanceDetail.length == 0)
+        if (missinngAtt.length > 0 && attendanceDetail.length > 0) {
           this.missingAttendence = true;
-        else
+          attendanceDetail.map(item => {
+            item.AttendanceDay = new Date(item.AttendanceDay);
+            item.AttendenceStatus = 8;
+          });
+        } else {
           this.missingAttendence = false;
-      }
+        }
 
+        if (missinngAtt.length > 0) {
+          let i = 0;
+          while(i < missinngAtt.length) {
+            attendanceDetail.push({
+              AttendanceId: 0,
+              UserId: 0,
+              UserTypeId: 2,
+              AttendanceDay: new Date(missinngAtt[i]),
+              BillingHours: 0,
+              AttendenceFromDay: null,
+              AttendenceStatus: 0,
+              AttendenceToDay: null,
+              ClientId: 0,
+              ClientTimeSheet: [],
+              DaysPending: 0,
+              EmployeeUid: this.currentEmployee.EmployeeUid,
+              ForMonth: 0,
+              ForYear: 0,
+              IsActiveDay: false,
+              IsHoliday: false,
+              IsOnLeave: false,
+              IsOpen: false,
+              IsTimeAttendacneApproved: 0,
+              LeaveId: 0,
+              PresentDayStatus: 0,
+              SubmittedBy: 0,
+              SubmittedOn: new Date(),
+              TotalDays: 0,
+              TotalMinutes: 0,
+              UpdatedBy: 0,
+              UpdatedOn: new Date(),
+              UserComments: "",
+            });
+
+            i++;
+          }
+        }
+
+        this.allAttendance = attendanceDetail.sort((a,b) => Date.parse(a.AttendanceDay) - Date.parse(b.AttendanceDay));
+        this.dayList = [];
+        let i = 0;
+        while(i < 7) {
+          this.dayList.push(new Date(this.allAttendance[i]["AttendanceDay"]).getDay());
+          i++;
+        }
+      }
       this.isClientSelected = true;
     })
   }
+
+
 
   editBillDetail(billDetail: any) {
     // "EditEmployeeBillDetail" => post
