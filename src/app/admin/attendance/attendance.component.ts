@@ -97,17 +97,9 @@ export class AttendanceComponent implements OnInit {
     var month = dt.getMonth();
     var year = dt.getFullYear();
     this.daysInMonth = new Date(year, month + 1, 0).getDate();
-    this.clientDetail = {
-      data: [],
-      className: "disabled-input",
-      placeholder: "Select Organization"
-    }
+    this.clientDetail = new autoCompleteModal('Select Organization');
 
-    this.employeesList = {
-      data: [],
-      className: "disabled-input",
-      placeholder: "Select Employee"
-    }
+    this.employeesList = new autoCompleteModal('Select Employee');
     this.isFormReady = false;
     this.fromModel = null;
     this.toModel = null;
@@ -216,7 +208,10 @@ export class AttendanceComponent implements OnInit {
 
               if(mappedClient.length == 1) {
                 this.clientId = mappedClient[0].ClientUid;
+              } else {
+                this.clientDetail.className = '';
               }
+
               Toast("Client loaded successfully.");
             }
           }
@@ -422,7 +417,7 @@ export class AttendanceComponent implements OnInit {
       index++;
     }
 
-    this.http.post("Attendance/InsertUpdateAttendance", records)
+    this.http.post("Attendance/InsertUpdateTimesheet", records)
     .then(response => {
       if (response.ResponseBody) {
         Toast("Created/Updated successfully");

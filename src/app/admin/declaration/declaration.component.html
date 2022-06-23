@@ -573,6 +573,11 @@
                           </div>
                         </div>
                       </div>
+
+                      <div class="t-body fs-5 text-center p-5 m-5" *ngIf="SectionIsReady">
+                        Unable to load other Exemptions.
+                        Please contact to admin.
+                      </div>
                     </div>
                     <div class="modal-footer border-top-0">
                       <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('exemptions')"><i
@@ -736,6 +741,11 @@
                             </ng-container>
                           </div>
                         </div>
+                      </div>
+
+                      <div class="t-body fs-5 text-center p-5 m-5" *ngIf="SectionIsReady">
+                        Unable to load tax saving allowances.
+                        Please contact to admin.
                       </div>
                     </div>
                     <div class="modal-footer border-top-0">

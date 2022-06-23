@@ -676,13 +676,13 @@ fieldset {
 
 .t-border .td:first-child,
 .th:first-child {
-  border-left: none !important;
-  border-right: none !important;
+  border-left: none;
+  border-right: none;
 }
 
 .t-border .td:last-child,
 .th:last-child {
-  border-right: none !important;
+  border-right: none;
 }
 
 .t-border .tr {
@@ -694,7 +694,7 @@ fieldset {
 }
 
 .t-border>.t-body>.tr:last-child {
-  border-bottom: none !important;
+  border-bottom: none;
 }
 
 .hide-bar {
@@ -760,6 +760,22 @@ fieldset {
   padding-top: 4px;
 }
 
+.border-cell {
+  border-left: none !important;
+
+  .tr {
+    padding: 0px !important;
+    border-left: none !important;
+  }
+
+  .td, .th {
+    border-top: 1px solid #d9d9d9 !important;
+    border-left: 1px solid #d9d9d9 !important;
+  }
+}
+
+
+
 .fe-1 {
   flex: 1 !important;
 }
@@ -809,7 +825,7 @@ fieldset {
 }
 
 .t-list .td, .th {
-  border: none !important;
+  border: none;
 }
 
 .t-body > .tr:hover {
