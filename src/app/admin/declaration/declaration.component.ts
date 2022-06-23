@@ -163,7 +163,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         else
           this.sections = [];
 
-        if (response.ResponseBody && response.ResponseBody.FileDetails.length > 0)
+        if (response.ResponseBody && response.ResponseBody.FileDetails)
           this.declarationFiles = response.ResponseBody.FileDetails;
 
         Toast("Declaration detail loaded successfully");
