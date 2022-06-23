@@ -49,8 +49,17 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     private nav: iNavigation,
     private common: CommonService
   ) { }
+
   ngAfterViewChecked(): void {
-    $('[data-bs-toggle="tooltip"]').tooltip();
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+    // $('[data-bs-toggle="tooltip"]').on('mouseleave', function () {
+    //   $(this).tooltip('dispose');
+    // });
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('dispose');
+    });
   }
 
   ngOnInit(): void {
