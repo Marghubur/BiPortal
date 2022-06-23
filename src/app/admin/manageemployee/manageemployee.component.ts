@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, ErrorToast, PlaceEmpty, Toast } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, PlaceEmpty, Toast, ToFixed } from 'src/providers/common-service/common.service';
 import { ProfileImage, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
@@ -50,6 +50,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   salaryBreakupForm: FormGroup = null;
   companyGroup: Array<any> = [];
   companyGroupId: number = 0;
+  salaryGroup: Array<any> = [];
+  salaryGroupId: number = 0;
+  isCompanyGroupSelected: boolean = false;
+  isSalaryGroup: boolean = false;
+  salaryComponents: Array<any> = [];
 
   get f() {
     let data = this.employeeForm.controls;
@@ -437,8 +442,81 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   selectCompanyGroup(event: any) {
     let value = Number(event.target.value);
-    if (value > 0)
+    if (value > 0) {
       this.companyGroupId = value;
+      this.findSalaryGroup();
+    }
+  }
+
+  findSalaryGroup() {
+    this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
+      if(res.ResponseBody) {
+        this.salaryGroup = res.ResponseBody;
+        Toast("Salary components loaded successfully.");
+      } else {
+        ErrorToast("Salary components loaded successfully.");
+      }
+    });
+  }
+
+  selectSalaryGroup(event: any) {
+    this.isSalaryGroup = true;
+    let value = Number(event.target.value);
+    if (value > 0) {
+      this.salaryGroupId = value;
+      this.salaryGroupDetail();
+    }
+  }
+
+  salaryGroupDetail() {
+    if (this.salaryGroupId > 0) {
+      this.isSalaryGroup = true;
+      this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryGroupId}`)
+      .then(res => {
+        if (res.ResponseBody) {
+          let value = res.ResponseBody;
+          this.salaryComponents = value.filter(x => x.ComponentCatagoryId == 1);
+          let fixedvaluedComponent = this.salaryComponents.filter(x => x.PercentageValue == 0);
+          let i = 0;
+          while (i < fixedvaluedComponent.length) {
+            let finalvalue = fixedvaluedComponent[i].MaxLimit;
+            switch (fixedvaluedComponent[i].ComponentId) {
+              case 'ECTG':
+                this.salaryBreakupForm.get("GratuityAnnually").setValue(finalvalue);
+                this.salaryBreakupForm.get("GratuityMonthly").setValue(ToFixed((finalvalue/12), 0));
+                break;
+              case 'CA':
+                this.salaryBreakupForm.get("ConveyanceAnnually").setValue(finalvalue);
+                this.salaryBreakupForm.get("ConveyanceMonthly").setValue(ToFixed((finalvalue/12), 0));
+                break;
+              case 'EPF':
+                this.salaryBreakupForm.get("PFAnnually").setValue(finalvalue);
+                this.salaryBreakupForm.get("PFMonthly").setValue(ToFixed((finalvalue/12), 0));
+                break;
+              case 'MA':
+                this.salaryBreakupForm.get("MedicalAnnually").setValue(finalvalue);
+                this.salaryBreakupForm.get("MedicalMonthly").setValue(ToFixed((finalvalue/12), 0));
+                break;
+              case 'SA':
+                this.salaryBreakupForm.get("ShiftAnnually").setValue(finalvalue);
+                this.salaryBreakupForm.get("ShiftMonthly").setValue(ToFixed((finalvalue/12), 0));
+                break;
+              case 'ESI':
+                this.salaryBreakupForm.get("InsuranceAnnually").setValue(finalvalue);
+                this.salaryBreakupForm.get("InsuranceMonthly").setValue(ToFixed((finalvalue/12), 0));
+                break;
+            }
+            i++;
+          }
+          this.isSalaryGroup = false;
+          this.isCompanyGroupSelected = true;
+          Toast("Salary group record found");
+        }
+      })
+    } else {
+      this.isSalaryGroup = false;
+      ErrorToast("Please select salary group.")
+    }
   }
 
   getBreakupDetail() {
@@ -495,11 +573,73 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       GratuityAnnually: new FormControl(0),
       FoodMonthly: new FormControl(0),
       FoodAnnually: new FormControl(0),
-      ExpectedCTCMonthly: new FormControl(0),
       ExpectedCTCAnnually: new FormControl(0),
       CTCMonthly: new FormControl(0),
       CTCAnnually: new FormControl(0)
     });
+  }
+
+  calculateSalary() {
+    let annualCTC = Number(this.salaryBreakupForm.get("ExpectedCTCAnnually").value);
+    let grossAnnually = annualCTC - Number (this.salaryBreakupForm.get("InsuranceAnnually").value + this.salaryBreakupForm.get("PFAnnually").value + this.salaryBreakupForm.get("GratuityAnnually").value);
+    this.salaryBreakupForm.get("GrossAnnually").setValue(grossAnnually);
+    this.salaryBreakupForm.get("GrossMonthly").setValue(ToFixed((grossAnnually/12), 0));
+    let i = 0;
+    while (i < this.salaryComponents.length) {
+      let formula = this.salaryComponents[i].Formula;
+      let componentId = this.salaryComponents[i].ComponentId;
+      if (formula && formula != '') {
+        let value = formula.split(' ');
+        if (value.length > 0) {
+          let finalvalue = 0;
+          let calValue = value[0];
+          let operator = value[1];
+          let calOn = value [2];
+          let calculatedOn = 0;
+          switch (calOn) {
+            case '[BASIC]':
+              calculatedOn = Number(this.salaryBreakupForm.get("BasicAnnually").value);
+              break;
+            case '[CTC]':
+              calculatedOn = annualCTC
+              break;
+            case '[GROSS]':
+              calculatedOn = grossAnnually;
+              break;
+          }
+          switch (operator) {
+            case '+':
+              finalvalue = calculatedOn + Number(calValue);
+              break;
+            case '*':
+              finalvalue = calculatedOn * Number(calValue);
+              break;
+            case '-':
+              finalvalue = calculatedOn - Number(calValue);
+              break;
+            case '%':
+              finalvalue = (calculatedOn * Number(calValue)) / 100;
+              break;
+          }
+          switch (componentId) {
+            case 'BS':
+              this.salaryBreakupForm.get("BasicAnnually").setValue(ToFixed((finalvalue), 0));
+              this.salaryBreakupForm.get("BasicMonthly").setValue(ToFixed((finalvalue/12), 0));
+              break;
+            case 'HRA':
+              this.salaryBreakupForm.get("HRAAnnually").setValue(ToFixed((finalvalue), 0));
+              this.salaryBreakupForm.get("HRAMonthly").setValue(ToFixed((finalvalue/12), 0));
+              break;
+            }
+          }
+        }
+        i++;
+      }
+      let specialAllowanceAnnually = grossAnnually - Number (this.salaryBreakupForm.get("BasicAnnually").value + this.salaryBreakupForm.get("ConveyanceAnnually").value + this.salaryBreakupForm.get("HRAAnnually").value + this.salaryBreakupForm.get("MedicalAnnually").value + this.salaryBreakupForm.get("ShiftAnnually").value);
+      this.salaryBreakupForm.get("SpecialAnnually").setValue(ToFixed((specialAllowanceAnnually), 0));
+      this.salaryBreakupForm.get("SpecialMonthly").setValue(ToFixed((specialAllowanceAnnually/12), 0));
+      this.salaryBreakupForm.get("CTCAnnually").setValue(annualCTC);
+      this.salaryBreakupForm.get("CTCMonthly").setValue(ToFixed((annualCTC/12), 0));
   }
 
   saveSalaryBreakup() {
@@ -538,10 +678,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         file: file
       });
     }
-  }
-
-  calculateSalary() {
-
   }
 }
 
@@ -628,7 +764,6 @@ class SalaryBreakupDetails {
   GratuityAnnually: number = 0;
   CTCMonthly: number = 0;
   CTCAnnually: number = 0;
-  ExpectedCTCMonthly: number = 0;
   ExpectedCTCAnnually: number = 0;
   FoodMonthly: number = 0;
   FoodAnnually: number = 0;
