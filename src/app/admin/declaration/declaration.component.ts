@@ -10,6 +10,7 @@ import { UserService } from 'src/providers/userService';
 import 'bootstrap';
 import { MonthlyTax } from '../incometax/incometax.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 declare var $: any;
 
 @Component({
@@ -54,6 +55,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   ExemptionDeclaration: Array<any> = [];
   OtherDeclaration: Array<any> = [];
   TaxSavingAlloance: Array<any> = [];
+  isEmployeesReady: boolean = false;
+  applicationData: any = [];
+  employeesList: autoCompleteModal = new autoCompleteModal();
+  currentEmployee: any = null;
+  userName: string = "";
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -99,6 +105,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       });
       i++;
     }
+
+    this.getDeclaration(this.EmployeeId);
   }
 
   ngAfterViewChecked(): void {
@@ -117,7 +125,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.TaxSavingAlloance = this.allComponentDetails.TaxSavingAlloance;
   }
 
-  loadData() {
+  getDeclaration(id: any) {
+    this.EmployeeId = id;
     this.SectionIsReady = false;
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody) {
@@ -426,6 +435,31 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     } else {
       WarningToast("Only numeric value is allowed");
     }
+  }
+
+  loadData() {
+    this.isEmployeesReady = false;
+    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.applicationData = response.ResponseBody;
+        this.employeesList.data = [];
+        this.employeesList.placeholder = "Employee";
+        let employees = this.applicationData.Employees;
+        if(employees) {
+          let i = 0;
+          while(i < employees.length) {
+            this.employeesList.data.push({
+              text: `${employees[i].FirstName} ${employees[i].LastName}`,
+              value: employees[i].EmployeeUid
+            });
+            i++;
+          }
+        }
+        this.employeesList.className = "";
+
+        this.isEmployeesReady = true;
+      }
+    });
   }
 
   rentedDecalrationPopup() {
