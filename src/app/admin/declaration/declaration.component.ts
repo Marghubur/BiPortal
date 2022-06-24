@@ -34,11 +34,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   taxSavingAllowance: Array<IncomeDeclaration> = [];
   cachedData: any = null;
   taxAmount: TaxAmount = new TaxAmount();
-  myDeclaration: Array<MyDeclaration> = [];
   year: number = 0;
   taxCalender: Array<any> = [];
   monthlyTaxAmount: MonthlyTax;
-  allComponentDetails: any = {};
+  employeeDeclaration: any = {};
   exemptionComponent: Array<any> = [];
   filterValue: string = '';
   editException: boolean = false;
@@ -120,9 +119,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   resetFilter() {
     this.filterValue = '';
 
-    this.ExemptionDeclaration = this.allComponentDetails.ExemptionDeclaration;
-    this.OtherDeclaration = this.allComponentDetails.OtherDeclaration;
-    this.TaxSavingAlloance = this.allComponentDetails.TaxSavingAlloance;
+    this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
+    this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
+    this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
   }
 
   getDeclaration(id: any) {
@@ -131,7 +130,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
-          this.allComponentDetails = response.ResponseBody;
+          this.employeeDeclaration = response.ResponseBody;
           this.resetFilter();
           this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
           this.employeeEmail = response.ResponseBody.Email;
@@ -152,47 +151,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       TaxAlreadyPaid: 37050,
       RemainingTaxAMount: 444600 - 37050
     };
-
-    this.myDeclaration.push({
-      Declaration: "1.5 Lac Exemptions",
-      NoOfDeclaration: 2,
-      AmountDeclared: 21600,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "Other Exemptions",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "Tax Saving Allowance",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "House Property",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "Income From Other Sources",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    });
 
     this.monthlyTaxAmount = {
       april: 37050,
@@ -421,15 +379,20 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
-            if(response.ResponseBody.length > 0) {
-              this.allComponentDetails = response.ResponseBody;
+            if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
+              this.employeeDeclaration = response.ResponseBody;
               this.resetFilter();
+              this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
+              this.employeeEmail = response.ResponseBody.Email;
             }
 
-            this.closeDeclaration(e);
-            Toast("Declaration Uploaded Successfully.");
-            this.SectionIsReady = true;
+            if (response.ResponseBody && response.ResponseBody.FileDetails)
+              this.declarationFiles = response.ResponseBody.FileDetails;
+
+            Toast("Declaration detail updated successfully");
           }
+
+          this.SectionIsReady = true;
         });
       }
     } else {
@@ -554,13 +517,4 @@ class TaxAmount {
   TotalTaxPayable: number = 0;
   TaxAlreadyPaid: number = 0;
   RemainingTaxAMount: number = 0;
-}
-
-class MyDeclaration {
-  Declaration: string = '';
-  NoOfDeclaration: number = 0;
-  AmountDeclared: number = 0;
-  ProofSUbmitted: number = 0;
-  AmountRejected: number = 0;
-  AmountAccepted: number = 0;
 }
