@@ -441,7 +441,7 @@
                 <option [value]="item.CompanyId" *ngFor="let item of companyGroup">{{item.CompanyName}}</option>
               </select>
             </div>
-            <div class="col-md-4 mb-3 m-0 p-0 row justify-content-end">
+            <!-- <div class="col-md-4 mb-3 m-0 p-0 row justify-content-end">
               <div class="col-md-2" *ngIf="isSalaryGroup">
                 <i class="fa fa-spinner fa-pulse text-success fa-2x fa-fw"></i>
               </div>
@@ -451,35 +451,35 @@
                   <option [value]="item.SalaryGroupId" *ngFor="let item of salaryGroup">{{item.GroupName}}</option>
                 </select>
               </div>
+            </div> -->
+          </div>
+          <div class="t-table t-list col-md-12 mb-3">
+            <div class="t-body">
+              <div class="tr py-2">
+                <div class="td align-middle fe-4 ps-2 fw-bold text-dark d-flex flex-column justify-content-between">
+                  Expected CTC of Employee
+                </div>
+                <div class="td align-middle fe-2">
+                  <div class="cell-wrapper mx-2 d-flex align-items-center">
+                    <label for="" class="form-label pe-2 mb-0">Annually</label>
+                    <input type="text" class="form-control form-control-sm" OnlyNumber="9" [readonly]="companyGroupId <= 0"
+                      formControlName="ExpectedCTCAnnually">
+                  </div>
+                </div>
+                <button class="btn btn-outline-success ms-3" (click)="calculateSalary()" [disabled]="companyGroupId <=0">
+                  <i class="fa fa-calculator pe-2"></i> Calculate
+                </button>
+              </div>
             </div>
           </div>
+
           <div [ngClass]="{'blur-section': !isCompanyGroupSelected}">
             <div class="blur-section__highlight" [ngClass]="{'d-none': isCompanyGroupSelected}">
               <div class="blur-section__content">
                 Please select Company group first
               </div>
             </div>
-
             <div class="blur-this">
-              <div class="t-table t-list col-md-12 mb-3">
-                <div class="t-body">
-                  <div class="tr py-2">
-                    <div class="td align-middle fe-4 ps-2 fw-bold text-dark d-flex flex-column justify-content-between">
-                      Expected CTC of Employee
-                    </div>
-                    <div class="td align-middle fe-2">
-                      <div class="cell-wrapper mx-2 d-flex align-items-center">
-                        <label for="" class="form-label pe-2 mb-0">Annually</label>
-                        <input type="text" class="form-control form-control-sm" OnlyNumber="9"
-                          formControlName="ExpectedCTCAnnually">
-                      </div>
-                    </div>
-                    <button class="btn btn-outline-success ms-3" (click)="calculateSalary()">
-                      <i class="fa fa-calculator pe-2"></i> Calculate
-                    </button>
-                  </div>
-                </div>
-              </div>
               <div class="col-md-12">
                 <div class="t-table t-list t-border col-md-12">
                   <div class="hide-bar alert-primary"></div>
