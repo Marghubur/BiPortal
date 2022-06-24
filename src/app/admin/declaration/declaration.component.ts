@@ -137,7 +137,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     if(this.allComponentDetails && this.allComponentDetails.length > 0) {
       let i = 0;
       while(i < filterItems.length) {
-        items = this.allComponentDetails.filter(x => x.Section == filterItems[i]);
+        items = this.allComponentDetails.filter(x => x.Section != null && x.Section.toLowerCase() == filterItems[i].toLowerCase());
         if(items && items.length > 0) {
           this.currentComponentDetails = this.currentComponentDetails.concat(items);
         }
