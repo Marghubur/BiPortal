@@ -672,9 +672,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         GroupId: 0
       }
       let formData = new FormData();
-      formData.append('completesalarydeatil', JSON.stringify(value));
+      formData.append('completesalarydetail', JSON.stringify(value));
       formData.append('salarydeatil', JSON.stringify(empSalary));
-      this.http.post(`/${this.employeeUid}`, value).then(res => {
+      this.http.post(`SalaryComponent/InsertUpdateSalaryBreakUp/${this.employeeUid}`, formData).then(res => {
         if (res.ResponseBody) {
           Toast("Salary breakup added successfully.")
         }
