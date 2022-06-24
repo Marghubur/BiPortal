@@ -39,7 +39,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   taxCalender: Array<any> = [];
   monthlyTaxAmount: MonthlyTax;
   allComponentDetails: any = {};
-  currentComponentDetails: Array<any> = [];
   exemptionComponent: Array<any> = [];
   filterValue: string = '';
   editException: boolean = false;
@@ -49,11 +48,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   presentRow: any = null;
   attachmentForDeclaration: string = '';
   employeeEmail: string = '';
-  sections: any = null;
   totalFileSize: number = 0;
   rentalPage: number = 0;
   declarationFiles: Array<Files> = [];
   slectedDeclarationnFile: Array<Files> = [];
+  ExemptionDeclaration: Array<any> = [];
+  OtherDeclaration: Array<any> = [];
+  TaxSavingAlloance: Array<any> = [];
   isEmployeesReady: boolean = false;
   applicationData: any = [];
   employeesList: autoCompleteModal = new autoCompleteModal();
@@ -70,6 +71,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.filterValue = '';
     this.rentalPage =1;
     this.rentedResidence();
+    this.EmployeeId = 4;
     this.loadData();
     var dt = new Date();
     var month = 3;
@@ -103,6 +105,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       });
       i++;
     }
+
+    this.getDeclaration(this.EmployeeId);
   }
 
   ngAfterViewChecked(): void {
@@ -110,45 +114,15 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   filterDeduction() {
-    // let value = e.target.value;
     let value = this.filterValue.toLocaleUpperCase();
-    if (value) {
-      this.currentComponentDetails = this.allComponentDetails.filter(x => x.Section == value || x.ComponentId == value);
-    }
   }
 
   resetFilter() {
     this.filterValue = '';
-    this.currentComponentDetails = this.allComponentDetails;
-  }
 
-  prepareDeclarationData(tabIndex: number) {
-    let filterItems = null;
-    switch(tabIndex) {
-      case 1:
-        filterItems = this.sections.ExemptionDeclaration
-        break;
-      case 2:
-        filterItems = this.sections.OtherDeclaration
-        break;
-      case 3:
-        filterItems = this.sections.TaxSavingAlloance
-        break;
-    }
-
-    this.currentComponentDetails = [];
-    let items = null;
-
-    if(this.allComponentDetails && this.allComponentDetails.length > 0) {
-      let i = 0;
-      while(i < filterItems.length) {
-        items = this.allComponentDetails.filter(x => x.Section != null && x.Section.toLowerCase() == filterItems[i].toLowerCase());
-        if(items && items.length > 0) {
-          this.currentComponentDetails = this.currentComponentDetails.concat(items);
-        }
-        i++;
-      }
-    }
+    this.ExemptionDeclaration = this.allComponentDetails.ExemptionDeclaration;
+    this.OtherDeclaration = this.allComponentDetails.OtherDeclaration;
+    this.TaxSavingAlloance = this.allComponentDetails.TaxSavingAlloance;
   }
 
   getDeclaration(id: any) {
@@ -157,17 +131,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
-          this.allComponentDetails = response.ResponseBody.SalaryComponentItems;
+          this.allComponentDetails = response.ResponseBody;
+          this.resetFilter();
           this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
           this.employeeEmail = response.ResponseBody.Email;
-
-          this.sections = response.ResponseBody.Sections;
         }
-
-        if(response.ResponseBody.Sections)
-          this.sections = response.ResponseBody.Sections;
-        else
-          this.sections = [];
 
         if (response.ResponseBody && response.ResponseBody.FileDetails)
           this.declarationFiles = response.ResponseBody.FileDetails;
@@ -455,7 +423,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           if (response.ResponseBody) {
             if(response.ResponseBody.length > 0) {
               this.allComponentDetails = response.ResponseBody;
-              this.currentComponentDetails = response.ResponseBody;
+              this.resetFilter();
             }
 
             this.closeDeclaration(e);
@@ -522,12 +490,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     } else {
       this.active = 4;
     }
-  }
-
-  loadSectionData(value: number) {
-    this.SectionIsReady = false;
-    this.prepareDeclarationData(value);
-    this.SectionIsReady = true;
   }
 
   activateMe(ele: string) {
