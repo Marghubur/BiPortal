@@ -58,8 +58,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   isEmployeesReady: boolean = false;
   applicationData: any = [];
   employeesList: autoCompleteModal = new autoCompleteModal();
-  currentEmployee: any = null;
-  userName: string = "";
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -71,7 +69,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.filterValue = '';
     this.rentalPage =1;
     this.rentedResidence();
-    this.EmployeeId = 4;
     this.loadData();
     var dt = new Date();
     var month = 3;
@@ -106,53 +103,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       i++;
     }
 
-    this.getDeclaration(this.EmployeeId);
-  }
-
-  ngAfterViewChecked(): void {
-    $('[data-bs-toggle = "tooltip"]').tooltip();
-  }
-
-  filterDeduction() {
-    let value = this.filterValue.toLocaleUpperCase();
-  }
-
-  resetFilter() {
-    this.filterValue = '';
-
-    this.ExemptionDeclaration = this.allComponentDetails.ExemptionDeclaration;
-    this.OtherDeclaration = this.allComponentDetails.OtherDeclaration;
-    this.TaxSavingAlloance = this.allComponentDetails.TaxSavingAlloance;
-  }
-
-  getDeclaration(id: any) {
-    this.EmployeeId = id;
-    this.SectionIsReady = false;
-    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
-      if (response.ResponseBody) {
-        if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
-          this.allComponentDetails = response.ResponseBody;
-          this.resetFilter();
-          this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
-          this.employeeEmail = response.ResponseBody.Email;
-        }
-
-        if (response.ResponseBody && response.ResponseBody.FileDetails)
-          this.declarationFiles = response.ResponseBody.FileDetails;
-
-        Toast("Declaration detail loaded successfully");
-      }
-
-      this.SectionIsReady = true;
-    })
-
     this.taxAmount = {
       NetTaxableAmount: 2050000,
       TotalTaxPayable: 444600,
       TaxAlreadyPaid: 37050,
       RemainingTaxAMount: 444600 - 37050
     };
-
     this.myDeclaration.push({
       Declaration: "1.5 Lac Exemptions",
       NoOfDeclaration: 2,
@@ -194,6 +150,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       AmountAccepted: 0
     });
 
+
     this.monthlyTaxAmount = {
       april: 37050,
       may: 37050,
@@ -208,6 +165,44 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       feb: 37050,
       march: 37050
     };
+  }
+
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle = "tooltip"]').tooltip();
+  }
+
+  filterDeduction() {
+    let value = this.filterValue.toLocaleUpperCase();
+  }
+
+  resetFilter() {
+    this.filterValue = '';
+
+    this.ExemptionDeclaration = this.allComponentDetails.ExemptionDeclaration;
+    this.OtherDeclaration = this.allComponentDetails.OtherDeclaration;
+    this.TaxSavingAlloance = this.allComponentDetails.TaxSavingAlloance;
+  }
+
+  getDeclaration(id: any) {
+    this.EmployeeId = id;
+    this.SectionIsReady = false;
+    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
+          this.allComponentDetails = response.ResponseBody;
+          this.resetFilter();
+          this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
+          this.employeeEmail = response.ResponseBody.Email;
+        }
+
+        if (response.ResponseBody && response.ResponseBody.FileDetails)
+          this.declarationFiles = response.ResponseBody.FileDetails;
+
+        Toast("Declaration detail loaded successfully");
+      }
+
+      this.SectionIsReady = true;
+    })
   }
 
   rentedResidence() {
