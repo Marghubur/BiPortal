@@ -264,7 +264,7 @@
               </li>
 
               <li [ngbNavItem]="2">
-                <a ngbNavLink (click)="loadSectionData(1)">1.5 Lac Exemptions</a>
+                <a ngbNavLink>1.5 Lac Exemptions</a>
                 <ng-template ngbNavContent>
                   <ng-container>
                     <div class="row justify-content-between my-3">
@@ -335,7 +335,7 @@
                         </div>
                       </div>
                       <div class="t-body" *ngIf="SectionIsReady">
-                        <div class="tr py-2" name="table-row" *ngFor="let r of currentComponentDetails; let i=index">
+                        <div class="tr py-2" name="table-row" *ngFor="let r of ExemptionDeclaration; let i=index">
                           <div class="td align-middle fe-1">
                             <div class="cell-wrapper">
                               {{r.Section}} <sup>$</sup>
@@ -428,7 +428,7 @@
               </li>
 
               <li [ngbNavItem]="3">
-                <a ngbNavLink (click)="loadSectionData(2)">Other Exemptions</a>
+                <a ngbNavLink>Other Exemptions</a>
                 <ng-template ngbNavContent>
                   <ng-container>
                     <div class="row justify-content-between my-3">
@@ -497,7 +497,7 @@
                         </div>
                       </div>
                       <div class="t-body" *ngIf="SectionIsReady">
-                        <div class="tr py-2" name="table-row" *ngFor="let r of currentComponentDetails; let i=index">
+                        <div class="tr py-2" name="table-row" *ngFor="let r of OtherDeclaration; let i=index">
                           <div class="td align-middle fe-1">
                             <div class="cell-wrapper">
                               {{r.Section}} <sup>$</sup>
@@ -593,7 +593,7 @@
               </li>
 
               <li [ngbNavItem]="4">
-                <a ngbNavLink (click)="loadSectionData(3)">Tax Saving Allowances</a>
+                <a ngbNavLink>Tax Saving Allowances</a>
                 <ng-template ngbNavContent>
                   <ng-container>
                     <div class="row justify-content-between my-3">
@@ -668,7 +668,7 @@
                         </div>
                       </div>
                       <div class="t-body" *ngIf="SectionIsReady">
-                        <div class="tr py-2" name="table-row" *ngFor="let r of currentComponentDetails; let i=index">
+                        <div class="tr py-2" name="table-row" *ngFor="let r of TaxSavingAlloance; let i=index">
                           <div class="td align-middle fe-1">
                             <div class="cell-wrapper">
                               {{r.Section}} <sup>$</sup>
