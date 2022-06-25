@@ -56,6 +56,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   isSalaryGroup: boolean = false;
   salaryComponents: Array<any> = [];
   salaryDeatil: Array<any> = [];
+  completeSalaryBreakup: SalaryBreakupDetails = new SalaryBreakupDetails();
 
   get f() {
     let data = this.employeeForm.controls;
@@ -441,6 +442,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   salryBreakupPopup() {
     $('#fullSalaryDetail').modal('show');
+    if (this.salaryDeatil.length == 1)
+      this.findSalaryGroup();
   }
 
   selectCompanyGroup(event: any) {
@@ -455,10 +458,18 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
       if(res.ResponseBody) {
         this.salaryGroup = res.ResponseBody;
-        if (this.salaryDeatil.length > 0 && this.salaryDeatil[0].CTC > 0) {
-          this.salaryBreakupForm.get("CTCAnnually").setValue(this.salaryDeatil[0].CTC);
+        if (this.salaryDeatil.length > 0 && this.salaryDeatil[0].CTC >= 0) {
+          let value = JSON.parse(this.salaryDeatil[0].CompleteSalaryDetail);
+          if (value.CTCAnnually > 0)
+            this.completeSalaryBreakup = value
+          else
+            this.completeSalaryBreakup = new SalaryBreakupDetails();
+          this.initForm();
+          this.isSalaryGroup = true;
+          this.isCompanyGroupSelected = true;
         } else {
           this.isCompanyGroupSelected = false;
+          this.isSalaryGroup = false;
         }
         Toast("Salary components loaded successfully.");
       } else {
@@ -506,42 +517,41 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.salaryBreakupForm = this.fb.group({
-      BasicMonthly: new FormControl(0),
-      BasicAnnually: new FormControl(0),
-      ConveyanceMonthly: new FormControl(0),
-      ConveyanceAnnually: new FormControl(0),
-      HRAMonthly: new FormControl(0),
-      HRAAnnually: new FormControl(0),
-      MedicalMonthly: new FormControl(0),
-      MedicalAnnually: new FormControl(0),
-      CarRunningMonthly: new FormControl(0),
-      CarRunningAnnually: new FormControl(0),
-      InternetMonthly: new FormControl(0),
-      InternetAnnually: new FormControl(0),
-      TravelMonthly: new FormControl(0),
-      TravelAnnually: new FormControl(0),
-      ShiftMonthly: new FormControl(0),
-      ShiftAnnually: new FormControl(0),
-      SpecialMonthly: new FormControl(0),
-      SpecialAnnually: new FormControl(0),
-      GrossMonthly: new FormControl(0),
-      GrossAnnually: new FormControl(0),
-      InsuranceMonthly: new FormControl(0),
-      InsuranceAnnually: new FormControl(0),
-      PFMonthly: new FormControl(0),
-      PFAnnually: new FormControl(0),
-      GratuityMonthly: new FormControl(0),
-      GratuityAnnually: new FormControl(0),
-      FoodMonthly: new FormControl(0),
-      FoodAnnually: new FormControl(0),
-      ExpectedCTCAnnually: new FormControl(0),
-      CTCMonthly: new FormControl(0),
-      CTCAnnually: new FormControl(0)
+      BasicMonthly: new FormControl(this.completeSalaryBreakup.BasicMonthly),
+      BasicAnnually: new FormControl(this.completeSalaryBreakup.BasicAnnually),
+      ConveyanceMonthly: new FormControl(this.completeSalaryBreakup.ConveyanceMonthly),
+      ConveyanceAnnually: new FormControl(this.completeSalaryBreakup.ConveyanceAnnually),
+      HRAMonthly: new FormControl(this.completeSalaryBreakup.HRAMonthly),
+      HRAAnnually: new FormControl(this.completeSalaryBreakup.HRAAnnually),
+      MedicalMonthly: new FormControl(this.completeSalaryBreakup.MedicalMonthly),
+      MedicalAnnually: new FormControl(this.completeSalaryBreakup.MedicalAnnually),
+      CarRunningMonthly: new FormControl(this.completeSalaryBreakup.CarRunningMonthly),
+      CarRunningAnnually: new FormControl(this.completeSalaryBreakup.CarRunningAnnually),
+      InternetMonthly: new FormControl(this.completeSalaryBreakup.InternetMonthly),
+      InternetAnnually: new FormControl(this.completeSalaryBreakup.InternetAnnually),
+      TravelMonthly: new FormControl(this.completeSalaryBreakup.TravelMonthly),
+      TravelAnnually: new FormControl(this.completeSalaryBreakup.TravelAnnually),
+      ShiftMonthly: new FormControl(this.completeSalaryBreakup.ShiftAnnually),
+      ShiftAnnually: new FormControl(this.completeSalaryBreakup.ShiftAnnually),
+      SpecialMonthly: new FormControl(this.completeSalaryBreakup.SpecialMonthly),
+      SpecialAnnually: new FormControl(this.completeSalaryBreakup.SpecialAnnually),
+      GrossMonthly: new FormControl(this.completeSalaryBreakup.GrossMonthly),
+      GrossAnnually: new FormControl(this.completeSalaryBreakup.GrossAnnually),
+      InsuranceMonthly: new FormControl(this.completeSalaryBreakup.InsuranceMonthly),
+      InsuranceAnnually: new FormControl(this.completeSalaryBreakup.InsuranceAnnually),
+      PFMonthly: new FormControl(this.completeSalaryBreakup.PFMonthly),
+      PFAnnually: new FormControl(this.completeSalaryBreakup.PFAnnually),
+      GratuityMonthly: new FormControl(this.completeSalaryBreakup.GratuityMonthly),
+      GratuityAnnually: new FormControl(this.completeSalaryBreakup.GratuityAnnually),
+      FoodMonthly: new FormControl(this.completeSalaryBreakup.FoodMonthly),
+      FoodAnnually: new FormControl(this.completeSalaryBreakup.FoodAnnually),
+      CTCMonthly: new FormControl(this.completeSalaryBreakup.CTCMonthly),
+      CTCAnnually: new FormControl(this.completeSalaryBreakup.CTCAnnually)
     });
   }
 
   calculateSalary() {
-    let annualCTC = Number(this.salaryBreakupForm.get("ExpectedCTCAnnually").value);
+    let annualCTC = Number(this.salaryBreakupForm.get("CTCAnnually").value);
     //let annualCTC = this.salaryDeatil[0].CTC;
     if (annualCTC > 0) {
       let salarygrpDetail = this.salaryGroup.find(x => x.MinAmount <= annualCTC && x.MaxAmount >= annualCTC);
@@ -586,13 +596,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
               }
               i++;
             }
-            this.isSalaryGroup = false;
             this.isCompanyGroupSelected = true;
             this.salaryCalculation(annualCTC);
           }
         })
       } else {
-        this.isSalaryGroup = false;
         ErrorToast("Please select salary group.")
       }
     }
@@ -676,7 +684,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       formData.append('salarydeatil', JSON.stringify(empSalary));
       this.http.post(`SalaryComponent/InsertUpdateSalaryBreakUp/${this.employeeUid}`, formData).then(res => {
         if (res.ResponseBody) {
-          Toast("Salary breakup added successfully.")
+          Toast("Salary breakup added successfully.");
+          $('#fullSalaryDetail').modal('hide');
         }
         this.isLoading = false;
       })
