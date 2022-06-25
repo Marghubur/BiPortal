@@ -55,6 +55,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   isCompanyGroupSelected: boolean = false;
   isSalaryGroup: boolean = false;
   salaryComponents: Array<any> = [];
+  salaryDeatil: Array<any> = [];
 
   get f() {
     let data = this.employeeForm.controls;
@@ -145,7 +146,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           value: 0,
           text: "Default Manager"
         });
-
         let i = 0;
         let managers = res.ResponseBody.EmployeesList;
         while(i < managers.length) {
@@ -158,6 +158,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           i++;
         }
       }
+
+      if (res.ResponseBody.SalaryDetail.length > 0)
+        this.salaryDeatil = res.ResponseBody.SalaryDetail;
       this.buildPageData(res);
       this.bindForm();
       this.idReady = true;
@@ -452,6 +455,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
       if(res.ResponseBody) {
         this.salaryGroup = res.ResponseBody;
+        if (this.salaryDeatil.length > 0 && this.salaryDeatil[0].CTC > 0) {
+          this.salaryBreakupForm.get("CTCAnnually").setValue(this.salaryDeatil[0].CTC);
+        } else {
+          this.isCompanyGroupSelected = false;
+        }
         Toast("Salary components loaded successfully.");
       } else {
         ErrorToast("Salary components loaded successfully.");
@@ -459,64 +467,17 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     });
   }
 
-  selectSalaryGroup(event: any) {
-    this.isSalaryGroup = true;
-    let value = Number(event.target.value);
-    if (value > 0) {
-      this.salaryGroupId = value;
-      this.salaryGroupDetail();
-    }
-  }
+  // selectSalaryGroup(event: any) {
+  //   this.isSalaryGroup = true;
+  //   let value = Number(event.target.value);
+  //   if (value > 0) {
+  //     this.salaryGroupId = value;
+  //     this.salaryGroupDetail();
+  //   }
+  // }
 
   salaryGroupDetail() {
-    if (this.salaryGroupId > 0) {
-      this.isSalaryGroup = true;
-      this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryGroupId}`)
-      .then(res => {
-        if (res.ResponseBody) {
-          let value = res.ResponseBody;
-          this.salaryComponents = value.filter(x => x.ComponentCatagoryId == 1);
-          let fixedvaluedComponent = this.salaryComponents.filter(x => x.PercentageValue == 0);
-          let i = 0;
-          while (i < fixedvaluedComponent.length) {
-            let finalvalue = fixedvaluedComponent[i].MaxLimit;
-            switch (fixedvaluedComponent[i].ComponentId) {
-              case 'ECTG':
-                this.salaryBreakupForm.get("GratuityAnnually").setValue(finalvalue);
-                this.salaryBreakupForm.get("GratuityMonthly").setValue(ToFixed((finalvalue/12), 0));
-                break;
-              case 'CA':
-                this.salaryBreakupForm.get("ConveyanceAnnually").setValue(finalvalue);
-                this.salaryBreakupForm.get("ConveyanceMonthly").setValue(ToFixed((finalvalue/12), 0));
-                break;
-              case 'EPF':
-                this.salaryBreakupForm.get("PFAnnually").setValue(finalvalue);
-                this.salaryBreakupForm.get("PFMonthly").setValue(ToFixed((finalvalue/12), 0));
-                break;
-              case 'MA':
-                this.salaryBreakupForm.get("MedicalAnnually").setValue(finalvalue);
-                this.salaryBreakupForm.get("MedicalMonthly").setValue(ToFixed((finalvalue/12), 0));
-                break;
-              case 'SA':
-                this.salaryBreakupForm.get("ShiftAnnually").setValue(finalvalue);
-                this.salaryBreakupForm.get("ShiftMonthly").setValue(ToFixed((finalvalue/12), 0));
-                break;
-              case 'ESI':
-                this.salaryBreakupForm.get("InsuranceAnnually").setValue(finalvalue);
-                this.salaryBreakupForm.get("InsuranceMonthly").setValue(ToFixed((finalvalue/12), 0));
-                break;
-            }
-            i++;
-          }
-          this.isSalaryGroup = false;
-          this.isCompanyGroupSelected = true;
-          Toast("Salary group record found");
-        }
-      })
-    } else {
-      this.isSalaryGroup = false;
-      ErrorToast("Please select salary group.")
-    }
+
   }
 
   getBreakupDetail() {
@@ -581,6 +542,63 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   calculateSalary() {
     let annualCTC = Number(this.salaryBreakupForm.get("ExpectedCTCAnnually").value);
+    //let annualCTC = this.salaryDeatil[0].CTC;
+    if (annualCTC > 0) {
+      let salarygrpDetail = this.salaryGroup.find(x => x.MinAmount <= annualCTC && x.MaxAmount >= annualCTC);
+      this.salaryGroupId = salarygrpDetail.SalaryGroupId;
+
+      if (this.salaryGroupId > 0) {
+        this.isSalaryGroup = true;
+        this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryGroupId}`)
+        .then(res => {
+          if (res.ResponseBody) {
+            let value = res.ResponseBody;
+            this.salaryComponents = value.filter(x => x.ComponentCatagoryId == 1);
+            let fixedvaluedComponent = this.salaryComponents.filter(x => x.PercentageValue == 0);
+            let i = 0;
+            while (i < fixedvaluedComponent.length) {
+              let finalvalue = fixedvaluedComponent[i].MaxLimit;
+              switch (fixedvaluedComponent[i].ComponentId) {
+                case 'ECTG':
+                  this.salaryBreakupForm.get("GratuityAnnually").setValue(finalvalue);
+                  this.salaryBreakupForm.get("GratuityMonthly").setValue(ToFixed((finalvalue/12), 0));
+                  break;
+                case 'CA':
+                  this.salaryBreakupForm.get("ConveyanceAnnually").setValue(finalvalue);
+                  this.salaryBreakupForm.get("ConveyanceMonthly").setValue(ToFixed((finalvalue/12), 0));
+                  break;
+                case 'EPF':
+                  this.salaryBreakupForm.get("PFAnnually").setValue(finalvalue);
+                  this.salaryBreakupForm.get("PFMonthly").setValue(ToFixed((finalvalue/12), 0));
+                  break;
+                case 'MA':
+                  this.salaryBreakupForm.get("MedicalAnnually").setValue(finalvalue);
+                  this.salaryBreakupForm.get("MedicalMonthly").setValue(ToFixed((finalvalue/12), 0));
+                  break;
+                case 'SA':
+                  this.salaryBreakupForm.get("ShiftAnnually").setValue(finalvalue);
+                  this.salaryBreakupForm.get("ShiftMonthly").setValue(ToFixed((finalvalue/12), 0));
+                  break;
+                case 'ESI':
+                  this.salaryBreakupForm.get("InsuranceAnnually").setValue(finalvalue);
+                  this.salaryBreakupForm.get("InsuranceMonthly").setValue(ToFixed((finalvalue/12), 0));
+                  break;
+              }
+              i++;
+            }
+            this.isSalaryGroup = false;
+            this.isCompanyGroupSelected = true;
+            this.salaryCalculation(annualCTC);
+          }
+        })
+      } else {
+        this.isSalaryGroup = false;
+        ErrorToast("Please select salary group.")
+      }
+    }
+
+  }
+  salaryCalculation(annualCTC: number) {
     let grossAnnually = annualCTC - Number (this.salaryBreakupForm.get("InsuranceAnnually").value + this.salaryBreakupForm.get("PFAnnually").value + this.salaryBreakupForm.get("GratuityAnnually").value);
     this.salaryBreakupForm.get("GrossAnnually").setValue(grossAnnually);
     this.salaryBreakupForm.get("GrossMonthly").setValue(ToFixed((grossAnnually/12), 0));
@@ -646,7 +664,17 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     let value = this.salaryBreakupForm.value;
     if (value) {
-      this.http.post(`/${this.employeeUid}`, value).then(res => {
+      let empSalary = {
+        EmployeeId: this.employeeUid,
+        CTC: value.CTCAnnually,
+        GrossIncome: value.GrossAnnually,
+        NetSalary: 0,
+        GroupId: 0
+      }
+      let formData = new FormData();
+      formData.append('completesalarydetail', JSON.stringify(value));
+      formData.append('salarydeatil', JSON.stringify(empSalary));
+      this.http.post(`SalaryComponent/InsertUpdateSalaryBreakUp/${this.employeeUid}`, formData).then(res => {
         if (res.ResponseBody) {
           Toast("Salary breakup added successfully.")
         }

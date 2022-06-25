@@ -39,7 +39,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   monthlyTaxAmount: MonthlyTax;
   employeeDeclaration: any = {};
   exemptionComponent: Array<any> = [];
-  filterValue: string = '';
   editException: boolean = false;
   EmployeeId: number = 0;
   EmployeeDeclarationId: number = 0;
@@ -67,10 +66,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     private http: AjaxService,) { }
 
   ngOnInit(): void {
-    this.filterValue = '';
     this.rentalPage =1;
     this.rentedResidence();
-    this.EmployeeId = 4;
     this.loadData();
     var dt = new Date();
     var month = 3;
@@ -104,21 +101,29 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       });
       i++;
     }
-
-    this.getDeclaration(this.EmployeeId);
   }
 
   ngAfterViewChecked(): void {
     $('[data-bs-toggle = "tooltip"]').tooltip();
   }
 
-  filterDeduction() {
-    let value = this.filterValue.toLocaleUpperCase();
+  filterDeduction(e: any, type: string) {
+    let value = e.target.value.toLocaleUpperCase();
+    switch (type) {
+      case '1.5lac':
+        this.ExemptionDeclaration = this.ExemptionDeclaration.filter(x => x.Section == value || x.ComponentId == value || x.ComponentFullName == value);
+        break;
+      case 'other':
+        this.OtherDeclaration = this.OtherDeclaration.filter(x => x.Section == value || x.ComponentId == value || x.ComponentFullName == value);
+        break;
+      case 'taxsaving':
+        this.TaxSavingAlloance = this.TaxSavingAlloance.filter(x => x.Section == value || x.ComponentId == value || x.ComponentFullName == value);
+        break;
+    }
   }
 
-  resetFilter() {
-    this.filterValue = '';
-
+  resetFilter(e: any) {
+    e.target.value = '';
     this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
     this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
     this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
@@ -131,7 +136,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       if (response.ResponseBody) {
         if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
           this.employeeDeclaration = response.ResponseBody;
-          this.resetFilter();
+          this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
+          this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
+          this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
           this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
           this.employeeEmail = response.ResponseBody.Email;
         }
@@ -381,9 +388,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           if (response.ResponseBody) {
             if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
               this.employeeDeclaration = response.ResponseBody;
-              this.resetFilter();
-              this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
-              this.employeeEmail = response.ResponseBody.Email;
+              this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
+              this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
+              this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
+              //this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
+              //this.employeeEmail = response.ResponseBody.Email;
             }
 
             if (response.ResponseBody && response.ResponseBody.FileDetails)
