@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary } from 'src/providers/constants';
-import { Files } from 'src/app/admin/documents/documents.component';
 import { BillDetails } from 'src/app/admin/files/files.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -122,15 +121,15 @@ export class SummaryComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigateRoot(Declaration, this.cachedData);
+        this.nav.navigateRoot(AdminDeclaration, this.cachedData);
         break;
       case "salary-tab":
-        this.nav.navigateRoot(Salary, this.cachedData);
+        this.nav.navigateRoot(AdminSalary, this.cachedData);
         break;
       case "summary-tab":
         break;
       case "preference-tab":
-        this.nav.navigateRoot(Preferences, this.cachedData);
+        this.nav.navigateRoot(AdminPreferences, this.cachedData);
         break;
     }
   }

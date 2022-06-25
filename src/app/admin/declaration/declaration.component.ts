@@ -65,7 +65,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     private http: AjaxService,) { }
 
   ngOnInit(): void {
-    this.rentalPage =1;
+    this.rentalPage = 1;
+    this.monthlyTaxAmount = new MonthlyTax();
     this.rentedResidence();
     this.loadData();
     var dt = new Date();
@@ -133,7 +134,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.employeeDeclaration.Declarations.length > 0) {
         let i = 0;
         while(i < this.employeeDeclaration.Declarations.length) {
-          this.taxAmount.TotalTaxPayable = this.employeeDeclaration.Declarations[i].TotalAmountDeclared;
+          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].TotalAmountDeclared;
           this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].AcceptedAmount;
           this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].RejectedAmount;
           i++;
@@ -170,8 +171,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         }
 
         if (response.ResponseBody && response.ResponseBody.FileDetails)
-          this.declarationFiles = response.ResponseBody.FileDetails;
+        this.declarationFiles = response.ResponseBody.FileDetails;
 
+        this.calculateDeclarations();
         Toast("Declaration detail loaded successfully");
       }
 
