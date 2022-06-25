@@ -77,7 +77,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
     this.initForm();
-    this.getBreakupDetail();
     this.managerList.placeholder = "Reporting Manager";
     this.managerList.data.push({
       value: 0,
@@ -100,8 +99,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.bindForm();
       this.idReady = true;
     }
-    this.loadData(this.employeeUid);
 
+    this.loadData(this.employeeUid);
   }
 
   buildProfileImage(fileDetail: any) {
@@ -157,10 +156,25 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           }
           i++;
         }
+
+        if(res.ResponseBody.Companies && res.ResponseBody.Companies.length > 0) {
+          let Companies = res.ResponseBody.Companies;
+          if (Companies.length == 1) {
+            this.companyGroup.push ({
+              CompanyName: Companies[0].CompanyName,
+              CompanyId: Companies[0].CompanyId
+            })
+
+            this.companyGroupId = 0;
+          } else {
+            this.companyGroup = Companies;
+          }
+        }
+
+        if (res.ResponseBody.SalaryDetail.length > 0)
+          this.salaryDeatil = res.ResponseBody.SalaryDetail;
       }
 
-      if (res.ResponseBody.SalaryDetail.length > 0)
-        this.salaryDeatil = res.ResponseBody.SalaryDetail;
       this.buildPageData(res);
       this.bindForm();
       this.idReady = true;
@@ -478,30 +492,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   salaryGroupDetail() {
 
-  }
-
-  getBreakupDetail() {
-    this.http.get("Company/GetAllCompany").then((response:ResponseModel) => {
-      if (response.ResponseBody) {
-        let Companys = response.ResponseBody;
-        if(Companys && Companys.length > 0) {
-          if (Companys.length == 1) {
-            this.companyGroup.push ({
-              CompanyName: Companys[0].CompanyName,
-              CompanyId: Companys[0].CompanyId
-            })
-            this.companyGroupId = 0;
-          } else {
-            this.companyGroup = Companys;
-          }
-          Toast("Compnay list loaded successfully");
-        } else {
-          Toast("No compnay found under current organization. Please add one.");
-        }
-      } else {
-        ErrorToast("Record not found.")
-      }
-    })
   }
 
   initForm() {
