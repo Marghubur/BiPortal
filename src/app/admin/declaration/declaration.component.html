@@ -81,7 +81,7 @@
               <div class="card py-3 ps-3 skeleton">
                 <p class="mb-0 vhide">Net Taxable Income</p>
                 <p class="vhide text-dark fs-2 mb-0 ">
-                  <span class="">INR {{taxAmount.NetTaxableAmount}}</span>
+                  <span class="">INR {{taxAmount.NetTaxableAmount | number:'':'en'}}</span>
                   <span class="float-end pe-2">
                     <a href="javascript:void(0)" (click)="gotoTaxSection('income-tax')"
                       class="text-decoration-none fs-6">
@@ -96,13 +96,13 @@
                 <p class="mb-0 vhide">Total Tax Payable <i class="fa fa-exclamation-circle float-end fa-lg pe-3"
                     data-bs-placement="right" data-toggle="tooltip"
                     title="Net tax amount {{taxAmount.TotalTaxPayable}} of after round Off is"></i></p>
-                <p class="text-dark fs-2 mb-0 vhide">INR {{taxAmount.TotalTaxPayable}}</p>
+                <p class="text-dark fs-2 mb-0 vhide">INR {{taxAmount.TotalTaxPayable | number:'':'en'}}</p>
               </div>
             </div>
             <div class="col-md-4">
               <div class="card py-3 ps-3 skeleton">
                 <p class="mb-0 vhide">Tax Already Paid</p>
-                <p class="text-dark fs-2 mb-0 vhide">INR {{taxAmount.TaxAlreadyPaid}}</p>
+                <p class="text-dark fs-2 mb-0 vhide">INR {{taxAmount.TaxAlreadyPaid | number:'':'en'}}</p>
               </div>
             </div>
           </div>
@@ -210,7 +210,7 @@
                       <div class="col-md-4">
                         <div class="card py-3 ps-3">
                           <p class="mb-0">TOTAL TAX PAYABLE</p>
-                          <p class="text-dark fs-2 mb-0">INR {{taxAmount.TotalTaxPayable}}</p>
+                          <p class="text-dark fs-2 mb-0">INR {{taxAmount.TotalTaxPayable | number:'':'en'}}</p>
                         </div>
                       </div>
                       <div class="col-md-4">
