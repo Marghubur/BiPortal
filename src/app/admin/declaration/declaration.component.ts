@@ -38,9 +38,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   year: number = 0;
   taxCalender: Array<any> = [];
   monthlyTaxAmount: MonthlyTax;
-  allComponentDetails: any = {};
+  employeeDeclaration: any = {};
   exemptionComponent: Array<any> = [];
-  filterValue: string = '';
   editException: boolean = false;
   EmployeeId: number = 0;
   EmployeeDeclarationId: number = 0;
@@ -66,7 +65,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     private http: AjaxService,) { }
 
   ngOnInit(): void {
-    this.filterValue = '';
     this.rentalPage =1;
     this.rentedResidence();
     this.loadData();
@@ -102,85 +100,59 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       });
       i++;
     }
-
-    this.taxAmount = {
-      NetTaxableAmount: 2050000,
-      TotalTaxPayable: 444600,
-      TaxAlreadyPaid: 37050,
-      RemainingTaxAMount: 444600 - 37050
-    };
-    this.myDeclaration.push({
-      Declaration: "1.5 Lac Exemptions",
-      NoOfDeclaration: 2,
-      AmountDeclared: 21600,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "Other Exemptions",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "Tax Saving Allowance",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "House Property",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    },
-    {
-      Declaration: "Income From Other Sources",
-      NoOfDeclaration: 0,
-      AmountDeclared: 0,
-      ProofSUbmitted: 0,
-      AmountRejected: 0,
-      AmountAccepted: 0
-    });
-
-
-    this.monthlyTaxAmount = {
-      april: 37050,
-      may: 37050,
-      june: 37050,
-      july: 37050,
-      aug: 37050,
-      sep: 37050,
-      oct: 37050,
-      nov: 37050,
-      dec: 37050,
-      jan: 37050,
-      feb: 37050,
-      march: 37050
-    };
   }
 
   ngAfterViewChecked(): void {
     $('[data-bs-toggle = "tooltip"]').tooltip();
   }
 
-  filterDeduction() {
-    let value = this.filterValue.toLocaleUpperCase();
+  filterDeduction(e: any, type: string) {
+    let value = e.target.value.toLocaleUpperCase();
+    switch (type) {
+      case '1.5lac':
+        this.ExemptionDeclaration = this.ExemptionDeclaration.filter(x => x.Section == value || x.ComponentId == value || x.ComponentFullName == value);
+        break;
+      case 'other':
+        this.OtherDeclaration = this.OtherDeclaration.filter(x => x.Section == value || x.ComponentId == value || x.ComponentFullName == value);
+        break;
+      case 'taxsaving':
+        this.TaxSavingAlloance = this.TaxSavingAlloance.filter(x => x.Section == value || x.ComponentId == value || x.ComponentFullName == value);
+        break;
+    }
   }
 
-  resetFilter() {
-    this.filterValue = '';
+  resetFilter(e: any) {
+    e.target.value = '';
+    this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
+    this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
+    this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
+  }
 
-    this.ExemptionDeclaration = this.allComponentDetails.ExemptionDeclaration;
-    this.OtherDeclaration = this.allComponentDetails.OtherDeclaration;
-    this.TaxSavingAlloance = this.allComponentDetails.TaxSavingAlloance;
+  calculateDeclarations() {
+    if(this.employeeDeclaration.Declarations != null &&
+      this.employeeDeclaration.Declarations.length > 0) {
+        let i = 0;
+        while(i < this.employeeDeclaration.Declarations.length) {
+          this.taxAmount.TotalTaxPayable = this.employeeDeclaration.Declarations[i].TotalAmountDeclared;
+          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].AcceptedAmount;
+          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].RejectedAmount;
+          i++;
+        }
+
+        this.taxAmount = {
+          NetTaxableAmount: 2050000,
+          TotalTaxPayable: 444600,
+          TaxAlreadyPaid: 37050,
+          RemainingTaxAMount: 444600 - 37050
+        };
+    } else {
+      this.taxAmount = {
+        NetTaxableAmount: 0,
+        TotalTaxPayable: 0,
+        TaxAlreadyPaid: 0,
+        RemainingTaxAMount: 0 - 0
+      };
+    }
   }
 
   getDeclaration(id: any) {
@@ -189,8 +161,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
-          this.allComponentDetails = response.ResponseBody;
-          this.resetFilter();
+          this.employeeDeclaration = response.ResponseBody;
+          this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
+          this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
+          this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
           this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
           this.employeeEmail = response.ResponseBody.Email;
         }
@@ -416,9 +390,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
-            if(response.ResponseBody.length > 0) {
-              this.allComponentDetails = response.ResponseBody;
-              this.resetFilter();
+            if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
+              this.employeeDeclaration = response.ResponseBody;
+              this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
+              this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
+              this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
+              //this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
+              //this.employeeEmail = response.ResponseBody.Email;
             }
 
             this.closeDeclaration(e);
