@@ -92,6 +92,7 @@ export class SalarycomponentStructureComponent implements OnInit {
       TaxExempt: new FormControl(this.currentSalaryComponent.TaxExempt),
       RequireDocs: new FormControl(this.currentSalaryComponent.RequireDocs),
       ComponentCatagoryId: new FormControl(this.currentSalaryComponent.ComponentCatagoryId),
+      IncludeInPayslip: new FormControl(this.currentSalaryComponent.IncludeInPayslip)
     })
   }
 

@@ -306,11 +306,12 @@
               <div class="col-md-6 mt-2">
                 <label for="" class="form-label">INCOME TAX SECTION</label>
                 <input type="text" [readonly]="!isTaxExempt" formControlName="Section"
-                  placeholder="Enter Income Tax Section" class="form-control">
+                  oninput="this.value = this.value.toUpperCase()" placeholder="Enter Income Tax Section"
+                  class="form-control">
               </div>
               <div class="col-md-6 mt-2">
                 <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
-                <input type="text" [readonly]="!isTaxExempt" OnlyNumber="9" formControlName="SectionMaxLimit"
+                <input type="number" [readonly]="!isTaxExempt" formControlName="SectionMaxLimit"
                   placeholder="Section Maximum Limit" class="form-control">
               </div>
             </div>

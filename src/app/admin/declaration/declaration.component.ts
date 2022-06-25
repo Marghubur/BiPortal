@@ -34,6 +34,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   taxSavingAllowance: Array<IncomeDeclaration> = [];
   cachedData: any = null;
   taxAmount: TaxAmount = new TaxAmount();
+  myDeclaration: Array<MyDeclaration> = [];
   year: number = 0;
   taxCalender: Array<any> = [];
   monthlyTaxAmount: MonthlyTax;
@@ -56,8 +57,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   isEmployeesReady: boolean = false;
   applicationData: any = [];
   employeesList: autoCompleteModal = new autoCompleteModal();
-  currentEmployee: any = null;
-  userName: string = "";
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -66,7 +65,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     private http: AjaxService,) { }
 
   ngOnInit(): void {
-    this.rentalPage =1;
+    this.rentalPage = 1;
+    this.monthlyTaxAmount = new MonthlyTax();
     this.rentedResidence();
     this.loadData();
     var dt = new Date();
@@ -129,6 +129,33 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
   }
 
+  calculateDeclarations() {
+    if(this.employeeDeclaration.Declarations != null &&
+      this.employeeDeclaration.Declarations.length > 0) {
+        let i = 0;
+        while(i < this.employeeDeclaration.Declarations.length) {
+          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].TotalAmountDeclared;
+          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].AcceptedAmount;
+          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].RejectedAmount;
+          i++;
+        }
+
+        this.taxAmount = {
+          NetTaxableAmount: 2050000,
+          TotalTaxPayable: 444600,
+          TaxAlreadyPaid: 37050,
+          RemainingTaxAMount: 444600 - 37050
+        };
+    } else {
+      this.taxAmount = {
+        NetTaxableAmount: 0,
+        TotalTaxPayable: 0,
+        TaxAlreadyPaid: 0,
+        RemainingTaxAMount: 0 - 0
+      };
+    }
+  }
+
   getDeclaration(id: any) {
     this.EmployeeId = id;
     this.SectionIsReady = false;
@@ -144,35 +171,14 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         }
 
         if (response.ResponseBody && response.ResponseBody.FileDetails)
-          this.declarationFiles = response.ResponseBody.FileDetails;
+        this.declarationFiles = response.ResponseBody.FileDetails;
 
+        this.calculateDeclarations();
         Toast("Declaration detail loaded successfully");
       }
 
       this.SectionIsReady = true;
     })
-
-    this.taxAmount = {
-      NetTaxableAmount: 2050000,
-      TotalTaxPayable: 444600,
-      TaxAlreadyPaid: 37050,
-      RemainingTaxAMount: 444600 - 37050
-    };
-
-    this.monthlyTaxAmount = {
-      april: 37050,
-      may: 37050,
-      june: 37050,
-      july: 37050,
-      aug: 37050,
-      sep: 37050,
-      oct: 37050,
-      nov: 37050,
-      dec: 37050,
-      jan: 37050,
-      feb: 37050,
-      march: 37050
-    };
   }
 
   rentedResidence() {
@@ -395,13 +401,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
               //this.employeeEmail = response.ResponseBody.Email;
             }
 
-            if (response.ResponseBody && response.ResponseBody.FileDetails)
-              this.declarationFiles = response.ResponseBody.FileDetails;
-
-            Toast("Declaration detail updated successfully");
+            this.closeDeclaration(e);
+            Toast("Declaration Uploaded Successfully.");
+            this.SectionIsReady = true;
           }
-
-          this.SectionIsReady = true;
         });
       }
     } else {
@@ -526,4 +529,13 @@ class TaxAmount {
   TotalTaxPayable: number = 0;
   TaxAlreadyPaid: number = 0;
   RemainingTaxAMount: number = 0;
+}
+
+class MyDeclaration {
+  Declaration: string = '';
+  NoOfDeclaration: number = 0;
+  AmountDeclared: number = 0;
+  ProofSUbmitted: number = 0;
+  AmountRejected: number = 0;
+  AmountAccepted: number = 0;
 }

@@ -24,7 +24,8 @@
       <app-breadcrums></app-breadcrums>
     </div>
     <div class="col-md-3 ms-3 my-3" *ngIf="isEmployeesReady">
-      <app-iautocomplete [data]="employeesList" (OnSelect)="getDeclaration($event)" [(ngModel)]="EmployeeId" [ngModelOptions]="{standalone: true}"></app-iautocomplete>
+      <app-iautocomplete [data]="employeesList" (OnSelect)="getDeclaration($event)" [(ngModel)]="EmployeeId"
+        [ngModelOptions]="{standalone: true}"></app-iautocomplete>
     </div>
     <div [ngClass]="{'blur-section': !SectionIsReady}">
       <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
@@ -82,7 +83,8 @@
                       {{year}}</span></li>
                 </ul>
                 <div class="alert alert-warning mx-5">
-                  Not submitting your investment proofs may lead to additional taxx being deducted in the subsequent months
+                  Not submitting your investment proofs may lead to additional taxx being deducted in the subsequent
+                  months
                   of this fiscal year.
                 </div>
               </div>
@@ -372,7 +374,8 @@
                           </div>
                           <div class="t-body" *ngIf="SectionIsReady">
                             <ng-container *ngFor="let r of ExemptionDeclaration; let i=index">
-                              <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                              <div class="tr py-2" name="table-row"
+                                [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
                                     {{r.Section}} <sup>$</sup>
@@ -389,10 +392,12 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper" name="view-control">
-                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
+                                      number:'':'en'}}</span>
                                     <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
                                   </div>
-                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
+                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
+                                    name="edit-control">
                                     <span class="pe-2 d-flex flex-column justify-content-center">
                                       <i class="fa fa-inr"></i>
                                     </span>
@@ -440,7 +445,8 @@
                                 <div class="td text-center fe-1">
                                   <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                                  <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
+                                  <div class="d-flex align-items-center justify-content-center d-none"
+                                    name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
                                     <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
@@ -458,7 +464,8 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-success"
-                            (click)="nextDeclaration('otherExemptions')">Next<i class="fa fa-arrow-right ps-2"></i></button>
+                            (click)="nextDeclaration('otherExemptions')">Next<i
+                              class="fa fa-arrow-right ps-2"></i></button>
                         </div>
                       </ng-container>
                     </ng-template>
@@ -477,9 +484,9 @@
                             <label for="" class="form-label">Search perform on section and deduction name.</label>
                             <div class="form-group has-search">
                               <span class="fa fa-search form-control-feedback"></span>
-                              <input type="text" class="form-control"
-                                oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-                                (keyup.enter)="filterDeduction($event, 'other')" (keyup.esc)="resetFilter($event)">>
+                              <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
+                                placeholder="Search" (keyup.enter)="filterDeduction($event, 'other')"
+                                (keyup.esc)="resetFilter($event)">>
                             </div>
                           </div>
                         </div>
@@ -552,7 +559,8 @@
                           </div>
                           <div class="t-body" *ngIf="SectionIsReady">
                             <ng-container *ngFor="let r of OtherDeclaration; let i=index">
-                              <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                              <div class="tr py-2" name="table-row"
+                                [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
                                     {{r.Section}} <sup>$</sup>
@@ -579,10 +587,12 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper" name="view-control">
-                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
+                                      number:'':'en'}}</span>
                                     <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
                                   </div>
-                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
+                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
+                                    name="edit-control">
                                     <span class="pe-2 d-flex flex-column justify-content-center">
                                       <i class="fa fa-inr"></i>
                                     </span>
@@ -630,7 +640,8 @@
                                 <div class="td text-center fe-1">
                                   <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                                  <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
+                                  <div class="d-flex align-items-center justify-content-center d-none"
+                                    name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
                                     <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
@@ -647,8 +658,8 @@
                           </div>
                         </div>
                         <div class="modal-footer border-top-0">
-                          <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('exemptions')"><i
-                              class="fa fa-arrow-left pe-2"></i> Prev</button>
+                          <button type="button" class="btn btn-outline-primary"
+                            (click)="nextDeclaration('exemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
                           <button type="button" class="btn btn-outline-success"
                             (click)="nextDeclaration('taxSavingAllowance')">Next <i
                               class="fa fa-arrow-right ps-2"></i></button>
@@ -664,7 +675,8 @@
                         <div class="row justify-content-between mt-3 mb-2">
                           <div class="col-md-8">
                             <h5 class="ps-3">Tax Saving Allowances</h5>
-                            <p class=" ps-3">Following allowances are exempted from Gross for Income tax calculation only
+                            <p class=" ps-3">Following allowances are exempted from Gross for Income tax calculation
+                              only
                               when
                               claim is submitted against allowances.</p>
                           </div>
@@ -672,9 +684,9 @@
                             <label for="" class="form-label">Search perform on section and deduction name.</label>
                             <div class="form-group has-search">
                               <span class="fa fa-search form-control-feedback"></span>
-                              <input type="text" class="form-control"
-                                oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-                                (keyup.enter)="filterDeduction($event, 'taxsaving')" (keyup.esc)="resetFilter($event)">
+                              <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
+                                placeholder="Search" (keyup.enter)="filterDeduction($event, 'taxsaving')"
+                                (keyup.esc)="resetFilter($event)">
                             </div>
                           </div>
                         </div>
@@ -752,7 +764,8 @@
                           </div>
                           <div class="t-body" *ngIf="SectionIsReady">
                             <ng-container *ngFor="let r of TaxSavingAlloance; let i=index">
-                              <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                              <div class="tr py-2" name="table-row"
+                                [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
                                     {{r.Section}} <sup>$</sup>
@@ -774,10 +787,12 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper" name="view-control">
-                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
+                                      number:'':'en'}}</span>
                                     <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
                                   </div>
-                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
+                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
+                                    name="edit-control">
                                     <span class="pe-2 d-flex flex-column justify-content-center">
                                       <i class="fa fa-inr"></i>
                                     </span>
@@ -825,7 +840,8 @@
                                 <div class="td text-center fe-1">
                                   <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                                  <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
+                                  <div class="d-flex align-items-center justify-content-center d-none"
+                                    name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
                                     <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
@@ -843,7 +859,8 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-primary"
-                            (click)="nextDeclaration('otherExemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
+                            (click)="nextDeclaration('otherExemptions')"><i class="fa fa-arrow-left pe-2"></i>
+                            Prev</button>
                           <button type="button" class="btn btn-outline-success"
                             (click)="submitDeclaration()">Submit</button>
                         </div>
@@ -866,7 +883,8 @@
                                   There are no rental details available
                                 </div>
                                 <div>
-                                  <button class="btn btn-outline-primary" (click)="rentedDecalrationPopup()"> <i class="fa fa-plus"></i> Add Rented
+                                  <button class="btn btn-outline-primary" (click)="rentedDecalrationPopup()"> <i
+                                      class="fa fa-plus"></i> Add Rented
                                     Residence</button>
                                 </div>
                               </div>
@@ -894,9 +912,11 @@
                                 <li>You can add more than one rented property or own property for the current financial
                                   year.
                                 </li>
-                                <li class="pt-3">For rented property if the total rent is more than &#x20b9; 100000 then you
+                                <li class="pt-3">For rented property if the total rent is more than &#x20b9; 100000 then
+                                  you
                                   need to provide either PAN of owner or declaration letter.</li>
-                                <li class="pt-3">For rented property you are eligible for HRA and in case HRA is not paid by
+                                <li class="pt-3">For rented property you are eligible for HRA and in case HRA is not
+                                  paid by
                                   your employer you will be eligible for exemption under section 80 GG.</li>
                                 <li class="pt-2">For own property/residence you will be eligible for house loan interest
                                   exemption under section 24.</li>
@@ -913,7 +933,8 @@
                     <ng-template ngbNavContent>
                       <ng-container>
                         <h5 class="text-dark">Income From Other Sources</h5>
-                        <p>Income from other sources is a residual category used to classify income that is not classified
+                        <p>Income from other sources is a residual category used to classify income that is not
+                          classified
                           as
                           taxed under any other head of income.</p>
                         <div class="mb-3">
