@@ -270,21 +270,11 @@
                     <input class="form-check-input" type="checkbox">
                     Loss of pay due to employee attendance will affect this component..
                   </li>
-                  <li class="list-group-item pb-0 ps-0">
-                    <input class="form-check-input me-1" type="checkbox" aria-label="...">
-                    This component is paid separately
-                    <ul class="list-border-0 list-group">
-                      <li class="list-group-item pt-3 d-flex align-items-center">
-                        <input type="checkbox" disabled class="form-check-input me-1">
-                        Hide component in Payslip (and exclude from gross earnings calculation in Payslip)
-                        <div class="mx-4 col-md-2 d-inline-block">
-                          <input type="text" class="form-control form-control-sm">
-                        </div>
-                        <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
-                      </li>
-                    </ul>
-                  </li>
                 </ng-container>
+                <li class="list-group-item pt-3 d-flex align-items-center ps-0">
+                  <input type="checkbox" class="form-check-input me-1" formControlName="IncludeInPayslip">
+                  Include component in Payslip (and included from gross earnings calculation in Payslip)
+                </li>
                 <li class="list-group-item ps-0">
                   <input class="form-check-input" type="checkbox" formControlName="IsAllowtoOverride">
                   Allow this component value to be customized and overridden at employee level.

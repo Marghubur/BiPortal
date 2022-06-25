@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { ADocx, AImage, APdf, Clients, Doc, DocImg, DocumentPath, DocumentPathName, Documents, Docx, Employees, Excel, ExcelImg, FileSystemType, Images, JImage, Pdf, PdfImg, PImage, Resume, UserPath, UserPathName, UserType } from 'src/providers/constants';
+import { ADocx, AImage, APdf, Clients, Doc, DocImg, DocumentPath, DocumentPathName, Documents, Docx, Employees, Excel, ExcelImg, FileSystemType, Images, JImage, Pdf, PdfImg, PImage, Resume, Txt, TxtImg, UserPath, UserPathName, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 import { environment } from "src/environments/environment";
@@ -119,6 +119,7 @@ export class documentsComponent implements OnInit, OnDestroy {
       case Pdf:
         this.viewer = document.getElementById("file-container");
         this.viewer.classList.remove('d-none');
+        this.viewer.querySelector('iframe').classList.remove('bg-white');
         this.viewer.querySelector('iframe').setAttribute('src',
         `${this.baseUrl}${environment.FolderDelimiter}${file.FilePath}${environment.FolderDelimiter}${file.FileName}`);
       break;
@@ -126,6 +127,12 @@ export class documentsComponent implements OnInit, OnDestroy {
       case Doc:
         this.getDocxHtml(file);
         break;
+      case Txt:
+        this.viewer = document.getElementById("file-container");
+        this.viewer.classList.remove('d-none');
+        this.viewer.querySelector('iframe').classList.add('bg-white');
+        this.viewer.querySelector('iframe').setAttribute('src',
+        `${this.baseUrl}${environment.FolderDelimiter}${file.FilePath}${environment.FolderDelimiter}${file.FileName}`);
     }
   }
 
@@ -248,6 +255,8 @@ export class documentsComponent implements OnInit, OnDestroy {
           case AImage:
             item["LocalImgPath"] = `${this.baseUrl}/${item.FilePath}/${item.FileName}`;
             break;
+          case Txt:
+            item["LocalImgPath"] = TxtImg;
           default:
             item.IsFolderType = true;
         }
