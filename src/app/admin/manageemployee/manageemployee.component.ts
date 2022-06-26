@@ -55,7 +55,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   isCompanyGroupSelected: boolean = false;
   isSalaryGroup: boolean = false;
   salaryComponents: Array<any> = [];
-  salaryDeatil: Array<any> = [];
+  salaryDetail: any = null;
   completeSalaryBreakup: SalaryBreakupDetails = new SalaryBreakupDetails();
 
   get f() {
@@ -75,9 +75,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    //this.calculateExpressionUsingInfixDS('(40 % 1000 + (((20 + 60) % 10) % 10');
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
-    this.initForm();
     this.managerList.placeholder = "Reporting Manager";
     this.managerList.data.push({
       value: 0,
@@ -100,7 +100,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.bindForm();
       this.idReady = true;
     }
-
     this.loadData(this.employeeUid);
   }
 
@@ -173,11 +172,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         }
 
         if (res.ResponseBody.SalaryDetail.length > 0)
-          this.salaryDeatil = res.ResponseBody.SalaryDetail;
+          this.salaryDetail = res.ResponseBody.SalaryDetail[0];
       }
 
       this.buildPageData(res);
       this.bindForm();
+      this.initForm();
       this.idReady = true;
     });
   }
@@ -456,7 +456,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   salryBreakupPopup() {
     $('#fullSalaryDetail').modal('show');
-    if (this.salaryDeatil.length == 1)
+    if (this.companyGroup.length == 1)
       this.findSalaryGroup();
   }
 
@@ -472,13 +472,13 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
       if(res.ResponseBody) {
         this.salaryGroup = res.ResponseBody;
-        if (this.salaryDeatil.length > 0 && this.salaryDeatil[0].CTC >= 0) {
-          let value = JSON.parse(this.salaryDeatil[0].CompleteSalaryDetail);
-          if (value.CTCAnnually > 0)
-            this.completeSalaryBreakup = value
+        if (this.salaryDetail.CompleteSalaryDetail) {
+          if (this.salaryDetail.CompleteSalaryDetail != null && this.salaryDetail.CompleteSalaryDetail != '{}')
+            this.completeSalaryBreakup = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
           else
             this.completeSalaryBreakup = new SalaryBreakupDetails();
           this.initForm();
+          this.salaryBreakupForm.get("ExpectedCTC").setValue(this.salaryDetail.CTC);
           this.isSalaryGroup = true;
           this.isCompanyGroupSelected = true;
         } else {
@@ -491,15 +491,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  // selectSalaryGroup(event: any) {
-  //   this.isSalaryGroup = true;
-  //   let value = Number(event.target.value);
-  //   if (value > 0) {
-  //     this.salaryGroupId = value;
-  //     this.salaryGroupDetail();
-  //   }
-  // }
 
   salaryGroupDetail() {
 
@@ -535,25 +526,24 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       GratuityAnnually: new FormControl(this.completeSalaryBreakup.GratuityAnnually),
       FoodMonthly: new FormControl(this.completeSalaryBreakup.FoodMonthly),
       FoodAnnually: new FormControl(this.completeSalaryBreakup.FoodAnnually),
-      CTCMonthly: new FormControl(this.completeSalaryBreakup.CTCMonthly),
-      CTCAnnually: new FormControl(this.completeSalaryBreakup.CTCAnnually)
+      CTCMonthly: new FormControl((this.completeSalaryBreakup.CTCMonthly)),
+      CTCAnnually: new FormControl(this.completeSalaryBreakup.CTCAnnually),
+      ExpectedCTC: new FormControl('')
     });
   }
 
   calculateSalary() {
-    let annualCTC = Number(this.salaryBreakupForm.get("CTCAnnually").value);
-    //let annualCTC = this.salaryDeatil[0].CTC;
+    let annualCTC = Number(this.salaryBreakupForm.get("ExpectedCTC").value);
     if (annualCTC > 0) {
       let salarygrpDetail = this.salaryGroup.find(x => x.MinAmount <= annualCTC && x.MaxAmount >= annualCTC);
-      this.salaryGroupId = salarygrpDetail.SalaryGroupId;
 
-      if (this.salaryGroupId > 0) {
+      if (salarygrpDetail) {
+        this.salaryGroupId = salarygrpDetail.SalaryGroupId;
         this.isSalaryGroup = true;
         this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryGroupId}`)
         .then(res => {
           if (res.ResponseBody) {
-            let value = res.ResponseBody;
-            this.salaryComponents = value.filter(x => x.ComponentCatagoryId == 1);
+            this.salaryComponents = res.ResponseBody;
             let fixedvaluedComponent = this.salaryComponents.filter(x => x.PercentageValue == 0);
             let i = 0;
             while (i < fixedvaluedComponent.length) {
@@ -594,8 +584,152 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         ErrorToast("Please select salary group.")
       }
     }
-
   }
+
+  calculateExpressionUsingInfixDS(expression: string): number {
+    expression = `(${expression})`;
+    let operatorStact = [];
+    let expressionStact = [];
+    let index = 0;
+    let lastOp = '';
+    let ch = '';
+    while(index < expression.length) {
+      ch = expression[index];
+      if(ch.trim() == ''){
+        index++;
+        continue;
+      }
+      if(isNaN(Number(ch))) {
+        switch(ch) {
+          case '+':
+          case '-':
+          case '/':
+          case '%':
+          case '*':
+            if(operatorStact.length > 0) {
+              lastOp = operatorStact[operatorStact.length - 1];
+              if(lastOp == '+' || lastOp == '-' || lastOp == '/' || lastOp == '*' || lastOp == '%') {
+                lastOp = operatorStact.pop();
+                expressionStact.push(lastOp);
+              }
+            }
+            operatorStact.push(ch);
+            break;
+          case ')':
+            while(true) {
+              lastOp = operatorStact.pop();
+              if(lastOp == '(') {
+                //operatorStact.pop();
+                break;
+              }
+              expressionStact.push(lastOp);
+            }
+            break;
+          case '(':
+            operatorStact.push(ch);
+            break;
+          default:
+            ErrorToast("Invalid expression");
+            break;
+        }
+      } else {
+        let value = 0;
+        while(true) {
+          ch = expression[index];
+          if(ch.trim() == '') {
+            expressionStact.push(value);
+            break;
+          }
+
+          if(!isNaN(Number(ch))) {
+            value = Number(`${value}${ch}`);
+            index++;
+          } else {
+            index--;
+            expressionStact.push(value);
+            break;
+          }
+        }
+      }
+
+      index++;
+    }
+
+    return this.calculationUsingInfixExpression(expressionStact);
+  }
+
+  calculationUsingInfixExpression(expressionStact: Array<any>): number {
+    let i = 0;
+    let term = [];
+    while (i < expressionStact.length) {
+      if (!isNaN(expressionStact[i]) && !isNaN(expressionStact[i+1]) && isNaN(Number(expressionStact[i+2]))) {
+        let  finalvalue = 0;
+        switch (expressionStact[i+2]) {
+          case '+':
+            finalvalue = expressionStact[i] + expressionStact[i+1];
+            break;
+          case '*':
+            finalvalue = expressionStact[i] * expressionStact[i+1];
+            break;
+          case '-':
+            finalvalue = expressionStact[i] - expressionStact[i+1];
+            break;
+          case '%':
+            finalvalue = (expressionStact[i] * expressionStact[i+1]) / 100;
+            break;
+          }
+        term.push(finalvalue);
+        i = i+3;
+      }
+      else if(!isNaN(expressionStact[i]) && isNaN(Number(expressionStact[i+1]))) {
+        let  finalvalue = 0;
+        let lastterm = term.pop();
+        switch (expressionStact[i+1]) {
+          case '+':
+            finalvalue = lastterm + expressionStact[i];
+            break;
+          case '*':
+            finalvalue = lastterm * expressionStact[i];
+            break;
+          case '-':
+            finalvalue = lastterm - expressionStact[i];
+            break;
+          case '%':
+            finalvalue = (lastterm * expressionStact[i]) / 100;
+            break;
+          }
+        term.push(finalvalue);
+        i = i+2;
+      } else {
+        let  finalvalue = 0;
+        let lastterm = term.pop();
+        let previousterm = term.pop();
+        switch (expressionStact[i]) {
+          case '+':
+            finalvalue = previousterm + lastterm;
+            break;
+          case '*':
+            finalvalue = previousterm * lastterm;
+            break;
+          case '-':
+            finalvalue = previousterm - lastterm;
+            break;
+          case '%':
+            finalvalue = (previousterm * lastterm) / 100;
+            break;
+          }
+        term.push(finalvalue);
+        i++;
+      }
+    }
+    if (term.length === 1) {
+      return Math.trunc(term[0]);
+    } else {
+      term = [];
+      ErrorToast("Invalid expression");
+    }
+  }
+
   salaryCalculation(annualCTC: number) {
     let grossAnnually = annualCTC - Number (this.salaryBreakupForm.get("InsuranceAnnually").value + this.salaryBreakupForm.get("PFAnnually").value + this.salaryBreakupForm.get("GratuityAnnually").value);
     this.salaryBreakupForm.get("GrossAnnually").setValue(grossAnnually);
@@ -605,53 +739,34 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       let formula = this.salaryComponents[i].Formula;
       let componentId = this.salaryComponents[i].ComponentId;
       if (formula && formula != '') {
-        let value = formula.split(' ');
-        if (value.length > 0) {
-          let finalvalue = 0;
-          let calValue = value[0];
-          let operator = value[1];
-          let calOn = value [2];
-          let calculatedOn = 0;
-          switch (calOn) {
-            case '[BASIC]':
-              calculatedOn = Number(this.salaryBreakupForm.get("BasicAnnually").value);
-              break;
-            case '[CTC]':
-              calculatedOn = annualCTC
-              break;
-            case '[GROSS]':
-              calculatedOn = grossAnnually;
-              break;
-          }
-          switch (operator) {
-            case '+':
-              finalvalue = calculatedOn + Number(calValue);
-              break;
-            case '*':
-              finalvalue = calculatedOn * Number(calValue);
-              break;
-            case '-':
-              finalvalue = calculatedOn - Number(calValue);
-              break;
-            case '%':
-              finalvalue = (calculatedOn * Number(calValue)) / 100;
-              break;
-          }
-          switch (componentId) {
-            case 'BS':
-              this.salaryBreakupForm.get("BasicAnnually").setValue(ToFixed((finalvalue), 0));
-              this.salaryBreakupForm.get("BasicMonthly").setValue(ToFixed((finalvalue/12), 0));
-              break;
-            case 'HRA':
-              this.salaryBreakupForm.get("HRAAnnually").setValue(ToFixed((finalvalue), 0));
-              this.salaryBreakupForm.get("HRAMonthly").setValue(ToFixed((finalvalue/12), 0));
-              break;
-            }
+        if (formula.includes("[BASIC]")) {
+          let calculatedOn = Number(this.salaryBreakupForm.get("BasicAnnually").value);
+          formula = formula.replace("[BASIC]", calculatedOn);
+        }
+        else if (formula.includes("[CTC]")) {
+          let calculatedOn = annualCTC;
+          formula = formula.replace("[CTC]", calculatedOn);
+        }
+        else if (formula.includes("[GROSS]")) {
+          let calculatedOn = grossAnnually;
+          formula = formula.replace("[GROSS]", calculatedOn);
+        }
+
+        let finalvalue = this.calculateExpressionUsingInfixDS(formula);
+        switch (componentId) {
+          case 'BS':
+            this.salaryBreakupForm.get("BasicAnnually").setValue(ToFixed((finalvalue), 0));
+            this.salaryBreakupForm.get("BasicMonthly").setValue(ToFixed((finalvalue/12), 0));
+            break;
+          case 'HRA':
+            this.salaryBreakupForm.get("HRAAnnually").setValue(ToFixed((finalvalue), 0));
+            this.salaryBreakupForm.get("HRAMonthly").setValue(ToFixed((finalvalue/12), 0));
+            break;
           }
         }
         i++;
       }
-      let specialAllowanceAnnually = grossAnnually - Number (this.salaryBreakupForm.get("BasicAnnually").value + this.salaryBreakupForm.get("ConveyanceAnnually").value + this.salaryBreakupForm.get("HRAAnnually").value + this.salaryBreakupForm.get("MedicalAnnually").value + this.salaryBreakupForm.get("ShiftAnnually").value);
+      let specialAllowanceAnnually = grossAnnually - (Number (this.salaryBreakupForm.get("BasicAnnually").value) + Number(this.salaryBreakupForm.get("ConveyanceAnnually").value) + Number (this.salaryBreakupForm.get("HRAAnnually").value) + Number(this.salaryBreakupForm.get("MedicalAnnually").value) + Number(this.salaryBreakupForm.get("ShiftAnnually").value));
       this.salaryBreakupForm.get("SpecialAnnually").setValue(ToFixed((specialAllowanceAnnually), 0));
       this.salaryBreakupForm.get("SpecialMonthly").setValue(ToFixed((specialAllowanceAnnually/12), 0));
       this.salaryBreakupForm.get("CTCAnnually").setValue(annualCTC);
@@ -667,7 +782,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         CTC: value.CTCAnnually,
         GrossIncome: value.GrossAnnually,
         NetSalary: 0,
-        GroupId: 0
+        GroupId: this.salaryGroupId
       }
       let formData = new FormData();
       formData.append('completesalarydetail', JSON.stringify(value));

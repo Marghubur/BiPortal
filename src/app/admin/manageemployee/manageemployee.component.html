@@ -433,25 +433,15 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body px-5">
-        <form [formGroup]="salaryBreakupForm">
+        <form [formGroup]="salaryBreakupForm" *ngIf="salaryBreakupForm">
           <div class="col-md-12 row m-0 p-0 justify-content-between">
             <div class="col-md-3 mb-3 m-0 p-0">
               <select class="form-select" (change)="selectCompanyGroup($event)">
                 <option value="0">Please select company group</option>
-                <option [value]="item.CompanyId" [selected]="companyGroup.length == 1" *ngFor="let item of companyGroup">{{item.CompanyName}}</option>
+                <option [value]="item.CompanyId" [selected]="companyGroup.length == 1"
+                  *ngFor="let item of companyGroup">{{item.CompanyName}}</option>
               </select>
             </div>
-            <!-- <div class="col-md-4 mb-3 m-0 p-0 row justify-content-end">
-              <div class="col-md-2" *ngIf="isSalaryGroup">
-                <i class="fa fa-spinner fa-pulse text-success fa-2x fa-fw"></i>
-              </div>
-              <div class="col-md-10">
-                <select class="form-select" (change)="selectSalaryGroup($event)">
-                  <option value="0">Please select salary group</option>
-                  <option [value]="item.SalaryGroupId" *ngFor="let item of salaryGroup">{{item.GroupName}}</option>
-                </select>
-              </div>
-            </div> -->
           </div>
           <div class="t-table t-list col-md-12 mb-3">
             <div class="t-body">
@@ -462,8 +452,8 @@
                 <div class="td align-middle fe-2">
                   <div class="cell-wrapper mx-2 d-flex align-items-center">
                     <label for="" class="form-label pe-2 mb-0">Annually</label>
-                    <input type="text" class="form-control form-control-sm" OnlyNumber="9" [readonly]="!isSalaryGroup"
-                      formControlName="CTCAnnually">
+                    <input type="text" class="form-control form-control-sm" OnlyNumber="9"
+                      formControlName="ExpectedCTC">
                   </div>
                 </div>
                 <button class="btn btn-outline-success ms-3" (click)="calculateSalary()" [disabled]="!isSalaryGroup">
