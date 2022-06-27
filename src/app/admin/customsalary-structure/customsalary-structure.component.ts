@@ -40,6 +40,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   groupAllComponents: Array<any> = [];
   activeComponent: Array<any> = [];
   addedFormula: string = '';
+  isEditSalaryGroup: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -266,6 +267,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   ediitSalaryGrouop(item: any) {
     if (item) {
+      this.isEditSalaryGroup = true;
       this.selectedSalaryStructure = item;
       this.salaryGroup();
       $('#addSalaryGroupModal').modal('show');
@@ -273,6 +275,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   addSalaryGroup() {
+    this.isEditSalaryGroup = false;
     this.isLoading = true;
     this.submitted = true;
     let errorCounter = 0;
