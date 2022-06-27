@@ -306,7 +306,7 @@
                       </div>
                       <div class="col-auto mx-3">
                         <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                        <h6 class="text-dark">INR 1716000</h6>
+                        <h6 class="text-dark">{{employeeDeclaration.Declarations[0].TotalAmountDeclared}}</h6>
                       </div>
                       <div class="col-auto mx-3">
                         <label for="" class="form-label pe-2 mb-0">AUTO APPROVED AMOUNT</label>
@@ -483,7 +483,7 @@
                       </div>
                       <div class="col-auto mx-3">
                         <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                        <h6 class="text-dark">INR 1716000</h6>
+                        <h6 class="text-dark">{{employeeDeclaration.Declarations[1].TotalAmountDeclared}}</h6>
                       </div>
                       <div class="col-auto mx-3">
                         <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
@@ -683,7 +683,7 @@
                       </div>
                       <div class="col-auto mx-3">
                         <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                        <h6 class="text-dark">INR 1716000</h6>
+                        <h6 class="text-dark">{{employeeDeclaration.Declarations[2].TotalAmountDeclared}}</h6>
                       </div>
                       <div class="col-auto mx-3">
                         <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
@@ -774,7 +774,7 @@
                                 <span class="pe-2 d-flex flex-column justify-content-center">
                                   <i class="fa fa-inr"></i>
                                 </span>
-                                <input [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control">
+                                <input type="number" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" >
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
