@@ -579,7 +579,7 @@
                                 <span class="pe-2 d-flex flex-column justify-content-center">
                                   <i class="fa fa-inr"></i>
                                 </span>
-                                <input [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control">
+                                <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" (keyup)="checkMaxLimit($event, r.MaxLimit)">
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
@@ -774,7 +774,7 @@
                                 <span class="pe-2 d-flex flex-column justify-content-center">
                                   <i class="fa fa-inr"></i>
                                 </span>
-                                <input type="number" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" >
+                                <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" (keyup)="checkMaxLimit($event, r.MaxLimit)">
                               </div>
                             </div>
                             <div class="td align-middle fe-1">

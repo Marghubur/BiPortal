@@ -57,6 +57,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   isEmployeesReady: boolean = false;
   applicationData: any = [];
   employeesList: autoCompleteModal = new autoCompleteModal();
+  isAmountExceed: boolean = false;
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -204,7 +205,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   editDeclaration(e: any) {
     this.editException = true;
     let current = e.target;
-    this.presentRow = current.closest('div[name="table-row"]')
+    this.presentRow = current.closest('div[name="table-row"]');
     this.presentRow.querySelector('div[name="view-control"]').classList.add('d-none');
     this.presentRow.querySelector('div[name="edit-control"]').classList.remove('d-none');
     this.presentRow.querySelector('i[name="edit-declaration"]').classList.add('d-none');
@@ -212,6 +213,17 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.presentRow.querySelector('a[name="upload-proof"]').classList.remove('pe-none', 'text-decoration-none', 'text-muted');
     this.presentRow.querySelector('a[name="upload-proof"]').classList.add('pe-auto', 'fw-bold', 'text-primary-c');
     this.presentRow.querySelector('input[name="DeclaratedValue"]').focus();
+  }
+
+  checkMaxLimit(e: any, maxlimit: number) {
+    let value = e.target.value;
+    if (value > maxlimit) {
+      ErrorToast("Amount is exceed from maxlimit");
+      this.isAmountExceed = true;
+      return;
+    } else {
+      this.isAmountExceed = false;
+    }
   }
 
   uploadDocument(item: any) {
@@ -225,6 +237,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       $("#addAttachmentModal").modal('show');
     }
   }
+
 
   UploadAttachment(fileInput: any) {
     this.FileDocumentList = [];
@@ -370,7 +383,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   saveDeclaration(item: any, e: any) {
     let declaredValue = this.presentRow.querySelector('input[name="DeclaratedValue"]').value;
     declaredValue = Number(declaredValue);
-    if (!isNaN(declaredValue) && declaredValue > 0) {
+    if (!isNaN(declaredValue) && declaredValue > 0 && this.isAmountExceed == false) {
       let value = {
         ComponentId: item.ComponentId,
         DeclaredValue: declaredValue,
@@ -408,7 +421,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         });
       }
     } else {
-      WarningToast("Only numeric value is allowed");
+      if (this.isAmountExceed)
+        ErrorToast("Please enter declaration amount less to maxlimit");
+      else
+        WarningToast("Only numeric value is allowed");
     }
   }
 
