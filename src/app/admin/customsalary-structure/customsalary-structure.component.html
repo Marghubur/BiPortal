@@ -425,7 +425,8 @@
               </a>
             </div>
           </div>
-          <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true" onkeypress="return (event.charCode !=8 && event.charCode ==0  || (event.charCode >= 47 && event.charCode <= 57 ) || event.charCode ==42 || event.charCode ==43 || event.charCode ==45)"
+          <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
+            onkeypress="return (event.charCode !=8 && event.charCode ==0  || (event.charCode >= 47 && event.charCode <= 57 ) || event.charCode ==42 || event.charCode ==43 || event.charCode ==45)"
             (keyup)="addFormula()">
           </div>
         </div>
@@ -735,7 +736,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title px-4" id="addClassModalLabel">{{selectedSalaryStructure.SalaryGroupId > 0 ? 'Update':
+        <h5 class="modal-title px-4" id="addClassModalLabel">{{isEditSalaryGroup ? 'Update':
           'Create'}} Salary Group</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -772,13 +773,13 @@
       </div>
       <div class="modal-footer border-top-0 me-3">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        <ng-container *ngIf="selectedSalaryStructure.SalaryGroupId > 0">
+        <ng-container *ngIf="isEditSalaryGroup">
           <button type="button" class="btn btn-primary-c" (click)="updateSalaryGroup()">
             <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
             {{ isLoading ? 'Wait' : 'Update Salary Group' }}
           </button>
         </ng-container>
-        <ng-container *ngIf="selectedSalaryStructure.SalaryGroupId == 0">
+        <ng-container *ngIf="!isEditSalaryGroup">
           <button type="button" class="btn btn-primary-c" (click)="addSalaryGroup()">
             <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
             {{ isLoading ? 'Wait' : 'Create Salary Group' }}
