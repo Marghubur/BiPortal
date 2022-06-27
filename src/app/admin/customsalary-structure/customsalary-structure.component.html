@@ -425,7 +425,7 @@
               </a>
             </div>
           </div>
-          <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
+          <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true" onkeypress="return (event.charCode !=8 && event.charCode ==0  || (event.charCode >= 47 && event.charCode <= 57 ) || event.charCode ==42 || event.charCode ==43 || event.charCode ==45)"
             (keyup)="addFormula()">
           </div>
         </div>

@@ -498,37 +498,37 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.salaryBreakupForm = this.fb.group({
-      BasicMonthly: new FormControl(this.completeSalaryBreakup.BasicMonthly),
-      BasicAnnually: new FormControl(this.completeSalaryBreakup.BasicAnnually),
-      ConveyanceMonthly: new FormControl(this.completeSalaryBreakup.ConveyanceMonthly),
-      ConveyanceAnnually: new FormControl(this.completeSalaryBreakup.ConveyanceAnnually),
-      HRAMonthly: new FormControl(this.completeSalaryBreakup.HRAMonthly),
-      HRAAnnually: new FormControl(this.completeSalaryBreakup.HRAAnnually),
-      MedicalMonthly: new FormControl(this.completeSalaryBreakup.MedicalMonthly),
-      MedicalAnnually: new FormControl(this.completeSalaryBreakup.MedicalAnnually),
-      CarRunningMonthly: new FormControl(this.completeSalaryBreakup.CarRunningMonthly),
-      CarRunningAnnually: new FormControl(this.completeSalaryBreakup.CarRunningAnnually),
-      InternetMonthly: new FormControl(this.completeSalaryBreakup.InternetMonthly),
-      InternetAnnually: new FormControl(this.completeSalaryBreakup.InternetAnnually),
-      TravelMonthly: new FormControl(this.completeSalaryBreakup.TravelMonthly),
-      TravelAnnually: new FormControl(this.completeSalaryBreakup.TravelAnnually),
-      ShiftMonthly: new FormControl(this.completeSalaryBreakup.ShiftAnnually),
-      ShiftAnnually: new FormControl(this.completeSalaryBreakup.ShiftAnnually),
-      SpecialMonthly: new FormControl(this.completeSalaryBreakup.SpecialMonthly),
-      SpecialAnnually: new FormControl(this.completeSalaryBreakup.SpecialAnnually),
-      GrossMonthly: new FormControl(this.completeSalaryBreakup.GrossMonthly),
-      GrossAnnually: new FormControl(this.completeSalaryBreakup.GrossAnnually),
-      InsuranceMonthly: new FormControl(this.completeSalaryBreakup.InsuranceMonthly),
-      InsuranceAnnually: new FormControl(this.completeSalaryBreakup.InsuranceAnnually),
-      PFMonthly: new FormControl(this.completeSalaryBreakup.PFMonthly),
-      PFAnnually: new FormControl(this.completeSalaryBreakup.PFAnnually),
-      GratuityMonthly: new FormControl(this.completeSalaryBreakup.GratuityMonthly),
-      GratuityAnnually: new FormControl(this.completeSalaryBreakup.GratuityAnnually),
-      FoodMonthly: new FormControl(this.completeSalaryBreakup.FoodMonthly),
-      FoodAnnually: new FormControl(this.completeSalaryBreakup.FoodAnnually),
-      CTCMonthly: new FormControl((this.completeSalaryBreakup.CTCMonthly)),
-      CTCAnnually: new FormControl(this.completeSalaryBreakup.CTCAnnually),
-      ExpectedCTC: new FormControl('')
+      BasicMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.BasicAnnually/12)),
+      BasicAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.BasicAnnually)),
+      ConveyanceMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.ConveyanceAnnually/12)),
+      ConveyanceAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.ConveyanceAnnually)),
+      HRAMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.HRAAnnually/12)),
+      HRAAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.HRAAnnually)),
+      MedicalMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.MedicalAnnually/12)),
+      MedicalAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.MedicalAnnually)),
+      CarRunningMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.CarRunningAnnually/12)),
+      CarRunningAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.CarRunningAnnually)),
+      InternetMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.InternetAnnually/12)),
+      InternetAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.InternetAnnually)),
+      TravelMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.TravelAnnually/12)),
+      TravelAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.TravelAnnually)),
+      ShiftMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.ShiftAnnually/12)),
+      ShiftAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.ShiftAnnually)),
+      SpecialMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.SpecialAnnually/12)),
+      SpecialAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.SpecialAnnually)),
+      GrossMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.GrossAnnually/12)),
+      GrossAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.GrossAnnually)),
+      InsuranceMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.InsuranceAnnually/12)),
+      InsuranceAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.InsuranceAnnually)),
+      PFMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.PFAnnually/12)),
+      PFAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.PFAnnually)),
+      GratuityMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.GratuityAnnually/12)),
+      GratuityAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.GratuityAnnually)),
+      FoodMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.FoodAnnually/12)),
+      FoodAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.FoodAnnually)),
+      CTCMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.CTCAnnually/12)),
+      CTCAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.CTCAnnually)),
+      ExpectedCTC: new FormControl(Math.trunc(this.salaryDetail.CTC))
     });
   }
 
@@ -540,44 +540,46 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       if (salarygrpDetail) {
         this.salaryGroupId = salarygrpDetail.SalaryGroupId;
         this.isSalaryGroup = true;
-        this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryGroupId}`)
+        this.http.post(`SalaryComponent/SalaryBreakupCalc/${this.employeeUid}/${this.salaryGroupId}`, annualCTC)
         .then(res => {
           if (res.ResponseBody) {
-            this.salaryComponents = res.ResponseBody;
-            let fixedvaluedComponent = this.salaryComponents.filter(x => x.PercentageValue == 0);
-            let i = 0;
-            while (i < fixedvaluedComponent.length) {
-              let finalvalue = fixedvaluedComponent[i].MaxLimit;
-              switch (fixedvaluedComponent[i].ComponentId) {
-                case 'ECTG':
-                  this.salaryBreakupForm.get("GratuityAnnually").setValue(finalvalue);
-                  this.salaryBreakupForm.get("GratuityMonthly").setValue(ToFixed((finalvalue/12), 0));
-                  break;
-                case 'CA':
-                  this.salaryBreakupForm.get("ConveyanceAnnually").setValue(finalvalue);
-                  this.salaryBreakupForm.get("ConveyanceMonthly").setValue(ToFixed((finalvalue/12), 0));
-                  break;
-                case 'EPF':
-                  this.salaryBreakupForm.get("PFAnnually").setValue(finalvalue);
-                  this.salaryBreakupForm.get("PFMonthly").setValue(ToFixed((finalvalue/12), 0));
-                  break;
-                case 'MA':
-                  this.salaryBreakupForm.get("MedicalAnnually").setValue(finalvalue);
-                  this.salaryBreakupForm.get("MedicalMonthly").setValue(ToFixed((finalvalue/12), 0));
-                  break;
-                case 'SA':
-                  this.salaryBreakupForm.get("ShiftAnnually").setValue(finalvalue);
-                  this.salaryBreakupForm.get("ShiftMonthly").setValue(ToFixed((finalvalue/12), 0));
-                  break;
-                case 'ESI':
-                  this.salaryBreakupForm.get("InsuranceAnnually").setValue(finalvalue);
-                  this.salaryBreakupForm.get("InsuranceMonthly").setValue(ToFixed((finalvalue/12), 0));
-                  break;
-              }
-              i++;
-            }
+            this.completeSalaryBreakup = res.ResponseBody;
+            this.initForm();
+            // this.salaryComponents = res.ResponseBody;
+            // let fixedvaluedComponent = this.salaryComponents.filter(x => x.PercentageValue == 0);
+            // let i = 0;
+            // while (i < fixedvaluedComponent.length) {
+            //   let finalvalue = fixedvaluedComponent[i].MaxLimit;
+            //   switch (fixedvaluedComponent[i].ComponentId) {
+            //     case 'ECTG':
+            //       this.salaryBreakupForm.get("GratuityAnnually").setValue(finalvalue);
+            //       this.salaryBreakupForm.get("GratuityMonthly").setValue(ToFixed((finalvalue/12), 0));
+            //       break;
+            //     case 'CA':
+            //       this.salaryBreakupForm.get("ConveyanceAnnually").setValue(finalvalue);
+            //       this.salaryBreakupForm.get("ConveyanceMonthly").setValue(ToFixed((finalvalue/12), 0));
+            //       break;
+            //     case 'EPF':
+            //       this.salaryBreakupForm.get("PFAnnually").setValue(finalvalue);
+            //       this.salaryBreakupForm.get("PFMonthly").setValue(ToFixed((finalvalue/12), 0));
+            //       break;
+            //     case 'MA':
+            //       this.salaryBreakupForm.get("MedicalAnnually").setValue(finalvalue);
+            //       this.salaryBreakupForm.get("MedicalMonthly").setValue(ToFixed((finalvalue/12), 0));
+            //       break;
+            //     case 'SA':
+            //       this.salaryBreakupForm.get("ShiftAnnually").setValue(finalvalue);
+            //       this.salaryBreakupForm.get("ShiftMonthly").setValue(ToFixed((finalvalue/12), 0));
+            //       break;
+            //     case 'ESI':
+            //       this.salaryBreakupForm.get("InsuranceAnnually").setValue(finalvalue);
+            //       this.salaryBreakupForm.get("InsuranceMonthly").setValue(ToFixed((finalvalue/12), 0));
+            //       break;
+            //   }
+            //   i++;
+            // }
             this.isCompanyGroupSelected = true;
-            this.salaryCalculation(annualCTC);
+            // this.salaryCalculation(annualCTC);
           }
         })
       } else {
@@ -779,7 +781,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (value) {
       let empSalary = {
         EmployeeId: this.employeeUid,
-        CTC: value.CTCAnnually,
+        CTC: value.ExpectedCTC,
         GrossIncome: value.GrossAnnually,
         NetSalary: 0,
         GroupId: this.salaryGroupId
