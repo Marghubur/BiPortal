@@ -8,6 +8,7 @@ import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/comm
 import { AccessTokenExpiredOn, Declaration, Preferences, Salary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 declare var $: any;
 
 @Component({
@@ -28,6 +29,9 @@ export class SummaryComponent implements OnInit {
   currentYear: number = 0;
   salarySummary: any = {};
   monthName: string = '';
+  isSummaryReady: boolean = false;
+  employeesList: autoCompleteModal = new autoCompleteModal();
+  applicationData: any = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -44,6 +48,7 @@ export class SummaryComponent implements OnInit {
 
   ngOnInit(): void {
     let date = new Date();
+    this.loadData();
     this.currentMonth = date.getMonth();
     this.currentYear = date.getFullYear();
     this.monthName = this.convertNumberToMonth(this.currentYear, this.currentMonth);
@@ -73,6 +78,31 @@ export class SummaryComponent implements OnInit {
         }
       } else {
         ErrorToast("No file or folder found");
+      }
+    });
+  }
+
+  loadData() {
+    this.isSummaryReady = false;
+    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.applicationData = response.ResponseBody;
+        this.employeesList.data = [];
+        this.employeesList.placeholder = "Employee";
+        let employees = this.applicationData.Employees;
+        if(employees) {
+          let i = 0;
+          while(i < employees.length) {
+            this.employeesList.data.push({
+              text: `${employees[i].FirstName} ${employees[i].LastName}`,
+              value: employees[i].EmployeeUid
+            });
+            i++;
+          }
+        }
+        this.employeesList.className = "";
+
+        this.isSummaryReady = true;
       }
     });
   }

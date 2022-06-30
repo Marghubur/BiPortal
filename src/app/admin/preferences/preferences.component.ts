@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { ResponseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
 import { AdminDeclaration, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
@@ -12,10 +15,15 @@ export class PreferencesComponent implements OnInit {
   salaryDeposit: SalaryDeposit = new SalaryDeposit();
   satutoryInformation: StatutoryInformation = new StatutoryInformation();
   cachedData: any = null;
+  employeesList: autoCompleteModal = new autoCompleteModal();
+  applicationData: any = [];
+  isPreferenceReady: boolean = false;
 
-  constructor(private nav: iNavigation) { }
+  constructor(private nav: iNavigation,
+              private http: AjaxService) { }
 
   ngOnInit(): void {
+    this.loadData()
     this.PanInformation = {
       NameOnCard: "MD Istayaque",
       PANNumber: "ABPANF655A",
@@ -42,6 +50,31 @@ export class PreferencesComponent implements OnInit {
       RegisteredLocation: 'Telangana',
       LWFStatus: "Disabled"
     }
+  }
+
+  loadData() {
+    this.isPreferenceReady = false;
+    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.applicationData = response.ResponseBody;
+        this.employeesList.data = [];
+        this.employeesList.placeholder = "Employee";
+        let employees = this.applicationData.Employees;
+        if(employees) {
+          let i = 0;
+          while(i < employees.length) {
+            this.employeesList.data.push({
+              text: `${employees[i].FirstName} ${employees[i].LastName}`,
+              value: employees[i].EmployeeUid
+            });
+            i++;
+          }
+        }
+        this.employeesList.className = "";
+
+        this.isPreferenceReady = true;
+      }
+    });
   }
 
   activateMe(ele: string) {

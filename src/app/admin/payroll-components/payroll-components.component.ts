@@ -306,8 +306,7 @@ export class PayrollComponentsComponent implements OnInit {
   filterRecords(e: any) {
     this.isReady = false;
     let text = e.target.value.toLowerCase();
-    this.RecurringComponent = this.AllComponents.filter (x => x.IsAdHoc == false
-      && (x.ComponentFullName.toLowerCase().indexOf(text) != -1 || x.ComponentId.toLowerCase().indexOf(text) != -1));
+    this.RecurringComponent = this.AllComponents.filter (x => x.IsAdHoc == false && (x.ComponentId.toLowerCase().indexOf(text) != -1 || x.ComponentFullName.toLowerCase().indexOf(text) != -1));
     this.isReady = true;
   }
 

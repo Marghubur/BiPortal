@@ -1,4 +1,4 @@
-<div class="col-12 full-v main-container" [ngClass]="{'preload': !SectionIsReady}">
+<div class="col-12 full-v main-container">
   <div class="col-md-12 bg-light mb-3 d-flex align-items-center">
     <ul class="nav col-md-9">
       <li class="nav-item">
@@ -26,901 +26,916 @@
     <div class="">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="right-panel col-md-12 p-0">
-      <div class="col-md-12 bg-light mb-3 mt-3">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link new-nav-link text-dark new-nav-active" id="attendance-tab"
-              (click)="activeTab('declaration-tab')" aria-current="page" href="javascript:void(0)">Declaration</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="timesheet-tab" (click)="activeTab('previous-income-tab')"
-              href="javascript:void(0)">Previous Income</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('form-12-tab')"
-              href="javascript:void(0)">Form 12 BB</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')"
-              href="javascript:void(0)">Free Tax Filling</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('tax-saving-tab')"
-              href="javascript:void(0)">Tax Saving Investment</a>
-          </li>
-        </ul>
+    <div [ngClass]="{'blur-section': !SectionIsReady}">
+      <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
+        <div class="blur-section__content">
+          Please select Employee first
+        </div>
       </div>
-      <ng-container>
-        <div class="container-fluid pt-4">
-          <div class="d-flex justify-content-between">
-            <h5 class="text-dark">Declaration</h5>
-            <div class="pt-3 pe-3">
-              <select class="form-select">
-                <option value="currentyear" selected>APR {{year}} - MAR {{year +1}}</option>
-                <option value="previousyear">APR {{year - 1}} - MAR {{year}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="card my-3">
-            <div class="d-flex text-dark fs-4 pt-3 align-items-center ps-3">
-              <i class=" fa fa-lightbulb-o"></i>
-              <h5 class="mb-0 ps-3">Important</h5>
-            </div>
-            <ul class="ps-5 ms-3">
-              <li class="pt-3">'$' - Not considered for exemption if opted foe New tax regime (Section 115BAC).</li>
-              <li class="pt-3">You can declare your investment amount till <span class="fw-bold">20th of every
-                  month</span> until the cutoff date of <span class="fw-bold">May 20, {{year}}</span></li>
-              <li class="pt-3">Last date for submitting your investment proofs is <span class="fw-bold">Dec 20,
-                  {{year}}</span></li>
-            </ul>
-            <div class="alert alert-warning mx-5">
-              Not submitting your investment proofs may lead to additional taxx being deducted in the subsequent months
-              of this fiscal year.
-            </div>
-          </div>
-          <div class="col-md-12 row my-4">
-            <div class="col-md-4">
-              <div class="card py-3 ps-3 skeleton">
-                <p class="mb-0 vhide">Net Taxable Income</p>
-                <p class="vhide text-dark fs-2 mb-0 ">
-                  <span class="">INR {{taxAmount.NetTaxableAmount}}</span>
-                  <span class="float-end pe-2">
-                    <a href="javascript:void(0)" (click)="gotoTaxSection('income-tax')"
-                      class="text-decoration-none fs-6">
-                      Income Tax Computitation
-                    </a>
-                  </span>
-                </p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card py-3 ps-3 skeleton">
-                <p class="mb-0 vhide">Total Tax Payable <i class="fa fa-exclamation-circle float-end fa-lg pe-3"
-                    data-bs-placement="right" data-toggle="tooltip"
-                    title="Net tax amount {{taxAmount.TotalTaxPayable}} of after round Off is"></i></p>
-                <p class="text-dark fs-2 mb-0 vhide">INR {{taxAmount.TotalTaxPayable}}</p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card py-3 ps-3 skeleton">
-                <p class="mb-0 vhide">Tax Already Paid</p>
-                <p class="text-dark fs-2 mb-0 vhide">INR {{taxAmount.TaxAlreadyPaid}}</p>
-              </div>
-            </div>
-          </div>
-
-          <ng-container *ngIf="!SectionIsReady">
-            <app-pre-load-table></app-pre-load-table>
-          </ng-container>
-          <ng-container *ngIf="SectionIsReady">
-            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-              <li [ngbNavItem]="1">
-                <a ngbNavLink>My Declaration</a>
-                <ng-template ngbNavContent>
-                  <ng-container>
-                    <h5 class="text-dark pt-3">My Declarations</h5>
-                    <p class="mb-0 pb-2">Below are the declarations done by you under various sections.</p>
-                    <div class="t-table t-list t-border col-md-12 my-3">
-                      <div class="hide-bar"></div>
-                      <div class="t-head bg-light">
-                        <div class="tr">
-                          <div class="th fe-3">
-                            <div class="cell-wrapper">
-                              DECLARATIONS
-                            </div>
-                          </div>
-                          <div class="th fe-3">
-                            <div class="cell-wrapper">
-                              NUMBER OF DECLARATIONS
-                            </div>
-                          </div>
-                          <div class="th fe-2">
-                            <div class="cell-wrapper">
-                              AMOUNT OF DECLARED
-                            </div>
-                          </div>
-                          <div class="th fe-2">
-                            <div class="cell-wrapper">
-                              PROOF SUBMITTED
-                            </div>
-                          </div>
-                          <div class="th fe-2">
-                            <div class="cell-wrapper">
-                              AMOUNT REJECTED
-                            </div>
-                          </div>
-                          <div class="th fe-2">
-                            <div class="cell-wrapper">
-                              AMOUNT ACCEPTED
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="t-body">
-                        <ng-container
-                          *ngIf="employeeDeclaration.Declarations != null && employeeDeclaration.Declarations.length > 0">
-                          <div class="tr py-3" *ngFor="let declaration of employeeDeclaration.Declarations">
-                            <div class="td align-middle fe-3">
-                              <div class="cell-wrapper">
-                                {{declaration.DeclarationName}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-3">
-                              <div class="cell-wrapper">
-                                {{declaration.Declarations.length}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-2">
-                              <div class="cell-wrapper">
-                                INR {{declaration.TotalAmountDeclared}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-2">
-                              <div class="cell-wrapper">
-                                {{declaration.NumberOfProofSubmitted}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-2">
-                              <div class="cell-wrapper">
-                                INR {{declaration.RejectedAmount}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-2">
-                              <div class="cell-wrapper">
-                                INR {{declaration.AcceptedAmount}}
-                              </div>
-                            </div>
-                          </div>
-                        </ng-container>
-
-                        <ng-container
-                          *ngIf="employeeDeclaration.Declarations == null || employeeDeclaration.Declarations.length == 0">
-                          <div class="p-5 m-5 d-flex flex-column justify-content-center text-center fs-5">
-                            Unable to get declaration detail. Please contact to admin.
-                          </div>
-                        </ng-container>
-
-                      </div>
-                    </div>
-                    <div class="py-3">
-                      <h5 class="text-dark ps-2 pb-0 mb-0">Monthly Tax Deductions Details</h5>
-                      <p class="mb-0 ps-2">Below deduction are based on your declared amount. Tax amount may chnage
-                        based
-                        on th amount approved.</p>
-                    </div>
-                    <div class="col-md-12 row mb-4">
-                      <div class="col-md-4">
-                        <div class="card py-3 ps-3">
-                          <p class="mb-0">TOTAL TAX PAYABLE</p>
-                          <p class="text-dark fs-2 mb-0">INR {{taxAmount.TotalTaxPayable}}</p>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="card py-3 ps-3">
-                          <p class="mb-0">TAX PAID TILL NOW</p>
-                          <p class="text-dark fs-2 mb-0">INR {{taxAmount.TaxAlreadyPaid}}</p>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="card py-3 ps-3">
-                          <p class="mb-0">REMAINING TAX AMOUNT</p>
-                          <p class="text-dark fs-2 mb-0">INR {{taxAmount.RemainingTaxAMount}}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="t-table t-list t-border mb-3 col-md-12 bg-white">
-                      <div class="t-head overflow-hidden custom-bg">
-                        <div class="tr bg-light py-3">
-                          <div class="th ps-2 fe-2">Month</div>
-                          <div class="th" *ngFor="let item of taxCalender">
-                            <div class="d-flex align-items-center">
-                              <span>{{item.month}} {{item.year}}</span>
-                              <div class="curent-employer-indicator indicator ms-1"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="t-body border-bottom overflow-hidden">
-                        <div class="tr py-3">
-                          <div class="td ps-2 fe-2">Monthly Total Tax</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.april}}</div>
-                          <div class="td ps-2">{{monthlyTaxAmount.may}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.june}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.july}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.aug}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.sep}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.oct}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.nov}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.dec}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.jan}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.feb}}</div>
-                          <div class="td ps-1">{{monthlyTaxAmount.march}}</div>
-                        </div>
-                      </div>
-                      <div class="ps-2 py-3 row">
-                        <div class="col d-flex align-items-center">
-                          <div class="previous-employer-indicator indicator"></div>
-                          <p class="p-0 m-0 ps-2">Tax Deduction from previous employer</p>
-                        </div>
-                        <div class="col d-flex align-items-center">
-                          <div class="curent-employer-indicator indicator"></div>
-                          <p class="p-0 m-0 ps-2">Imported Tax Deduction from current employer</p>
-                        </div>
-                        <div class="col d-flex align-items-center">
-                          <div class="project-salary-indicator indicator"></div>
-                          <p class="p-0 m-0 ps-2">Projected Income Tax</p>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container>
-                </ng-template>
+      <div class="blur-this">
+        <div class="right-panel col-md-12 p-0">
+          <div class="col-md-12 bg-light mb-3 mt-3">
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="nav-link new-nav-link text-dark new-nav-active" id="attendance-tab"
+                  (click)="activeTab('declaration-tab')" aria-current="page" href="javascript:void(0)">Declaration</a>
               </li>
-
-              <li [ngbNavItem]="2">
-                <a ngbNavLink>1.5 Lac Exemptions</a>
-                <ng-template ngbNavContent>
-                  <ng-container>
-                    <div class="row justify-content-between my-3">
-                      <div class="col-md-8">
-                        <h5 class="ps-3">1.5 Lac Exemptions</h5>
-                        <p class=" ps-3">
-                          The aggregate amount of deductions under section 80C, section 80CCC and sub-section (1) of
-                          80CCD
-                        </p>
-                      </div>
-                      <div class="col-md-3">
-                        <label for="" class="form-label">Search perform on section and deduction name.</label>
-                        <div class="form-group has-search">
-                          <span class="fa fa-search form-control-feedback"></span>
-                          <input type="text" class="form-control" [(ngModel)]="filterValue"
-                            oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-                            (keyup.enter)="filterDeduction($event, '1.5lac')" (keyup.esc)="resetFilter($event)">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12 row pb-4 ps-3">
-                      <div class="col-auto me-2">
-                        <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
-                        <h6 class="text-dark">INR 150000</h6>
-                      </div>
-                      <div class="col-auto mx-3">
-                        <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                        <h6 class="text-dark">{{employeeDeclaration.Declarations[0].TotalAmountDeclared}}</h6>
-                      </div>
-                      <div class="col-auto mx-3">
-                        <label for="" class="form-label pe-2 mb-0">AUTO APPROVED AMOUNT</label>
-                        <h6 class="text-dark">INR 150000</h6>
-                      </div>
-                      <div class="col-auto mx-3">
-                        <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
-                        <h6 class="text-dark">INR 21600</h6>
-                      </div>
-                      <div class="col-auto ms-3">
-                        <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
-                        <h6 class="text-dark">INR 0</h6>
-                      </div>
-                    </div>
-                    <div class="t-table t-list t-border col-md-12">
-                      <div class="hide-bar"></div>
-                      <div class="t-head">
-                        <div class="tr">
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">SECTION</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-3">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">DEDUCATION NAME</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">DECLARATION</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">PROOF</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">STATUS</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1 text-center">ACTIONS</div>
-                        </div>
-                      </div>
-                      <div class="t-body" *ngIf="SectionIsReady">
-                        <ng-container *ngFor="let r of ExemptionDeclaration; let i=index">
-                          <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                {{r.Section}} <sup>$</sup>
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-3">
-                              <div class="cell-wrapper">
-                                {{r.ComponentId}} ({{r.ComponentFullName}}) <a href="javascript:void(0)"
-                                  class="text-decoration-none"><i
-                                    class="fa fa-question-circle ps-3 text-secondary text-justify"
-                                    data-bs-toggle="tooltip" data-bs-placement="right"
-                                    title='{{r.ComponentDescription}}'></i></a>
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper" name="view-control">
-                                <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
-                                <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
-                              </div>
-                              <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
-                                <span class="pe-2 d-flex flex-column justify-content-center">
-                                  <i class="fa fa-inr"></i>
-                                </span>
-                                <input [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control">
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                <div [ngSwitch]="r.RequireDocs">
-                                  <div *ngSwitchCase="true">
-                                    <span>
-                                      <i class="fa fa-hand-o-right pe-2"></i>Change
-                                    </span>
-                                  </div>
-                                  <div *ngSwitchDefault>
-                                    <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none"
-                                      (click)="uploadDocument(r)">
-                                      <i class="fa fa-paperclip pe-2"></i>Upload
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="td align-middle">
-                              <div class="cell-wrapper">
-                                <div class="d-flex align-items-center">
-                                  <!-- <ng-container *ngIf="r.Status != 2">
-                                    <div class="circle">
-                                      <div class="checkmark">
-                                      </div>
-                                    </div>
-                                    <span class="ps-3">Auto Accepted</span>
-                                  </ng-container> -->
-                                  <ng-container *ngIf="r.DeclaredValue > 0">
-                                    <div class="circle">
-                                      <div class="checkmark">
-                                      </div>
-                                    </div>
-                                    <span class="ps-3">Submitted</span>
-                                  </ng-container>
-                                </div>
-                                <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
-                              </div>
-                            </div>
-                            <div class="td text-center fe-1">
-                              <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                              <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
-                                <a href="javascript:void(0)" class="text-decoration-none"
-                                  (click)="saveDeclaration(r, $event)">Save</a>
-                                <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
-                                  (click)="closeDeclaration($event)">Cancel</a>
-                              </div>
-                            </div>
-                          </div>
-                        </ng-container>
-                      </div>
-
-                      <div class="t-body fs-5 text-center p-5 m-5" *ngIf="!SectionIsReady">
-                        Unable to load the declaration.
-                        Please contact to admin.
-                      </div>
-                    </div>
-                    <div class="modal-footer border-top-0">
-                      <button type="button" class="btn btn-outline-success"
-                        (click)="nextDeclaration('otherExemptions')">Next<i class="fa fa-arrow-right ps-2"></i></button>
-                    </div>
-                  </ng-container>
-                </ng-template>
+              <li class="nav-item">
+                <a class="nav-link text-dark" id="timesheet-tab" (click)="activeTab('previous-income-tab')"
+                  href="javascript:void(0)">Previous Income</a>
               </li>
-
-              <li [ngbNavItem]="3">
-                <a ngbNavLink>Other Exemptions</a>
-                <ng-template ngbNavContent>
-                  <ng-container>
-                    <div class="row justify-content-between mt-3">
-                      <div class="col-md-8">
-                        <h5 class="ps-3">Other Exemptions</h5>
-                        <p class=" ps-3">Other deductions under chapter VI(A) which is from 80CCD1(B) to 80U</p>
-                      </div>
-                      <div class="col-md-3">
-                        <label for="" class="form-label">Search perform on section and deduction name.</label>
-                        <div class="form-group has-search">
-                          <span class="fa fa-search form-control-feedback"></span>
-                          <input type="text" class="form-control"
-                            oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-                            (keyup.enter)="filterDeduction($event, 'other')" (keyup.esc)="resetFilter($event)">>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12 row pb-4 ps-3">
-                      <div class="col-auto me-2">
-                        <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
-                        <h6 class="text-dark">INR 150000</h6>
-                      </div>
-                      <div class="col-auto mx-3">
-                        <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                        <h6 class="text-dark">{{employeeDeclaration.Declarations[1].TotalAmountDeclared}}</h6>
-                      </div>
-                      <div class="col-auto mx-3">
-                        <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
-                        <h6 class="text-dark">INR 21600</h6>
-                      </div>
-                      <div class="col-auto ms-3">
-                        <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
-                        <h6 class="text-dark">INR 0</h6>
-                      </div>
-                    </div>
-                    <div class="t-table t-list t-border col-md-12">
-                      <div class="hide-bar"></div>
-                      <div class="t-head">
-                        <div class="tr">
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">SECTION</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-3">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">DEDUCATION NAME</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">MAX LIMIT</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">DECLARATION</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">PROOF</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">STATUS</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">ACTIONS</div>
-                        </div>
-                      </div>
-                      <div class="t-body" *ngIf="SectionIsReady">
-                        <ng-container *ngFor="let r of OtherDeclaration; let i=index">
-                          <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                {{r.Section}} <sup>$</sup>
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-3">
-                              <div class="cell-wrapper">
-                                {{r.ComponentId}} ({{r.ComponentFullName}}) <a href="javascript:void(0)"
-                                  class="text-decoration-none"><i
-                                    class="fa fa-question-circle ps-3 text-secondary text-justify"
-                                    data-bs-toggle="tooltip" data-bs-placement="right"
-                                    title='{{r.ComponentDescription}}'></i></a>
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                <span *ngIf="r.MaxLimit > 0">
-                                  <i class="fa fa-rupee pe-2"></i> {{r.MaxLimit | number:'':'en'}}
-                                </span>
-                                <span *ngIf="r.MaxLimit <= 0">
-                                  No Limit
-                                </span>
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper" name="view-control">
-                                <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
-                                <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
-                              </div>
-                              <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
-                                <span class="pe-2 d-flex flex-column justify-content-center">
-                                  <i class="fa fa-inr"></i>
-                                </span>
-                                <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" (keyup)="checkMaxLimit($event, r.MaxLimit)">
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                <div [ngSwitch]="r.RequireDocs">
-                                  <div *ngSwitchCase="true">
-                                    <span>
-                                      <i class="fa fa-hand-o-right pe-2"></i>Change
-                                    </span>
-                                  </div>
-                                  <div *ngSwitchDefault>
-                                    <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none"
-                                      (click)="uploadDocument(r)">
-                                      <i class="fa fa-paperclip pe-2"></i>Upload
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="td align-middle">
-                              <div class="cell-wrapper">
-                                <div class="d-flex align-items-center">
-                                  <!-- <ng-container *ngIf="r.Status != 2">
-                                    <div class="circle">
-                                      <div class="checkmark">
-                                      </div>
-                                    </div>
-                                    <span class="ps-3">Auto Accepted</span>
-                                  </ng-container> -->
-                                  <ng-container *ngIf="r.DeclaredValue > 0">
-                                    <div class="circle">
-                                      <div class="checkmark">
-                                      </div>
-                                    </div>
-                                    <span class="ps-3">Submitted</span>
-                                  </ng-container>
-                                </div>
-                                <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
-                              </div>
-                            </div>
-                            <div class="td text-center fe-1">
-                              <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                              <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
-                                <a href="javascript:void(0)" class="text-decoration-none"
-                                  (click)="saveDeclaration(r, $event)">Save</a>
-                                <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
-                                  (click)="closeDeclaration($event)">Cancel</a>
-                              </div>
-                            </div>
-                          </div>
-                        </ng-container>
-                      </div>
-
-                      <div class="t-body fs-5 text-center p-5 m-5" *ngIf="!SectionIsReady">
-                        Unable to load other Exemptions.
-                        Please contact to admin.
-                      </div>
-                    </div>
-                    <div class="modal-footer border-top-0">
-                      <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('exemptions')"><i
-                          class="fa fa-arrow-left pe-2"></i> Prev</button>
-                      <button type="button" class="btn btn-outline-success"
-                        (click)="nextDeclaration('taxSavingAllowance')">Next <i
-                          class="fa fa-arrow-right ps-2"></i></button>
-                    </div>
-                  </ng-container>
-                </ng-template>
+              <li class="nav-item">
+                <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('form-12-tab')"
+                  href="javascript:void(0)">Form 12 BB</a>
               </li>
-
-              <li [ngbNavItem]="4">
-                <a ngbNavLink>Tax Saving Allowances</a>
-                <ng-template ngbNavContent>
-                  <ng-container>
-                    <div class="row justify-content-between mt-3 mb-2">
-                      <div class="col-md-8">
-                        <h5 class="ps-3">Tax Saving Allowances</h5>
-                        <p class=" ps-3">Following allowances are exempted from Gross for Income tax calculation only
-                          when
-                          claim is submitted against allowances.</p>
-                      </div>
-                      <div class="col-md-3">
-                        <label for="" class="form-label">Search perform on section and deduction name.</label>
-                        <div class="form-group has-search">
-                          <span class="fa fa-search form-control-feedback"></span>
-                          <input type="text" class="form-control"
-                            oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-                            (keyup.enter)="filterDeduction($event, 'taxsaving')" (keyup.esc)="resetFilter($event)">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="alert alert-warning mx-4" role="alert">
-                      Tax exempted values are based on the amount allocated in your salary structure. Please check
-                      income
-                      tax calculation to view tax exempted amount.
-                    </div>
-                    <div class="col-md-12 row pb-4 ps-3 pt-2">
-                      <div class="col-auto me-2">
-                        <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
-                        <h6 class="text-dark">INR 150000</h6>
-                      </div>
-                      <div class="col-auto mx-3">
-                        <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                        <h6 class="text-dark">{{employeeDeclaration.Declarations[2].TotalAmountDeclared}}</h6>
-                      </div>
-                      <div class="col-auto mx-3">
-                        <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
-                        <h6 class="text-dark">INR 21600</h6>
-                      </div>
-                      <div class="col-auto ms-3">
-                        <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
-                        <h6 class="text-dark">INR 0</h6>
-                      </div>
-                    </div>
-                    <div class="t-table t-list t-border col-md-12">
-                      <div class="hide-bar"></div>
-                      <div class="t-head">
-                        <div class="tr">
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">SECTION</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-3">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">DEDUCATION NAME</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">MAX LIMIT</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">DECLARATION</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">PROOF</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void()">STATUS</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">ACTIONS</div>
-                        </div>
-                      </div>
-                      <div class="t-body" *ngIf="SectionIsReady">
-                        <ng-container *ngFor="let r of TaxSavingAlloance; let i=index">
-                          <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                {{r.Section}} <sup>$</sup>
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-3">
-                              <div class="cell-wrapper">
-                                {{r.ComponentId}} ({{r.ComponentFullName}}) <a href="javascript:void(0)"
-                                  class="text-decoration-none"><i
-                                    class="fa fa-question-circle ps-3 text-secondary text-justify"
-                                    data-bs-toggle="tooltip" data-bs-placement="right"
-                                    title='{{r.ComponentDescription}}'></i></a>
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                <i class="fa fa-rupee pe-2"></i> {{r.MaxLimit | number:'':'en'}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper" name="view-control">
-                                <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
-                                <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
-                              </div>
-                              <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
-                                <span class="pe-2 d-flex flex-column justify-content-center">
-                                  <i class="fa fa-inr"></i>
-                                </span>
-                                <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" (keyup)="checkMaxLimit($event, r.MaxLimit)">
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                <div [ngSwitch]="r.RequireDocs">
-                                  <div *ngSwitchCase="true">
-                                    <span>
-                                      <i class="fa fa-hand-o-right pe-2"></i>Change
-                                    </span>
-                                  </div>
-                                  <div *ngSwitchDefault>
-                                    <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none"
-                                      (click)="uploadDocument(r)">
-                                      <i class="fa fa-paperclip pe-2"></i>Upload
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="td align-middle">
-                              <div class="cell-wrapper">
-                                <div class="d-flex align-items-center">
-                                  <!-- <ng-container *ngIf="r.Status != 2">
-                                    <div class="circle">
-                                      <div class="checkmark">
-                                      </div>
-                                    </div>
-                                    <span class="ps-3">Auto Accepted</span>
-                                  </ng-container> -->
-                                  <ng-container *ngIf="r.DeclaredValue > 0">
-                                    <div class="circle">
-                                      <div class="checkmark">
-                                      </div>
-                                    </div>
-                                    <span class="ps-3">Submitted</span>
-                                  </ng-container>
-                                </div>
-                                <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
-                              </div>
-                            </div>
-                            <div class="td text-center fe-1">
-                              <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                              <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
-                                <a href="javascript:void(0)" class="text-decoration-none"
-                                  (click)="saveDeclaration(r, $event)">Save</a>
-                                <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
-                                  (click)="closeDeclaration($event)">Cancel</a>
-                              </div>
-                            </div>
-                          </div>
-                        </ng-container>
-                      </div>
-
-                      <div class="t-body fs-5 text-center p-5 m-5" *ngIf="!SectionIsReady">
-                        Unable to load tax saving allowances.
-                        Please contact to admin.
-                      </div>
-                    </div>
-                    <div class="modal-footer border-top-0">
-                      <button type="button" class="btn btn-outline-primary"
-                        (click)="nextDeclaration('otherExemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
-                      <button type="button" class="btn btn-outline-success"
-                        (click)="submitDeclaration()">Submit</button>
-                    </div>
-                  </ng-container>
-                </ng-template>
+              <li class="nav-item">
+                <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')"
+                  href="javascript:void(0)">Free Tax Filling</a>
               </li>
-
-              <li [ngbNavItem]="5">
-                <a ngbNavLink>House Property</a>
-                <ng-template ngbNavContent>
-                  <ng-container>
-                    <h5 class="text-dark">House Property</h5>
-                    <p>Here you can declare all the gouse property rented or owned.</p>
-                    <div class="col-md-12 row">
-                      <div class="col-md-9 ps-3">
-                        <div class="col-md-12">
-                          <div class="card px-3 pb-3">
-                            <h5 class="pt-3 pb-2">I live in a rented residence</h5>
-                            <div class="alert alert-info" role="alert">
-                              There are no rental details available
-                            </div>
-                            <div>
-                              <button class="btn btn-outline-primary" (click)="rentedDecalrationPopup()"> <i class="fa fa-plus"></i> Add Rented
-                                Residence</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-12 mt-4 mb-3">
-                          <div class="card px-3 pb-3">
-                            <h5 class="pt-3 pb-2">I own residdence</h5>
-                            <div class="alert alert-info" role="alert">
-                              There are no own residence details available
-                            </div>
-                            <div>
-                              <button class="btn btn-outline-primary"> <i class="fa fa-plus"></i> Add Own
-                                Residence</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-3 mb-3">
-                        <div class="card">
-                          <div class="d-flex align-items-center pt-3 ps-3">
-                            <i class="fa fa-bullhorn"></i>
-                            <h6 class="mb-0 ps-3">House property declaration</h6>
-                          </div>
-                          <ul class="pt-3">
-                            <li>You can add more than one rented property or own property for the current financial
-                              year.
-                            </li>
-                            <li class="pt-3">For rented property if the total rent is more than &#x20b9; 100000 then you
-                              need to provide either PAN of owner or declaration letter.</li>
-                            <li class="pt-3">For rented property you are eligible for HRA and in case HRA is not paid by
-                              your employer you will be eligible for exemption under section 80 GG.</li>
-                            <li class="pt-2">For own property/residence you will be eligible for house loan interest
-                              exemption under section 24.</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container>
-                </ng-template>
-              </li>
-
-              <li [ngbNavItem]="6">
-                <a ngbNavLink>Income From Other Sources</a>
-                <ng-template ngbNavContent>
-                  <ng-container>
-                    <h5 class="text-dark">Income From Other Sources</h5>
-                    <p>Income from other sources is a residual category used to classify income that is not classified
-                      as
-                      taxed under any other head of income.</p>
-                    <div class="mb-3">
-                      <button class="btn btn-outline-primary"> <i class="fa fa-plus"></i> Add Income From Other
-                        Sources</button>
-                    </div>
-                  </ng-container>
-                </ng-template>
+              <li class="nav-item">
+                <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('tax-saving-tab')"
+                  href="javascript:void(0)">Tax Saving Investment</a>
               </li>
             </ul>
-            <div [ngbNavOutlet]="nav" class="mt-3"></div>
+          </div>
+          <ng-container>
+            <div class="container-fluid pt-4">
+              <div class="d-flex justify-content-between">
+                <h5 class="text-dark">Declaration</h5>
+                <div class="pt-3 pe-3">
+                  <select class="form-select">
+                    <option value="currentyear" selected>APR {{year}} - MAR {{year +1}}</option>
+                    <option value="previousyear">APR {{year - 1}} - MAR {{year}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="card my-3">
+                <div class="d-flex text-dark fs-4 pt-3 align-items-center ps-3">
+                  <i class=" fa fa-lightbulb-o"></i>
+                  <h5 class="mb-0 ps-3">Important</h5>
+                </div>
+                <ul class="ps-5 ms-3">
+                  <li class="pt-3">'$' - Not considered for exemption if opted foe New tax regime (Section 115BAC).</li>
+                  <li class="pt-3">You can declare your investment amount till <span class="fw-bold">20th of every
+                      month</span> until the cutoff date of <span class="fw-bold">May 20, {{year}}</span></li>
+                  <li class="pt-3">Last date for submitting your investment proofs is <span class="fw-bold">Dec 20,
+                      {{year}}</span></li>
+                </ul>
+                <div class="alert alert-warning mx-5">
+                  Not submitting your investment proofs may lead to additional taxx being deducted in the subsequent months
+                  of this fiscal year.
+                </div>
+              </div>
+              <div class="col-md-12 row my-4" [ngClass]="{'d-none': !SectionIsReady}">
+                <div class="col-md-4">
+                  <div class="card py-3 ps-3">
+                    <p class="mb-0">Net Taxable Income</p>
+                    <p class="text-dark fs-2 mb-0 ">
+                      <span class="">INR {{employeeDeclaration.TotalAmount | number : '1.2-2'}}</span>
+                      <span class="float-end pe-2">
+                        <a href="javascript:void(0)" (click)="gotoTaxSection('income-tax')"
+                          class="text-decoration-none fs-6">
+                          Income Tax Computitation
+                        </a>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card py-3 ps-3">
+                    <p class="mb-0">Total Tax Payable <i class="fa fa-exclamation-circle float-end fa-lg pe-3"
+                        data-bs-placement="right" data-toggle="tooltip"
+                        title="Net tax amount {{taxAmount.TotalTaxPayable}} of after round Off is"></i></p>
+                    <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card py-3 ps-3">
+                    <p class="mb-0">Tax Already Paid</p>
+                    <p class="text-dark fs-2 mb-0 vhide">INR {{employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <ng-container *ngIf="!SectionIsReady">
+                <app-pre-load-table></app-pre-load-table>
+              </ng-container> -->
+              <div *ngIf="SectionIsReady" [ngClass]="{'d-none': !SectionIsReady}">
+                <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+                  <li [ngbNavItem]="1">
+                    <a ngbNavLink>My Declaration</a>
+                    <ng-template ngbNavContent>
+                      <ng-container>
+                        <h5 class="text-dark pt-3">My Declarations</h5>
+                        <p class="mb-0 pb-2">Below are the declarations done by you under various sections.</p>
+                        <div class="t-table t-list t-border col-md-12 my-3">
+                          <div class="hide-bar"></div>
+                          <div class="t-head bg-light">
+                            <div class="tr">
+                              <div class="th fe-3">
+                                <div class="cell-wrapper">
+                                  DECLARATIONS
+                                </div>
+                              </div>
+                              <div class="th fe-3">
+                                <div class="cell-wrapper">
+                                  NUMBER OF DECLARATIONS
+                                </div>
+                              </div>
+                              <div class="th fe-2">
+                                <div class="cell-wrapper">
+                                  AMOUNT OF DECLARED
+                                </div>
+                              </div>
+                              <div class="th fe-2">
+                                <div class="cell-wrapper">
+                                  PROOF SUBMITTED
+                                </div>
+                              </div>
+                              <div class="th fe-2">
+                                <div class="cell-wrapper">
+                                  AMOUNT REJECTED
+                                </div>
+                              </div>
+                              <div class="th fe-2">
+                                <div class="cell-wrapper">
+                                  AMOUNT ACCEPTED
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="t-body">
+                            <ng-container
+                              *ngIf="employeeDeclaration.Declarations != null && employeeDeclaration.Declarations.length > 0">
+                              <div class="tr py-3" *ngFor="let declaration of employeeDeclaration.Declarations">
+                                <div class="td align-middle fe-3">
+                                  <div class="cell-wrapper">
+                                    {{declaration.DeclarationName}}
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-3">
+                                  <div class="cell-wrapper">
+                                    {{declaration.Declarations.length}}
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-2">
+                                  <div class="cell-wrapper">
+                                    INR {{declaration.TotalAmountDeclared}}
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-2">
+                                  <div class="cell-wrapper">
+                                    {{declaration.NumberOfProofSubmitted}}
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-2">
+                                  <div class="cell-wrapper">
+                                    INR {{declaration.RejectedAmount}}
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-2">
+                                  <div class="cell-wrapper">
+                                    INR {{declaration.AcceptedAmount}}
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+
+                            <ng-container
+                              *ngIf="employeeDeclaration.Declarations == null || employeeDeclaration.Declarations.length == 0">
+                              <div class="p-5 m-5 d-flex flex-column justify-content-center text-center fs-5">
+                                Unable to get declaration detail. Please contact to admin.
+                              </div>
+                            </ng-container>
+
+                          </div>
+                        </div>
+                        <div class="py-3">
+                          <h5 class="text-dark ps-2 pb-0 mb-0">Monthly Tax Deductions Details</h5>
+                          <p class="mb-0 ps-2">Below deduction are based on your declared amount. Tax amount may chnage
+                            based
+                            on th amount approved.</p>
+                        </div>
+                        <div class="col-md-12 row mb-4">
+                          <div class="col-md-4">
+                            <div class="card py-3 ps-3">
+                              <p class="mb-0">TOTAL TAX PAYABLE</p>
+                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}</p>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="card py-3 ps-3">
+                              <p class="mb-0">TAX PAID TILL NOW</p>
+                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxPaid| number : '1.2-2'}}</p>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="card py-3 ps-3">
+                              <p class="mb-0">REMAINING TAX AMOUNT</p>
+                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay - employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="t-table t-list t-border mb-3 col-md-12 bg-white">
+                          <div class="t-head overflow-hidden custom-bg">
+                            <div class="tr bg-light py-3">
+                              <div class="th ps-2 fe-2">Month</div>
+                              <div class="th" *ngFor="let item of taxCalender">
+                                <div class="d-flex align-items-center">
+                                  <span>{{item.month}} {{item.year}}</span>
+                                  <div class="curent-employer-indicator indicator ms-1"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="t-body border-bottom overflow-hidden">
+                            <div class="tr py-3">
+                              <div class="td px-2 fe-2">Monthly Total Tax</div>
+                              <ng-container *ngFor="let item of TaxDetails">
+                                <div class="td ps-1">{{item.TaxDeducted}}</div>
+                              </ng-container>
+                            </div>
+                          </div>
+                          <div class="ps-2 py-3 row">
+                            <div class="col d-flex align-items-center">
+                              <div class="previous-employer-indicator indicator"></div>
+                              <p class="p-0 m-0 ps-2">Tax Deduction from previous employer</p>
+                            </div>
+                            <div class="col d-flex align-items-center">
+                              <div class="curent-employer-indicator indicator"></div>
+                              <p class="p-0 m-0 ps-2">Imported Tax Deduction from current employer</p>
+                            </div>
+                            <div class="col d-flex align-items-center">
+                              <div class="project-salary-indicator indicator"></div>
+                              <p class="p-0 m-0 ps-2">Projected Income Tax</p>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </ng-template>
+                  </li>
+
+                  <li [ngbNavItem]="2">
+                    <a ngbNavLink>1.5 Lac Exemptions</a>
+                    <ng-template ngbNavContent>
+                      <ng-container>
+                        <div class="row justify-content-between my-3">
+                          <div class="col-md-8">
+                            <h5 class="ps-3">1.5 Lac Exemptions</h5>
+                            <p class=" ps-3">
+                              The aggregate amount of deductions under section 80C, section 80CCC and sub-section (1) of
+                              80CCD
+                            </p>
+                          </div>
+                          <div class="col-md-3">
+                            <label for="" class="form-label">Search perform on section and deduction name.</label>
+                            <div class="form-group has-search">
+                              <span class="fa fa-search form-control-feedback"></span>
+                              <input type="text" class="form-control" [(ngModel)]="filterValue"
+                                oninput="this.value = this.value.toUpperCase()" placeholder="Search"
+                                (keyup.enter)="filterDeduction($event, '1.5lac')" (keyup.esc)="resetFilter($event)">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12 row pb-4 ps-3">
+                          <div class="col-auto me-2">
+                            <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
+                            <h6 class="text-dark">INR 150000</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
+                            <h6 class="text-dark">{{employeeDeclaration.Declarations[0].TotalAmountDeclared}}</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AUTO APPROVED AMOUNT</label>
+                            <h6 class="text-dark">INR 150000</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
+                            <h6 class="text-dark">INR 21600</h6>
+                          </div>
+                          <div class="col-auto ms-3">
+                            <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
+                            <h6 class="text-dark">INR 0</h6>
+                          </div>
+                        </div>
+                        <div class="t-table t-list t-border col-md-12">
+                          <div class="hide-bar"></div>
+                          <div class="t-head">
+                            <div class="tr">
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">SECTION</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-3">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">DEDUCATION NAME</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">DECLARATION</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">PROOF</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">STATUS</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1 text-center">ACTIONS</div>
+                            </div>
+                          </div>
+                          <div class="t-body" *ngIf="SectionIsReady">
+                            <ng-container *ngFor="let r of ExemptionDeclaration; let i=index">
+                              <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper">
+                                    {{r.Section}} <sup>$</sup>
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-3">
+                                  <div class="cell-wrapper">
+                                    {{r.ComponentId}} ({{r.ComponentFullName}}) <a href="javascript:void(0)"
+                                      class="text-decoration-none"><i
+                                        class="fa fa-question-circle ps-3 text-secondary text-justify"
+                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                        title='{{r.ComponentDescription}}'></i></a>
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper" name="view-control">
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
+                                  </div>
+                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
+                                    <span class="pe-2 d-flex flex-column justify-content-center">
+                                      <i class="fa fa-inr"></i>
+                                    </span>
+                                    <input [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper">
+                                    <div *ngIf="r.UploadedFileIds > 0">
+                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
+                                        (click)="uploadDocument(r)">
+                                        <div class="d-flex align-items-center">
+                                          <div class="circle">
+                                            <div class="checkmark">
+                                            </div>
+                                          </div>
+                                          <span class="ps-3">Uploaded</span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <div *ngIf="r.UploadedFileIds == null">
+                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
+                                        (click)="uploadDocument(r)">
+                                        <i class="fa fa-paperclip pe-2"></i>Not Upload
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="td align-middle">
+                                  <div class="cell-wrapper">
+                                    <div class="d-flex align-items-center">
+                                      <!-- <ng-container *ngIf="r.Status != 2">
+                                        <div class="circle">
+                                          <div class="checkmark">
+                                          </div>
+                                        </div>
+                                        <span class="ps-3">Auto Accepted</span>
+                                      </ng-container> -->
+                                      <ng-container *ngIf="r.DeclaredValue > 0">
+                                        <div class="circle">
+                                          <div class="checkmark">
+                                          </div>
+                                        </div>
+                                        <span class="ps-3">Submitted</span>
+                                      </ng-container>
+                                    </div>
+                                    <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
+                                  </div>
+                                </div>
+                                <div class="td text-center fe-1">
+                                  <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
+                                    ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
+                                  <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
+                                    <a href="javascript:void(0)" class="text-decoration-none"
+                                      (click)="saveDeclaration(r, $event)">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
+                                      (click)="closeDeclaration($event)">Cancel</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </div>
+
+                          <div class="t-body fs-5 text-center p-5 m-5" *ngIf="!SectionIsReady">
+                            Unable to load the declaration.
+                            Please contact to admin.
+                          </div>
+                        </div>
+                        <div class="modal-footer border-top-0">
+                          <button type="button" class="btn btn-outline-success"
+                            (click)="nextDeclaration('otherExemptions')">Next<i class="fa fa-arrow-right ps-2"></i></button>
+                        </div>
+                      </ng-container>
+                    </ng-template>
+                  </li>
+
+                  <li [ngbNavItem]="3">
+                    <a ngbNavLink>Other Exemptions</a>
+                    <ng-template ngbNavContent>
+                      <ng-container>
+                        <div class="row justify-content-between mt-3">
+                          <div class="col-md-8">
+                            <h5 class="ps-3">Other Exemptions</h5>
+                            <p class=" ps-3">Other deductions under chapter VI(A) which is from 80CCD1(B) to 80U</p>
+                          </div>
+                          <div class="col-md-3">
+                            <label for="" class="form-label">Search perform on section and deduction name.</label>
+                            <div class="form-group has-search">
+                              <span class="fa fa-search form-control-feedback"></span>
+                              <input type="text" class="form-control"
+                                oninput="this.value = this.value.toUpperCase()" placeholder="Search"
+                                (keyup.enter)="filterDeduction($event, 'other')" (keyup.esc)="resetFilter($event)">>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12 row pb-4 ps-3">
+                          <div class="col-auto me-2">
+                            <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
+                            <h6 class="text-dark">INR 150000</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
+                            <h6 class="text-dark">{{employeeDeclaration.Declarations[1].TotalAmountDeclared}}</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
+                            <h6 class="text-dark">INR 21600</h6>
+                          </div>
+                          <div class="col-auto ms-3">
+                            <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
+                            <h6 class="text-dark">INR 0</h6>
+                          </div>
+                        </div>
+                        <div class="t-table t-list t-border col-md-12">
+                          <div class="hide-bar"></div>
+                          <div class="t-head">
+                            <div class="tr">
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">SECTION</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-3">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">DEDUCATION NAME</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">MAX LIMIT</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">DECLARATION</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">PROOF</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">STATUS</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">ACTIONS</div>
+                            </div>
+                          </div>
+                          <div class="t-body" *ngIf="SectionIsReady">
+                            <ng-container *ngFor="let r of OtherDeclaration; let i=index">
+                              <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper">
+                                    {{r.Section}} <sup>$</sup>
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-3">
+                                  <div class="cell-wrapper">
+                                    {{r.ComponentId}} ({{r.ComponentFullName}}) <a href="javascript:void(0)"
+                                      class="text-decoration-none"><i
+                                        class="fa fa-question-circle ps-3 text-secondary text-justify"
+                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                        title='{{r.ComponentDescription}}'></i></a>
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper">
+                                    <span *ngIf="r.MaxLimit > 0">
+                                      <i class="fa fa-rupee pe-2"></i> {{r.MaxLimit | number:'':'en'}}
+                                    </span>
+                                    <span *ngIf="r.MaxLimit <= 0">
+                                      No Limit
+                                    </span>
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper" name="view-control">
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
+                                  </div>
+                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
+                                    <span class="pe-2 d-flex flex-column justify-content-center">
+                                      <i class="fa fa-inr"></i>
+                                    </span>
+                                    <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" (keyup)="checkMaxLimit($event, r.MaxLimit)">
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper">
+                                    <div *ngIf="r.UploadedFileIds > 0">
+                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
+                                        (click)="uploadDocument(r)">
+                                        <div class="d-flex align-items-center">
+                                          <div class="circle">
+                                            <div class="checkmark">
+                                            </div>
+                                          </div>
+                                          <span class="ps-3">Uploaded</span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <div *ngIf="r.UploadedFileIds == null">
+                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
+                                        (click)="uploadDocument(r)">
+                                        <i class="fa fa-paperclip pe-2"></i>Not Upload
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="td align-middle">
+                                  <div class="cell-wrapper">
+                                    <div class="d-flex align-items-center">
+                                      <!-- <ng-container *ngIf="r.Status != 2">
+                                        <div class="circle">
+                                          <div class="checkmark">
+                                          </div>
+                                        </div>
+                                        <span class="ps-3">Auto Accepted</span>
+                                      </ng-container> -->
+                                      <ng-container *ngIf="r.DeclaredValue > 0">
+                                        <div class="circle">
+                                          <div class="checkmark">
+                                          </div>
+                                        </div>
+                                        <span class="ps-3">Submitted</span>
+                                      </ng-container>
+                                    </div>
+                                    <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
+                                  </div>
+                                </div>
+                                <div class="td text-center fe-1">
+                                  <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
+                                    ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
+                                  <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
+                                    <a href="javascript:void(0)" class="text-decoration-none"
+                                      (click)="saveDeclaration(r, $event)">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
+                                      (click)="closeDeclaration($event)">Cancel</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </div>
+
+                          <div class="t-body fs-5 text-center p-5 m-5" *ngIf="!SectionIsReady">
+                            Unable to load other Exemptions.
+                            Please contact to admin.
+                          </div>
+                        </div>
+                        <div class="modal-footer border-top-0">
+                          <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('exemptions')"><i
+                              class="fa fa-arrow-left pe-2"></i> Prev</button>
+                          <button type="button" class="btn btn-outline-success"
+                            (click)="nextDeclaration('taxSavingAllowance')">Next <i
+                              class="fa fa-arrow-right ps-2"></i></button>
+                        </div>
+                      </ng-container>
+                    </ng-template>
+                  </li>
+
+                  <li [ngbNavItem]="4">
+                    <a ngbNavLink>Tax Saving Allowances</a>
+                    <ng-template ngbNavContent>
+                      <ng-container>
+                        <div class="row justify-content-between mt-3 mb-2">
+                          <div class="col-md-8">
+                            <h5 class="ps-3">Tax Saving Allowances</h5>
+                            <p class=" ps-3">Following allowances are exempted from Gross for Income tax calculation only
+                              when
+                              claim is submitted against allowances.</p>
+                          </div>
+                          <div class="col-md-3">
+                            <label for="" class="form-label">Search perform on section and deduction name.</label>
+                            <div class="form-group has-search">
+                              <span class="fa fa-search form-control-feedback"></span>
+                              <input type="text" class="form-control"
+                                oninput="this.value = this.value.toUpperCase()" placeholder="Search"
+                                (keyup.enter)="filterDeduction($event, 'taxsaving')" (keyup.esc)="resetFilter($event)">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="alert alert-warning mx-4" role="alert">
+                          Tax exempted values are based on the amount allocated in your salary structure. Please check
+                          income
+                          tax calculation to view tax exempted amount.
+                        </div>
+                        <div class="col-md-12 row pb-4 ps-3 pt-2">
+                          <div class="col-auto me-2">
+                            <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
+                            <h6 class="text-dark">INR 150000</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
+                            <h6 class="text-dark">{{employeeDeclaration.Declarations[2].TotalAmountDeclared}}</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
+                            <h6 class="text-dark">INR 21600</h6>
+                          </div>
+                          <div class="col-auto ms-3">
+                            <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
+                            <h6 class="text-dark">INR 0</h6>
+                          </div>
+                        </div>
+                        <div class="t-table t-list t-border col-md-12">
+                          <div class="hide-bar"></div>
+                          <div class="t-head">
+                            <div class="tr">
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">SECTION</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-3">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">DEDUCATION NAME</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">MAX LIMIT</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">DECLARATION</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">PROOF</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  <div class="t-filter">
+                                    <a href="javascript:void()">STATUS</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="th fe-1">ACTIONS</div>
+                            </div>
+                          </div>
+                          <div class="t-body" *ngIf="SectionIsReady">
+                            <ng-container *ngFor="let r of TaxSavingAlloance; let i=index">
+                              <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper">
+                                    {{r.Section}} <sup>$</sup>
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-3">
+                                  <div class="cell-wrapper">
+                                    {{r.ComponentId}} ({{r.ComponentFullName}}) <a href="javascript:void(0)"
+                                      class="text-decoration-none"><i
+                                        class="fa fa-question-circle ps-3 text-secondary text-justify"
+                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                        title='{{r.ComponentDescription}}'></i></a>
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper">
+                                    <i class="fa fa-rupee pe-2"></i> {{r.MaxLimit | number:'':'en'}}
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper" name="view-control">
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
+                                  </div>
+                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
+                                    <span class="pe-2 d-flex flex-column justify-content-center">
+                                      <i class="fa fa-inr"></i>
+                                    </span>
+                                    <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" (keyup)="checkMaxLimit($event, r.MaxLimit)">
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper">
+                                    <div *ngIf="r.UploadedFileIds > 0">
+                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
+                                        (click)="uploadDocument(r)">
+                                        <div class="d-flex align-items-center">
+                                          <div class="circle">
+                                            <div class="checkmark">
+                                            </div>
+                                          </div>
+                                          <span class="ps-3">Uploaded</span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <div *ngIf="r.UploadedFileIds == null">
+                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
+                                        (click)="uploadDocument(r)">
+                                        <i class="fa fa-paperclip pe-2"></i>Not Upload
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="td align-middle">
+                                  <div class="cell-wrapper">
+                                    <div class="d-flex align-items-center">
+                                      <!-- <ng-container *ngIf="r.Status != 2">
+                                        <div class="circle">
+                                          <div class="checkmark">
+                                          </div>
+                                        </div>
+                                        <span class="ps-3">Auto Accepted</span>
+                                      </ng-container> -->
+                                      <ng-container *ngIf="r.DeclaredValue > 0">
+                                        <div class="circle">
+                                          <div class="checkmark">
+                                          </div>
+                                        </div>
+                                        <span class="ps-3">Submitted</span>
+                                      </ng-container>
+                                    </div>
+                                    <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
+                                  </div>
+                                </div>
+                                <div class="td text-center fe-1">
+                                  <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
+                                    ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
+                                  <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
+                                    <a href="javascript:void(0)" class="text-decoration-none"
+                                      (click)="saveDeclaration(r, $event)">Save</a>
+                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
+                                      (click)="closeDeclaration($event)">Cancel</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </div>
+
+                          <div class="t-body fs-5 text-center p-5 m-5" *ngIf="!SectionIsReady">
+                            Unable to load tax saving allowances.
+                            Please contact to admin.
+                          </div>
+                        </div>
+                        <div class="modal-footer border-top-0">
+                          <button type="button" class="btn btn-outline-primary"
+                            (click)="nextDeclaration('otherExemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
+                          <button type="button" class="btn btn-outline-success"
+                            (click)="submitDeclaration()">Submit</button>
+                        </div>
+                      </ng-container>
+                    </ng-template>
+                  </li>
+
+                  <li [ngbNavItem]="5">
+                    <a ngbNavLink>House Property</a>
+                    <ng-template ngbNavContent>
+                      <ng-container>
+                        <h5 class="text-dark">House Property</h5>
+                        <p>Here you can declare all the gouse property rented or owned.</p>
+                        <div class="col-md-12 row">
+                          <div class="col-md-9 ps-3">
+                            <div class="col-md-12">
+                              <div class="card px-3 pb-3">
+                                <h5 class="pt-3 pb-2">I live in a rented residence</h5>
+                                <div class="alert alert-info" role="alert">
+                                  There are no rental details available
+                                </div>
+                                <div>
+                                  <button class="btn btn-outline-primary" (click)="rentedDecalrationPopup()"> <i class="fa fa-plus"></i> Add Rented
+                                    Residence</button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 mt-4 mb-3">
+                              <div class="card px-3 pb-3">
+                                <h5 class="pt-3 pb-2">I own residdence</h5>
+                                <div class="alert alert-info" role="alert">
+                                  There are no own residence details available
+                                </div>
+                                <div>
+                                  <button class="btn btn-outline-primary"> <i class="fa fa-plus"></i> Add Own
+                                    Residence</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-3 mb-3">
+                            <div class="card">
+                              <div class="d-flex align-items-center pt-3 ps-3">
+                                <i class="fa fa-bullhorn"></i>
+                                <h6 class="mb-0 ps-3">House property declaration</h6>
+                              </div>
+                              <ul class="pt-3">
+                                <li>You can add more than one rented property or own property for the current financial
+                                  year.
+                                </li>
+                                <li class="pt-3">For rented property if the total rent is more than &#x20b9; 100000 then you
+                                  need to provide either PAN of owner or declaration letter.</li>
+                                <li class="pt-3">For rented property you are eligible for HRA and in case HRA is not paid by
+                                  your employer you will be eligible for exemption under section 80 GG.</li>
+                                <li class="pt-2">For own property/residence you will be eligible for house loan interest
+                                  exemption under section 24.</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </ng-template>
+                  </li>
+
+                  <li [ngbNavItem]="6">
+                    <a ngbNavLink>Income From Other Sources</a>
+                    <ng-template ngbNavContent>
+                      <ng-container>
+                        <h5 class="text-dark">Income From Other Sources</h5>
+                        <p>Income from other sources is a residual category used to classify income that is not classified
+                          as
+                          taxed under any other head of income.</p>
+                        <div class="mb-3">
+                          <button class="btn btn-outline-primary"> <i class="fa fa-plus"></i> Add Income From Other
+                            Sources</button>
+                        </div>
+                      </ng-container>
+                    </ng-template>
+                  </li>
+                </ul>
+                <div [ngbNavOutlet]="nav" class="mt-3"></div>
+              </div>
+            </div>
           </ng-container>
         </div>
-      </ng-container>
+      </div>
     </div>
   </div>
 </div>

@@ -58,6 +58,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   applicationData: any = [];
   employeesList: autoCompleteModal = new autoCompleteModal();
   isAmountExceed: boolean = false;
+  salaryDetails: any = null;
+  TaxDetails: Array<any> = [];
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -172,14 +174,31 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         }
 
         if (response.ResponseBody && response.ResponseBody.FileDetails)
-        this.declarationFiles = response.ResponseBody.FileDetails;
-
+          this.declarationFiles = response.ResponseBody.FileDetails;
+        this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
+        this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
+        this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
+        this.salaryDetails = response.ResponseBody.SalaryDetail;
+        this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
         this.calculateDeclarations();
         Toast("Declaration detail loaded successfully");
       }
 
       this.SectionIsReady = true;
     })
+  }
+
+  addSubmittedFileIds(item: any):any {
+    let i = 0;
+    while(i < item.length) {
+      let currentDeclaration: any = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item[i].ComponentId);
+      if (currentDeclaration.length > 0)
+      for (let index = 0; index < currentDeclaration.length; index++) {
+        item[i].UploadedFileIds += currentDeclaration[index].FileId;
+      }
+      i++;
+    }
+    return item;
   }
 
   rentedResidence() {
@@ -407,16 +426,16 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           if (response.ResponseBody) {
             if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
               this.employeeDeclaration = response.ResponseBody;
-              this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
-              this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
-              this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
-              //this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
-              //this.employeeEmail = response.ResponseBody.Email;
+              this.ExemptionDeclaration = this.addSubmittedFileIds(this.employeeDeclaration.ExemptionDeclaration);
+              this.OtherDeclaration = this.addSubmittedFileIds(this.employeeDeclaration.OtherDeclaration);
+              this.TaxSavingAlloance = this.addSubmittedFileIds(this.employeeDeclaration.TaxSavingAlloance);
             }
+            this.salaryDetails = response.ResponseBody.SalaryDetail;
+            this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
 
-            this.closeDeclaration(e);
             Toast("Declaration Uploaded Successfully.");
             this.SectionIsReady = true;
+            this.closeDeclaration(e);
           }
         });
       }
