@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ResponseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
+import { Toast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
@@ -14,8 +17,12 @@ export class IncometaxComponent implements OnInit {
   grossEarning: Array<GrossEarning> = [];
   taxSlab: Array<TaxSlab> = [];
   monthlyTaxAmount: MonthlyTax;
+  salaryDetail: any = null;
+  allDeclarationSalaryDetails: any = null;
+  salaryBreakup: any = null
 
-  constructor(private nav: iNavigation) { }
+  constructor(private nav: iNavigation,
+              private http: AjaxService) { }
 
   ngOnInit(): void {
     var dt = new Date();
@@ -235,7 +242,22 @@ export class IncometaxComponent implements OnInit {
       feb: 37050,
       march: 37050
     };
+    this.loadData();
+  }
 
+  loadData() {
+    let EmployeeId = 8;
+    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${EmployeeId}`)
+    .then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        console.log(response.ResponseBody);
+        this.allDeclarationSalaryDetails = response.ResponseBody;
+        this.salaryDetail = response.ResponseBody.SalaryDetail;
+        this.salaryBreakup = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        console.log(this.salaryBreakup);
+        Toast("Details get successfully")
+      }
+    })
   }
 
   activateMe(ele: string) {

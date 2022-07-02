@@ -48,7 +48,7 @@ export class PayrollComponentsComponent implements OnInit {
   isDisable: boolean = true;
   SalaryComponentsDetail: Array<any> = [];
   expandedTable: boolean = true;
-
+  addHocComponent: PayrollComponentsModal = new PayrollComponentsModal();
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -101,6 +101,19 @@ export class PayrollComponentsComponent implements OnInit {
     return this.NewSalaryForm.controls;
   }
 
+  initadhocForm() {
+    this.AdhocForm = this.fb.group({
+      ComponentName: new FormControl(''),
+      ComponentDescription: new FormControl(''),
+      ComponentFullName: new FormControl(''),
+      TaxExempt: new FormControl(false),
+      Section: new FormControl(''),
+      IsAdHoc: new FormControl(true),
+      SectionMaxLimit: new FormControl(0),
+      AdHocId: new FormControl(1)
+    });
+  }
+
   initForm() {
     this.NewSalaryForm = this.fb.group({
       ComponentName: new FormControl(this.CurrentRecurringComponent.ComponentId, [Validators.required]),
@@ -117,18 +130,7 @@ export class PayrollComponentsComponent implements OnInit {
     });
   }
 
-  initadhocForm() {
-    this.AdhocForm = this.fb.group({
-      ComponentName: new FormControl(''),
-      ComponentDescription: new FormControl(''),
-      ComponentFullName: new FormControl(''),
-      TaxExempt: new FormControl(false),
-      Section: new FormControl(''),
-      IsAdHoc: new FormControl(true),
-      SectionMaxLimit: new FormControl(0),
-      AdHocId: new FormControl(1)
-    });
-  }
+
 
   initdeductionForm() {
     this.DeductionForm = this.fb.group({
@@ -246,6 +248,8 @@ export class PayrollComponentsComponent implements OnInit {
   addNewAdhocAllowance() {
     this.isLoading = true;
     let value = this.AdhocForm.value;
+    value.IsAdHoc = true;
+    value.AdHocId = 1;
     if (value) {
       this.http.post("SalaryComponent/AddAdhocComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody.length > 0) {
@@ -305,8 +309,8 @@ export class PayrollComponentsComponent implements OnInit {
 
   filterRecords(e: any) {
     this.isReady = false;
-    let text = e.target.value.toLowerCase();
-    this.RecurringComponent = this.AllComponents.filter (x => x.IsAdHoc == false && (x.ComponentId.toLowerCase().indexOf(text) != -1 || x.ComponentFullName.toLowerCase().indexOf(text) != -1));
+    let text = e.target.value.toUpperCase();
+    this.RecurringComponent = this.AllComponents.filter (x => x.ComponentFullName.indexOf(text) != -1);
     this.isReady = true;
   }
 

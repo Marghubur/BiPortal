@@ -382,11 +382,11 @@
           <div class="row">
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">INCOME TAX SECTION</label>
-              <input type="text" formControlName="Section" placeholder="Enter Income Tax Section" class="form-control">
+              <input type="text" formControlName="Section" placeholder="Enter Income Tax Section" [readonly]="!isTaxExempt" class="form-control">
             </div>
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
-              <input type="text" OnlyNumber="9" formControlName="SectionMaxLimit" placeholder="Section Maximum Limit"
+              <input type="text" OnlyNumber="9" formControlName="SectionMaxLimit" [readonly]="!isTaxExempt" placeholder="Section Maximum Limit"
                 class="form-control">
             </div>
           </div>

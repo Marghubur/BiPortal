@@ -12,7 +12,7 @@ declare var $: any;
 })
 export class SalarycomponentStructureComponent implements OnInit {
   ActivatedPage: number = 1;
-  salaryComponentFields: Array<SalaryComponentFields> = [];
+  salaryComponentFields: Array<any> = [];
   salaryComponentActiveFields: Array<SalaryComponentFields> = [];
   currentSalaryComponent: SalaryComponentFields = null;
   editSalaryComponent: FormGroup;
@@ -24,6 +24,7 @@ export class SalarycomponentStructureComponent implements OnInit {
   isReady: boolean = false;
   AddActiveComponent: Array<SalaryComponentFields> = [];
   inactiveComponentDeatil: SalaryComponentFields = new SalaryComponentFields();
+  allAdHocComponent: Array<AdHocComponentsModal> = [];
 
   constructor(private fb: FormBuilder,
               private http: AjaxService) { }
@@ -43,6 +44,7 @@ export class SalarycomponentStructureComponent implements OnInit {
         if(res.ResponseBody.length > 0) {
           this.salaryComponentFields = res.ResponseBody
           this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsActive);
+          this.allAdHocComponent = res.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId > 0);
           Toast("Component structure table loaded successfully.");
         } else {
           WarningToast("0 item found under this catagroy. Please add one.");
@@ -207,13 +209,25 @@ export class SalarycomponentStructureComponent implements OnInit {
   filterComponent(e: any) {
     let value = e.target.value.toUpperCase();
     if (value) {
-      this.salaryComponentActiveFields = this.salaryComponentActiveFields.filter(x => x.ComponentId == value || x.ComponentFullName == value);
+      this.salaryComponentActiveFields = this.salaryComponentActiveFields.filter(x => x.ComponentId == value || x.ComponentFullName.toUpperCase().indexOf(value) != -1);
+    }
+  }
+
+  filterAdHocComponent(e: any) {
+    let value = e.target.value.toUpperCase();
+    if (value) {
+      this.allAdHocComponent = this.allAdHocComponent.filter(x => x.ComponentId == value || x.ComponentFullName.toUpperCase().indexOf(value) != -1);
     }
   }
 
   resetFilter(e: any) {
     e.target.value = '';
     this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsActive);
+  }
+
+  resetAdHocFilter(e: any) {
+    e.target.value = '';
+    this.allAdHocComponent = this.salaryComponentFields.filter(x => x.IsAdHoc == true && x.AdHocId > 0);
   }
 }
 
@@ -238,5 +252,20 @@ export class SalaryComponentFields {
   IsOpted: boolean = false;
   ComponentFullName: string = '';
   ComponentCatagoryId?: number = 0;
+}
+
+export class AdHocComponentsModal {
+  ComponentName: string = null;
+  ComponentTypeId: number = 0;
+  TaxExempt: boolean = false;
+  ComponentDescription: string = null;
+  Section: string = null;
+  SectionMaxLimit: number = 0;
+  IsAffectinGross: boolean = false;
+  ComponentId: string = '';
+  ComponentFullName: string = '';
+  AdHocId: number = 0;
+  IsAdHoc: boolean = false;
+  ComponentCatagoryId: number = 0;
 }
 
