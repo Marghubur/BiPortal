@@ -835,6 +835,7 @@ export class BuildPdfComponent implements OnInit {
         }
 
         this.getAttendance();
+        this.isClientSelected = true;
       }
     }
   }
@@ -856,6 +857,10 @@ export class BuildPdfComponent implements OnInit {
 
   onEdit(e: any) {
     this.isCustome = e.target.checked;
+    if (this.isCustome == true)
+      this.editMode = true;
+    else
+      this.editMode = false;
   }
 
   getFileExtension(value: any) {

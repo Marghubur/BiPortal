@@ -38,9 +38,11 @@ export class CustomsalaryStructureComponent implements OnInit {
   payrollCompoent: string = PayrollComponents;
   groupComponents: Array<any> = [];
   groupAllComponents: Array<any> = [];
+  customSalaryStructComp: Array<any> = []
   activeComponent: Array<any> = [];
   addedFormula: string = '';
   isEditSalaryGroup: boolean = false;
+  customSalaryStructureForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -131,6 +133,19 @@ export class CustomsalaryStructureComponent implements OnInit {
     });
   }
 
+  createCustomSalaryStructure() {
+    this.customSalaryStructureForm = this.fb.group({
+      StructureName: new FormControl(''),
+      StructureDescription: new FormControl(''),
+      EPF: new FormControl(false),
+      ESI: new FormControl(false),
+      IsPaidSeparately: new FormControl(false),
+      IsDeductedFlatIncome: new FormControl(false),
+      DeductedAmount: new FormControl(0),
+      DeductedIncomeTax: new FormControl(false)
+    })
+  }
+
   loadSalaryComponentDetail() {
     this.isPageReady = false;
     this.http.get("SalaryComponent/GetSalaryComponentsDetail").then(res => {
@@ -185,6 +200,11 @@ export class CustomsalaryStructureComponent implements OnInit {
     });
   }
 
+  addCustomSalaryStruct() {
+    this.isLoading = true;
+    let value = this.customSalaryStructureForm.value;
+  }
+
   ngOnInit(): void {
     this.salaryStructureType = [];
     this.selectedSalaryStructure = new SalaryStructureType();
@@ -194,6 +214,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.salaryGroup();
     this.loadSalaryComponentDetail();
     this.loadData();
+    this.createCustomSalaryStructure();
 
     this.customSalaryStructure = [{
       SalaryStructureName: 'Stehphe-II',
@@ -449,6 +470,19 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   addSalaryStrutModal() {
+    let SalaryGroupId = 0;
+    this.http.get(`SalaryComponent/GetSalaryGroupComponents/${SalaryGroupId}`)
+      .then(res => {
+        if (res.ResponseBody) {
+          this.customSalaryStructComp = res.ResponseBody;
+        }
+      })
+    let value = this.customSalaryStructComp.find(x => x.ComponentId == 'EPF');
+    if (value != null)
+      this.customSalaryStructureForm.get('EPF').setValue(true);
+    value = this.customSalaryStructComp.find(x => x.ComponentId == 'ESI');
+    if (value != null)
+      this.customSalaryStructureForm.get('ESI').setValue(true);
     $('#addCustomSalaryModal').modal('show');
   }
 

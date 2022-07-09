@@ -86,12 +86,12 @@
                     </div>
                     <div class="t-head overflow-hidden">
                       <div class="tr text-dark py-2">
-                        <div class="th ps-2">INR 2050000</div>
-                        <div class="th ps-2">INR 427500</div>
+                        <div class="th ps-2">{{salaryDetail.CTC | number}}</div>
+                        <div class="th ps-2">{{allDeclarationSalaryDetails.TotalAmount | number}}</div>
                         <div class="th ps-2">INR 17100</div>
-                        <div class="th ps-2">INR 444600</div>
-                        <div class="th ps-2">INR 37050</div>
-                        <div class="th ps-2">INR 407550</div>
+                        <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay | number}}</div>
+                        <div class="th ps-2">{{allDeclarationSalaryDetails.TaxPaid | number}}</div>
+                        <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay | number}} - {{allDeclarationSalaryDetails.TaxPaid | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -137,78 +137,144 @@
                       </div>
                     </div>
                     <div class="t-body overflow-hidden">
-                      <div class="tr text-dark py-3" *ngFor="let item of grossEarning">
-                        <div class="td ps-2 fe-3">
-                          <div class="cell-wrapper">
-                            {{item.salaryBreakup}}
+                      <ng-container>
+                        <div class="tr text-dark py-3">
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              Basic
+                            </div>
+                          </div>
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.BasicAnnually | number: '1.2-2'}}
+                            </div>
+                          </div>
+                          <div class="td">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.BasicAnnually/12 | number: '1.2-2'}}
+                            </div>
                           </div>
                         </div>
-                        <div class="td">
-                          <div class="cell-wrapper">
-                            {{item.total}}
+                        <div class="tr text-dark py-3">
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              Conveyance Allowance
+                            </div>
+                          </div>
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.ConveyanceAnnually | number: '1.2-2'}}
+                            </div>
+                          </div>
+                          <div class="td">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.ConveyanceAnnually/12 | number: '1.2-2'}}
+                            </div>
                           </div>
                         </div>
-                        <div class="td ps-3">
-                          <div class="cell-wrapper">
-                            {{item.april}}
+                        <div class="tr text-dark py-3">
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              HRA
+                            </div>
+                          </div>
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.HRAAnnually | number: '1.2-2'}}
+                            </div>
+                          </div>
+                          <div class="td">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.HRAAnnually/12 | number: '1.2-2'}}
+                            </div>
                           </div>
                         </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.may}}
+                        <div class="tr text-dark py-3">
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              Car Running Allowance
+                            </div>
+                          </div>
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.CarRunningAnnually | number: '1.2-2'}}
+                            </div>
+                          </div>
+                          <div class="td">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.CarRunningAnnually/12 | number: '1.2-2'}}
+                            </div>
                           </div>
                         </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.june}}
+                        <div class="tr text-dark py-3">
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              Telephone and Internet Allowance
+                            </div>
+                          </div>
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.InternetAnnually | number: '1.2-2'}}
+                            </div>
+                          </div>
+                          <div class="td">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.InternetAnnually/12 | number: '1.2-2'}}
+                            </div>
                           </div>
                         </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.july}}
+                        <div class="tr text-dark py-3">
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              Travel Reimburesment(LTA)
+                            </div>
+                          </div>
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.TravelAnnually | number: '1.2-2'}}
+                            </div>
+                          </div>
+                          <div class="td">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.TravelAnnually/12 | number: '1.2-2'}}
+                            </div>
                           </div>
                         </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.aug}}
+                        <div class="tr text-dark py-3">
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              Shfit Allowance
+                            </div>
+                          </div>
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.ShiftAnnually | number: '1.2-2'}}
+                            </div>
+                          </div>
+                          <div class="td">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.ShiftAnnually/12 | number: '1.2-2'}}
+                            </div>
                           </div>
                         </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.sep}}
+                        <div class="tr text-dark py-3">
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              Special Allowance
+                            </div>
+                          </div>
+                          <div class="td ps-2 fe-3">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.SpecialAnnually | number: '1.2-2'}}
+                            </div>
+                          </div>
+                          <div class="td">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup.SpecialAnnually/12 | number: '1.2-2'}}
+                            </div>
                           </div>
                         </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.oct}}
-                          </div>
-                        </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.nov}}
-                          </div>
-                        </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.dec}}
-                          </div>
-                        </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.jan}}
-                          </div>
-                        </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.feb}}
-                          </div>
-                        </div>
-                        <div class="td ps-1">
-                          <div class="cell-wrapper">
-                            {{item.march}}
-                          </div>
-                        </div>
-                      </div>
+                      </ng-container>
                     </div>
                   </div>
                 </ng-container>
