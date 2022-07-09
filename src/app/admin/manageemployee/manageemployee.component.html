@@ -436,10 +436,10 @@
         <form [formGroup]="salaryBreakupForm" *ngIf="salaryBreakupForm">
           <div class="col-md-12 row m-0 p-0 justify-content-between">
             <div class="col-md-3 mb-3 m-0 p-0">
-              <select class="form-select" (change)="selectCompanyGroup($event)">
-                <option value="0">Please select company group</option>
-                <option [value]="item.CompanyId" [selected]="companyGroup.length == 1"
-                  *ngFor="let item of companyGroup">{{item.CompanyName}}</option>
+              <select class="form-select" (change)="selectSalaryGroup($event)">
+                <option value="0">Please select salary group</option>
+                <option [value]="item.SalaryGroupId" [selected]="salaryGroup.length == 1"
+                  *ngFor="let item of salaryGroup">{{item.GroupName}}</option>
               </select>
             </div>
           </div>

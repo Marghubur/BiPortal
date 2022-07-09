@@ -83,6 +83,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       value: 0,
       text: "Default Manager"
     });
+    this.managerList.className="";
 
     this.model = this.calendar.getToday();
     let data = this.nav.getValue();
@@ -143,8 +144,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.managerList.placeholder = "Reporting Manager";
         this.managerList.data.push({
           value: 0,
-          text: "Default Manager"
+          text: "Default Manager",
         });
+        this.managerList.className ="";
         let i = 0;
         let managers = res.ResponseBody.EmployeesList;
         while(i < managers.length) {
@@ -169,10 +171,23 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           } else {
             this.companyGroup = Companies;
           }
+        } else {
+          this.companyGroup = [];
         }
 
-        if (res.ResponseBody.SalaryDetail.length > 0)
+        if (res.ResponseBody.SalaryDetail.length > 0) {
           this.salaryDetail = res.ResponseBody.SalaryDetail[0];
+        } else {
+          this.salaryDetail = {
+            EmployeeId: 0,
+            CTC: 0,
+            GrossIncome: 0,
+            NetSalary: 0,
+            CompleteSalaryDetail: null,
+            GroupId: 0,
+            TaxDetail: null
+          };
+        }
       }
 
       this.buildPageData(res);
@@ -221,6 +236,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ExprienceInYear: new FormControl(PlaceEmpty(this.employeeModal.ExprienceInYear)),
       LastCompanyName: new FormControl(this.employeeModal.LastCompanyName),
       IsPermanent: new FormControl(this.employeeModal.IsPermanent),
+      IsActive: new FormControl(this.employeeModal.IsActive),
       EmployeeUid: new FormControl(this.employeeModal.EmployeeUid),
       BranchName: new FormControl(this.employeeModal.BranchName),
       AllocatedClientName: new FormControl(this.employeeModal.AllocatedClientName),
@@ -456,27 +472,30 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   salryBreakupPopup() {
     $('#fullSalaryDetail').modal('show');
-    if (this.companyGroup.length == 1)
+    this.getAllSalaryGroup();
+    if (this.salaryGroup.length == 1) {
+      this.salaryGroupId = this.salaryGroup[0].SalaryGroupId;
       this.findSalaryGroup();
+    }
   }
 
-  selectCompanyGroup(event: any) {
+  selectSalaryGroup(event: any) {
     let value = Number(event.target.value);
     if (value > 0) {
-      this.companyGroupId = value;
+      this.salaryGroupId = value;
       this.findSalaryGroup();
     }
   }
 
   findSalaryGroup() {
-    this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
+    this.http.get(`SalaryComponent/GetSalaryGroupsById/${this.salaryGroupId}`).then(res => {
       if(res.ResponseBody) {
         this.salaryGroup = res.ResponseBody;
         if (this.salaryDetail.CompleteSalaryDetail) {
-          if (this.salaryDetail.CompleteSalaryDetail != null && this.salaryDetail.CompleteSalaryDetail != '{}')
-            this.completeSalaryBreakup = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+          if (this.salaryDetail.CompleteSalaryDetail != null && this.salaryDetail.CompleteSalaryDetail != '{}') 
+          this.completeSalaryBreakup = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
           else
-            this.completeSalaryBreakup = new SalaryBreakupDetails();
+          this.completeSalaryBreakup = new SalaryBreakupDetails();
           this.initForm();
           this.salaryBreakupForm.get("ExpectedCTC").setValue(this.salaryDetail.CTC);
           this.isSalaryGroup = true;
@@ -492,8 +511,15 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     });
   }
 
-  salaryGroupDetail() {
-
+  getAllSalaryGroup() {
+    this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
+      if(res.ResponseBody) {
+        this.salaryGroup = res.ResponseBody;
+        Toast("Record found");
+      } else {
+        ErrorToast("Unable to get salary group.");
+      }
+    });
   }
 
   initForm() {
@@ -864,6 +890,7 @@ export class EmployeeDetail {
   ExprienceInYear: number = null;
   LastCompanyName: string = null;
   IsPermanent: boolean = false;
+  IsActive: boolean = false;
   AllocatedClientId: number = null;
   AllocatedClientName: string = null;
   ActualPackage: number = null;
