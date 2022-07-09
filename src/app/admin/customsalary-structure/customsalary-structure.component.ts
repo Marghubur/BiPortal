@@ -43,6 +43,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   addedFormula: string = '';
   isEditSalaryGroup: boolean = false;
   customSalaryStructureForm: FormGroup;
+  currentGroup: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -84,13 +85,13 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   selectToAddComponent(event: any, item: any) {
     if (event.target.checked == true) {
-      let index = this.activeComponent.indexOf(item.ComponentId);
-        if (index > -1)
-          ErrorToast("Component already added. Please select another component.");
-        else
-          this.activeComponent.push(item.ComponentId)
+      let elem = this.activeComponent.find(x => x.ComponentId === item.ComponentId);
+      if (elem != null)
+        ErrorToast("Component already added. Please select another component.");
+      else
+        this.activeComponent.push(item);
     } else {
-        let index = this.activeComponent.indexOf(item.ComponentId);
+        let index = this.activeComponent.findIndex(x => x.ComponentId === item.ComponentId);
         if (index > -1)
           this.activeComponent.splice(index, 1);
     }
@@ -99,7 +100,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   addComponents() {
     this.componentsAvailable = false;
     let updateStructure: SalaryStructureType = {
-      ComponentIdList: this.activeComponent,
+      GroupComponents: this.activeComponent,
       ComponentId: null,
       GroupDescription: this.selectedSalaryStructure.GroupDescription,
       GroupName: this.selectedSalaryStructure.GroupName,
@@ -423,14 +424,13 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   selectSalaryGroup(item: SalaryStructureType) {
     if (item) {
+      this.currentGroup = item;
       this.isSalaryGrpSelected = false;
       this.http.get(`SalaryComponent/GetSalaryGroupComponents/${item.SalaryGroupId}`)
       .then(res => {
         if (res.ResponseBody) {
           let value = res.ResponseBody;
-          for (let index = 0; index < value.length; index++) {
-            this.activeComponent.push(value[index].ComponentId);
-          }
+          this.activeComponent = value;
           this.groupComponents = value;
           this.groupAllComponents = value;
           this.isSalaryGrpSelected = true;
@@ -503,13 +503,17 @@ export class CustomsalaryStructureComponent implements OnInit {
       value.CalculateInPercentage = true;
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
-    let errorCounter =0;
-    if (errorCounter === 0) {
-        this.http.put(`Settings/UpdateSalaryComponentDetail/${this.componentFields.ComponentId}`, value).then((response:ResponseModel) => {
+
+    if (this.currentGroup.SalaryGroupId > 0) {
+        this.http.put(`Settings/UpdateGroupSalaryComponentDetail/
+            ${this.componentFields.ComponentId}/
+            ${this.currentGroup.SalaryGroupId}`, value).then((response:ResponseModel) => {
           if (response.ResponseBody)
             Toast('Updated Successfully')
           $('#updateCalculationModal').modal('hide');
         })
+    } else {
+      WarningToast("Group not selected.");
     }
     this.submitted = true;
     this.isLoading = false;
@@ -552,7 +556,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 class SalaryStructureType {
   SalaryGroupId: number = 0;
   ComponentId: string = null;
-  ComponentIdList: Array<string> = [];
+  GroupComponents: Array<any> = [];
   GroupName: string = null;
   GroupDescription: string = null;
   MinAmount: number = 0;
