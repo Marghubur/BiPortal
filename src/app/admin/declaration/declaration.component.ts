@@ -179,6 +179,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
         this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
         this.salaryDetails = response.ResponseBody.SalaryDetail;
+        if(this.salaryDetails !== null)
         this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
         this.calculateDeclarations();
         Toast("Declaration detail loaded successfully");
