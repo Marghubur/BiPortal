@@ -20,7 +20,7 @@
           <app-breadcrums></app-breadcrums>
         </div>
         <div class="x_content mt-4" *ngIf="idReady">
-          <form [formGroup]="employeeForm" autocomplete="off">
+          <form [formGroup]="employeeForm" *ngIf="employeeForm" autocomplete="off">
             <div class="col-12 row">
               <div class="col-md-4">
                 <div class="x_header_title position-relative">
@@ -89,9 +89,35 @@
                     </form>
                   </div>
                 </div>
-
                 <div class="col-md-12 m-0 row">
-                  <div class="col-md-6 mb-3">
+                  <div class="col-6 p-3 pt-4">
+                    <p>Select your gender</p>
+                    <div class="col-12 row">
+                      <div>
+                        <input type="checkbox" class="me-2">
+                        <span>Male</span>
+                      </div>
+                      <div>
+                        <input type="checkbox" class="me-2">
+                        <label>Female</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-container *ngIf="isUpdate">
+              <a href="javascript:void(0)" (click)="addUpadteClientPopUp()" class="text-decoration-none ps-3">Add or Update Associate Clients <i class="fa fa-plus ps-2"></i></a>
+            </ng-container>
+            <div class="col-12 row m-0 mt-5">
+              <div class="x_panel x-panel-changed">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Other Detail<small>Fill the other details</small></h2>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
+                  <div class="col-md-4 mb-3">
                     <label class="form-label">Designation</label>
                     <select name="DesignationId" class="form-control" formControlName="DesignationId"
                       [ngClass]="{'error-field': submitted && f.DesignationId.errors !== null && f.DesignationId.errors.required}">
@@ -110,16 +136,13 @@
                       <option value="12">Other</option>
                     </select>
                   </div>
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-4 mb-3">
                     <label class="form-label">Reporting Manager</label>
                     <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId"
                       name="ReportingManagerId">
                     </app-iautocomplete>
                   </div>
-                </div>
-
-                <div class="col-md-12 m-0 row">
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label class="form-label">Role</label>
                     <select name="AccessLevelId" class="form-control" formControlName="AccessLevelId"
                       [ngClass]="{'error-field': submitted && f.AccessLevelId.errors !== null && f.AccessLevelId.errors.required}">
@@ -129,7 +152,7 @@
                       </option>
                     </select>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label class="form-label">User Type</label>
                     <select name="UserTypeId" class="form-control" formControlName="UserTypeId"
                       [ngClass]="{'error-field': submitted && f.UserTypeId.errors !== null && f.UserTypeId.errors.required}">
@@ -141,115 +164,24 @@
                       <option value="5">Other</option>
                     </select>
                   </div>
-                </div>
-
-                <div class="col-md-12 m-0 row">
-                  <div class="col-6 p-3 pt-4">
-                    <p>Select your gender</p>
-                    <div class="col-12 row">
-                      <div>
-                        <input type="checkbox" class="me-2">
-                        <span>Male</span>
-                      </div>
-                      <div>
-                        <input type="checkbox" class="me-2">
-                        <label>Female</label>
-                      </div>
-                    </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Company</label>
+                    <select class="form-control" formControlName="CompanyId"
+                    [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
+                      <option value="">Select Company</option>
+                      <option *ngFor="let item of companyGroup" [value]="item.CompanyId">
+                        {{item.CompanyName}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">CTC *</label>
+                    <input class="form-control" placeholder="Last Name" name="CTC" formControlName="CTC" OnlyNumber="12" (keyup)="ctcChangeAmount($event)"
+                      [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
                   </div>
                 </div>
               </div>
             </div>
-
-            <div class="x_panel x-panel-changed">
-              <div class="x_header">
-                <div class="x_header_title">
-                  <h2>Add Update Client<small>Add or update client(s) allocation detail</small>
-                  </h2>
-                </div>
-              </div>
-
-              <div class="col-md-12 row">
-                <div formArrayName="AllocatedClients" class="border-end col-md-6 m-0">
-                  <div class="pt-2">
-                    <div class="col-md-12 p-2 pt-3">
-                      <ng-container *ngIf="isAllocated">
-                        <ng-container *ngFor="let client of allocatedClient.controls; let index = index;">
-                          <ng-container [formGroupName]="index">
-                            <div class="d-block span-clients pe-2 pb-1 mb-2" *ngIf="client.get('IsActive').value"
-                              [ngClass]="{'inactive-mode': client.get('IsActiveRow').value != 1}">
-                              <span class="text-start">{{client.get("ClientName").value}}</span>
-                              <span class="float-end">
-                                <a (click)="bindCurrentClientDetail(client)">
-                                  <i class="fa fa-edit"></i>
-                                </a>
-                                <a (click)="deleteCurrentClient(client)">
-                                  <i class="ps-2 fa fa-trash"></i>
-                                </a>
-                              </span>
-                            </div>
-                          </ng-container>
-                        </ng-container>
-                      </ng-container>
-
-                      <ng-container *ngIf="!isAllocated">
-                        <div class="text-center">
-                          <p class="p-4">
-                            Not allocated to any client
-                          </p>
-                        </div>
-                      </ng-container>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Client (Allocated)</label>
-                    <div class="col-md-12">
-                      <select name="AllocatedClientId" class="form-control" formControlName="AllocatedClientId">
-                        <option value="0">Clients Name</option>
-                        <option *ngFor="let client of clients" value="{{client.ClientId}}">
-                          {{client.ClientName}}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="row mt-3">
-                    <div class="form-group col-md-4 mb-3">
-                      <label class="form-label">Actual Package / Mon</label>
-                      <input class="form-control" placeholder="Actual Package" OnlyNumber="10" name="ActualPackage"
-                        formControlName="ActualPackage" />
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                      <label class="form-label">Final Package / Mon</label>
-                      <input class="form-control" placeholder="Final Package" OnlyNumber="10" name="FinalPackage"
-                        formControlName="FinalPackage" />
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                      <label class="form-label">Take Home</label>
-                      <input class="form-control" placeholder="TakeHomeByCandidate" OnlyNumber="10"
-                        name="TakeHomeByCandidate" formControlName="TakeHomeByCandidate" />
-                    </div>
-                  </div>
-
-                  <div class="col-md-12 mt-3 text-end mb-3">
-                    <button class="btn btn-outline-success" (click)="addDetail()">
-                      <i class="fa pe-3"
-                        [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-                      <span *ngIf="isUpdated">
-                        Update changes
-                      </span>
-                      <span *ngIf="!isUpdated">
-                        Created
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div class="col-12 row m-0 mt-5">
               <div class="col-md-6">
                 <div class="x_panel">
@@ -404,9 +336,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-        <ng-container *ngIf="activeClient != null">
+        <ng-container *ngIf="activeAssignedClient != null">
           <div class="delete-content">
-            <b>Client Name: </b> <ins class="ps-4 fw-bold">{{activeClient.ClientName}}</ins>
+            <b>Client Name: </b> <ins class="ps-4 fw-bold">{{activeAssignedClient.ClientName}}</ins>
           </div>
           <div class="mt-4 mark">
             Please check client name very carefully, as once you de-activate the client,
@@ -436,9 +368,9 @@
         <form [formGroup]="salaryBreakupForm" *ngIf="salaryBreakupForm">
           <div class="col-md-12 row m-0 p-0 justify-content-between">
             <div class="col-md-3 mb-3 m-0 p-0">
-              <select class="form-select" (change)="selectSalaryGroup($event)">
+              <select class="form-select" disabled formControlName="SalaryGroupId">
                 <option value="0">Please select salary group</option>
-                <option [value]="item.SalaryGroupId" [selected]="salaryGroup.length == 1"
+                <option [value]="item.SalaryGroupId" 
                   *ngFor="let item of salaryGroup">{{item.GroupName}}</option>
               </select>
             </div>
@@ -452,7 +384,7 @@
                 <div class="td align-middle fe-2">
                   <div class="cell-wrapper mx-2 d-flex align-items-center">
                     <label for="" class="form-label pe-2 mb-0">Annually</label>
-                    <input type="text" class="form-control form-control-sm" OnlyNumber="9"
+                    <input type="text" class="form-control form-control-sm" OnlyNumber="9" (keyup)="ctcChangeAmount($event)"
                       formControlName="ExpectedCTC">
                   </div>
                 </div>
@@ -466,7 +398,7 @@
           <div [ngClass]="{'blur-section': !isCompanyGroupSelected}">
             <div class="blur-section__highlight" [ngClass]="{'d-none': isCompanyGroupSelected}">
               <div class="blur-section__content">
-                Please select Company group first
+                Please Enter expected CTC
               </div>
             </div>
             <div class="blur-this">
@@ -764,3 +696,99 @@
     </div>
   </div>
 </div>
+
+<!-- Add or update client Modal -->
+<div class="modal addclinet-modal fade" id="addUpdateClientModal" aria-labelledby="addUpdateClientModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUpdateClientModalLabel">Add Update Client<small>Add or update client(s) allocation detail</small></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="addUpdateClientForm" *ngIf="addUpdateClientForm">
+          <div class="col-md-12 row">
+            <div formArrayName="AllocatedClients" class="border-end col-md-6 m-0">
+              <div class="pt-2">
+                <div class="col-md-12 p-2 pt-3">
+                  <ng-container *ngIf="isAllocated">
+                    <ng-container *ngFor="let client of allocatedClient.controls; let index = index;">
+                      <ng-container [formGroupName]="index">
+                        <div class="d-block span-clients pe-2 pb-1 mb-2" *ngIf="client.get('IsActive').value"
+                          [ngClass]="{'inactive-mode': client.get('IsActiveRow').value != 1}">
+                          <span class="text-start">{{client.get("ClientName").value}}</span>
+                          <span class="float-end">
+                            <a (click)="bindCurrentClientDetail(client)">
+                              <i class="fa fa-edit"></i>
+                            </a>
+                            <a (click)="deleteCurrentClient(client)">
+                              <i class="ps-2 fa fa-trash"></i>
+                            </a>
+                          </span>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+  
+                  <ng-container *ngIf="!isAllocated">
+                    <div class="text-center">
+                      <p class="p-4">
+                        Not allocated to any client
+                      </p>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label">Client (Allocated)</label>
+                <div class="col-md-12">
+                  <select name="AllocatedClientId" class="form-control" formControlName="AllocatedClientId">
+                    <option value="0">Clients Name</option>
+                    <option *ngFor="let client of clients" value="{{client.ClientId}}">
+                      {{client.ClientName}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+  
+              <div class="row mt-3">
+                <div class="form-group col-md-4 mb-3">
+                  <label class="form-label">Actual Package / Mon</label>
+                  <input class="form-control" placeholder="Actual Package" OnlyNumber="10" name="ActualPackage"
+                    formControlName="ActualPackage" />
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <label class="form-label">Final Package / Mon</label>
+                  <input class="form-control" placeholder="Final Package" OnlyNumber="10" name="FinalPackage"
+                    formControlName="FinalPackage" />
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <label class="form-label">Take Home</label>
+                  <input class="form-control" placeholder="TakeHomeByCandidate" OnlyNumber="10"
+                    name="TakeHomeByCandidate" formControlName="TakeHomeByCandidate" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-outline-success" (click)="addDetail()">
+          <i class="fa pe-3"
+            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <span *ngIf="isUpdated">
+            Update changes
+          </span>
+          <span *ngIf="!isUpdated">
+            Created
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Close Modal -->
