@@ -31,6 +31,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   clients: Array<any> = [];
   allocatedClients: Array<any> = [];
+  allocatedCompany: any = null;
   isAllocated: boolean = false;
   isUpdate: boolean = false;
   employeeUid: number = 0;
@@ -57,6 +58,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   salaryComponents: Array<any> = [];
   salaryDetail: any = null;
   completeSalaryBreakup: SalaryBreakupDetails = new SalaryBreakupDetails();
+  addUpdateClientForm: FormGroup = null;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -84,7 +86,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       text: "Default Manager"
     });
     this.managerList.className="";
-
+    this.getAllCompany();
+    this.getAllSalaryGroup();
     this.model = this.calendar.getToday();
     let data = this.nav.getValue();
     this.employeeUid = 0;
@@ -98,7 +101,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal = new EmployeeDetail();
       this.employeeModal.ReportingManagerId = null;
       this.employeeModal.DesignationId = null;
-      this.bindForm();
       this.idReady = true;
     }
     this.loadData(this.employeeUid);
@@ -123,6 +125,15 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       if(profileDetail.length > 0) {
         this.buildProfileImage(profileDetail[0]);
       }
+      if (response.ResponseBody.Companies && response.ResponseBody.Companies.length == 1) 
+        this.allocatedCompany = response.ResponseBody.Companies[0];
+      else {
+        this.allocatedCompany = {
+          CompanyName: "",
+          CompanyId: 0
+        }
+      }
+        
       if(this.allocatedClients.length > 0) {
         this.allocatedClients.map((item, index) => {
           if(index == 0) {
@@ -159,21 +170,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           i++;
         }
 
-        if(res.ResponseBody.Companies && res.ResponseBody.Companies.length > 0) {
-          let Companies = res.ResponseBody.Companies;
-          if (Companies.length == 1) {
-            this.companyGroup.push ({
-              CompanyName: Companies[0].CompanyName,
-              CompanyId: Companies[0].CompanyId
-            })
-
-            this.companyGroupId = 0;
-          } else {
-            this.companyGroup = Companies;
-          }
-        } else {
-          this.companyGroup = [];
-        }
+        // if(res.ResponseBody.Companies && res.ResponseBody.Companies.length > 0) {
+        //   let Companies = res.ResponseBody.Companies;
+        //   this.allocatedCompany = Companies[0];
+        // } 
 
         if (res.ResponseBody.SalaryDetail.length > 0) {
           this.salaryDetail = res.ResponseBody.SalaryDetail[0];
@@ -192,11 +192,19 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
       this.buildPageData(res);
       this.bindForm();
+      this.bindClientDetails();
       this.initForm();
       this.idReady = true;
     });
   }
 
+  getAllCompany() {
+    this.http.get("Company/GetAllCompany").then(res => {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
+        this.companyGroup = res.ResponseBody;
+      }
+    })
+  }
   daysInMonth(monthNumber: number) {
     var now = new Date();
     return new Date(now.getFullYear(), monthNumber, 0).getDate();
@@ -241,19 +249,26 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       BranchName: new FormControl(this.employeeModal.BranchName),
       AllocatedClientName: new FormControl(this.employeeModal.AllocatedClientName),
       ProfileImgPath: new FormControl(""),
-      AllocatedClientId: new FormControl("0"),
-      ActualPackage: new FormControl(null),
-      FinalPackage: new FormControl(null),
       DateOfJoining: new FormControl(this.employeeModal.DateOfJoining),
       DOB: new FormControl(this.employeeModal.DOB),
-      TakeHomeByCandidate: new FormControl(null),
       FileId: new FormControl(this.employeeModal.FileId),
       AccessLevelId: new FormControl(this.employeeModal.AccessLevelId, [Validators.required]),
       UserTypeId: new FormControl(this.employeeModal.UserTypeId, [Validators.required]),
       ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId, [Validators.required]),
       DesignationId: new FormControl(this.employeeModal.DesignationId, [Validators.required]),
-      AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
+      CompanyId: new FormControl(this.allocatedCompany.CompanyId, [Validators.required]),
+      CTC: new FormControl(this.salaryDetail.CTC, [Validators.required])
     });
+  }
+  
+  bindClientDetails() {
+    this.addUpdateClientForm = this.fb.group({
+      AllocatedClientId: new FormControl("0"),
+      ActualPackage: new FormControl(null),
+      FinalPackage: new FormControl(null),
+      TakeHomeByCandidate: new FormControl(null),
+      AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
+    })
   }
 
   buildAlocatedClients(client: any, flag: boolean) {
@@ -272,7 +287,13 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   get allocatedClient(): FormArray {
-    return this.employeeForm.get ("AllocatedClients") as FormArray;
+    return this.addUpdateClientForm.get ("AllocatedClients") as FormArray;
+  }
+
+  ctcChangeAmount(e: any) {
+    let value = e.target.value;
+    this.salaryBreakupForm.get("ExpectedCTC").setValue(value);
+    this.employeeForm.get("CTC").setValue(value);
   }
 
   RegisterEmployee() {
@@ -287,6 +308,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (this.employeeForm.get('Email').errors !== null)
       errroCounter++;
     if (this.employeeForm.get('DesignationId').errors !== null)
+      errroCounter++;
+    if (this.employeeForm.get('CompanyId').errors !== null)
       errroCounter++;
     if (this.employeeForm.get('ReportingManagerId').errors !== null) {
       this.managerList = new autoCompleteModal();
@@ -355,28 +378,28 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   addDetail() {
     this.isAllocated = false;
-    let clientId = Number(this.employeeForm.get("AllocatedClientId").value);
+    let clientId = Number(this.addUpdateClientForm.get("AllocatedClientId").value);
     if(isNaN(clientId) || clientId <= 0){
       ErrorToast("Invalid client selected");
       return;
     }
 
     this.activeAssignedClient.ClientUid = clientId;
-    let actualPackage = Number(this.employeeForm.get("ActualPackage").value);
+    let actualPackage = Number(this.addUpdateClientForm.get("ActualPackage").value);
     if(isNaN(actualPackage)){
       ErrorToast("Invalid actual package supplied");
       return;
     }
 
     this.activeAssignedClient.ActualPackage = actualPackage;
-    let finalPackage = Number(this.employeeForm.get("FinalPackage").value);
+    let finalPackage = Number(this.addUpdateClientForm.get("FinalPackage").value);
     if(isNaN(finalPackage)){
       ErrorToast("Invalid final package supplied");
       return;
     }
 
     this.activeAssignedClient.FinalPackage = finalPackage;
-    let takeHomeByCandidate = Number(this.employeeForm.get("TakeHomeByCandidate").value);
+    let takeHomeByCandidate = Number(this.addUpdateClientForm.get("TakeHomeByCandidate").value);
     if(isNaN(takeHomeByCandidate)){
       ErrorToast("Invalid takehome package supplied");
       return;
@@ -404,10 +427,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       if (response.ResponseBody.Table) {
         this.allocatedClients = response.ResponseBody.Table;
         if(this.allocatedClients.length > 0) {
-          let assignedClients: FormArray = this.employeeForm.get("AllocatedClients") as FormArray;
+          let assignedClients: FormArray = this.addUpdateClientForm.get("AllocatedClients") as FormArray;
           assignedClients.clear();
           let apiClients: FormArray = this.fb.array(this.allocatedClients.map(x => this.buildAlocatedClients(x, (x.ClientUid == this.activeAssignedClient.ClientUid) ?? false)));
-          this.employeeForm.setControl("AllocatedClients", apiClients);
+          this.addUpdateClientForm.setControl("AllocatedClients", apiClients);
         }
         Toast("Organization added/updated successfully.");
       } else {
@@ -421,14 +444,14 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   bindCurrentClientDetail(client: any) {
     if (client) {
       this.activeAssignedClient = client.value;
-      this.employeeForm.get("AllocatedClientId").setValue(this.activeAssignedClient.ClientUid);
-      this.employeeForm.get("ActualPackage").setValue(this.activeAssignedClient.ActualPackage);
-      this.employeeForm.get("FinalPackage").setValue(this.activeAssignedClient.FinalPackage);
-      this.employeeForm.get("TakeHomeByCandidate").setValue(this.activeAssignedClient.TakeHomeByCandidate);
+      this.addUpdateClientForm.get("AllocatedClientId").setValue(this.activeAssignedClient.ClientUid);
+      this.addUpdateClientForm.get("ActualPackage").setValue(this.activeAssignedClient.ActualPackage);
+      this.addUpdateClientForm.get("FinalPackage").setValue(this.activeAssignedClient.FinalPackage);
+      this.addUpdateClientForm.get("TakeHomeByCandidate").setValue(this.activeAssignedClient.TakeHomeByCandidate);
       this.isUpdated = true;
 
       if (this.activeAssignedClient) {
-        let clientsDetail = this.employeeForm.get("AllocatedClients") as FormArray;
+        let clientsDetail = this.addUpdateClientForm.get("AllocatedClients") as FormArray;
         let i = 0;
         while(i < clientsDetail.length) {
           clientsDetail.controls[i].get("IsActiveRow").setValue(false);
@@ -456,10 +479,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       if(response.ResponseBody) {
         this.allocatedClients = response.ResponseBody.Table;
         if(this.allocatedClient.length > 0) {
-          let assignedClients: FormArray = this.employeeForm.get("AllocatedClients") as FormArray;
+          let assignedClients: FormArray = this.addUpdateClientForm.get("AllocatedClients") as FormArray;
           assignedClients.clear();
           let apiClients: FormArray = this.fb.array(this.allocatedClients.map(x => this.buildAlocatedClients(x, (x.ClientUid == this.activeAssignedClient.ClientUid) ?? false)));
-          this.employeeForm.setControl("AllocatedClients", apiClients);
+          this.addUpdateClientForm.setControl("AllocatedClients", apiClients);
         }
         Toast("Client de-activated successfully.");
       } else {
@@ -472,50 +495,34 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   salryBreakupPopup() {
     $('#fullSalaryDetail').modal('show');
-    this.getAllSalaryGroup();
-    if (this.salaryGroup.length == 1) {
-      this.salaryGroupId = this.salaryGroup[0].SalaryGroupId;
-      this.findSalaryGroup();
-    }
-  }
-
-  selectSalaryGroup(event: any) {
-    let value = Number(event.target.value);
-    if (value > 0) {
-      this.salaryGroupId = value;
-      this.findSalaryGroup();
-    }
-  }
-
-  findSalaryGroup() {
-    this.http.get(`SalaryComponent/GetSalaryGroupsById/${this.salaryGroupId}`).then(res => {
-      if(res.ResponseBody) {
-        this.salaryGroup = res.ResponseBody;
-        if (this.salaryDetail.CompleteSalaryDetail) {
-          if (this.salaryDetail.CompleteSalaryDetail != null && this.salaryDetail.CompleteSalaryDetail != '{}') 
-          this.completeSalaryBreakup = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
-          else
-          this.completeSalaryBreakup = new SalaryBreakupDetails();
-          this.initForm();
-          this.salaryBreakupForm.get("ExpectedCTC").setValue(this.salaryDetail.CTC);
-          this.isSalaryGroup = true;
-          this.isCompanyGroupSelected = true;
-        } else {
-          this.isCompanyGroupSelected = false;
-          this.isSalaryGroup = false;
-        }
-        Toast("Salary components loaded successfully.");
-      } else {
-        ErrorToast("Salary components loaded successfully.");
+    let companyid = this.employeeForm.get("CompanyId").value;
+    if (companyid > 0) {
+      if (this.salaryDetail.CompleteSalaryDetail != null && this.salaryDetail.CompleteSalaryDetail != '{}') {
+        this.salaryGroupId = this.salaryGroup[0].SalaryGroupId;
+        this.completeSalaryBreakup = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
       }
-    });
+      else
+        this.completeSalaryBreakup = new SalaryBreakupDetails();
+      this.initForm();
+      this.salaryBreakupForm.get("ExpectedCTC").setValue(this.employeeForm.get("CTC").value);
+      if (this.salaryBreakupForm.get("ExpectedCTC").value > 0) {
+        this.calculateSalary();
+        this.isSalaryGroup = true;
+        this.isCompanyGroupSelected = true;
+      }
+    } else {
+      ErrorToast("Please select company first.")
+      this.isCompanyGroupSelected = false;
+      this.isSalaryGroup = false;
+    }
   }
 
   getAllSalaryGroup() {
+    this.isSalaryGroup = false;
     this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
       if(res.ResponseBody) {
         this.salaryGroup = res.ResponseBody;
-        Toast("Record found");
+        this.isSalaryGroup = true;
       } else {
         ErrorToast("Unable to get salary group.");
       }
@@ -554,17 +561,18 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       FoodAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.FoodAnnually)),
       CTCMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.CTCAnnually/12)),
       CTCAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.CTCAnnually)),
-      ExpectedCTC: new FormControl(Math.trunc(this.salaryDetail.CTC))
+      ExpectedCTC: new FormControl(Math.trunc(this.completeSalaryBreakup.CTCAnnually)),
+      SalaryGroupId: new FormControl(this.salaryGroupId)
     });
   }
 
   calculateSalary() {
     let annualCTC = Number(this.salaryBreakupForm.get("ExpectedCTC").value);
     if (annualCTC > 0) {
-      let salarygrpDetail = this.salaryGroup.find(x => x.MinAmount <= annualCTC && x.MaxAmount >= annualCTC);
-
+      let salarygrpDetail = this.salaryGroup.filter(x => x.MinAmount <= annualCTC && x.MaxAmount >= annualCTC);
+      this.salaryGroup = salarygrpDetail;
       if (salarygrpDetail) {
-        this.salaryGroupId = salarygrpDetail.SalaryGroupId;
+        this.salaryGroupId = salarygrpDetail[0].SalaryGroupId;
         this.isSalaryGroup = true;
         this.http.post(`SalaryComponent/SalaryBreakupCalc/${this.employeeUid}/${this.salaryGroupId}`, annualCTC)
         .then(res => {
@@ -831,6 +839,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     $("#uploadocument").click();
   }
 
+  addUpadteClientPopUp() {
+    $('#addUpdateClientModal').modal('show');
+  }
+
   uploadProfilePicture(event: any) {
     if (event.target.files) {
       var reader = new FileReader();
@@ -874,6 +886,7 @@ export class EmployeeDetail {
   BranchName: string = null;
   SecondaryMobile: string = null;
   FatherName: string = null;
+  CompanyId: number = null;
   MotherName: string = null;
   SpouseName: string = null;
   State: string = null;
@@ -902,6 +915,7 @@ export class EmployeeDetail {
   DesignationId: number = null;
   AccessLevelId: number = null;
   UserTypeId: number = null;
+  CTC: number = null;
   AllocatedClients: Array<AssignedClients> = [];
 }
 
