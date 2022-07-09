@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Declaration, Salary, Summary } from 'src/providers/constants';
+import { EmployeeDetail } from 'src/app/admin/manageemployee/manageemployee.component';
+import { ResponseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { AccessTokenExpiredOn, Declaration, Salary, Summary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -12,10 +17,28 @@ export class PreferencesComponent implements OnInit {
   salaryDeposit: SalaryDeposit = new SalaryDeposit();
   satutoryInformation: StatutoryInformation = new StatutoryInformation();
   cachedData: any = null;
+  userDetail: UserDetail = new UserDetail();
+  EmployeeId: number = 0;
+  employeeDetail: EmployeeDetail = new EmployeeDetail();
 
-  constructor(private nav: iNavigation) { }
+  constructor(private local: ApplicationStorage,
+              private http: AjaxService,
+              private nav: iNavigation) { }
 
   ngOnInit(): void {
+    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
+    if(expiredOn === null || expiredOn === "")
+      this.userDetail["TokenExpiryDuration"] = new Date();
+      else
+      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+      let Master = this.local.get(null);
+      if(Master !== null && Master !== "") {
+        this.userDetail = Master["UserDetail"];
+        this.EmployeeId = this.userDetail.UserId;
+        this.LoadData();
+      } else {
+        Toast("Invalid user. Please login again.")
+      }
     this.PanInformation = {
       NameOnCard: "MD Istayaque",
       PANNumber: "ABPANF655A",
@@ -41,6 +64,22 @@ export class PreferencesComponent implements OnInit {
       State: 'Telangana',
       RegisteredLocation: 'Telangana',
       LWFStatus: "Disabled"
+    }
+  }
+
+  LoadData() {
+    if (this.EmployeeId > 0) {
+      this.http.get(`employee/GetManageEmployeeDetail/${this.EmployeeId}`).then((response: ResponseModel) => {
+        if(response.ResponseBody) {
+          if (response.ResponseBody.Employee.length > 0) {
+            this.employeeDetail = response.ResponseBody.Employee[0] as EmployeeDetail;
+            console.log(this.employeeDetail);
+            Toast("Record found.")
+          } else {
+            ErrorToast("Record not found");
+          }
+        }
+      });
     }
   }
 
