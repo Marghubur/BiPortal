@@ -28,6 +28,7 @@ export class SummaryComponent implements OnInit {
   currentYear: number = 0;
   salarySummary: any = {};
   monthName: string = '';
+  recordFound: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -66,10 +67,17 @@ export class SummaryComponent implements OnInit {
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        Toast("Record found.");
         this.userFiles = response.ResponseBody["Files"];
         if(this.userFiles !== null && this.userFiles.length > 0) {
           this.salarySummary = this.userFiles.filter(x => x.Month == this.currentMonth -1 && x.Status != 'Rejected')[0];
+          if (this.salarySummary) {
+            this.recordFound = true;
+            Toast("Record found.");
+          }
+          else {
+            this.recordFound = false;
+            ErrorToast("No record found")
+          }
         }
       } else {
         ErrorToast("No file or folder found");

@@ -91,7 +91,7 @@
                         <div class="th ps-2">INR 17100</div>
                         <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay | number}}</div>
                         <div class="th ps-2">{{allDeclarationSalaryDetails.TaxPaid | number}}</div>
-                        <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay | number}} - {{allDeclarationSalaryDetails.TaxPaid | number}}</div>
+                        <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid  | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -144,16 +144,18 @@
                               Basic
                             </div>
                           </div>
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup.BasicAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
                           <div class="td">
                             <div class="cell-wrapper">
-                              {{salaryBreakup.BasicAnnually/12 | number: '1.2-2'}}
+                              {{salaryBreakup[0].BasicAnnually | number: '1.2-2'}}
                             </div>
                           </div>
+                          <ng-container *ngFor="let item of salaryBreakup">
+                            <div class="td">
+                              <div class="cell-wrapper">
+                                {{item.BasicAnnually/12 | number: '1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
                         </div>
                         <div class="tr text-dark py-3">
                           <div class="td ps-2 fe-3">
@@ -161,16 +163,18 @@
                               Conveyance Allowance
                             </div>
                           </div>
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup.ConveyanceAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
                           <div class="td">
                             <div class="cell-wrapper">
-                              {{salaryBreakup.ConveyanceAnnually/12 | number: '1.2-2'}}
+                              {{salaryBreakup[0].ConveyanceAnnually | number: '1.2-2'}}
                             </div>
                           </div>
+                          <ng-container *ngFor="let item of salaryBreakup">
+                            <div class="td">
+                              <div class="cell-wrapper">
+                                {{item.ConveyanceAnnually/12 | number: '1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
                         </div>
                         <div class="tr text-dark py-3">
                           <div class="td ps-2 fe-3">
@@ -178,16 +182,18 @@
                               HRA
                             </div>
                           </div>
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup.HRAAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
                           <div class="td">
                             <div class="cell-wrapper">
-                              {{salaryBreakup.HRAAnnually/12 | number: '1.2-2'}}
+                              {{salaryBreakup[0].HRAAnnually | number: '1.2-2'}}
                             </div>
                           </div>
+                          <ng-container *ngFor="let item of salaryBreakup">
+                            <div class="td">
+                              <div class="cell-wrapper">
+                                {{item.HRAAnnually/12 | number: '1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
                         </div>
                         <div class="tr text-dark py-3">
                           <div class="td ps-2 fe-3">
@@ -195,16 +201,18 @@
                               Car Running Allowance
                             </div>
                           </div>
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup.CarRunningAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
                           <div class="td">
                             <div class="cell-wrapper">
-                              {{salaryBreakup.CarRunningAnnually/12 | number: '1.2-2'}}
+                              {{salaryBreakup[0].CarRunningAnnually | number: '1.2-2'}}
                             </div>
                           </div>
+                          <ng-container *ngFor="let item of salaryBreakup">
+                            <div class="td">
+                              <div class="cell-wrapper">
+                                {{item.CarRunningAnnually/12 | number: '1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
                         </div>
                         <div class="tr text-dark py-3">
                           <div class="td ps-2 fe-3">
@@ -212,16 +220,18 @@
                               Telephone and Internet Allowance
                             </div>
                           </div>
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup.InternetAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
                           <div class="td">
                             <div class="cell-wrapper">
-                              {{salaryBreakup.InternetAnnually/12 | number: '1.2-2'}}
+                              {{salaryBreakup[0].InternetAnnually | number: '1.2-2'}}
                             </div>
                           </div>
+                          <ng-container *ngFor="let item of salaryBreakup">
+                            <div class="td">
+                              <div class="cell-wrapper">
+                                {{item.InternetAnnually/12 | number: '1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
                         </div>
                         <div class="tr text-dark py-3">
                           <div class="td ps-2 fe-3">
@@ -229,16 +239,18 @@
                               Travel Reimburesment(LTA)
                             </div>
                           </div>
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup.TravelAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
                           <div class="td">
                             <div class="cell-wrapper">
-                              {{salaryBreakup.TravelAnnually/12 | number: '1.2-2'}}
+                              {{salaryBreakup[0].TravelAnnually | number: '1.2-2'}}
                             </div>
                           </div>
+                          <ng-container *ngFor="let item of salaryBreakup">
+                            <div class="td">
+                              <div class="cell-wrapper">
+                                {{item.TravelAnnually/12 | number: '1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
                         </div>
                         <div class="tr text-dark py-3">
                           <div class="td ps-2 fe-3">
@@ -246,16 +258,18 @@
                               Shfit Allowance
                             </div>
                           </div>
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup.ShiftAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
                           <div class="td">
                             <div class="cell-wrapper">
-                              {{salaryBreakup.ShiftAnnually/12 | number: '1.2-2'}}
+                              {{salaryBreakup[0].ShiftAnnually | number: '1.2-2'}}
                             </div>
                           </div>
+                          <ng-container *ngFor="let item of salaryBreakup">
+                            <div class="td">
+                              <div class="cell-wrapper">
+                                {{item.ShiftAnnually/12 | number: '1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
                         </div>
                         <div class="tr text-dark py-3">
                           <div class="td ps-2 fe-3">
@@ -263,16 +277,37 @@
                               Special Allowance
                             </div>
                           </div>
+                          <div class="td">
+                            <div class="cell-wrapper">
+                              {{salaryBreakup[0].SpecialAnnually | number: '1.2-2'}}
+                            </div>
+                          </div>
+                          <ng-container *ngFor="let item of salaryBreakup">
+                            <div class="td">
+                              <div class="cell-wrapper">
+                                {{item.SpecialAnnually/12 | number: '1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="tr text-dark py-3">
                           <div class="td ps-2 fe-3">
                             <div class="cell-wrapper">
-                              {{salaryBreakup.SpecialAnnually | number: '1.2-2'}}
+                              Total
                             </div>
                           </div>
                           <div class="td">
                             <div class="cell-wrapper">
-                              {{salaryBreakup.SpecialAnnually/12 | number: '1.2-2'}}
+                              {{salaryBreakup[0].Total | number: '1.2-2'}}
                             </div>
                           </div>
+                          <ng-container *ngFor="let item of salaryBreakup">
+                            <div class="td">
+                              <div class="cell-wrapper">
+                                {{item.Total/12 | number: '1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
                         </div>
                       </ng-container>
                     </div>
@@ -292,11 +327,11 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3 ">
                         <div class="th ps-3">Total Salary Receiived</div>
-                        <div class="th pe-3 text-end">2124000</div>
+                        <div class="th pe-3 text-end">{{salaryDetail.CTC | number}}</div>
                       </div>
                       <div class="tr py-3 border-bottom-0">
                         <div class="th fw-bold ps-3">Total</div>
-                        <div class="th fw-bold pe-3 text-end">2124000</div>
+                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.CTC | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -327,7 +362,7 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3 border-bottom-0">
                         <div class="th fw-bold ps-3">Taxable Amount under Head "Salaries</div>
-                        <div class="th fw-bold pe-3 text-end">2071600</div>
+                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.CTC - 52400 | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -335,7 +370,7 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3 border-bottom-0">
                         <div class="th fw-bold ps-3">Total Gross from all Heads</div>
-                        <div class="th fw-bold pe-3 text-end">2071600</div>
+                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.CTC - 52400 | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -369,11 +404,11 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3">
                         <div class="th fw-bold ps-3">Total Taxable Amount</div>
-                        <div class="th fw-bold pe-3 text-end">2050000</div>
+                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.CTC - 52400 -21600 | number}}</div>
                       </div>
                       <div class="tr py-3 border-bottom-0">
                         <div class="th ps-3">Net taxable income is</div>
-                        <div class="th pe-3 text-end">2050000</div>
+                        <div class="th pe-3 text-end">{{salaryDetail.CTC - 52400 -21600 | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -455,7 +490,7 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr border-bottom-0 py-3">
                         <div class="th ps-2 fw-bold">Tax Paid Till Now</div>
-                        <div class="th pe-3 fw-bold text-end">37050</div>
+                        <div class="th pe-3 fw-bold text-end">{{allDeclarationSalaryDetails.TaxPaid | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -463,7 +498,7 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr border-bottom-0 py-3">
                         <div class="th ps-2 fw-bold">Remaining Tax To Be Paid</div>
-                        <div class="th pe-3 fw-bold text-end">407550</div>
+                        <div class="th pe-3 fw-bold text-end">{{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid  | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -487,19 +522,10 @@
                     </div>
                     <div class="t-body border-bottom overflow-hidden">
                       <div class="tr py-3">
-                        <div class="td ps-2 fe-2">Monthly Total Tax</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.april}}</div>
-                        <div class="td ps-2">{{monthlyTaxAmount.may}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.june}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.july}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.aug}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.sep}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.oct}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.nov}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.dec}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.jan}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.feb}}</div>
-                        <div class="td ps-1">{{monthlyTaxAmount.march}}</div>
+                        <div class="td px-2 fe-2">Monthly Total Tax</div>
+                        <ng-container *ngFor="let item of TaxDetails">
+                          <div class="td ps-1">{{item.TaxDeducted}}</div>
+                        </ng-container>
                       </div>
                     </div>
                     <div class="ps-2 py-3 row">

@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Declaration, IncomeTax, PaySlip, Preferences, Salary, Summary, Taxcalculation } from 'src/providers/constants';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { AccessTokenExpiredOn, Declaration, IncomeTax, PaySlip, Preferences, Salary, Summary, Taxcalculation } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -14,16 +18,37 @@ export class MysalaryComponent implements OnInit {
   myAnnualSalary: MyAnnualSalary = new MyAnnualSalary();
   salaryDetail: boolean = true;
   isLoading: boolean = false;
-  salaryBreakup: Array<SalaryBreakup> = [];
+  salaryBreakup: any = {};
   salaryDeducation: Array<SalaryDeduction> = [];
   incomeTaxSlab: Array<IncomeTaxSlab> =[];
   currentYear: number = 0;
+  EmployeeId: number = 0;
+  userDetail: UserDetail = new UserDetail();
+  salaryDetails: any = null;
 
-  constructor(private nav: iNavigation) { }
+  constructor(private nav: iNavigation,
+              private user: UserService,
+              private http: AjaxService,
+              private local: ApplicationStorage) { }
 
   ngOnInit(): void {
     var dt = new Date();
     this.currentYear = dt.getFullYear();
+
+    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
+    this.userDetail = this.user.getInstance() as UserDetail;
+    if(expiredOn === null || expiredOn === "")
+      this.userDetail["TokenExpiryDuration"] = new Date();
+    else
+     this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+      let Master = this.local.get(null);
+    if(Master !== null && Master !== "") {
+      this.userDetail = Master["UserDetail"];
+      this.EmployeeId = this.userDetail.UserId;
+      this.loadData();
+    } else {
+      ErrorToast("Invalid user. Please login again.")
+    }
     this.myAnnualSalary = {
       Annual: 2124000,
       Bonus: 0,
@@ -34,57 +59,6 @@ export class MysalaryComponent implements OnInit {
       Perks: 0,
       SalaryMonth: 177000
     }
-
-    this.salaryBreakup.push({
-      Details: "Basic",
-      Monthly: 70800,
-      Annually: 849600
-    },
-    {
-      Details: "Conveyance Allowance",
-      Monthly: 1600,
-      Annually: 19200
-    },
-    {
-      Details: "HRA",
-      Monthly: 28320,
-      Annually: 339840
-    },
-    {
-      Details: "Medical Allowance",
-      Monthly: 1250,
-      Annually: 15000
-    },
-    {
-      Details: "Car Running Allowance",
-      Monthly: 1800,
-      Annually: 21600
-    },
-    {
-      Details: "Telephone and Internet Allowance",
-      Monthly: 1500,
-      Annually: 18000
-    },
-    {
-      Details: "Travel Reimbursement (LTA)",
-      Monthly: 2500,
-      Annually: 30000
-    },
-    {
-      Details: "Shift Allowance",
-      Monthly: 1500,
-      Annually: 18000
-    },
-    {
-      Details: "Special Allowance",
-      Monthly: 67730,
-      Annually: 812760
-    },
-    {
-      Details: "Total",
-      Monthly: 177000,
-      Annually: 2121000
-    });
 
     this.salaryDeducation.push({
       Deduction: 'PF Employee',
@@ -124,6 +98,19 @@ export class MysalaryComponent implements OnInit {
     {
       taxSlab: 'Income above 15,00,000',
       rate: '30%'
+    })
+  }
+
+  loadData() {
+    this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`)
+    .then(response => {
+      if (response.ResponseBody) {
+        this.salaryDetails = response.ResponseBody;
+        this.salaryBreakup = JSON.parse(response.ResponseBody.CompleteSalaryDetail);
+        this.salaryBreakup.Total =  (this.salaryBreakup.BasicAnnually + this.salaryBreakup.CarRunningAnnually+this.salaryBreakup.ConveyanceAnnually+this.salaryBreakup.HRAAnnually+this.salaryBreakup.InternetAnnually+this.salaryBreakup.TravelAnnually+this.salaryBreakup.ShiftAnnually+this.salaryBreakup.SpecialAnnually);
+        console.log(this.salaryBreakup);
+        Toast("Record found");
+      }
     })
   }
 
@@ -200,12 +187,6 @@ class MyAnnualSalary {
   PFperMonth: number = 0;
   Perks: number = 0;
   SalaryMonth: number = 0
-}
-
-class SalaryBreakup {
-  Details: string = '';
-  Monthly: number = 0;
-  Annually: number = 0;
 }
 
 class SalaryDeduction {

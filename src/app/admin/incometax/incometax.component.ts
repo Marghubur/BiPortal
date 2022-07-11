@@ -19,7 +19,8 @@ export class IncometaxComponent implements OnInit {
   monthlyTaxAmount: MonthlyTax;
   salaryDetail: any = null;
   allDeclarationSalaryDetails: any = null;
-  salaryBreakup: any = null
+  salaryBreakup: Array<any> = [];
+  TaxDetails: Array<any> = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
@@ -253,8 +254,13 @@ export class IncometaxComponent implements OnInit {
         console.log(response.ResponseBody);
         this.allDeclarationSalaryDetails = response.ResponseBody;
         this.salaryDetail = response.ResponseBody.SalaryDetail;
-        this.salaryBreakup = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
-        console.log(this.salaryBreakup);
+        this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
+        let value = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        for (let index = 0; index < 12; index++) {
+          let total = (value.BasicAnnually + value.CarRunningAnnually+value.ConveyanceAnnually+value.HRAAnnually+value.InternetAnnually+value.TravelAnnually+value.ShiftAnnually+value.SpecialAnnually);
+          value.Total = total;
+          this.salaryBreakup.push(value);
+        };
         Toast("Details get successfully")
       }
     })

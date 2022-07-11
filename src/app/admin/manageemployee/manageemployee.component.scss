@@ -273,3 +273,8 @@ hr {
 .addclinet-modal {
   z-index: 1060 !important;
 }
+
+.remoteClient {
+  z-index: 1080 !important;
+  background-color: rgba(0,0,0,0.5);
+}

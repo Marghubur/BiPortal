@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Declaration, PaySlip, Preferences, Salary, Summary } from 'src/providers/constants';
+import { ResponseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { AccessTokenExpiredOn, Declaration, PaySlip, Preferences, Salary, Summary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
 
 @Component({
   selector: 'app-incometax',
@@ -14,8 +19,18 @@ export class IncometaxComponent implements OnInit {
   grossEarning: Array<GrossEarning> = [];
   taxSlab: Array<TaxSlab> = [];
   monthlyTaxAmount: MonthlyTax;
+  salaryDetail: any = null;
+  allDeclarationSalaryDetails: any = null;
+  salaryBreakup: Array<any> = [];
+  TaxDetails: Array<any> = [];
+  EmployeeId: number = 0;
+  userDetail: UserDetail = new UserDetail();
+  pageReady: boolean = false;
 
-  constructor(private nav: iNavigation) { }
+  constructor(private local: ApplicationStorage,
+              private user: UserService,
+              private nav: iNavigation,
+              private http: AjaxService) { }
 
   ngOnInit(): void {
     var dt = new Date();
@@ -38,166 +53,181 @@ export class IncometaxComponent implements OnInit {
       i++;
     }
 
-    this.grossEarning.push({
-      salaryBreakup: 'Basic',
-      total: 849600,
-      april: 70800,
-      may: 70800,
-      june: 70800,
-      july: 70800,
-      aug: 70800,
-      sep: 70800,
-      oct: 70800,
-      nov: 70800,
-      dec: 70800,
-      jan: 70800,
-      feb: 70800,
-      march: 70800
-    },
-    {
-      salaryBreakup: 'Conveyance Allowance',
-      total: 19200,
-      april: 1600,
-      may: 1600,
-      june: 1600,
-      july: 1600,
-      aug: 1600,
-      sep: 1600,
-      oct: 1600,
-      nov: 1600,
-      dec: 1600,
-      jan: 1600,
-      feb: 1600,
-      march: 1600
-    },
-    {
-      salaryBreakup: 'HRA',
-      total: 339840,
-      april: 28320,
-      may: 28320,
-      june: 28320,
-      july: 28320,
-      aug: 28320,
-      sep: 28320,
-      oct: 28320,
-      nov: 28320,
-      dec: 28320,
-      jan: 28320,
-      feb: 28320,
-      march: 28320
-    },
-    {
-      salaryBreakup: 'Medical Allowance',
-      total: 15000,
-      april: 1250,
-      may: 1250,
-      june: 1250,
-      july: 1250,
-      aug: 1250,
-      sep: 1250,
-      oct: 1250,
-      nov: 1250,
-      dec: 1250,
-      jan: 1250,
-      feb: 1250,
-      march: 1250
-    },
-    {
-      salaryBreakup: 'Car Running Allowance',
-      total: 21600,
-      april: 1800,
-      may: 1800,
-      june: 1800,
-      july: 1800,
-      aug: 1800,
-      sep: 1800,
-      oct: 1800,
-      nov: 1800,
-      dec: 1800,
-      jan: 1800,
-      feb: 1800,
-      march: 1800
-    },
-    {
-      salaryBreakup: 'Telephone and Internet Allowance',
-      total: 18000,
-      april: 1500,
-      may: 1500,
-      june: 1500,
-      july: 1500,
-      aug: 1500,
-      sep: 1500,
-      oct: 1500,
-      nov: 1500,
-      dec: 1500,
-      jan: 1500,
-      feb: 1500,
-      march: 1500
-    },
-    {
-      salaryBreakup: 'Travel Reimburesment(LTA)',
-      total: 30000,
-      april: 2500,
-      may: 2500,
-      june: 2500,
-      july: 2500,
-      aug: 2500,
-      sep: 2500,
-      oct: 2500,
-      nov: 2500,
-      dec: 2500,
-      jan: 2500,
-      feb: 2500,
-      march: 2500
-    },
-    {
-      salaryBreakup: 'Shfit Allowance',
-      total: 18000,
-      april: 1500,
-      may: 1500,
-      june: 1500,
-      july: 1500,
-      aug: 1500,
-      sep: 1500,
-      oct: 1500,
-      nov: 1500,
-      dec: 1500,
-      jan: 1500,
-      feb: 1500,
-      march: 1500
-    },
-    {
-      salaryBreakup: 'Special Allowance',
-      total: 812760,
-      april: 67730,
-      may: 67730,
-      june: 67730,
-      july: 67730,
-      aug: 67730,
-      sep: 67730,
-      oct: 67730,
-      nov: 67730,
-      dec: 67730,
-      jan: 67730,
-      feb: 67730,
-      march: 67730
-    },
-    {
-      salaryBreakup: 'Total earnings',
-      total: 2124000,
-      april: 177000,
-      may: 177000,
-      june: 177000,
-      july: 177000,
-      aug: 177000,
-      sep: 177000,
-      oct: 177000,
-      nov: 177000,
-      dec: 177000,
-      jan: 177000,
-      feb: 177000,
-      march: 177000
-    });
+    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
+    this.userDetail = this.user.getInstance() as UserDetail;
+    if(expiredOn === null || expiredOn === "")
+      this.userDetail["TokenExpiryDuration"] = new Date();
+    else
+     this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+      let Master = this.local.get(null);
+    if(Master !== null && Master !== "") {
+      this.userDetail = Master["UserDetail"];
+      this.EmployeeId = this.userDetail.UserId;
+      this.loadData();
+    } else {
+      ErrorToast("Invalid user. Please login again.")
+    }
+
+    // this.grossEarning.push({
+    //   salaryBreakup: 'Basic',
+    //   total: 849600,
+    //   april: 70800,
+    //   may: 70800,
+    //   june: 70800,
+    //   july: 70800,
+    //   aug: 70800,
+    //   sep: 70800,
+    //   oct: 70800,
+    //   nov: 70800,
+    //   dec: 70800,
+    //   jan: 70800,
+    //   feb: 70800,
+    //   march: 70800
+    // },
+    // {
+    //   salaryBreakup: 'Conveyance Allowance',
+    //   total: 19200,
+    //   april: 1600,
+    //   may: 1600,
+    //   june: 1600,
+    //   july: 1600,
+    //   aug: 1600,
+    //   sep: 1600,
+    //   oct: 1600,
+    //   nov: 1600,
+    //   dec: 1600,
+    //   jan: 1600,
+    //   feb: 1600,
+    //   march: 1600
+    // },
+    // {
+    //   salaryBreakup: 'HRA',
+    //   total: 339840,
+    //   april: 28320,
+    //   may: 28320,
+    //   june: 28320,
+    //   july: 28320,
+    //   aug: 28320,
+    //   sep: 28320,
+    //   oct: 28320,
+    //   nov: 28320,
+    //   dec: 28320,
+    //   jan: 28320,
+    //   feb: 28320,
+    //   march: 28320
+    // },
+    // {
+    //   salaryBreakup: 'Medical Allowance',
+    //   total: 15000,
+    //   april: 1250,
+    //   may: 1250,
+    //   june: 1250,
+    //   july: 1250,
+    //   aug: 1250,
+    //   sep: 1250,
+    //   oct: 1250,
+    //   nov: 1250,
+    //   dec: 1250,
+    //   jan: 1250,
+    //   feb: 1250,
+    //   march: 1250
+    // },
+    // {
+    //   salaryBreakup: 'Car Running Allowance',
+    //   total: 21600,
+    //   april: 1800,
+    //   may: 1800,
+    //   june: 1800,
+    //   july: 1800,
+    //   aug: 1800,
+    //   sep: 1800,
+    //   oct: 1800,
+    //   nov: 1800,
+    //   dec: 1800,
+    //   jan: 1800,
+    //   feb: 1800,
+    //   march: 1800
+    // },
+    // {
+    //   salaryBreakup: 'Telephone and Internet Allowance',
+    //   total: 18000,
+    //   april: 1500,
+    //   may: 1500,
+    //   june: 1500,
+    //   july: 1500,
+    //   aug: 1500,
+    //   sep: 1500,
+    //   oct: 1500,
+    //   nov: 1500,
+    //   dec: 1500,
+    //   jan: 1500,
+    //   feb: 1500,
+    //   march: 1500
+    // },
+    // {
+    //   salaryBreakup: 'Travel Reimburesment(LTA)',
+    //   total: 30000,
+    //   april: 2500,
+    //   may: 2500,
+    //   june: 2500,
+    //   july: 2500,
+    //   aug: 2500,
+    //   sep: 2500,
+    //   oct: 2500,
+    //   nov: 2500,
+    //   dec: 2500,
+    //   jan: 2500,
+    //   feb: 2500,
+    //   march: 2500
+    // },
+    // {
+    //   salaryBreakup: 'Shfit Allowance',
+    //   total: 18000,
+    //   april: 1500,
+    //   may: 1500,
+    //   june: 1500,
+    //   july: 1500,
+    //   aug: 1500,
+    //   sep: 1500,
+    //   oct: 1500,
+    //   nov: 1500,
+    //   dec: 1500,
+    //   jan: 1500,
+    //   feb: 1500,
+    //   march: 1500
+    // },
+    // {
+    //   salaryBreakup: 'Special Allowance',
+    //   total: 812760,
+    //   april: 67730,
+    //   may: 67730,
+    //   june: 67730,
+    //   july: 67730,
+    //   aug: 67730,
+    //   sep: 67730,
+    //   oct: 67730,
+    //   nov: 67730,
+    //   dec: 67730,
+    //   jan: 67730,
+    //   feb: 67730,
+    //   march: 67730
+    // },
+    // {
+    //   salaryBreakup: 'Total earnings',
+    //   total: 2124000,
+    //   april: 177000,
+    //   may: 177000,
+    //   june: 177000,
+    //   july: 177000,
+    //   aug: 177000,
+    //   sep: 177000,
+    //   oct: 177000,
+    //   nov: 177000,
+    //   dec: 177000,
+    //   jan: 177000,
+    //   feb: 177000,
+    //   march: 177000
+    // });
 
     this.taxSlab.push({
       taxableincomeslab: '0% Tax on income up to 250000',
@@ -235,7 +265,27 @@ export class IncometaxComponent implements OnInit {
       feb: 37050,
       march: 37050
     };
+  }
 
+  loadData() {
+    this.pageReady = false;
+    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`)
+    .then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        console.log(response.ResponseBody);
+        this.allDeclarationSalaryDetails = response.ResponseBody;
+        this.salaryDetail = response.ResponseBody.SalaryDetail;
+        this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
+        let value = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        for (let index = 0; index < 12; index++) {
+          let total = (value.BasicAnnually + value.CarRunningAnnually+value.ConveyanceAnnually+value.HRAAnnually+value.InternetAnnually+value.TravelAnnually+value.ShiftAnnually+value.SpecialAnnually);
+          value.Total = total;
+          this.salaryBreakup.push(value);
+        };
+        this.pageReady = true;
+        Toast("Details get successfully")
+      }
+    })
   }
 
   activateMe(ele: string) {
