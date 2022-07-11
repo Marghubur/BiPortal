@@ -156,7 +156,8 @@
       </ng-container>
       <ng-container *ngIf="ActivatedPage == 2">
         <div class="col-md-12 mt-5 pt-3">
-          <button class="btn btn-outline-primary" (click)="addSalaryStrutModal()">Create Custom Salary Structure</button>
+          <button class="btn btn-outline-primary" (click)="addSalaryStrutModal()">Create Custom Salary
+            Structure</button>
           <div class="col-md-3 float-end">
             <div class="form-group has-search">
               <span class="fa fa-search form-control-feedback"></span>
@@ -426,7 +427,7 @@
             </div>
           </div>
           <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
-            onkeypress="return (event.charCode != 8 && event.charCode == 0  || (event.charCode >= 47 && event.charCode <= 57 ) || event.key == '%' || event.charCode == 43 || event.charCode == 45)"
+            onkeypress="return (event.charCode != 8 && event.charCode == 0  || (event.charCode >= 47 && event.charCode <= 57 ) || event.key == '%' || event.key == '*' ||event.charCode == 43 || event.charCode == 45)"
             (keyup)="addFormula()">
           </div>
         </div>
@@ -469,13 +470,14 @@
             <div class="col-md-6">
               <div class="my-2">
                 <label for="" class="form-label">Structure Name</label>
-                <input type="text" placeholder="Intern Salary Structure - No PF" class="form-control" formControlName="StructureName">
+                <input type="text" placeholder="Intern Salary Structure - No PF" class="form-control"
+                  formControlName="StructureName">
               </div>
               <div class="my-2">
                 <label for="" class="form-label">Description</label>
                 <textarea
-                  placeholder="This salary structure will be assigned to employees who are interns and are not eligible for PF deduction" formControlName="StructureDescription"
-                  class="form-control"></textarea>
+                  placeholder="This salary structure will be assigned to employees who are interns and are not eligible for PF deduction"
+                  formControlName="StructureDescription" class="form-control"></textarea>
               </div>
               <h5 class="py-2">Configure PF & ESI for this structure</h5>
               <blockquote>
@@ -498,7 +500,8 @@
                         <input type="checkbox" class="form-check-input me-1" formControlName="IsDeductedFlatIncome">
                         Deduct flat income tax
                         <div class="mx-4 col-md-2 d-inline-block">
-                          <input type="text" class="form-control form-control-sm" OnlyNumber="2" formControlName="DeductedAmount">
+                          <input type="text" class="form-control form-control-sm" OnlyNumber="2"
+                            formControlName="DeductedAmount">
                         </div>
                         of monthly Gross Salary
                       </li>
@@ -558,7 +561,8 @@
                       <ng-container>
                         <div class="td ps-3">
                           <a class="text-decoration-none text-dark" href="javascript:void(0)"
-                            (click)="updateCalcModel(item)"><i class="fa fa-ellipsis-h fa-lg" aria-hidden="true"></i></a>
+                            (click)="updateCalcModel(item)"><i class="fa fa-ellipsis-h fa-lg"
+                              aria-hidden="true"></i></a>
                         </div>
                       </ng-container>
                     </div>
