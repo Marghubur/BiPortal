@@ -58,22 +58,22 @@
                 <div class="bg-secondary text-light d-flex align-items-center py-3">
                   <div class="pe-2 ps-4">
                     <small>ANNUAL</small>
-                    <p class="fw-bold mb-0">INR {{myAnnualSalary.Annual}}</p>
+                    <p class="fw-bold mb-0">INR {{salaryBreakup.GrossAnnually}}</p>
                   </div>
                   <span class="fs-5 px-3">+</span>
                   <div class="px-2">
                     <small>BONUS</small>
-                    <p class="fw-bold mb-0">INR {{myAnnualSalary.Bonus}}</p>
+                    <p class="fw-bold mb-0">INR 0</p>
                   </div>
                   <span class="fs-5 px-3">+</span>
                   <div class="px-2">
                     <small>Other</small>
-                    <p class="fw-bold mb-0">INR {{myAnnualSalary.Other}}</p>
+                    <p class="fw-bold mb-0">INR 21600</p>
                   </div>
                   <span class="fs-5 px-3">=</span>
                   <div class="px-2">
                     <small>Total</small>
-                    <p class="fw-bold mb-0">INR {{myAnnualSalary.Total}}</p>
+                    <p class="fw-bold mb-0">INR {{salaryBreakup.GrossAnnually + 21600}}</p>
                   </div>
                   <div class="ms-auto me-3">
                     <a href="javascript:void(0)">
@@ -89,7 +89,7 @@
                   <div class="border border-secondary">
                     <div class="card-header py-2 d-flex text-dark align-items-center">
                       <p class="mb-0">
-                        REGULAR SALARY:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Total}} </span><span
+                        REGULAR SALARY:<span class="fw-bold tex-dark"> INR {{salaryBreakup.GrossAnnually + 21600}}</span><span
                           class="ps-3"><a href="javascript:void(0)" class="text-decoration-none"
                             (click)="salaryBreakupPopup()">SALARY BREAKUP</a></span>
                       </p>
@@ -97,7 +97,7 @@
                     <div class="row ps-3 mt-1">
                       <div class="col-md-4">
                         <small class="fw-bold">SALARY / MONTH</small>
-                        <p class="text-dark pt-2">INR{{myAnnualSalary.SalaryMonth}} </p>
+                        <p class="text-dark pt-2">INR{{salaryBreakup.GrossAnnually/12 | number :'1.2-2'}} </p>
                       </div>
                       <div class="col-md-4">
                         <small class="fw-bold">EFFECTIVE</small>
@@ -169,22 +169,173 @@
             </div>
           </div>
           <div class="t-body overflow-hidden">
-            <div class="tr py-2" *ngFor="let salary of salaryBreakup">
+            <div class="tr py-2">
               <div class="td align-middle fe-4">
                 <div class="cell-wrapper">
-                  {{salary.Details}}
+                  Basic
                 </div>
               </div>
               <div class="td align-middle fe-2">
                 <div class="cell-wrapper">
-                  <span *ngIf="salary.Details == 'Total'">INR </span>
-                  {{salary.Monthly}}
+                  {{salaryBreakup.BasicAnnually/12 | number:'1.2-2'}}
                 </div>
               </div>
               <div class="td align-middle fe-2">
                 <div class="cell-wrapper">
-                  <span *ngIf="salary.Details == 'Total'">INR </span>
-                  {{salary.Annually}}
+                  {{salaryBreakup.BasicAnnually | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+            <div class="tr py-2">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  Conveyance Allowance
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.ConveyanceAnnually/12 | number:'1.2-2'}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.ConveyanceAnnually | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+            <div class="tr py-2">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  HRA
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.HRAAnnually/12 | number:'1.2-2'}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.HRAAnnually | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+            <div class="tr py-2">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  Medical Allowance
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.MedicalAnnually/12 | number:'1.2-2'}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.MedicalAnnually | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+            <div class="tr py-2">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  Car Running Allowance
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.CarRunningAnnually/12 | number:'1.2-2'}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.CarRunningAnnually | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+            <div class="tr py-2">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  Telephone and Internet Allowance
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.InternetAnnually/12 | number:'1.2-2'}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.InternetAnnually | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+            <div class="tr py-2">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  Travel Reimbursement (LTA)
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.TravelAnnually/12 | number:'1.2-2'}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.TravelAnnually | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+            <div class="tr py-2">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  Shift Allowance
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.ShiftAnnually/12 | number:'1.2-2'}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.ShiftAnnually | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+            <div class="tr py-2">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  Special Allowance
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.SpecialAnnually/12 | number:'1.2-2'}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.SpecialAnnually | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+            <div class="tr py-2">
+              <div class="td align-middle fe-4">
+                <div class="cell-wrapper">
+                  Total
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.Total/12 | number:'1.2-2'}}
+                </div>
+              </div>
+              <div class="td align-middle fe-2">
+                <div class="cell-wrapper">
+                  {{salaryBreakup.Total | number:'1.2-2'}}
                 </div>
               </div>
             </div>
@@ -355,11 +506,11 @@
         <div class="custom-bg rounded text-dark d-flex align-items-center py-3">
           <div class="pe-2 ps-4">
             <small>ANNUAL</small>
-            <p class="fw-bold mb-0">INR {{myAnnualSalary.Annual}}</p>
+            <p class="fw-bold mb-0">INR {{salaryBreakup.GrossAnnually | number :'1.2-2'}}</p>
           </div>
           <div class="px-2 ms-4">
             <small>SALARY / MONTH</small>
-            <p class="fw-bold mb-0">INR {{myAnnualSalary.SalaryMonth}}</p>
+            <p class="fw-bold mb-0">INR {{salaryBreakup.GrossAnnually/12 | number :'1.2-2'}}</p>
           </div>
           <div class="px-2 ms-4">
             <small>EFFECTIVE</small>

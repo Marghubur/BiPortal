@@ -31,11 +31,11 @@
                 <div class="row">
                   <div class="col-md-4">
                     <small>NAME ON PAN CARD</small>
-                    <p class="text-dark">{{PanInformation.NameOnCard}}</p>
+                    <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
                   </div>
                   <div class="col-md-4">
                     <small>PAN NUMBER</small>
-                    <p class="text-dark">{{PanInformation.PANNumber}}</p>
+                    <p class="text-dark">{{employeeDetail.PANNo}}</p>
                   </div>
                   <div class="col-md-3">
                     <small>DATE OF BIRTH</small>
@@ -44,7 +44,7 @@
                 </div>
                 <div>
                   <small>FATHER / SPOUSE NAME</small>
-                  <p class="text-dark">{{PanInformation.FatherName}}</p>
+                  <p class="text-dark">{{employeeDetail.FatherName}}</p>
                 </div>
               </div>
             </div>
@@ -61,20 +61,20 @@
                 <div class="row">
                   <div class="col-md-4">
                     <small>BANK</small>
-                    <p class="text-dark">{{salaryDeposit.Bank}}</p>
+                    <p class="text-dark">{{employeeDetail.BankName}}</p>
                   </div>
                   <div class="col-md-4">
                     <small>ACCOUNT NUMBER</small>
-                    <p class="text-dark">{{salaryDeposit.ACNumber}}</p>
+                    <p class="text-dark">{{employeeDetail.AccountNumber}}</p>
                   </div>
                   <div class="col-md-3">
                     <small>IFSC CODE</small>
-                    <p class="text-dark">{{salaryDeposit.IFSCCode}}</p>
+                    <p class="text-dark">{{employeeDetail.IFSCCode}}</p>
                   </div>
                 </div>
                 <div class="pb-3">
                   <small>NAME OF THE ACCOUNT</small>
-                  <p class="text-dark">{{salaryDeposit.NameOnAccount}}</p>
+                  <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
                 </div>
               </div>
             </div>
@@ -104,16 +104,16 @@
                 </div>
                 <h5 class="text-dark pt-3 pb-1">ESI Account Information</h5>
                 <small>NAME OF THE ACCOUNT</small>
-                <p class="text-dark">{{satutoryInformation.NameOfAcccount}}</p>
+                <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
                 <h5 class="text-dark pt-3 pb-1">PT Details</h5>
                 <div class="row">
                   <div class="col-md-4">
                     <small>STATE</small>
-                    <p class="text-dark">{{satutoryInformation.State}}</p>
+                    <p class="text-dark">{{employeeDetail.State}}</p>
                   </div>
                   <div class="col-md-4">
-                    <small>REGISTERED LLOCAATION</small>
-                    <p class="text-dark">{{satutoryInformation.RegisteredLocation}}</p>
+                    <small>REGISTERED LOCAATION</small>
+                    <p class="text-dark">{{employeeDetail.City}}</p>
                   </div>
                 </div>
                 <h5 class="text-dark pt-3 pb-1">LWF DETAILS</h5>

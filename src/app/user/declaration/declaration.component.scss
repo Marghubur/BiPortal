@@ -104,3 +104,33 @@
 .project-salary-indicator {
   background-color: #1100ff;;
 }
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+
+.select-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 33vh;
+  text-align: center;
+  color: #a9a9a9;
+}
+
+textarea {
+  resize: none;
+}
