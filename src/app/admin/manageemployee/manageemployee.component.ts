@@ -125,7 +125,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       if(profileDetail.length > 0) {
         this.buildProfileImage(profileDetail[0]);
       }
-      if (response.ResponseBody.Companies && response.ResponseBody.Companies.length == 1) 
+      if (response.ResponseBody.Companies && response.ResponseBody.Companies.length == 1)
         this.allocatedCompany = response.ResponseBody.Companies[0];
       else {
         this.allocatedCompany = {
@@ -133,7 +133,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           CompanyId: 0
         }
       }
-        
+
       if(this.allocatedClients.length > 0) {
         this.allocatedClients.map((item, index) => {
           if(index == 0) {
@@ -173,7 +173,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         // if(res.ResponseBody.Companies && res.ResponseBody.Companies.length > 0) {
         //   let Companies = res.ResponseBody.Companies;
         //   this.allocatedCompany = Companies[0];
-        // } 
+        // }
 
         if (res.ResponseBody.SalaryDetail.length > 0) {
           this.salaryDetail = res.ResponseBody.SalaryDetail[0];
@@ -260,7 +260,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       CTC: new FormControl(this.salaryDetail.CTC, [Validators.required])
     });
   }
-  
+
   bindClientDetails() {
     this.addUpdateClientForm = this.fb.group({
       AllocatedClientId: new FormControl("0"),
@@ -531,37 +531,37 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.salaryBreakupForm = this.fb.group({
-      BasicMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.BasicAnnually/12)),
-      BasicAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.BasicAnnually)),
-      ConveyanceMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.ConveyanceAnnually/12)),
-      ConveyanceAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.ConveyanceAnnually)),
-      HRAMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.HRAAnnually/12)),
-      HRAAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.HRAAnnually)),
-      MedicalMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.MedicalAnnually/12)),
-      MedicalAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.MedicalAnnually)),
-      CarRunningMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.CarRunningAnnually/12)),
-      CarRunningAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.CarRunningAnnually)),
-      InternetMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.InternetAnnually/12)),
-      InternetAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.InternetAnnually)),
-      TravelMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.TravelAnnually/12)),
-      TravelAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.TravelAnnually)),
-      ShiftMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.ShiftAnnually/12)),
-      ShiftAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.ShiftAnnually)),
-      SpecialMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.SpecialAnnually/12)),
-      SpecialAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.SpecialAnnually)),
-      GrossMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.GrossAnnually/12)),
-      GrossAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.GrossAnnually)),
-      InsuranceMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.InsuranceAnnually/12)),
-      InsuranceAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.InsuranceAnnually)),
-      PFMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.PFAnnually/12)),
-      PFAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.PFAnnually)),
-      GratuityMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.GratuityAnnually/12)),
-      GratuityAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.GratuityAnnually)),
-      FoodMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.FoodAnnually/12)),
-      FoodAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.FoodAnnually)),
-      CTCMonthly: new FormControl(Math.trunc(this.completeSalaryBreakup.CTCAnnually/12)),
-      CTCAnnually: new FormControl(Math.trunc(this.completeSalaryBreakup.CTCAnnually)),
-      ExpectedCTC: new FormControl(Math.trunc(this.completeSalaryBreakup.CTCAnnually)),
+      BasicMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.BasicAnnually/12, 2)),
+      BasicAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.BasicAnnually, 2)),
+      ConveyanceMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.ConveyanceAnnually/12, 2)),
+      ConveyanceAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.ConveyanceAnnually, 2)),
+      HRAMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.HRAAnnually/12, 2)),
+      HRAAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.HRAAnnually, 2)),
+      MedicalMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.MedicalAnnually/12, 2)),
+      MedicalAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.MedicalAnnually, 2)),
+      CarRunningMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.CarRunningAnnually/12, 2)),
+      CarRunningAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.CarRunningAnnually, 2)),
+      InternetMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.InternetAnnually/12, 2)),
+      InternetAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.InternetAnnually, 2)),
+      TravelMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.TravelAnnually/12, 2)),
+      TravelAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.TravelAnnually, 2)),
+      ShiftMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.ShiftAnnually/12, 2)),
+      ShiftAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.ShiftAnnually, 2)),
+      SpecialMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.SpecialAnnually/12, 2)),
+      SpecialAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.SpecialAnnually, 2)),
+      GrossMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.GrossAnnually/12, 2)),
+      GrossAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.GrossAnnually, 2)),
+      InsuranceMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.InsuranceAnnually/12, 2)),
+      InsuranceAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.InsuranceAnnually, 2)),
+      PFMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.PFAnnually/12, 2)),
+      PFAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.PFAnnually, 2)),
+      GratuityMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.GratuityAnnually/12, 2)),
+      GratuityAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.GratuityAnnually, 2)),
+      FoodMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.FoodAnnually/12, 2)),
+      FoodAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.FoodAnnually, 2)),
+      CTCMonthly: new FormControl(ToFixed(this.completeSalaryBreakup.CTCAnnually/12, 2)),
+      CTCAnnually: new FormControl(ToFixed(this.completeSalaryBreakup.CTCAnnually, 2)),
+      ExpectedCTC: new FormControl(ToFixed(this.completeSalaryBreakup.CTCAnnually, 2)),
       SalaryGroupId: new FormControl(this.salaryGroupId)
     });
   }

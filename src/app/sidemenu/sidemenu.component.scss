@@ -39,7 +39,17 @@ a {
   height: calc(100vh - 4rem) !important;
   border-right: 1px solid #c5c5c5;
 }
+menu-container {
+  height: 88vh !important;
+  overflow: auto !important;
+}
+menu-container::-webkit-scrollbar-thumb {
+  background-color: transparent !important;
+}
 
+menu-container:hover::-webkit-scrollbar-thumb {
+  background: #a79898 !important;
+}
 .menu-top {
   height: 4rem;
 }

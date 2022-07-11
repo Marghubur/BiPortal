@@ -201,7 +201,7 @@
                       <input class="form-control" placeholder="Mother Name" name="MotherName" transform=""
                         formControlName="MotherName" />
                     </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                       <label class="form-label">Spouse Name (if maried)</label>
                       <input class="form-control" placeholder="Spouse Name" name="SpouseName" transform=""
                         formControlName="SpouseName" />
@@ -215,17 +215,12 @@
                       <input class="form-control" placeholder="Specification" name="Specification"
                         formControlName="Specification" />
                     </div>
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label">Year's of Exprience</label>
-                      <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="5"
-                        name="ExprienceInYear" formControlName="ExprienceInYear" />
-                    </div>
-                    <div class="col-md-6 mb-3">
+                    <!-- <div class="col-md-6 mb-3">
                       <label class="form-label">Last Company Name</label>
                       <input class="form-control" placeholder="Last Company Name" name="LastCompanyName" transform=""
                         formControlName="LastCompanyName" />
-                    </div>
-                    <div class="col-md-12 mb-3">
+                    </div> -->
+                    <div class="col-md-6 mb-3">
                       <label class="form-label">State</label>
                       <input class="form-control" placeholder="State" name="State" formControlName="State" />
                     </div>
@@ -286,6 +281,11 @@
                         oninput="this.value = this.value.toUpperCase()" formControlName="BranchName" />
                     </div>
                     <div class="col-md-6 mb-3">
+                      <label class="form-label">Work Exprience in month</label>
+                      <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="5"
+                        name="ExprienceInYear" formControlName="ExprienceInYear" />
+                    </div>
+                    <div class="col-md-6 mb-3">
                       <label class="form-label">Date of joining</label>
                       <form class="form-inline">
                         <div class="form-group w-100">
@@ -327,7 +327,8 @@
   </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="remoteClient" data-bs-backdrop="static"
+<!-- delete assign client modal -->
+<div class="modal fade remoteClient" data-bs-backdrop="static" data-bs-keyboard="false" id="remoteClient" data-bs-backdrop="static"
   data-bs-keyboard="false" tabindex="-1" aria-labelledby="remoteClientLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -355,7 +356,7 @@
   </div>
 </div>
 
-
+<!-- Salary Breakup Modal -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="fullSalaryDetail" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -370,7 +371,7 @@
             <div class="col-md-3 mb-3 m-0 p-0">
               <select class="form-select" disabled formControlName="SalaryGroupId">
                 <option value="0">Please select salary group</option>
-                <option [value]="item.SalaryGroupId" 
+                <option [value]="item.SalaryGroupId"
                   *ngFor="let item of salaryGroup">{{item.GroupName}}</option>
               </select>
             </div>
@@ -729,7 +730,7 @@
                       </ng-container>
                     </ng-container>
                   </ng-container>
-  
+
                   <ng-container *ngIf="!isAllocated">
                     <div class="text-center">
                       <p class="p-4">
@@ -740,7 +741,7 @@
                 </div>
               </div>
             </div>
-  
+
             <div class="col-md-6">
               <div class="form-group">
                 <label class="form-label">Client (Allocated)</label>
@@ -753,7 +754,7 @@
                   </select>
                 </div>
               </div>
-  
+
               <div class="row mt-3">
                 <div class="form-group col-md-4 mb-3">
                   <label class="form-label">Actual Package / Mon</label>
