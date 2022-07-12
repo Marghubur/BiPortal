@@ -44,14 +44,14 @@
             <div class="col-md-12 pt-3 skeleton" *ngFor="let catagory of Menu; let i = index;">
               <div class="vhide">
                 <div>
-                  <button class="w-100 py-3 btn btn-primary-c text-start" type="button" data-bs-toggle="collapse" (click)="openCloseTab($event, i)"
+                  <button class="w-100 py-3 btn btn-primary-c text-start" type="button" (click)="openCloseTab($event, i)"
                     [attr.data-bs-target]="'#collapseExample'+i" aria-expanded="false"
                     [attr.aria-controls]="'collapseExample'+i">
                     {{catagory.Name}}
                     <i class="fa fa-caret-down float-end"></i>
                   </button>
                 </div>
-                <div class="collapse d-none" [id]="'collapseExample'+i">
+                <div class="d-none" [id]="'collapseExample'+i">
                   <div class="card card-body mt-3">
                     <div formArrayName="menuItems" class="card-body pt-0 pb-0">
                       <ng-container *ngFor="let item of rolesForm.get('menuItems').controls;let index = index;">
