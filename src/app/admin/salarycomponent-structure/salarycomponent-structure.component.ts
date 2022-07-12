@@ -16,7 +16,7 @@ export class SalarycomponentStructureComponent implements OnInit {
   salaryComponentActiveFields: Array<SalaryComponentFields> = [];
   currentSalaryComponent: SalaryComponentFields = null;
   editSalaryComponent: FormGroup;
-  addComponentForm: FormGroup;
+  //addComponentForm: FormGroup;
   isFixedType: boolean = false;
   recurringComponent:Array<any> = [];
   isLoading: boolean = false;

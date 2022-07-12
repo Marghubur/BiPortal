@@ -60,6 +60,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   isAmountExceed: boolean = false;
   salaryDetails: any = null;
   TaxDetails: Array<any> = [];
+  isEmployeeSelect: boolean = false;
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -162,6 +163,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   getDeclaration(id: any) {
     this.EmployeeId = id;
     this.SectionIsReady = false;
+    this.isEmployeeSelect = true;
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
@@ -178,13 +180,28 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
         this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
         this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
+        for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
+          let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
+          switch (component) {
+            case "1.5 Lac Exemptions":
+              this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.ExemptionDeclaration.filter(x => x.UploadedFileIds > 0).length;
+              break;
+            case "Other Exemptions":
+              this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.OtherDeclaration.filter(x => x.UploadedFileIds > 0).length;
+              break;
+            case "Tax Saving Allowance":
+              this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.TaxSavingAlloance.filter(x => x.UploadedFileIds > 0).length;
+              break;
+          }
+
+        }
         this.salaryDetails = response.ResponseBody.SalaryDetail;
         if(this.salaryDetails !== null)
         this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
         this.calculateDeclarations();
         Toast("Declaration detail loaded successfully");
       }
-
+      this.isEmployeeSelect = false;
       this.SectionIsReady = true;
     })
   }
