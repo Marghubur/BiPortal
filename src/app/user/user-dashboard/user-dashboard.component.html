@@ -1,6 +1,6 @@
 <div class="main-container">
   <div class="x_panel">
-    <div class="x_header">
+    <div class="x_header" *ngIf="isPageReady">
       <div class="x_header_title">
         <h2 class="fw-bold text-dark">Welcome {{employeeDetails.FirstName}}!</h2>
       </div>
