@@ -31,7 +31,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   CalculationValue: string = '';
   submitted: boolean = false;
   SalaryGroupForm: FormGroup;
-  selectedSalaryStructure: SalaryStructureType = null;
+  selectedSalaryStructure: SalaryStructureType = new SalaryStructureType();
   isSalaryGrpSelected: boolean = false;
   isPageReady: boolean = false;
   filterText: string = "";

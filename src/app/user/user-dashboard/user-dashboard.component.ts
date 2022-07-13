@@ -73,6 +73,7 @@ export class UserDashboardComponent implements OnInit {
   }
 
   getEmpDetails() {
+    this.isPageReady = false;
     this.http.get(`Employee/GetManageEmployeeDetail/${this.employeeUid}`)
     .then(response => {
       if (response.ResponseBody) {
@@ -81,6 +82,7 @@ export class UserDashboardComponent implements OnInit {
           this.employeeDetails = data.Employee[0];
           this.allocatedClients = data.AllocatedClients;
           Toast("Dashboard is loading ......");
+          this.isPageReady = true;
         }
       } else {
         Toast("Fail to inser/update, please contact to admin.");
