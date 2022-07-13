@@ -16,7 +16,7 @@ export class SalarycomponentStructureComponent implements OnInit {
   salaryComponentActiveFields: Array<SalaryComponentFields> = [];
   currentSalaryComponent: SalaryComponentFields = null;
   editSalaryComponent: FormGroup;
-  addComponentForm: FormGroup;
+  //addComponentForm: FormGroup;
   isFixedType: boolean = false;
   recurringComponent:Array<any> = [];
   isLoading: boolean = false;
@@ -103,15 +103,18 @@ export class SalarycomponentStructureComponent implements OnInit {
     if (event.target.checked == true) {
       item.IsActive = true;
       item.ComponentCatagoryId = 1;
+      item.IncludeInPayslip = true;
       this.AddActiveComponent.push(item)
     } else {
       let current = this.AddActiveComponent.find(x => x.ComponentId == item.ComponentId);
       if(current) {
         current.IsActive = false;
+        item.IncludeInPayslip = false;
         item.ComponentCatagoryId = 0;
       } else {
         item.IsActive = false;
         item.ComponentCatagoryId = 0;
+        item.IncludeInPayslip = false;
         this.AddActiveComponent.push(item)
       }
     }

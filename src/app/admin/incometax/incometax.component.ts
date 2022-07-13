@@ -247,7 +247,7 @@ export class IncometaxComponent implements OnInit {
   }
 
   loadData() {
-    let EmployeeId = 8;
+    let EmployeeId = 30;
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${EmployeeId}`)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {

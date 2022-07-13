@@ -101,6 +101,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal = new EmployeeDetail();
       this.employeeModal.ReportingManagerId = null;
       this.employeeModal.DesignationId = null;
+      this.employeeModal.AccessLevelId = null;
+      this.employeeModal.CompanyId = null;
+      this.employeeModal.UserTypeId = null;
       this.idReady = true;
     }
     this.loadData(this.employeeUid);
@@ -130,9 +133,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       else {
         this.allocatedCompany = {
           CompanyName: "",
-          CompanyId: 0
+          CompanyId: null
         }
       }
+
+      if (response.ResponseBody.SalaryDetail && response.ResponseBody.SalaryDetail.length > 0)
+        this.employeeModal.CTC = response.ResponseBody.SalaryDetail[0].CTC;
 
       if(this.allocatedClients.length > 0) {
         this.allocatedClients.map((item, index) => {
@@ -257,7 +263,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId, [Validators.required]),
       DesignationId: new FormControl(this.employeeModal.DesignationId, [Validators.required]),
       CompanyId: new FormControl(this.allocatedCompany.CompanyId, [Validators.required]),
-      CTC: new FormControl(this.salaryDetail.CTC, [Validators.required])
+      CTC: new FormControl(this.employeeModal.CTC, [Validators.required])
     });
   }
 

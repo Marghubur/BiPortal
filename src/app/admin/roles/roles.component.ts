@@ -157,6 +157,22 @@ export class RolesComponent implements OnInit {
     })
   }
 
+  openCloseTab(e: any, i: number) {
+    let target = e.target;
+    let id = 'collapseExample'+i.toString();
+    let value = document.getElementById(id).classList;
+    if (value.contains('d-none')) {
+      value.remove('d-none');
+      target.lastChild.classList.remove('fa-caret-down', 'collapsing');
+      target.lastChild.classList.add('fa-caret-up');
+    }
+    else {
+      value.add('d-none');
+      target.lastChild.classList.add('fa-caret-down');
+      target.lastChild.classList.remove('fa-caret-up');
+    }
+  }
+
   addRolePopUp() {
     $('#addRole').modal('show');
   }

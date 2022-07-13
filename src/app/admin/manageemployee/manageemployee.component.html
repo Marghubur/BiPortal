@@ -121,7 +121,7 @@
                     <label class="form-label">Designation</label>
                     <select name="DesignationId" class="form-control" formControlName="DesignationId"
                       [ngClass]="{'error-field': submitted && f.DesignationId.errors !== null && f.DesignationId.errors.required}">
-                      <option value="">Select Designation</option>
+                      <option value=null>Select Designation</option>
                       <option value="1">Project Manager</option>
                       <option value="2">Architect</option>
                       <option value="3">Networking</option>
@@ -146,7 +146,7 @@
                     <label class="form-label">Role</label>
                     <select name="AccessLevelId" class="form-control" formControlName="AccessLevelId"
                       [ngClass]="{'error-field': submitted && f.AccessLevelId.errors !== null && f.AccessLevelId.errors.required}">
-                      <option value="">Allocate role</option>
+                      <option value=null>Allocate role</option>
                       <option *ngFor="let item of userRoles" [value]="item.AccessLevelId">
                         {{item.RoleName}}
                       </option>
@@ -156,7 +156,7 @@
                     <label class="form-label">User Type</label>
                     <select name="UserTypeId" class="form-control" formControlName="UserTypeId"
                       [ngClass]="{'error-field': submitted && f.UserTypeId.errors !== null && f.UserTypeId.errors.required}">
-                      <option value="">Select User Type</option>
+                      <option value=null>Select User Type</option>
                       <option value="1">Admin</option>
                       <option value="2">Employee</option>
                       <option value="3">Candidate</option>
@@ -168,7 +168,7 @@
                     <label class="form-label">Company</label>
                     <select class="form-control" formControlName="CompanyId"
                     [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
-                      <option value="">Select Company</option>
+                      <option value=null>Select Company</option>
                       <option *ngFor="let item of companyGroup" [value]="item.CompanyId">
                         {{item.CompanyName}}
                       </option>
@@ -176,7 +176,7 @@
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">CTC *</label>
-                    <input class="form-control" placeholder="Last Name" name="CTC" formControlName="CTC" OnlyNumber="12" (keyup)="ctcChangeAmount($event)"
+                    <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC" OnlyNumber="12" (keyup)="ctcChangeAmount($event)"
                       [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
                   </div>
                 </div>

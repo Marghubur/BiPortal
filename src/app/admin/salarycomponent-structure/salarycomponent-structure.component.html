@@ -239,7 +239,7 @@
             <input type="text" class="form-control" placeholder="Search">
           </div>
         </div>
-        <form [formGroup]="addComponentForm" *ngIf="addComponentForm">
+        <!-- <form [formGroup]="addComponentForm" *ngIf="addComponentForm"> -->
           <div class="t-table mt-5 t-list t-border col-md-12 my-3">
             <div class="hide-bar bg-light"></div>
             <div class="t-head bg-light fw-bold">
@@ -289,9 +289,9 @@
                 <div class="td ps-3 text-truncate">
                   {{item.RequireDocs}}
                 </div>
-                <div class="td ps-3 text-truncate">
+                <!-- <div class="td ps-3 text-truncate">
                   {{item.IsAllowtoOverride}}
-                </div>
+                </div> -->
                 <div class="td ps-3">
                   <input class="form-check-input" [checked]="item.IsActive == true" type="checkbox"
                     (click)="addComponent($event, item)">
@@ -299,7 +299,7 @@
               </div>
             </div>
           </div>
-        </form>
+        <!-- </form> -->
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>

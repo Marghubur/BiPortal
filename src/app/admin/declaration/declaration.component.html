@@ -29,7 +29,7 @@
     <div [ngClass]="{'blur-section': !SectionIsReady}">
       <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
         <div class="blur-section__content">
-          Please select Employee first
+          {{isEmployeeSelect? 'Please wait......': 'Please select Employee first'}}
         </div>
       </div>
       <div class="blur-this">
@@ -87,7 +87,7 @@
                 </div>
               </div>
               <div class="col-md-12 row my-4" [ngClass]="{'d-none': !SectionIsReady}">
-                <div class="col-md-4">
+                <div class="col-md-5">
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Net Taxable Income</p>
                     <p class="text-dark fs-2 mb-0 ">
@@ -109,7 +109,7 @@
                     <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}</p>
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Tax Already Paid</p>
                     <p class="text-dark fs-2 mb-0 vhide">INR {{employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
@@ -252,7 +252,7 @@
                             <div class="tr py-3">
                               <div class="td px-2 fe-2">Monthly Total Tax</div>
                               <ng-container *ngFor="let item of TaxDetails">
-                                <div class="td ps-1">{{item.TaxDeducted}}</div>
+                                <div class="td ps-1">{{item.TaxDeducted| number:'1.2-2'}}</div>
                               </ng-container>
                             </div>
                           </div>
@@ -475,7 +475,7 @@
                               <span class="fa fa-search form-control-feedback"></span>
                               <input type="text" class="form-control"
                                 oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-                                (keyup.enter)="filterDeduction($event, 'other')" (keyup.esc)="resetFilter($event)">>
+                                (keyup.enter)="filterDeduction($event, 'other')" (keyup.esc)="resetFilter($event)">
                             </div>
                           </div>
                         </div>
