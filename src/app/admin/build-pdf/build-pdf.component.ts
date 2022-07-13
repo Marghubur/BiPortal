@@ -56,6 +56,8 @@ export class BuildPdfComponent implements OnInit {
   allAttendance: Array<any> = [];
   dayList: Array<any> = [];
   template: any = null;
+  billAllDetails: any = null;
+  isBillGenerated: boolean = false;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -617,6 +619,7 @@ export class BuildPdfComponent implements OnInit {
     this.isLoading = true;
     this.submitted = true;
     let errroCounter = 0;
+    this.isBillGenerated = false;
     let billingYear: any = 0;
 
     if (this.pdfForm.get('billForMonth').errors !== null)
@@ -688,6 +691,8 @@ export class BuildPdfComponent implements OnInit {
         this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
           if(response.ResponseBody) {
             this.downloadFile(response.ResponseBody);
+            this.isBillGenerated = true;
+            this.billAllDetails = this.pdfForm.value;
             $('#viewFileModal').modal('show');
             Toast("Bill pdf generated successfully");
           }
@@ -929,7 +934,7 @@ export class BuildPdfComponent implements OnInit {
     }
   }
 
-  viewStaffingTempplte() {
+  viewStaffingTemplte() {
     this.http.get('Template/GetStaffingTemplate').then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.template = this.sanitizer.bypassSecurityTrustHtml(res.ResponseBody);
@@ -957,6 +962,19 @@ export class BuildPdfComponent implements OnInit {
     // let $dom = document.getElementById("template-view");
     // $dom.classList.remove('d-none');
     // $dom.setAttribute('src', this.template);
+  }
+
+  viewSendTemplete(e: any) {
+    let value = e.target.value;
+    if (value) {
+      this.http.get('Template/GetStaffingTemplate').then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          this.template = this.sanitizer.bypassSecurityTrustHtml(res.ResponseBody);
+        }
+      });
+    }
+    else
+      this.template = null;
   }
 }
 
