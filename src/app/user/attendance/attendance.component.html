@@ -84,15 +84,23 @@
                         <td class="align-middle"><i class="fa fa-circle pe-3 text-info"></i> 9h 0m</td>
                         <td class="align-middle">9h 0m</td>
                         <td class="align-middle">
-                          <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
-                            <span class=" ms-2" *ngSwitchCase="3">Week off</span>
-                            <span class=" ms-2" *ngSwitchCase="1">Not applied</span>
-                            <span class=" ms-2" *ngSwitchCase="2">-</span>
-                            <span class=" ms-2" *ngSwitchCase="0">
-                              <i class="fa fa-check pe-2 text-success"></i> On Time
-                            </span>
-
-                          </div>
+                          <ng-container *ngIf="item.AttendenceStatus == 9">
+                            <div class="d-inline">
+                              <span class=" ms-2">
+                                <i class="fa fa-check pe-2 text-success"></i> On Time
+                              </span>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="item.AttendenceStatus != 9">
+                            <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
+                              <span class=" ms-2" *ngSwitchCase="3">Week off</span>
+                              <span class=" ms-2" *ngSwitchCase="1">Not applied</span>
+                              <span class=" ms-2" *ngSwitchCase="2">-</span>
+                              <span class=" ms-2" *ngSwitchCase="0">
+                                <i class="fa fa-check pe-2 text-success"></i> On Time
+                              </span>
+                            </div>
+                          </ng-container>
                         </td>
                         <td>
                           <span class=" ms-2" [ngSwitch]="item.IsTimeAttendacneApproved">
@@ -102,18 +110,26 @@
                               </div>
                             </span>
                             <span class="ms-2" *ngSwitchCase="0">
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
-                                *ngIf="item.PresentDayStatus == 2">
-                                <i class="fa fa-clock-o pe-2 text-warning"></i> waiting...
-                              </div>
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
-                                *ngIf="item.PresentDayStatus == 0">
-                                <i class="fa fa-clock-o pe-2 text-warning"></i> Not Applied
-                              </div>
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
-                                *ngIf="item.PresentDayStatus == 3">
-                                <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
-                              </div>
+                              <ng-container *ngIf="item.AttendenceStatus == 9">
+                                <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                                  class="text-success fw-bold">
+                                  <i class="fa fa-check pe-2 text-success"></i> Approved
+                                </div>
+                              </ng-container>
+                              <ng-container *ngIf="item.AttendenceStatus != 9">
+                                <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                                  *ngIf="item.PresentDayStatus == 2">
+                                  <i class="fa fa-clock-o pe-2 text-warning"></i> waiting...
+                                </div>
+                                <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                                  *ngIf="item.PresentDayStatus == 0">
+                                  <i class="fa fa-clock-o pe-2 text-warning"></i> Not Applied
+                                </div>
+                                <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                                  *ngIf="item.PresentDayStatus == 3">
+                                  <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
+                                </div>
+                              </ng-container>
                             </span>
                           </span>
                         </td>
@@ -139,28 +155,25 @@
                                 </div>
                               </div>
                             </div>
-                            <span class=" ms-2" *ngIf="item.PresentDayStatus == 3">
-                              <div placement="top" ngbTooltip="Weekend" aria-expanded="false">
-                                <i class="fa zoom-2 fa-gift text-primary-c" aria-hidden="true"></i>
-                              </div>
-                            </span>
-                            <span class="ms-2" *ngIf="item.IsTimeAttendacneApproved == 1">
-                              <div placement="top" ngbTooltip="Approved" aria-expanded="false">
-                                <i class="fa fa-check-square-o zoom-2 text-success" aria-hidden="true"></i>
-                              </div>
-                            </span>
-                            <span class="ms-2" *ngIf="item.PresentDayStatus == 2">
-                              <div placement="top" ngbTooltip="Pending" aria-expanded="false">
-                                <i class="fa fa-clock-o zoom-2 text-warning" aria-hidden="true"></i>
-                              </div>
-                            </span>
-
-                            <!-- <span class=" ms-2" *ngSwitchCase="0">
-                              <div placement="top" ngbTooltip="Not applied" aria-expanded="false">
-                                <i class="fa zoom-2 fa-info-circle text-info" aria-hidden="true"></i>
-                              </div>
-                            </span> -->
-
+                            <ng-container *ngIf="item.AttendenceStatus == 9">
+                              <span class="ms-2">
+                                <div placement="top" ngbTooltip="Approved" aria-expanded="false">
+                                  <i class="fa fa-check-square-o zoom-2 text-success" aria-hidden="true"></i>
+                                </div>
+                              </span>
+                            </ng-container>
+                            <ng-container *ngIf="item.AttendenceStatus != 9">
+                              <span class=" ms-2" *ngIf="item.PresentDayStatus == 3">
+                                <div placement="top" ngbTooltip="Weekend" aria-expanded="false">
+                                  <i class="fa zoom-2 fa-gift text-primary-c" aria-hidden="true"></i>
+                                </div>
+                              </span>
+                              <span class="ms-2" *ngIf="item.PresentDayStatus == 2">
+                                <div placement="top" ngbTooltip="Pending" aria-expanded="false">
+                                  <i class="fa fa-clock-o zoom-2 text-warning" aria-hidden="true"></i>
+                                </div>
+                              </span>
+                            </ng-container>
                           </div>
                         </td>
                       </tr>

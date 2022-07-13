@@ -8,6 +8,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
 import { Attendance, UserType } from 'src/providers/constants';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare var $: any;
 
@@ -54,12 +55,14 @@ export class BuildPdfComponent implements OnInit {
   missingAttendence: boolean = false;
   allAttendance: Array<any> = [];
   dayList: Array<any> = [];
+  template: any = null;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
     private common: CommonService,
     private calendar: NgbCalendar,
-    private nav: iNavigation
+    private nav: iNavigation,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -83,6 +86,7 @@ export class BuildPdfComponent implements OnInit {
     this.model = this.calendar.getToday();
     this.pdfModal = new PdfModal();
     this.pdfModal.billNo = "";
+    this.pdfModal.iGST = 18;
     this.pdfModal.workingDay = this.daysInMonth((new Date()).getMonth() + 1);
     this.pdfModal.actualDaysBurned = this.pdfModal.workingDay;
     this.originalBillingMonth = this.model.month;
@@ -173,7 +177,9 @@ export class BuildPdfComponent implements OnInit {
             i++;
           }
         }
-
+        let burnDays = attendanceDetail.length - missinngAtt.length;
+        this.pdfForm.get('actualDaysBurned').setValue(burnDays);
+        this._calculateAmount(burnDays);
         this.allAttendance = attendanceDetail.sort((a,b) => Date.parse(a.AttendanceDay) - Date.parse(b.AttendanceDay));
         this.dayList = [];
         let i = 0;
@@ -827,11 +833,12 @@ export class BuildPdfComponent implements OnInit {
         this.pdfForm.get('receiverEmail').setValue(client.Email);
         this.pdfForm.get('ClientId').setValue(client.ClientId);
         this.grandTotalAmount = this.clientDetail.ActualPackage;
-
         if (!this.editMode) {
           this.packageAmount = this.clientDetail.ActualPackage;
           this.pdfForm.get('packageAmount').setValue(this.clientDetail.ActualPackage);
           this.pdfForm.get('grandTotalAmount').setValue(this.clientDetail.ActualPackage);
+          this.igstAmount = this.calculateGSTAmount( this.pdfModal.iGST);
+          this.calculateGrandTotal();
         }
 
         this.getAttendance();
@@ -920,6 +927,36 @@ export class BuildPdfComponent implements OnInit {
       this.packageAmount = amount;
       this.pdfForm.get("grandTotalAmount").setValue(amount);
     }
+  }
+
+  viewStaffingTempplte() {
+    this.http.get('Template/GetStaffingTemplate').then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        this.template = this.sanitizer.bypassSecurityTrustHtml(res.ResponseBody);
+      $('#template-view').modal('show');
+      }
+    })
+    let templateHtml = `<!DOCTYPE html>
+    <html style='background: white;'>
+        <head>
+            <title>STAFFING BILL</title>
+         </head>
+         <body>
+            <h4>Hi Sir/Madam, </h4>
+            <p>PFA bill for the month of July.</p>
+            <p>Developer detail as follows:</p>
+            <div style='margin-left:10px;'>1. FAHIM SHAIKH  [ROLE: SOFTWARE DEVELOPER]</div>
+            <div style='margin-left:10px; padding:15px 0px;'>2. VANHAR BASHA  [ROLE: SOFTWARE DEVELOPER]</div>
+
+            <p style='margin-top: 2rem;'>Thanks & Regards,</p>
+            <div>Team BottomHalf</div>
+            <div>Mob: +91-9100544384</div>
+        </body>
+    </html>`;
+
+    // let $dom = document.getElementById("template-view");
+    // $dom.classList.remove('d-none');
+    // $dom.setAttribute('src', this.template);
   }
 }
 

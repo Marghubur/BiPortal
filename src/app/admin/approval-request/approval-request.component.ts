@@ -4,6 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { ItemStatus } from 'src/providers/constants';
+import { UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -21,10 +22,15 @@ export class ApprovalRequestComponent implements OnInit {
   requestType: number = 0;
   editedMessage: string = '';
   itemStatus: number = 0;
+  currentUser: any = null;
 
-  constructor(private http: AjaxService) { }
+  constructor(
+    private http: AjaxService,
+    private userService: UserService
+    ) { }
 
   ngOnInit(): void {
+    this.currentUser = this.userService.getInstance();
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
     this.managerList.placeholder = "Reporting Manager";
@@ -37,7 +43,7 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get(`Request/GetPendingRequests/${0}/${this.itemStatus}`).then(response => {
+    this.http.get(`Request/GetPendingRequests/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
       if(response.ResponseBody) {
         this.request = response.ResponseBody;
       } else {
@@ -84,7 +90,7 @@ export class ApprovalRequestComponent implements OnInit {
           endPoint = `Request/ApprovalAction`;
           break;
         case 'Othermember':
-          endPoint = `Request/ReAssigneToOtherManager/0`;
+          endPoint = `Request/ReAssigneToOtherManager`;
           break;
         default:
           throw 'Invalid option selected.';
@@ -104,10 +110,13 @@ export class ApprovalRequestComponent implements OnInit {
     }
 
     this.http.put(endPoint, request).then((response:ResponseModel) => {
-      if (response.ResponseBody)
+      if (response.ResponseBody) {
         Toast("Submitted Successfully");
-      this.isLoading = true;
+        this.isLoading = false;
+        $('#leaveModal').modal('hide');
+      }
     })
+    this.isLoading = false;
   }
 }
 
