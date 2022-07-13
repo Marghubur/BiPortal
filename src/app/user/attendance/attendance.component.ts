@@ -218,6 +218,7 @@ export class AttendanceComponent implements OnInit {
     }
     if (this.commentValue == '') {
       this.isComment = true;
+      this.isLoading = false;
       return;
     }
     this.http.post('Attendance/SubmitAttendance', commment).then((response: ResponseModel) => {
