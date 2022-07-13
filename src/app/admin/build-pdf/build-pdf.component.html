@@ -59,7 +59,7 @@
               <div class="col-md-3">
                 <label class="form-label">Email Template</label>
                 <a href="javascript:void(0)" class="text-decoration-none float-end"
-                  [ngClass]="{'pe-none': !isClientSelected}" (click)="viewStaffingTempplte()">View Template</a>
+                  [ngClass]="{'pe-none': !isClientSelected}" (click)="viewStaffingTemplte()">View Template</a>
                 <select name="staffingTemplate" class="form-control" [disabled]="!isClientSelected">
                   <option value="1">Staffing Template</option>
                 </select>
@@ -417,7 +417,6 @@
                       </tbody>
                     </table>
                   </div>
-
                   <div class="col-md-12 button groups text-end">
                     <div class="btn-group">
                       <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
@@ -442,49 +441,88 @@
 
 <!--view Pdf, Doc and Excel Modal -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="viewFileModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title">Download Bill</h5>
         <!-- <button type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button> -->
       </div>
-      <div class="modal-body f-12 text-center">
-        <div class="d-flex align-items-center justify-content-around">
-          <div class="form-check">
-            <div class="donwload-file-ext">
-              <img src="assets/ext/pdf.png" alt="pdf extension">
+      <div class="modal-body f-12 ">
+        <div class="d-flex align-items-center">
+          <div class="col-md-5">
+            <div class="d-flex align-items-center justify-content-around">
+              <div class="form-check">
+                <div class="donwload-file-ext">
+                  <img src="assets/ext/pdf.png" alt="pdf extension">
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <input class="form-check-input" type="radio" name="downloadFile" value="pdf" checked
+                    (change)="getFileExtension($event)">
+                  <label class="form-check-label ps-3" for="downloadPdf">
+                    Download Pdf
+                  </label>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="donwload-file-ext">
+                  <img src="assets/ext/doc.jpg" alt="word extension">
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <input class="form-check-input" type="radio" value="docx" name="downloadFile"
+                    (change)="getFileExtension($event)">
+                  <label class="form-check-label ps-3" for="downloadDoc">
+                    Download Doc
+                  </label>
+                </div>
+              </div>
             </div>
-            <div class="d-flex align-items-center justify-content-center">
-              <input class="form-check-input" type="radio" name="downloadFile" value="pdf" checked
-                (change)="getFileExtension($event)">
-              <label class="form-check-label ps-3" for="downloadPdf">
-                Download Pdf
-              </label>
+            <div class="text-end ms-3 mt-4">
+              <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
+              <!-- <a href="javascript:void(0)" class="text-decoration-none" [attr.disabled]="isLoading"
+                (click)="downloadPdfDocx()" download>
+                <i class="fa fa-download text-light pe-2"></i> Download
+              </a> -->
+              <button class="btn btn-primary-c"
+                (click)="downloadPdfDocx()" download>
+                <i class="fa fa-download text-light pe-2"></i> Download
+              </button>
             </div>
           </div>
-          <div class="form-check">
-            <div class="donwload-file-ext">
-              <img src="assets/ext/doc.jpg" alt="word extension">
+          <div class="vr mx-5"></div>
+          <div class="col-md-6 text-start" *ngIf="isBillGenerated">
+            <div class="row justify-content-between align-items-end">
+              <div class="col-md-6">
+                <label class="form-label">Email Template</label>
+                <select name="staffingTemplate" class="form-control" (change)="viewSendTemplete($event)">
+                  <option value="" selected>Select Template</option>
+                  <option value="1">Staffing Template</option>
+                </select>
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-primary-c"><i class="fa fa-share pe-2" aria-hidden="true"></i> send email</button>
+              </div>
             </div>
-            <div class="d-flex align-items-center justify-content-center">
-              <input class="form-check-input" type="radio" value="docx" name="downloadFile"
-                (change)="getFileExtension($event)">
-              <label class="form-check-label ps-3" for="downloadDoc">
-                Download Doc
-              </label>
+            <div class="py-3">
+              <p class="text-dark mb-2">Linked email id</p>
+              <span class="badge fs-6 fw-normal bg-ant text-dark">{{billAllDetails.receiverEmail}}</span>
+              <span class="badge fs-6 fw-normal bg-ant text-dark ms-2">{{billAllDetails.senderEmail}}</span>
+              <span class="badge fs-6 fw-normal bg-ant text-dark ms-2">hr@bottomhalf.com</span>
+            </div>
+            <div class="">
+              <iframe [srcdoc]="template" width="100%" height="310px" style="border: none;"></iframe>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-decoration-none text-danger" (click)="closePopUp()">Cancel</a>
-        <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
+        <!-- <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
         <a href="javascript:void(0)" class="text-decoration-none" [attr.disabled]="isLoading"
           (click)="downloadPdfDocx()" download>
           <i class="fa fa-download text-light pe-2"></i> Download
-        </a>
+        </a> -->
       </div>
     </div>
   </div>
@@ -499,17 +537,6 @@
   </div>
   <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
 </div>
-
-
-<!-- Pdf viewer modal -->
-<!-- <div class="d-none file-container" id="template-view" (click)="closePdfViewer()">
-  <div class="text-end">
-    <a (click)="closePdfViewer()" class="close_view">
-      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
-    </a>
-  </div>
-  <iframe [srcdoc]="template" width="800px" height="600px" style="border: none;"></iframe>
-</div> -->
 
 <!-- Staffing bill template -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="template-view" tabindex="-1"
