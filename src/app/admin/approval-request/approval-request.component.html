@@ -28,64 +28,74 @@
               <div class="col-md-3 fw-bold text-dark">Notifies</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
-            <ng-container *ngFor="let item of request">
-              <div class="row py-3 border-bottom px-3 leave-box">
-                <div class="col-md-6">
-                  <p class="mb-0 fs-6">
-                    <span class="fw-bold text-primary-c me-2">From: {{item.FromDate | date}}</span>
-                    <span class="fw-bold text-primary-c me-4">To: {{item.ToDate | date}}</span>
-                    <span class="fw-bold text-primary-c">[{{item.UserName}}]</span>
-                  </p>
-                  <span>
-                    <span class="fw-bold">Message:</span>
-                    {{item.Message}}
-                  </span>
-                </div>
-                <div class="col-md-2">
-                  Timesheet approval Request
-                  <p class="mb-0">
-                    <span class="badge bg-primary">
-                      Project: &nbsp;
-                      <ng-container *ngIf="item.ProjectName == '' || item.ProjectName == null">
-                        NA
-                      </ng-container>
-                      <ng-container *ngIf="item.ProjectName != ''">
-                        {{item.ProjectName}}
-                      </ng-container>
+            <ng-container *ngIf="request.length > 0">
+              <ng-container *ngFor="let item of request">
+                <div class="row py-3 border-bottom px-3 leave-box">
+                  <div class="col-md-6">
+                    <p class="mb-0 fs-6">
+                      <span class="fw-bold text-primary-c me-2">From: {{item.FromDate | date}}</span>
+                      <span class="fw-bold text-primary-c me-4">To: {{item.ToDate | date}}</span>
+                      <span class="fw-bold text-primary-c">[{{item.UserName}}]</span>
+                    </p>
+                    <span>
+                      <span class="fw-bold">Message:</span>
+                      {{item.Message}}
                     </span>
-                  </p>
-                  <p class="mb-0">
-                    <span class="badge bg-success">
-                      Manager &nbsp;
-                      <ng-container *ngIf="item.AssigneeId == 0">
-                        NA
-                      </ng-container>
-                      <ng-container *ngIf="item.AssigneeId != 0">
-                        {{item.AssigneeId}}
-                      </ng-container>
-                    </span>
-                  </p>
+                  </div>
+                  <div class="col-md-2">
+                    Timesheet approval Request
+                    <p class="mb-0">
+                      <span class="badge bg-primary">
+                        Project: &nbsp;
+                        <ng-container *ngIf="item.ProjectName == '' || item.ProjectName == null">
+                          NA
+                        </ng-container>
+                        <ng-container *ngIf="item.ProjectName != ''">
+                          {{item.ProjectName}}
+                        </ng-container>
+                      </span>
+                    </p>
+                    <p class="mb-0">
+                      <span class="badge bg-success">
+                        Manager &nbsp;
+                        <ng-container *ngIf="item.AssigneeId == 0">
+                          NA
+                        </ng-container>
+                        <ng-container *ngIf="item.AssigneeId != 0">
+                          {{item.AssigneeId}}
+                        </ng-container>
+                      </span>
+                    </p>
+                  </div>
+                  <div class="col-md-3">
+                    {{item.UserName}}
+                    <p class="mb-0">{{item.Email}}</p>
+                    <p class="mb-0">{{item.Mobile}}</p>
+                  </div>
+                  <div class="col-md-1">
+                    <ng-container [ngSwitch]="item.RequestStatusId">
+                      <p *ngSwitchCase="2">Pending</p>
+                      <p *ngSwitchCase="9">Approved</p>
+                      <p *ngSwitchCase="5">Rejected</p>
+                    </ng-container>
+                  </div>
+                  <div class="d-flex my-1">
+                    <button *ngIf="item.RequestStatusId != 5" (click)="openPopup('Rejected', item)"
+                      class="btn btn-danger btn-sm"><i class="fa pe-1"
+                        [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
+                    <button *ngIf="item.RequestStatusId != 9" (click)="openPopup('Approved', item)"
+                      class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
+                        [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
+                    <button (click)="openPopup('Othermember', item)" class="btn btn-primary-c ms-2 btn-sm"><i
+                        class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
+                      Re-Assigne</button>
+                  </div>
                 </div>
-                <div class="col-md-3">
-                  {{item.UserName}}
-                  <p class="mb-0">{{item.Email}}</p>
-                  <p class="mb-0">{{item.Mobile}}</p>
-                </div>
-                <div class="col-md-1">
-                  <ng-container [ngSwitch]="item.RequestStatusId">
-                    <p *ngSwitchCase="2">Pending</p>
-                    <p *ngSwitchCase="9">Approved</p>
-                    <p *ngSwitchCase="5">Rejected</p>
-                  </ng-container>
-                </div>
-                <div class="d-flex my-1">
-                  <button *ngIf="item.RequestStatusId != 5" (click)="openPopup('Rejected', item)"
-                    class="btn btn-danger btn-sm"><i class="fa fa-ban pe-1"></i> Reject</button>
-                  <button *ngIf="item.RequestStatusId != 9" (click)="openPopup('Approved', item)"
-                    class="btn btn-success ms-2 btn-sm"><i class="fa fa-check pe-1"></i> Approved</button>
-                  <button (click)="openPopup('Othermember', item)" class="btn btn-primary-c ms-2 btn-sm"><i
-                      class="fa fa-refresh pe-1"></i> Re-Assigned</button>
-                </div>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="request.length ==0">
+              <div class="text-center fw-bold fs-4 py-5 my-5 text-dark">
+                No record found
               </div>
             </ng-container>
           </ng-template>
@@ -162,7 +172,7 @@
         </div>
         <div class="col-md-6 mb-3" *ngIf="modalHeader == 'Othermember'">
           <label class="form-label">Reporting Manager</label>
-          <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId" name="ReportingManagerId">
+          <app-iautocomplete [data]="managerList">
           </app-iautocomplete>
         </div>
       </div>
@@ -170,7 +180,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" (click)="submitRequest(modalHeader)">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Update' }}
+          {{ isLoading ? 'Wait' : 'Submit' }}
         </button>
       </div>
     </div>
