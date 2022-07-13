@@ -727,7 +727,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.employeeFile.ToBillNo = null;
     this.employeeFile.TakeHome = null;
     this.toModel = null;
-    this.RaisedBilloption = '';
+    this.RaisedBilloption = null;
     this.fromModel = null;
     this.toDate = null;
     this.fromDate = null;
@@ -756,7 +756,6 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.employeeFile.ToBillNo = null;
     this.employeeFile.TakeHome = null;
     this.toModel = null;
-    this.RaisedBilloption = '';
     this.fromModel = null;
     this.toDate = null;
     this.fromDate = null;
@@ -768,6 +767,8 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       data: [],
       placeholder: "All result"
     };
+    let value = (document.querySelectorAll('input[name="bydate"]') );
+
   }
 
   advancedSearchPopUp() {
