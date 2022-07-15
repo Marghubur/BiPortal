@@ -34,6 +34,7 @@ export class BuildPdfComponent implements OnInit {
   months: Array<any> = null;
   applicationData: ApplicationData = new ApplicationData();
   currentOrganization: any = null;
+  senderClient: any = null;
   days: Array<number> = [];
   currentEmployee: EmployeeDetail = null;
   isLoading: boolean = false;
@@ -56,8 +57,8 @@ export class BuildPdfComponent implements OnInit {
   allAttendance: Array<any> = [];
   dayList: Array<any> = [];
   template: any = null;
-  billAllDetails: any = null;
   isBillGenerated: boolean = false;
+  staffingTemplateType: string = null;
   email:Array<string> = [];
 
   constructor(private http: AjaxService,
@@ -693,8 +694,6 @@ export class BuildPdfComponent implements OnInit {
           if(response.ResponseBody) {
             this.downloadFile(response.ResponseBody);
             this.isBillGenerated = true;
-            this.billAllDetails = this.pdfForm.value;
-            this.viewTemplate()
             $('#viewFileModal').modal('show');
             Toast("Bill pdf generated successfully");
           }
@@ -822,23 +821,23 @@ export class BuildPdfComponent implements OnInit {
     this.isClientSelected = false;
     if (Id !== null) {
       let clientId: number = Number(Id);
-      let client = this.applicationData.clients.find(x => x.ClientId === clientId);
+      this.senderClient = this.applicationData.clients.find(x => x.ClientId === clientId);
       this.clientDetail = this.applicationData.allocatedClients.find(x => x.ClientUid === clientId && x.EmployeeUid == this.currentEmployee.EmployeeUid);
-      if (client && this.clientDetail) {
+      if (this.senderClient && this.clientDetail) {
         let lastAddress = '';
-        if (client.ThirdAddress === null || client.ThirdAddress === "") {
-          lastAddress = "Pin: " + client.Pincode;
+        if (this.senderClient.ThirdAddress === null || this.senderClient.ThirdAddress === "") {
+          lastAddress = "Pin: " + this.senderClient.Pincode;
         } else {
-          lastAddress = client.ThirdAddress + "  Pin: " + client.Pincode;
+          lastAddress = this.senderClient.ThirdAddress + "  Pin: " + this.senderClient.Pincode;
         }
-        this.pdfForm.get('receiverFirstAddress').setValue(client.FirstAddress);
-        this.pdfForm.get('receiverCompanyName').setValue(client.ClientName);
-        this.pdfForm.get('receiverGSTNo').setValue(client.GSTNO);
-        this.pdfForm.get('receiverSecondAddress').setValue(client.SecondAddress + " " + lastAddress);
+        this.pdfForm.get('receiverFirstAddress').setValue(this.senderClient.FirstAddress);
+        this.pdfForm.get('receiverCompanyName').setValue(this.senderClient.ClientName);
+        this.pdfForm.get('receiverGSTNo').setValue(this.senderClient.GSTNO);
+        this.pdfForm.get('receiverSecondAddress').setValue(this.senderClient.SecondAddress + " " + lastAddress);
         this.pdfForm.get('receiverThirdAddress').setValue(lastAddress);
-        this.pdfForm.get('receiverPrimaryContactNo').setValue(client.PrimaryPhoneNo);
-        this.pdfForm.get('receiverEmail').setValue(client.Email);
-        this.pdfForm.get('ClientId').setValue(client.ClientId);
+        this.pdfForm.get('receiverPrimaryContactNo').setValue(this.senderClient.PrimaryPhoneNo);
+        this.pdfForm.get('receiverEmail').setValue(this.senderClient.Email);
+        this.pdfForm.get('ClientId').setValue(this.senderClient.ClientId);
         this.grandTotalAmount = this.clientDetail.ActualPackage;
         if (!this.editMode) {
           this.packageAmount = this.clientDetail.ActualPackage;
@@ -927,7 +926,6 @@ export class BuildPdfComponent implements OnInit {
 
   }
 
-
   getFixedAmount($e: any) {
     let amount = Number($e.target.value);
     if (!isNaN(amount)) {
@@ -942,28 +940,7 @@ export class BuildPdfComponent implements OnInit {
         this.template = this.sanitizer.bypassSecurityTrustHtml(res.ResponseBody);
       $('#template-view').modal('show');
       }
-    })
-    let templateHtml = `<!DOCTYPE html>
-    <html style='background: white;'>
-        <head>
-            <title>STAFFING BILL</title>
-         </head>
-         <body>
-            <h4>Hi Sir/Madam, </h4>
-            <p>PFA bill for the month of July.</p>
-            <p>Developer detail as follows:</p>
-            <div style='margin-left:10px;'>1. FAHIM SHAIKH  [ROLE: SOFTWARE DEVELOPER]</div>
-            <div style='margin-left:10px; padding:15px 0px;'>2. VANHAR BASHA  [ROLE: SOFTWARE DEVELOPER]</div>
-
-            <p style='margin-top: 2rem;'>Thanks & Regards,</p>
-            <div>Team BottomHalf</div>
-            <div>Mob: +91-9100544384</div>
-        </body>
-    </html>`;
-
-    // let $dom = document.getElementById("template-view");
-    // $dom.classList.remove('d-none');
-    // $dom.setAttribute('src', this.template);
+    });
   }
 
   viewSendTemplete(e: any) {
@@ -972,6 +949,26 @@ export class BuildPdfComponent implements OnInit {
       this.viewTemplate();
     else
       this.template = null;
+  }
+
+  sendEmail() {
+    if (this.staffingTemplateType && this.currentOrganization.ClientId > 0 && this.senderClient.ClientId >0 && this.FileDetail.FileId > 0) {
+      let data = {
+        ClientId: this.currentOrganization.ClientId,
+        SenderId: this.senderClient.ClientId,
+        FileId: this.FileDetail.FileId,
+        Emails: []
+      };
+
+      this.http.post("bill/SendBillToClient", data).then((response: ResponseModel) => {
+        if (response.ResponseBody) {
+          Toast("Email send successfully");
+          $('#viewFileModal').modal('hide');
+        }
+      });
+    } else {
+      ErrorToast("Unable to send email. Please contact to admin.");
+    }
   }
 
   viewTemplate() {

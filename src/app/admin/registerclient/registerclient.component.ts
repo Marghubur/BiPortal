@@ -95,6 +95,10 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       PrimaryPhoneNo: new FormControl(this.clientModal.PrimaryPhoneNo, [Validators.required]),
       SecondaryPhoneNo: new FormControl(this.clientModal.SecondaryPhoneNo),
       Email: new FormControl(this.clientModal.Email, [Validators.required]),
+      OtherEmail_1: new FormControl(this.clientModal.OtherEmail_1),
+      OtherEmail_2: new FormControl(this.clientModal.OtherEmail_2),
+      OtherEmail_3: new FormControl(this.clientModal.OtherEmail_3),
+      OtherEmail_4: new FormControl(this.clientModal.OtherEmail_4),
       Fax: new FormControl(this.clientModal.Fax),
       FirstAddress: new FormControl(this.clientModal.FirstAddress),
       SecondAddress: new FormControl(this.clientModal.SecondAddress),
@@ -210,6 +214,10 @@ class clientModal {
   PrimaryPhoneNo: string = null;
   SecondaryPhoneNo: string = null;
   Email: string = null;
+  OtherEmail_1: string = null;
+  OtherEmail_2: string = null;
+  OtherEmail_3: string = null;
+  OtherEmail_4: string = null;
   Fax: string = null;
   FirstAddress: string = null;
   SecondAddress: string = null;

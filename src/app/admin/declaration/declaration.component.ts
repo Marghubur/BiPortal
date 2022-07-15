@@ -562,8 +562,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.rentalPage = 2;
   }
 
-  gotoTaxSection(value: string) {
-    this.nav.navigateRoot(AdminIncomeTax, value)
+  gotoTaxSection() {
+    this.nav.navigateRoot(AdminIncomeTax, this.EmployeeId)
   }
 }
 

@@ -104,11 +104,7 @@ export class iNavigation {
     if (Path !== null) {
       this.IsNavigated = true;
       this.pageRoute.RouteDetail = [];
-      this.pageRoute.RouteDetail.push({
-        Key: Path,
-        Value: Parameter,
-        PageQuery: filterObject
-      });
+      this.pushNavRoute(Path, Parameter, filterObject);
       this.route.navigate(["/" + Path, ]);
     } else {
       Toast("Invalid component path passed.");
