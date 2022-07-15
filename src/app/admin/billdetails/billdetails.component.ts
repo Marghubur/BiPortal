@@ -72,10 +72,12 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   orderByNameAsc: boolean = null;
   orderByBillStatusAsc: boolean = null;
   orderByMonthAsc: boolean = null;
+  orderByYearAsc: boolean = null;
   orderByGSTStatusAsc: boolean = null;
   orderByBillNoAsc: boolean = null;
   isFileFound: boolean = false;
   isError: boolean = false;
+  allBillingYears: Array<any> = [];
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -110,9 +112,11 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.RaisedBilloption = '';
     this.employeeData = new Filter();
     this.employeeFile = new BillDetails();
+    let year = new Date().getFullYear();
     this.employeeFile.Status = '0';
     this.employeeFile.GSTStatus = '0';
     this.employeeFile.Month = '0';
+    this.employeeFile.Year = year.toString();
     this.employeeId = 0;
     this.isReadonly = true;
     this.updateBillPaidOn();
@@ -123,6 +127,10 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       data: [],
       placeholder: "All result"
     }
+    for (let i = 0; i < 5; i++) {
+      let value = year - i;
+      this.allBillingYears.push(value);
+    }
     let data = this.nav.getValue();
     if (data != null) {
       if (data.ClientName) {
@@ -130,6 +138,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       } else {
         this.employeeFile.Status = data.BillStatusId;
         this.employeeFile.Month = data.BillForMonth;
+        this.employeeFile.Year = data.BillYear;
       }
       this.filterRecords();
     } else {
@@ -534,6 +543,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
             bills.FileUid = this.userFiles[i].FileUid;
             bills.GeneratedOn = this.userFiles[i].GeneratedOn;
             bills.Month = MonthName(this.userFiles[i].Month);
+            bills.Year = this.userFiles[i].Year;
             bills.PaidOn = this.userFiles[i].PaidOn;
             bills.Status = this.userFiles[i].BillStatusId;
             bills.SalaryAmount = ToFixed(this.userFiles[i].SalaryAmount, 2);
@@ -701,6 +711,12 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       delimiter = "and";
     }
 
+    if(this.employeeFile.Year !== null && this.employeeFile.Year !== "0") {
+      let YearValue = Number(this.employeeFile.Year);
+      searchQuery += ` ${delimiter} BillYear = '${YearValue}' `;
+      delimiter = "and";
+    }
+
     if(isDateFilterEnable) {
       searchQuery += ` ${delimiter} b.BillUpdatedOn between '${fromDateValue}' and '${toDateValue}'`;
       delimiter = "and";
@@ -726,6 +742,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.employeeFile.FromBillNo = null;
     this.employeeFile.ToBillNo = null;
     this.employeeFile.TakeHome = null;
+    this.employeeFile.Year = (new Date().getFullYear()).toString();
     this.toModel = null;
     this.RaisedBilloption = null;
     this.fromModel = null;
@@ -746,6 +763,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.employeeFile.ClientName="";
     this.employeeFile.BillNo = "";
     this.employeeFile.Status='0';
+    this.employeeFile.Year = (new Date().getFullYear()).toString();
     this.employeeFile.GSTAmount=null;
     this.employeeFile.GSTStatus='0';
     this.employeeFile.SalaryAmount = null;
@@ -859,6 +877,7 @@ export class BillDetails {
   GeneratedOn: string = '';
   IGST: number = 0;
   Month: string = '';
+  Year: string = '';
   PaidOn: string = '';
   SGST: number =0;
   SalaryAmount: number = null;
