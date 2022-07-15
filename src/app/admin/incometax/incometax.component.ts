@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
@@ -21,6 +21,7 @@ export class IncometaxComponent implements OnInit {
   allDeclarationSalaryDetails: any = null;
   salaryBreakup: Array<any> = [];
   TaxDetails: Array<any> = [];
+  EmployeeId: number = 0;
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
@@ -243,12 +244,17 @@ export class IncometaxComponent implements OnInit {
       feb: 37050,
       march: 37050
     };
+
+    this.EmployeeId = this.nav.getValue();
+    if(this.EmployeeId == null || this.EmployeeId <= 0){
+      ErrorToast("Unable to get data. Please contact to admin.");
+      return;
+    }
     this.loadData();
   }
 
   loadData() {
-    let EmployeeId = 30;
-    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${EmployeeId}`)
+    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
         console.log(response.ResponseBody);
