@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Attendance, Leave, UserAttendance, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
+import { AccessTokenExpiredOn, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
