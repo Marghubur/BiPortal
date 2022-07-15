@@ -20,6 +20,9 @@ export class IncometaxComponent implements OnInit {
   salaryBreakup: Array<any> = [];
   TaxDetails: Array<any> = [];
   EmployeeId: number = 0;
+  ExemptionDeclaration: Array<any> = [];
+  OtherDeclaration: Array<any> = [];
+  TaxSavingAlloance: Array<any> = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
@@ -80,10 +83,13 @@ export class IncometaxComponent implements OnInit {
       if (response.ResponseBody) {
         console.log(response.ResponseBody);
         this.allDeclarationSalaryDetails = response.ResponseBody;
+        this.ExemptionDeclaration = response.ResponseBody.ExemptionDeclaration;
+        this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
+        this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
         this.salaryDetail = response.ResponseBody.SalaryDetail;
         this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
         let value = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
-        for (let index = 0; index < 12; index++) {
+        for (let index = 0; index < 11; index++) {
           let total = (value.BasicAnnually + value.CarRunningAnnually+value.ConveyanceAnnually+value.HRAAnnually+value.InternetAnnually+value.TravelAnnually+value.ShiftAnnually+value.SpecialAnnually);
           value.Total = total;
           this.salaryBreakup.push(value);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart } from 'chart.js';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
@@ -19,8 +19,6 @@ declare var $: any;
 })
 export class LeaveComponent implements OnInit {
   cachedData: any = null;
-  LeaveFromDay: Date = null;
-  LeaveToDay: Date = null;
   isLoading: boolean = false;
   model: NgbDateStruct;
   leaveDays: number = 1;
@@ -28,6 +26,9 @@ export class LeaveComponent implements OnInit {
   userDetail: UserDetail = new UserDetail();
   employeeId: number = 0;
   managerList: autoCompleteModal = null;
+  leaveDetail: LeaveModal = null;
+  isPageReady: boolean = false;
+  submitted: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -37,8 +38,11 @@ export class LeaveComponent implements OnInit {
 
   ngOnInit(): void {
     this.cachedData = this.nav.getValue();
-    this.LeaveFromDay = new Date(new Date().setDate(new Date().getDate() + 2));
-    this.LeaveToDay = new Date(new Date().setDate(this.LeaveFromDay.getDate() + 1));
+    this.leaveDetail = new LeaveModal();
+    this.leaveDetail.LeaveFromDay = new Date(new Date().setDate(new Date().getDate() + 2));
+    this.leaveDetail.LeaveToDay = new Date(new Date().setDate( this.leaveDetail.LeaveFromDay.getDate() + 1));
+    this.leaveDetail.Session ='fullday';
+    this.leaveDetail.LeaveType = null;
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
     this.managerList.placeholder = "Reporting Manager";
@@ -60,6 +64,7 @@ export class LeaveComponent implements OnInit {
       if(Master !== null && Master !== "") {
         this.userDetail = Master["UserDetail"];
         this.employeeId = this.userDetail.UserId;
+        this.leaveDetail.EmployeeId = this.employeeId;
         this.getManagerList(this.employeeId);
       } else {
         Toast("Invalid user. Please login again.")
@@ -82,16 +87,18 @@ export class LeaveComponent implements OnInit {
   }
 
   submitLeave() {
+    this.submitted = true;
     if (this.employeeId > 0) {
-      let value = this.leaveForm.value;
+      let value: LeaveModal = this.leaveForm.value;
       value.UserTypeId = UserType.Employee;
-      value.ForYear= this.LeaveFromDay.getFullYear();
-      value.ForMonth= this.LeaveFromDay.getMonth() + 1;
+      value.ForYear= this.leaveDetail.LeaveFromDay.getFullYear();
+      value.ForMonth= this.leaveDetail.LeaveFromDay.getMonth() + 1;
       value.RequestType = 1;
       if (value) {
         this.http.post('Attendance/ApplyLeave', value).then ((response:ResponseModel) => {
           if (response.ResponseBody) {
-            Toast("Leave apply successfully.")
+            Toast("Leave apply successfully.");
+            this.submitted = false;
           }
         })
       }
@@ -101,9 +108,9 @@ export class LeaveComponent implements OnInit {
 
   onDateSelect(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
-    if (value.getTime() > this.LeaveFromDay.getTime()) {
-      this.LeaveToDay = value;
-      this.leaveDays = Math.floor((Date.UTC(this.LeaveToDay.getFullYear(), this.LeaveToDay.getMonth(), this.LeaveToDay.getDate()) - Date.UTC(this.LeaveFromDay.getFullYear(), this.LeaveFromDay.getMonth(), this.LeaveFromDay.getDate()) ) /(1000 * 60 * 60 * 24));
+    if (value.getTime() > this.leaveDetail.LeaveFromDay.getTime()) {
+      this.leaveDetail.LeaveToDay = value;
+      this.leaveDays = Math.floor((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate()) ) /(1000 * 60 * 60 * 24));
     }
     else
       ErrorToast("Please select a valid date.")
@@ -111,18 +118,17 @@ export class LeaveComponent implements OnInit {
 
   leaveRequestForm() {
     this.leaveForm = this.fb.group({
-      LeaveFromDay: new FormControl(this.LeaveFromDay),
-      LeaveToDay: new FormControl(this.LeaveToDay),
-      Session: new FormControl(''),
-      Reason: new FormControl(''),
-      Notify: new FormControl(''),
-      AssignTo: new FormControl(''),
-      ForYear: new FormControl(''),
-      RequestType: new FormControl(''),
-      LeaveType: new FormControl(''),
-      ForMonth: new FormControl(''),
-      UserTypeId: new FormControl(''),
-      EmployeeId: new FormControl(this.employeeId)
+      LeaveFromDay: new FormControl(this.leaveDetail.LeaveFromDay, [Validators.required]),
+      LeaveToDay: new FormControl(this.leaveDetail.LeaveFromDay, [Validators.required]),
+      Session: new FormControl(this.leaveDetail.Session, [Validators.required]),
+      Reason: new FormControl(this.leaveDetail.Reason, [Validators.required]),
+      AssignTo: new FormControl(this.leaveDetail.AssignTo, [Validators.required]),
+      ForYear: new FormControl(this.leaveDetail.ForYear),
+      RequestType: new FormControl(this.leaveDetail.RequestType),
+      LeaveType: new FormControl(this.leaveDetail.LeaveType, [Validators.required]),
+      ForMonth: new FormControl(this.leaveDetail.ForMonth),
+      UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
+      EmployeeId: new FormControl(this.leaveDetail.EmployeeId)
     })
   }
 
@@ -131,6 +137,7 @@ export class LeaveComponent implements OnInit {
   }
 
   getManagerList(employeeId: number) {
+    this.isPageReady = false;
     this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
       if(res.ResponseBody.EmployeesList) {
         this.managerList.data = [];
@@ -151,6 +158,7 @@ export class LeaveComponent implements OnInit {
           }
           i++;
         }
+        this.isPageReady = true;
       }
     })
   }
@@ -445,4 +453,18 @@ export class LeaveComponent implements OnInit {
       break;
     }
   }
+}
+
+class LeaveModal {
+  LeaveFromDay: Date = null;
+  LeaveToDay: Date = null;
+  Session: string = null;
+  Reason: string = null;
+  AssignTo: number = 0;
+  ForYear: number = 0;
+  RequestType: number = 0;
+  LeaveType: number = 0;
+  ForMonth: number = 0;
+  UserTypeId: number = 0;
+  EmployeeId: number = 0;
 }

@@ -309,7 +309,7 @@
 aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <form [formGroup]="leaveForm">
-      <div class="modal-content px-4 py-3">
+      <div class="modal-content px-4 py-3" *ngIf="isPageReady">
         <div class="modal-header border-bottom-0">
           <h5 class="modal-title" id="exampleModalLabel">Leave Request</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -323,12 +323,12 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="col-md-8 d-flex">
               <div class="col-md-6 ps-2 py-3 border">
                 <small>START DATE</small>
-                <p class="mb-0 text-dark fs-5">{{LeaveFromDay | date}}</p>
+                <p class="mb-0 text-dark fs-5">{{leaveDetail.LeaveFromDay | date}}</p>
               </div>
               <div class="col-md-6 pe-3 py-3 border text-end">
                 <small>END DATE</small>
                 <div class="mb-0 text-dark fs-5">
-                  <p class="mb-0" (click)="d.toggle()">{{LeaveToDay | date}}</p>
+                  <p class="mb-0" (click)="d.toggle()">{{leaveDetail.LeaveToDay | date}}</p>
                   <form class="row row-cols-sm-auto">
                     <div class="col-12">
                       <div class="input-group">
@@ -347,18 +347,18 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="col-md-6">
               <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
               <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="Session" id="btnradio10" autocomplete="off" checked formControlName="Session"
+                <input type="radio" class="btn-check" name="Session" id="btnradio10" autocomplete="off" checked formControlName="Session" [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
                   value="fullday">
                 <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
-                <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off" formControlName="Session"
+                <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off" formControlName="Session" [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
                   value="halfday">
                 <label class="btn btn-outline-primary" for="btnradio11">Half Day</label>
               </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Leave Type</label>
-              <select class="form-select mb-3" aria-label=".form-select-lg example" formControlName="LeaveType">
-                <option selected>Select leave type</option>
+              <select class="form-select mb-3" aria-label=".form-select-lg example" formControlName="LeaveType" [ngClass]="{'error-field':submitted && f['LeaveType'].errors != null && f['LeaveType'].errors['required']}">
+                <option value=null>Select leave type</option>
                 <option value="1">Casual Leave</option>
                 <option value="2">Paid Leave</option>
                 <option value="3">Sick Leave</option>
@@ -366,20 +366,14 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             </div>
           </div>
           <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
-          <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="Reason" formControlName="Reason"></textarea>
-          <div class="row">
-            <div class="col-md-6">
-              <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify</p>
-              <input type="text" class="form-control" placeholder="Search Employee" formControlName="Notify">
-              <p class="mb-0">These employees will be notified through email when you leave request is approved.</p>
-            </div>
-            <div class="col-md-6">
-              <p class="mb-0 text-dark ps-2 fs-5">Reporting Manager</p>
-              <app-iautocomplete [data]="managerList" formControlName="AssignTo"
-                name="ReportingManagerId">
-              </app-iautocomplete>
-            </div>
+          <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="Reason" formControlName="Reason" [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
+          <div class="col-md-6">
+            <p class="mb-0 text-dark ps-2 fs-5 py-2">Reporting Manager</p>
+            <app-iautocomplete [data]="managerList" formControlName="AssignTo" [ngClass]="{'error-field':submitted && f['AssignTo'].errors != null && f['AssignTo'].errors['required']}"
+              name="AssignTo">
+            </app-iautocomplete>
           </div>
+          <p class="mb-0 py-2">These employees will be notified through email when you leave request is approved.</p>
         </div>
         <div class="modal-footer border-top-0 pe-4">
           <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
