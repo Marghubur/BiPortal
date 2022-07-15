@@ -45,7 +45,7 @@
           <div class="card">
             <div class="card-body pb-0">
               <div class="pb-1">
-                <button class="btn btn-primary-c ms-2" type="button">Apply Leave</button>
+                <button class="btn btn-primary-c ms-2" type="button" (click)="leavePopUp()">Apply Leave</button>
               </div>
               <p class="ps-2 mb-2 mt-2">
                 <a href="javascript:void(0)" class="text-decoration-none">Request Credit for Compensatory Off</a>
@@ -303,3 +303,93 @@
     </div>
   </div>
 </div>
+
+<!-- Apply Leave Modal Start-->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="commentModal" tabindex="-1"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <form [formGroup]="leaveForm">
+      <div class="modal-content px-4 py-3">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="exampleModalLabel">Leave Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="col-md-12 px-4 d-block">
+          <p class="mt-2">Enter your leave reson and apply with one click.
+            Select your manage or reporting person under Notify section to get approval.</p>
+        </div>
+        <div class="modal-body px-4">
+          <div class="d-flex position-relative">
+            <div class="col-md-8 d-flex">
+              <div class="col-md-6 ps-2 py-3 border">
+                <small>START DATE</small>
+                <p class="mb-0 text-dark fs-5">{{LeaveFromDay | date}}</p>
+              </div>
+              <div class="col-md-6 pe-3 py-3 border text-end">
+                <small>END DATE</small>
+                <div class="mb-0 text-dark fs-5">
+                  <p class="mb-0" (click)="d.toggle()">{{LeaveToDay | date}}</p>
+                  <form class="row row-cols-sm-auto">
+                    <div class="col-12">
+                      <div class="input-group">
+                        <input class="form-control d-none" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelect($event)"
+                              name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                        <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()" type="button"></button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="px-3 py-2 day-wfh text-dark">{{leaveDays}}day leave</span>
+          <div class="row align-items-end">
+            <div class="col-md-6">
+              <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
+              <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="Session" id="btnradio10" autocomplete="off" checked formControlName="Session"
+                  value="fullday">
+                <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
+                <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off" formControlName="Session"
+                  value="halfday">
+                <label class="btn btn-outline-primary" for="btnradio11">Half Day</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Leave Type</label>
+              <select class="form-select mb-3" aria-label=".form-select-lg example" formControlName="LeaveType">
+                <option selected>Select leave type</option>
+                <option value="1">Casual Leave</option>
+                <option value="2">Paid Leave</option>
+                <option value="3">Sick Leave</option>
+              </select>
+            </div>
+          </div>
+          <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
+          <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="Reason" formControlName="Reason"></textarea>
+          <div class="row">
+            <div class="col-md-6">
+              <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify</p>
+              <input type="text" class="form-control" placeholder="Search Employee" formControlName="Notify">
+              <p class="mb-0">These employees will be notified through email when you leave request is approved.</p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0 text-dark ps-2 fs-5">Reporting Manager</p>
+              <app-iautocomplete [data]="managerList" formControlName="AssignTo"
+                name="ReportingManagerId">
+              </app-iautocomplete>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 pe-4">
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitLeave()">
+            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Request' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- End -->

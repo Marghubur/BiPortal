@@ -60,7 +60,7 @@
                 <label class="form-label">Email Template</label>
                 <a href="javascript:void(0)" class="text-decoration-none float-end"
                   [ngClass]="{'pe-none': !isClientSelected}" (click)="viewStaffingTemplte()">View Template</a>
-                <select name="staffingTemplate" class="form-control" [disabled]="!isClientSelected">
+                <select class="form-control" [disabled]="!isClientSelected">
                   <option value="1">Staffing Template</option>
                 </select>
               </div>
@@ -496,8 +496,8 @@
               <div class="col-md-6">
                 <label class="form-label">Email Template</label>
                 <select name="staffingTemplate" class="form-control" (change)="viewSendTemplete($event)">
-                  <option value="" selected>Select Template</option>
-                  <option value="1">Staffing Template</option>
+                  <option value="">Select Template</option>
+                  <option value="1" selected>Staffing Template</option>
                 </select>
               </div>
               <div class="col-auto">
@@ -506,9 +506,19 @@
             </div>
             <div class="py-3">
               <p class="text-dark mb-2">Linked email id</p>
-              <span class="badge fs-6 fw-normal bg-ant text-dark">{{billAllDetails.receiverEmail}}</span>
-              <span class="badge fs-6 fw-normal bg-ant text-dark ms-2">{{billAllDetails.senderEmail}}</span>
-              <span class="badge fs-6 fw-normal bg-ant text-dark ms-2">hr@bottomhalf.com</span>
+              <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">{{billAllDetails.receiverEmail}}</span>
+              <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">{{billAllDetails.senderEmail}}</span>
+              <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">hr@bottomhalf.com</span>
+              <ng-container *ngFor="let email of email">
+                <span class="badge fs-6 fw-normal bg-ant text-dark ms-2 my-2">{{email}}</span>
+              </ng-container>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="col-md-9">
+                <input type="email" class="form-control" placeholder="Email Id" name="add-email">
+              </div>
+              <button class="btn btn-primary-c" (click)="addEmailId()"><i class="fa fa-plus pe-2"></i>Add Email Id</button>
+              <!-- <a href="javascript:void(0)" class="text-decoration-none ps-3"><i class="fa fa-plus pe-2"></i>Add Email Id</a> -->
             </div>
             <div class="">
               <iframe [srcdoc]="template" width="100%" height="310px" style="border: none;"></iframe>
@@ -517,7 +527,7 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" class="text-decoration-none text-danger" (click)="closePopUp()">Cancel</a>
+        <a href="javascript:void(0)" class="text-decoration-none text-danger fw-bold" (click)="closePopUp()">Cancel</a>
         <!-- <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
         <a href="javascript:void(0)" class="text-decoration-none" [attr.disabled]="isLoading"
           (click)="downloadPdfDocx()" download>

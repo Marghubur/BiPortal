@@ -59,6 +59,7 @@ export class BuildPdfComponent implements OnInit {
   template: any = null;
   isBillGenerated: boolean = false;
   staffingTemplateType: string = null;
+  email:Array<string> = [];
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -944,14 +945,8 @@ export class BuildPdfComponent implements OnInit {
 
   viewSendTemplete(e: any) {
     let value = e.target.value;
-    if (value) {
-      this.staffingTemplateType = value;
-      this.http.get('Template/GetStaffingTemplate').then((res:ResponseModel) => {
-        if (res.ResponseBody) {
-          this.template = this.sanitizer.bypassSecurityTrustHtml(res.ResponseBody);
-        }
-      });
-    }
+    if (value)
+      this.viewTemplate();
     else
       this.template = null;
   }
@@ -974,6 +969,23 @@ export class BuildPdfComponent implements OnInit {
     } else {
       ErrorToast("Unable to send email. Please contact to admin.");
     }
+  }
+
+  viewTemplate() {
+    this.http.get('Template/GetStaffingTemplate').then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        this.template = this.sanitizer.bypassSecurityTrustHtml(res.ResponseBody);
+      }
+    });
+  }
+
+  addEmailId() {
+    let value = (document.querySelector('input[name="add-email"]') as HTMLInputElement).value;
+    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (value.match(validRegex))
+      this.email.push(value);
+    else
+      ErrorToast("Please enter a valid email id.");
   }
 }
 

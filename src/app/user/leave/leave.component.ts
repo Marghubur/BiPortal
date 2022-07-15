@@ -1,7 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart } from 'chart.js';
-import { Attendance, Timesheet, UserAttendance, UserTimesheet } from 'src/providers/constants';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { ResponseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { AccessTokenExpiredOn, UserAttendance, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
+declare var $: any;
 
 @Component({
   selector: 'app-leave',
@@ -10,16 +19,51 @@ import { iNavigation } from 'src/providers/iNavigation';
 })
 export class LeaveComponent implements OnInit {
   cachedData: any = null;
+  LeaveFromDay: Date = null;
+  LeaveToDay: Date = null;
+  isLoading: boolean = false;
+  model: NgbDateStruct;
+  leaveDays: number = 1;
+  leaveForm: FormGroup;
+  userDetail: UserDetail = new UserDetail();
+  employeeId: number = 0;
+  managerList: autoCompleteModal = null;
 
-
-  constructor(private nav: iNavigation) { }
+  constructor(private nav: iNavigation,
+              private http: AjaxService,
+              private local: ApplicationStorage,
+              private user: UserService,
+              private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.cachedData = this.nav.getValue();
+    this.LeaveFromDay = new Date(new Date().setDate(new Date().getDate() + 2));
+    this.LeaveToDay = new Date(new Date().setDate(this.LeaveFromDay.getDate() + 1));
+    this.managerList = new autoCompleteModal();
+    this.managerList.data = [];
+    this.managerList.placeholder = "Reporting Manager";
+    this.managerList.data.push({
+      value: 0,
+      text: "Default Manager"
+    });
+    this.managerList.className="";
     if(this.cachedData) {
 
     } else {
-
+      let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
+      this.userDetail = this.user.getInstance() as UserDetail;
+      if(expiredOn === null || expiredOn === "")
+      this.userDetail["TokenExpiryDuration"] = new Date();
+      else
+      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+      let Master = this.local.get(null);
+      if(Master !== null && Master !== "") {
+        this.userDetail = Master["UserDetail"];
+        this.employeeId = this.userDetail.UserId;
+        this.getManagerList(this.employeeId);
+      } else {
+        Toast("Invalid user. Please login again.")
+      }
     }
     this.LeaveReportChart();
     this.LoadDoughnutchart();
@@ -29,6 +73,86 @@ export class LeaveComponent implements OnInit {
     this.SickLeaveChart();
     this.UnpaidLeaveChart();
     this.CompLeaveChart();
+    this.leaveRequestForm();
+    $('#commentModal').modal('show');
+  }
+
+  leavePopUp() {
+    $('#commentModal').modal('show');
+  }
+
+  submitLeave() {
+    if (this.employeeId > 0) {
+      let value = this.leaveForm.value;
+      value.UserTypeId = UserType.Employee;
+      value.ForYear= this.LeaveFromDay.getFullYear();
+      value.ForMonth= this.LeaveFromDay.getMonth() + 1;
+      value.RequestType = 1;
+      if (value) {
+        this.http.post('Attendance/ApplyLeave', value).then ((response:ResponseModel) => {
+          if (response.ResponseBody) {
+            Toast("Leave apply successfully.")
+          }
+        })
+      }
+    }
+    console.log(this.leaveForm.value)
+  }
+
+  onDateSelect(e: NgbDateStruct) {
+    let value  = new Date(e.year, e.month-1, e.day);
+    if (value.getTime() > this.LeaveFromDay.getTime()) {
+      this.LeaveToDay = value;
+      this.leaveDays = Math.floor((Date.UTC(this.LeaveToDay.getFullYear(), this.LeaveToDay.getMonth(), this.LeaveToDay.getDate()) - Date.UTC(this.LeaveFromDay.getFullYear(), this.LeaveFromDay.getMonth(), this.LeaveFromDay.getDate()) ) /(1000 * 60 * 60 * 24));
+    }
+    else
+      ErrorToast("Please select a valid date.")
+  }
+
+  leaveRequestForm() {
+    this.leaveForm = this.fb.group({
+      LeaveFromDay: new FormControl(this.LeaveFromDay),
+      LeaveToDay: new FormControl(this.LeaveToDay),
+      Session: new FormControl(''),
+      Reason: new FormControl(''),
+      Notify: new FormControl(''),
+      AssignTo: new FormControl(''),
+      ForYear: new FormControl(''),
+      RequestType: new FormControl(''),
+      LeaveType: new FormControl(''),
+      ForMonth: new FormControl(''),
+      UserTypeId: new FormControl(''),
+      EmployeeId: new FormControl(this.employeeId)
+    })
+  }
+
+  get f() {
+    return this.leaveForm.controls;
+  }
+
+  getManagerList(employeeId: number) {
+    this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
+      if(res.ResponseBody.EmployeesList) {
+        this.managerList.data = [];
+        this.managerList.placeholder = "Reporting Manager";
+        this.managerList.data.push({
+          value: 0,
+          text: "Default Manager",
+        });
+        this.managerList.className ="";
+        let i = 0;
+        let managers = res.ResponseBody.EmployeesList;
+        while(i < managers.length) {
+          if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
+            this.managerList.data.push({
+              value: managers[i].EmployeeUid,
+              text: `${managers[i].FirstName} ${managers[i].LastName}`
+            });
+          }
+          i++;
+        }
+      }
+    })
   }
 
   LeaveReportChart(){
