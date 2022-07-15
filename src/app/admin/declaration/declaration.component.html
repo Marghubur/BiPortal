@@ -421,14 +421,14 @@
                                 <div class="td align-middle">
                                   <div class="cell-wrapper">
                                     <div class="d-flex align-items-center">
-                                      <!-- <ng-container *ngIf="r.Status != 2">
+                                      <ng-container *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
                                         <div class="circle">
                                           <div class="checkmark">
                                           </div>
                                         </div>
-                                        <span class="ps-3">Auto Accepted</span>
-                                      </ng-container> -->
-                                      <ng-container *ngIf="r.DeclaredValue > 0">
+                                        <span class="ps-3 fw-bold text-dark">Auto Accepted</span>
+                                      </ng-container>
+                                      <ng-container *ngIf="r.DeclaredValue > 0 && (r.ComponentId != 'EPF' || r.ComponentId != 'VPF')">
                                         <div class="circle">
                                           <div class="checkmark">
                                           </div>
@@ -436,10 +436,10 @@
                                         <span class="ps-3">Submitted</span>
                                       </ng-container>
                                     </div>
-                                    <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
+                                    <span *ngIf="r.DeclaredValue <= 0 && (r.ComponentId != 'EPF' && r.ComponentId != 'VPF')">Not Submitted</span>
                                   </div>
                                 </div>
-                                <div class="td text-center fe-1">
+                                <div class="td text-center fe-1" *ngIf="r.ComponentId != 'EPF' && r.ComponentId != 'VPF'">
                                   <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
@@ -449,6 +449,8 @@
                                     <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
                                       (click)="closeDeclaration($event)">Cancel</a>
                                   </div>
+                                </div>
+                                <div class="td text-center fe-1" *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
                                 </div>
                               </div>
                             </ng-container>
@@ -488,17 +490,17 @@
                           </div>
                         </div>
                         <div class="col-md-12 row pb-4 ps-3">
-                          <div class="col-auto me-2">
-                            <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
-                            <h6 class="text-dark">INR 150000</h6>
-                          </div>
                           <div class="col-auto mx-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                            <h6 class="text-dark">{{employeeDeclaration.Declarations[1].TotalAmountDeclared}}</h6>
+                            <h6 class="text-dark">INR {{employeeDeclaration.Declarations[1].TotalAmountDeclared | number}}</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AUTO APPROVED AMOUNT</label>
+                            <h6 class="text-dark">INR {{employeeDeclaration.Declarations[1].TotalAmountDeclared }}</h6>
                           </div>
                           <div class="col-auto mx-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
-                            <h6 class="text-dark">INR 21600</h6>
+                            <h6 class="text-dark">INR 0</h6>
                           </div>
                           <div class="col-auto ms-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
@@ -700,17 +702,17 @@
                           tax calculation to view tax exempted amount.
                         </div>
                         <div class="col-md-12 row pb-4 ps-3 pt-2">
-                          <div class="col-auto me-2">
-                            <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
-                            <h6 class="text-dark">INR 150000</h6>
-                          </div>
                           <div class="col-auto mx-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                            <h6 class="text-dark">{{employeeDeclaration.Declarations[2].TotalAmountDeclared}}</h6>
+                            <h6 class="text-dark">INR {{employeeDeclaration.Declarations[2].TotalAmountDeclared}}</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AUTO APPROVED AMOUNT</label>
+                            <h6 class="text-dark">INR {{employeeDeclaration.Declarations[2].TotalAmountDeclared}}</h6>
                           </div>
                           <div class="col-auto mx-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
-                            <h6 class="text-dark">INR 21600</h6>
+                            <h6 class="text-dark">INR 0</h6>
                           </div>
                           <div class="col-auto ms-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
