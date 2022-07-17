@@ -306,7 +306,7 @@
 
 <!-- Apply Leave Modal Start-->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="commentModal" tabindex="-1"
-aria-labelledby="exampleModalLabel" aria-hidden="true">
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <form [formGroup]="leaveForm">
       <div class="modal-content px-4 py-3" *ngIf="isPageReady">
@@ -333,8 +333,9 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="col-12">
                       <div class="input-group">
                         <input class="form-control d-none" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelect($event)"
-                              name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
-                        <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()" type="button"></button>
+                          name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                        <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()"
+                          type="button"></button>
                       </div>
                     </div>
                   </form>
@@ -347,29 +348,37 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="col-md-6">
               <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
               <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="Session" id="btnradio10" autocomplete="off" checked formControlName="Session" [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
+                <input type="radio" class="btn-check" name="Session" id="btnradio10" autocomplete="off" checked
+                  formControlName="Session"
+                  [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
                   value="fullday">
                 <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
-                <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off" formControlName="Session" [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
+                <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off"
+                  formControlName="Session"
+                  [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
                   value="halfday">
                 <label class="btn btn-outline-primary" for="btnradio11">Half Day</label>
               </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Leave Type</label>
-              <select class="form-select mb-3" aria-label=".form-select-lg example" formControlName="LeaveType" [ngClass]="{'error-field':submitted && f['LeaveType'].errors != null && f['LeaveType'].errors['required']}">
+              <select class="form-select mb-3" aria-label=".form-select-lg example" formControlName="LeaveType"
+                [ngClass]="{'error-field':submitted && f['LeaveType'].errors != null && f['LeaveType'].errors['required']}">
                 <option value=null>Select leave type</option>
-                <option value="1">Casual Leave</option>
-                <option value="2">Paid Leave</option>
-                <option value="3">Sick Leave</option>
+                <option value="1">Sick Leave</option>
+                <option value="2">Compensatory Leave</option>
+                <option value="3">Paid Leave</option>
               </select>
             </div>
           </div>
           <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
-          <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="Reason" formControlName="Reason" [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
-          <div class="col-md-6">
+          <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="Reason"
+            formControlName="Reason"
+            [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
+          <div class="col-md-6 mt-4">
             <p class="mb-0 text-dark ps-2 fs-5 py-2">Reporting Manager</p>
-            <app-iautocomplete [data]="managerList" formControlName="AssignTo" [ngClass]="{'error-field':submitted && f['AssignTo'].errors != null && f['AssignTo'].errors['required']}"
+            <app-iautocomplete [data]="managerList" formControlName="AssignTo"
+              [ngClass]="{'error-field':submitted && f['AssignTo'].errors != null && f['AssignTo'].errors['required']}"
               name="AssignTo">
             </app-iautocomplete>
           </div>
