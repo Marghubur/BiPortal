@@ -576,7 +576,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     let annualCTC = Number(this.salaryBreakupForm.get("ExpectedCTC").value);
     if (annualCTC > 0) {
       let salarygrpDetail = this.salaryGroup.filter(x => x.MinAmount <= annualCTC && x.MaxAmount >= annualCTC);
-      this.salaryGroup = salarygrpDetail;
+      //this.salaryGroup = salarygrpDetail;
       if (salarygrpDetail) {
         this.salaryGroupId = salarygrpDetail[0].SalaryGroupId;
         this.isSalaryGroup = true;

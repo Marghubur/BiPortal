@@ -23,6 +23,9 @@ export class IncometaxComponent implements OnInit {
   ExemptionDeclaration: Array<any> = [];
   OtherDeclaration: Array<any> = [];
   TaxSavingAlloance: Array<any> = [];
+  Section16TaxExemption:Array<any> = [];
+  Sec16TaxExemptAmount: number = 0;
+  isPageReady: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
@@ -78,23 +81,42 @@ export class IncometaxComponent implements OnInit {
   }
 
   loadData() {
+    this.isPageReady = false;
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
-        console.log(response.ResponseBody);
         this.allDeclarationSalaryDetails = response.ResponseBody;
+        this.allDeclarationSalaryDetails.IncomeTaxSlab = Object.entries(response.ResponseBody.IncomeTaxSlab);
         this.ExemptionDeclaration = response.ResponseBody.ExemptionDeclaration;
         this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
         this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
         this.salaryDetail = response.ResponseBody.SalaryDetail;
         this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
         let value = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        console.log(this.allDeclarationSalaryDetails);
         for (let index = 0; index < 11; index++) {
-          let total = (value.BasicAnnually + value.CarRunningAnnually+value.ConveyanceAnnually+value.HRAAnnually+value.InternetAnnually+value.TravelAnnually+value.ShiftAnnually+value.SpecialAnnually);
-          value.Total = total;
+          // let total = (value.BasicAnnually + value.CarRunningAnnually+value.ConveyanceAnnually+value.HRAAnnually+value.InternetAnnually+value.TravelAnnually+value.ShiftAnnually+value.SpecialAnnually);
+          // value.Total = total;
           this.salaryBreakup.push(value);
         };
+        this.getSalaryGroup();
+        this.isPageReady = true;
         Toast("Details get successfully")
+      }
+    })
+  }
+
+  getSalaryGroup() {
+    this.http.get('SalaryComponent/GetSalaryGroups').
+    then((response:ResponseModel) => {
+      if (response.ResponseBody && response.ResponseBody.length > 0) {
+        let allSalaryGroup = response.ResponseBody;
+        let salarygrp =  allSalaryGroup.find(x => x.MinAmount < this.salaryDetail.CTC && x.MaxAmount > this.salaryDetail.CTC);
+        this.Section16TaxExemption = (JSON.parse(salarygrp.SalaryComponents).filter(x => x.Section == "16(IA)" || x.Section == "16(III)"));
+        this.Sec16TaxExemptAmount = 0;
+        for (let i = 0; i < this.Section16TaxExemption.length; i++) {
+          this.Sec16TaxExemptAmount += this.Section16TaxExemption[i].DeclaredValue;
+        }
       }
     })
   }
