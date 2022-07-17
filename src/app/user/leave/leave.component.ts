@@ -39,7 +39,7 @@ export class LeaveComponent implements OnInit {
   ngOnInit(): void {
     this.cachedData = this.nav.getValue();
     this.leaveDetail = new LeaveModal();
-    this.leaveDetail.LeaveFromDay = new Date(new Date().setDate(new Date().getDate() + 2));
+    this.leaveDetail.LeaveFromDay = new Date();
     this.leaveDetail.LeaveToDay = new Date(new Date().setDate( this.leaveDetail.LeaveFromDay.getDate() + 1));
     this.leaveDetail.Session ='fullday';
     this.leaveDetail.LeaveType = null;
@@ -94,6 +94,7 @@ export class LeaveComponent implements OnInit {
       value.ForYear= this.leaveDetail.LeaveFromDay.getFullYear();
       value.ForMonth= this.leaveDetail.LeaveFromDay.getMonth() + 1;
       value.RequestType = 1;
+
       if (value) {
         this.http.post('Attendance/ApplyLeave', value).then ((response:ResponseModel) => {
           if (response.ResponseBody) {
