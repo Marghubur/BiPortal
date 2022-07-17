@@ -79,7 +79,6 @@ export class LeaveComponent implements OnInit {
     this.UnpaidLeaveChart();
     this.CompLeaveChart();
     this.leaveRequestForm();
-    $('#commentModal').modal('show');
   }
 
   leavePopUp() {
