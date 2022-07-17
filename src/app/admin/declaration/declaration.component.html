@@ -887,15 +887,73 @@
                       <ng-container>
                         <h5 class="text-dark">House Property</h5>
                         <p>Here you can declare all the gouse property rented or owned.</p>
+                        <div class="alert alert-warning fs-6" role="alert" *ngIf="housingPropertyDetail.TotalRent > 0 && housingPropertyDetail.TotalRent > 100000">
+                          The total rent amount for this financial year exceeds INR 1,00,000. You need to provide Owner PAN details or Signed documents.
+                        </div>
                         <div class="col-md-12 row">
                           <div class="col-md-9 ps-3">
                             <div class="col-md-12">
                               <div class="card px-3 pb-3">
                                 <h5 class="pt-3 pb-2">I live in a rented residence</h5>
-                                <div class="alert alert-info" role="alert">
+                                <div class="alert alert-info" role="alert" *ngIf="housingPropertyDetail.TotalRent <= 0">
                                   There are no rental details available
                                 </div>
-                                <div>
+                                <p class="mb-0">{{housingPropertyDetail.RentedFrom}} - {{housingPropertyDetail.RentedTo}}</p>
+                                <div class="custom-bg text-dark d-flex align-items-center py-2 my-3 rounded" *ngIf="housingPropertyDetail.TotalRent > 0">
+                                  <a href="javascript:void(0)" class="text-decoration-none" (click)="showrentedDetail()">
+                                    <i class="fa fa-lg ps-4" [ngClass]="{'fa-caret-right': !isShowRentedDetail, 'fa-caret-down': isShowRentedDetail}"></i>
+                                  </a>
+                                  <div class="pe-2 ps-4">
+                                    <small>MONTH</small>
+                                    <p class="mb-0">{{housingPropertyDetail.RentedFrom}} - {{housingPropertyDetail.RentedTo}}</p>
+                                  </div>
+                                  <span class="fs-5 px-4"></span>
+                                  <div class="px-2">
+                                    <small>CITY</small>
+                                    <p class="mb-0">{{housingPropertyDetail.City}}</p>
+                                  </div>
+                                  <span class="fs-5 px-4"></span>
+                                  <div class="px-2">
+                                    <small>NUMBER OF OWNERS</small>
+                                    <p class="mb-0">1</p>
+                                  </div>
+                                  <div class="ms-auto">
+                                    <span class="badge bg-primary">RENTED</span>
+                                    <span class="badge bg-success ms-2">AUTO APPROVED TILL CUTOFF DATE</span>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="editRentedResidence(housingPropertyDetail)">
+                                      <i class="fa fa-ellipsis-v ps-3 pe-4" aria-hidden="true"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                                <div class="card mb-4" *ngIf="isShowRentedDetail">
+                                  <p class="mb-0 custom-bg text-dark py-2 ps-2">Rentail Details</p>
+                                  <div class="bg-white d-flex align-items-center py-2 my-3 rounded" *ngIf="housingPropertyDetail.TotalRent > 0">
+                                    <div class="pe-2 ps-4 col-md-4">
+                                      <small>RENTED DECLARED</small>
+                                      <p class="mb-0 text-dark">INR {{housingPropertyDetail.TotalRent}}</p>
+                                    </div>
+                                    <div class="px-2 col-md-4">
+                                      <small>ADDRESS</small>
+                                      <p class="mb-0 text-dark">{{housingPropertyDetail.Address}}</p>
+                                    </div>
+                                  </div>
+                                  <p class="mb-0 custom-bg text-dark py-2 ps-2">Owner Details</p>
+                                  <div class="bg-white d-flex align-items-center py-2 my-3 rounded" *ngIf="housingPropertyDetail.TotalRent > 0">
+                                    <div class="pe-2 ps-4 col-md-2">
+                                      <small>NAME</small>
+                                      <p class="mb-0 text-dark">{{housingPropertyDetail.OwnerName}}</p>
+                                    </div>
+                                    <div class="px-2 col-md-2">
+                                      <small>PAN NUMBER</small>
+                                      <p class="mb-0 text-dark">{{housingPropertyDetail.PanNumber}}</p>
+                                    </div>
+                                    <div class="px-2 col-md-4">
+                                      <small>ADDRESS</small>
+                                      <p class="mb-0 text-dark">{{housingPropertyDetail.OwnerAddress}}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div *ngIf="housingPropertyDetail.TotalRent <= 0">
                                   <button class="btn btn-outline-primary" (click)="rentedDecalrationPopup()"> <i
                                       class="fa fa-plus"></i> Add Rented
                                     Residence</button>
@@ -1093,11 +1151,11 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="rentedResidenceModalLabel">Add Rented Residence</h5>
+        <h5 class="modal-title" id="rentedResidenceModalLabel">{{isRentedResidenceEdit ? 'Edit': 'Add'}} Rented Residence</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="rentResidenceForm">
+        <form [formGroup]="rentResidenceForm" *ngIf="rentResidenceForm">
           <ng-container *ngIf="rentalPage == 1">
             <h5>Rental Deatils</h5>
             <div class="row">
@@ -1105,7 +1163,7 @@
                 <label class="form-label">From</label>
                 <select class="form-select" formControlName="RentedFrom">
                   <option value="">Select from date</option>
-                  <option [value]="item.month+item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
+                  <option [value]="item.month + item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
                   </option>
                 </select>
               </div>
@@ -1113,7 +1171,7 @@
                 <label class="form-label">To</label>
                 <select class="form-select" formControlName="RentedTo">
                   <option value="">Select to date</option>
-                  <option [value]="item.month+item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
+                  <option [value]="item.month + item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
                   </option>
                 </select>
               </div>
@@ -1168,7 +1226,7 @@
               </div>
             </div>
             <div class="form-check col-md-6 mt-3">
-              <input class="form-check-input" type="checkbox" formControlName="IsOwnerAddress">
+              <input class="form-check-input" type="checkbox" (click)="sameOwnerAddress()" formControlName="IsOwnerAddressSame">
               <label class="form-check-label">
                 Owner address same as rental address
               </label>
@@ -1176,7 +1234,7 @@
             <div class="col-md-12 mt-3">
               <label class="form-label">Address</label>
               <textarea type="text" formControlName="Address" placeholder="OwnerAddress" class="form-control"
-                formControlName=""></textarea>
+                formControlName="OwnerAddress"></textarea>
             </div>
             <div class="form-check mt-3">
               <input class="form-check-input" formControlName="IsSignedDeclaration"
@@ -1188,7 +1246,7 @@
               </label>
               <div class="col-md-6 mt-3">
                 <label class="form-label">Owner Type</label>
-                <select class="form-select" [disabled]="!isSignDeclareEnable" formControlName="OwnerType">
+                <select class="form-select" [disabled]="!isSignDeclareEnable" formControlName="LandlordType">
                   <option value="">Select Land lord Type</option>
                 </select>
                 <a href="javascript:void(0)" class="text-decoration-none"><i
@@ -1198,8 +1256,10 @@
             <div class="modal-footer border-top-0">
               <button type="button" class="btn btn-secondary" (click)="navRentalpage(1)"><i
                   class="fa fa-arrow-left pe-2"></i> Back</button>
-              <button type="button" class="btn btn-primary-c" (click)="submitRentResidence()"><i
-                  class="fa fa-save pe-2"></i> Save</button>
+              <button class="btn btn btn-primary-c" [disabled]="isLoading" (click)="submitRentResidence()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-save': !isLoading}"></i>
+                {{ isLoading ? 'Wait' : 'Save' }}
+              </button>
             </div>
           </ng-container>
         </form>
