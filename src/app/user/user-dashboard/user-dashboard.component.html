@@ -4,7 +4,7 @@
       <div class="x_header_title">
         <h2 class="fw-bold text-dark">Welcome {{employeeDetails.FirstName}}!</h2>
       </div>
-      <ng-container *ngFor="let item of allocatedClients">
+      <ng-container *ngFor="let item of allocatedClients |slice:0:1">
         <h6>Developer at {{item.ClientName}}</h6>
       </ng-container>
     </div>

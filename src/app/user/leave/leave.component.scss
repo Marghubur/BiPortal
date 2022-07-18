@@ -33,3 +33,38 @@
   left: 28%;
   background: #dcd7d7;
 }
+
+.hide-bar {
+  height: 2.9rem !important;
+  background-color: #eeeded !important;
+}
+
+.custom-bg {
+  background-color: #eeeded;
+}
+
+.blinking {
+  font-weight: bold;
+  animation: blinkingText 1s infinite;
+}
+
+@keyframes blinkingText {
+  0% {
+    color: #d58740;
+  }
+  20% {
+    color: #915c2c;
+  }
+  40% {
+    color: #3e2611;
+  }
+  60% {
+    color: #3e2611;
+  }
+  80% {
+    color: #915c2c;
+  }
+  100% {
+    color: #d58740;
+  }
+}
