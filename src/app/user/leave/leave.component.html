@@ -34,13 +34,13 @@
                   <div>
                     <i class="fa fa-tasks fa-5x" aria-hidden="true"></i>
                   </div>
-                  <ng-container >
+                  <ng-container>
                     <div class="ps-4 pt-2 d-none">
                       <h5>Nothing here.</h5>
                       <p>Working hard yeah? Request time off on the right - ></p>
                     </div>
                   </ng-container>
-                  <ng-container >
+                  <ng-container>
                     <div class="ps-4">
                       <h5>Last leave apply</h5>
                       <div class="d-flex">
@@ -376,9 +376,9 @@
                   <div class="cell-wrapper">
                     <div class="d-flex align-items-center justify-content-between">
                       <div class="text-center ps-3">
-                        <p class="mb-0">{{item.FromDate | date}}</p>
+                        <p class="mb-0">{{item.LeaveFromDay | date}}</p>
                         <span>to</span>
-                        <p class="mb-0">{{item.ToDate | date}}</p>
+                        <p class="mb-0">{{item.LeaveToDay | date}}</p>
                       </div>
                       <div class="d-flex align-items-center flex-column pe-4">
                         <i class="fa fa-home fa-lg"></i>
@@ -399,17 +399,17 @@
                 <div class="td align-middle">
                   <div class="cell-wrapper">
                     {{item.RequestedOn | date}}
-                    <p class="mb-0">by {{item.UserName}}</p>
+                    <p class="mb-0">by {{item.EmployeeName}}</p>
                   </div>
                 </div>
                 <div class="td align-middle fe-2">
                   <div class="cell-wrapper">
-                    {{item.Message}}
+                    {{item.Reason}}
                   </div>
                 </div>
                 <div class="td align-middle">
                   <div class="cell-wrapper">
-                    <div [ngSwitch]="item.RequestStatusId">
+                    <div [ngSwitch]="item.LeaveStatus">
                       <div *ngSwitchCase=2>Pending</div>
                       <div *ngSwitchCase=9>Approved</div>
                       <div *ngSwitchCase=8>Submitted</div>
