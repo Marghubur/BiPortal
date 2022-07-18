@@ -9,7 +9,7 @@ import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, UserAttendance, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { UserService } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -29,6 +29,10 @@ export class LeaveComponent implements OnInit {
   leaveDetail: LeaveModal = null;
   isPageReady: boolean = false;
   submitted: boolean = false;
+  fromdateModal: NgbDateStruct;
+  employeeData: Filter = new Filter();
+  isLeaveDetails: boolean = false;
+  leaveData: Array<any> = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -66,51 +70,78 @@ export class LeaveComponent implements OnInit {
         this.employeeId = this.userDetail.UserId;
         this.leaveDetail.EmployeeId = this.employeeId;
         this.getManagerList(this.employeeId);
+        this.LeaveReportChart();
+        this.LoadDoughnutchart();
+        this.MonthlyStatusChart();
+        this.CasualLeaveChart();
+        this.EarnLeaveChart();
+        this.SickLeaveChart();
+        this.UnpaidLeaveChart();
+        this.CompLeaveChart();
+        this.leaveRequestForm();
       } else {
         Toast("Invalid user. Please login again.")
       }
     }
-    this.LeaveReportChart();
-    this.LoadDoughnutchart();
-    this.MonthlyStatusChart();
-    this.CasualLeaveChart();
-    this.EarnLeaveChart();
-    this.SickLeaveChart();
-    this.UnpaidLeaveChart();
-    this.CompLeaveChart();
-    this.leaveRequestForm();
   }
 
   leavePopUp() {
-    $('#commentModal').modal('show');
+    $('#leaveModal').modal('show');
   }
 
   submitLeave() {
     this.submitted = true;
+    this.isLoading = true;
+    let errroCounter = 0;
     if (this.employeeId > 0) {
       let value: LeaveModal = this.leaveForm.value;
       value.UserTypeId = UserType.Employee;
       value.ForYear= this.leaveDetail.LeaveFromDay.getFullYear();
       value.ForMonth= this.leaveDetail.LeaveFromDay.getMonth() + 1;
       value.RequestType = 1;
-
-      if (value) {
+      if (this.leaveForm.get('LeaveFromDay').errors !== null)
+        errroCounter++;
+      if (this.leaveForm.get('LeaveToDay').errors !== null)
+        errroCounter++;
+      if (this.leaveForm.get('Session').errors !== null)
+        errroCounter++;
+      if (this.leaveForm.get('Reason').errors !== null)
+        errroCounter++;
+      if (this.leaveForm.get('AssignTo').errors !== null)
+        errroCounter++;
+      if (this.leaveForm.get('LeaveType').errors !== null)
+        errroCounter++;
+      if (value && errroCounter == 0) {
         this.http.post('Attendance/ApplyLeave', value).then ((response:ResponseModel) => {
           if (response.ResponseBody) {
+            $('#leaveModal').modal('hide');
             Toast("Leave apply successfully.");
             this.submitted = false;
+            this.isLoading = false;
           }
         })
       }
+      this.isLoading = false;
     }
-    console.log(this.leaveForm.value)
   }
 
   onDateSelect(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
-    if (value.getTime() > this.leaveDetail.LeaveFromDay.getTime()) {
+    if (value.getTime() > this.leaveDetail.LeaveFromDay.getTime() && value.getTime() >= new Date().getTime()) {
       this.leaveDetail.LeaveToDay = value;
       this.leaveDays = Math.floor((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate()) ) /(1000 * 60 * 60 * 24));
+      this.leaveForm.get('LeaveToDay').setValue(value);
+    }
+    else
+      ErrorToast("Please select a valid date.")
+  }
+
+  onDateSelection(e: NgbDateStruct) {
+    let value  = new Date(e.year, e.month-1, e.day);
+    if (value.getTime() >= new Date().getTime() && value.getTime() < this.leaveDetail.LeaveToDay.getTime()) {
+      this.leaveDays = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24));
+      this.leaveDetail.LeaveFromDay = value;
+      this.leaveForm.get('LeaveFromDay').setValue(value);
     }
     else
       ErrorToast("Please select a valid date.")
@@ -119,7 +150,7 @@ export class LeaveComponent implements OnInit {
   leaveRequestForm() {
     this.leaveForm = this.fb.group({
       LeaveFromDay: new FormControl(this.leaveDetail.LeaveFromDay, [Validators.required]),
-      LeaveToDay: new FormControl(this.leaveDetail.LeaveFromDay, [Validators.required]),
+      LeaveToDay: new FormControl(this.leaveDetail.LeaveToDay, [Validators.required]),
       Session: new FormControl(this.leaveDetail.Session, [Validators.required]),
       Reason: new FormControl(this.leaveDetail.Reason, [Validators.required]),
       AssignTo: new FormControl(this.leaveDetail.AssignTo, [Validators.required]),
@@ -159,6 +190,27 @@ export class LeaveComponent implements OnInit {
           i++;
         }
         this.isPageReady = true;
+      }
+    })
+  }
+
+  showLeaveDetails() {
+    this.isLeaveDetails = !this.isLeaveDetails;
+    if (this.isLeaveDetails == true)
+      document.getElementById('leave-chart').classList.add('d-none');
+    else
+    document.getElementById('leave-chart').classList.remove('d-none');
+
+    this.http.post(`Attendance/GetAllLeavesByEmpId/${this.employeeId}`, this.employeeData)
+    .then ((respponse:ResponseModel) => {
+      if (respponse.ResponseBody) {
+        let data = respponse.ResponseBody.Leave;
+        for (let i = 0; i < data.length; i++) {
+          data.LeaveDetail = JSON.parse(data[i].LeaveDetail);
+        }
+        this.leaveData = data;
+        console.log(this.leaveData);
+        Toast("Leave records found.")
       }
     })
   }
