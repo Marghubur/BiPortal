@@ -33,6 +33,7 @@ export class LeaveComponent implements OnInit {
   employeeData: Filter = new Filter();
   isLeaveDetails: boolean = false;
   leaveData: Array<any> = [];
+  isLeaveDataFilter: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -196,23 +197,36 @@ export class LeaveComponent implements OnInit {
 
   showLeaveDetails() {
     this.isLeaveDetails = !this.isLeaveDetails;
-    if (this.isLeaveDetails == true)
-      document.getElementById('leave-chart').classList.add('d-none');
-    else
-    document.getElementById('leave-chart').classList.remove('d-none');
+    this.isLeaveDataFilter = false;
+    let elem = document.getElementById('leave-chart')
+    if (this.isLeaveDetails == true) {
+      elem.classList.add('d-none');
+      this.GetFilterResult();
+    }
+    else {
+      if (elem.classList.contains('d-none'))
+        document.getElementById('leave-chart').classList.remove('d-none');
+    }
 
+  }
+
+  PageChange(e: Filter) {
+    if(e != null) {
+      this.employeeData = e;
+      this.GetFilterResult();
+    }
+  }
+
+  GetFilterResult() {
     this.http.post(`Attendance/GetAllLeavesByEmpId/${this.employeeId}`, this.employeeData)
     .then ((respponse:ResponseModel) => {
       if (respponse.ResponseBody) {
         let data = respponse.ResponseBody.Leave;
-        for (let i = 0; i < data.length; i++) {
-          data.LeaveDetail = JSON.parse(data[i].LeaveDetail);
-        }
         this.leaveData = data;
-        console.log(this.leaveData);
-        Toast("Leave records found.")
+        this.employeeData.TotalRecords = data[0].Total;
+        this.isLeaveDataFilter = true;
       }
-    })
+    });
   }
 
   LeaveReportChart(){
