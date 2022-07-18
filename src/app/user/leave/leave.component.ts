@@ -32,7 +32,7 @@ export class LeaveComponent implements OnInit {
   fromdateModal: NgbDateStruct;
   employeeData: Filter = new Filter();
   isLeaveDetails: boolean = false;
-  leaveData: Array<any> = [];
+  leaveData: Array<LeaveDetails> = [];
   isLeaveDataFilter: boolean = false;
 
   constructor(private nav: iNavigation,
@@ -97,8 +97,6 @@ export class LeaveComponent implements OnInit {
     if (this.employeeId > 0) {
       let value: LeaveModal = this.leaveForm.value;
       value.UserTypeId = UserType.Employee;
-      value.ForYear= this.leaveDetail.LeaveFromDay.getFullYear();
-      value.ForMonth= this.leaveDetail.LeaveFromDay.getMonth() + 1;
       value.RequestType = 1;
       if (this.leaveForm.get('LeaveFromDay').errors !== null)
         errroCounter++;
@@ -139,7 +137,7 @@ export class LeaveComponent implements OnInit {
 
   onDateSelection(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
-    if (value.getTime() >= new Date().getTime() && value.getTime() < this.leaveDetail.LeaveToDay.getTime()) {
+    if (value.getTime() >= new Date().getTime()) {
       this.leaveDays = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24));
       this.leaveDetail.LeaveFromDay = value;
       this.leaveForm.get('LeaveFromDay').setValue(value);
@@ -155,10 +153,8 @@ export class LeaveComponent implements OnInit {
       Session: new FormControl(this.leaveDetail.Session, [Validators.required]),
       Reason: new FormControl(this.leaveDetail.Reason, [Validators.required]),
       AssignTo: new FormControl(this.leaveDetail.AssignTo, [Validators.required]),
-      ForYear: new FormControl(this.leaveDetail.ForYear),
       RequestType: new FormControl(this.leaveDetail.RequestType),
       LeaveType: new FormControl(this.leaveDetail.LeaveType, [Validators.required]),
-      ForMonth: new FormControl(this.leaveDetail.ForMonth),
       UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
       EmployeeId: new FormControl(this.leaveDetail.EmployeeId)
     })
@@ -218,11 +214,14 @@ export class LeaveComponent implements OnInit {
   }
 
   GetFilterResult() {
+    this.leaveData = [];
     this.http.post(`Attendance/GetAllLeavesByEmpId/${this.employeeId}`, this.employeeData)
     .then ((respponse:ResponseModel) => {
       if (respponse.ResponseBody) {
         let data = respponse.ResponseBody.Leave;
-        this.leaveData = data;
+        for (let i = 0; i < data.length; i++) {
+          this.leaveData.push(JSON.parse(data[i].LeaveDetail));
+        }
         this.employeeData.TotalRecords = data[0].Total;
         this.isLeaveDataFilter = true;
       }
@@ -533,4 +532,20 @@ class LeaveModal {
   ForMonth: number = 0;
   UserTypeId: number = 0;
   EmployeeId: number = 0;
+}
+
+class LeaveDetails {
+  EmployeeId:number = 0;
+  EmployeeName: string = '';
+  ProjectId: number = 0;
+  AssignTo: number = 0;
+  LeaveType: number = 0;
+  Session: string = '';
+  LeaveFromDay: Date = null;
+  LeaveToDay: Date = null;
+  LeaveStatus: number = 0;
+  RespondedBy: number = 0;
+  UpdatedOn: Date = null;
+  Reason: string = '';
+  RequestedOn: Date = null;
 }
