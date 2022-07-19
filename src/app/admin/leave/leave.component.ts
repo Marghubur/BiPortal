@@ -1,312 +1,158 @@
-import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
+import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { ErrorToast } from 'src/providers/common-service/common.service';
 import { Attendance, Timesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $:any;
+import 'bootstrap'
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-leave',
   templateUrl: './leave.component.html',
   styleUrls: ['./leave.component.scss']
 })
-export class LeaveComponent implements OnInit {
+export class LeaveComponent implements OnInit, AfterViewChecked{
   cachedData: any = null;
+  active = 1;
+  model: NgbDateStruct;
+  LeavePlan: Array<any> = [];
+  isPageReady: boolean = false;
+  menuItem: any = {};
+  groupActiveId: number = 1;
+  isListOfReason: boolean = false;
+  leaveTypeForm: FormGroup;
+  leaveTypeData: LeaveType=new LeaveType();
 
+  constructor(private nav: iNavigation,
+              private fb: FormBuilder) { }
 
-  constructor(private nav: iNavigation) { }
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+    $('[data-bs-toggle="tooltip"]').on('mouseleave', function() {
+      $(this).tooltip('dispose');
+    });
+    $('[data-bs-toggle="tooltip"]').on('click', function() {
+      $(this).tooltip('dispose');
+    });
+  }
 
   ngOnInit(): void {
-    this.cachedData = this.nav.getValue();
-    if(this.cachedData) {
-
-    } else {
-      
-    }
-    this.LeaveReportChart();
-    this.LoadDoughnutchart();
-    this.MonthlyStatusChart();
-    this.CasualLeaveChart();
-    this.EarnLeaveChart();
-    this.SickLeaveChart();
-    this.UnpaidLeaveChart();
-    this.CompLeaveChart();
+    this.initLeaveTypeForm();
   }
 
-  LeaveReportChart(){
-    let elem: any = document.getElementById('weeklyPatternChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [{
-                label: '# of Pattern',
-                barThickness: 20,
-                data: [12, 19, 3, 5, 2, 3, 10],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          responsive: true,
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
-          }
-      }
-    });
+  readLeaveTypeData(){
+    console.log(this.leaveTypeForm.value);
   }
 
-  LoadDoughnutchart() {
-    let elem: any = document.getElementById('consumeLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Leave Types'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(192,146,146)',
-            'rgb(143,178,168)',
-            'rgb(109,209,255)'
-          ],
-          borderWidth: 0,
-          data: [100, 100, 50],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(192,146,146)',
-            'rgb(143,178,168)',
-            'rgb(109,209,255)'
-          ],
-      }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        cutout: 25,
-    }
+
+  showHideReasonList(){
+    this.isListOfReason =!this.isListOfReason;
+  }
+
+
+  leaveTypePopUp() {
+    $('#addLeaveTypeModal').modal('show');
+  }
+
+  initLeaveTypeForm(){
+    this.leaveTypeForm=this.fb.group({
+      name: new FormControl(this.leaveTypeData.name),
+      code: new FormControl(this.leaveTypeData.code),
+      description: new FormControl(this.leaveTypeData.description),
+      isShowLeaveDescription: new FormControl(this.leaveTypeData.isShowLeaveDescription),
+      isPaidLeave: new FormControl(this.leaveTypeData.isPaidLeave),
+      isSickLeave: new FormControl(this.leaveTypeData.isSickLeave),
+      isStatutoryLeave: new FormControl(this.leaveTypeData.isStatutoryLeave),
+      isRestrictTo: new FormControl(this.leaveTypeData.isRestrictTo),
+      gender: new FormControl(this.leaveTypeData.gender),
+      isRestrictToEmployeesHaving: new FormControl(this.leaveTypeData.isRestrictToEmployeesHaving),
+      maritalStatus: new FormControl(this.leaveTypeData.maritalStatus),
+      isListOfReasons: new FormControl(this.leaveTypeData.isListOfReasons),
+      reasonsForLeave: new FormControl(this.leaveTypeData.reasonsForLeave)
+
     })
   }
 
-  CasualLeaveChart() {
-    let elem: any = document.getElementById('casualLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['2 Days Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(219,112,147)',
-            'rgb(123,104,238)'
-          ],
-          borderWidth: 0,
-          data: [2, 98],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(219,112,147)',
-            'rgb(123,104,238)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
-    }
-    })
+  leavePlanPopUp() {
+    $('#addLeavePlanModal').modal('show');
   }
 
-  EarnLeaveChart() {
-    let elem: any = document.getElementById('earnLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['1 Day Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(112,219,183)',
-            'rgb(68,79,117)'
-          ],
-          borderWidth: 0,
-          borderColor: 'rgb(255, 99, 132)',
-          data: [2, 98],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(112,219,183)',
-            'rgb(68,79,117)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
-    }
-    })
+  customLeavePolicy(e: any) {
+    let value = e.target.checked;
+    let elem = document.querySelector('p[name="custom-policy"]')
+    if (value == true)
+      elem.classList.remove('d-none');
+    else
+      elem.classList.add('d-none');
   }
 
-  SickLeaveChart() {
-    let elem: any = document.getElementById('sickLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['0.5 Day Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(32,178,170)',
-            'rgb(0,0,139)'
-          ],
-          borderWidth: 0,
-          data: [30, 70],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(32,178,170)',
-            'rgb(0,0,139)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
-    }
-    })
+  assignLeavePopUp() {
+    $('#assignLeaveTypeModal').modal('show');
   }
 
-  UnpaidLeaveChart() {
-    let elem: any = document.getElementById('unpaidLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['118 Days Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(234,9,141)',
-            'rgb(153,39,197)'
-          ],
-          borderWidth: 0,
-          borderColor: 'rgb(255, 99, 132)',
-          data: [2, 98],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(234,9,141)',
-            'rgb(153,39,197)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
-    }
-    })
+  leaveConfigPopUp() {
+    $('#leaveConfigModal').modal('show');
   }
 
-  CompLeaveChart() {
-    let elem: any = document.getElementById('compLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['118 Days Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(123,166,255)',
-            'rgb(249,203,156)'
-          ],
-          borderWidth: 0,
-          borderColor: 'rgb(255, 99, 132)',
-          data: [1, 1],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(123,166,255)',
-            'rgb(249,203,156)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
-    }
-    })
+  noLeaveQuotaAllow(e: any) {
+    let value = e.target.checked;
+    if (value == false)
+      document.querySelector('input[name="noLeaveQuotaAllow"]').setAttribute('readonly', '');
+    else
+      document.querySelector('input[name="noLeaveQuotaAllow"]').removeAttribute('readonly');
   }
 
-  MonthlyStatusChart(){
-    let elem: any = document.getElementById('MonthlyStatusChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [{
-                label: '# of Pattern',
-                barThickness: 20,
-                data: [12, 19, 3, 5, 2, 3, 10, 12, 19, 3, 5, 2, 3, 10],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          responsive: true,
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
-          }
-      }
-    });
+  LeaveBalanceCalculated(e: any) {
+    let value = e.target.value;
+    if (value) {
+      if (value == 'true')
+        document.querySelector('div[name="LeaveBalanceCalculated"]').classList.add('d-none');
+      else
+        document.querySelector('div[name="LeaveBalanceCalculated"]').classList.remove('d-none');
+    }
+  }
+
+  empJoinMiddle(e: any) {
+    let value = e.target.value;
+    if (value) {
+      if (value == 'true')
+        document.querySelector('div[name="EmpJoinMiddle"]').classList.add('d-none');
+      else
+        document.querySelector('div[name="EmpJoinMiddle"]').classList.remove('d-none');
+    }
+  }
+
+  EmpExitMiddle(e: any) {
+    let value = e.target.value;
+    if (value) {
+      if (value == '2')
+        document.querySelector('div[name="EmpExitMiddle"]').classList.remove('d-none');
+      else
+        document.querySelector('div[name="EmpExitMiddle"]').classList.add('d-none');
+    }
+  }
+
+  AccrualLevelVary(e: any) {
+    let value = e.target.value;
+    if (value) {
+      if (value == 'true')
+        document.querySelector('div[name="EmpExitMiddle"]').classList.add('d-none');
+      else
+        document.querySelector('div[name="AccrualLevelVary"]').classList.remove('d-none');
+    }
+  }
+
+  AccrualStart(e: any) {
+    let value = e.target.value;
+    if (value) {
+      if (value == 'true')
+        document.querySelector('input[name="noLeaveQuotaAllow"]').setAttribute('readonly', '');
+      else
+        document.querySelector('input[name="noLeaveQuotaAllow"]').removeAttribute('readonly');
+    }
   }
 
   activateMe(elemId: string) {
@@ -321,4 +167,57 @@ export class LeaveComponent implements OnInit {
       break;
     }
   }
+
+  changeMdneu(code: string) {
+    this.menuItem = {
+      Config: false,
+      Emp: false,
+      YearEnding: false,
+    };
+
+    switch(code) {
+      case 'Config':
+        this.menuItem.CS = true;
+        break;
+      case 'Emp':
+        this.menuItem.PR = true;
+        break;
+      case 'YearEnding':
+        this.menuItem.LAH = true;
+        break;
+    }
+  }
+
+  changeTab(index: number, item: any) {
+    this.isPageReady = false;
+    if(index >= 0 &&  item.CompanyId > 0) {
+      let result = document.querySelectorAll('.list-group-item > a');
+      let i = 0;
+      while (i < result.length) {
+        result[i].classList.remove('active-tab');
+        i++;
+      }
+      result[index].classList.add('active-tab');
+      this.isPageReady = true;
+    } else {
+      ErrorToast("Please select a company.")
+    }
+  }
+}
+
+class LeaveType {
+  name: String='';
+  code: String='';
+  description: String='';
+  isShowLeaveDescription: boolean=null;
+  isPaidLeave: boolean=null;
+  isSickLeave: boolean=null;
+  isStatutoryLeave: boolean=null;
+  isRestrictTo: boolean=null;
+  gender: String='';
+  isRestrictToEmployeesHaving: boolean=null;
+  maritalStatus: String;
+  isListOfReasons: boolean=null;
+  reasonsForLeave: String='';
+
 }
