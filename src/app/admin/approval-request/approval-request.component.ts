@@ -15,6 +15,7 @@ declare var $: any;
 export class ApprovalRequestComponent implements OnInit {
   active = 1;
   request: Array<ApprovalRequest> = [];
+  leave_request: Array<ApprovalRequest> = [];
   modalHeader: string = '';
   isLoading: boolean = false;
   singleLeave: ApprovalRequest = new ApprovalRequest();
@@ -45,7 +46,8 @@ export class ApprovalRequestComponent implements OnInit {
   loadData() {
     this.http.get(`Request/GetPendingRequests/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
       if(response.ResponseBody) {
-        this.request = response.ResponseBody;
+        this.request = response.ResponseBody.filter(x => x.RequestType == 2);
+        this.leave_request = response.ResponseBody.filter(x => x.RequestType == 1);
       } else {
         ErrorToast("Fail to fetch data. Please contact to admin.");
       }
