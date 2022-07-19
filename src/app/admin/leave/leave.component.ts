@@ -6,6 +6,8 @@ import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ResponseModel } from 'src/auth/jwtService';
 
 @Component({
   selector: 'app-leave',
@@ -25,7 +27,9 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   leaveTypeData: LeaveType=new LeaveType();
 
   constructor(private nav: iNavigation,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder,
+              private http: AjaxService
+              ) { }
 
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -40,7 +44,18 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   ngOnInit(): void {
+    this.loadLeaveData();
     this.initLeaveTypeForm();
+  }
+
+  loadLeaveData() {
+    let request = {
+
+    };
+
+    this.http.get("leave/GetAllLeavePlans").then((result: ResponseModel) => {
+
+    });
   }
 
   readLeaveTypeData(){
