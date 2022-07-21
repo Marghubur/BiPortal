@@ -1,11 +1,13 @@
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { ErrorToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Attendance, Timesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ResponseModel } from 'src/auth/jwtService';
 
 @Component({
   selector: 'app-leave',
@@ -22,10 +24,14 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   groupActiveId: number = 1;
   isListOfReason: boolean = false;
   leaveTypeForm: FormGroup;
-  leaveTypeData: LeaveType=new LeaveType();
+  leaveTypeData: LeaveType = new LeaveType();
+  leaveTypes: Array<any> = [];
+  isUpdate: boolean = false;
 
   constructor(private nav: iNavigation,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder,
+              private http: AjaxService
+              ) { }
 
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -40,39 +46,93 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   ngOnInit(): void {
+    this.loadLeaveData();
     this.initLeaveTypeForm();
   }
 
-  readLeaveTypeData(){
-    console.log(this.leaveTypeForm.value);
+  loadLeaveData() {
+    this.http.get("leave/GetAllLeavePlans").then((result: ResponseModel) => {
+      if(result.ResponseBody) {
+        this.leaveTypes = result.ResponseBody;
+        Toast("Leave plan loaded successfully.");
+      } else {
+        ErrorToast("Fail to load leave plan.");
+        this.leaveTypes = [];
+      }
+    });
   }
 
+  saveLeaveType(){
+    this.leaveTypeForm.get("Reasons").setValue('[]');
+    let value = this.leaveTypeForm.value;
+
+
+    if(value) {
+      let Url: string = "";
+      if(this.isUpdate) {
+        Url = `leave/UpdateLeavePlans/${this.leaveTypeData.LeavePlanId}`;
+        this.http.put(Url, value).then((response: ResponseModel) => {
+          this.manageResponseOnUpdate(response);
+        });
+      } else {
+        Url = "leave/AddLeavePlans";
+        this.http.post(Url, value).then((response: ResponseModel) => {
+          this.manageResponseOnUpdate(response);
+        });
+      }
+    }
+  }
+
+  manageResponseOnUpdate(response: ResponseModel) {
+    if (response.ResponseBody){
+      if(this.isUpdate)
+        Toast("Record updated successfully");
+      else
+        Toast("Record inserted successfully");
+
+      $('#addLeaveTypeModal').modal('hide');
+    }
+  }
+
+  leaveType(e: any) {
+
+  }
 
   showHideReasonList(){
-    this.isListOfReason =!this.isListOfReason;
+    this.isListOfReason = !this.isListOfReason;
   }
-
 
   leaveTypePopUp() {
     $('#addLeaveTypeModal').modal('show');
   }
 
-  initLeaveTypeForm(){
-    this.leaveTypeForm=this.fb.group({
-      name: new FormControl(this.leaveTypeData.name),
-      code: new FormControl(this.leaveTypeData.code),
-      description: new FormControl(this.leaveTypeData.description),
-      isShowLeaveDescription: new FormControl(this.leaveTypeData.isShowLeaveDescription),
-      isPaidLeave: new FormControl(this.leaveTypeData.isPaidLeave),
-      isSickLeave: new FormControl(this.leaveTypeData.isSickLeave),
-      isStatutoryLeave: new FormControl(this.leaveTypeData.isStatutoryLeave),
-      isRestrictTo: new FormControl(this.leaveTypeData.isRestrictTo),
-      gender: new FormControl(this.leaveTypeData.gender),
-      isRestrictToEmployeesHaving: new FormControl(this.leaveTypeData.isRestrictToEmployeesHaving),
-      maritalStatus: new FormControl(this.leaveTypeData.maritalStatus),
-      isListOfReasons: new FormControl(this.leaveTypeData.isListOfReasons),
-      reasonsForLeave: new FormControl(this.leaveTypeData.reasonsForLeave)
+  updateRecord(item: LeaveType) {
+    this.leaveTypeData = item;
+    this.initLeaveTypeForm();
+    this.isUpdate = true;
+    this.leaveTypePopUp();
+  }
 
+  initLeaveTypeForm(){
+    let reasons: Array<string> = [];
+    if(this.leaveTypeData.Reasons !== null && this.leaveTypeData.Reasons != "") {
+      this.leaveTypeData.Reasons = JSON.parse(this.leaveTypeData.Reasons);
+    }
+
+    this.leaveTypeForm = this.fb.group({
+      LeavePlanCode: new FormControl(this.leaveTypeData.LeavePlanCode),
+      PlanName: new FormControl(this.leaveTypeData.PlanName),
+      LeavePlanId: new FormControl(this.leaveTypeData.LeavePlanId),
+      PlanDescription: new FormControl(this.leaveTypeData.PlanDescription),
+      ShowDescription: new FormControl(this.leaveTypeData.ShowDescription),
+      IsPaidLeave: new FormControl(this.leaveTypeData.IsPaidLeave),
+      IsSickLeave: new FormControl(this.leaveTypeData.IsSickLeave),
+      IsStatutoryLeave: new FormControl(this.leaveTypeData.IsStatutoryLeave),
+      IsRestrictOnGender: new FormControl(this.leaveTypeData.IsRestrictOnGender),
+      IsMale: new FormControl(this.leaveTypeData.IsMale),
+      IsRestrictOnMaritalStatus: new FormControl(this.leaveTypeData.IsRestrictOnMaritalStatus),
+      IsMarried: new FormControl(this.leaveTypeData.IsMarried),
+      Reasons: new FormControl(this.leaveTypeData.Reasons)
     })
   }
 
@@ -206,18 +266,19 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 }
 
 class LeaveType {
-  name: String='';
-  code: String='';
-  description: String='';
-  isShowLeaveDescription: boolean=null;
-  isPaidLeave: boolean=null;
-  isSickLeave: boolean=null;
-  isStatutoryLeave: boolean=null;
-  isRestrictTo: boolean=null;
-  gender: String='';
-  isRestrictToEmployeesHaving: boolean=null;
-  maritalStatus: String;
-  isListOfReasons: boolean=null;
-  reasonsForLeave: String='';
-
+  LeavePlanId: number = 0;
+  LeaveGroupId: number;
+  LeavePlanCode: string = null;
+  PlanName: string = '';
+  PlanDescription: string = '';
+  MaxLeaveLimit: number;
+  ShowDescription: boolean = false;
+  IsPaidLeave: boolean = false;
+  IsSickLeave: boolean = false;
+  IsStatutoryLeave: boolean = false;
+  IsRestrictOnGender: boolean = false;
+  IsMale: boolean = null;
+  IsRestrictOnMaritalStatus: boolean = false;
+  IsMarried: boolean = null;
+  Reasons: any = null;
 }
