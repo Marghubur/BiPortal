@@ -32,10 +32,12 @@
             <div class="row my-3">
               <div class="col-md-8">
                 <h5 class="fs-4">Leave Plans</h5>
-                <p class="mb-0">You can configure leave plans for various groups of employees. You can assign leave plans to employees later.</p>
+                <p class="mb-0">You can configure leave plans for various groups of employees. You can assign leave
+                  plans to employees later.</p>
               </div>
               <div class="col-md-4">
-                <button class="btn btn-primary-c float-end" (click)="leavePlanPopUp()"><i class="fa fa-plus px-2"></i>Add Leave Plan</button>
+                <button class="btn btn-primary-c float-end" (click)="leavePlanPopUp()"><i
+                    class="fa fa-plus px-2"></i>Add Leave Plan</button>
               </div>
             </div>
             <div class="row">
@@ -62,8 +64,7 @@
                     </ng-container>
                     <ng-container *ngIf="LeavePlan.length > 0">
                       <ng-container *ngFor="let item of LeavePlan; let i =index">
-                        <li
-                          class="list-group-item border-0 p-0 my-2 d-flex justify-content-between align-items-start">
+                        <li class="list-group-item border-0 p-0 my-2 d-flex justify-content-between align-items-start">
                           <a href="javascript:void(0)" (click)="changeTab(i, item)" [ngClass]="{'active-tab': i == 0}"
                             class="d-block w-100 px-3 text-decoration-none text-dark">
                             <div class="d-flex flex-row w-100 justify-content-between">
@@ -87,12 +88,14 @@
                 <div class="x_panel">
                   <div class="x_header">
                     <div class="d-flex justify-content-between py-2">
-                      <h6 class="fs-4">Standar Leave Plan</h6>
+                      <h6 class="fs-4">Standard Leave Plan</h6>
                       <div class="col-md-1 d-flex justify-content-between align-items-center">
                         <a href="javascript:void(0)"><i class="fa fa-pencil fa-lg text-secondary"></i></a>
                         <a href="javascript:void(0)"><i class="fa fa-trash fa-lg text-secondary"></i></a>
                         <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
-                          <a href="javascript:void(0)" class="text-decoration-none" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()"><i class="fa fa-ellipsis-v fa-lg text-secondary"></i></a>
+                          <a href="javascript:void(0)" class="text-decoration-none" id="dropdownManual"
+                            ngbDropdownAnchor (focus)="myDrop.open()"><i
+                              class="fa fa-ellipsis-v fa-lg text-secondary"></i></a>
                           <div ngbDropdownMenu aria-labelledby="dropdownManual">
                             <button (click)="assignLeavePopUp()" ngbDropdownItem>Assign Leave Types</button>
                             <button ngbDropdownItem>Set as Default</button>
@@ -115,7 +118,7 @@
                               <h4>No Leave Types are assigned to this leave plan.</h4>
                             </div>
                           </ng-container> -->
-                          <ng-container >
+                          <ng-container>
                             <div class="t-table t-list t-border col-md-12">
                               <div class="hide-bar"></div>
                               <div class="t-head">
@@ -148,34 +151,44 @@
                                 </div>
                               </div>
                               <div class="t-body custom-height">
-                                <div class="tr align-items-center py-2 ps-2">
-                                  <div class="td">
-                                    <div class="cell-wrapper">
-                                      Casual
+                                <ng-container *ngIf="leaveTypes.length > 0">
+                                  <div *ngFor="let item of leaveTypes" class="tr align-items-center py-2 ps-2">
+                                    <div class="td">
+                                      <div class="cell-wrapper">
+                                        {{item.PlanName}}
+                                      </div>
+                                    </div>
+                                    <div class="td">
+                                      <div class="cell-wrapper">
+                                        {{item.MaxLeaveLimit}}
+                                      </div>
+                                    </div>
+                                    <div class="td">
+                                      <div class="cell-wrapper">
+                                        None
+                                      </div>
+                                    </div>
+                                    <div class="td">
+                                      <div class="cell-wrapper">
+                                        All leaves Expire
+                                      </div>
+                                    </div>
+                                    <div class="td">
+                                      <div class="cell-wrapper">
+                                        <button class="btn btn-sm btn-outline-primary px-3"
+                                          (click)="leaveConfigPopUp()">Setup</button>
+                                        <a href="javascript:void(0)" class="text-decoration-none text-danger"><i
+                                            class="fa fa-trash fa-lg ms-3"></i></a>
+                                      </div>
                                     </div>
                                   </div>
-                                  <div class="td">
-                                    <div class="cell-wrapper">
-                                      0
-                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="leaveTypes.length == 0">
+                                  <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
+                                    No leave type were found. Please add one by using
+                                    <b class="text-primary-c">Add Leave Type</b> button.
                                   </div>
-                                  <div class="td">
-                                    <div class="cell-wrapper">
-                                      None
-                                    </div>
-                                  </div>
-                                  <div class="td">
-                                    <div class="cell-wrapper">
-                                      All leaves Expire
-                                    </div>
-                                  </div>
-                                  <div class="td">
-                                    <div class="cell-wrapper">
-                                      <button class="btn btn-sm btn-outline-primary px-3" (click)="leaveConfigPopUp()">Setup</button>
-                                      <a href="javascript:void(0)" class="text-decoration-none text-danger"><i class="fa fa-trash fa-lg ms-3"></i></a>
-                                    </div>
-                                  </div>
-                                </div>
+                                </ng-container>
                               </div>
                             </div>
                           </ng-container>
@@ -188,8 +201,8 @@
                         </ng-template>
                       </li>
                       <li [ngbNavItem]="3">
-                        <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('YearEnding')">Year Ending Process <i
-                            class="fa fa-calendar px-2"></i></a>
+                        <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('YearEnding')">Year Ending Process
+                          <i class="fa fa-calendar px-2"></i></a>
                         <ng-template ngbNavContent>
                         </ng-template>
                       </li>
@@ -251,29 +264,39 @@
               </div>
 
               <div class="t-body custom-height">
-                <div class="tr align-items-center py-2 ps-2">
-                  <div class="td">
-                    <div class="cell-wrapper">
-                      Casual
+                <ng-container *ngIf="leaveTypes.length > 0">
+                  <div *ngFor="let item of leaveTypes" class="tr align-items-center py-2 ps-2">
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        {{item.PlanName}}
+                      </div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        {{item.LeavePlanCode}}
+                      </div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        {{item.PlanDescription}}
+                      </div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        <a href="javascript:void(0)" (click)="updateRecord(item)"
+                          class="text-decoration-none text-secondary">
+                          <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  <div class="td">
-                    <div class="cell-wrapper">
-                      0
-                    </div>
+                </ng-container>
+                <ng-container *ngIf="leaveTypes.length == 0">
+                  <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
+                    No leave type were found. Please add one by using
+                    <b class="text-primary-c">Add Leave Type</b> button.
                   </div>
-                  <div class="td">
-                    <div class="cell-wrapper">
-                      None
-                    </div>
-                  </div>
-                  <div class="td">
-                    <div class="cell-wrapper">
-                      <a href="javascript:void(0)" class="text-decoration-none text-secondary"><i class="fa fa-pencil"
-                          aria-hidden="true"></i></a>
-                    </div>
-                  </div>
-                </div>
+                </ng-container>
               </div>
             </div>
           </ng-template>
@@ -285,7 +308,8 @@
 </div>
 
 <!-- Add Leave Plan Modal -->
-<div class="modal fade" id="addLeavePlanModal" tabindex="-1" aria-labelledby="addLeavePlanModalLabel" aria-hidden="true">
+<div class="modal fade" id="addLeavePlanModal" tabindex="-1" aria-labelledby="addLeavePlanModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
@@ -347,7 +371,8 @@
 <!-- End -->
 
 <!-- Assign Leave Type Modal -->
-<div class="modal fade" id="assignLeaveTypeModal" tabindex="-1" aria-labelledby="assignLeaveTypeModalLabel" aria-hidden="true">
+<div class="modal fade" id="assignLeaveTypeModal" tabindex="-1" aria-labelledby="assignLeaveTypeModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
@@ -868,7 +893,10 @@
 
         <ng-container *ngIf="configPageNo == 3">
           <div class="my-4">
-            <h6 class="fw-bold text-dark">Allow applying for half-day? <i class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="If you choose Yes, leave request can be for half days. Either first half or second half of an employee shift."></i></h6>
+            <h6 class="fw-bold text-dark">Allow applying for half-day? <i
+                class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip" data-bs-placement="right"
+                title="If you choose Yes, leave request can be for half days. Either first half or second half of an employee shift."></i>
+            </h6>
             <div class="form-check">
               <input class="form-check-input" value="true" type="radio" name="IsApplyHalfDay">
               <label class="form-check-label">
@@ -902,7 +930,8 @@
             <div class="card bg-light p-3">
               <div class="row align-items-center">
                 <div class="col-md-10">
-                  <h6 class="fw-bold text-dark">Define the leave credit below (for the exit month) based on employee's exit date</h6>
+                  <h6 class="fw-bold text-dark">Define the leave credit below (for the exit month) based on employee's
+                    exit date</h6>
                   <div class="d-flex align-items-center">
                     <label class="form-label me-3">If the duration is more and includes</label>
                     <div class="col-md-1">
@@ -946,7 +975,8 @@
             </div>
           </div>
           <div class="my-4">
-            <h6 class="fw-bold text-dark">Check restrictions that are applicable for back dated leave application by employes?</h6>
+            <h6 class="fw-bold text-dark">Check restrictions that are applicable for back dated leave application by
+              employes?</h6>
             <div class="form-check d-flex align-items-center">
               <input class="form-check-input" type="checkbox">
               <div class="d-flex align-items-center ms-2">
@@ -992,7 +1022,8 @@
             </div>
           </div>
           <div class="my-4">
-            <h6 class="fw-bold text-dark">Do you require a document proof or attachment for extended days of this leave?</h6>
+            <h6 class="fw-bold text-dark">Do you require a document proof or attachment for extended days of this leave?
+            </h6>
             <div class="form-check d-flex align-items-center">
               <input class="form-check-input" type="checkbox">
               <div class="d-flex align-items-center ms-2">
@@ -1059,7 +1090,8 @@
             </div>
           </div>
           <div class="my-4">
-            <h6 class="fw-bold text-dark">Is there a limit on the number of consecutive days this leave can be taken?</h6>
+            <h6 class="fw-bold text-dark">Is there a limit on the number of consecutive days this leave can be taken?
+            </h6>
             <div class="form-check">
               <input class="form-check-input" value="false" type="radio" name="IsLimitforConsecutiveDay">
               <label class="form-check-label">
@@ -1082,7 +1114,8 @@
             </div>
           </div>
           <div class="my-4">
-            <h6 class="fw-bold text-dark">Can an employee on the maximum number of leave balance that can be availed in a month?</h6>
+            <h6 class="fw-bold text-dark">Can an employee on the maximum number of leave balance that can be availed in
+              a month?</h6>
             <div class="form-check">
               <input class="form-check-input" value="false" type="radio" name="IsMaxLeaveAvailed">
               <label class="form-check-label">
@@ -1105,7 +1138,10 @@
             </div>
           </div>
           <div class="my-4">
-            <h6 class="fw-bold text-dark">Can Manager override leave restriction and apply leave? <i class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Do you want manager (Reporting Manager / HR Manager) yto apply leave for an employee incase there is no leave balance or employee is unable to apply leave because of any other leave restriction."></i></h6>
+            <h6 class="fw-bold text-dark">Can Manager override leave restriction and apply leave? <i
+                class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip" data-bs-placement="right"
+                title="Do you want manager (Reporting Manager / HR Manager) yto apply leave for an employee incase there is no leave balance or employee is unable to apply leave because of any other leave restriction."></i>
+            </h6>
             <div class="form-check">
               <input class="form-check-input" value="false" type="radio" name="IsMaxLeaveAvailed">
               <label class="form-check-label">
@@ -1120,7 +1156,8 @@
             </div>
           </div>
           <div class="my-4">
-            <h6 class="fw-bold text-dark">Check all restrictions you'd like to apply on the number of leave instance (requests)?</h6>
+            <h6 class="fw-bold text-dark">Check all restrictions you'd like to apply on the number of leave instance
+              (requests)?</h6>
             <div class="form-check d-flex align-items-center">
               <input class="form-check-input" type="checkbox">
               <div class="d-flex align-items-center ms-2">
@@ -1296,9 +1333,10 @@
                 </label>
               </div>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox" >
+                <input class="form-check-input" type="checkbox">
                 <label class="form-check-label ms-2">
-                  Do not consider holidays accompanying Half day leave as leave (ignores the above rule if leave taken is half day. This rule doesn't apply if leave is taken on half day week off).
+                  Do not consider holidays accompanying Half day leave as leave (ignores the above rule if leave taken
+                  is half day. This rule doesn't apply if leave is taken on half day week off).
                 </label>
               </div>
             </div>
@@ -1362,9 +1400,10 @@
                 </label>
               </div>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox" >
+                <input class="form-check-input" type="checkbox">
                 <label class="form-check-label ms-2">
-                  Do not consider week off accompanying Half day leave as leave (ignores the above rule if leave taken is half day. This rule doesn't apply if leave is taken on half day week off).
+                  Do not consider week off accompanying Half day leave as leave (ignores the above rule if leave taken
+                  is half day. This rule doesn't apply if leave is taken on half day week off).
                 </label>
               </div>
             </div>
@@ -1537,14 +1576,16 @@
               </div>
             </div>
             <div class="form-check d-flex align-items-center">
-              <input class="form-check-input" type="checkbox" >
+              <input class="form-check-input" type="checkbox">
               <label class="form-check-label ms-2">
-                Any leave that has an expiry date, either through previous carry forward, or expiray settings undet step2 (leave accrual) remains unchanged.
+                Any leave that has an expiry date, either through previous carry forward, or expiray settings undet
+                step2 (leave accrual) remains unchanged.
               </label>
             </div>
           </div>
           <div class="my-4">
-            <h6 class="fw-bold text-dark">What happens to the negative leave balances that may have accumulated for employees who have taken leave beyond their anuual quota?</h6>
+            <h6 class="fw-bold text-dark">What happens to the negative leave balances that may have accumulated for
+              employees who have taken leave beyond their anuual quota?</h6>
             <div class="form-check">
               <input class="form-check-input" value="1" type="radio" name="IsNegativeLeaveQuota">
               <label class="form-check-label">
@@ -1590,95 +1631,98 @@
           <div class="col-md-12 row">
             <div class="col-md-8">
               <label for="" class="form-label">Name</label>
-              <input type="text" placeholder="Leave Type Name" class="form-control" formControlName="name">
+              <input type="text" placeholder="Leave Type Name" class="form-control"
+                oninput="this.value = this.value.toUpperCase()" formControlName="PlanName">
             </div>
             <div class="col-md-4">
               <label for="" class="form-label">Code</label>
-              <input type="text" placeholder="Leave Code" class="form-control" formControlName="code">
+              <input type="text" placeholder="Leave Code" class="form-control"
+                oninput="this.value = this.value.toUpperCase()" formControlName="LeavePlanCode">
             </div>
           </div>
           <div class="mt-3">
             <label for="" class="form-label">Description</label>
-            <textarea placeholder="Enter your text" class="form-control" cols="30" rows="3" formControlName="description"></textarea>
+            <textarea placeholder="Enter your text" class="form-control" cols="30" rows="3"
+              oninput="this.value = this.value.toUpperCase()" formControlName="PlanDescription"></textarea>
           </div>
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="isShowLeaveDescription" >
-            <label class="form-check-label" for="flexCheckDefault">
+            <input class="form-check-input" type="checkbox" formControlName="ShowDescription">
+            <label class="form-check-label">
               Show leave description while applying leave
             </label>
           </div>
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="isPaidLeave" >
-            <label class="form-check-label" for="flexCheckDefault">
+            <input class="form-check-input" type="checkbox" formControlName="IsPaidLeave" (click)="leaveType($event)">
+            <label class="form-check-label">
               This is a paid leave
             </label>
           </div>
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="isSickLeave" >
-            <label class="form-check-label" for="flexCheckDefault">
+            <input class="form-check-input" type="checkbox" formControlName="IsSickLeave" (click)="leaveType($event)">
+            <label class="form-check-label">
               This is a sick leave
             </label>
           </div>
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="isStatutoryLeave" >
-            <label class="form-check-label" for="flexCheckDefault">
+            <input class="form-check-input" type="checkbox" formControlName="IsStatutoryLeave"
+              (click)="leaveType($event)">
+            <label class="form-check-label">
               This is a statutory leave
             </label>
           </div>
-
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="isRestrictTo" >
+            <input class="form-check-input" type="checkbox" formControlName="IsRestrictOnGender">
             <div class="d-flex align-items-center">
-              <label class="form-check-label" for="flexCheckDefault">
+              <label class="form-check-label">
                 Restrict to
               </label>
               <div class="col-md-2 ms-3">
-                <select class="form-select form-select-sm" aria-label="Default select example" formControlName="gender" >
-                  <option selected>Select</option>
-                  <option value="0">Male</option>
-                  <option value="1">Female</option>
+                <select class="form-select form-select-sm" aria-label="Default select example" formControlName="IsMale">
+                  <option value=null>Select</option>
+                  <option value="false">Male</option>
+                  <option value="true">Female</option>
                 </select>
               </div>
-              <label class="form-check-label ms-3" for="flexCheckDefault">
+              <label class="form-check-label ms-3">
                 Gender
               </label>
             </div>
           </div>
 
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="isRestrictToEmployeesHaving" >
+            <input class="form-check-input" type="checkbox" formControlName="IsRestrictOnMaritalStatus">
             <div class="d-flex">
-              <label class="form-check-label" for="flexCheckDefault">
+              <label class="form-check-label">
                 Restrict to employees having
               </label>
               <div class="col-md-2 ms-3">
-                <select class="form-select form-select-sm" aria-label="Default select example" formControlName="maritalStatus" >
-                  <option selected>Select</option>
-                  <option value="1">Married</option>
-                  <option value="2">Single</option>
+                <select class="form-select form-select-sm" aria-label="Default select example"
+                  formControlName="IsMarried">
+                  <option value=null>Select</option>
+                  <option value="false">Married</option>
+                  <option value="true">Single</option>
                 </select>
               </div>
-              <label class="form-check-label ms-3" for="flexCheckDefault">
+              <label class="form-check-label ms-3">
                 Marital status
               </label>
             </div>
           </div>
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="isListOfReasons"
-              (click)="showHideReasonList()">
-              <label class="form-check-label" for="flexCheckDefault">
+            <input class="form-check-input" type="checkbox" (click)="showHideReasonList()">
+            <label class="form-check-label">
               List of reasons
             </label>
           </div>
           <div class="col-md-12 d-flex align-items-center mt-3" *ngIf="isListOfReason">
-            <input type="text" name="" id="" class="form-control" placeholder="Reasons for leave" formControlName="reasonsForLeave">
+            <input type="text" class="form-control" placeholder="Reasons for leave">
             <i class="fa fa-plus-circle fs-4 ms-2" aria-hidden="true"></i>
           </div>
         </form>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary-c" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary-c" (click)="readLeaveTypeData()" >Save</button>
+        <button type="button" class="btn btn-primary-c" (click)="saveLeaveType()">Save</button>
       </div>
     </div>
   </div>
