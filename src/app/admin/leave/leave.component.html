@@ -1003,8 +1003,8 @@
               <h6 class="fw-bold text-dark">Check restrictions that are applicable for back dated leave application by
                 employes?</h6>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox">
-                <div class="d-flex align-items-center ms-2" formControlName="IsEmpApplyPastDay">
+                <input class="form-check-input" type="checkbox" formControlName="IsEmpApplyPastDay">
+                <div class="d-flex align-items-center ms-2" >
                   <label class="form-check-label">
                     Employee can apply leave for past days, but no beyond than
                   </label>
@@ -1074,14 +1074,14 @@
         </ng-container>
 
         <ng-container *ngIf="configPageNo == 4">
-          <form>
+          <form [formGroup]="leaveRestrictionForm">
             <div class="my-4">
               <h6 class="fw-bold text-dark">A new joinee employee can apply for leave?</h6>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="radio" name="IsNewJoinee">
+                <input class="form-check-input" type="radio" name="IsNewJoinee" formControlName="IsNewJoinee">
                 <div class="d-flex align-items-center ms-2">
                   <div class="col-md-2 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AfterProbationEnd">
                   </div>
                   <label for="" class="form-label">
                     days after Probation ends.
@@ -1089,10 +1089,10 @@
                 </div>
               </div>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="radio" name="IsNewJoinee">
+                <input class="form-check-input" type="radio" name="IsNewJoinee" formControlName="IsNewJoinee">
                 <div class="d-flex align-items-center ms-2">
                   <div class="col-md-2 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" >
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AfterJoining">
                   </div>
                   <label for="" class="form-label pe-3">
                     days after joining.
@@ -1101,13 +1101,13 @@
               </div>
               <div class="my-4">
                 <div class="form-check d-flex align-items-center">
-                  <input class="form-check-input" type="radio" value="true" name="IsLimitforConsecutiveDay">
+                  <input class="form-check-input" type="radio" value="true" name="IsLeaveDurationProbation" formControlName="IsLeaveDurationProbation">
                   <div class="d-flex align-items-center ms-2">
                     <label class="form-check-label">
                       Do not allow employees to avail/apply for more than
                     </label>
                     <div class="col-md-1 mx-2">
-                      <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                      <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="LeaveDurationProbation">
                     </div>
                     <label for="" class="form-label">
                       days of leave during probation (irrespective of accrual/credit).
@@ -1120,19 +1120,19 @@
               <h6 class="fw-bold text-dark">Is there a limit on the number of consecutive days this leave can be taken?
               </h6>
               <div class="form-check">
-                <input class="form-check-input" value="false" type="radio" name="IsLimitforConsecutiveDay">
+                <input class="form-check-input" value="false" type="radio" name="IsLimitforConsecutiveDay" formControlName="IsLimitforConsecutiveDay">
                 <label class="form-check-label">
                   No limit. All the available balance can be used at a time.
                 </label>
               </div>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="radio" value="true" name="IsLimitforConsecutiveDay">
+                <input class="form-check-input" type="radio" value="true" name="IsLimitforConsecutiveDay" formControlName="IsLimitforConsecutiveDay">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Yes, Limit to a maximum of
                   </label>
                   <div class="col-md-2 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="ConsecutiveLeaveDay">
                   </div>
                   <label for="" class="form-label">
                     consecutive days of leave (excluding weekends & holidays).
@@ -1144,19 +1144,19 @@
               <h6 class="fw-bold text-dark">Can an employee on the maximum number of leave balance that can be availed in
                 a month?</h6>
               <div class="form-check">
-                <input class="form-check-input" value="false" type="radio" name="IsMaxLeaveAvailed">
+                <input class="form-check-input" value="false" type="radio" name="IsMaxLeaveAvailed" formControlName="IsMaxLeaveAvailed">
                 <label class="form-check-label">
                   No. Employee can avail all available leave balance in a month.
                 </label>
               </div>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="radio" value="true" name="IsMaxLeaveAvailed">
+                <input class="form-check-input" type="radio" value="true" name="IsMaxLeaveAvailed" formControlName="IsMaxLeaveAvailed">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Yes, Employee in notice period can consume available leave given that the notice period extends by
                   </label>
                   <div class="col-md-1 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="ExtendsActualLeaveDays">
                   </div>
                   <label for="" class="form-label">
                     times the actual leave days.
@@ -1170,13 +1170,13 @@
                   title="Do you want manager (Reporting Manager / HR Manager) yto apply leave for an employee incase there is no leave balance or employee is unable to apply leave because of any other leave restriction."></i>
               </h6>
               <div class="form-check">
-                <input class="form-check-input" value="false" type="radio" name="IsMaxLeaveAvailed">
+                <input class="form-check-input" value="false" type="radio" name="IsManagerOverrideLeave" formControlName="IsManagerOverrideLeave">
                 <label class="form-check-label">
                   No. Manager cannot apply by overriding restrictions.
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" value="true" type="radio" name="IsMaxLeaveAvailed">
+                <input class="form-check-input" value="true" type="radio" name="IsManagerOverrideLeave" formControlName="IsManagerOverrideLeave">
                 <label class="form-check-label">
                   Yes, Manager can apply by overriding restrictions
                 </label>
@@ -1186,13 +1186,13 @@
               <h6 class="fw-bold text-dark">Check all restrictions you'd like to apply on the number of leave instance
                 (requests)?</h6>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox">
+                <input class="form-check-input" type="checkbox" formControlName="IsEnforceMinGap">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Enforce a minimum gap of
                   </label>
                   <div class="col-md-2 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="EnforecMinGapDays">
                   </div>
                   <label for="" class="form-label">
                     calendar days between two leave requests.
@@ -1200,13 +1200,13 @@
                 </div>
               </div>
               <div class="form-check d-flex align-items-center mt-2">
-                <input class="form-check-input" type="checkbox">
+                <input class="form-check-input" type="checkbox" formControlName="IsAllowinLeaveCalendarYear">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Do not allow more than
                   </label>
                   <div class="col-md-2 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AllowDaysinLeaveCalendarYear">
                   </div>
                   <label for="" class="form-label">
                     instance (leave request) in a leave calendar year.
@@ -1214,13 +1214,13 @@
                 </div>
               </div>
               <div class="form-check d-flex align-items-center mt-2">
-                <input class="form-check-input" type="checkbox">
+                <input class="form-check-input" type="checkbox" formControlName="IsAllowinLeaveCalendarMonth">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Do not allow more than
                   </label>
                   <div class="col-md-2 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AllowDaysinLeaveCalendarMonth">
                   </div>
                   <label for="" class="form-label">
                     instance (leave request) in a calendar month.
@@ -1228,13 +1228,13 @@
                 </div>
               </div>
               <div class="form-check d-flex align-items-center mt-2">
-                <input class="form-check-input" type="checkbox">
+                <input class="form-check-input" type="checkbox" formControlName="IsAllowinLeaveEntireTenure">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Do not allow more than
                   </label>
                   <div class="col-md-2 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AllowDaysinLeaveEntireTenure">
                   </div>
                   <label for="" class="form-label">
                     instance (leave request) in a entire tenure.
@@ -1242,30 +1242,30 @@
                 </div>
               </div>
               <div class="form-check d-flex align-items-center mt-2">
-                <input class="form-check-input" type="checkbox">
+                <input class="form-check-input" type="checkbox" formControlName="IsAllowLeavesInSIngleInstance">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Do not allow availing less than
                   </label>
                   <div class="col-md-1 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AllowDaysLeavesInSIngleInstance">
                   </div>
                   <label for="" class="form-label">
                     days to leave in a single instance when total available leave balance is greater than or equal to
                   </label>
                   <div class="col-md-1 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="LeaveBalanceQualOrGreater">
                   </div>
                 </div>
               </div>
               <div class="form-check d-flex align-items-center mt-2">
-                <input class="form-check-input" type="checkbox">
+                <input class="form-check-input" type="checkbox" formControlName="IsRestrictEmpForLeave">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Restrict employees from applying leave from
                   </label>
                   <div class="col-md-2 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="RestrictLeaveInEveryMonth">
                   </div>
                   <label for="" class="form-label">
                     of every month.
@@ -1276,23 +1276,23 @@
             <div class="my-4">
               <h6 class="fw-bold text-dark">Check all restrictions you'd like to apply to enforce in relation with other leave types?</h6>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox">
+                <input class="form-check-input" type="checkbox" formControlName="IsLeaveTakenWith">
                 <label class="form-check-label ps-2">
-                  This leave cannot be taken alomg with
+                  This leave cannot be taken along with
                 </label>
                 <div class="col-md-1 mx-2">
-                  <select class="form-select form-select-sm">
+                  <select class="form-select form-select-sm" formControlName="LeaveTakenWith">
                     <option value="">Select</option>
                   </select>
                 </div>
               </div>
               <div class="form-check d-flex align-items-center mt-2">
-                <input class="form-check-input" type="checkbox">
+                <input class="form-check-input" type="checkbox" formControlName="IsLeaveAvailBalanceIn">
                 <label class="form-check-label ps-2">
-                  This leave is not available when ther is balance in
+                  This leave is not available when there is balance in
                 </label>
                 <div class="col-md-1 mx-2">
-                  <select class="form-select form-select-sm">
+                  <select class="form-select form-select-sm" formControlName="LeaveAvailBalanceIn">
                     <option value="">Select</option>
                   </select>
                 </div>
@@ -1302,337 +1302,343 @@
         </ng-container>
 
         <ng-container *ngIf="configPageNo == 5">
-          <div class="my-4">
-            <h6 class="fw-bold text-dark">If a holiday is adjoining a leave, is it considered a leave?</h6>
-            <div class="form-check">
-              <input class="form-check-input" value="false" type="radio" name="IsHolidayAdjoining">
-              <label class="form-check-label">
-                No, Holidays have nothing to do with leave.
-              </label>
-            </div>
-            <div class="form-check d-flex align-items-center">
-              <input class="form-check-input" value="true" type="radio" name="IsHolidayAdjoining">
-              <div class="d-flex align-items-center ms-2">
-                <label class="form-check-label">
-                  Yes, Holidays accompanying leave is treated as leave when total number of leave includes
-                </label>
-                <div class="col-md-1 mx-2">
-                  <input type="text" OnlyNumber="3" class="form-control form-control-sm">
-                </div>
-                <div class="col-md-2 mx-2">
-                  <select class="form-select form-select-sm">
-                    <option value="">Calender Days</option>
-                  </select>
-                </div>
-                <label for="" class="form-label">
-                  and
-                </label>
-              </div>
-            </div>
-            <div class="my-4 ms-3">
+          <form [formGroup]="holidayWeekendOffForm">
+            <div class="my-4">
+              <h6 class="fw-bold text-dark">If a holiday is adjoining a leave, is it considered a leave?</h6>
               <div class="form-check">
-                <input class="form-check-input" value="1" type="radio" name="IsHolidayAccomLeave">
+                <input class="form-check-input" value="false" type="radio" name="IsHolidayAdjoining" formControlName="IsHolidayAdjoining">
                 <label class="form-check-label">
-                  If Holiday is right between two leave days (Holiday is sandwitched between leave days).
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" value="2" type="radio" name="IsHolidayAccomLeave">
-                <label class="form-check-label">
-                  If leave day is right before a holiday.
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" value="3" type="radio" name="IsHolidayAccomLeave">
-                <label class="form-check-label">
-                  If leave day is right after a holiday.
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" value="4" type="radio" name="IsHolidayAccomLeave">
-                <label class="form-check-label">
-                  If leave day is before or after or in-between a holiday.
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" value="5" type="radio" name="IsHolidayAccomLeave">
-                <label class="form-check-label">
-                  If leave day is between holidays.
+                  No, Holidays have nothing to do with leave.
                 </label>
               </div>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox">
-                <label class="form-check-label ms-2">
-                  Do not consider holidays accompanying Half day leave as leave (ignores the above rule if leave taken
-                  is half day. This rule doesn't apply if leave is taken on half day week off).
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="my-4">
-            <h6 class="fw-bold text-dark">If a week off day is adjoining a leave, is it considered a leave?</h6>
-            <div class="form-check">
-              <input class="form-check-input" value="false" type="radio" name="IsWeekoffDayAdjoining">
-              <label class="form-check-label">
-                No, Week Off days have nothing to do with leave.
-              </label>
-            </div>
-            <div class="form-check d-flex align-items-center">
-              <input class="form-check-input" value="true" type="radio" name="IsWeekoffDayAdjoining">
-              <div class="d-flex align-items-center ms-2">
-                <label class="form-check-label">
-                  Yes, Week Off accompanying leave is treated as leave when total number of leave includes
-                </label>
-                <div class="col-md-1 mx-2">
-                  <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+                <input class="form-check-input" value="true" type="radio" name="IsHolidayAdjoining" formControlName="IsHolidayAdjoining">
+                <div class="d-flex align-items-center ms-2">
+                  <label class="form-check-label">
+                    Yes, Holidays accompanying leave is treated as leave when total number of leave includes
+                  </label>
+                  <div class="col-md-1 mx-2">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="HolidayAdjoiningTotalLeave">
+                  </div>
+                  <div class="col-md-2 mx-2">
+                    <select class="form-select form-select-sm" formControlName="HolidayAdjoiningOn">
+                      <option value="">Calender Days</option>
+                    </select>
+                  </div>
+                  <label for="" class="form-label">
+                    and
+                  </label>
                 </div>
-                <div class="col-md-2 mx-2">
-                  <select class="form-select form-select-sm">
-                    <option value="">Calender Days</option>
-                  </select>
+              </div>
+              <div class="my-4 ms-3">
+                <div class="form-check">
+                  <input class="form-check-input" value="1" type="radio" name="IsHolidayAccomLeave" formControlName="IsHolidayAccomLeave">
+                  <label class="form-check-label">
+                    If Holiday is right between two leave days (Holiday is sandwitched between leave days).
+                  </label>
                 </div>
-                <label for="" class="form-label">
-                  and
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" value="2" type="radio" name="IsHolidayAccomLeave" formControlName="IsHolidayAccomLeave">
+                  <label class="form-check-label">
+                    If leave day is right before a holiday.
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" value="3" type="radio" name="IsHolidayAccomLeave" formControlName="IsHolidayAccomLeave">
+                  <label class="form-check-label">
+                    If leave day is right after a holiday.
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" value="4" type="radio" name="IsHolidayAccomLeave" formControlName="IsHolidayAccomLeave">
+                  <label class="form-check-label">
+                    If leave day is before or after or in-between a holiday.
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" value="5" type="radio" name="IsHolidayAccomLeave" formControlName="IsHolidayAccomLeave">
+                  <label class="form-check-label">
+                    If leave day is between holidays.
+                  </label>
+                </div>
+                <div class="form-check d-flex align-items-center">
+                  <input class="form-check-input" type="checkbox" formControlName="IsHolidayAccomLeaveHalfday">
+                  <label class="form-check-label ms-2">
+                    Do not consider holidays accompanying Half day leave as leave (ignores the above rule if leave taken
+                    is half day. This rule doesn't apply if leave is taken on half day week off).
+                  </label>
+                </div>
               </div>
             </div>
-            <div class="my-4 ms-3">
+            <div class="my-4">
+              <h6 class="fw-bold text-dark">If a week off day is adjoining a leave, is it considered a leave?</h6>
               <div class="form-check">
-                <input class="form-check-input" value="1" type="radio" name="IsWeekOffAccomLeave">
+                <input class="form-check-input" value="false" type="radio" name="IsWeekoffDayAdjoining" formControlName="IsWeekoffDayAdjoining">
                 <label class="form-check-label">
-                  If week off day is right between two leave days (Week off is sandwitched between leave days).
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" value="2" type="radio" name="IsWeekOffAccomLeave">
-                <label class="form-check-label">
-                  If leave day is right before a week off.
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" value="3" type="radio" name="IsWeekOffAccomLeave">
-                <label class="form-check-label">
-                  If leave day is right after a week off.
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" value="4" type="radio" name="IsWeekOffAccomLeave">
-                <label class="form-check-label">
-                  If leave day is before or after or in-between a week off.
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" value="5" type="radio" name="IsWeekOffAccomLeave">
-                <label class="form-check-label">
-                  If leave day is between week off.
+                  No, Week Off days have nothing to do with leave.
                 </label>
               </div>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox">
-                <label class="form-check-label ms-2">
-                  Do not consider week off accompanying Half day leave as leave (ignores the above rule if leave taken
-                  is half day. This rule doesn't apply if leave is taken on half day week off).
+                <input class="form-check-input" value="true" type="radio" name="IsWeekoffDayAdjoining" formControlName="IsWeekoffDayAdjoining">
+                <div class="d-flex align-items-center ms-2">
+                  <label class="form-check-label">
+                    Yes, Week Off accompanying leave is treated as leave when total number of leave includes
+                  </label>
+                  <div class="col-md-1 mx-2">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="WeekoffDayAdjoiningTotalLeave">
+                  </div>
+                  <div class="col-md-2 mx-2">
+                    <select class="form-select form-select-sm" formControlName="WeekoffDayAdjoiningOn">
+                      <option value="">Calender Days</option>
+                    </select>
+                  </div>
+                  <label for="" class="form-label">
+                    and
+                  </label>
+                </div>
+              </div>
+              <div class="my-4 ms-3">
+                <div class="form-check">
+                  <input class="form-check-input" value="1" type="radio" name="IsWeekOffAccomLeave" formControlName="IsWeekOffAccomLeave">
+                  <label class="form-check-label">
+                    If week off day is right between two leave days (Week off is sandwitched between leave days).
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" value="2" type="radio" name="IsWeekOffAccomLeave" formControlName="IsWeekOffAccomLeave">
+                  <label class="form-check-label">
+                    If leave day is right before a week off.
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" value="3" type="radio" name="IsWeekOffAccomLeave" formControlName="IsWeekOffAccomLeave">
+                  <label class="form-check-label">
+                    If leave day is right after a week off.
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" value="4" type="radio" name="IsWeekOffAccomLeave" formControlName="IsWeekOffAccomLeave">
+                  <label class="form-check-label">
+                    If leave day is before or after or in-between a week off.
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" value="5" type="radio" name="IsWeekOffAccomLeave" formControlName="IsWeekOffAccomLeave">
+                  <label class="form-check-label">
+                    If leave day is between week off.
+                  </label>
+                </div>
+                <div class="form-check d-flex align-items-center">
+                  <input class="form-check-input" type="checkbox" formControlName="IsWeekOffAccomLeaveHalfday">
+                  <label class="form-check-label ms-2">
+                    Do not consider week off accompanying Half day leave as leave (ignores the above rule if leave taken
+                    is half day. This rule doesn't apply if leave is taken on half day week off).
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="my-4">
+              <h6 class="fw-bold text-dark">Do you want to club sandwich policy across leave types</h6>
+              <div class="form-check">
+                <input class="form-check-input" value="true" type="radio" name="IsClubSandwich" formControlName="IsClubSandwich">
+                <label class="form-check-label">
+                  Yes, club sandwich policy across leave type.
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" value="false" type="radio" name="IsClubSandwich" formControlName="IsClubSandwich">
+                <label class="form-check-label">
+                  No, do not club sandwich policy across leave type.
                 </label>
               </div>
             </div>
-          </div>
-          <div class="my-4">
-            <h6 class="fw-bold text-dark">Do you want to club sandwich policy across leave types</h6>
-            <div class="form-check">
-              <input class="form-check-input" value="true" type="radio" name="IsClubSandwich">
-              <label class="form-check-label">
-                Yes, club sandwich policy across leave type.
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" value="false" type="radio" name="IsClubSandwich">
-              <label class="form-check-label">
-                No, do not club sandwich policy across leave type.
-              </label>
-            </div>
-          </div>
+          </form>
         </ng-container>
 
         <ng-container *ngIf="configPageNo == 6">
-          <div class="my-4">
-            <h6 class="fw-bold text-dark">Does this leave request require an approval</h6>
-            <div class="form-check">
-              <input class="form-check-input" value="false" type="radio" name="IsRequiredApproval">
-              <label class="form-check-label">
-                No
-              </label>
+          <form [formGroup]="leaveApprovalForm">
+            <div class="my-4">
+              <h6 class="fw-bold text-dark">Does this leave request require an approval</h6>
+              <div class="form-check">
+                <input class="form-check-input" value="false" type="radio" name="IsRequiredApproval" formControlName="IsRequiredApproval">
+                <label class="form-check-label">
+                  No
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" value="true" type="radio" name="IsRequiredApproval" formControlName="IsRequiredApproval">
+                <label class="form-check-label">
+                  Yes
+                </label>
+              </div>
+              <div class="card px-2 pt-2 pb-3">
+                <h6>Approval Chain</h6>
+              </div>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" value="true" type="radio" name="IsRequiredApproval">
-              <label class="form-check-label">
-                Yes
-              </label>
-            </div>
-            <div class="card px-2 pt-2 pb-3">
-              <h6>Approval Chain</h6>
-            </div>
-          </div>
+          </form>
         </ng-container>
 
         <ng-container *ngIf="configPageNo == 7">
-          <div class="my-4">
-            <h6 class="fw-bold text-dark">What happens to the leave balances at the end of the year?</h6>
-            <div class="form-check">
-              <input class="form-check-input" value="1" type="radio" name="IsLeaveBalanceAtEnd">
-              <label class="form-check-label">
-                All leave balances expire or get reset.
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" value="2" type="radio" name="IsLeaveBalanceAtEnd">
-              <label class="form-check-label">
-                All leave balances get paid to the employee
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" value="3" type="radio" name="IsLeaveBalanceAtEnd">
-              <label class="form-check-label">
-                All leave balances get carried forward to the next year.
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" value="4" type="radio" name="IsLeaveBalanceAtEnd">
-              <label class="form-check-label">
-                Pay first and then carry forward remaining
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" value="2" type="radio" name="IsLeaveBalanceAtEnd">
-              <label class="form-check-label">
-                Carry forward first anf then pay remaining
-              </label>
-            </div>
+          <form [formGroup]="yearEndProcessForm">
             <div class="my-4">
-              <h6 class="fw-bold text-dark">Pay first and carry forward remaining?</h6>
-              <div class="d-flex">
-                <label for="" class="form-label">Leave for payment and carryforward is defined as</label>
-                <div class="col-md-1 ms-3">
-                  <select class="form-select form-select-sm">
-                    <option value="">Select</option>
-                    <option value="">Fixed number of days</option>
-                    <option value="">Percentage of remaining leave</option>
-                  </select>
-                </div>
+              <h6 class="fw-bold text-dark">What happens to the leave balances at the end of the year?</h6>
+              <div class="form-check">
+                <input class="form-check-input" value="1" type="radio" name="IsLeaveBalanceAtEnd" formControlName="IsLeaveBalanceAtEnd">
+                <label class="form-check-label">
+                  All leave balances expire or get reset.
+                </label>
               </div>
-              <!-- For percentage select start-->
-              <div class="my-4 card">
+              <div class="form-check">
+                <input class="form-check-input" value="2" type="radio" name="IsLeaveBalanceAtEnd" formControlName="IsLeaveBalanceAtEnd">
+                <label class="form-check-label">
+                  All leave balances get paid to the employee
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" value="3" type="radio" name="IsLeaveBalanceAtEnd" formControlName="IsLeaveBalanceAtEnd">
+                <label class="form-check-label">
+                  All leave balances get carried forward to the next year.
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" value="4" type="radio" name="IsLeaveBalanceAtEnd" formControlName="IsLeaveBalanceAtEnd">
+                <label class="form-check-label">
+                  Pay first and then carry forward remaining
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" value="2" type="radio" name="IsLeaveBalanceAtEnd" formControlName="IsLeaveBalanceAtEnd">
+                <label class="form-check-label">
+                  Carry forward first anf then pay remaining
+                </label>
+              </div>
+              <div class="my-4">
+                <h6 class="fw-bold text-dark">Pay first and carry forward remaining?</h6>
+                <div class="d-flex">
+                  <label for="" class="form-label">Leave for payment and carryforward is defined as</label>
+                  <div class="col-md-1 ms-3">
+                    <select class="form-select form-select-sm" formControlName="LeaveForPaymentBasedOn">
+                      <option value="">Select</option>
+                      <option value="">Fixed number of days</option>
+                      <option value="">Percentage of remaining leave</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- For percentage select start-->
+                <div class="my-4 card p-2">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label me-3">If the balance is more than</label>
+                    <div class="col-md-1">
+                      <input type="text" class="form-control form-control-sm" OnlyNumber="2" formControlName="BalanceMoreThan">
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center ms-3 my-3">
+                    <label class="form-label me-3">Pay</label>
+                    <div class="col-md-1">
+                      <input type="text" class="form-control form-control-sm" OnlyNumber="2" formControlName="Pay">
+                    </div>
+                    <span class="px-2">% of remaining leave days and carryforward</span>
+                    <div class="col-md-1 mx-3">
+                      <input type="text" class="form-control form-control-sm" OnlyNumber="2" formControlName="PercentRemainingDay">
+                    </div>
+                    <label for="" class="form-label">% of remaining leave days</label>
+                  </div>
+                  <div class="form-check d-flex align-items-center">
+                    <input class="form-check-input" type="checkbox">
+                    <div class="d-flex align-items-center ps-2">
+                      <label class="form-check-label">
+                        Restrict maximum payable days to .
+                      </label>
+                      <div class="col-md-2 mx-3">
+                        <input type="text" class="form-control form-control-sm" OnlyNumber="2" formControlName="RestrictMaxDays">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-check d-flex align-items-center">
+                    <input class="form-check-input" type="checkbox" formControlName="IsRestrictMaxCarryForward">
+                    <div class="d-flex align-items-center ps-2">
+                      <label class="form-check-label">
+                        Restrict maximum carried forward days to days to .
+                      </label>
+                      <div class="col-md-2 mx-3">
+                        <input type="text" class="form-control form-control-sm" OnlyNumber="2" formControlName="RestrictMaxCarryForwardDays">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- percentage select end -->
+                <!-- Fixed number of days start -->
                 <div class="d-flex align-items-center">
                   <label class="form-label me-3">If the balance is more than</label>
                   <div class="col-md-1">
-                    <input type="text" class="form-control" OnlyNumber="2">
+                    <input type="text" class="form-control form-control-sm" OnlyNumber="2" formControlName="LeaveBalanceMoreThan">
                   </div>
-                </div>
-                <div class="d-flex align-items-center ms-3">
-                  <label class="form-label me-3">Pay</label>
-                  <div class="col-md-1">
-                    <input type="text" class="form-control" OnlyNumber="2">
-                  </div>
-                  <span class="px-2">% of remaining leave days and carryforward</span>
+                  <span class="px-2">days, pay upto</span>
                   <div class="col-md-1 mx-3">
-                    <input type="text" class="form-control" OnlyNumber="2">
+                    <input type="text" class="form-control form-control-sm" OnlyNumber="2" formControlName="PayUptoDays">
                   </div>
-                  <label for="" class="form-label">% of remaining leave days</label>
-                </div>
-              </div>
-              <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox">
-                <div class="d-flex align-items-center">
-                  <label class="form-check-label">
-                    Restrict maximum payable days to .
-                  </label>
+                  <label for="" class="form-label">days and carry forward upto</label>
                   <div class="col-md-1 mx-3">
-                    <input type="text" class="form-control" OnlyNumber="2">
+                    <input type="text" class="form-control form-control-sm" OnlyNumber="2" formControlName="CarryForwardDaysUpto">
                   </div>
+                  <label for="" class="form-label ps-3">remaining days</label>
                 </div>
+                <!-- Fixed Number of days end -->
               </div>
-              <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox">
-                <div class="d-flex align-items-center">
-                  <label class="form-check-label">
-                    Restrict maximum carried forward days to days to .
-                  </label>
-                  <div class="col-md-1 mx-3">
-                    <input type="text" class="form-control" OnlyNumber="2">
-                  </div>
-                </div>
-              </div>
-              <!-- percentage select end -->
-              <!-- Fixed number of days start -->
-              <div class="d-flex align-items-center">
-                <label class="form-label me-3">If the balance is more than</label>
-                <div class="col-md-1">
-                  <input type="text" class="form-control" OnlyNumber="2">
-                </div>
-                <span class="px-2">days, pay upto</span>
-                <div class="col-md-1 mx-3">
-                  <input type="text" class="form-control" OnlyNumber="2">
-                </div>
-                <label for="" class="form-label">days and carry forward upto</label>
-                <div class="col-md-1 mx-3">
-                  <input type="text" class="form-control" OnlyNumber="2">
-                </div>
-                <label for="" class="form-label ps-3">remaining days</label>
-              </div>
-              <!-- Fixed Number of days end -->
             </div>
-          </div>
-          <div class="my-4">
-            <h6 class="fw-bold text-dark">Does carried forward leave expire after certain time?</h6>
-            <div class="form-check">
-              <input class="form-check-input" value="false" type="radio" name="IsLeaveExpire">
-              <label class="form-check-label">
-                No. carried forward leave don't expire after cetain time.
-              </label>
-            </div>
-            <div class="form-check d-flex align-items-center">
-              <input class="form-check-input" type="radio" value="true" name="IsLeaveExpire">
-              <div class="d-flex align-items-center ms-2">
+            <div class="my-4">
+              <h6 class="fw-bold text-dark">Does carried forward leave expire after certain time?</h6>
+              <div class="form-check">
+                <input class="form-check-input" value="false" type="radio" name="IsLeaveExpire" formControlName="IsLeaveExpire">
                 <label class="form-check-label">
-                  Yes, carried forward leave expires
+                  No. carried forward leave don't expire after cetain time.
                 </label>
-                <div class="col-md-1 mx-2">
-                  <input type="text" OnlyNumber="3" class="form-control form-control-sm">
+              </div>
+              <div class="form-check d-flex align-items-center">
+                <input class="form-check-input" type="radio" value="true" name="IsLeaveExpire" formControlName="IsLeaveExpire">
+                <div class="d-flex align-items-center ms-2">
+                  <label class="form-check-label">
+                    Yes, carried forward leave expires
+                  </label>
+                  <div class="col-md-2 mx-2">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="ExpireLeaveCarryForward">
+                  </div>
+                  <label for="" class="form-label">
+                    days in the next leave calendar year.
+                  </label>
                 </div>
-                <label for="" class="form-label">
-                  days in the next leave calendar year.
+              </div>
+              <div class="form-check d-flex align-items-center">
+                <input class="form-check-input" type="checkbox" formControlName="ExpiraySettingUnchanged">
+                <label class="form-check-label ms-2">
+                  Any leave that has an expiry date, either through previous carry forward, or expiray settings under
+                  step2 (leave accrual) remains unchanged.
                 </label>
               </div>
             </div>
-            <div class="form-check d-flex align-items-center">
-              <input class="form-check-input" type="checkbox">
-              <label class="form-check-label ms-2">
-                Any leave that has an expiry date, either through previous carry forward, or expiray settings undet
-                step2 (leave accrual) remains unchanged.
-              </label>
+            <div class="my-4">
+              <h6 class="fw-bold text-dark">What happens to the negative leave balances that may have accumulated for
+                employees who have taken leave beyond their anuual quota?</h6>
+              <div class="form-check">
+                <input class="form-check-input" value="1" type="radio" name="IsNegativeLeaveQuota" formControlName="IsNegativeLeaveQuota">
+                <label class="form-check-label">
+                  Deduct from Salary.
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" value="2" type="radio" name="IsNegativeLeaveQuota" formControlName="IsNegativeLeaveQuota">
+                <label class="form-check-label">
+                  Nullify and reset the balance to zero.
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" value="3" type="radio" name="IsNegativeLeaveQuota" formControlName="IsNegativeLeaveQuota">
+                <label class="form-check-label">
+                  Carry forward negative balance to following year.
+                </label>
+              </div>
             </div>
-          </div>
-          <div class="my-4">
-            <h6 class="fw-bold text-dark">What happens to the negative leave balances that may have accumulated for
-              employees who have taken leave beyond their anuual quota?</h6>
-            <div class="form-check">
-              <input class="form-check-input" value="1" type="radio" name="IsNegativeLeaveQuota">
-              <label class="form-check-label">
-                Deduct from Salary.
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" value="2" type="radio" name="IsNegativeLeaveQuota">
-              <label class="form-check-label">
-                Nullify and reset the balance to zero.
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" value="3" type="radio" name="IsNegativeLeaveQuota">
-              <label class="form-check-label">
-                Carry forward negative balance to following year.
-              </label>
-            </div>
-          </div>
+          </form>
         </ng-container>
       </div>
       <div class="modal-footer border-top-0 px-4">

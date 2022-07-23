@@ -40,6 +40,9 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   leaveAccrualForm: FormGroup;
   leaveRestrictionForm: FormGroup;
   applyForLeaveForm: FormGroup;
+  holidayWeekendOffForm: FormGroup;
+  leaveApprovalForm: FormGroup;
+  yearEndProcessForm: FormGroup;
   // ------------------End------------------
 
   constructor(private nav: iNavigation,
@@ -67,6 +70,10 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     this.initLeaveAccrual();
     this.leaveConfigPopUp();
     this.initApplyForLeave();
+    this.initLeaveRestriction();
+    this.initholidayWeekendOff();
+    this.initleaveApproval();
+    this.inityearEndProcess();
   }
 
   loadLeaveData() {
@@ -603,6 +610,80 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   removeLeaveCredit(i: number) {
     let item = this.applyForLeaveForm.get('LeaveCredit') as FormArray;
     item.removeAt(i)
+  }
+
+  initLeaveRestriction() {
+    this.leaveRestrictionForm = this.fb.group({
+      IsNewJoinee: new FormControl(),
+      AfterProbationEnd: new FormControl(),
+      AfterJoining: new FormControl(),
+      IsLimitforConsecutiveDay: new FormControl(),
+      LeaveDurationProbation: new FormControl(),
+      IsLeaveDurationProbation: new FormControl(),
+      ConsecutiveLeaveDay: new FormControl(),
+      IsMaxLeaveAvailed: new FormControl(),
+      ExtendsActualLeaveDays: new FormControl(),
+      IsManagerOverrideLeave: new FormControl(),
+      IsEnforceMinGap: new FormControl(),
+      EnforecMinGapDays: new FormControl(),
+      IsAllowinLeaveCalendarYear: new FormControl(),
+      AllowDaysinLeaveCalendarYear: new FormControl(),
+      IsAllowinLeaveCalendarMonth: new FormControl(),
+      AllowDaysinLeaveCalendarMonth: new FormControl(),
+      IsAllowinLeaveEntireTenure: new FormControl(),
+      AllowDaysinLeaveEntireTenure: new FormControl(),
+      IsAllowLeavesInSIngleInstance: new FormControl(),
+      AllowDaysLeavesInSIngleInstance: new FormControl(),
+      LeaveBalanceQualOrGreater: new FormControl(),
+      IsRestrictEmpForLeave: new FormControl(),
+      RestrictLeaveInEveryMonth: new FormControl(),
+      IsLeaveTakenWith: new FormControl(),
+      LeaveTakenWith: new FormControl(),
+      IsLeaveAvailBalanceIn: new FormControl(),
+      LeaveAvailBalanceIn: new FormControl()
+    })
+  }
+
+  initholidayWeekendOff() {
+    this.holidayWeekendOffForm = this.fb.group({
+      IsHolidayAdjoining: new FormControl(),
+      HolidayAdjoiningTotalLeave: new FormControl(),
+      HolidayAdjoiningOn: new FormControl(),
+      IsHolidayAccomLeave: new FormControl(),
+      IsWeekoffDayAdjoining: new FormControl(),
+      WeekoffDayAdjoiningTotalLeave: new FormControl(),
+      WeekoffDayAdjoiningOn: new FormControl(),
+      IsWeekOffAccomLeave: new FormControl(),
+      IsHolidayAccomLeaveHalfday: new FormControl(),
+      IsWeekOffAccomLeaveHalfday: new FormControl(),
+      IsClubSandwich: new FormControl()
+    })
+  }
+
+  initleaveApproval() {
+    this.leaveApprovalForm = this.fb.group({
+      IsRequiredApproval: new FormControl()
+    })
+  }
+
+  inityearEndProcess() {
+    this.yearEndProcessForm = this.fb.group({
+      IsLeaveBalanceAtEnd: new FormControl(),
+      LeaveForPaymentBasedOn: new FormControl(),
+      BalanceMoreThan: new FormControl(),
+      Pay: new FormControl(),
+      PercentRemainingDay: new FormControl(),
+      RestrictMaxDays: new FormControl(),
+      IsRestrictMaxCarryForward: new FormControl(),
+      RestrictMaxCarryForwardDays: new FormControl(),
+      LeaveBalanceMoreThan: new FormControl(),
+      PayUptoDays: new FormControl(),
+      CarryForwardDaysUpto: new FormControl(),
+      IsLeaveExpire: new FormControl(),
+      ExpireLeaveCarryForward: new FormControl(),
+      IsNegativeLeaveQuota: new FormControl(),
+      ExpiraySettingUnchanged: new FormControl()
+    })
   }
 }
 
