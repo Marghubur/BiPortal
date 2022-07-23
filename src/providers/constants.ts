@@ -91,6 +91,7 @@ export const Payroll = 'admin/payroll';
 export const LeavesAndHoliday = 'admin/leaves-holidays';
 export const PFESISetup = 'admin/pfesisetup';
 export const Expenses = 'admin/expenses';
+export const ManageLeavePlan = 'admin/manageleaveplan';
 
 // ********************** Admin route pages  *******************
 
