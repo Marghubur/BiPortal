@@ -787,7 +787,7 @@
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" value="true" type="radio" name="IsLeaveforFutureDate" formControlName="IsLeaveforFutureDate">
+                <input class="form-check-input" value="false" type="radio" name="IsLeaveforFutureDate" formControlName="IsLeaveforFutureDate">
                 <label class="form-check-label">
                   No, Employee is limited to apply for leave balance accrued on the day of leave application and not on future day for which leave is applied.
                 </label>
@@ -923,7 +923,7 @@
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" value="true" type="radio" name="IsApplyHalfDay" formControlName="IsApplyHalfDay">
+                <input class="form-check-input" value="false" type="radio" name="IsApplyHalfDay" formControlName="IsApplyHalfDay">
                 <label class="form-check-label">
                   No
                 </label>
@@ -938,7 +938,7 @@
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" value="true" type="radio" name="IsEmpSeeLeave" formControlName="IsEmpSeeLeave">
+                <input class="form-check-input" value="false" type="radio" name="IsEmpSeeLeave" formControlName="IsEmpSeeLeave">
                 <label class="form-check-label">
                   No, Employee cannot apply by themselves. HR Manager or a Reporting manager can apply on their behalf.
                 </label>
@@ -957,7 +957,7 @@
                         <div class="col-md-1">
                           <input type="text" class="form-control" OnlyNumber="2" formControlName="DurationMoreThan">
                         </div>
-                        <span class="px-2">Calendar days</span>
+                        <label class="px-2 form-label">Calendar days</label>
                         <label for="" class="form-label ps-3">Need</label>
                         <div class="col-md-1 mx-3">
                           <input type="text" class="form-control" OnlyNumber="2" formControlName="NeedDays">
@@ -1040,7 +1040,7 @@
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" value="true" type="radio" name="IsCommentRequired" formControlName="IsCommentRequired">
+                <input class="form-check-input" value="false" type="radio" name="IsCommentRequired" formControlName="IsCommentRequired">
                 <label class="form-check-label">
                   No, This leave does not require any comments although the employee is shown a comment box field.
                 </label>
@@ -1050,7 +1050,7 @@
               <h6 class="fw-bold text-dark">Do you require a document proof or attachment for extended days of this leave?
               </h6>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="checkbox" formControlName="ReqdDocforLeave">
+                <input class="form-check-input" type="checkbox" formControlName="IsReqdDocforLeave">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Yes, Require an attachment if the leave exceeds
@@ -1078,7 +1078,7 @@
             <div class="my-4">
               <h6 class="fw-bold text-dark">A new joinee employee can apply for leave?</h6>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="radio" name="IsNewJoinee" formControlName="IsNewJoinee">
+                <input class="form-check-input" value="true" type="radio" name="IsNewJoineeApply" formControlName="IsNewJoineeApply">
                 <div class="d-flex align-items-center ms-2">
                   <div class="col-md-2 mx-2">
                     <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AfterProbationEnd">
@@ -1089,7 +1089,7 @@
                 </div>
               </div>
               <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="radio" name="IsNewJoinee" formControlName="IsNewJoinee">
+                <input class="form-check-input" value="false" type="radio" name="IsNewJoineeApply" formControlName="IsNewJoineeApply">
                 <div class="d-flex align-items-center ms-2">
                   <div class="col-md-2 mx-2">
                     <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AfterJoining">
@@ -1242,13 +1242,13 @@
                 </div>
               </div>
               <div class="form-check d-flex align-items-center mt-2">
-                <input class="form-check-input" type="checkbox" formControlName="IsAllowLeavesInSIngleInstance">
+                <input class="form-check-input" type="checkbox" formControlName="IsAllowLeavesInSingleInstance">
                 <div class="d-flex align-items-center ms-2">
                   <label class="form-check-label">
                     Do not allow availing less than
                   </label>
                   <div class="col-md-1 mx-2">
-                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AllowDaysLeavesInSIngleInstance">
+                    <input type="text" OnlyNumber="3" class="form-control form-control-sm" formControlName="AllowDaysLeavesInSingleInstance">
                   </div>
                   <label for="" class="form-label">
                     days to leave in a single instance when total available leave balance is greater than or equal to
@@ -1429,7 +1429,7 @@
                   </label>
                 </div>
                 <div class="form-check d-flex align-items-center">
-                  <input class="form-check-input" type="checkbox" formControlName="IsWeekOffAccomLeaveHalfday">
+                  <input class="form-check-input" type="checkbox" formControlName="IsExpiraySettingUnchanged">
                   <label class="form-check-label ms-2">
                     Do not consider week off accompanying Half day leave as leave (ignores the above rule if leave taken
                     is half day. This rule doesn't apply if leave is taken on half day week off).
@@ -1507,7 +1507,7 @@
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" value="2" type="radio" name="IsLeaveBalanceAtEnd" formControlName="IsLeaveBalanceAtEnd">
+                <input class="form-check-input" value="5" type="radio" name="IsLeaveBalanceAtEnd" formControlName="IsLeaveBalanceAtEnd">
                 <label class="form-check-label">
                   Carry forward first anf then pay remaining
                 </label>
@@ -1544,7 +1544,7 @@
                     <label for="" class="form-label">% of remaining leave days</label>
                   </div>
                   <div class="form-check d-flex align-items-center">
-                    <input class="form-check-input" type="checkbox">
+                    <input class="form-check-input" type="checkbox" formControlName="IsRestrictMaxDays">
                     <div class="d-flex align-items-center ps-2">
                       <label class="form-check-label">
                         Restrict maximum payable days to .
