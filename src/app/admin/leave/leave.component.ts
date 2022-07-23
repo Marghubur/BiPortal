@@ -5,7 +5,7 @@ import { Attendance, Timesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Files } from '../documents/documents.component';
@@ -38,6 +38,11 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   leaveQuotaForm: FormGroup;
   leaveQuota: LeaveQuota = new LeaveQuota();
   leaveAccrualForm: FormGroup;
+  leaveRestrictionForm: FormGroup;
+  applyForLeaveForm: FormGroup;
+  holidayWeekendOffForm: FormGroup;
+  leaveApprovalForm: FormGroup;
+  yearEndProcessForm: FormGroup;
   // ------------------End------------------
 
   constructor(private nav: iNavigation,
@@ -63,6 +68,12 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     this.initLeavePlanForm();
     this.initLeaveQuota();
     this.initLeaveAccrual();
+    this.leaveConfigPopUp();
+    this.initApplyForLeave();
+    this.initLeaveRestriction();
+    this.initholidayWeekendOff();
+    this.initleaveApproval();
+    this.inityearEndProcess();
   }
 
   loadLeaveData() {
@@ -192,21 +203,35 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 
   empJoinMiddle(e: any) {
     let value = e.target.value;
+    let elem = document.querySelectorAll('div[name="EmpJoinMiddle"]');
     if (value) {
-      if (value == 'true')
-        document.querySelector('div[name="EmpJoinMiddle"]').classList.add('d-none');
-      else
-        document.querySelector('div[name="EmpJoinMiddle"]').classList.remove('d-none');
+      if (value == 'true') {
+        for (let i = 0; i < elem.length; i++) {
+          elem[i].classList.add('d-none');
+        }
+      }
+      else {
+        for (let i = 0; i < elem.length; i++) {
+          elem[i].classList.remove('d-none');
+        }
+      }
     }
   }
 
   EmpExitMiddle(e: any) {
     let value = e.target.value;
+    let elem = document.querySelectorAll('div[name="EmpExitMiddle"]');
     if (value) {
-      if (value == '2')
-        document.querySelector('div[name="EmpExitMiddle"]').classList.remove('d-none');
-      else
-        document.querySelector('div[name="EmpExitMiddle"]').classList.add('d-none');
+      if (value == '2') {
+        for (let i = 0; i < elem.length; i++) {
+          elem[i].classList.remove('d-none');
+        }
+      }
+      else {
+        for (let i = 0; i < elem.length; i++) {
+          elem[i].classList.add('d-none');
+        }
+      }
     }
   }
 
@@ -214,7 +239,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     let value = e.target.value;
     if (value) {
       if (value == 'true')
-        document.querySelector('div[name="EmpExitMiddle"]').classList.add('d-none');
+        document.querySelector('div[name="AccrualLevelVary"]').classList.add('d-none');
       else
         document.querySelector('div[name="AccrualLevelVary"]').classList.remove('d-none');
     }
@@ -423,6 +448,9 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       case 1:
         this.submitLeaveQuota();
         break;
+      case 2:
+        this.submitLeaveAccrual();
+        break;
     }
     if (this.configPageNo > 0 && this.configPageNo <= 6) {
       this.configPageNo = this.configPageNo + 1;
@@ -437,6 +465,19 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
   }
 
+  submitLeaveAccrual() {
+    this.submit = true;
+    this.isLoading = true
+    let errorCounter = 0;
+    let value = this.leaveAccrualForm.value;
+    if (value && errorCounter == 0) {
+      console.log(value);
+      this.submit = false;
+      this.isLoading = false;
+    }
+    this.isLoading = false;
+  }
+
   initLeaveAccrual() {
     this.leaveAccrualForm = this.fb.group({
       IsLeaveBalanceCalculated: new FormControl (),
@@ -444,7 +485,204 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       AccrualAnnualQuota: new FormControl(),
       IsEmpJoinMiddle: new FormControl(),
       IsEmpExitMiddle: new FormControl(),
+      LeaveCreditBWJoiningDate: new FormArray([this.createFormBWJoiningDate()]),
+      LeaveCreditBWExitDate: new FormArray([this.createFormBWExitDate()]),
+      IsAccrualLevelVary: new FormControl(),
+      IsAccrualStart: new FormControl(),
+      DaysAfterJoining: new FormControl(),
+      DaysAfterProbEnd: new FormControl(),
+      AccrualRateOnExp: new FormArray([this.createAccruralRateOnExp()]),
+      IsLeaveAccrualImpacted: new FormControl(),
+      WeeklyOffAsAbsent: new FormControl(),
+      HolidayOffAsAbsent: new FormControl(),
+      IsLeaveforFutureDate: new FormControl(),
+      IsLeaveBeyondBalance: new FormControl(),
+      LeaveBalanceLessThan: new FormControl(),
+      EmpGoBeyondAccrueBal: new FormControl(),
+      IsAccrueLeaveTotalBal: new FormControl(),
+      IsAccrueLeaveEmpOnLeave: new FormControl(),
+      DaysInPrevMnth: new FormControl(),
+      IsLeaveBalanceRounded: new FormControl(),
+      IsLeaveCredit: new FormControl(),
+      LeaveExpAfter: new FormControl()
+    })
+  }
 
+  createAccruralRateOnExp(): FormGroup {
+    return this.fb.group({
+      YearOfJoining: new FormControl(),
+      AccureDayMonth: new FormControl(),
+      AccureDayYear: new FormControl()
+    })
+  }
+
+  addAccruralRateOnExp() {
+    let item = this.leaveAccrualForm.get('AccrualRateOnExp') as FormArray;
+    item.push(this.createAccruralRateOnExp());
+  }
+
+  removeAccruralRateOnExp(i: number) {
+    let item = this.leaveAccrualForm.get('AccrualRateOnExp') as FormArray;
+    item.removeAt(i);
+  }
+
+  createFormBWJoiningDate(): FormGroup {
+    return this.fb.group({
+      FromJoiningDate: new FormControl(''),
+      ToJoiningDate: new FormControl(''),
+      AllocatedLeave: new FormControl('')
+    });
+  }
+
+  get formBWJoiningDate() {
+    return this.leaveAccrualForm.get('LeaveCreditBWJoiningDate') as FormArray;
+  }
+
+  addFormBWJoiningDate() {
+    let item = this.leaveAccrualForm.get('LeaveCreditBWJoiningDate') as FormArray;
+    item.push(this.createFormBWJoiningDate());
+    let elem = document.querySelectorAll('div[name="EmpJoinMiddle"]');
+    for (let i = 0; i < elem.length; i++) {
+      elem[i].classList.remove('d-none');
+    }
+  }
+
+  removeFormBWJoiningDate(i: number) {
+    let item = this.leaveAccrualForm.get('LeaveCreditBWJoiningDate') as FormArray;
+    item.removeAt(i);
+    if (item.length === 0)
+      this.addFormBWJoiningDate();
+  }
+
+  createFormBWExitDate(): FormGroup {
+    return this.fb.group({
+      FromExitDate: new FormControl(),
+      ToExitDate: new FormControl(),
+      LeaveDays: new FormControl()
+    })
+  }
+
+  addFormBWExitDate() {
+    let item = this.leaveAccrualForm.get('LeaveCreditBWExitDate') as FormArray;
+    item.push(this.createFormBWExitDate());
+    let elem = document.querySelectorAll('div[name="EmpExitMiddle"]');
+    for (let i = 0; i < elem.length; i++) {
+      elem[i].classList.remove('d-none');
+    }
+  }
+
+  removeFormBWExitDate(i: number) {
+    let item = this.leaveAccrualForm.get('LeaveCreditBWExitDate') as FormArray;
+    item.removeAt(i);
+  }
+
+  initApplyForLeave() {
+    this.applyForLeaveForm = this.fb.group({
+      IsApplyHalfDay: new FormControl(),
+      IsEmpSeeLeave: new FormControl(),
+      LeaveCredit: new FormArray([this.createLeaveCredit()]),
+      IsEmpApplyLeave: new FormControl(),
+      BeforeDays: new FormControl(),
+      IsEmpApplyPastDay: new FormControl(),
+      NoOfPastDay: new FormControl(),
+      NotApplyPastDay: new FormControl(),
+      NotApplyPastDayAfter: new FormControl(),
+      IsCommentRequired: new FormControl(),
+      IsDocumentRequired: new FormControl(),
+      ReqdDocforLeave: new FormControl(),
+      ReqdDocforLeaveAfter: new FormControl()
+    })
+  }
+
+  createLeaveCredit(): FormGroup {
+    return this.fb.group({
+      DurationMoreThan: new FormControl(),
+      NeedDays: new FormControl(),
+      AtLeastWOrkingDays: new FormControl()
+    })
+  }
+
+  addLeaveCredit() {
+    let item = this.applyForLeaveForm.get('LeaveCredit') as FormArray;
+    item.push(this.createLeaveCredit());
+  }
+
+  removeLeaveCredit(i: number) {
+    let item = this.applyForLeaveForm.get('LeaveCredit') as FormArray;
+    item.removeAt(i)
+  }
+
+  initLeaveRestriction() {
+    this.leaveRestrictionForm = this.fb.group({
+      IsNewJoinee: new FormControl(),
+      AfterProbationEnd: new FormControl(),
+      AfterJoining: new FormControl(),
+      IsLimitforConsecutiveDay: new FormControl(),
+      LeaveDurationProbation: new FormControl(),
+      IsLeaveDurationProbation: new FormControl(),
+      ConsecutiveLeaveDay: new FormControl(),
+      IsMaxLeaveAvailed: new FormControl(),
+      ExtendsActualLeaveDays: new FormControl(),
+      IsManagerOverrideLeave: new FormControl(),
+      IsEnforceMinGap: new FormControl(),
+      EnforecMinGapDays: new FormControl(),
+      IsAllowinLeaveCalendarYear: new FormControl(),
+      AllowDaysinLeaveCalendarYear: new FormControl(),
+      IsAllowinLeaveCalendarMonth: new FormControl(),
+      AllowDaysinLeaveCalendarMonth: new FormControl(),
+      IsAllowinLeaveEntireTenure: new FormControl(),
+      AllowDaysinLeaveEntireTenure: new FormControl(),
+      IsAllowLeavesInSIngleInstance: new FormControl(),
+      AllowDaysLeavesInSIngleInstance: new FormControl(),
+      LeaveBalanceQualOrGreater: new FormControl(),
+      IsRestrictEmpForLeave: new FormControl(),
+      RestrictLeaveInEveryMonth: new FormControl(),
+      IsLeaveTakenWith: new FormControl(),
+      LeaveTakenWith: new FormControl(),
+      IsLeaveAvailBalanceIn: new FormControl(),
+      LeaveAvailBalanceIn: new FormControl()
+    })
+  }
+
+  initholidayWeekendOff() {
+    this.holidayWeekendOffForm = this.fb.group({
+      IsHolidayAdjoining: new FormControl(),
+      HolidayAdjoiningTotalLeave: new FormControl(),
+      HolidayAdjoiningOn: new FormControl(),
+      IsHolidayAccomLeave: new FormControl(),
+      IsWeekoffDayAdjoining: new FormControl(),
+      WeekoffDayAdjoiningTotalLeave: new FormControl(),
+      WeekoffDayAdjoiningOn: new FormControl(),
+      IsWeekOffAccomLeave: new FormControl(),
+      IsHolidayAccomLeaveHalfday: new FormControl(),
+      IsWeekOffAccomLeaveHalfday: new FormControl(),
+      IsClubSandwich: new FormControl()
+    })
+  }
+
+  initleaveApproval() {
+    this.leaveApprovalForm = this.fb.group({
+      IsRequiredApproval: new FormControl()
+    })
+  }
+
+  inityearEndProcess() {
+    this.yearEndProcessForm = this.fb.group({
+      IsLeaveBalanceAtEnd: new FormControl(),
+      LeaveForPaymentBasedOn: new FormControl(),
+      BalanceMoreThan: new FormControl(),
+      Pay: new FormControl(),
+      PercentRemainingDay: new FormControl(),
+      RestrictMaxDays: new FormControl(),
+      IsRestrictMaxCarryForward: new FormControl(),
+      RestrictMaxCarryForwardDays: new FormControl(),
+      LeaveBalanceMoreThan: new FormControl(),
+      PayUptoDays: new FormControl(),
+      CarryForwardDaysUpto: new FormControl(),
+      IsLeaveExpire: new FormControl(),
+      ExpireLeaveCarryForward: new FormControl(),
+      IsNegativeLeaveQuota: new FormControl(),
+      ExpiraySettingUnchanged: new FormControl()
     })
   }
 }
