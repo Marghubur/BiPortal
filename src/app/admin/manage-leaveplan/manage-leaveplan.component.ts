@@ -15,7 +15,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 })
 export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   cachedData: any = null;
-  configPageNo: number = 2;
+  configPageNo: number = 1;
   isPageReady: boolean = false;
   leaveDetailForm: FormGroup;
   leaveDetail: LeaveDetail = new LeaveDetail();
@@ -53,7 +53,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   loadPlanDetail() {
-    this.http.get(`leave/GetLeaveTypeDetailByPlan/${this.LeavePlanId}`).then(response => {
+    this.http.get(`leave/GetLeaveTypeByPlanId/${this.LeavePlanId}`).then(response => {
       if(response.ResponseBody) {
         this.initLeaveDetail();
         this.initLeaveAccrual();
