@@ -19,17 +19,20 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   cachedData: any = null;
   active = 1;
   model: NgbDateStruct;
-  LeavePlan: Array<any> = [];
+  leavePlanList: Array<any> = [];
   isPageReady: boolean = false;
   menuItem: any = {};
   groupActiveId: number = 1;
   isListOfReason: boolean = false;
   leaveTypeForm: FormGroup;
-  leaveTypes: Array<any> = [];
+  leaveTypes: Array<LeaveType> = [];
   isUpdate: boolean = false;
 
   currentPlan: LeavePlan = new LeavePlan();
   leaveTypeData: LeaveType = new LeaveType();
+  planLeaveTypes: Array<LeaveType> = []
+  assignLeaveTypes: Array<LeaveType> = [];
+  leaveTypeDateIsReady: boolean = false;
 
   // -------------------Start--------------
   leavePlanForm: FormGroup;
@@ -88,24 +91,24 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   loadLeaveData() {
     this.http.get("leave/GetLeavePlans").then((result: ResponseModel) => {
       if(result.ResponseBody) {
-        this.LeavePlan = result.ResponseBody;
+        this.leavePlanList = result.ResponseBody;
+        this.bindFirstPlanOnPage();
         Toast("Leave plan loaded successfully.");
       } else {
         ErrorToast("Fail to load leave plan.");
-        this.LeavePlan = [];
+        this.leavePlanList = [];
       }
     });
   }
 
   saveLeaveType(){
     this.leaveTypeForm.get("Reasons").setValue('[]');
-    this.leaveTypeForm.get("LeavePlanId").setValue(this.currentPlan.LeavePlanId);
     let value = this.leaveTypeForm.value;
 
     if(value) {
       let Url: string = "";
       if(this.isUpdate) {
-        Url = `leave/UpdateLeavePlanType/${this.leaveTypeData.LeavePlanId}`;
+        Url = `leave/UpdateLeavePlanType/${this.leaveTypeData.LeavePlanTypeId}`;
         this.http.put(Url, value).then((response: ResponseModel) => {
           this.manageResponseOnUpdate(response);
         });
@@ -118,8 +121,108 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
   }
 
+  onTabChange(index: number) {
+    switch(index) {
+      case 0:
+        this.bindFirstPlanOnPage();
+        break;
+      case 1:
+        this.loadLeaveType();
+        break;
+    }
+  }
+
+  bindFirstPlanOnPage() {
+    if(this.leavePlanList.length > 0) {
+      this.currentPlan = this.leavePlanList[0];
+      if(this.currentPlan.AssociatedPlanTypes){
+        this.planLeaveTypes = JSON.parse(this.currentPlan.AssociatedPlanTypes);
+      }
+
+      this.isPageReady = true;
+    } else {
+      this.isPageReady = false;
+    }
+  }
+
+  loadLeaveType() {
+    this.leaveTypeDateIsReady = false;
+    this.http.get("leave/GetLeaveTypeFilter").then(response => {
+      if(response.ResponseBody) {
+        this.leaveTypes = response.ResponseBody;
+        this.leaveTypeDateIsReady = true;
+        Toast("Leave type data loaded successfully");
+      } else {
+        ErrorToast("Fail to laod Leave types. Please contact to admin");
+      }
+    });
+  }
+
+  bindLeaveTypeModal() {
+    $('#assignLeaveTypeModal').modal('show');
+    if(this.leaveTypes.length == 0)
+    this.leaveTypeDateIsReady = false;
+    this.http.get("leave/GetLeaveTypeFilter").then(response => {
+      if(response.ResponseBody) {
+        this.leaveTypes = response.ResponseBody;
+
+        if(this.currentPlan != null && this.currentPlan.AssociatedPlanTypes) {
+          this.planLeaveTypes = JSON.parse(this.currentPlan.AssociatedPlanTypes);
+
+          let i = 0;
+          while(i < this.leaveTypes.length) {
+            if(this.planLeaveTypes.find(x => x.LeavePlanTypeId == this.leaveTypes[i].LeavePlanTypeId) != null) {
+              this.leaveTypes[i].IsActive = true;
+            } else {
+              this.leaveTypes[i].IsActive = false;
+            }
+            i++;
+          }
+        }
+
+        this.leaveTypeDateIsReady = true;
+        Toast("Leave type data loaded successfully");
+      } else {
+        ErrorToast("Fail to laod Leave types. Please contact to admin");
+      }
+    });
+  }
+
+  selectedPlan(index: number, item: any) {
+    this.isPageReady = false;
+    this.currentPlan = item;
+    if(index >= 0 &&  item.LeavePlanId > 0) {
+      let result = document.querySelectorAll('.list-group-item > a');
+      let i = 0;
+      while (i < result.length) {
+        result[i].classList.remove('active-tab');
+        i++;
+      }
+
+      result[index].classList.add('active-tab');
+      if(this.currentPlan.AssociatedPlanTypes) {
+        this.planLeaveTypes = JSON.parse(this.currentPlan.AssociatedPlanTypes);
+
+        let i = 0;
+        while(i < this.leaveTypes.length) {
+          if(this.planLeaveTypes.find(x => x.LeavePlanTypeId == this.leaveTypes[i].LeavePlanTypeId) != null) {
+            this.leaveTypes[i].IsActive = true;
+          } else {
+            this.leaveTypes[i].IsActive = false;
+          }
+          i++;
+        }
+      }
+
+      this.isPageReady = true;
+    } else {
+      ErrorToast("Please select a company.")
+    }
+  }
+
   manageResponseOnUpdate(response: ResponseModel) {
-    if (response.ResponseBody){
+    if (response.ResponseBody) {
+      this.leaveTypes = response.ResponseBody;
       if(this.isUpdate)
         Toast("Record updated successfully");
       else
@@ -141,6 +244,36 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     $('#addLeaveTypeModal').modal('show');
   }
 
+  assignLeaveType(e: any, item: LeaveType) {
+    if (e.target.checked == true) {
+      let elem = this.assignLeaveTypes.find(x => x.LeavePlanCode === item.LeavePlanCode);
+      if (elem != null)
+        ErrorToast("Leave type already added. Please select another leave type.");
+      else
+        this.assignLeaveTypes.push(item);
+    } else {
+        let index = this.assignLeaveTypes.findIndex(x => x.LeavePlanCode === item.LeavePlanCode);
+        if (index > -1)
+          this.assignLeaveTypes.splice(index, 1);
+    }
+  }
+
+  addLeaveType() {
+    this.isLoading = true;
+    if (this.currentPlan.LeavePlanId > 0 && this.assignLeaveTypes.length > 0) {
+      this.http.post(`Leave/LeavePlanUpdateTypes/${this.currentPlan.LeavePlanId}`, this.assignLeaveTypes)
+      .then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          this.currentPlan = res.ResponseBody;
+          this.planLeaveTypes = JSON.parse(res.ResponseBody.AssociatedPlanTypes);
+          $('#assignLeaveTypeModal').modal('hide');
+          this.isLoading = false;
+          Toast('Leave Type is added successfully. ')
+        }
+      })
+    }
+  }
+
   updateRecord(item: LeaveType) {
     this.leaveTypeData = item;
     this.initLeaveTypeForm();
@@ -157,7 +290,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       LeavePlanCode: new FormControl(this.leaveTypeData.LeavePlanCode),
       PlanName: new FormControl(this.leaveTypeData.PlanName),
       LeavePlanTypeId: new FormControl(this.leaveTypeData.LeavePlanTypeId),
-      LeavePlanId: new FormControl(this.leaveTypeData.LeavePlanId),
       PlanDescription: new FormControl(this.leaveTypeData.PlanDescription),
       ShowDescription: new FormControl(this.leaveTypeData.ShowDescription),
       IsPaidLeave: new FormControl(this.leaveTypeData.IsPaidLeave),
@@ -182,10 +314,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       elem.classList.remove('d-none');
     else
       elem.classList.add('d-none');
-  }
-
-  assignLeavePopUp() {
-    $('#assignLeaveTypeModal').modal('show');
   }
 
   setUpLeaveConfig(currenType: any) {
@@ -277,7 +405,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
   }
 
-  changeMdneu(code: string) {
+  changeMenu(code: string) {
     this.menuItem = {
       Config: false,
       Emp: false,
@@ -287,6 +415,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     switch(code) {
       case 'Config':
         this.menuItem.CS = true;
+        this.bindFirstPlanOnPage();
         break;
       case 'Emp':
         this.menuItem.PR = true;
@@ -297,41 +426,13 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
   }
 
-  selectedPlan(index: number, item: any) {
-    this.isPageReady = false;
-    this.currentPlan = item;
-    if(index >= 0 &&  item.LeavePlanId > 0) {
-      let result = document.querySelectorAll('.list-group-item > a');
-      let i = 0;
-      while (i < result.length) {
-        result[i].classList.remove('active-tab');
-        i++;
-      }
-
-      result[index].classList.add('active-tab');
-
-      this.http.get(`leave/GetLeaveTypeByPlanId/${this.currentPlan.LeavePlanId}`).then(response => {
-        if(response.ResponseBody) {
-          this.leaveTypes = response.ResponseBody;
-          // this.initLeaveTypeForm();
-          Toast("Leave type detail loaded successfully");
-        } else {
-          ErrorToast("Unable to load leave type detail. Please contact to admin.");
-        }
-      });
-
-      this.isPageReady = true;
-    } else {
-      ErrorToast("Please select a company.")
-    }
-  }
-
   // -------------------Start---------------------
 
   initLeavePlanForm() {
     this.leavePlanForm = this.fb.group({
       PlanName: new FormControl(this.leavePlan.PlanName, [Validators.required]),
       PlanDescription: new FormControl(this.leavePlan.PlanDescription),
+      AssociatedPlanTypes: new FormControl(this.leavePlan.AssociatedPlanTypes),
       PlanStartCalendarDate: new FormControl(this.leavePlan.PlanStartCalendarDate, [Validators.required]),
       IsShowLeavePolicy: new FormControl(this.leavePlan.IsShowLeavePolicy),
       IsUploadedCustomLeavePolicy: new FormControl(this.leavePlan.IsUploadedCustomLeavePolicy)
@@ -367,7 +468,9 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       if(response.ResponseBody) {
         this.submit = false;
         this.isLoading = false;
-
+        this.leavePlanList = response.ResponseBody;
+        $('#addLeavePlanModal').modal('hide');
+        this.bindFirstPlanOnPage();
         Toast("Plan inserted/update successfully.");
       } else {
         ErrorToast("Fail to inserted/update.");
@@ -716,8 +819,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 
 class LeaveType {
   LeavePlanTypeId: number = 0;
-  LeavePlanId: number = 0;
-  LeaveGroupId: number;
   LeavePlanCode: string = null;
   PlanName: string = '';
   PlanDescription: string = '';
@@ -731,12 +832,14 @@ class LeaveType {
   IsRestrictOnMaritalStatus: boolean = false;
   IsMarried: boolean = null;
   Reasons: any = null;
+  IsActive: boolean = false;
 }
 
 class LeavePlan {
   LeavePlanId: number = 0;
   PlanName: string = null;
   PlanDescription: string = null;
+  AssociatedPlanTypes: string = null;
   PlanStartCalendarDate: Date = null;
   IsShowLeavePolicy: boolean = true;
   IsUploadedCustomLeavePolicy: boolean = false;
