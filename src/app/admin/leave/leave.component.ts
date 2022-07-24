@@ -31,7 +31,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   currentPlan: LeavePlan = new LeavePlan();
   leaveTypeData: LeaveType = new LeaveType();
   planLeaveTypes: Array<LeaveType> = []
-  assignLeaveTypes: Array<LeaveType> = [];
   leaveTypeDateIsReady: boolean = false;
 
   // -------------------Start--------------
@@ -82,23 +81,40 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   saveLeaveType(){
+    this.isLoading = true;
+    this.submit = true;
+    let errorCounter = 0;
     this.leaveTypeForm.get("Reasons").setValue('[]');
     let value = this.leaveTypeForm.value;
-
-    if(value) {
+    if (this.leaveTypeForm.get('PlanName').errors !== null)
+      errorCounter++;
+    if (this.leaveTypeForm.get('LeavePlanCode').errors !== null)
+      errorCounter++;
+    if (this.leaveTypeForm.get('PlanDescription').errors !== null)
+      errorCounter++;
+    if(value && errorCounter === 0) {
       let Url: string = "";
       if(this.isUpdate) {
         Url = `leave/UpdateLeavePlanType/${this.leaveTypeData.LeavePlanTypeId}`;
         this.http.put(Url, value).then((response: ResponseModel) => {
           this.manageResponseOnUpdate(response);
+          this.isLoading = false;
+          this.submit = false;
         });
       } else {
         Url = "leave/AddLeavePlanType";
         this.http.post(Url, value).then((response: ResponseModel) => {
           this.manageResponseOnUpdate(response);
+          this.isLoading = false;
+          this.submit = false;
         });
       }
     }
+    this.isLoading = false;
+  }
+
+  get LeaveTypeConntrol() {
+    return this.leaveTypeForm.controls;
   }
 
   onTabChange(index: number) {
@@ -230,22 +246,22 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 
   assignLeaveType(e: any, item: LeaveType) {
     if (e.target.checked == true) {
-      let elem = this.assignLeaveTypes.find(x => x.LeavePlanCode === item.LeavePlanCode);
+      let elem = this.planLeaveTypes.find(x => x.LeavePlanTypeId === item.LeavePlanTypeId);
       if (elem != null)
         ErrorToast("Leave type already added. Please select another leave type.");
       else
-        this.assignLeaveTypes.push(item);
+        this.planLeaveTypes.push(item);
     } else {
-        let index = this.assignLeaveTypes.findIndex(x => x.LeavePlanCode === item.LeavePlanCode);
+        let index = this.planLeaveTypes.findIndex(x => x.LeavePlanCode === item.LeavePlanCode);
         if (index > -1)
-          this.assignLeaveTypes.splice(index, 1);
+          this.planLeaveTypes.splice(index, 1);
     }
   }
 
   addLeaveType() {
     this.isLoading = true;
-    if (this.currentPlan.LeavePlanId > 0 && this.assignLeaveTypes.length > 0) {
-      this.http.post(`Leave/LeavePlanUpdateTypes/${this.currentPlan.LeavePlanId}`, this.assignLeaveTypes)
+    if (this.currentPlan.LeavePlanId > 0 && this.planLeaveTypes.length > 0) {
+      this.http.post(`Leave/LeavePlanUpdateTypes/${this.currentPlan.LeavePlanId}`, this.planLeaveTypes)
       .then((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.currentPlan = res.ResponseBody;
@@ -271,10 +287,10 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
 
     this.leaveTypeForm = this.fb.group({
-      LeavePlanCode: new FormControl(this.leaveTypeData.LeavePlanCode),
-      PlanName: new FormControl(this.leaveTypeData.PlanName),
+      LeavePlanCode: new FormControl(this.leaveTypeData.LeavePlanCode, [Validators.required]),
+      PlanName: new FormControl(this.leaveTypeData.PlanName, [Validators.required]),
       LeavePlanTypeId: new FormControl(this.leaveTypeData.LeavePlanTypeId),
-      PlanDescription: new FormControl(this.leaveTypeData.PlanDescription),
+      PlanDescription: new FormControl(this.leaveTypeData.PlanDescription, [Validators.required]),
       ShowDescription: new FormControl(this.leaveTypeData.ShowDescription),
       IsPaidLeave: new FormControl(this.leaveTypeData.IsPaidLeave),
       IsSickLeave: new FormControl(this.leaveTypeData.IsSickLeave),
@@ -415,8 +431,8 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 class LeaveType {
   LeavePlanTypeId: number = 0;
   LeavePlanCode: string = null;
-  PlanName: string = '';
-  PlanDescription: string = '';
+  PlanName: string = null;
+  PlanDescription: string = null;
   MaxLeaveLimit: number;
   ShowDescription: boolean = false;
   IsPaidLeave: boolean = false;
