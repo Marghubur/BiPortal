@@ -63,16 +63,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 
 
     this.initLeavePlanForm();
-<<<<<<< HEAD
-=======
-    this.initLeaveQuota();
-    this.initLeaveAccrual();
-    this.initApplyForLeave();
-    this.initLeaveRestriction();
-    this.initholidayWeekendOff();
-    this.initleaveApproval();
-    this.inityearEndProcess();
->>>>>>> main
   }
 
   loadLeaveData() {
