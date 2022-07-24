@@ -17,8 +17,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   cachedData: any = null;
   configPageNo: number = 2;
   isPageReady: boolean = false;
-  leaveQuotaForm: FormGroup;
-  leaveQuota: LeaveQuota = new LeaveQuota();
+  leaveDetailForm: FormGroup;
+  leaveDetail: LeaveDetail = new LeaveDetail();
   leaveAccrualForm: FormGroup;
   leaveRestrictionForm: FormGroup;
   applyForLeaveForm: FormGroup;
@@ -33,7 +33,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   leaveApproval: LeaveApproval = new LeaveApproval();
   submit: boolean = false;
   isLoading: boolean = false;
-  LeavePlanId: number = 4;
+  LeavePlanId: number = 0;
+  isDataLoaded: boolean = false;
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -51,25 +52,48 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  ngOnInit(): void {
-    this.initLeaveQuota();
-    this.initLeaveAccrual();
-    this.initApplyForLeave();
-    this.initLeaveRestriction();
-    this.initholidayWeekendOff();
-    this.initleaveApproval();
-    this.inityearEndProcess();
+  loadPlanDetail() {
+    this.http.get(`leave/GetLeaveTypeDetailByPlan/${this.LeavePlanId}`).then(response => {
+      if(response.ResponseBody) {
+        this.initLeaveDetail();
+        this.initLeaveAccrual();
+        this.initApplyForLeave();
+        this.initLeaveRestriction();
+        this.initholidayWeekendOff();
+        this.initleaveApproval();
+        this.inityearEndProcess();
+
+        Toast("Data loaded successfully")
+        this.isDataLoaded = true;
+      } else {
+        ErrorToast("Unable to lead plan detail. Please contact to admin.");
+      }
+    });
   }
 
-  initLeaveQuota() {
-    this.leaveQuotaForm = this.fb.group({
-      IsQuotaLimit: new FormControl(this.leaveQuota.IsQuotaLimit? 'true':'false'),
-      QuotaLimit: new FormControl(this.leaveQuota.QuotaLimit),
-      IsBeyondAnnualQuota: new FormControl(this.leaveQuota.IsBeyondAnnualQuota? 'true':'false'),
-      BeyondAnnualQuota: new FormControl(this.leaveQuota.BeyondAnnualQuota),
-      IsLeaveQuotaAllocated: new FormControl(this.leaveQuota.IsLeaveQuotaAllocated),
-      LeaveQuotaAllocatedAfter: new FormControl(this.leaveQuota.LeaveQuotaAllocatedAfter),
-      IsManagerAwardCasual: new FormControl(this.leaveQuota.IsManagerAwardCasual? 'true':'false')
+  ngOnInit(): void {
+    let id = this.nav.getValue();
+    if(id != null && !isNaN(Number(id))) {
+      this.LeavePlanId = Number(id);
+      this.loadPlanDetail();
+    } else {
+      ErrorToast("Invlaid plan selected please select again.");
+      return;
+    }
+
+  }
+
+  initLeaveDetail() {
+    this.leaveDetailForm = this.fb.group({
+      IsLeaveDaysLimit: new FormControl(this.leaveDetail.IsLeaveDaysLimit? 'true':'false'),
+      LeaveLimit: new FormControl(this.leaveDetail.LeaveLimit),
+      CanApplyExtraLeave: new FormControl(this.leaveDetail.CanApplyExtraLeave? 'true':'false'),
+      ExtraLeaveLimit: new FormControl(this.leaveDetail.ExtraLeaveLimit),
+      IsNoLeaveAfterDate: new FormControl(this.leaveDetail.IsNoLeaveAfterDate),
+      LeaveNotAllocatedIfJoinAfter: new FormControl(this.leaveDetail.LeaveNotAllocatedIfJoinAfter),
+      CanManagerAwardCausalLeave: new FormControl(this.leaveDetail.CanManagerAwardCausalLeave? 'true':'false'),
+      CanCompoffAllocatedAutomatically: new FormControl(this.leaveDetail.CanCompoffAllocatedAutomatically? 'true':'false'),
+      CanCompoffCreditedByManager: new FormControl(this.leaveDetail.CanCompoffCreditedByManager? 'true':'false')
     })
   }
 
@@ -77,7 +101,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     this.submit = true;
     this.isLoading = true
     let errorCounter = 0;
-    let value = this.leaveQuotaForm.value;
+    let value = this.leaveDetailForm.value;
     if (value && errorCounter == 0) {
       this.http.post(`Leave/AddUpdateLeaveQuota/${this.LeavePlanId}`, value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
@@ -92,12 +116,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
 
-  noLeaveQuotaAllow(e: any) {
+  noLeaveDetailAllow(e: any) {
     let value = e.target.checked;
     if (value == false)
-      document.querySelector('input[name="LeaveQuotaAllocatedAfter"]').setAttribute('readonly', '');
+      document.querySelector('input[name="LeaveNotAllocatedIfJoinAfter"]').setAttribute('readonly', '');
     else
-      document.querySelector('input[name="LeaveQuotaAllocatedAfter"]').removeAttribute('readonly');
+      document.querySelector('input[name="LeaveNotAllocatedIfJoinAfter"]').removeAttribute('readonly');
   }
 
   LeaveBalanceCalculated(e: any) {
@@ -204,9 +228,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   quotaLimit(e: any) {
     let value = e.target.value;
     if (value == 'true')
-      document.getElementsByName('QuotaLimit')[0].removeAttribute('readonly');
+      document.getElementsByName('LeaveLimit')[0].removeAttribute('readonly');
     else
-      document.getElementsByName('QuotaLimit')[0].setAttribute('readonly', '');
+      document.getElementsByName('LeaveLimit')[0].setAttribute('readonly', '');
   }
 
   initLeaveAccrual() {
@@ -468,14 +492,18 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
 }
 
-class LeaveQuota {
-  IsQuotaLimit: boolean = true;
-  QuotaLimit: number = 0;
-  IsBeyondAnnualQuota: boolean = false;
-  BeyondAnnualQuota: number = 0;
-  IsLeaveQuotaAllocated: boolean = false;
-  LeaveQuotaAllocatedAfter: number = 0;
-  IsManagerAwardCasual: boolean = false;
+class LeaveDetail {
+  LeaveDetailId: number = 0;
+  LeavePlanId: number = 0;
+  IsLeaveDaysLimit: boolean = false;
+  LeaveLimit: number = 0;
+  CanApplyExtraLeave: boolean = false;
+  ExtraLeaveLimit: number = 0;
+  LeaveNotAllocatedIfJoinAfter: number = 0;
+  IsNoLeaveAfterDate: boolean = false;
+  CanManagerAwardCausalLeave: boolean = false;
+  CanCompoffAllocatedAutomatically: boolean = false;
+  CanCompoffCreditedByManager: boolean = false;
 }
 
 class LeaveAccrual {
