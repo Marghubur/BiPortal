@@ -15,7 +15,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 })
 export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   cachedData: any = null;
-  configPageNo: number = 1;
+  configPageNo: number = 2;
   isPageReady: boolean = false;
   leaveQuotaForm: FormGroup;
   leaveQuota: LeaveQuota = new LeaveQuota();
@@ -80,10 +80,11 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let value = this.leaveQuotaForm.value;
     if (value && errorCounter == 0) {
       this.http.post(`Leave/AddUpdateLeaveQuota/${this.LeavePlanId}`, value).then((res:ResponseModel) => {
-        if (res.ResponseBody)
+        if (res.ResponseBody) {
           Toast("Leave Quota updated successfully.")
+          this.configPageNo = this.configPageNo + 1;
+        }
       })
-      this.configPageNo = this.configPageNo + 1;
       this.submit = false;
       this.isLoading = false;
     }
@@ -210,31 +211,36 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   initLeaveAccrual() {
     this.leaveAccrualForm = this.fb.group({
-      IsLeaveBalanceCalculated: new FormControl (this.leaveAccrual.IsLeaveBalanceCalculated),
-      AccrualRateBasedon: new FormControl(this.leaveAccrual.AccrualRateBasedon),
-      AccrualAnnualQuota: new FormControl(this.leaveAccrual.AccrualAnnualQuota),
-      IsEmpJoinMiddle: new FormControl(this.leaveAccrual.IsEmpJoinMiddle),
-      IsEmpExitMiddle: new FormControl(this.leaveAccrual.IsEmpExitMiddle),
       LeaveCreditBWJoiningDate: new FormArray([this.createFormBWJoiningDate()]),
       LeaveCreditBWExitDate: new FormArray([this.createFormBWExitDate()]),
-      IsAccrualLevelVary: new FormControl(this.leaveAccrual.IsAccrualLevelVary),
-      IsAccrualStart: new FormControl(this.leaveAccrual.IsAccrualStart),
-      DaysAfterJoining: new FormControl(this.leaveAccrual.DaysAfterJoining),
-      DaysAfterProbEnd: new FormControl(this.leaveAccrual.DaysAfterProbEnd),
       AccrualRateOnExp: new FormArray([this.createAccruralRateOnExp()]),
-      IsLeaveAccrualImpacted: new FormControl(this.leaveAccrual.IsLeaveAccrualImpacted),
-      WeeklyOffAsAbsent: new FormControl(this.leaveAccrual.WeeklyOffAsAbsent),
-      HolidayOffAsAbsent: new FormControl(this.leaveAccrual.HolidayOffAsAbsent),
-      IsLeaveforFutureDate: new FormControl(this.leaveAccrual.IsLeaveforFutureDate),
-      IsLeaveBeyondBalance: new FormControl(this.leaveAccrual.IsLeaveBeyondBalance),
-      LeaveBalanceLessThan: new FormControl(this.leaveAccrual.LeaveBalanceLessThan),
-      EmpGoBeyondAccrueBal: new FormControl(this.leaveAccrual.EmpGoBeyondAccrueBal),
-      IsAccrueLeaveTotalBal: new FormControl(this.leaveAccrual.IsAccrueLeaveEmpOnLeave),
-      IsAccrueLeaveEmpOnLeave: new FormControl(this.leaveAccrual.IsAccrueLeaveEmpOnLeave),
-      DaysInPrevMnth: new FormControl(this.leaveAccrual.DaysInPrevMnth),
-      IsLeaveBalanceRounded: new FormControl(this.leaveAccrual.IsLeaveBalanceRounded),
-      IsLeaveCredit: new FormControl(this.leaveAccrual.IsLeaveCredit),
-      LeaveExpAfter: new FormControl(this.leaveAccrual.LeaveExpAfter)
+      LeaveAccrualId: new FormControl(this.leaveAccrual.LeaveAccrualId),
+      LeavePlanId: new FormControl(this.leaveAccrual.LeavePlanId),
+      CanApplyEntireLeave: new FormControl(this.leaveAccrual.CanApplyEntireLeave),
+      IsLeaveAccruedPatternAvail: new FormControl(this.leaveAccrual.IsLeaveAccruedPatternAvail),
+      LeaveDistributionSequence: new FormControl(this.leaveAccrual.LeaveDistributionSequence),
+      LeaveDistributionAppliedFrom: new FormControl(this.leaveAccrual.LeaveDistributionAppliedFrom),
+      IsAllowLeavesForJoinigMonth: new FormControl(this.leaveAccrual.IsAllowLeavesForJoinigMonth),
+      IsAllowLeavesProbationPeriod: new FormControl(this.leaveAccrual.IsAllowLeavesProbationPeriod),
+      BreakMonthLeaveAllocationId: new FormControl(this.leaveAccrual.BreakMonthLeaveAllocationId),
+      IsNoLeaveOnProbationPeriod: new FormControl(this.leaveAccrual.IsNoLeaveOnProbationPeriod),
+      IsVaryOnProbationOrExprience: new FormControl(this.leaveAccrual.IsVaryOnProbationOrExprience),
+      IsImpactedOnWorkDaysEveryMonth: new FormControl(this.leaveAccrual.IsImpactedOnWorkDaysEveryMonth),
+      WeekOffAsAbsentIfAttendaceLessThen: new FormControl(this.leaveAccrual.WeekOffAsAbsentIfAttendaceLessThen),
+      HolidayAsAbsentIfAttendaceLessThen: new FormControl(this.leaveAccrual.HolidayAsAbsentIfAttendaceLessThen),
+      CanApplyForFutureDate: new FormControl(this.leaveAccrual.CanApplyForFutureDate),
+      ExtraLeaveBeyondAccruedBalance: new FormControl(this.leaveAccrual.ExtraLeaveBeyondAccruedBalance),
+      NoOfDaysForExtraLeave: new FormControl(this.leaveAccrual.NoOfDaysForExtraLeave),
+      AllowOnlyIfAccrueBalanceIsAlleast: new FormControl(this.leaveAccrual.AllowOnlyIfAccrueBalanceIsAlleast),
+      NotAllowIfAlreadyOnLeaveMoreThan: new FormControl(this.leaveAccrual.NotAllowIfAlreadyOnLeaveMoreThan),
+      RoundOffLeaveBalance: new FormControl(this.leaveAccrual.RoundOffLeaveBalance),
+      ToNearestHalfDay: new FormControl(this.leaveAccrual.ToNearestHalfDay),
+      ToNearestFullDay: new FormControl(this.leaveAccrual.ToNearestFullDay),
+      ToNextAvailableHalfDay: new FormControl(this.leaveAccrual.ToNextAvailableHalfDay),
+      ToNextAvailableFullDay: new FormControl(this.leaveAccrual.ToNextAvailableFullDay),
+      ToPreviousHalfDay: new FormControl(this.leaveAccrual.ToPreviousHalfDay),
+      DoesLeaveExpireAfterSomeTime: new FormControl(this.leaveAccrual.DoesLeaveExpireAfterSomeTime),
+      AfterHowManyDays: new FormControl(this.leaveAccrual.AfterHowManyDays)
     })
   }
 
@@ -308,27 +314,25 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   initApplyForLeave() {
     this.applyForLeaveForm = this.fb.group({
-      IsApplyHalfDay: new FormControl(this.appplyingForLeave.IsApplyHalfDay),
-      IsEmpSeeLeave: new FormControl(this.appplyingForLeave.IsEmpSeeLeave),
-      LeaveCredit: new FormArray([this.createLeaveCredit()]),
-      IsEmpApplyLeave: new FormControl(this.appplyingForLeave.IsEmpApplyLeave),
-      BeforeDays: new FormControl(this.appplyingForLeave.BeforeDays),
-      IsEmpApplyPastDay: new FormControl(this.appplyingForLeave.IsEmpApplyPastDay),
-      NoOfPastDay: new FormControl(this.appplyingForLeave.NoOfPastDay),
-      NotApplyPastDay: new FormControl(this.appplyingForLeave.NotApplyPastDay),
-      NotApplyPastDayAfter: new FormControl(this.appplyingForLeave.NotApplyPastDayAfter),
-      IsCommentRequired: new FormControl(this.appplyingForLeave.IsCommentRequired),
-      IsDocumentRequired: new FormControl(this.appplyingForLeave.IsDocumentRequired),
-      IsReqdDocforLeave: new FormControl(this.appplyingForLeave.IsReqdDocforLeave),
-      ReqdDocforLeaveAfter: new FormControl(this.appplyingForLeave.ReqdDocforLeaveAfter)
+      LeaveApplyDetailId: new FormControl(this.appplyingForLeave.LeaveApplyDetailId),
+      LeavePlanId: new FormControl(this.appplyingForLeave.LeavePlanId),
+      IsAllowForHalfDay: new FormControl(this.appplyingForLeave.IsAllowForHalfDay),
+      EmployeeCanSeeAndApplyCurrentPlanLeave: new FormControl(this.appplyingForLeave.EmployeeCanSeeAndApplyCurrentPlanLeave),
+      ApplyPriorBeforeLeaveDate: new FormControl(this.appplyingForLeave.ApplyPriorBeforeLeaveDate),
+      BackDateLeaveApplyNotBeyondDays: new FormControl(this.appplyingForLeave.BackDateLeaveApplyNotBeyondDays),
+      RestrictBackDateLeaveApplyAfter: new FormControl(this.appplyingForLeave.RestrictBackDateLeaveApplyAfter),
+      CurrentLeaveRequiredComments: new FormControl(this.appplyingForLeave.CurrentLeaveRequiredComments),
+      ProofRequiredIfDaysExceeds: new FormControl(this.appplyingForLeave.ProofRequiredIfDaysExceeds),
+      NoOfDaysExceeded: new FormControl(this.appplyingForLeave.NoOfDaysExceeded),
+      LeaveCredit: new FormArray([this.createLeaveCredit()])
     })
   }
 
   createLeaveCredit(): FormGroup {
     return this.fb.group({
-      DurationMoreThan: new FormControl(),
-      NeedDays: new FormControl(),
-      AtLeastWOrkingDays: new FormControl()
+      RemaningCalendarDayInNotice: new FormControl(this.appplyingForLeave.RemaningCalendarDayInNotice),
+      RequiredCalendarDaysForLeaveApply: new FormControl(this.appplyingForLeave.RequiredCalendarDaysForLeaveApply),
+      RemaningWorkingDaysInNotice: new FormControl(this.appplyingForLeave.RemaningWorkingDaysInNotice)
     })
   }
 
@@ -344,76 +348,82 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   initLeaveRestriction() {
     this.leaveRestrictionForm = this.fb.group({
-      IsNewJoineeApply: new FormControl(this.leaveRestriction.IsNewJoineeApply),
-      AfterProbationEnd: new FormControl(this.leaveRestriction.AfterProbationEnd),
-      AfterJoining: new FormControl(this.leaveRestriction.AfterJoining),
-      IsLimitforConsecutiveDay: new FormControl(this.leaveRestriction.IsLimitforConsecutiveDay),
-      LeaveDurationProbation: new FormControl(this.leaveRestriction.LeaveDurationProbation),
-      IsLeaveDurationProbation: new FormControl(this.leaveRestriction.IsLeaveDurationProbation),
-      ConsecutiveLeaveDay: new FormControl(this.leaveRestriction.ConsecutiveLeaveDay),
-      IsMaxLeaveAvailed: new FormControl(this.leaveRestriction.IsMaxLeaveAvailed),
-      ExtendsActualLeaveDays: new FormControl(this.leaveRestriction.ExtendsActualLeaveDays),
-      IsManagerOverrideLeave: new FormControl(this.leaveRestriction.IsManagerOverrideLeave),
-      IsEnforceMinGap: new FormControl(this.leaveRestriction.IsEnforceMinGap),
-      EnforecMinGapDays: new FormControl(this.leaveRestriction.EnforecMinGapDays),
-      IsAllowinLeaveCalendarYear: new FormControl(this.leaveRestriction.IsAllowinLeaveCalendarYear),
-      AllowDaysinLeaveCalendarYear: new FormControl(this.leaveRestriction.AllowDaysinLeaveCalendarYear),
-      IsAllowinLeaveCalendarMonth: new FormControl(this.leaveRestriction.IsAllowinLeaveCalendarMonth),
-      AllowDaysinLeaveCalendarMonth: new FormControl(this.leaveRestriction.AllowDaysinLeaveCalendarMonth),
-      IsAllowinLeaveEntireTenure: new FormControl(this.leaveRestriction.IsAllowinLeaveEntireTenure),
-      AllowDaysinLeaveEntireTenure: new FormControl(this.leaveRestriction.AllowDaysinLeaveEntireTenure),
-      IsAllowLeavesInSingleInstance: new FormControl(this.leaveRestriction.IsAllowLeavesInSingleInstance),
-      AllowDaysLeavesInSingleInstance: new FormControl(this.leaveRestriction.AllowDaysLeavesInSingleInstance),
-      LeaveBalanceQualOrGreater: new FormControl(this.leaveRestriction.LeaveBalanceQualOrGreater),
-      IsRestrictEmpForLeave: new FormControl(this.leaveRestriction.IsRestrictEmpForLeave),
-      RestrictLeaveInEveryMonth: new FormControl(this.leaveRestriction.RestrictLeaveInEveryMonth),
-      IsLeaveTakenWith: new FormControl(this.leaveRestriction.IsLeaveTakenWith),
-      LeaveTakenWith: new FormControl(this.leaveRestriction.LeaveTakenWith),
-      IsLeaveAvailBalanceIn: new FormControl(this.leaveRestriction.IsLeaveAvailBalanceIn),
-      LeaveAvailBalanceIn: new FormControl(this.leaveRestriction.LeaveAvailBalanceIn)
+      LeavePlanRestrictionId: new FormControl(this.leaveRestriction.LeavePlanRestrictionId),
+      LeavePlanId: new FormControl(this.leaveRestriction.LeavePlanId),
+      NewJoineeCanApplyLeave: new FormControl(this.leaveRestriction.NewJoineeCanApplyLeave),
+      DaysAfterInProbation: new FormControl(this.leaveRestriction.DaysAfterInProbation),
+      DaysAfterJoining: new FormControl(this.leaveRestriction.DaysAfterJoining),
+      LimitDaysLeaveInProbation: new FormControl(this.leaveRestriction.LimitDaysLeaveInProbation),
+      IsConsecutiveLeaveLimit: new FormControl(this.leaveRestriction.IsConsecutiveLeaveLimit),
+      ConsecutiveDaysLimit: new FormControl(this.leaveRestriction.ConsecutiveDaysLimit),
+      IsLeaveInNoticeExtendsNoticePeriod: new FormControl(this.leaveRestriction.IsLeaveInNoticeExtendsNoticePeriod),
+      NoOfTimesNoticePeriodExtended: new FormControl(this.leaveRestriction.NoOfTimesNoticePeriodExtended),
+      CanManageOverrideLeaveRestriction: new FormControl(this.leaveRestriction.CanManageOverrideLeaveRestriction),
+      GapBetweenTwoConsicutiveLeaveDates: new FormControl(this.leaveRestriction.GapBetweenTwoConsicutiveLeaveDates),
+      LimitOfMaximumLeavesInCalendarMonth: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInCalendarMonth),
+      LimitOfMaximumLeavesInCalendarYear: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInCalendarYear),
+      LimitOfMaximumLeavesInEntireTenure: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInEntireTenure),
+      IsLeaveRestrictionForEachMonth: new FormControl(this.leaveRestriction.IsLeaveRestrictionForEachMonth),
+      RestrictFromDayOfMonth: new FormControl(this.leaveRestriction.RestrictFromDayOfMonth),
+      RestrictToDayOfMonth: new FormControl(this.leaveRestriction.RestrictToDayOfMonth),
+      CurrentLeaveCannotCombineWith: new FormControl(this.leaveRestriction.CurrentLeaveCannotCombineWith),
+      CurrentLeaveCannotIfBalanceInPlan: new FormControl(this.leaveRestriction.CurrentLeaveCannotIfBalanceInPlan)
     })
   }
 
   initholidayWeekendOff() {
     this.holidayWeekendOffForm = this.fb.group({
-      IsHolidayAdjoining: new FormControl(this.holidayWeekOffs.IsHolidayAdjoining),
-      HolidayAdjoiningTotalLeave: new FormControl(this.holidayWeekOffs.HolidayAdjoiningTotalLeave),
-      HolidayAdjoiningOn: new FormControl(this.holidayWeekOffs.HolidayAdjoiningOn),
-      IsHolidayAccomLeave: new FormControl(this.holidayWeekOffs.IsHolidayAccomLeave),
-      IsWeekoffDayAdjoining: new FormControl(this.holidayWeekOffs.IsWeekoffDayAdjoining),
-      WeekoffDayAdjoiningTotalLeave: new FormControl(this.holidayWeekOffs.WeekoffDayAdjoiningTotalLeave),
-      WeekoffDayAdjoiningOn: new FormControl(this.holidayWeekOffs.WeekoffDayAdjoiningOn),
-      IsWeekOffAccomLeave: new FormControl(this.holidayWeekOffs.IsWeekOffAccomLeave),
-      IsHolidayAccomLeaveHalfday: new FormControl(this.holidayWeekOffs.IsHolidayAccomLeaveHalfday),
-      IsWeekOffAccomLeaveHalfday: new FormControl(this.holidayWeekOffs.IsWeekOffAccomLeaveHalfday),
-      IsClubSandwich: new FormControl(this.holidayWeekOffs.IsClubSandwich)
+      LeaveHolidaysAndWeekOffId:new FormControl(this.holidayWeekOffs.LeaveHolidaysAndWeekOffId),
+      LeavePlanId:new FormControl(this.holidayWeekOffs.LeavePlanId),
+      AdJoiningHolidayIsConsiderAsLeave:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffIsConsiderAsLeave),
+      IfLeaveLieBetweenTwoHolidays:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenTwoHolidays),
+      IfHolidayIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightBeforLeave),
+      IfHolidayIsRightAfterLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightAfterLeave),
+      IfHolidayIsBetweenLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsBetweenLeave),
+      IfHolidayIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfHolidayIsRightBeforeAfterOrInBetween),
+      AdjoiningHolidayRulesIsValidForHalfDay:new FormControl(this.holidayWeekOffs.AdjoiningHolidayRulesIsValidForHalfDay),
+      AdjoiningWeekOffIsConsiderAsLeave:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffIsConsiderAsLeave),
+      ConsiderLeaveIfIncludeDays:new FormControl(this.holidayWeekOffs.ConsiderLeaveIfIncludeDays),
+      IfLeaveLieBetweenWeekOff:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenWeekOff),
+      IfWeekOffIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforLeave),
+      IfWeekOffIsRightAfterLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightAfterLeave),
+      IfWeekOffIsBetweenLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsBetweenLeave),
+      IfWeekOffIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforeAfterOrInBetween),
+      AdjoiningWeekOffRulesIsValidForHalfDay:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffRulesIsValidForHalfDay),
+      ClubSandwichPolicy:new FormControl(this.holidayWeekOffs.ClubSandwichPolicy)
     })
   }
 
   initleaveApproval() {
     this.leaveApprovalForm = this.fb.group({
-      IsRequiredApproval: new FormControl(this.leaveApproval.IsRequiredApproval)
+      IsLeaveRequiredApproval: new FormControl(this.leaveApproval.IsLeaveRequiredApproval)
     })
   }
 
   inityearEndProcess() {
     this.yearEndProcessForm = this.fb.group({
-      IsLeaveBalanceAtEnd: new FormControl(this.yearEndProcess.IsLeaveBalanceAtEnd),
-      LeaveForPaymentBasedOn: new FormControl(this.yearEndProcess.LeaveForPaymentBasedOn),
-      BalanceMoreThan: new FormControl(this.yearEndProcess.BalanceMoreThan),
-      Pay: new FormControl(this.yearEndProcess.Pay),
-      PercentRemainingDay: new FormControl(this.yearEndProcess.PercentRemainingDay),
-      IsRestrictMaxDays: new FormControl(this.yearEndProcess.IsRestrictMaxDays),
-      RestrictMaxDays: new FormControl(this.yearEndProcess.RestrictMaxDays),
-      IsRestrictMaxCarryForward: new FormControl(this.yearEndProcess.IsRestrictMaxCarryForward),
-      RestrictMaxCarryForwardDays: new FormControl(this.yearEndProcess.RestrictMaxCarryForwardDays),
-      LeaveBalanceMoreThan: new FormControl(this.yearEndProcess.LeaveBalanceMoreThan),
-      PayUptoDays: new FormControl(this.yearEndProcess.PayUptoDays),
-      CarryForwardDaysUpto: new FormControl(this.yearEndProcess.CarryForwardDaysUpto),
-      IsLeaveExpire: new FormControl(this.yearEndProcess.IsLeaveExpire),
-      ExpireLeaveCarryForward: new FormControl(this.yearEndProcess.ExpireLeaveCarryForward),
-      IsNegativeLeaveQuota: new FormControl(this.yearEndProcess.IsNegativeLeaveQuota),
-      IsExpiraySettingUnchanged: new FormControl(this.yearEndProcess.IsExpiraySettingUnchanged)
+      IsLeaveBalanceExpiredOnEndOfYear: new FormControl(this.yearEndProcess.IsLeaveBalanceExpiredOnEndOfYear),
+      AllConvertedToPaid: new FormControl(this.yearEndProcess.AllConvertedToPaid),
+      AllLeavesCarryForwardToNextYear: new FormControl(this.yearEndProcess.AllLeavesCarryForwardToNextYear),
+      PayFirstNCarryForwordRemaning: new FormControl(this.yearEndProcess.PayFirstNCarryForwordRemaning),
+      CarryForwordFirstNPayRemaning: new FormControl(this.yearEndProcess.CarryForwordFirstNPayRemaning),
+      PayNCarryForwardIfDaysBalance: new FormControl(this.yearEndProcess.PayNCarryForwardIfDaysBalance),
+      PayPercent: new FormControl(this.yearEndProcess.PayPercent),
+      CarryForwardPercent: new FormControl(this.yearEndProcess.CarryForwardPercent),
+      IsMaximumPayableRequired: new FormControl(this.yearEndProcess.IsMaximumPayableRequired),
+      MaximumPayableDays: new FormControl(this.yearEndProcess.MaximumPayableDays),
+      IsMaximumCarryForwardRequired: new FormControl(this.yearEndProcess.IsMaximumCarryForwardRequired),
+      MaximumCarryForwardDays: new FormControl(this.yearEndProcess.MaximumCarryForwardDays),
+      RulesForLeaveBalanceIsMoreThan: new FormControl(this.yearEndProcess.RulesForLeaveBalanceIsMoreThan),
+      PaybleForDays: new FormControl(this.yearEndProcess.PaybleForDays),
+      CarryForwardForDays: new FormControl(this.yearEndProcess.CarryForwardForDays),
+      DoestCarryForwardExpired: new FormControl(this.yearEndProcess.DoestCarryForwardExpired),
+      ExpiredAfter: new FormControl(this.yearEndProcess.ExpiredAfter),
+      DoesNegativeLeaveHasImpact: new FormControl(this.yearEndProcess.DoesNegativeLeaveHasImpact),
+      DeductFromSalaryOnYearChange: new FormControl(this.yearEndProcess.DeductFromSalaryOnYearChange),
+      ResetBalanceToZero: new FormControl(this.yearEndProcess.ResetBalanceToZero),
+      CarryForwardToNextYear: new FormControl(this.yearEndProcess.CarryForwardToNextYear),
+      PayNCarryForwardForFixedDays: new FormControl(this.yearEndProcess.PayNCarryForwardForFixedDays)
     })
   }
 
@@ -500,89 +510,141 @@ class LeaveAccrual {
   IsLeaveBalanceRounded: number = 1;
   IsLeaveCredit: boolean = false;
   LeaveExpAfter: number = 0;
+
+  LeaveAccrualId: number = 0;
+  LeavePlanId: number = 0;
+  CanApplyEntireLeave: boolean = null;
+  IsLeaveAccruedPatternAvail: boolean = null;
+  LeaveDistributionSequence: string = '';
+  LeaveDistributionAppliedFrom: number = 0;
+  IsAllowLeavesForJoinigMonth: boolean = null;
+  IsAllowLeavesProbationPeriod: boolean = null;
+  BreakMonthLeaveAllocationId: number = 0;
+  IsNoLeaveOnProbationPeriod: boolean = null;
+  IsVaryOnProbationOrExprience: boolean = null;
+  IsImpactedOnWorkDaysEveryMonth: boolean = null;
+  WeekOffAsAbsentIfAttendaceLessThen: number = 0;
+  HolidayAsAbsentIfAttendaceLessThen: boolean = null;
+  CanApplyForFutureDate: boolean = null;
+  ExtraLeaveBeyondAccruedBalance: boolean = null;
+  NoOfDaysForExtraLeave: number = 0;
+  AllowOnlyIfAccrueBalanceIsAlleast: number = 0;
+  NotAllowIfAlreadyOnLeaveMoreThan: number = 0;
+  RoundOffLeaveBalance: boolean = null;
+  ToNearestHalfDay: boolean = null;
+  ToNearestFullDay: boolean = null;
+  ToNextAvailableHalfDay: boolean = null;
+  ToNextAvailableFullDay: boolean = null;
+  ToPreviousHalfDay: boolean = null;
+  DoesLeaveExpireAfterSomeTime: boolean = null;
+  AfterHowManyDays: number = 0;
+  Allocateleavebreakformonth: Allocateleavebreakformonth = new Allocateleavebreakformonth();
 }
 
 class ApplyingForLeave {
-  IsApplyHalfDay: boolean = false;
-  IsEmpSeeLeave: boolean = true;
-  DurationMoreThan: number = null;
-  NeedDays: number = null;
-  AtLeastWOrkingDays: number = null;
-  IsEmpApplyLeave: boolean = false;
-  BeforeDays: number = 0;
-  IsEmpApplyPastDay: boolean = false;
-  NoOfPastDay: number = 0;
-  NotApplyPastDay: boolean = false;
-  NotApplyPastDayAfter: number = 0;
-  IsCommentRequired: boolean = false;
-  IsDocumentRequired: boolean = false;
-  IsReqdDocforLeave: boolean = false;
-  ReqdDocforLeaveAfter: number = 0;
+  LeaveApplyDetailId: number = 0;
+  LeavePlanId: number = 0;
+  IsAllowForHalfDay: boolean = null;
+  EmployeeCanSeeAndApplyCurrentPlanLeave: boolean = null;
+  RemaningCalendarDayInNotice: number = 0;
+  RequiredCalendarDaysForLeaveApply: number = 0;
+  RemaningWorkingDaysInNotice: number = 0;
+  ApplyPriorBeforeLeaveDate: number = 0;
+  BackDateLeaveApplyNotBeyondDays: number = 0;
+  RestrictBackDateLeaveApplyAfter: number = 0;
+  CurrentLeaveRequiredComments: boolean = null;
+  ProofRequiredIfDaysExceeds: boolean = null;
+  NoOfDaysExceeded: number = 0;
 }
 
 class LeaveRestriction {
-  IsNewJoineeApply: boolean = true;
-  AfterProbationEnd: number =0;
-  AfterJoining: number =0;
-  IsLimitforConsecutiveDay: boolean = false;
-  LeaveDurationProbation: number = 0;
-  IsLeaveDurationProbation: boolean = false;
-  ConsecutiveLeaveDay: number = 0;
-  IsMaxLeaveAvailed: boolean = false;
-  ExtendsActualLeaveDays:number = 0;
-  IsManagerOverrideLeave: boolean = false;
-  IsEnforceMinGap: boolean = false;
-  EnforecMinGapDays: number = 0;
-  IsAllowinLeaveCalendarYear: boolean = false;
-  AllowDaysinLeaveCalendarYear: number = 0;
-  IsAllowinLeaveCalendarMonth: boolean = false;
-  AllowDaysinLeaveCalendarMonth: number = 0;
-  IsAllowinLeaveEntireTenure: boolean = false;
-  AllowDaysinLeaveEntireTenure: number = 0;
-  IsAllowLeavesInSingleInstance: boolean = false;
-  AllowDaysLeavesInSingleInstance: number = 0;
-  LeaveBalanceQualOrGreater: number = 0;
-  IsRestrictEmpForLeave: boolean = false;
-  RestrictLeaveInEveryMonth: number = 0;
-  IsLeaveTakenWith: boolean = false;
-  LeaveTakenWith: number = 0;
-  IsLeaveAvailBalanceIn: boolean = false;
-  LeaveAvailBalanceIn: number = 0;
+  LeavePlanRestrictionId: number = 0;
+  LeavePlanId: number = 0;
+  NewJoineeCanApplyLeave: boolean = null;
+  DaysAfterInProbation: number = 0;
+  DaysAfterJoining: number = 0;
+  LimitDaysLeaveInProbation: boolean = null;
+  IsConsecutiveLeaveLimit: boolean = null;
+  ConsecutiveDaysLimit: number = 0;
+  IsLeaveInNoticeExtendsNoticePeriod: boolean = null;
+  NoOfTimesNoticePeriodExtended: number = 0;
+  CanManageOverrideLeaveRestriction: boolean = null;
+  GapBetweenTwoConsicutiveLeaveDates: number = 0;
+  LimitOfMaximumLeavesInCalendarMonth: number = 0;
+  LimitOfMaximumLeavesInCalendarYear: number = 0;
+  LimitOfMaximumLeavesInEntireTenure: number = 0;
+  IsLeaveRestrictionForEachMonth: boolean = null;
+  RestrictFromDayOfMonth: number = 0;
+  RestrictToDayOfMonth: number = 0;
+  CurrentLeaveCannotCombineWith: number = 0;
+  CurrentLeaveCannotIfBalanceInPlan: number = 0;
 }
 
 class HolidayWeekOffs {
-  IsHolidayAdjoining: boolean = false;
-  HolidayAdjoiningTotalLeave: number = 0;
-  HolidayAdjoiningOn: number = 0;
-  IsHolidayAccomLeave: number = 0;
-  IsWeekoffDayAdjoining: boolean = false;
-  WeekoffDayAdjoiningTotalLeave: number = 0;
-  WeekoffDayAdjoiningOn: number = 0;
-  IsWeekOffAccomLeave: number = 0;
-  IsHolidayAccomLeaveHalfday: boolean= false;
-  IsClubSandwich: boolean = false;
-  IsWeekOffAccomLeaveHalfday: boolean = false;
+  LeaveHolidaysAndWeekOffId: number = 0;
+  LeavePlanId: number = 0;
+  AdJoiningHolidayIsConsiderAsLeave: boolean = null;
+  IfLeaveLieBetweenTwoHolidays: boolean = null;
+  IfHolidayIsRightBeforLeave: boolean = null;
+  IfHolidayIsRightAfterLeave: boolean = null;
+  IfHolidayIsBetweenLeave: boolean = null;
+  IfHolidayIsRightBeforeAfterOrInBetween: boolean = null;
+  AdjoiningHolidayRulesIsValidForHalfDay: boolean = null;
+  AdjoiningWeekOffIsConsiderAsLeave: boolean = null;
+  ConsiderLeaveIfIncludeDays: number = 0;
+  IfLeaveLieBetweenWeekOff: boolean = null;
+  IfWeekOffIsRightBeforLeave: boolean = null;
+  IfWeekOffIsRightAfterLeave: boolean = null;
+  IfWeekOffIsBetweenLeave: boolean = null;
+  IfWeekOffIsRightBeforeAfterOrInBetween: boolean = null;
+  AdjoiningWeekOffRulesIsValidForHalfDay: boolean = null;
+  ClubSandwichPolicy: boolean = null;
 }
 
 class LeaveApproval {
-  IsRequiredApproval: boolean = false;
+  LeaveApprovalId: number = 0;
+  LeavePlanId: number = 0;
+  IsLeaveRequiredApproval: boolean = null;
+  ApprovalLevels: number = 0;
+  IsReportingManageIsDefaultForAction: boolean = null;
+  CanHigherRankPersonsIsAvailForAction: boolean = null;
+  IsReqioredAllLevelApproval: boolean = null;
+  NoOfApprovalForConfirmation: number = 0;
 }
 
 class YearEndProcess {
-  IsLeaveBalanceAtEnd: number = 1;
-  LeaveForPaymentBasedOn: number = 0;
-  BalanceMoreThan: number = 0;
-  Pay: number = 0;
-  PercentRemainingDay: number = 0;
-  IsRestrictMaxDays: boolean = false;
-  RestrictMaxDays: number = 0;
-  IsRestrictMaxCarryForward: boolean = false;
-  RestrictMaxCarryForwardDays: number = 0;
-  LeaveBalanceMoreThan: number = 0;
-  PayUptoDays: number = 0;
-  CarryForwardDaysUpto: number = 0;
-  IsLeaveExpire: boolean = false;
-  ExpireLeaveCarryForward: number = 0;
-  IsNegativeLeaveQuota: boolean = false;
-  IsExpiraySettingUnchanged: boolean = false;
+  LeaveEndYearProcessingId: number = 0
+  LeavePlanId: number = 0;
+  IsLeaveBalanceExpiredOnEndOfYear: boolean = null;
+  AllConvertedToPaid : boolean = null;
+  AllLeavesCarryForwardToNextYear: boolean = null;
+  PayFirstNCarryForwordRemaning : boolean = null;
+  CarryForwordFirstNPayRemaning: boolean = null;
+  PayNCarryForwardForFixedDays: boolean = null;
+  PayNCarryForwardForPercent: boolean = null;
+  PayNCarryForwardIfDaysBalance: number = 0;
+  PayPercent: number = 0;
+  CarryForwardPercent: number = 0;
+  IsMaximumPayableRequired: boolean = null;
+  MaximumPayableDays: number = 0;
+  IsMaximumCarryForwardRequired: boolean = null;
+  MaximumCarryForwardDays: number = 0;
+  RulesForLeaveBalanceIsMoreThan: number = 0;
+  PaybleForDays: number = 0;
+  CarryForwardForDays: number = 0;
+  DoestCarryForwardExpired: boolean = null;
+  ExpiredAfter: number = 0;
+  DoesNegativeLeaveHasImpact: boolean = null;
+  DeductFromSalaryOnYearChange: boolean = null;
+  ResetBalanceToZero: boolean = null;
+  CarryForwardToNextYear: boolean = null;
+}
+
+class Allocateleavebreakformonth {
+  BreakMonthLeaveAllocationId: number = 0;
+  LeavePlanId: number = 0;
+  LeavePlanDetailId: number = 0;
+  FromDate: number = 0;
+  ToDate: number = 0;
+  AllocatedLeave: number = 0;
 }
