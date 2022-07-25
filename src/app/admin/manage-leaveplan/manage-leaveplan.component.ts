@@ -60,8 +60,11 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
         if (response.ResponseBody.leaveAccrual)
           this.leaveAccrual = response.ResponseBody.leaveAccrual;
-        this.initLeaveDetail();
 
+        if (response.ResponseBody.leaveApplyDetail)
+          this.appplyingForLeave = response.ResponseBody.leaveApplyDetail;
+
+        this.initLeaveDetail();
         this.initLeaveAccrual();
         this.initApplyForLeave();
         this.initLeaveRestriction();
@@ -129,16 +132,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       document.querySelector('input[name="LeaveNotAllocatedIfJoinAfter"]').setAttribute('readonly', '');
     else
       document.querySelector('input[name="LeaveNotAllocatedIfJoinAfter"]').removeAttribute('readonly');
-  }
-
-  LeaveBalanceCalculated(e: any) {
-    let value = e.target.value;
-    if (value) {
-      if (value == 'true')
-        document.querySelector('div[name="LeaveBalanceCalculated"]').classList.add('d-none');
-      else
-        document.querySelector('div[name="LeaveBalanceCalculated"]').classList.remove('d-none');
-    }
   }
 
   empJoinMiddle(e: any) {
@@ -361,17 +354,35 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     item.removeAt(i);
   }
 
+  submitApplyForLeave() {
+    this.submit = true;
+    this.isLoading = true
+    let errorCounter = 0;
+    let value = this.applyForLeaveForm.value;
+    if (value && errorCounter == 0) {
+      this.http.put(`ManageLeavePlan/UpdateApplyForLeave/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          Toast("Apply for Leave updated successfully.")
+          //this.configPageNo = this.configPageNo + 1;
+        }
+      })
+      this.submit = false;
+      this.isLoading = false;
+    }
+    this.isLoading = false;
+  }
+
   initApplyForLeave() {
     this.applyForLeaveForm = this.fb.group({
       LeaveApplyDetailId: new FormControl(this.appplyingForLeave.LeaveApplyDetailId),
-      LeavePlanId: new FormControl(this.appplyingForLeave.LeavePlanId),
-      IsAllowForHalfDay: new FormControl(this.appplyingForLeave.IsAllowForHalfDay),
-      EmployeeCanSeeAndApplyCurrentPlanLeave: new FormControl(this.appplyingForLeave.EmployeeCanSeeAndApplyCurrentPlanLeave),
+      LeavePlanTypeId: new FormControl(this.leavePlanTypeId),
+      IsAllowForHalfDay: new FormControl(this.appplyingForLeave.IsAllowForHalfDay ? 'true': 'false'),
+      EmployeeCanSeeAndApplyCurrentPlanLeave: new FormControl(this.appplyingForLeave.EmployeeCanSeeAndApplyCurrentPlanLeave ? 'true': 'false'),
       ApplyPriorBeforeLeaveDate: new FormControl(this.appplyingForLeave.ApplyPriorBeforeLeaveDate),
       BackDateLeaveApplyNotBeyondDays: new FormControl(this.appplyingForLeave.BackDateLeaveApplyNotBeyondDays),
       RestrictBackDateLeaveApplyAfter: new FormControl(this.appplyingForLeave.RestrictBackDateLeaveApplyAfter),
-      CurrentLeaveRequiredComments: new FormControl(this.appplyingForLeave.CurrentLeaveRequiredComments),
-      ProofRequiredIfDaysExceeds: new FormControl(this.appplyingForLeave.ProofRequiredIfDaysExceeds),
+      CurrentLeaveRequiredComments: new FormControl(this.appplyingForLeave.CurrentLeaveRequiredComments ? 'true': 'false'),
+      ProofRequiredIfDaysExceeds: new FormControl(this.appplyingForLeave.ProofRequiredIfDaysExceeds ? 'true': 'false'),
       NoOfDaysExceeded: new FormControl(this.appplyingForLeave.NoOfDaysExceeded),
       LeaveCredit: new FormArray([this.createLeaveCredit()])
     })
@@ -489,6 +500,46 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  toggleCurrent(groupNum: number, e: any) {
+    switch(groupNum) {
+      case 1:
+        this.leaveAccrualForm.get('CanApplyEntireLeave').setValue('false');
+        this.leaveAccrualForm.get('IsLeaveAccruedPatternAvail').setValue('false');
+        this.leaveAccrualForm.get(e.target.name).setValue('true');
+        if (this.leaveAccrualForm.get('IsLeaveAccruedPatternAvail').value == 'true')
+          document.getElementsByName('LeaveBalanceCalculated')[0].classList.remove('d-none');
+        else
+          document.getElementsByName('LeaveBalanceCalculated')[0].classList.add('d-none');
+        break;
+      case 8:
+         if (e.target.checked == true) {
+          e.target.nextSibling.querySelector('input').removeAttribute('readonly');
+         } else {
+          e.target.nextSibling.querySelector('input').addAttribute('readonly', '');
+          e.target.nextSibling.querySelector('input').value = '0';
+         }
+        break;
+      case 9:
+        this.leaveAccrualForm.get("RoundOffLeaveBalance").setValue('false');
+        this.leaveAccrualForm.get("ToNearestHalfDay").setValue('false');
+        this.leaveAccrualForm.get("ToNearestFullDay").setValue('false');
+        this.leaveAccrualForm.get("ToNextAvailableHalfDay").setValue('false');
+        this.leaveAccrualForm.get("ToNextAvailableFullDay").setValue('false');
+        this.leaveAccrualForm.get("ToPreviousHalfDay").setValue('false');
+        this.leaveAccrualForm.get(e.target.name).setValue('true');
+        break;
+      case 10:
+          if (e.target.value == 'true') {
+            document.getElementsByName('AfterHowManyDays')[0].removeAttribute('readonly');
+
+          } else {
+            document.getElementsByName('AfterHowManyDays')[0].setAttribute('readonly', '');
+            this.leaveAccrualForm.get("AfterHowManyDays").setValue(0);
+          }
+        break;
+    }
+  }
+
   // prevConfigPage() {
   //   this.configPageNo = this.configPageNo - 1;
   //   let tab = document.getElementById('leaveConfigModal');
@@ -566,7 +617,7 @@ class LeaveAccrual {
 
 class ApplyingForLeave {
   LeaveApplyDetailId: number = 0;
-  LeavePlanId: number = 0;
+  LeavePlanTypeId: number = 0;
   IsAllowForHalfDay: boolean = null;
   EmployeeCanSeeAndApplyCurrentPlanLeave: boolean = null;
   RemaningCalendarDayInNotice: number = 0;
