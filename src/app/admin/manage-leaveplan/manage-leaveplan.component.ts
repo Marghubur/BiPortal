@@ -33,7 +33,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   leaveApproval: LeaveApproval = new LeaveApproval();
   submit: boolean = false;
   isLoading: boolean = false;
-  LeavePlanId: number = 0;
+  leavePlanTypeId: number = 0;
   isDataLoaded: boolean = false;
 
   constructor(private nav: iNavigation,
@@ -53,9 +53,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   loadPlanDetail() {
-    this.http.get(`leave/GetLeaveTypeByPlanId/${this.LeavePlanId}`).then(response => {
+    this.http.get(`ManageLeavePlan/GetLeavePlanTypeConfiguration/${this.leavePlanTypeId}`).then(response => {
       if(response.ResponseBody) {
+        if(response.ResponseBody.leaveDetail)
+          this.leaveDetail = response.ResponseBody.leaveDetail;
         this.initLeaveDetail();
+
         this.initLeaveAccrual();
         this.initApplyForLeave();
         this.initLeaveRestriction();
@@ -74,7 +77,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     let id = this.nav.getValue();
     if(id != null && !isNaN(Number(id))) {
-      this.LeavePlanId = Number(id);
+      this.leavePlanTypeId = Number(id);
       this.loadPlanDetail();
     } else {
       ErrorToast("Invlaid plan selected please select again.");
@@ -85,6 +88,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   initLeaveDetail() {
     this.leaveDetailForm = this.fb.group({
+      LeavePlanTypeId: new FormControl(this.leavePlanTypeId),
       IsLeaveDaysLimit: new FormControl(this.leaveDetail.IsLeaveDaysLimit? 'true':'false'),
       LeaveLimit: new FormControl(this.leaveDetail.LeaveLimit),
       CanApplyExtraLeave: new FormControl(this.leaveDetail.CanApplyExtraLeave? 'true':'false'),
@@ -103,7 +107,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let errorCounter = 0;
     let value = this.leaveDetailForm.value;
     if (value && errorCounter == 0) {
-      this.http.post(`Leave/AddUpdateLeaveQuota/${this.LeavePlanId}`, value).then((res:ResponseModel) => {
+      this.http.put(`ManageLeavePlan/UpdateLeaveDetail/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           Toast("Leave Quota updated successfully.")
           this.configPageNo = this.configPageNo + 1;
@@ -494,7 +498,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
 class LeaveDetail {
   LeaveDetailId: number = 0;
-  LeavePlanId: number = 0;
+  LeavePlanTypeId: number = 0;
   IsLeaveDaysLimit: boolean = false;
   LeaveLimit: number = 0;
   CanApplyExtraLeave: boolean = false;
