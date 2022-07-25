@@ -239,7 +239,7 @@
             <div class="col-md-12 d-flex justify-content-end">
               <div class="d-flex align-items-center border col-md-3 float-end bg-white">
                 <i class="fa fa-search pe-2 ps-3"></i>
-                <input type="text" placeholder="Search" class="form-control border-0">
+                <input type="text" placeholder="Search" class="form-control border-0" oninput="this.value = this.value.toUpperCase()" (keyup)="filterLeaveType($event)" (keyup.esc)="resetFilterLeaveType($event)">
               </div>
             </div>
 
@@ -325,7 +325,7 @@
 </div>
 
 <!-- Add Leave Plan Modal -->
-<div class="modal fade" id="addLeavePlanModal" tabindex="-1" aria-labelledby="addLeavePlanModalLabel"
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addLeavePlanModal" tabindex="-1" aria-labelledby="addLeavePlanModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
@@ -398,7 +398,7 @@
 <!-- End -->
 
 <!-- Assign Leave Type Modal -->
-<div class="modal fade" id="assignLeaveTypeModal" tabindex="-1" aria-labelledby="assignLeaveTypeModalLabel"
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="assignLeaveTypeModal" tabindex="-1" aria-labelledby="assignLeaveTypeModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
@@ -411,10 +411,10 @@
         <h5>Select the leave types to be assigned to {{currentPlan.PlanName}} leave plan</h5>
         <div class="form-group mt-3">
           <div class="col-md-12 row">
-            <nav class=" bg-light">
+            <nav class=" bg-white">
               <div class="d-flex align-items-center border col-md-3 float-end">
                 <i class="fa fa-search pe-2 ps-3"></i>
-                <input type="text" placeholder="Search" class="form-control border-0">
+                <input type="text" placeholder="Search" class="form-control border-0" oninput="this.value = this.value.toUpperCase()" (keyup)="filterLeaveType($event)" (keyup.esc)="resetFilterLeaveType($event)">
               </div>
             </nav>
           </div>
@@ -481,8 +481,11 @@
                 </ng-container>
               </ng-container>
               <ng-container *ngIf="!leaveTypeDateIsReady">
-                <div>
-                  Loading...
+                <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                  <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                    <img src="assets/images/cog.gif" alt="">
+                    <h6 class="modal-title title-message">Please Wait ........</h6>
+                  </div>
                 </div>
               </ng-container>
             </div>
@@ -502,7 +505,7 @@
 <!-- End -->
 
 <!-- Add Leave Plan Modal -->
-<div class="modal fade" id="addLeaveTypeModal" tabindex="-1" aria-labelledby="addLeaveTypeModalLabel"
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addLeaveTypeModal" tabindex="-1" aria-labelledby="addLeaveTypeModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
@@ -607,18 +610,6 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary-c" (click)="saveLeaveType()"><i class="fa" [ngClass]="{'fa-floppy-o': !isLoading , 'fa-spin fa-spinner': isLoading}"></i><span class="ps-2">{{isLoading ? 'Wait': 'Save'}}</span></button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Loading loader model -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="loadermodal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body modal-container f-12 text-center cog-wheel">
-        <img src="assets/images/cog.gif" alt="">
-        <h6 class="modal-title title-message">Please Wait ........</h6>
       </div>
     </div>
   </div>

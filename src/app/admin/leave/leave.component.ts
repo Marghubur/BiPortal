@@ -27,7 +27,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   leaveTypeForm: FormGroup;
   leaveTypes: Array<LeaveType> = [];
   isUpdate: boolean = false;
-
+  allLeaveTypes: Array<LeaveType> = [];
   currentPlan: LeavePlan = new LeavePlan();
   leaveTypeData: LeaveType = new LeaveType();
   planLeaveTypes: Array<LeaveType> = []
@@ -145,6 +145,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     this.leaveTypeDateIsReady = false;
     this.http.get("leave/GetLeaveTypeFilter").then(response => {
       if(response.ResponseBody) {
+        this.allLeaveTypes = response.ResponseBody;
         this.leaveTypes = response.ResponseBody;
         this.leaveTypeDateIsReady = true;
         Toast("Leave type data loaded successfully");
@@ -160,6 +161,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     this.leaveTypeDateIsReady = false;
     this.http.get("leave/GetLeaveTypeFilter").then(response => {
       if(response.ResponseBody) {
+        this.allLeaveTypes = response.ResponseBody;
         this.leaveTypes = response.ResponseBody;
 
         if(this.currentPlan != null && this.currentPlan.AssociatedPlanTypes) {
@@ -219,6 +221,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   manageResponseOnUpdate(response: ResponseModel) {
     if (response.ResponseBody){
       if(this.isUpdate) {
+        this.allLeaveTypes = response.ResponseBody;
         this.leaveTypes = response.ResponseBody;
         Toast("Record updated successfully");
       }
@@ -425,7 +428,17 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
   }
 
+  filterLeaveType(e: any) {
+    let value = e.target.value;
+    let filterLeaveType = this.leaveTypes.filter(x => x.LeavePlanCode == value || x.PlanName == value);
+    if (filterLeaveType.length > 0)
+      this.leaveTypes = filterLeaveType;
+  }
 
+  resetFilterLeaveType(e: any) {
+    e.target.value = '';
+    this.leaveTypes = this.allLeaveTypes;
+  }
 }
 
 class LeaveType {
