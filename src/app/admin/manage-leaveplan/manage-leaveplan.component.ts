@@ -57,6 +57,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       if(response.ResponseBody) {
         if(response.ResponseBody.leaveDetail)
           this.leaveDetail = response.ResponseBody.leaveDetail;
+
+        if (response.ResponseBody.leaveAccrual)
+          this.leaveAccrual = response.ResponseBody.leaveAccrual;
         this.initLeaveDetail();
 
         this.initLeaveAccrual();
@@ -224,9 +227,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   beyondAnnualQuota(e: any) {
     let value = e.target.value;
     if (value == 'true')
-      document.getElementsByName('BeyondAnnualQuota')[0].removeAttribute('readonly');
+      document.getElementsByName('CanApplyExtraLeave')[0].removeAttribute('readonly');
     else
-      document.getElementsByName('BeyondAnnualQuota')[0].setAttribute('readonly', '');
+      document.getElementsByName('CanApplyExtraLeave')[0].setAttribute('readonly', '');
   }
 
   quotaLimit(e: any) {
@@ -237,37 +240,55 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       document.getElementsByName('LeaveLimit')[0].setAttribute('readonly', '');
   }
 
+  submitLeaveAccrual() {
+    this.submit = true;
+    this.isLoading = true
+    let errorCounter = 0;
+    let value = this.leaveAccrualForm.value;
+    if (value && errorCounter == 0) {
+      this.http.put(`ManageLeavePlan/UpdateLeaveAccrual/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          Toast("Leave Accrual updated successfully.")
+          //this.configPageNo = this.configPageNo + 1;
+        }
+      })
+      this.submit = false;
+      this.isLoading = false;
+    }
+    this.isLoading = false;
+  }
+
   initLeaveAccrual() {
     this.leaveAccrualForm = this.fb.group({
       LeaveCreditBWJoiningDate: new FormArray([this.createFormBWJoiningDate()]),
       LeaveCreditBWExitDate: new FormArray([this.createFormBWExitDate()]),
       AccrualRateOnExp: new FormArray([this.createAccruralRateOnExp()]),
       LeaveAccrualId: new FormControl(this.leaveAccrual.LeaveAccrualId),
-      LeavePlanId: new FormControl(this.leaveAccrual.LeavePlanId),
-      CanApplyEntireLeave: new FormControl(this.leaveAccrual.CanApplyEntireLeave),
-      IsLeaveAccruedPatternAvail: new FormControl(this.leaveAccrual.IsLeaveAccruedPatternAvail),
+      LeavePlanTypeId: new FormControl(this.leavePlanTypeId),
+      CanApplyEntireLeave: new FormControl(this.leaveAccrual.CanApplyEntireLeave ?'true' : 'false'),
+      IsLeaveAccruedPatternAvail: new FormControl(this.leaveAccrual.IsLeaveAccruedPatternAvail?'true' : 'false'),
       LeaveDistributionSequence: new FormControl(this.leaveAccrual.LeaveDistributionSequence),
       LeaveDistributionAppliedFrom: new FormControl(this.leaveAccrual.LeaveDistributionAppliedFrom),
-      IsAllowLeavesForJoinigMonth: new FormControl(this.leaveAccrual.IsAllowLeavesForJoinigMonth),
-      IsAllowLeavesProbationPeriod: new FormControl(this.leaveAccrual.IsAllowLeavesProbationPeriod),
+      IsAllowLeavesForJoinigMonth: new FormControl(this.leaveAccrual.IsAllowLeavesForJoinigMonth ?'true' : 'false'),
+      IsAllowLeavesProbationPeriod: new FormControl(this.leaveAccrual.IsAllowLeavesProbationPeriod?'true' : 'false'),
       BreakMonthLeaveAllocationId: new FormControl(this.leaveAccrual.BreakMonthLeaveAllocationId),
-      IsNoLeaveOnProbationPeriod: new FormControl(this.leaveAccrual.IsNoLeaveOnProbationPeriod),
-      IsVaryOnProbationOrExprience: new FormControl(this.leaveAccrual.IsVaryOnProbationOrExprience),
-      IsImpactedOnWorkDaysEveryMonth: new FormControl(this.leaveAccrual.IsImpactedOnWorkDaysEveryMonth),
+      IsNoLeaveOnProbationPeriod: new FormControl(this.leaveAccrual.IsNoLeaveOnProbationPeriod?'true' : 'false'),
+      IsVaryOnProbationOrExprience: new FormControl(this.leaveAccrual.IsVaryOnProbationOrExprience ?'true' : 'false'),
+      IsImpactedOnWorkDaysEveryMonth: new FormControl(this.leaveAccrual.IsImpactedOnWorkDaysEveryMonth ?'true' : 'false'),
       WeekOffAsAbsentIfAttendaceLessThen: new FormControl(this.leaveAccrual.WeekOffAsAbsentIfAttendaceLessThen),
       HolidayAsAbsentIfAttendaceLessThen: new FormControl(this.leaveAccrual.HolidayAsAbsentIfAttendaceLessThen),
-      CanApplyForFutureDate: new FormControl(this.leaveAccrual.CanApplyForFutureDate),
-      ExtraLeaveBeyondAccruedBalance: new FormControl(this.leaveAccrual.ExtraLeaveBeyondAccruedBalance),
+      CanApplyForFutureDate: new FormControl(this.leaveAccrual.CanApplyForFutureDate?'true' : 'false'),
+      ExtraLeaveBeyondAccruedBalance: new FormControl(this.leaveAccrual.ExtraLeaveBeyondAccruedBalance ?'true' : 'false'),
       NoOfDaysForExtraLeave: new FormControl(this.leaveAccrual.NoOfDaysForExtraLeave),
       AllowOnlyIfAccrueBalanceIsAlleast: new FormControl(this.leaveAccrual.AllowOnlyIfAccrueBalanceIsAlleast),
       NotAllowIfAlreadyOnLeaveMoreThan: new FormControl(this.leaveAccrual.NotAllowIfAlreadyOnLeaveMoreThan),
-      RoundOffLeaveBalance: new FormControl(this.leaveAccrual.RoundOffLeaveBalance),
-      ToNearestHalfDay: new FormControl(this.leaveAccrual.ToNearestHalfDay),
-      ToNearestFullDay: new FormControl(this.leaveAccrual.ToNearestFullDay),
-      ToNextAvailableHalfDay: new FormControl(this.leaveAccrual.ToNextAvailableHalfDay),
-      ToNextAvailableFullDay: new FormControl(this.leaveAccrual.ToNextAvailableFullDay),
-      ToPreviousHalfDay: new FormControl(this.leaveAccrual.ToPreviousHalfDay),
-      DoesLeaveExpireAfterSomeTime: new FormControl(this.leaveAccrual.DoesLeaveExpireAfterSomeTime),
+      RoundOffLeaveBalance: new FormControl(this.leaveAccrual.RoundOffLeaveBalance ?'true' : 'false'),
+      ToNearestHalfDay: new FormControl(this.leaveAccrual.ToNearestHalfDay ?'true' : 'false'),
+      ToNearestFullDay: new FormControl(this.leaveAccrual.ToNearestFullDay ?'true' : 'false'),
+      ToNextAvailableHalfDay: new FormControl(this.leaveAccrual.ToNextAvailableHalfDay ?'true' : 'false'),
+      ToNextAvailableFullDay: new FormControl(this.leaveAccrual.ToNextAvailableFullDay ?'true' : 'false'),
+      ToPreviousHalfDay: new FormControl(this.leaveAccrual.ToPreviousHalfDay ?'true' : 'false'),
+      DoesLeaveExpireAfterSomeTime: new FormControl(this.leaveAccrual.DoesLeaveExpireAfterSomeTime?'true' : 'false'),
       AfterHowManyDays: new FormControl(this.leaveAccrual.AfterHowManyDays)
     })
   }
@@ -499,7 +520,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 class LeaveDetail {
   LeaveDetailId: number = 0;
   LeavePlanTypeId: number = 0;
-  IsLeaveDaysLimit: boolean = false;
+  IsLeaveDaysLimit: boolean = true;
   LeaveLimit: number = 0;
   CanApplyExtraLeave: boolean = false;
   ExtraLeaveLimit: number = 0;
@@ -511,52 +532,22 @@ class LeaveDetail {
 }
 
 class LeaveAccrual {
-  IsLeaveBalanceCalculated: boolean = true;
-  AccrualRateBasedon: number = 1;
-  AccrualAnnualQuota:number = 0;
-  IsEmpJoinMiddle: boolean = true;
-  IsEmpExitMiddle:boolean = true;
-  FromJoiningDate: number = null
-  ToJoiningDate:number = null;
-  AllocatedLeave: number = null;
-  FromExitDate: number = null;
-  ToExitDate: number = null;
-  LeaveDays: number = null;
-  IsAccrualLevelVary: boolean = true;
-  IsAccrualStart: boolean = true;
-  DaysAfterJoining: number = 0;
-  DaysAfterProbEnd: number = 0;
-  YearOfJoining: number = null;
-  AccureDayMonth: number = null;
-  AccureDayYear: number = null;
-  IsLeaveAccrualImpacted: boolean = false;
-  WeeklyOffAsAbsent: number = 0;
-  HolidayOffAsAbsent: number = 0;
-  IsLeaveforFutureDate: boolean = false;
-  IsLeaveBeyondBalance: boolean = true;
-  LeaveBalanceLessThan: number = 0;
-  EmpGoBeyondAccrueBal: number = 0;
-  IsAccrueLeaveTotalBal: boolean = false;
-  IsAccrueLeaveEmpOnLeave: boolean = false;
-  DaysInPrevMnth:number = 0;
-  IsLeaveBalanceRounded: number = 1;
-  IsLeaveCredit: boolean = false;
-  LeaveExpAfter: number = 0;
-
   LeaveAccrualId: number = 0;
-  LeavePlanId: number = 0;
+  LeavePlanTypeId: number = 0;
   CanApplyEntireLeave: boolean = null;
   IsLeaveAccruedPatternAvail: boolean = null;
   LeaveDistributionSequence: string = '';
   LeaveDistributionAppliedFrom: number = 0;
   IsAllowLeavesForJoinigMonth: boolean = null;
+
   IsAllowLeavesProbationPeriod: boolean = null;
   BreakMonthLeaveAllocationId: number = 0;
   IsNoLeaveOnProbationPeriod: boolean = null;
+
   IsVaryOnProbationOrExprience: boolean = null;
   IsImpactedOnWorkDaysEveryMonth: boolean = null;
   WeekOffAsAbsentIfAttendaceLessThen: number = 0;
-  HolidayAsAbsentIfAttendaceLessThen: boolean = null;
+  HolidayAsAbsentIfAttendaceLessThen: number = 0;
   CanApplyForFutureDate: boolean = null;
   ExtraLeaveBeyondAccruedBalance: boolean = null;
   NoOfDaysForExtraLeave: number = 0;

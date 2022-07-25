@@ -232,6 +232,16 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
   }
 
+  editLeavePlan(item: LeavePlan) {
+    if (item) {
+      this.leavePlan = item;
+      let date = new Date(this.leavePlan.PlanStartCalendarDate);
+      this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.initLeavePlanForm();
+      $('#addLeavePlanModal').modal('show');
+    }
+  }
+
   leaveType(leaveType: string) {
     this.leaveTypeCheck = '';
     this.leaveTypeCheck = leaveType
@@ -307,6 +317,9 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   leavePlanPopUp() {
+    this.leavePlan = new LeavePlan();
+    this.model = null;
+    this.initLeavePlanForm()
     $('#addLeavePlanModal').modal('show');
   }
 
@@ -361,10 +374,11 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 
   initLeavePlanForm() {
     this.leavePlanForm = this.fb.group({
+      LeavePlanId: new FormControl(this.leavePlan.LeavePlanId),
       PlanName: new FormControl(this.leavePlan.PlanName, [Validators.required]),
       PlanDescription: new FormControl(this.leavePlan.PlanDescription),
       AssociatedPlanTypes: new FormControl(this.leavePlan.AssociatedPlanTypes),
-      PlanStartCalendarDate: new FormControl(this.leavePlan.PlanStartCalendarDate, [Validators.required]),
+      PlanStartCalendarDate: new FormControl(null, [Validators.required]),
       IsShowLeavePolicy: new FormControl(this.leavePlan.IsShowLeavePolicy),
       IsUploadedCustomLeavePolicy: new FormControl(this.leavePlan.IsUploadedCustomLeavePolicy)
     })
@@ -389,24 +403,23 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       errorCounter++;
     let value = this.leavePlanForm.value;
     if (value && errorCounter == 0) {
-      console.log(value);
+      this.http.post('leave/AddLeavePlan', this.leavePlanForm.value).then(response => {
+        if(response.ResponseBody) {
+          this.submit = false;
+          this.isLoading = false;
+          this.leavePlanList = response.ResponseBody;
+          $('#addLeavePlanModal').modal('hide');
+          this.bindFirstPlanOnPage();
+          Toast("Plan inserted/update successfully.");
+        } else {
+          ErrorToast("Fail to inserted/update.");
+        }
+      });
       this.submit = false;
       this.isLoading = false;
     }
     this.isLoading = false;
 
-    this.http.post('leave/AddLeavePlan', this.leavePlanForm.value).then(response => {
-      if(response.ResponseBody) {
-        this.submit = false;
-        this.isLoading = false;
-        this.leavePlanList = response.ResponseBody;
-        $('#addLeavePlanModal').modal('hide');
-        this.bindFirstPlanOnPage();
-        Toast("Plan inserted/update successfully.");
-      } else {
-        ErrorToast("Fail to inserted/update.");
-      }
-    });
   }
 
   fireBrowseOption() {
