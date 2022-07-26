@@ -78,7 +78,7 @@
                                 <a href="javascript:void(0)"><i class="fa fa-trash fa-lg text-white pt-3"></i></a>
                               </div>
                             </div>
-                            <p class="mb-0 text-white ps-2 pb-2">Double click to edit the company.</p>
+                            <p class="mb-0 text-white ps-2 pb-2">5 Employees</p>
                           </a>
                         </li>
                       </ng-container>
@@ -183,6 +183,96 @@
                           <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('Emp')">Employees <i
                               class="fa fa-users px-2"></i></a>
                           <ng-template ngbNavContent>
+                           <div class="t-table t-list t-border col-md-12 mt-2">
+                              <div class="hide-bar"></div>
+                              <div class="t-head">
+                                <div class="tr py-2 fw-bold ps-2">
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      EMPLOYEE NAME
+                                    </div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      EMPLOYEE NUMBER
+                                    </div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      DEPARTMENT
+                                    </div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      JOB TITLE
+                                    </div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      REPORTING TO
+                                    </div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      LOCATION
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="t-body custom-height">
+                                <ng-container >
+                                  <ng-container >
+                                    <div class="tr align-items-center py-2 ps-2">
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          AHMAD ALI
+                                        </div>
+                                      </div>
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          G102
+                                        </div>
+                                      </div>
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          Customer Service
+                                        </div>
+                                      </div>
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          CSM
+                                        </div>
+                                      </div>
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          Zeeshan Ahmad
+                                        </div>
+                                      </div>
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          Banglore, Karnatak
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                  <ng-container >
+                                    <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
+                                      No leave employee were found. Please add one by using
+                                      <b class="text-primary-c">Add Employee</b> button.
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                                <!-- <ng-container *ngIf="!leaveTypeDateIsReady">
+                                  <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                                    <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                                      <img src="assets/images/cog.gif" alt="">
+                                      <h6 class="modal-title title-message">Please Wait ........</h6>
+                                    </div>
+                                  </div>
+                                </ng-container> -->
+                              </div>
+                            </div>
                           </ng-template>
                         </li>
                         <li [ngbNavItem]="3">
@@ -190,6 +280,76 @@
                             Process
                             <i class="fa fa-calendar px-2"></i></a>
                           <ng-template ngbNavContent>
+                            <div class="t-table t-list t-border col-md-12 mt-2">
+                              <div class="hide-bar"></div>
+                              <div class="t-head">
+                                <div class="tr py-2 fw-bold ps-2">
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      YEAR ENDS
+                                    </div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      EMPLOYEE COUNT
+                                    </div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      STATUS
+                                    </div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      ACTIONS
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="t-body custom-height">
+                                <ng-container >
+                                  <ng-container >
+                                    <div class="tr align-items-center py-2 ps-2">
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          Dec 2022
+                                        </div>
+                                      </div>
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          3
+                                        </div>
+                                      </div>
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          Ready to process
+                                        </div>
+                                      </div>
+                                      <div class="td">
+                                        <div class="cell-wrapper">
+                                          <button class="btn btn-outline-primary px-2">Begin Year End Process</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                  <ng-container >
+                                    <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
+                                      No leave employee were found. Please add one by using
+                                      <b class="text-primary-c">Add Employee</b> button.
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                                <!-- <ng-container *ngIf="!leaveTypeDateIsReady">
+                                  <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                                    <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                                      <img src="assets/images/cog.gif" alt="">
+                                      <h6 class="modal-title title-message">Please Wait ........</h6>
+                                    </div>
+                                  </div>
+                                </ng-container> -->
+                              </div>
+                            </div>
                           </ng-template>
                         </li>
                       </ul>
