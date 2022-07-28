@@ -92,6 +92,7 @@ export const LeavesAndHoliday = 'admin/leaves-holidays';
 export const PFESISetup = 'admin/pfesisetup';
 export const Expenses = 'admin/expenses';
 export const ManageLeavePlan = 'admin/manageleaveplan';
+export const ManageYearEnding = 'admin/manageyearending';
 
 // ********************** Admin route pages  *******************
 

@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { Attendance, ManageLeavePlan, Timesheet } from 'src/providers/constants';
+import { Attendance, ManageLeavePlan, ManageYearEnding, Timesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
@@ -62,8 +62,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   ngOnInit(): void {
     this.loadLeaveData();
     this.initLeaveTypeForm()
-
-
     this.initLeavePlanForm();
   }
 
@@ -451,6 +449,10 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   resetFilterLeaveType(e: any) {
     e.target.value = '';
     this.leaveTypes = this.allLeaveTypes;
+  }
+
+  yearEndSetting() {
+    this.nav.navigate(ManageYearEnding, null)
   }
 }
 
