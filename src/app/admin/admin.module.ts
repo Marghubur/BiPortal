@@ -56,6 +56,7 @@ import { PayrollComponentsComponent } from './payroll-components/payroll-compone
 import { CommonService } from 'src/providers/common-service/common.service';
 import { DateFormatter } from 'src/providers/DateFormatter';
 import { ManageLeaveplanComponent } from './manage-leaveplan/manage-leaveplan.component';
+import { ManageYearEndingComponent } from './manage-year-ending/manage-year-ending.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +109,8 @@ import { ManageLeaveplanComponent } from './manage-leaveplan/manage-leaveplan.co
     SalarycomponentStructureComponent,
     CustomsalaryStructureComponent,
     PayrollComponentsComponent,
-    ManageLeaveplanComponent
+    ManageLeaveplanComponent,
+    ManageYearEndingComponent
   ],
   imports: [
     CommonModule,

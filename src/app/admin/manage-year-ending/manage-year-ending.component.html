@@ -1,0 +1,219 @@
+<div class="col-md-12 col-sm-12 main-container">
+  <div class="col-md-12 bg-light mb-3">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page"
+          href="javascript:void(0)">ATTENDENCE</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')"
+          href="javascript:void(0)">TIMESHEET</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark nav-active" id="leave-tab" (click)="activateMe('leave-tab')"
+          href="javascript:void(0)">LEAVE</a>
+      </li>
+    </ul>
+  </div>
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="d-flex align-items-center">
+        <h2 class="text-dark fw-bold">YEAR END PROCESS</h2>
+        <h2 class="ms-3">STANDARD LEAVE PLAN 2022</h2>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="px-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
+    <div class="x_content">
+      <div class="row mt-3">
+        <div class="col-md-3">
+          <div class="x_panel px-3 pt-3 pb-1">
+            <ul class="d-flex flex-column justify-content-center list-unstyled px-3 config-tab" id="leaveConfigModal">
+              <li class="p-3">
+                <a href="javascript:void(0)" class="text-decoration-none text-muted" (click)="activeYearEndPage(1)">
+                  <div name="tab-index" [attr.index]="1" class="d-flex align-items-center active-index">
+                    <div class="index-count border me-3 rounded-circle fw-bold">1</div>
+                    <span>PENDING LEAVE REQUESTS</span>
+                  </div>
+                </a>
+              </li>
+              <li class="p-3">
+                <a href="javascript:void(0)" class="text-decoration-none text-muted" (click)="activeYearEndPage(2)">
+                  <div name="tab-index" [attr.index]="2" class="d-flex align-items-center">
+                    <div class="index-count border me-3 rounded-circle fw-bold">2</div>
+                    <span>LEAVE BALANCE ACTIONS</span>
+                  </div>
+                </a>
+              </li>
+              <li class="p-3">
+                <a href="javascript:void(0)" class="text-decoration-none text-muted" (click)="activeYearEndPage(3)">
+                  <div name="tab-index" [attr.index]="3" class="d-flex align-items-center">
+                    <div class="index-count border me-3 rounded-circle fw-bold">3</div>
+                    <span>ENCASHMENT SETTING</span>
+                  </div>
+                </a>
+              </li>
+              <li class="p-3">
+                <a href="javascript:void(0)" class="text-decoration-none text-muted" (click)="activeYearEndPage(4)">
+                  <div name="tab-index" [attr.index]="4" class="d-flex align-items-center">
+                    <div class="index-count border me-3 rounded-circle fw-bold">4</div>
+                    <span>FINALIZE PROCESS</span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="x_panel px-4">
+            <ng-container *ngIf="configPage == 1">
+              <div class="bg-light d-flex justify-content-between align-items-ccenter py-2">
+                <h6 class="ps-3">Take action on pending Leave Requests <i class="fa fa-exclamation-circle text-secondary ps-2"></i></h6>
+                <button class="btn btn-primary-c mx-3" (click)="savePendingLeave()">Save & Next</button>
+              </div>
+              <div class="alert alert-primary col-md-6 my-4">
+                No pending leave requests.
+              </div>
+            </ng-container>
+            <ng-container *ngIf="configPage == 2">
+              <div class="bg-light d-flex justify-content-between align-items-center py-2">
+                <h6 class="ps-3">Leave balance & year end actions <i class="fa fa-exclamation-circle text-secondary ps-2"></i></h6>
+                <button class="btn btn-primary-c mx-3">Save & Next</button>
+              </div>
+              <p class="mt-4 mb-0">If you'd like to chnage the ratio of encashed, carry forward leave, you can use the override text box by selecting the check box.</p>
+              <div class="alert alert-primary col-md-6 my-4">
+                No Leave Balances to update.
+              </div>
+              <div class="t-table t-list t-border col-md-12 mt-2">
+                <div class="hide-bar"></div>
+                <div class="t-head">
+                  <div class="tr py-2 fw-bold ps-2">
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        EMPLOYMENT NUMBER
+                      </div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        EMPLOYEE
+                      </div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        LEAVE TYPE
+                      </div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        BALANCE(X)
+                      </div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        DAYS ENCASHED(Y)
+                      </div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        DAYS CARRIED FORWARD(Z)
+                      </div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper">
+                        DAYS TO EXPIRE(X,Y,Z)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="t-body custom-height">
+                  <ng-container >
+                    <div >
+                      <div class="td">
+                        <div class="cell-wrapper">
+
+                        </div>
+                      </div>
+                      <div class="td">
+                        <div class="cell-wrapper">
+
+                        </div>
+                      </div>
+                      <div class="td">
+                        <div class="cell-wrapper">
+
+                        </div>
+                      </div>
+                      <div class="td">
+                        <div class="cell-wrapper">
+
+                        </div>
+                      </div>
+                      <div class="td">
+                        <div class="cell-wrapper">
+
+                        </div>
+                      </div>
+                      <div class="td">
+                        <div class="cell-wrapper">
+
+                        </div>
+                      </div>
+                      <div class="td">
+                        <div class="cell-wrapper">
+
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="configPage == 3">
+              <div class="bg-light d-flex justify-content-between align-items-center py-2">
+                <h6 class="ps-3">Take action on pending Leave Requests <i class="fa fa-exclamation-circle text-secondary ps-2"></i></h6>
+                <button class="btn btn-primary-c mx-3">Save & Next</button>
+              </div>
+              <div class="alert alert-primary col-md-6 my-4">
+                No pending leave requests.
+              </div>
+            </ng-container>
+            <ng-container *ngIf="configPage == 4">
+              <div class="bg-light py-2">
+                <h6 class="ps-3">Finalize Year end process</h6>
+              </div>
+              <p class="mt-4 mb-0">Please confirm if you'd like to finalize the leave chnages made</p>
+              <div class="my-3">
+                <button class="btn btn-primary-c px-3" (click)="finalizeModal()">Finalize</button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Year-End Finalize Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="yearEndFinalizeModal" tabindex="-1" aria-labelledby="yearEndFinalizeLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="yearEndFinalizeLabel">Please Confirm</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="px-2 mb-0">
+          Once the year end process is finalized, <span class="text-danger">it cannot be reverted back</span> and the data cannot be edited. Are you sure, you want to continue ?
+        </p>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-danger px-3" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-success px-3">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Finalize Modal -->
