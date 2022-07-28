@@ -160,9 +160,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let value = e.target.value;
     if (value) {
       if (value == 'true')
-        document.querySelector('div[name="AccrualLevelVary"]').classList.add('d-none');
-      else
         document.querySelector('div[name="AccrualLevelVary"]').classList.remove('d-none');
+      else
+        document.querySelector('div[name="AccrualLevelVary"]').classList.add('d-none');
     }
   }
 
@@ -198,9 +198,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   beyondAnnualQuota(e: any) {
     let value = e.target.value;
     if (value == 'true')
-      document.getElementsByName('CanApplyExtraLeave')[0].removeAttribute('readonly');
+      document.getElementsByName('ExtraLeaveLimit')[0].removeAttribute('readonly');
     else
-      document.getElementsByName('CanApplyExtraLeave')[0].setAttribute('readonly', '');
+      document.getElementsByName('ExtraLeaveLimit')[0].setAttribute('readonly', '');
   }
 
   quotaLimit(e: any) {
@@ -738,15 +738,39 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.leaveAccrualForm.get('IsAccrualStartsAfterJoining').setValue('false');
         this.leaveAccrualForm.get('IsAccrualStartsAfterProbationEnds').setValue('false');
         this.leaveAccrualForm.get(e.target.name).setValue(e.target.value);
+        if (e.target.name == 'IsAccrualStartsAfterJoining') {
+          document.getElementsByName('AccrualDaysAfterJoining')[0].removeAttribute('readonly');
+          document.getElementsByName('AccrualDaysAfterProbationEnds')[0].setAttribute('readonly', '');
+        } else {
+          document.getElementsByName('AccrualDaysAfterJoining')[0].setAttribute('readonly', '');
+          document.getElementsByName('AccrualDaysAfterProbationEnds')[0].removeAttribute('readonly');
+        }
         break;
       case 8:
-        this.leaveAccrualForm.get("IsExtraLeaveBeyondAccruedBalance").setValue('false');
-        this.leaveAccrualForm.get("IsNoExtraLeaveBeyondAccruedBalance").setValue('false');
-        this.leaveAccrualForm.get("IsAccrueIfHavingLeaveBalance").setValue(false);
-        // this.leaveAccrualForm.get("AllowOnlyIfAccrueBalanceIsAlleast").setValue('false');
-        this.leaveAccrualForm.get("IsAccrueIfOnOtherLeave").setValue(false);
-        // this.leaveAccrualForm.get("NotAllowIfAlreadyOnLeaveMoreThan").setValue(0);
-        this.leaveAccrualForm.get(e.target.name).setValue('true');
+        if (e.target.name == "IsExtraLeaveBeyondAccruedBalance" || e.target.name == "IsNoExtraLeaveBeyondAccruedBalance") {
+          this.leaveAccrualForm.get("IsExtraLeaveBeyondAccruedBalance").setValue('false');
+          this.leaveAccrualForm.get("IsNoExtraLeaveBeyondAccruedBalance").setValue('false');
+          this.leaveAccrualForm.get(e.target.name).setValue('true');
+        }
+        if (e.target.name == 'IsExtraLeaveBeyondAccruedBalance')
+          document.getElementsByName('NoOfDaysForExtraLeave')[0].removeAttribute('readonly');
+        else if (e.target.name == 'IsNoExtraLeaveBeyondAccruedBalance')
+          document.getElementsByName('NoOfDaysForExtraLeave')[0].setAttribute('readonly', '');
+
+        if (e.target.name == 'IsAccrueIfHavingLeaveBalance' && e.target.checked == true)
+          document.getElementsByName('AllowOnlyIfAccrueBalanceIsAlleast')[0].removeAttribute('readonly');
+        else if (e.target.name == 'IsAccrueIfHavingLeaveBalance' && e.target.checked == false) {
+          document.getElementsByName('AllowOnlyIfAccrueBalanceIsAlleast')[0].setAttribute('readonly', '');
+          this.leaveAccrualForm.get(e.target.name).setValue(e.target.checked);
+        }
+
+        if (e.target.name == 'IsAccrueIfOnOtherLeave' && e.target.checked == true)
+          document.getElementsByName('NotAllowIfAlreadyOnLeaveMoreThan')[0].removeAttribute('readonly');
+        else if (e.target.name == 'IsAccrueIfOnOtherLeave' && e.target.checked == false) {
+          document.getElementsByName('NotAllowIfAlreadyOnLeaveMoreThan')[0].setAttribute('readonly', '');
+          this.leaveAccrualForm.get(e.target.name).setValue(e.target.checked);
+        }
+
         break;
       case 9:
         this.leaveAccrualForm.get("RoundOffLeaveBalance").setValue('false');
@@ -820,7 +844,7 @@ class LeaveAccrual {
   ExitMonthLeaveDistribution: any = {};
   AccrualProrateDetail: any = {};
   LeaveDistributionAppliedFrom: number = 0;
-  IsLeavesProratedForJoinigMonth: boolean = null;
+  IsLeavesProratedForJoinigMonth: boolean = true;
   LeaveDistributionSequence: string = null;
 
   IsLeavesProratedOnProbation: boolean = null;
@@ -828,7 +852,7 @@ class LeaveAccrual {
   BreakMonthLeaveAllocationId: number = 0;
   IsNoLeaveOnProbationPeriod: boolean = null;
 
-  IsVaryOnProbationOrExprience: boolean = null;
+  IsVaryOnProbationOrExprience: boolean = false;;
   IsAccrualStartsAfterJoining: boolean = false;
   IsAccrualStartsAfterProbationEnds: boolean = false;
   AccrualDaysAfterJoining: number = 0;
