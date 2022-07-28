@@ -1301,23 +1301,98 @@
                     <h6 class="fw-bold text-dark">Does this leave request require an approval</h6>
                     <div class="form-check">
                       <input class="form-check-input" value="false" type="radio" name="IsLeaveRequiredApproval"
-                        formControlName="IsLeaveRequiredApproval">
+                        (click)="leaveRequestForApproval($event)" formControlName="IsLeaveRequiredApproval">
                       <label class="form-check-label">
                         No
                       </label>
                     </div>
                     <div class="form-check">
                       <input class="form-check-input" value="true" type="radio" name="IsLeaveRequiredApproval"
-                        formControlName="IsLeaveRequiredApproval">
+                        (click)="leaveRequestForApproval($event)" formControlName="IsLeaveRequiredApproval">
                       <label class="form-check-label">
                         Yes
                       </label>
                     </div>
-                    <div class="card px-2 pt-2 pb-3">
+                    <div class="card px-2 pt-2 mt-3 pb-3 "
+                      [ngClass]="{'d-none': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'false'}"
+                      data-name="ApprovalChainContainer">
                       <h6>Approval Chain</h6>
+                      <ng-container formArrayName="ApprovalChain">
+                        <div class="px-5 pt-3 mt-3 bg-light" [formGroupName]="i"
+                          *ngFor="let item of leaveApprovalForm.get('ApprovalChain').controls; let i = index">
+                          <div class="d-flex">
+                            <div class="col-auto me-3">
+                              LEVEL {{i+1}} <i class=" fa fa-circle text-primary ps-3"></i>
+                            </div>
+                            <div class="col-md-8">
+                              <select class="form-control" name="ApprovalRoleTypeId"
+                                formControlName="ApprovalRoleTypeId">
+                                <option value="1">Reporting Manager</option>
+                                <option value="2">Sr. HR Manager</option>
+                              </select>
+                              <div class="d-flex align-items-center mt-3"
+                                [ngClass]="{'d-none': leaveApprovalForm.controls['ApprovalChain'].controls[i].controls.IsSkipToNextLevel.value != true}"
+                                data-name="skip-section">
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" formControlName="IsSkipToNextLevel"
+                                    (click)="skipLeaveNextLevel($event, i)">
+                                  <label class="form-check-label">
+                                    Skip to next level after
+                                  </label>
+                                </div>
+                                <div class="d-flex ms-2 align-items-center">
+                                  <div class="col-md-3">
+                                    <input type="text" class="form-control" name="SkipToNextLevelAfterDays"
+                                      formControlName="SkipToNextLevelAfterDays"
+                                      [readonly]="leaveApprovalForm.controls['ApprovalChain'].controls[i].controls.SkipToNextLevelAfterDays.value <= 0">
+                                  </div>
+                                  <span class="ps-2">days</span>
+                                </div>
+                              </div>
+                            </div>
+                            <a href="javascript:void(0)" class="text-decoration-none text-secondary"
+                              (click)="removeApprovalChain(i)">
+                              <i class="fa fa-trash ps-3 text-secondary fa-lg"></i>
+                            </a>
+                          </div>
+                          <a href="javascript:void(0)"
+                            [ngClass]="{'d-none': leaveApprovalForm.controls['ApprovalChain'].controls[i].controls.IsSkipToNextLevel.value == true}"
+                            data-name="createApprovalChain" class="text-decoration-none mt-4"
+                            (click)="createApprovalChain(i)"><i class="fa fa-plus pe-2 py-3"></i>Add New Level</a>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <div class="form-check mt-4">
+                      <input class="form-check-input" type="checkbox" formControlName="IsRequiredAllLevelApproval">
+                      <label class="form-check-label">
+                        Auto-approve (and skip) approver level, in case approver is not yet registered with HiringBell
+                        not yet assigned role (e.g. RM, Project Manager, Department Head/Business uunit Head etc.) on
+                        has been relieved.
+                      </label>
+                    </div>
+                    <div class="form-check mt-2">
+                      <input class="form-check-input" type="checkbox" formControlName="IsPauseForApprovalNotification">
+                      <label class="form-check-label">
+                        Pause sending of email notification (to approvers) for each request that uis being raised or
+                        approved. Approvers will be able to view these requests as part of the daily email digest.
+                      </label>
+                    </div>
+                  </div>
+                  <div class="my-4">
+                    <h6 class="fw-bold text-dark">Default approval action</h6>
+                    <div class="form-check">
+                      <input class="form-check-input" value="true" type="radio"
+                        name="IsReportingManageIsDefaultForAction"
+                        formControlName="IsReportingManageIsDefaultForAction">
+                      <label class="form-check-label">
+                        Doest reporting manage is default for approval.
+                      </label>
                     </div>
                   </div>
                 </form>
+                <div class="text-end">
+                  <button class="btn btn-primary-c" (click)="submitLeaveApproval()">Save & Next</button>
+                </div>
               </ng-container>
 
               <ng-container *ngIf="configPageNo == 7">
@@ -1327,36 +1402,36 @@
                       What happens to the leave balances at the end of the year?
                     </h6>
                     <div class="form-check">
-                      <input class="form-check-input" value="1" type="radio" name="IsLeaveBalanceExpiredOnEndOfYear"
-                        formControlName="IsLeaveBalanceExpiredOnEndOfYear" />
+                      <input class="form-check-input" value="true" type="radio" name="IsLeaveBalanceExpiredOnEndOfYear"
+                        (click)="toggleLeaveOnYearEnds(1, $event)" formControlName="IsLeaveBalanceExpiredOnEndOfYear" />
                       <label class="form-check-label">
                         All leave balances expire or get reset.
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" value="2" type="radio" name="AllConvertedToPaid"
-                        formControlName="AllConvertedToPaid" />
+                      <input class="form-check-input" value="true" type="radio" name="AllConvertedToPaid"
+                        (click)="toggleLeaveOnYearEnds(1, $event)" formControlName="AllConvertedToPaid" />
                       <label class="form-check-label">
                         All leave balances get paid to the employee
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" value="3" type="radio" name="AllLeavesCarryForwardToNextYear"
-                        formControlName="AllLeavesCarryForwardToNextYear" />
+                      <input class="form-check-input" value="true" type="radio" name="AllLeavesCarryForwardToNextYear"
+                        (click)="toggleLeaveOnYearEnds(1, $event)" formControlName="AllLeavesCarryForwardToNextYear" />
                       <label class="form-check-label">
                         All leave balances get carried forward to the next year.
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" value="4" type="radio" name="PayFirstNCarryForwordRemaning"
-                        formControlName="PayFirstNCarryForwordRemaning" />
+                      <input class="form-check-input" value="true" type="radio" name="PayFirstNCarryForwordRemaning"
+                        (click)="toggleLeaveOnYearEnds(1, $event)" formControlName="PayFirstNCarryForwordRemaning" />
                       <label class="form-check-label">
                         Pay first and then carry forward remaining
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" value="5" type="radio" name="CarryForwordFirstNPayRemaning"
-                        formControlName="CarryForwordFirstNPayRemaning" />
+                      <input class="form-check-input" value="true" type="radio" name="CarryForwordFirstNPayRemaning"
+                        (click)="toggleLeaveOnYearEnds(1, $event)" formControlName="CarryForwordFirstNPayRemaning" />
                       <label class="form-check-label">
                         Carry forward first anf then pay remaining
                       </label>
@@ -1369,9 +1444,9 @@
                         <label for="" class="form-label">Leave for payment and carryforward is defined
                           as</label>
                         <div class="col-md-1 ms-3">
-                          <select class="form-select form-select-sm">
+                          <select class="form-select form-select-sm" formControlName="PayNCarryForwardDefineType">
                             <option value="">Select</option>
-                            <option value="">Fixed number of days</option>
+                            <option value="fixed">Fixed number of days</option>
                             <option value="">
                               Percentage of remaining leave
                             </option>
@@ -1384,7 +1459,7 @@
                           <label class="form-label me-3">If the balance is more than</label>
                           <div class="col-md-1">
                             <input type="text" class="form-control form-control-sm" OnlyNumber="2"
-                              formControlName="PayNCarryForwardIfDaysBalance" />
+                              formControlName="PayNCarryForwardRuleInPercent" />
                           </div>
                         </div>
                         <div class="d-flex align-items-center ms-3 my-3">
@@ -1432,7 +1507,7 @@
                         <label class="form-label me-3">If the balance is more than</label>
                         <div class="col-md-1">
                           <input type="text" class="form-control form-control-sm" OnlyNumber="2"
-                            formControlName="RulesForLeaveBalanceIsMoreThan" />
+                            formControlName="PayNCarryForwardRuleInDays" />
                         </div>
                         <span class="px-2">days, pay upto</span>
                         <div class="col-md-1 mx-3">
@@ -1478,7 +1553,7 @@
                       </div>
                     </div>
                     <div class="form-check d-flex align-items-center">
-                      <input class="form-check-input" type="checkbox" formControlName="DoesNegativeLeaveHasImpact" />
+                      <input class="form-check-input" type="checkbox" formControlName="DoesExpiryLeaveRemainUnchange" />
                       <label class="form-check-label ms-2">
                         Any leave that has an expiry date, either through
                         previous carry forward, or expiray settings under step2
@@ -1493,28 +1568,31 @@
                       their anuual quota?
                     </h6>
                     <div class="form-check">
-                      <input class="form-check-input" value="1" type="radio" name="DeductFromSalaryOnYearChange"
-                        formControlName="DeductFromSalaryOnYearChange" />
+                      <input class="form-check-input" value="true" type="radio" name="DeductNegativeLeaveFromSalary"
+                        (click)="toggleLeaveOnYearEnds(2, $event)" formControlName="DeductNegativeLeaveFromSalary" />
                       <label class="form-check-label">
                         Deduct from Salary.
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" value="2" type="radio" name="ResetBalanceToZero"
-                        formControlName="ResetBalanceToZero" />
+                      <input class="form-check-input" value="true" type="radio" name="ResetBalanceToZero"
+                        (click)="toggleLeaveOnYearEnds(2, $event)" formControlName="ResetBalanceToZero" />
                       <label class="form-check-label">
                         Nullify and reset the balance to zero.
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" value="3" type="radio" name="CarryForwardToNextYear"
-                        formControlName="CarryForwardToNextYear" />
+                      <input class="form-check-input" value="true" type="radio" name="CarryForwardToNextYear"
+                        (click)="toggleLeaveOnYearEnds(2, $event)" formControlName="CarryForwardToNextYear" />
                       <label class="form-check-label">
                         Carry forward negative balance to following year.
                       </label>
                     </div>
                   </div>
                 </form>
+                <div class="text-end">
+                  <button class="btn btn-primary-c" (click)="submitYearEndProcessing()">Save & Next</button>
+                </div>
               </ng-container>
             </div>
           </div>
