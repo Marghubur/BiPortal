@@ -52,31 +52,41 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  bindPage(data) {
+    if(data) {
+      if(data.leaveDetail)
+        this.leaveDetail = data.leaveDetail;
+
+      if (data.leavePlanRestriction)
+        this.leaveRestriction = data.leavePlanRestriction;
+
+      if (data.leaveAccrual)
+        this.leaveAccrual = data.leaveAccrual;
+
+      if (data.leaveApplyDetail)
+        this.appplyingForLeave = data.leaveApplyDetail;
+
+      if(data.leaveHolidaysAndWeekoff)
+        this.holidayWeekOffs = data.leaveHolidaysAndWeekoff;
+
+      this.initLeaveAccrual();
+      this.initApplyForLeave();
+      this.initLeaveDetail();
+      this.initLeaveRestriction();
+      this.initholidayWeekendOff();
+      this.initleaveApproval();
+      this.inityearEndProcess();
+
+      Toast("Data loaded successfully")
+      this.isDataLoaded = true;
+    } else {
+      ErrorToast("Unable to lead plan detail. Please contact to admin.");
+    }
+  }
+
   loadPlanDetail() {
     this.http.get(`ManageLeavePlan/GetLeavePlanTypeConfiguration/${this.leavePlanTypeId}`).then(response => {
-      if(response.ResponseBody) {
-        if(response.ResponseBody.leaveDetail)
-          this.leaveDetail = response.ResponseBody.leaveDetail;
-
-        if (response.ResponseBody.leaveAccrual)
-          this.leaveAccrual = response.ResponseBody.leaveAccrual;
-
-        if (response.ResponseBody.leaveApplyDetail)
-          this.appplyingForLeave = response.ResponseBody.leaveApplyDetail;
-
-        this.initLeaveDetail();
-        this.initLeaveAccrual();
-        this.initApplyForLeave();
-        this.initLeaveRestriction();
-        this.initholidayWeekendOff();
-        this.initleaveApproval();
-        this.inityearEndProcess();
-
-        Toast("Data loaded successfully")
-        this.isDataLoaded = true;
-      } else {
-        ErrorToast("Unable to lead plan detail. Please contact to admin.");
-      }
+      this.bindPage(response.ResponseBody)
     });
   }
 
@@ -94,6 +104,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   initLeaveDetail() {
     this.leaveDetailForm = this.fb.group({
+      LeaveDetailId: new FormControl(this.leaveDetail.LeaveDetailId),
       LeavePlanTypeId: new FormControl(this.leavePlanTypeId),
       IsLeaveDaysLimit: new FormControl(this.leaveDetail.IsLeaveDaysLimit? 'true':'false'),
       LeaveLimit: new FormControl(this.leaveDetail.LeaveLimit),
@@ -116,7 +127,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       this.http.put(`ManageLeavePlan/UpdateLeaveDetail/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           Toast("Leave Quota updated successfully.")
-          this.configPageNo = this.configPageNo + 1;
+          this.bindPage(res.ResponseBody);
         }
       })
       this.submit = false;
@@ -134,38 +145,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       document.querySelector('input[name="LeaveNotAllocatedIfJoinAfter"]').removeAttribute('readonly');
   }
 
-  empJoinMiddle(e: any) {
-    let value = e.target.value;
-    let elem = document.querySelectorAll('div[name="EmpJoinMiddle"]');
-    if (value) {
-      if (value == 'true') {
-        for (let i = 0; i < elem.length; i++) {
-          elem[i].classList.add('d-none');
-        }
-      }
-      else {
-        for (let i = 0; i < elem.length; i++) {
-          elem[i].classList.remove('d-none');
-        }
-      }
-    }
-  }
-
-  EmpExitMiddle(e: any) {
-    let value = e.target.value;
-    let elem = document.querySelectorAll('div[name="EmpExitMiddle"]');
-    if (value) {
-      if (value == '2') {
-        for (let i = 0; i < elem.length; i++) {
-          elem[i].classList.remove('d-none');
-        }
-      }
-      else {
-        for (let i = 0; i < elem.length; i++) {
-          elem[i].classList.add('d-none');
-        }
-      }
-    }
+  empJoinMiddle(flag: boolean) {
+    let elem = document.getElementById("EmpJoinMiddle");
+    if(flag)
+      elem.classList.remove('d-none');
+    else
+      elem.classList.add('d-none');
   }
 
   AccrualLevelVary(e: any) {
@@ -175,16 +160,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         document.querySelector('div[name="AccrualLevelVary"]').classList.add('d-none');
       else
         document.querySelector('div[name="AccrualLevelVary"]').classList.remove('d-none');
-    }
-  }
-
-  AccrualStart(e: any) {
-    let value = e.target.value;
-    if (value) {
-      // if (value == 'true')
-      //   document.querySelector('input[name="noLeaveQuotaAllow"]').setAttribute('readonly', '');
-      // else
-      //   document.querySelector('input[name="noLeaveQuotaAllow"]').removeAttribute('readonly');
     }
   }
 
@@ -253,104 +228,176 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   initLeaveAccrual() {
     this.leaveAccrualForm = this.fb.group({
-      LeaveCreditBWJoiningDate: new FormArray([this.createFormBWJoiningDate()]),
-      LeaveCreditBWExitDate: new FormArray([this.createFormBWExitDate()]),
-      AccrualRateOnExp: new FormArray([this.createAccruralRateOnExp()]),
       LeaveAccrualId: new FormControl(this.leaveAccrual.LeaveAccrualId),
       LeavePlanTypeId: new FormControl(this.leavePlanTypeId),
+
       CanApplyEntireLeave: new FormControl(this.leaveAccrual.CanApplyEntireLeave ?'true' : 'false'),
       IsLeaveAccruedPatternAvail: new FormControl(this.leaveAccrual.IsLeaveAccruedPatternAvail?'true' : 'false'),
       LeaveDistributionSequence: new FormControl(this.leaveAccrual.LeaveDistributionSequence),
       LeaveDistributionAppliedFrom: new FormControl(this.leaveAccrual.LeaveDistributionAppliedFrom),
-      IsAllowLeavesForJoinigMonth: new FormControl(this.leaveAccrual.IsAllowLeavesForJoinigMonth ?'true' : 'false'),
-      IsAllowLeavesProbationPeriod: new FormControl(this.leaveAccrual.IsAllowLeavesProbationPeriod?'true' : 'false'),
-      BreakMonthLeaveAllocationId: new FormControl(this.leaveAccrual.BreakMonthLeaveAllocationId),
+
+      IsLeavesProratedForJoinigMonth: new FormControl(this.leaveAccrual.IsLeavesProratedForJoinigMonth ? 'true' : 'false'),
+      JoiningMonthLeaveDistribution: this.buildFormArrayBetweenJoiningDate(),
+
+      IsLeavesProratedOnProbation: new FormControl(this.leaveAccrual.IsLeavesProratedOnProbation?'true' : 'false'),
+      ExitMonthLeaveDistribution: this.buildFormArrayBetweenProbationPeriod(),
+      IsNotAllowProratedOnProbation: new FormControl(this.leaveAccrual.IsNotAllowProratedOnProbation ?'true' : 'false'),
       IsNoLeaveOnProbationPeriod: new FormControl(this.leaveAccrual.IsNoLeaveOnProbationPeriod?'true' : 'false'),
+
       IsVaryOnProbationOrExprience: new FormControl(this.leaveAccrual.IsVaryOnProbationOrExprience ?'true' : 'false'),
+      IsAccrualStartsAfterJoining: new FormControl(this.leaveAccrual.IsAccrualStartsAfterJoining ?'true' : 'false'),
+      IsAccrualStartsAfterProbationEnds: new FormControl(this.leaveAccrual.IsAccrualStartsAfterProbationEnds ?'true' : 'false'),
+      AccrualDaysAfterJoining: new FormControl(this.leaveAccrual.AccrualDaysAfterJoining),
+      AccrualDaysAfterProbationEnds: new FormControl(this.leaveAccrual.AccrualDaysAfterProbationEnds),
+      AccrualProrateDetail: this.buildAccruralRateOnExp(),
+
       IsImpactedOnWorkDaysEveryMonth: new FormControl(this.leaveAccrual.IsImpactedOnWorkDaysEveryMonth ?'true' : 'false'),
+
       WeekOffAsAbsentIfAttendaceLessThen: new FormControl(this.leaveAccrual.WeekOffAsAbsentIfAttendaceLessThen),
       HolidayAsAbsentIfAttendaceLessThen: new FormControl(this.leaveAccrual.HolidayAsAbsentIfAttendaceLessThen),
       CanApplyForFutureDate: new FormControl(this.leaveAccrual.CanApplyForFutureDate?'true' : 'false'),
-      ExtraLeaveBeyondAccruedBalance: new FormControl(this.leaveAccrual.ExtraLeaveBeyondAccruedBalance ?'true' : 'false'),
+      IsExtraLeaveBeyondAccruedBalance: new FormControl(this.leaveAccrual.IsExtraLeaveBeyondAccruedBalance ?'true' : 'false'),
+      IsNoExtraLeaveBeyondAccruedBalance: new FormControl(this.leaveAccrual.IsNoExtraLeaveBeyondAccruedBalance ?'true' : 'false'),
       NoOfDaysForExtraLeave: new FormControl(this.leaveAccrual.NoOfDaysForExtraLeave),
+      IsAccrueIfHavingLeaveBalance: new FormControl(this.leaveAccrual.IsAccrueIfHavingLeaveBalance),
       AllowOnlyIfAccrueBalanceIsAlleast: new FormControl(this.leaveAccrual.AllowOnlyIfAccrueBalanceIsAlleast),
+      IsAccrueIfOnOtherLeave: new FormControl(this.leaveAccrual.IsAccrueIfOnOtherLeave),
       NotAllowIfAlreadyOnLeaveMoreThan: new FormControl(this.leaveAccrual.NotAllowIfAlreadyOnLeaveMoreThan),
+
       RoundOffLeaveBalance: new FormControl(this.leaveAccrual.RoundOffLeaveBalance ?'true' : 'false'),
       ToNearestHalfDay: new FormControl(this.leaveAccrual.ToNearestHalfDay ?'true' : 'false'),
       ToNearestFullDay: new FormControl(this.leaveAccrual.ToNearestFullDay ?'true' : 'false'),
       ToNextAvailableHalfDay: new FormControl(this.leaveAccrual.ToNextAvailableHalfDay ?'true' : 'false'),
       ToNextAvailableFullDay: new FormControl(this.leaveAccrual.ToNextAvailableFullDay ?'true' : 'false'),
       ToPreviousHalfDay: new FormControl(this.leaveAccrual.ToPreviousHalfDay ?'true' : 'false'),
+
       DoesLeaveExpireAfterSomeTime: new FormControl(this.leaveAccrual.DoesLeaveExpireAfterSomeTime?'true' : 'false'),
       AfterHowManyDays: new FormControl(this.leaveAccrual.AfterHowManyDays)
-    })
+    });
+  }
+
+  buildAccruralRateOnExp(): FormArray {
+    let data = this.leaveAccrual.AccrualProrateDetail;
+    let dataArray: FormArray = this.fb.array([]);
+
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          PeriodType: new FormControl(data[i].PeriodType),
+          YearsAfterJoining: new FormControl(data[i].YearsAfterJoining),
+          DaysMonthly: new FormControl(data[i].DaysMonthly),
+          DaysYearly: new FormControl(data[i].DaysYearly)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.createAccruralRateOnExp());
+    }
+
+    return dataArray;
   }
 
   createAccruralRateOnExp(): FormGroup {
     return this.fb.group({
-      YearOfJoining: new FormControl(),
-      AccureDayMonth: new FormControl(),
-      AccureDayYear: new FormControl()
-    })
+      PeriodType: new FormControl('After Probation'),
+      YearsAfterJoining: new FormControl(0),
+      DaysMonthly: new FormControl(0),
+      DaysYearly: new FormControl(0)
+    });
   }
 
   addAccruralRateOnExp() {
-    let item = this.leaveAccrualForm.get('AccrualRateOnExp') as FormArray;
+    let item = this.leaveAccrualForm.get('AccrualProrateDetail') as FormArray;
     item.push(this.createAccruralRateOnExp());
   }
 
   removeAccruralRateOnExp(i: number) {
-    let item = this.leaveAccrualForm.get('AccrualRateOnExp') as FormArray;
+    let item = this.leaveAccrualForm.get('AccrualProrateDetail') as FormArray;
     item.removeAt(i);
   }
 
-  createFormBWJoiningDate(): FormGroup {
+  buildFormArrayBetweenJoiningDate(): FormArray {
+    let data = this.leaveAccrual.JoiningMonthLeaveDistribution;
+    let dataArray: FormArray = this.fb.array([]);
+
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          FromDate: new FormControl(data[i].FromDate),
+          ToDate: new FormControl(data[i].ToDate),
+          AllocatedLeave: new FormControl(data[i].AllocatedLeave)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.createFormBetweenJoiningDate());
+    }
+
+    return dataArray;
+  }
+
+  createFormBetweenJoiningDate(): FormGroup {
     return this.fb.group({
-      FromJoiningDate: new FormControl(''),
-      ToJoiningDate: new FormControl(''),
-      AllocatedLeave: new FormControl('')
+      FromDate: new FormControl(0),
+      ToDate: new FormControl(0),
+      AllocatedLeave: new FormControl(0)
     });
   }
 
-  get formBWJoiningDate() {
-    return this.leaveAccrualForm.get('LeaveCreditBWJoiningDate') as FormArray;
+  get formBetweenJoiningDate() {
+    return this.leaveAccrualForm.get('JoiningMonthLeaveDistribution') as FormArray;
   }
 
-  addFormBWJoiningDate() {
-    let item = this.leaveAccrualForm.get('LeaveCreditBWJoiningDate') as FormArray;
-    item.push(this.createFormBWJoiningDate());
-    let elem = document.querySelectorAll('div[name="EmpJoinMiddle"]');
-    for (let i = 0; i < elem.length; i++) {
-      elem[i].classList.remove('d-none');
-    }
+  addFormBetweenJoiningDate() {
+    let item = this.leaveAccrualForm.get('JoiningMonthLeaveDistribution') as FormArray;
+    item.push(this.createFormBetweenJoiningDate());
   }
 
-  removeFormBWJoiningDate(i: number) {
-    let item = this.leaveAccrualForm.get('LeaveCreditBWJoiningDate') as FormArray;
+  removeFormBetweenJoiningDate(i: number) {
+    let item = this.leaveAccrualForm.get('JoiningMonthLeaveDistribution') as FormArray;
     item.removeAt(i);
     if (item.length === 0)
-      this.addFormBWJoiningDate();
+      this.addFormBetweenJoiningDate();
   }
 
-  createFormBWExitDate(): FormGroup {
+  buildFormArrayBetweenProbationPeriod(): FormArray {
+    let data = this.leaveAccrual.ExitMonthLeaveDistribution;
+    let dataArray: FormArray = this.fb.array([]);
+
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          FromDate: new FormControl(data[i].FromDate),
+          ToDate: new FormControl(data[i].ToDate),
+          AllocatedLeave: new FormControl(data[i].AllocatedLeave)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.createFormBetweenJoiningDate());
+    }
+
+    return dataArray;
+  }
+
+  createFormBetweenExitDate(): FormGroup {
     return this.fb.group({
-      FromExitDate: new FormControl(),
-      ToExitDate: new FormControl(),
-      LeaveDays: new FormControl()
+      FromDate: new FormControl(0),
+      ToDate: new FormControl(0),
+      AllocatedLeave: new FormControl(0)
     })
   }
 
-  addFormBWExitDate() {
-    let item = this.leaveAccrualForm.get('LeaveCreditBWExitDate') as FormArray;
-    item.push(this.createFormBWExitDate());
-    let elem = document.querySelectorAll('div[name="EmpExitMiddle"]');
-    for (let i = 0; i < elem.length; i++) {
-      elem[i].classList.remove('d-none');
-    }
+  addFormBetweenExitDate() {
+    let item = this.leaveAccrualForm.get('ExitMonthLeaveDistribution') as FormArray;
+    item.push(this.createFormBetweenExitDate());
   }
 
-  removeFormBWExitDate(i: number) {
-    let item = this.leaveAccrualForm.get('LeaveCreditBWExitDate') as FormArray;
+  removeFormBetweenExitDate(i: number) {
+    let item = this.leaveAccrualForm.get('ExitMonthLeaveDistribution') as FormArray;
     item.removeAt(i);
   }
 
@@ -361,10 +408,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let value = this.applyForLeaveForm.value;
     if (value && errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateApplyForLeave/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
-        if (res.ResponseBody) {
-          Toast("Apply for Leave updated successfully.")
-          //this.configPageNo = this.configPageNo + 1;
-        }
+        this.bindPage(res.ResponseBody);
       })
       this.submit = false;
       this.isLoading = false;
@@ -380,29 +424,49 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       EmployeeCanSeeAndApplyCurrentPlanLeave: new FormControl(this.appplyingForLeave.EmployeeCanSeeAndApplyCurrentPlanLeave ? 'true': 'false'),
       ApplyPriorBeforeLeaveDate: new FormControl(this.appplyingForLeave.ApplyPriorBeforeLeaveDate),
       BackDateLeaveApplyNotBeyondDays: new FormControl(this.appplyingForLeave.BackDateLeaveApplyNotBeyondDays),
-      RestrictBackDateLeaveApplyAfter: new FormControl(this.appplyingForLeave.RestrictBackDateLeaveApplyAfter),
       CurrentLeaveRequiredComments: new FormControl(this.appplyingForLeave.CurrentLeaveRequiredComments ? 'true': 'false'),
       ProofRequiredIfDaysExceeds: new FormControl(this.appplyingForLeave.ProofRequiredIfDaysExceeds ? 'true': 'false'),
       NoOfDaysExceeded: new FormControl(this.appplyingForLeave.NoOfDaysExceeded),
-      LeaveCredit: new FormArray([this.createLeaveCredit()])
+      RuleForLeaveInNotice: this.buildRuleForLeaveInNotice()
     })
   }
 
-  createLeaveCredit(): FormGroup {
+  buildRuleForLeaveInNotice(): FormArray {
+    let data = this.appplyingForLeave.RuleForLeaveInNotice;
+    let dataArray: FormArray = this.fb.array([]);
+
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          RemaningCalendarDayInNotice: new FormControl(data[i].RemaningCalendarDayInNotice),
+          RequiredCalendarDaysForLeaveApply: new FormControl(data[i].RequiredCalendarDaysForLeaveApply),
+          RemaningWorkingDaysInNotice: new FormControl(data[i].RemaningWorkingDaysInNotice)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.createRuleForLeaveInNotice());
+    }
+
+    return dataArray;
+  }
+
+  createRuleForLeaveInNotice(): FormGroup {
     return this.fb.group({
-      RemaningCalendarDayInNotice: new FormControl(this.appplyingForLeave.RemaningCalendarDayInNotice),
-      RequiredCalendarDaysForLeaveApply: new FormControl(this.appplyingForLeave.RequiredCalendarDaysForLeaveApply),
-      RemaningWorkingDaysInNotice: new FormControl(this.appplyingForLeave.RemaningWorkingDaysInNotice)
+      RemaningCalendarDayInNotice: new FormControl(0),
+      RequiredCalendarDaysForLeaveApply: new FormControl(0),
+      RemaningWorkingDaysInNotice: new FormControl(0)
     })
   }
 
-  addLeaveCredit() {
-    let item = this.applyForLeaveForm.get('LeaveCredit') as FormArray;
-    item.push(this.createLeaveCredit());
+  addRuleForLeaveInNotice() {
+    let item = this.applyForLeaveForm.get('RuleForLeaveInNotice') as FormArray;
+    item.push(this.createRuleForLeaveInNotice());
   }
 
-  removeLeaveCredit(i: number) {
-    let item = this.applyForLeaveForm.get('LeaveCredit') as FormArray;
+  removeRuleForLeaveInNotice(i: number) {
+    let item = this.applyForLeaveForm.get('RuleForLeaveInNotice') as FormArray;
     item.removeAt(i)
   }
 
@@ -410,48 +474,86 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     this.leaveRestrictionForm = this.fb.group({
       LeavePlanRestrictionId: new FormControl(this.leaveRestriction.LeavePlanRestrictionId),
       LeavePlanId: new FormControl(this.leaveRestriction.LeavePlanId),
-      NewJoineeCanApplyLeave: new FormControl(this.leaveRestriction.NewJoineeCanApplyLeave),
-      DaysAfterInProbation: new FormControl(this.leaveRestriction.DaysAfterInProbation),
+      CanApplyAfterProbation: new FormControl(this.leaveRestriction.CanApplyAfterProbation ? 'true' : 'false'),
+      CanApplyAfterJoining: new FormControl(this.leaveRestriction.CanApplyAfterJoining ? 'true' : 'false'),
+      DaysAfterProbation: new FormControl(this.leaveRestriction.DaysAfterProbation),
       DaysAfterJoining: new FormControl(this.leaveRestriction.DaysAfterJoining),
-      LimitDaysLeaveInProbation: new FormControl(this.leaveRestriction.LimitDaysLeaveInProbation),
-      IsConsecutiveLeaveLimit: new FormControl(this.leaveRestriction.IsConsecutiveLeaveLimit),
+      IsAvailRestrictedLeavesInProbation: new FormControl(this.leaveRestriction.IsAvailRestrictedLeavesInProbation ? 'true' : 'false'),
+      LeaveLimitInProbation: new FormControl(this.leaveRestriction.LeaveLimitInProbation),
+
+      IsConsecutiveLeaveLimit: new FormControl(this.leaveRestriction.IsConsecutiveLeaveLimit ? 'true' : 'false'),
       ConsecutiveDaysLimit: new FormControl(this.leaveRestriction.ConsecutiveDaysLimit),
-      IsLeaveInNoticeExtendsNoticePeriod: new FormControl(this.leaveRestriction.IsLeaveInNoticeExtendsNoticePeriod),
+
+      IsLeaveInNoticeExtendsNoticePeriod: new FormControl(this.leaveRestriction.IsLeaveInNoticeExtendsNoticePeriod ? 'true' : 'false'),
       NoOfTimesNoticePeriodExtended: new FormControl(this.leaveRestriction.NoOfTimesNoticePeriodExtended),
-      CanManageOverrideLeaveRestriction: new FormControl(this.leaveRestriction.CanManageOverrideLeaveRestriction),
+
+      CanManageOverrideLeaveRestriction: new FormControl(this.leaveRestriction.CanManageOverrideLeaveRestriction ? 'true' : 'false'),
+
       GapBetweenTwoConsicutiveLeaveDates: new FormControl(this.leaveRestriction.GapBetweenTwoConsicutiveLeaveDates),
-      LimitOfMaximumLeavesInCalendarMonth: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInCalendarMonth),
       LimitOfMaximumLeavesInCalendarYear: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInCalendarYear),
+      LimitOfMaximumLeavesInCalendarMonth: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInCalendarMonth),
       LimitOfMaximumLeavesInEntireTenure: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInEntireTenure),
-      IsLeaveRestrictionForEachMonth: new FormControl(this.leaveRestriction.IsLeaveRestrictionForEachMonth),
-      RestrictFromDayOfMonth: new FormControl(this.leaveRestriction.RestrictFromDayOfMonth),
-      RestrictToDayOfMonth: new FormControl(this.leaveRestriction.RestrictToDayOfMonth),
-      CurrentLeaveCannotCombineWith: new FormControl(this.leaveRestriction.CurrentLeaveCannotCombineWith),
-      CurrentLeaveCannotIfBalanceInPlan: new FormControl(this.leaveRestriction.CurrentLeaveCannotIfBalanceInPlan)
+      MinLeaveToApplyDependsOnAvailable: new FormControl(this.leaveRestriction.MinLeaveToApplyDependsOnAvailable),
+      AvailableLeaves: new FormControl(this.leaveRestriction.AvailableLeaves),
+      RestrictFromDayOfEveryMonth: new FormControl(this.leaveRestriction.RestrictFromDayOfEveryMonth),
+
+      IsCurrentPlanDepnedsOnOtherPlan: new FormControl(this.leaveRestriction.IsCurrentPlanDepnedsOnOtherPlan),
+      AssociatedPlanTypeId: new FormControl(this.leaveRestriction.AssociatedPlanTypeId),
+      IsCheckOtherPlanTypeBalance: new FormControl(this.leaveRestriction.IsCheckOtherPlanTypeBalance),
+      DependentPlanTypeId: new FormControl(this.leaveRestriction.DependentPlanTypeId)
     })
+  }
+
+  submitLeaveRestriction() {
+    this.submit = true;
+    this.isLoading = true
+    let errorCounter = 0;
+    let value = this.leaveRestrictionForm.value;
+    if (value && errorCounter == 0) {
+      this.http.put(`ManageLeavePlan/UpdateLeaveRestriction/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+        this.bindPage(res.ResponseBody);
+        this.submit = false;
+        this.isLoading = false;
+      });
+    }
   }
 
   initholidayWeekendOff() {
     this.holidayWeekendOffForm = this.fb.group({
       LeaveHolidaysAndWeekOffId:new FormControl(this.holidayWeekOffs.LeaveHolidaysAndWeekOffId),
-      LeavePlanId:new FormControl(this.holidayWeekOffs.LeavePlanId),
-      AdJoiningHolidayIsConsiderAsLeave:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffIsConsiderAsLeave),
-      IfLeaveLieBetweenTwoHolidays:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenTwoHolidays),
-      IfHolidayIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightBeforLeave),
-      IfHolidayIsRightAfterLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightAfterLeave),
-      IfHolidayIsBetweenLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsBetweenLeave),
-      IfHolidayIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfHolidayIsRightBeforeAfterOrInBetween),
+      LeavePlanTypeId:new FormControl(this.holidayWeekOffs.LeavePlanTypeId),
+      AdJoiningHolidayIsConsiderAsLeave:new FormControl(this.holidayWeekOffs.AdJoiningHolidayIsConsiderAsLeave ? 'true' : 'false'),
+      ConsiderLeaveIfNumOfDays:new FormControl(this.holidayWeekOffs.ConsiderLeaveIfNumOfDays),
+      IfLeaveLieBetweenTwoHolidays:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenTwoHolidays ? 'true' : 'false'),
+      IfHolidayIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightBeforLeave ? 'true' : 'false'),
+      IfHolidayIsRightAfterLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightAfterLeave ? 'true' : 'false'),
+      IfHolidayIsBetweenLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsBetweenLeave ? 'true' : 'false'),
+      IfHolidayIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfHolidayIsRightBeforeAfterOrInBetween ? 'true' : 'false'),
       AdjoiningHolidayRulesIsValidForHalfDay:new FormControl(this.holidayWeekOffs.AdjoiningHolidayRulesIsValidForHalfDay),
       AdjoiningWeekOffIsConsiderAsLeave:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffIsConsiderAsLeave),
       ConsiderLeaveIfIncludeDays:new FormControl(this.holidayWeekOffs.ConsiderLeaveIfIncludeDays),
-      IfLeaveLieBetweenWeekOff:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenWeekOff),
-      IfWeekOffIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforLeave),
-      IfWeekOffIsRightAfterLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightAfterLeave),
-      IfWeekOffIsBetweenLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsBetweenLeave),
-      IfWeekOffIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforeAfterOrInBetween),
+      IfLeaveLieBetweenWeekOff:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenWeekOff ? 'true' : 'false'),
+      IfWeekOffIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforLeave ? 'true' : 'false'),
+      IfWeekOffIsRightAfterLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightAfterLeave ? 'true' : 'false'),
+      IfWeekOffIsBetweenLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsBetweenLeave ? 'true' : 'false'),
+      IfWeekOffIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforeAfterOrInBetween ? 'true' : 'false'),
       AdjoiningWeekOffRulesIsValidForHalfDay:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffRulesIsValidForHalfDay),
-      ClubSandwichPolicy:new FormControl(this.holidayWeekOffs.ClubSandwichPolicy)
+      ClubSandwichPolicy:new FormControl(this.holidayWeekOffs.ClubSandwichPolicy ? 'true' : 'false')
     })
+  }
+
+  submitHolidayNWeekOffLeave() {
+    this.submit = true;
+    this.isLoading = true
+    let errorCounter = 0;
+    let value = this.holidayWeekendOffForm.value;
+    if (value && errorCounter == 0) {
+      this.http.put(`ManageLeavePlan/UpdateHolidayNWeekOffPlan/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+        this.bindPage(res.ResponseBody);
+        this.submit = false;
+        this.isLoading = false;
+      });
+    }
   }
 
   initleaveApproval() {
@@ -511,13 +613,30 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         else
           document.getElementsByName('LeaveBalanceCalculated')[0].classList.add('d-none');
         break;
+      case 3:
+        this.leaveAccrualForm.get('IsNoLeaveOnProbationPeriod').setValue('false');
+        this.leaveAccrualForm.get('IsNotAllowProratedOnProbation').setValue('false');
+        this.leaveAccrualForm.get('IsLeavesProratedOnProbation').setValue('false');
+        this.leaveAccrualForm.get(e.target.name).setValue(e.target.value);
+        let elem = document.getElementById("EmpExitMiddle");
+        if(e.target.name == "IsNotAllowProratedOnProbation")
+          elem.classList.remove('d-none');
+        else
+          elem.classList.add('d-none');
+        break;
+      case 5:
+        this.leaveAccrualForm.get('IsAccrualStartsAfterJoining').setValue('false');
+        this.leaveAccrualForm.get('IsAccrualStartsAfterProbationEnds').setValue('false');
+        this.leaveAccrualForm.get(e.target.name).setValue(e.target.value);
+        break;
       case 8:
-         if (e.target.checked == true) {
-          e.target.nextSibling.querySelector('input').removeAttribute('readonly');
-         } else {
-          e.target.nextSibling.querySelector('input').addAttribute('readonly', '');
-          e.target.nextSibling.querySelector('input').value = '0';
-         }
+        this.leaveAccrualForm.get("IsExtraLeaveBeyondAccruedBalance").setValue('false');
+        this.leaveAccrualForm.get("IsNoExtraLeaveBeyondAccruedBalance").setValue('false');
+        this.leaveAccrualForm.get("IsAccrueIfHavingLeaveBalance").setValue(false);
+        // this.leaveAccrualForm.get("AllowOnlyIfAccrueBalanceIsAlleast").setValue('false');
+        this.leaveAccrualForm.get("IsAccrueIfOnOtherLeave").setValue(false);
+        // this.leaveAccrualForm.get("NotAllowIfAlreadyOnLeaveMoreThan").setValue(0);
+        this.leaveAccrualForm.get(e.target.name).setValue('true');
         break;
       case 9:
         this.leaveAccrualForm.get("RoundOffLeaveBalance").setValue('false');
@@ -587,22 +706,34 @@ class LeaveAccrual {
   LeavePlanTypeId: number = 0;
   CanApplyEntireLeave: boolean = null;
   IsLeaveAccruedPatternAvail: boolean = null;
-  LeaveDistributionSequence: string = '';
+  JoiningMonthLeaveDistribution: any = {};
+  ExitMonthLeaveDistribution: any = {};
+  AccrualProrateDetail: any = {};
   LeaveDistributionAppliedFrom: number = 0;
-  IsAllowLeavesForJoinigMonth: boolean = null;
+  IsLeavesProratedForJoinigMonth: boolean = null;
+  LeaveDistributionSequence: string = null;
 
-  IsAllowLeavesProbationPeriod: boolean = null;
+  IsLeavesProratedOnProbation: boolean = null;
+  IsNotAllowProratedOnProbation: boolean = null;
   BreakMonthLeaveAllocationId: number = 0;
   IsNoLeaveOnProbationPeriod: boolean = null;
 
   IsVaryOnProbationOrExprience: boolean = null;
+  IsAccrualStartsAfterJoining: boolean = false;
+  IsAccrualStartsAfterProbationEnds: boolean = false;
+  AccrualDaysAfterJoining: number = 0;
+  AccrualDaysAfterProbationEnds: number = 0;
+
   IsImpactedOnWorkDaysEveryMonth: boolean = null;
   WeekOffAsAbsentIfAttendaceLessThen: number = 0;
   HolidayAsAbsentIfAttendaceLessThen: number = 0;
   CanApplyForFutureDate: boolean = null;
-  ExtraLeaveBeyondAccruedBalance: boolean = null;
+  IsExtraLeaveBeyondAccruedBalance: boolean = false;
+  IsNoExtraLeaveBeyondAccruedBalance: boolean = false;
   NoOfDaysForExtraLeave: number = 0;
+  IsAccrueIfHavingLeaveBalance: boolean = false;
   AllowOnlyIfAccrueBalanceIsAlleast: number = 0;
+  IsAccrueIfOnOtherLeave: boolean = false;
   NotAllowIfAlreadyOnLeaveMoreThan: number = 0;
   RoundOffLeaveBalance: boolean = null;
   ToNearestHalfDay: boolean = null;
@@ -612,7 +743,6 @@ class LeaveAccrual {
   ToPreviousHalfDay: boolean = null;
   DoesLeaveExpireAfterSomeTime: boolean = null;
   AfterHowManyDays: number = 0;
-  Allocateleavebreakformonth: Allocateleavebreakformonth = new Allocateleavebreakformonth();
 }
 
 class ApplyingForLeave {
@@ -620,59 +750,67 @@ class ApplyingForLeave {
   LeavePlanTypeId: number = 0;
   IsAllowForHalfDay: boolean = null;
   EmployeeCanSeeAndApplyCurrentPlanLeave: boolean = null;
-  RemaningCalendarDayInNotice: number = 0;
-  RequiredCalendarDaysForLeaveApply: number = 0;
-  RemaningWorkingDaysInNotice: number = 0;
   ApplyPriorBeforeLeaveDate: number = 0;
   BackDateLeaveApplyNotBeyondDays: number = 0;
   RestrictBackDateLeaveApplyAfter: number = 0;
   CurrentLeaveRequiredComments: boolean = null;
   ProofRequiredIfDaysExceeds: boolean = null;
   NoOfDaysExceeded: number = 0;
+  RuleForLeaveInNotice: Array<any> = [];
 }
 
 class LeaveRestriction {
   LeavePlanRestrictionId: number = 0;
   LeavePlanId: number = 0;
-  NewJoineeCanApplyLeave: boolean = null;
-  DaysAfterInProbation: number = 0;
+  CanApplyAfterProbation: boolean = false;
+  CanApplyAfterJoining: boolean = false;
+  DaysAfterProbation: number = 0;
   DaysAfterJoining: number = 0;
-  LimitDaysLeaveInProbation: boolean = null;
-  IsConsecutiveLeaveLimit: boolean = null;
+  IsAvailRestrictedLeavesInProbation: boolean = false;
+  LeaveLimitInProbation: number = 0;
+
+  IsConsecutiveLeaveLimit: boolean = false;
   ConsecutiveDaysLimit: number = 0;
-  IsLeaveInNoticeExtendsNoticePeriod: boolean = null;
+
+  IsLeaveInNoticeExtendsNoticePeriod: boolean = false;
   NoOfTimesNoticePeriodExtended: number = 0;
-  CanManageOverrideLeaveRestriction: boolean = null;
+
+  CanManageOverrideLeaveRestriction: boolean = false;
+
   GapBetweenTwoConsicutiveLeaveDates: number = 0;
-  LimitOfMaximumLeavesInCalendarMonth: number = 0;
   LimitOfMaximumLeavesInCalendarYear: number = 0;
+  LimitOfMaximumLeavesInCalendarMonth: number = 0;
   LimitOfMaximumLeavesInEntireTenure: number = 0;
-  IsLeaveRestrictionForEachMonth: boolean = null;
-  RestrictFromDayOfMonth: number = 0;
-  RestrictToDayOfMonth: number = 0;
-  CurrentLeaveCannotCombineWith: number = 0;
-  CurrentLeaveCannotIfBalanceInPlan: number = 0;
+  MinLeaveToApplyDependsOnAvailable: number = 0;
+  AvailableLeaves: number = 0;
+  RestrictFromDayOfEveryMonth: number = 0;
+
+  IsCurrentPlanDepnedsOnOtherPlan: boolean = false;
+  AssociatedPlanTypeId: number = 0;
+  IsCheckOtherPlanTypeBalance: boolean = false;
+  DependentPlanTypeId: number = 0;
 }
 
 class HolidayWeekOffs {
   LeaveHolidaysAndWeekOffId: number = 0;
-  LeavePlanId: number = 0;
-  AdJoiningHolidayIsConsiderAsLeave: boolean = null;
-  IfLeaveLieBetweenTwoHolidays: boolean = null;
-  IfHolidayIsRightBeforLeave: boolean = null;
-  IfHolidayIsRightAfterLeave: boolean = null;
-  IfHolidayIsBetweenLeave: boolean = null;
-  IfHolidayIsRightBeforeAfterOrInBetween: boolean = null;
-  AdjoiningHolidayRulesIsValidForHalfDay: boolean = null;
-  AdjoiningWeekOffIsConsiderAsLeave: boolean = null;
+  LeavePlanTypeId: number = 0;
+  AdJoiningHolidayIsConsiderAsLeave: boolean = false;
+  ConsiderLeaveIfNumOfDays: number = 0;
+  IfLeaveLieBetweenTwoHolidays: boolean = false;
+  IfHolidayIsRightBeforLeave: boolean = false;
+  IfHolidayIsRightAfterLeave: boolean = false;
+  IfHolidayIsBetweenLeave: boolean = false;
+  IfHolidayIsRightBeforeAfterOrInBetween: boolean = false;
+  AdjoiningHolidayRulesIsValidForHalfDay: boolean = false;
+  AdjoiningWeekOffIsConsiderAsLeave: boolean = false;
   ConsiderLeaveIfIncludeDays: number = 0;
-  IfLeaveLieBetweenWeekOff: boolean = null;
-  IfWeekOffIsRightBeforLeave: boolean = null;
-  IfWeekOffIsRightAfterLeave: boolean = null;
-  IfWeekOffIsBetweenLeave: boolean = null;
-  IfWeekOffIsRightBeforeAfterOrInBetween: boolean = null;
-  AdjoiningWeekOffRulesIsValidForHalfDay: boolean = null;
-  ClubSandwichPolicy: boolean = null;
+  IfLeaveLieBetweenWeekOff: boolean = false;
+  IfWeekOffIsRightBeforLeave: boolean = false;
+  IfWeekOffIsRightAfterLeave: boolean = false;
+  IfWeekOffIsBetweenLeave: boolean = false;
+  IfWeekOffIsRightBeforeAfterOrInBetween: boolean = false;
+  AdjoiningWeekOffRulesIsValidForHalfDay: boolean = false;
+  ClubSandwichPolicy: boolean = false;
 }
 
 class LeaveApproval {
@@ -712,13 +850,4 @@ class YearEndProcess {
   DeductFromSalaryOnYearChange: boolean = null;
   ResetBalanceToZero: boolean = null;
   CarryForwardToNextYear: boolean = null;
-}
-
-class Allocateleavebreakformonth {
-  BreakMonthLeaveAllocationId: number = 0;
-  LeavePlanId: number = 0;
-  LeavePlanDetailId: number = 0;
-  FromDate: number = 0;
-  ToDate: number = 0;
-  AllocatedLeave: number = 0;
 }

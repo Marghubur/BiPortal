@@ -89,3 +89,8 @@ content: '';
   max-width: 100% !important;
   min-width: 100% !important;
 }
+
+.panel-h {
+  height: calc(100vh - 18rem - 4px);
+  overflow-y: auto;
+}
