@@ -14,8 +14,8 @@ import { ResponseModel } from 'src/auth/jwtService';
   styleUrls: ['./manage-leaveplan.component.scss']
 })
 export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
-  cachedData: any = null;
-  configPageNo: number = 1;
+  leaveTypeDeatils: any = null;
+  configPageNo: number = 7;
   isPageReady: boolean = false;
   leaveDetailForm: FormGroup;
   leaveDetail: LeaveDetail = new LeaveDetail();
@@ -84,7 +84,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       this.initleaveApproval();
       this.inityearEndProcess();
 
-      Toast("Data updateded successfully")
+      Toast("Data updateded successfully");
+      this.isPageReady = false;
       this.isDataLoaded = true;
     } else {
       ErrorToast("Unable to lead plan detail. Please contact to admin.");
@@ -98,8 +99,11 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
-    let id = this.nav.getValue();
-    if(id != null && !isNaN(Number(id))) {
+    let data = this.nav.getValue();
+    if(data != null) {
+      this.isPageReady = true;
+      this.leaveTypeDeatils = data;
+      let id = data.LeavePlanTypeId;
       this.leavePlanTypeId = Number(id);
       this.loadPlanDetail();
     } else {
@@ -133,6 +137,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     if (value && errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateLeaveDetail/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
+        this.configPageNo = this.configPageNo + 1;
+        this.ConfigPageTab(this.configPageNo);
         this.submit = false;
         this.isLoading = false;
       });
@@ -166,24 +172,11 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  accrualRateBasedon(e: any) {
-    let value = e.target.value;
-    if (value) {
-      switch (value) {
-        case '2':
-          document.getElementsByName("AccrualRateBasedon")[0].innerHTML = 'day of the Quarter'
-          break;
-        case '3':
-          document.getElementsByName("AccrualRateBasedon")[0].innerHTML = 'day of the Half Year'
-          break;
-      }
-    }
-  }
-
   findDay(e: any) {
     let value = Number(e.target.value);
+    let text = document.getElementsByName("AccrualRateBasedon")[0].innerHTML;
+    text = text.replace('st', "").replace("nd", "").replace("rd", "").replace("th", "");
     if (value != 0) {
-      let text = document.getElementsByName("AccrualRateBasedon")[0].innerHTML;
       if (value == 1 || value == 21 || value == 31)
         document.getElementsByName("AccrualRateBasedon")[0].innerHTML = 'st' +' '+ text;
       else if (value == 2 || value == 22)
@@ -193,6 +186,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       else if ((value > 3 && value < 21) || (value > 24 && value < 31))
         document.getElementsByName("AccrualRateBasedon")[0].innerHTML = 'th' +' '+ text;
     }
+    else
+      document.getElementsByName("AccrualRateBasedon")[0].innerHTML = text;
   }
 
   beyondAnnualQuota(e: any) {
@@ -219,6 +214,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     if (value && errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateLeaveAccrual/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
+        this.configPageNo = this.configPageNo + 1;
+        this.ConfigPageTab(this.configPageNo);
         this.submit = false;
         this.isLoading = false;
       });
@@ -314,6 +311,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   removeAccruralRateOnExp(i: number) {
     let item = this.leaveAccrualForm.get('AccrualProrateDetail') as FormArray;
     item.removeAt(i);
+    if (item.length == 0)
+      this.addAccruralRateOnExp();
   }
 
   buildFormArrayBetweenJoiningDate(): FormArray {
@@ -398,6 +397,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   removeFormBetweenExitDate(i: number) {
     let item = this.leaveAccrualForm.get('ExitMonthLeaveDistribution') as FormArray;
     item.removeAt(i);
+    if (item.length == 0)
+      this.addFormBetweenExitDate();
   }
 
   submitApplyForLeave() {
@@ -408,6 +409,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     if (value && errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateApplyForLeave/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
+        this.configPageNo = this.configPageNo + 1;
+        this.ConfigPageTab(this.configPageNo);
         this.submit = false;
         this.isLoading = false;
       });
@@ -465,7 +468,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   removeRuleForLeaveInNotice(i: number) {
     let item = this.applyForLeaveForm.get('RuleForLeaveInNotice') as FormArray;
-    item.removeAt(i)
+    item.removeAt(i);
+    if (item.length == 0)
+      this.addRuleForLeaveInNotice();
   }
 
   initLeaveRestriction() {
@@ -510,6 +515,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     if (value && errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateLeaveRestriction/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
+        this.configPageNo = this.configPageNo + 1;
+        this.ConfigPageTab(this.configPageNo);
         this.submit = false;
         this.isLoading = false;
       });
@@ -528,7 +535,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       IfHolidayIsBetweenLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsBetweenLeave ? 'true' : 'false'),
       IfHolidayIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfHolidayIsRightBeforeAfterOrInBetween ? 'true' : 'false'),
       AdjoiningHolidayRulesIsValidForHalfDay:new FormControl(this.holidayWeekOffs.AdjoiningHolidayRulesIsValidForHalfDay),
-      AdjoiningWeekOffIsConsiderAsLeave:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffIsConsiderAsLeave),
+      AdjoiningWeekOffIsConsiderAsLeave:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffIsConsiderAsLeave? 'true' : 'false'),
       ConsiderLeaveIfIncludeDays:new FormControl(this.holidayWeekOffs.ConsiderLeaveIfIncludeDays),
       IfLeaveLieBetweenWeekOff:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenWeekOff ? 'true' : 'false'),
       IfWeekOffIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforLeave ? 'true' : 'false'),
@@ -548,6 +555,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     if (value && errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateHolidayNWeekOffPlan/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
+        this.configPageNo = this.configPageNo + 1;
+        this.ConfigPageTab(this.configPageNo);
         this.submit = false;
         this.isLoading = false;
       });
@@ -584,6 +593,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   removeApprovalChain(i: number) {
     let item = this.leaveApprovalForm.get('ApprovalChain') as FormArray;
     item.removeAt(i);
+    if (item.length == 0)
+      this.createApprovalChain(0);
   }
 
   buildApprovalChain(): FormArray {
@@ -623,6 +634,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     if (value && errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateLeaveApproval/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
+        this.configPageNo = this.configPageNo + 1;
+        this.ConfigPageTab(this.configPageNo);
         this.submit = false;
         this.isLoading = false;
       });
@@ -647,23 +660,134 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       PayFirstNCarryForwordRemaning: new FormControl(this.yearEndProcess.PayFirstNCarryForwordRemaning ? 'true' : 'false'),
       CarryForwordFirstNPayRemaning: new FormControl(this.yearEndProcess.CarryForwordFirstNPayRemaning ? 'true' : 'false'),
       PayNCarryForwardDefineType: new FormControl(this.yearEndProcess.PayNCarryForwardDefineType),
-      PayNCarryForwardRuleInPercent: new FormControl(this.yearEndProcess.PayNCarryForwardRuleInPercent),
-      PayPercent: new FormControl(this.yearEndProcess.PayPercent),
-      CarryForwardPercent: new FormControl(this.yearEndProcess.CarryForwardPercent),
-      IsMaximumPayableRequired: new FormControl(this.yearEndProcess.IsMaximumPayableRequired),
-      MaximumPayableDays: new FormControl(this.yearEndProcess.MaximumPayableDays),
-      IsMaximumCarryForwardRequired: new FormControl(this.yearEndProcess.IsMaximumCarryForwardRequired),
-      MaximumCarryForwardDays: new FormControl(this.yearEndProcess.MaximumCarryForwardDays),
-      PayNCarryForwardRuleInDays: new FormControl(this.yearEndProcess.PayNCarryForwardRuleInDays),
-      PaybleForDays: new FormControl(this.yearEndProcess.PaybleForDays),
-      CarryForwardForDays: new FormControl(this.yearEndProcess.CarryForwardForDays),
       DoestCarryForwardExpired: new FormControl(this.yearEndProcess.DoestCarryForwardExpired ? 'true' : 'false'),
       ExpiredAfter: new FormControl(this.yearEndProcess.ExpiredAfter),
       DoesExpiryLeaveRemainUnchange: new FormControl(this.yearEndProcess.DoesExpiryLeaveRemainUnchange),
-      DeductNegativeLeaveFromSalary: new FormControl(this.yearEndProcess.DeductFromSalaryOnYearChange ? 'true' : 'false'),
+      DeductFromSalaryOnYearChange: new FormControl(this.yearEndProcess.DeductFromSalaryOnYearChange ? 'true' : 'false'),
       ResetBalanceToZero: new FormControl(this.yearEndProcess.ResetBalanceToZero ? 'true' : 'false'),
-      CarryForwardToNextYear: new FormControl(this.yearEndProcess.CarryForwardToNextYear ? 'true' : 'false')
+      CarryForwardToNextYear: new FormControl(this.yearEndProcess.CarryForwardToNextYear ? 'true' : 'false'),
+      FixedPayNCarryForward: this.buildFixedNcarryForward(),
+      PercentagePayNCarryForward: this.buildPercentageNcarryForward()
     })
+  }
+
+  buildPercentageNcarryForward() {
+    let data = this.yearEndProcess.PercentagePayNCarryForward;
+    let dataArray = this.fb.array([]);
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          PayNCarryForwardRuleInPercent: new FormControl(data[i].PayNCarryForwardRuleInPercent),
+          PayPercent: new FormControl(data[i].PayPercent),
+          CarryForwardPercent: new FormControl(data[i].CarryForwardPercent),
+          IsMaximumPayableRequired: new FormControl(data[i].IsMaximumPayableRequired),
+          MaximumPayableDays: new FormControl(data[i].MaximumPayableDays),
+          IsMaximumCarryForwardRequired: new FormControl(data[i].IsMaximumCarryForwardRequired),
+          MaximumCarryForwardDays: new FormControl(data[i].MaximumCarryForwardDays)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.addPercentageNcarryForward());
+    }
+
+    return dataArray;
+  }
+
+  addPercentageNcarryForward():FormGroup {
+    return this.fb.group({
+      PayNCarryForwardRuleInPercent: new FormControl(0),
+      PayPercent: new FormControl(0),
+      CarryForwardPercent: new FormControl(0),
+      IsMaximumPayableRequired: new FormControl(false),
+      MaximumPayableDays: new FormControl(0),
+      IsMaximumCarryForwardRequired: new FormControl(false),
+      MaximumCarryForwardDays: new FormControl(0),
+    })
+  }
+
+  createPercentagePayNCarryForward() {
+    let item = this.yearEndProcessForm.get('PercentagePayNCarryForward') as FormArray;
+    item.push(this.addPercentageNcarryForward());
+  }
+
+  removePercentagePayNCarryForward(i: number) {
+    let item = this.yearEndProcessForm.get('PercentagePayNCarryForward') as FormArray;
+    item.removeAt(i);
+    if (item.length == 0)
+      this.createPercentagePayNCarryForward();
+  }
+
+  buildFixedNcarryForward() {
+    let data = this.yearEndProcess.FixedPayNCarryForward;
+    let dataArray = this.fb.array([]);
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          PayNCarryForwardRuleInDays: new FormControl(data[i].PayNCarryForwardRuleInDays),
+          PaybleForDays: new FormControl(data[i].PaybleForDays),
+          CarryForwardForDays: new FormControl(data[i].CarryForwardForDays)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.addFixedNcarryForward());
+    }
+
+    return dataArray;
+  }
+
+  addFixedNcarryForward():FormGroup {
+    return this.fb.group({
+      PayNCarryForwardRuleInDays: new FormControl(0),
+      PaybleForDays: new FormControl(0),
+      CarryForwardForDays: new FormControl(0)
+    })
+  }
+
+  createFixedPayNCarryForward() {
+    let item = this.yearEndProcessForm.get('FixedPayNCarryForward') as FormArray;
+    item.push(this.addFixedNcarryForward());
+  }
+
+  removeFixedPayNCarryForward(i: number) {
+    let item = this.yearEndProcessForm.get('FixedPayNCarryForward') as FormArray;
+    item.removeAt(i);
+    if (item.length == 0)
+      this.createFixedPayNCarryForward();
+  }
+
+  toogleLeaveRestrictions(position: number, e: any) {
+    switch (position) {
+      case 1:
+        this.leaveRestrictionForm.get('CanApplyAfterProbation').setValue('false');
+        this.leaveRestrictionForm.get('CanApplyAfterJoining').setValue('false');
+        this.leaveRestrictionForm.get(e.target.name).setValue(e.target.value);
+        break;
+    }
+  }
+
+  toogleHolidayAndWeekOff(position: number, e: any) {
+    switch (position) {
+      case 1:
+        this.holidayWeekendOffForm.get('IfLeaveLieBetweenTwoHolidays').setValue('false');
+        this.holidayWeekendOffForm.get('IfHolidayIsRightBeforLeave').setValue('false');
+        this.holidayWeekendOffForm.get('IfHolidayIsRightAfterLeave').setValue('false');
+        this.holidayWeekendOffForm.get('IfHolidayIsBetweenLeave').setValue('false');
+        this.holidayWeekendOffForm.get('IfHolidayIsRightBeforeAfterOrInBetween').setValue('false');
+        this.holidayWeekendOffForm.get(e.target.name).setValue(e.target.value);
+        break;
+      case 2:
+        this.holidayWeekendOffForm.get('IfLeaveLieBetweenWeekOff').setValue('false');
+        this.holidayWeekendOffForm.get('IfWeekOffIsRightBeforLeave').setValue('false');
+        this.holidayWeekendOffForm.get('IfWeekOffIsRightAfterLeave').setValue('false');
+        this.holidayWeekendOffForm.get('IfWeekOffIsBetweenLeave').setValue('false');
+        this.holidayWeekendOffForm.get('IfWeekOffIsRightBeforeAfterOrInBetween').setValue('false');
+        this.holidayWeekendOffForm.get(e.target.name).setValue(e.target.value);
+        break;
+    }
   }
 
   toggleLeaveOnYearEnds(position: number, e: any) {
@@ -677,7 +801,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.yearEndProcessForm.get(e.target.name).setValue(e.target.value);
         break;
       case 2:
-        this.yearEndProcessForm.get('DeductNegativeLeaveFromSalary').setValue('false');
+        this.yearEndProcessForm.get('DeductFromSalaryOnYearChange').setValue('false');
         this.yearEndProcessForm.get('ResetBalanceToZero').setValue('false');
         this.yearEndProcessForm.get('CarryForwardToNextYear').setValue('false');
         this.yearEndProcessForm.get(e.target.name).setValue(e.target.value);
@@ -702,10 +826,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   activateMe(elemId: string) {
     switch(elemId) {
       case "attendance-tab":
-        this.nav.navigate(Attendance, this.cachedData);
+        this.nav.navigate(Attendance, null);
       break;
       case "timesheet-tab":
-        this.nav.navigate(Timesheet, this.cachedData);
+        this.nav.navigate(Timesheet, null);
       break;
       case "leave-tab":
       break;
@@ -793,18 +917,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  // prevConfigPage() {
-  //   this.configPageNo = this.configPageNo - 1;
-  //   let tab = document.getElementById('leaveConfigModal');
-  //   let elem = tab.querySelectorAll('div[name="tab-index"]');
-  //     for (let i = 0; i < elem.length; i++) {
-  //       elem[i].classList.remove('active-index');
-  //     };
-  //     tab.querySelector(`div[index='${this.configPageNo}']`).classList.add('active-index');
-  //     tab.querySelector(`div[index='${this.configPageNo}']`).classList.remove('submitted-index');
-  //     tab.querySelector(`div[index='${this.configPageNo + 1}']`).classList.remove('submitted-index');
-  // }
-
   ConfigPageTab(index: number) {
     if (index > 0 && index <= 7) {
       this.configPageNo = index;
@@ -812,10 +924,14 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       let elem = tab.querySelectorAll('div[name="tab-index"]');
       for (let i = 0; i < elem.length; i++) {
         elem[i].classList.remove('active-index');
+        elem[i].classList.remove('submitted-index');
       };
       tab.querySelector(`div[index='${this.configPageNo}']`).classList.add('active-index');
-      // if (this.configPageNo > 1)
-      //   tab.querySelector(`div[index='${this.configPageNo - 1}']`).classList.add('submitted-index');
+      if (index > 1) {
+        for (let i = 0; i < index-1; i++) {
+          elem[i].classList.add('submitted-index');
+        }
+      }
     }
   }
 
@@ -883,7 +999,7 @@ class ApplyingForLeave {
   LeaveApplyDetailId: number = 0;
   LeavePlanTypeId: number = 0;
   IsAllowForHalfDay: boolean = null;
-  EmployeeCanSeeAndApplyCurrentPlanLeave: boolean = null;
+  EmployeeCanSeeAndApplyCurrentPlanLeave: boolean = true;
   ApplyPriorBeforeLeaveDate: number = 0;
   BackDateLeaveApplyNotBeyondDays: number = 0;
   RestrictBackDateLeaveApplyAfter: number = 0;
@@ -968,6 +1084,23 @@ class YearEndProcess {
   CarryForwordFirstNPayRemaning: boolean = false;
   PayNCarryForwardForPercent: boolean = false;
   PayNCarryForwardDefineType: string = null;
+  DoestCarryForwardExpired: boolean = false;
+  ExpiredAfter: number = 0;
+  DoesExpiryLeaveRemainUnchange: boolean = false;
+  DeductFromSalaryOnYearChange: boolean = false;
+  ResetBalanceToZero: boolean = false;
+  CarryForwardToNextYear: boolean = false;
+  FixedPayNCarryForward: Array<FixedPayNCarryForward> = [];
+  PercentagePayNCarryForward: Array<PercentagePayNCarryForward> = [];
+}
+
+class FixedPayNCarryForward {
+  PayNCarryForwardRuleInDays: number = 0;
+  PaybleForDays: number = 0;
+  CarryForwardForDays: number = 0;
+}
+
+class PercentagePayNCarryForward {
   PayNCarryForwardRuleInPercent: number = 0;
   PayPercent: number = 0;
   CarryForwardPercent: number = 0;
@@ -975,13 +1108,4 @@ class YearEndProcess {
   MaximumPayableDays: number = 0;
   IsMaximumCarryForwardRequired: boolean = false;
   MaximumCarryForwardDays: number = 0;
-  PayNCarryForwardRuleInDays: number = 0;
-  PaybleForDays: number = 0;
-  CarryForwardForDays: number = 0;
-  DoestCarryForwardExpired: boolean = false;
-  ExpiredAfter: number = 0;
-  DoesExpiryLeaveRemainUnchange: boolean = false;
-  DeductFromSalaryOnYearChange: boolean = false;
-  ResetBalanceToZero: boolean = false;
-  CarryForwardToNextYear: boolean = false;
 }
