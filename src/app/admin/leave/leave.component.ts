@@ -9,6 +9,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { AjaxService } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Files } from '../documents/documents.component';
+import { Filter } from 'src/providers/userService';
 
 @Component({
   selector: 'app-leave',
@@ -32,6 +33,11 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   leaveTypeData: LeaveType = new LeaveType();
   planLeaveTypes: Array<LeaveType> = []
   leaveTypeDateIsReady: boolean = false;
+  employeeFilter: Filter = new Filter();
+  employees: Array<any> = [];
+  assignEmpList: Array<any> = [];
+  currentPlanEmpList: Array<any> = [];
+  employeeIsReady: boolean = false;
 
   // -------------------Start--------------
   leavePlanForm: FormGroup;
@@ -60,8 +66,13 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   ngOnInit(): void {
+    this.menuItem = {
+      Config: true,
+      Emp: false,
+      YearEnding: false,
+    };
     this.loadLeaveData();
-    this.initLeaveTypeForm()
+    this.initLeaveTypeForm();
     this.initLeavePlanForm();
   }
 
@@ -154,11 +165,11 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   bindLeaveTypeModal() {
-    $('#assignLeaveTypeModal').modal('show');
     if(this.leaveTypes.length == 0)
     this.leaveTypeDateIsReady = false;
     this.http.get("leave/GetLeaveTypeFilter").then(response => {
       if(response.ResponseBody) {
+        $('#assignLeaveTypeModal').modal('show');
         this.allLeaveTypes = response.ResponseBody;
         this.leaveTypes = response.ResponseBody;
 
@@ -182,6 +193,96 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
         ErrorToast("Fail to laod Leave types. Please contact to admin");
       }
     });
+  }
+
+  loadEmployeeData() {
+    this.assignEmpList = [];
+    this.currentPlanEmpList = [];
+    this.http.get(`ManageLeavePlan/GetEmpMappingByLeavePlanId/${this.currentPlan.LeavePlanId}`)
+    .then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        this.assignEmpList = res.ResponseBody;
+        let i = 0;
+        while(i < this.assignEmpList.length) {
+          let result = this.employees.find(x => x.EmployeeUid == this.assignEmpList[i].EmployeeId);
+          this.currentPlanEmpList.push(result);
+          i++;
+        }
+      }
+    })
+  }
+
+  getEmployees() {
+    this.employeeIsReady = false;
+    this.http.post("Employee/GetEmployees", this.employeeFilter).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.employees = response.ResponseBody;
+        this.employeeFilter.TotalRecords = this.employees[0].Total;
+      } else {
+        this.employeeFilter.TotalRecords = 0;
+        ErrorToast("Unable to load employee list detail.");
+      }
+      this.employeeIsReady = true;
+    });
+  }
+
+  addEmployeeToPlan() {
+    if (this.assignEmpList.length > 0) {
+      let i = 0;
+      while(i < this.assignEmpList.length) {
+        let value = this.employees.find(x => x.EmployeeUid == this.assignEmpList[i].EmployeeId);
+        value.Active = true;
+        i++;
+      }
+    }
+    $('#showemployeesdetail').modal('show');
+  }
+
+  assignEmpListToPlan(item: any, e: any) {
+    if (e.target.checked == true) {
+      let elem = this.assignEmpList.find(x => x.EmployeeId === item.EmployeeUid);
+      if (elem == null) {
+        this.assignEmpList.push({
+          EmployeeLeaveplanMappingId: 0,
+          EmployeeId: item.EmployeeUid,
+          LeavePlanId: this.currentPlan.LeavePlanId,
+          IsAdded: true
+        });
+      }
+    } else {
+        let elem = this.assignEmpList.find(x => x.EmployeeId === item.EmployeeUid);
+        if (elem != null)
+          elem.IsAdded = false;
+    }
+  }
+
+  assignEmpToPlan() {
+    if (this.assignEmpList && this.assignEmpList.length > 0) {
+      this.http.put(`ManageLeavePlan/AddUpdateEmpLeavePlan/${this.currentPlan.LeavePlanId}`, this.assignEmpList).
+      then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          this.currentPlanEmpList = [];
+          let addedEmployee = this.assignEmpList.filter(x => x.IsAdded == true);
+          let i = 0;
+          while(i < addedEmployee.length) {
+            let result = this.employees.find(x => x.EmployeeUid == addedEmployee[i].EmployeeId);
+            this.currentPlanEmpList.push(result);
+            i++;
+          }
+          $('#showemployeesdetail').modal('hide');
+          Toast("Employee's leave plan updated successfully");
+        } else {
+          Toast("Fail to update the plan");
+        }
+      })
+    }
+  }
+
+  GetFilterResult(e: any) {
+    if(e != null) {
+      this.employeeFilter = e;
+      this.addEmployeeToPlan();
+    }
   }
 
   selectedPlan(index: number, item: any) {
@@ -354,16 +455,19 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       YearEnding: false,
     };
 
+    this.leaveTypeDateIsReady = false;
     switch(code) {
       case 'Config':
-        this.menuItem.CS = true;
+        this.menuItem.Config = true;
         this.bindFirstPlanOnPage();
         break;
       case 'Emp':
-        this.menuItem.PR = true;
+        this.menuItem.Emp = true;
+        this.getEmployees();
+        this.loadEmployeeData();
         break;
       case 'YearEnding':
-        this.menuItem.LAH = true;
+        this.menuItem.YearEnding = true;
         break;
     }
   }
