@@ -593,6 +593,15 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   removeApprovalChain(i: number) {
     let item = this.leaveApprovalForm.get('ApprovalChain') as FormArray;
     item.removeAt(i);
+    if (i > 0) {
+      let index = 0;
+      while (index < item.length) {
+        document.querySelectorAll('[data-name="createApprovalChain"]')[index].classList.add('d-none');
+        index++;
+      }
+    }
+    document.querySelectorAll('[data-name="createApprovalChain"]')[item.length-1].classList.remove('d-none');
+
     if (item.length == 0)
       this.createApprovalChain(0);
   }
