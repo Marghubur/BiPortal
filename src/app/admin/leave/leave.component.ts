@@ -38,6 +38,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   assignEmpList: Array<any> = [];
   currentPlanEmpList: Array<any> = [];
   employeeIsReady: boolean = false;
+  isLeavePageReady: boolean = false;
 
   // -------------------Start--------------
   leavePlanForm: FormGroup;
@@ -77,10 +78,30 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   loadLeaveData() {
-    this.http.get("leave/GetLeavePlans").then((result: ResponseModel) => {
+    this.isLeavePageReady = false;
+    this.http.post("leave/GetLeavePlans", this.employeeFilter).then((result: ResponseModel) => {
       if(result.ResponseBody) {
-        this.leavePlanList = result.ResponseBody;
+        if(result.ResponseBody.LeavePlan) {
+          this.leavePlanList = result.ResponseBody.LeavePlan;
+        } else {
+          ErrorToast("Fail to load leave plan data.");
+          return;
+        }
+
+        if(result.ResponseBody.Employees) {
+          this.employees = result.ResponseBody.Employees;
+          if(this.employees.length > 0)
+            this.employeeFilter.TotalRecords = this.employees[0].Total;
+          else
+            this.employeeFilter.TotalRecords = 0;
+        } else {
+          this.employeeFilter.TotalRecords = 0;
+          ErrorToast("Fail to load page data.");
+          return;
+        }
+
         this.bindFirstPlanOnPage();
+        this.isLeavePageReady = true;
         Toast("Leave plan loaded successfully.");
       } else {
         ErrorToast("Fail to load leave plan.");
@@ -196,6 +217,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   loadEmployeeData() {
+    this.employeeIsReady = false;
     this.assignEmpList = [];
     this.currentPlanEmpList = [];
     this.http.get(`ManageLeavePlan/GetEmpMappingByLeavePlanId/${this.currentPlan.LeavePlanId}`)
@@ -208,29 +230,20 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           this.currentPlanEmpList.push(result);
           i++;
         }
+
+        this.employeeIsReady = true;
+      } else {
+        ErrorToast("Fail to load employee data. Please contact to admin.");
       }
     })
-  }
-
-  getEmployees() {
-    this.employeeIsReady = false;
-    this.http.post("Employee/GetEmployees", this.employeeFilter).then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        this.employees = response.ResponseBody;
-        this.employeeFilter.TotalRecords = this.employees[0].Total;
-      } else {
-        this.employeeFilter.TotalRecords = 0;
-        ErrorToast("Unable to load employee list detail.");
-      }
-      this.employeeIsReady = true;
-    });
   }
 
   addEmployeeToPlan() {
     if (this.assignEmpList.length > 0) {
       let i = 0;
-      while(i < this.assignEmpList.length) {
-        let value = this.employees.find(x => x.EmployeeUid == this.assignEmpList[i].EmployeeId);
+      let empList = this.assignEmpList.filter(x => x.IsAdded == true);
+      while(i < empList.length) {
+        let value = this.employees.find(x => x.EmployeeUid == empList[i].EmployeeId);
         value.Active = true;
         i++;
       }
@@ -248,7 +261,8 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           LeavePlanId: this.currentPlan.LeavePlanId,
           IsAdded: true
         });
-      }
+      } else
+        elem.IsAdded = true;
     } else {
         let elem = this.assignEmpList.find(x => x.EmployeeId === item.EmployeeUid);
         if (elem != null)
@@ -463,7 +477,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
         break;
       case 'Emp':
         this.menuItem.Emp = true;
-        this.getEmployees();
         this.loadEmployeeData();
         break;
       case 'YearEnding':
