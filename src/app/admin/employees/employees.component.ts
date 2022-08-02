@@ -31,7 +31,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   anyFilter: string = "";
   employeeDetails: employeeModel = null;
   singleEmployee: any = null;
-  isActiveEmployee: boolean = true;
+  isActiveEmployee: number = 1;
   isActiveTab: any = {};
   orderByNameAsc: boolean = null;
   orderByMobileAsc: boolean = null;
@@ -54,9 +54,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     $('[data-bs-toggle="tooltip"]').tooltip({
       trigger: 'hover'
     });
-    // $('[data-bs-toggle="tooltip"]').on('mouseleave', function () {
-    //   $(this).tooltip('dispose');
-    // });
+
     $('[data-bs-toggle="tooltip"]').on('click', function () {
       $(this).tooltip('dispose');
     });
@@ -111,34 +109,32 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
         break;
     }
     this.employeeData = new Filter();
-    //this.isActiveEmployee = value;
     if (value == 1)
-      this.isActiveEmployee = true;
+      this.isActiveEmployee = 1;
     else if (value == 0)
-      this.isActiveEmployee = false;
+      this.isActiveEmployee = 0;
     else
-      this.isActiveEmployee = null;
+      this.isActiveEmployee = -1;
     this.LoadData();
   }
 
   LoadData() {
     this.isEmpPageReady = false;
     this.isFileFound = false;
-    // let query = "1=1";
-    // if(this.employeeData.SearchString.trim() !== "") {
-    //   query = `${this.employeeData.SearchString}`;
-    // }
-
-    // if(this.isActiveEmployee != -1){
-    //   query += ` And IsActive = ${this.isActiveEmployee}`;
-    // }
+    let activeState = null;
+    if(this.isActiveEmployee != -1) {
+      if(this.isActiveEmployee == 1)
+        activeState = true;
+      else
+        activeState = false;
+    }
 
     this.http.post("Employee/GetEmployees", {
       SearchString: this.employeeData.SearchString,
       PageIndex: this.employeeData.PageIndex,
       PageSize: this.employeeData.PageSize,
       SortBy: this.employeeData.SortBy,
-      isActive: this.isActiveEmployee
+      isActive: activeState
     }).then((response: ResponseModel) => {
       this.employeeDetail = response.ResponseBody;
       let i =0;
@@ -158,6 +154,8 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
         this.employeeData.TotalRecords = 0;
       }
       this.isEmpPageReady = true;
+      let elem = document.getElementById('namefilter');
+      if(elem)elem.focus();
     });
   }
 
@@ -194,17 +192,17 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     this.employeeData.reset();
 
     if(this.employeeDetails.Name !== null && this.employeeDetails.Name !== "") {
-      this.employeeData.SearchString += ` FirstName like ${this.employeeDetails.Name}`;
+      this.employeeData.SearchString += ` 1=1 and emp.FirstName like '%${this.employeeDetails.Name}%'`;
         delimiter = "and";
     }
 
     if(this.employeeDetails.Email !== null && this.employeeDetails.Email !== "") {
-      this.employeeData.SearchString += `Email like ${this.employeeDetails.Email}`;
+      this.employeeData.SearchString += `1=1 emp.Email like '%${this.employeeDetails.Email}%'`;
         delimiter = "and";
     }
 
     if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile.trim() !== '') {
-      this.employeeData.SearchString += `Mobile like ${this.employeeDetails.Mobile}`;
+      this.employeeData.SearchString += `1=1 emp.Mobile like '%${this.employeeDetails.Mobile}%'`;
         delimiter = "and";
     }
 
@@ -220,7 +218,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   }
 
   resetFilter() {
-    this.isActiveEmployee = true;
+    this.isActiveEmployee = 1;
     this.isActiveTab = {
       Active: true,
       InActive: false,

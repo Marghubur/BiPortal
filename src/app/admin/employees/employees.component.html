@@ -71,7 +71,8 @@
                   <div class="th fe-5">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                        (keyup.enter)="filterRecords()" [(ngModel)]="employeeDetails.Name" placeholder="Search by Name">
+                        (keyup.enter)="filterRecords()" autofocus [(ngModel)]="employeeDetails.Name"
+                        placeholder="Search by Name" id="namefilter">
                       <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
                         <a href="javascript:void()" class="pe-2">Full Name</a>
                         <i class="fa fa-sort-amount-asc"
@@ -124,13 +125,18 @@
                         <a href="javascript:void(0)" (click)="EditCurrent(user)">{{user.FirstName}}
                           {{user.LastName}}</a>
                         <div class="float-end">
-                          <a href="javascript:void(0)" (click)="editProfile(user)" data-bs-toggle="tooltip" data-bs-placement="right" title="View Profile"><span class="badge bg-dark me-3"><i
+                          <a href="javascript:void(0)" (click)="editProfile(user)" data-bs-toggle="tooltip"
+                            data-bs-placement="right" title="View Profile"><span class="badge bg-dark me-3"><i
                                 class="fa fa fa-user-circle-o user-edit-icon"></i></span></a>
-                          <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o" data-bs-toggle="tooltip" data-bs-placement="right" title="{{user.FirstName}} {{user.LastName}} is associated with {{user.ClientJson.length}} clients"> &nbsp;
+                          <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o"
+                              data-bs-toggle="tooltip" data-bs-placement="right"
+                              title="{{user.FirstName}} {{user.LastName}} is associated with {{user.ClientJson.length}} clients">
+                              &nbsp;
                               <span></span>
                               <span *ngIf="user.ClientJson.length > 0">{{user.ClientJson.length}}</span>
                               <span *ngIf="user.ClientJson.length == 0">0</span></span></a>
-                          <a href="javascript:void(0)" class="ms-3" (click)="goToAttendancePage(user)" data-bs-toggle="tooltip" data-bs-placement="right" title="View Attendance">
+                          <a href="javascript:void(0)" class="ms-3" (click)="goToAttendancePage(user)"
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="View Attendance">
                             <span class="text-sm-left text-muted">Attendance</span>
                             <span class="ms-2 badge bg-success">
                               <i class="fa fa-id-badge"></i>

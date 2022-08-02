@@ -24,7 +24,7 @@
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="x_content">
+    <div class="x_content" *ngIf="isLeavePageReady">
       <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
         <li [ngbNavItem]="1">
           <a ngbNavLink (click)="onTabChange(0)">Leave Plans</a>
@@ -216,7 +216,7 @@
                               </div>
 
                               <div class="t-body custom-height">
-                                <ng-container>
+                                <ng-container *ngIf="employeeIsReady">
                                   <ng-container>
                                     <div class="tr align-items-center py-2 ps-2"
                                       *ngFor="let item of currentPlanEmpList">
@@ -244,14 +244,15 @@
                                     </div>
                                   </ng-container>
                                 </ng-container>
-                                <!-- <ng-container *ngIf="!leaveTypeDateIsReady">
-                                  <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                                <ng-container *ngIf="!employeeIsReady">
+                                  <div
+                                    class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
                                     <div class="col-md-3 modal-container f-12 text-center cog-wheel">
                                       <img src="assets/images/cog.gif" alt="">
                                       <h6 class="modal-title title-message">Please Wait ........</h6>
                                     </div>
                                   </div>
-                                </ng-container> -->
+                                </ng-container>
                               </div>
                             </div>
                           </ng-template>
@@ -449,6 +450,12 @@
         </li>
       </ul>
       <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </div>
+    <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center" *ngIf="!isLeavePageReady">
+      <div class="col-md-3 modal-container f-12 text-center cog-wheel my-5 py-5">
+        <img src="assets/images/cog.gif" alt="">
+        <h6 class="modal-title title-message">Please Wait ........</h6>
+      </div>
     </div>
   </div>
 </div>
