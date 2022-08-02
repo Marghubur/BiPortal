@@ -385,8 +385,8 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   addLeaveType() {
-    this.isLoading = true;
-    if (this.currentPlan.LeavePlanId > 0 && this.planLeaveTypes.length > 0) {
+    if (this.currentPlan.LeavePlanId > 0) {
+      this.isLoading = true;
       this.http.post(`Leave/LeavePlanUpdateTypes/${this.currentPlan.LeavePlanId}`, this.planLeaveTypes)
       .then((res:ResponseModel) => {
         if (res.ResponseBody) {
