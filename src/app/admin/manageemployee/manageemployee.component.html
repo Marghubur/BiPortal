@@ -19,8 +19,8 @@
         <div class="px-1">
           <app-breadcrums></app-breadcrums>
         </div>
-        <div class="x_content mt-4" *ngIf="idReady">
-          <form [formGroup]="employeeForm" *ngIf="employeeForm" autocomplete="off">
+        <div class="x_content mt-4" *ngIf="isReady">
+          <form [formGroup]="employeeForm" autocomplete="off">
             <div class="col-12 row">
               <div class="col-md-4">
                 <div class="x_header_title position-relative">
@@ -107,7 +107,8 @@
               </div>
             </div>
             <ng-container *ngIf="isUpdate">
-              <a href="javascript:void(0)" (click)="addUpadteClientPopUp()" class="text-decoration-none ps-3">Add or Update Associate Clients <i class="fa fa-plus ps-2"></i></a>
+              <a href="javascript:void(0)" (click)="addUpadteClientPopUp()" class="text-decoration-none ps-3">Add or
+                Update Associate Clients <i class="fa fa-plus ps-2"></i></a>
             </ng-container>
             <div class="col-12 row m-0 mt-5">
               <div class="x_panel x-panel-changed">
@@ -167,16 +168,17 @@
                   <div class="col-md-4">
                     <label class="form-label">Company</label>
                     <select class="form-control" formControlName="CompanyId"
-                    [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
-                      <option value=null>Select Company</option>
-                      <option *ngFor="let item of companyGroup" [value]="item.CompanyId">
+                      [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
+                      <option value="">Select Company</option>
+                      <option *ngFor="let item of allocatedCompany" [value]="item.CompanyId">
                         {{item.CompanyName}}
                       </option>
                     </select>
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">CTC *</label>
-                    <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC" OnlyNumber="12" (keyup)="ctcChangeAmount($event)"
+                    <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC"
+                      OnlyNumber="12" (keyup)="ctcChangeAmount($event)"
                       [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
                   </div>
                 </div>
@@ -328,8 +330,9 @@
 </div>
 
 <!-- delete assign client modal -->
-<div class="modal fade remoteClient" data-bs-backdrop="static" data-bs-keyboard="false" id="remoteClient" data-bs-backdrop="static"
-  data-bs-keyboard="false" tabindex="-1" aria-labelledby="remoteClientLabel" aria-hidden="true">
+<div class="modal fade remoteClient" data-bs-backdrop="static" data-bs-keyboard="false" id="remoteClient"
+  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="remoteClientLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -371,8 +374,7 @@
             <div class="col-md-3 mb-3 m-0 p-0">
               <select class="form-select" disabled formControlName="SalaryGroupId">
                 <option value="0">Please select salary group</option>
-                <option [value]="item.SalaryGroupId"
-                  *ngFor="let item of salaryGroup">{{item.GroupName}}</option>
+                <option [value]="item.SalaryGroupId" *ngFor="let item of salaryGroup">{{item.GroupName}}</option>
               </select>
             </div>
           </div>
@@ -385,11 +387,11 @@
                 <div class="td align-middle fe-2">
                   <div class="cell-wrapper mx-2 d-flex align-items-center">
                     <label for="" class="form-label pe-2 mb-0">Annually</label>
-                    <input type="text" class="form-control form-control-sm" OnlyNumber="9" (keyup)="ctcChangeAmount($event)"
-                      formControlName="ExpectedCTC">
+                    <input type="text" class="form-control form-control-sm" OnlyNumber="9"
+                      (keyup)="ctcChangeAmount($event)" formControlName="ExpectedCTC">
                   </div>
                 </div>
-                <button class="btn btn-outline-success ms-3" (click)="calculateSalary()" [disabled]="!isSalaryGroup">
+                <button class="btn btn-outline-success ms-3" (click)="calculateSalary()">
                   <i class="fa fa-calculator pe-2"></i> Calculate
                 </button>
               </div>
@@ -699,11 +701,13 @@
 </div>
 
 <!-- Add or update client Modal -->
-<div class="modal addclinet-modal fade" id="addUpdateClientModal" aria-labelledby="addUpdateClientModalLabel" aria-hidden="true">
+<div class="modal addclinet-modal fade" id="addUpdateClientModal" aria-labelledby="addUpdateClientModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addUpdateClientModalLabel">Add Update Client<small>Add or update client(s) allocation detail</small></h5>
+        <h5 class="modal-title" id="addUpdateClientModalLabel">Add Update Client<small>Add or update client(s)
+            allocation detail</small></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -779,8 +783,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-outline-success" (click)="addDetail()">
-          <i class="fa pe-3"
-            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i class="fa pe-3" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
           <span *ngIf="isUpdated">
             Update changes
           </span>

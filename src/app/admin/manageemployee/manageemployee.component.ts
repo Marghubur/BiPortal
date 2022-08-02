@@ -31,13 +31,14 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   clients: Array<any> = [];
   allocatedClients: Array<any> = [];
-  allocatedCompany: any = null;
+  allocatedCompany: Array<any> = [];
+  currentCompanyDetail: any = null;
   isAllocated: boolean = false;
   isUpdate: boolean = false;
   employeeUid: number = 0;
   isInsertingNewClient: boolean = true;
   assignedActiveClientUid: number = 0;
-  idReady: boolean = false;
+  isReady: boolean = false;
   currentClientId: number = 0;
   isUpdated: boolean = false;
   activeClient: any = null;
@@ -86,8 +87,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       text: "Default Manager"
     });
     this.managerList.className="";
-    this.getAllCompany();
-    this.getAllSalaryGroup();
+    // this.getAllCompany();
+    // this.getAllSalaryGroup();
     this.model = this.calendar.getToday();
     let data = this.nav.getValue();
     this.employeeUid = 0;
@@ -104,7 +105,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.AccessLevelId = null;
       this.employeeModal.CompanyId = null;
       this.employeeModal.UserTypeId = null;
-      this.idReady = true;
+      this.isReady = true;
     }
     this.loadData(this.employeeUid);
   }
@@ -123,19 +124,35 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       if(response.ResponseBody.Roles)
         this.userRoles = response.ResponseBody.Roles;
 
+      if(response.ResponseBody.SalaryGroup) {
+        this.salaryGroup = response.ResponseBody.SalaryGroup;
+        if (this.salaryDetail.CompleteSalaryDetail != null && this.salaryDetail.CompleteSalaryDetail != '{}') {
+          this.salaryGroupId = this.salaryGroup[0].SalaryGroupId;
+          this.completeSalaryBreakup = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        }
+      }
+
       this.allocatedClients = response.ResponseBody.AllocatedClients;
       let profileDetail = response.ResponseBody.FileDetail;
       if(profileDetail.length > 0) {
         this.buildProfileImage(profileDetail[0]);
       }
-      if (response.ResponseBody.Companies && response.ResponseBody.Companies.length == 1)
-        this.allocatedCompany = response.ResponseBody.Companies[0];
-      else {
-        this.allocatedCompany = {
-          CompanyName: "",
-          CompanyId: null
+
+      if(response.ResponseBody.Company && response.ResponseBody.Company.length == 1)
+        this.currentCompanyDetail = response.ResponseBody.Company[0];
+      else
+        this.currentCompanyDetail = {
+          CompanyId: ""
+        };
+
+        if(response.ResponseBody.Companies)
+          this.allocatedCompany = response.ResponseBody.Companies;
+        else {
+          this.allocatedCompany = [{
+            CompanyName: "",
+            CompanyId: ""
+          }]
         }
-      }
 
       if (response.ResponseBody.SalaryDetail && response.ResponseBody.SalaryDetail.length > 0)
         this.employeeModal.CTC = response.ResponseBody.SalaryDetail[0].CTC;
@@ -176,11 +193,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           i++;
         }
 
-        // if(res.ResponseBody.Companies && res.ResponseBody.Companies.length > 0) {
-        //   let Companies = res.ResponseBody.Companies;
-        //   this.allocatedCompany = Companies[0];
-        // }
-
         if (res.ResponseBody.SalaryDetail.length > 0) {
           this.salaryDetail = res.ResponseBody.SalaryDetail[0];
         } else {
@@ -200,17 +212,18 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.bindForm();
       this.bindClientDetails();
       this.initForm();
-      this.idReady = true;
+      this.isReady = true;
     });
   }
 
-  getAllCompany() {
-    this.http.get("Company/GetAllCompany").then(res => {
-      if (res.ResponseBody && res.ResponseBody.length > 0) {
-        this.companyGroup = res.ResponseBody;
-      }
-    })
-  }
+  // getAllCompany() {
+  //   this.http.get("Company/GetAllCompany").then(res => {
+  //     if (res.ResponseBody && res.ResponseBody.length > 0) {
+  //       this.companyGroup = res.ResponseBody;
+  //     }
+  //   })
+  // }
+
   daysInMonth(monthNumber: number) {
     var now = new Date();
     return new Date(now.getFullYear(), monthNumber, 0).getDate();
@@ -262,7 +275,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       UserTypeId: new FormControl(this.employeeModal.UserTypeId, [Validators.required]),
       ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId, [Validators.required]),
       DesignationId: new FormControl(this.employeeModal.DesignationId, [Validators.required]),
-      CompanyId: new FormControl(this.allocatedCompany.CompanyId, [Validators.required]),
+      CompanyId: new FormControl(this.currentCompanyDetail.CompanyId, [Validators.required]),
       CTC: new FormControl(this.employeeModal.CTC, [Validators.required])
     });
   }
@@ -523,17 +536,17 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllSalaryGroup() {
-    this.isSalaryGroup = false;
-    this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
-      if(res.ResponseBody) {
-        this.salaryGroup = res.ResponseBody;
-        this.isSalaryGroup = true;
-      } else {
-        ErrorToast("Unable to get salary group.");
-      }
-    });
-  }
+  // getAllSalaryGroup() {
+  //   this.isSalaryGroup = false;
+  //   this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
+  //     if(res.ResponseBody) {
+  //       this.salaryGroup = res.ResponseBody;
+  //       this.isSalaryGroup = true;
+  //     } else {
+  //       ErrorToast("Unable to get salary group.");
+  //     }
+  //   });
+  // }
 
   initForm() {
     this.salaryBreakupForm = this.fb.group({
