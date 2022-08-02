@@ -573,6 +573,25 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   yearEndSetting() {
     this.nav.navigate(ManageYearEnding, null)
   }
+
+  defaultPlanPopUp() {
+    $('#defaultPlanModal').modal('show');
+  }
+
+  saveDefaultPlan(item: any) {
+    if (item) {
+      this.isLoading = true;
+      item.IsDefaultPlan = true;
+      this.http.put(`Leave/SetDefaultPlan/${item.LeavePlanId}`, item).then(res => {
+        if (res.ResponseBody) {
+          this.leavePlanList = res.ResponseBody;
+          Toast("Leave plan updated successfully");
+          $('#defaultPlanModal').modal('hide');
+          this.isLoading = false;
+        }
+      })
+    }
+  }
 }
 
 class LeaveType {
