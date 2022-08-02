@@ -324,8 +324,10 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
         this.leaveTypes = response.ResponseBody;
         Toast("Record updated successfully");
       }
-      else
+      else {
+        this.leaveTypes = response.ResponseBody;
         Toast("Record inserted successfully");
+      }
 
       $('#addLeaveTypeModal').modal('hide');
     }

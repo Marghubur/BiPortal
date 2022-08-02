@@ -106,7 +106,7 @@
                         <div class="d-flex align-items-center">
                           <label class="form-check-label ps-2">Limit to</label>
                           <div class="col-md-2 mx-3">
-                            <input type="text" class="form-control form-control-sm" name="LeaveLimit" OnlyNumber="3" [readonly]="leaveDetailForm.controls.LeaveLimit.value <=0"
+                            <input type="text" class="form-control form-control-sm" name="LeaveLimit" OnlyNumber="3" [readonly]="leaveDetailForm.controls.IsLeaveDaysLimit.value == 'false'"
                               formControlName="LeaveLimit">
                           </div>
                           <span>days per year</span>
