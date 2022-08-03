@@ -383,7 +383,7 @@
                       </div>
                       <div class="d-flex align-items-center flex-column pe-4">
                         <i class="fa fa-home fa-lg"></i>
-                        <p>1 Day</p>
+                        <p>{{item.NoOfDays}} {{item.NoOfDays == 1? 'day':'days'}}</p>
                       </div>
                     </div>
                   </div>
@@ -535,7 +535,9 @@
                 [ngClass]="{'error-field':submitted && f['LeaveType'].errors != null && f['LeaveType'].errors['required']}">
                 <option value="">Select leave type</option>
                 <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveTypes">
-                  {{l.PlanName}}
+                  <div class="col-md-12">
+                    {{l.PlanName}}   [{{l.TotalLeaveTaken}} of {{l.MaxLeaveLimit}}]
+                  </div>
                 </option>
               </select>
             </div>

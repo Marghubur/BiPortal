@@ -81,6 +81,7 @@ export class LeaveComponent implements OnInit {
         this.UnpaidLeaveChart();
         this.CompLeaveChart();
         this.leaveRequestForm();
+        this.GetFilterResult();
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -88,6 +89,7 @@ export class LeaveComponent implements OnInit {
   }
 
   leavePopUp() {
+    this.leaveDetail = new LeaveModal();
     $('#leaveModal').modal('show');
   }
 
@@ -114,6 +116,7 @@ export class LeaveComponent implements OnInit {
       if (value && errroCounter == 0) {
         this.http.post('Attendance/ApplyLeave', value).then ((response:ResponseModel) => {
           if (response.ResponseBody) {
+            this.GetFilterResult();
             $('#leaveModal').modal('hide');
             Toast("Leave apply successfully.");
             this.submitted = false;
@@ -139,7 +142,7 @@ export class LeaveComponent implements OnInit {
   onDateSelection(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
     if (value.getTime() >= new Date().getTime()) {
-      this.leaveDays = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24));
+      //this.leaveDays = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24));
       this.leaveDetail.LeaveFromDay = value;
       this.leaveForm.get('LeaveFromDay').setValue(value);
     }
@@ -205,7 +208,6 @@ export class LeaveComponent implements OnInit {
     let elem = document.getElementById('leave-chart')
     if (this.isLeaveDetails == true) {
       elem.classList.add('d-none');
-      this.GetFilterResult();
     }
     else {
       if (elem.classList.contains('d-none'))
@@ -229,6 +231,21 @@ export class LeaveComponent implements OnInit {
         let data = respponse.ResponseBody.Leave;
         for (let i = 0; i < data.length; i++) {
           this.leaveData.push(JSON.parse(data[i].LeaveDetail));
+          let toDate = new Date(this.leaveData[i].LeaveToDay);
+          let fromDate = new Date(this.leaveData[i].LeaveFromDay);
+          let differ = toDate.getTime() - fromDate.getTime();
+          this.leaveData[i].NoOfDays = Math.ceil(differ / (1000*3600*24));
+        }
+
+        for (let i = 0; i < this.leaveTypes.length; i++) {
+          let value = this.leaveData.filter(x => x.LeaveType == this.leaveTypes[i].LeavePlanTypeId);
+          if (value.length > 0) {
+            let totalDays = 0;
+            for (let j = 0; j < value.length; j++) {
+              totalDays +=  value[j].NoOfDays;
+            }
+            this.leaveTypes[i].TotalLeaveTaken = totalDays
+          };
         }
         this.employeeData.TotalRecords = data[0].Total;
         this.isLeaveDataFilter = true;
@@ -556,4 +573,5 @@ class LeaveDetails {
   UpdatedOn: Date = null;
   Reason: string = '';
   RequestedOn: Date = null;
+  NoOfDays: number = null;
 }
