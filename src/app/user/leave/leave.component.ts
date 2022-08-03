@@ -72,16 +72,6 @@ export class LeaveComponent implements OnInit {
         this.employeeId = this.userDetail.UserId;
         this.leaveDetail.EmployeeId = this.employeeId;
         this.loadData(this.employeeId);
-        this.LeaveReportChart();
-        this.LoadDoughnutchart();
-        this.MonthlyStatusChart();
-        this.CasualLeaveChart();
-        this.EarnLeaveChart();
-        this.SickLeaveChart();
-        this.UnpaidLeaveChart();
-        this.CompLeaveChart();
-        this.leaveRequestForm();
-        this.GetFilterResult();
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -172,8 +162,18 @@ export class LeaveComponent implements OnInit {
     this.isPageReady = false;
     this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
       if(res.ResponseBody.Employees && res.ResponseBody.LeavePlan) {
+        if(res.ResponseBody.LeavePlan.length > 1) {
+          ErrorToast("Employee found assiciated with multiple leave plan. Please contact to admin.");
+          return;
+        }
+
+        if(res.ResponseBody.LeavePlan.length < 1) {
+          ErrorToast("Employee found not assiciated with leave plan. Please contact to admin.");
+          return;
+        }
+
+        let plandetail = res.ResponseBody.LeavePlan[0];
         this.managerList.data = [];
-        let plandetail = res.ResponseBody.LeavePlan;
         if(plandetail && plandetail.AssociatedPlanTypes) {
           this.leaveTypes = JSON.parse(plandetail.AssociatedPlanTypes);
         } else {
@@ -197,9 +197,27 @@ export class LeaveComponent implements OnInit {
           }
           i++;
         }
+
+        this.bindChartData();
         this.isPageReady = true;
       }
     })
+  }
+
+  bindChartData() {
+    this.LeaveReportChart();
+    this.LoadDoughnutchart();
+    this.MonthlyStatusChart();
+    // this.CasualLeaveChart();
+    // this.EarnLeaveChart();
+    // this.SickLeaveChart();
+    // this.UnpaidLeaveChart();
+    // this.CompLeaveChart();
+    this.leaveRequestForm();
+    this.GetFilterResult();
+
+
+    this.LeaveChart(0);
   }
 
   showLeaveDetails() {
@@ -329,8 +347,8 @@ export class LeaveComponent implements OnInit {
     })
   }
 
-  CasualLeaveChart() {
-    let elem: any = document.getElementById('casualLeaveChart');
+  LeaveChart(index: number) {
+    let elem: any = document.getElementById('leaveChart_' + index);
     const ctx = elem.getContext('2d');
     const myChart = new Chart(ctx, {
       type: 'doughnut',
