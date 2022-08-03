@@ -163,6 +163,16 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       this.currentPlan = this.leavePlanList[0];
       if(this.currentPlan.AssociatedPlanTypes){
         this.planLeaveTypes = JSON.parse(this.currentPlan.AssociatedPlanTypes);
+
+        if(this.planLeaveTypes && this.planLeaveTypes.length > 0) {
+          let i = 0;
+          while(i < this.planLeaveTypes.length) {
+            this.planLeaveTypes[i].LeavePlanId = this.currentPlan.LeavePlanId;
+            i++;
+          }
+        } else {
+          this.planLeaveTypes = [];
+        }
       }
 
       this.isPageReady = true;
@@ -597,6 +607,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 class LeaveType {
   LeavePlanTypeId: number = 0;
   LeavePlanCode: string = null;
+  LeavePlanId: number = 0;
   PlanName: string = null;
   PlanDescription: string = null;
   MaxLeaveLimit: number;
@@ -605,9 +616,9 @@ class LeaveType {
   IsSickLeave: boolean = false;
   IsStatutoryLeave: boolean = false;
   IsRestrictOnGender: boolean = false;
-  IsMale: boolean = null;
+  IsMale: boolean = false;
   IsRestrictOnMaritalStatus: boolean = false;
-  IsMarried: boolean = null;
+  IsMarried: boolean = false;
   Reasons: any = null;
   IsActive: boolean = false;
 }

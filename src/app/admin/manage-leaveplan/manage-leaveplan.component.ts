@@ -135,13 +135,13 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let errorCounter = 0;
     let value = this.leaveDetailForm.value;
     if (value && errorCounter == 0) {
-      this.http.put(`ManageLeavePlan/UpdateLeaveDetail/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+      this.http.put(`ManageLeavePlan/UpdateLeaveDetail/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
-        this.isLoading = false;
       });
+      this.isLoading = false;
     }
   }
 
@@ -212,13 +212,13 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let errorCounter = 0;
     let value = this.leaveAccrualForm.value;
     if (value && errorCounter == 0) {
-      this.http.put(`ManageLeavePlan/UpdateLeaveAccrual/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+      this.http.put(`ManageLeavePlan/UpdateLeaveAccrual/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
-        this.isLoading = false;
       });
+      this.isLoading = false;
     }
   }
 
@@ -407,13 +407,13 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let errorCounter = 0;
     let value = this.applyForLeaveForm.value;
     if (value && errorCounter == 0) {
-      this.http.put(`ManageLeavePlan/UpdateApplyForLeave/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+      this.http.put(`ManageLeavePlan/UpdateApplyForLeave/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
-        this.isLoading = false;
       });
+      this.isLoading = false;
     }
   }
 
@@ -513,13 +513,13 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let errorCounter = 0;
     let value = this.leaveRestrictionForm.value;
     if (value && errorCounter == 0) {
-      this.http.put(`ManageLeavePlan/UpdateLeaveRestriction/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+      this.http.put(`ManageLeavePlan/UpdateLeaveRestriction/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
-        this.isLoading = false;
       });
+      this.isLoading = false;
     }
   }
 
@@ -553,13 +553,13 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let errorCounter = 0;
     let value = this.holidayWeekendOffForm.value;
     if (value && errorCounter == 0) {
-      this.http.put(`ManageLeavePlan/UpdateHolidayNWeekOffPlan/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+      this.http.put(`ManageLeavePlan/UpdateHolidayNWeekOffPlan/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
-        this.isLoading = false;
       });
+      this.isLoading = false;
     }
   }
 
@@ -641,13 +641,13 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let errorCounter = 0;
     let value = this.leaveApprovalForm.value;
     if (value && errorCounter == 0) {
-      this.http.put(`ManageLeavePlan/UpdateLeaveApproval/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+      this.http.put(`ManageLeavePlan/UpdateLeaveApproval/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
-        this.isLoading = false;
       });
+      this.isLoading = false;
     }
   }
 
@@ -824,11 +824,11 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let errorCounter = 0;
     let value = this.yearEndProcessForm.value;
     if (value && errorCounter == 0) {
-      this.http.put(`ManageLeavePlan/UpdateYearEndProcessing/${this.leavePlanTypeId}`, value).then((res:ResponseModel) => {
+      this.http.put(`ManageLeavePlan/UpdateYearEndProcessing/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.submit = false;
-        this.isLoading = false;
       });
+      this.isLoading = false;
     }
   }
 

@@ -64,7 +64,8 @@
                     </div>
                   </ng-container>
                 </div>
-                <a href="javascript:void(0)" (click)="showLeaveDetails()" class="text-decoration-none text-end">{{!isLeaveDetails ? 'Show':'Hide'}} Leave Deatils</a>
+                <a href="javascript:void(0)" (click)="showLeaveDetails()"
+                  class="text-decoration-none text-end">{{!isLeaveDetails ? 'Show':'Hide'}} Leave Deatils</a>
               </div>
             </div>
           </div>
@@ -424,7 +425,8 @@
                 </div>
                 <div class="td align-middle">
                   <div class="cell-wrapper">
-                    <a href="javascript:void(0)"class="text-decoration-none text-dark"><i class="fa fa-ellipsis-v"></i></a>
+                    <a href="javascript:void(0)" class="text-decoration-none text-dark"><i
+                        class="fa fa-ellipsis-v"></i></a>
                   </div>
                 </div>
               </div>
@@ -469,8 +471,9 @@
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control d-none" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)"
-                            name="dp" [(ngModel)]="fromdateModal" ngbDatepicker #fromdate="ngbDatepicker">
+                          <input class="form-control d-none" placeholder="yyyy-mm-dd"
+                            (dateSelect)="onDateSelection($event)" name="dp" [(ngModel)]="fromdateModal" ngbDatepicker
+                            #fromdate="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()"
                             type="button"></button>
                         </div>
@@ -478,7 +481,8 @@
                     </form>
                   </div>
                   <div class="ms-3">
-                    <button class="btn btn-outline-secondary calendar" (click)="fromdate.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                    <button class="btn btn-outline-secondary calendar" (click)="fromdate.toggle()" type="button"><i
+                        class="fa fa-calendar"></i></button>
                   </div>
                 </div>
 
@@ -491,8 +495,9 @@
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control d-none" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelect($event)"
-                            name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                          <input class="form-control d-none" placeholder="yyyy-mm-dd"
+                            (dateSelect)="onDateSelect($event)" name="dp" [(ngModel)]="model" ngbDatepicker
+                            #d="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()"
                             type="button"></button>
                         </div>
@@ -500,7 +505,8 @@
                     </form>
                   </div>
                   <div class="ms-3">
-                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                        class="fa fa-calendar"></i></button>
                   </div>
                 </div>
               </div>
@@ -527,10 +533,10 @@
               <label class="form-label">Leave Type</label>
               <select class="form-select mb-3" aria-label=".form-select-lg example" formControlName="LeaveType"
                 [ngClass]="{'error-field':submitted && f['LeaveType'].errors != null && f['LeaveType'].errors['required']}">
-                <option value=null>Select leave type</option>
-                <option value="1">Sick Leave</option>
-                <option value="2">Compensatory Leave</option>
-                <option value="3">Paid Leave</option>
+                <option value="">Select leave type</option>
+                <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveTypes">
+                  {{l.PlanName}}
+                </option>
               </select>
             </div>
           </div>
