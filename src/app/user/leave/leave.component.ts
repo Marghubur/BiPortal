@@ -34,6 +34,7 @@ export class LeaveComponent implements OnInit {
   isLeaveDetails: boolean = false;
   leaveData: Array<LeaveDetails> = [];
   isLeaveDataFilter: boolean = false;
+  leaveTypes: Array<any> = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -154,7 +155,7 @@ export class LeaveComponent implements OnInit {
       Reason: new FormControl(this.leaveDetail.Reason, [Validators.required]),
       AssignTo: new FormControl(this.leaveDetail.AssignTo, [Validators.required]),
       RequestType: new FormControl(this.leaveDetail.RequestType),
-      LeaveType: new FormControl(this.leaveDetail.LeaveType, [Validators.required]),
+      LeaveType: new FormControl("", [Validators.required]),
       UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
       EmployeeId: new FormControl(this.leaveDetail.EmployeeId)
     })
@@ -167,8 +168,15 @@ export class LeaveComponent implements OnInit {
   loadData(employeeId: number) {
     this.isPageReady = false;
     this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
-      if(res.ResponseBody.Employees) {
+      if(res.ResponseBody.Employees && res.ResponseBody.LeavePlan) {
         this.managerList.data = [];
+        let plandetail = res.ResponseBody.LeavePlan;
+        if(plandetail && plandetail.AssociatedPlanTypes) {
+          this.leaveTypes = JSON.parse(plandetail.AssociatedPlanTypes);
+        } else {
+          this.leaveTypes = [];
+        }
+
         this.managerList.placeholder = "Reporting Manager";
         this.managerList.data.push({
           value: 0,
