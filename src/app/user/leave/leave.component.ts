@@ -70,7 +70,7 @@ export class LeaveComponent implements OnInit {
         this.userDetail = Master["UserDetail"];
         this.employeeId = this.userDetail.UserId;
         this.leaveDetail.EmployeeId = this.employeeId;
-        this.getManagerList(this.employeeId);
+        this.loadData(this.employeeId);
         this.LeaveReportChart();
         this.LoadDoughnutchart();
         this.MonthlyStatusChart();
@@ -164,10 +164,10 @@ export class LeaveComponent implements OnInit {
     return this.leaveForm.controls;
   }
 
-  getManagerList(employeeId: number) {
+  loadData(employeeId: number) {
     this.isPageReady = false;
     this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
-      if(res.ResponseBody.EmployeesList) {
+      if(res.ResponseBody.Employees) {
         this.managerList.data = [];
         this.managerList.placeholder = "Reporting Manager";
         this.managerList.data.push({
@@ -176,7 +176,7 @@ export class LeaveComponent implements OnInit {
         });
         this.managerList.className ="";
         let i = 0;
-        let managers = res.ResponseBody.EmployeesList;
+        let managers = res.ResponseBody.Employees;
         while(i < managers.length) {
           if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
             this.managerList.data.push({
