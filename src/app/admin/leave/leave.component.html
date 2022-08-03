@@ -77,17 +77,17 @@
                           <a href="javascript:void(0)" (click)="selectedPlan(i, item)"
                             class="d-block w-100 px-3 text-decoration-none text-dark"
                             [ngClass]="{'active-tab': i == 0}">
-                            <div class="d-flex flex-row w-100 justify-content-between">
-                              <div class="ms-2 col-md-8 me-auto pt-4">
+                            <div *ngIf="item.IsDefaultPlan == true" class="mt-2">
+                              <a class="rounded text-decoration-none text-light"><i class="fa fa-check-circle-o fa-lg"></i> Default Plan</a>
+                            </div>
+                            <div class="d-flex flex-row w-100 justify-content-between mt-4">
+                              <div class="ms-2 col-md-8 me-auto">
                                 <div class="fw-bold fs-6">{{item.PlanName}}</div>
                                 <div class="mt-2" *ngIf="item.IsDefaultPlan == false">
                                   <button class="btn btn-light fw-bold btn-sm" (click)="defaultPlanPopUp()">Set Default Plan</button>
                                 </div>
-                                <div class="mt-2" *ngIf="item.IsDefaultPlan == true">
-                                  <button class="btn btn-light text-success fw-bold btn-sm"><i class="fa fa-check-circle-o fa-lg text-success"></i> Default Plan</button>
-                                </div>
                               </div>
-                              <div class="col-md-3 pt-4 d-flex flex-column  align-items-end">
+                              <div class="col-md-3 d-flex flex-column  align-items-end">
                                 <a href="javascript:void(0)" (click)="editLeavePlan(item)"><i
                                     class="fa fa-pencil fa-lg text-white"></i></a>
                                 <a href="javascript:void(0)"><i class="fa fa-trash fa-lg text-white pt-3"></i></a>
@@ -906,13 +906,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <h5 class="text-dark fw-bold">Are you want to set {{currentPlan.PlanName}} as default plan.</h5>
+        <h5 class="text-dark">Are you want to set <span class="fw-bold">[{{currentPlan.PlanName}}]</span> as default plan.</h5>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="saveDefaultPlan(currentPlan)"><i class="fa"
-          [ngClass]="{'fa-floppy-o': !isLoading , 'fa-spin fa-spinner': isLoading}"></i><span class="ps-2">{{isLoading
-          ? 'Wait': 'Save'}}</span></button>
+        <a href="javascript:void(0)" class="text-decoration-none text-danger fw-bold" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
+        <a href="javascript:void(0)" class="text-decoration-none text-primary ps-3 fw-bold" (click)="saveDefaultPlan(currentPlan)"><i class="fa"
+          [ngClass]="{'fa-floppy-o': !isLoading , 'fa-spin fa-spinner': isLoading}"></i><span class="ps-2 ">{{isLoading
+          ? 'Wait': 'Save'}}</span></a>
       </div>
     </div>
   </div>
