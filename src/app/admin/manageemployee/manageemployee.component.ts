@@ -172,7 +172,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   loadData(employeeId: number) {
-    this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
+    this.http.get(`employee/GetAllManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
       if(res.ResponseBody.EmployeesList) {
         this.managerList.data = [];
         this.managerList.placeholder = "Reporting Manager";
