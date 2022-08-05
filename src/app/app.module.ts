@@ -22,6 +22,7 @@ import { LoginComponent } from './login/login.component';
 import { ToastComponent } from './toast/toast.component'
 import { LayoutModule } from "./layout/layout.module"
 import { UserService } from 'src/providers/userService';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { UserService } from 'src/providers/userService';
     RouterModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    LayoutModule
+    LayoutModule,
+    NgChartsModule
   ],
   providers: [
     AjaxService,

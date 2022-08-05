@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Chart } from 'chart.js';
+import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -35,12 +35,18 @@ export class LeaveComponent implements OnInit {
   leaveData: Array<LeaveDetails> = [];
   isLeaveDataFilter: boolean = false;
   leaveTypes: Array<any> = [];
+  chartDataset: Array<any> = [];
+  testDataset: Array<any> = [];
+
+  @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
               private local: ApplicationStorage,
               private user: UserService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder,
+              private elementRef: ElementRef
+              ) { }
 
   ngOnInit(): void {
     this.cachedData = this.nav.getValue();
@@ -72,16 +78,6 @@ export class LeaveComponent implements OnInit {
         this.employeeId = this.userDetail.UserId;
         this.leaveDetail.EmployeeId = this.employeeId;
         this.loadData(this.employeeId);
-        this.LeaveReportChart();
-        this.LoadDoughnutchart();
-        this.MonthlyStatusChart();
-        this.CasualLeaveChart();
-        this.EarnLeaveChart();
-        this.SickLeaveChart();
-        this.UnpaidLeaveChart();
-        this.CompLeaveChart();
-        this.leaveRequestForm();
-        this.GetFilterResult();
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -172,8 +168,18 @@ export class LeaveComponent implements OnInit {
     this.isPageReady = false;
     this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
       if(res.ResponseBody.Employees && res.ResponseBody.LeavePlan) {
+        if(res.ResponseBody.LeavePlan.length > 1) {
+          ErrorToast("Employee found assiciated with multiple leave plan. Please contact to admin.");
+          return;
+        }
+
+        if(res.ResponseBody.LeavePlan.length < 1) {
+          ErrorToast("Employee found not assiciated with leave plan. Please contact to admin.");
+          return;
+        }
+
+        let plandetail = res.ResponseBody.LeavePlan[0];
         this.managerList.data = [];
-        let plandetail = res.ResponseBody.LeavePlan;
         if(plandetail && plandetail.AssociatedPlanTypes) {
           this.leaveTypes = JSON.parse(plandetail.AssociatedPlanTypes);
         } else {
@@ -197,9 +203,88 @@ export class LeaveComponent implements OnInit {
           }
           i++;
         }
+
+        this.bindChartData();
         this.isPageReady = true;
       }
     })
+  }
+
+  bindChartData() {
+    this.LeaveReportChart();
+    this.LoadDoughnutchart();
+    this.MonthlyStatusChart();
+    // this.CasualLeaveChart();
+    // this.EarnLeaveChart();
+    // this.SickLeaveChart();
+    // this.UnpaidLeaveChart();
+    // this.CompLeaveChart();
+    this.leaveRequestForm();
+    this.GetFilterResult();
+
+    let i = 0;
+    this.chartDataset = [];
+    while(i < this.leaveTypes.length) {
+      this.LeaveChart(i, this.leaveTypes[i]);
+      i++;
+    }
+
+    this.entireChart.changes.subscribe(t => {
+      let canvasChars: Array<any> = t._results;
+      canvasChars.map((item: any, i: number) => {
+      this.buildChartData(item.nativeElement.getContext('2d'), i);
+      });
+    });
+
+
+  }
+
+  buildChartData(context: any, index: any) {
+    let item = this.chartDataset[index];
+    let bgColor = []
+    switch(index % 7) {
+      case 0:
+        // bgColor = ['red', 'rgb(51, 122, 183)']
+        bgColor = ['red', 'rgba(255, 99, 132, 0.2)'];
+        break;
+      case 1:
+        bgColor = ['red', 'rgba(255, 206, 86, 0.2)'];
+        break;
+       case 2:
+        bgColor = ['red', 'rgba(255, 159, 64, 0.2)'];
+        break;
+      default:
+        bgColor = ['blue', 'rgba(153, 102, 255, 0.2)'];
+        break;
+    }
+
+    new Chart(context, {
+      type: 'doughnut',
+      data: {
+        labels: ['Used', 'Available'],
+        datasets: [{
+          label: 'My leave plan',
+          backgroundColor: bgColor,
+          borderWidth: 0,
+          data: [2, 98],
+          hoverOffset: 4,
+          hoverBackgroundColor: bgColor,
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        cutout: 50
+      }
+    });
+  }
+
+  LeaveChart(index: number, item: any) {
+    this.chartDataset.push({
+      PlanName: item.PlanName,
+      AvailableLeaves: 0,
+      MaxLeaveLimit: item.MaxLeaveLimit,
+      Config: null
+    });
   }
 
   showLeaveDetails() {
@@ -325,35 +410,6 @@ export class LeaveComponent implements OnInit {
         maintainAspectRatio: false,
         responsive: true,
         cutout: 25,
-    }
-    })
-  }
-
-  CasualLeaveChart() {
-    let elem: any = document.getElementById('casualLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['2 Days Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(219,112,147)',
-            'rgb(123,104,238)'
-          ],
-          borderWidth: 0,
-          data: [2, 98],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(219,112,147)',
-            'rgb(123,104,238)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
     }
     })
   }
