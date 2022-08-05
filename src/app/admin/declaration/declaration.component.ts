@@ -185,48 +185,49 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       if (response.FileDetails)
         this.declarationFiles = response.FileDetails;
 
-        if(response.SalaryComponentItems && response.SalaryComponentItems.length > 0) {
-          this.employeeDeclaration = response;
-          this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
-          this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
-          this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
-          this.EmployeeDeclarationId = response.EmployeeDeclarationId;
-          this.employeeEmail = response.Email;
+      if(response.SalaryComponentItems && response.SalaryComponentItems.length > 0) {
+        this.employeeDeclaration = response;
+        this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
+        this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
+        this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
+        this.EmployeeDeclarationId = response.EmployeeDeclarationId;
+        this.employeeEmail = response.Email;
 
-
-          if(this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
-            for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
-              let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
-              switch (component) {
-                case "1.5 Lac Exemptions":
-                  this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.ExemptionDeclaration.filter(x => x.UploadedFileIds > 0).length;
-                  break;
-                case "Other Exemptions":
-                  this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.OtherDeclaration.filter(x => x.UploadedFileIds > 0).length;
-                  break;
-                case "Tax Saving Allowance":
-                  this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.TaxSavingAlloance.filter(x => x.UploadedFileIds > 0).length;
-                  break;
-              }
+        if(this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
+          this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
+          this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
+          this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
+          for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
+            let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
+            switch (component) {
+              case "1.5 Lac Exemptions":
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.ExemptionDeclaration.filter(x => x.UploadedFileIds > 0).length;
+                break;
+              case "Other Exemptions":
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.OtherDeclaration.filter(x => x.UploadedFileIds > 0).length;
+                break;
+              case "Tax Saving Allowance":
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.TaxSavingAlloance.filter(x => x.UploadedFileIds > 0).length;
+                break;
             }
-
-            this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
-            this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
-            this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
-
-            this.salaryDetails = response.SalaryDetail;
-            if(this.salaryDetails !== null)
-            this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
-            if (response.HousingProperty) {
-              this.housingPropertyDetail = JSON.parse(response.HousingProperty);
-            }
-
-            this.calculateDeclarations();
-
-            this.isEmployeeSelect = false;
-            this.SectionIsReady = true;
           }
+
+          this.salaryDetails = response.SalaryDetail;
+          if(this.salaryDetails !== null)
+          this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
+          if (response.HousingProperty && response.HousingProperty != '{}') {
+            this.housingPropertyDetail = JSON.parse(response.HousingProperty);
+          }
+
+          this.calculateDeclarations();
+
+          this.isEmployeeSelect = false;
+          this.SectionIsReady = true;
         }
+      } else {
+        this.isEmployeeSelect = false;
+        this.SectionIsReady = true;
+      }
     }
   }
 
