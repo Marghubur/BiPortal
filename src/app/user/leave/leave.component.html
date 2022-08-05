@@ -142,8 +142,8 @@
           </div>
         </div>
         <h5 class="mt-3 pt-3 pb-3">Leave Balances</h5>
-        <div class="row">
-          <div class="col-md-4" *ngFor="let leave of leaveTypes; let i = index;">
+        <div class="row" *ngIf="chartDataset.length > 0">
+          <div class="col-md-4 mt-4" *ngFor="let leave of chartDataset; let i = index;">
             <div class="card">
               <div class="card-body pb-0">
                 <div class="d-flex justify-content-between">
@@ -155,7 +155,9 @@
                   </div>
                 </div>
                 <div class="d-block mt-2">
-                  <canvas id="leaveChart_{{i}}" width="200" height="200"></canvas>
+                  <canvas width="200" height="200" id="convas{{i}}" #leaveChart>
+                    {{leave.Config}}
+                  </canvas>
                 </div>
                 <div class="row mt-3 border-top">
                   <div class="col-md-6 border-end pt-3">
@@ -180,148 +182,6 @@
                     <h6 class="custom-text-size">ANNUAL QUOTA</h6>
                     <p>{{leave.MaxLeaveLimit}}</p>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body pb-0">
-                <div class="d-flex justify-content-between">
-                  <h6 class="pt-2 ps-2">
-                    Unpaid Leave
-                  </h6>
-                  <div>
-                    <i class="fa fa-refresh fa-lg p-3" aria-hidden="true"></i>
-                  </div>
-                </div>
-                <div class="d-block mt-2">
-                  <canvas id="compLeaveChart" width="200" height="200"></canvas>
-                </div>
-                <div class="row mt-3 border-top">
-                  <div class="col-md-6 border-end pt-3">
-                    <h6 class="custom-text-size">AVAILABLE</h6>
-                    <p>0</p>
-                  </div>
-                  <div class="col-md-6 pt-3">
-                    <h6 class="custom-text-size">CONSUMED</h6>
-                    <p>0</p>
-                  </div>
-                </div>
-                <div class="row border-top pt-3">
-                  <h6 class="custom-text-size">ANNUAL QUOTA</h6>
-                  <p>0</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body pb-0">
-                <div class="d-flex justify-content-between">
-                  <h6 class="pt-2 ps-2">
-                    Earned Leave
-                  </h6>
-                  <div>
-                    <i class="fa fa-refresh fa-lg p-3" aria-hidden="true"></i>
-                  </div>
-                </div>
-                <div class="d-block mt-2">
-                  <canvas id="earnLeaveChart" width="200" height="200"></canvas>
-                </div>
-                <div class="row mt-3 border-top">
-                  <div class="col-md-6 border-end pt-3">
-                    <h6 class="custom-text-size">AVAILABLE</h6>
-                    <p>1</p>
-                  </div>
-                  <div class="col-md-6 pt-3">
-                    <h6 class="custom-text-size">CONSUMED</h6>
-                    <p>1</p>
-                  </div>
-                </div>
-                <div class="row border-top">
-                  <div class="col-md-4 border-end pt-3">
-                    <h6 class="custom-text-size">ACCRUED SO FAR</h6>
-                    <p>1.5</p>
-                  </div>
-                  <div class="col-md-4 border-end pt-3">
-                    <h6 class="custom-text-size">CARRYOVER</h6>
-                    <p>0.5</p>
-                  </div>
-                  <div class="col-md-4 pt-3">
-                    <h6 class="custom-text-size">ANNUAL QUOTA</h6>
-                    <p>6</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row mt-4">
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body pb-0">
-                <div class="d-flex justify-content-between">
-                  <h6 class="pt-2">
-                    Sick Leave
-                  </h6>
-                  <div>
-                    <i class="fa fa-refresh fa-lg p-3" aria-hidden="true"></i>
-                  </div>
-                </div>
-                <div class="d-block mt-2">
-                  <canvas id="sickLeaveChart" width="200" height="200"></canvas>
-                </div>
-                <div class="row mt-3 border-top">
-                  <div class="col-md-6 border-end pt-3">
-                    <h6 class="custom-text-size">AVAILABLE</h6>
-                    <p>0.5</p>
-                  </div>
-                  <div class="col-md-6 pt-3">
-                    <h6 class="custom-text-size">CONSUMED</h6>
-                    <p>1</p>
-                  </div>
-                </div>
-                <div class="row border-top">
-                  <div class="col-md-6 border-end pt-3">
-                    <h6 class="custom-text-size">ACCRUED SO FAR</h6>
-                    <p>1.5</p>
-                  </div>
-                  <div class="col-md-6 pt-3">
-                    <h6 class="custom-text-size">ANNUAL QUOTA</h6>
-                    <p>6</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body pb-0">
-                <div class="d-flex justify-content-between">
-                  <h6 class="pt-2 ps-2">
-                    Unpaid Leave
-                  </h6>
-                  <div>
-                    <i class="fa fa-refresh fa-lg p-3" aria-hidden="true"></i>
-                  </div>
-                </div>
-                <div class="d-block mt-2">
-                  <canvas id="unpaidLeaveChart" width="200" height="200"></canvas>
-                </div>
-                <div class="row mt-3 border-top">
-                  <div class="col-md-6 border-end pt-3">
-                    <h6 class="custom-text-size">AVAILABLE</h6>
-                    <p>118</p>
-                  </div>
-                  <div class="col-md-6 pt-3">
-                    <h6 class="custom-text-size">CONSUMED</h6>
-                    <p>2</p>
-                  </div>
-                </div>
-                <div class="row border-top pt-3">
-                  <h6 class="custom-text-size">ANNUAL QUOTA</h6>
-                  <p>120</p>
                 </div>
               </div>
             </div>

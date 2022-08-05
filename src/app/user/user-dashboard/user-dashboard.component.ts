@@ -79,7 +79,7 @@ export class UserDashboardComponent implements OnInit {
       if (response.ResponseBody) {
         if (response.ResponseBody) {
           let data = response.ResponseBody;
-          this.employeeDetails = data.Employee[0];
+          this.employeeDetails = data.Employees[0];
           this.allocatedClients = data.AllocatedClients;
           Toast("Dashboard is loading ......");
           this.isPageReady = true;
