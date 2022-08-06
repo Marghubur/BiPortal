@@ -162,11 +162,11 @@
                 <div class="row mt-3 border-top">
                   <div class="col-md-6 border-end pt-3">
                     <h6 class="custom-text-size">AVAILABLE</h6>
-                    <p>{{leave.MaxLeaveLimit}}</p>
+                    <p>{{leave.AvailableLeaves}}</p>
                   </div>
                   <div class="col-md-6 pt-3">
                     <h6 class="custom-text-size">CONSUMED</h6>
-                    <p>0</p>
+                    <p>{{leave.MaxLeaveLimit - leave.AvailableLeaves}}</p>
                   </div>
                 </div>
                 <div class="row border-top">

@@ -77,7 +77,7 @@ export class LeaveComponent implements OnInit {
         this.userDetail = Master["UserDetail"];
         this.employeeId = this.userDetail.UserId;
         this.leaveDetail.EmployeeId = this.employeeId;
-        this.loadData(this.employeeId);
+        this.loadData();
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -112,7 +112,6 @@ export class LeaveComponent implements OnInit {
       if (value && errroCounter == 0) {
         this.http.post('Attendance/ApplyLeave', value).then ((response:ResponseModel) => {
           if (response.ResponseBody) {
-            this.GetFilterResult();
             $('#leaveModal').modal('hide');
             Toast("Leave apply successfully.");
             this.submitted = false;
@@ -164,43 +163,50 @@ export class LeaveComponent implements OnInit {
     return this.leaveForm.controls;
   }
 
-  loadData(employeeId: number) {
+  loadData() {
     this.isPageReady = false;
-    this.http.get(`employee/GetManageEmployeeDetail/${employeeId}`).then((res: ResponseModel) => {
+    let year = new Date().getFullYear();
+    this.http.get(`Attendance/GetAllLeavesByEmpId/${this.employeeId}/${year}`)
+    .then((res: ResponseModel) => {
       if(res.ResponseBody.Employees && res.ResponseBody.LeavePlan) {
-        if(res.ResponseBody.LeavePlan.length > 1) {
-          ErrorToast("Employee found assiciated with multiple leave plan. Please contact to admin.");
+        if(!res.ResponseBody.EmployeeLeaveDetail && !res.ResponseBody.LeavePlan) {
+          ErrorToast("Fail to get leave detail. Please contact to admin.");
           return;
         }
 
-        if(res.ResponseBody.LeavePlan.length < 1) {
-          ErrorToast("Employee found not assiciated with leave plan. Please contact to admin.");
-          return;
-        }
-
-        let plandetail = res.ResponseBody.LeavePlan[0];
-        this.managerList.data = [];
+        let leaveDetail = res.ResponseBody.EmployeeLeaveDetail;
+        let plandetail = res.ResponseBody.LeavePlan;
         if(plandetail && plandetail.AssociatedPlanTypes) {
           this.leaveTypes = JSON.parse(plandetail.AssociatedPlanTypes);
+          if(!this.leaveTypes) {
+            ErrorToast("Invalid plan detail. Please contact to admin.");
+            return;
+          }
         } else {
           this.leaveTypes = [];
         }
 
+        this.managerList.data = [];
         this.managerList.placeholder = "Reporting Manager";
         this.managerList.data.push({
           value: 0,
           text: "Default Manager",
         });
+
+        if(!res.ResponseBody.Employees) {
+          ErrorToast("Unable to bind manage detail. Please contact to admin.");
+        }
+
         this.managerList.className ="";
         let i = 0;
         let managers = res.ResponseBody.Employees;
         while(i < managers.length) {
-          if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
+          //if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
             this.managerList.data.push({
               value: managers[i].EmployeeUid,
               text: `${managers[i].FirstName} ${managers[i].LastName}`
             });
-          }
+          //}
           i++;
         }
 
@@ -214,13 +220,7 @@ export class LeaveComponent implements OnInit {
     this.LeaveReportChart();
     this.LoadDoughnutchart();
     this.MonthlyStatusChart();
-    // this.CasualLeaveChart();
-    // this.EarnLeaveChart();
-    // this.SickLeaveChart();
-    // this.UnpaidLeaveChart();
-    // this.CompLeaveChart();
     this.leaveRequestForm();
-    this.GetFilterResult();
 
     let i = 0;
     this.chartDataset = [];
@@ -235,8 +235,6 @@ export class LeaveComponent implements OnInit {
       this.buildChartData(item.nativeElement.getContext('2d'), i);
       });
     });
-
-
   }
 
   buildChartData(context: any, index: any) {
@@ -244,7 +242,6 @@ export class LeaveComponent implements OnInit {
     let bgColor = []
     switch(index % 7) {
       case 0:
-        // bgColor = ['red', 'rgb(51, 122, 183)']
         bgColor = ['red', 'rgba(255, 99, 132, 0.2)'];
         break;
       case 1:
@@ -266,7 +263,7 @@ export class LeaveComponent implements OnInit {
           label: 'My leave plan',
           backgroundColor: bgColor,
           borderWidth: 0,
-          data: [2, 98],
+          data: [(item.MaxLeaveLimit - item.AvailableLeaves), item.MaxLeaveLimit],
           hoverOffset: 4,
           hoverBackgroundColor: bgColor,
         }]
@@ -281,8 +278,11 @@ export class LeaveComponent implements OnInit {
   LeaveChart(index: number, item: any) {
     this.chartDataset.push({
       PlanName: item.PlanName,
-      AvailableLeaves: 0,
+      AvailableLeaves: item.AvailableLeave,
       MaxLeaveLimit: item.MaxLeaveLimit,
+      PlanDescription: item.PlanDescription,
+      LeavePlanCode: item.LeavePlanCode,
+      LeavePlanTypeId: item.LeavePlanTypeId,
       Config: null
     });
   }
@@ -310,16 +310,23 @@ export class LeaveComponent implements OnInit {
 
   GetFilterResult() {
     this.leaveData = [];
-    this.http.post(`Attendance/GetAllLeavesByEmpId/${this.employeeId}`, this.employeeData)
-    .then ((respponse:ResponseModel) => {
-      if (respponse.ResponseBody) {
-        let data = respponse.ResponseBody.Leave;
-        for (let i = 0; i < data.length; i++) {
-          this.leaveData.push(JSON.parse(data[i].LeaveDetail));
-          let toDate = new Date(this.leaveData[i].LeaveToDay);
-          let fromDate = new Date(this.leaveData[i].LeaveFromDay);
-          let differ = toDate.getTime() - fromDate.getTime();
-          this.leaveData[i].NoOfDays = Math.ceil(differ / (1000*3600*24));
+    let year = new Date().getFullYear();
+    this.http.get(`Attendance/GetAllLeavesByEmpId/${this.employeeId}/${year}`)
+    .then ((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        if(!response.ResponseBody.EmployeeLeaveDetail && !response.ResponseBody.LeavePlan) {
+          ErrorToast("Fail to get leave detail. Please contact to admin.");
+          return;
+        }
+
+        let leavePlan = response.ResponseBody.LeavePlan;
+        let leaveDetail = response.ResponseBody.EmployeeLeaveDetail;
+        if (leavePlan.AssociatedPlanTypes) {
+          let planDetail = JSON.parse(leavePlan.AssociatedPlanTypes);
+          if(!planDetail) {
+            ErrorToast("Invalid plan detail. Please contact to admin.");
+            return;
+          }
         }
 
         for (let i = 0; i < this.leaveTypes.length; i++) {
@@ -332,7 +339,11 @@ export class LeaveComponent implements OnInit {
             this.leaveTypes[i].TotalLeaveTaken = totalDays
           };
         }
-        this.employeeData.TotalRecords = data[0].Total;
+
+        if(leaveDetail.length > 0)
+          this.employeeData.TotalRecords = leaveDetail[0].Total;
+        else
+          this.employeeData.TotalRecords = 0;
         this.isLeaveDataFilter = true;
       }
     });
@@ -410,125 +421,6 @@ export class LeaveComponent implements OnInit {
         maintainAspectRatio: false,
         responsive: true,
         cutout: 25,
-    }
-    })
-  }
-
-  EarnLeaveChart() {
-    let elem: any = document.getElementById('earnLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['1 Day Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(112,219,183)',
-            'rgb(68,79,117)'
-          ],
-          borderWidth: 0,
-          borderColor: 'rgb(255, 99, 132)',
-          data: [2, 98],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(112,219,183)',
-            'rgb(68,79,117)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
-    }
-    })
-  }
-
-  SickLeaveChart() {
-    let elem: any = document.getElementById('sickLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['0.5 Day Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(32,178,170)',
-            'rgb(0,0,139)'
-          ],
-          borderWidth: 0,
-          data: [30, 70],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(32,178,170)',
-            'rgb(0,0,139)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
-    }
-    })
-  }
-
-  UnpaidLeaveChart() {
-    let elem: any = document.getElementById('unpaidLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['118 Days Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(234,9,141)',
-            'rgb(153,39,197)'
-          ],
-          borderWidth: 0,
-          borderColor: 'rgb(255, 99, 132)',
-          data: [2, 98],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(234,9,141)',
-            'rgb(153,39,197)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
-    }
-    })
-  }
-
-  CompLeaveChart() {
-    let elem: any = document.getElementById('compLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['118 Days Available'],
-        datasets: [{
-          label: 'My First dataset',
-          backgroundColor: [
-            'rgb(123,166,255)',
-            'rgb(249,203,156)'
-          ],
-          borderWidth: 0,
-          borderColor: 'rgb(255, 99, 132)',
-          data: [1, 1],
-          hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(123,166,255)',
-            'rgb(249,203,156)'
-          ],
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        cutout: 50
     }
     })
   }
