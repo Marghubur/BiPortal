@@ -175,9 +175,16 @@
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-3">
-                                  <div class="cell-wrapper">
-                                    {{declaration.Declarations.length}}
-                                  </div>
+                                  <ng-container *ngIf="declaration.DeclarationName == 'House Property' && declaration.TotalAmountDeclared > 0">
+                                    <div class="cell-wrapper">
+                                      1
+                                    </div>
+                                  </ng-container>
+                                  <ng-container *ngIf="declaration.DeclarationName != 'House Property'">
+                                    <div class="cell-wrapper">
+                                      {{declaration.Declarations.length}}
+                                    </div>
+                                  </ng-container>
                                 </div>
                                 <div class="td align-middle fe-2">
                                   <div class="cell-wrapper">
