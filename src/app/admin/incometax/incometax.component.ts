@@ -25,6 +25,9 @@ export class IncometaxComponent implements OnInit {
   TaxSavingAlloance: Array<any> = [];
   Section16TaxExemption:Array<any> = [];
   Sec16TaxExemptAmount: number = 0;
+  totalAllowTaxExemptAmount : number = 0;
+  totalSection80CExempAmount: number = 0;
+  totalOtherExemptAmount: number = 0;
   isPageReady: boolean = false;
 
   constructor(private nav: iNavigation,
@@ -82,23 +85,46 @@ export class IncometaxComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
+    this.totalAllowTaxExemptAmount = 0;
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.allDeclarationSalaryDetails = response.ResponseBody;
         this.allDeclarationSalaryDetails.IncomeTaxSlab = Object.entries(response.ResponseBody.IncomeTaxSlab);
         this.ExemptionDeclaration = response.ResponseBody.ExemptionDeclaration;
+        if ((this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
+          this.ExemptionDeclaration = [];
         this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
+        if ((this.OtherDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
+          this.OtherDeclaration = [];
         this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
+        if ((this.TaxSavingAlloance.filter(x => x.DeclaredValue > 0).length <= 0))
+          this.TaxSavingAlloance = [];
         this.salaryDetail = response.ResponseBody.SalaryDetail;
         this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
         let value = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
         console.log(this.allDeclarationSalaryDetails);
-        for (let index = 0; index < 11; index++) {
+        for (let index = 0; index < 12; index++) {
           // let total = (value.BasicAnnually + value.CarRunningAnnually+value.ConveyanceAnnually+value.HRAAnnually+value.InternetAnnually+value.TravelAnnually+value.ShiftAnnually+value.SpecialAnnually);
           // value.Total = total;
           this.salaryBreakup.push(value);
         };
+        let hraComponent = this.allDeclarationSalaryDetails.SalaryComponentItems.find(x => x.ComponentId == "HRA" && x.DeclaredValue > 0);
+        if (hraComponent)
+          this.TaxSavingAlloance.push(hraComponent);
+
+        for (let i = 0; i < this.allDeclarationSalaryDetails.Declarations.length; i++) {
+          switch (this.allDeclarationSalaryDetails.Declarations[i].DeclarationName) {
+            case "1.5 Lac Exemptions":
+              this.totalSection80CExempAmount = this.allDeclarationSalaryDetails.Declarations[i].TotalAmountDeclared;
+              break;
+            case "Other Exemptions":
+              this.totalOtherExemptAmount = this.allDeclarationSalaryDetails.Declarations[i].TotalAmountDeclared;
+              break;
+          }
+        }
+
+        this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance)
         this.getSalaryGroup();
         this.isPageReady = true;
         Toast("Details get successfully")
@@ -119,6 +145,15 @@ export class IncometaxComponent implements OnInit {
         }
       }
     })
+  }
+
+  componentTotalAmount(item: Array<any>) {
+    let totalAmount = 0;
+    for (let i = 0; i < item.length; i++) {
+      if (item[i].DeclaredValue > 0)
+        totalAmount += item[i].DeclaredValue;
+    }
+    return totalAmount;
   }
 
   activateMe(ele: string) {

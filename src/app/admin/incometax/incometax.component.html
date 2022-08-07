@@ -121,12 +121,12 @@
                             SALARY BREAKUP
                           </div>
                         </div>
-                        <div class="th">
-                          <div class="cell-wrapper">
+                        <div class="th fe-1">
+                          <div class="cell-wrapper ms-2">
                             Total
                           </div>
                         </div>
-                        <div class="th" *ngFor="let item of taxCalender">
+                        <div class="th fe-1" *ngFor="let item of taxCalender">
                           <div class="cell-wrapper">
                             <div class="d-flex align-items-center">
                               <span>{{item.month}} {{item.year}}</span>
@@ -144,13 +144,13 @@
                               Basic
                             </div>
                           </div>
-                          <div class="td">
+                          <div class="td fe-1">
                             <div class="cell-wrapper">
                               {{salaryBreakup[0].BasicAnnually | number: '1.2-2'}}
                             </div>
                           </div>
                           <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td">
+                            <div class="td fe-1">
                               <div class="cell-wrapper">
                                 {{item.BasicAnnually/12 | number: '1.2-2'}}
                               </div>
@@ -163,13 +163,13 @@
                               Conveyance Allowance
                             </div>
                           </div>
-                          <div class="td">
+                          <div class="td fe-1">
                             <div class="cell-wrapper">
                               {{salaryBreakup[0].ConveyanceAnnually | number: '1.2-2'}}
                             </div>
                           </div>
                           <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td">
+                            <div class="td fe-1">
                               <div class="cell-wrapper">
                                 {{item.ConveyanceAnnually/12 | number: '1.2-2'}}
                               </div>
@@ -182,13 +182,13 @@
                               HRA
                             </div>
                           </div>
-                          <div class="td">
+                          <div class="td fe-1">
                             <div class="cell-wrapper">
                               {{salaryBreakup[0].HRAAnnually | number: '1.2-2'}}
                             </div>
                           </div>
                           <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td">
+                            <div class="td fe-1">
                               <div class="cell-wrapper">
                                 {{item.HRAAnnually/12 | number: '1.2-2'}}
                               </div>
@@ -201,13 +201,13 @@
                               Car Running Allowance
                             </div>
                           </div>
-                          <div class="td">
+                          <div class="td fe-1">
                             <div class="cell-wrapper">
                               {{salaryBreakup[0].CarRunningAnnually | number: '1.2-2'}}
                             </div>
                           </div>
                           <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td">
+                            <div class="td fe-1">
                               <div class="cell-wrapper">
                                 {{item.CarRunningAnnually/12 | number: '1.2-2'}}
                               </div>
@@ -220,13 +220,13 @@
                               Telephone and Internet Allowance
                             </div>
                           </div>
-                          <div class="td">
+                          <div class="td fe-1">
                             <div class="cell-wrapper">
                               {{salaryBreakup[0].InternetAnnually | number: '1.2-2'}}
                             </div>
                           </div>
                           <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td">
+                            <div class="td fe-1">
                               <div class="cell-wrapper">
                                 {{item.InternetAnnually/12 | number: '1.2-2'}}
                               </div>
@@ -239,13 +239,13 @@
                               Travel Reimburesment(LTA)
                             </div>
                           </div>
-                          <div class="td">
+                          <div class="td fe-1">
                             <div class="cell-wrapper">
                               {{salaryBreakup[0].TravelAnnually | number: '1.2-2'}}
                             </div>
                           </div>
                           <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td">
+                            <div class="td fe-1">
                               <div class="cell-wrapper">
                                 {{item.TravelAnnually/12 | number: '1.2-2'}}
                               </div>
@@ -258,13 +258,13 @@
                               Shfit Allowance
                             </div>
                           </div>
-                          <div class="td">
+                          <div class="td fe-1">
                             <div class="cell-wrapper">
                               {{salaryBreakup[0].ShiftAnnually | number: '1.2-2'}}
                             </div>
                           </div>
                           <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td">
+                            <div class="td fe-1">
                               <div class="cell-wrapper">
                                 {{item.ShiftAnnually/12 | number: '1.2-2'}}
                               </div>
@@ -277,13 +277,13 @@
                               Special Allowance
                             </div>
                           </div>
-                          <div class="td">
+                          <div class="td fe-1">
                             <div class="cell-wrapper">
                               {{salaryBreakup[0].SpecialAnnually | number: '1.2-2'}}
                             </div>
                           </div>
                           <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td">
+                            <div class="td fe-1">
                               <div class="cell-wrapper">
                                 {{item.SpecialAnnually/12 | number: '1.2-2'}}
                               </div>
@@ -327,68 +327,81 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3 ">
                         <div class="th ps-3">Total Salary Receiived</div>
-                        <div class="th pe-3 text-end">{{salaryDetail.CTC | number}}</div>
+                        <div class="th pe-3 text-end">{{salaryDetail.GrossIncome | number}}</div>
                       </div>
                       <div class="tr py-3 border-bottom-0">
                         <div class="th fw-bold ps-3">Total</div>
-                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.CTC | number}}</div>
+                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome | number}}</div>
                       </div>
                     </div>
                   </div>
 
-                  <h6 class="ms-4 fw-bold mt-3">Less: Allowance Tax Exemptions</h6>
-                  <div class="t-table t-border t-list bg-white ms-4">
-                    <div class="t-head overflow-hidden">
-                      <div class="tr py-3 custom-bg">
-                        <div class="th ps-3">SECTION</div>
-                        <div class="th ps-3 fe-4">ALLOWANCE</div>
-                        <div class="th ps-3"></div>
-                        <div class="th pe-3">DECLARED AMOUNT</div>
-                        <div class="th pe-3 text-end">DEDUCTABLE AMOUNT</div>
-                      </div>
-                      <ng-container *ngFor="let item of TaxSavingAlloance">
-                        <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
-                          <div class="th ps-3">{{item.Section}}</div>
-                          <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
+                  <ng-container *ngIf="TaxSavingAlloance.length > 0">
+                    <h6 class="ms-4 fw-bold mt-3">Less: Allowance Tax Exemptions</h6>
+                    <div class="t-table t-border t-list bg-white ms-4">
+                      <div class="t-head overflow-hidden">
+                        <div class="tr py-3 custom-bg">
+                          <div class="th ps-3">SECTION</div>
+                          <div class="th ps-3 fe-4">ALLOWANCE</div>
                           <div class="th ps-3"></div>
-                          <div class="th ps-3">{{item.DeclaredValue}}</div>
-                          <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
+                          <div class="th pe-3">DECLARED AMOUNT</div>
+                          <div class="th pe-3 text-end">DEDUCTABLE AMOUNT</div>
                         </div>
-                      </ng-container>
-                      <ng-container *ngFor="let item of allDeclarationSalaryDetails.Declarations">
-                        <div class="tr py-3 border-bottom-0" *ngIf="item.DeclarationName == 'Tax Saving Allowance' && item.TotalAmountDeclared > 0">
+                          <ng-container *ngFor="let item of TaxSavingAlloance">
+                            <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
+                              <div class="th ps-3">{{item.Section}}</div>
+                              <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
+                              <div class="th ps-3"></div>
+                              <div class="th ps-3">{{item.DeclaredValue}}</div>
+                              <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
+                            </div>
+                          </ng-container>
+                          <div class="tr py-3">
+                            <div class="td ps-3">Total</div>
+                            <div class="td ps-3 fe-4"></div>
+                            <div class="td ps-3"></div>
+                            <div class="td pe-3"></div>
+                            <div class="td pe-3 text-end">{{totalAllowTaxExemptAmount}}</div>
+                          </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container >
+                    <h6 class="ms-5 py-3 text-dark">Less: Section 16 Tax Exemptions</h6>
+                    <div class="t-table t-border t-list bg-white ms-5">
+                      <div class="t-head overflow-hidden">
+                        <!-- <div class="tr py-3" *ngFor="let item of Section16TaxExemption">
+                          <div class="th ps-3">{{item.Section}}</div>
+                          <div class="th ps-3">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
+                          <div class="th ps-3">{{item.ComponentId == 'PTAX' ? 'View Details': ''}}</div>
+                          <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
+                        </div> -->
+                        <div class="tr py-3">
+                          <div class="th ps-3">16(iii)</div>
+                          <div class="th ps-3">PTAX (Professional Tax)</div>
+                          <div class="th ps-3"></div>
+                          <div class="th pe-3 text-end">2400</div>
+                        </div>
+                        <div class="tr py-3">
+                          <div class="th ps-3">16(ia)</div>
+                          <div class="th ps-3">STANDARD DEDUCTION</div>
+                          <div class="th ps-3"></div>
+                          <div class="th pe-3 text-end">50000</div>
+                        </div>
+                        <div class="tr py-3 border-bottom-0">
                           <div class="th ps-3 fw-bold">Total</div>
                           <div class="th ps-3"></div>
                           <div class="th ps-3"></div>
-                          <div class="th ps-3"></div>
-                          <div class="th pe-3 text-end fw-bold">{{item.TotalAmountDeclared}}</div>
+                          <div class="th pe-3 text-end fw-bold">52400</div>
                         </div>
-                      </ng-container>
-                    </div>
-                  </div>
-                  <ng-container *ngIf="Section16TaxExemption.length > 0"></ng-container>
-                  <h6 class="ms-5 py-3 text-dark">Less: Section 16 Tax Exemptions</h6>
-                  <div class="t-table t-border t-list bg-white ms-5">
-                    <div class="t-head overflow-hidden">
-                      <div class="tr py-3" *ngFor="let item of Section16TaxExemption">
-                        <div class="th ps-3">{{item.Section}}</div>
-                        <div class="th ps-3">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
-                        <div class="th ps-3">{{item.ComponentId == 'PTAX' ? 'View Details': ''}}</div>
-                        <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
-                      </div>
-                      <div class="tr py-3 border-bottom-0">
-                        <div class="th ps-3 fw-bold">Total</div>
-                        <div class="th ps-3"></div>
-                        <div class="th ps-3"></div>
-                        <div class="th pe-3 text-end fw-bold">{{Sec16TaxExemptAmount}}</div>
                       </div>
                     </div>
-                  </div>
+                  </ng-container>
                   <div class="t-table t-border t-list bg-white ms-4 mt-3">
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3 border-bottom-0">
                         <div class="th fw-bold ps-3">Taxable Amount under Head "Salaries</div>
-                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.CTC - Sec16TaxExemptAmount | number}}</div>
+                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -396,77 +409,77 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3 border-bottom-0">
                         <div class="th fw-bold ps-3">Total Gross from all Heads</div>
-                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.CTC - Sec16TaxExemptAmount | number}}</div>
+                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 | number}}</div>
                       </div>
                     </div>
                   </div>
-                  <h6 class="ms-4 fw-bold mt-3">Less: 1.5 Lac Tax Exemption (Section 80C + Others)</h6>
-                  <div class="t-table t-border t-list bg-white ms-4">
-                    <div class="t-head overflow-hidden">
-                      <div class="tr py-3 custom-bg">
-                        <div class="th ps-3">SECTION</div>
-                        <div class="th ps-3 fe-4">ALLOWANCE</div>
-                        <div class="th ps-3"></div>
-                        <div class="th pe-3">DECLARED AMOUNT</div>
-                        <div class="th pe-3 text-end">DEDUCTABLE AMOUNT</div>
-                      </div>
-                      <ng-container *ngFor="let item of ExemptionDeclaration">
-                        <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
-                          <div class="th ps-3">{{item.Section}}</div>
-                          <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
-                          <div class="th ps-3">View Details</div>
-                          <div class="th ps-3">{{item.DeclaredValue}}</div>
-                          <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
+                  <ng-container *ngIf="ExemptionDeclaration.length > 0">
+                    <h6 class="ms-4 fw-bold mt-3">Less: 1.5 Lac Tax Exemption (Section 80C + Others)</h6>
+                    <div class="t-table t-border t-list bg-white ms-4">
+                      <div class="t-head overflow-hidden">
+                        <div class="tr py-3 custom-bg">
+                          <div class="th ps-3">SECTION</div>
+                          <div class="th ps-3 fe-4">ALLOWANCE</div>
+                          <div class="th ps-3"></div>
+                          <div class="th pe-3">DECLARED AMOUNT</div>
+                          <div class="th pe-3 text-end">DEDUCTABLE AMOUNT</div>
                         </div>
-                      </ng-container>
-                      <ng-container *ngFor="let item of allDeclarationSalaryDetails.Declarations">
-                        <div class="tr py-3 border-bottom-0" *ngIf="item.DeclarationName == '1.5 Lac Exemptions' && item.TotalAmountDeclared > 0">
+                        <ng-container *ngFor="let item of ExemptionDeclaration">
+                          <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
+                            <div class="th ps-3">{{item.Section}}</div>
+                            <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
+                            <div class="th ps-3">View Details</div>
+                            <div class="th ps-3">{{item.DeclaredValue}}</div>
+                            <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
+                          </div>
+                        </ng-container>
+                        <div class="tr py-3 border-bottom-0">
                           <div class="th ps-3 fw-bold">Total</div>
                           <div class="th ps-3"></div>
                           <div class="th ps-3"></div>
                           <div class="th ps-3"></div>
-                          <div class="th pe-3 text-end fw-bold">{{item.TotalAmountDeclared}}</div>
+                          <div class="th pe-3 text-end fw-bold">{{totalSection80CExempAmount}}</div>
                         </div>
-                      </ng-container>
-                    </div>
-                  </div>
-                  <h6 class="ms-4 fw-bold mt-3">Less: Other Tax Exemption</h6>
-                  <div class="t-table t-border t-list bg-white ms-4">
-                    <div class="t-head overflow-hidden">
-                      <div class="tr py-3 custom-bg">
-                        <div class="th ps-3">SECTION</div>
-                        <div class="th ps-3 fe-4">ALLOWANCE</div>
-                        <div class="th pe-3">DECLARED AMOUNT</div>
-                        <div class="th pe-3 text-end">DEDUCTABLE AMOUNT</div>
                       </div>
-                      <ng-container *ngFor="let item of OtherDeclaration">
-                        <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
-                          <div class="th ps-3">{{item.Section}}</div>
-                          <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
-                          <div class="th ps-3">{{item.DeclaredValue}}</div>
-                          <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="OtherDeclaration.length > 0">
+                    <h6 class="ms-4 fw-bold mt-3">Less: Other Tax Exemption</h6>
+                    <div class="t-table t-border t-list bg-white ms-4">
+                      <div class="t-head overflow-hidden">
+                        <div class="tr py-3 custom-bg">
+                          <div class="th ps-3">SECTION</div>
+                          <div class="th ps-3 fe-4">ALLOWANCE</div>
+                          <div class="th pe-3">DECLARED AMOUNT</div>
+                          <div class="th pe-3 text-end">DEDUCTABLE AMOUNT</div>
                         </div>
-                      </ng-container>
-                      <ng-container *ngFor="let item of allDeclarationSalaryDetails.Declarations">
-                        <div class="tr py-3 border-bottom-0" *ngIf="item.DeclarationName == 'Other Exemptions' && item.TotalAmountDeclared > 0">
+                        <ng-container *ngFor="let item of OtherDeclaration">
+                          <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
+                            <div class="th ps-3">{{item.Section}}</div>
+                            <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
+                            <div class="th ps-3">{{item.DeclaredValue}}</div>
+                            <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
+                          </div>
+                        </ng-container>
+                        <div class="tr py-3 border-bottom-0">
                           <div class="th ps-3 fw-bold">Total</div>
                           <div class="th ps-3"></div>
                           <div class="th ps-3"></div>
                           <div class="th ps-3"></div>
-                          <div class="th pe-3 text-end fw-bold">{{item.TotalAmountDeclared}}</div>
+                          <div class="th pe-3 text-end fw-bold">{{totalOtherExemptAmount}}</div>
                         </div>
-                      </ng-container>
+                      </div>
                     </div>
-                  </div>
+                  </ng-container>
                   <div class="t-table t-border t-list mt-3">
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3">
                         <div class="th fw-bold ps-3">Total Taxable Amount</div>
-                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.CTC - 52400 -21600 | number}}</div>
+                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 - totalOtherExemptAmount - totalSection80CExempAmount| number}}</div>
                       </div>
                       <div class="tr py-3 border-bottom-0">
                         <div class="th ps-3">Net taxable income is</div>
-                        <div class="th pe-3 text-end">{{salaryDetail.CTC - 52400 -21600 | number}}</div>
+                        <div class="th pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 - totalOtherExemptAmount - totalSection80CExempAmount| number}}</div>
                       </div>
                     </div>
                   </div>
