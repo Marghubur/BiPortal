@@ -175,6 +175,10 @@ export class LeaveComponent implements OnInit {
         }
 
         let leaveDetail = res.ResponseBody.EmployeeLeaveDetail;
+        if(leaveDetail && leaveDetail.LeaveDetail) {
+          this.leaveData = JSON.parse(leaveDetail.LeaveDetail);
+        }
+
         let plandetail = res.ResponseBody.LeavePlan;
         if(plandetail && plandetail.AssociatedPlanTypes) {
           this.leaveTypes = JSON.parse(plandetail.AssociatedPlanTypes);
@@ -232,7 +236,7 @@ export class LeaveComponent implements OnInit {
     this.entireChart.changes.subscribe(t => {
       let canvasChars: Array<any> = t._results;
       canvasChars.map((item: any, i: number) => {
-      this.buildChartData(item.nativeElement.getContext('2d'), i);
+        this.buildChartData(item.nativeElement.getContext('2d'), i);
       });
     });
   }
@@ -263,7 +267,7 @@ export class LeaveComponent implements OnInit {
           label: 'My leave plan',
           backgroundColor: bgColor,
           borderWidth: 0,
-          data: [(item.MaxLeaveLimit - item.AvailableLeaves), item.MaxLeaveLimit],
+          data: [(item.MaxLeaveLimit - item.AvailableLeaves), item.AvailableLeaves],
           hoverOffset: 4,
           hoverBackgroundColor: bgColor,
         }]

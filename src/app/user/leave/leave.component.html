@@ -193,19 +193,14 @@
           <div class="hide-bar"></div>
           <div class="t-head custom-bg text-dark">
             <div class="tr">
-              <div class="th">
+              <div class="th fe-2">
                 <div class="cell-wrapper ps-3">
-                  DATE
+                  From - To Dates
                 </div>
               </div>
               <div class="th">
                 <div class="cell-wrapper">
-                  REQUEST TYPE
-                </div>
-              </div>
-              <div class="th">
-                <div class="cell-wrapper">
-                  REQUEST ON
+                  REQUEST DETAIL
                 </div>
               </div>
               <div class="th fe-2">
@@ -220,11 +215,6 @@
               </div>
               <div class="th">
                 <div class="cell-wrapper">
-                  ACTION TAKEN BY
-                </div>
-              </div>
-              <div class="th">
-                <div class="cell-wrapper">
                   ACTIONS
                 </div>
               </div>
@@ -233,17 +223,20 @@
           <div class="t-body custom-height text-dark">
             <ng-container *ngIf="leaveData.length > 0">
               <div class="tr py-2" *ngFor="let item of leaveData">
-                <div class="td align-middle">
+                <div class="td align-middle fe-2">
                   <div class="cell-wrapper">
-                    <div class="d-flex align-items-center justify-content-between">
-                      <div class="text-center ps-3">
-                        <p class="mb-0">{{item.LeaveFromDay | date}}</p>
-                        <span>to</span>
-                        <p class="mb-0">{{item.LeaveToDay | date}}</p>
-                      </div>
-                      <div class="d-flex align-items-center flex-column pe-4">
-                        <i class="fa fa-home fa-lg"></i>
-                        <p>{{item.NoOfDays}} {{item.NoOfDays == 1? 'day':'days'}}</p>
+                    <div class="d-flex flex-column justify-content-center">
+                      <div class="d-flex align-items-center justify-content-start">
+                        <div class="h-4 d-flex align-items-center flex-column px-4">
+                          <i class="fa fa-home fa-lg"></i>
+                          <p class="m-0">{{item.NumOfDays}} {{item.NumOfDays == 1? 'day':'days'}}</p>
+                        </div>
+                        <div class="text-center px-3">
+                          <p class="mb-0">{{item.LeaveFromDay | date}}</p>
+                        </div>
+                        <div class="text-center px-3">
+                          <p class="mb-0">{{item.LeaveToDay | date}}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -251,16 +244,18 @@
                 <div class="td align-middle">
                   <div class="cell-wrapper">
                     <div [ngSwitch]="item.LeaveType">
-                      <div *ngSwitchCase=1>Sick Leave</div>
-                      <div *ngSwitchCase=2>Compensatory Leave</div>
-                      <div *ngSwitchCase=3>Paid Leave</div>
+                      <div *ngSwitchCase=1> <b>Sick Leave</b> </div>
+                      <div *ngSwitchCase=2> <b>Compensatory Leave</b> </div>
+                      <div *ngSwitchCase=3> <b>Paid Leave</b> </div>
                     </div>
-                  </div>
-                </div>
-                <div class="td align-middle">
-                  <div class="cell-wrapper">
-                    {{item.RequestedOn | date}}
-                    <p class="mb-0">by {{item.EmployeeName}}</p>
+                    <div class="cell-wrapper">
+                      <span class="text-primary-c">{{item.RequestedOn | date}}</span>
+                      <p class="mb-0">BY:
+                        <span class="text-muted">
+                          {{item.EmployeeName}}
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div class="td align-middle fe-2">
@@ -276,11 +271,6 @@
                       <div *ngSwitchCase=8>Submitted</div>
                       <div *ngSwitchCase=5>Rejected</div>
                     </div>
-                  </div>
-                </div>
-                <div class="td align-middle">
-                  <div class="cell-wrapper">
-
                   </div>
                 </div>
                 <div class="td align-middle">
