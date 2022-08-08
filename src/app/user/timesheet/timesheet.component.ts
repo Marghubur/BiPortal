@@ -122,7 +122,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   loadMappedClients() {
-    this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
+    this.http.get(`employee/LoadMappedClients/${this.employeeId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         let mappedClient = response.ResponseBody.AllocatedClients;
         if(mappedClient != null && mappedClient.length > 0) {
@@ -130,13 +130,13 @@ export class TimesheetComponent implements OnInit {
           while(i < mappedClient.length) {
             this.clientDetail.data.push({
               text: mappedClient[i].ClientName,
-              value: mappedClient[i].ClientUid,
+              value: mappedClient[i].ClientId,
             });
             i++;
           }
 
           if(mappedClient.length == 1) {
-            this.clientId = mappedClient[0].ClientUid;
+            this.clientId = mappedClient[0].ClientId;
           }
           Toast("Client loaded successfully.");
         } else {
@@ -389,7 +389,7 @@ export class TimesheetComponent implements OnInit {
       ForMonth: this.fromDate.getMonth() + 1
     }
 
-    this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
+    this.http.post("Timesheet/GetTimesheetByUserId", data).then((response: ResponseModel) => {
       if(response.ResponseBody.EmployeeDetail)
         this.client = response.ResponseBody.EmployeeDetail;
       else {
