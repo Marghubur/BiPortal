@@ -30,6 +30,7 @@ export class IncometaxComponent implements OnInit {
   totalSection80CExempAmount: number = 0;
   totalOtherExemptAmount: number = 0;
   isPageReady: boolean = false;
+  hraDetails: Array<any> = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
@@ -54,27 +55,6 @@ export class IncometaxComponent implements OnInit {
       });
       i++;
     }
-
-    this.taxSlab.push({
-      taxableincomeslab: '0% Tax on income up to 250000',
-      taxamount: 0
-    },
-    {
-      taxableincomeslab: '5% Tax on income between 250001 and 500000',
-      taxamount: 12500
-    },
-    {
-      taxableincomeslab: '20% Tax on income between 500001 and 1000000',
-      taxamount: 100000
-    },
-    {
-      taxableincomeslab: '30% Tax on income above 1000000',
-      taxamount: 315000
-    },
-    {
-      taxableincomeslab: 'Gross Income Tax',
-      taxamount: 427500
-    });
 
     this.EmployeeId = this.nav.getValue();
     if(this.EmployeeId == null || this.EmployeeId <= 0){
@@ -159,7 +139,16 @@ export class IncometaxComponent implements OnInit {
 
   viewHRAPopUp() {
     $('#viewHRAModal').modal('show');
+
+    for (let i = 0; i < this.taxCalender.length; i++) {
+      this.hraDetails.push({
+
+      })
+    }
+
   }
+
+
 
   activateMe(ele: string) {
     switch(ele) {
