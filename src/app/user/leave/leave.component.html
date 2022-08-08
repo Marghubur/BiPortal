@@ -40,25 +40,35 @@
                       <p>Working hard yeah? Request time off on the right - ></p>
                     </div>
                   </ng-container>
-                  <ng-container>
+                  <ng-container *ngIf="leaveData.length > 0">
                     <div class="ps-4">
                       <h5>Last leave apply</h5>
                       <div class="d-flex">
                         <div class="me-4 pe-2">
                           <small class="blinking">DATE</small>
-                          <p class="mb-0 blinking">Jul 18, 2022 - Jul 19, 2022</p>
+                          <p class="mb-0 blinking">{{leaveData[0].LeaveFromDay | date}} - {{leaveData[0].LeaveToDay |
+                            date}}</p>
                         </div>
                         <div class="me-4">
                           <small class="blinking">REQUEST TYPE</small>
-                          <p class="mb-0 blinking">Compensatory Leave</p>
+                          <div [ngSwitch]="leaveData[0].LeaveType" class="blinking">
+                            <div *ngSwitchCase=1>Sick Leave</div>
+                            <div *ngSwitchCase=2>Compensatory Leave</div>
+                            <div *ngSwitchCase=3>Paid Leave</div>
+                          </div>
                         </div>
                         <div class="me-4">
                           <small class="blinking">REQUESTED ON</small>
-                          <p class="mb-0 blinking">Jul 18, 2022</p>
+                          <p class="mb-0 blinking">{{leaveData[0].RequestedOn | date}}</p>
                         </div>
                         <div>
                           <small class="blinking">STATUS</small>
-                          <p class="mb-0 blinking">Pending</p>
+                          <div [ngSwitch]="leaveData[0].LeaveStatus" class="blinking">
+                            <div *ngSwitchCase=2>Pending</div>
+                            <div *ngSwitchCase=9>Approved</div>
+                            <div *ngSwitchCase=8>Submitted</div>
+                            <div *ngSwitchCase=5>Rejected</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -97,7 +107,7 @@
                     Last Week
                   </h6>
                   <div>
-                    <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
+                    <i class="fa fa-info-circle fa-lg p-3" (click)="loadData()" aria-hidden="true"></i>
                   </div>
                 </div>
                 <div class="d-block mt-2">
