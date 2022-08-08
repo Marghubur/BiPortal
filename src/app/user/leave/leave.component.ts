@@ -533,7 +533,7 @@ export class LeaveComponent implements OnInit {
 class LeaveModal {
   LeaveFromDay: Date = null;
   LeaveToDay: Date = null;
-  Session: string = null;
+  Session: string = 'fullday';
   Reason: string = null;
   AssignTo: number = 0;
   ForYear: number = 0;

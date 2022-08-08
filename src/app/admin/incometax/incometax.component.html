@@ -640,14 +640,35 @@
 
 <!-- View HRA Modal -->
 <div class="modal fade" id="viewHRAModal" tabindex="-1" aria-labelledby="viewHRAModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="viewHRAModalLabel">HRA (HOUSE RENT ALLOWANCE) DETAILS</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+        <div class="t-table t-list border-0 col-md-12 bg-white">
+          <div class="t-head overflow-hidden">
+            <div class="tr border-bottom-0">
+              <div class="th ps-2">MONTH</div>
+              <div class="th">RENT PAID</div>
+              <div class="th">ACTUAL HRA(1)</div>
+              <div class="th">LOCATION BASED HRA(2)</div>
+              <div class="th">RENT BASED HRA(3)</div>
+              <div class="th">MIN (1,2,3)</div>
+            </div>
+          </div>
+          <div class="t-head overflow-hidden">
+            <div class="tr text-dark py-2" *ngFor="let item of 12">
+              <div class="td ps-2">{{salaryDetail.GrossIncome | number}}</div>
+              <div class="td ps-2">{{allDeclarationSalaryDetails.TotalAmount | number}}</div>
+              <div class="td ps-2">{{allDeclarationSalaryDetails.SurChargesAndCess}}</div>
+              <div class="td ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay | number}}</div>
+              <div class="td ps-2">{{allDeclarationSalaryDetails.TaxPaid | number}}</div>
+              <div class="td ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid  | number}}</div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

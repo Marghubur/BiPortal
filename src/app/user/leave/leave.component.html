@@ -73,6 +73,13 @@
                       </div>
                     </div>
                   </ng-container>
+                  <ng-container *ngIf="leaveData.length <= 0">
+                    <div class="px-5 mx-5">
+                      <div class="text-dark px-5 mx-5 fw-bold">
+                        No Leave Apply..
+                      </div>
+                    </div>
+                  </ng-container>
                 </div>
                 <a href="javascript:void(0)" (click)="showLeaveDetails()"
                   class="text-decoration-none text-end">{{!isLeaveDetails ? 'Show':'Hide'}} Leave Deatils</a>
