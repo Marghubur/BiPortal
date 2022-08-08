@@ -51,9 +51,9 @@ export class AjaxService {
               resolve(null);
             }
           },
-          (error: HttpErrorResponse) => {
-            this.tokenHelper.HandleResponseStatus(error.status);
-            reject(false);
+          (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
           });
     });
   }
@@ -75,9 +75,9 @@ export class AjaxService {
             }
             resolve(res.body);
           },
-          error => {
-            this.tokenHelper.HandleResponseStatus(error.status);
-            reject(error);
+          (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
           }
         );
     });
@@ -100,9 +100,9 @@ export class AjaxService {
             }
             resolve(res.body);
           },
-          error => {
-            this.tokenHelper.HandleResponseStatus(error.status);
-            reject(error);
+          (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
           }
         );
     });
@@ -118,9 +118,9 @@ export class AjaxService {
           (res: HttpResponse<any>) => {
             resolve(res.body);
           },
-          error => {
-            this.tokenHelper.HandleResponseStatus(error.status);
-            reject(null);
+          (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
           }
         );
     });
@@ -145,9 +145,9 @@ export class AjaxService {
             }
             resolve(res);
           },
-          error => {
-            this.tokenHelper.HandleResponseStatus(error.status);
-            reject(error);
+          (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
           }
         );
     });
@@ -176,9 +176,9 @@ export class AjaxService {
               reject(e);
             }
           },
-          error => {
-            this.tokenHelper.HandleResponseStatus(error.status);
-            reject(error);
+          (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
           }
         );
     });
@@ -201,9 +201,9 @@ export class AjaxService {
             }
             resolve(res.body);
           },
-          error => {
-            this.tokenHelper.HandleResponseStatus(error.status);
-            reject(error);
+          (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
           }
         );
     });

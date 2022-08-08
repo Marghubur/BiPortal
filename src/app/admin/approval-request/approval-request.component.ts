@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -16,11 +16,10 @@ export class ApprovalRequestComponent implements OnInit {
   active = 1;
   request: Array<ApprovalRequest> = [];
   leave_request: Array<ApprovalRequest> = [];
-  modalHeader: string = '';
+  requestState: string = '';
   isLoading: boolean = false;
-  singleLeave: ApprovalRequest = new ApprovalRequest();
+  currentRequest: ApprovalRequest = new ApprovalRequest();
   managerList: autoCompleteModal = null;
-  requestType: number = 0;
   editedMessage: string = '';
   itemStatus: number = 0;
   currentUser: any = null;
@@ -56,20 +55,10 @@ export class ApprovalRequestComponent implements OnInit {
     });
   }
 
-  openPopup(e: string, request: any) {
+  openPopup(state: string, request: any) {
     $('#leaveModal').modal('show');
-    this.modalHeader = e;
-    this.singleLeave = request;
-    switch (this.modalHeader) {
-      case 'Reject':
-        this.requestType = 2;
-        break;
-      case 'Approved':
-        this.requestType = 1;
-      default:
-        this.requestType = 3;
-        break;
-    }
+    this.requestState = state;
+    this.currentRequest = request;
   }
 
   filterRequest(e: any) {
@@ -79,39 +68,41 @@ export class ApprovalRequestComponent implements OnInit {
 
   submitRequest(header: string) {
     this.isLoading = true;
-    let statusId = 0;
     let endPoint = '';
-    try{
-      switch(header) {
-        case 'Approved':
-          statusId = ItemStatus.Approved;
-          endPoint = `Request/ApprovalAction`;
-          break;
-        case 'Rejected':
-          statusId = ItemStatus.Rejected;
-          endPoint = `Request/ApprovalAction`;
-          break;
-        case 'Othermember':
-          endPoint = `Request/ReAssigneToOtherManager`;
-          break;
-        default:
-          throw 'Invalid option selected.';
-          break;
-      }
-    } catch(e) {
-      ErrorToast(e);
+
+    switch(this.active) {
+      case 1:
+        endPoint = `Request`;
+        break;
+      case 2:
+        endPoint = `Leave`;
+        break;
+      case 3:
+        WarningToast("Invalid tab selected");
+        return;
+      default:
+        WarningToast("Invalid tab selected");
+        return;
     }
 
-    //this.isLoading = false;
-    let request = {
-      ApprovalRequestId: this.singleLeave.ApprovalRequestId,
-      RequestType: this.requestType,
-      NewAssigneeId: this.singleLeave.AssigneeId,
-      DesignationId: this.singleLeave.UserTypeId,
-      RequestStatusId: statusId
+    switch(header) {
+      case 'Approved':
+        this.currentRequest.RequestStatusId = ItemStatus.Approved;
+        endPoint = `${endPoint}/ApprovalAction`;
+        break;
+      case 'Rejected':
+        this.currentRequest.RequestStatusId = ItemStatus.Rejected;
+        endPoint = `${endPoint}/ApprovalAction`;
+        break;
+      case 'Othermember':
+        endPoint = `${endPoint}/ApprovalAction`;
+        break;
+      default:
+        throw 'Invalid option selected.';
+        break;
     }
 
-    this.http.put(endPoint, request).then((response:ResponseModel) => {
+    this.http.put(endPoint, this.currentRequest).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         Toast("Submitted Successfully");
         this.isLoading = false;
@@ -137,4 +128,5 @@ export class ApprovalRequest {
 	ProjectId:number = null;
 	ProjectName:string = '';
   RequestStatusId: number = 0;
+  RequestType: string = "";
 }

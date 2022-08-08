@@ -1,6 +1,7 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ErrorToast, Toast } from "src/providers/common-service/common.service";
-import { AccessToken, AccessTokenExpiredOn, BadRequest, Login, Master, NotFound, ServerError, Success, UnAuthorize } from "src/providers/constants";
+import { AccessToken, AccessTokenExpiredOn, BadRequest, Forbidden, Login, Master, NotFound, ServerError, Success, UnAuthorize } from "src/providers/constants";
 import { iNavigation } from "src/providers/iNavigation";
 
 @Injectable()
@@ -41,15 +42,31 @@ export class JwtService {
     }
 
     IsValidResponse(response: ResponseModel) {
-      if (response !== null)
-          return this.HandleResponseStatus(response.HttpStatusCode);
-      else
-          return false;
+      let flag = true;
+      if (!response || response.HttpStatusCode != Success) {
+       let e: HttpErrorResponse = {
+            error: null,
+            headers: null,
+            status: response.HttpStatusCode,
+            statusText: null,
+            url: null,
+            message: null,
+            name: null,
+            ok: null,
+            type: null
+        };
+
+        this.HandleResponseStatus(e);
+        flag = false;
+      }
+
+      return flag;
     }
 
-    HandleResponseStatus(statusCode: number): boolean {
+    HandleResponseStatus(e: HttpErrorResponse): boolean {
       let flag = false;
-      switch (statusCode) {
+      let error: ResponseModel = e.error;
+      switch (e.status) {
           case Success:
               flag = true;
               break;
@@ -65,8 +82,16 @@ export class JwtService {
           case NotFound:
               ErrorToast("Page not found. Please check your Url.");
               break;
+          case Forbidden:
+            ErrorToast("Invalid user access. Please try login again.");
+            this.nav.navigate(Login, null);
+            break;
           case ServerError:
           case BadRequest:
+              if(error.HttpStatusMessage)
+                ErrorToast(error.HttpStatusMessage);
+              else
+              ErrorToast("Unknown error occured. Please contact to admin.");
               break;
           default:
               ErrorToast("Unknown error occured. Please contact to admin.");

@@ -21,6 +21,7 @@ export const BadRequest = 400;
 export const Success = 200;
 export const UnAuthorize = 401;
 export const NotFound = 404;
+export const Forbidden = 403;
 export const AccessToken = ProjectName + "_access_token";
 export const Authorization = "Authorization";
 export const Master = ProjectName + "_master";
