@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
+import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -37,6 +39,8 @@ export class LeaveComponent implements OnInit {
   leaveTypes: Array<any> = [];
   chartDataset: Array<any> = [];
   testDataset: Array<any> = [];
+  graphInstances: Array<any> = [];
+  observer: Subscription = null;
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -86,6 +90,7 @@ export class LeaveComponent implements OnInit {
 
   leavePopUp() {
     this.leaveDetail = new LeaveModal();
+    this.leaveRequestForm();
     $('#leaveModal').modal('show');
   }
 
@@ -110,8 +115,9 @@ export class LeaveComponent implements OnInit {
       if (this.leaveForm.get('LeaveType').errors !== null)
         errroCounter++;
       if (value && errroCounter == 0) {
-        this.http.post('Attendance/ApplyLeave', value).then ((response:ResponseModel) => {
-          if (response.ResponseBody) {
+        this.http.post('Attendance/ApplyLeave', value).then ((res:ResponseModel) => {
+          if (res.ResponseBody) {
+            this.bindData(res);
             $('#leaveModal').modal('hide');
             Toast("Leave apply successfully.");
             this.submitted = false;
@@ -155,7 +161,7 @@ export class LeaveComponent implements OnInit {
       RequestType: new FormControl(this.leaveDetail.RequestType),
       LeaveType: new FormControl("", [Validators.required]),
       UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
-      EmployeeId: new FormControl(this.leaveDetail.EmployeeId)
+      EmployeeId: new FormControl(this.employeeId)
     })
   }
 
@@ -168,56 +174,62 @@ export class LeaveComponent implements OnInit {
     let year = new Date().getFullYear();
     this.http.get(`Attendance/GetAllLeavesByEmpId/${this.employeeId}/${year}`)
     .then((res: ResponseModel) => {
-      if(res.ResponseBody.Employees && res.ResponseBody.LeavePlan) {
-        if(!res.ResponseBody.EmployeeLeaveDetail && !res.ResponseBody.LeavePlan) {
-          ErrorToast("Fail to get leave detail. Please contact to admin.");
+      this.bindData(res);
+    })
+  }
+
+  bindData(res: any) {
+    if(res.ResponseBody.Employees && res.ResponseBody.LeavePlan) {
+      if(!res.ResponseBody.EmployeeLeaveDetail && !res.ResponseBody.LeavePlan) {
+        ErrorToast("Fail to get leave detail. Please contact to admin.");
+        return;
+      }
+
+      let leaveDetail = res.ResponseBody.EmployeeLeaveDetail;
+      if(leaveDetail && leaveDetail.LeaveDetail) {
+        this.leaveData = (JSON.parse(leaveDetail.LeaveDetail)).map(obj => {return {...obj, RequestedOn: new Date(obj.RequestedOn)}});
+        this.leaveData = this.leaveData.sort((a, b) => Number(b.RequestedOn) - Number(a.RequestedOn));
+      }
+
+      let plandetail = res.ResponseBody.LeavePlan;
+      if(plandetail && plandetail.AssociatedPlanTypes) {
+        this.leaveTypes = JSON.parse(plandetail.AssociatedPlanTypes);
+        if(!this.leaveTypes) {
+          ErrorToast("Invalid plan detail. Please contact to admin.");
           return;
         }
-
-        let leaveDetail = res.ResponseBody.EmployeeLeaveDetail;
-        if(leaveDetail && leaveDetail.LeaveDetail) {
-          this.leaveData = JSON.parse(leaveDetail.LeaveDetail);
-        }
-
-        let plandetail = res.ResponseBody.LeavePlan;
-        if(plandetail && plandetail.AssociatedPlanTypes) {
-          this.leaveTypes = JSON.parse(plandetail.AssociatedPlanTypes);
-          if(!this.leaveTypes) {
-            ErrorToast("Invalid plan detail. Please contact to admin.");
-            return;
-          }
-        } else {
-          this.leaveTypes = [];
-        }
-
-        this.managerList.data = [];
-        this.managerList.placeholder = "Reporting Manager";
-        this.managerList.data.push({
-          value: 0,
-          text: "Default Manager",
-        });
-
-        if(!res.ResponseBody.Employees) {
-          ErrorToast("Unable to bind manage detail. Please contact to admin.");
-        }
-
-        this.managerList.className ="";
-        let i = 0;
-        let managers = res.ResponseBody.Employees;
-        while(i < managers.length) {
-          //if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
-            this.managerList.data.push({
-              value: managers[i].EmployeeUid,
-              text: `${managers[i].FirstName} ${managers[i].LastName}`
-            });
-          //}
-          i++;
-        }
-
-        this.bindChartData();
-        this.isPageReady = true;
+      } else {
+        this.leaveTypes = [];
       }
-    })
+
+      this.managerList.data = [];
+      this.managerList.placeholder = "Reporting Manager";
+      this.managerList.data.push({
+        value: 0,
+        text: "Default Manager",
+      });
+
+      if(!res.ResponseBody.Employees) {
+        ErrorToast("Unable to bind manage detail. Please contact to admin.");
+      }
+
+      this.managerList.className ="";
+      let i = 0;
+      let managers = res.ResponseBody.Employees;
+      while(i < managers.length) {
+        //if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
+          this.managerList.data.push({
+            value: managers[i].EmployeeUid,
+            text: `${managers[i].FirstName} ${managers[i].LastName}`
+          });
+        //}
+        i++;
+      }
+
+      this.DestroyGraphInstances();
+      this.bindChartData();
+      this.isPageReady = true;
+    }
   }
 
   bindChartData() {
@@ -233,7 +245,10 @@ export class LeaveComponent implements OnInit {
       i++;
     }
 
-    this.entireChart.changes.subscribe(t => {
+    if(this.observer != null)
+      this.observer.unsubscribe();
+
+    this.observer = this.entireChart.changes.subscribe(t => {
       let canvasChars: Array<any> = t._results;
       canvasChars.map((item: any, i: number) => {
         this.buildChartData(item.nativeElement.getContext('2d'), i);
@@ -259,7 +274,7 @@ export class LeaveComponent implements OnInit {
         break;
     }
 
-    new Chart(context, {
+    let graph = new Chart(context, {
       type: 'doughnut',
       data: {
         labels: ['Used', 'Available'],
@@ -277,6 +292,18 @@ export class LeaveComponent implements OnInit {
         cutout: 50
       }
     });
+
+    this.graphInstances.push(graph);
+  }
+
+  DestroyGraphInstances() {
+    let i = 0;
+    while(i < this.graphInstances.length) {
+      this.graphInstances[i].destroy();
+      i++;
+    }
+
+    this.graphInstances = [];
   }
 
   LeaveChart(index: number, item: any) {
@@ -353,7 +380,7 @@ export class LeaveComponent implements OnInit {
     });
   }
 
-  LeaveReportChart(){
+  LeaveReportChart() {
     let elem: any = document.getElementById('weeklyPatternChart');
     const ctx = elem.getContext('2d');
     const myChart = new Chart(ctx, {
@@ -395,12 +422,14 @@ export class LeaveComponent implements OnInit {
           }
       }
     });
+
+    this.graphInstances.push(myChart);
   }
 
   LoadDoughnutchart() {
     let elem: any = document.getElementById('consumeLeaveChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
+    let ctx = elem.getContext('2d');
+    let myChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: ['Leave Types'],
@@ -426,13 +455,15 @@ export class LeaveComponent implements OnInit {
         responsive: true,
         cutout: 25,
     }
-    })
+    });
+
+    this.graphInstances.push(myChart);
   }
 
   MonthlyStatusChart(){
     let elem: any = document.getElementById('MonthlyStatusChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
+    let ctx = elem.getContext('2d');
+    let myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -481,6 +512,8 @@ export class LeaveComponent implements OnInit {
           }
       }
     });
+
+    this.graphInstances.push(myChart);
   }
 
   activateMe(elemId: string) {
