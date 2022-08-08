@@ -355,7 +355,7 @@
                               <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
                               <div class="th ps-3 fe-1">
                                 <ng-container *ngIf="item.ComponentId == 'HRA'">
-                                  <a href="javascript:void(0)" class="text-decoration-none">View Detail</a>
+                                  <a href="javascript:void(0)" (click)="viewHRAPopUp()" class="text-decoration-none">View Detail</a>
                                 </ng-container>
                               </div>
                               <div class="th ps-3">{{item.DeclaredValue}}</div>
@@ -638,3 +638,21 @@
   </div>
 </div>
 
+<!-- View HRA Modal -->
+<div class="modal fade" id="viewHRAModal" tabindex="-1" aria-labelledby="viewHRAModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewHRAModalLabel">HRA (HOUSE RENT ALLOWANCE) DETAILS</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

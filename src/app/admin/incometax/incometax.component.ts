@@ -4,6 +4,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-incometax',
@@ -154,6 +155,10 @@ export class IncometaxComponent implements OnInit {
         totalAmount += item[i].DeclaredValue;
     }
     return totalAmount;
+  }
+
+  viewHRAPopUp() {
+    $('#viewHRAModal').modal('show');
   }
 
   activateMe(ele: string) {
