@@ -2,7 +2,7 @@
   <div class="col-md-12 bg-light mb-3">
     <ul class="nav">
       <li class="nav-item">
-        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page"
+        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('timesheet-tab')" aria-current="page"
           href="javascript:void(0)">ATTENDENCE</a>
       </li>
       <li class="nav-item">
@@ -32,10 +32,10 @@
             </a>
           </div>
           <div class="elem-row-item-base justify-content-end ps-2">
-            <a href="javascript:void(0)" (click)="getAllPendingAttendance()"
+            <a href="javascript:void(0)" (click)="getAllPendingTimesheet()"
               class="p-2 p-2 badge bg-success text-light head-badge">
               <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
-              My pending attendance
+              My pending timesheet
             </a>
           </div>
         </div>
@@ -48,11 +48,11 @@
 
     <ng-container [ngSwitch]="divisionCode">
       <ng-container *ngSwitchCase="2">
-        <div class="x_panel pt-4 attendance-form">
+        <div class="x_panel pt-4 timesheet-form">
           <div class="x_header">
             <div class="x_header_title row">
               <div class="text-dark text-dark d-flex flex-column justify-content-center">
-                <h2>Find below pending attendance list: <small>For the present month.</small></h2>
+                <h2>Find below pending timesheet list: <small>For the present month.</small></h2>
               </div>
             </div>
           </div>
@@ -61,7 +61,7 @@
               <p class="pending-list me-2">{{index + 1.}}</p>
               <a href="javascript:void(0)" (click)="getPendingWeek(d.days[0].date, d.days[6].date)"
                 class="pending-list">
-                <b>Your pending attendance from:</b>
+                <b>Your pending timesheet from:</b>
                 <span>{{d.days[0].date | date}} - {{d.days[6].date | date}}</span>
               </a>
             </div>
@@ -74,10 +74,10 @@
       </ng-container>
 
       <ng-container *ngSwitchDefault>
-        <ng-container *ngIf="isAttendanceDataLoaded">
+        <ng-container *ngIf="isTimesheetDataLoaded">
           <div class="col-md-12 row mt-4 mb-4 ms-0">
             <div class="col-md-4 ps-0">
-              <h6>Attendance Stats</h6>
+              <h6>Timesheet Stats</h6>
               <div class="card px-3 py-2">
                 <div class="d-flex justify-content-between">
                   <h6 class="pt-3 ps-2">
@@ -160,7 +160,7 @@
               <h6>Actions</h6>
               <div class="card px-3 pt-3 pb-5">
                 <div class="pb-4">
-                  <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
+                  <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
                   <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
                 </div>
                 <h6 class=" text-center pb-5 pt-5">
@@ -172,12 +172,12 @@
         </ng-container>
         <ng-container [ngSwitch]="isFormReady">
           <div *ngSwitchCase="true">
-            <div [formGroup]="attendenceForm" class="x_panel pt-4 attendance-form">
+            <div [formGroup]="timesheetForm" class="x_panel pt-4 timesheet-form">
               <div class="d-flex flex-row justify-content-between">
                 <div class="d-flex">
                   <div class="text-dark text-dark d-flex flex-column justify-content-center">
                     <div>
-                      <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
+                      <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
                       <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
                     </div>
                   </div>
@@ -233,29 +233,29 @@
                       <th class="text-center">Final</th>
                     </tr>
                   </thead>
-                  <tbody formArrayName="attendanceArray">
+                  <tbody formArrayName="timesheetArray">
                     <tr>
-                      <ng-container *ngFor="let item of attendenceForm.get('attendanceArray').controls;let i = index;">
+                      <ng-container *ngFor="let item of timesheetForm.get('timesheetArray').controls;let i = index;">
                         <ng-container [formGroupName]="i">
                           <td>
                             <div class="center-badge d-flex justify-content-start">
-                              <ng-container [ngSwitch]="item.get('AttendenceStatus').value">
-                                <span class="s" *ngSwitchCase="8">
+                              <ng-container [ngSwitch]="item.get('TimesheetStatus').value">
+                                <span class="status-icon s" *ngSwitchCase="8">
                                   <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
                                 </span>
-                                <span class="s" *ngSwitchCase="-1">
+                                <span class="status-icon s" *ngSwitchCase="-1">
                                   <i class="fa fa-ban text-danger pt-1 pb-1" aria-hidden="true"></i>
                                 </span>
-                                <span class="" *ngSwitchDefault>
+                                <span class="status-icon" *ngSwitchDefault>
                                   <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
                                 </span>
 
-                                <input type="number" class="ms-1 text-start" placeholder="hours" min="0" max="23"
+                                <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23"
                                   [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
                                   formControlName="UserHours"
                                   onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                                 <span>&nbsp;:</span>
-                                <input type="number" class="text-end" placeholder="minutes" min="0" max="59"
+                                <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59"
                                   (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
                                   onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 
@@ -271,7 +271,7 @@
                               </ng-container>
                             </div>
                             <small class="d-block text-muted">
-                              {{item.get('AttendanceDay').value | date}}
+                              {{item.get('PresentDate').value | date}}
                             </small>
                           </td>
                         </ng-container>
@@ -293,7 +293,7 @@
                     <h2>Instruction</h2>
                     <div>
                       <p>
-                        Attendance for the week you are requesting is currently blocked.
+                        Timesheet for the week you are requesting is currently blocked.
                         As per company guide lines you need to submit your timesheet before end of every week.
                       </p>
 
@@ -321,7 +321,7 @@
                   Uhh!!! No client allocated on your name. Please contact your maanager.
                 </p>
                 <p *ngIf="!NoClient" class="h3 text-muted text-center">
-                  Please select week date to get attendance.
+                  Please select week date to get timesheet.
                 </p>
               </div>
             </div>

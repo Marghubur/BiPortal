@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Attendance, Leave, Timesheet, UserAttendance, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
+import { AccessTokenExpiredOn, UserAttendance, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -17,10 +17,10 @@ declare var $: any;
   styleUrls: ['./timesheet.component.scss']
 })
 export class TimesheetComponent implements OnInit {
-  attendenceForm: FormGroup;
+  timesheetForm: FormGroup;
   date: any;
   isFormReady: boolean = false;
-  attendanceArray: FormArray;
+  timesheetArray: FormArray;
   singleEmployee: Filter = null;
   employeeDetails: autoCompleteModal = new autoCompleteModal();
   employeeId: number = 0;
@@ -46,12 +46,13 @@ export class TimesheetComponent implements OnInit {
   isLoading: boolean = false;
   billingHrs: string = '';
   NoClient: boolean = false;
-  isAttendanceDataLoaded: boolean = false;
+  isTimesheetDataLoaded: boolean = false;
   weekList: Array<any> = [];
   divisionCode: number = 0;
-  PendingAttendacneMessage: string = 'Select above pending attendance link to submit before end of the month.';
+  PendingAttendacneMessage: string = 'Select above pending timesheet link to submit before end of the month.';
   isBlocked: boolean = false;
   cachedData: any = null;
+  dailyTimesheetDetails: Array<any> = [];
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -97,7 +98,7 @@ export class TimesheetComponent implements OnInit {
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
     if(this.cachedData) {
-      this.employeeId = this.cachedData.EmployeeUid;
+      this.employeeId = this.cachedData.EmployeeId;
       this.clientId = this.cachedData.ClientUid;
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.isEmployeesReady = true;
@@ -183,20 +184,22 @@ export class TimesheetComponent implements OnInit {
     return totalTime;
   }
 
-  buildWeekForm(at: any, item: any, attendanceId: number) {
+  buildWeekForm(at: any, item: any, timesheetId: number) {
     if (item == null) {
       return this.fb.group({
-        AttendanceId: [attendanceId, Validators.required],
-        UserComments: ['', Validators.required],
-        TotalMinutes: [0, Validators.required],
-        BillingHours: [this.buildTime(this.client.BillingHours), Validators.required],
-        AttendenceStatus: [-1, Validators.required],
-        AttendanceDay: [at.date, Validators.required],
-        AttendanceDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
-        EmployeeUid: [0],
+        TimesheetId: [timesheetId, Validators.required],
+        EmployeeId: [0],
+        ClientId: [0],
         UserTypeId: [UserType.Employee],
-        UserHours: ["00"],
-        UserMin: ["00"]
+        TotalMinutes: [8 * 60 * 5, Validators.required],
+        IsHoliday: [false],
+        IsWeekEnd: [false],
+        TimesheetStatus: [-1, Validators.required],
+        TimesheetDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
+        PresentDate: [at.date, Validators.required],
+        UserHours: [8, Validators.required],
+        UserMin: [0, Validators.required],
+        UserComments: ['', Validators.required]
       });
     } else {
       let totalTime = this.buildTime(item.TotalMinutes);
@@ -204,35 +207,37 @@ export class TimesheetComponent implements OnInit {
       let hours = timeValues[0];
       let minutes = timeValues[1];
       return this.fb.group({
-        AttendanceId: [attendanceId, Validators.required],
-        UserComments: [item.UserComments, Validators.required],
-        TotalMinutes: [totalTime, Validators.required],
-        BillingHours: [this.buildTime(this.client.BillingHours), Validators.required],
-        AttendenceStatus: [item.AttendenceStatus, Validators.required],
-        AttendanceDay: [at.date, Validators.required],
-        AttendanceDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
-        EmployeeUid: [item.EmployeeUid],
+        TimesheetId: [timesheetId, Validators.required],
+        EmployeeId: [item.EmployeeId],
+        ClientId: [item.ClientId],
         UserTypeId: [item.UserTypeId],
-        UserHours: [hours],
-        UserMin: [minutes]
+        TotalMinutes: [totalTime, Validators.required],
+        IsHoliday: [item.IsHoliday],
+        IsWeekEnd: [item.IsWeekEnd],
+        TimesheetStatus: [item.TimesheetStatus, Validators.required],
+        TimesheetDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
+        UserHours: [hours, Validators.required],
+        UserMin: [minutes, Validators.required],
+        PresentDate: [at.date, Validators.required],
+        UserComments: ['', Validators.required]
       });
     }
   }
 
-  initForm(attendanceDetail: Array<any>) {
+  initForm(timesheetDetail: Array<any>) {
     let weekDaysList = this.buildWeekDays();
     this.weekDaysList = weekDaysList.map(item => item.date.getDay());
 
-    let attendanceId = 0;
-    if(attendanceDetail && attendanceDetail.length > 0) {
-      attendanceId = attendanceDetail[0].AttendanceId;
+    let timesheetId = 0;
+    if(timesheetDetail && timesheetDetail.length > 0) {
+      timesheetId = timesheetDetail[0].TimesheetId;
     }
 
-    this.attendenceForm = this.fb.group({
-      attendanceArray: this.fb.array(weekDaysList.map(item => {
+    this.timesheetForm = this.fb.group({
+      timesheetArray: this.fb.array(weekDaysList.map(item => {
         item.date.setHours(0,0,0,0);
-        let value = attendanceDetail.find(x => new Date(x.AttendanceDay).getDate() == item.date.getDate());
-        return this.buildWeekForm(item, value, attendanceId);
+        let value = timesheetDetail.find(x => new Date(x.PresentDate).getDate() == item.date.getDate());
+        return this.buildWeekForm(item, value, timesheetId);
       }))
     });
 
@@ -240,7 +245,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   countTotalTime() {
-    let records = this.attendenceForm.get("attendanceArray")["controls"];
+    let records = this.timesheetForm.get("timesheetArray")["controls"];
     this.totalHrs = '';
     this.totalMins = '';
     this.billingHrs = '';
@@ -250,13 +255,13 @@ export class TimesheetComponent implements OnInit {
 
     let i = 0;
     while (i < records.length) {
-      let day = Number(new Date(records[i].get("AttendanceDay").value).getDay());
+      let day = Number(new Date(records[i].get("PresentDate").value).getDay());
       if(!isNaN(day) && day !== 6 && day !== 0) {
         hrsValue +=  Number(records[i].get("UserHours").value);
         minsValue +=  Number(records[i].get("UserMin").value);
       }
 
-      billingValue +=  parseInt(records[i].get("BillingHours").value);
+      billingValue +=  parseInt(records[i].get("TotalMinutes").value);
       i++;
     }
 
@@ -287,7 +292,7 @@ export class TimesheetComponent implements OnInit {
     } else {
       value = "00";
     }
-    let records = this.attendenceForm.get("attendanceArray")["controls"];
+    let records = this.timesheetForm.get("timesheetArray")["controls"];
     if(records && records.length >= index) {
       records[index].get("UserMin").setValue(value);
     }
@@ -295,7 +300,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   manageHourField(index: number, e: any, weekDaysList : Array<any>) {
-    // let hrs = this.attendenceForm.get("UserHours").value;
+    // let hrs = this.timesheetForm.get("UserHours").value;
     let hrs = parseInt(e.target.value);
     let value: any = "";
     if (hrs > 0 ) {
@@ -304,7 +309,7 @@ export class TimesheetComponent implements OnInit {
       value = "00";
     }
 
-    let records = this.attendenceForm.get("attendanceArray")["controls"];
+    let records = this.timesheetForm.get("timesheetArray")["controls"];
     if(records && records.length >= index) {
       records[index].get("UserHours").setValue(value);
     }
@@ -333,20 +338,20 @@ export class TimesheetComponent implements OnInit {
   onSubmit(){
     this.isLoading = true;
     this.isBlocked = false;
-    let values = JSON.stringify(this.attendenceForm.get("attendanceArray").value);
+    let values = JSON.stringify(this.timesheetForm.get("timesheetArray").value);
     let records: Array<any> = JSON.parse(values);
     let index = 0;
     while(index < records.length) {
       records[index].TotalMinutes = this.calculateTime(records[index].UserHours, records[index].UserMin);
-      records[index].EmployeeUid = Number(this.employeeId);
+      records[index].EmployeeId = Number(this.employeeId);
       records[index]["ClientId"] = Number(this.clientId);
-      records[index].AttendenceStatus = 8;
+      records[index].TimesheetStatus = 8;
       records[index].BillingHours = 0;
-      records[index]["AttendanceDay"] = new Date(records[index]["AttendanceDay"]);
+      records[index]["PresentDate"] = new Date(records[index]["PresentDate"]);
       index++;
     }
 
-    this.http.post("Attendance/InsertUpdateTimesheet", records)
+    this.http.post("timesheet/InsertUpdateTimesheet", records)
     .then(response => {
       if (response.ResponseBody) {
         Toast("Created/Updated successfully");
@@ -358,11 +363,11 @@ export class TimesheetComponent implements OnInit {
     }).catch(e => {
       this.isLoading = false;
       this.isBlocked = true;
-      ErrorToast("You have permission to submit only current week attendance.");
+      ErrorToast("You have permission to submit only current week timesheet.");
     });
   }
 
-  getUserAttendanceData() {
+  getUserTimesheetData() {
     this.isLoading = true;
     if(this.employeeId <= 0) {
       Toast("Invalid user selected.")
@@ -380,11 +385,11 @@ export class TimesheetComponent implements OnInit {
     }
 
     let data = {
-      EmployeeUid: Number(this.employeeId),
+      EmployeeId: Number(this.employeeId),
       ClientId: Number(this.clientId),
       UserTypeId : UserType.Employee,
-      AttendenceFromDay: this.fromDate,
-      AttendenceToDay: this.toDate,
+      TimesheetFromDate: this.fromDate,
+      TimesheetToDate: this.toDate,
       ForYear: this.fromDate.getFullYear(),
       ForMonth: this.fromDate.getMonth() + 1
     }
@@ -394,13 +399,15 @@ export class TimesheetComponent implements OnInit {
         this.client = response.ResponseBody.EmployeeDetail;
       else {
         this.NoClient = true;
-        this.isAttendanceDataLoaded = false;
+        this.isTimesheetDataLoaded = false;
       }
 
-      if (response.ResponseBody.AttendacneDetails) {
-        let blockedAttendance = response.ResponseBody.AttendacneDetails.filter(x => x.IsOpen === false);
-        this.createPageData(response.ResponseBody.AttendacneDetails);
-        this.isAttendanceDataLoaded = true;
+      this.dailyTimesheetDetails = [];
+      if (response.ResponseBody.DailyTimesheetDetails) {
+        // let blockedtimesheet = response.ResponseBody.DailyTimesheetDetails.filter(x => x.IsOpen === false);
+        this.dailyTimesheetDetails = response.ResponseBody.DailyTimesheetDetails;
+        this.createPageData();
+        this.isTimesheetDataLoaded = true;
       }
 
       this.divisionCode = 1;
@@ -429,33 +436,33 @@ export class TimesheetComponent implements OnInit {
     }
 
     let data = {
-      EmployeeUid: Number(this.employeeId),
+      EmployeeId: Number(this.employeeId),
       ClientId: Number(this.clientId),
       UserTypeId : UserType.Employee,
-      AttendenceFromDay: this.fromDate,
-      AttendenceToDay: this.toDate,
+      TimesheetFromDay: this.fromDate,
+      TimesheetToDay: this.toDate,
       ForYear: this.fromDate.getFullYear(),
       ForMonth: this.fromDate.getMonth() + 1
     }
 
-    this.http.post("Attendance/EnablePermission", data).then((response: ResponseModel) => {
+    this.http.post("timesheet/EnablePermission", data).then((response: ResponseModel) => {
       if (response.ResponseBody)
         Toast("Enable Permission");
     })
   }
 
-  createPageData(response: any) {
-    if(response) {
-      let attendance = response;
+  createPageData() {
+    if(this.dailyTimesheetDetails.length > 0) {
       let index = 0;
-      while (index < attendance.length) {
-        let value = attendance[index].AttendanceDay;
+      while (index < this.dailyTimesheetDetails.length) {
+        let value = this.dailyTimesheetDetails[index].PresentDate;
         if(value) {
-          attendance[index].AttendanceDay = new Date(value);
+          this.dailyTimesheetDetails[index].PresentDate = new Date(value);
         }
         index++;
       }
-      this.initForm(attendance);
+
+      this.initForm(this.dailyTimesheetDetails);
       this.isFormReady = true;
     } else {
       Toast("Unable to get user data.");
@@ -473,7 +480,7 @@ export class TimesheetComponent implements OnInit {
       let index = 0;
       while(index < emp.length) {
         this.employeeDetails.data.push({
-          value: emp[index]["EmployeeUid"],
+          value: emp[index]["EmployeeId"],
           text: `${emp[index]["FirstName"]} ${emp[index]["LastName"]}`
         });
         index++;
@@ -519,7 +526,7 @@ export class TimesheetComponent implements OnInit {
       if(this.fromDate) {
         this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         this.toDate.setDate(this.toDate.getDate() + 6);
-        this.getUserAttendanceData();
+        this.getUserTimesheetData();
       }
     } else {
       WarningToast("Please select employer first.");
@@ -536,7 +543,7 @@ export class TimesheetComponent implements OnInit {
     if (this.fromDate) {
       this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
       this.toDate.setDate(this.toDate.getDate() + 6);
-      this.getUserAttendanceData();
+      this.getUserTimesheetData();
     }
 
     this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
@@ -547,7 +554,7 @@ export class TimesheetComponent implements OnInit {
     if (this.fromDate) {
       this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
       this.toDate.setDate(this.toDate.getDate() + 6);
-      this.getUserAttendanceData();
+      this.getUserTimesheetData();
     }
 
     this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
@@ -562,7 +569,7 @@ export class TimesheetComponent implements OnInit {
       if(this.fromDate) {
         this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         this.toDate.setDate(this.toDate.getDate() + 6);
-        this.getUserAttendanceData();
+        this.getUserTimesheetData();
       }
     } else {
       WarningToast("Please select employer first.");
@@ -575,19 +582,19 @@ export class TimesheetComponent implements OnInit {
       if(from && to) {
         this.fromDate = new Date(from);
         this.toDate = new Date(to);
-        this.getUserAttendanceData();
+        this.getUserTimesheetData();
       }
     } else {
       WarningToast("Please select employer first.");
     }
   }
 
-  getAllPendingAttendance() {
+  getAllPendingTimesheet() {
     if(this.clientId > 0) {
-      this.http.get(`Attendance/GetPendingAttendanceById/${this.employeeId}/1/${this.clientId}`).then((response: ResponseModel) => {
+      this.http.get(`Timesheet/GetPendingTimesheetById/${this.employeeId}/1/${this.clientId}`).then((response: ResponseModel) => {
         if(response.ResponseBody && response.ResponseBody.length > 0) {
-          this.PendingAttendacneMessage = 'Select above pending attendance link to submit before end of the month.';
-          this.buildPendingAttendanceModal(response.ResponseBody);
+          this.PendingAttendacneMessage = 'Select above pending timesheet link to submit before end of the month.';
+          this.buildPendingTimesheetModal(response.ResponseBody);
         } else {
           this.divisionCode = 2;
           this.PendingAttendacneMessage = "Wow!!! You don't have any pending attendace for this month.";
@@ -602,7 +609,7 @@ export class TimesheetComponent implements OnInit {
     let i = 0;
     let date = null;
     while(i < existingDateList.length) {
-      date = new Date(existingDateList[i]["AttendanceDay"]);
+      date = new Date(existingDateList[i]["PresentDate"]);
       if(currenDate.getFullYear() == date.getFullYear() &&
          currenDate.getMonth() == date.getMonth() &&
          currenDate.getDate() == date.getDate()) {
@@ -613,7 +620,7 @@ export class TimesheetComponent implements OnInit {
     return false;
   }
 
-  buildPendingAttendanceModal(res: Array<any>) {
+  buildPendingTimesheetModal(res: Array<any>) {
     let now: any = new Date(new Date().setHours(0,0,0,0));
     let startDate = new Date(now.getFullYear(), now.getMonth(), 1);
     this.weekList = [];

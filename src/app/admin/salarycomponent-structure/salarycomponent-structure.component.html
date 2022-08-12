@@ -19,7 +19,8 @@
       <ng-container *ngIf="ActivatedPage == 1">
         <div class="d-flex flex-column">
           <div class="mb-3">
-            <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage+1)">Next <i class="fa fa-arrow-right ps-1"></i></button>
+            <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage+1)">Next <i
+                class="fa fa-arrow-right ps-1"></i></button>
           </div>
           <div class="col-md-12 d-flex justify-content-between">
             <div class="form-group">
@@ -64,7 +65,7 @@
             <ng-container *ngIf="salaryComponentActiveFields.length > 0">
               <div class="tr py-2" *ngFor="let item of salaryComponentActiveFields">
                 <div class="td ps-3 text-truncate fe-2">
-                  <div [ngSwitch]="item.IsActive">
+                  <div [ngSwitch]="item.IsOpted">
                     <div *ngSwitchCase="1">
                       <span class="badge bg-success me-2">ON</span>{{item.ComponentId}} ({{item.ComponentFullName}})
                     </div>
@@ -121,7 +122,8 @@
       <ng-container *ngIf="ActivatedPage == 2">
         <div class="d-flex flex-column">
           <div class="mb-3">
-            <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage-1)"><i class="fa fa-arrow-left pe-1"></i> Back</button>
+            <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage-1)"><i
+                class="fa fa-arrow-left pe-1"></i> Back</button>
           </div>
           <div class="col-md-12 d-flex justify-content-between">
             <div class="form-group">
@@ -132,8 +134,8 @@
             <div class="col-md-3">
               <div class="form-group has-search">
                 <span class="fa fa-search form-control-feedback"></span>
-                <input type="text" class="form-control" placeholder="Search" (keydown.enter)="filterAdHocComponent($event)"
-                  (keydown.esc)="resetAdHocFilter($event)">
+                <input type="text" class="form-control" placeholder="Search"
+                  (keydown.enter)="filterAdHocComponent($event)" (keydown.esc)="resetAdHocFilter($event)">
               </div>
             </div>
           </div>
@@ -240,65 +242,62 @@
           </div>
         </div>
         <!-- <form [formGroup]="addComponentForm" *ngIf="addComponentForm"> -->
-          <div class="t-table mt-5 t-list t-border col-md-12 my-3">
-            <div class="hide-bar bg-light"></div>
-            <div class="t-head bg-light fw-bold">
-              <div class="tr">
-                <div class="th  fe-3 text-truncate ps-3">
-                  COMPONENT NAME
-                </div>
-                <div class="th text-truncate ps-3">
-                  TYPE
-                </div>
-                <div class="th text-truncate ps-3">
-                  TAX EXEMPT
-                </div>
-                <div class="th text-truncate ps-3">
-                  REQUIRE DOCS
-                </div>
-                <div class="th text-truncate ps-3">
-                  INDIVIDUAL OVERRIDE
-                </div>
-                <div class="th text-truncate ps-3">
-                  ACTIONS
-                </div>
+        <div class="t-table mt-5 t-list t-border col-md-12 my-3">
+          <div class="hide-bar bg-light"></div>
+          <div class="t-head bg-light fw-bold">
+            <div class="tr">
+              <div class="th  fe-3 text-truncate ps-3">
+                COMPONENT NAME
               </div>
-            </div>
-            <div class="t-body custom-height">
-              <div class="tr py-2" *ngFor="let item of salaryComponentFields">
-                <div class="td fe-3 ps-3 text-truncate">
-                  {{item.ComponentId}} ({{item.ComponentFullName}})
-                </div>
-                <div class="td ps-3 text-truncate">
-                  <ng-container [ngSwitch]="item.ComponentTypeId">
-                    <ng-container *ngSwitchCase="2">Allowance</ng-container>
-                    <ng-container *ngSwitchCase="1">Fixed</ng-container>
-                    <ng-container *ngSwitchCase="3">Rembursment</ng-container>
-                    <ng-container *ngSwitchCase="4">Reimursable</ng-container>
-                  </ng-container>
-                </div>
-                <div class="td ps-3 text-truncate">
-                  <ng-conatiner [ngSwitch]="item.TaxExempt">
-                    <ng-conatiner *ngSwitchCase="true">
-                      Tax Exempt
-                      <small class="text-muted d-block">Section {{item.Section}}</small>
-                    </ng-conatiner>
-                    <ng-conatiner *ngSwitchCase="false">Taxable</ng-conatiner>
-                  </ng-conatiner>
-                </div>
-                <div class="td ps-3 text-truncate">
-                  {{item.RequireDocs}}
-                </div>
-                <!-- <div class="td ps-3 text-truncate">
-                  {{item.IsAllowtoOverride}}
-                </div> -->
-                <div class="td ps-3">
-                  <input class="form-check-input" [checked]="item.IsActive == true" type="checkbox"
-                    (click)="addComponent($event, item)">
-                </div>
+              <div class="th text-truncate ps-3">
+                TYPE
+              </div>
+              <div class="th text-truncate ps-3">
+                TAX EXEMPT
+              </div>
+              <div class="th text-truncate ps-3">
+                REQUIRE DOCS
+              </div>
+              <div class="th text-truncate ps-3">
+                ACTIONS
               </div>
             </div>
           </div>
+          <div class="t-body custom-height">
+            <div class="tr py-2" *ngFor="let item of salaryComponentFields">
+              <div class="td fe-3 ps-3 text-truncate">
+                {{item.ComponentId}} ({{item.ComponentFullName}})
+              </div>
+              <div class="td ps-3 text-truncate">
+                <ng-container [ngSwitch]="item.ComponentTypeId">
+                  <ng-container *ngSwitchCase="2">Allowance</ng-container>
+                  <ng-container *ngSwitchCase="1">Fixed</ng-container>
+                  <ng-container *ngSwitchCase="3">Rembursment</ng-container>
+                  <ng-container *ngSwitchCase="4">Reimursable</ng-container>
+                </ng-container>
+              </div>
+              <div class="td ps-3 text-truncate">
+                <ng-conatiner [ngSwitch]="item.TaxExempt">
+                  <ng-conatiner *ngSwitchCase="true">
+                    Tax Exempt
+                    <small class="text-muted d-block">Section {{item.Section}}</small>
+                  </ng-conatiner>
+                  <ng-conatiner *ngSwitchCase="false">Taxable</ng-conatiner>
+                </ng-conatiner>
+              </div>
+              <div class="td ps-3 text-truncate">
+                {{item.RequireDocs}}
+              </div>
+              <!-- <div class="td ps-3 text-truncate">
+                  {{item.IsAllowtoOverride}}
+                </div> -->
+              <div class="td ps-3">
+                <input class="form-check-input" [checked]="item.IsOpted == true" type="checkbox"
+                  (click)="addComponent($event, item)">
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- </form> -->
       </div>
       <div class="modal-footer border-top-0">
@@ -325,7 +324,7 @@
       <div class="modal-body px-5">
         <form [formGroup]="editSalaryComponent">
           <div class="form-check my-2">
-            <input class="form-check-input" formControlName="IsActive" type="checkbox" id="flexCheckChecked">
+            <input class="form-check-input" formControlName="IsOpted" type="checkbox" id="flexCheckChecked">
             <label class="form-check-label" for="flexCheckChecked">
               Activate this component
             </label>

@@ -131,3 +131,10 @@
   border-right: 6px solid transparent;
   transform: rotate(180deg);
 }
+
+.status-icon {
+  margin-bottom: -0.09rem !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
