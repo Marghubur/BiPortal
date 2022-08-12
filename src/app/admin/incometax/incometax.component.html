@@ -359,7 +359,8 @@
                                 </ng-container>
                               </div>
                               <div class="th ps-3">{{item.DeclaredValue}}</div>
-                              <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
+                              <div class="th pe-3 text-end" *ngIf="item.ComponentId != 'HRA'">{{item.DeclaredValue}}</div>
+                              <div class="th pe-3 text-end" *ngIf="item.ComponentId == 'HRA'">{{allDeclarationSalaryDetails.HRADeatils.HRAAmount}}</div>
                             </div>
                           </ng-container>
                           <div class="tr py-3">
@@ -394,7 +395,7 @@
                           <div class="th ps-3 fe-4">STANDARD DEDUCTION</div>
                           <div class="th ps-3">
                             <ng-container >
-                              <a href="javascript:void(0)" class="text-decoration-none">View Detail</a>
+                              <a href="javascript:void(0)" (click)="viewStandardDeductionPopUp()" class="text-decoration-none">View Detail</a>
                             </ng-container>
                           </div>
                           <div class="th ps-3"></div>
@@ -442,7 +443,7 @@
                           <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
                             <div class="th ps-3">{{item.Section}}</div>
                             <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
-                            <div class="th ps-3">View Details</div>
+                            <div class="th ps-3"></div>
                             <div class="th ps-3">{{item.DeclaredValue}}</div>
                             <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
                           </div>
@@ -518,7 +519,7 @@
                     </div>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="SurChargesAndCess > 0">
+                <ng-container *ngIf="allDeclarationSalaryDetails.SurChargesAndCess > 0">
                   <div class="d-flex py-3 align-items-center">
                     <div class="pointable-text ms-2 px-2">Q</div>
                     <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Surcharge & Cess</h5>
@@ -641,16 +642,16 @@
 <!-- View HRA Modal -->
 <div class="modal fade" id="viewHRAModal" tabindex="-1" aria-labelledby="viewHRAModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content ps-4">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="viewHRAModalLabel">HRA (HOUSE RENT ALLOWANCE) DETAILS</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="t-table t-list border-0 col-md-12 bg-white">
-          <div class="t-head overflow-hidden">
-            <div class="tr border-bottom-0">
-              <div class="th ps-2">MONTH</div>
+          <div class="t-head overflow-hidden border-bottom">
+            <div class="tr align-items-center border-bottom-0">
+              <div class="th">MONTH</div>
               <div class="th">RENT PAID</div>
               <div class="th">ACTUAL HRA(1)</div>
               <div class="th">LOCATION BASED HRA(2)</div>
@@ -659,21 +660,49 @@
             </div>
           </div>
           <div class="t-head overflow-hidden">
-            <div class="tr text-dark py-2" *ngFor="let item of 12">
-              <div class="td ps-2">{{salaryDetail.GrossIncome | number}}</div>
-              <div class="td ps-2">{{allDeclarationSalaryDetails.TotalAmount | number}}</div>
-              <div class="td ps-2">{{allDeclarationSalaryDetails.SurChargesAndCess}}</div>
-              <div class="td ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay | number}}</div>
-              <div class="td ps-2">{{allDeclarationSalaryDetails.TaxPaid | number}}</div>
-              <div class="td ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid  | number}}</div>
+            <div class="tr py-2" *ngFor="let item of hraDetails">
+              <div class="td">{{item.Month}}</div>
+              <div class="td">{{item.RentPaid/12 | number}}</div>
+              <div class="td">{{item.HRA1/12 | number}}</div>
+              <div class="td">{{item.HRA2/12 | number}}</div>
+              <div class="td">{{item.HRA3/12 | number}}</div>
+              <div class="td">{{item.Min/12 | number}}</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+<!-- View Standard Deduction Modal -->
+<div class="modal fade" id="standardDeductionModal" tabindex="-1" aria-labelledby="standardDeductionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content ps-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="standardDeductionModalLabel">STANDARD DEDUCTIONS DETAILS</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="t-table t-list border-0 col-md-12 bg-white">
+          <div class="t-head overflow-hidden border-bottom">
+            <div class="tr align-items-center border-bottom-0">
+              <div class="th">MONTH</div>
+              <div class="th">AMOUNT</div>
+              <div class="th">SOURCE</div>
+            </div>
+          </div>
+          <div class="t-head overflow-hidden">
+            <div class="tr py-2" *ngFor="let item of standardDeductionDetails">
+              <div class="td">{{item.Month}}</div>
+              <div class="td">{{item.Amount/12 | number}}</div>
+              <div class="td">{{item.Source}}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<!-- End -->
