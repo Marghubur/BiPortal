@@ -60,6 +60,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   salaryDetail: any = null;
   completeSalaryBreakup: SalaryBreakupDetails = new SalaryBreakupDetails();
   addUpdateClientForm: FormGroup = null;
+  leavePlans: Array<any> = [];
 
   get f() {
     let data = this.employeeForm.controls;
@@ -86,7 +87,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       value: 0,
       text: "Default Manager"
     });
-    this.managerList.className="";
+    this.managerList.className = "dd";
     // this.getAllCompany();
     // this.getAllSalaryGroup();
     this.model = this.calendar.getToday();
@@ -105,8 +106,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.AccessLevelId = null;
       this.employeeModal.CompanyId = null;
       this.employeeModal.UserTypeId = null;
-      this.isReady = true;
     }
+
     this.loadData(this.employeeUid);
   }
 
@@ -168,6 +169,18 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         });
         this.isAllocated = true;
       }
+
+      if (response.ResponseBody.LeavePlans.length > 0) {
+        this.leavePlans = response.ResponseBody.LeavePlans;
+        if (this.employeeModal.LeavePlanId == 0) {
+          let plan = this.leavePlans.find(x => x.IsDefaultPlan == 1);
+          if(plan) {
+            this.employeeModal.LeavePlanId = plan.LeavePlanId;
+          }
+        }
+      } else {
+        this.leavePlans = [];
+      }
     }
   }
 
@@ -180,7 +193,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           value: 0,
           text: "Default Manager",
         });
-        this.managerList.className ="";
+        this.managerList.className = "dd";
         let i = 0;
         let managers = res.ResponseBody.EmployeesList;
         while(i < managers.length) {
@@ -243,9 +256,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.employeeForm = this.fb.group({
       FirstName: new FormControl(this.employeeModal.FirstName, [Validators.required]),
       LastName: new FormControl(this.employeeModal.LastName, [Validators.required]),
-      Mobile: new FormControl(this.employeeModal.Mobile),
-      Email: new FormControl(this.employeeModal.Email),
+      Mobile: new FormControl(this.employeeModal.Mobile, [Validators.required]),
+      Email: new FormControl(this.employeeModal.Email, [Validators.required]),
       SecondaryMobile: new FormControl(this.employeeModal.SecondaryMobile),
+      LeavePlanId: new FormControl(this.employeeModal.LeavePlanId),
       FatherName: new FormControl(this.employeeModal.FatherName),
       MotherName: new FormControl(this.employeeModal.MotherName),
       SpouseName: new FormControl(this.employeeModal.SpouseName),
@@ -273,7 +287,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       FileId: new FormControl(this.employeeModal.FileId),
       AccessLevelId: new FormControl(this.employeeModal.AccessLevelId, [Validators.required]),
       UserTypeId: new FormControl(this.employeeModal.UserTypeId, [Validators.required]),
-      ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId, [Validators.required]),
+      ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId),
       DesignationId: new FormControl(this.employeeModal.DesignationId, [Validators.required]),
       CompanyId: new FormControl(this.currentCompanyDetail.CompanyId, [Validators.required]),
       CTC: new FormControl(this.employeeModal.CTC, [Validators.required])
@@ -333,7 +347,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (this.employeeForm.get('ReportingManagerId').errors !== null) {
       this.managerList = new autoCompleteModal();
       this.managerList.data = [];
-      this.managerList.className = "error-field";
+      this.managerList.className = "dd";
       this.managerList.placeholder = "Reporting Manager";
       this.managerList.data.push({
         value: 0,
@@ -900,10 +914,11 @@ export class EmployeeDetail {
   FileId: number = 0;
   FirstName: string = null;
   LastName: string = null;
-  Mobile: string = "XXXXXXXXXX";
-  Email: string = "example@mail.com";
+  Mobile: string = null;
+  Email: string = null;
   BranchName: string = null;
   SecondaryMobile: string = null;
+  LeavePlanId: number = 0;
   FatherName: string = null;
   CompanyId: number = null;
   MotherName: string = null;
