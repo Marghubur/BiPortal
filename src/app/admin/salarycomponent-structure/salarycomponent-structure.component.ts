@@ -43,7 +43,7 @@ export class SalarycomponentStructureComponent implements OnInit {
       if(res.ResponseBody) {
         if(res.ResponseBody.length > 0) {
           this.salaryComponentFields = res.ResponseBody
-          this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsActive);
+          this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsOpted);
           this.allAdHocComponent = res.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId > 0);
           Toast("Component structure table loaded successfully.");
         } else {
@@ -59,7 +59,7 @@ export class SalarycomponentStructureComponent implements OnInit {
     if(data) {
       if(data.length > 0) {
         this.salaryComponentFields = data
-        this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsActive);
+        this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsOpted);
         Toast("Component structure table loaded successfully.");
       } else {
         WarningToast("0 item found under this catagroy. Please add one.");
@@ -90,7 +90,7 @@ export class SalarycomponentStructureComponent implements OnInit {
       MaxLimit: new FormControl(this.currentSalaryComponent.MaxLimit),
       IsAllowtoOverride: new FormControl(this.currentSalaryComponent.IsAllowtoOverride),
       Section: new FormControl(this.currentSalaryComponent.Section),
-      IsActive: new FormControl(this.currentSalaryComponent.IsActive),
+      IsOpted: new FormControl(this.currentSalaryComponent.IsOpted),
       TaxExempt: new FormControl(this.currentSalaryComponent.TaxExempt),
       RequireDocs: new FormControl(this.currentSalaryComponent.RequireDocs),
       ComponentCatagoryId: new FormControl(this.currentSalaryComponent.ComponentCatagoryId),
@@ -101,18 +101,18 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   addComponent(event: any, item: any) {
     if (event.target.checked == true) {
-      item.IsActive = true;
+      item.IsOpted = true;
       item.ComponentCatagoryId = 1;
       item.IncludeInPayslip = true;
       this.AddActiveComponent.push(item)
     } else {
       let current = this.AddActiveComponent.find(x => x.ComponentId == item.ComponentId);
       if(current) {
-        current.IsActive = false;
+        current.IsOpted = false;
         item.IncludeInPayslip = false;
         item.ComponentCatagoryId = 0;
       } else {
-        item.IsActive = false;
+        item.IsOpted = false;
         item.ComponentCatagoryId = 0;
         item.IncludeInPayslip = false;
         this.AddActiveComponent.push(item)
@@ -172,7 +172,7 @@ export class SalarycomponentStructureComponent implements OnInit {
   }
 
   inactiveComponent() {
-    this.inactiveComponentDeatil.IsActive = false;
+    this.inactiveComponentDeatil.IsOpted = false;
     this.inactiveComponentDeatil.ComponentCatagoryId = 0;
     this.http.put(`Settings/EnableSalaryComponentDetail/${this.inactiveComponentDeatil.ComponentId}`, this.inactiveComponentDeatil)
     .then(res => {
@@ -225,7 +225,7 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   resetFilter(e: any) {
     e.target.value = '';
-    this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsActive);
+    this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsOpted);
   }
 
   resetAdHocFilter(e: any) {

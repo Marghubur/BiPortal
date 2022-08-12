@@ -152,7 +152,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.http.get("SalaryComponent/GetSalaryComponentsDetail").then(res => {
       if(res.ResponseBody) {
         let data = res.ResponseBody;
-        data = data.filter(x => x.ComponentCatagoryId != 1);
+        data = data.filter(x => x.IsAdHoc == 0);
         let i = 0;
         this.salaryComponentFields = [];
         while(i < data.length) {
