@@ -237,8 +237,9 @@
                     formControlName="ComponentTypeId" (change)="selectComponentType($event)">
                     <option value="0">Select Componet Type</option>
                     <option value="2">Allowance</option>
-                    <option value="4">Reimbursable</option>
                     <option value="3">Rembursement</option>
+                    <option value="4">Reimbursable</option>
+                    <option value="6">Perquisite</option>
                   </select>
                 </div>
               </div>
@@ -382,12 +383,13 @@
           <div class="row">
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">INCOME TAX SECTION</label>
-              <input type="text" formControlName="Section" placeholder="Enter Income Tax Section" [readonly]="!isTaxExempt" class="form-control">
+              <input type="text" formControlName="Section" placeholder="Enter Income Tax Section"
+                [readonly]="!isTaxExempt" class="form-control">
             </div>
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
-              <input type="text" OnlyNumber="9" formControlName="SectionMaxLimit" [readonly]="!isTaxExempt" placeholder="Section Maximum Limit"
-                class="form-control">
+              <input type="text" OnlyNumber="9" formControlName="SectionMaxLimit" [readonly]="!isTaxExempt"
+                placeholder="Section Maximum Limit" class="form-control">
             </div>
           </div>
         </form>
