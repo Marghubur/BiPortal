@@ -4,6 +4,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-incometax',
@@ -29,6 +30,8 @@ export class IncometaxComponent implements OnInit {
   totalSection80CExempAmount: number = 0;
   totalOtherExemptAmount: number = 0;
   isPageReady: boolean = false;
+  hraDetails: Array<any> = [];
+  standardDeductionDetails: Array<any> = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
@@ -53,27 +56,6 @@ export class IncometaxComponent implements OnInit {
       });
       i++;
     }
-
-    this.taxSlab.push({
-      taxableincomeslab: '0% Tax on income up to 250000',
-      taxamount: 0
-    },
-    {
-      taxableincomeslab: '5% Tax on income between 250001 and 500000',
-      taxamount: 12500
-    },
-    {
-      taxableincomeslab: '20% Tax on income between 500001 and 1000000',
-      taxamount: 100000
-    },
-    {
-      taxableincomeslab: '30% Tax on income above 1000000',
-      taxamount: 315000
-    },
-    {
-      taxableincomeslab: 'Gross Income Tax',
-      taxamount: 427500
-    });
 
     this.EmployeeId = this.nav.getValue();
     if(this.EmployeeId == null || this.EmployeeId <= 0){
@@ -124,7 +106,7 @@ export class IncometaxComponent implements OnInit {
           }
         }
 
-        this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance)
+        this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance) ;
         this.getSalaryGroup();
         this.isPageReady = true;
         Toast("Details get successfully")
@@ -147,13 +129,41 @@ export class IncometaxComponent implements OnInit {
     })
   }
 
-  componentTotalAmount(item: Array<any>) {
+  componentTotalAmount(value: Array<any>) {
+    let item = value.filter(x => x.ComponentId != "HRA");
     let totalAmount = 0;
     for (let i = 0; i < item.length; i++) {
       if (item[i].DeclaredValue > 0)
         totalAmount += item[i].DeclaredValue;
     }
     return totalAmount;
+  }
+
+  viewHRAPopUp() {
+    this.hraDetails = [];
+    $('#viewHRAModal').modal('show');
+    for (let i = 0; i < this.taxCalender.length; i++) {
+      this.hraDetails.push({
+        Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
+        RentPaid: (this.allDeclarationSalaryDetails.Declarations.find(x => x.DeclarationName == "House Property")).TotalAmountDeclared,
+        HRA1: this.allDeclarationSalaryDetails.HRADeatils.HRA1,
+        HRA2: this.allDeclarationSalaryDetails.HRADeatils.HRA2,
+        HRA3: this.allDeclarationSalaryDetails.HRADeatils.HRA3,
+        Min: this.allDeclarationSalaryDetails.HRADeatils.HRAAmount,
+      })
+    }
+  }
+
+  viewStandardDeductionPopUp() {
+    this.standardDeductionDetails = [];
+    $('#standardDeductionModal').modal('show');
+    for (let i = 0; i < this.taxCalender.length; i++) {
+      this.standardDeductionDetails.push({
+        Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
+        Amount: 2400,
+        Source: 'Proceed'
+      })
+    }
   }
 
   activateMe(ele: string) {

@@ -94,6 +94,7 @@ export const PFESISetup = 'admin/pfesisetup';
 export const Expenses = 'admin/expenses';
 export const ManageLeavePlan = 'admin/manageleaveplan';
 export const ManageYearEnding = 'admin/manageyearending';
+export const SalaryBreakup = 'admin/salarybreakup';
 
 // ********************** Admin route pages  *******************
 
