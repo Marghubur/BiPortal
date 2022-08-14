@@ -257,13 +257,13 @@
               </div>
             </div>
             <ng-container [ngSwitch]="ComponentType">
-              <div *ngSwitchCase="'rembursement'">
+              <div *ngSwitchCase="'3'">
                 <div class="alert alert-primary my-3 py-2 mb-0 col-md-12" role="alert">
                   Reimbursement - is part of employee CTC, the paid amount is never displayed in Form 16 and income tax
                   computation. The unpaid amount is paid as part of Special allowance.
                 </div>
               </div>
-              <div *ngSwitchCase="'reimbursable'">
+              <div *ngSwitchCase="'4'">
                 <div class="alert alert-primary my-3 py-2 mb-0 col-md-12" role="alert">
                   Reimbursable component - is part of employees CTC and is displayed as exempted/non-exempted amount in
                   Form 16 and income tax computation.

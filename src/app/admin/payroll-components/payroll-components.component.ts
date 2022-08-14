@@ -156,17 +156,7 @@ export class PayrollComponentsComponent implements OnInit {
   selectComponentType(e: any) {
     let value = e.target.value;
     if (value) {
-      switch (value) {
-        case "2":
-          this.ComponentType = "Allowance"
-          break;
-        case "3":
-          this.ComponentType = "Rembursement"
-          break;
-        case "4":
-          this.ComponentType = "Reimbursable"
-          break;
-      }
+      this.ComponentType = value;
     }
   }
 
@@ -235,14 +225,16 @@ export class PayrollComponentsComponent implements OnInit {
               this.NewSalaryForm.reset();
             }
             $('#NewComponentModal').modal('hide');
-            Toast("Component added successfully.");
-          } else
-            ErrorToast("Fail to add component. Please contact to admin.");
-          this.submitted = false;
-        })
+            Toast("Component added/updated successfully.");
+            this.submitted = false;
+            this.isLoading = false;
+          }
+        }).catch(e => {
+          this.isLoading = false;
+          ErrorToast("Fail to add component. Please contact to admin.");
+        });
       }
     }
-    this.isLoading = false;
   }
 
   addNewAdhocAllowance() {

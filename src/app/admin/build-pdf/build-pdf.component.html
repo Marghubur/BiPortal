@@ -501,7 +501,7 @@
                 </select>
               </div>
               <div class="col-auto">
-                <button class="btn btn-primary-c"><i class="fa fa-share pe-2" aria-hidden="true"></i> send email</button>
+                <button class="btn btn-primary-c"  (click)="sendEmail()"><i class="fa fa-share pe-2" aria-hidden="true"></i> send email</button>
               </div>
             </div>
             <div class="py-3">
@@ -509,8 +509,8 @@
               <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">{{billAllDetails.receiverEmail}}</span>
               <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">{{billAllDetails.senderEmail}}</span>
               <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">hr@bottomhalf.com</span>
-              <ng-container *ngFor="let email of email">
-                <span class="badge fs-6 fw-normal bg-ant text-dark ms-2 my-2">{{email}}</span>
+              <ng-container *ngFor="let email of email; let i = index">
+                <span class="badge fs-6 fw-normal bg-ant text-dark ms-2 my-2">{{email}} <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none"><i class="fa fa-close ps-2 text-dark"></i></a></span>
               </ng-container>
             </div>
             <div class="d-flex align-items-center justify-content-between">
@@ -527,7 +527,7 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" class="text-decoration-none text-danger fw-bold" (click)="closePopUp()">Cancel</a>
+        <a href="javascript:void(0)" class="text-decoration-none text-danger fw-bold" (click)="closePopUp()">Close</a>
         <!-- <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
         <a href="javascript:void(0)" class="text-decoration-none" [attr.disabled]="isLoading"
           (click)="downloadPdfDocx()" download>
