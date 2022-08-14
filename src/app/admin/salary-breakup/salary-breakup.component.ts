@@ -35,7 +35,6 @@ export class SalaryBreakupComponent implements OnInit {
       if(!data.CTC)
         data.CTC = 0;
       this.employeeCTC = data.CTC;
-      // this.getSalaryGroup(this.employeeCTC);
       this.loadData();
     } else {
       ErrorToast("Invalid employee selected")
@@ -68,20 +67,6 @@ export class SalaryBreakupComponent implements OnInit {
 
       this.initForm();
       this.isSalaryGroup = true;
-    });
-  }
-
-  getSalaryGroup(CTC: number) {
-    this.isSalaryGroup = false;
-    this.http.get(`SalaryComponent/GetSalaryGroupByCTC/${CTC}`).then(response => {
-      if(response.ResponseBody) {
-        this.salaryGroup = response.ResponseBody;
-        this.salaryGroupId = this.salaryGroup.SalaryGroupId;
-        this.salaryComponents = JSON.parse(this.salaryGroup.SalaryComponents);
-        this.salaryComponents = this.salaryComponents.filter(x => x.IncludeInPayslip == true);
-        console.log(this.salaryComponents);
-      } else
-        ErrorToast("No salary group found. Please contact to admin.")
     });
   }
 
