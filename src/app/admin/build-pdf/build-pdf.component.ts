@@ -60,6 +60,7 @@ export class BuildPdfComponent implements OnInit {
   isBillGenerated: boolean = false;
   staffingTemplateType: string = null;
   email:Array<string> = [];
+  billAllDetails: any = null;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -689,11 +690,13 @@ export class BuildPdfComponent implements OnInit {
       }
 
       let modalStatus = this.validateBillRequest(request);
+      this.billAllDetails = request;
       if(modalStatus == null) {
         this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
           if(response.ResponseBody) {
             this.downloadFile(response.ResponseBody);
             this.isBillGenerated = true;
+            this.viewTemplate();
             $('#viewFileModal').modal('show');
             Toast("Bill pdf generated successfully");
           }
@@ -952,13 +955,17 @@ export class BuildPdfComponent implements OnInit {
   }
 
   sendEmail() {
-    if (this.staffingTemplateType && this.currentOrganization.ClientId > 0 && this.senderClient.ClientId >0 && this.FileDetail.FileId > 0) {
+    // this.staffingTemplateType &&
+    if (this.currentOrganization.ClientId > 0 && this.senderClient.ClientId >0 && this.FileDetail.FileId > 0) {
       let data = {
         ClientId: this.currentOrganization.ClientId,
         SenderId: this.senderClient.ClientId,
         FileId: this.FileDetail.FileId,
-        Emails: []
+        Emails: [this.billAllDetails.receiverEmail, this.billAllDetails.senderEmail]
       };
+      for (let i = 0; i < this.email.length; i++) {
+        data.Emails.push(this.email[i])
+      }
 
       this.http.post("bill/SendBillToClient", data).then((response: ResponseModel) => {
         if (response.ResponseBody) {
@@ -982,10 +989,18 @@ export class BuildPdfComponent implements OnInit {
   addEmailId() {
     let value = (document.querySelector('input[name="add-email"]') as HTMLInputElement).value;
     var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    if (value.match(validRegex))
+    if (value.match(validRegex)) {
       this.email.push(value);
+      (document.querySelector('input[name="add-email"]') as HTMLInputElement).value = '';
+    }
     else
       ErrorToast("Please enter a valid email id.");
+  }
+
+  removeEmail(index: number) {
+    if (index >-1) {
+      this.email.splice(index, 1);
+    }
   }
 }
 
