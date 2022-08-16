@@ -76,21 +76,58 @@ export class IncometaxComponent implements OnInit {
         this.ExemptionDeclaration = response.ResponseBody.ExemptionDeclaration;
         if ((this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
           this.ExemptionDeclaration = [];
-        this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
+
+          this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
         if ((this.OtherDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
           this.OtherDeclaration = [];
-        this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
+
+          this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
         if ((this.TaxSavingAlloance.filter(x => x.DeclaredValue > 0).length <= 0))
           this.TaxSavingAlloance = [];
         this.salaryDetail = response.ResponseBody.SalaryDetail;
         this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
-        let value = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
-        console.log(this.allDeclarationSalaryDetails);
-        for (let index = 0; index < 12; index++) {
-          // let total = (value.BasicAnnually + value.CarRunningAnnually+value.ConveyanceAnnually+value.HRAAnnually+value.InternetAnnually+value.TravelAnnually+value.ShiftAnnually+value.SpecialAnnually);
-          // value.Total = total;
-          this.salaryBreakup.push(value);
-        };
+
+        let annualSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        if (annualSalaryDetail && annualSalaryDetail.length == 12) {
+          let i = 0;
+          let value = "";
+          let selectedComponent = [];
+          let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName}) => { return { ComponentId, ComponentName } });
+          while(i < annualSalaryDetail.length) {
+            value = props[i].ComponentId;
+            selectedComponent = annualSalaryDetail.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));
+            this.salaryBreakup.push({
+              id: props[i].ComponentId,
+              key: props[i].ComponentName,
+              total: selectedComponent.reduce((acc, cur) => { return acc + cur.FinalAmount; }, 0),
+              value: selectedComponent
+            });
+
+            i++;
+          }
+
+          i = 0;
+          let totalAmount = 0;
+          let finalAmount = 0;
+          let totalAmounts: Array<any> = [];
+          while(i < annualSalaryDetail.length) {
+            totalAmount = annualSalaryDetail[i].SalaryBreakupDetails.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+            finalAmount += totalAmount;
+            totalAmounts.push({ FinalAmount: totalAmount });
+            i++;
+          }
+
+          this.salaryBreakup.push({
+            key: 'Total',
+            total: finalAmount,
+            value: totalAmounts
+          });
+
+        } else {
+          ErrorToast("Unable to get salary detail. Please contact to admin.");
+          return;
+        }
+
         let hraComponent = this.allDeclarationSalaryDetails.SalaryComponentItems.find(x => x.ComponentId == "HRA" && x.DeclaredValue > 0);
         if (hraComponent)
           this.TaxSavingAlloance.push(hraComponent);

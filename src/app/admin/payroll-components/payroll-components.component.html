@@ -221,8 +221,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="NewComponentModalLabel">{{CurrentRecurringComponent.ComponentId == ''? 'ADD NEW ':
-          'UPDATE'}} SALARY COMPONENT - {{ComponentType == '2' ? 'ALLOWANCE' : ComponentType == '3' ? 'REBURSEMENT' : ComponentType == '4' ? 'REIMBURSABLE' : 'PREQUISITE'}}</h5>
+        <h5 class="modal-title" id="NewComponentModalLabel">SALARY COMPONENT</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -236,10 +235,11 @@
                     [ngClass]="{'error-field': submitted && f.Type.errors !== null && f.Type.errors.required}"
                     formControlName="ComponentTypeId" (change)="selectComponentType($event)">
                     <option value="0">Select Componet Type</option>
-                    <option value="2">Allowance</option>
+                    <option value="2">Allowance (By: Employee)</option>
                     <option value="3">Rembursement</option>
                     <option value="4">Reimbursable</option>
                     <option value="6">Perquisite</option>
+                    <option value="7">Allowance (By: Employer)</option>
                   </select>
                 </div>
               </div>
@@ -274,8 +274,7 @@
           <div class="row col-md-12">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" [readonly]="CurrentRecurringComponent.ComponentId != '' || ComponentType == ''"
-                oninput="this.value = this.value.toUpperCase()"
+              <input type="text" oninput="this.value = this.value.toUpperCase()"
                 [ngClass]="{'error-field': submitted && f.ComponentName.errors !== null && f.ComponentName.errors.required}"
                 formControlName="ComponentName" placeholder="Component Name" class="form-control">
             </div>
