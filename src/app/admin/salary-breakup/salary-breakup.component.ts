@@ -21,7 +21,6 @@ export class SalaryBreakupComponent implements OnInit {
   salaryDetail: any = null;
   employeeCTC: number = 0;
   employeeDetails: any = null;
-  annualCTC: number = 0;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -45,46 +44,61 @@ export class SalaryBreakupComponent implements OnInit {
     this.isSalaryGroup = false;
     this.isReady = false;
     this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.employeeUid}`).then(res => {
+      let completeSalaryDetail = [];
       if(res.ResponseBody) {
         this.salaryDetail = res.ResponseBody;
         if (this.salaryDetail.CompleteSalaryDetail != null && this.salaryDetail.CompleteSalaryDetail != '{}') {
-          this.salaryComponents = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
-          this.isReady = true;
+          completeSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
         } else {
-          this.salaryComponents = [];
+          ErrorToast("Fail to get salary detail. Please contact to admin.");
+          return;
         }
       } else {
-          this.salaryDetail = {
-            EmployeeId: 0,
-            CTC: 0,
-            GrossIncome: 0,
-            NetSalary: 0,
-            CompleteSalaryDetail: null,
-            GroupId: 0,
-            TaxDetail: null
-          };
+        this.salaryDetail = {
+          EmployeeId: 0,
+          CTC: 0,
+          GrossIncome: 0,
+          NetSalary: 0,
+          CompleteSalaryDetail: null,
+          GroupId: 0,
+          TaxDetail: null
+        };
       }
 
-      this.initForm();
-      this.isSalaryGroup = true;
+      this.buildAndBindData(completeSalaryDetail);
     });
+  }
+
+  buildAndBindData(completeSalaryDetail: any) {
+    if (completeSalaryDetail && completeSalaryDetail.length > 0) {
+      let presentMonth = new Date().getMonth() + 1;
+      let singleDetail = completeSalaryDetail.find(x => x.MonthNumber == presentMonth);
+
+      if (singleDetail) {
+        this.salaryComponents = singleDetail.SalaryBreakupDetails;
+        this.isReady = true;
+      } else {
+        ErrorToast("Fail to get salary detail. Please contact to admin.");
+        return;
+      }
+    } else {
+      this.salaryComponents = [];
+    }
+
+    this.initForm();
+    this.isSalaryGroup = true;
   }
 
   saveSalaryBreakup() {
     this.isLoading = true;
     let value = this.salaryBreakupForm.value;
     if (value) {
-      let empSalary = {
-        EmployeeId: this.employeeUid,
-        CTC: value.ExpectedCTC,
-        GrossIncome: value.GrossAnnually,
-        NetSalary: 0,
-        GroupId: this.salaryGroupId
-      }
+      let presentMonth = new Date().getMonth() + 1;
+      let presentYear = new Date().getFullYear();
       let formData = new FormData();
       formData.append('completesalarydetail', JSON.stringify(value));
-      formData.append('salarydeatil', JSON.stringify(empSalary));
-      this.http.post(`SalaryComponent/InsertUpdateSalaryBreakUp/${this.employeeUid}`, formData).then(res => {
+      this.http.post(`SalaryComponent/InsertUpdateSalaryBreakUp/
+          ${this.employeeUid}/${presentMonth}/${presentYear}`, formData).then(res => {
         if (res.ResponseBody) {
           Toast("Salary breakup added successfully.");
           this.isLoading = false;
@@ -97,54 +111,81 @@ export class SalaryBreakupComponent implements OnInit {
 
   initForm() {
     this.salaryBreakupForm = this.fb.group({
-      Components: this.buildItems()
+      Components: this.buildComponents()
     });
   }
 
-  buildItems(): FormArray {
-    let itemArray = this.fb.array(
-      this.salaryComponents.map((elem, index) => {
-        return this.addGroupItems(elem)
-      })
-    );
+  buildComponents(): FormArray {
+    let i = 0;
+    let elems = [];
+    let flag = false;
+    let finalItemArray: FormArray = this.fb.array([]);
+    while(i < 6) {
+      flag = false;
+      switch(i) {
+        case 0: // fixed
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 2);
+          break;
+        case 1: // special
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 102);
+          flag = true;
+          break;
+        case 2: // perquisite
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 6);
+          break;
+        case 3: // gross
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 100);
+          flag = true;
+          break;
+        case 4: // employer
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 7);
+          break;
+        case 5: // ctc
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 101);
+          flag = true;
+          break;
+      }
 
-    return itemArray;
+      this.fb.array(
+        elems.map((elem, index) => {
+          finalItemArray.push(this.addGroupItems(elem, flag))
+        })
+      );
+
+      i++;
+    }
+
+    return finalItemArray;
   }
 
-  addGroupItems(item: any): FormGroup {
+  addGroupItems(item: any, flag: boolean): FormGroup {
     return this.fb.group({
       ComponentId: new FormControl(item.ComponentId),
       ComponentName: new FormControl(item.ComponentName),
-      FinalAmount: new FormControl(item.FinalAmount),
-      AnnualAmount: new FormControl(item.FinalAmount * 12),
+      FinalAmount: new FormControl(item.FinalAmount * 12),
+      MonthlyAmount: new FormControl(ToFixed(item.FinalAmount, 2)),
+      ComponentTypeId: new FormControl(item.ComponentTypeId),
+      IsHighlight: new FormControl(flag),
     });
   }
 
 
   calculateSalary() {
-    this.annualCTC = Number(this.annualCTC);
-    if (!isNaN(this.annualCTC) && this.annualCTC > 0) {
+    this.employeeCTC = Number(this.employeeCTC);
+    if (!isNaN(this.employeeCTC) && this.employeeCTC > 0) {
       this.salaryCalculation();
     }
   }
 
   salaryCalculation() {
-    if (this.annualCTC > 0) {
+    if (this.employeeCTC > 0) {
       this.isSalaryGroup = true;
-      this.http.get(`SalaryComponent/SalaryBreakupCalc/${this.employeeUid}/${this.annualCTC}`)
+      this.http.get(`SalaryComponent/SalaryBreakupCalc/${this.employeeUid}/${this.employeeCTC}`)
       .then(res => {
         if (res.ResponseBody) {
-          let components = res.ResponseBody.filter(x => x.ComponentId != 'GROSSINCOME');
-          if (components.length > 0) {
-            this.salaryComponents = res.ResponseBody;
-            this.initForm();
-          } else {
-            ErrorToast("Fail to get salary comonents. Please contact to admin.");
-          }
-
-          this.isReady = true;
+          this.buildAndBindData(res.ResponseBody);
         }
-      })
+      });
     }
   }
 }

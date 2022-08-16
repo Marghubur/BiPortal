@@ -2,16 +2,20 @@
   <div class="col-md-12 bg-light mb-3">
     <ul class="nav">
       <li class="nav-item">
-        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('declaration-tab')" aria-current="page" href="javascript:void(0)">DECLARATION</a>
+        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('declaration-tab')" aria-current="page"
+          href="javascript:void(0)">DECLARATION</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark nav-active" id="timesheet-tab" (click)="activateMe('salary-tab')" href="javascript:void(0)">SALARY</a>
+        <a class="nav-link text-dark nav-active" id="timesheet-tab" (click)="activateMe('salary-tab')"
+          href="javascript:void(0)">SALARY</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')" href="javascript:void(0)">SUMMARY</a>
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')"
+          href="javascript:void(0)">SUMMARY</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">Preference</a>
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')"
+          href="javascript:void(0)">Preference</a>
       </li>
     </ul>
   </div>
@@ -25,8 +29,8 @@
           <div class="col-md-12 bg-light mb-3 mt-3">
             <ul class="nav">
               <li class="nav-item">
-                <a class="nav-link new-nav-link text-dark" id="attendance-tab"
-                  (click)="activeTab('MySalary')" aria-current="page" href="javascript:void(0)">My Salary</a>
+                <a class="nav-link new-nav-link text-dark" id="attendance-tab" (click)="activeTab('MySalary')"
+                  aria-current="page" href="javascript:void(0)">My Salary</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link text-dark" id="timesheet-tab" (click)="activeTab('PaySlips')"
@@ -38,7 +42,7 @@
               </li>
             </ul>
           </div>
-          <ng-container >
+          <ng-container>
             <div class="custom-bg mt-3">
               <div class="d-flex justify-content-between">
                 <p class="fs-4 pt-3 ps-3">
@@ -91,7 +95,8 @@
                         <div class="th ps-2">{{allDeclarationSalaryDetails.SurChargesAndCess}}</div>
                         <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay | number}}</div>
                         <div class="th ps-2">{{allDeclarationSalaryDetails.TaxPaid | number}}</div>
-                        <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid  | number}}</div>
+                        <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay -
+                          allDeclarationSalaryDetails.TaxPaid | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -137,174 +142,22 @@
                       </div>
                     </div>
                     <div class="t-body overflow-hidden">
-                      <ng-container>
+                      <ng-container *ngFor="let item of salaryBreakup">
                         <div class="tr text-dark py-3">
                           <div class="td ps-2 fe-3">
                             <div class="cell-wrapper">
-                              Basic
+                              {{item.key}}
                             </div>
                           </div>
                           <div class="td fe-1">
                             <div class="cell-wrapper">
-                              {{salaryBreakup[0].BasicAnnually | number: '1.2-2'}}
+                              {{item.total | number: '1.2-2'}}
                             </div>
                           </div>
-                          <ng-container *ngFor="let item of salaryBreakup">
+                          <ng-container *ngFor="let elem of item.value">
                             <div class="td fe-1">
                               <div class="cell-wrapper">
-                                {{item.BasicAnnually/12 | number: '1.2-2'}}
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                        <div class="tr text-dark py-3">
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              Conveyance Allowance
-                            </div>
-                          </div>
-                          <div class="td fe-1">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup[0].ConveyanceAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
-                          <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td fe-1">
-                              <div class="cell-wrapper">
-                                {{item.ConveyanceAnnually/12 | number: '1.2-2'}}
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                        <div class="tr text-dark py-3">
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              HRA
-                            </div>
-                          </div>
-                          <div class="td fe-1">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup[0].HRAAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
-                          <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td fe-1">
-                              <div class="cell-wrapper">
-                                {{item.HRAAnnually/12 | number: '1.2-2'}}
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                        <div class="tr text-dark py-3">
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              Car Running Allowance
-                            </div>
-                          </div>
-                          <div class="td fe-1">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup[0].CarRunningAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
-                          <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td fe-1">
-                              <div class="cell-wrapper">
-                                {{item.CarRunningAnnually/12 | number: '1.2-2'}}
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                        <div class="tr text-dark py-3">
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              Telephone and Internet Allowance
-                            </div>
-                          </div>
-                          <div class="td fe-1">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup[0].InternetAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
-                          <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td fe-1">
-                              <div class="cell-wrapper">
-                                {{item.InternetAnnually/12 | number: '1.2-2'}}
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                        <div class="tr text-dark py-3">
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              Travel Reimburesment(LTA)
-                            </div>
-                          </div>
-                          <div class="td fe-1">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup[0].TravelAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
-                          <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td fe-1">
-                              <div class="cell-wrapper">
-                                {{item.TravelAnnually/12 | number: '1.2-2'}}
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                        <div class="tr text-dark py-3">
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              Shfit Allowance
-                            </div>
-                          </div>
-                          <div class="td fe-1">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup[0].ShiftAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
-                          <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td fe-1">
-                              <div class="cell-wrapper">
-                                {{item.ShiftAnnually/12 | number: '1.2-2'}}
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                        <div class="tr text-dark py-3">
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              Special Allowance
-                            </div>
-                          </div>
-                          <div class="td fe-1">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup[0].SpecialAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
-                          <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td fe-1">
-                              <div class="cell-wrapper">
-                                {{item.SpecialAnnually/12 | number: '1.2-2'}}
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                        <div class="tr text-dark py-3">
-                          <div class="td ps-2 fe-3">
-                            <div class="cell-wrapper">
-                              Total
-                            </div>
-                          </div>
-                          <div class="td">
-                            <div class="cell-wrapper">
-                              {{salaryBreakup[0].GrossAnnually | number: '1.2-2'}}
-                            </div>
-                          </div>
-                          <ng-container *ngFor="let item of salaryBreakup">
-                            <div class="td">
-                              <div class="cell-wrapper">
-                                {{item.GrossAnnually/12 | number: '1.2-2'}}
+                                {{elem.FinalAmount | number: '1.2-2'}}
                               </div>
                             </div>
                           </ng-container>
@@ -349,31 +202,33 @@
                           <div class="th pe-3">DECLARED AMOUNT</div>
                           <div class="th pe-3 text-end">DEDUCTABLE AMOUNT</div>
                         </div>
-                          <ng-container *ngFor="let item of TaxSavingAlloance">
-                            <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
-                              <div class="th ps-3">{{item.Section}}</div>
-                              <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
-                              <div class="th ps-3 fe-1">
-                                <ng-container *ngIf="item.ComponentId == 'HRA'">
-                                  <a href="javascript:void(0)" (click)="viewHRAPopUp()" class="text-decoration-none">View Detail</a>
-                                </ng-container>
-                              </div>
-                              <div class="th ps-3">{{item.DeclaredValue}}</div>
-                              <div class="th pe-3 text-end" *ngIf="item.ComponentId != 'HRA'">{{item.DeclaredValue}}</div>
-                              <div class="th pe-3 text-end" *ngIf="item.ComponentId == 'HRA'">{{allDeclarationSalaryDetails.HRADeatils.HRAAmount}}</div>
+                        <ng-container *ngFor="let item of TaxSavingAlloance">
+                          <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
+                            <div class="th ps-3">{{item.Section}}</div>
+                            <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
+                            <div class="th ps-3 fe-1">
+                              <ng-container *ngIf="item.ComponentId == 'HRA'">
+                                <a href="javascript:void(0)" (click)="viewHRAPopUp()" class="text-decoration-none">View
+                                  Detail</a>
+                              </ng-container>
                             </div>
-                          </ng-container>
-                          <div class="tr py-3">
-                            <div class="td ps-3">Total</div>
-                            <div class="td ps-3 fe-4"></div>
-                            <div class="td ps-3"></div>
-                            <div class="td pe-3"></div>
-                            <div class="td pe-3 text-end">{{totalAllowTaxExemptAmount}}</div>
+                            <div class="th ps-3">{{item.DeclaredValue}}</div>
+                            <div class="th pe-3 text-end" *ngIf="item.ComponentId != 'HRA'">{{item.DeclaredValue}}</div>
+                            <div class="th pe-3 text-end" *ngIf="item.ComponentId == 'HRA'">
+                              {{allDeclarationSalaryDetails.HRADeatils.HRAAmount}}</div>
                           </div>
+                        </ng-container>
+                        <div class="tr py-3">
+                          <div class="td ps-3">Total</div>
+                          <div class="td ps-3 fe-4"></div>
+                          <div class="td ps-3"></div>
+                          <div class="td pe-3"></div>
+                          <div class="td pe-3 text-end">{{totalAllowTaxExemptAmount}}</div>
+                        </div>
                       </div>
                     </div>
                   </ng-container>
-                  <ng-container >
+                  <ng-container>
                     <h6 class="ms-5 py-3 text-dark">Less: Section 16 Tax Exemptions</h6>
                     <div class="t-table t-border t-list bg-white ms-5">
                       <div class="t-head overflow-hidden">
@@ -394,8 +249,9 @@
                           <div class="th ps-3">16(iA)</div>
                           <div class="th ps-3 fe-4">STANDARD DEDUCTION</div>
                           <div class="th ps-3">
-                            <ng-container >
-                              <a href="javascript:void(0)" (click)="viewStandardDeductionPopUp()" class="text-decoration-none">View Detail</a>
+                            <ng-container>
+                              <a href="javascript:void(0)" (click)="viewStandardDeductionPopUp()"
+                                class="text-decoration-none">View Detail</a>
                             </ng-container>
                           </div>
                           <div class="th ps-3"></div>
@@ -415,7 +271,8 @@
                       <div class="t-head overflow-hidden">
                         <div class="tr py-3 border-bottom-0">
                           <div class="th fw-bold ps-3">Taxable Amount under Head "Salaries</div>
-                          <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 | number}}</div>
+                          <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount -
+                            52400 | number}}</div>
                         </div>
                       </div>
                     </div>
@@ -423,7 +280,8 @@
                       <div class="t-head overflow-hidden">
                         <div class="tr py-3 border-bottom-0">
                           <div class="th fw-bold ps-3">Total Gross from all Heads</div>
-                          <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 | number}}</div>
+                          <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount -
+                            52400 | number}}</div>
                         </div>
                       </div>
                     </div>
@@ -490,11 +348,13 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3">
                         <div class="th fw-bold ps-3">Total Taxable Amount</div>
-                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 - totalOtherExemptAmount - totalSection80CExempAmount| number}}</div>
+                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount -
+                          52400 - totalOtherExemptAmount - totalSection80CExempAmount| number}}</div>
                       </div>
                       <div class="tr py-3 border-bottom-0">
                         <div class="th ps-3">Net taxable income is</div>
-                        <div class="th pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 - totalOtherExemptAmount - totalSection80CExempAmount| number}}</div>
+                        <div class="th pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 -
+                          totalOtherExemptAmount - totalSection80CExempAmount| number}}</div>
                       </div>
                     </div>
                   </div>
@@ -512,7 +372,8 @@
                       </div>
                     </div>
                     <div class="t-body overflow-hidden">
-                      <div class="tr tax-slab text-dark py-3" *ngFor="let item of allDeclarationSalaryDetails.IncomeTaxSlab">
+                      <div class="tr tax-slab text-dark py-3"
+                        *ngFor="let item of allDeclarationSalaryDetails.IncomeTaxSlab">
                         <div class="td ps-1">{{item[0]}}</div>
                         <div class="td ps-1 text-end pe-3">{{item[1]}}</div>
                       </div>
@@ -561,7 +422,8 @@
                         <div class="th pe-3 text-end">{{allDeclarationSalaryDetails.TaxNeedToPay | number}}</div>
                       </div>
                       <div class="tr border-bottom-0 py-3">
-                        <div class="th ps-2">Net tax amount of {{allDeclarationSalaryDetails.TaxNeedToPay | number}} after round Off is</div>
+                        <div class="th ps-2">Net tax amount of {{allDeclarationSalaryDetails.TaxNeedToPay | number}}
+                          after round Off is</div>
                         <div class="th pe-3 text-end">{{allDeclarationSalaryDetails.TaxNeedToPay | number}}</div>
                       </div>
                     </div>
@@ -584,7 +446,8 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr border-bottom-0 py-3">
                         <div class="th ps-2 fw-bold">Remaining Tax To Be Paid</div>
-                        <div class="th pe-3 fw-bold text-end">{{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid  | number}}</div>
+                        <div class="th pe-3 fw-bold text-end">{{allDeclarationSalaryDetails.TaxNeedToPay -
+                          allDeclarationSalaryDetails.TaxPaid | number}}</div>
                       </div>
                     </div>
                   </div>
@@ -677,7 +540,8 @@
 <!-- End -->
 
 <!-- View Standard Deduction Modal -->
-<div class="modal fade" id="standardDeductionModal" tabindex="-1" aria-labelledby="standardDeductionModalLabel" aria-hidden="true">
+<div class="modal fade" id="standardDeductionModal" tabindex="-1" aria-labelledby="standardDeductionModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content ps-4">
       <div class="modal-header border-bottom-0">
