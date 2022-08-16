@@ -380,11 +380,11 @@ export class CustomsalaryStructureComponent implements OnInit {
         case 'gross':
           index = 1;
           break;
-        case 'net':
-          index = 2;
-          break;
+        // case 'net':
+        //   index = 2;
+        //   break;
         case 'basic':
-          index = 3;
+          index = 2;
           break;
       }
 
