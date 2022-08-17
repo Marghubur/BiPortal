@@ -403,7 +403,7 @@
                 <option value="">Select leave type</option>
                 <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveTypes">
                   <div class="col-md-12">
-                    {{l.PlanName}}
+                    {{l.PlanName}} [{{l.AvailableLeave}}]
                   </div>
                 </option>
               </select>

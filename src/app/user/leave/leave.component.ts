@@ -360,16 +360,16 @@ export class LeaveComponent implements OnInit {
           }
         }
 
-        for (let i = 0; i < this.leaveTypes.length; i++) {
-          let value = this.leaveData.filter(x => x.LeaveType == this.leaveTypes[i].LeavePlanTypeId);
-          if (value.length > 0) {
-            let totalDays = 0;
-            for (let j = 0; j < value.length; j++) {
-              totalDays +=  value[j].NoOfDays;
-            }
-            this.leaveTypes[i].TotalLeaveTaken = totalDays
-          };
-        }
+        // for (let i = 0; i < this.leaveTypes.length; i++) {
+        //   let value = this.leaveData.filter(x => x.LeaveType == this.leaveTypes[i].LeavePlanTypeId);
+        //   if (value.length > 0) {
+        //     let totalDays = 0;
+        //     for (let j = 0; j < value.length; j++) {
+        //       totalDays +=  value[j].NoOfDays;
+        //     }
+        //     this.leaveTypes[i].TotalLeaveTaken = totalDays
+        //   };
+        // }
 
         if(leaveDetail.length > 0)
           this.employeeData.TotalRecords = leaveDetail[0].Total;
