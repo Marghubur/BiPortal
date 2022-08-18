@@ -1,0 +1,77 @@
+<div class="col-md-12 col-sm-12 main-container">
+  <div class="x_panel">
+    <div class="x_header">
+      <h2>Email service</h2>
+      <div class="clearfix"></div>
+    </div>
+    <div>
+      <ul class="list-group">
+        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">An item</a></li>
+        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">A second item</a></li>
+        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">A third item</a></li>
+        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">A fourth item</a></li>
+        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">And a fifth one</a></li>
+      </ul>
+      <div class="compose-container float-end shadow-lg mt-4 me-3 rounded-circle d-flex align-items-center justify-content-center" (click)="composeMailPopUp()">
+        <a href="javascript:void(0)" class="text-decoration-none text-dark"><i class="fa fa-pencil fa-lg text-white"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Compose Mail Modal -->
+<div class="modal fade" id="composeMailModal" tabindex="-1" aria-labelledby="composeMailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="composeMailModalLabel">New Message</h5>
+        <div>
+          <a href="javascript:void(0)" class="text-decoration-none" (click)="minimizeMailBox()">
+            <i class="fa fa-minus px-2 text-dark"></i>
+          </a>
+          <a href="javascript:void(0)" class="text-decoration-none" (click)="maximizeMailbox()">
+            <i class="fa fa-window-maximize px-2 text-dark"></i>
+          </a>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="emailForm">
+          <div class="email-address-box border-bottom d-flex align-items-center"   [ngClass]="{'error-field': isSubmitted && f.To.errors != null && f.To.errors.required}">
+            <label for="to-email-address" class="form-label fs-5 m-0 pe-1 d-none">To</label>
+            <input type="text" class="form-control border-0 fs-5 py-3" formControlName="To" placeholder="Receipents" (click)="emailAddress()">
+            <div class="col-auto float-end d-none" data-name="Cc-Bcc-address">
+              <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
+              <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
+            </div>
+          </div>
+          <div class="email-address-box border-bottom d-flex align-items-center d-none" data-name="Cc-address">
+            <label for="Cc-email-address" class="form-label fs-5 m-0 pe-1">Cc</label>
+            <input type="text" class="form-control border-0 fs-5 py-3" formControlName="CC" >
+            <div class="col-auto float-end" data-name="Add-Bcc-btn">
+              <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
+            </div>
+          </div>
+          <div class="email-address-box border-bottom d-flex align-items-center d-none" data-name="Bcc-address">
+            <label for="Bcc-email-address" class="form-label fs-5 m-0 pe-1">Bcc</label>
+            <input type="text" class="form-control border-0 fs-5 py-3" formControlName="BCC">
+            <div class="col-auto float-end" data-name="Add-Cc-btn">
+              <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
+            </div>
+          </div>
+          <div class="email-address-box"  [ngClass]="{'error-field': isSubmitted && f.Subject.errors != null && f.Subject.errors.required}">
+            <input type="text" class="form-control border-0 border-bottom py-3 fs-5" formControlName="Subject" placeholder="Subject">
+          </div>
+          <div class="message-box">
+            <textarea class="form-control border-0 py-3 fs-5 small-message-box" formControlName="Body"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0 justify-content-start">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-outline-primary" [disabled]="isLoading" (click)="sendEmailRequest()"><i class="fa " [ngClass]="{'fa-send-o': !isLoading, 'fa-spin fa-spinner': isLoading}"></i><span class="ps-2">{{ isLoading ? 'Wait' : 'Send' }}</span></button>
+        <a href="javascript:void(0)" class="text-decoration-none ps-2"><i class="fa fa-paperclip pe-2"></i>Attach</a>
+      </div>
+    </div>
+  </div>
+</div>

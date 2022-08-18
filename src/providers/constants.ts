@@ -95,6 +95,7 @@ export const Expenses = 'admin/expenses';
 export const ManageLeavePlan = 'admin/manageleaveplan';
 export const ManageYearEnding = 'admin/manageyearending';
 export const SalaryBreakup = 'admin/salarybreakup';
+export const EmailService = 'admin/email';
 
 // ********************** Admin route pages  *******************
 

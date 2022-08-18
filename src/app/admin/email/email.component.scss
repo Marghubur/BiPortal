@@ -1,0 +1,29 @@
+.compose-container {
+  width: 40px;
+  height: 40px;
+  background-color: #337ab7;;
+  color: #fff;
+}
+
+.compose-container:hover {
+  box-shadow: 0 4px 12px rgba(240, 220, 6, 4%) !important;
+}
+
+.large-message-box {
+  height: 60vh;
+  resize: none;
+}
+
+.small-message-box {
+  height: 40vh;
+  resize: none;
+}
+
+.email-address-box input::placeholder {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.modal-dialog {
+
+}
