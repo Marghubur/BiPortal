@@ -91,12 +91,16 @@ export class EmailComponent implements OnInit {
     $('#composeMailModal').closest('.modal').find('.modal-body').slideUp();
     $('#composeMailModal').closest('.modal').find('.modal-footer').slideUp();
     $('#composeMailModal').closest('.modal').animate({'left':0,'bottom':0});
+    $('.modal-dialog-centered')[0].classList.remove('align-items-center', 'modal-dialog-margin');
+    $('.modal-dialog-centered')[0].classList.add('align-items-end', 'm-0');
   }
 
   normalMailBox() {
     $('#composeMailModal').closest('.modal').find('.modal-body').slideDown();
     $('#composeMailModal').closest('.modal').find('.modal-footer').slideDown();
     $('#composeMailModal').closest('.modal').animate({'left':0,'bottom':'50%'});
+    $('.modal-dialog-centered')[0].classList.remove('align-items-end', 'm-0');
+    $('.modal-dialog-centered')[0].classList.add('align-items-center', 'modal-dialog-margin');
   }
 
   maximizeMailbox() {
@@ -111,7 +115,9 @@ export class EmailComponent implements OnInit {
       elem.querySelector('.fa-window-maximize').classList.remove('fa-window-maximize');
       elem.querySelector('.small-message-box').classList.add('large-message-box');
       elem.querySelector('.large-message-box').classList.remove('small-message-box');
+      elem.querySelector('.fa-minus').classList.add('d-none');
     } else {
+      elem.querySelector('.fa-minus').classList.remove('d-none');
       this.compressMailbox();
     }
   }

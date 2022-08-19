@@ -24,6 +24,10 @@
   font-weight: 500;
 }
 
-.modal-dialog {
+.modal-dialog-margin {
+  margin: 1.75rem auto;
+}
 
+.modal-backdrop .show {
+  opacity: 1 !important;
 }
