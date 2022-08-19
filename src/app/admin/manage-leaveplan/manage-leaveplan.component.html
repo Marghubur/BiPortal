@@ -30,7 +30,8 @@
           <div class="row mt-3">
             <div class="col-md-3 panel-h">
               <div class="x_panel px-3 pt-3 pb-1">
-                <ul class="d-flex justify-content-center flex-column list-unstyled px-3 config-tab" id="leaveConfigModal">
+                <ul class="d-flex justify-content-center flex-column list-unstyled px-3 config-tab"
+                  id="leaveConfigModal">
                   <li class="py-3">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(1)" class="text-decoration-none text-muted">
                       <div name="tab-index" [attr.index]="1" class="d-flex align-items-center active-index">
@@ -106,7 +107,8 @@
                         <div class="d-flex align-items-center">
                           <label class="form-check-label ps-2">Limit to</label>
                           <div class="col-md-2 mx-3">
-                            <input type="text" class="form-control form-control-sm" name="LeaveLimit" OnlyNumber="3" [readonly]="leaveDetailForm.controls.IsLeaveDaysLimit.value == 'false'"
+                            <input type="text" class="form-control form-control-sm" name="LeaveLimit" OnlyNumber="3"
+                              [readonly]="leaveDetailForm.controls.IsLeaveDaysLimit.value == 'false'"
                               formControlName="LeaveLimit">
                           </div>
                           <span>days per year</span>
@@ -138,8 +140,9 @@
                             not
                             exceeding</label>
                           <div class="col-md-1 mx-3">
-                            <input type="text" [readonly]="leaveDetailForm.controls.ExtraLeaveLimit.value <=0" class="form-control form-control-sm" name="ExtraLeaveLimit"
-                              OnlyNumber="3" formControlName="ExtraLeaveLimit">
+                            <input type="text" [readonly]="leaveDetailForm.controls.ExtraLeaveLimit.value <=0"
+                              class="form-control form-control-sm" name="ExtraLeaveLimit" OnlyNumber="3"
+                              formControlName="ExtraLeaveLimit">
                           </div>
                           <span>days per year</span>
                         </div>
@@ -149,12 +152,14 @@
                       <input class="form-check-input" type="checkbox" (click)="noLeaveDetailAllow($event)"
                         formControlName="IsNoLeaveAfterDate">
                       <div class="d-flex align-items-center">
-                        <label class=" ps-2 form-check-label fw-bold text-dark">No leave quota is allocated in the joining
+                        <label class=" ps-2 form-check-label fw-bold text-dark">No leave quota is allocated in the
+                          joining
                           month if the employee joins after</label>
                         <div class="col-md-1 mx-3">
                           <input type="text" name="LeaveNotAllocatedIfJoinAfter"
                             class="form-control form-control-sm d-flex align-items-center"
-                            formControlName="LeaveNotAllocatedIfJoinAfter" [readonly]="leaveDetailForm.controls.LeaveNotAllocatedIfJoinAfter.value <=0" OnlyNumber="2">
+                            formControlName="LeaveNotAllocatedIfJoinAfter"
+                            [readonly]="leaveDetailForm.controls.LeaveNotAllocatedIfJoinAfter.value <=0" OnlyNumber="2">
                         </div>
                         <span class="fw-bold text-dark">th of the month. <i
                             class="fw-normal fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
@@ -206,7 +211,8 @@
                           Leave are accrued (earned) at regular intervals (Define accrual pattern below).
                         </label>
                       </div>
-                      <div [ngClass]="{'d-none': leaveAccrualForm.controls.IsLeaveAccruedPatternAvail.value == 'false'}" class="my-4" name="LeaveBalanceCalculated">
+                      <div [ngClass]="{'d-none': leaveAccrualForm.controls.IsLeaveAccruedPatternAvail.value == 'false'}"
+                        class="my-4" name="LeaveBalanceCalculated">
                         <h6 class="fw-bold text-dark">Leave accrual of Annual quota happens at the following rate</h6>
                         <div class="d-flex align-items-center">
                           <div class="col-md-1 me-3">
@@ -231,8 +237,9 @@
                       </div>
                     </div>
                     <div class="my-4">
-                      <h6 class="fw-bold text-dark">What happens to the leave quota when an employee joins company in the
-                        middle of the leave calendar year?</h6>
+                      <h6 class="fw-bold text-dark">What happens to the leave quota when an employee joins company in
+                        the
+                        middle of the leave calendar month?</h6>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" value="true" name="IsLeavesProratedForJoinigMonth"
                           formControlName="IsLeavesProratedForJoinigMonth" (click)="empJoinMiddle(false)">
@@ -247,7 +254,8 @@
                         <input class="form-check-input" type="radio" value="false" name="IsLeavesProratedForJoinigMonth"
                           formControlName="IsLeavesProratedForJoinigMonth" (click)="empJoinMiddle(true)">
                         <label class="form-check-label">
-                          Leaves are credited (in joining month) based on date of month, on which employee has joined the
+                          Leaves are credited (in joining month) based on date of month, on which employee has joined
+                          the
                           company.
                         </label>
                       </div>
@@ -297,8 +305,9 @@
                       </div>
                     </div>
                     <div class="my-4">
-                      <h6 class="fw-bold text-dark">What happens to the leave quota when an employee exits company in the
-                        middle of the leave calendar year?</h6>
+                      <h6 class="fw-bold text-dark">What happens to the leave quota when an employee exits company in
+                        the
+                        middle of the leave calendar month?</h6>
                       <div class="form-check">
                         <input class="form-check-input" value="true" type="radio" name="IsLeavesProratedOnProbation"
                           formControlName="IsLeavesProratedOnProbation" (click)="toggleCurrent(3, $event)">
@@ -389,7 +398,9 @@
                         </label>
                       </div>
                     </div>
-                    <div class="my-4" [ngClass]="{'d-none': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'false'}" name="AccrualLevelVary">
+                    <div class="my-4"
+                      [ngClass]="{'d-none': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'false'}"
+                      name="AccrualLevelVary">
                       <h6 class="fw-bold text-dark">From when does the accrual start? <i
                           class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
                           data-bs-placement="right"
@@ -400,8 +411,9 @@
                           formControlName="IsAccrualStartsAfterJoining" (click)="toggleCurrent(5, $event)">
                         <div class="d-flex align-items-center mx-2">
                           <div class="col-md-2 me-2">
-                            <input type="text" class="form-control form-control-sm" [readonly]="leaveAccrualForm.controls.AccrualDaysAfterJoining.value <=0" name="AccrualDaysAfterJoining"
-                              formControlName="AccrualDaysAfterJoining" OnlyNumber="3">
+                            <input type="text" class="form-control form-control-sm"
+                              [readonly]="leaveAccrualForm.controls.AccrualDaysAfterJoining.value <=0"
+                              name="AccrualDaysAfterJoining" formControlName="AccrualDaysAfterJoining" OnlyNumber="3">
                           </div>
                           <label class="form-check-label">
                             days after joining.
@@ -409,11 +421,14 @@
                         </div>
                       </div>
                       <div class="form-check d-flex align-items-center mt-2">
-                        <input class="form-check-input" value="true" type="radio" name="IsAccrualStartsAfterProbationEnds"
-                          formControlName="IsAccrualStartsAfterProbationEnds" (click)="toggleCurrent(5, $event)">
+                        <input class="form-check-input" value="true" type="radio"
+                          name="IsAccrualStartsAfterProbationEnds" formControlName="IsAccrualStartsAfterProbationEnds"
+                          (click)="toggleCurrent(5, $event)">
                         <div class="d-flex align-items-center mx-2">
                           <div class="col-md-2 me-2">
-                            <input type="text" class="form-control form-control-sm" name="AccrualDaysAfterProbationEnds" formControlName="AccrualDaysAfterProbationEnds" OnlyNumber="3" [readonly]="leaveAccrualForm.controls.AccrualDaysAfterProbationEnds.value <= 0">
+                            <input type="text" class="form-control form-control-sm" name="AccrualDaysAfterProbationEnds"
+                              formControlName="AccrualDaysAfterProbationEnds" OnlyNumber="3"
+                              [readonly]="leaveAccrualForm.controls.AccrualDaysAfterProbationEnds.value <= 0">
                           </div>
                           <label class="form-check-label">
                             days after Probation ends.
@@ -426,7 +441,8 @@
                           <div class="card bg-light p-3">
                             <div class="row align-items-center">
                               <div class="col-md-10">
-                                <h6 class="fw-bold text-dark">Define the accrual rates below based on employee experience
+                                <h6 class="fw-bold text-dark">Define the accrual rates below based on employee
+                                  experience
                                 </h6>
                                 <div class="d-flex align-items-center">
                                   <div class="form-group">
@@ -442,7 +458,8 @@
                                   <span class="px-2">Year from joining</span>
                                   <span class="ps-5">Accrue</span>
                                   <div class="col-md-1 mx-3">
-                                    <input type="text" class="form-control" OnlyNumber="2" formControlName="DaysMonthly">
+                                    <input type="text" class="form-control" OnlyNumber="2"
+                                      formControlName="DaysMonthly">
                                   </div>
                                   <label for="" class="form-label">days Monthly</label>
                                   <div class="col-md-1 mx-3">
@@ -535,14 +552,17 @@
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Can employees apply leave beyond their accrued balance?</h6>
                       <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input" value="true" type="radio" name="IsExtraLeaveBeyondAccruedBalance"
-                          formControlName="IsExtraLeaveBeyondAccruedBalance" (click)="toggleCurrent(8, $event)">
+                        <input class="form-check-input" value="true" type="radio"
+                          name="IsExtraLeaveBeyondAccruedBalance" formControlName="IsExtraLeaveBeyondAccruedBalance"
+                          (click)="toggleCurrent(8, $event)">
                         <div class="d-flex align-items-center ps-2">
                           <label class="form-check-label">
                             Yes, Employee can go beyond their accrued balance but no more than
                           </label>
                           <div class="col-md-1 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="leaveAccrualForm.controls.NoOfDaysForExtraLeave.value <= 0" name="NoOfDaysForExtraLeave" formControlName="NoOfDaysForExtraLeave">
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="leaveAccrualForm.controls.NoOfDaysForExtraLeave.value <= 0"
+                              name="NoOfDaysForExtraLeave" formControlName="NoOfDaysForExtraLeave">
                           </div>
                           <label for="" class="form-label">
                             days and not exceeding their annual quota.
@@ -567,7 +587,10 @@
                             credits)
                           </label>
                           <div class="col-md-1 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="leaveAccrualForm.controls.AllowOnlyIfAccrueBalanceIsAlleast.value <= 0" name="AllowOnlyIfAccrueBalanceIsAlleast" formControlName="AllowOnlyIfAccrueBalanceIsAlleast">
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="leaveAccrualForm.controls.AllowOnlyIfAccrueBalanceIsAlleast.value <= 0"
+                              name="AllowOnlyIfAccrueBalanceIsAlleast"
+                              formControlName="AllowOnlyIfAccrueBalanceIsAlleast">
                           </div>
                           <label for="" class="form-label">
                             days.
@@ -582,7 +605,10 @@
                             Do not accrue leave if an employee is on any leave for more than
                           </label>
                           <div class="col-md-1 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" name="NotAllowIfAlreadyOnLeaveMoreThan" [readonly]="leaveAccrualForm.controls.NotAllowIfAlreadyOnLeaveMoreThan.value <= 0" formControlName="NotAllowIfAlreadyOnLeaveMoreThan">
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              name="NotAllowIfAlreadyOnLeaveMoreThan"
+                              [readonly]="leaveAccrualForm.controls.NotAllowIfAlreadyOnLeaveMoreThan.value <= 0"
+                              formControlName="NotAllowIfAlreadyOnLeaveMoreThan">
                           </div>
                           <label for="" class="form-label">
                             days in previous Month. (irrespective of leave calender year)
@@ -671,7 +697,8 @@
                             Yes, Leave will expire after
                           </label>
                           <div class="col-md-2 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" name="AfterHowManyDays" [readonly]="leaveAccrualForm.controls.AfterHowManyDays.value <= 0"
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              name="AfterHowManyDays" [readonly]="leaveAccrualForm.controls.AfterHowManyDays.value <= 0"
                               formControlName="AfterHowManyDays">
                           </div>
                           <label for="" class="form-label">
@@ -732,9 +759,11 @@
                         </label>
                       </div>
                     </div>
-                    <div class="mt-4" [ngClass]="{'d-none': applyForLeaveForm.controls.EmployeeCanSeeAndApplyCurrentPlanLeave.value == 'true'}">
+                    <div class="mt-4"
+                      [ngClass]="{'d-none': applyForLeaveForm.controls.EmployeeCanSeeAndApplyCurrentPlanLeave.value == 'true'}">
                       <ng-container formArrayName="RuleForLeaveInNotice">
-                        <h6 class="fw-bold text-dark">How many days prior notice is required to apply for this leave?</h6>
+                        <h6 class="fw-bold text-dark">How many days prior notice is required to apply for this leave?
+                        </h6>
                         <div class="card bg-light p-3" [formGroupName]="i"
                           *ngFor="let item of applyForLeaveForm.get('RuleForLeaveInNotice').controls; let i = index">
                           <div class="row align-items-center">
@@ -823,7 +852,8 @@
                         <input class="form-check-input" value="false" type="radio" name="CurrentLeaveRequiredComments"
                           formControlName="CurrentLeaveRequiredComments">
                         <label class="form-check-label">
-                          No, This leave does not require any comments although the employee is shown a comment box field.
+                          No, This leave does not require any comments although the employee is shown a comment box
+                          field.
                         </label>
                       </div>
                     </div>
@@ -840,7 +870,8 @@
                             Yes, Require an attachment if the leave exceeds
                           </label>
                           <div class="col-md-2 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="applyForLeaveForm.controls.ProofRequiredIfDaysExceeds.value == 'false'"
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="applyForLeaveForm.controls.ProofRequiredIfDaysExceeds.value == 'false'"
                               formControlName="NoOfDaysExceeded">
                           </div>
                           <label for="" class="form-label">
@@ -860,7 +891,7 @@
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitApplyForLeave()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
-                        <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
                 </ng-container>
@@ -870,11 +901,12 @@
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">A new joinee employee can apply for leave?</h6>
                       <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input" value="true" type="radio" name="CanApplyAfterProbation" (click)="toogleLeaveRestrictions(1, $event)"
-                          formControlName="CanApplyAfterProbation">
+                        <input class="form-check-input" value="true" type="radio" name="CanApplyAfterProbation"
+                          (click)="toogleLeaveRestrictions(1, $event)" formControlName="CanApplyAfterProbation">
                         <div class="d-flex align-items-center ms-2">
                           <div class="col-md-2 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="leaveRestrictionForm.controls.CanApplyAfterProbation.value == 'false'"
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="leaveRestrictionForm.controls.CanApplyAfterProbation.value == 'false'"
                               formControlName="DaysAfterProbation">
                           </div>
                           <label for="" class="form-label">
@@ -883,11 +915,12 @@
                         </div>
                       </div>
                       <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input" value="true" type="radio" name="CanApplyAfterJoining" (click)="toogleLeaveRestrictions(1, $event)"
-                          formControlName="CanApplyAfterJoining">
+                        <input class="form-check-input" value="true" type="radio" name="CanApplyAfterJoining"
+                          (click)="toogleLeaveRestrictions(1, $event)" formControlName="CanApplyAfterJoining">
                         <div class="d-flex align-items-center ms-2">
                           <div class="col-md-2 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="leaveRestrictionForm.controls.CanApplyAfterJoining.value == 'false'"
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="leaveRestrictionForm.controls.CanApplyAfterJoining.value == 'false'"
                               formControlName="DaysAfterJoining">
                           </div>
                           <label for="" class="form-label pe-3">
@@ -905,7 +938,8 @@
                               Do not allow employees to avail/apply for more than
                             </label>
                             <div class="col-md-1 mx-2">
-                              <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="leaveRestrictionForm.controls.IsAvailRestrictedLeavesInProbation.value == 'false'"
+                              <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                                [readonly]="leaveRestrictionForm.controls.IsAvailRestrictedLeavesInProbation.value == 'false'"
                                 formControlName="LeaveLimitInProbation">
                             </div>
                             <label for="" class="form-label">
@@ -934,7 +968,8 @@
                             Yes, Limit to a maximum of
                           </label>
                           <div class="col-md-2 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="leaveRestrictionForm.controls.IsConsecutiveLeaveLimit.value == 'false'"
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="leaveRestrictionForm.controls.IsConsecutiveLeaveLimit.value == 'false'"
                               formControlName="ConsecutiveDaysLimit">
                           </div>
                           <label for="" class="form-label">
@@ -949,14 +984,16 @@
                         a month?</h6>
                       <div class="form-check">
                         <input class="form-check-input" value="false" type="radio"
-                          name="IsLeaveInNoticeExtendsNoticePeriod" formControlName="IsLeaveInNoticeExtendsNoticePeriod">
+                          name="IsLeaveInNoticeExtendsNoticePeriod"
+                          formControlName="IsLeaveInNoticeExtendsNoticePeriod">
                         <label class="form-check-label">
                           No. Employee can avail all available leave balance in a month.
                         </label>
                       </div>
                       <div class="form-check d-flex align-items-center">
                         <input class="form-check-input" type="radio" value="true"
-                          name="IsLeaveInNoticeExtendsNoticePeriod" formControlName="IsLeaveInNoticeExtendsNoticePeriod">
+                          name="IsLeaveInNoticeExtendsNoticePeriod"
+                          formControlName="IsLeaveInNoticeExtendsNoticePeriod">
                         <div class="d-flex align-items-center ms-2">
                           <label class="form-check-label">
                             Yes, Employee in notice period can consume available leave given that the notice period
@@ -964,7 +1001,8 @@
                             by
                           </label>
                           <div class="col-md-1 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="leaveRestrictionForm.controls.IsLeaveInNoticeExtendsNoticePeriod.value == 'false'"
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="leaveRestrictionForm.controls.IsLeaveInNoticeExtendsNoticePeriod.value == 'false'"
                               formControlName="NoOfTimesNoticePeriodExtended">
                           </div>
                           <label for="" class="form-label">
@@ -987,8 +1025,8 @@
                         </label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" value="true" type="radio" name="CanManageOverrideLeaveRestriction"
-                          formControlName="CanManageOverrideLeaveRestriction">
+                        <input class="form-check-input" value="true" type="radio"
+                          name="CanManageOverrideLeaveRestriction" formControlName="CanManageOverrideLeaveRestriction">
                         <label class="form-check-label">
                           Yes, Manager can apply by overriding restrictions
                         </label>
@@ -1077,15 +1115,18 @@
                       </div>
                     </div>
                     <div class="my-4">
-                      <h6 class="fw-bold text-dark">Check all restrictions you'd like to apply to enforce in relation with
+                      <h6 class="fw-bold text-dark">Check all restrictions you'd like to apply to enforce in relation
+                        with
                         other leave types?</h6>
                       <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input" type="checkbox" formControlName="IsCurrentPlanDepnedsOnOtherPlan">
+                        <input class="form-check-input" type="checkbox"
+                          formControlName="IsCurrentPlanDepnedsOnOtherPlan">
                         <label class="form-check-label ps-2">
                           This leave cannot be taken along with
                         </label>
                         <div class="col-md-1 mx-2">
-                          <select class="form-select form-select-sm" formControlName="AssociatedPlanTypeId" [disabled]="leaveRestrictionForm.controls.IsCurrentPlanDepnedsOnOtherPlan.value == false">
+                          <select class="form-select form-select-sm" formControlName="AssociatedPlanTypeId"
+                            [disabled]="leaveRestrictionForm.controls.IsCurrentPlanDepnedsOnOtherPlan.value == false">
                             <option value="0">Select</option>
                           </select>
                         </div>
@@ -1096,7 +1137,8 @@
                           This leave is not available when there is balance in
                         </label>
                         <div class="col-md-1 mx-2">
-                          <select class="form-select form-select-sm" formControlName="DependentPlanTypeId"  [disabled]="leaveRestrictionForm.controls.IsCheckOtherPlanTypeBalance.value == false">
+                          <select class="form-select form-select-sm" formControlName="DependentPlanTypeId"
+                            [disabled]="leaveRestrictionForm.controls.IsCheckOtherPlanTypeBalance.value == false">
                             <option value="0">Select</option>
                           </select>
                         </div>
@@ -1106,7 +1148,7 @@
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitLeaveRestriction()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
-                        <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
                 </ng-container>
@@ -1123,14 +1165,15 @@
                         </label>
                       </div>
                       <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input" value="true" type="radio" name="AdJoiningHolidayIsConsiderAsLeave"
-                          formControlName="AdJoiningHolidayIsConsiderAsLeave">
+                        <input class="form-check-input" value="true" type="radio"
+                          name="AdJoiningHolidayIsConsiderAsLeave" formControlName="AdJoiningHolidayIsConsiderAsLeave">
                         <div class="d-flex align-items-center ms-2">
                           <label class="form-check-label">
                             Yes, Holidays accompanying leave is treated as leave when total number of leave includes
                           </label>
                           <div class="col-md-1 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'false'"
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'false'"
                               formControlName="ConsiderLeaveIfNumOfDays">
                           </div>
                           <div class="col-md-2 mx-2">
@@ -1143,31 +1186,32 @@
                           </label>
                         </div>
                       </div>
-                      <div class="my-4 ms-3" [ngClass]="{'d-none': holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'false'}">
+                      <div class="my-4 ms-3"
+                        [ngClass]="{'d-none': holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'false'}">
                         <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfLeaveLieBetweenTwoHolidays" (click)="toogleHolidayAndWeekOff(1, $event)"
-                            formControlName="IfLeaveLieBetweenTwoHolidays">
+                          <input class="form-check-input" value="true" type="radio" name="IfLeaveLieBetweenTwoHolidays"
+                            (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfLeaveLieBetweenTwoHolidays">
                           <label class="form-check-label">
                             If Holiday is right between two leave days (Holiday is sanwiched between leave days)
                           </label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfHolidayIsRightBeforLeave" (click)="toogleHolidayAndWeekOff(1, $event)"
-                            formControlName="IfHolidayIsRightBeforLeave">
+                          <input class="form-check-input" value="true" type="radio" name="IfHolidayIsRightBeforLeave"
+                            (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsRightBeforLeave">
                           <label class="form-check-label">
                             If leave day is right before a holiday.
                           </label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfHolidayIsRightAfterLeave" (click)="toogleHolidayAndWeekOff(1, $event)"
-                            formControlName="IfHolidayIsRightAfterLeave">
+                          <input class="form-check-input" value="true" type="radio" name="IfHolidayIsRightAfterLeave"
+                            (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsRightAfterLeave">
                           <label class="form-check-label">
                             If leave day is right after a holiday.
                           </label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfHolidayIsBetweenLeave" (click)="toogleHolidayAndWeekOff(1, $event)"
-                            formControlName="IfHolidayIsBetweenLeave">
+                          <input class="form-check-input" value="true" type="radio" name="IfHolidayIsBetweenLeave"
+                            (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsBetweenLeave">
                           <label class="form-check-label">
                             If leave day is before or after or in-between a holiday.
                           </label>
@@ -1184,7 +1228,8 @@
                           <input class="form-check-input" type="checkbox"
                             formControlName="AdjoiningHolidayRulesIsValidForHalfDay">
                           <label class="form-check-label ms-2">
-                            Do not consider holidays accompanying Half day leave as leave (ignores the above rule if leave
+                            Do not consider holidays accompanying Half day leave as leave (ignores the above rule if
+                            leave
                             taken
                             is half day. This rule doesn't apply if leave is taken on half day week off).
                           </label>
@@ -1192,7 +1237,8 @@
                       </div>
                     </div>
                     <div class="my-4">
-                      <h6 class="fw-bold text-dark">If a week off day is adjoining a leave, is it considered a leave?</h6>
+                      <h6 class="fw-bold text-dark">If a week off day is adjoining a leave, is it considered a leave?
+                      </h6>
                       <div class="form-check">
                         <input class="form-check-input" value="false" type="radio"
                           name="AdjoiningWeekOffIsConsiderAsLeave" formControlName="AdjoiningWeekOffIsConsiderAsLeave">
@@ -1201,14 +1247,15 @@
                         </label>
                       </div>
                       <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input" value="true" type="radio" name="AdjoiningWeekOffIsConsiderAsLeave"
-                          formControlName="AdjoiningWeekOffIsConsiderAsLeave">
+                        <input class="form-check-input" value="true" type="radio"
+                          name="AdjoiningWeekOffIsConsiderAsLeave" formControlName="AdjoiningWeekOffIsConsiderAsLeave">
                         <div class="d-flex align-items-center ms-2">
                           <label class="form-check-label">
                             Yes, Week Off accompanying leave is treated as leave when total number of leave includes
                           </label>
                           <div class="col-md-1 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'false'"
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'false'"
                               formControlName="ConsiderLeaveIfIncludeDays">
                           </div>
                           <div class="col-md-2 mx-2">
@@ -1221,31 +1268,33 @@
                           </label>
                         </div>
                       </div>
-                      <div class="my-4 ms-3" [ngClass]="{'d-none': holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'false'}">
+                      <div class="my-4 ms-3"
+                        [ngClass]="{'d-none': holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'false'}">
                         <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfLeaveLieBetweenWeekOff" (click)="toogleHolidayAndWeekOff(2, $event)"
-                            formControlName="IfLeaveLieBetweenWeekOff">
+                          <input class="form-check-input" value="true" type="radio" name="IfLeaveLieBetweenWeekOff"
+                            (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfLeaveLieBetweenWeekOff">
                           <label class="form-check-label">
-                            If week off day is right between two leave days (Week off is sandwitched between leave days).
+                            If week off day is right between two leave days (Week off is sandwitched between leave
+                            days).
                           </label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsRightBeforLeave" (click)="toogleHolidayAndWeekOff(2, $event)"
-                            formControlName="IfWeekOffIsRightBeforLeave">
+                          <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsRightBeforLeave"
+                            (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsRightBeforLeave">
                           <label class="form-check-label">
                             If leave day is right before a Week off.
                           </label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsRightAfterLeave" (click)="toogleHolidayAndWeekOff(2, $event)"
-                            formControlName="IfWeekOffIsRightAfterLeave">
+                          <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsRightAfterLeave"
+                            (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsRightAfterLeave">
                           <label class="form-check-label">
                             If leave day is right after a week off.
                           </label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsBetweenLeave" (click)="toogleHolidayAndWeekOff(2, $event)"
-                            formControlName="IfWeekOffIsBetweenLeave">
+                          <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsBetweenLeave"
+                            (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsBetweenLeave">
                           <label class="form-check-label">
                             If leave day is before or after or in-between a week off.
                           </label>
@@ -1262,7 +1311,8 @@
                           <input class="form-check-input" type="checkbox"
                             formControlName="AdjoiningWeekOffRulesIsValidForHalfDay">
                           <label class="form-check-label ms-2">
-                            Do not consider week off accompanying Half day leave as leave (ignores the above rule if leave
+                            Do not consider week off accompanying Half day leave as leave (ignores the above rule if
+                            leave
                             taken
                             is half day. This rule doesn't apply if leave is taken on half day week off).
                           </label>
@@ -1290,7 +1340,7 @@
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitHolidayNWeekOffLeave()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
-                        <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
                 </ng-container>
@@ -1371,7 +1421,8 @@
                         </label>
                       </div>
                       <div class="form-check mt-2">
-                        <input class="form-check-input" type="checkbox" formControlName="IsPauseForApprovalNotification">
+                        <input class="form-check-input" type="checkbox"
+                          formControlName="IsPauseForApprovalNotification">
                         <label class="form-check-label">
                           Pause sending of email notification (to approvers) for each request that uis being raised or
                           approved. Approvers will be able to view these requests as part of the daily email digest.
@@ -1393,7 +1444,7 @@
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitLeaveApproval()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
-                        <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
                 </ng-container>
@@ -1405,8 +1456,9 @@
                         What happens to the leave balances at the end of the year?
                       </h6>
                       <div class="form-check">
-                        <input class="form-check-input" value="true" type="radio" name="IsLeaveBalanceExpiredOnEndOfYear"
-                          (click)="toggleLeaveOnYearEnds(1, $event)" formControlName="IsLeaveBalanceExpiredOnEndOfYear" />
+                        <input class="form-check-input" value="true" type="radio"
+                          name="IsLeaveBalanceExpiredOnEndOfYear" (click)="toggleLeaveOnYearEnds(1, $event)"
+                          formControlName="IsLeaveBalanceExpiredOnEndOfYear" />
                         <label class="form-check-label">
                           All leave balances expire or get reset.
                         </label>
@@ -1420,7 +1472,8 @@
                       </div>
                       <div class="form-check">
                         <input class="form-check-input" value="true" type="radio" name="AllLeavesCarryForwardToNextYear"
-                          (click)="toggleLeaveOnYearEnds(1, $event)" formControlName="AllLeavesCarryForwardToNextYear" />
+                          (click)="toggleLeaveOnYearEnds(1, $event)"
+                          formControlName="AllLeavesCarryForwardToNextYear" />
                         <label class="form-check-label">
                           All leave balances get carried forward to the next year.
                         </label>
@@ -1439,11 +1492,14 @@
                           Carry forward first anf then pay remaining
                         </label>
                       </div>
-                      <div class="my-4" [ngClass]="{'d-none': yearEndProcessForm.controls.PayFirstNCarryForwordRemaning.value == 'false' && yearEndProcessForm.controls.CarryForwordFirstNPayRemaning.value == 'false'}">
-                        <h6 class="fw-bold text-dark" [ngClass]="{'d-none': yearEndProcessForm.controls.PayFirstNCarryForwordRemaning.value == 'false'}">
+                      <div class="my-4"
+                        [ngClass]="{'d-none': yearEndProcessForm.controls.PayFirstNCarryForwordRemaning.value == 'false' && yearEndProcessForm.controls.CarryForwordFirstNPayRemaning.value == 'false'}">
+                        <h6 class="fw-bold text-dark"
+                          [ngClass]="{'d-none': yearEndProcessForm.controls.PayFirstNCarryForwordRemaning.value == 'false'}">
                           Pay first and carry forward remaining?
                         </h6>
-                        <h6 class="fw-bold text-dark" [ngClass]="{'d-none': yearEndProcessForm.controls.CarryForwordFirstNPayRemaning.value == 'false'}">
+                        <h6 class="fw-bold text-dark"
+                          [ngClass]="{'d-none': yearEndProcessForm.controls.CarryForwordFirstNPayRemaning.value == 'false'}">
                           Carry forward first and pay remaining?
                         </h6>
                         <div class="d-flex">
@@ -1460,9 +1516,12 @@
                           </div>
                         </div>
                         <!-- For percentage select start-->
-                        <div class="" [ngClass]="{'d-none': yearEndProcessForm.controls.PayNCarryForwardDefineType.value != 'percentage'}">
+                        <div class=""
+                          [ngClass]="{'d-none': yearEndProcessForm.controls.PayNCarryForwardDefineType.value != 'percentage'}">
                           <ng-container formArrayName="PercentagePayNCarryForward">
-                            <div class="d-flex align-items-center my-2" *ngFor="let item of yearEndProcessForm.get('PercentagePayNCarryForward').controls; let i = index" [formGroupName]="i">
+                            <div class="d-flex align-items-center my-2"
+                              *ngFor="let item of yearEndProcessForm.get('PercentagePayNCarryForward').controls; let i = index"
+                              [formGroupName]="i">
                               <div class="card p-2">
                                 <div class="d-flex align-items-center">
                                   <label class="form-label me-3">If the balance is more than</label>
@@ -1485,13 +1544,15 @@
                                   <label for="" class="form-label">% of remaining leave days</label>
                                 </div>
                                 <div class="form-check d-flex align-items-center">
-                                  <input class="form-check-input" type="checkbox" formControlName="IsMaximumPayableRequired" />
+                                  <input class="form-check-input" type="checkbox"
+                                    formControlName="IsMaximumPayableRequired" />
                                   <div class="d-flex align-items-center ps-2">
                                     <label class="form-check-label">
                                       Restrict maximum payable days to .
                                     </label>
                                     <div class="col-md-2 mx-3">
-                                      <input type="text" class="form-control form-control-sm" OnlyNumber="2" [readonly]="yearEndProcessForm.controls['PercentagePayNCarryForward'].controls[i].controls.IsMaximumPayableRequired.value == false"
+                                      <input type="text" class="form-control form-control-sm" OnlyNumber="2"
+                                        [readonly]="yearEndProcessForm.controls['PercentagePayNCarryForward'].controls[i].controls.IsMaximumPayableRequired.value == false"
                                         formControlName="MaximumPayableDays" />
                                     </div>
                                   </div>
@@ -1504,7 +1565,8 @@
                                       Restrict maximum carried forward days to days to .
                                     </label>
                                     <div class="col-md-2 mx-3">
-                                      <input type="text" class="form-control form-control-sm" OnlyNumber="2" [readonly]="yearEndProcessForm.controls['PercentagePayNCarryForward'].controls[i].controls.IsMaximumCarryForwardRequired.value == false"
+                                      <input type="text" class="form-control form-control-sm" OnlyNumber="2"
+                                        [readonly]="yearEndProcessForm.controls['PercentagePayNCarryForward'].controls[i].controls.IsMaximumCarryForwardRequired.value == false"
                                         formControlName="MaximumCarryForwardDays" />
                                     </div>
                                   </div>
@@ -1517,9 +1579,11 @@
                         </div>
                         <!-- percentage select end -->
                         <!-- Fixed number of days start -->
-                        <div class="" [ngClass]="{'d-none': yearEndProcessForm.controls.PayNCarryForwardDefineType.value != 'fixed'}">
+                        <div class=""
+                          [ngClass]="{'d-none': yearEndProcessForm.controls.PayNCarryForwardDefineType.value != 'fixed'}">
                           <ng-container formArrayName="FixedPayNCarryForward">
-                            <div class="p-2 bg-light d-flex align-items-center my-2" [formGroupName]="i" *ngFor="let item of yearEndProcessForm.get('FixedPayNCarryForward').controls; let i = index">
+                            <div class="p-2 bg-light d-flex align-items-center my-2" [formGroupName]="i"
+                              *ngFor="let item of yearEndProcessForm.get('FixedPayNCarryForward').controls; let i = index">
                               <div class="d-flex align-items-center">
                                 <label class="form-label me-3">If the balance is more than</label>
                                 <div class="col-md-1">
@@ -1566,7 +1630,8 @@
                             Yes, carried forward leave expires
                           </label>
                           <div class="col-md-2 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm" [readonly]="yearEndProcessForm.controls.DoestCarryForwardExpired.value == 'false'"
+                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
+                              [readonly]="yearEndProcessForm.controls.DoestCarryForwardExpired.value == 'false'"
                               formControlName="ExpiredAfter" />
                           </div>
                           <label for="" class="form-label">
@@ -1575,7 +1640,8 @@
                         </div>
                       </div>
                       <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input" type="checkbox" formControlName="DoesExpiryLeaveRemainUnchange" />
+                        <input class="form-check-input" type="checkbox"
+                          formControlName="DoesExpiryLeaveRemainUnchange" />
                         <label class="form-check-label ms-2">
                           Any leave that has an expiry date, either through
                           previous carry forward, or expiray settings under step2
@@ -1615,7 +1681,7 @@
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitYearEndProcessing()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
-                        <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
                 </ng-container>
