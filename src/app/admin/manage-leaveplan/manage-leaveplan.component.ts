@@ -99,6 +99,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.test();
     let data = this.nav.getValue();
     if(data != null) {
       this.isPageReady = true;
@@ -110,7 +111,16 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       ErrorToast("Invlaid plan selected please select again.");
       return;
     }
+  }
 
+  test() {
+    this.http.post("attendance/ApplyLeaveService_Testing", {
+      EmployeeId: 4,
+      FromDate: new Date(),
+      ToDate: new Date()
+    }).then((response: ResponseModel) => {
+
+    });
   }
 
   initLeaveDetail() {

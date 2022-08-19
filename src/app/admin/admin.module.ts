@@ -58,6 +58,7 @@ import { DateFormatter } from 'src/providers/DateFormatter';
 import { ManageLeaveplanComponent } from './manage-leaveplan/manage-leaveplan.component';
 import { ManageYearEndingComponent } from './manage-year-ending/manage-year-ending.component';
 import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.component';
+import { EmailComponent } from './email/email.component';
 
 @NgModule({
   declarations: [
@@ -112,7 +113,8 @@ import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.componen
     PayrollComponentsComponent,
     ManageLeaveplanComponent,
     ManageYearEndingComponent,
-    SalaryBreakupComponent
+    SalaryBreakupComponent,
+    EmailComponent
   ],
   imports: [
     CommonModule,
