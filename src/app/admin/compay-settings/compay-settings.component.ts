@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ResponseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
   selector: 'app-compay-settings',
@@ -7,57 +11,62 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./compay-settings.component.scss']
 })
 export class CompaySettingsComponent implements OnInit {
-  ActivatedPage: number = 1;
-  companyInformationForm: FormGroup;
-  companyInformation: CompanyInformationClass = new CompanyInformationClass();
+  companySettingForm: FormGroup;
+  companySetting: CompanySetting = new CompanySetting();
+  currentCompany: any = null;
+  isPageReady: boolean  = false;
+  isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+              private nav: iNavigation,
+              private http: AjaxService) { }
 
   ngOnInit(): void {
-    this.ActivatedPage = 1;
+    let data = this.nav.getValue();
+    if (data) {
+      this.currentCompany = data;
+      this.companySetting.CompanyId = this.currentCompany.CompanyId;
+      this.isPageReady = true;
+    }
+    else {
+      this.isPageReady = false;
+      ErrorToast("Company information doesn't found. Please contact to admin.");
+    }
     this.initForm();
   }
 
   initForm() {
-    this.companyInformationForm = this.fb.group({
-      LegalEntity: new FormControl(this.companyInformation.LegalEntity),
-      Signature: new FormControl(this.companyInformation.Signature),
-      CompanyLegalName: new FormControl(this.companyInformation.CompanyLegalName),
-      BusinessType: new FormControl(this.companyInformation.BusinessType),
-      InformationDate: new FormControl(this.companyInformation.InformationDate),
-      RegisteredAddress: new FormControl(this.companyInformation.RegisteredAddress)
+    this.companySettingForm = this.fb.group({
+      SettingId: new FormControl(this.companySetting.SettingId),
+      CompanyId: new FormControl(this.companySetting.CompanyId),
+      ProbationPeriodInDays: new FormControl(this.companySetting.ProbationPeriodInDays),
+      NoticePeriodInDays: new FormControl(this.companySetting.NoticePeriodInDays)
     })
   }
 
-  activePage(page: number) {
-    switch (page) {
-      case 2:
-        this.ActivatedPage = 2;
-        break;
-      case 3:
-        this.ActivatedPage = 3;
-        break;
-      default:
-        this.ActivatedPage = 1;
-        break;
+  saveSetting() {
+    let value = this.companySettingForm.value;
+    if (value.CompanyId > 0) {
+      this.isLoading = true;
+      console.log(value)
+      this.http.post("", value).then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          this.isLoading = false;
+          Toast("Setting save successfully")
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
     }
-    var stepCount = document.querySelectorAll(".progress-step");
-    var stepinfo = document.querySelectorAll(".step-info");
-    for (let i=0; i <stepCount.length; i++) {
-      stepCount[i].classList.remove('active');
-      stepinfo[i].classList.remove('step-info-active');
-    }
-    stepCount[page-1].classList.add('active');
-    stepCount[page-1].classList.add('step-info-active');
+    else
+      ErrorToast("Please select company first.");
   }
-
 }
 
-class CompanyInformationClass {
-  LegalEntity: string = '0';
-  Signature: string = '';
-  CompanyLegalName: string = '';
-  BusinessType: string = '';
-  InformationDate: string = '';
-  RegisteredAddress: string = '';
+export class CompanySetting {
+  SettingId: number = 0;
+  CompanyId: number = 0;
+  ProbationPeriodInDays: number = 0;
+  NoticePeriodInDays: number = 0;
+
 }

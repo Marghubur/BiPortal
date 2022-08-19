@@ -21,7 +21,8 @@ export class SettingsComponent implements OnInit {
   SalaryStructure: string = SalaryComponentStructure;
   CustomSalary: string = CustomSalaryStructure;
   PayrollComponent: string = PayrollComponents;
-  PayRollPage: string = Payroll
+  PayRollPage: string = Payroll;
+  CompanySettingPage: string = CompanySettings;
   menuItem: any = {};
   active: number = 1;
   groupActiveId: number = 1;
@@ -80,6 +81,9 @@ export class SettingsComponent implements OnInit {
         break;
       case PayrollComponents:
         this.nav.navigate(PayrollComponents, null);
+        break;
+      case CompanySettings:
+        this.nav.navigate(CompanySettings, this.currentCompnay);
         break;
     }
   }
