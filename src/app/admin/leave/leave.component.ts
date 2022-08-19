@@ -227,56 +227,27 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   loadEmployeeData() {
-    this.employeeIsReady = false;
-    this.assignEmpList = [];
-    this.currentPlanEmpList = [];
-    this.http.get(`ManageLeavePlan/GetEmpMappingByLeavePlanId/${this.currentPlan.LeavePlanId}`)
-    .then((res: ResponseModel) => {
-      if (res.ResponseBody) {
-        this.assignEmpList = res.ResponseBody;
-        let i = 0;
-        while(i < this.assignEmpList.length) {
-          let result = this.employees.find(x => x.EmployeeUid == this.assignEmpList[i].EmployeeId);
-          this.currentPlanEmpList.push(result);
-          i++;
-        }
-
-        this.employeeIsReady = true;
-      } else {
-        ErrorToast("Fail to load employee data. Please contact to admin.");
-      }
-    })
+    this.employeeIsReady = true;
+    this.currentPlanEmpList = this.employees.filter(x => x.LeavePlanId == this.currentPlan.LeavePlanId);
   }
 
   addEmployeeToPlan() {
-    if (this.assignEmpList.length > 0) {
-      let i = 0;
-      let empList = this.assignEmpList.filter(x => x.IsAdded == true);
-      while(i < empList.length) {
-        let value = this.employees.find(x => x.EmployeeUid == empList[i].EmployeeId);
-        value.Active = true;
-        i++;
-      }
-    }
+    this.assignEmpList = [];
+    this.assignEmpList = this.employees.filter(x => x.LeavePlanId == this.currentPlan.LeavePlanId);
     $('#showemployeesdetail').modal('show');
   }
 
   assignEmpListToPlan(item: any, e: any) {
     if (e.target.checked == true) {
-      let elem = this.assignEmpList.find(x => x.EmployeeId === item.EmployeeUid);
+      let elem = this.assignEmpList.find(x => x.EmployeeUid === item.EmployeeUid);
       if (elem == null) {
-        this.assignEmpList.push({
-          EmployeeLeaveplanMappingId: 0,
-          EmployeeId: item.EmployeeUid,
-          LeavePlanId: this.currentPlan.LeavePlanId,
-          IsAdded: true
-        });
-      } else
-        elem.IsAdded = true;
+        item.LeavePlanId = this.currentPlan.LeavePlanId;
+        this.assignEmpList.push(item);
+      }
     } else {
-        let elem = this.assignEmpList.find(x => x.EmployeeId === item.EmployeeUid);
-        if (elem != null)
-          elem.IsAdded = false;
+        let emp = this.assignEmpList.find(x => x.EmployeeUid === item.EmployeeUid);
+        if (emp != null)
+          emp.LeavePlanId = 0;
     }
   }
 
@@ -286,11 +257,10 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       then((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.currentPlanEmpList = [];
-          let addedEmployee = this.assignEmpList.filter(x => x.IsAdded == true);
           let i = 0;
-          while(i < addedEmployee.length) {
-            let result = this.employees.find(x => x.EmployeeUid == addedEmployee[i].EmployeeId);
-            this.currentPlanEmpList.push(result);
+          while(i < this.assignEmpList.length) {
+            this.assignEmpList = this.assignEmpList.filter(x => x.LeavePlanId == this.currentPlan.LeavePlanId);
+            this.currentPlanEmpList.push(this.assignEmpList[i]);
             i++;
           }
           $('#showemployeesdetail').modal('hide');
