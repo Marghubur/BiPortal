@@ -110,7 +110,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   buildPageData(response: ResponseModel) {
-    if (response.ResponseBody) {
+    if (response.ResponseBody && response.ResponseBody.Employee != undefined) {
       this.clients = response.ResponseBody.Clients;
       if (response.ResponseBody.Employee.length > 0)
         this.employeeModal = response.ResponseBody.Employee[0] as EmployeeDetail;
@@ -166,6 +166,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       } else {
         this.leavePlans = [];
       }
+    } else {
+      ErrorToast("Fail to get employee detail. Please contact to admin.");
     }
   }
 
