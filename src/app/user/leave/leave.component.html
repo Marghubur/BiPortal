@@ -103,7 +103,7 @@
           </div>
         </div>
       </div>
-      <div id="leave-chart">
+      <div id="leave-chart" [ngClass]="{'d-none': leaveData.length <= 0}">
         <h5 class="mt-3 pt-3 pb-3">My Leave Status</h5>
         <div class="row">
           <div class="col-md-3">

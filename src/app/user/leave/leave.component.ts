@@ -89,6 +89,7 @@ export class LeaveComponent implements OnInit {
   }
 
   leavePopUp() {
+    this.isPageReady = true;
     this.leaveDetail = new LeaveModal();
     this.leaveRequestForm();
     $('#leaveModal').modal('show');
@@ -172,9 +173,14 @@ export class LeaveComponent implements OnInit {
   loadData() {
     this.isPageReady = false;
     let year = new Date().getFullYear();
-    this.http.get(`Attendance/GetAllLeavesByEmpId/${this.employeeId}/${year}`)
+    let value = {
+      EmployeeId :this.employeeId
+    }
+    this.http.post('Attendance/GetAllLeavesByEmpId', value)
     .then((res: ResponseModel) => {
       this.bindData(res);
+    }).catch(e => {
+      ErrorToast("No record found");
     })
   }
 
@@ -326,7 +332,7 @@ export class LeaveComponent implements OnInit {
       elem.classList.add('d-none');
     }
     else {
-      if (elem.classList.contains('d-none'))
+      if (elem.classList.contains('d-none') && this.leaveData.length >0)
         document.getElementById('leave-chart').classList.remove('d-none');
     }
 
@@ -342,7 +348,7 @@ export class LeaveComponent implements OnInit {
   GetFilterResult() {
     this.leaveData = [];
     let year = new Date().getFullYear();
-    this.http.get(`Attendance/GetAllLeavesByEmpId/${this.employeeId}/${year}`)
+    this.http.post('Attendance/GetAllLeavesByEmpId',this.employeeId)
     .then ((response:ResponseModel) => {
       if (response.ResponseBody) {
         if(!response.ResponseBody.EmployeeLeaveDetail && !response.ResponseBody.LeavePlan) {

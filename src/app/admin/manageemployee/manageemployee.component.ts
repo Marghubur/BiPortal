@@ -99,9 +99,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.AccessLevelId = null;
       this.employeeModal.CompanyId = null;
       this.employeeModal.UserTypeId = null;
+      this.currentCompanyDetail = {
+        CompanyId: ""
+      };
     }
-
     this.loadData(this.employeeUid);
+
   }
 
   buildProfileImage(fileDetail: any) {
@@ -192,13 +195,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           }
           i++;
         }
-
-
       }
-
       this.buildPageData(res);
       this.bindForm();
       this.bindClientDetails();
+
       this.isReady = true;
     });
   }
