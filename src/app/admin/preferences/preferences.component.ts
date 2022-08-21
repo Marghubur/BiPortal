@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 
 @Component({
   selector: 'app-preferences',
@@ -18,12 +20,16 @@ export class PreferencesComponent implements OnInit {
   employeesList: autoCompleteModal = new autoCompleteModal();
   applicationData: any = [];
   isPreferenceReady: boolean = false;
+  IsPageReady: boolean = false;
+  employeeDetail: EmployeeDetail = new EmployeeDetail();
+  EmployeeId: number = 0;
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    this.loadData()
+    this.EmployeeId = 11;
+    this.LoadData();
     this.PanInformation = {
       NameOnCard: "MD Istayaque",
       PANNumber: "ABPANF655A",
@@ -52,29 +58,23 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  loadData() {
-    this.isPreferenceReady = false;
-    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        this.applicationData = response.ResponseBody;
-        this.employeesList.data = [];
-        this.employeesList.placeholder = "Employee";
-        let employees = this.applicationData.Employees;
-        if(employees) {
-          let i = 0;
-          while(i < employees.length) {
-            this.employeesList.data.push({
-              text: `${employees[i].FirstName} ${employees[i].LastName}`,
-              value: employees[i].EmployeeUid
-            });
-            i++;
+  LoadData() {
+    this.IsPageReady = false;
+    if (this.EmployeeId > 0) {
+      this.http.get(`employee/GetAllManageEmployeeDetail/${this.EmployeeId}`).then((response: ResponseModel) => {
+        if(response.ResponseBody) {
+          if (response.ResponseBody.Employee.length > 0) {
+            this.employeeDetail = response.ResponseBody.Employee[0] as EmployeeDetail;
+            this.IsPageReady = true;
+            Toast("Record found.")
+          } else {
+            ErrorToast("Record not found");
           }
         }
-        this.employeesList.className = "";
-
-        this.isPreferenceReady = true;
-      }
-    });
+      }).catch(e => {
+        ErrorToast("No record found");
+      });
+    }
   }
 
   activateMe(ele: string) {

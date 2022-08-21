@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { iNavigation } from 'src/providers/iNavigation';
+import { Files } from '../documents/documents.component';
 declare var $: any;
 
 @Component({
@@ -15,11 +17,26 @@ export class EmailComponent implements OnInit {
   isSubmitted: boolean = false;
   isLoading: boolean = false;
   isMinimize: boolean = false;
+  toEmail: Array<string> = [];
+  ccEmail: Array<string> = [];
+  bccEmail: Array<string> = [];
+  totalFileSize: number = 0;
+  FileDocumentList: Array<Files> = [];
+  FilesCollection: Array<any> = [];
+  isLargeFile: boolean = false;
+  FileDocuments: Array<any> = [];
+  isUploading: boolean = false;
+  currentUser: any = null;
 
   constructor(private fb:FormBuilder,
-              private http:AjaxService) { }
+              private http:AjaxService,
+              private nav:iNavigation) { }
 
   ngOnInit(): void {
+    let data = this.nav.getValue();
+    if (data) {
+      this.currentUser = data;
+    }
     this.initForm();
   }
 
@@ -45,25 +62,33 @@ export class EmailComponent implements OnInit {
       return;
     }
 
-    let to = (this.emailForm.get('To').value).split(',');
-    let cc = (this.emailForm.get('CC').value).split(',');
-    let bcc = (this.emailForm.get('BCC').value).split(',');
+    let formData = new FormData();
     let value = {
-      To: to,
+      To: this.toEmail,
       Subject: this.emailForm.get('Subject').value,
       Body: this.emailForm.get('Body').value,
-      CC: cc,
-      BCC: bcc
+      CC: this.ccEmail,
+      BCC: this.bccEmail
     };
-    this.http.post("Email/SendEmailRequest", value).then((res:ResponseModel) => {
-      if (res.ResponseBody) {
-        $('#composeMailModal').modal('hide');
-        Toast("Email send successfully");
-        this.isLoading = false;
+
+    if (this.FileDocumentList.length > 0 && this.currentUser.UserId > 0) {
+      let index = 0;
+      while (index < this.FileDocumentList.length) {
+        formData.append(this.FileDocumentList[index].FileName, this.FilesCollection[index]);
+        index++;
       }
-    }).catch(e => {
-      this.isLoading = false;
-    })
+      formData.append("fileDetail", JSON.stringify(this.FileDocumentList));
+      formData.append("mailDetail", JSON.stringify(value));
+      this.http.post("Email/SendEmailRequest", value).then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          $('#composeMailModal').modal('hide');
+          Toast("Email send successfully");
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
   }
 
   composeMailPopUp() {
@@ -159,4 +184,91 @@ export class EmailComponent implements OnInit {
 
   }
 
+  addEmailChip(e: any, name: string) {
+    let value = (e.target.value).replace(' ', '');
+    let validRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (value && value.match(validRegex)) {
+      switch (name) {
+        case 'to-emails':
+          this.toEmail.push(value);
+          break;
+        case 'cc-emails':
+          this.ccEmail.push(value);
+          break;
+        case 'bcc-emails':
+          this.bccEmail.push(value);
+          break;
+      }
+      e.target.value = '';
+    } else {
+      ErrorToast("Please enter a valid email.");
+    }
+  }
+
+  removeToEmail(i: number, name: string) {
+    if (name != null && i >= 0) {
+      switch (name) {
+        case 'to-emails':
+          this.toEmail.splice(i, 1);
+          break;
+        case 'cc-emails':
+          this.ccEmail.splice(i, 1);
+          break;
+        case 'bcc-emails':
+          this.bccEmail.splice(i, 1);
+          break;
+      }
+    }
+  }
+
+  fireBrowserFile() {
+    $('#fileAttachment').click();
+  }
+
+  uploadProfilePicture(fileinput: any) {
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    let selectedFile = fileinput.target.files;
+    if (selectedFile.length > 0) {
+      let index = 0;
+      let file = null;
+      this.isUploading = false;
+      while (index < selectedFile.length) {
+        file = <File>selectedFile[index];
+        let item: Files = new Files();
+        item.FileName = file.name;
+        item.FileType = file.type;
+        item.FileSize = (Number(file.size)/1024);
+        item.Email = this.currentUser.Email;
+        item.FileExtension = file.type;
+        item.DocumentId = 0;
+        item.FilePath = '';
+        item.ParentFolder = '';
+        item.UserId = this.currentUser.UserId;
+        item.UserTypeId = this.currentUser.UserTypeId;
+        this.FileDocumentList.push(item);
+        this.FilesCollection.push(file);
+        index++;
+      }
+
+      this.totalFileSize = 0;
+      for(let i=0; i<selectedFile.length; i++) {
+        let filesize = Number(this.FilesCollection[i].size)
+        this.totalFileSize += (filesize/1024);
+      }
+
+      if (this.totalFileSize > 5120) {
+        this.isLargeFile = true;
+      }
+    }
+  }
+
+  getSelectedText(e: any) {
+    let value = e.view.getSelection().toString();
+    if (value && value.length > 0) {
+      let text = document.getElementById('emailbody').innerHTML;
+      let boldText = "<b>" + value + "</b>";
+      document.getElementById('emailbody').innerHTML = text.replace(value, boldText);
+    }
+  }
 }

@@ -39,38 +39,49 @@
         <form [formGroup]="emailForm">
           <div class="email-address-box border-bottom d-flex align-items-center"   [ngClass]="{'error-field': isSubmitted && f.To.errors != null && f.To.errors.required}">
             <label for="to-email-address" class="form-label fs-5 m-0 pe-1 d-none">To</label>
-            <input type="text" class="form-control border-0 fs-5 py-3" formControlName="To" placeholder="Receipents" (click)="emailAddress()">
-            <div class="col-auto float-end d-none" data-name="Cc-Bcc-address">
-              <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
-              <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
+            <div class="d-flex flex-row flex-wrap w-100 align-items-center">
+              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of toEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-danger" (click)="removeToEmail(i, 'to-emails')"></i></a></span>
+              <input type="text" class="col border-0 ms-2 fs-5"placeholder="Receipents" (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'to-emails')">
+              <div class="col-auto float-end d-none" data-name="Cc-Bcc-address">
+                <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
+                <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
+              </div>
             </div>
           </div>
-          <div class="email-address-box border-bottom d-flex align-items-center d-none" data-name="Cc-address">
+          <div class="email-address-box my-4 border-bottom d-flex align-items-center d-none" data-name="Cc-address">
             <label for="Cc-email-address" class="form-label fs-5 m-0 pe-1">Cc</label>
-            <input type="text" class="form-control border-0 fs-5 py-3" formControlName="CC" >
-            <div class="col-auto float-end" data-name="Add-Bcc-btn">
-              <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
+            <div class="d-flex flex-row flex-wrap w-100 align-items-center">
+              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of ccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-danger" (click)="removeToEmail(i, 'cc-emails')"></i></a></span>
+              <input type="text" class="col border-0 ms-2 fs-5" (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'cc-emails')">
+              <div class="col-auto float-end" data-name="Add-Bcc-btn">
+                <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
+              </div>
             </div>
           </div>
-          <div class="email-address-box border-bottom d-flex align-items-center d-none" data-name="Bcc-address">
+          <div class="email-address-box my-4 border-bottom d-flex align-items-center d-none" data-name="Bcc-address">
             <label for="Bcc-email-address" class="form-label fs-5 m-0 pe-1">Bcc</label>
-            <input type="text" class="form-control border-0 fs-5 py-3" formControlName="BCC">
-            <div class="col-auto float-end" data-name="Add-Cc-btn">
-              <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
+            <div class="d-flex flex-row flex-wrap w-100 align-items-center">
+              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of bccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-danger" (click)="removeToEmail(i, 'bcc-emails')"></i></a></span>
+              <input type="text" class="col border-0 ms-2 fs-5" (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'bcc-emails')">
+              <div class="col-auto float-end" data-name="Add-Cc-btn">
+                <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
+              </div>
             </div>
           </div>
           <div class="email-address-box"  [ngClass]="{'error-field': isSubmitted && f.Subject.errors != null && f.Subject.errors.required}">
             <input type="text" class="form-control border-0 border-bottom py-3 fs-5" formControlName="Subject" placeholder="Subject">
           </div>
           <div class="message-box">
-            <textarea class="form-control border-0 py-3 fs-5 small-message-box" formControlName="Body"></textarea>
+            <div contenteditable="true" id="emailbody" class="form-control border-0 py-3 fs-5 small-message-box" (keydown.control.b)="getSelectedText($event)" formControlName="Body"></div>
           </div>
         </form>
       </div>
       <div class="modal-footer border-top-0 justify-content-start">
         <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+        <input type="file" id="fileAttachment" class="d-none" (change)="uploadProfilePicture($event)">
         <button type="button" class="btn btn-outline-primary" [disabled]="isLoading" (click)="sendEmailRequest()"><i class="fa " [ngClass]="{'fa-send-o': !isLoading, 'fa-spin fa-spinner': isLoading}"></i><span class="ps-2">{{ isLoading ? 'Wait' : 'Send' }}</span></button>
-        <a href="javascript:void(0)" class="text-decoration-none ps-2"><i class="fa fa-paperclip pe-2"></i>Attach</a>
+        <a href="javascript:void(0)" class="text-decoration-none ps-2" (click)="fireBrowserFile()"><i class="fa fa-paperclip pe-2"></i>Attach</a>
+        <a href="javascript:void(0)" class="text-decoration-none ps-2"><i class="fa fa-html5 pe-2"></i>Template</a>
       </div>
     </div>
   </div>

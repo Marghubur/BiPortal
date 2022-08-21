@@ -16,6 +16,8 @@
 
 .small-message-box {
   height: 40vh;
+  outline: 0;
+  box-shadow: none !important;
   resize: none;
 }
 
@@ -30,4 +32,35 @@
 
 .modal-backdrop .show {
   opacity: 1 !important;
+}
+
+.email-address {
+  display: block;
+  max-width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: none !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.email-address:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: none;
+  outline: 0;
+  box-shadow: none !important;
+}
+
+.chip-box {
+  max-width: 100% !important;
+  min-width: 0px !important;
 }
