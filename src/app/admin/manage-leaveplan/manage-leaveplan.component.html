@@ -280,12 +280,13 @@
                                     <div class="col-md-1 mx-3">
                                       <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate">
                                     </div>
-                                    <label for="" class="form-label">of the month allocate</label>
+                                    <label class="form-label">of the month allocate</label>
                                     <div class="col-md-1 mx-3">
-                                      <input type="text" class="form-control" OnlyNumber="2"
+                                      <input type="text" class="form-control"
+                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'"
                                         formControlName="AllocatedLeave">
                                     </div>
-                                    <label for="" class="form-label">days(s) of leave.</label>
+                                    <label class="form-label">days(s) of leave.</label>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
@@ -309,8 +310,8 @@
                         the
                         middle of the leave calendar month?</h6>
                       <div class="form-check">
-                        <input class="form-check-input" value="true" type="radio" name="IsLeavesProratedOnProbation"
-                          formControlName="IsLeavesProratedOnProbation" (click)="toggleCurrent(3, $event)">
+                        <input class="form-check-input" value="true" type="radio" name="IsLeavesProratedOnNotice"
+                          formControlName="IsLeavesProratedOnNotice" (click)="toggleCurrent(3, $event)">
                         <label class="form-check-label">
                           Leave are prorated based on actual exit date of employee (recommended). <i
                             class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
@@ -319,14 +320,13 @@
                         </label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" value="true" type="radio" name="IsNotAllowProratedOnProbation"
-                          formControlName="IsNotAllowProratedOnProbation" (click)="toggleCurrent(3, $event)">
+                        <input class="form-check-input" value="true" type="radio" name="IsNotAllowProratedOnNotice"
+                          formControlName="IsNotAllowProratedOnNotice" (click)="toggleCurrent(3, $event)">
                         <label class="form-check-label">
                           Leaves are updated based on date of month, on which employee is exiting the company..
                         </label>
                       </div>
-                      <div
-                        [ngClass]="{'d-none': leaveAccrualForm.controls.IsNotAllowProratedOnProbation.value == 'false'}"
+                      <div [ngClass]="{'d-none': leaveAccrualForm.controls.IsNotAllowProratedOnNotice.value == 'false'}"
                         id="EmpExitMiddle">
                         <ng-container formArrayName="ExitMonthLeaveDistribution">
                           <div class="my-4" [formGroupName]="i"
@@ -370,8 +370,8 @@
                         </ng-container>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" value="true" type="radio" name="IsNoLeaveOnProbationPeriod"
-                          formControlName="IsNoLeaveOnProbationPeriod" (click)="toggleCurrent(3, $event)">
+                        <input class="form-check-input" value="true" type="radio" name="IsNoLeaveOnNoticePeriod"
+                          formControlName="IsNoLeaveOnNoticePeriod" (click)="toggleCurrent(3, $event)">
                         <label class="form-check-label">
                           Do not accure leave when an employee has resigned and is under notice period.
                         </label>

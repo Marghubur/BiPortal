@@ -245,10 +245,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       IsLeavesProratedForJoinigMonth: new FormControl(this.leaveAccrual.IsLeavesProratedForJoinigMonth ? 'true' : 'false'),
       JoiningMonthLeaveDistribution: this.buildFormArrayBetweenJoiningDate(),
 
-      IsLeavesProratedOnProbation: new FormControl(this.leaveAccrual.IsLeavesProratedOnProbation?'true' : 'false'),
+      IsLeavesProratedOnNotice: new FormControl(this.leaveAccrual.IsLeavesProratedOnNotice?'true' : 'false'),
       ExitMonthLeaveDistribution: this.buildFormArrayBetweenProbationPeriod(),
-      IsNotAllowProratedOnProbation: new FormControl(this.leaveAccrual.IsNotAllowProratedOnProbation ?'true' : 'false'),
-      IsNoLeaveOnProbationPeriod: new FormControl(this.leaveAccrual.IsNoLeaveOnProbationPeriod?'true' : 'false'),
+      IsNotAllowProratedOnNotice: new FormControl(this.leaveAccrual.IsNotAllowProratedOnNotice ?'true' : 'false'),
+      IsNoLeaveOnNoticePeriod: new FormControl(this.leaveAccrual.IsNoLeaveOnNoticePeriod?'true' : 'false'),
 
       IsVaryOnProbationOrExprience: new FormControl(this.leaveAccrual.IsVaryOnProbationOrExprience ?'true' : 'false'),
       IsAccrualStartsAfterJoining: new FormControl(this.leaveAccrual.IsAccrualStartsAfterJoining ?'true' : 'false'),
@@ -867,12 +867,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
           document.getElementsByName('LeaveBalanceCalculated')[0].classList.add('d-none');
         break;
       case 3:
-        this.leaveAccrualForm.get('IsNoLeaveOnProbationPeriod').setValue('false');
-        this.leaveAccrualForm.get('IsNotAllowProratedOnProbation').setValue('false');
-        this.leaveAccrualForm.get('IsLeavesProratedOnProbation').setValue('false');
+        this.leaveAccrualForm.get('IsNoLeaveOnNoticePeriod').setValue('false');
+        this.leaveAccrualForm.get('IsNotAllowProratedOnNotice').setValue('false');
+        this.leaveAccrualForm.get('IsLeavesProratedOnNotice').setValue('false');
         this.leaveAccrualForm.get(e.target.name).setValue(e.target.value);
         let elem = document.getElementById("EmpExitMiddle");
-        if(e.target.name == "IsNotAllowProratedOnProbation")
+        if(e.target.name == "IsNotAllowProratedOnNotice")
           elem.classList.remove('d-none');
         else
           elem.classList.add('d-none');
@@ -982,10 +982,10 @@ class LeaveAccrual {
   IsLeavesProratedForJoinigMonth: boolean = true;
   LeaveDistributionSequence: string = null;
 
-  IsLeavesProratedOnProbation: boolean = null;
-  IsNotAllowProratedOnProbation: boolean = null;
+  IsLeavesProratedOnNotice: boolean = null;
+  IsNotAllowProratedOnNotice: boolean = null;
   BreakMonthLeaveAllocationId: number = 0;
-  IsNoLeaveOnProbationPeriod: boolean = null;
+  IsNoLeaveOnNoticePeriod: boolean = null;
 
   IsVaryOnProbationOrExprience: boolean = false;;
   IsAccrualStartsAfterJoining: boolean = false;
