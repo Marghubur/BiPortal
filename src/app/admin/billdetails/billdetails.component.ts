@@ -849,7 +849,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   EditEmployee(item: any) {
     if (item !== null) {
       let EmpId = item;
-      let EmpIsActive = true;
+      let EmpIsActive = 1;
       if (EmpId !== null && EmpId !== "") {
         this.http.get(`Employee/GetEmployeeById/${EmpId}/${EmpIsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {

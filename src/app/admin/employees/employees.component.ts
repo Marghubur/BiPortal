@@ -197,12 +197,12 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     }
 
     if(this.employeeDetails.Email !== null && this.employeeDetails.Email !== "") {
-      this.employeeData.SearchString += `1=1 emp.Email like '%${this.employeeDetails.Email}%'`;
+      this.employeeData.SearchString += `1=1 And emp.Email like '%${this.employeeDetails.Email}%'`;
         delimiter = "and";
     }
 
     if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile.trim() !== '') {
-      this.employeeData.SearchString += `1=1 emp.Mobile like '%${this.employeeDetails.Mobile}%'`;
+      this.employeeData.SearchString += `1=1 And emp.Mobile like '%${this.employeeDetails.Mobile}%'`;
         delimiter = "and";
     }
 
@@ -212,8 +212,8 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   globalFilter() {
     let searchQuery = "";
     this.employeeData.reset();
-    this.employeeData.SearchString = ` Global like ${this.anyFilter}`;
-
+    searchQuery= `emp.FirstName like '%${this.anyFilter}%' OR emp.Email like '%${this.anyFilter}%' OR emp.Mobile like '%${this.anyFilter}%'`;
+    this.employeeData.SearchString = `1=1 And ${searchQuery}`;
     this.LoadData();
   }
 
