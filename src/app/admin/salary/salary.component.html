@@ -19,7 +19,7 @@
       </li>
     </ul>
     <div class="col-md-3 pe-2 my-3" *ngIf="isSalaryReady">
-      <app-iautocomplete [data]="employeesList" [(ngModel)]="EmployeeId" [ngModelOptions]="{standalone: true}"></app-iautocomplete>
+      <app-iautocomplete [data]="employeesList" (OnSelect)="getSalaryBreakup($event)" [(ngModel)]="EmployeeId" [ngModelOptions]="{standalone: true}"></app-iautocomplete>
     </div>
   </div>
   <div class="col-12 x_panel p-0 m-0">
@@ -48,7 +48,7 @@
           <ng-container>
             <div class="mt-4 alert alert-info fs-6" role="alert">
               Your Income and tax liability computed as per Old income taax regiime. To learn more, and switch to New
-              income tax regime, <a href="javscript:void(0)" (click)="newIncomeTaxRegimePopUp()"
+              income tax regime, <a href="javascript:void(0)" (click)="newIncomeTaxRegimePopUp()"
                 class="text-decoration-none">click here.</a>
             </div>
             <div class="d-flex mt-5 ms-5 mb-3">
@@ -83,12 +83,12 @@
                       <i class="fa fa-refresh text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
                     </a>
                     <button type="btn" class="btn btn-outline-light btn-sm ms-3" (click)="viewSalary()">
-                      <i class="fa" [ngClass]="{'fa-angle-down': salaryDetail, 'fa-angle-up': !salaryDetail}"
+                      <i class="fa" [ngClass]="{'fa-angle-down': isSalaryDetail, 'fa-angle-up': !isSalaryDetail}"
                         aria-hidden="true"></i>
                     </button>
                   </div>
                 </div>
-                <ng-container *ngIf="!salaryDetail">
+                <ng-container *ngIf="!isSalaryDetail">
                   <div class="border border-secondary">
                     <div class="card-header py-2 d-flex text-dark align-items-center">
                       <p class="mb-0">
@@ -146,110 +146,84 @@
 
 <!-- Full Salary Deatils -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="fullSalaryDetail" tabindex="-1"
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  aria-labelledby="fullSalaryDetailLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title fs-4 text-dark" id="exampleModalLabel">SALARY BREAKUP</h5>
+        <h5 class="modal-title fs-4 text-dark" id="fullSalaryDetailLabel">SALARY BREAKUP</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body px-5">
-        <div class="t-table t-list t-border col-md-12">
-          <div class="hide-bar alert-primary"></div>
-          <div class="t-head alert-primary">
-            <div class="tr fw-bold text-dark">
-              <div class="th fe-4">
-                <div class="cell-wrapper">
-                  DETAILS
-                </div>
-              </div>
-              <div class="th fe-2">
-                MONTHLY
-              </div>
-              <div class="th fe-2">
-                ANNUALLY
-              </div>
-            </div>
-          </div>
-          <div class="t-body overflow-hidden">
-            <div class="tr py-2" *ngFor="let salary of salaryBreakup">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  {{salary.Details}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  <span *ngIf="salary.Details == 'Total'">INR </span>
-                  {{salary.Monthly}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  <span *ngIf="salary.Details == 'Total'">INR </span>
-                  {{salary.Annually}}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="t-table t-list t-border col-md-12 mt-4">
-          <div class="hide-bar alert-primary"></div>
-          <div class="t-head alert-primary">
-            <div class="tr fw-bold text-dark">
-              <div class="th fe-4">
-                <div class="cell-wrapper">
-                  DEDUCATION
-                </div>
-              </div>
-              <div class="th fe-2">
-                MONTHLY
-              </div>
-              <div class="th fe-2">
-                ANNUALLY
-              </div>
-            </div>
-          </div>
-          <div class="t-body overflow-hidden">
-            <div class="tr py-2" *ngFor="let deduction of salaryDeducation">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  {{deduction.Deduction}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  <span *ngIf="deduction.Deduction == 'NET PAY'">INR </span>
-                  {{deduction.Monthly}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  <span *ngIf="deduction.Deduction == 'NET PAY'">INR </span>
-                  {{deduction.Annually}}
+        <form>
+          <ng-container [formGroup]="salaryBreakupForm" *ngIf="salaryBreakupForm">
+            <div class="pull-down">
+              <div class="blur-this">
+                <div class="col-md-12">
+                  <div class="t-table t-list t-border col-md-12">
+                    <div class="hide-bar alert-primary"></div>
+                    <div class="t-head alert-primary">
+                      <div class="tr fw-bold text-dark">
+                        <div class="th fe-4">
+                          <div class="cell-wrappe ps-2">
+                            DETAILS
+                          </div>
+                        </div>
+                        <div class="th fe-2">
+                          MONTHLY
+                        </div>
+                        <div class="th fe-2">
+                          ANNUALLY
+                        </div>
+                      </div>
+                    </div>
+                    <div class="t-body" *ngIf="isReady">
+                      <ng-container formArrayName="Components">
+                        <div class="tr"
+                          *ngFor="let item of salaryBreakupForm.get('Components').controls; let index = index;">
+                          <ng-container [formGroupName]="index">
+                            <div class="td d-flex flex-column justify-content-center fe-4 ps-2 py-2"
+                              [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                              {{item.get('ComponentName').value}}
+                            </div>
+                            <div class="td align-middle fe-2">
+                              <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                                {{item.get('MonthlyAmount').value}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-2">
+                              <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                                {{item.get('FinalAmount').value}}
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <p class="ps-5 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if
-        any).</p>
+          </ng-container>
+        </form>
+        <p class="fs-6 my-2 text-success fw-bold">Note: Net Pay displayed does not include Income Tax, Professional
+          Tax or Other deductions (if
+          any).</p>
       <div class="modal-footer border-top-0 pe-5">
         <button type="button" class="btn btn-outline-success px-4" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+</div>
 
 <!-- New Income Tax regime Modal Start-->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="newIncomeTaxRegime" tabindex="-1"
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  aria-labelledby="newIncomeTaxRegimeLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content mx-3">
       <div class="sticky-modal-header">
         <div class="modal-header bg-secondary text-white">
-          <h5 class="modal-title" id="exampleModalLabel">Switch to Section 115BAC</h5>
+          <h5 class="modal-title" id="newIncomeTaxRegimeLabel">Switch to Section 115BAC</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="card py-3 ps-3 shadow-lg">
@@ -347,11 +321,11 @@
 
 <!-- Salary structutr Change History -->
 <div class="modal fade slaryStructureHistory" id="slaryStructureHistory" tabindex="-1"
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  aria-labelledby="slaryStructureHistoryLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header bg-secondary text-white border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">Salary structure Change History</h5>
+        <h5 class="modal-title" id="slaryStructureHistoryLabel">Salary structure Change History</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

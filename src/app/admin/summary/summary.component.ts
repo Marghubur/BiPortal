@@ -32,6 +32,7 @@ export class SummaryComponent implements OnInit {
   isSummaryReady: boolean = false;
   employeesList: autoCompleteModal = new autoCompleteModal();
   applicationData: any = [];
+  isRecordFound: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -68,6 +69,7 @@ export class SummaryComponent implements OnInit {
   }
 
   LoadFiles() {
+    this.isRecordFound = false;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       if (response.ResponseBody) {
@@ -75,6 +77,7 @@ export class SummaryComponent implements OnInit {
         this.userFiles = response.ResponseBody["Files"];
         if(this.userFiles !== null && this.userFiles.length > 0) {
           this.salarySummary = this.userFiles.filter(x => x.Month == this.currentMonth -1 && x.Status != 'Rejected')[0];
+          this.isRecordFound = true;
         }
       } else {
         ErrorToast("No file or folder found");
