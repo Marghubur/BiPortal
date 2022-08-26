@@ -89,11 +89,15 @@ export class IncometaxComponent implements OnInit {
 
         let annualSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
         if (annualSalaryDetail && annualSalaryDetail.length == 12) {
+          annualSalaryDetail.map((com) => {
+            com.SalaryBreakupDetails = com.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != 'CTC' && x.ComponentId != "PTAX" && x.ComponentId != "ESI")
+          });
+
           let i = 0;
           let value = "";
           let selectedComponent = [];
           let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName}) => { return { ComponentId, ComponentName } });
-          while(i < annualSalaryDetail.length) {
+          while(i < props.length) {
             value = props[i].ComponentId;
             selectedComponent = annualSalaryDetail.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));
             this.salaryBreakup.push({
@@ -145,6 +149,8 @@ export class IncometaxComponent implements OnInit {
 
         this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance) ;
         this.getSalaryGroup();
+        this.hraCalculation();
+        this.totalAllowTaxExemptAmount = this.totalAllowTaxExemptAmount + this.hraDetails.reduce((acc, next) => {return acc + next.Min}, 0)
         this.isPageReady = true;
         Toast("Details get successfully")
       }
@@ -179,6 +185,10 @@ export class IncometaxComponent implements OnInit {
   viewHRAPopUp() {
     this.hraDetails = [];
     $('#viewHRAModal').modal('show');
+    this.hraCalculation();
+  }
+
+  hraCalculation() {
     for (let i = 0; i < this.taxCalender.length; i++) {
       this.hraDetails.push({
         Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,

@@ -358,10 +358,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
     if (errroCounter == 0) {
       if (this.ProfessuinalDetail_JSON == null) {
-        this.ProfessuinalDetail_JSON = null;
+        this.ProfessuinalDetail_JSON = "";
       }
       let formData = new FormData();
       formData.append("employeeDetail", JSON.stringify(this.employeeForm.value));
+      if(this.employeeForm.value.AllocatedClients == undefined || this.employeeForm.value.AllocatedClients == undefined)
+        this.employeeForm.value.AllocatedClients = [];
       formData.append("allocatedClients", JSON.stringify(this.employeeForm.value.AllocatedClients));
       formData.append("ProfessuinalDetail_JSON", this.ProfessuinalDetail_JSON)
       let file = null;
@@ -378,7 +380,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }).catch(e => {
         this.isLoading = false;
-        ErrorToast("Registration fail. Please contact admin.")
+        ErrorToast(e.HttpStatusMessage);
       });
     } else {
       this.isLoading = false;

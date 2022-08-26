@@ -96,7 +96,7 @@ export class SalaryBreakupComponent implements OnInit {
       let presentMonth = new Date().getMonth() + 1;
       let presentYear = new Date().getFullYear();
       let formData = new FormData();
-      formData.append('completesalarydetail', JSON.stringify(value));
+      formData.append('completesalarydetail', JSON.stringify(value.Components));
       this.http.post(`SalaryComponent/InsertUpdateSalaryBreakUp/
           ${this.employeeUid}/${presentMonth}/${presentYear}`, formData).then(res => {
         if (res.ResponseBody) {
