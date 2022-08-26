@@ -38,23 +38,32 @@
                 </div>
               </div>
               <div class="ps-3 pt-4">
-                <div class="row">
-                  <div class="col-md-6">
-                    <small class="fs-6">WORKING DAYS</small>
-                    <p class="text-dark fw-bold">{{salarySummary.NoOfDays}} Days</p>
+                <ng-container *ngIf="isRecordFound">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <small class="fs-6">WORKING DAYS</small>
+                      <p class="text-dark fw-bold">{{salarySummary.NoOfDays}} Days</p>
+                    </div>
+                    <div class="col-md-6">
+                      <small class="fs-6">LOSS OF DAYS</small>
+                      <p class="text-dark fw-bold">{{salarySummary.Absents}} Days</p>
+                    </div>
+                    <div class="col-md-6">
+                      <small class="fs-6">PAYMENT MODE</small>
+                      <p class="text-dark fw-bold">Bank Transfer</p>
+                    </div>
+                    <div class="col-md-6 mt-auto mb-3">
+                      <a href="javascript:void(0)" class="text-decoration-none" (click)="viewPaySlip()">View Pay Slip</a>
+                    </div>
                   </div>
-                  <div class="col-md-6">
-                    <small class="fs-6">LOSS OF DAYS</small>
-                    <p class="text-dark fw-bold">{{salarySummary.Absents}} Days</p>
+                </ng-container>
+                <ng-container *ngIf="!isRecordFound">
+                  <div class="py-4 my-2 d-flex align-items-center justify-content-center">
+                    <div class="fw- bold fs-5 pt-1 pb-4">
+                      No record found.
+                    </div>
                   </div>
-                  <div class="col-md-6">
-                    <small class="fs-6">PAYMENT MODE</small>
-                    <p class="text-dark fw-bold">Bank Transfer</p>
-                  </div>
-                  <div class="col-md-6 mt-auto mb-3">
-                    <a href="javascript:void(0)" class="text-decoration-none" (click)="viewPaySlip()">View Pay Slip</a>
-                  </div>
-                </div>
+                </ng-container>
               </div>
             </div>
           </div>

@@ -12,12 +12,12 @@ import { iNavigation } from 'src/providers/iNavigation';
 export class SalaryBreakupComponent implements OnInit {
   salaryBreakupForm: FormGroup = null;
   isLoading: boolean = false;
+  isReady: boolean = false;
   employeeUid: number = 0;
   salaryGroupId: number = 0;
   salaryComponents: Array<any> = [];
   isSalaryGroup: boolean = false;
   salaryGroup: any = null;
-  isReady: boolean = false;
   salaryDetail: any = null;
   employeeCTC: number = 0;
   employeeDetails: any = null;
