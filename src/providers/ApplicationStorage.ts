@@ -89,7 +89,7 @@ export class ApplicationStorage {
     return ResultingData;
   }
 
-  getByKey(key: string) {
+  getByKey(key: string): any {
     if (key === undefined || key === null || key === "")
       return null;
     key = key.toLocaleLowerCase();
@@ -99,11 +99,21 @@ export class ApplicationStorage {
     return data;
   }
 
-  setByKey(Key: string, ModifiedData: any): boolean {
+  setByKey(Key: string, UserData: any): boolean {
     let flag = false;
     if (Key != null && Key != "") {
       Key = Key.toLocaleLowerCase();
-      localStorage.setItem(Key, ModifiedData);
+      localStorage.setItem(Key, UserData);
+      flag = true;
+    }
+    return flag;
+  }
+
+  removeByKey(Key: string): boolean {
+    let flag = false;
+    if (Key != null && Key != "") {
+      Key = Key.toLocaleLowerCase();
+      localStorage.removeItem(Key);
       flag = true;
     }
     return flag;

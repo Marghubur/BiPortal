@@ -70,7 +70,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     private user: UserService,
     private fb: FormBuilder,
     private nav: iNavigation,
-    private http: AjaxService,) { }
+    private http: AjaxService
+    ) { }
 
   ngOnInit(): void {
     this.rentalPage = 1;
@@ -108,6 +109,15 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         year: Number(year.toString().slice(-2))
       });
       i++;
+    }
+
+    let empId = this.local.getByKey("EmployeeId");
+    if(empId != null){
+      if (isNaN(Number(empId))) {
+        WarningToast("Unable to fetch previous EmployeeId. Please selecte from given dropdown.");
+      } else {
+        this.getDeclaration(Number(empId));
+      }
     }
     // this.getDeclaration(32);
   }
@@ -171,6 +181,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.isEmployeeSelect = true;
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody) {
+        this.local.setByKey("EmployeeId", this.EmployeeId);
         this.bindData(response.ResponseBody);
         Toast("Declaration detail loaded successfully");
       }

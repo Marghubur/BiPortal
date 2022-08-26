@@ -180,7 +180,7 @@
                     <div class="t-table t-list t-border bg-white">
                       <div class="t-head overflow-hidden">
                         <div class="tr py-3 ">
-                          <div class="th ps-3">Total Salary Receiived</div>
+                          <div class="th ps-3">Total Salary Received</div>
                           <div class="th pe-3 text-end">{{salaryDetail.GrossIncome | number}}</div>
                         </div>
                         <div class="tr py-3 border-bottom-0">
@@ -199,7 +199,7 @@
                           <div class="th ps-3">SECTION</div>
                           <div class="th ps-3 fe-4">ALLOWANCE</div>
                           <div class="th ps-3 fe-1"></div>
-                          <div class="th pe-3">DECLARED AMOUNT</div>
+                          <div class="th pe-3">GROSS AMOUNT</div>
                           <div class="th pe-3 text-end">DEDUCTABLE AMOUNT</div>
                         </div>
                         <ng-container *ngFor="let item of TaxSavingAlloance">
@@ -215,7 +215,7 @@
                             <div class="th ps-3">{{item.DeclaredValue}}</div>
                             <div class="th pe-3 text-end" *ngIf="item.ComponentId != 'HRA'">{{item.DeclaredValue}}</div>
                             <div class="th pe-3 text-end" *ngIf="item.ComponentId == 'HRA'">
-                              {{allDeclarationSalaryDetails.HRADeatils.HRAAmount}}</div>
+                              {{allDeclarationSalaryDetails.HRADeatils.HRAAmount*12}}</div>
                           </div>
                         </ng-container>
                         <div class="tr py-3">
@@ -242,17 +242,18 @@
                           <div class="th ps-3">16(iii)</div>
                           <div class="th ps-3 fe-4">PTAX (Professional Tax)</div>
                           <div class="th ps-3"></div>
-                          <div class="th ps-3"></div>
+                          <div class="th ps-3">
+                            <ng-container>
+                              <a href="javascript:void(0)" (click)="viewStandardDeductionPopUp()"
+                                class="text-decoration-none">View Detail</a>
+                            </ng-container>
+                          </div>
                           <div class="th pe-3 text-end">2400</div>
                         </div>
                         <div class="tr py-3">
                           <div class="th ps-3">16(iA)</div>
                           <div class="th ps-3 fe-4">STANDARD DEDUCTION</div>
                           <div class="th ps-3">
-                            <ng-container>
-                              <a href="javascript:void(0)" (click)="viewStandardDeductionPopUp()"
-                                class="text-decoration-none">View Detail</a>
-                            </ng-container>
                           </div>
                           <div class="th ps-3"></div>
                           <div class="th pe-3 text-end">50000</div>
@@ -525,11 +526,11 @@
           <div class="t-head overflow-hidden">
             <div class="tr py-2" *ngFor="let item of hraDetails">
               <div class="td">{{item.Month}}</div>
-              <div class="td">{{item.RentPaid/12 | number}}</div>
-              <div class="td">{{item.HRA1/12 | number}}</div>
-              <div class="td">{{item.HRA2/12 | number}}</div>
-              <div class="td">{{item.HRA3/12 | number}}</div>
-              <div class="td">{{item.Min/12 | number}}</div>
+              <div class="td">{{item.RentPaid | number}}</div>
+              <div class="td">{{item.HRA1 | number}}</div>
+              <div class="td">{{item.HRA2 | number}}</div>
+              <div class="td">{{item.HRA3 | number}}</div>
+              <div class="td">{{item.Min | number}}</div>
             </div>
           </div>
         </div>
