@@ -526,7 +526,7 @@
           <div class="t-head overflow-hidden">
             <div class="tr py-2" *ngFor="let item of hraDetails">
               <div class="td">{{item.Month}}</div>
-              <div class="td">{{item.RentPaid | number}}</div>
+              <div class="td">{{item.RentPaid/12 | number: '1.2-2'}}</div>
               <div class="td">{{item.HRA1 | number}}</div>
               <div class="td">{{item.HRA2 | number}}</div>
               <div class="td">{{item.HRA3 | number}}</div>
