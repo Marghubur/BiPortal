@@ -453,7 +453,7 @@
                                     name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
                                       (click)="closeDeclaration($event)">Cancel</a>
                                   </div>
                                 </div>
@@ -657,7 +657,7 @@
                                     name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
                                       (click)="closeDeclaration($event)">Cancel</a>
                                   </div>
                                 </div>
@@ -831,7 +831,7 @@
                                     <div *ngIf="r.UploadedFileIds == null">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
-                                        <i class="fa fa-paperclip pe-2"></i>Not Upload
+                                        <i class="fa fa-paperclip pe-2"></i><span>Not Upload</span>
                                       </a>
                                     </div>
                                   </div>
@@ -864,7 +864,7 @@
                                     name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
                                       (click)="closeDeclaration($event)">Cancel</a>
                                   </div>
                                 </div>
@@ -1038,14 +1038,14 @@
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl p-5 ">
     <div class="modal-content rounded-3 px-4">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-normal" id="addAttachmentModalLabel">Add Attachment for {{attachmentForDeclaration}}
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="col-12 row m-0">
-          <div class="col-md-4 card mt-4 me-2">
+          <!-- <div class="col-md-4 card mt-4 me-2">
             <div class="">
               <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
               <div class="col-md-12 p-0">
@@ -1076,8 +1076,8 @@
                 <i class="fa fa-eraser pe-2"></i> Cancel
               </button>
             </div>
-          </div>
-          <div class="col-md-7 mt-4 overflow-auto" style="height: 33vh">
+          </div> -->
+          <div class="col-md-12 mt-4 overflow-auto" style="height: 33vh">
             <ng-container *ngIf="slectedDeclarationnFile.length > 0">
               <table class="table">
                 <thead>
@@ -1089,8 +1089,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of slectedDeclarationnFile">
-                    <td class="counterCell"></td>
+                  <tr *ngFor="let item of slectedDeclarationnFile; let i = index">
+                    <td class="counterCell">{{i+1}}</td>
                     <td>{{item.FileName}}</td>
                     <td>
                       <ng-container *ngIf="item.FileSize > 0">
@@ -1101,15 +1101,17 @@
                       </ng-container>
                     </td>
                     <td>
-                      <input type="file" id="modifyAttachment" class="d-none"
+                      <!-- <input type="file" id="modifyAttachment" class="d-none"
                         (change)="ModifyAttachment($event, item.FileId)" />
                       <a href="javascript:void(0)" (click)="fireBrowser()" class="text-decoration-none"> <i
-                          class="fa fa-pencil text-primary"></i></a>
+                          class="fa fa-pencil text-primary"></i></a> -->
+                      <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
+                      <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-trash px-2 text-danger"></i></a>
                     </td>
                   </tr>
                   <tr>
                     <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
-                    <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
+                    <td colspan="2" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
                   </tr>
                 </tbody>
               </table>
@@ -1147,6 +1149,17 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="modal-footer border-top-0 mb-2">
+        <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
+        <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="fireFileBrowser()"><i class="fa fa-paperclip pe-2"></i>Add Attachment</a>
+        <button type="button" class="btn btn-outline-danger mx-2" (click)="closeAttachmentModal()">
+          <i class="fa fa-eraser pe-2"></i> Clean
+        </button>
+        <button type="button" class="btn btn-primary-c ms-2" (click)="saveAttachment()"
+          [disabled]="isLargeFile || FilesCollection.length == 0">
+          <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload
+        </button>
       </div>
     </div>
   </div>
@@ -1309,3 +1322,14 @@
   </div>
 </div> -->
 <!-- End -->
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
+<!-- End pdf view modal -->

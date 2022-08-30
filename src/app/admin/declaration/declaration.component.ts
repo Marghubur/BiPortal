@@ -65,6 +65,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   housingPropertyDetail: HouseProperty = new HouseProperty;
   isRentedResidenceEdit: boolean = false;
   isShowRentedDetail: boolean = false;
+  basePath: string = '';
+  viewer: any = null;
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -82,6 +84,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     var month = 3;
     var year = dt.getFullYear();
     this.year = dt.getFullYear();
+    this.basePath = this.http.GetImageBasePath();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     if (expiredOn === null || expiredOn === "")
@@ -344,6 +347,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       let currentDeclaration = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item.ComponentId);
       if (currentDeclaration.length > 0)
         this.slectedDeclarationnFile = currentDeclaration;
+
+      if (this.FilesCollection.length > 0) {
+        this.FileDocumentList = [];
+        this.FilesCollection = [];
+        this.removeSelectedFile()
+      }
       $("#addAttachmentModal").modal('show');
     }
   }
@@ -398,30 +407,44 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $("#modifyAttachment").click();
   }
 
-  ModifyAttachment(fileInput: any, fileId: number) {
-    this.FileDocumentList = [];
-    this.FilesCollection = [];
-    let selectedFile = fileInput.target.files;
-    if (selectedFile) {
-      let file = null;
-      file = <File>selectedFile[0];
-      let item: Files = new Files();
-      item.FileName = this.attachmentForDeclaration;
-      item.FileType = file.type;
-      item.FileSize = (Number(file.size) / 1024);
-      item.FileExtension = file.type;
-      item.DocumentId = 0;
-      item.FileUid = fileId;
-      item.ParentFolder = '';
-      item.Email = this.employeeEmail;
-      item.UserId = this.EmployeeId;
-      this.FileDocumentList.push(item);
-      this.FilesCollection.push(file);
-      this.totalFileSize = 0;
-      this.totalFileSize += selectedFile[0].size / 1024;
-    } else {
-      ErrorToast("You are not slected the file")
-    }
+  // ModifyAttachment(fileInput: any, fileId: number) {
+  //   this.FileDocumentList = [];
+  //   this.FilesCollection = [];
+  //   let selectedFile = fileInput.target.files;
+  //   if (selectedFile) {
+  //     let file = null;
+  //     file = <File>selectedFile[0];
+  //     let item: Files = new Files();
+  //     item.FileName = this.attachmentForDeclaration;
+  //     item.FileType = file.type;
+  //     item.FileSize = (Number(file.size) / 1024);
+  //     item.FileExtension = file.type;
+  //     item.DocumentId = 0;
+  //     item.FileUid = fileId;
+  //     item.ParentFolder = '';
+  //     item.Email = this.employeeEmail;
+  //     item.UserId = this.EmployeeId;
+  //     this.FileDocumentList.push(item);
+  //     this.FilesCollection.push(file);
+  //     this.totalFileSize = 0;
+  //     this.totalFileSize += selectedFile[0].size / 1024;
+  //   } else {
+  //     ErrorToast("You are not slected the file")
+  //   }
+  // }
+
+  viewFile(userFile: any) {
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}.${userFile.FileExtension}`;
+    this.viewer = document.getElementById("file-container");
+    this.viewer.classList.remove('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+  }
+
+  closePdfViewer() {
+    event.stopPropagation();
+    this.viewer.classList.add('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', '');
   }
 
   uploadReceipts(fileInput: any) {
@@ -480,13 +503,38 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     elem.querySelector('div[name="cancel-declaration"]').classList.add('d-none');
     elem.querySelector('a[name="upload-proof"]').classList.remove('pe-auto', 'fw-bold', 'text-primary-c');
     elem.querySelector('a[name="upload-proof"]').classList.add('pe-none', 'text-decoration-none', 'text-muted');
+    this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
+    let tag = document.createElement("i");
+    tag.classList.add("fa", "fa-paperclip", "pe-2");
+    this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+    tag = document.createElement("span");
+    var text = document.createTextNode("Not Upload");
+    tag.appendChild(text);
+    this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
   }
 
   fireFileBrowser() {
     $("#uploadAttachment").click();
   }
 
+  removeSelectedFile() {
+    let elem = document.querySelectorAll('a[name="upload-proof"]');
+    for (let i = 0; i < elem.length; i++) {
+      (<HTMLElement> elem[i]).innerText = '';
+      let tag = document.createElement("i");
+      tag.classList.add("fa", "fa-paperclip", "pe-2");
+      elem[i].appendChild(tag);
+      tag = document.createElement("span");
+      var text = document.createTextNode("Not Upload");
+      tag.appendChild(text);
+      elem[i].appendChild(tag);
+    }
+  }
+
   saveAttachment() {
+    let length = this.FilesCollection.length;
+    this.presentRow.querySelector('a[name="upload-proof"]').classList.add('text-decoration-none');
+    this.presentRow.querySelector('a[name="upload-proof"]').innerText = length + " " + "file selected";
     $('#addAttachmentModal').modal('hide');
   }
 
@@ -517,6 +565,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           if (response.ResponseBody) {
             if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
               this.employeeDeclaration = response.ResponseBody;
+              this.declarationFiles = response.ResponseBody.FileDetails;
               this.ExemptionDeclaration = this.addSubmittedFileIds(this.employeeDeclaration.ExemptionDeclaration);
               this.OtherDeclaration = this.addSubmittedFileIds(this.employeeDeclaration.OtherDeclaration);
               this.TaxSavingAlloance = this.addSubmittedFileIds(this.employeeDeclaration.TaxSavingAlloance);
