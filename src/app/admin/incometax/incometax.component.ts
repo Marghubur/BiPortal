@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
@@ -32,6 +33,10 @@ export class IncometaxComponent implements OnInit {
   isPageReady: boolean = false;
   hraDetails: Array<any> = [];
   standardDeductionDetails: Array<any> = [];
+  employeesList: autoCompleteModal = new autoCompleteModal();
+  applicationData: any = [];
+  isEmployeesReady:boolean = false;
+  isEmployeeSelect: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
@@ -58,15 +63,25 @@ export class IncometaxComponent implements OnInit {
     }
 
     this.EmployeeId = this.nav.getValue();
-    if(this.EmployeeId == null || this.EmployeeId <= 0){
+    if(this.EmployeeId != null || this.EmployeeId > 0)
+      this.loadData();
+    else
+      this.getEmployees();
+  }
+
+  getIncomeTaxDetail(id: any) {
+    this.EmployeeId =0 ;
+    if (id > 0) {
+      this.EmployeeId = id;
+      this.loadData();
+    } else {
       ErrorToast("Unable to get data. Please contact to admin.");
-      return;
     }
-    this.loadData();
   }
 
   loadData() {
     this.isPageReady = false;
+    this.isEmployeeSelect = false;
     this.totalAllowTaxExemptAmount = 0;
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`)
     .then((response:ResponseModel) => {
@@ -132,9 +147,13 @@ export class IncometaxComponent implements OnInit {
           return;
         }
 
+        let hraAmount = 0;
         let hraComponent = this.allDeclarationSalaryDetails.SalaryComponentItems.find(x => x.ComponentId == "HRA" && x.DeclaredValue > 0);
-        if (hraComponent)
+        if (hraComponent) {
           this.TaxSavingAlloance.push(hraComponent);
+          this.hraCalculation();
+          hraAmount = this.hraDetails.reduce((acc, next) => {return acc + next.Min}, 0)
+        }
 
         for (let i = 0; i < this.allDeclarationSalaryDetails.Declarations.length; i++) {
           switch (this.allDeclarationSalaryDetails.Declarations[i].DeclarationName) {
@@ -149,12 +168,37 @@ export class IncometaxComponent implements OnInit {
 
         this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance) ;
         this.getSalaryGroup();
-        this.hraCalculation();
-        this.totalAllowTaxExemptAmount = this.totalAllowTaxExemptAmount + this.hraDetails.reduce((acc, next) => {return acc + next.Min}, 0)
+        this.totalAllowTaxExemptAmount = this.totalAllowTaxExemptAmount + hraAmount;
         this.isPageReady = true;
+         this.isEmployeeSelect = true;
         Toast("Details get successfully")
       }
     })
+  }
+
+  getEmployees() {
+    this.isEmployeesReady = false;
+    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.applicationData = response.ResponseBody;
+        this.employeesList.data = [];
+        this.employeesList.placeholder = "Employee";
+        let employees = this.applicationData.Employees;
+        if(employees) {
+          let i = 0;
+          while(i < employees.length) {
+            this.employeesList.data.push({
+              text: `${employees[i].FirstName} ${employees[i].LastName}`,
+              value: employees[i].EmployeeUid
+            });
+            i++;
+          }
+        }
+        this.employeesList.className = "";
+
+        this.isEmployeesReady = true;
+      }
+    });
   }
 
   getSalaryGroup() {
