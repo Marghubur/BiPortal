@@ -93,7 +93,8 @@
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Net Taxable Income</p>
                     <p class="text-dark fs-2 mb-0 ">
-                      <span class="">INR {{employeeDeclaration.TotalAmount | number : '1.2-2'}}</span>
+                      <span class="" *ngIf="employeeDeclaration.TotalAmount > 200000">INR {{employeeDeclaration.TotalAmount | number : '1.2-2'}}</span>
+                      <span class="" *ngIf="employeeDeclaration.TotalAmount < 200000">INR 0</span>
                       <span class="float-end pe-2">
                         <a href="javascript:void(0)" (click)="gotoTaxSection()" class="text-decoration-none fs-6">
                           Income Tax Computitation
@@ -175,10 +176,17 @@
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-3">
-                                  <ng-container *ngIf="declaration.DeclarationName == 'House Property' && declaration.TotalAmountDeclared > 0">
-                                    <div class="cell-wrapper">
-                                      1
-                                    </div>
+                                  <ng-container *ngIf="declaration.DeclarationName == 'House Property'">
+                                    <ng-container *ngIf="declaration.TotalAmountDeclared > 0">
+                                      <div class="cell-wrapper">
+                                        1
+                                      </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="declaration.TotalAmountDeclared <= 0">
+                                      <div class="cell-wrapper">
+                                        0
+                                      </div>
+                                    </ng-container>
                                   </ng-container>
                                   <ng-container *ngIf="declaration.DeclarationName != 'House Property'">
                                     <div class="cell-wrapper">
@@ -1106,7 +1114,7 @@
                       <a href="javascript:void(0)" (click)="fireBrowser()" class="text-decoration-none"> <i
                           class="fa fa-pencil text-primary"></i></a> -->
                       <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
-                      <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-trash px-2 text-danger"></i></a>
+                      <a href="javascript:void(0)" class="text-decoration-none" (click)="deletePopup(item)"><i class="fa fa-trash px-2 text-danger"></i></a>
                     </td>
                   </tr>
                   <tr>
@@ -1333,3 +1341,24 @@
   <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
 </div>
 <!-- End pdf view modal -->
+
+<!-- Delete Attachment Popup -->
+<div class="modal delete-modal fade attachment-popup" id="deleteAttachmentModal" tabindex="-1" aria-labelledby="deleteAttachmentModalLabel" *ngIf="deleteFile != null"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded">
+      <div class="modal-header bg-secondary text-light">
+        <h5 class="modal-title fw-normal" id="deleteAttachmentModalLabel">Delete Attachment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5>Are you want delete <span class="text-dark fw-bold">{{deleteFile.FileName}}</span> attachment</h5>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->

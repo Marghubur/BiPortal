@@ -67,6 +67,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   isShowRentedDetail: boolean = false;
   basePath: string = '';
   viewer: any = null;
+  deleteFile: any = null;
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -189,6 +190,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         Toast("Declaration detail loaded successfully");
       }
     })
+  }
+
+  deletePopup(item: any) {
+    if (item) {
+      this.deleteFile = item;
+      $('#deleteAttachmentModal').modal('show');
+    }
   }
 
   bindData(response) {

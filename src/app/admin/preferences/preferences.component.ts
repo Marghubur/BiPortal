@@ -28,8 +28,6 @@ export class PreferencesComponent implements OnInit {
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    this.EmployeeId = 11;
-    this.LoadData();
     this.PanInformation = {
       NameOnCard: "MD Istayaque",
       PANNumber: "ABPANF655A",
@@ -56,6 +54,16 @@ export class PreferencesComponent implements OnInit {
       RegisteredLocation: 'Telangana',
       LWFStatus: "Disabled"
     }
+    this.getEmployees();
+  }
+
+  getPreference(id: any) {
+    if (id > 0) {
+      this.EmployeeId = id;
+      this.LoadData();
+    }else {
+      ErrorToast("Unable to get data. Please contact to admin.");
+    }
   }
 
   LoadData() {
@@ -75,6 +83,31 @@ export class PreferencesComponent implements OnInit {
         ErrorToast("No record found");
       });
     }
+  }
+
+  getEmployees() {
+    this.isPreferenceReady = false;
+    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.applicationData = response.ResponseBody;
+        this.employeesList.data = [];
+        this.employeesList.placeholder = "Employee";
+        let employees = this.applicationData.Employees;
+        if(employees) {
+          let i = 0;
+          while(i < employees.length) {
+            this.employeesList.data.push({
+              text: `${employees[i].FirstName} ${employees[i].LastName}`,
+              value: employees[i].EmployeeUid
+            });
+            i++;
+          }
+        }
+        this.employeesList.className = "";
+
+        this.isPreferenceReady = true;
+      }
+    });
   }
 
   activateMe(ele: string) {
