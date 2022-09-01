@@ -563,19 +563,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
-            if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
-              this.employeeDeclaration = response.ResponseBody;
-              this.declarationFiles = response.ResponseBody.FileDetails;
-              this.ExemptionDeclaration = this.addSubmittedFileIds(this.employeeDeclaration.ExemptionDeclaration);
-              this.OtherDeclaration = this.addSubmittedFileIds(this.employeeDeclaration.OtherDeclaration);
-              this.TaxSavingAlloance = this.addSubmittedFileIds(this.employeeDeclaration.TaxSavingAlloance);
-            }
-            this.salaryDetails = response.ResponseBody.SalaryDetail;
-            this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
-
-            Toast("Declaration Uploaded Successfully.");
-            this.SectionIsReady = true;
-            this.closeDeclaration(e);
+            this.bindData(response.ResponseBody);
+            Toast("Declaration detail loaded successfully");
           }
         });
       }
