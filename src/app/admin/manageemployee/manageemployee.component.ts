@@ -594,4 +594,5 @@ export class EmployeeDetail {
   UserTypeId: number = null;
   CTC: number = null;
   AllocatedClients: Array<AssignedClients> = [];
+  ClientJson: string = '';
 }

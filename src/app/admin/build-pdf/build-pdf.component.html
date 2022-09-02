@@ -35,12 +35,12 @@
               </div>
               <div class="col-md-3">
                 <label class="form-label">From Company *</label>
-                <select name="senderClientId" class="form-control" formControlName="senderClientId"
+                <select name="senderId" class="form-control" formControlName="senderId"
                   (change)="findSenderClientDetail($event)"
-                  [ngClass]="{'error': submitted && f.senderClientId.errors !== null && f.senderClientId.errors.required}">
+                  [ngClass]="{'error': submitted && f.senderId.errors !== null && f.senderId.errors.required}">
                   <option value="0">Sender Organization</option>
-                  <option *ngFor="let client of applicationData.clients" value="{{client.ClientId}}">
-                    {{client.ClientName}}
+                  <option *ngFor="let client of applicationData.Organizations" value="{{client.CompanyId}}">
+                    {{client.CompanyName}}
                   </option>
                 </select>
               </div>
@@ -50,8 +50,8 @@
                   (change)="findReceiverClientDetail($event)"
                   [ngClass]="{'error': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
                   <option value="0">Client Organization</option>
-                  <option *ngFor="let client of assignedClients" value="{{client.ClientUid}}">
-                    {{client.ClientName}}
+                  <option *ngFor="let client of assignedClients" value="{{client.CompanyId}}">
+                    {{client.CompanyName}}
                   </option>
                 </select>
               </div>
