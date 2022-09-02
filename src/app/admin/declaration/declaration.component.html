@@ -93,7 +93,8 @@
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Net Taxable Income</p>
                     <p class="text-dark fs-2 mb-0 ">
-                      <span class="">INR {{employeeDeclaration.TotalAmount | number : '1.2-2'}}</span>
+                      <span class="" *ngIf="employeeDeclaration.TotalAmount > 200000">INR {{employeeDeclaration.TotalAmount | number : '1.2-2'}}</span>
+                      <span class="" *ngIf="employeeDeclaration.TotalAmount < 200000">INR 0</span>
                       <span class="float-end pe-2">
                         <a href="javascript:void(0)" (click)="gotoTaxSection()" class="text-decoration-none fs-6">
                           Income Tax Computitation
@@ -175,10 +176,17 @@
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-3">
-                                  <ng-container *ngIf="declaration.DeclarationName == 'House Property' && declaration.TotalAmountDeclared > 0">
-                                    <div class="cell-wrapper">
-                                      1
-                                    </div>
+                                  <ng-container *ngIf="declaration.DeclarationName == 'House Property'">
+                                    <ng-container *ngIf="declaration.TotalAmountDeclared > 0">
+                                      <div class="cell-wrapper">
+                                        1
+                                      </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="declaration.TotalAmountDeclared <= 0">
+                                      <div class="cell-wrapper">
+                                        0
+                                      </div>
+                                    </ng-container>
                                   </ng-container>
                                   <ng-container *ngIf="declaration.DeclarationName != 'House Property'">
                                     <div class="cell-wrapper">
@@ -1106,7 +1114,7 @@
                       <a href="javascript:void(0)" (click)="fireBrowser()" class="text-decoration-none"> <i
                           class="fa fa-pencil text-primary"></i></a> -->
                       <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
-                      <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-trash px-2 text-danger"></i></a>
+                      <a href="javascript:void(0)" class="text-decoration-none" (click)="deletePopup(item)"><i class="fa fa-trash px-2 text-danger"></i></a>
                     </td>
                   </tr>
                   <tr>
@@ -1214,12 +1222,16 @@
                 </div>
               </div>
             </div>
-            <div>
+            <div class="mt-3">
               <input type="file" class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf"
                 (change)="uploadReceipts($event)" multiple id="uploadreceipt">
-              <a href="javascript:void(0)" (click)="fireuploadreceipt()" class="text-decoration-none"><i
+              <a href="javascript:void(0)" *ngIf="housingPropertyRentFile.length <=0" (click)="fireuploadreceipt()" class="text-decoration-none"><i
                   class="fa fa-paperclip pe-2 pt-3"></i>Rent Receipts or Agreement <i
                   class="fa fa-exclamation-circle ps-2 text-secondary"></i></a>
+              <span class="ps-3 fw-bold" *ngIf="FileDocumentList.length > 0">{{FileDocumentList.length}} file selected</span>
+              <a href="javascript:void(0)" (click)="viewHousingPropertyFilePopUp(housingPropertyRentFile)">
+                <span class="ps-3 fw-bold" *ngIf="FileDocumentList.length == 0 && housingPropertyRentFile.length > 0">{{housingPropertyRentFile.length}} file uploaded</span>
+              </a>
             </div>
             <div class="modal-footer border-top-0">
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i>
@@ -1246,7 +1258,7 @@
               </div>
             </div>
             <div class="form-check col-md-6 mt-3">
-              <input class="form-check-input" type="checkbox" (click)="sameOwnerAddress()" formControlName="IsOwnerAddressSame">
+              <input class="form-check-input" type="checkbox" (click)="sameOwnerAddress($event)" formControlName="IsOwnerAddressSame">
               <label class="form-check-label">
                 Owner address same as rental address
               </label>
@@ -1267,10 +1279,21 @@
               <div class="col-md-6 mt-3">
                 <label class="form-label">Owner Type</label>
                 <select class="form-select" [disabled]="!isSignDeclareEnable" formControlName="LandlordType">
-                  <option value="">Select Land lord Type</option>
+                  <option value="" disabled>Select Land lord Type</option>
+                  <option value="Government">Government</option>
+                  <option value="NonResident">Non Resident</option>
+                  <option value="OtherValue">Other Value</option>
                 </select>
-                <a href="javascript:void(0)" class="text-decoration-none"><i
-                    class="fa fa-paperclip pe-2 pt-3"></i>Upload declaration letter</a>
+                <div class="mt-3">
+                  <input type="file" class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf"
+                    (change)="uploadHPLetter($event)" multiple id="uploadHPLetter">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="fireuploadHPLetter()" *ngIf="housingPropertyLetterFile.length <= 0"><i
+                      class="fa fa-paperclip pe-2 pt-3"></i>Upload declaration letter</a>
+                  <span class="ps-3 fw-bold" *ngIf="hPLetterList.length > 0">{{this.hPLetterList.length}} file selected</span>
+                  <a href="javascript:void(0)" (click)="viewHousingPropertyFilePopUp(housingPropertyLetterFile)">
+                    <span class="ps-3 fw-bold" *ngIf="hPLetterList.length == 0 && housingPropertyLetterFile.length > 0">{{housingPropertyLetterFile.length}} file uploaded</span>
+                  </a>
+                </div>
               </div>
             </div>
             <div class="modal-footer border-top-0">
@@ -1333,3 +1356,60 @@
   <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
 </div>
 <!-- End pdf view modal -->
+
+<!-- Delete Attachment Popup -->
+<div class="modal delete-modal fade attachment-popup" id="deleteAttachmentModal" tabindex="-1" aria-labelledby="deleteAttachmentModalLabel" *ngIf="deleteFile != null"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded">
+      <div class="modal-header bg-secondary text-light">
+        <h5 class="modal-title fw-normal" id="deleteAttachmentModalLabel">Delete Attachment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5>Are you want delete <span class="text-dark fw-bold">{{deleteFile.FileName}}</span> attachment</h5>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+<!-- View Housing property file -->
+<div class="modal fade delete-modal" id="housingPropertyFileModal" tabindex="-1" aria-labelledby="housingPropertyFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="housingPropertyFileModalLabel">Uploaded Housing Property Files</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ng-container >
+          <table class="table">
+            <thead>
+              <tr>
+                <th width="8%">#</th>
+                <th>File Name</th>
+                <td width="20%">Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of viewHousingPropFile; let i = index">
+                <td class="counterCell">{{i+1}}</td>
+                <td>{{item.FileName}}.{{item.FileExtension}}</td>
+                <td>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteHousingPropertyFile(item)"><i class="fa fa-trash px-2 text-danger"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->

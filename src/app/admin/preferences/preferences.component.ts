@@ -20,16 +20,15 @@ export class PreferencesComponent implements OnInit {
   employeesList: autoCompleteModal = new autoCompleteModal();
   applicationData: any = [];
   isPreferenceReady: boolean = false;
-  IsPageReady: boolean = false;
   employeeDetail: EmployeeDetail = new EmployeeDetail();
   EmployeeId: number = 0;
+  SectionIsReady: boolean = false;
+  isEmployeeSelect: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    this.EmployeeId = 11;
-    this.LoadData();
     this.PanInformation = {
       NameOnCard: "MD Istayaque",
       PANNumber: "ABPANF655A",
@@ -56,25 +55,62 @@ export class PreferencesComponent implements OnInit {
       RegisteredLocation: 'Telangana',
       LWFStatus: "Disabled"
     }
+    this.getEmployees();
+  }
+
+  getPreference(id: any) {
+    if (id > 0) {
+      this.EmployeeId = id;
+      this.LoadData();
+    }else {
+      ErrorToast("Unable to get data. Please contact to admin.");
+    }
   }
 
   LoadData() {
-    this.IsPageReady = false;
+    this.isEmployeeSelect = true;
+    this.SectionIsReady= false;
     if (this.EmployeeId > 0) {
       this.http.get(`employee/GetAllManageEmployeeDetail/${this.EmployeeId}`).then((response: ResponseModel) => {
         if(response.ResponseBody) {
           if (response.ResponseBody.Employee.length > 0) {
             this.employeeDetail = response.ResponseBody.Employee[0] as EmployeeDetail;
-            this.IsPageReady = true;
             Toast("Record found.")
           } else {
             ErrorToast("Record not found");
           }
+          this.isEmployeeSelect = false;
+          this.SectionIsReady= true;
         }
       }).catch(e => {
         ErrorToast("No record found");
       });
     }
+  }
+
+  getEmployees() {
+    this.isPreferenceReady = false;
+    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.applicationData = response.ResponseBody;
+        this.employeesList.data = [];
+        this.employeesList.placeholder = "Employee";
+        let employees = this.applicationData.Employees;
+        if(employees) {
+          let i = 0;
+          while(i < employees.length) {
+            this.employeesList.data.push({
+              text: `${employees[i].FirstName} ${employees[i].LastName}`,
+              value: employees[i].EmployeeUid
+            });
+            i++;
+          }
+        }
+        this.employeesList.className = "";
+
+        this.isPreferenceReady = true;
+      }
+    });
   }
 
   activateMe(ele: string) {

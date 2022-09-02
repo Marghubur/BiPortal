@@ -62,6 +62,7 @@ export class BuildPdfComponent implements OnInit {
   staffingTemplateType: string = null;
   email:Array<string> = [];
   billAllDetails: any = null;
+  templateText: any = null;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -962,8 +963,16 @@ export class BuildPdfComponent implements OnInit {
     this.http.get('Template/GetStaffingTemplate').then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.template = this.sanitizer.bypassSecurityTrustHtml(res.ResponseBody);
+        this.templateText = this.convertToPlain(res.ResponseBody);
+        this.templateText = (this.templateText.trim());
       }
     });
+  }
+
+  convertToPlain(html){
+    var tempDivElement = document.createElement("div");
+    tempDivElement.innerHTML = html;
+    return tempDivElement.textContent || tempDivElement.innerText || "";
   }
 
   addEmailId() {
