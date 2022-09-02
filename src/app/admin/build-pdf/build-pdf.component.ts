@@ -9,6 +9,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
 import { Attendance, UserType } from 'src/providers/constants';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Filter } from 'src/providers/userService';
 
 declare var $: any;
 
@@ -182,8 +183,13 @@ export class BuildPdfComponent implements OnInit {
             i++;
           }
         }
-        let burnDays = attendanceDetail.length - missinngAtt.length;
-        this.pdfForm.get('actualDaysBurned').setValue(burnDays);
+        let burnDays = null;
+        if (this.applicationData.fileDetail.length <= 0) {
+          burnDays = attendanceDetail.length - missinngAtt.length;
+          this.pdfForm.get('actualDaysBurned').setValue(burnDays)
+        }
+        else
+          burnDays = this.pdfForm.get('actualDaysBurned').value;
         this._calculateAmount(burnDays);
         this.allAttendance = attendanceDetail.sort((a,b) => Date.parse(a.AttendanceDay) - Date.parse(b.AttendanceDay));
         this.dayList = [];
@@ -218,18 +224,17 @@ export class BuildPdfComponent implements OnInit {
         let editGrandTotalAmount: number = 0;
         if (response.ResponseBody) {
           this.applicationData = response.ResponseBody as ApplicationData;
-          this.employees = this.applicationData.employees;
-          let company: any = this.applicationData.clients.filter(x => x.ClientId === 1);
+          this.employees = this.applicationData.Employees;
+          this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === 1);
           this.pdfModal = new PdfModal();
-          if (company.length > 0) {
-            this.currentOrganization = company[0];
-            this.pdfModal.senderCompanyName = this.currentOrganization.ClientName;
-            this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
+          if (this.currentOrganization != null) {
+            this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
+            this.pdfModal.senderGSTNo = this.currentOrganization.GSTINNumber;
             this.pdfModal.senderFirstAddress = this.currentOrganization.FirstAddress;
             this.pdfModal.senderSecondAddress = this.currentOrganization.SecondAddress + " " + this.currentOrganization.ThirdAddress;
             this.pdfModal.senderPrimaryContactNo = this.currentOrganization.PrimaryPhoneNo;
             this.pdfModal.senderEmail = this.currentOrganization.Email;
-            this.pdfModal.senderClientId = this.currentOrganization.ClientId;
+            this.pdfModal.senderId = this.currentOrganization.CompanyId;
           }
 
           if (this.applicationData.fileDetail.length > 0) {
@@ -326,20 +331,20 @@ export class BuildPdfComponent implements OnInit {
   }
 
   loadPageLevelData() {
-    this.http.get("OnlineDocument/LoadApplicationData").then((response: ResponseModel) => {
+    let filter: Filter = new Filter();
+    this.http.post("bill/GetBillDetailForEmployee", filter).then((response: ResponseModel) => {
       if (response.ResponseBody !== null) {
         this.applicationData = response.ResponseBody as ApplicationData;
-        this.employees = this.applicationData.employees;
-        let company: any = this.applicationData.clients.filter(x => x.ClientId === 1);
-        if (company.length > 0) {
-          this.currentOrganization = company[0];
-          this.pdfModal.senderCompanyName = this.currentOrganization.ClientName;
-          this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
+        this.employees = this.applicationData.Employees;
+        this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === 1);
+        if (this.currentOrganization != null) {
+          this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
+          this.pdfModal.senderGSTNo = this.currentOrganization.GSTINNumber;
           this.pdfModal.senderFirstAddress = this.currentOrganization.FirstAddress;
           this.pdfModal.senderSecondAddress = this.currentOrganization.SecondAddress + " " + this.currentOrganization.ThirdAddress;
           this.pdfModal.senderPrimaryContactNo = this.currentOrganization.PrimaryPhoneNo;
           this.pdfModal.senderEmail = this.currentOrganization.Email;
-          this.pdfModal.senderClientId = this.currentOrganization.ClientId;
+          this.pdfModal.senderId = this.currentOrganization.CompanyId;
           this.pdfModal.receiverCompanyId = 0;
           this.pdfModal.developerId = 0;
           this.pdfModal.StatusId = 2;
@@ -549,7 +554,7 @@ export class BuildPdfComponent implements OnInit {
       grandTotalAmount: new FormControl(this.pdfModal.grandTotalAmount),
       senderCompanyName: new FormControl(this.pdfModal.senderCompanyName, [Validators.required]),
       receiverCompanyId: new FormControl(this.pdfModal.receiverCompanyId, [Validators.required]),
-      senderClientId: new FormControl(this.pdfModal.senderClientId, [Validators.required]),
+      senderId: new FormControl(this.pdfModal.senderId, [Validators.required]),
       receiverFirstAddress: new FormControl(this.pdfModal.receiverFirstAddress, [Validators.required]),
       receiverCompanyName: new FormControl(this.pdfModal.receiverCompanyName, [Validators.required]),
       receiverGSTNo: new FormControl(this.pdfModal.receiverGSTNo, [Validators.required]),
@@ -589,7 +594,8 @@ export class BuildPdfComponent implements OnInit {
     if (employeeId) {
       this.currentEmployee = this.employees.find(x => x.EmployeeUid === parseInt(employeeId));
       if (this.currentEmployee) {
-        this.assignedClients = this.applicationData.allocatedClients.filter(x => x.EmployeeUid == this.currentEmployee.EmployeeUid);
+        if(this.currentEmployee.ClientJson != null && this.currentEmployee.ClientJson != '')
+          this.assignedClients = JSON.parse(this.currentEmployee.ClientJson); // this.applicationData.allocatedClients.filter(x => x.EmployeeUid == this.currentEmployee.EmployeeUid);
         this.pdfForm.controls["developerName"].setValue(this.currentEmployee.FirstName + " " + this.currentEmployee.LastName);
         if (!this.editMode) {
           this.pdfForm.controls["packageAmount"].setValue(this.currentEmployee.FinalPackage);
@@ -631,33 +637,7 @@ export class BuildPdfComponent implements OnInit {
     billingYear = Number(this.pdfForm.get('billYear').value);
     if (this.pdfForm.get('billYear').errors !== null)
       errroCounter++;
-    if (this.pdfForm.get('packageAmount').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('senderCompanyName').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('developerName').errors !== null)
-      errroCounter++;
     if (this.pdfForm.get('dateOfBilling').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('senderFirstAddress').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('senderSecondAddress').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('senderGSTNo').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('senderPrimaryContactNo').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('senderEmail').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('receiverFirstAddress').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('receiverCompanyName').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('receiverGSTNo').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('receiverSecondAddress').errors !== null)
-      errroCounter++;
-    if (this.pdfForm.get('receiverPrimaryContactNo').errors !== null)
       errroCounter++;
     if (this.pdfForm.get('EmployeeId').errors !== null)
       errroCounter++;
@@ -679,7 +659,7 @@ export class BuildPdfComponent implements OnInit {
     this.pdfForm.get('cGstAmount').setValue(this.cgstAmount);
     this.pdfForm.get('sGstAmount').setValue(this.sgstAmount);
     this.pdfForm.get('igstAmount').setValue(this.igstAmount);
-    this.pdfForm.get('grandTotalAmount').setValue(this.grandTotalAmount);
+//    this.pdfForm.get('grandTotalAmount').setValue(this.grandTotalAmount);
     this.pdfForm.get("billingMonth").setValue(new Date(billingYear, this.originalBillingMonth - 1, 1));
 
     if (errroCounter === 0) {
@@ -720,17 +700,17 @@ export class BuildPdfComponent implements OnInit {
   validateBillRequest(request: PdfModal) {
     let message = null;
     let now = new Date();
-    if(request.EmployeeId <=0){
+    if(request.EmployeeId <= 0){
       message = "Invalid Employee selected";
       return message;
     }
 
-    if (request.senderClientId <=0) {
+    if (request.senderId <= 0) {
       message = "Invalid Sender selected"
       return message;
     }
 
-    if(request.ClientId <= 0) {
+    if(request.receiverCompanyId <= 0) {
       message = "Invalid client seleted.";
       return message;
     }
@@ -795,8 +775,8 @@ export class BuildPdfComponent implements OnInit {
   findSenderClientDetail(e: any) {
     let Id = e.target.value;
     if (Id !== null) {
-      let clientId: number = Number(Id);
-      let clients = this.applicationData.clients.find(x => x.ClientId === clientId);
+      let companyId: number = Number(Id);
+      let clients = this.applicationData.Organizations.filter(x => x.CompanyId === companyId);
       if (clients.length > 0) {
         let client = clients[0];
         let lastAddress = '';
@@ -806,7 +786,7 @@ export class BuildPdfComponent implements OnInit {
           lastAddress = client.ThirdAddress + "  Pin: " + client.Pincode;
         }
         this.pdfForm.get('senderFirstAddress').setValue(client.FirstAddress);
-        this.pdfForm.get('senderCompanyName').setValue(client.ClientName);
+        this.pdfForm.get('senderCompanyName').setValue(client.CompanyName);
         this.pdfForm.get('senderGSTNo').setValue(client.GSTNO);
         this.pdfForm.get('senderSecondAddress').setValue(client.SecondAddress + " " + lastAddress);
         this.pdfForm.get('senderThirdAddress').setValue(lastAddress);
@@ -823,9 +803,9 @@ export class BuildPdfComponent implements OnInit {
   bindClientDetail(Id: any) {
     this.isClientSelected = false;
     if (Id !== null) {
-      let clientId: number = Number(Id);
-      this.senderClient = this.applicationData.clients.find(x => x.ClientId === clientId);
-      this.clientDetail = this.applicationData.allocatedClients.find(x => x.ClientUid === clientId && x.EmployeeUid == this.currentEmployee.EmployeeUid);
+      let companyId: number = Number(Id);
+      this.senderClient = this.applicationData.Organizations.find(x => x.CompanyId === this.currentOrganization.CompanyId);
+      this.clientDetail = this.assignedClients.find(x => x.CompanyId == companyId); //this.applicationData.allocatedClients.find(x => x.ClientUid === clientId && x.EmployeeUid == this.currentEmployee.EmployeeUid);
       if (this.senderClient && this.clientDetail) {
         let lastAddress = '';
         if (this.senderClient.ThirdAddress === null || this.senderClient.ThirdAddress === "") {
@@ -834,13 +814,13 @@ export class BuildPdfComponent implements OnInit {
           lastAddress = this.senderClient.ThirdAddress + "  Pin: " + this.senderClient.Pincode;
         }
         this.pdfForm.get('receiverFirstAddress').setValue(this.senderClient.FirstAddress);
-        this.pdfForm.get('receiverCompanyName').setValue(this.senderClient.ClientName);
+        this.pdfForm.get('receiverCompanyName').setValue(this.senderClient.Company);
         this.pdfForm.get('receiverGSTNo').setValue(this.senderClient.GSTNO);
         this.pdfForm.get('receiverSecondAddress').setValue(this.senderClient.SecondAddress + " " + lastAddress);
         this.pdfForm.get('receiverThirdAddress').setValue(lastAddress);
         this.pdfForm.get('receiverPrimaryContactNo').setValue(this.senderClient.PrimaryPhoneNo);
         this.pdfForm.get('receiverEmail').setValue(this.senderClient.Email);
-        this.pdfForm.get('ClientId').setValue(this.senderClient.ClientId);
+        this.pdfForm.get('ClientId').setValue(this.senderClient.CompanyId);
         this.grandTotalAmount = this.clientDetail.ActualPackage;
         if (!this.editMode) {
           this.packageAmount = this.clientDetail.ActualPackage;
@@ -1034,7 +1014,7 @@ class PdfModal {
   developerName: string = "NA";
   developerId: number = 0;
   senderCompanyName: string = null;
-  senderClientId: number = 0;
+  senderId: number = 0;
   senderGSTNo: string = null;
   senderFirstAddress: string = null;
   senderSecondAddress: string = null;
@@ -1054,7 +1034,6 @@ class PdfModal {
 
 export class ApplicationData {
   fileDetail: Array<any> = [];
-  clients: Array<any> = [];
-  employees: Array<EmployeeDetail> = [];
-  allocatedClients: Array<any> = [];
+  Employees: Array<any> = [];
+  Organizations: Array<any> = [];
 }
