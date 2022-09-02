@@ -27,6 +27,8 @@ export class PayslipComponent implements OnInit {
   joiningDate: Date = null;
   paySlipDate: any = null;
   completeSalaryDetail: Array<any> = [];
+  SectionIsReady: boolean = false;
+  isEmployeeSelect: boolean = false;
 
   constructor(private nav: iNavigation,
               private fb:FormBuilder,
@@ -39,12 +41,16 @@ export class PayslipComponent implements OnInit {
   }
 
   getPayslipList(e: any) {
+    this.isEmployeeSelect = true;
+    this.SectionIsReady= false;
     this.EmployeeId = e;
     if (this.EmployeeId > 0) {
       this.paySlipSchedule = [];
       this.salaryDetail = null;
       let employee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
       this.joiningDate = new Date(employee.CreatedOn);
+      this.isEmployeeSelect = false;
+      this.SectionIsReady= true;
       if (this.joiningDate.getMonth() == new Date().getMonth() && this.joiningDate.getFullYear() == new Date().getFullYear()) {
         WarningToast("Joining month of the employee is current month");
         return;

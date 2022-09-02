@@ -22,128 +22,128 @@
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="right-panel col-md-12 p-0">
-      <ng-container *ngIf="IsPageReady">
-        <div class="container-fluid row">
-          <div class="col-md-6 mt-4">
-            <div class="card">
-              <div class="card-header fs-5 text-dark">
-                PAN Information
+    <div [ngClass]="{'blur-section': !SectionIsReady}">
+      <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
+        <div class="blur-section__content">
+          {{isEmployeeSelect? 'Please wait......': 'Please select Employee first'}}
+        </div>
+      </div>
+      <div class="blur-this">
+        <div class="right-panel col-md-12 p-0">
+          <div class="container-fluid row">
+            <div class="col-md-6 mt-4">
+              <div class="card">
+                <div class="card-header fs-5 text-dark">
+                  PAN Information
+                </div>
+                <div class="ps-3 pt-4">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <small>NAME ON PAN CARD</small>
+                      <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
+                    </div>
+                    <div class="col-md-4">
+                      <small>PAN NUMBER</small>
+                      <p class="text-dark">{{employeeDetail.PANNo}}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <small>DATE OF BIRTH</small>
+                      <p class="text-dark">{{PanInformation.DOB | date}}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <small>FATHER / SPOUSE NAME</small>
+                    <p class="text-dark">{{employeeDetail.FatherName}}</p>
+                  </div>
+                </div>
               </div>
-              <div class="ps-3 pt-4">
-                <div class="row">
-                  <div class="col-md-4">
-                    <small>NAME ON PAN CARD</small>
+            </div>
+            <div class="col-md-6 mt-4">
+              <div class="card">
+                <div class="card-header fs-5 text-dark">
+                  Salary Deposit
+                </div>
+                <div class="ps-3 pt-4">
+                  <small>SALARY PAYMENT MODE</small>
+                  <p class="text-dark">{{salaryDeposit.PaymentMode}}</p>
+                  <h5 class="text-dark pb-1">Bank Information</h5>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <small>BANK</small>
+                      <p class="text-dark">{{employeeDetail.BankName}}</p>
+                    </div>
+                    <div class="col-md-4">
+                      <small>ACCOUNT NUMBER</small>
+                      <p class="text-dark">{{employeeDetail.AccountNumber}}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <small>IFSC CODE</small>
+                      <p class="text-dark">{{employeeDetail.IFSCCode}}</p>
+                    </div>
+                  </div>
+                  <div class="pb-3">
+                    <small>NAME OF THE ACCOUNT</small>
                     <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
                   </div>
-                  <div class="col-md-4">
-                    <small>PAN NUMBER</small>
-                    <p class="text-dark">{{employeeDetail.PANNo}}</p>
-                  </div>
-                  <div class="col-md-3">
-                    <small>DATE OF BIRTH</small>
-                    <p class="text-dark">{{PanInformation.DOB | date}}</p>
-                  </div>
-                </div>
-                <div>
-                  <small>FATHER / SPOUSE NAME</small>
-                  <p class="text-dark">{{employeeDetail.FatherName}}</p>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-6 mt-4">
-            <div class="card">
-              <div class="card-header fs-5 text-dark">
-                Salary Deposit
-              </div>
-              <div class="ps-3 pt-4">
-                <small>SALARY PAYMENT MODE</small>
-                <p class="text-dark">{{salaryDeposit.PaymentMode}}</p>
-                <h5 class="text-dark pb-1">Bank Information</h5>
-                <div class="row">
-                  <div class="col-md-4">
-                    <small>BANK</small>
-                    <p class="text-dark">{{employeeDetail.BankName}}</p>
-                  </div>
-                  <div class="col-md-4">
-                    <small>ACCOUNT NUMBER</small>
-                    <p class="text-dark">{{employeeDetail.AccountNumber}}</p>
-                  </div>
-                  <div class="col-md-3">
-                    <small>IFSC CODE</small>
-                    <p class="text-dark">{{employeeDetail.IFSCCode}}</p>
-                  </div>
+            <div class="col-md-6 mt-4 mb-4">
+              <div class="card custom-card-height">
+                <div class="card-header fs-5 text-dark">
+                  Statutory Information
                 </div>
-                <div class="pb-3">
+                <div class="ps-3 pt-4">
+                  <h5 class="text-dark pb-1">PF Account Information</h5>
+                  <small>PF Status</small>
+                  <p class="text-dark">{{satutoryInformation.PFStatus}}</p>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <small>PF NUMBER</small>
+                      <p class="text-dark">{{satutoryInformation.PFNumber}}</p>
+                    </div>
+                    <div class="col-md-4">
+                      <small>UNIVERSAL ACCOUNT NUMBER</small>
+                      <p class="text-dark">{{satutoryInformation.UniversalACNumber}}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <small>PF JON DATE</small>
+                      <p class="text-dark">{{satutoryInformation.PFJoinDate | date}}</p>
+                    </div>
+                  </div>
+                  <h5 class="text-dark pt-3 pb-1">ESI Account Information</h5>
                   <small>NAME OF THE ACCOUNT</small>
                   <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
+                  <h5 class="text-dark pt-3 pb-1">PT Details</h5>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <small>STATE</small>
+                      <p class="text-dark">{{employeeDetail.State}}</p>
+                    </div>
+                    <div class="col-md-4">
+                      <small>REGISTERED LOCAATION</small>
+                      <p class="text-dark">{{employeeDetail.City}}</p>
+                    </div>
+                  </div>
+                  <h5 class="text-dark pt-3 pb-1">LWF DETAILS</h5>
+                  <small>LWF STATUS</small>
+                  <p class="text-dark">{{satutoryInformation.LWFStatus}}</p>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-6 mt-4 mb-4">
-            <div class="card custom-card-height">
-              <div class="card-header fs-5 text-dark">
-                Statutory Information
-              </div>
-              <div class="ps-3 pt-4">
-                <h5 class="text-dark pb-1">PF Account Information</h5>
-                <small>PF Status</small>
-                <p class="text-dark">{{satutoryInformation.PFStatus}}</p>
-                <div class="row">
-                  <div class="col-md-4">
-                    <small>PF NUMBER</small>
-                    <p class="text-dark">{{satutoryInformation.PFNumber}}</p>
-                  </div>
-                  <div class="col-md-4">
-                    <small>UNIVERSAL ACCOUNT NUMBER</small>
-                    <p class="text-dark">{{satutoryInformation.UniversalACNumber}}</p>
-                  </div>
-                  <div class="col-md-3">
-                    <small>PF JON DATE</small>
-                    <p class="text-dark">{{satutoryInformation.PFJoinDate | date}}</p>
-                  </div>
+            <div class="col-md-6 mt-4 mb-4">
+              <div class="card custom-card-height">
+                <div class="card-header fs-5 text-dark">
+                  Identity Information
                 </div>
-                <h5 class="text-dark pt-3 pb-1">ESI Account Information</h5>
-                <small>NAME OF THE ACCOUNT</small>
-                <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
-                <h5 class="text-dark pt-3 pb-1">PT Details</h5>
-                <div class="row">
-                  <div class="col-md-4">
-                    <small>STATE</small>
-                    <p class="text-dark">{{employeeDetail.State}}</p>
-                  </div>
-                  <div class="col-md-4">
-                    <small>REGISTERED LOCAATION</small>
-                    <p class="text-dark">{{employeeDetail.City}}</p>
-                  </div>
+                <div class="alert alert-primary mt-4 mx-3" role="alert">
+                  Aadhar details are not available
                 </div>
-                <h5 class="text-dark pt-3 pb-1">LWF DETAILS</h5>
-                <small>LWF STATUS</small>
-                <p class="text-dark">{{satutoryInformation.LWFStatus}}</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 mt-4 mb-4">
-            <div class="card custom-card-height">
-              <div class="card-header fs-5 text-dark">
-                Identity Information
-              </div>
-              <div class="alert alert-primary mt-4 mx-3" role="alert">
-                Aadhar details are not available
               </div>
             </div>
           </div>
         </div>
-      </ng-container>
-      <ng-container *ngIf="!IsPageReady">
-          <div class="d-flex align-items-center justify-content-center my-5 py-5">
-            <div class="py-5 my-5 fs-5 fw-bold text-dark">
-              Please select employee first
-            </div>
-          </div>
-      </ng-container>
+      </div>
     </div>
   </div>
 </div>

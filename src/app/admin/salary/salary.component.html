@@ -26,119 +26,128 @@
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="right-panel col-md-12 p-0">
-      <ng-container>
-        <div class="container-fluid pt-4">
-          <div class="col-md-12 bg-light mb-3 mt-3">
-            <ul class="nav">
-              <li class="nav-item">
-                <a class="nav-link new-nav-link text-dark new-nav-active" id="attendance-tab"
-                  (click)="activeTab('MySalary')" aria-current="page" href="javascript:void(0)">My Salary</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-dark" id="timesheet-tab" (click)="activeTab('PaySlips')"
-                  href="javascript:void(0)">Pay Slips</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('IncomeTax')"
-                  href="javascript:void(0)">Income Tax</a>
-              </li>
-            </ul>
-          </div>
+    <div [ngClass]="{'blur-section': !SectionIsReady}">
+      <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
+        <div class="blur-section__content">
+          {{isEmployeeSelect? 'Please wait......': 'Please select Employee first'}}
+        </div>
+      </div>
+      <div class="blur-this">
+        <div class="right-panel col-md-12 p-0">
           <ng-container>
-            <div class="mt-4 alert alert-info fs-6" role="alert">
-              Your Income and tax liability computed as per Old income taax regiime. To learn more, and switch to New
-              income tax regime, <a href="javascript:void(0)" (click)="newIncomeTaxRegimePopUp()"
-                class="text-decoration-none">click here.</a>
-            </div>
-            <div class="d-flex mt-5 ms-5 mb-3">
-              <div class="col-md-2">
-                <div class="bg-info text-light rounded-circle current-circle col-md-5">
-                  <span class="fw-bold">CURRENT</span>
-                </div>
+            <div class="container-fluid pt-4">
+              <div class="col-md-12 bg-light mb-3 mt-3">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link new-nav-link text-dark new-nav-active" id="attendance-tab"
+                      (click)="activeTab('MySalary')" aria-current="page" href="javascript:void(0)">My Salary</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-dark" id="timesheet-tab" (click)="activeTab('PaySlips')"
+                      href="javascript:void(0)">Pay Slips</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('IncomeTax')"
+                      href="javascript:void(0)">Income Tax</a>
+                  </li>
+                </ul>
               </div>
-              <div class="col-md-8 ms-4">
-                <div class="bg-secondary text-light d-flex align-items-center py-3">
-                  <div class="pe-2 ps-4">
-                    <small>ANNUAL</small>
-                    <p class="fw-bold mb-0">INR {{myAnnualSalary.Annual}}</p>
+              <ng-container>
+                <div class="mt-4 alert alert-info fs-6" role="alert">
+                  Your Income and tax liability computed as per Old income taax regiime. To learn more, and switch to New
+                  income tax regime, <a href="javascript:void(0)" (click)="newIncomeTaxRegimePopUp()"
+                    class="text-decoration-none">click here.</a>
+                </div>
+                <div class="d-flex mt-5 ms-5 mb-3">
+                  <div class="col-md-2">
+                    <div class="bg-info text-light rounded-circle current-circle col-md-5">
+                      <span class="fw-bold">CURRENT</span>
+                    </div>
                   </div>
-                  <span class="fs-5 px-3">+</span>
-                  <div class="px-2">
-                    <small>BONUS</small>
-                    <p class="fw-bold mb-0">INR {{myAnnualSalary.Bonus}}</p>
-                  </div>
-                  <span class="fs-5 px-3">+</span>
-                  <div class="px-2">
-                    <small>Other</small>
-                    <p class="fw-bold mb-0">INR {{myAnnualSalary.Other}}</p>
-                  </div>
-                  <span class="fs-5 px-3">=</span>
-                  <div class="px-2">
-                    <small>Total</small>
-                    <p class="fw-bold mb-0">INR {{myAnnualSalary.Total}}</p>
-                  </div>
-                  <div class="ms-auto me-3">
-                    <a href="javascript:void(0)">
-                      <i class="fa fa-refresh text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
-                    </a>
-                    <button type="btn" class="btn btn-outline-light btn-sm ms-3" (click)="viewSalary()">
-                      <i class="fa" [ngClass]="{'fa-angle-down': isSalaryDetail, 'fa-angle-up': !isSalaryDetail}"
-                        aria-hidden="true"></i>
-                    </button>
+                  <div class="col-md-8 ms-4">
+                    <div class="bg-secondary text-light d-flex align-items-center py-3">
+                      <div class="pe-2 ps-4">
+                        <small>ANNUAL</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Annual}}</p>
+                      </div>
+                      <span class="fs-5 px-3">+</span>
+                      <div class="px-2">
+                        <small>BONUS</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Bonus}}</p>
+                      </div>
+                      <span class="fs-5 px-3">+</span>
+                      <div class="px-2">
+                        <small>Other</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Other}}</p>
+                      </div>
+                      <span class="fs-5 px-3">=</span>
+                      <div class="px-2">
+                        <small>Total</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Total}}</p>
+                      </div>
+                      <div class="ms-auto me-3">
+                        <a href="javascript:void(0)">
+                          <i class="fa fa-refresh text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
+                        </a>
+                        <button type="btn" class="btn btn-outline-light btn-sm ms-3" (click)="viewSalary()">
+                          <i class="fa" [ngClass]="{'fa-angle-down': isSalaryDetail, 'fa-angle-up': !isSalaryDetail}"
+                            aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="!isSalaryDetail">
+                      <div class="border border-secondary">
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            REGULAR SALARY:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Total}} </span><span
+                              class="ps-3"><a href="javascript:void(0)" class="text-decoration-none"
+                                (click)="salaryBreakupPopup()">SALARY BREAKUP</a></span>
+                          </p>
+                        </div>
+                        <div class="row ps-3 mt-1">
+                          <div class="col-md-4">
+                            <small class="fw-bold">SALARY / MONTH</small>
+                            <p class="text-dark pt-2">INR{{myAnnualSalary.SalaryMonth}} </p>
+                          </div>
+                          <div class="col-md-4">
+                            <small class="fw-bold">EFFECTIVE</small>
+                            <p class="pt-2">{{myAnnualSalary.Effective | date}}</p>
+                          </div>
+                        </div>
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            BONUS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Bonus}} </span>
+                          </p>
+                        </div>
+                        <div class="text-center py-2">
+                          <ng-container *ngIf="myAnnualSalary.Bonus == 0">No bonus added</ng-container>
+                        </div>
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            OTHER:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Other}} </span>
+                          </p>
+                        </div>
+                        <div class=" ps-3 mt-1">
+                          <small class="fw-bold">PF - EMPLOYER / MONTH</small>
+                          <p class="pt-2">INR {{myAnnualSalary.PFperMonth}}</p>
+                        </div>
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            PERKS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Perks}} </span>
+                          </p>
+                        </div>
+                        <div class="text-center py-2">
+                          <ng-container *ngIf="myAnnualSalary.Perks == 0">No perks are assigned</ng-container>
+                        </div>
+                      </div>
+                    </ng-container>
                   </div>
                 </div>
-                <ng-container *ngIf="!isSalaryDetail">
-                  <div class="border border-secondary">
-                    <div class="card-header py-2 d-flex text-dark align-items-center">
-                      <p class="mb-0">
-                        REGULAR SALARY:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Total}} </span><span
-                          class="ps-3"><a href="javascript:void(0)" class="text-decoration-none"
-                            (click)="salaryBreakupPopup()">SALARY BREAKUP</a></span>
-                      </p>
-                    </div>
-                    <div class="row ps-3 mt-1">
-                      <div class="col-md-4">
-                        <small class="fw-bold">SALARY / MONTH</small>
-                        <p class="text-dark pt-2">INR{{myAnnualSalary.SalaryMonth}} </p>
-                      </div>
-                      <div class="col-md-4">
-                        <small class="fw-bold">EFFECTIVE</small>
-                        <p class="pt-2">{{myAnnualSalary.Effective | date}}</p>
-                      </div>
-                    </div>
-                    <div class="card-header py-2 d-flex text-dark align-items-center">
-                      <p class="mb-0">
-                        BONUS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Bonus}} </span>
-                      </p>
-                    </div>
-                    <div class="text-center py-2">
-                      <ng-container *ngIf="myAnnualSalary.Bonus == 0">No bonus added</ng-container>
-                    </div>
-                    <div class="card-header py-2 d-flex text-dark align-items-center">
-                      <p class="mb-0">
-                        OTHER:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Other}} </span>
-                      </p>
-                    </div>
-                    <div class=" ps-3 mt-1">
-                      <small class="fw-bold">PF - EMPLOYER / MONTH</small>
-                      <p class="pt-2">INR {{myAnnualSalary.PFperMonth}}</p>
-                    </div>
-                    <div class="card-header py-2 d-flex text-dark align-items-center">
-                      <p class="mb-0">
-                        PERKS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Perks}} </span>
-                      </p>
-                    </div>
-                    <div class="text-center py-2">
-                      <ng-container *ngIf="myAnnualSalary.Perks == 0">No perks are assigned</ng-container>
-                    </div>
-                  </div>
-                </ng-container>
-              </div>
+              </ng-container>
             </div>
           </ng-container>
         </div>
-      </ng-container>
+      </div>
     </div>
   </div>
 </div>

@@ -29,7 +29,8 @@ export class SalaryComponent implements OnInit {
   salaryComponents: Array<any> = [];
   salaryDetail: any = null;
   isReady: boolean = false;
-  isSalaryGroup: boolean = false;
+  SectionIsReady: boolean = false;
+  isEmployeeSelect: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -95,7 +96,8 @@ export class SalaryComponent implements OnInit {
   }
 
   getSalaryBreakup(e) {
-    this.isSalaryGroup = false;
+    this.isEmployeeSelect = true;
+    this.SectionIsReady= false;
     this.isReady = false;
     this.myAnnualSalary = new MyAnnualSalary();
     this.EmployeeId = e;
@@ -151,7 +153,8 @@ export class SalaryComponent implements OnInit {
     }
 
     this.initForm();
-    this.isSalaryGroup = true;
+    this.isEmployeeSelect = false;
+    this.SectionIsReady= true;
   }
 
   initForm() {

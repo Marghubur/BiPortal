@@ -520,8 +520,9 @@
               <button class="btn btn-primary-c" (click)="addEmailId()"><i class="fa fa-plus pe-2"></i>Add Email Id</button>
               <!-- <a href="javascript:void(0)" class="text-decoration-none ps-3"><i class="fa fa-plus pe-2"></i>Add Email Id</a> -->
             </div>
-            <div class="">
-              <iframe [srcdoc]="template" width="100%" height="310px" style="border: none;"></iframe>
+            <div class="mt-4">
+              <!-- <iframe [srcdoc]="template" width="100%" height="310px" style="border: none;"></iframe> -->
+              <textarea [value]="templateText" cols="80" rows="10"></textarea>
             </div>
           </div>
         </div>
