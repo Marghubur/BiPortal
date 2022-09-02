@@ -20,9 +20,10 @@ export class PreferencesComponent implements OnInit {
   employeesList: autoCompleteModal = new autoCompleteModal();
   applicationData: any = [];
   isPreferenceReady: boolean = false;
-  IsPageReady: boolean = false;
   employeeDetail: EmployeeDetail = new EmployeeDetail();
   EmployeeId: number = 0;
+  SectionIsReady: boolean = false;
+  isEmployeeSelect: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
@@ -67,17 +68,19 @@ export class PreferencesComponent implements OnInit {
   }
 
   LoadData() {
-    this.IsPageReady = false;
+    this.isEmployeeSelect = true;
+    this.SectionIsReady= false;
     if (this.EmployeeId > 0) {
       this.http.get(`employee/GetAllManageEmployeeDetail/${this.EmployeeId}`).then((response: ResponseModel) => {
         if(response.ResponseBody) {
           if (response.ResponseBody.Employee.length > 0) {
             this.employeeDetail = response.ResponseBody.Employee[0] as EmployeeDetail;
-            this.IsPageReady = true;
             Toast("Record found.")
           } else {
             ErrorToast("Record not found");
           }
+          this.isEmployeeSelect = false;
+          this.SectionIsReady= true;
         }
       }).catch(e => {
         ErrorToast("No record found");
