@@ -83,16 +83,20 @@ export class SidemenuComponent implements OnInit {
         let filteredMenu = [];
         let menuItems = [];
         let i = 0;
+        let index = 0;
         while(i < parentItems.length) {
           menuItems = menu.filter(x => x.Childs === parentItems[i].Catagory);
-          if(menuItems.find(x => x.Link === this.MenuName)) {
-            this.CatagoryPosition = i;
+          index = menuItems.findIndex(x => x.Link === this.MenuName);
+          if(index >= 0) {
+            this.CatagoryPosition = index;
           }
           filteredMenu.push({
             Name: parentItems[i].Catagory,
             ParentDetail: parentItems[i],
             Value: menuItems
           });
+
+          index = -1;
           i++;
         }
 
