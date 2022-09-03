@@ -614,7 +614,7 @@ export class TimesheetComponent implements OnInit {
 
   getAllPendingTimesheet() {
     if(this.clientId > 0) {
-      this.http.get(`Timesheet/GetPendingTimesheetById/${this.employeeId}/1/${this.clientId}`).then((response: ResponseModel) => {
+      this.http.get(`Timesheet/GetPendingTimesheetById/${this.employeeId}/${this.clientId}`).then((response: ResponseModel) => {
         if(response.ResponseBody && response.ResponseBody.length > 0) {
           this.PendingAttendacneMessage = 'Select above pending timesheet link to submit before end of the month.';
           this.buildPendingTimesheetModal(response.ResponseBody);
