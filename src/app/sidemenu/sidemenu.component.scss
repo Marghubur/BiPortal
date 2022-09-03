@@ -6,13 +6,27 @@
   font-weight: 700;
   padding-bottom: 10px;
 }
+
 a {
   text-decoration: none;
-  font-size: 13px;
   font-weight: 600;
   color: #222;
   margin: 0px 2px;
   display: block;
+}
+
+@media (min-width: 320px) and (min-width: 961px) {
+  /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+  a {
+    font-size: 0.9vw;
+  }
+}
+
+@media (min-width: 1025px) and (min-width: 1281px) {
+  /* big landscape tablets, laptops, and desktops */
+  a {
+    font-size: 0.7vw;
+  }
 }
 
 .accordion-header button {
