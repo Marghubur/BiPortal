@@ -294,7 +294,7 @@
         <a href="javascript:void(0)" (click)="ClosePopup()" class="text-decoration-none text-danger btn-white pe-3"
           data-dismiss="modal">Cancel</a>
         <a href="javascript:void(0)" (click)="DeleteCurrent(singleEmployee)" *ngIf="singleEmployee?.IsActive == true"
-          class="text-decoration-none btn-white text-primary">Delete</a>
+          class="text-decoration-none btn-white text-primary">Remove</a>
         <a href="javascript:void(0)" (click)="DeactivatedEmployee(singleEmployee)"
           *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary">Activate</a>
       </div>
