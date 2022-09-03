@@ -21,19 +21,19 @@
       <div class="col-12 row m-0 p-0 mb-4">
         <div class="col-md-4 p-0 m-0">
           <label class="form-label">Select Employer</label>
-          <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+          <app-iautocomplete [data]="clientDetail" (OnSelect)="presentWeek()"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
           </app-iautocomplete>
         </div>
         <div class="col-md-8 elem-row justify-content-end">
-          <div class="elem-row-item-base justify-content-end">
+          <!-- <div class="elem-row-item-base justify-content-end">
             <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
               <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
               {{ isLoading ? 'Wait' : 'Present week'}}
             </a>
-          </div>
+          </div> -->
           <div class="elem-row-item-base justify-content-end ps-2">
             <a href="javascript:void(0)" (click)="getAllPendingTimesheet()"
-              class="p-2 p-2 badge bg-success text-light head-badge">
+              class="p-2 p-2 badge bg-success text-light head-badge fs-6">
               <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
               My pending timesheet
             </a>
@@ -152,7 +152,7 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="DayValue == 6 || DayValue ==  0">
-                  <h4 class="text-center pt-5 pb-5">Today is Holiday</h4>
+                  <h4 class="text-center pt-5 pb-5">Today is week-off</h4>
                 </ng-container>
               </div>
             </div>
@@ -161,7 +161,7 @@
               <div class="card px-3 pt-3 pb-5">
                 <div class="pb-4">
                   <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
-                  <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
+                  <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate | date}}.
                 </div>
                 <h6 class=" text-center pb-5 pt-5">
                   Work From Home
@@ -181,7 +181,7 @@
                       <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
                     </div>
                   </div>
-                  <div class="ms-4 d-flex">
+                  <!-- <div class="ms-4 d-flex">
                     <div class="p-0">
                       <form class="form-inline">
                         <div class="form-group">
@@ -209,7 +209,7 @@
                         Next week<i class="fa fa-angle-double-right ps-2"></i>
                       </button>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="text-end">
                   <button type="button" class="btn btn-primary-c btn-sm" [disabled]="isBlocked" (click)="onSubmit()">
@@ -235,6 +235,11 @@
                   </thead>
                   <tbody formArrayName="timesheetArray">
                     <tr>
+                      <ng-container *ngIf="emptyFields.length > 0">
+                        <td *ngFor="let item of emptyFields">
+                          <span>Not Allowed</span>
+                        </td>
+                      </ng-container>
                       <ng-container *ngFor="let item of timesheetForm.get('timesheetArray').controls;let i = index;">
                         <ng-container [formGroupName]="i">
                           <td>
