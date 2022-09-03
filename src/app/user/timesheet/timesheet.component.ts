@@ -53,6 +53,7 @@ export class TimesheetComponent implements OnInit {
   isBlocked: boolean = false;
   cachedData: any = null;
   dailyTimesheetDetails: Array<any> = [];
+  emptyFields: Array<number> = [];
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -493,7 +494,8 @@ export class TimesheetComponent implements OnInit {
     let currentDate = null;
     if((this.toDate - this.fromDate) > 0){
       let index = 0;
-      let to = 7;
+      //let to = 7;
+      let to = this.toDate.getDate() - this.fromDate.getDate();
       while(index < to) {
         currentDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         weekDaysList.push({
@@ -516,13 +518,25 @@ export class TimesheetComponent implements OnInit {
       }
       i++;
     }
+
+    this.emptyFields = [];
+      let day = this.fromDate.getDay();
+      if(this.fromDate.getDate() < 6  && (day > 1 || day == 0)) {
+        let value = day == 0 ? 6 : day-1 ;
+        for (let i = 0; i < value; i++) {
+          this.emptyFields.push(i);
+        }
+      }
+
     return weekDaysList;
   }
 
   fromDateSelection(e: NgbDateStruct) {
     if (this.clientId > 0) {
-      let seletedDate = `${e.year}-${e.month}-${e.day}`;
+      let date = `${e.year}-${e.month}-${e.day}`;
+      let seletedDate = new Date(date);
       this.fromDate = this.getMonday(new Date(seletedDate));
+      //this.fromDate = new Date(seletedDate.getFullYear(), seletedDate.getMonth(), 1);
       if(this.fromDate) {
         this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         this.toDate.setDate(this.toDate.getDate() + 6);
@@ -563,12 +577,21 @@ export class TimesheetComponent implements OnInit {
   presentWeek() {
     if(this.clientId > 0) {
       this.isLoading = true;
-      let currentDate = new Date().setHours(0, 0, 0, 0);
-      this.fromDate = this.getMonday(new Date(currentDate));
+      let currentDate = new Date(new Date().setHours(0, 0, 0, 0));
+      //this.fromDate = this.getMonday(new Date(currentDate));
+      this.fromDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
       this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
       if(this.fromDate) {
-        this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
-        this.toDate.setDate(this.toDate.getDate() + 6);
+        // this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
+        // this.toDate.setDate(this.toDate.getDate() + 6);
+        this.toDate = new Date();
+        if (this.toDate.getDay() == 4)
+        this.toDate.add
+          this.toDate.setDate(this.toDate.getDate() + 2);
+
+        if (this.toDate.getDay() == 5)
+          this.toDate.setDate(this.toDate.getDate() + 1);
+
         this.getUserTimesheetData();
       }
     } else {
