@@ -176,7 +176,7 @@ export class RecentComponent implements OnInit {
       let empId = item.EmployeeUid;
       if (empId !== null && empId !== "") {
         item.IsActive = false;
-        this.http.delete(`Employee/DeleteEmployeeById/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
+        this.http.delete(`Employee/ActivateOrDeActiveEmployee/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             Toast("Employee Deleted successfully")
             this.LoadData();
@@ -192,7 +192,7 @@ export class RecentComponent implements OnInit {
       let empId = item.EmployeeUid;
       if (empId !== null && empId !== "") {
         item.IsActive = true;
-        this.http.delete(`Employee/DeleteEmployeeById/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
+        this.http.delete(`Employee/ActivateOrDeActiveEmployee/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             Toast("Employee Activated successfully");
             this.LoadData();
