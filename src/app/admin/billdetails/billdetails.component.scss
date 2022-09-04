@@ -72,12 +72,13 @@
   margin-top: 25px;
 }
 
-.popup-form input {
-  height: 34px !important;
+.popup-form  .form-control, 
+.popup-form  .form-select {
+  height: 35px !important;
 }
 
 .popup-form button {
-  height: 34px !important;
+  height: 35px !important;
   border-radius: 0px 4px 4px 0px;
 }
 
