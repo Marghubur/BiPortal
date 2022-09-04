@@ -980,3 +980,8 @@ fieldset {
     border: 2px solid cadetblue;
   }
 }
+
+
+.form-control-sm {
+  min-height: calc(1.8vw + 2px) !important;
+}
