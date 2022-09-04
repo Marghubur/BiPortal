@@ -1,5 +1,5 @@
 <div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
-  <div class="col-12 u-header curren-bg row m-0 my-3">
+  <div class="col-12 u-header curren-bg row m-0 my-3 align-items-center">
     <div class="col-md-3">
       <div class="d-inline-block c-tab" id="emp-tab">
         <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.Active}" (click)="SwitchTab($event, 1)">
@@ -8,30 +8,30 @@
         <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.InActive}" (click)="SwitchTab($event, 0)">
           InActive
         </a>
-        <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.All}" (click)="SwitchTab($event, -1)">
+        <!-- <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.All}" (click)="SwitchTab($event, -1)">
           All
-        </a>
+        </a> -->
       </div>
     </div>
-    <div class="col-md-7 pt-2 row m-0">
+    <div class="col-md-7 align-items-center row m-0">
       <div class="col-md-10">
         <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
           (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
           [(ngModel)]="anyFilter">
       </div>
       <div class="col-md-2">
-        <button class="btn btn-sm btn-primary-c filter-btn-grp" (click)="globalFilter()" (keydown.esc)="resetFilter()">
+        <button class="btn  btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
           <i class="fa fa-filter"></i>
         </button>
-        <button class="btn btn-sm btn-danger filter-btn-grp ms-2" (click)="resetFilter()">
+        <button class="btn  btn-danger ms-2" (click)="resetFilter()">
           <i class="fa fa-repeat"></i>
         </button>
       </div>
     </div>
 
     <div class="col-md-2 inline-row d-r p-0 m-0">
-      <div class="pt-1">
-        <button class="btn btn-sp btn-sm btn-lightorange" [routerLink]="['/' + manageEmployeeRouteName]"
+      <div class="">
+        <button class="btn btn-sp btn-lightorange" [routerLink]="['/' + manageEmployeeRouteName]"
           routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o ms-1" aria-hidden="true"></i>
           Add Employee
         </button>

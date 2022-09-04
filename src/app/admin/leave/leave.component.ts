@@ -130,6 +130,8 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           this.manageResponseOnUpdate(response);
           this.isLoading = false;
           this.submit = false;
+        }).catch(e => {
+          this.isLoading = false;
         });
       } else {
         Url = "leave/AddLeavePlanType";
@@ -137,10 +139,11 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           this.manageResponseOnUpdate(response);
           this.isLoading = false;
           this.submit = false;
+        }).catch(e => {
+          this.isLoading = false;
         });
       }
     }
-    this.isLoading = false;
   }
 
   get LeaveTypeConntrol() {
@@ -378,6 +381,8 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           this.isLoading = false;
           Toast('Leave Type is added successfully. ')
         }
+      }).catch(e => {
+        this.isLoading = false;
       })
     }
   }
@@ -508,14 +513,15 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           $('#addLeavePlanModal').modal('hide');
           this.bindFirstPlanOnPage();
           Toast("Plan inserted/update successfully.");
+          this.isLoading = false;
         } else {
           ErrorToast("Fail to inserted/update.");
         }
+      }).catch(e => {
+        this.isLoading = false;
       });
       this.submit = false;
-      this.isLoading = false;
     }
-    this.isLoading = false;
 
   }
 
@@ -569,6 +575,8 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           $('#defaultPlanModal').modal('hide');
           this.isLoading = false;
         }
+      }).catch(e => {
+        this.isLoading = false;
       })
     }
   }

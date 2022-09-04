@@ -227,13 +227,15 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
           this.LoadFiles();
           this.refreshFilter();
           Toast(response.ResponseBody);
+          this.isLoading = false;
         }
         this.closeWindow();
-      });
+      }).catch(e => {
+        this.isLoading = false;
+      })
     } else {
       ErrorToast("Status is mandatory fields.");
     }
-    this.isLoading = false;
   }
 
   GetDocumentFile(fileInput: any) {
@@ -307,12 +309,14 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
           this.closeWindow();
           this.refreshFilter();
           Toast(response.ResponseBody);
+          this.isLoading = false;
         }
+      }).catch(e => {
+        this.isLoading = false;
       });
     } else {
       ErrorToast("Please fill all mandatory fields.");
     }
-    this.isLoading = false;
   }
 
   editFile(FileUid: string) {
@@ -567,6 +571,8 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
         ErrorToast("No file or folder found");
       }
       this.isEmpPageReady = true;
+    }).catch(e => {
+      this.isLoading = false;
     });
   }
 

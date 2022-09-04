@@ -236,6 +236,8 @@ export class CompanyInfoComponent implements OnInit {
         Toast("Detail inserted/updated successfully.");
         this.isLoading = false;
       }
+    }).catch(e => {
+      this.isLoading = false;
     });
   }
 }

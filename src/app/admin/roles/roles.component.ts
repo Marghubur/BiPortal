@@ -191,9 +191,10 @@ export class RolesComponent implements OnInit {
           this.Roles = response.ResponseBody['Table'];
         }
         this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
       });
       $('#addRole').modal('hide');
     };
-    this.isLoading = false;
   }
 }

@@ -175,11 +175,13 @@ export class SettingsComponent implements OnInit {
           this.Companys = response.ResponseBody;
           Toast("Company Group added successfully.");
           $('#NewCompanyModal').modal('hide');
+          this.isLoading = false;
         }
         else
           ErrorToast("Fail to add company group. Please contact to admin.");
 
         this.submitted = false;
+      }).catch(e => {
         this.isLoading = false;
       });
     }
@@ -201,11 +203,13 @@ export class SettingsComponent implements OnInit {
           this.Companys = response.ResponseBody;
           Toast("Company detail updated successfully.");
           $('#NewCompanyModal').modal('hide');
+          this.isLoading = false;
         }
         else
           ErrorToast("Fail to add company group. Please contact to admin.");
 
         this.submitted = false;
+      }).catch(e => {
         this.isLoading = false;
       });
     }
