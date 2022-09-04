@@ -24,9 +24,9 @@
                 </div>
               </div>
               <div class="col-md-3">
-                <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
-                  <i class="fa fa-filter">
-                    <span>Filter</span>
+                <a href="javascript:void(0)" class="pe-0 a-btn text-dark fw-bold" (click)="advancedSearchPopUp()">
+                  <i class="fa fa-search">
+                    <span>Advanced Search</span>
                   </i>
                 </a>
               </div>
@@ -40,9 +40,9 @@
                 </a>
               </div>
               <div class="text-end">
-                <a href="javascript:void(0)" class="pe-0 a-btn text-dark fw-bold" (click)="advancedSearchPopUp()">
-                  <i class="fa fa-search">
-                    <span>Advanced Search</span>
+                <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
+                  <i class="fa fa-filter">
+                    <span>Filter</span>
                   </i>
                 </a>
               </div>
@@ -391,12 +391,12 @@
           <div [formGroup]="gstDetailForm" class="col-md-12 popup-form">
             <div class="col-md-12 row m-0">
               <div class="col-4 form-group">
-                <label for="">Bill No.#</label>
+                <label class="form-label">Bill No.#</label>
                 <input class="form-control disabled text-muted" disabled formControlName="Billno">
               </div>
               <div class="col-4 form-group">
-                <label for="">GST Status</label>
-                <select formControlName="Gststatus" name="Gststatus" class="form-control">
+                <label class="form-label">GST Status</label>
+                <select formControlName="Gststatus" name="Gststatus" class="form-select">
                   <option value="0">Status Type</option>
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
@@ -407,7 +407,7 @@
                 </select>
               </div>
               <div class="col-4 form-group">
-                <label for="">Paid On</label>
+                <label class="form-label">Paid On</label>
                 <form class="form-inline">
                   <div class="form-group w-100">
                     <div class="input-group w-100">
@@ -425,13 +425,13 @@
             </div>
             <div class="col-md-12 row m-0 mt-4">
               <div class="col-4 form-group">
-                <label for="">GST Amount</label>
+                <label class="form-label">GST Amount</label>
                 <input class="form-control disabled text-muted" disabled placeholder="GST Amount"
                   formControlName="Amount">
               </div>
               <div class="col-4 form-group">
-                <label for="">Paid By</label>
-                <select formControlName="Paidby" name="Paidby" class="form-control" disabled>
+                <label class="form-label">Paid By</label>
+                <select formControlName="Paidby" name="Paidby" class="form-select" disabled>
                   <option value="0">Employee Name</option>
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
@@ -480,8 +480,8 @@
           <div [formGroup]="documentForm" class="col-md-12 popup-form">
             <div class="col-md-12 row m-0">
               <div class="col-6 form-group">
-                <label for="">File Status</label>
-                <select formControlName="StatusId" name="StatusId" class="form-control">
+                <label for="" class="form-label">File Status</label>
+                <select formControlName="StatusId" name="StatusId" class="form-select">
                   <option value="0">File Status Type</option>
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
@@ -492,7 +492,7 @@
                 </select>
               </div>
               <div class="col-6 form-group">
-                <label for="">Updated On</label>
+                <label for="" class="form-label">Updated On</label>
                 <form class="form-inline">
                   <div class="form-group w-100">
                     <div class="input-group w-100">
