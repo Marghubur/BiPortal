@@ -248,11 +248,13 @@ export class PayrollComponentsComponent implements OnInit {
           this.AdhocAllowance = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 1);
           $('#CreateAdhocModal').modal('hide');
           Toast("Component added successfully.")
+          this.isLoading = false;
         } else
           ErrorToast("Fail to add adhoc allowance component. Please contact to admin.")
+      }).catch(e => {
+        this.isLoading = false;
       })
     }
-    this.isLoading = false;
   }
 
   addNewDeduction() {
@@ -266,11 +268,13 @@ export class PayrollComponentsComponent implements OnInit {
           this.AdhocDeduction = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 3);
           $('#CreateDeductionModal').modal('hide');
           Toast("Component added successfully.")
+          this.isLoading = false;
         } else
           ErrorToast("Fail to add deduction component. Please contact to admin.")
+      }).catch(e => {
+        this.isLoading = false;
       })
     }
-    this.isLoading = false;
   }
 
   addNewBonus() {
@@ -284,11 +288,13 @@ export class PayrollComponentsComponent implements OnInit {
           this.AdhocBonus = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 3);
           $('#CreateBonusModal').modal('hide');
           Toast("Component added successfully.")
+          this.isLoading = false;
         } else
           ErrorToast("Fail to add bonus component. Please contact to admin.")
+      }).catch(e => {
+        this.isLoading = false;
       })
     }
-    this.isLoading = false;
   }
 
   enableTaxExempt(e: any) {
@@ -462,6 +468,8 @@ export class PayrollComponentsComponent implements OnInit {
         } else {
           ErrorToast("Unable to upload the data");
         }
+      }).catch(e => {
+        this.isLoading = false;
       });
     } else {
       WarningToast("Please upload atleast one record");

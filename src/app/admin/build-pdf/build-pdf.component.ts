@@ -937,10 +937,10 @@ export class BuildPdfComponent implements OnInit {
 
   sendEmail() {
     // this.staffingTemplateType &&
-    if (this.currentOrganization.ClientId > 0 && this.senderClient.ClientId >0 && this.FileDetail.FileId > 0) {
+    if (this.currentOrganization.CompanyId > 0 && this.senderClient.CompanyId >0 && this.FileDetail.FileId > 0) {
       let data = {
-        ClientId: this.currentOrganization.ClientId,
-        SenderId: this.senderClient.ClientId,
+        ClientId: this.currentOrganization.CompanyId,
+        SenderId: this.senderClient.CompanyId,
         FileId: this.FileDetail.FileId,
         Emails: [this.billAllDetails.receiverEmail, this.billAllDetails.senderEmail]
       };

@@ -73,6 +73,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   hPLetterCollection:Array<any> = [];
   housingPropertyLetterFile: Array<any> = [];
   viewHousingPropFile: Array<any> = [];
+  viewAttachment: string = '';
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -325,8 +326,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.SectionIsReady = true;
           this.isLoading = false;
         }
+      }).catch(e => {
+        this.isLoading = false;
       });
-      this.isLoading = false;
     }
   }
 
@@ -362,11 +364,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  uploadDocument(item: any) {
+  uploadDocument(item: any, type?: string) {
     this.slectedDeclarationnFile = [];
     if (item) {
       this.attachmentForDeclaration = item.ComponentId ;
       this.isLargeFile = false;
+      this.viewAttachment = '';
       let currentDeclaration = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item.ComponentId);
       if (currentDeclaration.length > 0)
         this.slectedDeclarationnFile = currentDeclaration;
@@ -376,6 +379,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.FilesCollection = [];
         this.removeSelectedFile()
       }
+
+      if (type != null && type !== '')
+        this.viewAttachment = type;
+
       $("#addAttachmentModal").modal('show');
     }
   }
@@ -556,7 +563,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $("#addAttachmentModal").modal('hide');
   }
 
-  closeDeclaration(e: any) {
+  closeDeclaration(item: any, e: any) {
     this.FileDocumentList = [];
     this.FilesCollection = [];
     this.editException = true;
@@ -568,14 +575,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     elem.querySelector('div[name="cancel-declaration"]').classList.add('d-none');
     elem.querySelector('a[name="upload-proof"]').classList.remove('pe-auto', 'fw-bold', 'text-primary-c');
     elem.querySelector('a[name="upload-proof"]').classList.add('pe-none', 'text-decoration-none', 'text-muted');
-    let value = this.presentRow.querySelector('a[name="upload-proof"]').innerText;
-    if(value.indexOf('Not Upload') > -1) {
-      value = '';
+    if(item.UploadedFileIds <= 0) {
+      this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
       let tag = document.createElement("i");
       tag.classList.add("fa", "fa-paperclip", "pe-2");
       this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
       tag = document.createElement("span");
       var text = document.createTextNode("Not Upload");
+      tag.appendChild(text);
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+    } else {
+      this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
+      let tag = document.createElement("i");
+      tag.classList.add("fa", "fa-check-circle", "text-success", "fa-lg", "pe-2");
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+      tag = document.createElement("span");
+      var text = document.createTextNode("Uploaded");
       tag.appendChild(text);
       this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
     }
@@ -705,6 +720,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     if (data) {
       this.isRentedResidenceEdit = true;
       this.FileDocumentList = [];
+      this.hPLetterList = [];
       let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP');
       this.housingPropertyRentFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
       this.housingPropertyLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");

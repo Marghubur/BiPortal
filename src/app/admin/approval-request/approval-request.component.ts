@@ -108,8 +108,9 @@ export class ApprovalRequestComponent implements OnInit {
         this.isLoading = false;
         $('#leaveModal').modal('hide');
       }
+    }).catch(e => {
+      this.isLoading = false;
     })
-    this.isLoading = false;
   }
 }
 

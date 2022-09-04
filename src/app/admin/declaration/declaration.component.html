@@ -417,11 +417,12 @@
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
-                                          <div class="circle">
+                                          <!-- <div class="circle">
                                             <div class="checkmark">
                                             </div>
-                                          </div>
-                                          <span class="ps-3">Uploaded</span>
+                                          </div> -->
+                                          <i class="fa fa-check-circle fa-lg text-success"></i>
+                                          <span class="ps-2">Uploaded</span>
                                         </div>
                                       </a>
                                     </div>
@@ -437,18 +438,12 @@
                                   <div class="cell-wrapper">
                                     <div class="d-flex align-items-center">
                                       <ng-container *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3 fw-bold text-dark">Auto Accepted</span>
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2 fw-bold text-dark">Auto Accepted</span>
                                       </ng-container>
                                       <ng-container *ngIf="r.DeclaredValue > 0 && (r.ComponentId != 'EPF' || r.ComponentId != 'VPF')">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3">Submitted</span>
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2">Submitted</span>
                                       </ng-container>
                                     </div>
                                     <span *ngIf="r.DeclaredValue <= 0 && (r.ComponentId != 'EPF' && r.ComponentId != 'VPF')">Not Submitted</span>
@@ -462,7 +457,8 @@
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
                                     <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
-                                      (click)="closeDeclaration($event)">Cancel</a>
+                                      (click)="closeDeclaration(r, $event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                                 <div class="td text-center fe-1" *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
@@ -621,11 +617,8 @@
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
-                                          <div class="circle">
-                                            <div class="checkmark">
-                                            </div>
-                                          </div>
-                                          <span class="ps-3">Uploaded</span>
+                                          <i class="fa fa-check-circle fa-lg text-success"></i>
+                                          <span class="ps-2">Uploaded</span>
                                         </div>
                                       </a>
                                     </div>
@@ -648,11 +641,8 @@
                                         <span class="ps-3">Auto Accepted</span>
                                       </ng-container> -->
                                       <ng-container *ngIf="r.DeclaredValue > 0">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3">Submitted</span>
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2">Submitted</span>
                                       </ng-container>
                                     </div>
                                     <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
@@ -666,7 +656,8 @@
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
                                     <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
-                                      (click)="closeDeclaration($event)">Cancel</a>
+                                      (click)="closeDeclaration(r, $event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                               </div>
@@ -828,11 +819,8 @@
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
-                                          <div class="circle">
-                                            <div class="checkmark">
-                                            </div>
-                                          </div>
-                                          <span class="ps-3">Uploaded</span>
+                                          <i class="fa fa-check-circle fa-lg text-success"></i>
+                                          <span class="ps-2">Uploaded</span>
                                         </div>
                                       </a>
                                     </div>
@@ -847,19 +835,9 @@
                                 <div class="td align-middle">
                                   <div class="cell-wrapper">
                                     <div class="d-flex align-items-center">
-                                      <!-- <ng-container *ngIf="r.Status != 2">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3">Auto Accepted</span>
-                                      </ng-container> -->
                                       <ng-container *ngIf="r.DeclaredValue > 0">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3">Submitted</span>
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2">Submitted</span>
                                       </ng-container>
                                     </div>
                                     <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
@@ -873,7 +851,8 @@
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
                                     <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
-                                      (click)="closeDeclaration($event)">Cancel</a>
+                                      (click)="closeDeclaration(r, $event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                               </div>
@@ -1047,7 +1026,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl p-5 ">
     <div class="modal-content rounded-3 px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title fw-normal" id="addAttachmentModalLabel">Add Attachment for {{attachmentForDeclaration}}
+        <h5 class="modal-title fw-normal" id="addAttachmentModalLabel">{{viewAttachment == '' ? 'Add Attachment' : 'View Attachment'}}  for {{attachmentForDeclaration}}
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -1117,7 +1096,7 @@
                       <a href="javascript:void(0)" class="text-decoration-none" (click)="deletePopup(item)"><i class="fa fa-trash px-2 text-danger"></i></a>
                     </td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="viewAttachment == null || viewAttachment == ''">
                     <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
                     <td colspan="2" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
                   </tr>
@@ -1158,7 +1137,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer border-top-0 mb-2">
+      <div class="modal-footer border-top-0 mb-2" *ngIf="viewAttachment == null || viewAttachment == ''">
         <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
         <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="fireFileBrowser()"><i class="fa fa-paperclip pe-2"></i>Add Attachment</a>
         <button type="button" class="btn btn-outline-danger mx-2" (click)="closeAttachmentModal()">

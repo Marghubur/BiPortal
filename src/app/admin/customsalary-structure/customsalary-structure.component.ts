@@ -318,14 +318,16 @@ export class CustomsalaryStructureComponent implements OnInit {
           Toast("Salary Group added suuccessfully.");
           this.SalaryGroupForm.reset();
           $('#addSalaryGroupModal').modal('hide');
+          this.isLoading = false;
         } else {
           ErrorToast("Unable to add salary group.")
         }
+      }).catch(e => {
+        this.isLoading = false;
       })
     } else {
       ErrorToast("Please correct all the mandaroty field marded red");
     }
-    this.isLoading = false;
   }
 
   updateSalaryGroup() {
@@ -362,12 +364,14 @@ export class CustomsalaryStructureComponent implements OnInit {
         Toast("Salary Group added suuccessfully.");
         this.SalaryGroupForm.reset();
         $('#addSalaryGroupModal').modal('hide');
+        this.isLoading = false;
       } else {
         ErrorToast("Unable to add salary group.")
       }
+    }).catch(e => {
+      this.isLoading = false;
     })
 
-    this.isLoading = false;
   }
 
   formulaAppliedOn(item: string) {
@@ -508,15 +512,18 @@ export class CustomsalaryStructureComponent implements OnInit {
         this.http.put(`Settings/UpdateGroupSalaryComponentDetail/
             ${this.componentFields.ComponentId}/
             ${this.currentGroup.SalaryGroupId}`, value).then((response:ResponseModel) => {
-          if (response.ResponseBody)
+          if (response.ResponseBody) {
+            this.isLoading = false;
             Toast('Updated Successfully')
+          }
           $('#updateCalculationModal').modal('hide');
+        }).catch(e => {
+          this.isLoading = false;
         })
     } else {
       WarningToast("Group not selected.");
     }
     this.submitted = true;
-    this.isLoading = false;
   }
 
   navigateTo(name: string) {

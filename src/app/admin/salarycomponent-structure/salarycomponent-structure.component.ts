@@ -127,12 +127,14 @@ export class SalarycomponentStructureComponent implements OnInit {
           this.bindData(response.ResponseBody);
           Toast("Component Added Successfully");
           $('#addComponentModal').modal('hide');
+          this.isLoading = false;
         }
+      }).catch(e => {
+        this.isLoading = false;
       })
     } else {
       ErrorToast ("Please select the recurring components")
     }
-    this.isLoading = false;
   }
 
   getComponentData(data: SalaryComponentFields) {
@@ -180,12 +182,14 @@ export class SalarycomponentStructureComponent implements OnInit {
         this.bindData(res.ResponseBody);
         $('#inactiveComponentModal').modal('hide');
         Toast("Component detail updated successfully");
+        this.isLoading = false;
       } else {
         Toast("Fail to update. Please contact to admin.");
       }
 
-      this.isLoading = false;
       $('#editSalaryMoadl').modal('hide');
+    }).catch(e => {
+      this.isLoading = false;
     });
   }
 
@@ -199,13 +203,15 @@ export class SalarycomponentStructureComponent implements OnInit {
     .then(res => {
       if(res.ResponseBody) {
         this.bindData(res.ResponseBody);
+        this.isLoading = false;
         Toast("Component detail updated successfully");
       } else {
         Toast("Fail to update. Please contact to admin.");
       }
 
-      this.isLoading = false;
       $('#editSalaryMoadl').modal('hide');
+    }).catch(e => {
+      this.isLoading = false;
     });
   }
 

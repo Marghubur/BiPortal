@@ -85,6 +85,8 @@ export class ResetpasswordComponent implements OnInit {
         ErrorToast("Unable to update your password");
       }
       this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
     })
   }
 

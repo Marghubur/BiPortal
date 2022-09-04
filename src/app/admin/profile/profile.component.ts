@@ -1169,7 +1169,8 @@ export class ManageComponent implements OnInit {
               if (this.userModal.Companies.length == 0)
                 this.isCarrerProfileData = true;
               break;
-            }
+        }
+        this.isLoading = false;
         Toast("Employment Form submitted successfully")
       } else {
         ErrorToast("Invalid user. Please login again.");
@@ -1185,6 +1186,8 @@ export class ManageComponent implements OnInit {
       this.buildPersonalDetailForm();
       this.isFormReady = true;
 
+    }).catch(e => {
+      this.isLoading = false;
     })
   }
 
@@ -1300,6 +1303,8 @@ export class ManageComponent implements OnInit {
       if(response.ResponseBody) {
         Toast(response.ResponseBody);
       }
+    }).catch(e => {
+      this.isLoading = false;
     })
     this.fileDetail = [];
   }
@@ -1322,6 +1327,8 @@ export class ManageComponent implements OnInit {
       if(response.ResponseBody) {
         Toast(response.ResponseBody);
       }
+    }).catch(e => {
+      this.isLoading = false;
     })
     this.fileDetail = [];
   }

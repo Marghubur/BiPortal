@@ -150,8 +150,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
       });
-      this.isLoading = false;
     }
   }
 
@@ -227,8 +229,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
       });
-      this.isLoading = false;
     }
   }
 
@@ -422,8 +426,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
       });
-      this.isLoading = false;
     }
   }
 
@@ -528,8 +534,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
       });
-      this.isLoading = false;
     }
   }
 
@@ -568,8 +576,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
       });
-      this.isLoading = false;
     }
   }
 
@@ -656,8 +666,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
         this.submit = false;
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
       });
-      this.isLoading = false;
     }
   }
 
@@ -837,8 +849,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       this.http.put(`ManageLeavePlan/UpdateYearEndProcessing/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.submit = false;
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
       });
-      this.isLoading = false;
     }
   }
 

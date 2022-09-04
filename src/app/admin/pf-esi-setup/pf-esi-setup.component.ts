@@ -202,10 +202,13 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
     formData.append('ESISetting', JSON.stringify(ESISetting));
     formData.append('PFESISetting', JSON.stringify(PFESISetting));
     this.http.post('Settings/PfEsiSetting', formData).then((response:ResponseModel) => {
-      if (response.ResponseBody)
+      if (response.ResponseBody) {
         Toast("Setting changed")
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
     })
-    this.isLoading = false;
   }
 
   enableChildList(e: any) {
