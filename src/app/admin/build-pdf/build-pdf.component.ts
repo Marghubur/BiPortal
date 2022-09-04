@@ -230,7 +230,7 @@ export class BuildPdfComponent implements OnInit {
           this.pdfModal = new PdfModal();
           if (this.currentOrganization != null) {
             this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
-            this.pdfModal.senderGSTNo = this.currentOrganization.GSTINNumber;
+            this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
             this.pdfModal.senderFirstAddress = this.currentOrganization.FirstAddress;
             this.pdfModal.senderSecondAddress = this.currentOrganization.SecondAddress + " " + this.currentOrganization.ThirdAddress;
             this.pdfModal.senderPrimaryContactNo = this.currentOrganization.PrimaryPhoneNo;
@@ -340,7 +340,7 @@ export class BuildPdfComponent implements OnInit {
         this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === 1);
         if (this.currentOrganization != null) {
           this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
-          this.pdfModal.senderGSTNo = this.currentOrganization.GSTINNumber;
+          this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
           this.pdfModal.senderFirstAddress = this.currentOrganization.FirstAddress;
           this.pdfModal.senderSecondAddress = this.currentOrganization.SecondAddress + " " + this.currentOrganization.ThirdAddress;
           this.pdfModal.senderPrimaryContactNo = this.currentOrganization.PrimaryPhoneNo;

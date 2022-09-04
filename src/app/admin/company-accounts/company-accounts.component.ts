@@ -57,7 +57,7 @@ export class CompanyAccountsComponent implements OnInit {
   initForm() {
     this.organizationAccountsForm = this.fb.group({
       CompanyId: new FormControl(this.CompanyAccountDetail.CompanyId),
-      GSTINNumber: new FormControl(this.CompanyAccountDetail.GSTINNumber),
+      GSTNO: new FormControl(this.CompanyAccountDetail.GSTNO),
       AccountNumber: new FormControl(this.CompanyAccountDetail.AccountNumber, [Validators.required]),
       BankName: new FormControl(this.CompanyAccountDetail.BankName),
       Branch: new FormControl(this.CompanyAccountDetail.Branch),
@@ -112,7 +112,7 @@ export class CompanyAccountsComponent implements OnInit {
 
 export class organizationAccountModal {
   OrganizationId: number = 0;
-  GSTINNumber: string = null;
+  GSTNO: string = null;
   AccountNumber: string = null;
   BankName: string = null;
   Branch: string = null;
