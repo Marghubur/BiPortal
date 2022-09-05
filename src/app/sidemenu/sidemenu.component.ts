@@ -1,7 +1,7 @@
 import { ApplicationStorage } from "../../providers/ApplicationStorage";
 import { AjaxService } from "../../providers/ajax.service";
 import { CommonService, ErrorToast, Toast, UserDetail } from "../../providers/common-service/common.service";
-import { AccessTokenExpiredOn, Blogs, BuildPdf, Documents, Employees, Login } from "../../providers/constants";
+import { AccessTokenExpiredOn, Blogs, BuildPdf, Documents, Employees, Login, OrganizationSetting } from "../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { UserService } from "src/providers/userService";
@@ -142,6 +142,10 @@ export class SidemenuComponent implements OnInit {
 
   AutoDemo() {
     this.nav.navigate("/", null);
+  }
+
+  organizationSetting() {
+    this.nav.navigate(OrganizationSetting, null)
   }
 
   toggleSection(e: any, index: number) {

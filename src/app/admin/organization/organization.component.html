@@ -1,0 +1,286 @@
+<div class="container-fluid main-container">
+  <div class="x_panel mt-2">
+    <div class="x_header">
+      <div class="x_header_title">
+        <h2>Organization<small>add or update deatils</small></h2>
+      </div>
+    </div>
+    <div class="px-1">
+      <app-breadcrums></app-breadcrums>
+    </div>
+    <div class="x_content mt-4" *ngIf="isLoaded">
+      <form [formGroup]="organizationForm" autocomplete="off" class="col-md-12 row">
+        <div class="mb-5">
+          <div class="col-12 row m-0">
+            <div class="col-md-4">
+              <div class="x_header_title position-relative">
+                <div class="img-container-sq" (change)="uploadClientLogo($event)">
+                  <div class="img-container__box">
+                    <img [attr.src]="profileURL" alt="User">
+                    <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
+                      formControlName="ProfileImgPath" />
+                    <div class="img-container__btn mt-2">
+                      <button class="btn btn-outline-success form-control" (click)="fireBrowserFile()">Browse</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8 p-0">
+              <div class="col-md-12 row">
+                <div class="col-md-4">
+                  <label class="form-label">Organization Name *</label>
+                  <input placeholder="Client or organization name" class="form-control" name="OrganizationName"
+                    formControlName="OrganizationName"  oninput="this.value = this.value.toUpperCase()"
+                    [ngClass]="{'error-field': submitted && f.OrganizationName.errors !== null && f.OrganizationName.errors.required}" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Company Name *</label>
+                  <input placeholder="Companyn name" class="form-control" name="CompanyName"
+                    formControlName="CompanyName"  oninput="this.value = this.value.toUpperCase()"
+                    [ngClass]="{'error-field': submitted && f.CompanyName.errors !== null && f.CompanyName.errors.required}" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Primary No.# *</label>
+                  <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="11"
+                    [ngClass]="{'error-field': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
+                    name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
+                </div>
+              </div>
+              <div class="col-md-12 row">
+                <div class="col-md-4 mt-4">
+                  <label class="form-label">PAN No.#</label>
+                  <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()"
+                  oninput="this.value = this.value.toUpperCase()" name="PANNumber" formControlName="PANNumber" />
+                </div>
+                <div class="col-md-4 mt-4">
+                  <label class="form-label">Alternate No.#</label>
+                  <input class="form-control" placeholder="Alternate Phone No.#" name="SecondaryPhoneNo"
+                    formControlName="SecondaryPhoneNo" />
+                </div>
+                <div class="col-md-4 mt-4">
+                  <label class="form-label">FAX No.# (optional)</label>
+                  <input class="form-control" placeholder="FAX No.#" name="Fax"
+                    oninput="this.value = this.value.toUpperCase()" formControlName="Fax" />
+                </div>
+              </div>
+
+              <div class="col-md-12 row">
+                <div class="col-md-4 pb-3 mt-4">
+                  <label class="form-label">Email Id *</label>
+                  <input class="form-control" placeholder="Email Id"
+                    [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.Email.errors.required}" name="Email"
+                    formControlName="Email" />
+                </div>
+                <div class="col-md-4 mt-4">
+                  <label class="form-label">GSTIN No.#</label>
+                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No."
+                    name="GSTNO" formControlName="GSTNO" />
+                </div>
+                <div class="col-md-4 mt-4">
+                  <label class="form-label">Mobile No.# (optional)</label>
+                  <input class="form-control" placeholder="Mobile No.#" name="MobileNo" formControlName="MobileNo"
+                    OnlyNumber="11" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-12 row m-0 mb-4">
+          <div class="col-md-12">
+            <div class="x_panel mh-auto">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <h2>Other Email's<small>These email can be used as secoundry emails.</small></h2>
+                </div>
+              </div>
+              <div class="col-md-12 mt-4 mb-3 mb-3 row">
+                <div class="col-md-3">
+                  <label class="form-label">Other Email 1</label>
+                  <input placeholder="Other Email 1" class="form-control" name="FirstEmail"
+                    formControlName="FirstEmail" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Other Email 2</label>
+                  <input placeholder="Other Email 2" class="form-control" name="SecondEmail"
+                    formControlName="SecondEmail" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Other Email 3</label>
+                  <input placeholder="Other Email 3" class="form-control" name="ThirdEmail"
+                    formControlName="ThirdEmail" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Other Email 4</label>
+                  <input placeholder="Other Email 4" class="form-control" name="ForthEmail"
+                    formControlName="ForthEmail" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 row m-0 mb-4">
+          <div class="col-md-12">
+            <div class="x_panel mh-auto">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <h2>Organization Primary Details<small>Primary details like Trade License Number, Type Of Business etc.</small></h2>
+                </div>
+              </div>
+              <div class="mb-3 mb-3 row">
+                <div class="col-md-6 row">
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Sector Type</label>
+                    <input placeholder="Sector Type" class="form-control" name="SectorType"  oninput="this.value = this.value.toUpperCase()"
+                      formControlName="SectorType" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">In Corporation Date</label>
+                      <form class="form-inline">
+                        <div class="form-group w-100">
+                          <div class="input-group w-100">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                              (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                              <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                                  class="fa fa-calendar" aria-hidden="true"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Trade License Number</label>
+                    <input placeholder="Trade License Number" class="form-control" name="TradeLicenseNumber" oninput="this.value = this.value.toUpperCase()"
+                      formControlName="TradeLicenseNumber" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Legal Entity</label>
+                    <input placeholder="Legal Entity" class="form-control" name="LegalEntity" oninput="this.value = this.value.toUpperCase()"
+                      formControlName="LegalEntity" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Legal Name Of Company</label>
+                    <input placeholder="LegalNameOfCompany" class="form-control" name="LegalNameOfCompany" oninput="this.value = this.value.toUpperCase()"
+                      formControlName="LegalNameOfCompany" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Type Of Business</label>
+                    <input placeholder="TypeOfBusiness" class="form-control" name="TypeOfBusiness" oninput="this.value = this.value.toUpperCase()"
+                      formControlName="TypeOfBusiness" />
+                  </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                  <label class="form-label">Company Detail</label>
+                  <textarea placeholder="Company Detail" class="form-control" name="CompanyDetail" oninput="this.value = this.value.toUpperCase()" formControlName="CompanyDetail"  cols="30" rows="5"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 row m-0">
+          <div class="col-md-6">
+            <div class="x_panel">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <h2>Bank Detail<small>Bank related detail for transaction.</small></h2>
+                </div>
+              </div>
+              <div class="col-md-12 mb-3 mb-3 row">
+                <!-- <label class="form-label">Address *</label> -->
+                <div class="col-md-12 mt-4">
+                  <label class="form-label">Bank Name</label>
+                  <input placeholder="Bank name" class="form-control" name="BankName" transform="" oninput="this.value = this.value.toUpperCase()"
+                    formControlName="BankName" />
+                </div>
+                <div class="col-md-12 mt-4">
+                  <label class="form-label">Account No.#</label>
+                  <input placeholder="Account No.#" class="form-control" name="AccountNo" formControlName="AccountNo" />
+                </div>
+                <div class="col-md-12 mt-4">
+                  <label class="form-label">IFSC Code</label>
+                  <input placeholder="IFSC Code" class="form-control" name="IFSC"
+                    oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" />
+                </div>
+                <div class="col-md-12 mt-4">
+                  <label class="form-label">Branch Name (Optional)</label>
+                  <input placeholder="Branch name" class="form-control" name="BranchName" transform="" oninput="this.value = this.value.toUpperCase()"
+                    formControlName="BranchName" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="x_panel">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <h2>Organization/Client Other Detail<small>
+                      Other detail like Address, State etc.</small></h2>
+                </div>
+              </div>
+              <div class="col-md-12 mb-3 mb-3 row">
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Country</label>
+                  <input placeholder="Country" class="form-control" oninput="this.value = this.value.toUpperCase()" name="Country" formControlName="Country" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">State</label>
+                  <input placeholder="State" class="form-control" oninput="this.value = this.value.toUpperCase()" name="State" formControlName="State" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">City</label>
+                  <input placeholder="City" class="form-control" oninput="this.value = this.value.toUpperCase()" name="City" formControlName="City" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Pincode</label>
+                  <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6"
+                    formControlName="Pincode" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Address Line 1</label>
+                  <input placeholder="Address Line 1" class="form-control" name="FirstAddress" oninput="this.value = this.value.toUpperCase()"
+                    formControlName="FirstAddress" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Address Line 2</label>
+                  <input placeholder="Address Line 2" class="form-control" name="SecondAddress" oninput="this.value = this.value.toUpperCase()"
+                    formControlName="SecondAddress" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Address Line 3</label>
+                  <input placeholder="Address Line 3" class="form-control" name="ThirdAddress" oninput="this.value = this.value.toUpperCase()"
+                    formControlName="ThirdAddress" />
+                </div>
+                <div class="col-md-6 mt-4">
+                  <label class="form-label">Address Line 4</label>
+                  <input placeholder="Address Line 4" class="form-control" name="ForthAddress" oninput="this.value = this.value.toUpperCase()"
+                    formControlName="ForthAddress" />
+                </div>
+                <div class="col-md-12 mt-4">
+                  <label class="form-label">Full Address</label>
+                  <textarea placeholder="Full Address" class="form-control" name="FullAddress" oninput="this.value = this.value.toUpperCase()" formControlName="FullAddress" cols="30" rows="4"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 row m-0 pt-5">
+          <div class="col-md-12 button groups text-end">
+            <div class="btn-group">
+              <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+            </div>
+            <div class="btn-group ms-2">
+              <button class="btn btn-primary-c" [disabled]="isLoading" (click)="generate()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+                {{ isLoading ? 'Processing' : 'Submit' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

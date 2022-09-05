@@ -59,6 +59,7 @@ import { ManageLeaveplanComponent } from './manage-leaveplan/manage-leaveplan.co
 import { ManageYearEndingComponent } from './manage-year-ending/manage-year-ending.component';
 import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.component';
 import { EmailComponent } from './email/email.component';
+import { OrganizationComponent } from './organization/organization.component';
 
 @NgModule({
   declarations: [
@@ -114,7 +115,8 @@ import { EmailComponent } from './email/email.component';
     ManageLeaveplanComponent,
     ManageYearEndingComponent,
     SalaryBreakupComponent,
-    EmailComponent
+    EmailComponent,
+    OrganizationComponent
   ],
   imports: [
     CommonModule,
