@@ -80,9 +80,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       value: 0,
       text: "Default Manager"
     });
-    this.managerList.className = "dd";
-    // this.getAllCompany();
-    // this.getAllSalaryGroup();
+    this.managerList.className = "autocomplete-height";
     this.model = this.calendar.getToday();
     let data = this.nav.getValue();
     this.employeeUid = 0;
@@ -516,7 +514,18 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   navToSalaryBreakup() {
-    this.nav.navigate(SalaryBreakup, this.employeeForm.value);
+    let ctc = this.employeeForm.get('CTC').value;
+    if (ctc == null || ctc == 0) {
+      ErrorToast("Please enter ctc");
+      return;
+    }
+    this.http.get(`SalaryComponent/"GetSalaryGroupByCTC/${ctc}`).then(res => {
+      if (res.ResponseBody) {
+        this.nav.navigate(SalaryBreakup, this.employeeForm.value);
+      }
+    }).catch(e => {
+      ErrorToast("Please salary group not found, please add salary group first");
+    })
   }
 
   uploadProfilePicture(event: any) {

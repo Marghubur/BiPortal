@@ -48,7 +48,8 @@ import { AdminResetPassword, AdminDeclaration,
   ManageLeavePlan,
   ManageYearEnding,
   SalaryBreakup,
-  EmailService
+  EmailService,
+  OrganizationSetting
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -100,6 +101,7 @@ import { ManageLeaveplanComponent } from './manage-leaveplan/manage-leaveplan.co
 import { ManageYearEndingComponent } from './manage-year-ending/manage-year-ending.component';
 import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.component';
 import { EmailComponent } from './email/email.component';
+import { OrganizationComponent } from './organization/organization.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -153,6 +155,7 @@ const routes: Routes = [
   { path: ManageYearEnding, component: ManageYearEndingComponent},
   { path: SalaryBreakup, component: SalaryBreakupComponent},
   { path: EmailService, component: EmailComponent},
+  { path: OrganizationSetting, component: OrganizationComponent}
 ];
 
 @NgModule({
