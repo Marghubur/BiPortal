@@ -49,8 +49,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.organization.CompanyId = 2;
-    this.http.get(`Company/GetCompanyById/${this.organization.CompanyId}`).then((response: ResponseModel) => {
+    this.http.get(`Company/GetOrganizationDetail`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         if (response.ResponseBody.OrganizationDetail) {
           this.organization = response.ResponseBody.OrganizationDetail as OrganizationModal;
@@ -102,7 +101,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       Fax: new FormControl(this.organization.Fax),
       Pincode: new FormControl(this.organization.Pincode),
       FileId: new FormControl(this.organization.FileId),
-      PANNumber: new FormControl(this.organization.PANNumber),
+      PANNo: new FormControl(this.organization.PANNo),
       TradeLicenseNumber: new FormControl(this.organization.TradeLicenseNumber),
       GSTNO: new FormControl(this.organization.GSTNO),
       AccountNo: new FormControl(this.organization.AccountNo),
@@ -156,7 +155,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
       formData.append(ProfileImage, file)
-      this.http.post('Company/UpdateCompanyDetails', formData).then((response: ResponseModel) => {
+      this.http.post('Company/InsertUpdateOrganizationDetail', formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.organization = response.ResponseBody as OrganizationModal;
           this.initForm();
@@ -233,7 +232,7 @@ class OrganizationModal {
   Fax: string = null;
   Pincode: number = 0;
   FileId: number = 0;
-  PANNumber: string = null;
+  PANNo: string = null;
   TradeLicenseNumber
   GSTNO: string = null;
   AccountNo: string = null;

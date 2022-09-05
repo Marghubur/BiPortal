@@ -41,7 +41,7 @@ export class PreferencesComponent implements OnInit {
       }
     this.PanInformation = {
       NameOnCard: "MD Istayaque",
-      PANNumber: "ABPANF655A",
+      PANNo: "ABPANF655A",
       DOB: new Date(),
       FatherName: "MD MUSTAQUE"
     };
@@ -102,7 +102,7 @@ export class PreferencesComponent implements OnInit {
 
 class PANInformation {
   NameOnCard: string = '';
-  PANNumber: string = '';
+  PANNo: string = '';
   DOB: Date = null;
   FatherName : string = ''
 }

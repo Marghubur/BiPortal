@@ -286,8 +286,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       Address: new FormControl(this.housingPropertyDetail.Address),
       City: new FormControl(this.housingPropertyDetail.City),
       OwnerName: new FormControl (this.housingPropertyDetail.OwnerName),
-      IsPanNumber: new FormControl (this.housingPropertyDetail.IsPanNumber),
-      PanNumber: new FormControl (this.housingPropertyDetail.PanNumber),
+      IsPANNo: new FormControl (this.housingPropertyDetail.IsPANNo),
+      PANNo: new FormControl (this.housingPropertyDetail.PANNo),
       IsOwnerAddressSame: new FormControl (this.housingPropertyDetail.IsOwnerAddressSame),
       LandlordType: new FormControl (this.housingPropertyDetail.LandlordType),
       OwnerAddress:new FormControl (this.housingPropertyDetail.OwnerAddress),
@@ -705,7 +705,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.isPanEnable = true;
     else {
       this.isPanEnable = false;
-      this.rentResidenceForm.get('PanNumber').setValue('');
+      this.rentResidenceForm.get('PANNo').setValue('');
     }
   }
 
@@ -829,8 +829,8 @@ class HouseProperty {
   Address: string = '';
   City: string = '';
   OwnerName: string = '';
-  IsPanNumber: boolean = false;
-  PanNumber: string = '';
+  IsPANNo: boolean = false;
+  PANNo: string = '';
   IsOwnerAddressSame: boolean = false;
   LandlordType: string = '';
   IsSignedDeclaration: boolean = false;

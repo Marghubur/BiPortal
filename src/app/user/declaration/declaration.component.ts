@@ -198,8 +198,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       Address: new FormControl(''),
       City: new FormControl(''),
       OwnerName: new FormControl (''),
-      IsPanNumber: new FormControl (false),
-      PanNumber: new FormControl (''),
+      IsPANNo: new FormControl (false),
+      PANNo: new FormControl (''),
       IsOwnerAddress: new FormControl (false),
       OwnerType: new FormControl (''),
       IsSignedDeclaration: new FormControl (false)
