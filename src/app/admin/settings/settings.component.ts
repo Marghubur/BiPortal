@@ -34,7 +34,7 @@ export class SettingsComponent implements OnInit {
   CompanyId: number = 0;
   isPageReady: boolean = false;
   currentCompnay: CompanyGroup = null;
-
+  isPageLoading: boolean = false;
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
               private http: AjaxService
@@ -42,14 +42,14 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentCompnay = new CompanyGroup();
-    this.loadData();
-    this.initForm();
     this.menuItem = {
       CS: false,
       PR: true,
       LAH: false,
       EX: false
     }
+    this.loadData();
+    this.initForm();
   }
 
   get f() {
@@ -133,6 +133,7 @@ export class SettingsComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
+    this.isPageLoading = false;
     this.http.get("Company/GetAllCompany").then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.Companys = response.ResponseBody;
@@ -140,13 +141,17 @@ export class SettingsComponent implements OnInit {
           this.currentCompnay = this.Companys[0];
           this.CompanyId = this.currentCompnay.CompanyId;
           Toast("Compnay list loaded successfully");
+          this.isPageReady = true;
+          this.isPageLoading = true;
         } else {
           Toast("No compnay found under current organization. Please add one.");
         }
       } else {
         ErrorToast("Record not found.")
       }
+    }).catch(e => {
       this.isPageReady = true;
+      this.isPageLoading = true;
     })
   }
 

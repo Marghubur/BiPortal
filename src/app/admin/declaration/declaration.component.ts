@@ -85,6 +85,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.rentalPage = 1;
     this.monthlyTaxAmount = new MonthlyTax();
+    this.employeesList.placeholder = "Employee";
+    this.employeesList.className = 'disable-field';
+    this.isEmployeesReady = true;
     this.loadData();
     this.rentedResidence();
     var dt = new Date();

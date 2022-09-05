@@ -14,105 +14,294 @@
         <div class="px-1">
           <app-breadcrums></app-breadcrums>
         </div>
-
-        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mt-4 mb-3">
-          <li [ngbNavItem]="1">
-            <a ngbNavLink>COMPANY GROUPS</a>
-            <ng-template ngbNavContent>
-              <div class="col-md-12 m-0 p-0 row">
-                <div class="col-md-3 col-sm-12 ps-0 ">
-                  <div class="x_panel p-0">
-                    <div class="x_header p-3">
-                      <div class="x_header_title d-flex flex-row justify-content-between">
-                        <h5 class="text-primary-c m-0">
-                          COMPANY
-                        </h5>
-                        <a href="javascript:void(0)" class="text-decoration-none text-primary-c fw-bold"
-                          (click)="openModalToAddNewCompany()">
-                          <u class="mt-2">
-                            <i class="fa fa-plus pe-2"></i>
-                            Add
-                          </u>
-                        </a>
+        <ng-container *ngIf="isPageLoading">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mt-4 mb-3">
+            <li [ngbNavItem]="1">
+              <a ngbNavLink>COMPANY GROUPS</a>
+              <ng-template ngbNavContent>
+                <div class="col-md-12 m-0 p-0 row">
+                  <div class="col-md-3 col-sm-12 ps-0 ">
+                    <div class="x_panel p-0">
+                      <div class="x_header p-3">
+                        <div class="x_header_title d-flex flex-row justify-content-between">
+                          <h5 class="text-primary-c m-0">
+                            COMPANY
+                          </h5>
+                          <a href="javascript:void(0)" class="text-decoration-none text-primary-c fw-bold"
+                            (click)="openModalToAddNewCompany()">
+                            <u class="mt-2">
+                              <i class="fa fa-plus pe-2"></i>
+                              Add
+                            </u>
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                    <div class="x_body">
-                      <ul class="list-group side-group">
-                        <ng-container *ngIf="Companys.length === 0">
-                          <li>
-                            <div class="text-center mt-5 px-4">
-                              <h5>
-                                No Company available under current Organization.
-                              </h5>
-                              <p>User below button or above add button to add one.</p>
-                              <button class="btn btn-success mt-4" (click)="openModalToAddNewCompany()">
-                                <i class="fa fa-plus pe-2"></i> ADD COMPANY
-                              </button>
-                            </div>
-                          </li>
-                        </ng-container>
-                        <ng-container *ngIf="Companys.length > 0">
-                          <ng-container *ngFor="let item of Companys; let i =index">
-                            <li
-                              class="list-group-item border-0 p-0 my-2 d-flex justify-content-between align-items-start">
-                              <a href="javascript:void(0)" (click)="changeTab(i, item)"
-                                (dblclick)="editCompanyDetail(item)" [ngClass]="{'active-tab': i == 0}"
-                                class="d-block w-100 px-3 text-decoration-none text-dark">
-                                <div class="d-flex flex-row w-100 justify-content-between">
-                                  <div class="ms-2 col-md-8 me-auto py-4">
-                                    <div class="fw-bold fs-6">{{item.CompanyName}}</div>
-                                    <ng-container *ngIf="item.FullAddress == null">
-                                      <div class="row">
-                                        <div class="col-md-2">Addr.:</div>
-                                        <div class="col-md-10 ps-3">NA</div>
-                                      </div>
-                                    </ng-container>
-                                    <ng-container *ngIf="item.FullAddress != null">
-                                      <div class="row">
-                                        <div class="col-md-2">Addr.:</div>
-                                        <div class="col-md-10 ps-3">{{item.FullAddress | slice: 0:43}}...</div>
-                                      </div>
-                                    </ng-container>
-                                  </div>
-                                  <div class="col-md-3 d-flex flex-column justify-content-center">
-                                    <p class="mb-0">0</p>
-                                    <p class="mb-0">Employees</p>
-                                  </div>
-                                </div>
-                                <p class="mb-0 text-white ps-2 pb-2">Double click to edit the company.</p>
-                              </a>
+                      <div class="x_body">
+                        <ul class="list-group side-group">
+                          <ng-container *ngIf="Companys.length === 0">
+                            <li>
+                              <div class="text-center mt-5 px-4">
+                                <h5>
+                                  No Company available under current Organization.
+                                </h5>
+                                <p>User below button or above add button to add one.</p>
+                                <button class="btn btn-success mt-4" (click)="openModalToAddNewCompany()">
+                                  <i class="fa fa-plus pe-2"></i> ADD COMPANY
+                                </button>
+                              </div>
                             </li>
                           </ng-container>
-                        </ng-container>
-                      </ul>
+                          <ng-container *ngIf="Companys.length > 0">
+                            <ng-container *ngFor="let item of Companys; let i =index">
+                              <li
+                                class="list-group-item border-0 p-0 my-2 d-flex justify-content-between align-items-start">
+                                <a href="javascript:void(0)" (click)="changeTab(i, item)"
+                                  (dblclick)="editCompanyDetail(item)" [ngClass]="{'active-tab': i == 0}"
+                                  class="d-block w-100 px-3 text-decoration-none text-dark">
+                                  <div class="d-flex flex-row w-100 justify-content-between">
+                                    <div class="ms-2 col-md-8 me-auto py-4">
+                                      <div class="fw-bold fs-6">{{item.CompanyName}}</div>
+                                      <ng-container *ngIf="item.FullAddress == null">
+                                        <div class="row">
+                                          <div class="col-md-2">Addr.:</div>
+                                          <div class="col-md-10 ps-3">NA</div>
+                                        </div>
+                                      </ng-container>
+                                      <ng-container *ngIf="item.FullAddress != null">
+                                        <div class="row">
+                                          <div class="col-md-2">Addr.:</div>
+                                          <div class="col-md-10 ps-3">{{item.FullAddress | slice: 0:43}}...</div>
+                                        </div>
+                                      </ng-container>
+                                    </div>
+                                    <div class="col-md-3 d-flex flex-column justify-content-center">
+                                      <p class="mb-0">0</p>
+                                      <p class="mb-0">Employees</p>
+                                    </div>
+                                  </div>
+                                  <p class="mb-0 text-white ps-2 pb-2">Double click to edit the company.</p>
+                                </a>
+                              </li>
+                            </ng-container>
+                          </ng-container>
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-9 col-sm-12 pe-0" [ngClass]="{'preload': !isPageReady}">
-                  <ng-container>
-                    <div class="x_panel">
-                        <ul ngbNav #nav="ngbNav" [ngClass]="{'disabled-li': Companys.length == 0}"
-                          [(activeId)]="groupActiveId" class="nav-tabs">
-                          <li [ngbNavItem]="1">
-                            <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('PR')">
-                              Payroll <i class="fa fa-inr px-2" aria-hidden="true"></i>
-                            </a>
-                            <ng-template ngbNavContent>
-                              <ng-container *ngIf="Companys.length > 0">
-                                <div class="w-100" *ngIf="menuItem.PR">
+                  <div class="col-md-9 col-sm-12 pe-0" [ngClass]="{'preload': !isPageReady}">
+                    <ng-container>
+                      <div class="x_panel">
+                          <ul ngbNav #nav="ngbNav" [ngClass]="{'disabled-li': Companys.length == 0}"
+                            [(activeId)]="groupActiveId" class="nav-tabs">
+                            <li [ngbNavItem]="1">
+                              <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('PR')">
+                                Payroll <i class="fa fa-inr px-2" aria-hidden="true"></i>
+                              </a>
+                              <ng-template ngbNavContent>
+                                <ng-container *ngIf="Companys.length > 0">
+                                  <div class="w-100" *ngIf="menuItem.PR">
+                                    <div class="x_body">
+                                      <div class="col-md-12">
+                                        <h3 class="text-primary-c">
+                                          Setup Payroll
+                                        </h3>
+                                        <p>Payroll is going to take a little more patience,
+                                          as we collect all of the information.
+                                        </p>
+                                      </div>
+                                      <div class="col-md-12 mt-4">
+                                        <div class="row m-0 skeleton">
+                                          <div
+                                            class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
+                                            <div class="d-flex flex-row justify-content-center">
+                                              <div>
+                                                <div
+                                                  class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
+                                                  1
+                                                </div>
+                                                <p class="text-primary-c m-0">Completed</p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="vhide col-md-10 h-bg py-3">
+                                            <div class="d-flex flex-row w-100 justify-content-between">
+                                              <div class="ms-2 fe-4 me-auto py-4">
+                                                <a href="javascript:void(0)" class="text-decoration-none"
+                                                  (click)="redirectTo(CompanyInfoPage)">
+                                                  <div class="fw-bold text-primary-dc fs-5">
+                                                    COMPANY INFORMATION
+                                                  </div>
+                                                </a>
+                                                Company legal entity, authorized signatories and
+                                                bank account information.
+                                              </div>
+                                              <div class="fe-1 d-flex flex-column justify-content-center text-end">
+                                                <a href=" javascript:void(0)">
+                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                </a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="row m-0 skeleton">
+                                          <div
+                                            class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
+                                            <div class="d-flex flex-row justify-content-center">
+                                              <div>
+                                                <div
+                                                  class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
+                                                  2
+                                                </div>
+                                                <p class="text-primary-c m-0">Completed</p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-10 h-bg py-3 vhide">
+                                            <div class="d-flex flex-row w-100 justify-content-between">
+                                              <div class="ms-2 fe-4 me-auto py-4">
+                                                <a href="javascript:void(0)" (click)="redirectTo(PayRollPage)"
+                                                  class="text-decoration-none">
+                                                  <div class="fw-bold fs-5 text-primary-dc">
+                                                    GENERAL PAYROLL SETTINGS
+                                                  </div>
+                                                </a>
+                                                Payroll cycle and payroll period settings.
+                                              </div>
+                                              <div class="fe-1 d-flex flex-column justify-content-center text-end">
+                                                <a href=" javascript:void(0)">
+                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                </a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="row m-0 skeleton">
+                                          <div
+                                            class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
+                                            <div class="d-flex flex-row justify-content-center">
+                                              <div>
+                                                <div
+                                                  class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
+                                                  3
+                                                </div>
+                                                <p class="text-primary-c m-0">Completed</p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-10 vhide h-bg py-3">
+                                            <div class="d-flex flex-row w-100 justify-content-between">
+                                              <div class="ms-2 fe-4 me-auto py-4">
+                                                <a href="javascript:void(0)" (click)="redirectTo(PfNEsiPage)"
+                                                  class="text-decoration-none">
+                                                  <div class="fw-bold fs-5 text-primary-dc">
+                                                    PF & ESI SETTINGS
+                                                  </div>
+                                                </a>
+                                                Employee Provident Fund and ESI settings.
+                                              </div>
+                                              <div class="fe-1 d-flex flex-column justify-content-center text-end">
+                                                <a href=" javascript:void(0)">
+                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                </a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="row m-0 skeleton">
+                                          <div
+                                            class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
+                                            <div class="d-flex flex-row justify-content-center">
+                                              <div>
+                                                <div
+                                                  class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
+                                                  4
+                                                </div>
+                                                <p class="text-primary-c m-0">Completed</p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-10 vhide h-bg py-3">
+                                            <div class="d-flex flex-row w-100 justify-content-between">
+                                              <div class="ms-2 fe-4 me-auto py-4">
+                                                <a href="javascript:void(0)" class="text-decoration-none"
+                                                  (click)="redirectTo(SalaryStructure)">
+                                                  <div class="fw-bold fs-5 text-primary-dc">
+                                                    SALARY COMPONENTS & STRUCTURES
+                                                  </div>
+                                                </a>
+                                                Setup salary components & salary structures for employees.
+                                              </div>
+                                              <div class="fe-1 d-flex flex-column justify-content-center text-end">
+                                                <a href=" javascript:void(0)">
+                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                </a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="row m-0 skeleton">
+                                          <div
+                                            class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
+                                            <div class="d-flex flex-row justify-content-center">
+                                              <div>
+                                                <div
+                                                  class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
+                                                  5
+                                                </div>
+                                                <p class="text-primary-c m-0">Completed</p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-10 vhide h-bg py-3">
+                                            <div class="d-flex flex-row w-100 justify-content-between">
+                                              <div class="ms-2 fe-4 me-auto py-4">
+                                                <a href="javascript:void(0)" class="text-decoration-none"
+                                                  (click)="redirectTo(CustomSalary)">
+                                                  <div class="fw-bold fs-5 text-primary-dc">
+                                                    CUSTOM SALARY STRUCTURES
+                                                  </div>
+                                                </a>
+                                                Setup Custom salary structures for individual employee
+                                                or group employees.
+                                              </div>
+                                              <div class="fe-1 d-flex flex-column justify-content-center text-end">
+                                                <a href=" javascript:void(0)">
+                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                </a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </ng-container>
+                                <ng-container *ngIf="Companys.length == 0">
+                                  <div
+                                    class="col-md-12 x_panel border-0 d-flex flex-column justify-content-center text-center">
+                                    <h4>Please add salary group first.</h4>
+                                  </div>
+                                </ng-container>
+  
+                              </ng-template>
+                            </li>
+                            <li [ngbNavItem]="2">
+                              <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('CS')">Company Settings <i
+                                  class="fa fa-cog px-2"></i></a>
+                              <ng-template ngbNavContent>
+                                <div *ngIf="menuItem.CS">
                                   <div class="x_body">
                                     <div class="col-md-12">
                                       <h3 class="text-primary-c">
-                                        Setup Payroll
+                                        Compnay Setting
                                       </h3>
                                       <p>Payroll is going to take a little more patience,
                                         as we collect all of the information.
                                       </p>
                                     </div>
                                     <div class="col-md-12 mt-4">
-                                      <div class="row m-0 skeleton">
-                                        <div
-                                          class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
+                                      <div class="row m-0">
+                                        <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
                                           <div class="d-flex flex-row justify-content-center">
                                             <div>
                                               <div
@@ -123,13 +312,13 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="vhide col-md-10 h-bg py-3">
+                                        <div class=" col-md-10 h-bg py-3">
                                           <div class="d-flex flex-row w-100 justify-content-between">
                                             <div class="ms-2 fe-4 me-auto py-4">
                                               <a href="javascript:void(0)" class="text-decoration-none"
-                                                (click)="redirectTo(CompanyInfoPage)">
+                                                (click)="redirectTo(ManageCompanyDetail)">
                                                 <div class="fw-bold text-primary-dc fs-5">
-                                                  COMPANY INFORMATION
+                                                  MODIFY COMPANY DETAIL
                                                 </div>
                                               </a>
                                               Company legal entity, authorized signatories and
@@ -143,9 +332,8 @@
                                           </div>
                                         </div>
                                       </div>
-                                      <div class="row m-0 skeleton">
-                                        <div
-                                          class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
+                                      <div class="row m-0">
+                                        <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
                                           <div class="d-flex flex-row justify-content-center">
                                             <div>
                                               <div
@@ -156,13 +344,13 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="col-md-10 h-bg py-3 vhide">
+                                        <div class="col-md-10 h-bg py-3">
                                           <div class="d-flex flex-row w-100 justify-content-between">
                                             <div class="ms-2 fe-4 me-auto py-4">
-                                              <a href="javascript:void(0)" (click)="redirectTo(PayRollPage)"
+                                              <a href="javascript:void(0)" (click)="redirectTo(ManageCompanyAccounts)"
                                                 class="text-decoration-none">
                                                 <div class="fw-bold fs-5 text-primary-dc">
-                                                  GENERAL PAYROLL SETTINGS
+                                                  MANAGE COMPANY ACCOUNT DETAIL
                                                 </div>
                                               </a>
                                               Payroll cycle and payroll period settings.
@@ -175,9 +363,8 @@
                                           </div>
                                         </div>
                                       </div>
-                                      <div class="row m-0 skeleton">
-                                        <div
-                                          class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
+                                      <div class="row m-0">
+                                        <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
                                           <div class="d-flex flex-row justify-content-center">
                                             <div>
                                               <div
@@ -188,81 +375,16 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="col-md-10 vhide h-bg py-3">
+                                        <div class="col-md-10 h-bg py-3">
                                           <div class="d-flex flex-row w-100 justify-content-between">
                                             <div class="ms-2 fe-4 me-auto py-4">
-                                              <a href="javascript:void(0)" (click)="redirectTo(PfNEsiPage)"
+                                              <a href="javascript:void(0)" (click)="redirectTo(CompanySettingPage)"
                                                 class="text-decoration-none">
                                                 <div class="fw-bold fs-5 text-primary-dc">
-                                                  PF & ESI SETTINGS
+                                                  MANAGE COMPANY SETTINGS
                                                 </div>
                                               </a>
-                                              Employee Provident Fund and ESI settings.
-                                            </div>
-                                            <div class="fe-1 d-flex flex-column justify-content-center text-end">
-                                              <a href=" javascript:void(0)">
-                                                <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
-                                              </a>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="row m-0 skeleton">
-                                        <div
-                                          class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
-                                          <div class="d-flex flex-row justify-content-center">
-                                            <div>
-                                              <div
-                                                class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
-                                                4
-                                              </div>
-                                              <p class="text-primary-c m-0">Completed</p>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="col-md-10 vhide h-bg py-3">
-                                          <div class="d-flex flex-row w-100 justify-content-between">
-                                            <div class="ms-2 fe-4 me-auto py-4">
-                                              <a href="javascript:void(0)" class="text-decoration-none"
-                                                (click)="redirectTo(SalaryStructure)">
-                                                <div class="fw-bold fs-5 text-primary-dc">
-                                                  SALARY COMPONENTS & STRUCTURES
-                                                </div>
-                                              </a>
-                                              Setup salary components & salary structures for employees.
-                                            </div>
-                                            <div class="fe-1 d-flex flex-column justify-content-center text-end">
-                                              <a href=" javascript:void(0)">
-                                                <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
-                                              </a>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="row m-0 skeleton">
-                                        <div
-                                          class="col-md-2 vhide col-md-2 d-flex flex-column justify-content-center">
-                                          <div class="d-flex flex-row justify-content-center">
-                                            <div>
-                                              <div
-                                                class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
-                                                5
-                                              </div>
-                                              <p class="text-primary-c m-0">Completed</p>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="col-md-10 vhide h-bg py-3">
-                                          <div class="d-flex flex-row w-100 justify-content-between">
-                                            <div class="ms-2 fe-4 me-auto py-4">
-                                              <a href="javascript:void(0)" class="text-decoration-none"
-                                                (click)="redirectTo(CustomSalary)">
-                                                <div class="fw-bold fs-5 text-primary-dc">
-                                                  CUSTOM SALARY STRUCTURES
-                                                </div>
-                                              </a>
-                                              Setup Custom salary structures for individual employee
-                                              or group employees.
+                                              Basic company settings.
                                             </div>
                                             <div class="fe-1 d-flex flex-column justify-content-center text-end">
                                               <a href=" javascript:void(0)">
@@ -275,207 +397,97 @@
                                     </div>
                                   </div>
                                 </div>
-                              </ng-container>
-                              <ng-container *ngIf="Companys.length == 0">
-                                <div
-                                  class="col-md-12 x_panel border-0 d-flex flex-column justify-content-center text-center">
-                                  <h4>Please add salary group first.</h4>
-                                </div>
-                              </ng-container>
-
-                            </ng-template>
-                          </li>
-                          <li [ngbNavItem]="2">
-                            <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('CS')">Company Settings <i
-                                class="fa fa-cog px-2"></i></a>
-                            <ng-template ngbNavContent>
-                              <div *ngIf="menuItem.CS">
-                                <div class="x_body">
-                                  <div class="col-md-12">
-                                    <h3 class="text-primary-c">
-                                      Compnay Setting
-                                    </h3>
-                                    <p>Payroll is going to take a little more patience,
-                                      as we collect all of the information.
-                                    </p>
-                                  </div>
-                                  <div class="col-md-12 mt-4">
-                                    <div class="row m-0">
-                                      <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
-                                        <div class="d-flex flex-row justify-content-center">
-                                          <div>
-                                            <div
-                                              class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
-                                              1
-                                            </div>
-                                            <p class="text-primary-c m-0">Completed</p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class=" col-md-10 h-bg py-3">
-                                        <div class="d-flex flex-row w-100 justify-content-between">
-                                          <div class="ms-2 fe-4 me-auto py-4">
-                                            <a href="javascript:void(0)" class="text-decoration-none"
-                                              (click)="redirectTo(ManageCompanyDetail)">
-                                              <div class="fw-bold text-primary-dc fs-5">
-                                                MODIFY COMPANY DETAIL
-                                              </div>
-                                            </a>
-                                            Company legal entity, authorized signatories and
-                                            bank account information.
-                                          </div>
-                                          <div class="fe-1 d-flex flex-column justify-content-center text-end">
-                                            <a href=" javascript:void(0)">
-                                              <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
-                                            </a>
-                                          </div>
-                                        </div>
-                                      </div>
+                              </ng-template>
+                            </li>
+                            <li [ngbNavItem]="3">
+                              <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('LAH')">Leaves & Holidays <i
+                                  class="fa fa-calendar-times-o px-2"></i></a>
+                              <ng-template ngbNavContent>
+                                <div *ngIf="menuItem.LAH">
+                                  <div class="x_body">
+                                    <div class="col-md-12">
+                                      <h3 class="text-primary-c">
+                                        Leaves and Holidays
+                                      </h3>
+                                      <p>Payroll is going to take a little more patience,
+                                        as we collect all of the information.
+                                      </p>
                                     </div>
-                                    <div class="row m-0">
-                                      <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
-                                        <div class="d-flex flex-row justify-content-center">
-                                          <div>
-                                            <div
-                                              class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
-                                              2
-                                            </div>
-                                            <p class="text-primary-c m-0">Completed</p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-10 h-bg py-3">
-                                        <div class="d-flex flex-row w-100 justify-content-between">
-                                          <div class="ms-2 fe-4 me-auto py-4">
-                                            <a href="javascript:void(0)" (click)="redirectTo(ManageCompanyAccounts)"
-                                              class="text-decoration-none">
-                                              <div class="fw-bold fs-5 text-primary-dc">
-                                                MANAGE COMPANY ACCOUNT DETAIL
-                                              </div>
-                                            </a>
-                                            Payroll cycle and payroll period settings.
-                                          </div>
-                                          <div class="fe-1 d-flex flex-column justify-content-center text-end">
-                                            <a href=" javascript:void(0)">
-                                              <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
-                                            </a>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="row m-0">
-                                      <div class="col-md-2 col-md-2 d-flex flex-column justify-content-center">
-                                        <div class="d-flex flex-row justify-content-center">
-                                          <div>
-                                            <div
-                                              class="fs-5 circle-dv d-flex flex-column justify-content-center text-center">
-                                              3
-                                            </div>
-                                            <p class="text-primary-c m-0">Completed</p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-10 h-bg py-3">
-                                        <div class="d-flex flex-row w-100 justify-content-between">
-                                          <div class="ms-2 fe-4 me-auto py-4">
-                                            <a href="javascript:void(0)" (click)="redirectTo(CompanySettingPage)"
-                                              class="text-decoration-none">
-                                              <div class="fw-bold fs-5 text-primary-dc">
-                                                MANAGE COMPANY SETTINGS
-                                              </div>
-                                            </a>
-                                            Basic company settings.
-                                          </div>
-                                          <div class="fe-1 d-flex flex-column justify-content-center text-end">
-                                            <a href=" javascript:void(0)">
-                                              <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
-                                            </a>
-                                          </div>
-                                        </div>
-                                      </div>
+                                    <div class="col-md-12 mt-4">
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            </ng-template>
-                          </li>
-                          <li [ngbNavItem]="3">
-                            <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('LAH')">Leaves & Holidays <i
-                                class="fa fa-calendar-times-o px-2"></i></a>
-                            <ng-template ngbNavContent>
-                              <div *ngIf="menuItem.LAH">
-                                <div class="x_body">
-                                  <div class="col-md-12">
-                                    <h3 class="text-primary-c">
-                                      Leaves and Holidays
-                                    </h3>
-                                    <p>Payroll is going to take a little more patience,
-                                      as we collect all of the information.
-                                    </p>
-                                  </div>
-                                  <div class="col-md-12 mt-4">
-                                  </div>
-                                </div>
-                              </div>
-                            </ng-template>
-                          </li>
-
-                          <li [ngbNavItem]="4">
-                            <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('EX')">Expenses <i
-                                class="fa fa-money px-2"></i></a>
-                            <ng-template ngbNavContent>
-                              <div *ngIf="menuItem.EX">
-                                <div class="x_body">
-                                  <div class="col-md-12">
-                                    <h3 class="text-primary-c">
-                                      Company Expenses
-                                    </h3>
-                                    <p>Payroll is going to take a little more patience,
-                                      as we collect all of the information.
-                                    </p>
-                                  </div>
-                                  <div class="col-md-12 mt-4">
+                              </ng-template>
+                            </li>
+  
+                            <li [ngbNavItem]="4">
+                              <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('EX')">Expenses <i
+                                  class="fa fa-money px-2"></i></a>
+                              <ng-template ngbNavContent>
+                                <div *ngIf="menuItem.EX">
+                                  <div class="x_body">
+                                    <div class="col-md-12">
+                                      <h3 class="text-primary-c">
+                                        Company Expenses
+                                      </h3>
+                                      <p>Payroll is going to take a little more patience,
+                                        as we collect all of the information.
+                                      </p>
+                                    </div>
+                                    <div class="col-md-12 mt-4">
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </ng-template>
-                          </li>
-                        </ul>
-                      <div>
-                        <div [ngbNavOutlet]="nav" class="col-12 p-0 mt-2"></div>
+                              </ng-template>
+                            </li>
+                          </ul>
+                        <div>
+                          <div [ngbNavOutlet]="nav" class="col-12 p-0 mt-2"></div>
+                        </div>
                       </div>
-                    </div>
-                  </ng-container>
+                    </ng-container>
+                  </div>
                 </div>
-              </div>
-            </ng-template>
-          </li>
-          <li [ngbNavItem]="2" (click)="redirectTo(PayrollComponent)">
-            <a ngbNavLink>COMPONENTS</a>
-            <ng-template ngbNavContent>
-              <!-- Redirect to new page-->
-            </ng-template>
-          </li>
-          <li [ngbNavItem]="3">
-            <a ngbNavLink>LEAVE ENHANCEMENT</a>
-            <ng-template ngbNavContent>
-              <p>Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh elit id diam. Nulla
-                facilisi.
-                Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis, luctus eget tincidunt eu, congue
-                et odio.
-                Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu, et molestie lectus ultrices et. Sed
-                diam urna,
-                egestas ut ipsum vel, volutpat volutpat neque. Praesent fringilla tortor arcu. Vivamus faucibus nisl
-                enim, nec
-                tristique ipsum euismod facilisis. Morbi ut bibendum est, eu tincidunt odio. Orci varius natoque
-                penatibus et
-                magnis dis parturient montes, nascetur ridiculus mus. Mauris aliquet odio ac lorem aliquet ultricies
-                in eget
-                neque. Phasellus nec tortor vel tellus pulvinar feugiat.</p>
-            </ng-template>
-          </li>
-          <div [ngbNavOutlet]="nav" class="col-12 mt-2"></div>
-        </ul>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2" (click)="redirectTo(PayrollComponent)">
+              <a ngbNavLink>COMPONENTS</a>
+              <ng-template ngbNavContent>
+                <!-- Redirect to new page-->
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="3">
+              <a ngbNavLink>LEAVE ENHANCEMENT</a>
+              <ng-template ngbNavContent>
+                <p>Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh elit id diam. Nulla
+                  facilisi.
+                  Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis, luctus eget tincidunt eu, congue
+                  et odio.
+                  Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu, et molestie lectus ultrices et. Sed
+                  diam urna,
+                  egestas ut ipsum vel, volutpat volutpat neque. Praesent fringilla tortor arcu. Vivamus faucibus nisl
+                  enim, nec
+                  tristique ipsum euismod facilisis. Morbi ut bibendum est, eu tincidunt odio. Orci varius natoque
+                  penatibus et
+                  magnis dis parturient montes, nascetur ridiculus mus. Mauris aliquet odio ac lorem aliquet ultricies
+                  in eget
+                  neque. Phasellus nec tortor vel tellus pulvinar feugiat.</p>
+              </ng-template>
+            </li>
+            <div [ngbNavOutlet]="nav" class="col-12 mt-2"></div>
+          </ul>
+        </ng-container>
+        <ng-container *ngIf="!isPageLoading">
+          <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </ng-container>
+
       </div>
     </form>
 
