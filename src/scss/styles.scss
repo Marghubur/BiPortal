@@ -984,3 +984,8 @@ fieldset {
 .autocomplete-height {
   height: 4.2vh !important;
 }
+
+
+.form-control-sm {
+  min-height: calc(1.8vw + 2px) !important;
+}

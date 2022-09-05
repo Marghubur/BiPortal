@@ -63,7 +63,7 @@ export class CompanyAccountsComponent implements OnInit {
       Branch: new FormControl(this.CompanyAccountDetail.Branch),
       BranchCode: new FormControl(this.CompanyAccountDetail.BranchCode),
       IFSCCode: new FormControl(this.CompanyAccountDetail.IFSCCode),
-      PANNumber: new FormControl(this.CompanyAccountDetail.PANNumber),
+      PANNo: new FormControl(this.CompanyAccountDetail.PANNo),
       IsUser: new FormControl(this.CompanyAccountDetail.IsUser),
       TradeLiecenceNumber: new FormControl (this.CompanyAccountDetail.TradeLiecenceNumber),
       OrganizationId: new FormControl(this.CompanyAccountDetail.OrganizationId),
@@ -117,7 +117,7 @@ export class organizationAccountModal {
   BankName: string = null;
   Branch: string = null;
   IFSCCode: string = null;
-  PANNumber: string = null;
+  PANNo: string = null;
   IsUser: boolean = false;
   TradeLiecenceNumber: string = '';
   BranchCode: string = '';
