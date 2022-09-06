@@ -129,13 +129,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
         activeState = false;
     }
 
-    this.http.post("Employee/GetEmployees", {
-      SearchString: this.employeeData.SearchString,
-      PageIndex: this.employeeData.PageIndex,
-      PageSize: this.employeeData.PageSize,
-      SortBy: this.employeeData.SortBy,
-      isActive: activeState
-    }).then((response: ResponseModel) => {
+    this.http.post("Employee/GetEmployees", this.employeeData).then((response: ResponseModel) => {
       this.employeeDetail = response.ResponseBody;
       let i =0;
       while (i < this.employeeDetail.length) {
