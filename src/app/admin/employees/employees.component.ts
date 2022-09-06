@@ -37,7 +37,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   orderByMobileAsc: boolean = null;
   orderByEmailAsc: boolean = null;
   isFileFound: boolean = false;
-
+  companyId: number = 0;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -201,6 +201,11 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
         delimiter = "and";
     }
 
+    if(this.companyId !== null) {
+      this.employeeData.SearchString += `1=1 And emp.CompanyId like '${this.companyId}'`;
+        delimiter = "and";
+    }
+
     if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile.trim() !== '') {
       this.employeeData.SearchString += `1=1 And emp.Mobile like '%${this.employeeDetails.Mobile}%'`;
         delimiter = "and";
@@ -229,7 +234,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     this.employeeData.PageSize = 10;
     this.employeeData.StartIndex = 1;
     this.employeeData.EndIndex = (this.employeeData.PageSize * this.employeeData.PageIndex);
-
+    this.companyId = 0;
     this.LoadData();
     this.employeeDetails.Name="";
     this.employeeDetails.Mobile = null;
