@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { ProfileImage, UserImage, UserType } from 'src/providers/constants';
+import { OrgLogo, ProfileImage, UserImage, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -20,13 +20,16 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   isUpdating: boolean = false;
   organizationForm: FormGroup = null;
   organization:OrganizationModal = new OrganizationModal();
-  profileURL: string = UserImage;
+  profileURL: string = OrgLogo;
   fileDetail: Array<any> = [];
   UserTypeId: UserType= UserType.Client;
   model: NgbDateStruct;
+  openingDate: NgbDateStruct;
+  closingDate: NgbDateStruct;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
+              private ngbCalendar: NgbCalendar,
               private nav: iNavigation) { }
 
   ngOnDestroy() {
@@ -43,18 +46,21 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     } else {
       this.organization = new OrganizationModal;
       this.loadData();
-      this.initForm();
-      this.isLoaded = true;
     }
   }
 
   loadData() {
+    this.isLoaded = false;
     this.http.get(`Company/GetOrganizationDetail`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         if (response.ResponseBody.OrganizationDetail) {
           this.organization = response.ResponseBody.OrganizationDetail as OrganizationModal;
           let date = new Date(this.organization.InCorporationDate);
           this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          let openingdate = new Date(this.organization.OpeningDate);
+          this.openingDate = { day: openingdate.getDate(), month: openingdate.getMonth() + 1, year: openingdate.getFullYear()};
+          let closingdate = new Date(this.organization.ClosingDate);
+          this.closingDate = { day: closingdate.getDate(), month: closingdate.getMonth() + 1, year: closingdate.getFullYear()};
           this.initForm();
           this.isLoaded = true;
         }
@@ -78,6 +84,8 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   initForm() {
     this.organizationForm = this.fb.group({
       CompanyId: new FormControl(this.organization.CompanyId),
+      OrganizationId: new FormControl(this.organization.OrganizationId),
+      BankAccountId: new FormControl(this.organization.BankAccountId),
       OrganizationName: new FormControl(this.organization.OrganizationName, [Validators.required]),
       CompanyName: new FormControl(this.organization.CompanyName, [Validators.required]),
       CompanyDetail: new FormControl(this.organization.CompanyDetail),
@@ -102,17 +110,27 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       Pincode: new FormControl(this.organization.Pincode),
       FileId: new FormControl(this.organization.FileId),
       PANNo: new FormControl(this.organization.PANNo),
-      TradeLicenseNumber: new FormControl(this.organization.TradeLicenseNumber),
-      GSTNO: new FormControl(this.organization.GSTNO),
+      TradeLicenseNo: new FormControl(this.organization.TradeLicenseNo),
+      GSTNO: new FormControl(this.organization.GSTNo),
       AccountNo: new FormControl(this.organization.AccountNo),
       BankName: new FormControl(this.organization.BankName),
-      BranchName: new FormControl(this.organization.BranchName),
+      Branch: new FormControl(this.organization.Branch),
       IFSC: new FormControl(this.organization.IFSC),
       LegalDocumentPath: new FormControl(this.organization.LegalDocumentPath),
       LegalEntity: new FormControl(this.organization.LegalEntity),
       LegalNameOfCompany: new FormControl(this.organization.LegalNameOfCompany),
       TypeOfBusiness: new FormControl(this.organization.TypeOfBusiness),
       InCorporationDate: new FormControl(this.organization.InCorporationDate),
+      OrgMobile: new FormControl(this.organization.OrgMobile),
+      OrgEmail: new FormControl(this.organization.OrgEmail, [Validators.required]),
+      OrgPrimaryPhoneNo: new FormControl(this.organization.OrgPrimaryPhoneNo, [Validators.required]),
+      OrgSecondaryPhoneNo: new FormControl(this.organization.OrgSecondaryPhoneNo),
+      OrgFax: new FormControl(this.organization.OrgFax),
+      IsPrimaryCompany: new FormControl(this.organization.IsPrimaryCompany),
+      FixedComponentsId: new FormControl(this.organization.FixedComponentsId),
+      BranchCode: new FormControl(this.organization.BranchCode),
+      OpeningDate: new FormControl(this.organization.OpeningDate),
+      ClosingDate: new FormControl(this.organization.ClosingDate),
       ProfileImgPath: new FormControl('')
     })
   }
@@ -120,6 +138,16 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
     this.organizationForm.controls["InCorporationDate"].setValue(date);
+  }
+
+  onOpeningSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.organizationForm.controls["OpeningDate"].setValue(date);
+  }
+
+  onClosingSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.organizationForm.controls["ClosingDate"].setValue(date);
   }
 
   generate() {
@@ -150,7 +178,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     if (errroCounter === 0) {
       let request: OrganizationModal = this.organizationForm.value;
       let formData = new FormData()
-      formData.append("CompanyInfo", JSON.stringify(request));
+      formData.append("OrganizationInfo", JSON.stringify(request));
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
@@ -160,9 +188,9 @@ export class OrganizationComponent implements OnInit, OnDestroy {
           this.organization = response.ResponseBody as OrganizationModal;
           this.initForm();
 
-          Toast("Client Inserted/Updated successfully");
+          Toast("Organization Inserted/Updated successfully");
         } else {
-          ErrorToast("Failed to generated, Please contact to admin.");
+          ErrorToast("Failed to Inserted/Updated, Please contact to admin.");
         }
         this.isLoading = false;
       }).catch(e => {
@@ -209,6 +237,8 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
 class OrganizationModal {
   CompanyId: number = 0;
+  OrganizationId: number = 0;
+  BankAccountId: number = 0;
   OrganizationName: string = null;
   CompanyName: string = null;
   CompanyDetail: string = null;
@@ -233,15 +263,25 @@ class OrganizationModal {
   Pincode: number = 0;
   FileId: number = 0;
   PANNo: string = null;
-  TradeLicenseNumber
-  GSTNO: string = null;
+  TradeLicenseNo: string = null;
+  GSTNo: string = null;
   AccountNo: string = null;
   BankName: string = null;
-  BranchName: string = null;
+  Branch: string = null;
+  BranchCode: string = null;
+  OpeningDate: string = null;
+  ClosingDate: string = null;
   IFSC: string = null;
   LegalDocumentPath: string = null;
   LegalEntity: string = null;
   LegalNameOfCompany: string = null;
   TypeOfBusiness: string = null;
   InCorporationDate: string = null;
+  IsPrimaryCompany: boolean = false;
+  FixedComponentsId: string = null;
+  OrgMobile: string = null;
+  OrgEmail: string = null;
+  OrgPrimaryPhoneNo: string = null;
+  OrgSecondaryPhoneNo: string = null;
+  OrgFax: string = null;
 }

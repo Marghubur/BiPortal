@@ -150,7 +150,7 @@ export const Images = "assets/ext/image.png";
 export const DocumentPath = "Documents";
 export const UserPath = "User";
 export const UserImage = "assets/images/faces/face.jpg";
-
+export const OrgLogo = "assets/images/organization-logo.jpg"
 
 
 
