@@ -24,6 +24,7 @@ export class Filter {
     EndIndex: number = 0;
     PageSize: number = 10;
     SortBy: string = "";
+    CompanyId: number = 0;
     TotalRecords: number = 0;
     ShowPageNo: number = 5;
     ActivePageNumber: number = 1;
