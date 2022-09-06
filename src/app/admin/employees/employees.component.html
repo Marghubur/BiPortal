@@ -9,14 +9,14 @@
           InActive
         </a>
         <!-- <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.All}" (click)="SwitchTab($event, -1)">
-          All
+          Allsss
         </a> -->
       </div>
     </div>
     <div class="col-md-2 ms-3">
-      <select class="form-select" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()" [(ngModel)]="companyId">
+      <select class="form-select" (change)="filterRecords()" (keydown.esc)="resetFilter()" [(ngModel)]="companyId">
         <option value=0 selected>All</option>
-        <option>...</option>
+        <option [value]="item.CompanyId" *ngFor="let item of companies">{{item.CompanyName}}</option>
       </select>
     </div>
     <div class="col-md-2 inline-row d-r p-0 m-0 text-start">
