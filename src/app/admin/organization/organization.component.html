@@ -36,16 +36,14 @@
                       [ngClass]="{'error-field': submitted && f.OrganizationName.errors !== null && f.OrganizationName.errors.required}" />
                   </div>
                   <div class="col-md-4 mt-4">
-                    <label class="form-label">Organization Mobile No.# *</label>
+                    <label class="form-label">Organization Mobile No.#</label>
                     <input placeholder="Organization Mobile No." class="form-control" name="OrgMobile"
-                      formControlName="OrgMobile"  oninput="this.value = this.value.toUpperCase()"
-                      [ngClass]="{'error-field': submitted && f.OrgMobile.errors !== null && f.OrgMobile.errors.required}" />
+                      formControlName="OrgMobile"  oninput="this.value = this.value.toUpperCase()"/>
                   </div>
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization Email *</label>
                     <input placeholder="Organization Email" class="form-control" name="OrgEmail"
-                      formControlName="OrgEmail"  oninput="this.value = this.value.toUpperCase()"
-                      [ngClass]="{'error-field': submitted && f.OrgEmail.errors !== null && f.OrgEmail.errors.required}" />
+                      formControlName="OrgEmail" [ngClass]="{'error-field': submitted && f.OrgEmail.errors !== null && f.OrgEmail.errors.required}" />
                   </div>
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization Primary No.# *</label>
@@ -89,6 +87,12 @@
                         [ngClass]="{'error-field': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
                         name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
                     </div>
+                    <div class="col-md-6 mt-4">
+                      <label class="form-label">Email Id *</label>
+                      <input class="form-control" placeholder="Email Id"
+                        [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.Email.errors.required}" name="Email"
+                        formControlName="Email" />
+                    </div>
                     <div class="col-md-6 mt-3">
                       <label class="form-label">Alternate No.#</label>
                       <input class="form-control" placeholder="Alternate Phone No.#" name="SecondaryPhoneNo"
@@ -98,12 +102,6 @@
                       <label class="form-label">FAX No.# (optional)</label>
                       <input class="form-control" placeholder="FAX No.#" name="Fax"
                         oninput="this.value = this.value.toUpperCase()" formControlName="Fax" />
-                    </div>
-                    <div class="col-md-6 mt-4">
-                      <label class="form-label">Email Id *</label>
-                      <input class="form-control" placeholder="Email Id"
-                        [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.Email.errors.required}" name="Email"
-                        formControlName="Email" />
                     </div>
                     <div class="col-md-6 mt-4">
                       <label class="form-label">Mobile No.# (optional)</label>
@@ -135,7 +133,7 @@
                       <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No."
                         name="GSTNO" formControlName="GSTNO" />
                     </div>
-                    <div class="col-md-6 mt-3">
+                    <div class="col-md-6 mt-4">
                       <label class="form-label">PAN No.#</label>
                       <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()"
                       oninput="this.value = this.value.toUpperCase()" name="PANNo" formControlName="PANNo" />

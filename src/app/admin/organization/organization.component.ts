@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { ProfileImage, UserImage, UserType } from 'src/providers/constants';
+import { OrgLogo, ProfileImage, UserImage, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -20,7 +20,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   isUpdating: boolean = false;
   organizationForm: FormGroup = null;
   organization:OrganizationModal = new OrganizationModal();
-  profileURL: string = UserImage;
+  profileURL: string = OrgLogo;
   fileDetail: Array<any> = [];
   UserTypeId: UserType= UserType.Client;
   model: NgbDateStruct;
@@ -29,6 +29,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
+              private ngbCalendar: NgbCalendar,
               private nav: iNavigation) { }
 
   ngOnDestroy() {
@@ -49,15 +50,16 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
+    this.isLoaded = false;
     this.http.get(`Company/GetOrganizationDetail`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         if (response.ResponseBody.OrganizationDetail) {
           this.organization = response.ResponseBody.OrganizationDetail as OrganizationModal;
           let date = new Date(this.organization.InCorporationDate);
           this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-          let openingdate = new Date(this.organization.InCorporationDate);
+          let openingdate = new Date(this.organization.OpeningDate);
           this.openingDate = { day: openingdate.getDate(), month: openingdate.getMonth() + 1, year: openingdate.getFullYear()};
-          let closingdate = new Date(this.organization.InCorporationDate);
+          let closingdate = new Date(this.organization.ClosingDate);
           this.closingDate = { day: closingdate.getDate(), month: closingdate.getMonth() + 1, year: closingdate.getFullYear()};
           this.initForm();
           this.isLoaded = true;
@@ -120,8 +122,8 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       TypeOfBusiness: new FormControl(this.organization.TypeOfBusiness),
       InCorporationDate: new FormControl(this.organization.InCorporationDate),
       OrgMobile: new FormControl(this.organization.OrgMobile),
-      OrgEmail: new FormControl(this.organization.OrgEmail),
-      OrgPrimaryPhoneNo: new FormControl(this.organization.OrgPrimaryPhoneNo),
+      OrgEmail: new FormControl(this.organization.OrgEmail, [Validators.required]),
+      OrgPrimaryPhoneNo: new FormControl(this.organization.OrgPrimaryPhoneNo, [Validators.required]),
       OrgSecondaryPhoneNo: new FormControl(this.organization.OrgSecondaryPhoneNo),
       OrgFax: new FormControl(this.organization.OrgFax),
       IsPrimaryCompany: new FormControl(this.organization.IsPrimaryCompany),
