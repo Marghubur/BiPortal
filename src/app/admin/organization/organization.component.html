@@ -43,13 +43,12 @@
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization Email *</label>
                     <input placeholder="Organization Email" class="form-control" name="OrgEmail"
-                      formControlName="OrgEmail" [ngClass]="{'error-field': submitted && f.OrgEmail.errors !== null && f.OrgEmail.errors.required}" />
+                      formControlName="OrgEmail" />
                   </div>
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization Primary No.# *</label>
                     <input placeholder="Organization Primary No.# " class="form-control" name="OrgPrimaryPhoneNo"
-                      formControlName="OrgPrimaryPhoneNo"  oninput="this.value = this.value.toUpperCase()"
-                      [ngClass]="{'error-field': submitted && f.OrgPrimaryPhoneNo.errors !== null && f.OrgPrimaryPhoneNo.errors.required}" />
+                      formControlName="OrgPrimaryPhoneNo"  oninput="this.value = this.value.toUpperCase()"/>
                   </div>
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization Alternate No.#</label>
@@ -120,7 +119,9 @@
                     </div>
                     <div class="col-md-6 mt-4">
                       <label class="form-label">Other Email 3</label>
-                      <input placeholder="Other Email 3" class="form-control" name="ThirdEmail"
+                      <input placeholder="Oth
+
+                      er Email 3" class="form-control" name="ThirdEmail"
                         formControlName="ThirdEmail" />
                     </div>
                     <div class="col-md-6 mt-4">
