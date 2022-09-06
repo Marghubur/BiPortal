@@ -3,12 +3,13 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { tableConfig } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { Attendance, Documents, DocumentsPage, Employees, Files, ManageEmployee, Profile, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { DocumentUser } from '../documents/documents.component';
 import 'bootstrap';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 declare var $: any;
 
 @Component({
@@ -37,7 +38,8 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   orderByMobileAsc: boolean = null;
   orderByEmailAsc: boolean = null;
   isFileFound: boolean = false;
-
+  companyId: number = 0;
+  companies: Array<any> = [];
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -45,6 +47,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
+    private local: ApplicationStorage,
     private userService: UserService,
     private nav: iNavigation,
     private common: CommonService
@@ -69,7 +72,12 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     this.employeeData = new Filter();
     this.employeeData.SearchString = "";
     this.employeeDetails = new employeeModel();
-
+    let Master = this.local.get(null);
+    if (Master !== null && Master !== "") {
+      this.companies = Master["Companies"];
+    } else {
+      ErrorToast("Invalid user. Please login again.")
+    }
 
     this.documentForm = this.fb.group({
       "Title": new FormControl(""),
@@ -201,6 +209,12 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
         delimiter = "and";
     }
 
+    if(this.companyId !== null) {
+      this.companyId = Number(this.companyId);
+      this.employeeData.SearchString += `1=1 And l.CompanyId == ${this.companyId}`;
+        delimiter = "and";
+    }
+
     if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile.trim() !== '') {
       this.employeeData.SearchString += `1=1 And emp.Mobile like '%${this.employeeDetails.Mobile}%'`;
         delimiter = "and";
@@ -229,7 +243,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     this.employeeData.PageSize = 10;
     this.employeeData.StartIndex = 1;
     this.employeeData.EndIndex = (this.employeeData.PageSize * this.employeeData.PageIndex);
-
+    this.companyId = 0;
     this.LoadData();
     this.employeeDetails.Name="";
     this.employeeDetails.Mobile = null;
