@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit {
   redirectTo(pageName: string) {
     switch(pageName) {
       case PFESISetup:
-        this.nav.navigate(PFESISetup, null);
+        this.nav.navigate(PFESISetup, this.currentCompnay.CompanyId);
         break;
       case CompanyInfo:
         this.nav.navigate(CompanyInfo, this.CompanyId);
@@ -77,7 +77,7 @@ export class SettingsComponent implements OnInit {
         this.nav.navigate(SalaryComponentStructure, null)
         break;
       case CustomSalaryStructure:
-        this.nav.navigate(CustomSalaryStructure, null);
+        this.nav.navigate(CustomSalaryStructure, this.currentCompnay);
         break;
       case PayrollComponents:
         this.nav.navigate(PayrollComponents, null);

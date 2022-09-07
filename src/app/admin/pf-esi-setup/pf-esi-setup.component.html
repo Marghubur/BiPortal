@@ -18,8 +18,8 @@
 
         <div class="col-12 p-2 my-4 row">
           <p class="fs-5 fw-bold text-primary-dc">PROVIDENT FUND & ESI SETTING <button [disabled]="isLoading"
-              class="btn btn-outline-success float-end" (click)="submitPFESISetting()"><i class="fa pe-2" [ngClass]="{'fa-cog': !isLoading, 'fa-spin fa-spinner': isLoading}"></i>
-              {{ isLoading ? 'Wait' : 'Save' }}</button></p>
+              class="btn btn-outline-success float-end" (click)="submitPFESISetting()"><i class="fa" [ngClass]="{'fa-cog': !isLoading, 'fa-spin fa-spinner': isLoading}"></i>
+             <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span></button></p>
           <label>These setting will be used for the different calculatin like, Salary, GST etc.</label>
 
           <ng-container *ngIf="IsReady">
@@ -122,7 +122,7 @@
                           Maximum monthly gross salary eligible for ESI
                           <i class="mx-4 fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Maximum monthly gross salary eligible for ESI"></i>
                           <div class="col-md-2 d-inline-block">
-                            <input class="form-control" formControlName="EligibilitySalaryForESI" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            <input class="form-control" formControlName="MaximumGrossForESI" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                           </div>
                         </li>
                         <li class="list-group-item">
@@ -196,13 +196,12 @@
           </ng-container>
           <ng-container *ngIf="!IsReady">
             <div class="x_panel">
-              <div class="d-flex flex-column justify-content-center">
-                <p class="fs-4 text-center">No data available. Please try again if found same issue
+              <div class="d-flex flex-column justify-content-center my-5 py-5">
+                <p class="fs-4 text-center my-5 py-5">No data available. Please try again if found same issue
                   again thne please contact to admin.</p>
               </div>
             </div>
           </ng-container>
-
         </div>
       </div>
     </form>

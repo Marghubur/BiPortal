@@ -519,12 +519,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ErrorToast("Please enter ctc");
       return;
     }
-    this.http.get(`SalaryComponent/"GetSalaryGroupByCTC/${ctc}`).then(res => {
+    this.http.get(`SalaryComponent/GetSalaryGroupByCTC/${ctc}`).then(res => {
       if (res.ResponseBody) {
         this.nav.navigate(SalaryBreakup, this.employeeForm.value);
       }
     }).catch(e => {
-      ErrorToast("Please salary group not found, please add salary group first");
+      ErrorToast(`No Salary group found for CTC = [ ${ctc} ]. Please create group for this bracket.`);
     })
   }
 

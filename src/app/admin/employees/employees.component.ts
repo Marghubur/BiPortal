@@ -203,11 +203,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
         delimiter = "and";
     }
 
-    if(this.companyId !== null) {
-      this.companyId = Number(this.companyId);
-      this.employeeData.SearchString += `1=1 And l.CompanyId == ${this.companyId}`;
-        delimiter = "and";
-    }
+    this.employeeData.CompanyId = Number(this.companyId);
 
     if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile.trim() !== '') {
       this.employeeData.SearchString += `1=1 And emp.Mobile like '%${this.employeeDetails.Mobile}%'`;

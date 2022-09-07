@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {  FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { Payroll } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
@@ -37,10 +37,9 @@ export class PayrollComponent implements OnInit {
     this.compnayDetail = this.nav.getValue();
     this.payRoll = new PayRoll();
     if(this.compnayDetail != null) {
-      this.isReady = true;
       this.loadPayrollSetting();
-      this.initForm();
     } else {
+      this.initForm();
       ErrorToast("Getter some internal issue. Please login again or contact to admin.");
     }
   }
@@ -51,13 +50,16 @@ export class PayrollComponent implements OnInit {
       if(res.ResponseBody) {
         this.payRoll = res.ResponseBody;
         this.initForm();
-        this.isReady = true;
         this.isPageReady = true;
         Toast("Payroll detail fetched successfully.");
       } else {
         this.isPageReady = true;
-        ErrorToast("Fail to fetch payroll detail. Please contact to admin.");
+        this.payRoll.CompanyId = this.compnayDetail.CompanyId;
+        this.initForm();
+        WarningToast("No data available. Please add payroll detail.");
       }
+
+      this.isReady = true;
     });
   }
 

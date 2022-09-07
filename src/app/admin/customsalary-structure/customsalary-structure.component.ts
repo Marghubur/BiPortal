@@ -44,6 +44,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   isEditSalaryGroup: boolean = false;
   customSalaryStructureForm: FormGroup;
   currentGroup: any = null;
+  compnayDetail: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -101,6 +102,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.componentsAvailable = false;
     let updateStructure: SalaryStructureType = {
       GroupComponents: this.activeComponent,
+      CompanyId: this.compnayDetail.CompanyId,
       ComponentId: null,
       GroupDescription: this.selectedSalaryStructure.GroupDescription,
       GroupName: this.selectedSalaryStructure.GroupName,
@@ -125,6 +127,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   salaryGroup() {
     this.SalaryGroupForm = this.fb.group({
+      CompanyId: new FormControl(this.selectedSalaryStructure.CompanyId), 
       ComponentId: new FormControl(this.selectedSalaryStructure.ComponentId),
       GroupName: new FormControl(this.selectedSalaryStructure.GroupName, [Validators.required]),
       GroupDescription: new FormControl(this.selectedSalaryStructure.GroupDescription, [Validators.required]),
@@ -147,53 +150,46 @@ export class CustomsalaryStructureComponent implements OnInit {
     })
   }
 
-  loadSalaryComponentDetail() {
+  buildSalaryComponentDetail(components: Array<any>) {
     this.isPageReady = false;
-    this.http.get("SalaryComponent/GetSalaryComponentsDetail").then(res => {
-      if(res.ResponseBody) {
-        let data = res.ResponseBody;
-        data = data.filter(x => x.IsAdHoc == 0);
-        let i = 0;
-        this.salaryComponentFields = [];
-        while(i < data.length) {
-          this.salaryComponentFields.push({
-            ComponentFullName: data[i]["ComponentFullName"],
-            ComponentDescription: data[i]["ComponentDescription"],
-            ComponentId: data[i]["ComponentId"],
-            Type: data[i]["ComponentTypeId"],
-            TaxExempt: data[i]["TaxExempt"],
-            Formula: data[i]["Formula"],
-            MaxLimit: data[i]["MaxLimit"],
-            RequireDocs: false,
-            IndividualOverride: false,
-            IsAllowtoOverride: false,
-            IsComponentEnable: false,
-            IsActive: data[i]["IsActive"],
-            PercentageValue: data[i]["PercentageValue"],
-            CalculateInPercentage: data[i]["CalculateInPercentage"],
-            EmployerContribution: data[i]["EmployerContribution"],
-            IncludeInPayslip: data[i]["IncludeInPayslip"],
-            IsOpted: data[i]["IsOpted"],
-            EmployeeContribution: data[i]["EmployeeContribution"],
-            Section: data[i]["Section"]
-          });
-          i++;
-        }
-        this.allComponentFields = this.salaryComponentFields;
-        this.isPageReady = true;
-        this.isReady = true;
-        Toast("Salary components loaded successfully.");
-      } else {
-        ErrorToast("Salary components loaded successfully.");
-      }
-    });
+    components = components.filter(x => x.IsAdHoc == 0);
+    let i = 0;
+    this.salaryComponentFields = [];
+    while(i < components.length) {
+      this.salaryComponentFields.push({
+        ComponentFullName: components[i]["ComponentFullName"],
+        ComponentDescription: components[i]["ComponentDescription"],
+        ComponentId: components[i]["ComponentId"],
+        Type: components[i]["ComponentTypeId"],
+        TaxExempt: components[i]["TaxExempt"],
+        Formula: components[i]["Formula"],
+        MaxLimit: components[i]["MaxLimit"],
+        RequireDocs: false,
+        IndividualOverride: false,
+        IsAllowtoOverride: false,
+        IsComponentEnable: false,
+        IsActive: components[i]["IsActive"],
+        PercentageValue: components[i]["PercentageValue"],
+        CalculateInPercentage: components[i]["CalculateInPercentage"],
+        EmployerContribution: components[i]["EmployerContribution"],
+        IncludeInPayslip: components[i]["IncludeInPayslip"],
+        IsOpted: components[i]["IsOpted"],
+        EmployeeContribution: components[i]["EmployeeContribution"],
+        Section: components[i]["Section"]
+      });
+      i++;
+    }
+    this.allComponentFields = this.salaryComponentFields;
   }
 
   loadData() {
     this.salaryStructureType = [];
-    this.http.get("SalaryComponent/GetSalaryGroups").then(res => {
-      if(res.ResponseBody) {
-        this.salaryStructureType = res.ResponseBody;
+    this.http.get(`SalaryComponent/GetCustomSalryPageData/${this.compnayDetail.CompanyId}`).then(res => {
+      if(res.ResponseBody && res.ResponseBody.SalaryComponents != null && res.ResponseBody.SalaryGroups != null) {
+        this.salaryStructureType = res.ResponseBody.SalaryGroups;
+        this.buildSalaryComponentDetail(res.ResponseBody.SalaryComponents);
+        this.isPageReady = true;
+        this.isReady = true;
         Toast("Salary components loaded successfully.");
       } else {
         ErrorToast("Salary components loaded successfully.");
@@ -207,56 +203,20 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.compnayDetail = this.nav.getValue();
     this.salaryStructureType = [];
     this.selectedSalaryStructure = new SalaryStructureType();
     this.ComponentName = '0';
     this.OpertaionType = "0";
     this.CalculationValue = null;
+    this.selectedSalaryStructure.CompanyId = this.compnayDetail.CompanyId;
     this.salaryGroup();
-    this.loadSalaryComponentDetail();
-    this.loadData();
-    this.createCustomSalaryStructure();
-
-    this.customSalaryStructure = [{
-      SalaryStructureName: 'Stehphe-II',
-      NoOfEmployee: 1,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-    },
-    {
-      SalaryStructureName: 'M-Dummy',
-      NoOfEmployee: 5,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-    },
-    {
-      SalaryStructureName: 'Custom Salary Structure',
-      NoOfEmployee: 1,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-    },
-    {
-      SalaryStructureName: 'Roma',
-      NoOfEmployee: 1,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-    },
-    {
-      SalaryStructureName: 'Stehphe-II',
-      NoOfEmployee: 1,
-      CreatedBy: 'Admin',
-      CreatedOn: new Date(),
-      ModifiedBy: 'Admin',
-      ModifiedOn: new Date(),
-    }];
+    if (this.compnayDetail != null) {
+      this.loadData();
+      this.createCustomSalaryStructure();
+    } else {
+      ErrorToast("Invalid company selected.");
+    }
   }
 
   activePage(page: number) {
@@ -562,6 +522,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
 class SalaryStructureType {
   SalaryGroupId: number = 0;
+  CompanyId: number = 0;
   ComponentId: string = null;
   GroupComponents: Array<any> = [];
   GroupName: string = null;

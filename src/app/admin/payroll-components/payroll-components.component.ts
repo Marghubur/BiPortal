@@ -49,18 +49,25 @@ export class PayrollComponentsComponent implements OnInit {
   SalaryComponentsDetail: Array<any> = [];
   expandedTable: boolean = true;
   addHocComponent: PayrollComponentsModal = new PayrollComponentsModal();
+  companyId: number = 0;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
               private nav:iNavigation) { }
 
   ngOnInit(): void {
-    this.ComponentType = '';
-    this.loadData()
-    this.initForm();
+    let data = this.nav.getValue();
     this.initadhocForm();
     this.initdeductionForm();
     this.initbonusForm();
+    this.loadData();
+    
+    if (data > 0) {
+      this.companyId = data;
+      this.ComponentType = '';
+    } else {
+      ErrorToast("Company was not selected. Please visit page again.");
+    }
   }
 
   navigate() {
@@ -76,6 +83,7 @@ export class PayrollComponentsComponent implements OnInit {
         this.AdhocAllowance =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 1);
         this.AdhocBonus =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 2);
         this.AdhocDeduction =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 3);
+        this.initForm();
         Toast("Record found");
         this.isReady = true;
       }
