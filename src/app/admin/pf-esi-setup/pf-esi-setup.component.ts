@@ -4,6 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import 'bootstrap';
+import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
 @Component({
@@ -13,146 +14,81 @@ declare var $: any;
 })
 export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
   PFandESIForm: FormGroup;
-  pfesi: Ipfesi = null;
+  pfesiSetting: pfesisetting = null;
   IsReady: boolean = false;
   isLoading: boolean = false;
   isallowChild: boolean = false;
   isallowPFamount:boolean = false;
   isallowPFLimit: boolean = false;
+  companyId: number = 0;
 
   constructor(
     private fb: FormBuilder,
-    private http: AjaxService
+    private http: AjaxService,
+    private nav: iNavigation
   ) { }
+
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip();
   }
 
   ngOnInit(): void {
-    this.loadData();
+    let data = this.nav.getValue();
+    if (data > 0) {
+      this.companyId = data;
+      this.loadData();
+    }
+    else
+      ErrorToast("Please select comopany first");
   }
 
   loadData() {
-    this.http.get("Settings/GetSalaryComponents").then(res => {
+    this.http.get(`Settings/GetSalaryComponents/${this.companyId}`).then(res => {
       if(res.ResponseBody) {
         this.IsReady = true;
-        this.buildData(res.ResponseBody);
+        this.pfesiSetting = res.ResponseBody;
         this.initForm();
         Toast("Page data loaded successfully.");
       } else {
         ErrorToast("Page data loaded successfully.");
       }
+    }).catch(e => {
+      this.IsReady = true;
     });
-  }
-
-  buildData(data: Array<any>) {
-    let pfData = data["SalaryComponent"].find(x => x.ComponentId == "PF");
-    let esiData = data["SalaryComponent"].find(x => x.ComponentId == "ESI");
-    let pfesidata = data["PfEsiSettings"];
-
-    if(pfesidata == null) {
-      pfesidata = {
-        PfEsi_setting_Id: null,
-        IsPF_Limit_Amount_Statutory: false,
-        IsPF_Allow_overriding: false,
-        IsPF_EmployerContribution_Outside_GS: false,
-        IsPF_OtherChgarges: false,
-        IsPFAllowVPF: false,
-        IsESI_Allow_overriding: false,
-        IsESI_EmployerContribution_Outside_GS: false,
-        IsESI_Exclude_EmployerShare: false,
-        IsESI_Exclude_EmpGratuity: false,
-        IsESI_Restrict_Statutory: false,
-        IsESI_IncludeBonuses_Eligibility: false,
-        IsESI_IncludeBonuses_Calculation: false,
-        IsPF_Employer_LimitContribution: false
-      };
-    }
-
-    // let employeeAmount = 0;
-    // if(esiData.EmployeeContribution)
-    //   employeeAmount = esiData.Amount;
-
-    // let employerAmount = 0;
-    // if(esiData.EmployerContribution)
-    //   employerAmount = esiData.Amount;
-
-    if (pfData ==null) {
-      pfData = new Ipfesi();
-      pfData.IsActive = false;
-      pfData.CalculateInPercentage = false;
-      pfData.EmployerContribution = 0;
-      pfData.IncludeInPayslip = false;
-    }
-
-    if (esiData ==null) {
-      esiData = new Ipfesi();
-      esiData.IsActive = false;
-      esiData.MaxLimit = 0;
-      esiData.EmployeeContribution = 0;
-      esiData.EmployerContribution = 0;
-      esiData.IncludeInPayslip = false;
-    }
-
-    if (pfesidata ==null)
-        pfesidata = new pfesisetting();
-
-    this.pfesi = {
-      IsAllowOverridingPf: pfesidata.IsPF_Allow_overriding,
-      PFEnable: pfData.IsActive,
-      IsPfCalculateInPercentage: pfData.CalculateInPercentage,
-      IsPfAmountLimitStatutory: pfesidata.IsPF_Limit_Amount_Statutory,
-      IsPfEmployerContribution: pfesidata.IsPF_EmployerContribution_Outside_GS,
-      EmployerPFLimit: pfData.EmployerContribution,
-      IsHidePfEmployer: pfData.IncludeInPayslip,
-      IsPayOtherCharges: pfesidata.IsPF_OtherChgarges,
-      IsAllowVPF: pfesidata.IsPFAllowVPF,
-      EsiEnable: esiData.IsActive,
-      EligibilitySalaryForESI: esiData.MaxLimit,
-      EsiEmployeeContribution: esiData.EmployeeContribution,
-      EsiEmployerContribution: esiData.EmployerContribution,
-      IsEsiEmployerContributionOutside: pfesidata.IsESI_EmployerContribution_Outside_GS,
-      IsAllowOverridingEsi: pfesidata.IsESI_Allow_overriding,
-      IsHideEsiEmployer: esiData.IncludeInPayslip,
-      IsEsiExcludeEmployerShare: pfesidata.IsESI_Exclude_EmployerShare,
-      IsEsiExcludeEmployeeGratuity: pfesidata.IsESI_Exclude_EmpGratuity,
-      IsRestrictEsi: pfesidata.IsESI_Restrict_Statutory,
-      IsIncludeBonusEsiEligibility: pfesidata.IsESI_IncludeBonuses_Eligibility,
-      IsIncludeBonusEsiContribution: pfesidata.IsESI_IncludeBonuses_Calculation,
-      IsEmployerPFLimitContribution: pfesidata.IsPF_Employer_LimitContribution
-    };
   }
 
   initForm() {
     this.PFandESIForm = this.fb.group({
-      PFEnable: new FormControl (this.pfesi.PFEnable? 'true' : 'false'),
-      IsPfAmountLimitStatutory: new FormControl(this.pfesi.IsPfAmountLimitStatutory),
-      IsPfCalculateInPercentage: new FormControl(this.pfesi.IsPfCalculateInPercentage),
-      IsAllowOverridingPf: new FormControl (this.pfesi.IsAllowOverridingPf),
-      IsPfEmployerContribution: new FormControl (this.pfesi.IsPfEmployerContribution),
-      EmployerPFLimit: new FormControl (this.pfesi.EmployerPFLimit),
-      IsHidePfEmployer: new FormControl (this.pfesi.IsHidePfEmployer),
-      IsPayOtherCharges: new FormControl (this.pfesi.IsPayOtherCharges),
-      IsAllowVPF: new FormControl (this.pfesi.IsAllowVPF),
-      EsiEnable: new FormControl (this.pfesi.EsiEnable? 'true' : 'false'),
-      EligibilitySalaryForESI: new FormControl (this.pfesi.EligibilitySalaryForESI),
-      EsiEmployeeContribution: new FormControl (this.pfesi.EsiEmployeeContribution),
-      EsiEmployerContribution: new FormControl (this.pfesi.EsiEmployerContribution),
-      IsAllowOverridingEsi: new FormControl (this.pfesi.IsAllowOverridingEsi),
-      IsHideEsiEmployer: new FormControl(this.pfesi.IsHideEsiEmployer),
-      IsEsiExcludeEmployerShare: new FormControl(this.pfesi.IsEsiExcludeEmployerShare),
-      IsEsiExcludeEmployeeGratuity: new FormControl(this.pfesi.IsEsiExcludeEmployeeGratuity),
-      IsEsiEmployerContributionOutside: new FormControl(this.pfesi.IsEsiEmployerContributionOutside),
-      IsRestrictEsi: new FormControl(this.pfesi.IsRestrictEsi),
-      IsIncludeBonusEsiEligibility: new FormControl(this.pfesi.IsIncludeBonusEsiEligibility),
-      IsIncludeBonusEsiContribution: new FormControl(this.pfesi.IsIncludeBonusEsiContribution),
-      IsEmployerPFLimitContribution: new FormControl(this.pfesi.IsEmployerPFLimitContribution)
+      PFEnable: new FormControl (this.pfesiSetting.PFEnable? 'true' : 'false'),
+      IsPfAmountLimitStatutory: new FormControl(this.pfesiSetting.IsPfAmountLimitStatutory),
+      IsPfCalculateInPercentage: new FormControl(this.pfesiSetting.IsPfCalculateInPercentage),
+      IsAllowOverridingPf: new FormControl (this.pfesiSetting.IsAllowOverridingPf),
+      IsPfEmployerContribution: new FormControl (this.pfesiSetting.IsPfEmployerContribution),
+      EmployerPFLimit: new FormControl (this.pfesiSetting.EmployerPFLimit),
+      IsHidePfEmployer: new FormControl (this.pfesiSetting.IsHidePfEmployer),
+      IsPayOtherCharges: new FormControl (this.pfesiSetting.IsPayOtherCharges),
+      IsAllowVPF: new FormControl (this.pfesiSetting.IsAllowVPF),
+      EsiEnable: new FormControl (this.pfesiSetting.EsiEnable? 'true' : 'false'),
+      MaximumGrossForESI: new FormControl (this.pfesiSetting.MaximumGrossForESI),
+      EsiEmployeeContribution: new FormControl (this.pfesiSetting.EsiEmployeeContribution),
+      EsiEmployerContribution: new FormControl (this.pfesiSetting.EsiEmployerContribution),
+      IsAllowOverridingEsi: new FormControl (this.pfesiSetting.IsAllowOverridingEsi),
+      IsHideEsiEmployer: new FormControl(this.pfesiSetting.IsHideEsiEmployer),
+      IsEsiExcludeEmployerShare: new FormControl(this.pfesiSetting.IsEsiExcludeEmployerShare),
+      IsEsiExcludeEmployeeGratuity: new FormControl(this.pfesiSetting.IsEsiExcludeEmployeeGratuity),
+      IsEsiEmployerContributionOutside: new FormControl(this.pfesiSetting.IsEsiEmployerContributionOutside),
+      IsRestrictEsi: new FormControl(this.pfesiSetting.IsRestrictEsi),
+      IsIncludeBonusEsiEligibility: new FormControl(this.pfesiSetting.IsIncludeBonusEsiEligibility),
+      IsIncludeBonusEsiContribution: new FormControl(this.pfesiSetting.IsIncludeBonusEsiContribution),
+      IsEmployerPFLimitContribution: new FormControl(this.pfesiSetting.IsEmployerPFLimitContribution),
+      CompanyId: new FormControl(this.companyId),
+      PfEsi_setting_Id: new FormControl(this.pfesiSetting.PfEsi_setting_Id)
     })
   }
 
   submitPFESISetting() {
     this.isLoading = true;
-    let data:Ipfesi = this.PFandESIForm.value;
+    let data:pfesisetting = this.PFandESIForm.value;
 
     if (data.IsPfEmployerContribution == false) {
       data.IsEmployerPFLimitContribution = false;
@@ -162,46 +98,7 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
     if (data.IsPfCalculateInPercentage == false)
       data.IsAllowOverridingPf = false;
 
-
-    var ESISetting = {
-      ComponentId: 'ESI',
-      MaxLimit: data.EligibilitySalaryForESI,
-      EmployeeContribution: data.EsiEmployeeContribution,
-      EmployerContribution: data.EsiEmployerContribution,
-      IsActive: data.EsiEnable,
-      IsDeductions: true,
-      IncludeInPayslip: data.IsHideEsiEmployer
-    };
-    var PFSetting = {
-      ComponentId: 'PF',
-      CalculateInPercentage: data.IsPfCalculateInPercentage,
-      EmployerContribution: data.EmployerPFLimit,
-      IsActive: data.PFEnable,
-      IsDeductions: true,
-      IncludeInPayslip: data.IsHidePfEmployer
-    }
-    var PFESISetting = {
-      PfEsi_setting_Id: 1,
-      IsPF_Limit_Amount_Statutory: data.IsPfAmountLimitStatutory,
-      IsPF_Allow_overriding: data.IsAllowOverridingPf,
-      IsPF_EmployerContribution_Outside_GS: data.IsPfEmployerContribution,
-      IsPF_OtherChgarges: data.IsPayOtherCharges,
-      IsPFAllowVPF: data.IsAllowVPF,
-      IsESI_Allow_overriding: data.IsAllowOverridingEsi,
-      IsESI_EmployerContribution_Outside_GS: data.IsEsiEmployerContributionOutside,
-      IsESI_Exclude_EmployerShare: data.IsEsiExcludeEmployerShare,
-      IsESI_Exclude_EmpGratuity: data.IsEsiExcludeEmployeeGratuity,
-      IsESI_Restrict_Statutory: data.IsRestrictEsi,
-      IsESI_IncludeBonuses_Eligibility: data.IsIncludeBonusEsiEligibility,
-      IsESI_IncludeBonuses_Calculation: data.IsIncludeBonusEsiContribution,
-      IsPF_Employer_LimitContribution: data.IsEmployerPFLimitContribution
-    }
-
-    let formData = new FormData();
-    formData.append('PFSetting', JSON.stringify(PFSetting));
-    formData.append('ESISetting', JSON.stringify(ESISetting));
-    formData.append('PFESISetting', JSON.stringify(PFESISetting));
-    this.http.post('Settings/PfEsiSetting', formData).then((response:ResponseModel) => {
+    this.http.put(`Settings/PfEsiSetting/${this.companyId}`, data).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         Toast("Setting changed")
         this.isLoading = false;
@@ -241,45 +138,29 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
   };
 }
 
-
-class Ipfesi {
-  PFEnable: boolean = null;
-  IsPfAmountLimitStatutory: boolean = null;
-  IsPfCalculateInPercentage: boolean = null;
-  IsAllowOverridingPf: boolean = null;
-  IsPfEmployerContribution: boolean = null;
-  EmployerPFLimit: number = null;
-  IsHidePfEmployer: boolean = null;
-  IsPayOtherCharges: boolean = null;
-  IsAllowVPF: boolean = null;
-  EsiEnable: boolean = null;
-  EligibilitySalaryForESI: number = null;
-  EsiEmployeeContribution: number = null;
-  EsiEmployerContribution: number = null;
-  IsAllowOverridingEsi: boolean = null;
-  IsHideEsiEmployer: boolean = null;
-  IsEsiExcludeEmployerShare: boolean = null;
-  IsEsiExcludeEmployeeGratuity: boolean = null;
-  IsRestrictEsi: boolean = null;
-  IsIncludeBonusEsiEligibility: boolean = null;
-  IsIncludeBonusEsiContribution: boolean = null;
-  IsEsiEmployerContributionOutside: boolean = null;
-  IsEmployerPFLimitContribution: boolean = null;
-}
-
 class pfesisetting {
-  PfEsi_setting_Id: number =0;
-  IsPF_Limit_Amount_Statutory: boolean = false;
-	IsPF_Allow_overriding: boolean = false;
-  IsPF_EmployerContribution_Outside_GS: boolean = false;
-  IsPF_OtherChgarges: boolean = false;
-	IsPFAllowVPF: boolean = false;
-  IsESI_Allow_overriding: boolean = false;
-  IsESI_EmployerContribution_Outside_GS: boolean = false;
-  IsESI_Exclude_EmployerShare: boolean = false;
-  IsESI_Exclude_EmpGratuity: boolean = false;
-  IsESI_Restrict_Statutory: boolean = false;
-  IsESI_IncludeBonuses_Eligibility: boolean = false;
-  IsESI_IncludeBonuses_Calculation: boolean = false;
-  IsPF_Employer_LimitContribution: boolean = false;
+  PfEsi_setting_Id: number = 0;
+  PFEnable: boolean = false;
+  IsPfAmountLimitStatutory: boolean = false;
+  IsPfCalculateInPercentage: boolean = false;
+  IsAllowOverridingPf: boolean = false;
+  IsPfEmployerContribution: boolean = false;
+  IsHidePfEmployer: boolean = false;
+  IsPayOtherCharges: boolean = false;
+  IsAllowVPF: boolean = false;
+  EsiEnable: boolean = false;
+  IsAllowOverridingEsi: boolean = false;
+  IsHideEsiEmployer: boolean = false;
+  IsEsiExcludeEmployerShare: boolean = false;
+  IsEsiExcludeEmployeeGratuity: boolean = false;
+  IsEsiEmployerContributionOutside: boolean = false;
+  IsRestrictEsi: boolean = false;
+  IsIncludeBonusEsiEligibility: boolean = false;
+  IsIncludeBonusEsiContribution: boolean = false;
+  IsEmployerPFLimitContribution: boolean = false;
+  EmployerPFLimit: number = 0;
+  MaximumGrossForESI: number = 0;
+  EsiEmployeeContribution: number = 0;
+  EsiEmployerContribution: number = 0;
+  CompanyId: number = 0;  
 }
