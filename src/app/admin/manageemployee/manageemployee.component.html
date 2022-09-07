@@ -41,14 +41,14 @@
                   <div class="col-md-12 m-0 row">
                     <div class="col-md-4 mb-3">
                       <label class="form-label">First Name *</label>
-                      <input inputtype="mandatory" class="form-control" placeholder="First Name" transform=""
+                      <input inputtype="mandatory" class="form-control" placeholder="First Name" transform="" oninput="this.value = this.value.toUpperCase()"
                         [ngClass]="{'error-field': submitted && f.FirstName.errors !== null && f.FirstName.errors.required}"
                         name="FirstName" formControlName="FirstName" />
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Last Name *</label>
                       <input class="form-control" placeholder="Last Name" name="LastName" formControlName="LastName"
-                        transform=""
+                        transform="" oninput="this.value = this.value.toUpperCase()"
                         [ngClass]="{'error-field': submitted && f.LastName.errors !== null && f.LastName.errors.required}" />
                     </div>
                     <div class="col-md-4 mb-3">
@@ -58,7 +58,7 @@
                         OnlyNumber="10" name="Mobile" formControlName="Mobile" />
                     </div>
                   </div>
-  
+
                   <div class="col-md-12 m-0 row">
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Email Id </label>
@@ -87,7 +87,7 @@
                       </form>
                     </div>
                   </div>
-  
+
                   <div class="col-md-12 m-0 row">
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Select Leave Plan</label>
@@ -98,7 +98,7 @@
                       </select>
                     </div>
                   </div>
-  
+
                   <div class="col-md-12 m-0 row">
                     <div class="col-6 p-3 pt-4">
                       <p>Select your gender</p>
@@ -205,26 +205,26 @@
                     <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Father Name</label>
-                        <input class="form-control" placeholder="Mother Name" name="FatherName" transform=""
+                        <input class="form-control" placeholder="Mother Name" name="FatherName" transform="" oninput="this.value = this.value.toUpperCase()"
                           formControlName="FatherName" />
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Mother Name</label>
-                        <input class="form-control" placeholder="Mother Name" name="MotherName" transform=""
+                        <input class="form-control" placeholder="Mother Name" name="MotherName" transform="" oninput="this.value = this.value.toUpperCase()"
                           formControlName="MotherName" />
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Spouse Name (if maried)</label>
-                        <input class="form-control" placeholder="Spouse Name" name="SpouseName" transform=""
+                        <input class="form-control" placeholder="Spouse Name" name="SpouseName" transform="" oninput="this.value = this.value.toUpperCase()"
                           formControlName="SpouseName" />
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Domain</label>
-                        <input class="form-control" placeholder="Domain" name="Domain" formControlName="Domain" />
+                        <input class="form-control" placeholder="Domain" name="Domain" formControlName="Domain" oninput="this.value = this.value.toUpperCase()"/>
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Specification</label>
-                        <input class="form-control" placeholder="Specification" name="Specification"
+                        <input class="form-control" placeholder="Specification" name="Specification" oninput="this.value = this.value.toUpperCase()"
                           formControlName="Specification" />
                       </div>
                       <!-- <div class="col-md-6 mb-3">
@@ -234,26 +234,26 @@
                       </div> -->
                       <div class="col-md-6 mb-3">
                         <label class="form-label">State</label>
-                        <input class="form-control" placeholder="State" name="State" formControlName="State" />
+                        <input class="form-control" placeholder="State" name="State" formControlName="State" oninput="this.value = this.value.toUpperCase()"/>
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">City</label>
-                        <input class="form-control" placeholder="City" name="City" formControlName="City" />
+                        <input class="form-control" placeholder="City" name="City" formControlName="City" oninput="this.value = this.value.toUpperCase()"/>
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Pincode</label>
-                        <input class="form-control" placeholder="Pincode" OnlyNumber="6" name="Pincode"
+                        <input class="form-control" placeholder="Pincode" OnlyNumber="6" name="Pincode" oninput="this.value = this.value.toUpperCase()"
                           formControlName="Pincode" />
                       </div>
                       <div class="col-md-12 mb-3">
                         <label class="form-label">Address</label>
-                        <textarea rows="5" class="form-control" placeholder="Address" name="Address"
+                        <textarea rows="5" class="form-control" placeholder="Address" name="Address" oninput="this.value = this.value.toUpperCase()"
                           formControlName="Address"></textarea>
                       </div>
                     </div>
                   </div>
                 </div>
-  
+
                 <div class="col-md-6">
                   <div class="x_panel">
                     <div class="x_header">
@@ -274,12 +274,12 @@
                       </div>
                       <div class="col-md-12 mb-3">
                         <label class="form-label">Bank Account No.#</label>
-                        <input class="form-control" placeholder="Bank Account No.#" name="AccountNumber"
+                        <input class="form-control" placeholder="Bank Account No.#" name="AccountNumber" oninput="this.value = this.value.toUpperCase()"
                           formControlName="AccountNumber" />
                       </div>
                       <div class="col-md-12 mb-3">
                         <label class="form-label">Bank Name</label>
-                        <input class="form-control" placeholder="Bank Name" name="BankName" transform=""
+                        <input class="form-control" placeholder="Bank Name" name="BankName" transform="" oninput="this.value = this.value.toUpperCase()"
                           formControlName="BankName" />
                       </div>
                       <div class="col-md-6 mb-3">
@@ -318,7 +318,7 @@
                   </div>
                 </div>
               </div>
-  
+
               <div class="col-12 row m-0 pt-5">
                 <div class="col-md-12 button groups text-end">
                   <div class="btn-group">
