@@ -19,12 +19,14 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   isPageReady: boolean = false;
   leaveDetailForm: FormGroup;
   leaveDetail: LeaveDetail = new LeaveDetail();
+  managementLeaveDetail: Managementleave = new Managementleave();
   leaveAccrualForm: FormGroup;
   leaveRestrictionForm: FormGroup;
   applyForLeaveForm: FormGroup;
   holidayWeekendOffForm: FormGroup;
   leaveApprovalForm: FormGroup;
   yearEndProcessForm: FormGroup;
+  managementLeave: FormGroup;
   leaveAccrual: LeaveAccrual = new LeaveAccrual();
   appplyingForLeave: ApplyingForLeave = new ApplyingForLeave();
   leaveRestriction: LeaveRestriction = new LeaveRestriction();
@@ -60,6 +62,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       if (data.leavePlanRestriction)
         this.leaveRestriction = data.leavePlanRestriction;
 
+      if (data.managementLeave)
+        this.managementLeaveDetail = data.managementLeave;
+
       if (data.leaveAccrual)
         this.leaveAccrual = data.leaveAccrual;
 
@@ -77,6 +82,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
 
       this.initLeaveAccrual();
+      this.initManagementLeave();
       this.initApplyForLeave();
       this.initLeaveDetail();
       this.initLeaveRestriction();
@@ -99,7 +105,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
-    this.test();
     let data = this.nav.getValue();
     if(data != null) {
       this.isPageReady = true;
@@ -133,9 +138,14 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       ExtraLeaveLimit: new FormControl(this.leaveDetail.ExtraLeaveLimit),
       IsNoLeaveAfterDate: new FormControl(this.leaveDetail.IsNoLeaveAfterDate),
       LeaveNotAllocatedIfJoinAfter: new FormControl(this.leaveDetail.LeaveNotAllocatedIfJoinAfter),
-      CanManagerAwardCausalLeave: new FormControl(this.leaveDetail.CanManagerAwardCausalLeave? 'true':'false'),
       CanCompoffAllocatedAutomatically: new FormControl(this.leaveDetail.CanCompoffAllocatedAutomatically? 'true':'false'),
       CanCompoffCreditedByManager: new FormControl(this.leaveDetail.CanCompoffCreditedByManager? 'true':'false')
+    })
+  }
+  
+  initManagementLeave() {
+    this.managementLeave = this.fb.group({
+      CanManagerAwardCausalLeave: new FormControl(this.managementLeaveDetail.CanManagerAwardCausalLeave? 'true':'false')
     })
   }
 
@@ -146,6 +156,24 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let value = this.leaveDetailForm.value;
     if (value && errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateLeaveDetail/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
+        this.bindPage(res.ResponseBody);
+        this.configPageNo = this.configPageNo + 1;
+        this.ConfigPageTab(this.configPageNo);
+        this.submit = false;
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      });
+    }
+  }
+
+  submitManagementLeave() {
+    this.submit = true;
+    this.isLoading = true
+    let errorCounter = 0;
+    let value = this.managementLeave.value;
+    if (value && errorCounter == 0) {
+      this.http.put(`ManageLeavePlan/UpdateLeaveFromManagement/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.configPageNo = this.configPageNo + 1;
         this.ConfigPageTab(this.configPageNo);
@@ -243,8 +271,11 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
       CanApplyEntireLeave: new FormControl(this.leaveAccrual.CanApplyEntireLeave ?'true' : 'false'),
       IsLeaveAccruedPatternAvail: new FormControl(this.leaveAccrual.IsLeaveAccruedPatternAvail?'true' : 'false'),
+      IsLeaveAccruedProrateDefined: new FormControl(this.leaveAccrual.IsLeaveAccruedProrateDefined),
       LeaveDistributionSequence: new FormControl(this.leaveAccrual.LeaveDistributionSequence),
       LeaveDistributionAppliedFrom: new FormControl(this.leaveAccrual.LeaveDistributionAppliedFrom),
+      
+      LeaveDistributionRateOnStartOfPeriod: this.buildFormArrayBetweenProbationPeriod(),
 
       IsLeavesProratedForJoinigMonth: new FormControl(this.leaveAccrual.IsLeavesProratedForJoinigMonth ? 'true' : 'false'),
       JoiningMonthLeaveDistribution: this.buildFormArrayBetweenJoiningDate(),
@@ -374,6 +405,51 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       this.addFormBetweenJoiningDate();
   }
 
+  buildFormArrayForLeaveProrate(): FormArray {
+    let data = this.leaveAccrual.LeaveDistributionRateOnStartOfPeriod;
+    let dataArray: FormArray = this.fb.array([]);
+
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          FromDate: new FormControl(data[i].FromDate),
+          ToDate: new FormControl(data[i].ToDate),
+          AllocatedLeave: new FormControl(data[i].AllocatedLeave)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.createFormBetweenJoiningDate());
+    }
+
+    return dataArray;
+  }
+
+  createFormLeaveProrate(): FormGroup {
+    return this.fb.group({
+      FromDate: new FormControl(0),
+      ToDate: new FormControl(0),
+      AllocatedLeave: new FormControl(0)
+    });
+  }
+
+  get formLeaveProrate() {
+    return this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod') as FormArray;
+  }
+
+  addFormLeaveProrate() {
+    let item = this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod') as FormArray;
+    item.push(this.createFormLeaveProrate());
+  }
+
+  removeFormLeaveProrate(i: number) {
+    let item = this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod') as FormArray;
+    item.removeAt(i);
+    if (item.length === 0)
+      this.addFormLeaveProrate();
+  }
+
   buildFormArrayBetweenProbationPeriod(): FormArray {
     let data = this.leaveAccrual.ExitMonthLeaveDistribution;
     let dataArray: FormArray = this.fb.array([]);
@@ -499,10 +575,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       DaysAfterJoining: new FormControl(this.leaveRestriction.DaysAfterJoining),
       IsAvailRestrictedLeavesInProbation: new FormControl(this.leaveRestriction.IsAvailRestrictedLeavesInProbation ? 'true' : 'false'),
       LeaveLimitInProbation: new FormControl(this.leaveRestriction.LeaveLimitInProbation),
-
-      IsConsecutiveLeaveLimit: new FormControl(this.leaveRestriction.IsConsecutiveLeaveLimit ? 'true' : 'false'),
-      ConsecutiveDaysLimit: new FormControl(this.leaveRestriction.ConsecutiveDaysLimit),
-
       IsLeaveInNoticeExtendsNoticePeriod: new FormControl(this.leaveRestriction.IsLeaveInNoticeExtendsNoticePeriod ? 'true' : 'false'),
       NoOfTimesNoticePeriodExtended: new FormControl(this.leaveRestriction.NoOfTimesNoticePeriodExtended),
 
@@ -876,9 +948,11 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.leaveAccrualForm.get('IsLeaveAccruedPatternAvail').setValue('false');
         this.leaveAccrualForm.get(e.target.name).setValue('true');
         if (this.leaveAccrualForm.get('IsLeaveAccruedPatternAvail').value == 'true')
-          document.getElementsByName('LeaveBalanceCalculated')[0].classList.remove('d-none');
+          document.getElementById('LeaveBalanceCalculated').classList.remove('d-none');
         else
-          document.getElementsByName('LeaveBalanceCalculated')[0].classList.add('d-none');
+          document.getElementById('LeaveBalanceCalculated').classList.add('d-none');
+        break;
+      case 2:
         break;
       case 3:
         this.leaveAccrualForm.get('IsNoLeaveOnNoticePeriod').setValue('false');
@@ -941,7 +1015,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       case 10:
           if (e.target.value == 'true') {
             document.getElementsByName('AfterHowManyDays')[0].removeAttribute('readonly');
-
           } else {
             document.getElementsByName('AfterHowManyDays')[0].setAttribute('readonly', '');
             this.leaveAccrualForm.get("AfterHowManyDays").setValue(0);
@@ -951,7 +1024,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   ConfigPageTab(index: number) {
-    if (index > 0 && index <= 7) {
+    if (index > 0 && index <= 8) {
       this.configPageNo = index;
       let tab = document.getElementById('leaveConfigModal');
       let elem = tab.querySelectorAll('div[name="tab-index"]');
@@ -979,9 +1052,12 @@ class LeaveDetail {
   ExtraLeaveLimit: number = 0;
   LeaveNotAllocatedIfJoinAfter: number = 0;
   IsNoLeaveAfterDate: boolean = false;
-  CanManagerAwardCausalLeave: boolean = false;
   CanCompoffAllocatedAutomatically: boolean = false;
   CanCompoffCreditedByManager: boolean = false;
+}
+
+class Managementleave {
+  CanManagerAwardCausalLeave: boolean = false;
 }
 
 class LeaveAccrual {
@@ -989,7 +1065,9 @@ class LeaveAccrual {
   LeavePlanTypeId: number = 0;
   CanApplyEntireLeave: boolean = null;
   IsLeaveAccruedPatternAvail: boolean = null;
+  IsLeaveAccruedProrateDefined: boolean = false;
   JoiningMonthLeaveDistribution: any = {};
+  LeaveDistributionRateOnStartOfPeriod: any = {};
   ExitMonthLeaveDistribution: any = {};
   AccrualProrateDetail: any = {};
   LeaveDistributionAppliedFrom: number = 0;
@@ -1051,10 +1129,6 @@ class LeaveRestriction {
   DaysAfterJoining: number = 0;
   IsAvailRestrictedLeavesInProbation: boolean = false;
   LeaveLimitInProbation: number = 0;
-
-  IsConsecutiveLeaveLimit: boolean = false;
-  ConsecutiveDaysLimit: number = 0;
-
   IsLeaveInNoticeExtendsNoticePeriod: boolean = false;
   NoOfTimesNoticePeriodExtended: number = 0;
 

@@ -157,7 +157,6 @@ export class SettingsComponent implements OnInit {
 
   initForm() {
     this.companyGroupForm = this.fb.group({
-      OrganizationName: new FormControl(this.currentCompnay.OrganizationName, [Validators.required]),
       CompanyName: new FormControl(this.currentCompnay.CompanyName, [Validators.required]),
       CompanyDetail: new FormControl(this.currentCompnay.CompanyDetail, [Validators.required]),
       InCorporationDate: new FormControl(this.currentCompnay.InCorporationDate, [Validators.required]),
@@ -241,7 +240,6 @@ export class SettingsComponent implements OnInit {
 
 class CompanyGroup {
   CompanyId: number = 0;
-  OrganizationName: string = '';
   CompanyName: string = '';
   CompanyDetail: string = '';
   InCorporationDate: Date = null;
