@@ -35,14 +35,14 @@
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">Account No.#</label>
-                      <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNumber"
-                        [ngClass]="{'error-field': submitted && f.AccountNumber.errors !== null && f.AccountNumber.errors.required}"
-                        formControlName="AccountNumber" />
+                      <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNo"
+                        [ngClass]="{'error-field': submitted && f.AccountNo.errors !== null && f.AccountNo.errors.required}"
+                        formControlName="AccountNo" />
                     </div>
                     <div class="col-md-4 my-2">
-                      <label class="form-label">IFSCCode Code</label>
-                      <input placeholder="IFSCCode Code" class="form-control" name="IFSCCode"
-                        oninput="this.value = this.value.toUpperCase()" formControlName="IFSCCode" />
+                      <label class="form-label">IFSC Code</label>
+                      <input placeholder="IFSC Code" class="form-control" name="IFSC"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" />
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">Branch Name</label>
@@ -70,13 +70,13 @@
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">GSTIN No.#</label>
-                      <input placeholder="GSTIN No.#" class="form-control" name="GSTNO"
-                        oninput="this.value = this.value.toUpperCase()" formControlName="GSTNO" />
+                      <input placeholder="GSTIN No.#" class="form-control" name="GSTNo"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="GSTNo" />
                     </div>
                     <div class="col-md-4 my-2">
                       <label class="form-label">Trade Liecence No.</label>
-                      <input placeholder="Trade Liecence Number" class="form-control" name="TradeLiecenceNumber"
-                        oninput="this.value = this.value.toUpperCase()" formControlName="TradeLiecenceNumber" />
+                      <input placeholder="Trade Liecence Number" class="form-control" name="TradeLicenseNo"
+                        oninput="this.value = this.value.toUpperCase()" formControlName="TradeLicenseNo" />
                     </div>
                   </div>
                 </div>

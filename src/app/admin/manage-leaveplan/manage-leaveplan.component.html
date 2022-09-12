@@ -44,7 +44,7 @@
                     <a href="javascript:void(0)" (click)="ConfigPageTab(2)" class="text-decoration-none text-muted">
                       <div name="tab-index" [attr.index]="2" class="d-flex align-items-center">
                         <div class="index-count border me-3 rounded-circle fw-bold">2</div>
-                        <span>LEAVE ACCRUAL</span>
+                        <span>LEAVE FROM MANAGMENT</span>
                       </div>
                     </a>
                   </li>
@@ -52,7 +52,7 @@
                     <a href="javascript:void(0)" (click)="ConfigPageTab(3)" class="text-decoration-none text-muted">
                       <div name="tab-index" [attr.index]="3" class="d-flex align-items-center">
                         <div class="index-count border me-3 rounded-circle fw-bold">3</div>
-                        <span>APPLYING FOR LEAVE</span>
+                        <span>LEAVE ACCRUAL</span>
                       </div>
                     </a>
                   </li>
@@ -60,7 +60,7 @@
                     <a href="javascript:void(0)" (click)="ConfigPageTab(4)" class="text-decoration-none text-muted">
                       <div name="tab-index" [attr.index]="4" class="d-flex align-items-center">
                         <div class="index-count border me-3 rounded-circle fw-bold">4</div>
-                        <span>LEAVE RESTRICTIONS</span>
+                        <span>APPLYING FOR LEAVE</span>
                       </div>
                     </a>
                   </li>
@@ -68,7 +68,7 @@
                     <a href="javascript:void(0)" (click)="ConfigPageTab(5)" class="text-decoration-none text-muted">
                       <div name="tab-index" [attr.index]="5" class="d-flex align-items-center">
                         <div class="index-count border me-3 rounded-circle fw-bold">5</div>
-                        <span>HOLIDAYS AND WEEKOFFS</span>
+                        <span>LEAVE RESTRICTIONS</span>
                       </div>
                     </a>
                   </li>
@@ -76,7 +76,7 @@
                     <a href="javascript:void(0)" (click)="ConfigPageTab(6)" class="text-decoration-none text-muted">
                       <div name="tab-index" [attr.index]="6" class="d-flex align-items-center">
                         <div class="index-count border me-3 rounded-circle fw-bold">6</div>
-                        <span>LEAVE APPROVAL</span>
+                        <span>HOLIDAYS AND WEEKOFFS</span>
                       </div>
                     </a>
                   </li>
@@ -84,11 +84,20 @@
                     <a href="javascript:void(0)" (click)="ConfigPageTab(7)" class="text-decoration-none text-muted">
                       <div name="tab-index" [attr.index]="7" class="d-flex align-items-center">
                         <div class="index-count border me-3 rounded-circle fw-bold">7</div>
+                        <span>LEAVE APPROVAL</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="py-3">
+                    <a href="javascript:void(0)" (click)="ConfigPageTab(8)" class="text-decoration-none text-muted">
+                      <div name="tab-index" [attr.index]="8" class="d-flex align-items-center">
+                        <div class="index-count border me-3 rounded-circle fw-bold">8</div>
                         <span>YEAR END PROCESSING</span>
                       </div>
                     </a>
                   </li>
                 </ul>
+                <button class="btn btn-primary" (click)="test()">Call For Leave</button>
               </div>
             </div>
             <div class="col-md-9 panel-h">
@@ -167,6 +176,17 @@
                             title="In case this option is not selected the entire quota for the month will be allocated to employees, irrespective of their date of joining"></i></span>
                       </div>
                     </div>
+                    <div class="text-end my-3">
+                      <button class="btn btn-primary-c" (click)="submitLeaveQuota()">
+                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                        <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
+                      </button>
+                    </div>
+                  </form>
+                </ng-container>
+
+                <ng-container *ngIf="configPageNo == 2">
+                  <form [formGroup]="managementLeave">
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Can reporting manager award Casual credits to his reportees?</h6>
                       <div class="form-check">
@@ -185,7 +205,7 @@
                       </div>
                     </div>
                     <div class="text-end my-3">
-                      <button class="btn btn-primary-c" (click)="submitLeaveQuota()">
+                      <button class="btn btn-primary-c" (click)="submitManagementLeave()">
                         <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                       </button>
@@ -193,7 +213,7 @@
                   </form>
                 </ng-container>
 
-                <ng-container *ngIf="configPageNo == 2">
+                <ng-container *ngIf="configPageNo == 3">
                   <form [formGroup]="leaveAccrualForm">
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">How is available leave balance of an employee calculated?</h6>
@@ -211,30 +231,89 @@
                           Leave are accrued (earned) at regular intervals (Define accrual pattern below).
                         </label>
                       </div>
-                      <div [ngClass]="{'d-none': leaveAccrualForm.controls.IsLeaveAccruedPatternAvail.value == 'false'}"
-                        class="my-4" name="LeaveBalanceCalculated">
-                        <h6 class="fw-bold text-dark">Leave accrual of Annual quota happens at the following rate</h6>
-                        <div class="d-flex align-items-center">
-                          <div class="col-md-1 me-3">
-                            <select class="form-select" formControlName="LeaveDistributionSequence">
-                              <option value="1">Monthly</option>
-                              <option value="2">Quarterly</option>
-                              <option value="3">Half Yearly</option>
-                            </select>
-                          </div>
-                          <div class="col-md-1 me-3">
-                            <input type="text" class="form-control" OnlyNumber="2" name="LeaveDistributionAppliedFrom"
-                              formControlName="LeaveDistributionAppliedFrom" (keyup)="findDay($event)">
-                          </div>
-                          <label name="AccrualRateBasedon" class="form-label d-flex">
-                            <div class="ps-1" [ngSwitch]="leaveAccrualForm.controls.LeaveDistributionSequence.value">
-                              <div *ngSwitchCase="1">of month</div>
-                              <div *ngSwitchCase="2">day of the Quarter</div>
-                              <div *ngSwitchDefault>day of the Half Year</div>
+                      <ng-container>
+                        <div id="LeaveBalanceCalculated" [ngClass]="{'d-none': leaveAccrualForm.controls.IsLeaveAccruedPatternAvail.value == 'false'}">
+                          <div class="my-4" name="LeaveBalanceCalculated">
+                            <h6 class="fw-bold text-dark">Leave accrual of Annual quota happens at the following rate</h6>
+                            <div class="d-flex align-items-center">
+                              <div class="col-md-1 me-3">
+                                <select class="form-select" formControlName="LeaveDistributionSequence">
+                                  <option value="1">Monthly</option>
+                                  <option value="2">Quarterly</option>
+                                  <option value="3">Half Yearly</option>
+                                </select>
+                              </div>
+                              <label name="AccrualRateBasedon" class="form-label d-flex">
+                                <div class="ps-1 pe-1">
+                                  <div>Accrual (or earned) </div>
+                                </div>
+                              </label>
+                              <div class="col-md-1 me-3">
+                                <input type="text" class="form-control" OnlyNumber="2" name="LeaveDistributionAppliedFrom"
+                                  formControlName="LeaveDistributionAppliedFrom" (keyup)="findDay($event)">
+                              </div>
+                              <label name="AccrualRateBasedon" class="form-label d-flex">
+                                <div class="ps-1" [ngSwitch]="leaveAccrualForm.controls.LeaveDistributionSequence.value">
+                                  <div *ngSwitchCase="1">days on every month</div>
+                                  <div *ngSwitchCase="2">days on every Quarter</div>
+                                  <div *ngSwitchDefault>days Half Year</div>
+                                </div>
+                              </label>
                             </div>
-                          </label>
+                          </div>
+    
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="true" name="IsLeaveAccruedProrateDefined"
+                              formControlName="IsLeaveAccruedProrateDefined" (click)="toggleCurrent(2, $event)">
+                            <label class="form-check-label">
+                              Define leave accrued (earned) rate else defined above quota will be calculated automatically (recommended to unselected).
+                            </label>
+                          </div>
+                          <div
+                            [ngClass]="{'d-none': leaveAccrualForm.controls.IsLeaveAccruedProrateDefined.value == false}">
+                            <ng-container formArrayName="LeaveDistributionRateOnStartOfPeriod">
+                              <div class="my-4" [formGroupName]="i"
+                                *ngFor="let item of formLeaveProrate.controls; let i = index">
+                                <div class="card bg-light p-3">
+                                  <div class="row align-items-center">
+                                    <div class="col-md-10">
+                                      <h6 class="fw-bold text-dark">Define how leave will get credited to employee's bucket
+                                      </h6>
+                                      <div class="d-flex align-items-center">
+                                        <label class="form-label me-3">If from date is</label>
+                                        <div class="col-md-1">
+                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate">
+                                        </div>
+                                        <span class="px-2">to</span>
+                                        <div class="col-md-1 mx-3">
+                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate">
+                                        </div>
+                                        <label class="form-label">then </label>
+                                        <div class="col-md-1 mx-3">
+                                          <input type="text" class="form-control"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'"
+                                            formControlName="AllocatedLeave">
+                                        </div>
+                                        <label class="form-label">days(s) will be accrualed or earned.</label>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                      <a href="javascript:void(0)" class="text-decoration-none text-secondary"
+                                        (click)="addFormLeaveProrate()">
+                                        <i class="fa fa-plus-circle fa-lg"></i>
+                                      </a>
+                                      <a href="javascript:void(0)" class="text-decoration-none text-secondary"
+                                        (click)="removeFormLeaveProrate(i)">
+                                        <i class="fa fa-minus-circle fa-lg ms-2"></i>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </div>
                         </div>
-                      </div>
+                      </ng-container>
                     </div>
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">What happens to the leave quota when an employee joins company in
@@ -716,7 +795,7 @@
                   </form>
                 </ng-container>
 
-                <ng-container *ngIf="configPageNo == 3">
+                <ng-container *ngIf="configPageNo == 4">
                   <form [formGroup]="applyForLeaveForm">
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Allow applying for half-day? <i
@@ -896,7 +975,7 @@
                   </div>
                 </ng-container>
 
-                <ng-container *ngIf="configPageNo == 4">
+                <ng-container *ngIf="configPageNo == 5">
                   <form [formGroup]="leaveRestrictionForm">
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">A new joinee employee can apply for leave?</h6>
@@ -946,35 +1025,6 @@
                               days of leave during probation (irrespective of accrual/credit).
                             </label>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="my-4">
-                      <h6 class="fw-bold text-dark">Is there a limit on the number of consecutive days this leave can be
-                        taken?
-                      </h6>
-                      <div class="form-check">
-                        <input class="form-check-input" value="false" type="radio" name="IsConsecutiveLeaveLimit"
-                          formControlName="IsConsecutiveLeaveLimit">
-                        <label class="form-check-label">
-                          No limit. All the available balance can be used at a time.
-                        </label>
-                      </div>
-                      <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input" type="radio" value="true" name="IsConsecutiveLeaveLimit"
-                          formControlName="IsConsecutiveLeaveLimit">
-                        <div class="d-flex align-items-center ms-2">
-                          <label class="form-check-label">
-                            Yes, Limit to a maximum of
-                          </label>
-                          <div class="col-md-2 mx-2">
-                            <input type="text" OnlyNumber="3" class="form-control form-control-sm"
-                              [readonly]="leaveRestrictionForm.controls.IsConsecutiveLeaveLimit.value == 'false'"
-                              formControlName="ConsecutiveDaysLimit">
-                          </div>
-                          <label for="" class="form-label">
-                            consecutive days of leave (excluding weekends & holidays).
-                          </label>
                         </div>
                       </div>
                     </div>
@@ -1153,7 +1203,7 @@
                   </div>
                 </ng-container>
 
-                <ng-container *ngIf="configPageNo == 5">
+                <ng-container *ngIf="configPageNo == 6">
                   <form [formGroup]="holidayWeekendOffForm">
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">If a holiday is adjoining a leave, is it considered a leave?</h6>
@@ -1345,7 +1395,7 @@
                   </div>
                 </ng-container>
 
-                <ng-container *ngIf="configPageNo == 6">
+                <ng-container *ngIf="configPageNo == 7">
                   <form [formGroup]="leaveApprovalForm">
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Does this leave request require an approval</h6>
@@ -1449,7 +1499,7 @@
                   </div>
                 </ng-container>
 
-                <ng-container *ngIf="configPageNo == 7">
+                <ng-container *ngIf="configPageNo == 8">
                   <form [formGroup]="yearEndProcessForm">
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">

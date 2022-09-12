@@ -57,16 +57,17 @@ export class CompanyAccountsComponent implements OnInit {
   initForm() {
     this.organizationAccountsForm = this.fb.group({
       CompanyId: new FormControl(this.CompanyAccountDetail.CompanyId),
-      GSTNO: new FormControl(this.CompanyAccountDetail.GSTNO),
-      AccountNumber: new FormControl(this.CompanyAccountDetail.AccountNumber, [Validators.required]),
+      GSTNo: new FormControl(this.CompanyAccountDetail.GSTNo),
+      AccountNo: new FormControl(this.CompanyAccountDetail.AccountNo, [Validators.required]),
       BankName: new FormControl(this.CompanyAccountDetail.BankName),
       Branch: new FormControl(this.CompanyAccountDetail.Branch),
       BranchCode: new FormControl(this.CompanyAccountDetail.BranchCode),
-      IFSCCode: new FormControl(this.CompanyAccountDetail.IFSCCode),
+      IFSC: new FormControl(this.CompanyAccountDetail.IFSC),
       PANNo: new FormControl(this.CompanyAccountDetail.PANNo),
-      IsUser: new FormControl(this.CompanyAccountDetail.IsUser),
-      TradeLiecenceNumber: new FormControl (this.CompanyAccountDetail.TradeLiecenceNumber),
+      TradeLicenseNo: new FormControl (this.CompanyAccountDetail.TradeLicenseNo),
+      IsPrimayAccount: new FormControl (this.CompanyAccountDetail.IsPrimayAccount),
       OrganizationId: new FormControl(this.CompanyAccountDetail.OrganizationId),
+      BankAccountId: new FormControl(this.CompanyAccountDetail.BankAccountId)
     });
   }
 
@@ -76,17 +77,17 @@ export class CompanyAccountsComponent implements OnInit {
   }
 
   generate() {
-    this.submitted = true;
-    this.isLoading = true;
     let errroCounter = 0;
 
-    if (this.organizationAccountsForm.get("AccountNumber").value === "" || this.organizationAccountsForm.get("AccountNumber").value === null)
+    if (this.organizationAccountsForm.get("AccountNo").value === "" || this.organizationAccountsForm.get("AccountNo").value === null)
       errroCounter++;
     if (errroCounter === 0) {
+      this.submitted = true;
+      this.isLoading = true;
       let request: organizationAccountModal = this.organizationAccountsForm.value;
       request.OrganizationId = this.OrganizationId;
       request.CompanyId = this.CurrentCompany.CompanyId;
-      request.IsUser = false;
+      request.IsPrimayAccount = false;
       if (request.OrganizationId > 0 && request.CompanyId > 0) {
         this.http.post("Company/InsertUpdateCompanyAccounts", request).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
@@ -106,20 +107,19 @@ export class CompanyAccountsComponent implements OnInit {
       ErrorToast("All read marked fields are mandatory.");
     }
   }
-
-
 }
 
 export class organizationAccountModal {
   OrganizationId: number = 0;
-  GSTNO: string = null;
-  AccountNumber: string = null;
+  GSTNo: string = null;
+  AccountNo: string = null;
   BankName: string = null;
   Branch: string = null;
-  IFSCCode: string = null;
+  IFSC: string = null;
   PANNo: string = null;
-  IsUser: boolean = false;
-  TradeLiecenceNumber: string = '';
+  IsPrimayAccount: boolean = false;
+  TradeLicenseNo: string = '';
   BranchCode: string = '';
   CompanyId: number = 0;
+  BankAccountId: number = 0;
 }
