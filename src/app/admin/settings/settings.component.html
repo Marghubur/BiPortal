@@ -505,13 +505,6 @@
             <form [formGroup]="companyGroupForm">
               <div class="row col-md-12">
                 <div class="col-md-6 mt-3">
-                  <label for="" class="form-label">ORGANIZATION NAME</label>
-                  <input
-                    [ngClass]="{'error-field': submitted && f.OrganizationName.errors !== null && f.OrganizationName.errors.required}"
-                    formControlName="OrganizationName" oninput="this.value = this.value.toUpperCase()" type="text"
-                    placeholder="Organization Name" class="form-control">
-                </div>
-                <div class="col-md-6 mt-3">
                   <label for="" class="form-label">COMPANY NAME</label>
                   <input
                     [ngClass]="{'error-field': submitted && f.CompanyName.errors !== null && f.CompanyName.errors.required}"
@@ -533,7 +526,7 @@
                   <label for="" class="form-label">COMPANY EMAIL</label>
                   <input
                     [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.CompanyName.errors.required}"
-                    formControlName="Email" oninput="this.value = this.value.toUpperCase()" type="Email"
+                    formControlName="Email" type="Email"
                     placeholder="Company Email" class="form-control">
                 </div>
                 <div class="col-md-6 mt-2">
