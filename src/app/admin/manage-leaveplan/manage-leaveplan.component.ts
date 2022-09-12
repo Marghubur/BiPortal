@@ -271,10 +271,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
       CanApplyEntireLeave: new FormControl(this.leaveAccrual.CanApplyEntireLeave ?'true' : 'false'),
       IsLeaveAccruedPatternAvail: new FormControl(this.leaveAccrual.IsLeaveAccruedPatternAvail?'true' : 'false'),
-      IsLeaveAccruedProrateDefined: new FormControl(this.leaveAccrual.IsLeaveAccruedProrateDefined),
       LeaveDistributionSequence: new FormControl(this.leaveAccrual.LeaveDistributionSequence),
       LeaveDistributionAppliedFrom: new FormControl(this.leaveAccrual.LeaveDistributionAppliedFrom),
       
+      IsLeaveAccruedProrateDefined: new FormControl(this.leaveAccrual.IsLeaveAccruedProrateDefined),
       LeaveDistributionRateOnStartOfPeriod: this.buildFormArrayBetweenProbationPeriod(),
 
       IsLeavesProratedForJoinigMonth: new FormControl(this.leaveAccrual.IsLeavesProratedForJoinigMonth ? 'true' : 'false'),
