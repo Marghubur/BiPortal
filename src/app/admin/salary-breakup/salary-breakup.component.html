@@ -25,7 +25,7 @@
               </div>
             </div>
             <div class="col-md-12 row mb-5">
-              <div class="col-6 d-flex flex-column justify-content-end">
+              <div class="col-6 d-flex flex-column justify-content-end" >
                 Expected CTC of Employee
               </div>
               <div class="col-6">
@@ -48,66 +48,76 @@
               <div class="pull-down" [ngClass]="{'blur-section': !isReady}">
                 <div class="blur-section__highlight" [ngClass]="{'d-none': isReady}">
                   <div class="blur-section__content">
-                    Please Enter expected CTC
+                    <ng-container *ngIf="!isReady">Please Enter expected CTC</ng-container>
                   </div>
                 </div>
                 <div class="blur-this">
                   <div class="col-md-12">
-                    <div class="t-table t-list t-border col-md-12">
-                      <div class="hide-bar alert-primary"></div>
-                      <div class="t-head alert-primary">
-                        <div class="tr fw-bold text-dark">
-                          <div class="th fe-4">
-                            <div class="cell-wrappe ps-2">
-                              DETAILS
+                    <ng-container *ngIf="isBasicSalaryEmpty">
+                      <div class="d-flex align-items-center justify-content-center py-5 my-5">
+                        <p class="my-5text-dark fw-bold fs-5 py-5">Please fill the salarybreak formula or click calculate button for the calculation of salary breakup </p>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="!isBasicSalaryEmpty && isReady">
+                      <div class="t-table t-list t-border col-md-12">
+                        <div class="hide-bar alert-primary"></div>
+                        <div class="t-head alert-primary">
+                          <div class="tr fw-bold text-dark">
+                            <div class="th fe-4">
+                              <div class="cell-wrappe ps-2">
+                                DETAILS
+                              </div>
+                            </div>
+                            <div class="th fe-2">
+                              MONTHLY
+                            </div>
+                            <div class="th fe-2">
+                              ANNUALLY
                             </div>
                           </div>
-                          <div class="th fe-2">
-                            MONTHLY
-                          </div>
-                          <div class="th fe-2">
-                            ANNUALLY
-                          </div>
+                        </div>
+                        <div class="t-body" *ngIf="isReady">
+                          <ng-container formArrayName="Components">
+                            <div class="tr"
+                              *ngFor="let item of salaryBreakupForm.get('Components').controls; let index = index;">
+                              <ng-container [formGroupName]="index">
+                                <div class="td d-flex flex-column justify-content-center fe-4 ps-2"
+                                  [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                                  {{item.get('ComponentName').value}}
+                                </div>
+                                <div class="td align-middle fe-2">
+                                  <div class="cell-wrapper mx-2">
+                                    <input type="text" class="border-0 form-control form-control-sm" OnlyNumber="9"
+                                      formControlName="MonthlyAmount">
+                                  </div>
+                                </div>
+                                <div class="td align-middle fe-2">
+                                  <div class="cell-wrapper mx-2">
+                                    <input type="text" class="border-0 form-control form-control-sm" OnlyNumber="9"
+                                      formControlName="FinalAmount">
+                                  </div>
+                                </div>
+                              </ng-container>
+                            </div>
+                          </ng-container>
                         </div>
                       </div>
-                      <div class="t-body" *ngIf="isReady">
-                        <ng-container formArrayName="Components">
-                          <div class="tr"
-                            *ngFor="let item of salaryBreakupForm.get('Components').controls; let index = index;">
-                            <ng-container [formGroupName]="index">
-                              <div class="td d-flex flex-column justify-content-center fe-4 ps-2"
-                                [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
-                                {{item.get('ComponentName').value}}
-                              </div>
-                              <div class="td align-middle fe-2">
-                                <div class="cell-wrapper mx-2">
-                                  <input type="text" class="border-0 form-control form-control-sm" OnlyNumber="9"
-                                    formControlName="MonthlyAmount">
-                                </div>
-                              </div>
-                              <div class="td align-middle fe-2">
-                                <div class="cell-wrapper mx-2">
-                                  <input type="text" class="border-0 form-control form-control-sm" OnlyNumber="9"
-                                    formControlName="FinalAmount">
-                                </div>
-                              </div>
-                            </ng-container>
-                          </div>
-                        </ng-container>
-                      </div>
-                    </div>
+                    </ng-container>
+
                   </div>
                 </div>
               </div>
             </ng-container>
           </form>
-          <p class="fs-6 my-2 text-success fw-bold">Note: Net Pay displayed does not include Income Tax, Professional
-            Tax or Other deductions (if
-            any).</p>
-          <button class="btn btn-primary-c float-end" [disabled]="isLoading" (click)="saveSalaryBreakup()">
-            <i class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-save': !isLoading}"></i>
-            {{ isLoading ? 'Wait' : 'Save' }}
-          </button>
+          <ng-container *ngIf="!isBasicSalaryEmpty">
+            <p class="fs-6 my-2 text-success fw-bold">Note: Net Pay displayed does not include Income Tax, Professional
+              Tax or Other deductions (if
+              any).</p>
+            <button class="btn btn-primary-c float-end" [disabled]="isLoading" (click)="saveSalaryBreakup()">
+              <i class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-save': !isLoading}"></i>
+              {{ isLoading ? 'Wait' : 'Save' }}
+            </button>
+          </ng-container>
         </div>
       </div>
     </div>

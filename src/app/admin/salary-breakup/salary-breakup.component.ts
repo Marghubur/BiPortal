@@ -21,6 +21,7 @@ export class SalaryBreakupComponent implements OnInit {
   salaryDetail: any = null;
   employeeCTC: number = 0;
   employeeDetails: any = null;
+  isBasicSalaryEmpty: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -66,16 +67,24 @@ export class SalaryBreakupComponent implements OnInit {
       }
 
       this.buildAndBindData(completeSalaryDetail);
+    }).catch(e => {
+      this.isReady = false;
     });
   }
 
   buildAndBindData(completeSalaryDetail: any) {
+    this.isBasicSalaryEmpty = false;
     if (completeSalaryDetail && completeSalaryDetail.length > 0) {
       let presentMonth = new Date().getMonth() + 1;
       let singleDetail = completeSalaryDetail.find(x => x.MonthNumber == presentMonth);
 
       if (singleDetail) {
         this.salaryComponents = singleDetail.SalaryBreakupDetails;
+        if (this.salaryComponents.find(x => x.ComponentId == "BS").FinalAmount == 0)
+          this.isBasicSalaryEmpty = true;
+        else
+          this.isBasicSalaryEmpty = false;
+
         this.isReady = true;
       } else {
         ErrorToast("Fail to get salary detail. Please contact to admin.");
@@ -83,6 +92,7 @@ export class SalaryBreakupComponent implements OnInit {
       }
     } else {
       this.salaryComponents = [];
+      this.isBasicSalaryEmpty = true;
     }
 
     this.initForm();
