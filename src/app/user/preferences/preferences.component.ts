@@ -20,6 +20,11 @@ export class PreferencesComponent implements OnInit {
   userDetail: UserDetail = new UserDetail();
   EmployeeId: number = 0;
   employeeDetail: EmployeeDetail = new EmployeeDetail();
+  anInformation: PANInformation = new PANInformation();
+  applicationData: any = [];
+  isPreferenceReady: boolean = false;
+  SectionIsReady: boolean = false;
+  isEmployeeSelect: boolean = false;
 
   constructor(private local: ApplicationStorage,
               private http: AjaxService,
@@ -68,17 +73,22 @@ export class PreferencesComponent implements OnInit {
   }
 
   LoadData() {
+    this.isEmployeeSelect = true;
+    this.SectionIsReady= false;
     if (this.EmployeeId > 0) {
-      this.http.get(`employee/GetManageEmployeeDetail/${this.EmployeeId}`).then((response: ResponseModel) => {
+      this.http.get(`employee/GetAllManageEmployeeDetail/${this.EmployeeId}`).then((response: ResponseModel) => {
         if(response.ResponseBody) {
           if (response.ResponseBody.Employee.length > 0) {
             this.employeeDetail = response.ResponseBody.Employee[0] as EmployeeDetail;
-            console.log(this.employeeDetail);
             Toast("Record found.")
           } else {
             ErrorToast("Record not found");
           }
+          this.isEmployeeSelect = false;
+          this.SectionIsReady= true;
         }
+      }).catch(e => {
+        ErrorToast("No record found");
       });
     }
   }
