@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Declaration, IncomeTax, PaySlip, Preferences, Salary, Summary, Taxcalculation } from 'src/providers/constants';
+import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
+import { AccessTokenExpiredOn, AdminSalary, Declaration, IncomeTax, PaySlip, Preferences, Salary, Summary, Taxcalculation } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -16,7 +17,7 @@ export class MysalaryComponent implements OnInit {
   active = 1;
   cachedData: any = null;
   myAnnualSalary: MyAnnualSalary = new MyAnnualSalary();
-  salaryDetail: boolean = true;
+  salaryDetail: any = null;
   isLoading: boolean = false;
   salaryBreakup: any = {};
   salaryDeducation: Array<SalaryDeduction> = [];
@@ -25,11 +26,19 @@ export class MysalaryComponent implements OnInit {
   EmployeeId: number = 0;
   userDetail: UserDetail = new UserDetail();
   salaryDetails: any = null;
+  isSalaryDetail: boolean = true;
+  applicationData: any = [];
+  isSalaryReady: boolean = false;
+  salaryBreakupForm: FormGroup = null;
+  salaryComponents: Array<any> = [];
+  isReady: boolean = false;
+  SectionIsReady: boolean = false;
 
   constructor(private nav: iNavigation,
               private user: UserService,
               private http: AjaxService,
-              private local: ApplicationStorage) { }
+              private local: ApplicationStorage,
+              private fb: FormBuilder) { }
 
   ngOnInit(): void {
     var dt = new Date();
@@ -60,17 +69,6 @@ export class MysalaryComponent implements OnInit {
       SalaryMonth: 177000
     }
 
-    this.salaryDeducation.push({
-      Deduction: 'PF Employee',
-      Monthly: 1800,
-      Annually: 15000
-    },
-    {
-      Deduction: 'NET PAY',
-      Monthly: 175200,
-      Annually: 2102400
-    });
-
     this.incomeTaxSlab.push({
       taxSlab: 'Income Upto 2,50,000',
       rate: 'NIL'
@@ -98,25 +96,130 @@ export class MysalaryComponent implements OnInit {
     {
       taxSlab: 'Income above 15,00,000',
       rate: '30%'
-    })
+    });
   }
 
   loadData() {
-    this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`)
-    .then(response => {
-      if (response.ResponseBody) {
-        this.salaryDetails = response.ResponseBody;
-        this.salaryBreakup = JSON.parse(response.ResponseBody.CompleteSalaryDetail);
-        this.salaryBreakup.Total =  (this.salaryBreakup.BasicAnnually + this.salaryBreakup.CarRunningAnnually+this.salaryBreakup.ConveyanceAnnually+this.salaryBreakup.HRAAnnually+this.salaryBreakup.InternetAnnually+this.salaryBreakup.TravelAnnually+this.salaryBreakup.ShiftAnnually+this.salaryBreakup.SpecialAnnually);
-        console.log(this.salaryBreakup);
-        Toast("Record found");
+    this.SectionIsReady= false;
+    this.isReady = false;
+    this.myAnnualSalary = new MyAnnualSalary();
+    this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
+      let completeSalaryDetail = [];
+      if(res.ResponseBody) {
+        this.salaryDetail = res.ResponseBody;
+        if (this.salaryDetail.CompleteSalaryDetail != null && this.salaryDetail.CompleteSalaryDetail != '{}') {
+          completeSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        } else {
+          ErrorToast("Fail to get salary detail. Please contact to admin.");
+          return;
+        }
+      } else {
+        this.salaryDetail = {
+          EmployeeId: 0,
+          CTC: 0,
+          GrossIncome: 0,
+          NetSalary: 0,
+          CompleteSalaryDetail: null,
+          GroupId: 0,
+          TaxDetail: null
+        };
       }
-    })
+      this.buildAndBindData(completeSalaryDetail);
+    });
+  }
+
+  buildAndBindData(completeSalaryDetail: any) {
+    if (completeSalaryDetail && completeSalaryDetail.length > 0) {
+      let presentMonth = new Date().getMonth() + 1;
+      let singleDetail = completeSalaryDetail.find(x => x.MonthNumber == presentMonth);
+
+      if (singleDetail) {
+        this.salaryComponents = singleDetail.SalaryBreakupDetails;
+        this.myAnnualSalary = {
+          Annual: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount * 12), 2),
+          Bonus: 0,
+          Other: ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2),
+          Total: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount * 12) + (this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2),
+          Effective:new Date(), //this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId).UpdatedOn,
+          PFperMonth: ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2)/12,
+          Perks: 0,
+          SalaryMonth: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount), 2)
+        }
+        this.isReady = true;
+      } else {
+        ErrorToast("Fail to get salary detail. Please contact to admin.");
+        return;
+      }
+    } else {
+      this.salaryComponents = [];
+    }
+    this.initForm();
+    this.SectionIsReady= true;
+  }
+
+  initForm() {
+    this.salaryBreakupForm = this.fb.group({
+      Components: this.buildComponents()
+    });
+  }
+
+  buildComponents(): FormArray {
+    let i = 0;
+    let elems = [];
+    let flag = false;
+    let finalItemArray: FormArray = this.fb.array([]);
+    while(i < 6) {
+      flag = false;
+      switch(i) {
+        case 0: // fixed
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 2);
+          break;
+        case 1: // special
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 102);
+          flag = true;
+          break;
+        case 2: // perquisite
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 6);
+          break;
+        case 3: // gross
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 100);
+          flag = true;
+          break;
+        case 4: // employer
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 7);
+          break;
+        case 5: // ctc
+          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 101);
+          flag = true;
+          break;
+      }
+
+      this.fb.array(
+        elems.map((elem, index) => {
+          finalItemArray.push(this.addGroupItems(elem, flag))
+        })
+      );
+
+      i++;
+    }
+
+    return finalItemArray;
+  }
+
+  addGroupItems(item: any, flag: boolean): FormGroup {
+    return this.fb.group({
+      ComponentId: new FormControl(item.ComponentId),
+      ComponentName: new FormControl(item.ComponentName),
+      FinalAmount: new FormControl(item.FinalAmount * 12),
+      MonthlyAmount: new FormControl(ToFixed(item.FinalAmount, 2)),
+      ComponentTypeId: new FormControl(item.ComponentTypeId),
+      IsHighlight: new FormControl(flag),
+    });
   }
 
   continueCurrentTaxRegime() {
-    this.nav.navigate(Salary, null);
     $('#newIncomeTaxRegime').modal('hide');
+    this.nav.navigate(AdminSalary, null);
   }
 
   activateMe(ele: string) {
@@ -158,7 +261,7 @@ export class MysalaryComponent implements OnInit {
   }
 
   viewSalary() {
-    this.salaryDetail = !this.salaryDetail;
+    this.isSalaryDetail = !this.isSalaryDetail;
   }
 
   salaryBreakupPopup() {
@@ -172,7 +275,6 @@ export class MysalaryComponent implements OnInit {
   newIncomeTaxRegimePopUp() {
     $('#newIncomeTaxRegime').modal('show');
   }
-
 
 }
 

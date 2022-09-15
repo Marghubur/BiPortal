@@ -37,11 +37,11 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="emailForm">
-          <div class="email-address-box border-bottom d-flex align-items-center"   [ngClass]="{'error-field': isSubmitted && f.To.errors != null && f.To.errors.required}">
+          <div class="email-address-box border-bottom d-flex align-items-center" [ngClass]="{'error-field': isSubmitted && f.To.errors != null && f.To.errors.required}">
             <label for="to-email-address" class="form-label fs-5 m-0 pe-1 d-none">To</label>
             <div class="d-flex flex-row flex-wrap w-100 align-items-center">
               <span class="badge bg-primary fs-6 m-2" *ngFor="let item of toEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-danger" (click)="removeToEmail(i, 'to-emails')"></i></a></span>
-              <input type="text" class="col border-0 ms-2 fs-5"placeholder="Receipents" (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'to-emails')">
+              <input type="text" class="col border-0 ms-2 fs-5" placeholder="Receipents" formControlName="To" (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'to-emails')">
               <div class="col-auto float-end d-none" data-name="Cc-Bcc-address">
                 <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
                 <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
@@ -52,7 +52,7 @@
             <label for="Cc-email-address" class="form-label fs-5 m-0 pe-1">Cc</label>
             <div class="d-flex flex-row flex-wrap w-100 align-items-center">
               <span class="badge bg-primary fs-6 m-2" *ngFor="let item of ccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-danger" (click)="removeToEmail(i, 'cc-emails')"></i></a></span>
-              <input type="text" class="col border-0 ms-2 fs-5" (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'cc-emails')">
+              <input type="text" class="col border-0 ms-2 fs-5" formControlName="CC" (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'cc-emails')">
               <div class="col-auto float-end" data-name="Add-Bcc-btn">
                 <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
               </div>
@@ -62,7 +62,7 @@
             <label for="Bcc-email-address" class="form-label fs-5 m-0 pe-1">Bcc</label>
             <div class="d-flex flex-row flex-wrap w-100 align-items-center">
               <span class="badge bg-primary fs-6 m-2" *ngFor="let item of bccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-danger" (click)="removeToEmail(i, 'bcc-emails')"></i></a></span>
-              <input type="text" class="col border-0 ms-2 fs-5" (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'bcc-emails')">
+              <input type="text" class="col border-0 ms-2 fs-5" formControlName="BCC"  (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'bcc-emails')">
               <div class="col-auto float-end" data-name="Add-Cc-btn">
                 <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
               </div>
@@ -72,7 +72,7 @@
             <input type="text" class="form-control border-0 border-bottom py-3 fs-5" formControlName="Subject" placeholder="Subject">
           </div>
           <div class="message-box">
-            <div contenteditable="true" id="emailbody" class="form-control border-0 py-3 fs-5 small-message-box" (keydown.control.b)="getSelectedText($event)" formControlName="Body"></div>
+            <div contenteditable="true" id="emailbody" class="form-control border-0 py-3 fs-5 small-message-box" (keydown.control.b)="getSelectedText($event)"></div>
           </div>
         </form>
       </div>

@@ -121,7 +121,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       LegalNameOfCompany: new FormControl(this.organization.LegalNameOfCompany),
       TypeOfBusiness: new FormControl(this.organization.TypeOfBusiness),
       InCorporationDate: new FormControl(this.organization.InCorporationDate),
-      OrgMobile: new FormControl(this.organization.OrgMobile),
+      OrgMobileNo: new FormControl(this.organization.OrgMobileNo),
       OrgEmail: new FormControl(this.organization.OrgEmail),
       OrgPrimaryPhoneNo: new FormControl(this.organization.OrgPrimaryPhoneNo),
       OrgSecondaryPhoneNo: new FormControl(this.organization.OrgSecondaryPhoneNo),
@@ -279,7 +279,7 @@ class OrganizationModal {
   InCorporationDate: string = null;
   IsPrimaryCompany: boolean = false;
   FixedComponentsId: string = null;
-  OrgMobile: string = null;
+  OrgMobileNo: string = null;
   OrgEmail: string = null;
   OrgPrimaryPhoneNo: string = null;
   OrgSecondaryPhoneNo: string = null;

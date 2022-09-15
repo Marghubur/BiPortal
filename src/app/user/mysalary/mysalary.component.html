@@ -23,119 +23,128 @@
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="right-panel col-md-12 p-0">
-      <ng-container>
-        <div class="container-fluid pt-4">
-          <div class="col-md-12 bg-light mb-3 mt-3">
-            <ul class="nav">
-              <li class="nav-item">
-                <a class="nav-link new-nav-link text-dark new-nav-active" id="attendance-tab"
-                  (click)="activeTab('MySalary')" aria-current="page" href="javascript:void(0)">My Salary</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-dark" id="timesheet-tab" (click)="activeTab('PaySlips')"
-                  href="javascript:void(0)">Pay Slips</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('IncomeTax')"
-                  href="javascript:void(0)">Income Tax</a>
-              </li>
-            </ul>
-          </div>
+    <div [ngClass]="{'blur-section': !SectionIsReady}">
+      <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
+        <div class="blur-section__content">
+          {{'Please login again'}}
+        </div>
+      </div>
+      <div class="blur-this">
+        <div class="right-panel col-md-12 p-0">
           <ng-container>
-            <div class="mt-4 alert alert-info fs-6" role="alert">
-              Your Income and tax liability computed as per Old income taax regiime. To learn more, and switch to New
-              income tax regime, <a href="javscript:void(0)" (click)="newIncomeTaxRegimePopUp()"
-                class="text-decoration-none">click here.</a>
-            </div>
-            <div class="d-flex mt-5 ms-5 mb-3">
-              <div class="col-md-2">
-                <div class="bg-info text-light rounded-circle current-circle col-md-5">
-                  <span class="fw-bold">CURRENT</span>
-                </div>
+            <div class="container-fluid pt-4">
+              <div class="col-md-12 bg-light mb-3 mt-3">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link new-nav-link text-dark new-nav-active" id="attendance-tab"
+                      (click)="activeTab('MySalary')" aria-current="page" href="javascript:void(0)">My Salary</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-dark" id="timesheet-tab" (click)="activeTab('PaySlips')"
+                      href="javascript:void(0)">Pay Slips</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('IncomeTax')"
+                      href="javascript:void(0)">Income Tax</a>
+                  </li>
+                </ul>
               </div>
-              <div class="col-md-8 ms-4">
-                <div class="bg-secondary text-light d-flex align-items-center py-3">
-                  <div class="pe-2 ps-4">
-                    <small>ANNUAL</small>
-                    <p class="fw-bold mb-0">INR {{salaryBreakup.GrossAnnually}}</p>
+              <ng-container>
+                <div class="mt-4 alert alert-info fs-6" role="alert">
+                  Your Income and tax liability computed as per Old income taax regiime. To learn more, and switch to New
+                  income tax regime, <a href="javascript:void(0)" (click)="newIncomeTaxRegimePopUp()"
+                    class="text-decoration-none">click here.</a>
+                </div>
+                <div class="d-flex mt-5 ms-5 mb-3">
+                  <div class="col-md-2">
+                    <div class="bg-info text-light rounded-circle current-circle col-md-5">
+                      <span class="fw-bold">CURRENT</span>
+                    </div>
                   </div>
-                  <span class="fs-5 px-3">+</span>
-                  <div class="px-2">
-                    <small>BONUS</small>
-                    <p class="fw-bold mb-0">INR 0</p>
-                  </div>
-                  <span class="fs-5 px-3">+</span>
-                  <div class="px-2">
-                    <small>Other</small>
-                    <p class="fw-bold mb-0">INR 21600</p>
-                  </div>
-                  <span class="fs-5 px-3">=</span>
-                  <div class="px-2">
-                    <small>Total</small>
-                    <p class="fw-bold mb-0">INR {{salaryBreakup.GrossAnnually + 21600}}</p>
-                  </div>
-                  <div class="ms-auto me-3">
-                    <a href="javascript:void(0)">
-                      <i class="fa fa-refresh text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
-                    </a>
-                    <button type="btn" class="btn btn-outline-light btn-sm ms-3" (click)="viewSalary()">
-                      <i class="fa" [ngClass]="{'fa-angle-down': salaryDetail, 'fa-angle-up': !salaryDetail}"
-                        aria-hidden="true"></i>
-                    </button>
+                  <div class="col-md-8 ms-4">
+                    <div class="bg-secondary text-light d-flex align-items-center py-3">
+                      <div class="pe-2 ps-4">
+                        <small>ANNUAL</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Annual}}</p>
+                      </div>
+                      <span class="fs-5 px-3">+</span>
+                      <div class="px-2">
+                        <small>BONUS</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Bonus}}</p>
+                      </div>
+                      <span class="fs-5 px-3">+</span>
+                      <div class="px-2">
+                        <small>Other</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Other}}</p>
+                      </div>
+                      <span class="fs-5 px-3">=</span>
+                      <div class="px-2">
+                        <small>Total</small>
+                        <p class="fw-bold mb-0">INR {{myAnnualSalary.Total}}</p>
+                      </div>
+                      <div class="ms-auto me-3">
+                        <a href="javascript:void(0)">
+                          <i class="fa fa-refresh text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
+                        </a>
+                        <button type="btn" class="btn btn-outline-light btn-sm ms-3" (click)="viewSalary()">
+                          <i class="fa" [ngClass]="{'fa-angle-down': isSalaryDetail, 'fa-angle-up': !isSalaryDetail}"
+                            aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="!isSalaryDetail">
+                      <div class="border border-secondary">
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            REGULAR SALARY:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Total}} </span><span
+                              class="ps-3"><a href="javascript:void(0)" class="text-decoration-none"
+                                (click)="salaryBreakupPopup()">SALARY BREAKUP</a></span>
+                          </p>
+                        </div>
+                        <div class="row ps-3 mt-1">
+                          <div class="col-md-4">
+                            <small class="fw-bold">SALARY / MONTH</small>
+                            <p class="text-dark pt-2">INR{{myAnnualSalary.SalaryMonth}} </p>
+                          </div>
+                          <div class="col-md-4">
+                            <small class="fw-bold">EFFECTIVE</small>
+                            <p class="pt-2">{{myAnnualSalary.Effective | date}}</p>
+                          </div>
+                        </div>
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            BONUS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Bonus}} </span>
+                          </p>
+                        </div>
+                        <div class="text-center py-2">
+                          <ng-container *ngIf="myAnnualSalary.Bonus == 0">No bonus added</ng-container>
+                        </div>
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            OTHER:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Other}} </span>
+                          </p>
+                        </div>
+                        <div class=" ps-3 mt-1">
+                          <small class="fw-bold">PF - EMPLOYER / MONTH</small>
+                          <p class="pt-2">INR {{myAnnualSalary.PFperMonth}}</p>
+                        </div>
+                        <div class="card-header py-2 d-flex text-dark align-items-center">
+                          <p class="mb-0">
+                            PERKS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Perks}} </span>
+                          </p>
+                        </div>
+                        <div class="text-center py-2">
+                          <ng-container *ngIf="myAnnualSalary.Perks == 0">No perks are assigned</ng-container>
+                        </div>
+                      </div>
+                    </ng-container>
                   </div>
                 </div>
-                <ng-container *ngIf="!salaryDetail">
-                  <div class="border border-secondary">
-                    <div class="card-header py-2 d-flex text-dark align-items-center">
-                      <p class="mb-0">
-                        REGULAR SALARY:<span class="fw-bold tex-dark"> INR {{salaryBreakup.GrossAnnually + 21600}}</span><span
-                          class="ps-3"><a href="javascript:void(0)" class="text-decoration-none"
-                            (click)="salaryBreakupPopup()">SALARY BREAKUP</a></span>
-                      </p>
-                    </div>
-                    <div class="row ps-3 mt-1">
-                      <div class="col-md-4">
-                        <small class="fw-bold">SALARY / MONTH</small>
-                        <p class="text-dark pt-2">INR{{salaryBreakup.GrossAnnually/12 | number :'1.2-2'}} </p>
-                      </div>
-                      <div class="col-md-4">
-                        <small class="fw-bold">EFFECTIVE</small>
-                        <p class="pt-2">{{myAnnualSalary.Effective | date}}</p>
-                      </div>
-                    </div>
-                    <div class="card-header py-2 d-flex text-dark align-items-center">
-                      <p class="mb-0">
-                        BONUS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Bonus}} </span>
-                      </p>
-                    </div>
-                    <div class="text-center py-2">
-                      <ng-container *ngIf="myAnnualSalary.Bonus == 0">No bonus added</ng-container>
-                    </div>
-                    <div class="card-header py-2 d-flex text-dark align-items-center">
-                      <p class="mb-0">
-                        OTHER:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Other}} </span>
-                      </p>
-                    </div>
-                    <div class=" ps-3 mt-1">
-                      <small class="fw-bold">PF - EMPLOYER / MONTH</small>
-                      <p class="pt-2">INR {{myAnnualSalary.PFperMonth}}</p>
-                    </div>
-                    <div class="card-header py-2 d-flex text-dark align-items-center">
-                      <p class="mb-0">
-                        PERKS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Perks}} </span>
-                      </p>
-                    </div>
-                    <div class="text-center py-2">
-                      <ng-container *ngIf="myAnnualSalary.Perks == 0">No perks are assigned</ng-container>
-                    </div>
-                  </div>
-                </ng-container>
-              </div>
+              </ng-container>
             </div>
           </ng-container>
         </div>
-      </ng-container>
+      </div>
     </div>
   </div>
 </div>
@@ -143,261 +152,84 @@
 
 <!-- Full Salary Deatils -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="fullSalaryDetail" tabindex="-1"
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  aria-labelledby="fullSalaryDetailLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title fs-4 text-dark" id="exampleModalLabel">SALARY BREAKUP</h5>
+        <h5 class="modal-title fs-4 text-dark" id="fullSalaryDetailLabel">SALARY BREAKUP</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body px-5">
-        <div class="t-table t-list t-border col-md-12">
-          <div class="hide-bar alert-primary"></div>
-          <div class="t-head alert-primary">
-            <div class="tr fw-bold text-dark">
-              <div class="th fe-4">
-                <div class="cell-wrapper">
-                  DETAILS
-                </div>
-              </div>
-              <div class="th fe-2">
-                MONTHLY
-              </div>
-              <div class="th fe-2">
-                ANNUALLY
-              </div>
-            </div>
-          </div>
-          <div class="t-body overflow-hidden">
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  Basic
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.BasicAnnually/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.BasicAnnually | number:'1.2-2'}}
-                </div>
-              </div>
-            </div>
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  Conveyance Allowance
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.ConveyanceAnnually/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.ConveyanceAnnually | number:'1.2-2'}}
+        <form>
+          <ng-container [formGroup]="salaryBreakupForm" *ngIf="salaryBreakupForm">
+            <div class="pull-down">
+              <div class="blur-this">
+                <div class="col-md-12">
+                  <div class="t-table t-list t-border col-md-12">
+                    <div class="hide-bar alert-primary"></div>
+                    <div class="t-head alert-primary">
+                      <div class="tr fw-bold text-dark">
+                        <div class="th fe-4">
+                          <div class="cell-wrappe ps-2">
+                            DETAILS
+                          </div>
+                        </div>
+                        <div class="th fe-2">
+                          MONTHLY
+                        </div>
+                        <div class="th fe-2">
+                          ANNUALLY
+                        </div>
+                      </div>
+                    </div>
+                    <div class="t-body" *ngIf="isReady">
+                      <ng-container formArrayName="Components">
+                        <div class="tr"
+                          *ngFor="let item of salaryBreakupForm.get('Components').controls; let index = index;">
+                          <ng-container [formGroupName]="index">
+                            <div class="td d-flex flex-column justify-content-center fe-4 ps-2 py-2"
+                              [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                              {{item.get('ComponentName').value}}
+                            </div>
+                            <div class="td align-middle fe-2">
+                              <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                                {{item.get('MonthlyAmount').value | number:'1.2-2'}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-2">
+                              <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                                {{item.get('FinalAmount').value | number:'1.2-2'}}
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  HRA
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.HRAAnnually/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.HRAAnnually | number:'1.2-2'}}
-                </div>
-              </div>
-            </div>
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  Medical Allowance
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.MedicalAnnually/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.MedicalAnnually | number:'1.2-2'}}
-                </div>
-              </div>
-            </div>
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  Car Running Allowance
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.CarRunningAnnually/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.CarRunningAnnually | number:'1.2-2'}}
-                </div>
-              </div>
-            </div>
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  Telephone and Internet Allowance
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.InternetAnnually/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.InternetAnnually | number:'1.2-2'}}
-                </div>
-              </div>
-            </div>
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  Travel Reimbursement (LTA)
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.TravelAnnually/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.TravelAnnually | number:'1.2-2'}}
-                </div>
-              </div>
-            </div>
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  Shift Allowance
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.ShiftAnnually/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.ShiftAnnually | number:'1.2-2'}}
-                </div>
-              </div>
-            </div>
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  Special Allowance
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.SpecialAnnually/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.SpecialAnnually | number:'1.2-2'}}
-                </div>
-              </div>
-            </div>
-            <div class="tr py-2">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  Total
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.Total/12 | number:'1.2-2'}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  {{salaryBreakup.Total | number:'1.2-2'}}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="t-table t-list t-border col-md-12 mt-4">
-          <div class="hide-bar alert-primary"></div>
-          <div class="t-head alert-primary">
-            <div class="tr fw-bold text-dark">
-              <div class="th fe-4">
-                <div class="cell-wrapper">
-                  DEDUCATION
-                </div>
-              </div>
-              <div class="th fe-2">
-                MONTHLY
-              </div>
-              <div class="th fe-2">
-                ANNUALLY
-              </div>
-            </div>
-          </div>
-          <div class="t-body overflow-hidden">
-            <div class="tr py-2" *ngFor="let deduction of salaryDeducation">
-              <div class="td align-middle fe-4">
-                <div class="cell-wrapper">
-                  {{deduction.Deduction}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  <span *ngIf="deduction.Deduction == 'NET PAY'">INR </span>
-                  {{deduction.Monthly}}
-                </div>
-              </div>
-              <div class="td align-middle fe-2">
-                <div class="cell-wrapper">
-                  <span *ngIf="deduction.Deduction == 'NET PAY'">INR </span>
-                  {{deduction.Annually}}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="ps-5 fs-6">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if
-        any).</p>
+          </ng-container>
+        </form>
+        <p class="fs-6 my-2 text-success fw-bold">Note: Net Pay displayed does not include Income Tax, Professional
+          Tax or Other deductions (if
+          any).</p>
       <div class="modal-footer border-top-0 pe-5">
         <button type="button" class="btn btn-outline-success px-4" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+</div>
 
 <!-- New Income Tax regime Modal Start-->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="newIncomeTaxRegime" tabindex="-1"
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  aria-labelledby="newIncomeTaxRegimeLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content mx-3">
       <div class="sticky-modal-header">
         <div class="modal-header bg-secondary text-white">
-          <h5 class="modal-title" id="exampleModalLabel">Switch to Section 115BAC</h5>
+          <h5 class="modal-title" id="newIncomeTaxRegimeLabel">Switch to Section 115BAC</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="card py-3 ps-3 shadow-lg">
@@ -495,22 +327,22 @@
 
 <!-- Salary structutr Change History -->
 <div class="modal fade slaryStructureHistory" id="slaryStructureHistory" tabindex="-1"
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  aria-labelledby="slaryStructureHistoryLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header bg-secondary text-white border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">Salary structure Change History</h5>
+        <h5 class="modal-title" id="slaryStructureHistoryLabel">Salary structure Change History</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="custom-bg rounded text-dark d-flex align-items-center py-3">
           <div class="pe-2 ps-4">
             <small>ANNUAL</small>
-            <p class="fw-bold mb-0">INR {{salaryBreakup.GrossAnnually | number :'1.2-2'}}</p>
+            <p class="fw-bold mb-0">INR {{myAnnualSalary.Annual}}</p>
           </div>
           <div class="px-2 ms-4">
             <small>SALARY / MONTH</small>
-            <p class="fw-bold mb-0">INR {{salaryBreakup.GrossAnnually/12 | number :'1.2-2'}}</p>
+            <p class="fw-bold mb-0">INR {{myAnnualSalary.SalaryMonth}}</p>
           </div>
           <div class="px-2 ms-4">
             <small>EFFECTIVE</small>

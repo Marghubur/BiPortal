@@ -66,7 +66,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   TotalReceivedAmount: number = 0;
   TotalBilledAmount: number = 0;
   TotalSalaryAmount: number = 0;
-  RaisedBilloption: string = '';
+  RaisedBilloption: string = '1';
   isReadonly: boolean = true;
   calculateAmount: boolean = false;
   orderByNameAsc: boolean = null;

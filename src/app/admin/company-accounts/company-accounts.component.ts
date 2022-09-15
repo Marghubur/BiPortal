@@ -64,6 +64,7 @@ export class CompanyAccountsComponent implements OnInit {
           this.isLoaded = true;
         } else {
           this.companyData.TotalRecords = 0;
+          this.isLoaded = true;
         }
       }
     }).catch(e => {
@@ -113,7 +114,7 @@ export class CompanyAccountsComponent implements OnInit {
       request.CompanyId = this.CurrentCompany.CompanyId;
       if (request.OrganizationId > 0 && request.CompanyId > 0) {
         this.http.post("Company/InsertUpdateCompanyAccounts", request).then((response: ResponseModel) => {
-          if (response.ResponseBody !== null) {
+          if (response.ResponseBody !== null && response.ResponseBody.length > 0) {
             this.CompanyAccountDetails = response.ResponseBody;
             $('#accountModal').modal('hide');
             Toast("Company account deatils inserted/updated successfully");

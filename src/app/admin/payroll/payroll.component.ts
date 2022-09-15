@@ -17,7 +17,7 @@ export class PayrollComponent implements OnInit {
   payRoll:PayRoll = new PayRoll();
   days: Array<any> = [];
   months: Array<any> = ['JANUARY', 'FEBUARY', 'MARCH', 'APRIL', 'MAY',
-  'JUNE', 'JULY', 'AUGEST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+  'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
   payDay: Array<any> = [];
   payPeriodMonth: string = null;
   payPeriodDate: string = null;

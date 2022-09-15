@@ -4,13 +4,13 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, AdminSalary, Form12B, FreeTaxFilling, IncomeTax, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
+import { AccessTokenExpiredOn, Form12B, FreeTaxFilling, IncomeTax, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
 import { MonthlyTax } from '../incometax/incometax.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { HouseProperty } from 'src/app/admin/declaration/declaration.component';
 declare var $: any;
 
 @Component({
@@ -59,41 +59,60 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   isAmountExceed: boolean = false;
   salaryDetails: any = null;
   TaxDetails: Array<any> = [];
+  isLoading: boolean = false;
+  housingPropertyDetail: HouseProperty = new HouseProperty;
+  isRentedResidenceEdit: boolean = false;
+  isShowRentedDetail: boolean = false;
+  basePath: string = '';
+  viewer: any = null;
+  deleteFile: any = null;
+  housingPropertyRentFile: Array<any> = [];
+  hPLetterList: Array<Files> = [];
+  hPLetterCollection: Array<any> = [];
+  housingPropertyLetterFile: Array<any> = [];
+  viewHousingPropFile: Array<any> = [];
+  viewAttachment: string = '';
 
   constructor(private local: ApplicationStorage,
-              private user: UserService,
-              private fb: FormBuilder,
-              private nav: iNavigation,
-              private http: AjaxService,) { }
+    private user: UserService,
+    private fb: FormBuilder,
+    private nav: iNavigation,
+    private http: AjaxService
+  ) { }
 
   ngOnInit(): void {
+    this.rentalPage = 1;
+    this.monthlyTaxAmount = new MonthlyTax();
+    this.isEmployeesReady = true;
     var dt = new Date();
     var month = 3;
     var year = dt.getFullYear();
     this.year = dt.getFullYear();
+    this.basePath = this.http.GetImageBasePath();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
-    if(expiredOn === null || expiredOn === "")
+    if (expiredOn === null || expiredOn === "")
       this.userDetail["TokenExpiryDuration"] = new Date();
     else
-     this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-    if(Master !== null && Master !== "") {
+      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+    let Master = this.local.get(null);
+    if (Master !== null && Master !== "") {
       this.userDetail = Master["UserDetail"];
       this.EmployeeId = this.userDetail.UserId;
-      this.getDeclaration();
+      this.getDeclaration()
     } else {
       ErrorToast("Invalid user. Please login again.")
     }
+    this.rentedResidence();
 
     let i = 0;
-    while( i < 12) {
+    while (i < 12) {
       var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
       if (month == 12) {
         month = 1;
-        year ++
+        year++
       } else {
-        month ++;
+        month++;
       }
       this.taxCalender.push({
         month: new Date(year, mnth, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
@@ -130,15 +149,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   calculateDeclarations() {
-    if(this.employeeDeclaration.Declarations != null &&
+    if (this.employeeDeclaration.Declarations != null &&
       this.employeeDeclaration.Declarations.length > 0) {
-        let i = 0;
-        while(i < this.employeeDeclaration.Declarations.length) {
-          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].TotalAmountDeclared;
-          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].AcceptedAmount;
-          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].RejectedAmount;
-          i++;
-        }
+      let i = 0;
+      while (i < this.employeeDeclaration.Declarations.length) {
+        this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].TotalAmountDeclared;
+        this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].AcceptedAmount;
+        this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].RejectedAmount;
+        i++;
+      }
+
+      this.taxAmount = {
+        NetTaxableAmount: 2050000,
+        TotalTaxPayable: 444600,
+        TaxAlreadyPaid: 37050,
+        RemainingTaxAMount: 444600 - 37050
+      };
     } else {
       this.taxAmount = {
         NetTaxableAmount: 0,
@@ -151,63 +177,160 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   getDeclaration() {
     this.SectionIsReady = false;
-    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
+    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
-          this.employeeDeclaration = response.ResponseBody;
-          this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
-          this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
-          this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
-          this.EmployeeDeclarationId = response.ResponseBody.EmployeeDeclarationId;
-          this.employeeEmail = response.ResponseBody.Email;
-        }
-
-        if (response.ResponseBody && response.ResponseBody.FileDetails)
-          this.declarationFiles = response.ResponseBody.FileDetails;
-        this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
-        this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
-        this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
-        this.salaryDetails = response.ResponseBody.SalaryDetail;
-        this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
-        this.calculateDeclarations();
+        this.bindData(response.ResponseBody);
         Toast("Declaration detail loaded successfully");
       }
-
-      this.SectionIsReady = true;
     })
   }
 
-  addSubmittedFileIds(item: any):any {
+  deletePopup(item: any) {
+    if (item) {
+      this.deleteFile = item;
+      $('#deleteAttachmentModal').modal('show');
+    }
+  }
+
+  bindData(response) {
+    if (!response || response == undefined) {
+      ErrorToast("Fail to load declaration data. Please contact to admin.");
+      return;
+    } else {
+      if (response.FileDetails)
+        this.declarationFiles = response.FileDetails;
+
+      if (response.SalaryComponentItems && response.SalaryComponentItems.length > 0) {
+        this.employeeDeclaration = response;
+        this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
+        this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
+        this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
+        this.EmployeeDeclarationId = response.EmployeeDeclarationId;
+        this.employeeEmail = response.Email;
+
+        if (this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
+          this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
+          this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
+          this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
+          for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
+            let component = this.employeeDeclaration.Declarations[index].DeclarationName;
+            switch (component) {
+              case "1.5 Lac Exemptions":
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(this.ExemptionDeclaration);
+                break;
+              case "Other Exemptions":
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(this.OtherDeclaration);
+                break;
+              case "Tax Saving Allowance":
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(this.TaxSavingAlloance);
+                break;
+              case "House Property":
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = (this.declarationFiles.filter(x => x.FileName.split('_')[0] == 'HP')).length;
+                break;
+            }
+          }
+
+          this.salaryDetails = response.SalaryDetail;
+          if (this.salaryDetails !== null)
+            this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
+          if (response.HousingProperty && response.HousingProperty != '{}') {
+            this.housingPropertyDetail = JSON.parse(response.HousingProperty);
+          }
+          this.calculateDeclarations();
+          this.SectionIsReady = true;
+        }
+      } else {
+        this.SectionIsReady = true;
+      }
+    }
+  }
+
+  addSubmittedFileIds(item: any): any {
     let i = 0;
-    while(i < item.length) {
-      let currentDeclaration: any = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item[i].ComponentId);
+    while (i < item.length) {
+      let currentDeclaration: any = this.declarationFiles.filter(x => x.FileName.split('_')[0] == item[i].ComponentId);
       if (currentDeclaration.length > 0)
+        item[i].UploadedFileIds = [];
       for (let index = 0; index < currentDeclaration.length; index++) {
-        item[i].UploadedFileIds += currentDeclaration[index].FileId;
+        item[i].UploadedFileIds.push(currentDeclaration[index].FileId);
       }
       i++;
     }
     return item;
   }
 
+  calculatedTotalUploadFile(item: any): number {
+    let totalUploadedFile = 0;
+    let elem = item.filter(x => x.UploadedFileIds != null);
+    if (item.length > 0) {
+      totalUploadedFile = elem.map(x => x.UploadedFileIds.length).reduce((acc, curr) => { return acc + curr; }, 0)
+    }
+    return totalUploadedFile;
+  }
+
   rentedResidence() {
     this.rentResidenceForm = this.fb.group({
-      RentedFrom: new FormControl(''),
-      RentedTo: new FormControl(''),
-      TotalRent: new FormControl(''),
-      Address: new FormControl(''),
-      City: new FormControl(''),
-      OwnerName: new FormControl (''),
-      IsPANNo: new FormControl (false),
-      PANNo: new FormControl (''),
-      IsOwnerAddress: new FormControl (false),
-      OwnerType: new FormControl (''),
-      IsSignedDeclaration: new FormControl (false)
+      RentedFrom: new FormControl(this.housingPropertyDetail.RentedFrom),
+      RentedTo: new FormControl(this.housingPropertyDetail.RentedTo),
+      TotalRent: new FormControl(this.housingPropertyDetail.TotalRent),
+      Address: new FormControl(this.housingPropertyDetail.Address),
+      City: new FormControl(this.housingPropertyDetail.City),
+      OwnerName: new FormControl(this.housingPropertyDetail.OwnerName),
+      IsPANNo: new FormControl(this.housingPropertyDetail.IsPANNo),
+      PANNo: new FormControl(this.housingPropertyDetail.PANNo),
+      IsOwnerAddressSame: new FormControl(this.housingPropertyDetail.IsOwnerAddressSame),
+      LandlordType: new FormControl(this.housingPropertyDetail.LandlordType),
+      OwnerAddress: new FormControl(this.housingPropertyDetail.OwnerAddress),
+      IsSignedDeclaration: new FormControl(this.housingPropertyDetail.IsSignedDeclaration)
     })
   }
 
   submitRentResidence() {
-    console.log(this.rentResidenceForm.value);
+    this.isLoading = true;
+    let data = this.rentResidenceForm.value;
+    let value = {
+      ComponentId: 'HP',
+      HousePropertyDetail: data,
+      EmployeeId: this.EmployeeId,
+      Email: this.employeeEmail
+    }
+
+    let formData = new FormData();
+    if (this.EmployeeId > 0 && this.EmployeeDeclarationId > 0) {
+      for (let i = 0; i < this.hPLetterList.length; i++) {
+        this.FileDocumentList.push(this.hPLetterList[i]);
+        this.FilesCollection.push(this.hPLetterCollection[i]);
+      }
+      if (this.FileDocumentList.length > 0) {
+        let i = 0;
+        while (i < this.FileDocumentList.length) {
+          formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
+          i++;
+        }
+      }
+      this.SectionIsReady = false;
+      formData.append('declaration', JSON.stringify(value));
+      formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
+      this.http.upload(`Declaration/HousingPropertyDeclaration/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
+        if (response.ResponseBody) {
+          this.bindData(response.ResponseBody);
+          Toast("House property deatils added successfully.");
+          $('#rentedResidenceModal').modal('hide')
+          this.SectionIsReady = true;
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      });
+    }
+  }
+
+  sameOwnerAddress(e: any) {
+    let status = e.target.checked;
+    let value = '';
+    if (status == true)
+      value = this.rentResidenceForm.get('Address').value;
+    this.rentResidenceForm.get('OwnerAddress').setValue(value);
   }
 
   editDeclaration(e: any) {
@@ -234,14 +357,25 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  uploadDocument(item: any) {
+  uploadDocument(item: any, type?: string) {
     this.slectedDeclarationnFile = [];
     if (item) {
-      this.attachmentForDeclaration = item.ComponentId ;
+      this.attachmentForDeclaration = item.ComponentId;
       this.isLargeFile = false;
-      let currentDeclaration = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item.ComponentId);
+      this.viewAttachment = '';
+      let currentDeclaration = this.declarationFiles.filter(x => x.FileName.split('_')[0] == item.ComponentId);
       if (currentDeclaration.length > 0)
         this.slectedDeclarationnFile = currentDeclaration;
+
+      if (this.FilesCollection.length > 0) {
+        this.FileDocumentList = [];
+        this.FilesCollection = [];
+        this.removeSelectedFile()
+      }
+
+      if (type != null && type !== '')
+        this.viewAttachment = type;
+
       $("#addAttachmentModal").modal('show');
     }
   }
@@ -292,34 +426,26 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $("#uploadreceipt").click();
   }
 
+  fireuploadHPLetter() {
+    $("#uploadHPLetter").click();
+  }
+
   fireBrowser() {
     $("#modifyAttachment").click();
   }
 
-  ModifyAttachment(fileInput: any, fileId: number) {
-    this.FileDocumentList = [];
-    this.FilesCollection = [];
-    let selectedFile = fileInput.target.files;
-    if (selectedFile) {
-      let file = null;
-      file = <File>selectedFile[0];
-      let item: Files = new Files();
-      item.FileName = this.attachmentForDeclaration;
-      item.FileType = file.type;
-      item.FileSize = (Number(file.size) / 1024);
-      item.FileExtension = file.type;
-      item.DocumentId = 0;
-      item.FileUid = fileId;
-      item.ParentFolder = '';
-      item.Email = this.employeeEmail;
-      item.UserId = this.EmployeeId;
-      this.FileDocumentList.push(item);
-      this.FilesCollection.push(file);
-      this.totalFileSize = 0;
-      this.totalFileSize += selectedFile[0].size / 1024;
-    } else {
-      ErrorToast("You are not slected the file")
-    }
+  viewFile(userFile: any) {
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}.${userFile.FileExtension}`;
+    this.viewer = document.getElementById("file-container");
+    this.viewer.classList.remove('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+  }
+
+  closePdfViewer() {
+    event.stopPropagation();
+    this.viewer.classList.add('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', '');
   }
 
   uploadReceipts(fileInput: any) {
@@ -332,17 +458,55 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       while (index < selectedFile.length) {
         file = <File>selectedFile[index];
         let item: Files = new Files();
-        item.FileName = this.attachmentForDeclaration;
+        item.AlternateName = "HP_Receipt";
+        item.FileName = file.name;
         item.FileType = file.type;
         item.FileSize = (Number(file.size) / 1024);
         item.FileExtension = file.type;
         item.DocumentId = 0;
-        //item.FilePath = this.getRelativePath(this.routeParam);
         item.ParentFolder = '';
         item.Email = this.employeeEmail;
         item.UserId = this.EmployeeId;
         this.FileDocumentList.push(item);
         this.FilesCollection.push(file);
+        index++;
+      };
+      this.totalFileSize = 0;
+      let i = 0;
+      while (i < selectedFile.length) {
+        this.totalFileSize += selectedFile[i].size / 1024;
+        i++;
+      }
+      if (this.totalFileSize > 2048) {
+        this.isLargeFile = true;
+        this.fileDetail = [];
+      }
+    } else {
+      ErrorToast("You are not slected the file")
+    }
+  }
+
+  uploadHPLetter(fileInput: any) {
+    this.hPLetterList = [];
+    this.hPLetterCollection = [];
+    let selectedFile = fileInput.target.files;
+    if (selectedFile.length > 0) {
+      let index = 0;
+      let file = null;
+      while (index < selectedFile.length) {
+        file = <File>selectedFile[index];
+        let item: Files = new Files();
+        item.AlternateName = "HP_Dec_Letter";
+        item.FileName = file.name;
+        item.FileType = file.type;
+        item.FileSize = (Number(file.size) / 1024);
+        item.FileExtension = file.type;
+        item.DocumentId = 0;
+        item.ParentFolder = '';
+        item.Email = this.employeeEmail;
+        item.UserId = this.EmployeeId;
+        this.hPLetterList.push(item);
+        this.hPLetterCollection.push(file);
         index++;
       };
       this.totalFileSize = 0;
@@ -366,7 +530,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $("#addAttachmentModal").modal('hide');
   }
 
-  closeDeclaration(e: any) {
+  closeDeclaration(item: any, e: any) {
     this.FileDocumentList = [];
     this.FilesCollection = [];
     this.editException = true;
@@ -378,13 +542,49 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     elem.querySelector('div[name="cancel-declaration"]').classList.add('d-none');
     elem.querySelector('a[name="upload-proof"]').classList.remove('pe-auto', 'fw-bold', 'text-primary-c');
     elem.querySelector('a[name="upload-proof"]').classList.add('pe-none', 'text-decoration-none', 'text-muted');
+    if (item.UploadedFileIds <= 0) {
+      this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
+      let tag = document.createElement("i");
+      tag.classList.add("fa", "fa-paperclip", "pe-2");
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+      tag = document.createElement("span");
+      var text = document.createTextNode("Not Upload");
+      tag.appendChild(text);
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+    } else {
+      this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
+      let tag = document.createElement("i");
+      tag.classList.add("fa", "fa-check-circle", "text-success", "fa-lg", "pe-2");
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+      tag = document.createElement("span");
+      var text = document.createTextNode("Uploaded");
+      tag.appendChild(text);
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+    }
   }
 
   fireFileBrowser() {
     $("#uploadAttachment").click();
   }
 
+  removeSelectedFile() {
+    let elem = document.querySelectorAll('a[name="upload-proof"]');
+    for (let i = 0; i < elem.length; i++) {
+      (<HTMLElement>elem[i]).innerText = '';
+      let tag = document.createElement("i");
+      tag.classList.add("fa", "fa-paperclip", "pe-2");
+      elem[i].appendChild(tag);
+      tag = document.createElement("span");
+      var text = document.createTextNode("Not Upload");
+      tag.appendChild(text);
+      elem[i].appendChild(tag);
+    }
+  }
+
   saveAttachment() {
+    let length = this.FilesCollection.length;
+    this.presentRow.querySelector('a[name="upload-proof"]').classList.add('text-decoration-none');
+    this.presentRow.querySelector('a[name="upload-proof"]').innerText = length + " " + "file selected";
     $('#addAttachmentModal').modal('hide');
   }
 
@@ -413,18 +613,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
-            if(response.ResponseBody.SalaryComponentItems && response.ResponseBody.SalaryComponentItems.length > 0) {
-              this.employeeDeclaration = response.ResponseBody;
-              this.ExemptionDeclaration = this.addSubmittedFileIds(this.employeeDeclaration.ExemptionDeclaration);
-              this.OtherDeclaration = this.addSubmittedFileIds(this.employeeDeclaration.OtherDeclaration);
-              this.TaxSavingAlloance = this.addSubmittedFileIds(this.employeeDeclaration.TaxSavingAlloance);
-            }
-            this.salaryDetails = response.ResponseBody.SalaryDetail;
-            this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
-
-            Toast("Declaration Uploaded Successfully.");
-            this.SectionIsReady = true;
-            this.closeDeclaration(e);
+            this.bindData(response.ResponseBody);
+            Toast("Declaration detail loaded successfully");
           }
         });
       }
@@ -452,8 +642,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     let value = e.target.checked;
     if (value == true)
       this.isPanEnable = true;
-    else
+    else {
       this.isPanEnable = false;
+      this.rentResidenceForm.get('PANNo').setValue('');
+    }
   }
 
   nextDeclaration(value: string) {
@@ -464,6 +656,36 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     } else {
       this.active = 4;
     }
+  }
+
+  editRentedResidence(data: any) {
+    if (data) {
+      this.isRentedResidenceEdit = true;
+      this.FileDocumentList = [];
+      this.hPLetterList = [];
+      let value = this.declarationFiles.filter(x => x.FileName.split('_')[0] == 'HP');
+      this.housingPropertyRentFile = value.filter(x => x.FileName.split('_')[1] == "Receipt");
+      this.housingPropertyLetterFile = value.filter(x => x.FileName.split('_')[1] == "Dec");
+      this.housingPropertyDetail = data;
+      this.rentedResidence();
+      $('#rentedResidenceModal').modal('show');
+    }
+    else
+      this.isRentedResidenceEdit = false;
+  }
+
+  viewHousingPropertyFilePopUp(item: any) {
+    this.viewHousingPropFile = [];
+    this.viewHousingPropFile = item;
+    $('#housingPropertyFileModal').modal('show');
+  }
+
+  deleteHousingPropertyFile(userFile: any) {
+
+  }
+
+  showrentedDetail() {
+    this.isShowRentedDetail = !this.isShowRentedDetail;
   }
 
   activateMe(ele: string) {
@@ -508,8 +730,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.rentalPage = 2;
   }
 
-  gotoTaxSection(value: string) {
-    this.nav.navigateRoot(IncomeTax, value)
+  gotoTaxSection() {
+    this.nav.navigateRoot(IncomeTax, null)
   }
 }
 
@@ -533,7 +755,7 @@ class TaxAmount {
 class MyDeclaration {
   Declaration: string = '';
   NoOfDeclaration: number = 0;
-  AmountDeclared: number =0;
+  AmountDeclared: number = 0;
   ProofSUbmitted: number = 0;
   AmountRejected: number = 0;
   AmountAccepted: number = 0;

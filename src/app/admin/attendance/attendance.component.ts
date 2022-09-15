@@ -827,12 +827,12 @@ export class AttendanceComponent implements OnInit {
           placeholder: "Select Organization"
         }
 
-        let assignedClients = this.applicationData.Clients.filter(x => clients.indexOf(x.ClientId) !== -1);
+        //let assignedClients = this.applicationData.Clients.filter(x => clients.indexOf(x.ClientId) !== -1);
         let i = 0;
-        while(i < assignedClients.length) {
+        while(i < clients.length) {
           this.clientDetail.data.push({
-            text: assignedClients[i].ClientName,
-            value: assignedClients[i].ClientId,
+            text: clients[i].CompanyName,
+            value: clients[i].CompanyId,
           });
           i++;
         }

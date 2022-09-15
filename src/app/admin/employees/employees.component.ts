@@ -132,9 +132,9 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     let activeState = null;
     if(this.isActiveEmployee != -1) {
       if(this.isActiveEmployee == 1)
-        activeState = true;
+        this.employeeData.isActive = true;
       else
-        activeState = false;
+        this.employeeData.isActive = false;
     }
 
     this.http.post("Employee/GetEmployees", this.employeeData).then((response: ResponseModel) => {
@@ -305,8 +305,14 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   editProfile(item: any) {
     if (item !== null) {
       let EmpId = item.EmployeeUid;
+      let status = 1;
+      if (item.IsActive == true)
+        status = 1;
+      else
+        status = 0;
+
       if (EmpId !== null && EmpId !== "") {
-        this.http.get(`Employee/GetEmployeeById/${EmpId}/${item.IsActive}`).then((response: ResponseModel) => {
+        this.http.get(`Employee/GetEmployeeById/${EmpId}/${status}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             this.nav.navigate(Profile, response.ResponseBody);
           }

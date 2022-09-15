@@ -104,11 +104,11 @@
                       <p>Select your gender</p>
                       <div class="col-4 d-flex flex-row justify-content-between">
                         <div>
-                          <input type="checkbox" class="me-2">
+                          <input type="radio" class="me-2" name="Gender" formControlName="Gender" value="true">
                           <span>Male</span>
                         </div>
                         <div>
-                          <input type="checkbox" class="me-2">
+                          <input type="radio" class="me-2" name="Gender" formControlName="Gender" value="false">
                           <label>Female</label>
                         </div>
                       </div>
@@ -247,7 +247,7 @@
                       </div>
                       <div class="col-md-12 mb-3">
                         <label class="form-label">Address</label>
-                        <textarea rows="5" class="form-control" placeholder="Address" name="Address" oninput="this.value = this.value.toUpperCase()"
+                        <textarea rows="5" class="form-control" placeholder="Address" name="Address" oninput="this.value = this.value.toUpperCase()" [rows]="3"
                           formControlName="Address"></textarea>
                       </div>
                     </div>
@@ -269,8 +269,7 @@
                       </div>
                       <div class="col-md-6 mb-3">
                         <label class="form-label">Aadhar No. #</label>
-                        <input class="form-control" placeholder="Aadhar No. #" name="AadharNo"
-                          oninput="this.value = this.value.toUpperCase()" formControlName="AadharNo" />
+                        <input class="form-control" placeholder="Aadhar No. #" name="AadharNo" OnlyNumber="18" formControlName="AadharNo" />
                       </div>
                       <div class="col-md-12 mb-3">
                         <label class="form-label">Bank Account No.#</label>
@@ -302,11 +301,11 @@
                         <form class="form-inline">
                           <div class="form-group w-100">
                             <div class="input-group w-100">
-                              <input class="form-control" placeholder="yyyy-mm-dd" name="joiningDate"
+                              <input class="form-control" placeholder="yyyy-mm-dd" name="joiningDate" readonly
                                 [(ngModel)]="joiningDatemodel" (dateSelect)="onJoiningDateSelection($event)" ngbDatepicker
                                 #joiningDate="ngbDatepicker">
                               <div class="input-group-append">
-                                <button class="btn btn-outline-secondary calendar" (click)="joiningDate.toggle()"
+                                <button class="btn btn-outline-secondary calendar" (click)="joiningDate.toggle()" disabled
                                   type="button"><i class="fa fa-calendar" aria-hidden="true"></i>
                                 </button>
                               </div>

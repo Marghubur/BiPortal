@@ -116,7 +116,6 @@ export class CustomsalaryStructureComponent implements OnInit {
         this.groupComponents = response.ResponseBody;
         this.groupAllComponents = response.ResponseBody;
         Toast("Salary Group added suuccessfully.");
-        this.SalaryGroupForm.reset();
         this.componentsAvailable = true;
       } else {
         ErrorToast("Unable to add salary group.")
@@ -127,7 +126,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   salaryGroup() {
     this.SalaryGroupForm = this.fb.group({
-      CompanyId: new FormControl(this.selectedSalaryStructure.CompanyId), 
+      CompanyId: new FormControl(this.compnayDetail.CompanyId),
       ComponentId: new FormControl(this.selectedSalaryStructure.ComponentId),
       GroupName: new FormControl(this.selectedSalaryStructure.GroupName, [Validators.required]),
       GroupDescription: new FormControl(this.selectedSalaryStructure.GroupDescription, [Validators.required]),
@@ -188,6 +187,7 @@ export class CustomsalaryStructureComponent implements OnInit {
       if(res.ResponseBody && res.ResponseBody.SalaryComponents != null && res.ResponseBody.SalaryGroups != null) {
         this.salaryStructureType = res.ResponseBody.SalaryGroups;
         this.buildSalaryComponentDetail(res.ResponseBody.SalaryComponents);
+        this.salaryGroup();
         this.isPageReady = true;
         this.isReady = true;
         Toast("Salary components loaded successfully.");
@@ -203,15 +203,14 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.compnayDetail = this.nav.getValue();
     this.salaryStructureType = [];
     this.selectedSalaryStructure = new SalaryStructureType();
     this.ComponentName = '0';
     this.OpertaionType = "0";
     this.CalculationValue = null;
-    this.selectedSalaryStructure.CompanyId = this.compnayDetail.CompanyId;
-    this.salaryGroup();
+    this.compnayDetail = this.nav.getValue();
     if (this.compnayDetail != null) {
+      this.selectedSalaryStructure.CompanyId = this.compnayDetail.CompanyId;
       this.loadData();
       this.createCustomSalaryStructure();
     } else {
@@ -276,7 +275,6 @@ export class CustomsalaryStructureComponent implements OnInit {
         if (response.ResponseBody) {
           this.salaryStructureType = response.ResponseBody;
           Toast("Salary Group added suuccessfully.");
-          this.SalaryGroupForm.reset();
           $('#addSalaryGroupModal').modal('hide');
           this.isLoading = false;
         } else {
@@ -322,7 +320,6 @@ export class CustomsalaryStructureComponent implements OnInit {
       if (response.ResponseBody) {
         this.salaryStructureType = response.ResponseBody;
         Toast("Salary Group added suuccessfully.");
-        this.SalaryGroupForm.reset();
         $('#addSalaryGroupModal').modal('hide');
         this.isLoading = false;
       } else {
@@ -456,6 +453,8 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   addSalaryGroupModal() {
     this.submitted = false;
+    this.selectedSalaryStructure = new SalaryStructureType();
+    this.salaryGroup();
     $('#addSalaryGroupModal').modal('show');
   }
 

@@ -18,9 +18,6 @@
           href="javascript:void(0)">Preference</a>
       </li>
     </ul>
-    <div class="col-md-3 pe-2 my-3" *ngIf="isEmployeesReady">
-      <app-iautocomplete [data]="employeesList" (OnSelect)="getDeclaration($event)" [(ngModel)]="EmployeeId" [ngModelOptions]="{standalone: true}"></app-iautocomplete>
-    </div>
   </div>
   <div class="col-12 x_panel p-0 m-0">
     <div class="">
@@ -75,26 +72,27 @@
                   <h5 class="mb-0 ps-3">Important</h5>
                 </div>
                 <ul class="ps-5 ms-3">
-                  <li class="pt-3">'$' - Not considered for exemption if opted foe New tax regime (Section 115BAC).</li>
+                  <li class="pt-3">'$' - Not considered for exemption if opted <form action="" method="post"></form> New tax regime (Section 115BAC).</li>
                   <li class="pt-3">You can declare your investment amount till <span class="fw-bold">20th of every
                       month</span> until the cutoff date of <span class="fw-bold">May 20, {{year}}</span></li>
                   <li class="pt-3">Last date for submitting your investment proofs is <span class="fw-bold">Dec 20,
                       {{year}}</span></li>
                 </ul>
                 <div class="alert alert-warning mx-5">
-                  Not submitting your investment proofs may lead to additional taxx being deducted in the subsequent months
+                  Not submitting your investment proofs may lead to additional taxx being deducted in the subsequent
+                  months
                   of this fiscal year.
                 </div>
               </div>
               <div class="col-md-12 row my-4" [ngClass]="{'d-none': !SectionIsReady}">
-                <div class="col-md-4">
+                <div class="col-md-5">
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Net Taxable Income</p>
                     <p class="text-dark fs-2 mb-0 ">
-                      <span class="">INR {{employeeDeclaration.TotalAmount | number : '1.2-2'}}</span>
+                      <span class="" *ngIf="employeeDeclaration.TotalAmount > 200000">INR {{employeeDeclaration.TotalAmount | number : '1.2-2'}}</span>
+                      <span class="" *ngIf="employeeDeclaration.TotalAmount < 200000">INR 0</span>
                       <span class="float-end pe-2">
-                        <a href="javascript:void(0)" (click)="gotoTaxSection('income-tax')"
-                          class="text-decoration-none fs-6">
+                        <a href="javascript:void(0)" (click)="gotoTaxSection()" class="text-decoration-none fs-6">
                           Income Tax Computitation
                         </a>
                       </span>
@@ -109,7 +107,7 @@
                     <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}</p>
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Tax Already Paid</p>
                     <p class="text-dark fs-2 mb-0 vhide">INR {{employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
@@ -139,12 +137,12 @@
                               </div>
                               <div class="th fe-3">
                                 <div class="cell-wrapper">
-                                  NUMBER OF DECLARATIONS
+                                  # OF DECLARATIONS
                                 </div>
                               </div>
                               <div class="th fe-2">
                                 <div class="cell-wrapper">
-                                  AMOUNT OF DECLARED
+                                  DECLARED AMOUNT
                                 </div>
                               </div>
                               <div class="th fe-2">
@@ -174,9 +172,23 @@
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-3">
-                                  <div class="cell-wrapper">
-                                    {{declaration.Declarations.length}}
-                                  </div>
+                                  <ng-container *ngIf="declaration.DeclarationName == 'House Property'">
+                                    <ng-container *ngIf="declaration.TotalAmountDeclared > 0">
+                                      <div class="cell-wrapper">
+                                        1
+                                      </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="declaration.TotalAmountDeclared <= 0">
+                                      <div class="cell-wrapper">
+                                        0
+                                      </div>
+                                    </ng-container>
+                                  </ng-container>
+                                  <ng-container *ngIf="declaration.DeclarationName != 'House Property'">
+                                    <div class="cell-wrapper">
+                                      {{declaration.Declarations.length}}
+                                    </div>
+                                  </ng-container>
                                 </div>
                                 <div class="td align-middle fe-2">
                                   <div class="cell-wrapper">
@@ -212,7 +224,7 @@
                         </div>
                         <div class="py-3">
                           <h5 class="text-dark ps-2 pb-0 mb-0">Monthly Tax Deductions Details</h5>
-                          <p class="mb-0 ps-2">Below deduction are based on your declared amount. Tax amount may chnage
+                          <p class="mb-0 ps-2">Below deduction are based on your declared amount. Tax amount may change
                             based
                             on th amount approved.</p>
                         </div>
@@ -220,7 +232,8 @@
                           <div class="col-md-4">
                             <div class="card py-3 ps-3">
                               <p class="mb-0">TOTAL TAX PAYABLE</p>
-                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}</p>
+                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}
+                              </p>
                             </div>
                           </div>
                           <div class="col-md-4">
@@ -232,7 +245,8 @@
                           <div class="col-md-4">
                             <div class="card py-3 ps-3">
                               <p class="mb-0">REMAINING TAX AMOUNT</p>
-                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay - employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
+                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay -
+                                employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
                             </div>
                           </div>
                         </div>
@@ -252,7 +266,7 @@
                             <div class="tr py-3">
                               <div class="td px-2 fe-2">Monthly Total Tax</div>
                               <ng-container *ngFor="let item of TaxDetails">
-                                <div class="td ps-1">{{item.TaxDeducted}}</div>
+                                <div class="td ps-1">{{item.TaxDeducted| number:'1.2-2'}}</div>
                               </ng-container>
                             </div>
                           </div>
@@ -363,7 +377,8 @@
                           </div>
                           <div class="t-body" *ngIf="SectionIsReady">
                             <ng-container *ngFor="let r of ExemptionDeclaration; let i=index">
-                              <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                              <div class="tr py-2" name="table-row"
+                                [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
                                     {{r.Section}} <sup>$</sup>
@@ -380,10 +395,12 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper" name="view-control">
-                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
+                                      number:'':'en'}}</span>
                                     <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
                                   </div>
-                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
+                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
+                                    name="edit-control">
                                     <span class="pe-2 d-flex flex-column justify-content-center">
                                       <i class="fa fa-inr"></i>
                                     </span>
@@ -392,21 +409,22 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
-                                    <div *ngIf="r.UploadedFileIds > 0">
-                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
-                                        (click)="uploadDocument(r)">
+                                    <div *ngIf="r.UploadedFileIds != null">
+                                      <a href="javascript:void(0)" name="upload-proof"
+                                        class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
-                                          <div class="circle">
+                                          <!-- <div class="circle">
                                             <div class="checkmark">
                                             </div>
-                                          </div>
-                                          <span class="ps-3">Uploaded</span>
+                                          </div> -->
+                                          <i class="fa fa-check-circle fa-lg text-success"></i>
+                                          <span class="ps-2">Uploaded</span>
                                         </div>
                                       </a>
                                     </div>
                                     <div *ngIf="r.UploadedFileIds == null">
-                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
-                                        (click)="uploadDocument(r)">
+                                      <a href="javascript:void(0)" name="upload-proof"
+                                        class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <i class="fa fa-paperclip pe-2"></i>Not Upload
                                       </a>
                                     </div>
@@ -415,33 +433,31 @@
                                 <div class="td align-middle">
                                   <div class="cell-wrapper">
                                     <div class="d-flex align-items-center">
-                                      <!-- <ng-container *ngIf="r.Status != 2">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3">Auto Accepted</span>
-                                      </ng-container> -->
-                                      <ng-container *ngIf="r.DeclaredValue > 0">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3">Submitted</span>
+                                      <ng-container *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2 fw-bold text-dark">Auto Accepted</span>
+                                      </ng-container>
+                                      <ng-container *ngIf="r.DeclaredValue > 0 && (r.ComponentId != 'EPF' || r.ComponentId != 'VPF')">
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2">Submitted</span>
                                       </ng-container>
                                     </div>
-                                    <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
+                                    <span *ngIf="r.DeclaredValue <= 0 && (r.ComponentId != 'EPF' && r.ComponentId != 'VPF')">Not Submitted</span>
                                   </div>
                                 </div>
-                                <div class="td text-center fe-1">
+                                <div class="td text-center fe-1" *ngIf="r.ComponentId != 'EPF' && r.ComponentId != 'VPF'">
                                   <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                                  <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
+                                  <div class="d-flex align-items-center justify-content-center d-none"
+                                    name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
-                                      (click)="closeDeclaration($event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
+                                      (click)="closeDeclaration(r, $event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
+                                </div>
+                                <div class="td text-center fe-1" *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
                                 </div>
                               </div>
                             </ng-container>
@@ -454,7 +470,8 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-success"
-                            (click)="nextDeclaration('otherExemptions')">Next<i class="fa fa-arrow-right ps-2"></i></button>
+                            (click)="nextDeclaration('otherExemptions')">Next<i
+                              class="fa fa-arrow-right ps-2"></i></button>
                         </div>
                       </ng-container>
                     </ng-template>
@@ -473,24 +490,24 @@
                             <label for="" class="form-label">Search perform on section and deduction name.</label>
                             <div class="form-group has-search">
                               <span class="fa fa-search form-control-feedback"></span>
-                              <input type="text" class="form-control"
-                                oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-                                (keyup.enter)="filterDeduction($event, 'other')" (keyup.esc)="resetFilter($event)">>
+                              <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
+                                placeholder="Search" (keyup.enter)="filterDeduction($event, 'other')"
+                                (keyup.esc)="resetFilter($event)">
                             </div>
                           </div>
                         </div>
                         <div class="col-md-12 row pb-4 ps-3">
-                          <div class="col-auto me-2">
-                            <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
-                            <h6 class="text-dark">INR 150000</h6>
-                          </div>
                           <div class="col-auto mx-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                            <h6 class="text-dark">{{employeeDeclaration.Declarations[1].TotalAmountDeclared}}</h6>
+                            <h6 class="text-dark">INR {{employeeDeclaration.Declarations[1].TotalAmountDeclared | number}}</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AUTO APPROVED AMOUNT</label>
+                            <h6 class="text-dark">INR {{employeeDeclaration.Declarations[1].TotalAmountDeclared }}</h6>
                           </div>
                           <div class="col-auto mx-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
-                            <h6 class="text-dark">INR 21600</h6>
+                            <h6 class="text-dark">INR 0</h6>
                           </div>
                           <div class="col-auto ms-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
@@ -548,7 +565,8 @@
                           </div>
                           <div class="t-body" *ngIf="SectionIsReady">
                             <ng-container *ngFor="let r of OtherDeclaration; let i=index">
-                              <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                              <div class="tr py-2" name="table-row"
+                                [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
                                     {{r.Section}} <sup>$</sup>
@@ -575,33 +593,34 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper" name="view-control">
-                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
+                                      number:'':'en'}}</span>
                                     <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
                                   </div>
-                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
+                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
+                                    name="edit-control">
                                     <span class="pe-2 d-flex flex-column justify-content-center">
                                       <i class="fa fa-inr"></i>
                                     </span>
-                                    <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" (keyup)="checkMaxLimit($event, r.MaxLimit)">
+                                    <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue"
+                                      name="DeclaratedValue" class="form-control"
+                                      (keyup)="checkMaxLimit($event, r.MaxLimit)">
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
-                                    <div *ngIf="r.UploadedFileIds > 0">
-                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
-                                        (click)="uploadDocument(r)">
+                                    <div *ngIf="r.UploadedFileIds != null">
+                                      <a href="javascript:void(0)" name="upload-proof"
+                                        class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
-                                          <div class="circle">
-                                            <div class="checkmark">
-                                            </div>
-                                          </div>
-                                          <span class="ps-3">Uploaded</span>
+                                          <i class="fa fa-check-circle fa-lg text-success"></i>
+                                          <span class="ps-2">Uploaded</span>
                                         </div>
                                       </a>
                                     </div>
                                     <div *ngIf="r.UploadedFileIds == null">
-                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
-                                        (click)="uploadDocument(r)">
+                                      <a href="javascript:void(0)" name="upload-proof"
+                                        class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <i class="fa fa-paperclip pe-2"></i>Not Upload
                                       </a>
                                     </div>
@@ -618,11 +637,8 @@
                                         <span class="ps-3">Auto Accepted</span>
                                       </ng-container> -->
                                       <ng-container *ngIf="r.DeclaredValue > 0">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3">Submitted</span>
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2">Submitted</span>
                                       </ng-container>
                                     </div>
                                     <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
@@ -631,11 +647,13 @@
                                 <div class="td text-center fe-1">
                                   <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                                  <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
+                                  <div class="d-flex align-items-center justify-content-center d-none"
+                                    name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
-                                      (click)="closeDeclaration($event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
+                                      (click)="closeDeclaration(r, $event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                               </div>
@@ -648,8 +666,8 @@
                           </div>
                         </div>
                         <div class="modal-footer border-top-0">
-                          <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('exemptions')"><i
-                              class="fa fa-arrow-left pe-2"></i> Prev</button>
+                          <button type="button" class="btn btn-outline-primary"
+                            (click)="nextDeclaration('exemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
                           <button type="button" class="btn btn-outline-success"
                             (click)="nextDeclaration('taxSavingAllowance')">Next <i
                               class="fa fa-arrow-right ps-2"></i></button>
@@ -665,7 +683,8 @@
                         <div class="row justify-content-between mt-3 mb-2">
                           <div class="col-md-8">
                             <h5 class="ps-3">Tax Saving Allowances</h5>
-                            <p class=" ps-3">Following allowances are exempted from Gross for Income tax calculation only
+                            <p class=" ps-3">Following allowances are exempted from Gross for Income tax calculation
+                              only
                               when
                               claim is submitted against allowances.</p>
                           </div>
@@ -673,9 +692,9 @@
                             <label for="" class="form-label">Search perform on section and deduction name.</label>
                             <div class="form-group has-search">
                               <span class="fa fa-search form-control-feedback"></span>
-                              <input type="text" class="form-control"
-                                oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-                                (keyup.enter)="filterDeduction($event, 'taxsaving')" (keyup.esc)="resetFilter($event)">
+                              <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
+                                placeholder="Search" (keyup.enter)="filterDeduction($event, 'taxsaving')"
+                                (keyup.esc)="resetFilter($event)">
                             </div>
                           </div>
                         </div>
@@ -685,17 +704,17 @@
                           tax calculation to view tax exempted amount.
                         </div>
                         <div class="col-md-12 row pb-4 ps-3 pt-2">
-                          <div class="col-auto me-2">
-                            <label for="" class="form-label pe-2 mb-0">MAX LIMIT</label>
-                            <h6 class="text-dark">INR 150000</h6>
-                          </div>
                           <div class="col-auto mx-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT DECLARED</label>
-                            <h6 class="text-dark">{{employeeDeclaration.Declarations[2].TotalAmountDeclared}}</h6>
+                            <h6 class="text-dark">INR {{employeeDeclaration.Declarations[2].TotalAmountDeclared}}</h6>
+                          </div>
+                          <div class="col-auto mx-3">
+                            <label for="" class="form-label pe-2 mb-0">AUTO APPROVED AMOUNT</label>
+                            <h6 class="text-dark">INR {{employeeDeclaration.Declarations[2].TotalAmountDeclared}}</h6>
                           </div>
                           <div class="col-auto mx-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT ACCEPTED</label>
-                            <h6 class="text-dark">INR 21600</h6>
+                            <h6 class="text-dark">INR 0</h6>
                           </div>
                           <div class="col-auto ms-3">
                             <label for="" class="form-label pe-2 mb-0">AMOUNT REJECTED</label>
@@ -753,7 +772,8 @@
                           </div>
                           <div class="t-body" *ngIf="SectionIsReady">
                             <ng-container *ngFor="let r of TaxSavingAlloance; let i=index">
-                              <div class="tr py-2" name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                              <div class="tr py-2" name="table-row"
+                                [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
                                     {{r.Section}} <sup>$</sup>
@@ -775,34 +795,35 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper" name="view-control">
-                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue | number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
+                                      number:'':'en'}}</span>
                                     <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
                                   </div>
-                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none" name="edit-control">
+                                  <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
+                                    name="edit-control">
                                     <span class="pe-2 d-flex flex-column justify-content-center">
                                       <i class="fa fa-inr"></i>
                                     </span>
-                                    <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" (keyup)="checkMaxLimit($event, r.MaxLimit)">
+                                    <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue"
+                                      name="DeclaratedValue" class="form-control"
+                                      (keyup)="checkMaxLimit($event, r.MaxLimit)">
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
-                                    <div *ngIf="r.UploadedFileIds > 0">
-                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
-                                        (click)="uploadDocument(r)">
+                                    <div *ngIf="r.UploadedFileIds != null">
+                                      <a href="javascript:void(0)" name="upload-proof"
+                                        class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
-                                          <div class="circle">
-                                            <div class="checkmark">
-                                            </div>
-                                          </div>
-                                          <span class="ps-3">Uploaded</span>
+                                          <i class="fa fa-check-circle fa-lg text-success"></i>
+                                          <span class="ps-2">Uploaded</span>
                                         </div>
                                       </a>
                                     </div>
                                     <div *ngIf="r.UploadedFileIds == null">
-                                      <a href="javascript:void(0)" name="upload-proof" class="text-muted pe-none text-decoration-none"
-                                        (click)="uploadDocument(r)">
-                                        <i class="fa fa-paperclip pe-2"></i>Not Upload
+                                      <a href="javascript:void(0)" name="upload-proof"
+                                        class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
+                                        <i class="fa fa-paperclip pe-2"></i><span>Not Upload</span>
                                       </a>
                                     </div>
                                   </div>
@@ -810,19 +831,9 @@
                                 <div class="td align-middle">
                                   <div class="cell-wrapper">
                                     <div class="d-flex align-items-center">
-                                      <!-- <ng-container *ngIf="r.Status != 2">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3">Auto Accepted</span>
-                                      </ng-container> -->
                                       <ng-container *ngIf="r.DeclaredValue > 0">
-                                        <div class="circle">
-                                          <div class="checkmark">
-                                          </div>
-                                        </div>
-                                        <span class="ps-3">Submitted</span>
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2">Submitted</span>
                                       </ng-container>
                                     </div>
                                     <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
@@ -831,11 +842,13 @@
                                 <div class="td text-center fe-1">
                                   <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                                  <div class="d-flex align-items-center justify-content-center d-none" name="cancel-declaration">
+                                  <div class="d-flex align-items-center justify-content-center d-none"
+                                    name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"
                                       (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascripr:void(0)" class="text-decoration-none text-danger ps-3"
-                                      (click)="closeDeclaration($event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
+                                      (click)="closeDeclaration(r, $event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                               </div>
@@ -849,7 +862,8 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-primary"
-                            (click)="nextDeclaration('otherExemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
+                            (click)="nextDeclaration('otherExemptions')"><i class="fa fa-arrow-left pe-2"></i>
+                            Prev</button>
                           <button type="button" class="btn btn-outline-success"
                             (click)="submitDeclaration()">Submit</button>
                         </div>
@@ -863,16 +877,75 @@
                       <ng-container>
                         <h5 class="text-dark">House Property</h5>
                         <p>Here you can declare all the gouse property rented or owned.</p>
+                        <div class="alert alert-warning fs-6" role="alert" *ngIf="housingPropertyDetail.TotalRent > 0 && housingPropertyDetail.TotalRent > 100000">
+                          The total rent amount for this financial year exceeds INR 1,00,000. You need to provide Owner PAN details or Signed documents.
+                        </div>
                         <div class="col-md-12 row">
                           <div class="col-md-9 ps-3">
                             <div class="col-md-12">
                               <div class="card px-3 pb-3">
                                 <h5 class="pt-3 pb-2">I live in a rented residence</h5>
-                                <div class="alert alert-info" role="alert">
+                                <div class="alert alert-info" role="alert" *ngIf="housingPropertyDetail== null || housingPropertyDetail == ''">
                                   There are no rental details available
                                 </div>
-                                <div>
-                                  <button class="btn btn-outline-primary" (click)="rentedDecalrationPopup()"> <i class="fa fa-plus"></i> Add Rented
+                                <p class="mb-0">{{housingPropertyDetail.RentedFrom}} - {{housingPropertyDetail.RentedTo}}</p>
+                                <div class="custom-bg text-dark d-flex align-items-center py-2 my-3 rounded" *ngIf="housingPropertyDetail.TotalRent > 0">
+                                  <a href="javascript:void(0)" class="text-decoration-none" (click)="showrentedDetail()">
+                                    <i class="fa fa-lg ps-4" [ngClass]="{'fa-caret-right': !isShowRentedDetail, 'fa-caret-down': isShowRentedDetail}"></i>
+                                  </a>
+                                  <div class="pe-2 ps-4">
+                                    <small>MONTH</small>
+                                    <p class="mb-0">{{housingPropertyDetail.RentedFrom}} - {{housingPropertyDetail.RentedTo}}</p>
+                                  </div>
+                                  <span class="fs-5 px-4"></span>
+                                  <div class="px-2">
+                                    <small>CITY</small>
+                                    <p class="mb-0">{{housingPropertyDetail.City}}</p>
+                                  </div>
+                                  <span class="fs-5 px-4"></span>
+                                  <div class="px-2">
+                                    <small>NUMBER OF OWNERS</small>
+                                    <p class="mb-0">1</p>
+                                  </div>
+                                  <div class="ms-auto">
+                                    <span class="badge bg-primary">RENTED</span>
+                                    <span class="badge bg-success ms-2">AUTO APPROVED TILL CUTOFF DATE</span>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="editRentedResidence(housingPropertyDetail)">
+                                      <i class="fa fa-ellipsis-v ps-3 pe-4" aria-hidden="true"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                                <div class="card mb-4" *ngIf="isShowRentedDetail">
+                                  <p class="mb-0 custom-bg text-dark py-2 ps-2">Rentail Details</p>
+                                  <div class="bg-white d-flex align-items-center py-2 my-3 rounded" *ngIf="housingPropertyDetail.TotalRent > 0">
+                                    <div class="pe-2 ps-4 col-md-4">
+                                      <small>RENTED DECLARED</small>
+                                      <p class="mb-0 text-dark">INR {{housingPropertyDetail.TotalRent}}</p>
+                                    </div>
+                                    <div class="px-2 col-md-4">
+                                      <small>ADDRESS</small>
+                                      <p class="mb-0 text-dark">{{housingPropertyDetail.Address}}</p>
+                                    </div>
+                                  </div>
+                                  <p class="mb-0 custom-bg text-dark py-2 ps-2">Owner Details</p>
+                                  <div class="bg-white d-flex align-items-center py-2 my-3 rounded" *ngIf="housingPropertyDetail.TotalRent > 0">
+                                    <div class="pe-2 ps-4 col-md-2">
+                                      <small>NAME</small>
+                                      <p class="mb-0 text-dark">{{housingPropertyDetail.OwnerName}}</p>
+                                    </div>
+                                    <div class="px-2 col-md-2">
+                                      <small>PAN NUMBER</small>
+                                      <p class="mb-0 text-dark">{{housingPropertyDetail.PANNo}}</p>
+                                    </div>
+                                    <div class="px-2 col-md-4">
+                                      <small>ADDRESS</small>
+                                      <p class="mb-0 text-dark">{{housingPropertyDetail.OwnerAddress}}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div *ngIf="housingPropertyDetail.TotalRent <= 0">
+                                  <button class="btn btn-outline-primary" (click)="rentedDecalrationPopup()"> <i
+                                      class="fa fa-plus"></i> Add Rented
                                     Residence</button>
                                 </div>
                               </div>
@@ -900,9 +973,11 @@
                                 <li>You can add more than one rented property or own property for the current financial
                                   year.
                                 </li>
-                                <li class="pt-3">For rented property if the total rent is more than &#x20b9; 100000 then you
+                                <li class="pt-3">For rented property if the total rent is more than &#x20b9; 100000 then
+                                  you
                                   need to provide either PAN of owner or declaration letter.</li>
-                                <li class="pt-3">For rented property you are eligible for HRA and in case HRA is not paid by
+                                <li class="pt-3">For rented property you are eligible for HRA and in case HRA is not
+                                  paid by
                                   your employer you will be eligible for exemption under section 80 GG.</li>
                                 <li class="pt-2">For own property/residence you will be eligible for house loan interest
                                   exemption under section 24.</li>
@@ -919,7 +994,8 @@
                     <ng-template ngbNavContent>
                       <ng-container>
                         <h5 class="text-dark">Income From Other Sources</h5>
-                        <p>Income from other sources is a residual category used to classify income that is not classified
+                        <p>Income from other sources is a residual category used to classify income that is not
+                          classified
                           as
                           taxed under any other head of income.</p>
                         <div class="mb-3">
@@ -945,14 +1021,14 @@
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl p-5 ">
     <div class="modal-content rounded-3 px-4">
-      <div class="modal-header">
-        <h5 class="modal-title fw-normal" id="addAttachmentModalLabel">Add Attachment for {{attachmentForDeclaration}}
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title fw-normal" id="addAttachmentModalLabel">{{viewAttachment == '' ? 'Add Attachment' : 'View Attachment'}}  for {{attachmentForDeclaration}}
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="col-12 row m-0">
-          <div class="col-md-4 card mt-4 me-2">
+          <!-- <div class="col-md-4 card mt-4 me-2">
             <div class="">
               <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
               <div class="col-md-12 p-0">
@@ -983,8 +1059,8 @@
                 <i class="fa fa-eraser pe-2"></i> Cancel
               </button>
             </div>
-          </div>
-          <div class="col-md-7 mt-4 overflow-auto" style="height: 33vh">
+          </div> -->
+          <div class="col-md-12 mt-4 overflow-auto" style="height: 33vh">
             <ng-container *ngIf="slectedDeclarationnFile.length > 0">
               <table class="table">
                 <thead>
@@ -996,8 +1072,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of slectedDeclarationnFile">
-                    <td class="counterCell"></td>
+                  <tr *ngFor="let item of slectedDeclarationnFile; let i = index">
+                    <td class="counterCell">{{i+1}}</td>
                     <td>{{item.FileName}}</td>
                     <td>
                       <ng-container *ngIf="item.FileSize > 0">
@@ -1008,15 +1084,17 @@
                       </ng-container>
                     </td>
                     <td>
-                      <input type="file" id="modifyAttachment" class="d-none"
+                      <!-- <input type="file" id="modifyAttachment" class="d-none"
                         (change)="ModifyAttachment($event, item.FileId)" />
                       <a href="javascript:void(0)" (click)="fireBrowser()" class="text-decoration-none"> <i
-                          class="fa fa-pencil text-primary"></i></a>
+                          class="fa fa-pencil text-primary"></i></a> -->
+                      <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
+                      <a href="javascript:void(0)" class="text-decoration-none" (click)="deletePopup(item)"><i class="fa fa-trash px-2 text-danger"></i></a>
                     </td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="viewAttachment == null || viewAttachment == ''">
                     <td colspan="2" class="ps-5 fw-bold">Total Size: </td>
-                    <td width="15%" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
+                    <td colspan="2" class="fw-bold">{{totalFileSize | number: '1.2-2'}} KB</td>
                   </tr>
                 </tbody>
               </table>
@@ -1055,6 +1133,17 @@
           </div>
         </div>
       </div>
+      <div class="modal-footer border-top-0 mb-2" *ngIf="viewAttachment == null || viewAttachment == ''">
+        <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
+        <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="fireFileBrowser()"><i class="fa fa-paperclip pe-2"></i>Add Attachment</a>
+        <button type="button" class="btn btn-outline-danger mx-2" (click)="closeAttachmentModal()">
+          <i class="fa fa-eraser pe-2"></i> Clean
+        </button>
+        <button type="button" class="btn btn-primary-c ms-2" (click)="saveAttachment()"
+          [disabled]="isLargeFile || FilesCollection.length == 0">
+          <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -1065,7 +1154,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="rentedResidenceModalLabel">Add Rented Residence</h5>
+        <h5 class="modal-title" id="rentedResidenceModalLabel">{{isRentedResidenceEdit ? 'Edit': 'Add'}} Rented Residence</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -1077,7 +1166,7 @@
                 <label class="form-label">From</label>
                 <select class="form-select" formControlName="RentedFrom">
                   <option value="">Select from date</option>
-                  <option [value]="item.month+item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
+                  <option [value]="item.month + item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
                   </option>
                 </select>
               </div>
@@ -1085,19 +1174,19 @@
                 <label class="form-label">To</label>
                 <select class="form-select" formControlName="RentedTo">
                   <option value="">Select to date</option>
-                  <option [value]="item.month+item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
+                  <option [value]="item.month + item.year" *ngFor="let item of taxCalender">{{item.month}} {{item.year}}
                   </option>
                 </select>
               </div>
             </div>
             <div class="col-md-12 mt-3">
               <label class="form-label">Address</label>
-              <textarea formControlName="Address" placeholder="Address" class="form-control"></textarea>
+              <textarea formControlName="Address" placeholder="Address" class="form-control" oninput="this.value = this.value.toUpperCase()"></textarea>
             </div>
             <div class="row">
               <div class="col-md-6 mt-3">
                 <label class="form-label">City</label>
-                <input type="text" formControlName="City" placeholder="City" class="form-control">
+                <input type="text" formControlName="City" placeholder="City" class="form-control" oninput="this.value = this.value.toUpperCase()">
               </div>
               <div class="col-md-6 mt-3">
                 <label class="form-label">Total Rent</label>
@@ -1108,12 +1197,16 @@
                 </div>
               </div>
             </div>
-            <div>
+            <div class="mt-3">
               <input type="file" class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf"
                 (change)="uploadReceipts($event)" multiple id="uploadreceipt">
-              <a href="javascript:void(0)" (click)="fireuploadreceipt()" class="text-decoration-none"><i
+              <a href="javascript:void(0)" *ngIf="housingPropertyRentFile.length <=0" (click)="fireuploadreceipt()" class="text-decoration-none"><i
                   class="fa fa-paperclip pe-2 pt-3"></i>Rent Receipts or Agreement <i
                   class="fa fa-exclamation-circle ps-2 text-secondary"></i></a>
+              <span class="ps-3 fw-bold" *ngIf="FileDocumentList.length > 0">{{FileDocumentList.length}} file selected</span>
+              <a href="javascript:void(0)" (click)="viewHousingPropertyFilePopUp(housingPropertyRentFile)">
+                <span class="ps-3 fw-bold" *ngIf="FileDocumentList.length == 0 && housingPropertyRentFile.length > 0">{{housingPropertyRentFile.length}} file uploaded</span>
+              </a>
             </div>
             <div class="modal-footer border-top-0">
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i>
@@ -1126,7 +1219,7 @@
             <h5>Owner Name</h5>
             <div class="col-md-6 mt-3">
               <label class="form-label">Owner Name</label>
-              <input type="text" class="form-control" placeholder="Owner Name" formControlName="OwnerName">
+              <input type="text" class="form-control" placeholder="Owner Name" formControlName="OwnerName" oninput="this.value = this.value.toUpperCase()">
             </div>
             <div class="form-check d-flex align-items-center col-md-6 mt-3">
               <input class="form-check-input" type="checkbox" (click)="panFieldEnable($event)"
@@ -1135,12 +1228,12 @@
                 PAN Number
               </label>
               <div class="col-md-9">
-                <input type="text" class="form-control" placeholder="PAN Number" [readonly]="!isPanEnable"
+                <input type="text" class="form-control" placeholder="PAN Number" [readonly]="!isPanEnable" oninput="this.value = this.value.toUpperCase()"
                   formControlName="PANNo">
               </div>
             </div>
             <div class="form-check col-md-6 mt-3">
-              <input class="form-check-input" type="checkbox" formControlName="IsOwnerAddress">
+              <input class="form-check-input" type="checkbox" (click)="sameOwnerAddress($event)" oninput="this.value = this.value.toUpperCase()" formControlName="IsOwnerAddressSame">
               <label class="form-check-label">
                 Owner address same as rental address
               </label>
@@ -1148,7 +1241,7 @@
             <div class="col-md-12 mt-3">
               <label class="form-label">Address</label>
               <textarea type="text" formControlName="Address" placeholder="OwnerAddress" class="form-control"
-                formControlName=""></textarea>
+                formControlName="OwnerAddress"></textarea>
             </div>
             <div class="form-check mt-3">
               <input class="form-check-input" formControlName="IsSignedDeclaration"
@@ -1160,18 +1253,31 @@
               </label>
               <div class="col-md-6 mt-3">
                 <label class="form-label">Owner Type</label>
-                <select class="form-select" [disabled]="!isSignDeclareEnable" formControlName="OwnerType">
-                  <option value="">Select Land lord Type</option>
+                <select class="form-select" [disabled]="!isSignDeclareEnable" formControlName="LandlordType">
+                  <option value="" disabled>Select Land lord Type</option>
+                  <option value="Government">Government</option>
+                  <option value="NonResident">Non Resident</option>
+                  <option value="OtherValue">Other Value</option>
                 </select>
-                <a href="javascript:void(0)" class="text-decoration-none"><i
-                    class="fa fa-paperclip pe-2 pt-3"></i>Upload declaration letter</a>
+                <div class="mt-3">
+                  <input type="file" class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf"
+                    (change)="uploadHPLetter($event)" multiple id="uploadHPLetter">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="fireuploadHPLetter()" *ngIf="housingPropertyLetterFile.length <= 0"><i
+                      class="fa fa-paperclip pe-2 pt-3"></i>Upload declaration letter</a>
+                  <span class="ps-3 fw-bold" *ngIf="hPLetterList.length > 0">{{this.hPLetterList.length}} file selected</span>
+                  <a href="javascript:void(0)" (click)="viewHousingPropertyFilePopUp(housingPropertyLetterFile)">
+                    <span class="ps-3 fw-bold" *ngIf="hPLetterList.length == 0 && housingPropertyLetterFile.length > 0">{{housingPropertyLetterFile.length}} file uploaded</span>
+                  </a>
+                </div>
               </div>
             </div>
             <div class="modal-footer border-top-0">
               <button type="button" class="btn btn-secondary" (click)="navRentalpage(1)"><i
                   class="fa fa-arrow-left pe-2"></i> Back</button>
-              <button type="button" class="btn btn-primary-c" (click)="submitRentResidence()"><i
-                  class="fa fa-save pe-2"></i> Save</button>
+              <button class="btn btn btn-primary-c" [disabled]="isLoading" (click)="submitRentResidence()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-save': !isLoading}"></i>
+                {{ isLoading ? 'Wait' : 'Save' }}
+              </button>
             </div>
           </ng-container>
         </form>
@@ -1213,4 +1319,72 @@
     </div>
   </div>
 </div> -->
+<!-- End -->
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
+<!-- End pdf view modal -->
+
+<!-- Delete Attachment Popup -->
+<div class="modal delete-modal fade attachment-popup" id="deleteAttachmentModal" tabindex="-1" aria-labelledby="deleteAttachmentModalLabel" *ngIf="deleteFile != null"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded">
+      <div class="modal-header bg-secondary text-light">
+        <h5 class="modal-title fw-normal" id="deleteAttachmentModalLabel">Delete Attachment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5>Are you want delete <span class="text-dark fw-bold">{{deleteFile.FileName}}</span> attachment</h5>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+<!-- View Housing property file -->
+<div class="modal fade delete-modal" id="housingPropertyFileModal" tabindex="-1" aria-labelledby="housingPropertyFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="housingPropertyFileModalLabel">Uploaded Housing Property Files</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ng-container >
+          <table class="table">
+            <thead>
+              <tr>
+                <th width="8%">#</th>
+                <th>File Name</th>
+                <td width="20%">Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of viewHousingPropFile; let i = index">
+                <td class="counterCell">{{i+1}}</td>
+                <td>{{item.FileName}}.{{item.FileExtension}}</td>
+                <td>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteHousingPropertyFile(item)"><i class="fa fa-trash px-2 text-danger"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- End -->

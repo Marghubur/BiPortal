@@ -76,7 +76,7 @@
                   <h5 class="mb-0 ps-3">Important</h5>
                 </div>
                 <ul class="ps-5 ms-3">
-                  <li class="pt-3">'$' - Not considered for exemption if opted foe New tax regime (Section 115BAC).</li>
+                  <li class="pt-3">'$' - Not considered for exemption if opted <form action="" method="post"></form> New tax regime (Section 115BAC).</li>
                   <li class="pt-3">You can declare your investment amount till <span class="fw-bold">20th of every
                       month</span> until the cutoff date of <span class="fw-bold">May 20, {{year}}</span></li>
                   <li class="pt-3">Last date for submitting your investment proofs is <span class="fw-bold">Dec 20,
@@ -228,7 +228,7 @@
                         </div>
                         <div class="py-3">
                           <h5 class="text-dark ps-2 pb-0 mb-0">Monthly Tax Deductions Details</h5>
-                          <p class="mb-0 ps-2">Below deduction are based on your declared amount. Tax amount may chnage
+                          <p class="mb-0 ps-2">Below deduction are based on your declared amount. Tax amount may change
                             based
                             on th amount approved.</p>
                         </div>
@@ -413,7 +413,7 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
-                                    <div *ngIf="r.UploadedFileIds > 0">
+                                    <div *ngIf="r.UploadedFileIds != null">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
@@ -613,7 +613,7 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
-                                    <div *ngIf="r.UploadedFileIds > 0">
+                                    <div *ngIf="r.UploadedFileIds != null">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
@@ -815,7 +815,7 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
-                                    <div *ngIf="r.UploadedFileIds > 0">
+                                    <div *ngIf="r.UploadedFileIds != null">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
@@ -1185,12 +1185,12 @@
             </div>
             <div class="col-md-12 mt-3">
               <label class="form-label">Address</label>
-              <textarea formControlName="Address" placeholder="Address" class="form-control"></textarea>
+              <textarea formControlName="Address" placeholder="Address" class="form-control" oninput="this.value = this.value.toUpperCase()"></textarea>
             </div>
             <div class="row">
               <div class="col-md-6 mt-3">
                 <label class="form-label">City</label>
-                <input type="text" formControlName="City" placeholder="City" class="form-control">
+                <input type="text" formControlName="City" placeholder="City" class="form-control" oninput="this.value = this.value.toUpperCase()">
               </div>
               <div class="col-md-6 mt-3">
                 <label class="form-label">Total Rent</label>
@@ -1223,7 +1223,7 @@
             <h5>Owner Name</h5>
             <div class="col-md-6 mt-3">
               <label class="form-label">Owner Name</label>
-              <input type="text" class="form-control" placeholder="Owner Name" formControlName="OwnerName">
+              <input type="text" class="form-control" placeholder="Owner Name" formControlName="OwnerName" oninput="this.value = this.value.toUpperCase()">
             </div>
             <div class="form-check d-flex align-items-center col-md-6 mt-3">
               <input class="form-check-input" type="checkbox" (click)="panFieldEnable($event)"
@@ -1232,12 +1232,12 @@
                 PAN Number
               </label>
               <div class="col-md-9">
-                <input type="text" class="form-control" placeholder="PAN Number" [readonly]="!isPanEnable"
+                <input type="text" class="form-control" placeholder="PAN Number" [readonly]="!isPanEnable" oninput="this.value = this.value.toUpperCase()"
                   formControlName="PANNo">
               </div>
             </div>
             <div class="form-check col-md-6 mt-3">
-              <input class="form-check-input" type="checkbox" (click)="sameOwnerAddress($event)" formControlName="IsOwnerAddressSame">
+              <input class="form-check-input" type="checkbox" (click)="sameOwnerAddress($event)" oninput="this.value = this.value.toUpperCase()" formControlName="IsOwnerAddressSame">
               <label class="form-check-label">
                 Owner address same as rental address
               </label>

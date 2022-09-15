@@ -145,6 +145,7 @@ export class SettingsComponent implements OnInit {
           this.isPageLoading = true;
         } else {
           Toast("No compnay found under current organization. Please add one.");
+          this.isPageLoading = true;
         }
       } else {
         ErrorToast("Record not found.")
@@ -221,7 +222,7 @@ export class SettingsComponent implements OnInit {
 
   changeTab(index: number, item: CompanyGroup) {
     this.isPageReady = false;
-    this.currentCompnay = this.Companys[0];
+    this.currentCompnay = item;
     if(index >= 0 &&  item.CompanyId > 0) {
       let result = document.querySelectorAll('.list-group-item > a');
       let i = 0;

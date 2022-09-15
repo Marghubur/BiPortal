@@ -202,12 +202,11 @@ export class IncometaxComponent implements OnInit {
   }
 
   getSalaryGroup() {
-    this.http.get('SalaryComponent/GetSalaryGroups').
+    this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryDetail.GroupId}`).
     then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
-        let allSalaryGroup = response.ResponseBody;
-        let salarygrp =  allSalaryGroup.find(x => x.MinAmount < this.salaryDetail.CTC && x.MaxAmount > this.salaryDetail.CTC);
-        this.Section16TaxExemption = (JSON.parse(salarygrp.SalaryComponents).filter(x => x.Section == "16(IA)" || x.Section == "16(III)"));
+        let salaryComponents = response.ResponseBody;
+        this.Section16TaxExemption = salaryComponents.filter(x => x.Section == "16(IA)" || x.Section == "16(III)");
         this.Sec16TaxExemptAmount = 0;
         for (let i = 0; i < this.Section16TaxExemption.length; i++) {
           this.Sec16TaxExemptAmount += this.Section16TaxExemption[i].DeclaredValue;

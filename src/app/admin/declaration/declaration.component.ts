@@ -232,13 +232,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
             let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
             switch (component) {
               case "1.5 Lac Exemptions":
-                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.ExemptionDeclaration.filter(x => x.UploadedFileIds > 0).length;
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(this.ExemptionDeclaration);
                 break;
               case "Other Exemptions":
-                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.OtherDeclaration.filter(x => x.UploadedFileIds > 0).length;
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.OtherDeclaration);
                 break;
               case "Tax Saving Allowance":
-                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.TaxSavingAlloance.filter(x => x.UploadedFileIds > 0).length;
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.TaxSavingAlloance);
                 break;
               case "House Property":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = (this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP')).length;
@@ -270,12 +270,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     while(i < item.length) {
       let currentDeclaration: any = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item[i].ComponentId);
       if (currentDeclaration.length > 0)
+      item[i].UploadedFileIds = [];
       for (let index = 0; index < currentDeclaration.length; index++) {
-        item[i].UploadedFileIds += currentDeclaration[index].FileId;
+        item[i].UploadedFileIds.push(currentDeclaration[index].FileId);
       }
       i++;
     }
     return item;
+  }
+
+  calculatedTotalUploadFile(item: any):number {
+    let totalUploadedFile = 0;
+    let elem = item.filter(x => x.UploadedFileIds != null);
+    if (item.length > 0) {
+      totalUploadedFile = elem.map(x => x.UploadedFileIds.length).reduce((acc, curr) => {return acc + curr;}, 0)
+    }
+    return totalUploadedFile;
   }
 
   rentedResidence() {
@@ -822,7 +832,7 @@ class MyDeclaration {
   AmountAccepted: number = 0;
 }
 
-class HouseProperty {
+export class HouseProperty {
   RentedFrom: string = '';
   RentedTo: string = '';
   TotalRent: number = 0;
