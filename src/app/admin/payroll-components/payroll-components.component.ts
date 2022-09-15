@@ -61,13 +61,13 @@ export class PayrollComponentsComponent implements OnInit {
     this.initdeductionForm();
     this.initbonusForm();
     this.loadData();
-    
+
     if (data > 0) {
       this.companyId = data;
       this.ComponentType = '';
-    } else {
-      ErrorToast("Company was not selected. Please visit page again.");
-    }
+    }// else {
+    //   ErrorToast("Company was not selected. Please visit page again.");
+    // }
   }
 
   navigate() {

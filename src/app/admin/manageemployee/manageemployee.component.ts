@@ -92,6 +92,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     } else {
       this.isUpdate = false;
       this.employeeModal = new EmployeeDetail();
+      this.joiningDate();
       this.employeeModal.ReportingManagerId = null;
       this.employeeModal.DesignationId = null;
       this.employeeModal.AccessLevelId = null;
@@ -113,8 +114,13 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   buildPageData(response: ResponseModel) {
     if (response.ResponseBody && response.ResponseBody.Employee != undefined) {
       this.clients = response.ResponseBody.Clients;
-      if (response.ResponseBody.Employee.length > 0)
+      if (response.ResponseBody.Employee.length > 0) {
         this.employeeModal = response.ResponseBody.Employee[0] as EmployeeDetail;
+        let date = new Date(this.employeeModal.DOB);
+        this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        date = new Date(this.employeeModal.CreatedOn);
+        this.joiningDatemodel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      }
 
       if(response.ResponseBody.Roles)
         this.userRoles = response.ResponseBody.Roles;
@@ -231,6 +237,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.employeeForm.get("DateOfJoining").setValue(date);
   }
 
+  joiningDate() {
+    let date = new Date();
+    this.joiningDatemodel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+  }
+
   bindForm() {
     this.employeeForm = this.fb.group({
       FirstName: new FormControl(this.employeeModal.FirstName, [Validators.required]),
@@ -261,7 +272,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       BranchName: new FormControl(this.employeeModal.BranchName),
       AllocatedClientName: new FormControl(this.employeeModal.AllocatedClientName),
       ProfileImgPath: new FormControl(""),
-      DateOfJoining: new FormControl(this.employeeModal.DateOfJoining),
+      DateOfJoining: new FormControl(this.employeeModal.CreatedOn),
       DOB: new FormControl(this.employeeModal.DOB),
       FileId: new FormControl(this.employeeModal.FileId),
       AccessLevelId: new FormControl(this.employeeModal.AccessLevelId, [Validators.required]),
@@ -269,7 +280,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId),
       DesignationId: new FormControl(this.employeeModal.DesignationId, [Validators.required]),
       CompanyId: new FormControl(this.currentCompanyDetail.CompanyId, [Validators.required]),
-      CTC: new FormControl(this.employeeModal.CTC, [Validators.required])
+      CTC: new FormControl(this.employeeModal.CTC, [Validators.required]),
+      Gender: new FormControl(this.employeeModal.Gender ? 'true' : 'false')
     });
   }
 
@@ -353,7 +365,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.TakeHomeByCandidate = 0;
     if (this.employeeModal.FileId === null)
       this.employeeModal.FileId = 0;
-
     if (errroCounter == 0) {
       if (this.ProfessuinalDetail_JSON == null) {
         this.ProfessuinalDetail_JSON = "";
@@ -596,7 +607,7 @@ export class EmployeeDetail {
   FinalPackage: number = null;
   TakeHomeByCandidate: number = null;
   DOB: Date = null;
-  DateOfJoining: Date = null;
+  CreatedOn: Date = null;
   ReportingManagerId: number = -1;
   DesignationId: number = null;
   AccessLevelId: number = null;
@@ -604,4 +615,5 @@ export class EmployeeDetail {
   CTC: number = null;
   AllocatedClients: Array<AssignedClients> = [];
   ClientJson: string = '';
+  Gender: boolean = true;
 }

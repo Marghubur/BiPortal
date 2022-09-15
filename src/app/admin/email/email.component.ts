@@ -45,8 +45,7 @@ export class EmailComponent implements OnInit {
       To: new FormControl('', [Validators.required]),
       CC: new FormControl(''),
       BCC: new FormControl(''),
-      Subject: new FormControl('', [Validators.required]),
-      Body: new FormControl('')
+      Subject: new FormControl('', [Validators.required])
     })
   }
 
@@ -66,16 +65,17 @@ export class EmailComponent implements OnInit {
     let value = {
       To: this.toEmail,
       Subject: this.emailForm.get('Subject').value,
-      Body: this.emailForm.get('Body').value,
+      Body: (<HTMLInputElement>document.getElementById('emailbody')).innerHTML,
       CC: this.ccEmail,
       BCC: this.bccEmail
     };
-
-    if (this.FileDocumentList.length > 0 && this.currentUser.UserId > 0) {
-      let index = 0;
-      while (index < this.FileDocumentList.length) {
-        formData.append(this.FileDocumentList[index].FileName, this.FilesCollection[index]);
-        index++;
+    if (this.toEmail != null) {
+      if (this.FileDocumentList.length > 0) {
+        let index = 0;
+        while (index < this.FileDocumentList.length) {
+          formData.append(this.FileDocumentList[index].FileName, this.FilesCollection[index]);
+          index++;
+        }
       }
       formData.append("fileDetail", JSON.stringify(this.FileDocumentList));
       formData.append("mailDetail", JSON.stringify(value));
@@ -88,6 +88,8 @@ export class EmailComponent implements OnInit {
       }).catch(e => {
         this.isLoading = false;
       })
+    } else {
+      this.isLoading = false;
     }
   }
 

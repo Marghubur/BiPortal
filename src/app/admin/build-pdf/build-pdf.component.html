@@ -231,14 +231,14 @@
                           </div>
                           <div class="col-md-6 row m-0 p-0">
                             <div class="col-md-6">
-                              <label class="form-label">Billng month*</label>
+                              <label class="form-label">Billing month*</label>
                               <select name="billForMonth" class="form-control" (change)="calculateSpecificDays($event)"
                                 [ngClass]="{'disable-field': !isClientSelected}" formControlName="billForMonth">
                                 <option *ngFor="let m of months" value="{{m.name}}">{{m.name}}</option>
                               </select>
                             </div>
                             <div class="col-md-6">
-                              <label class="form-label">Billng year*</label>
+                              <label class="form-label">Billing year*</label>
                               <input inputtype="mandatory" class="form-control" placeholder="Year"
                                 [ngClass]="{'error': submitted && f.header.errors !== null && f.header.errors.required}"
                                 name="billYear" formControlName="billYear" />

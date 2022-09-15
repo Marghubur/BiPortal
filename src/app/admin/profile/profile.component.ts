@@ -1309,7 +1309,7 @@ export class ManageComponent implements OnInit {
     this.fileDetail = [];
   }
 
-  public submitManageUserForm() {
+  submitManageUserForm() {
     let formData = new FormData();
     let userInfo = this.manageUserForm.value;
     this.userModal.FirstName = userInfo.FirstName;
@@ -1400,7 +1400,7 @@ class Employment {
   Years: number = 0;
   Months: number = 0;
   CurrentSalary: number = 0;
-  CurrencyType: string = null;
+  CurrencyType: string = '';
   Experties: string = null;
   JobProfile: string = null;
 }

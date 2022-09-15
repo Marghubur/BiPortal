@@ -261,7 +261,7 @@
                               </label>
                             </div>
                           </div>
-    
+
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="true" name="IsLeaveAccruedProrateDefined"
                               formControlName="IsLeaveAccruedProrateDefined" (click)="toggleCurrent(2, $event)">
@@ -339,9 +339,7 @@
                         </label>
                       </div>
 
-                      <div
-                        [ngClass]="{'d-none': leaveAccrualForm.controls.IsLeavesProratedForJoinigMonth.value == 'true'}"
-                        id="EmpJoinMiddle">
+                      <div [ngClass]="{'d-none': leaveAccrualForm.controls.IsLeavesProratedForJoinigMonth.value == 'true'}" id="EmpJoinMiddle">
                         <ng-container formArrayName="JoiningMonthLeaveDistribution">
                           <div class="my-4" [formGroupName]="i"
                             *ngFor="let item of formBetweenJoiningDate.controls; let i = index">
@@ -405,8 +403,12 @@
                           Leaves are updated based on date of month, on which employee is exiting the company..
                         </label>
                       </div>
-                      <div [ngClass]="{'d-none': leaveAccrualForm.controls.IsNotAllowProratedOnNotice.value == 'false'}"
-                        id="EmpExitMiddle">
+                      <div [ngClass]="{'d-none': leaveAccrualForm.controls.IsNotAllowProratedOnNotice.value == 'false'}" id="EmpExitMiddle">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="" formControlName="">
+                          <label class="form-check-label">This rule is applied from this days
+                            <i class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="If an employee is existing in between a leave calender year, the leave will be prorated will be prorated and allocated accordingly. Example: If annual quota is 12 and employee is existing on 15th June, the prorated leave allocation will be 5.5 for that year. If the employee exits on 1st July, he will get 6 leaves."></i></label>
+                        </div>
                         <ng-container formArrayName="ExitMonthLeaveDistribution">
                           <div class="my-4" [formGroupName]="i"
                             *ngFor="let item of leaveAccrualForm.get('ExitMonthLeaveDistribution').controls; let i = index">

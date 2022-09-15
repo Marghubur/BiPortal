@@ -62,7 +62,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   TotalReceivedAmount: number = 0;
   TotalBilledAmount: number = 0;
   TotalSalaryAmount: number = 0;
-  RaisedBilloption: string = '';
+  RaisedBilloption: string = '1';
   isReadonly: boolean = true;
   calculateAmount: boolean = false;
   orderByNameAsc: boolean = null;
@@ -410,8 +410,10 @@ export class FilesComponent implements OnInit, AfterViewChecked {
           if (ext[1] == "docx")
             this.viewer.classList.add("d-none");
         }
+        $('#downloadPopUp').modal('hide')
       }
-      this.closeWindow();
+      //this.closeWindow();
+
     }).catch(e => {
       console.log(JSON.stringify(e));
     });
@@ -817,6 +819,22 @@ export class FilesComponent implements OnInit, AfterViewChecked {
         this.http.get(`Clients/GetClientById/${ClientId}/${ClientIsActive}/${UserType.Client}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             this.nav.navigate(RegisterClient, response.ResponseBody);
+          }
+        }).catch(e => {
+          ErrorToast("Got error to get data. Please contact to admin.");
+        })
+      }
+    }
+  }
+
+  EditEmployee(item: any) {
+    if (item !== null) {
+      let EmpId = item;
+      let EmpIsActive = 1;
+      if (EmpId !== null && EmpId !== "") {
+        this.http.get(`Employee/GetEmployeeById/${EmpId}/${EmpIsActive}`).then((response: ResponseModel) => {
+          if (response.ResponseBody !== null) {
+            this.nav.navigate(ManageEmployee, response.ResponseBody);
           }
         }).catch(e => {
           ErrorToast("Got error to get data. Please contact to admin.");

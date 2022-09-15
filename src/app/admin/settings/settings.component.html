@@ -282,7 +282,7 @@
                                     <h4>Please add salary group first.</h4>
                                   </div>
                                 </ng-container>
-  
+
                               </ng-template>
                             </li>
                             <li [ngbNavItem]="2">
@@ -419,7 +419,7 @@
                                 </div>
                               </ng-template>
                             </li>
-  
+
                             <li [ngbNavItem]="4">
                               <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('EX')">Expenses <i
                                   class="fa fa-money px-2"></i></a>
@@ -516,7 +516,7 @@
                 <div class="col-md-12 mt-3">
                   <label for="" class="form-label">ABOUT COMPANY</label>
                   <textarea
-                    [ngClass]="{'error-field': submitted && f.CompanyDetail.errors !== null && f.CompanyDetail.errors.required}"
+                    [ngClass]="{'error-field': submitted && f.CompanyDetail.errors !== null && f.CompanyDetail.errors.required}" oninput="this.value = this.value.toUpperCase()"
                     formControlName="CompanyDetail" type="text" placeholder="Company Description"
                     class="form-control"></textarea>
                 </div>

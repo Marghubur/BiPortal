@@ -942,6 +942,7 @@ export class BuildPdfComponent implements OnInit {
         ClientId: this.currentOrganization.CompanyId,
         SenderId: this.senderClient.CompanyId,
         FileId: this.FileDetail.FileId,
+        EmployeeId: this.currentEmployee.EmployeeUid,
         Emails: [this.billAllDetails.receiverEmail, this.billAllDetails.senderEmail]
       };
       for (let i = 0; i < this.email.length; i++) {
