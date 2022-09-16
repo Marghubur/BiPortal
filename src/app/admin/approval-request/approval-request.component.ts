@@ -45,14 +45,18 @@ export class ApprovalRequestComponent implements OnInit {
   loadData() {
     this.http.get(`Request/GetPendingRequests/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
       if(response.ResponseBody) {
-        this.request = response.ResponseBody.filter(x => x.RequestType == 2);
-        this.leave_request = response.ResponseBody.filter(x => x.RequestType == 1);
+        this.buildPage(response.ResponseBody);
       } else {
         ErrorToast("Fail to fetch data. Please contact to admin.");
       }
     }).catch(e => {
       ErrorToast("Fail to fetch data. Please contact to admin.");
     });
+  }
+
+  buildPage(req: any) {
+    this.request = req.filter(x => x.RequestType == 2);
+    this.leave_request = req.filter(x => x.RequestType == 1);
   }
 
   openPopup(state: string, request: any) {
@@ -88,14 +92,14 @@ export class ApprovalRequestComponent implements OnInit {
     switch(header) {
       case 'Approved':
         this.currentRequest.RequestStatusId = ItemStatus.Approved;
-        endPoint = `${endPoint}/ApprovalAction`;
+        endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
         break;
       case 'Rejected':
         this.currentRequest.RequestStatusId = ItemStatus.Rejected;
-        endPoint = `${endPoint}/ApprovalAction`;
+        endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
         break;
       case 'Othermember':
-        endPoint = `${endPoint}/ApprovalAction`;
+        endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
         break;
       default:
         throw 'Invalid option selected.';
@@ -104,9 +108,10 @@ export class ApprovalRequestComponent implements OnInit {
 
     this.http.put(endPoint, this.currentRequest).then((response:ResponseModel) => {
       if (response.ResponseBody) {
-        Toast("Submitted Successfully");
-        this.isLoading = false;
         $('#leaveModal').modal('hide');
+        this.isLoading = false;
+        Toast("Submitted Successfully");
+        this.buildPage(response.ResponseBody);
       }
     }).catch(e => {
       this.isLoading = false;

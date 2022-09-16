@@ -185,8 +185,8 @@ export class LeaveComponent implements OnInit {
   }
 
   bindData(res: any) {
-    if(res.ResponseBody.Employees && res.ResponseBody.LeavePlan) {
-      if(!res.ResponseBody.EmployeeLeaveDetail && !res.ResponseBody.LeavePlan) {
+    if(res.ResponseBody.Employee && res.ResponseBody.LeavePlanTypes) {
+      if(!res.ResponseBody.EmployeeLeaveDetail) {
         ErrorToast("Fail to get leave detail. Please contact to admin.");
         return;
       }
@@ -197,9 +197,9 @@ export class LeaveComponent implements OnInit {
         this.leaveData = this.leaveData.sort((a, b) => Number(b.RequestedOn) - Number(a.RequestedOn));
       }
 
-      let plandetail = res.ResponseBody.LeavePlan;
-      if(plandetail && plandetail.AssociatedPlanTypes) {
-        this.leaveTypes = JSON.parse(plandetail.AssociatedPlanTypes);
+      let plandetail = res.ResponseBody.LeavePlanTypes;
+      if(plandetail) {
+        this.leaveTypes = plandetail;
         if(!this.leaveTypes) {
           ErrorToast("Invalid plan detail. Please contact to admin.");
           return;
@@ -215,22 +215,22 @@ export class LeaveComponent implements OnInit {
         text: "Default Manager",
       });
 
-      if(!res.ResponseBody.Employees) {
-        ErrorToast("Unable to bind manage detail. Please contact to admin.");
-      }
+      // if(!res.ResponseBody.Employees) {
+      //   ErrorToast("Unable to bind manage detail. Please contact to admin.");
+      // }
 
-      this.managerList.className ="";
-      let i = 0;
-      let managers = res.ResponseBody.Employees;
-      while(i < managers.length) {
-        //if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
-          this.managerList.data.push({
-            value: managers[i].EmployeeUid,
-            text: `${managers[i].FirstName} ${managers[i].LastName}`
-          });
-        //}
-        i++;
-      }
+      // this.managerList.className ="";
+      // let i = 0;
+      // let managers = res.ResponseBody.Employees;
+      // while(i < managers.length) {
+      //   //if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
+      //     this.managerList.data.push({
+      //       value: managers[i].EmployeeUid,
+      //       text: `${managers[i].FirstName} ${managers[i].LastName}`
+      //     });
+      //   //}
+      //   i++;
+      // }
 
       this.DestroyGraphInstances();
       this.bindChartData();
