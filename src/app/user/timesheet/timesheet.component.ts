@@ -54,6 +54,7 @@ export class TimesheetComponent implements OnInit {
   cachedData: any = null;
   dailyTimesheetDetails: Array<any> = [];
   emptyFields: Array<number> = [];
+  distributedWeek = [];
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -225,8 +226,11 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
-  initForm(timesheetDetail: Array<any>) {
+  initForm(timesheetDetail: Array<any>, index?: number) {
     let weekDaysList = this.buildWeekDays();
+    if (index >= 0) {
+      weekDaysList = this.distributedWeek[index];
+    }
     this.weekDaysList = weekDaysList.map(item => item.date.getDay());
 
     let timesheetId = 0;
@@ -356,7 +360,7 @@ export class TimesheetComponent implements OnInit {
     .then(response => {
       if (response.ResponseBody) {
         Toast("Created/Updated successfully");
-        this.initForm(response.ResponseBody);
+        //this.initForm(response.ResponseBody);
       } else {
         Toast("Fail to inser/update, please contact to admin.");
       }
@@ -492,6 +496,15 @@ export class TimesheetComponent implements OnInit {
   buildWeekDays(): Array<any> {
     let weekDaysList = [];
     let currentDate = null;
+    this.emptyFields = [];
+    let day = this.fromDate.getDay();
+    let value = 0;
+    if(this.fromDate.getDate() < 6  && (day > 1 || day == 0)) {
+      value = day == 0 ? 6 : day-1 ;
+      for (let i = 0; i < value; i++) {
+        this.emptyFields.push(i);
+      }
+    }
     if((this.toDate - this.fromDate) > 0){
       let index = 0;
       //let to = 7;
@@ -510,7 +523,7 @@ export class TimesheetComponent implements OnInit {
       Toast("Wrong date seleted.")
     }
 
-    let i = 0;
+    let i = value;
     while(i < weekDaysList.length) {
       if (weekDaysList[i].date.getDay() == 0 || weekDaysList[i].date.getDay() == 6) {
         weekDaysList[i].hrs = "00";
@@ -519,15 +532,19 @@ export class TimesheetComponent implements OnInit {
       i++;
     }
 
-    this.emptyFields = [];
-      let day = this.fromDate.getDay();
-      if(this.fromDate.getDate() < 6  && (day > 1 || day == 0)) {
-        let value = day == 0 ? 6 : day-1 ;
-        for (let i = 0; i < value; i++) {
-          this.emptyFields.push(i);
-        }
-      }
+    this.distributedWeek = [];
+    let index = 0;
+    while (index <weekDaysList.length) {
+      let increment = 0;
+      if (index == 0)
+        increment = (7 - value);
+      else
+        increment = index + 7;
 
+      let data = weekDaysList.slice(index, increment);
+      this.distributedWeek.push(data);
+      index=increment;
+    }
     return weekDaysList;
   }
 
@@ -626,6 +643,11 @@ export class TimesheetComponent implements OnInit {
     } else {
       WarningToast("Please select employer first.");
     }
+  }
+
+  viewTimeSheet(index: number) {
+    this.initForm(this.dailyTimesheetDetails, index)
+    $('#timesheetModal').modal('show')
   }
 
   checkDateExists(currenDate: Date, existingDateList: Array<any>) {

@@ -140,7 +140,7 @@ export class MysalaryComponent implements OnInit {
           Bonus: 0,
           Other: ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2),
           Total: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount * 12) + (this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2),
-          Effective:new Date(), //this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId).UpdatedOn,
+          Effective: this.userDetail.CreatedOn,
           PFperMonth: ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2)/12,
           Perks: 0,
           SalaryMonth: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount), 2)
