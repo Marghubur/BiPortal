@@ -308,7 +308,8 @@
                           </a>
                         </td>
                         <td>
-                          Pending
+                          <span *ngIf="item.status == 2"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Pending</span>
+                          <span *ngIf="item.status == 8"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
                         </td>
                       </tr>
                     </tbody>
@@ -385,12 +386,7 @@
                 </tr>
               </thead>
               <tbody formArrayName="timesheetArray">
-                <tr *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;">
-                  <!-- <ng-container *ngIf="emptyFields.length > 0">
-                    <td *ngFor="let item of emptyFields">
-                      <span>Not Allowed</span>
-                    </td>
-                  </ng-container> -->
+                <tr *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11}">
                   <ng-container >
                     <ng-container [formGroupName]="i">
                       <td>{{item.get('PresentDate').value | date: 'EEE'}}</td>
@@ -398,12 +394,12 @@
                       <td></td>
                       <td>
                         <div class="center-badge d-flex justify-content-start">
-                          <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23" [readonly]="item.get('TimesheetStatus').value == 11"
+                          <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23" [readonly]="item.get('TimesheetStatus').value == 11" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11}"
                             [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
                             formControlName="UserHours"
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                           <span>&nbsp;:</span>
-                          <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59" [readonly]="item.get('TimesheetStatus').value == 11"
+                          <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59" [readonly]="item.get('TimesheetStatus').value == 11" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11}"
                             (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 

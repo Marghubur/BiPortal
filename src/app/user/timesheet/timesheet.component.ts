@@ -253,7 +253,33 @@ export class TimesheetComponent implements OnInit {
         return this.buildWeekForm(item, value, timesheetId);
       }))
     });
+    if (isNaN(index))
+      this.weeklyTimeSheetDistribution();
     this.countTotalTime();
+  }
+
+  weeklyTimeSheetDistribution() {
+    let value = this.timesheetForm.value.timesheetArray.filter(x => x.TimesheetStatus != 11);
+    let count = 0;
+    this.currentMonthWeek = [];
+    for (let i = 0; i < this.distributedWeek.length; i++) {
+      let index = 0;
+      if (this.emptyFields.length > 0 && count == 0) {
+        index =  this.emptyFields.length;
+        count = 1;
+      }
+      let status = 0;
+      let filterrecord = value.filter(x => x.PresentDate.getTime() >= this.distributedWeek[i][index].date.getTime() && x.PresentDate.getTime() <= this.distributedWeek[i][this.distributedWeek[i].length-1].date.getTime())
+      if (filterrecord.filter(x => x.TimesheetStatus == 2).length > 0)
+        status = 2;
+      else
+        status = 8;
+      this.currentMonthWeek.push( {
+        startWeek: this.distributedWeek[i][index].date,
+        endWeek: this.distributedWeek[i][this.distributedWeek[i].length-1].date,
+        status: status
+      })
+    }
   }
 
   countTotalTime() {
@@ -550,7 +576,7 @@ export class TimesheetComponent implements OnInit {
     }
 
     this.distributedWeek = [];
-    this.currentMonthWeek = [];
+    //this.currentMonthWeek = [];
     let index = 0;
     while (index <weekDaysList.length) {
       let increment = index + 7;
@@ -559,18 +585,18 @@ export class TimesheetComponent implements OnInit {
       index=(index+7);
     }
 
-    let count = 0;
-    for (let i = 0; i < this.distributedWeek.length; i++) {
-      let index = 0;
-      if (this.emptyFields.length > 0 && count == 0) {
-        index =  this.emptyFields.length;
-        count = 1;
-      }
-      this.currentMonthWeek.push( {
-        startWeek: this.distributedWeek[i][index].date,
-        endWeek: this.distributedWeek[i][this.distributedWeek[i].length-1].date
-      })
-    }
+    // let count = 0;
+    // for (let i = 0; i < this.distributedWeek.length; i++) {
+    //   let index = 0;
+    //   if (this.emptyFields.length > 0 && count == 0) {
+    //     index =  this.emptyFields.length;
+    //     count = 1;
+    //   }
+    //   this.currentMonthWeek.push( {
+    //     startWeek: this.distributedWeek[i][index].date,
+    //     endWeek: this.distributedWeek[i][this.distributedWeek[i].length-1].date
+    //   })
+    // }
     return weekDaysList;
   }
 
