@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-md-3">
                       <small>DATE OF BIRTH</small>
-                      <p class="text-dark">{{PanInformation.DOB | date}}</p>
+                      <p class="text-dark">{{employeeDetail.DOB | date}}</p>
                     </div>
                   </div>
                   <div>
@@ -97,15 +97,15 @@
                   <div class="row">
                     <div class="col-md-4">
                       <small>PF NUMBER</small>
-                      <p class="text-dark">{{satutoryInformation.PFNumber}}</p>
+                      <p class="text-dark">{{employeeDetail.EmployeeUid}}</p>
                     </div>
                     <div class="col-md-4">
                       <small>UNIVERSAL ACCOUNT NUMBER</small>
                       <p class="text-dark">{{satutoryInformation.UniversalACNumber}}</p>
                     </div>
                     <div class="col-md-3">
-                      <small>PF JON DATE</small>
-                      <p class="text-dark">{{satutoryInformation.PFJoinDate | date}}</p>
+                      <small>PF JOIN DATE</small>
+                      <p class="text-dark">{{employeeDetail.CreatedOn | date}}</p>
                     </div>
                   </div>
                   <h5 class="text-dark pt-3 pb-1">ESI Account Information</h5>

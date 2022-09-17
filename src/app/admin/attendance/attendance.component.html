@@ -28,20 +28,14 @@
             </div>
             <div class="col-md-4 p-0 m-0">
               <label class="form-label">Select Compnay</label>
-              <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+              <app-iautocomplete [data]="clientDetail" (OnSelect)="loadMappedClients($event)"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
               </app-iautocomplete>
             </div>
           </div>
         </ng-container>
         <div class="col-md-4 vhide elem-row justify-content-end">
-          <div class="elem-row-item-base justify-content-end">
-            <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
-              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
-              {{ isLoading ? 'Wait' : 'Present week'}}
-            </a>
-          </div>
           <div class="elem-row-item-base justify-content-end ps-2">
-            <a href="javascript:void(0)" (click)="getAllPendingAttendance()"
+            <a href="javascript:void(0)"
               class="p-2 p-2 badge bg-success text-light head-badge">
               <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
               My pending attendance
@@ -53,284 +47,237 @@
     <div *ngIf="isEmployeesReady">
       <app-breadcrums></app-breadcrums>
     </div>
-
-    <ng-container [ngSwitch]="divisionCode">
-      <ng-container *ngSwitchCase="2">
-        <div class="x_panel pt-4 attendance-form">
-          <div class="x_header">
-            <div class="x_header_title row">
-              <div class="text-dark text-dark d-flex flex-column justify-content-center">
-                <h2>Find below pending attendance list: <small>For the present month.</small></h2>
-              </div>
-            </div>
-          </div>
-          <div class="x_content m-4 d-flex flex-column justify-content-between">
-            <div class="d-flex" *ngFor="let d of weekList;let index = index;">
-              <p class="pending-list me-2">{{index + 1.}}</p>
-              <a href="javascript:void(0)" (click)="getPendingWeek(d.days[0].date, d.days[6].date)"
-                class="pending-list">
-                <b>Your pending attendance from:</b>
-                <span>{{d.days[0].date | date}} - {{d.days[6].date | date}}</span>
-              </a>
-            </div>
-
-            <div class="d-flex flex-row justify-content-center mt-5">
-              <p class="text-muted pending-info">{{PendingAttendacneMessage}}</p>
-            </div>
-          </div>
+    <ng-container *ngIf="!isEmployeeSelected">
+      <div class="my-5 py-5 d-flex align-items-center justify-content-center">
+        <div class="my-5 py-5 fs-5 fw-bold text-dark">
+          Please select Employee and Employer first
         </div>
-      </ng-container>
-
-      <ng-container *ngSwitchDefault>
-        <ng-container *ngIf="isAttendanceDataLoaded">
-          <div class="col-md-12 row mt-4 mb-4 ms-0">
-            <div class="col-md-4 ps-0">
-              <h6>Attendance Stats</h6>
-              <div class="card px-3 py-2">
-                <div class="d-flex justify-content-between">
-                  <h6 class="pt-3 ps-2">
-                    Last Week
-                  </h6>
-                  <div>
-                    <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
-                  </div>
-                </div>
-                <div class="d-flex align-items-center justify-content-between pe-2 pb-3 pt-3">
-                  <div class="col-md-4 d-flex align-items-center">
-                    <i class="fa fa-user-circle fa-2x text-success ps-2" aria-hidden="true"></i>
-                    <span class="fw-bold ps-2 last-week-team">Your</span>
-                  </div>
-                  <div class="col-md-4">
-                    <h6 class="last-week-team">AVG HRS / DAY</h6>
-                    <h6 class="pt-2"> 8h 0m</h6>
-                  </div>
-                  <div class="col-md-4">
-                    <h6 class="last-week-team">ON TIME ARRIVAL</h6>
-                    <h6 class=" pt-2">100%</h6>
-                  </div>
-                </div>
-                <div class="border-top d-flex align-items-center pt-3">
-                  <div class="col-md-4 d-flex align-items-center">
-                    <span class="fa-stack fa-lg ps-2 text-dark">
-                      <i class="fa fa-circle fa-stack-2x"></i>
-                      <i class="fa fa-users fa-stack-1x fa-inverse"></i>
-                    </span>
-                    <span class="fw-bold ps-2 last-week-team">My Team</span>
-                  </div>
-                  <div class="col-md-4 pt-2">
-                    <h6>7h 24m</h6>
-                  </div>
-                  <div class="col-md-4 pt-2">
-                    <h6>81%</h6>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <h6>Timings</h6>
-              <div class="card px-3 py-2">
-                <div class="d-flex justify-content-between pb-4">
-                  <div class="d-flex pt-3 ps-2">
-                    <div class="text-inisde-circle" [ngClass]="{'active-circle': DayValue == 1}">M</div>
-                    <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 2}">T</div>
-                    <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 3}">W</div>
-                    <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 4}">T</div>
-                    <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 5}">F</div>
-                    <div class="text-inisde-circle ms-3 inactive-circle">S</div>
-                    <div class="text-inisde-circle ms-3 inactive-circle">S</div>
-                  </div>
-                  <div>
-                    <i class="fa fa-search fa-lg pe-3 pt-3" aria-hidden="true"></i>
-                    <i class="fa fa-qrcode fa-lg  pe-2 pt-3" aria-hidden="true"></i>
-                  </div>
-                </div>
-                <ng-container *ngIf="DayValue > 0 &&  DayValue <= 5">
-                  <h6 class="pt-5 ps-2">Today (10:00 AM - 8:00PM)</h6>
-                  <div class="progress ms-2 me-2 mt-1 mb-2">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 11.11%" aria-valuenow="1.11"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <div class="d-flex justify-content-between ps-2 pe-2">
-                    <h6>Duration: 9h 0m</h6>
-                    <h6>Break: 60 Min</h6>
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="DayValue == 6 || DayValue ==  0">
-                  <h4 class="text-center pt-4 pb-5">Today is Holiday</h4>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isEmployeeSelected">
+      <ng-container *ngIf="!isLoading">
+        <h6 class="mt-3 text-dark">Logs & Requests</h6>
+        <div class="col-md-12 mt-3 bg-light">
+          <div class="x_panel">
+            <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
+              <span class="ps-4 fw-bold" *ngIf="presentMonth">Last {{currentDays.length}} days</span>
+              <span class="ps-4 fw-bold" *ngIf="!presentMonth">{{changeMonth}}</span>
+              <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio20" autocomplete="off" checked>
+                <label class="btn btn-outline-primary month-btn" for="btnradio20">{{currentDays.length}}
+                  Days</label>
+                <ng-container *ngFor="let month of monthName; let i = index">
+                  <input type="radio" class="btn-check" name="btnradio" id="btnradio{{i}}" autocomplete="off">
+                  <label class="btn btn-outline-primary month-btn" for="btnradio{{i}}"
+                    (click)="getAllDays(month, i)">{{month}}</label>
                 </ng-container>
               </div>
             </div>
-            <div class="col-md-4 pe-0">
-              <h6>Actions</h6>
-              <div class="card px-3 pt-3 pb-5">
-                <div class="pb-4">
-                  <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
-                  <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
-                </div>
-                <h6 class=" text-center pb-5 pt-4">
-                  Work From Home
-                </h6>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-
-        <ng-container [ngSwitch]="isFormReady">
-          <div *ngSwitchCase="true">
-            <div [formGroup]="attendenceForm" class="x_panel pt-4 attendance-form">
-              <div class="d-flex flex-row justify-content-between">
-                <div class="d-flex">
-                  <div class="text-dark text-dark d-flex flex-column justify-content-center">
-                    <div>
-                      <span class="fw-bold">Attendance: From&nbsp;</span> {{fromDate | date}}
-                      <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
-                    </div>
-                  </div>
-                  <div class="ms-4 d-flex">
-                    <div class="p-0">
-                      <form class="form-inline">
-                        <div class="form-group">
-                          <div class="input-group">
-                            <input class="form-control form-control-sm border" placeholder="yyyy-mm-dd"
-                              (click)="from.toggle()" (dateSelect)="fromDateSelection($event)" name="fromModel"
-                              [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
-                            <div class="input-group-append">
-                              <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()"
-                                type="button"></button>
+            <div class="">
+              <table class="table table-hover table-striped">
+                <thead>
+                  <tr>
+                    <th class="custom-th">DATE</th>
+                    <th class="custom-th">ATTENDANCE VISUAL</th>
+                    <th class="custom-th">EFFECTIVE HOURS</th>
+                    <th class="custom-th">GROSS HOURS</th>
+                    <th class="custom-th">ARRIVAL</th>
+                    <th class="custom-th">Status</th>
+                    <th class="custom-th">LOG</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of currentDays; let index = index">
+                    <td class="align-middle">{{item.AttendanceDay | date: 'MMM d, EEE'}}
+                      <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
+                        <span class="badge bg-primary ms-2" *ngSwitchCase="2">WFH</span>
+                        <span class="badge bg-info ms-2" *ngSwitchCase="5">LEAVE</span>
+                        <span class="badge bg-warning ms-2" *ngSwitchCase="3">W-OFF</span>
+                        <span class="badge bg-secondary ms-2" *ngSwitchCase="4">HLDY</span>
+                        <span class="badge bg-success ms-2" *ngSwitchCase="1">IN-OFFC</span>
+                        <span class="badge bg-danger ms-2" *ngSwitchDefault>EMPTY</span>
+                      </div>
+                    </td>
+                    <td class="align-middle">
+                      <p class="pt-3">
+                        <ngb-progressbar type="info" [value]="100" style="width: 40%;"></ngb-progressbar>
+                      </p>
+                    </td>
+                    <td class="align-middle"><i class="fa fa-circle pe-3 text-info"></i> 9h 0m</td>
+                    <td class="align-middle">9h 0m</td>
+                    <td class="align-middle">
+                      <ng-container *ngIf="item.AttendenceStatus == 9">
+                        <div class="d-inline">
+                          <span class=" ms-2">
+                            <i class="fa fa-check pe-2 text-success"></i> On Time
+                          </span>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="item.AttendenceStatus != 9">
+                        <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
+                          <span class=" ms-2" *ngSwitchCase="3">Week off</span>
+                          <span class=" ms-2" *ngSwitchCase="1">Not applied</span>
+                          <span class=" ms-2" *ngSwitchCase="2">-</span>
+                          <span class=" ms-2" *ngSwitchCase="0">
+                            <i class="fa fa-check pe-2 text-success"></i> On Time
+                          </span>
+                        </div>
+                      </ng-container>
+                    </td>
+                    <td>
+                      <span class=" ms-2" [ngSwitch]="item.IsTimeAttendacneApproved">
+                        <span class="ms-2" *ngSwitchCase="1">
+                          <div placement="top" ngbTooltip="Approved" aria-expanded="false">
+                            <i class="fa fa-check pe-2 text-success"></i> Approved
+                          </div>
+                        </span>
+                        <span class="ms-2" *ngSwitchCase="0">
+                          <ng-container *ngIf="item.AttendenceStatus == 9">
+                            <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                              class="text-success fw-bold">
+                              <i class="fa fa-check pe-2 text-success"></i> Approved
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="item.AttendenceStatus != 9">
+                            <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                              *ngIf="item.PresentDayStatus == 2">
+                              <i class="fa fa-clock-o pe-2 text-warning"></i> waiting...
+                            </div>
+                            <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                              *ngIf="item.PresentDayStatus == 0">
+                              <i class="fa fa-clock-o pe-2 text-warning"></i> Not Applied
+                            </div>
+                            <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                              *ngIf="item.PresentDayStatus == 3">
+                              <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
+                            </div>
+                          </ng-container>
+                        </span>
+                      </span>
+                    </td>
+                    <td class="align-middle">
+                      <div class="d-flex align-items-center">
+                        <div class="col" *ngIf="item.PresentDayStatus == 0">
+                          <div ngbDropdown class="d-inline-block">
+                            <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Absent"
+                              id="dropdownBasic1" ngbDropdownToggle>
+                              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                            </button>
+                            <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                              <button ngbDropdownItem>
+                                <a class="dropdown-item" href="javascript:void(0)"
+                                  (click)="commentPopUp(item)">Apply
+                                  WFH Request</a>
+                              </button>
+                              <button ngbDropdownItem>
+                                <a class="dropdown-item" href="javascript:void(0)"
+                                  (click)="selectOption(index)">Apply
+                                  Leave</a>
+                              </button>
                             </div>
                           </div>
                         </div>
-                      </form>
-                    </div>
-                    <div class="ms-2">
-                      <button href="javascript:void(0)" class="btn btn-sm btn-outline-dark" [disabled]="!fromDate"
-                        (click)="prevWeek()">
-                        <i class="fa fa-angle-double-left pe-2"></i>Prev week
-                      </button>
-                    </div>
-                    <div class="ms-2 me-2">
-                      <button href="javascript:void(0)" class="btn btn-sm btn-success" [disabled]="!fromDate"
-                        (click)="nextWeek()">
-                        Next week<i class="fa fa-angle-double-right ps-2"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <div class="ms-1 me-1">
-                    <button type="button"
-                      [ngClass]="{'btn-danger' : enablePermissionButton, 'btn-success': !enablePermissionButton}"
-                      class="btn btn-sm" (click)="onSubmit()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                      {{ enablePermissionButton ? 'Disable' : 'Enable' }}
-                    </button>
-                  </div>
-                  <div class="ms-1 me-1">
-                    <button type="button" class="btn btn-primary-c btn-sm" (click)="onSubmit()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                      {{ isLoading ? 'Saving' : 'Submit' }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="x_content">
-                <div class="d-flex flex-direction-column justify-content-center mt-5">
-                  <div class="text-center w-100">
-                    <p class="lead mark text-success" *ngIf="enablePermissionButton">
-                      Given week is open, candidate can submit their timesheet.
-                      To block this week please use the above disable button.
-                    </p>
-                    <p class="lead mark text-danger" *ngIf="!enablePermissionButton">
-                      Given week is closed, candidate can't submit their timesheet.
-                      To unblock this week please use the above enable button.
-                    </p>
-                  </div>
-                </div>
-                <table class="table-middle table table-hover">
-                  <thead>
-                    <tr>
-                      <th class="">Mon</th>
-                      <th class="">Tue</th>
-                      <th class="">Wed</th>
-                      <th class="">Thu</th>
-                      <th class="">Fri</th>
-                      <th class="">Sat</th>
-                      <th class="">Sun</th>
-                      <th class="text-center">Billing</th>
-                      <th class="text-center">Final</th>
-                    </tr>
-                  </thead>
-                  <tbody formArrayName="attendanceArray">
-                    <tr>
-                      <ng-container *ngFor="let item of attendenceForm.get('attendanceArray').controls;let i = index;">
-                        <ng-container [formGroupName]="i">
-                          <td>
-                            <div class="center-badge d-flex justify-content-start">
-                              <ng-container [ngSwitch]="item.get('AttendenceStatus').value">
-                                <span class="s" *ngSwitchCase="8">
-                                  <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
-                                </span>
-                                <span class="" *ngSwitchDefault>
-                                  <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
-                                </span>
-                              </ng-container>
-
-                              <input type="number" class="ms-1 text-start" placeholder="hours" min="0" max="23"
-                                [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
-                                formControlName="UserHours"
-                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                              <span>&nbsp;:</span>
-                              <input type="number" class="text-end" placeholder="minutes" min="0" max="59"
-                                (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
-                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-
-                              <div ngbDropdown class="d-none dropright">
-                                <input type="text" class="form-control input-overflow" formControlName="UserComments"
-                                  placeholder="Comments" (focus)="takeComments($event)">
-                                <div class="p-0 position-absolute d-none textarea-box">
-                                  <textarea class="form-control" (blur)="captureComments($event)"
-                                    placeholder="enter your comments" formControlName="UserComments">
-                                  </textarea>
-                                </div>
-                              </div>
+                        <ng-container *ngIf="item.AttendenceStatus == 9">
+                          <span class="ms-2">
+                            <div placement="top" ngbTooltip="Approved" aria-expanded="false">
+                              <i class="fa fa-check-square-o zoom-2 text-success" aria-hidden="true"></i>
                             </div>
-                            <small class="d-block text-muted">
-                              {{item.get('AttendanceDay').value | date}}
-                            </small>
-                          </td>
+                          </span>
                         </ng-container>
-                      </ng-container>
-                      <td>
-                        <div class="center-badge d-flex justify-content-center">
-                          08:00
-                        </div>
-                      </td>
-                      <td>
-                        <div class="center-badge d-flex justify-content-center">{{totalHrs}} : {{totalMins}}</div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                        <ng-container *ngIf="item.AttendenceStatus != 9">
+                          <span class=" ms-2" *ngIf="item.PresentDayStatus == 3">
+                            <div placement="top" ngbTooltip="Weekend" aria-expanded="false">
+                              <i class="fa zoom-2 fa-gift text-primary-c" aria-hidden="true"></i>
+                            </div>
+                          </span>
+                          <span class="ms-2" *ngIf="item.PresentDayStatus == 2">
+                            <div placement="top" ngbTooltip="Pending" aria-expanded="false">
+                              <i class="fa fa-clock-o zoom-2 text-warning" aria-hidden="true"></i>
+                            </div>
+                          </span>
+                        </ng-container>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comment Modal Start-->
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="commentModal" tabindex="-1"
+          aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+              <div class="modal-header border-bottom-0">
+                <h5 class="modal-title" id="exampleModalLabel">Work From Home Request</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="col-md-12 px-4 d-block">
+                <p class="mt-2">Enter your work from home reson and apply with one click.
+                  Select your manage or reporting person under Notify section to get approval.</p>
+              </div>
+              <div class="modal-body px-4">
+                <div class="d-flex position-relative">
+                  <div class="col-md-8 d-flex">
+                    <div class="col-md-6 ps-2 py-3 border">
+                      <small>START DATE</small>
+                      <p class="mb-0 text-dark fs-5">{{today | date}}</p>
+                    </div>
+                    <div class="col-md-6 pe-3 py-3 border text-end">
+                      <small>END DATE</small>
+                      <p class="mb-0 text-dark fs-5">{{tomorrow | date}}</p>
+                    </div>
+                  </div>
+                </div>
+                <span class="px-3 py-2 day-wfh">1day WFH</span>
+                <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
+                <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
+                  <input type="radio" class="btn-check" name="btnradio10" id="btnradio10" autocomplete="off" checked
+                    value="fullday">
+                  <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
+                  <input type="radio" class="btn-check" name="btnradio10" id="btnradio11" autocomplete="off"
+                    value="firsthalf">
+                  <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
+                  <input type="radio" class="btn-check" name="btnradio10" id="btnradio12" autocomplete="off"
+                    value="secondhalf">
+                  <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
+                </div>
+                <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
+                <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue"
+                  [(ngModel)]="commentValue"></textarea>
+                <div class="alert alert-danger" *ngIf="isComment">
+                  Comment is required.
+                </div>
+                <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify</p>
+                <input type="text" class="form-control" placeholder="Search Employee">
+                <p class="mb-0">These employees will be notified through email when you WFH request is approved.</p>
+              </div>
+
+              <div class="modal-footer border-top-0 pe-4">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitAttendance()">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                  {{ isLoading ? 'Wait' : 'Request' }}
+                </button>
               </div>
             </div>
           </div>
-          <div *ngSwitchDefault [ngClass]="{'preload': !isEmployeesReady}">
-            <div class="x_panel d-flex flex-direction-column justify-content-center skeleton">
-              <div class="x_content vhide">
-                <p *ngIf="NoClient" class="h3 text-muted text-center">
-                  Uhh!!! No client allocated on your name. Please contact your maanager.
-                </p>
-                <p *ngIf="!NoClient" class="h3 text-muted text-center">
-                  Please select week date to get attendance.
-                </p>
-              </div>
+        </div>
+        <!-- End -->
+      </ng-container>
+      <ng-container *ngIf="isLoading">
+        <div class="x_panel">
+          <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center bg-white">
+            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
             </div>
           </div>
-        </ng-container>
+        </div>
       </ng-container>
     </ng-container>
   </form>
