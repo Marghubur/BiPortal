@@ -57,10 +57,9 @@
               </div>
 
               <div class="col-md-3">
-                <label class="form-label">Email Template</label>
-                <a href="javascript:void(0)" class="text-decoration-none float-end"
-                  [ngClass]="{'pe-none': !isClientSelected}" (click)="viewStaffingTemplte()">View Template</a>
-                <select class="form-control" [disabled]="!isClientSelected">
+                <label class="form-label" [ngClass]="{'blur-text': !isClientSelected}">Email Template</label>
+                <a href="javascript:void(0)" class="text-decoration-none float-end" [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="viewStaffingTemplte()">View Template</a>
+                <select class="form-control" [disabled]="!isClientSelected" [ngClass]="{'blur-text': !isClientSelected}">
                   <option value="1">Staffing Template</option>
                 </select>
               </div>
@@ -75,7 +74,7 @@
                   </label>
                 </div>
                 <div class="col-6 text-end">
-                  <a href="javascript:void(0)" class="text-primary-c fw-bold pe-4" (click)="viewTimesheetDetail()">
+                  <a href="javascript:void(0)" class="text-primary-c fw-bold pe-4" [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="viewTimesheetDetail()">
                     Edit TimeSheet</a>
                 </div>
               </div>
@@ -584,8 +583,12 @@
         <h5 class="modal-title">Update TimeSheet</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body px-5">
-        <div class="col-md-12 px-3 mt-3" *ngIf="allTimesheet.length > 0">
+      <div class="modal-body px-5 mt-0 pt-0">
+        <div class="col-md-12 px-3" *ngIf="allTimesheet.length > 0">
+          <div class="py-3">
+            <a href="javascript:void(0)" class="pe-3" (click)="selectUnselect('select')"><i class="fa fa-check pe-1 text-success"></i> Select All</a>
+            <a href="javascript:void(0)" (click)="selectUnselect('deselect')"><i class="fa fa-close pe-1 text-danger"></i> Deselect All</a>
+          </div>
           <div class="t-table border-cell t-list t-border col-md-12">
             <div class="t-head overflow-hidden">
               <div class="tr">
@@ -607,7 +610,7 @@
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:0:7">
                     <div class="td align-middle text-center">
-                      <div class="cell-wrapper">
+                      <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
                           <i class="ps-2 text-success fa fa-check"></i>
@@ -621,8 +624,8 @@
                 </div>
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:7:14">
-                    <div class="td align-middle text-center" (click)="enableDate(item)">
-                      <div class="cell-wrapper">
+                    <div class="td align-middle text-center">
+                      <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
                           <i class="ps-2 text-success fa fa-check"></i>
@@ -637,7 +640,7 @@
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:14:21">
                     <div class="td align-middle text-center">
-                      <div class="cell-wrapper">
+                      <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
                           <i class="ps-2 text-success fa fa-check"></i>
@@ -652,7 +655,7 @@
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:21:28">
                     <div class="td align-middle text-center">
-                      <div class="cell-wrapper">
+                      <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
                           <i class="ps-2 text-success fa fa-check"></i>
@@ -667,7 +670,7 @@
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:28:31">
                     <div class="td align-middle text-center">
-                      <div class="cell-wrapper">
+                      <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
                           <i class="ps-2 text-success fa fa-check"></i>
@@ -680,7 +683,7 @@
                   </ng-container>
                   <div class="td align-middle text-center"
                     [ngClass]="{'fe-5': allTimesheet.length == 30, 'fe-4': allTimesheet.length == 31, 'fe-7': allTimesheet.length == 28, 'fe-6': allTimesheet.length == 29}">
-                    <div class="cell-wrapper">
+                    <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                       <span class="d-none">{{item}}</span>
                     </div>
                   </div>
@@ -688,10 +691,17 @@
               </ng-container>
             </div>
           </div>
+          <div class="mt-3">
+            <input class="form-control" type="text" placeholder="Comment" id="commentsection">
+          </div>
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</button>
+        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitTimesheet()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Processing' : 'Save' }}</span>
+        </button>
       </div>
     </div>
   </div>

@@ -6,6 +6,7 @@ import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/comm
 import { AccessTokenExpiredOn, Declaration, PaySlip, Preferences, Salary, Summary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
+declare var $: any;
 
 @Component({
   selector: 'app-incometax',
@@ -26,6 +27,19 @@ export class IncometaxComponent implements OnInit {
   EmployeeId: number = 0;
   userDetail: UserDetail = new UserDetail();
   pageReady: boolean = false;
+  hraDetails: Array<any> = [];
+  isPageReady: boolean = false;
+  isEmployeesReady:boolean = false;
+  isEmployeeSelect: boolean = false;
+  ExemptionDeclaration: Array<any> = [];
+  OtherDeclaration: Array<any> = [];
+  TaxSavingAlloance: Array<any> = [];
+  Section16TaxExemption:Array<any> = [];
+  Sec16TaxExemptAmount: number = 0;
+  totalAllowTaxExemptAmount : number = 0;
+  totalSection80CExempAmount: number = 0;
+  totalOtherExemptAmount: number = 0;
+  standardDeductionDetails: Array<any> = [];
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -68,166 +82,7 @@ export class IncometaxComponent implements OnInit {
       ErrorToast("Invalid user. Please login again.")
     }
 
-    // this.grossEarning.push({
-    //   salaryBreakup: 'Basic',
-    //   total: 849600,
-    //   april: 70800,
-    //   may: 70800,
-    //   june: 70800,
-    //   july: 70800,
-    //   aug: 70800,
-    //   sep: 70800,
-    //   oct: 70800,
-    //   nov: 70800,
-    //   dec: 70800,
-    //   jan: 70800,
-    //   feb: 70800,
-    //   march: 70800
-    // },
-    // {
-    //   salaryBreakup: 'Conveyance Allowance',
-    //   total: 19200,
-    //   april: 1600,
-    //   may: 1600,
-    //   june: 1600,
-    //   july: 1600,
-    //   aug: 1600,
-    //   sep: 1600,
-    //   oct: 1600,
-    //   nov: 1600,
-    //   dec: 1600,
-    //   jan: 1600,
-    //   feb: 1600,
-    //   march: 1600
-    // },
-    // {
-    //   salaryBreakup: 'HRA',
-    //   total: 339840,
-    //   april: 28320,
-    //   may: 28320,
-    //   june: 28320,
-    //   july: 28320,
-    //   aug: 28320,
-    //   sep: 28320,
-    //   oct: 28320,
-    //   nov: 28320,
-    //   dec: 28320,
-    //   jan: 28320,
-    //   feb: 28320,
-    //   march: 28320
-    // },
-    // {
-    //   salaryBreakup: 'Medical Allowance',
-    //   total: 15000,
-    //   april: 1250,
-    //   may: 1250,
-    //   june: 1250,
-    //   july: 1250,
-    //   aug: 1250,
-    //   sep: 1250,
-    //   oct: 1250,
-    //   nov: 1250,
-    //   dec: 1250,
-    //   jan: 1250,
-    //   feb: 1250,
-    //   march: 1250
-    // },
-    // {
-    //   salaryBreakup: 'Car Running Allowance',
-    //   total: 21600,
-    //   april: 1800,
-    //   may: 1800,
-    //   june: 1800,
-    //   july: 1800,
-    //   aug: 1800,
-    //   sep: 1800,
-    //   oct: 1800,
-    //   nov: 1800,
-    //   dec: 1800,
-    //   jan: 1800,
-    //   feb: 1800,
-    //   march: 1800
-    // },
-    // {
-    //   salaryBreakup: 'Telephone and Internet Allowance',
-    //   total: 18000,
-    //   april: 1500,
-    //   may: 1500,
-    //   june: 1500,
-    //   july: 1500,
-    //   aug: 1500,
-    //   sep: 1500,
-    //   oct: 1500,
-    //   nov: 1500,
-    //   dec: 1500,
-    //   jan: 1500,
-    //   feb: 1500,
-    //   march: 1500
-    // },
-    // {
-    //   salaryBreakup: 'Travel Reimburesment(LTA)',
-    //   total: 30000,
-    //   april: 2500,
-    //   may: 2500,
-    //   june: 2500,
-    //   july: 2500,
-    //   aug: 2500,
-    //   sep: 2500,
-    //   oct: 2500,
-    //   nov: 2500,
-    //   dec: 2500,
-    //   jan: 2500,
-    //   feb: 2500,
-    //   march: 2500
-    // },
-    // {
-    //   salaryBreakup: 'Shfit Allowance',
-    //   total: 18000,
-    //   april: 1500,
-    //   may: 1500,
-    //   june: 1500,
-    //   july: 1500,
-    //   aug: 1500,
-    //   sep: 1500,
-    //   oct: 1500,
-    //   nov: 1500,
-    //   dec: 1500,
-    //   jan: 1500,
-    //   feb: 1500,
-    //   march: 1500
-    // },
-    // {
-    //   salaryBreakup: 'Special Allowance',
-    //   total: 812760,
-    //   april: 67730,
-    //   may: 67730,
-    //   june: 67730,
-    //   july: 67730,
-    //   aug: 67730,
-    //   sep: 67730,
-    //   oct: 67730,
-    //   nov: 67730,
-    //   dec: 67730,
-    //   jan: 67730,
-    //   feb: 67730,
-    //   march: 67730
-    // },
-    // {
-    //   salaryBreakup: 'Total earnings',
-    //   total: 2124000,
-    //   april: 177000,
-    //   may: 177000,
-    //   june: 177000,
-    //   july: 177000,
-    //   aug: 177000,
-    //   sep: 177000,
-    //   oct: 177000,
-    //   nov: 177000,
-    //   dec: 177000,
-    //   jan: 177000,
-    //   feb: 177000,
-    //   march: 177000
-    // });
+
 
     this.taxSlab.push({
       taxableincomeslab: '0% Tax on income up to 250000',
@@ -267,25 +122,157 @@ export class IncometaxComponent implements OnInit {
     };
   }
 
+
   loadData() {
-    this.pageReady = false;
+    this.isPageReady = false;
+    this.isEmployeeSelect = false;
+    this.totalAllowTaxExemptAmount = 0;
     this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
-        console.log(response.ResponseBody);
         this.allDeclarationSalaryDetails = response.ResponseBody;
+        this.allDeclarationSalaryDetails.IncomeTaxSlab = Object.entries(response.ResponseBody.IncomeTaxSlab);
+        this.ExemptionDeclaration = response.ResponseBody.ExemptionDeclaration;
+        if ((this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
+          this.ExemptionDeclaration = [];
+
+          this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
+        if ((this.OtherDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
+          this.OtherDeclaration = [];
+
+          this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
+        if ((this.TaxSavingAlloance.filter(x => x.DeclaredValue > 0).length <= 0))
+          this.TaxSavingAlloance = [];
         this.salaryDetail = response.ResponseBody.SalaryDetail;
         this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
-        let value = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
-        for (let index = 0; index < 12; index++) {
-          let total = (value.BasicAnnually + value.CarRunningAnnually+value.ConveyanceAnnually+value.HRAAnnually+value.InternetAnnually+value.TravelAnnually+value.ShiftAnnually+value.SpecialAnnually);
-          value.Total = total;
-          this.salaryBreakup.push(value);
-        };
-        this.pageReady = true;
+
+        let annualSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        if (annualSalaryDetail && annualSalaryDetail.length == 12) {
+          annualSalaryDetail.map((com) => {
+            com.SalaryBreakupDetails = com.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != 'CTC' && x.ComponentId != "PTAX" && x.ComponentId != "ESI")
+          });
+
+          let i = 0;
+          let value = "";
+          let selectedComponent = [];
+          let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName}) => { return { ComponentId, ComponentName } });
+          while(i < props.length) {
+            value = props[i].ComponentId;
+            selectedComponent = annualSalaryDetail.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));
+            this.salaryBreakup.push({
+              id: props[i].ComponentId,
+              key: props[i].ComponentName,
+              total: selectedComponent.reduce((acc, cur) => { return acc + cur.FinalAmount; }, 0),
+              value: selectedComponent
+            });
+
+            i++;
+          }
+
+          i = 0;
+          let totalAmount = 0;
+          let finalAmount = 0;
+          let totalAmounts: Array<any> = [];
+          while(i < annualSalaryDetail.length) {
+            totalAmount = annualSalaryDetail[i].SalaryBreakupDetails.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+            finalAmount += totalAmount;
+            totalAmounts.push({ FinalAmount: totalAmount });
+            i++;
+          }
+
+          this.salaryBreakup.push({
+            key: 'Total',
+            total: finalAmount,
+            value: totalAmounts
+          });
+
+        } else {
+          ErrorToast("Unable to get salary detail. Please contact to admin.");
+          return;
+        }
+
+        let hraAmount = 0;
+        let hraComponent = this.allDeclarationSalaryDetails.SalaryComponentItems.find(x => x.ComponentId == "HRA" && x.DeclaredValue > 0);
+        if (hraComponent) {
+          this.TaxSavingAlloance.push(hraComponent);
+          this.hraCalculation();
+          hraAmount = this.hraDetails.reduce((acc, next) => {return acc + next.Min}, 0)
+        }
+
+        for (let i = 0; i < this.allDeclarationSalaryDetails.Declarations.length; i++) {
+          switch (this.allDeclarationSalaryDetails.Declarations[i].DeclarationName) {
+            case "1.5 Lac Exemptions":
+              this.totalSection80CExempAmount = this.allDeclarationSalaryDetails.Declarations[i].TotalAmountDeclared;
+              break;
+            case "Other Exemptions":
+              this.totalOtherExemptAmount = this.allDeclarationSalaryDetails.Declarations[i].TotalAmountDeclared;
+              break;
+          }
+        }
+
+        this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance) ;
+        this.getSalaryGroup();
+        this.totalAllowTaxExemptAmount = this.totalAllowTaxExemptAmount + hraAmount;
+        this.isPageReady = true;
+         this.isEmployeeSelect = true;
         Toast("Details get successfully")
       }
     })
+  }
+
+  getSalaryGroup() {
+    this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryDetail.GroupId}`).
+    then((response:ResponseModel) => {
+      if (response.ResponseBody && response.ResponseBody.length > 0) {
+        let salaryComponents = response.ResponseBody;
+        this.Section16TaxExemption = salaryComponents.filter(x => x.Section == "16(IA)" || x.Section == "16(III)");
+        this.Sec16TaxExemptAmount = 0;
+        for (let i = 0; i < this.Section16TaxExemption.length; i++) {
+          this.Sec16TaxExemptAmount += this.Section16TaxExemption[i].DeclaredValue;
+        }
+      }
+    })
+  }
+
+  componentTotalAmount(value: Array<any>) {
+    let item = value.filter(x => x.ComponentId != "HRA");
+    let totalAmount = 0;
+    for (let i = 0; i < item.length; i++) {
+      if (item[i].DeclaredValue > 0)
+        totalAmount += item[i].DeclaredValue;
+    }
+    return totalAmount;
+  }
+
+  viewHRAPopUp() {
+    this.hraDetails = [];
+    $('#viewHRAModal').modal('show');
+    this.hraCalculation();
+  }
+
+  hraCalculation() {
+    for (let i = 0; i < this.taxCalender.length; i++) {
+      this.hraDetails.push({
+        Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
+        RentPaid: (this.allDeclarationSalaryDetails.Declarations.find(x => x.DeclarationName == "House Property")).TotalAmountDeclared,
+        HRA1: this.allDeclarationSalaryDetails.HRADeatils.HRA1,
+        HRA2: this.allDeclarationSalaryDetails.HRADeatils.HRA2,
+        HRA3: this.allDeclarationSalaryDetails.HRADeatils.HRA3,
+        Min: this.allDeclarationSalaryDetails.HRADeatils.HRAAmount,
+      })
+    }
+  }
+
+  viewStandardDeductionPopUp() {
+    this.standardDeductionDetails = [];
+    $('#standardDeductionModal').modal('show');
+    for (let i = 0; i < this.taxCalender.length; i++) {
+      this.standardDeductionDetails.push({
+        Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
+        Amount: 2400,
+        Source: 'Proceed'
+      })
+    }
   }
 
   activateMe(ele: string) {

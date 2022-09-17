@@ -160,7 +160,7 @@ export class BuildPdfComponent implements OnInit {
             i++;
           }
         }
-        
+
         let burnDays = timesheetDetails.length - missinngAtt.length;
         if (burnDays > 0)
           this.pdfForm.get('actualDaysBurned').setValue(burnDays)
@@ -908,7 +908,37 @@ export class BuildPdfComponent implements OnInit {
   }
 
   enableDate(current: any) {
-    alert('hi');
+    if (current) {
+      this.allTimesheet.find(x => x.PresentDate == current.PresentDate).TimesheetStatus = 8;
+    }
+  }
+
+  selectUnselect(status: string) {
+    if (status == 'select') {
+      this.allTimesheet.map(x => x.TimesheetStatus = 8);
+    }
+    else if('deselect') {
+      this.allTimesheet.map(x => x.TimesheetStatus = 4);
+    }
+  }
+
+  submitTimesheet() {
+    this.isLoading = true;
+    let value = ( <HTMLInputElement>document.getElementById('commentsection')).value;
+    if (value != null && value != '') {
+      let formData = new FormData();
+      formData.append('comment', JSON.stringify(value));
+      formData.append('timesheet', JSON.stringify(this.allTimesheet));
+      this.http.post('Timesheet/UpdateTimesheet', formData).then(res => {
+        if (res.ResponseBody) {
+          this.isLoading = false;
+          $('#timesheet-view').modal('hide');
+        } else
+          this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
   }
 
   viewSendTemplete(e: any) {
