@@ -109,12 +109,12 @@
                                         </div>
                                         <div class="td align-middle fe-2">
                                           <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
-                                            {{item.get('MonthlyAmount').value}}
+                                            {{item.get('MonthlyAmount').value |number:'1.2-2'}}
                                           </div>
                                         </div>
                                         <div class="td align-middle fe-2">
                                           <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
-                                            {{item.get('FinalAmount').value}}
+                                            {{item.get('FinalAmount').value |number:'1.2-2'}}
                                           </div>
                                         </div>
                                       </ng-container>
