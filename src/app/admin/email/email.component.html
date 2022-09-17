@@ -1,26 +1,35 @@
 <div class="col-md-12 col-sm-12 main-container">
   <div class="x_panel">
-    <div class="x_header">
-      <h2>Email service</h2>
-      <div class="clearfix"></div>
-    </div>
-    <div>
-      <ul class="list-group">
-        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">An item</a></li>
-        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">A second item</a></li>
-        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">A third item</a></li>
-        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">A fourth item</a></li>
-        <li class="list-group-item py-3"><a href="javascript:void(0)" class="text-decoration-none text-dark">And a fifth one</a></li>
-      </ul>
-      <div class="compose-container float-end shadow-lg mt-4 me-3 rounded-circle d-flex align-items-center justify-content-center" (click)="composeMailPopUp()">
-        <a href="javascript:void(0)" class="text-decoration-none text-dark"><i class="fa fa-pencil fa-lg text-white"></i></a>
+    <ng-container *ngIf="!isPageReady">
+      <div class="x_header">
+        <h2>Email service</h2>
+        <div class="clearfix"></div>
       </div>
-    </div>
+      <div>
+        <div class="d-flex align-items-center justify-content-center">
+          <img src="assets/images/uc.jpg" alt="under_construction" class="construction-img">
+        </div>
+        <p class="fw-bold fs-4 text-dark text-center">but still you can send email by clicking the below button</p>
+        <div class="compose-container float-end shadow-lg mt-4 me-3 rounded-circle d-flex align-items-center justify-content-center" (click)="composeMailPopUp()">
+          <a href="javascript:void(0)" class="text-decoration-none text-dark"><i class="fa fa-pencil fa-lg text-white"></i></a>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isPageReady">
+      <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+        <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+          <img src="assets/images/cog.gif" alt="" />
+          <h6 class="modal-title title-message">
+            Please Wait ........
+          </h6>
+        </div>
+      </div>
+    </ng-container>
   </div>
 </div>
 
 <!-- Compose Mail Modal -->
-<div class="modal fade" id="composeMailModal" tabindex="-1" aria-labelledby="composeMailModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="composeMailModal" tabindex="-1" aria-labelledby="composeMailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
@@ -40,14 +49,14 @@
           <div class="email-address-box border-bottom d-flex align-items-center">
             <label for="to-email-address" class="form-label fs-5 m-0 pe-1 d-none">To</label>
             <div class="d-flex flex-row flex-wrap w-100 align-items-center">
-              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of toEmail; let i = index">{{item}} 
+              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of toEmail; let i = index">{{item}}
                 <a href="javascript:void(0)" class="text-decoration-none">
                   <i class="fa fa-close text-light" (click)="removeToEmail(i, 'to-emails')"></i>
                 </a>
               </span>
 
               <input type="text" class="col border-0 ms-2 fs-5" placeholder="Receipents" formControlName="To" (click)="emailAddress()" (blur)="addToList($event, 'to-emails')" (keyup)="addEmailChip($event, 'to-emails')">
-              
+
               <div class="col-auto float-end d-none" data-name="Cc-Bcc-address">
                 <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
                 <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
@@ -84,8 +93,9 @@
       </div>
       <div class="modal-footer border-top-0 justify-content-start">
         <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-        <input type="file" id="fileAttachment" class="d-none" (change)="uploadProfilePicture($event)">
+        <input type="file" id="fileAttachment" multiple class="d-none" (change)="uploadProfilePicture($event)">
         <button type="button" class="btn btn-outline-primary" [disabled]="isLoading" (click)="sendEmailRequest()"><i class="fa " [ngClass]="{'fa-send-o': !isLoading, 'fa-spin fa-spinner': isLoading}"></i><span class="ps-2">{{ isLoading ? 'Wait' : 'Send' }}</span></button>
+        <span *ngIf="FileDocumentList.length > 0" class="fw-bold ps-3 pe-2 text-dark">{{FileDocumentList.length}} file attached</span>
         <a href="javascript:void(0)" class="text-decoration-none ps-2" (click)="fireBrowserFile()"><i class="fa fa-paperclip pe-2"></i>Attach</a>
         <a href="javascript:void(0)" class="text-decoration-none ps-2"><i class="fa fa-html5 pe-2"></i>Template</a>
       </div>
