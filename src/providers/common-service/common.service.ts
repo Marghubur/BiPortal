@@ -1,4 +1,4 @@
-import { Home } from "./../constants";
+import { Home, UserType } from "./../constants";
 import { Injectable, ElementRef } from "@angular/core";
 import { ApplicationStorage } from "./../ApplicationStorage";
 import * as $ from 'jquery';
@@ -17,9 +17,19 @@ export class CommonService {
   private PageLevelCounter: number = 0;
   private WindowHeight: number = 0;
   private WindowWidth: number = 0;
+  private UserRole: UserType = UserType.Other;
+
   DefaultTimeout: number = 8 * 1000;
   $ButtonId: any = "";
   constructor() { }
+
+  public UpdateRoleType(role: UserType) {
+    this.UserRole = role;
+  }
+
+  public GetRole() {
+    return this.UserRole;
+  }
 
   public GetWindowHeight(): number {
     return this.WindowHeight;
