@@ -368,7 +368,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   checkMaxLimit(e: any, maxlimit: number) {
     let value = e.target.value;
-    if (value > maxlimit) {
+    if (value > maxlimit && maxlimit != -1) {
       ErrorToast("Amount is exceed from maxlimit");
       this.isAmountExceed = true;
       return;

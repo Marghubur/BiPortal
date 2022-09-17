@@ -485,6 +485,7 @@ export class TimesheetComponent implements OnInit {
 
   getUserTimesheetData() {
     this.isLoading = true;
+    this.isTimesheetDataLoaded = true;
     if(this.employeeId <= 0) {
       Toast("Invalid user selected.")
       return;
@@ -523,7 +524,7 @@ export class TimesheetComponent implements OnInit {
         // let blockedtimesheet = response.ResponseBody.DailyTimesheetDetails.filter(x => x.IsOpen === false);
         this.dailyTimesheetDetails = response.ResponseBody.DailyTimesheetDetails;
         this.createPageData();
-        this.isTimesheetDataLoaded = true;
+        this.isTimesheetDataLoaded = false;
       }
 
       this.divisionCode = 1;
@@ -982,12 +983,22 @@ export class TimesheetComponent implements OnInit {
           });
           i++;
         }
-
+        this.isFormReady = false;
+        this.NoClient = false;
         if (clients.length  == 1)
           this.clientId = clients[0].CompanyId;
         else
           this.clientId = 0;
 
+      } else {
+        this.isFormReady = false;
+        this.NoClient = true;
+        this.clientDetail.placeholder = "Select Organization";
+        this.clientDetail.data.push({
+          value: '0',
+          text: 'Select Organization'
+        });
+        this.clientId = 0;
       }
     }
   }
