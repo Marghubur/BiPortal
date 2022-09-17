@@ -455,90 +455,76 @@
         </button> -->
       </div>
       <div class="modal-body f-12 ">
-        <div class="d-flex align-items-center">
-          <div class="col-md-5">
-            <div class="d-flex align-items-center justify-content-around">
-              <div class="form-check">
-                <div class="donwload-file-ext">
-                  <img src="assets/ext/pdf.png" alt="pdf extension">
-                </div>
-                <div class="d-flex align-items-center justify-content-center">
-                  <input class="form-check-input" type="radio" name="downloadFile" value="pdf" checked
-                    (change)="getFileExtension($event)">
-                  <label class="form-check-label ps-3" for="downloadPdf">
-                    Download Pdf
-                  </label>
+        <div class="d-flex flex-column align-items-center" *ngIf="isBillGenerated">
+          <div class="col-12">
+            <div class="d-flex">
+              <div class="col-md-6">
+                <div class="d-flex align-items-center justify-content-around">
+                  <div class="form-check">
+                    <div class="donwload-file-ext text-center">
+                      <img src="assets/ext/pdf.png" alt="pdf extension">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" (click)="getFileExtension($event)" class="text-primary-c fw-b">
+                          <i class="fa fa-download text-primary-c pe-2"></i>
+                          Download PDF
+                        </a>
+                    </div>
+                  </div>
+                  <div class="form-check">
+                    <div class="donwload-file-ext text-center">
+                      <img src="assets/ext/doc.jpg" alt="word extension">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                      <a href="javascript:void(0)" (click)="getFileExtension($event)" class="text-primary-c fw-b">
+                        <i class="fa fa-download text-primary-c pe-2"></i>
+                        Download DOCX
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="form-check">
-                <div class="donwload-file-ext">
-                  <img src="assets/ext/doc.jpg" alt="word extension">
+
+              <div class="col-md-6">
+                <div class="row justify-content-between align-items-end">
+                  <div class="col-md-6">
+                    <label class="form-label">Email Template</label>
+                    <select name="staffingTemplate" class="form-control" (change)="viewSendTemplete($event)">
+                      <option value="">Select Template</option>
+                      <option value="1" selected>Staffing Template</option>
+                    </select>
+                  </div>
+                  <div class="col-auto">
+                    <button class="btn btn-primary-c"  (click)="sendEmail()"><i class="fa fa-share pe-2" aria-hidden="true"></i> send email</button>
+                  </div>
                 </div>
-                <div class="d-flex align-items-center justify-content-center">
-                  <input class="form-check-input" type="radio" value="docx" name="downloadFile"
-                    (change)="getFileExtension($event)">
-                  <label class="form-check-label ps-3" for="downloadDoc">
-                    Download Doc
-                  </label>
+                <div class="py-3">
+                  <p class="text-dark mb-2">Linked email id</p>
+                  <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">{{billAllDetails.receiverEmail}}</span>
+                  <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">{{billAllDetails.senderEmail}}</span>
+                  <ng-container *ngFor="let email of email; let i = index">
+                    <span class="badge fs-6 fw-normal bg-ant text-dark ms-2 my-2">{{email}} <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none"><i class="fa fa-close ps-2 text-dark"></i></a></span>
+                  </ng-container>
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="col-md-9">
+                    <input type="email" class="form-control" placeholder="Email Id" name="add-email">
+                  </div>
+                  <button class="btn btn-primary-c" (click)="addEmailId()"><i class="fa fa-plus pe-2"></i>Add Email Id</button>
                 </div>
               </div>
-            </div>
-            <div class="text-end ms-3 mt-4">
-              <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
-              <!-- <a href="javascript:void(0)" class="text-decoration-none" [attr.disabled]="isLoading"
-                (click)="downloadPdfDocx()" download>
-                <i class="fa fa-download text-light pe-2"></i> Download
-              </a> -->
-              <button class="btn btn-primary-c"
-                (click)="downloadPdfDocx()" download>
-                <i class="fa fa-download text-light pe-2"></i> Download
-              </button>
             </div>
           </div>
-          <div class="vr mx-5"></div>
-          <div class="col-md-6 text-start" *ngIf="isBillGenerated">
-            <div class="row justify-content-between align-items-end">
-              <div class="col-md-6">
-                <label class="form-label">Email Template</label>
-                <select name="staffingTemplate" class="form-control" (change)="viewSendTemplete($event)">
-                  <option value="">Select Template</option>
-                  <option value="1" selected>Staffing Template</option>
-                </select>
-              </div>
-              <div class="col-auto">
-                <button class="btn btn-primary-c"  (click)="sendEmail()"><i class="fa fa-share pe-2" aria-hidden="true"></i> send email</button>
-              </div>
-            </div>
-            <div class="py-3">
-              <p class="text-dark mb-2">Linked email id</p>
-              <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">{{billAllDetails.receiverEmail}}</span>
-              <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">{{billAllDetails.senderEmail}}</span>
-              <span class="badge fs-6 fw-normal bg-ant text-dark my-2 ms-2">hr@bottomhalf.com</span>
-              <ng-container *ngFor="let email of email; let i = index">
-                <span class="badge fs-6 fw-normal bg-ant text-dark ms-2 my-2">{{email}} <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none"><i class="fa fa-close ps-2 text-dark"></i></a></span>
-              </ng-container>
-            </div>
-            <div class="d-flex align-items-center justify-content-between">
-              <div class="col-md-9">
-                <input type="email" class="form-control" placeholder="Email Id" name="add-email">
-              </div>
-              <button class="btn btn-primary-c" (click)="addEmailId()"><i class="fa fa-plus pe-2"></i>Add Email Id</button>
-              <!-- <a href="javascript:void(0)" class="text-decoration-none ps-3"><i class="fa fa-plus pe-2"></i>Add Email Id</a> -->
-            </div>
+
+          <div class="col-md-12 text-start">
             <div class="mt-4">
-              <!-- <iframe [srcdoc]="template" width="100%" height="310px" style="border: none;"></iframe> -->
-              <textarea [value]="templateText" cols="80" rows="10"></textarea>
+              <textarea [value]="templateText" class="w-100" rows="10"></textarea>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-decoration-none text-danger fw-bold" (click)="closePopUp()">Close</a>
-        <!-- <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
-        <a href="javascript:void(0)" class="text-decoration-none" [attr.disabled]="isLoading"
-          (click)="downloadPdfDocx()" download>
-          <i class="fa fa-download text-light pe-2"></i> Download
-        </a> -->
       </div>
     </div>
   </div>
