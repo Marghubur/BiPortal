@@ -7,7 +7,7 @@ import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
-import { Attendance, UserType } from 'src/providers/constants';
+import { Attendance, ItemStatus, UserType } from 'src/providers/constants';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Filter } from 'src/providers/userService';
 
@@ -54,8 +54,8 @@ export class BuildPdfComponent implements OnInit {
   downlodFilePath: string = "";
   basePath: string = "";
   viewer: any = null;
-  missingAttendence: boolean = false;
-  allAttendance: Array<any> = [];
+  missingTimesheetStatus: boolean = false;
+  allTimesheet: Array<any> = [];
   dayList: Array<any> = [];
   template: any = null;
   isBillGenerated: boolean = false;
@@ -125,78 +125,54 @@ export class BuildPdfComponent implements OnInit {
   }
 
   getAttendance() {
-    this.missingAttendence = false;
-    this.allAttendance = [];
-    let attendenceFor = {
+    this.missingTimesheetStatus = false;
+    this.allTimesheet = [];
+    let timesheetStatusFor = {
       "EmployeeUid": this.currentEmployee.EmployeeUid,
       "UserTypeId": UserType.Employee,
       "ForMonth": this.originalBillingMonth,
       "ForYear": this.model.year
     }
-    this.http.post("Attendance/GetAttendamceById", attendenceFor).then ((response: ResponseModel) => {
+    this.http.post("Timesheet/GetEmployeeTimeSheet", timesheetStatusFor).then ((response: ResponseModel) => {
       if (response.ResponseBody) {
         let missinngAtt = response.ResponseBody.MissingDate;
-        let attendanceDetail = response.ResponseBody.AttendanceDetail;
-        if (missinngAtt.length > 0 && attendanceDetail.length > 0) {
-          this.missingAttendence = true;
-          attendanceDetail.map(item => {
-            item.AttendanceDay = new Date(item.AttendanceDay);
-            item.AttendenceStatus = 8;
+        let timesheetDetails = response.ResponseBody.TimesheetDetails;
+        if (missinngAtt.length > 0 && timesheetDetails.length > 0) {
+          this.missingTimesheetStatus = true;
+          timesheetDetails.map(item => {
+            item.PresentDate = new Date(item.PresentDate);
+            item.TimesheetStatus = 8;
           });
         } else {
-          this.missingAttendence = false;
+          this.missingTimesheetStatus = false;
         }
 
         if (missinngAtt.length > 0) {
           let i = 0;
           while(i < missinngAtt.length) {
-            attendanceDetail.push({
-              AttendanceId: 0,
-              UserId: 0,
+            timesheetDetails.push({
               UserTypeId: 2,
-              AttendanceDay: new Date(missinngAtt[i]),
-              BillingHours: 0,
-              AttendenceFromDay: null,
-              AttendenceStatus: 0,
-              AttendenceToDay: null,
-              ClientId: 0,
-              ClientTimeSheet: [],
-              DaysPending: 0,
+              PresentDate: new Date(missinngAtt[i]),
               EmployeeUid: this.currentEmployee.EmployeeUid,
-              ForMonth: 0,
-              ForYear: 0,
-              IsActiveDay: false,
-              IsHoliday: false,
-              IsOnLeave: false,
-              IsOpen: false,
-              IsTimeAttendacneApproved: 0,
-              LeaveId: 0,
-              PresentDayStatus: 0,
-              SubmittedBy: 0,
-              SubmittedOn: new Date(),
-              TotalDays: 0,
-              TotalMinutes: 0,
-              UpdatedBy: 0,
-              UpdatedOn: new Date(),
-              UserComments: "",
+              TimesheetStatus: ItemStatus.NotGenerated
             });
 
             i++;
           }
         }
-        let burnDays = null;
-        if (this.applicationData.fileDetail.length <= 0) {
-          burnDays = attendanceDetail.length - missinngAtt.length;
+        
+        let burnDays = timesheetDetails.length - missinngAtt.length;
+        if (burnDays > 0)
           this.pdfForm.get('actualDaysBurned').setValue(burnDays)
-        }
         else
           burnDays = this.pdfForm.get('actualDaysBurned').value;
+
         this._calculateAmount(burnDays);
-        this.allAttendance = attendanceDetail.sort((a,b) => Date.parse(a.AttendanceDay) - Date.parse(b.AttendanceDay));
+        this.allTimesheet = timesheetDetails.sort((a,b) => Date.parse(a.PresentDate) - Date.parse(b.PresentDate));
         this.dayList = [];
         let i = 0;
         while(i < 7) {
-          this.dayList.push(new Date(this.allAttendance[i]["AttendanceDay"]).getDay());
+          this.dayList.push(new Date(this.allTimesheet[i]["PresentDate"]).getDay());
           i++;
         }
       }
@@ -925,6 +901,14 @@ export class BuildPdfComponent implements OnInit {
       $('#template-view').modal('show');
       }
     });
+  }
+
+  viewTimesheetDetail() {
+    $('#timesheet-view').modal('show');
+  }
+
+  enableDate(current: any) {
+    alert('hi');
   }
 
   viewSendTemplete(e: any) {
