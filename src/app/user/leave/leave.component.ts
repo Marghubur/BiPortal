@@ -107,7 +107,7 @@ export class LeaveComponent implements OnInit {
         WarningToast("Please select start and end date first.");
         return;
       }
-        
+
       if (this.leaveForm.get('LeaveToDay').errors !== null) {
         WarningToast("Please select start and end date first.");
         return;
