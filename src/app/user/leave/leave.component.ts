@@ -3,12 +3,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, UserAttendance, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -41,6 +40,7 @@ export class LeaveComponent implements OnInit {
   testDataset: Array<any> = [];
   graphInstances: Array<any> = [];
   observer: Subscription = null;
+  isEnabled: boolean = false;
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -103,37 +103,39 @@ export class LeaveComponent implements OnInit {
       let value: LeaveModal = this.leaveForm.value;
       value.UserTypeId = UserType.Employee;
       value.RequestType = 1;
-      if (this.leaveForm.get('LeaveFromDay').errors !== null)
-        errroCounter++;
-      if (this.leaveForm.get('LeaveToDay').errors !== null)
-        errroCounter++;
-      if (this.leaveForm.get('Session').errors !== null)
-        errroCounter++;
-      if (this.leaveForm.get('Reason').errors !== null)
-        errroCounter++;
-      if (this.leaveForm.get('AssignTo').errors !== null)
-        errroCounter++;
-      if (this.leaveForm.get('LeaveType').errors !== null)
-        errroCounter++;
-      if (value && errroCounter == 0) {
-        this.http.post('Attendance/ApplyLeave', value).then ((res:ResponseModel) => {
-          if (res.ResponseBody) {
-            this.bindData(res);
-            $('#leaveModal').modal('hide');
-            Toast("Leave apply successfully.");
-            this.submitted = false;
-            this.isLoading = false;
-          }
-        }).catch(e => {
-          this.isLoading = false;
-        })
+      if (this.leaveForm.get('LeaveFromDay').errors !== null) {
+        WarningToast("Please select start and end date first.");
+        return;
       }
+
+      if (this.leaveForm.get('LeaveToDay').errors !== null) {
+        WarningToast("Please select start and end date first.");
+        return;
+      }
+
+      if (this.leaveForm.get('LeaveType').errors !== null) {
+        WarningToast("Please select Leave Type first.");
+        return;
+      }
+
+      this.http.post('Attendance/ApplyLeave', value).then ((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          this.bindData(res);
+          $('#leaveModal').modal('hide');
+          Toast("Leave apply successfully.");
+          this.submitted = false;
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.submitted = false;
+        this.isLoading = false;
+      });
     }
   }
 
   onDateSelect(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
-    if (value.getTime() > this.leaveDetail.LeaveFromDay.getTime() && value.getTime() >= new Date().getTime()) {
+    if (value.getTime() >= this.leaveDetail.LeaveFromDay.getTime() && value.getTime() >= new Date().getTime()) {
       this.leaveDetail.LeaveToDay = value;
       this.leaveDays = Math.floor((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate()) ) /(1000 * 60 * 60 * 24));
       this.leaveForm.get('LeaveToDay').setValue(value);
@@ -146,11 +148,11 @@ export class LeaveComponent implements OnInit {
     let value  = new Date(e.year, e.month-1, e.day);
     if (value.getTime() >= new Date().getTime()) {
       //this.leaveDays = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24));
-      this.leaveDetail.LeaveFromDay = value;
-      this.leaveForm.get('LeaveFromDay').setValue(value);
     }
-    else
-      ErrorToast("Please select a valid date.")
+    this.leaveDetail.LeaveFromDay = value;
+    this.leaveForm.get('LeaveFromDay').setValue(value);
+    // else
+    //   ErrorToast("Please select a valid date.")
   }
 
   leaveRequestForm() {
@@ -179,7 +181,8 @@ export class LeaveComponent implements OnInit {
     }
     this.http.post('Attendance/GetAllLeavesByEmpId', value)
     .then((res: ResponseModel) => {
-      this.bindData(res);
+      if (res.ResponseBody)
+        this.bindData(res);
     }).catch(e => {
       ErrorToast("No record found");
     })
@@ -460,7 +463,7 @@ export class LeaveComponent implements OnInit {
       options: {
         maintainAspectRatio: false,
         responsive: true,
-        cutout: 25,
+        cutout: 60,
     }
     });
 
@@ -533,6 +536,23 @@ export class LeaveComponent implements OnInit {
       break;
       case "leave-tab":
       break;
+    }
+  }
+
+  validateLeaveStatus(e: any) {
+    if(e.target.value) {
+      let value = parseInt(e.target.value);
+      let leaveType = this.leaveTypes.find(i => i.LeavePlanTypeId == value);
+      if (leaveType) {
+        if (leaveType.AvailableLeave <= 0) {
+          ErrorToast(`You don't have enough [${leaveType.PlanName}] balance.`)
+          this.isEnabled = false;
+        } else {
+          this.isEnabled = true;
+        }
+      }
+    } else {
+      ErrorToast("Invalid selection");
     }
   }
 }
