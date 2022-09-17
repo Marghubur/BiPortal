@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Files } from '../documents/documents.component';
 declare var $: any;
@@ -37,7 +37,21 @@ export class EmailComponent implements OnInit {
     if (data) {
       this.currentUser = data;
     }
+
     this.initForm();
+    //this.loadMail();
+  }
+  
+  loadMail() {
+    this.http.get(`email/GetMyMails`).then(response => {
+      if (response.ResponseBody) {
+        Toast("EMail loaded succcessfully.")
+      } else {
+        WarningToast("Not able to load your mails.")
+      }
+      
+      this.initForm();
+    });
   }
 
   initForm() {
@@ -57,7 +71,18 @@ export class EmailComponent implements OnInit {
     this.isSubmitted = true;
     this.isLoading = true;
     if (this.emailForm.invalid) {
+      ErrorToast("Please enter [To] address and [Subject] first.");
       this.isLoading = false;
+      return;
+    }
+
+    if(this.toEmail.length == 0) {
+      ErrorToast("Please enter [To] email address");
+      return;
+    }
+
+    if(this.emailForm.get('Subject').value.trim() == "") {
+      ErrorToast("Subject is a required field.");
       return;
     }
 
@@ -77,9 +102,9 @@ export class EmailComponent implements OnInit {
           index++;
         }
       }
-      formData.append("fileDetail", JSON.stringify(this.FileDocumentList));
       formData.append("mailDetail", JSON.stringify(value));
-      this.http.post("Email/SendEmailRequest", value).then((res:ResponseModel) => {
+      //formData.append("files", JSON.stringify(value));
+      this.http.post("Email/SendEmailRequest", formData).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           $('#composeMailModal').modal('hide');
           Toast("Email send successfully");
@@ -187,7 +212,16 @@ export class EmailComponent implements OnInit {
   }
 
   addEmailChip(e: any, name: string) {
-    let value = (e.target.value).replace(' ', '');
+    if(e.key == ';' || e.key == ' ') {
+      let value = (e.target.value).replace(/ /g, '').replace(/;/g, '');
+      this.addToList(e, name);
+    } else {
+
+    }
+  }
+
+  addToList(e: any, name: string) {
+    let value = (e.target.value).replace(/ /g, '').replace(/;/g, '');
     let validRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (value && value.match(validRegex)) {
       switch (name) {
@@ -241,13 +275,10 @@ export class EmailComponent implements OnInit {
         item.FileName = file.name;
         item.FileType = file.type;
         item.FileSize = (Number(file.size)/1024);
-        item.Email = this.currentUser.Email;
         item.FileExtension = file.type;
         item.DocumentId = 0;
         item.FilePath = '';
         item.ParentFolder = '';
-        item.UserId = this.currentUser.UserId;
-        item.UserTypeId = this.currentUser.UserTypeId;
         this.FileDocumentList.push(item);
         this.FilesCollection.push(file);
         index++;
