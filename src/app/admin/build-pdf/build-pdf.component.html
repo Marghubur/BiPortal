@@ -66,12 +66,18 @@
               </div>
             </div>
             <div class="col-md-12 ms-3 mt-4 row">
-              <div class="col-md-3 form-check">
-                <input class="form-check-input" type="checkbox" formControlName="IsCustomBill" id="flexCheckDefault"
-                  (change)="onEdit($event)">
-                <label class="form-check-label" for="flexCheckDefault">
-                  Generate Custom Bill
-                </label>
+              <div class="d-flex flex-row justify-content-between">
+                <div class="col-md-6 form-check">
+                  <input class="form-check-input" type="checkbox" formControlName="IsCustomBill" id="flexCheckDefault"
+                    (change)="onEdit($event)">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Generate Custom Bill
+                  </label>
+                </div>
+                <div class="col-6 text-end">
+                  <a href="javascript:void(0)" class="text-primary-c fw-bold pe-4" (click)="viewTimesheetDetail()">
+                    Edit TimeSheet</a>
+                </div>
               </div>
             </div>
 
@@ -83,7 +89,7 @@
               </div>
 
               <div class="blur-this">
-                <div class="col-md-12 px-3 mt-3" *ngIf="allAttendance.length > 0">
+                <div class="col-md-12 px-3 mt-3" *ngIf="allTimesheet.length > 0">
                   <div class="t-table border-cell t-list t-border col-md-12">
                     <div class="t-head overflow-hidden">
                       <div class="tr">
@@ -103,14 +109,14 @@
                     <div class="t-body overflow-hidden">
                       <ng-container>
                         <div class="tr py-2">
-                          <ng-container *ngFor="let item of allAttendance | slice:0:7">
+                          <ng-container *ngFor="let item of allTimesheet | slice:0:7">
                             <div class="td align-middle text-center">
                               <div class="cell-wrapper">
-                                {{item.AttendanceDay | date}}
-                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                {{item.PresentDate | date}}
+                                <ng-container *ngIf="item.TimesheetStatus == 8">
                                   <i class="ps-2 text-success fa fa-check"></i>
                                 </ng-container>
-                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                <ng-container *ngIf="item.TimesheetStatus != 8">
                                   <i class="ps-2 text-danger fa fa-close"></i>
                                 </ng-container>
                               </div>
@@ -118,14 +124,14 @@
                           </ng-container>
                         </div>
                         <div class="tr py-2">
-                          <ng-container *ngFor="let item of allAttendance | slice:7:14">
+                          <ng-container *ngFor="let item of allTimesheet | slice:7:14">
                             <div class="td align-middle text-center">
                               <div class="cell-wrapper">
-                                {{item.AttendanceDay | date}}
-                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                {{item.PresentDate | date}}
+                                <ng-container *ngIf="item.TimesheetStatus == 8">
                                   <i class="ps-2 text-success fa fa-check"></i>
                                 </ng-container>
-                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                <ng-container *ngIf="item.TimesheetStatus != 8">
                                   <i class="ps-2 text-danger fa fa-close"></i>
                                 </ng-container>
                               </div>
@@ -133,14 +139,14 @@
                           </ng-container>
                         </div>
                         <div class="tr py-2">
-                          <ng-container *ngFor="let item of allAttendance | slice:14:21">
+                          <ng-container *ngFor="let item of allTimesheet | slice:14:21">
                             <div class="td align-middle text-center">
                               <div class="cell-wrapper">
-                                {{item.AttendanceDay | date}}
-                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                {{item.PresentDate | date}}
+                                <ng-container *ngIf="item.TimesheetStatus == 8">
                                   <i class="ps-2 text-success fa fa-check"></i>
                                 </ng-container>
-                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                <ng-container *ngIf="item.TimesheetStatus != 8">
                                   <i class="ps-2 text-danger fa fa-close"></i>
                                 </ng-container>
                               </div>
@@ -148,14 +154,14 @@
                           </ng-container>
                         </div>
                         <div class="tr py-2">
-                          <ng-container *ngFor="let item of allAttendance | slice:21:28">
+                          <ng-container *ngFor="let item of allTimesheet | slice:21:28">
                             <div class="td align-middle text-center">
                               <div class="cell-wrapper">
-                                {{item.AttendanceDay | date}}
-                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                {{item.PresentDate | date}}
+                                <ng-container *ngIf="item.TimesheetStatus == 8">
                                   <i class="ps-2 text-success fa fa-check"></i>
                                 </ng-container>
-                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                <ng-container *ngIf="item.TimesheetStatus != 8">
                                   <i class="ps-2 text-danger fa fa-close"></i>
                                 </ng-container>
                               </div>
@@ -163,21 +169,21 @@
                           </ng-container>
                         </div>
                         <div class="tr py-2">
-                          <ng-container *ngFor="let item of allAttendance | slice:28:31">
+                          <ng-container *ngFor="let item of allTimesheet | slice:28:31">
                             <div class="td align-middle text-center">
                               <div class="cell-wrapper">
-                                {{item.AttendanceDay | date}}
-                                <ng-container *ngIf="item.AttendenceStatus == 8">
+                                {{item.PresentDate | date}}
+                                <ng-container *ngIf="item.TimesheetStatus == 8">
                                   <i class="ps-2 text-success fa fa-check"></i>
                                 </ng-container>
-                                <ng-container *ngIf="item.AttendenceStatus != 8">
+                                <ng-container *ngIf="item.TimesheetStatus != 8">
                                   <i class="ps-2 text-danger fa fa-close"></i>
                                 </ng-container>
                               </div>
                             </div>
                           </ng-container>
                           <div class="td align-middle text-center"
-                            [ngClass]="{'fe-5': allAttendance.length == 30, 'fe-4': allAttendance.length == 31, 'fe-7': allAttendance.length == 28, 'fe-6': allAttendance.length == 29}">
+                            [ngClass]="{'fe-5': allTimesheet.length == 30, 'fe-4': allTimesheet.length == 31, 'fe-7': allTimesheet.length == 28, 'fe-6': allTimesheet.length == 29}">
                             <div class="cell-wrapper">
                               <span class="d-none">{{item}}</span>
                             </div>
@@ -560,6 +566,129 @@
       </div>
       <div class="modal-body px-5">
         <iframe [srcdoc]="template" width="100%" height="400px" style="border: none;"></iframe>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modal -->
+
+<!-- Staffing bill timesheet -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="timesheet-view" tabindex="-1"
+  aria-labelledby="timesheet-viewLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0 pt-4">
+        <h5 class="modal-title">Update TimeSheet</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5">
+        <div class="col-md-12 px-3 mt-3" *ngIf="allTimesheet.length > 0">
+          <div class="t-table border-cell t-list t-border col-md-12">
+            <div class="t-head overflow-hidden">
+              <div class="tr">
+                <div class="th fe-1 text-center" *ngFor="let day of dayList">
+                  <div [ngSwitch]="day">
+                    <div class="fw-bold p-2 bg-ant" *ngSwitchCase="1">Monday</div>
+                    <div class="fw-bold p-2 bg-ant" *ngSwitchCase="2">Tuesday</div>
+                    <div class="fw-bold p-2 bg-ant" *ngSwitchCase="3">Wednesday</div>
+                    <div class="fw-bold p-2 bg-ant" *ngSwitchCase="4">Thusday</div>
+                    <div class="fw-bold p-2 bg-ant" *ngSwitchCase="5">Friday</div>
+                    <div class="fw-bold p-2 bg-ant" *ngSwitchCase="6">Saturday</div>
+                    <div class="fw-bold p-2 bg-ant" *ngSwitchDefault>Sunday</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="t-body overflow-hidden">
+              <ng-container>
+                <div class="tr py-2">
+                  <ng-container *ngFor="let item of allTimesheet | slice:0:7">
+                    <div class="td align-middle text-center">
+                      <div class="cell-wrapper">
+                        {{item.PresentDate | date}}
+                        <ng-container *ngIf="item.TimesheetStatus == 8">
+                          <i class="ps-2 text-success fa fa-check"></i>
+                        </ng-container>
+                        <ng-container *ngIf="item.TimesheetStatus != 8">
+                          <i class="ps-2 text-danger fa fa-close"></i>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+                <div class="tr py-2">
+                  <ng-container *ngFor="let item of allTimesheet | slice:7:14">
+                    <div class="td align-middle text-center" (click)="enableDate(item)">
+                      <div class="cell-wrapper">
+                        {{item.PresentDate | date}}
+                        <ng-container *ngIf="item.TimesheetStatus == 8">
+                          <i class="ps-2 text-success fa fa-check"></i>
+                        </ng-container>
+                        <ng-container *ngIf="item.TimesheetStatus != 8">
+                          <i class="ps-2 text-danger fa fa-close"></i>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+                <div class="tr py-2">
+                  <ng-container *ngFor="let item of allTimesheet | slice:14:21">
+                    <div class="td align-middle text-center">
+                      <div class="cell-wrapper">
+                        {{item.PresentDate | date}}
+                        <ng-container *ngIf="item.TimesheetStatus == 8">
+                          <i class="ps-2 text-success fa fa-check"></i>
+                        </ng-container>
+                        <ng-container *ngIf="item.TimesheetStatus != 8">
+                          <i class="ps-2 text-danger fa fa-close"></i>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+                <div class="tr py-2">
+                  <ng-container *ngFor="let item of allTimesheet | slice:21:28">
+                    <div class="td align-middle text-center">
+                      <div class="cell-wrapper">
+                        {{item.PresentDate | date}}
+                        <ng-container *ngIf="item.TimesheetStatus == 8">
+                          <i class="ps-2 text-success fa fa-check"></i>
+                        </ng-container>
+                        <ng-container *ngIf="item.TimesheetStatus != 8">
+                          <i class="ps-2 text-danger fa fa-close"></i>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+                <div class="tr py-2">
+                  <ng-container *ngFor="let item of allTimesheet | slice:28:31">
+                    <div class="td align-middle text-center">
+                      <div class="cell-wrapper">
+                        {{item.PresentDate | date}}
+                        <ng-container *ngIf="item.TimesheetStatus == 8">
+                          <i class="ps-2 text-success fa fa-check"></i>
+                        </ng-container>
+                        <ng-container *ngIf="item.TimesheetStatus != 8">
+                          <i class="ps-2 text-danger fa fa-close"></i>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <div class="td align-middle text-center"
+                    [ngClass]="{'fe-5': allTimesheet.length == 30, 'fe-4': allTimesheet.length == 31, 'fe-7': allTimesheet.length == 28, 'fe-6': allTimesheet.length == 29}">
+                    <div class="cell-wrapper">
+                      <span class="d-none">{{item}}</span>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
