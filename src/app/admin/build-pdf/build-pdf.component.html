@@ -47,7 +47,7 @@
               <div class="col-md-3">
                 <label class="form-label">To Company *</label>
                 <select name="receiverCompanyId" class="form-control" formControlName="receiverCompanyId"
-                  (change)="findReceiverClientDetail($event)"
+                  (change)="findReceiverClientDetail()"
                   [ngClass]="{'error': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
                   <option value="0">Client Organization</option>
                   <option *ngFor="let client of assignedClients" value="{{client.CompanyId}}">

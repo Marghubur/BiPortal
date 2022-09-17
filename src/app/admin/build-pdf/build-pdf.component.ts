@@ -128,20 +128,24 @@ export class BuildPdfComponent implements OnInit {
     this.missingTimesheetStatus = false;
     this.allTimesheet = [];
     let timesheetStatusFor = {
-      "EmployeeUid": this.currentEmployee.EmployeeUid,
+      "EmployeeId": this.currentEmployee.EmployeeUid,
       "UserTypeId": UserType.Employee,
       "ForMonth": this.originalBillingMonth,
-      "ForYear": this.model.year
+      "ForYear": this.model.year,
+      "ClientId": this.clientDetail.CompanyId
     }
+
     this.http.post("Timesheet/GetEmployeeTimeSheet", timesheetStatusFor).then ((response: ResponseModel) => {
       if (response.ResponseBody) {
+        let burnDays = 0;
         let missinngAtt = response.ResponseBody.MissingDate;
         let timesheetDetails = response.ResponseBody.TimesheetDetails;
         if (missinngAtt.length > 0 && timesheetDetails.length > 0) {
           this.missingTimesheetStatus = true;
           timesheetDetails.map(item => {
             item.PresentDate = new Date(item.PresentDate);
-            item.TimesheetStatus = 8;
+            if(item.TimesheetStatus == 8)
+              burnDays++;
           });
         } else {
           this.missingTimesheetStatus = false;
@@ -161,7 +165,6 @@ export class BuildPdfComponent implements OnInit {
           }
         }
 
-        let burnDays = timesheetDetails.length - missinngAtt.length;
         if (burnDays > 0)
           this.pdfForm.get('actualDaysBurned').setValue(burnDays)
         else
@@ -177,7 +180,7 @@ export class BuildPdfComponent implements OnInit {
         }
       }
       this.isClientSelected = true;
-    })
+    });
   }
 
 
@@ -773,8 +776,12 @@ export class BuildPdfComponent implements OnInit {
     }
   }
 
-  findReceiverClientDetail(e: any) {
-    this.bindClientDetail(e.target.value);
+  findReceiverClientDetail() {
+    let value = this.pdfForm.get('receiverCompanyId').value;
+    if(value) 
+      this.bindClientDetail(value);
+    else
+      ErrorToast("Company not selected properly.");
   }
 
   bindClientDetail(Id: any) {
@@ -808,7 +815,6 @@ export class BuildPdfComponent implements OnInit {
         }
 
         this.getAttendance();
-        this.isClientSelected = true;
       }
     }
   }
