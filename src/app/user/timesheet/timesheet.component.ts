@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';3
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { data } from 'jquery';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -53,8 +54,10 @@ export class TimesheetComponent implements OnInit {
   isBlocked: boolean = false;
   cachedData: any = null;
   dailyTimesheetDetails: Array<any> = [];
-  emptyFields: Array<number> = [];
+  emptyFields: Array<any> = [];
   distributedWeek = [];
+  currentMonthWeek: Array<any> = [];
+  viewTimesheetWeek: any = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -187,6 +190,9 @@ export class TimesheetComponent implements OnInit {
   }
 
   buildWeekForm(at: any, item: any, timesheetId: number) {
+    let status = -1;
+    if (at.date.getMonth() != new Date().getMonth())
+      status = 11;
     if (item == null) {
       return this.fb.group({
         TimesheetId: [timesheetId, Validators.required],
@@ -196,7 +202,7 @@ export class TimesheetComponent implements OnInit {
         TotalMinutes: [8 * 60 * 5, Validators.required],
         IsHoliday: [false],
         IsWeekEnd: [false],
-        TimesheetStatus: [-1, Validators.required],
+        TimesheetStatus: [status, Validators.required],
         TimesheetDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
         PresentDate: [at.date, Validators.required],
         UserHours: [8, Validators.required],
@@ -227,9 +233,11 @@ export class TimesheetComponent implements OnInit {
   }
 
   initForm(timesheetDetail: Array<any>, index?: number) {
-    let weekDaysList = this.buildWeekDays();
+    let weekDaysList = [];
     if (index >= 0) {
       weekDaysList = this.distributedWeek[index];
+    } else {
+      weekDaysList = this.buildWeekDays();
     }
     this.weekDaysList = weekDaysList.map(item => item.date.getDay());
 
@@ -245,8 +253,33 @@ export class TimesheetComponent implements OnInit {
         return this.buildWeekForm(item, value, timesheetId);
       }))
     });
-
+    if (isNaN(index))
+      this.weeklyTimeSheetDistribution();
     this.countTotalTime();
+  }
+
+  weeklyTimeSheetDistribution() {
+    let value = this.timesheetForm.value.timesheetArray.filter(x => x.TimesheetStatus != 11);
+    let count = 0;
+    this.currentMonthWeek = [];
+    for (let i = 0; i < this.distributedWeek.length; i++) {
+      let index = 0;
+      if (this.emptyFields.length > 0 && count == 0) {
+        index =  this.emptyFields.length;
+        count = 1;
+      }
+      let status = 0;
+      let filterrecord = value.filter(x => x.PresentDate.getTime() >= this.distributedWeek[i][index].date.getTime() && x.PresentDate.getTime() <= this.distributedWeek[i][this.distributedWeek[i].length-1].date.getTime())
+      if (filterrecord.filter(x => x.TimesheetStatus == 2).length > 0)
+        status = 2;
+      else
+        status = 8;
+      this.currentMonthWeek.push( {
+        startWeek: this.distributedWeek[i][index].date,
+        endWeek: this.distributedWeek[i][this.distributedWeek[i].length-1].date,
+        status: status
+      })
+    }
   }
 
   countTotalTime() {
@@ -257,16 +290,17 @@ export class TimesheetComponent implements OnInit {
     let hrsValue = 0;
     let minsValue = 0;
     let billingValue = 0;
-
     let i = 0;
     while (i < records.length) {
-      let day = Number(new Date(records[i].get("PresentDate").value).getDay());
-      if(!isNaN(day) && day !== 6 && day !== 0) {
-        hrsValue +=  Number(records[i].get("UserHours").value);
-        minsValue +=  Number(records[i].get("UserMin").value);
+      let date = new Date(records[i].get("PresentDate").value);
+      if (date.getMonth() == new Date().getMonth()) {
+        let day = Number(date.getDay());
+        if(!isNaN(day) && day !== 6 && day !== 0) {
+          hrsValue +=  Number(records[i].get("UserHours").value);
+          minsValue +=  Number(records[i].get("UserMin").value);
+        }
+        billingValue +=  parseInt(records[i].get("TotalMinutes").value);
       }
-
-      billingValue +=  parseInt(records[i].get("TotalMinutes").value);
       i++;
     }
 
@@ -502,13 +536,22 @@ export class TimesheetComponent implements OnInit {
     if(this.fromDate.getDate() < 6  && (day > 1 || day == 0)) {
       value = day == 0 ? 6 : day-1 ;
       for (let i = 0; i < value; i++) {
-        this.emptyFields.push(i);
+        let  currentDate = new Date(this.fromDate.getTime());
+        currentDate.setDate(this.fromDate.getDate() - (value-i));
+        let data = {
+          date: new Date(currentDate),
+          hrs: "00",
+          mins: "00"
+        };
+        weekDaysList.push(data);
+        this.emptyFields.push(data);
+        currentDate = null;
       }
     }
     if((this.toDate - this.fromDate) > 0){
       let index = 0;
       //let to = 7;
-      let to = this.toDate.getDate() - this.fromDate.getDate();
+      let to = (this.toDate.getDate() - this.fromDate.getDate())+1;
       while(index < to) {
         currentDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         weekDaysList.push({
@@ -523,7 +566,7 @@ export class TimesheetComponent implements OnInit {
       Toast("Wrong date seleted.")
     }
 
-    let i = value;
+    let i = 0;
     while(i < weekDaysList.length) {
       if (weekDaysList[i].date.getDay() == 0 || weekDaysList[i].date.getDay() == 6) {
         weekDaysList[i].hrs = "00";
@@ -533,18 +576,27 @@ export class TimesheetComponent implements OnInit {
     }
 
     this.distributedWeek = [];
+    //this.currentMonthWeek = [];
     let index = 0;
     while (index <weekDaysList.length) {
-      let increment = 0;
-      if (index == 0)
-        increment = (7 - value);
-      else
-        increment = index + 7;
-
+      let increment = index + 7;
       let data = weekDaysList.slice(index, increment);
       this.distributedWeek.push(data);
-      index=increment;
+      index=(index+7);
     }
+
+    // let count = 0;
+    // for (let i = 0; i < this.distributedWeek.length; i++) {
+    //   let index = 0;
+    //   if (this.emptyFields.length > 0 && count == 0) {
+    //     index =  this.emptyFields.length;
+    //     count = 1;
+    //   }
+    //   this.currentMonthWeek.push( {
+    //     startWeek: this.distributedWeek[i][index].date,
+    //     endWeek: this.distributedWeek[i][this.distributedWeek[i].length-1].date
+    //   })
+    // }
     return weekDaysList;
   }
 
@@ -603,11 +655,10 @@ export class TimesheetComponent implements OnInit {
         // this.toDate.setDate(this.toDate.getDate() + 6);
         this.toDate = new Date();
         if (this.toDate.getDay() == 4)
-        this.toDate.add
-          this.toDate.setDate(this.toDate.getDate() + 2);
+          this.toDate.setDate(this.toDate.getDate() + 1);
 
         if (this.toDate.getDay() == 5)
-          this.toDate.setDate(this.toDate.getDate() + 1);
+          this.toDate.setDate(this.toDate.getDate() + 2);
 
         this.getUserTimesheetData();
       }
@@ -646,7 +697,8 @@ export class TimesheetComponent implements OnInit {
   }
 
   viewTimeSheet(index: number) {
-    this.initForm(this.dailyTimesheetDetails, index)
+    this.initForm(this.dailyTimesheetDetails, index);
+    this.viewTimesheetWeek = this.currentMonthWeek[index];
     $('#timesheetModal').modal('show')
   }
 

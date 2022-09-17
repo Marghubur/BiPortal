@@ -301,14 +301,15 @@
                       </tr>
                     </thead>
                     <tbody >
-                      <tr *ngFor="let item of distributedWeek; let i = index">
-                        <td >
+                      <tr *ngFor="let item of currentMonthWeek; let i = index">
+                        <td>
                           <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="viewTimeSheet(i)">
-                            <span class="fw-bold pe-1">Timesheet From</span>{{item[0].date | date}} <span class="fw-bold px-1">to</span>{{item[3].date | date}}
+                            <span class="fw-bold pe-1">Timesheet From</span>{{item.startWeek | date}} <span class="fw-bold px-1">to</span>{{item.endWeek | date}}
                           </a>
                         </td>
                         <td>
-                          Pending
+                          <span *ngIf="item.status == 2"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Pending</span>
+                          <span *ngIf="item.status == 8"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
                         </td>
                       </tr>
                     </tbody>
@@ -356,7 +357,7 @@
 </div>
 
 <!-- View Timesheet Modal -->
-<div class="modal fade" id="timesheetModal" tabindex="-1" aria-labelledby="timesheetModalLabel" aria-hidden="true">
+<div class="modal fade" id="timesheetModal" tabindex="-1" aria-labelledby="timesheetModalLabel" aria-hidden="true" *ngIf="viewTimesheetWeek != null">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
@@ -368,8 +369,8 @@
           <div class="d-flex flex-row justify-content-between">
             <div class="text-dark text-dark d-flex flex-column justify-content-center">
               <div>
-                <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
-                <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
+                <span class="fw-bold">Timesheet: From&nbsp;</span> {{viewTimesheetWeek.startWeek | date}}
+                <span class="fw-bold">&nbsp; to &nbsp; </span> {{viewTimesheetWeek.endWeek | date}}.
               </div>
             </div>
           </div>
@@ -377,6 +378,7 @@
             <table class="table-middle table table-hover">
               <thead>
                 <tr>
+                  <th>DAY</th>
                   <th class="">DATE</th>
                   <th class="">TIMESHEET VISUAL</th>
                   <th class="">EFFECTIVE HOURS</th>
@@ -384,60 +386,51 @@
                 </tr>
               </thead>
               <tbody formArrayName="timesheetArray">
-                <tr>
-                  <ng-container *ngIf="emptyFields.length > 0">
-                    <td *ngFor="let item of emptyFields">
-                      <span>Not Allowed</span>
-                    </td>
-                  </ng-container>
-                  <ng-container *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;">
+                <tr *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11}">
+                  <ng-container >
                     <ng-container [formGroupName]="i">
+                      <td>{{item.get('PresentDate').value | date: 'EEE'}}</td>
                       <td>{{item.get('PresentDate').value | date}}</td>
                       <td></td>
                       <td>
                         <div class="center-badge d-flex justify-content-start">
-                          <ng-container [ngSwitch]="item.get('TimesheetStatus').value">
-                            <span class="status-icon s" *ngSwitchCase="8">
-                              <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
-                            </span>
-                            <span class="status-icon s" *ngSwitchCase="-1">
-                              <i class="fa fa-ban text-danger pt-1 pb-1" aria-hidden="true"></i>
-                            </span>
-                            <span class="status-icon" *ngSwitchDefault>
-                              <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
-                            </span>
+                          <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23" [readonly]="item.get('TimesheetStatus').value == 11" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11}"
+                            [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
+                            formControlName="UserHours"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                          <span>&nbsp;:</span>
+                          <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59" [readonly]="item.get('TimesheetStatus').value == 11" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11}"
+                            (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 
-                            <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23"
-                              [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
-                              formControlName="UserHours"
-                              onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                            <span>&nbsp;:</span>
-                            <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59"
-                              (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
-                              onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-
-                            <div ngbDropdown class="d-none dropright">
-                              <input type="text" class="form-control input-overflow" formControlName="UserComments"
-                                placeholder="Comments" (focus)="takeComments($event)">
-                              <div class="p-0 position-absolute d-none textarea-box">
-                                <textarea class="form-control" (blur)="captureComments($event)"
-                                  placeholder="enter your comments" formControlName="UserComments">
-                                </textarea>
-                              </div>
+                          <div ngbDropdown class="d-none dropright">
+                            <input type="text" class="form-control input-overflow" formControlName="UserComments"
+                              placeholder="Comments" (focus)="takeComments($event)">
+                            <div class="p-0 position-absolute d-none textarea-box">
+                              <textarea class="form-control" (blur)="captureComments($event)"
+                                placeholder="enter your comments" formControlName="UserComments">
+                              </textarea>
                             </div>
-                          </ng-container>
+                          </div>
                         </div>
                       </td>
                       <td>
                         <ng-container [ngSwitch]="item.get('TimesheetStatus').value">
-                          <span class="status-icon s" *ngSwitchCase="8">
-                            <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
+                          <span class="" *ngSwitchCase="8">
+                            <i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            Submitted
                           </span>
-                          <span class="status-icon s" *ngSwitchCase="-1">
-                            <i class="fa fa-ban text-danger pt-1 pb-1" aria-hidden="true"></i>
+                          <span class="" *ngSwitchCase="-1">
+                            <i class="fa fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            Not Submitted
                           </span>
-                          <span class="status-icon" *ngSwitchDefault>
-                            <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
+                          <span class="" *ngSwitchCase="2">
+                            <i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            Pending
+                          </span>
+                          <span class="text-danger" *ngSwitchCase="11">
+                            <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            Readonly
                           </span>
                         </ng-container>
                       </td>
@@ -446,14 +439,17 @@
                       </td>
                     </ng-container>
                   </ng-container>
-                  <td>
-                    <div class="center-badge d-flex justify-content-center">
-                      08:00
-                    </div>
+                </tr>
+                <tr>
+                  <td >
+                    <span class="fw-bold">Final</span>
                   </td>
+                  <td></td>
+                  <td></td>
                   <td>
-                    <div class="center-badge d-flex justify-content-center">{{totalHrs}} : {{totalMins}}</div>
+                    <div class="fw-bold">{{totalHrs}} : {{totalMins}}</div>
                   </td>
+                  <td></td>
                 </tr>
               </tbody>
             </table>
