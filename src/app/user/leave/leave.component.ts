@@ -124,9 +124,10 @@ export class LeaveComponent implements OnInit {
             this.submitted = false;
             this.isLoading = false;
           }
+        }).catch(e => {
+          this.isLoading = false;
         })
       }
-      this.isLoading = false;
     }
   }
 

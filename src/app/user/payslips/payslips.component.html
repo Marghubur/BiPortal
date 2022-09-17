@@ -19,60 +19,122 @@
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="right-panel col-md-12 p-0">
-      <ng-container>
-        <div class="container-fluid pt-4">
-          <div class="col-md-12 bg-light mb-3 mt-3">
-            <ul class="nav">
-              <li class="nav-item">
-                <a class="nav-link new-nav-link text-dark" id="attendance-tab"
-                  (click)="activeTab('MySalary')" aria-current="page" href="javascript:void(0)">My Salary</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-dark new-nav-active" id="timesheet-tab" (click)="activeTab('PaySlips')"
-                  href="javascript:void(0)">Pay Slips</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('IncomeTax')"
-                  href="javascript:void(0)">Income Tax</a>
-              </li>
-            </ul>
-          </div>
-          <ng-container >
-            <h5 class="text-dark ps-3">Pay Slips</h5>
+    <div [ngClass]="{'blur-section': !SectionIsReady}">
+      <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
+        <div class="blur-section__content">
+          {{'Please login again'}}
+        </div>
+      </div>
+      <div class="blur-this">
+        <div class="right-panel col-md-12 p-0">
+          <ng-container>
+            <div class="container-fluid pt-4">
+              <div class="col-md-12 bg-light mb-3 mt-3">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link new-nav-link text-dark" id="attendance-tab"
+                      (click)="activeTab('MySalary')" aria-current="page" href="javascript:void(0)">My Salary</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-dark new-nav-active" id="timesheet-tab" (click)="activeTab('PaySlips')"
+                      href="javascript:void(0)">Pay Slips</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('IncomeTax')"
+                      href="javascript:void(0)">Income Tax</a>
+                  </li>
+                </ul>
+              </div>
+              <ng-container >
+                <h5 class="text-dark ps-3">Pay Slips</h5>
                 <p class="mb-0 ps-3">Here you can manage all hiringBell payslips for applicable years.</p>
                 <div class="d-flex px-3 justify-content-between">
                   <div class="col-md-2 pt-3 pe-3">
-                    <select class="form-select" (change)="allPaySlip($event)">
+                    <select class="form-select" (change)="allPaySlip($event.target.value)">
                       <option value="{{currentYear}}"  selected>Year {{currentYear}}</option>
                       <option value="{{currentYear - 1}}" >Year {{currentYear - 1}}</option>
                     </select>
                   </div>
                   <div>
-                    <button class="btn btn-outline-success"><i class="fa fa-download pe-3"></i> April {{currentYear}} Pay Slip</button>
+                    <button class="btn btn-outline-success" *ngIf="isReady"><i class="fa fa-download pe-3"></i> {{paySlipDate.Month}} {{paySlipDate.Year}} Pay Slip</button>
                   </div>
                 </div>
                 <div class="row mx-3 my-3">
-                  <div class="col-md-2 card">
-                    <p class="mb-0 py-2">PAYSLIPS</p>
-                    <div class="card border-0" *ngFor="let item of paySlipSchedule">
-                      <a href="javaascript:void(0)" class=" text-decoration-none py-2 fs-5 text-dark border-top">{{item.paySlipMonth}} {{item.paySlipYear}}</a>
+                  <div class="col-md-2 ps-0">
+                    <div class="card border-0">
+                      <p class="mb-0 py-2 ps-3">PAYSLIPS</p>
+                      <div class="list-group" *ngFor="let item of paySlipSchedule">
+                        <a href="javascript:void(0)" (click)="getPaySlip(item.paySlipMonth)" class="ps-3 list-group-item list-group-item-action py-2 fs-5 text-dark rounded-0">{{item.paySlipMonth | date: 'MMM'}} {{item.paySlipYear}}</a>
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-9">
-                    <div class="d-none file-container" id="file-container">
-                      <div class="text-end">
-                        <a  class="close_view">
-                          <i class="fa fa-times fa-2x" aria-hidden="true"></i>
-                        </a>
+                    <ng-container *ngIf="!isReady">
+                      <div class="d-flex align-items-center justify-content-center pb-5 my-5">
+                        <div class="pb-5 fw-bold fs-5">
+                          Please select Pay Slip month first.
+                        </div>
                       </div>
-                      <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
-                    </div>
+                    </ng-container>
+                    <form>
+                      <ng-container [formGroup]="salaryBreakupForm" *ngIf="salaryBreakupForm">
+                        <div class="pull-down">
+                          <div class="blur-this">
+                            <div class="col-md-12">
+                              <div class="t-table t-list t-border col-md-12">
+                                <div class="hide-bar alert-primary"></div>
+                                <div class="t-head alert-primary">
+                                  <div class="tr fw-bold text-dark">
+                                    <div class="th fe-4">
+                                      <div class="cell-wrappe ps-2">
+                                        DETAILS
+                                      </div>
+                                    </div>
+                                    <div class="th fe-2">
+                                      MONTHLY
+                                    </div>
+                                    <div class="th fe-2">
+                                      ANNUALLY
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="t-body" *ngIf="isReady">
+                                  <ng-container formArrayName="Components">
+                                    <div class="tr"
+                                      *ngFor="let item of salaryBreakupForm.get('Components').controls; let index = index;">
+                                      <ng-container [formGroupName]="index">
+                                        <div class="td d-flex flex-column justify-content-center fe-4 ps-2 py-2"
+                                          [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                                          {{item.get('ComponentName').value}}
+                                        </div>
+                                        <div class="td align-middle fe-2">
+                                          <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                                            {{item.get('MonthlyAmount').value}}
+                                          </div>
+                                        </div>
+                                        <div class="td align-middle fe-2">
+                                          <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
+                                            {{item.get('FinalAmount').value}}
+                                          </div>
+                                        </div>
+                                      </ng-container>
+                                    </div>
+                                  </ng-container>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </form>
+                    <p *ngIf="isReady" class="fs-6 my-2 text-success fw-bold">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if any).</p>
                   </div>
                 </div>
+              </ng-container>
+            </div>
           </ng-container>
         </div>
-      </ng-container>
+      </div>
     </div>
   </div>
 </div>

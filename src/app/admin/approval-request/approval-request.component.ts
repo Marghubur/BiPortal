@@ -23,6 +23,7 @@ export class ApprovalRequestComponent implements OnInit {
   editedMessage: string = '';
   itemStatus: number = 0;
   currentUser: any = null;
+  isPageLoading: boolean = false;
 
   constructor(
     private http: AjaxService,
@@ -43,13 +44,16 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   loadData() {
+    this.isPageLoading = true;
     this.http.get(`Request/GetPendingRequests/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
       if(response.ResponseBody) {
         this.buildPage(response.ResponseBody);
+        this.isPageLoading = false;
       } else {
         ErrorToast("Fail to fetch data. Please contact to admin.");
       }
     }).catch(e => {
+      this.isPageLoading = false;
       ErrorToast("Fail to fetch data. Please contact to admin.");
     });
   }
