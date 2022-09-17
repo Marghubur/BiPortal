@@ -27,6 +27,7 @@ export class EmailComponent implements OnInit {
   FileDocuments: Array<any> = [];
   isUploading: boolean = false;
   currentUser: any = null;
+  isPageReady: boolean = false;
 
   constructor(private fb:FormBuilder,
               private http:AjaxService,
@@ -37,20 +38,26 @@ export class EmailComponent implements OnInit {
     if (data) {
       this.currentUser = data;
     }
-
+    this.isPageReady = true;
     this.initForm();
+    this.isPageReady = false;
     //this.loadMail();
   }
-  
+
   loadMail() {
+    this.isPageReady = true;
     this.http.get(`email/GetMyMails`).then(response => {
       if (response.ResponseBody) {
-        Toast("EMail loaded succcessfully.")
+        this.isPageReady = false;
+        Toast("EMail loaded succcessfully.");
       } else {
+        this.isPageReady = false;
         WarningToast("Not able to load your mails.")
       }
-      
+
       this.initForm();
+    }).catch(e => {
+      this.isPageReady = false;
     });
   }
 
@@ -128,6 +135,8 @@ export class EmailComponent implements OnInit {
     if (modalClass.contains('modal-fullscreen'))
       this.compressMailbox()
     this.initForm();
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
     $('#composeMailModal').modal('show');
   }
 
@@ -262,8 +271,8 @@ export class EmailComponent implements OnInit {
   }
 
   uploadProfilePicture(fileinput: any) {
-    this.FileDocumentList = [];
-    this.FilesCollection = [];
+    // this.FileDocumentList = [];
+    // this.FilesCollection = [];
     let selectedFile = fileinput.target.files;
     if (selectedFile.length > 0) {
       let index = 0;
