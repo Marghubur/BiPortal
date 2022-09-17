@@ -168,15 +168,15 @@
                       </ng-container>
                     </div>
                     <div class="d-flex my-1">
-                      <button *ngIf="item.RequestStatusId != 5" (click)="openPopup('Rejected', item)"
-                        class="btn btn-danger btn-sm"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
-                      <button *ngIf="item.RequestStatusId != 9" (click)="openPopup('Approved', item)"
-                        class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
-                      <button (click)="openPopup('Othermember', item)" class="btn btn-primary-c ms-2 btn-sm"><i
+                      <a *ngIf="item.RequestStatusId != 5" href="javascript:void(0)" (click)="openPopup('Rejected', item)"
+                        class="text-danger fw-bold btn-sm"><i class="fa pe-1"
+                          [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
+                      <a *ngIf="item.RequestStatusId != 9" href="javascript:void(0)" (click)="openPopup('Approved', item)"
+                        class="text-succes fw-bolds ms-2 btn-sm"><i class="fa pe-1"
+                          [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
+                      <a href="javascript:void(0)" (click)="openPopup('Othermember', item)" class="text-primar fw-boldy-c ms-2 btn-sm"><i
                           class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
-                        Re-Assigne</button>
+                        Re-Assigne</a>
                     </div>
                   </div>
                 </ng-container>

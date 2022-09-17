@@ -35,7 +35,7 @@
           </div>
           <div class="col-md-4 p-0 m-0">
             <label class="form-label">Select Organization</label>
-            <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+            <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" (OnSelect)="presentWeek()" [ngModelOptions]="{standalone: true}">
             </app-iautocomplete>
           </div>
         </div>
@@ -60,121 +60,312 @@
           <ng-container ngbNavItem>
             <a ngbNavLink class="text-dark">Attendance Log</a>
             <ng-template ngbNavContent>
-              <ng-container *ngIf="currentDays.length != 0">
-                <div class="x_panel">
-                  <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
-                    <span class="ps-4 fw-bold" *ngIf="presentMonth">Last {{currentDays.length}} days</span>
-                    <span class="ps-4 fw-bold" *ngIf="!presentMonth">{{changeMonth}}</span>
-                    <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
-                      <input type="radio" class="btn-check" name="btnradio" id="btnradio20" autocomplete="off" checked>
-                      <label class="btn btn-outline-primary month-btn" for="btnradio20">{{currentDays.length}}
-                        Days</label>
-                      <ng-container *ngFor="let month of monthName; let i = index">
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio{{i}}" autocomplete="off">
-                        <label class="btn btn-outline-primary month-btn" for="btnradio{{i}}"
-                          (click)="getAllDays(month, i)">{{month}}</label>
-                      </ng-container>
+              <ng-container [ngSwitch]="divisionCode">
+                <ng-container *ngSwitchCase="2">
+                  <div class="x_panel pt-4 timesheet-form">
+                    <div class="x_header">
+                      <div class="x_header_title row">
+                        <div class="text-dark text-dark d-flex flex-column justify-content-center">
+                          <h2>Find below pending timesheet list: <small>For the present month.</small></h2>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="x_content m-4 d-flex flex-column justify-content-between">
+                      <div class="d-flex" *ngFor="let d of weekList;let index = index;">
+                        <p class="pending-list me-2">{{index + 1.}}</p>
+                        <a href="javascript:void(0)" (click)="getPendingWeek(d.days[0].date, d.days[6].date)"
+                          class="pending-list">
+                          <b>Your pending timesheet from:</b>
+                          <span>{{d.days[0].date | date}} - {{d.days[6].date | date}}</span>
+                        </a>
+                      </div>
+
+                      <div class="d-flex flex-row justify-content-center mt-5">
+                        <p class="text-muted pending-info">{{PendingAttendacneMessage}}</p>
+                      </div>
                     </div>
                   </div>
-                  <div class="">
-                    <table class="table table-hover table-striped">
-                      <thead>
-                        <tr>
-                          <th class="custom-th">DATE</th>
-                          <th class="custom-th">ATTENDANCE VISUAL</th>
-                          <th class="custom-th">EFFECTIVE HOURS</th>
-                          <th class="custom-th">GROSS HOURS</th>
-                          <th class="custom-th">ARRIVAL</th>
-                          <th class="custom-th">LOG</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let item of currentDays; let index = index">
-                          <td class="align-middle">{{item.AttendanceDay | date: 'MMM d, EEE'}}
-                            <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
-                              <span class="badge bg-primary ms-2" *ngSwitchCase="2">WFH</span>
-                              <span class="badge bg-info ms-2" *ngSwitchCase="5">LEAVE</span>
-                              <span class="badge bg-warning ms-2" *ngSwitchCase="3">W-OFF</span>
-                              <span class="badge bg-secondary ms-2" *ngSwitchCase="4">HLDY</span>
-                              <span class="badge bg-success ms-2" *ngSwitchCase="1">IN-OFFC</span>
-                              <span class="badge bg-danger ms-2" *ngSwitchDefault>EMPTY</span>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+                  <ng-container *ngIf="isTimesheetDataLoaded">
+                    <div class="col-md-12 row mt-4 mb-4 ms-0">
+                      <div class="col-md-4 ps-0">
+                        <h6>Timesheet Stats</h6>
+                        <div class="card px-3 py-2">
+                          <div class="d-flex justify-content-between">
+                            <h6 class="pt-3 ps-2">
+                              Last Week
+                            </h6>
+                            <div>
+                              <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
                             </div>
-                          </td>
-                          <td class="align-middle">
-                            <p class="pt-3">
-                              <ngb-progressbar type="info" [value]="100" style="width: 40%;"></ngb-progressbar>
-                            </p>
-                          </td>
-                          <td class="align-middle"><i class="fa fa-circle pe-3 text-info"></i> 9h 0m</td>
-                          <td class="align-middle">9h 0m</td>
-                          <td class="align-middle">
-                            <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
-                              <span class=" ms-2" *ngSwitchCase="2">
-                                <i class="fa fa-check pe-2 text-success"></i> 9h 0m
-                              </span>
-                              <span class=" ms-2" *ngSwitchCase="3">Weeked</span>
-                              <span class=" ms-2" *ngSwitchCase="1">
-                                <i class="fa fa-check pe-2 text-success"></i> On Time
-                              </span>
-                              <span class="ms-2" *ngSwitchDefault>Not Submitted</span>
+                          </div>
+                          <div class="d-flex align-items-center justify-content-between pe-2 pb-3 pt-3">
+                            <div class="col-md-4 d-flex align-items-center">
+                              <i class="fa fa-user-circle fa-3x text-success ps-2" aria-hidden="true"></i>
+                              <span class="fw-bold ps-2 last-week-team">Your</span>
                             </div>
-                          </td>
-                          <td class="align-middle">
-                            <div class="d-flex align-items-center">
-                              <div class="col">
-                                <div ngbDropdown class="d-inline-block">
-                                  <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Absent"
-                                    id="dropdownBasic1" ngbDropdownToggle>
-                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                  </button>
-                                  <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                                    <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)"
-                                        (click)="commentPopUp(item)">Apply
-                                        WFH Request</a>
-                                    </button>
-                                    <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)"
-                                        (click)="selectOption(index)">Apply
-                                        Leave</a>
-                                    </button>
+                            <div class="col-md-4">
+                              <h6 class="last-week-team">AVG HRS / DAY</h6>
+                              <h6 class="pt-2"> 8h 0m</h6>
+                            </div>
+                            <div class="col-md-4">
+                              <h6 class="last-week-team">ON TIME ARRIVAL</h6>
+                              <h6 class=" pt-2">100%</h6>
+                            </div>
+                          </div>
+                          <div class="border-top d-flex align-items-center pb-1 pt-3">
+                            <div class="col-md-4 d-flex align-items-center">
+                              <span class="fa-stack fa-2x ps-2 text-dark">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+                              </span>
+                              <span class="fw-bold ps-2 last-week-team">My Team</span>
+                            </div>
+                            <div class="col-md-4 pt-2">
+                              <h6>7h 24m</h6>
+                            </div>
+                            <div class="col-md-4 pt-2">
+                              <h6>81%</h6>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <h6>Timings</h6>
+                        <div class="card px-3 py-2">
+                          <div class="d-flex justify-content-between pb-5">
+                            <div class="d-flex pt-3 ps-2">
+                              <div class="text-inisde-circle" [ngClass]="{'active-circle': DayValue == 1}">M</div>
+                              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 2}">T</div>
+                              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 3}">W</div>
+                              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 4}">T</div>
+                              <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 5}">F</div>
+                              <div class="text-inisde-circle ms-3 inactive-circle">S</div>
+                              <div class="text-inisde-circle ms-3 inactive-circle">S</div>
+                            </div>
+                            <div>
+                              <i class="fa fa-search fa-lg pe-3 pt-3" aria-hidden="true"></i>
+                              <i class="fa fa-qrcode fa-lg  pe-2 pt-3" aria-hidden="true"></i>
+                            </div>
+                          </div>
+                          <ng-container *ngIf="DayValue > 0 &&  DayValue <= 5">
+                            <h6 class="pt-5 ps-2">Today (10:00 AM - 8:00PM)</h6>
+                            <div class="progress ms-2 me-2 mt-1 mb-2">
+                              <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 11.11%" aria-valuenow="1.11"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                              <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="d-flex justify-content-between ps-2 pe-2">
+                              <h6>Duration: 9h 0m</h6>
+                              <h6>Break: 60 Min</h6>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="DayValue == 6 || DayValue ==  0">
+                            <h4 class="text-center pt-5 pb-5">Today is week-off</h4>
+                          </ng-container>
+                        </div>
+                      </div>
+                      <div class="col-md-4 pe-0">
+                        <h6>Actions</h6>
+                        <div class="card px-3 pt-3 pb-5">
+                          <div class="pb-4">
+                            <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
+                            <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate | date}}.
+                          </div>
+                          <h6 class=" text-center pb-5 pt-5">
+                            Work From Home
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container [ngSwitch]="isFormReady">
+                    <div *ngSwitchCase="true">
+                      <div  class="x_panel pt-4 timesheet-form">
+                        <div class="d-flex flex-row justify-content-between">
+                          <div class="d-flex">
+                            <div class="text-dark text-dark d-flex flex-column justify-content-center">
+                              <div>
+                                <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
+                                <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
+                              </div>
+                            </div>
+                            <!-- <div class="ms-4 d-flex">
+                              <div class="p-0">
+                                <form class="form-inline">
+                                  <div class="form-group">
+                                    <div class="input-group">
+                                      <input class="form-control form-control-sm border" placeholder="yyyy-mm-dd"
+                                        (click)="from.toggle()" (dateSelect)="fromDateSelection($event)" name="fromModel"
+                                        [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
+                                      <div class="input-group-append">
+                                        <button class="btn btn-outline-dark fa fa-calendar btn-design" (click)="from.toggle()"
+                                          type="button"></button>
+                                      </div>
+                                    </div>
                                   </div>
+                                </form>
+                              </div>
+                              <div class="ms-2">
+                                <button href="javascript:void(0)" class="btn btn-sm btn-outline-dark" [disabled]="!fromDate"
+                                  (click)="prevWeek()">
+                                  <i class="fa fa-angle-double-left pe-2"></i>Prev week
+                                </button>
+                              </div>
+                              <div class="ms-2 me-2">
+                                <button href="javascript:void(0)" class="btn btn-sm btn-success" [disabled]="!fromDate"
+                                  (click)="nextWeek()">
+                                  Next week<i class="fa fa-angle-double-right ps-2"></i>
+                                </button>
+                              </div>
+                            </div> -->
+                          </div>
+                          <div class="text-end">
+                            <button type="button" class="btn btn-primary-c btn-sm" [disabled]="isBlocked" (click)="onSubmit()">
+                              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                              {{ isLoading ? 'Saving' : 'Submit' }}
+                            </button>
+                          </div>
+                        </div>
+                        <div class="x_content mt-4">
+                          <!-- <table class="table-middle table table-hover">
+                            <thead>
+                              <tr>
+                                <th class="">Mon</th>
+                                <th class="">Tue</th>
+                                <th class="">Wed</th>
+                                <th class="">Thu</th>
+                                <th class="">Fri</th>
+                                <th class="">Sat</th>
+                                <th class="">Sun</th>
+                                <th class="text-center">Billing</th>
+                                <th class="text-center">Final</th>
+                              </tr>
+                            </thead>
+                            <tbody formArrayName="timesheetArray">
+                              <tr>
+                                <ng-container *ngIf="emptyFields.length > 0">
+                                  <td *ngFor="let item of emptyFields">
+                                    <span>Not Allowed</span>
+                                  </td>
+                                </ng-container>
+                                <ng-container *ngFor="let item of timesheetForm.get('timesheetArray').controls;let i = index;">
+                                  <ng-container [formGroupName]="i">
+                                    <td>
+                                      <div class="center-badge d-flex justify-content-start">
+                                        <ng-container [ngSwitch]="item.get('TimesheetStatus').value">
+                                          <span class="status-icon s" *ngSwitchCase="8">
+                                            <i class="fa fa-check-square-o text-success pt-1 pb-1" aria-hidden="true"></i>
+                                          </span>
+                                          <span class="status-icon s" *ngSwitchCase="-1">
+                                            <i class="fa fa-ban text-danger pt-1 pb-1" aria-hidden="true"></i>
+                                          </span>
+                                          <span class="status-icon" *ngSwitchDefault>
+                                            <i class="fa fa-exclamation text-warning pt-1 pb-1" aria-hidden="true"></i>
+                                          </span>
+
+                                          <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23"
+                                            [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
+                                            formControlName="UserHours"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                          <span>&nbsp;:</span>
+                                          <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59"
+                                            (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+
+                                          <div ngbDropdown class="d-none dropright">
+                                            <input type="text" class="form-control input-overflow" formControlName="UserComments"
+                                              placeholder="Comments" (focus)="takeComments($event)">
+                                            <div class="p-0 position-absolute d-none textarea-box">
+                                              <textarea class="form-control" (blur)="captureComments($event)"
+                                                placeholder="enter your comments" formControlName="UserComments">
+                                              </textarea>
+                                            </div>
+                                          </div>
+                                        </ng-container>
+                                      </div>
+                                      <small class="d-block text-muted">
+                                        {{item.get('PresentDate').value | date}}
+                                      </small>
+                                    </td>
+                                  </ng-container>
+                                </ng-container>
+                                <td>
+                                  <div class="center-badge d-flex justify-content-center">
+                                    08:00
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="center-badge d-flex justify-content-center">{{totalHrs}} : {{totalMins}}</div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table> -->
+                          <div>
+                            <table class="table-middle table table-hover">
+                              <thead>
+                                <tr>
+                                  <th class="">Timesheet Date</th>
+                                  <th class="">Status</th>
+                                </tr>
+                              </thead>
+                              <tbody >
+                                <tr *ngFor="let item of currentMonthWeek; let i = index">
+                                  <td>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="viewTimeSheet(i)">
+                                      <span class="fw-bold pe-1">Timesheet From</span>{{item.startWeek | date}} <span class="fw-bold px-1">to</span>{{item.endWeek | date}}
+                                    </a>
+                                  </td>
+                                  <td>
+                                    <span *ngIf="item.status == 2"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Pending</span>
+                                    <span *ngIf="item.status == 8"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div *ngIf="isBlocked" class="mt-5 d-flex flex-column justify-content-center">
+                            <div class="text-center">
+                              <h2>Instruction</h2>
+                              <div>
+                                <p>
+                                  Timesheet for the week you are requesting is currently blocked.
+                                  As per company guide lines you need to submit your timesheet before end of every week.
+                                </p>
+                                <p>If you want to raise a request to admin please leave your comments and submit it by using below form.</p>
+                              </div>
+                              <div class="col-12">
+                                <div class="mt-2">
+                                  <button class="btn btn-info btn-sm">
+                                    <i class="fa fa-paper-plane-o pe-2" aria-hidden="true"></i>
+                                    Request
+                                  </button>
                                 </div>
                               </div>
-                              <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
-
-                                <span class=" ms-2" *ngSwitchCase="3">
-                                  <div placement="top" ngbTooltip="Weekend" aria-expanded="false">
-                                    <i class="fa zoom-2 fa-gift text-primary" aria-hidden="true"></i>
-                                  </div>
-                                </span>
-
-                                <ng-container *ngSwitchDefault>
-                                  <span class="ms-2" *ngIf="item.IsTimeAttendacneApproved">
-                                    <div placement="top" ngbTooltip="Approved" aria-expanded="false">
-                                      <i class="fa fa-check-square-o zoom-2 text-success" aria-hidden="true"></i>
-                                    </div>
-                                  </span>
-                                  <span class="ms-2" *ngIf="!item.IsTimeAttendacneApproved">
-                                    <div placement="top" ngbTooltip="Pending" aria-expanded="false">
-                                      <i class="fa fa-clock-o zoom-2 text-warning" aria-hidden="true"></i>
-                                    </div>
-                                  </span>
-                                </ng-container>
-                              </div>
                             </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="currentDays.length == 0">
-                <div class="x_panel flex-column d-flex align-items-center justify-content-center">
-                  <h2 class="text-dark py-3">No Record Found...</h2>
-                  <h2 class="text-dark">Please select filter to get the record.</h2>
-                </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngSwitchDefault class="">
+                      <div class="x_panel d-flex flex-direction-column justify-content-center">
+                        <div class="x_content">
+                          <p *ngIf="NoClient" class="h3 text-muted text-center">
+                            Uhh!!! No client allocated on your name. Please contact your maanager.
+                          </p>
+                          <p *ngIf="!NoClient" class="h3 text-muted text-center">
+                            Please select week date to get timesheet.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
               </ng-container>
             </ng-template>
           </ng-container>
@@ -348,4 +539,116 @@
 
     </ng-container>
   </form>
+</div>
+
+
+<!-- View Timesheet Modal -->
+<div class="modal fade" id="timesheetModal" tabindex="-1" aria-labelledby="timesheetModalLabel" aria-hidden="true" *ngIf="viewTimesheetWeek != null">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="timesheetModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" >
+        <div [formGroup]="timesheetForm" *ngIf="timesheetForm" class="x_panel pt-4 timesheet-form">
+          <div class="d-flex flex-row justify-content-between">
+            <div class="text-dark text-dark d-flex flex-column justify-content-center">
+              <div>
+                <span class="fw-bold">Timesheet: From&nbsp;</span> {{viewTimesheetWeek.startWeek | date}}
+                <span class="fw-bold">&nbsp; to &nbsp; </span> {{viewTimesheetWeek.endWeek | date}}.
+              </div>
+            </div>
+          </div>
+          <div class="x_content mt-4">
+            <table class="table-middle table table-hover">
+              <thead>
+                <tr>
+                  <th>DAY</th>
+                  <th class="">DATE</th>
+                  <th class="">TIMESHEET VISUAL</th>
+                  <th class="">EFFECTIVE HOURS</th>
+                  <th class="">STATUS</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="timesheetArray">
+                <tr *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11}">
+                  <ng-container >
+                    <ng-container [formGroupName]="i">
+                      <td>{{item.get('PresentDate').value | date: 'EEE'}}</td>
+                      <td>{{item.get('PresentDate').value | date}}</td>
+                      <td></td>
+                      <td>
+                        <div class="center-badge d-flex justify-content-start">
+                          <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23" [readonly]="item.get('TimesheetStatus').value == 11" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11}"
+                            [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
+                            formControlName="UserHours"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                          <span>&nbsp;:</span>
+                          <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59" [readonly]="item.get('TimesheetStatus').value == 11" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11}"
+                            (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+
+                          <div ngbDropdown class="d-none dropright">
+                            <input type="text" class="form-control input-overflow" formControlName="UserComments"
+                              placeholder="Comments" (focus)="takeComments($event)">
+                            <div class="p-0 position-absolute d-none textarea-box">
+                              <textarea class="form-control" (blur)="captureComments($event)"
+                                placeholder="enter your comments" formControlName="UserComments">
+                              </textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <ng-container [ngSwitch]="item.get('TimesheetStatus').value">
+                          <span class="" *ngSwitchCase="8">
+                            <i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            Submitted
+                          </span>
+                          <span class="" *ngSwitchCase="-1">
+                            <i class="fa fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            Not Submitted
+                          </span>
+                          <span class="" *ngSwitchCase="2">
+                            <i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            Pending
+                          </span>
+                          <span class="text-danger" *ngSwitchCase="11">
+                            <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            Readonly
+                          </span>
+                        </ng-container>
+                      </td>
+                      <td>
+
+                      </td>
+                    </ng-container>
+                  </ng-container>
+                </tr>
+                <tr>
+                  <td >
+                    <span class="fw-bold">Final</span>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <div class="fw-bold">{{totalHrs}} : {{totalMins}}</div>
+                  </td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-c btn-sm" [disabled]="isBlocked" (click)="onSubmit()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+          {{ isLoading ? 'Saving' : 'Submit' }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
