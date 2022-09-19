@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { CompanyAccounts, CompanyDetail, CompanyInfo, CompanySettings, CustomSalaryStructure, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { CompanyAccounts, CompanyDetail, CompanyInfo, CompanySettings, CustomSalaryStructure, OrganizationSetting, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -35,6 +35,8 @@ export class SettingsComponent implements OnInit {
   isPageReady: boolean = false;
   currentCompnay: CompanyGroup = null;
   isPageLoading: boolean = false;
+  organizationId: number = 0;
+
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
               private http: AjaxService
@@ -62,7 +64,7 @@ export class SettingsComponent implements OnInit {
         this.nav.navigate(PFESISetup, this.currentCompnay.CompanyId);
         break;
       case CompanyInfo:
-        this.nav.navigate(CompanyInfo, this.CompanyId);
+        this.nav.navigate(CompanyInfo, this.currentCompnay);
         break;
       case Payroll:
         this.nav.navigate(Payroll, this.currentCompnay);
@@ -139,12 +141,13 @@ export class SettingsComponent implements OnInit {
         this.Companys = response.ResponseBody;
         if(this.Companys && this.Companys.length > 0) {
           this.currentCompnay = this.Companys[0];
+          this.organizationId = this.currentCompnay.OrganizationId;
           this.CompanyId = this.currentCompnay.CompanyId;
           Toast("Compnay list loaded successfully");
           this.isPageReady = true;
           this.isPageLoading = true;
         } else {
-          Toast("No compnay found under current organization. Please add one.");
+          WarningToast("No compnay found under current organization. Please add one.");
           this.isPageLoading = true;
         }
       } else {
@@ -162,7 +165,8 @@ export class SettingsComponent implements OnInit {
       CompanyDetail: new FormControl(this.currentCompnay.CompanyDetail, [Validators.required]),
       InCorporationDate: new FormControl(this.currentCompnay.InCorporationDate, [Validators.required]),
       Email: new FormControl(this.currentCompnay.Email, Validators.required),
-      CompanyId: new FormControl(this.currentCompnay.CompanyId, Validators.required)
+      CompanyId: new FormControl(this.currentCompnay.CompanyId, Validators.required),
+      OrganizationId: new FormControl(this.organizationId, Validators.required),
     })
   }
 
@@ -174,7 +178,7 @@ export class SettingsComponent implements OnInit {
       return;
     }
     let value:CompanyGroup = this.companyGroupForm.value;
-    if (value) {
+    if (value && this.organizationId > 0) {
       this.http.post("Company/AddCompanyGroup", value).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.Companys = response.ResponseBody;
@@ -219,6 +223,9 @@ export class SettingsComponent implements OnInit {
       });
     }
   }
+  gtoOrganization() {
+    this.nav.navigate(OrganizationSetting, null);
+  }
 
   changeTab(index: number, item: CompanyGroup) {
     this.isPageReady = false;
@@ -245,6 +252,7 @@ class CompanyGroup {
   CompanyDetail: string = '';
   InCorporationDate: Date = null;
   Email: string = '';
+  OrganizationId: number = 0;
 }
 interface Payroll {
 
