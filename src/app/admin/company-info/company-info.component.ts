@@ -8,7 +8,7 @@ import { DateFormatter } from 'src/providers/DateFormatter';
 import { organizationAccountModal } from '../company-accounts/company-accounts.component';
 import { Files } from '../documents/documents.component';
 import { iNavigation } from 'src/providers/iNavigation';
-import { environment } from 'src/environments/environment';
+import { Filter } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -35,7 +35,8 @@ export class CompanyInfoComponent implements OnInit {
   isLoading: boolean = false;
   imageBasePath: string = null;
   isPageReady: boolean = true;
-
+  companyData: Filter = new Filter();
+  CurrentCompany: any= null;
   constructor(private fb: FormBuilder,
               private http: AjaxService,
               private dateFormat: DateFormatter,
@@ -51,8 +52,11 @@ export class CompanyInfoComponent implements OnInit {
     this.companyInformation = new CompanyInformationClass();
     this.companyInformation.LegalEntity = '';
     let data = this.nav.getValue();
-    if (data > 0) {
-      this.CompanyId = data;
+    if (data) {
+      this.CurrentCompany = data;
+      this.CompanyId = this.CurrentCompany.CompanyId;
+      this.OrganizationId = data.OrganizationId;
+      this.companyData.SearchString = `1=1 And CompanyId=${this.CurrentCompany.CompanyId} And OrganizationId=${this.OrganizationId}`;
       this.initForm();
       this.loadData();
     } else {
@@ -112,9 +116,8 @@ export class CompanyInfoComponent implements OnInit {
   }
 
   findBankDetails() {
-    this.OrganizationId =1;
     if (this.CompanyId > 0 && this.OrganizationId > 0) {
-      this.http.get(`Company/GetCompanyBankDetail/${this.OrganizationId}/${this.CompanyId}`).then((response:ResponseModel) => {
+      this.http.post('Company/GetCompanyBankDetail', this.companyData).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.BankDetails = response.ResponseBody;
           Toast("Record found.")
