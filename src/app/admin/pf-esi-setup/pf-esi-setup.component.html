@@ -17,12 +17,11 @@
         </div>
 
         <div class="col-12 p-2 my-4 row">
-          <p class="fs-5 fw-bold text-primary-dc">PROVIDENT FUND & ESI SETTING <button [disabled]="isLoading"
-              class="btn btn-outline-success float-end" (click)="submitPFESISetting()"><i class="fa" [ngClass]="{'fa-cog': !isLoading, 'fa-spin fa-spinner': isLoading}"></i>
-             <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span></button></p>
-          <label>These setting will be used for the different calculatin like, Salary, GST etc.</label>
-
           <ng-container *ngIf="IsReady">
+            <p class="fs-5 fw-bold text-primary-dc">PROVIDENT FUND & ESI SETTING <button [disabled]="isLoading"
+                class="btn btn-outline-success float-end" (click)="submitPFESISetting()"><i class="fa" [ngClass]="{'fa-cog': !isLoading, 'fa-spin fa-spinner': isLoading}"></i>
+               <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span></button></p>
+            <label>These setting will be used for the different calculatin like, Salary, GST etc.</label>
             <div class="mx-4 my-4 row" [formGroup]="PFandESIForm">
               <div class="col-md-6">
                 <div class="px-3 pt-4 pb-5">
@@ -33,7 +32,6 @@
                         <input type="radio" class="btn-check" formControlName="PFEnable" value="true" name="PFEnable" id="btnradio1"
                           autocomplete="off" checked>
                         <label class="btn btn-outline-primary" for="btnradio1">On</label>
-
                         <input type="radio" class="btn-check" formControlName="PFEnable" value="false" name="PFEnable" id="btnradio2"
                           autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio2">Off</label>
@@ -195,10 +193,15 @@
             </div>
           </ng-container>
           <ng-container *ngIf="!IsReady">
-            <div class="x_panel">
-              <div class="d-flex flex-column justify-content-center my-5 py-5">
-                <p class="fs-4 text-center my-5 py-5">No data available. Please try again if found same issue
-                  again thne please contact to admin.</p>
+            <div class="py-5 my-5">
+              <h6 class="fw-bold fs-3 text-center text-dark">PF & ESI Settings are loading</h6>
+              <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                  <img src="assets/images/cog.gif" alt="" />
+                  <h6 class="modal-title title-message">
+                    Please Wait ........
+                  </h6>
+                </div>
               </div>
             </div>
           </ng-container>

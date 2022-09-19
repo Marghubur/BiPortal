@@ -11,7 +11,7 @@
         <div class="x_header">
           <div class="x_header_title d-flex justify-content-between align-items-center">
             <h2>Employee<small>Details</small></h2>
-            <a href="javascript:void(0)" *ngIf="isReady" (click)="navToSalaryBreakup()" class="text-decoration-none fw-bold"><i
+            <a href="javascript:void(0)" [ngClass]="{'pe-none': !isCompaniesDetails}" *ngIf="isReady" (click)="navToSalaryBreakup()" class="text-decoration-none fw-bold"><i
                 class="fa fa-money pe-1"></i> Salary Breakup</a>
           </div>
         </div>
@@ -21,317 +21,330 @@
         </div>
         <ng-container *ngIf="isReady">
           <div class="x_content mt-4">
-            <form [formGroup]="employeeForm" autocomplete="off">
-              <div class="col-12 row">
-                <div class="col-md-3">
-                  <div class="x_header_title position-relative">
-                    <div class="img-container-sq" (change)="uploadProfilePicture($event)">
-                      <div class="img-container__box">
-                        <img [attr.src]="profileURL" alt="User">
-                        <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
-                          formControlName="ProfileImgPath" />
-                        <div class="img-container__btn mt-2">
-                          <button class="btn btn-outline-success form-control" (click)="fireBrowserFile()">Browse</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            <div [ngClass]="{'blur-section': !isCompaniesDetails}">
+              <div class="blur-section__highlight" [ngClass]="{'d-none': isCompaniesDetails}">
+                <div class="blur-section__content">
+                  {{'Please add company first'}}
+                  <p class="mb-0 py-3">
+                    <button class="btn btn-primary fs-5 fw-bold" (click)="gotoCompany()"><i class="fa fa-cog pe-2"></i> Configure Company</button>
+                  </p>
                 </div>
-                <div class="col-md-9">
-                  <div class="col-md-12 m-0 row">
-                    <div class="col-md-4 mb-3">
-                      <label class="form-label">First Name *</label>
-                      <input inputtype="mandatory" class="form-control" placeholder="First Name" transform="" oninput="this.value = this.value.toUpperCase()"
-                        [ngClass]="{'error-field': submitted && f.FirstName.errors !== null && f.FirstName.errors.required}"
-                        name="FirstName" formControlName="FirstName" />
-                    </div>
-                    <div class="col-md-4 mb-3">
-                      <label class="form-label">Last Name *</label>
-                      <input class="form-control" placeholder="Last Name" name="LastName" formControlName="LastName"
-                        transform="" oninput="this.value = this.value.toUpperCase()"
-                        [ngClass]="{'error-field': submitted && f.LastName.errors !== null && f.LastName.errors.required}" />
-                    </div>
-                    <div class="col-md-4 mb-3">
-                      <label class="form-label">Mobile Number </label>
-                      <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#"
-                        [ngClass]="{'error-field': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}"
-                        OnlyNumber="10" name="Mobile" formControlName="Mobile" />
-                    </div>
-                  </div>
-
-                  <div class="col-md-12 m-0 row">
-                    <div class="col-md-4 mb-3">
-                      <label class="form-label">Email Id </label>
-                      <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email"
-                        [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.Email.errors.required}" />
-                    </div>
-                    <div class="col-md-4 mb-3">
-                      <label class="form-label">Alternet Number</label>
-                      <input class="form-control" placeholder="SecondaryMobile" OnlyNumber="10" name="SecondaryMobile"
-                        formControlName="SecondaryMobile" />
-                    </div>
-                    <div class="col-md-4 pb-3">
-                      <label class="form-label">Date of birth </label>
-                      <form class="form-inline">
-                        <div class="form-group w-100">
-                          <div class="input-group w-100">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
-                              (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
-                            <div class="input-group-append">
-                              <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                                  class="fa fa-calendar" aria-hidden="true"></i>
-                              </button>
+              </div>
+              <div class="blur-this">
+                <form [formGroup]="employeeForm" autocomplete="off">
+                  <div class="col-12 row">
+                    <div class="col-md-3">
+                      <div class="x_header_title position-relative">
+                        <div class="img-container-sq" (change)="uploadProfilePicture($event)">
+                          <div class="img-container__box">
+                            <img [attr.src]="profileURL" alt="User">
+                            <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
+                              formControlName="ProfileImgPath" />
+                            <div class="img-container__btn mt-2">
+                              <button class="btn btn-outline-success form-control" (click)="fireBrowserFile()">Browse</button>
                             </div>
                           </div>
                         </div>
-                      </form>
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="col-md-12 m-0 row">
-                    <div class="col-md-4 mb-3">
-                      <label class="form-label">Select Leave Plan</label>
-                      <select class="form-control" formControlName="LeavePlanId">
-                        <option [value]="l.LeavePlanId" *ngFor="let l of leavePlans">
-                          {{l.PlanName}}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="col-md-12 m-0 row">
-                    <div class="col-6 p-3 pt-4">
-                      <p>Select your gender</p>
-                      <div class="col-4 d-flex flex-row justify-content-between">
-                        <div>
-                          <input type="radio" class="me-2" name="Gender" formControlName="Gender" value="true">
-                          <span>Male</span>
+                    <div class="col-md-9">
+                      <div class="col-md-12 m-0 row">
+                        <div class="col-md-4 mb-3">
+                          <label class="form-label">First Name *</label>
+                          <input inputtype="mandatory" class="form-control" placeholder="First Name" transform="" oninput="this.value = this.value.toUpperCase()"
+                            [ngClass]="{'error-field': submitted && f.FirstName.errors !== null && f.FirstName.errors.required}"
+                            name="FirstName" formControlName="FirstName" />
                         </div>
-                        <div>
-                          <input type="radio" class="me-2" name="Gender" formControlName="Gender" value="false">
-                          <label>Female</label>
+                        <div class="col-md-4 mb-3">
+                          <label class="form-label">Last Name *</label>
+                          <input class="form-control" placeholder="Last Name" name="LastName" formControlName="LastName"
+                            transform="" oninput="this.value = this.value.toUpperCase()"
+                            [ngClass]="{'error-field': submitted && f.LastName.errors !== null && f.LastName.errors.required}" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label class="form-label">Mobile Number </label>
+                          <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#"
+                            [ngClass]="{'error-field': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}"
+                            OnlyNumber="10" name="Mobile" formControlName="Mobile" />
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <ng-container *ngIf="isUpdate">
-                <a href="javascript:void(0)" (click)="addUpadteClientPopUp()" class="text-decoration-none ps-3">Add or
-                  Update Associate Clients <i class="fa fa-plus ps-2"></i></a>
-              </ng-container>
-              <div class="col-12 row m-0 mt-5">
-                <div class="x_panel x-panel-changed">
-                  <div class="x_header">
-                    <div class="x_header_title">
-                      <h2>Other Detail<small>Fill the other details</small></h2>
-                    </div>
-                  </div>
-                  <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
-                    <div class="col-md-4 mb-3">
-                      <label class="form-label">Designation</label>
-                      <select name="DesignationId" class="form-control" formControlName="DesignationId"
-                        [ngClass]="{'error-field': submitted && f.DesignationId.errors !== null && f.DesignationId.errors.required}">
-                        <option value=null>Select Designation</option>
-                        <option value="1">Project Manager</option>
-                        <option value="2">Architect</option>
-                        <option value="3">Networking</option>
-                        <option value="4">Full stack Developer</option>
-                        <option value="5">Backend (Server side) Developer</option>
-                        <option value="6">Database Developer</option>
-                        <option value="7">Frontend (UI) Developer</option>
-                        <option value="8">System Engineer</option>
-                        <option value="9">Associate Engineer</option>
-                        <option value="10">Test Lead</option>
-                        <option value="11">Tester</option>
-                        <option value="12">Other</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                      <label class="form-label">Reporting Manager</label>
-                      <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId"
-                        name="ReportingManagerId">
-                      </app-iautocomplete>
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label">Role</label>
-                      <select name="AccessLevelId" class="form-control" formControlName="AccessLevelId"
-                        [ngClass]="{'error-field': submitted && f.AccessLevelId.errors !== null && f.AccessLevelId.errors.required}">
-                        <option value=null>Allocate role</option>
-                        <option *ngFor="let item of userRoles" [value]="item.AccessLevelId">
-                          {{item.RoleName}}
-                        </option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label">User Type</label>
-                      <select name="UserTypeId" class="form-control" formControlName="UserTypeId"
-                        [ngClass]="{'error-field': submitted && f.UserTypeId.errors !== null && f.UserTypeId.errors.required}">
-                        <option value=null>Select User Type</option>
-                        <option value="1">Admin</option>
-                        <option value="2">Employee</option>
-                        <option value="3">Candidate</option>
-                        <option value="4">Client</option>
-                        <option value="5">Other</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label">Company</label>
-                      <select class="form-control" formControlName="CompanyId"
-                        [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
-                        <option value="">Select Company</option>
-                        <option *ngFor="let item of allocatedCompany" [value]="item.CompanyId">
-                          {{item.CompanyName}}
-                        </option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label">CTC *</label>
-                      <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC"
-                        OnlyNumber="12" (keyup)="ctcChangeAmount($event)"
-                        [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 row m-0 mt-5">
-                <div class="col-md-6">
-                  <div class="x_panel">
-                    <div class="x_header">
-                      <div class="x_header_title">
-                        <h2>Personal Detail<small>Fill the sender Compnay details</small></h2>
-                      </div>
-                    </div>
-                    <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Father Name</label>
-                        <input class="form-control" placeholder="Mother Name" name="FatherName" transform="" oninput="this.value = this.value.toUpperCase()"
-                          formControlName="FatherName" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Mother Name</label>
-                        <input class="form-control" placeholder="Mother Name" name="MotherName" transform="" oninput="this.value = this.value.toUpperCase()"
-                          formControlName="MotherName" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Spouse Name (if maried)</label>
-                        <input class="form-control" placeholder="Spouse Name" name="SpouseName" transform="" oninput="this.value = this.value.toUpperCase()"
-                          formControlName="SpouseName" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Domain</label>
-                        <input class="form-control" placeholder="Domain" name="Domain" formControlName="Domain" oninput="this.value = this.value.toUpperCase()"/>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Specification</label>
-                        <input class="form-control" placeholder="Specification" name="Specification" oninput="this.value = this.value.toUpperCase()"
-                          formControlName="Specification" />
-                      </div>
-                      <!-- <div class="col-md-6 mb-3">
-                        <label class="form-label">Last Company Name</label>
-                        <input class="form-control" placeholder="Last Company Name" name="LastCompanyName" transform=""
-                          formControlName="LastCompanyName" />
-                      </div> -->
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">State</label>
-                        <input class="form-control" placeholder="State" name="State" formControlName="State" oninput="this.value = this.value.toUpperCase()"/>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">City</label>
-                        <input class="form-control" placeholder="City" name="City" formControlName="City" oninput="this.value = this.value.toUpperCase()"/>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Pincode</label>
-                        <input class="form-control" placeholder="Pincode" OnlyNumber="6" name="Pincode" oninput="this.value = this.value.toUpperCase()"
-                          formControlName="Pincode" />
-                      </div>
-                      <div class="col-md-12 mb-3">
-                        <label class="form-label">Address</label>
-                        <textarea rows="5" class="form-control" placeholder="Address" name="Address" oninput="this.value = this.value.toUpperCase()" [rows]="3"
-                          formControlName="Address"></textarea>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                <div class="col-md-6">
-                  <div class="x_panel">
-                    <div class="x_header">
-                      <div class="x_header_title">
-                        <h2>Account Detail<small>Fill the receiver Compnay details</small></h2>
-                      </div>
-                    </div>
-                    <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">PAN No. #</label>
-                        <input class="form-control" placeholder="PAN card no.#" name="PANNo"
-                          oninput="this.value = this.value.toUpperCase()" formControlName="PANNo" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Aadhar No. #</label>
-                        <input class="form-control" placeholder="Aadhar No. #" name="AadharNo" OnlyNumber="18" formControlName="AadharNo" />
-                      </div>
-                      <div class="col-md-12 mb-3">
-                        <label class="form-label">Bank Account No.#</label>
-                        <input class="form-control" placeholder="Bank Account No.#" name="AccountNumber" oninput="this.value = this.value.toUpperCase()"
-                          formControlName="AccountNumber" />
-                      </div>
-                      <div class="col-md-12 mb-3">
-                        <label class="form-label">Bank Name</label>
-                        <input class="form-control" placeholder="Bank Name" name="BankName" transform="" oninput="this.value = this.value.toUpperCase()"
-                          formControlName="BankName" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">IFSC Code</label>
-                        <input class="form-control" placeholder="IFSC Code" name="IFSCCode"
-                          oninput="this.value = this.value.toUpperCase()" formControlName="IFSCCode" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Branch (Optional)</label>
-                        <input class="form-control" placeholder="Branch name" name="BranchName"
-                          oninput="this.value = this.value.toUpperCase()" formControlName="BranchName" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Work Exprience in month</label>
-                        <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="5"
-                          name="ExprienceInYear" formControlName="ExprienceInYear" />
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label class="form-label">Date of joining</label>
-                        <form class="form-inline">
-                          <div class="form-group w-100">
-                            <div class="input-group w-100">
-                              <input class="form-control" placeholder="yyyy-mm-dd" name="joiningDate" readonly
-                                [(ngModel)]="joiningDatemodel" (dateSelect)="onJoiningDateSelection($event)" ngbDatepicker
-                                #joiningDate="ngbDatepicker">
-                              <div class="input-group-append">
-                                <button class="btn btn-outline-secondary calendar" (click)="joiningDate.toggle()" disabled
-                                  type="button"><i class="fa fa-calendar" aria-hidden="true"></i>
-                                </button>
+                      <div class="col-md-12 m-0 row">
+                        <div class="col-md-4 mb-3">
+                          <label class="form-label">Email Id </label>
+                          <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email"
+                            [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.Email.errors.required}" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label class="form-label">Alternet Number</label>
+                          <input class="form-control" placeholder="SecondaryMobile" OnlyNumber="10" name="SecondaryMobile"
+                            formControlName="SecondaryMobile" />
+                        </div>
+                        <div class="col-md-4 pb-3">
+                          <label class="form-label">Date of birth </label>
+                          <form class="form-inline">
+                            <div class="form-group w-100">
+                              <div class="input-group w-100">
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                                  (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
+                                <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                                      class="fa fa-calendar" aria-hidden="true"></i>
+                                  </button>
+                                </div>
                               </div>
                             </div>
+                          </form>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 m-0 row">
+                        <div class="col-md-4 mb-3">
+                          <label class="form-label">Select Leave Plan</label>
+                          <select class="form-control" formControlName="LeavePlanId">
+                            <option value="0" disabled>Select Leaveplan</option>
+                            <option [value]="l.LeavePlanId" *ngFor="let l of leavePlans">
+                              {{l.PlanName}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 m-0 row">
+                        <div class="col-6 p-3 pt-4">
+                          <p>Select your gender</p>
+                          <div class="col-4 d-flex flex-row justify-content-between">
+                            <div>
+                              <input type="radio" class="me-2" name="Gender" formControlName="Gender" value="true">
+                              <span>Male</span>
+                            </div>
+                            <div>
+                              <input type="radio" class="me-2" name="Gender" formControlName="Gender" value="false">
+                              <label>Female</label>
+                            </div>
                           </div>
-                        </form>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                  <ng-container *ngIf="isUpdate">
+                    <a href="javascript:void(0)" (click)="addUpadteClientPopUp()" class="text-decoration-none ps-3">Add or
+                      Update Associate Clients <i class="fa fa-plus ps-2"></i></a>
+                  </ng-container>
+                  <div class="col-12 row m-0 mt-5">
+                    <div class="x_panel x-panel-changed">
+                      <div class="x_header">
+                        <div class="x_header_title">
+                          <h2>Other Detail<small>Fill the other details</small></h2>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
+                        <div class="col-md-4 mb-3">
+                          <label class="form-label">Designation</label>
+                          <select name="DesignationId" class="form-control" formControlName="DesignationId"
+                            [ngClass]="{'error-field': submitted && f.DesignationId.errors !== null && f.DesignationId.errors.required}">
+                            <option value=null>Select Designation</option>
+                            <option value="1">Project Manager</option>
+                            <option value="2">Architect</option>
+                            <option value="3">Networking</option>
+                            <option value="4">Full stack Developer</option>
+                            <option value="5">Backend (Server side) Developer</option>
+                            <option value="6">Database Developer</option>
+                            <option value="7">Frontend (UI) Developer</option>
+                            <option value="8">System Engineer</option>
+                            <option value="9">Associate Engineer</option>
+                            <option value="10">Test Lead</option>
+                            <option value="11">Tester</option>
+                            <option value="12">Other</option>
+                          </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label class="form-label">Reporting Manager</label>
+                          <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId"
+                            name="ReportingManagerId">
+                          </app-iautocomplete>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label">Role</label>
+                          <select name="AccessLevelId" class="form-control" formControlName="AccessLevelId"
+                            [ngClass]="{'error-field': submitted && f.AccessLevelId.errors !== null && f.AccessLevelId.errors.required}">
+                            <option value=null>Allocate role</option>
+                            <option *ngFor="let item of userRoles" [value]="item.AccessLevelId">
+                              {{item.RoleName}}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label">User Type</label>
+                          <select name="UserTypeId" class="form-control" formControlName="UserTypeId"
+                            [ngClass]="{'error-field': submitted && f.UserTypeId.errors !== null && f.UserTypeId.errors.required}">
+                            <option value=null>Select User Type</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Employee</option>
+                            <option value="3">Candidate</option>
+                            <option value="4">Client</option>
+                            <option value="5">Other</option>
+                          </select>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label">Company</label>
+                          <select class="form-control" formControlName="CompanyId"
+                            [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
+                            <option value="">Select Company</option>
+                            <option *ngFor="let item of allocatedCompany" [value]="item.CompanyId">
+                              {{item.CompanyName}}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label">CTC *</label>
+                          <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC"
+                            OnlyNumber="12" (keyup)="ctcChangeAmount($event)"
+                            [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 row m-0 mt-5">
+                    <div class="col-md-6">
+                      <div class="x_panel">
+                        <div class="x_header">
+                          <div class="x_header_title">
+                            <h2>Personal Detail<small>Fill the sender Compnay details</small></h2>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Father Name</label>
+                            <input class="form-control" placeholder="Mother Name" name="FatherName" transform="" oninput="this.value = this.value.toUpperCase()"
+                              formControlName="FatherName" />
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Mother Name</label>
+                            <input class="form-control" placeholder="Mother Name" name="MotherName" transform="" oninput="this.value = this.value.toUpperCase()"
+                              formControlName="MotherName" />
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Spouse Name (if maried)</label>
+                            <input class="form-control" placeholder="Spouse Name" name="SpouseName" transform="" oninput="this.value = this.value.toUpperCase()"
+                              formControlName="SpouseName" />
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Domain</label>
+                            <input class="form-control" placeholder="Domain" name="Domain" formControlName="Domain" oninput="this.value = this.value.toUpperCase()"/>
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Specification</label>
+                            <input class="form-control" placeholder="Specification" name="Specification" oninput="this.value = this.value.toUpperCase()"
+                              formControlName="Specification" />
+                          </div>
+                          <!-- <div class="col-md-6 mb-3">
+                            <label class="form-label">Last Company Name</label>
+                            <input class="form-control" placeholder="Last Company Name" name="LastCompanyName" transform=""
+                              formControlName="LastCompanyName" />
+                          </div> -->
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">State</label>
+                            <input class="form-control" placeholder="State" name="State" formControlName="State" oninput="this.value = this.value.toUpperCase()"/>
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">City</label>
+                            <input class="form-control" placeholder="City" name="City" formControlName="City" oninput="this.value = this.value.toUpperCase()"/>
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Pincode</label>
+                            <input class="form-control" placeholder="Pincode" OnlyNumber="6" name="Pincode" oninput="this.value = this.value.toUpperCase()"
+                              formControlName="Pincode" />
+                          </div>
+                          <div class="col-md-12 mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea rows="5" class="form-control" placeholder="Address" name="Address" oninput="this.value = this.value.toUpperCase()" [rows]="3"
+                              formControlName="Address"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-              <div class="col-12 row m-0 pt-5">
-                <div class="col-md-12 button groups text-end">
-                  <div class="btn-group">
-                    <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+                    <div class="col-md-6">
+                      <div class="x_panel">
+                        <div class="x_header">
+                          <div class="x_header_title">
+                            <h2>Account Detail<small>Fill the receiver Compnay details</small></h2>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">PAN No. #</label>
+                            <input class="form-control" placeholder="PAN card no.#" name="PANNo"
+                              oninput="this.value = this.value.toUpperCase()" formControlName="PANNo" />
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Aadhar No. #</label>
+                            <input class="form-control" placeholder="Aadhar No. #" name="AadharNo" OnlyNumber="18" formControlName="AadharNo" />
+                          </div>
+                          <div class="col-md-12 mb-3">
+                            <label class="form-label">Bank Account No.#</label>
+                            <input class="form-control" placeholder="Bank Account No.#" name="AccountNumber" oninput="this.value = this.value.toUpperCase()"
+                              formControlName="AccountNumber" />
+                          </div>
+                          <div class="col-md-12 mb-3">
+                            <label class="form-label">Bank Name</label>
+                            <input class="form-control" placeholder="Bank Name" name="BankName" transform="" oninput="this.value = this.value.toUpperCase()"
+                              formControlName="BankName" />
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">IFSC Code</label>
+                            <input class="form-control" placeholder="IFSC Code" name="IFSCCode"
+                              oninput="this.value = this.value.toUpperCase()" formControlName="IFSCCode" />
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Branch (Optional)</label>
+                            <input class="form-control" placeholder="Branch name" name="BranchName"
+                              oninput="this.value = this.value.toUpperCase()" formControlName="BranchName" />
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Work Exprience in month</label>
+                            <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="5"
+                              name="ExprienceInYear" formControlName="ExprienceInYear" />
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label">Date of joining</label>
+                            <form class="form-inline">
+                              <div class="form-group w-100">
+                                <div class="input-group w-100">
+                                  <input class="form-control" placeholder="yyyy-mm-dd" name="joiningDate" readonly
+                                    [(ngModel)]="joiningDatemodel" (dateSelect)="onJoiningDateSelection($event)" ngbDatepicker
+                                    #joiningDate="ngbDatepicker">
+                                  <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary calendar" (click)="joiningDate.toggle()" disabled
+                                      type="button"><i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="btn-group ms-2">
-                    <button class="btn btn-success" [disabled]="isLoading" (click)="RegisterEmployee()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
-                      {{ isLoading ? 'Wait' : 'Register' }}
-                    </button>
+
+                  <div class="col-12 row m-0 pt-5">
+                    <div class="col-md-12 button groups text-end">
+                      <div class="btn-group">
+                        <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+                      </div>
+                      <div class="btn-group ms-2">
+                        <button class="btn btn-success" [disabled]="isLoading" (click)="RegisterEmployee()">
+                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                          {{ isLoading ? 'Wait' : 'Register' }}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </form>
               </div>
-            </form>
+            </div>
           </div>
         </ng-container>
         <ng-container *ngIf="!isReady">

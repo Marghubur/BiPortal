@@ -10,7 +10,7 @@
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="my-3 px-5">
+    <div class="my-3 px-5" *ngIf="isPageReady">
       <form [formGroup]="companyInformationForm">
         <div class="col-md-4 mb-4 mt-2">
           <!-- <select class="form-select" formControlName="CompanyId" disabled>
@@ -248,5 +248,18 @@
         </ng-container>
       </form>
     </div>
+    <ng-container *ngIf="!isPageReady">
+      <div class="py-5 my-5">
+        <h6 class="fw-bold fs-3 text-center text-dark">Company Information are loading</h6>
+        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+            <h6 class="modal-title title-message">
+              Please Wait ........
+            </h6>
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </div>
 </div>

@@ -34,6 +34,7 @@ export class CompanyInfoComponent implements OnInit {
   OrganizationId: number = 0;
   isLoading: boolean = false;
   imageBasePath: string = null;
+  isPageReady: boolean = true;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -60,6 +61,7 @@ export class CompanyInfoComponent implements OnInit {
   }
 
   loadData() {
+    this.isPageReady = false;
     this.http.get(`Company/GetCompanyById/${this.CompanyId}`).then((response: ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.OrganizationDetail) {
         Toast("Record found.")
@@ -83,7 +85,10 @@ export class CompanyInfoComponent implements OnInit {
         this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         this.initForm();
         this.findBankDetails();
+        this.isPageReady = true;
       }
+    }).catch(e => {
+      this.isPageReady = true;
     })
   }
 

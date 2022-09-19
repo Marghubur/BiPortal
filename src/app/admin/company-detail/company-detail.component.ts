@@ -50,15 +50,19 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   loadData() {
+    this.isLoaded = false;
     this.http.get(`Company/GetCompanyById/${this.CompanyId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
           this.organizationModal = response.ResponseBody.OrganizationDetail;
           this.buildProfileImage(response.ResponseBody.Files);
           this.singleOrganization = this.organizationModal;
           this.initForm();
+          this.isLoaded = true;
       } else {
-        ErrorToast("Fail to get the data.")
+        ErrorToast("Fail to get the data.");
+        this.isLoaded = true;
       }
+    }).catch(e => {
       this.isLoaded = true;
     });
   }
