@@ -24,7 +24,7 @@ export class PayrollComponent implements OnInit {
   isReady: boolean = false;
   compnayDetail: any = null;
   submitted: boolean = false;
-  isPageReady: boolean = false;
+  isPageReady: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -58,8 +58,10 @@ export class PayrollComponent implements OnInit {
         this.initForm();
         WarningToast("No data available. Please add payroll detail.");
       }
-
       this.isReady = true;
+    }).catch(e => {
+      this.isReady = true;
+      this.isPageReady = true;
     });
   }
 

@@ -1,14 +1,14 @@
-<div class="col-12 full-v main-container" [ngClass]="{'preload': !isPageReady}">
+<div class="col-12 full-v main-container">
   <div class="x_panel mt-2">
     <div class="x_header">
       <div class="x_header_title">
-        <h2> SALARY COMPONENT AND STRUCTURE</h2>
+        <h2> CUSTOM SALARY COMPONENT AND STRUCTURE</h2>
       </div>
     </div>
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="col-md-12 px-4">
+    <div class="col-md-12 px-4" *ngIf="isPageReady">
       <div class="d-flex my-3 ms-2 align-items-center">
         <div class="progress-step col-md-9 my-2 ms-3">
           <div class="custom-progress" id="progressbar"></div>
@@ -26,9 +26,9 @@
         </div>
       </div>
       <ng-container *ngIf="ActivatedPage == 1">
-        <div class="row mt-5 skeleton">
+        <div class="row mt-5">
           <ng-container *ngIf="salaryStructureType.length > 0">
-            <div class="vhide col-md-2 my-2" *ngFor="let item of salaryStructureType">
+            <div class="col-md-2 my-2" *ngFor="let item of salaryStructureType">
               <a href="javascript:void(0)" class="text-decoration-none" (click)="selectSalaryGroup(item)">
                 <div class="card py-4">
                   <h5 class="text-center">{{item.GroupName}}</h5>
@@ -288,6 +288,19 @@
         </div>
       </ng-container>
     </div>
+    <ng-container *ngIf="!isPageReady">
+      <div class="py-5 my-5">
+        <h6 class="fw-bold fs-3 text-center text-dark">Custom Salary Component and Structure are loading</h6>
+        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+            <h6 class="modal-title title-message">
+              Please Wait ........
+            </h6>
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </div>
 </div>
 

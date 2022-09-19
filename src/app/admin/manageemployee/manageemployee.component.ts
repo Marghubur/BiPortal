@@ -5,7 +5,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, PlaceEmpty, Toast, ToFixed } from 'src/providers/common-service/common.service';
-import { ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
+import { OrganizationSetting, ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -54,6 +54,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   salaryDetail: any = null;
   addUpdateClientForm: FormGroup = null;
   leavePlans: Array<any> = [];
+  isCompaniesDetails: boolean = true;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -131,21 +132,20 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.buildProfileImage(profileDetail[0]);
       }
 
-      if(response.ResponseBody.Company && response.ResponseBody.Company.length == 1)
-        this.currentCompanyDetail = response.ResponseBody.Company[0];
-      else
-        this.currentCompanyDetail = {
+      if(response.ResponseBody.Companies.length > 0)
+        this.allocatedCompany = response.ResponseBody.Companies;
+      else {
+        this.allocatedCompany = [{
+          CompanyName: "",
           CompanyId: ""
-        };
+        }];
+        this.isCompaniesDetails = false;
+      }
 
-        if(response.ResponseBody.Companies)
-          this.allocatedCompany = response.ResponseBody.Companies;
-        else {
-          this.allocatedCompany = [{
-            CompanyName: "",
-            CompanyId: ""
-          }]
-        }
+      if (this.employeeModal.CompanyId > 0)
+        this.currentCompanyDetail = response.ResponseBody.Companies.find(x => x.CompanyId == this.employeeModal.CompanyId);
+      else
+        this.currentCompanyDetail = response.ResponseBody.Companies.find(x => x.IsPrimaryCompany == 1);
 
       if (response.ResponseBody.SalaryDetail && response.ResponseBody.SalaryDetail.length > 0)
         this.employeeModal.CTC = response.ResponseBody.SalaryDetail[0].CTC;
@@ -522,6 +522,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   addUpadteClientPopUp() {
     $('#addUpdateClientModal').modal('show');
+  }
+
+  gotoCompany() {
+    this.nav.navigate(OrganizationSetting, null)
   }
 
   navToSalaryBreakup() {

@@ -14,147 +14,151 @@
         <div class="px-1">
           <app-breadcrums></app-breadcrums>
         </div>
-
-        <div class="x_content" *ngIf="isLoaded">
-          <div class="row ">
-            <div class="col-md-4 mt-3">
-              <label class="form-label">Organization Name</label>
-              <input type="text" class="form-control" readonly [value]="CurrentCompany.OrganizationName">
+        <ng-container *ngIf="isLoaded">
+          <div class="x_content">
+            <div class="row ">
+              <div class="col-md-4 mt-3">
+                <label class="form-label">Organization Name</label>
+                <input type="text" class="form-control" readonly [value]="CurrentCompany.OrganizationName">
+              </div>
+              <div class="col-md-4 mt-3">
+                <label class="form-label">Company Name</label>
+                <input type="text" class="form-control" readonly [value]="CurrentCompany.CompanyName">
+              </div>
             </div>
-            <div class="col-md-4 mt-3">
-              <label class="form-label">Company Name</label>
-              <input type="text" class="form-control" readonly [value]="CurrentCompany.CompanyName">
-            </div>
-          </div>
-          <div class="t-table t-list t-border col-md-12 mt-3">
-            <div class="hide-bar"></div>
-            <div class="t-head">
-              <div class="tr">
-                <div class="th fe-index">
-                  <div class="t-index">
-                    <a href="javascript:void()" class="ps-3">#</a>
-                  </div>
-                </div>
-                <div class="th fe-5">
-                  <div class="cell-wrapper">
-                    <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"  oninput="this.value = this.value.toUpperCase()"
-                      (keyup.enter)="filterRecords()" autofocus [(ngModel)]="filterCompanyAccountInfo.BankName" name="BankName" autocomplete="off"
-                      placeholder="Search by AccountNumber">
-                    <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'BankName')">
-                      <a href="javascript:void()" class="pe-2">Bank Name</a>
-                      <i class="fa fa-sort-amount-asc"
-                        [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                      <i class="fa fa-sort-amount-desc"
-                        [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
+            <div class="t-table t-list t-border col-md-12 mt-3">
+              <div class="hide-bar"></div>
+              <div class="t-head">
+                <div class="tr">
+                  <div class="th fe-index">
+                    <div class="t-index">
+                      <a href="javascript:void()" class="ps-3">#</a>
                     </div>
                   </div>
-                </div>
-                <div class="th fe-2">
-                  <div class="cell-wrapper">
-                    <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" autocomplete="off"
-                      (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.AccountNo" name="AccountNo"
-                      placeholder="Search by Account Number">
-                    <div class="t-filter" (click)="arrangeDetails(orderByAccountAsc, 'AccountNo')">
-                      <a href="javascript:void()" class="pe-2">Account No.</a>
-                      <i class="fa fa-sort-amount-asc"
-                        [ngClass]="{'d-none': orderByAccountAsc == null || !orderByAccountAsc }" aria-hidden="true"></i>
-                      <i class="fa fa-sort-amount-desc"
-                        [ngClass]="{'d-none': orderByAccountAsc == null || orderByAccountAsc }" aria-hidden="true"></i>
+                  <div class="th fe-5">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"  oninput="this.value = this.value.toUpperCase()"
+                        (keyup.enter)="filterRecords()" autofocus [(ngModel)]="filterCompanyAccountInfo.BankName" name="BankName" autocomplete="off"
+                        placeholder="Search by AccountNumber">
+                      <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'BankName')">
+                        <a href="javascript:void()" class="pe-2">Bank Name</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="th fe-2">
-                  <div class="cell-wrapper">
-                    <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" name="BranchName"  oninput="this.value = this.value.toUpperCase()"
-                      (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.Branch" placeholder="Search by Branch Name" autocomplete="off">
-                    <div class="t-filter" (click)="arrangeDetails(orderByBranchAsc, 'Branch')">
-                      <a href="javascript:void()" class="pe-2">Branch Name</a>
-                      <i class="fa fa-sort-amount-asc"
-                        [ngClass]="{'d-none': orderByBranchAsc == null || !orderByBranchAsc }" aria-hidden="true"></i>
-                      <i class="fa fa-sort-amount-desc"
-                        [ngClass]="{'d-none': orderByBranchAsc == null || orderByBranchAsc }" aria-hidden="true"></i>
+                  <div class="th fe-2">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" autocomplete="off"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.AccountNo" name="AccountNo"
+                        placeholder="Search by Account Number">
+                      <div class="t-filter" (click)="arrangeDetails(orderByAccountAsc, 'AccountNo')">
+                        <a href="javascript:void()" class="pe-2">Account No.</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByAccountAsc == null || !orderByAccountAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByAccountAsc == null || orderByAccountAsc }" aria-hidden="true"></i>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="th fe-2">
-                  <div class="cell-wrapper">
-                    <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" name="IFSC"  oninput="this.value = this.value.toUpperCase()"
-                      (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.IFSC" placeholder="Search by IFSC Code" autocomplete="off">
-                    <div class="t-filter" (click)="arrangeDetails(orderByIFSCAsc, 'IFSC')">
-                      <a href="javascript:void()" class="pe-2">IFSC</a>
-                      <i class="fa fa-sort-amount-asc"
-                        [ngClass]="{'d-none': orderByIFSCAsc == null || !orderByIFSCAsc }" aria-hidden="true"></i>
-                      <i class="fa fa-sort-amount-desc"
-                        [ngClass]="{'d-none': orderByIFSCAsc == null || orderByIFSCAsc }" aria-hidden="true"></i>
+                  <div class="th fe-2">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" name="BranchName"  oninput="this.value = this.value.toUpperCase()"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.Branch" placeholder="Search by Branch Name" autocomplete="off">
+                      <div class="t-filter" (click)="arrangeDetails(orderByBranchAsc, 'Branch')">
+                        <a href="javascript:void()" class="pe-2">Branch Name</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByBranchAsc == null || !orderByBranchAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByBranchAsc == null || orderByBranchAsc }" aria-hidden="true"></i>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="th fe-2 align-items-center justify-content-center">
-                  <div class="cell-wrapper ">
-                    <button class="btn btn-outline-success" (click)="addAccountPopUp()"><i class="fa fa-plus-square-o pe-2"></i>Add Account</button>
-                    <div class="text-center mt-3">ACTIONS</div>
+                  <div class="th fe-2">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" name="IFSC"  oninput="this.value = this.value.toUpperCase()"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.IFSC" placeholder="Search by IFSC Code" autocomplete="off">
+                      <div class="t-filter" (click)="arrangeDetails(orderByIFSCAsc, 'IFSC')">
+                        <a href="javascript:void()" class="pe-2">IFSC</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByIFSCAsc == null || !orderByIFSCAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByIFSCAsc == null || orderByIFSCAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-2 align-items-center justify-content-center">
+                    <div class="cell-wrapper ">
+                      <button class="btn btn-outline-success" (click)="addAccountPopUp()"><i class="fa fa-plus-square-o pe-2"></i>Add Account</button>
+                      <div class="text-center mt-3">ACTIONS</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="t-body">
-              <ng-container *ngIf="CompanyAccountDetails.length > 0">
-                <div class="tr py-2" *ngFor="let bank of CompanyAccountDetails; let i=index">
-                  <div class="td align-middle text-center fe-index">
-                    <div class="cell-wrapper">
-                      {{i+1}}
+              <div class="t-body">
+                <ng-container *ngIf="CompanyAccountDetails.length > 0">
+                  <div class="tr py-2" *ngFor="let bank of CompanyAccountDetails; let i=index">
+                    <div class="td align-middle text-center fe-index">
+                      <div class="cell-wrapper">
+                        {{i+1}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-5">
+                      <div class="cell-wrapper">
+                        {{bank.BankName}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{bank.AccountNo}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{bank.Branch}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{bank.IFSC}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="d-flex flex-row justify-content-center">
+                        <a href="javascript:void(0)" (click)="editAccountPopUp(bank)">
+                          <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                        </a>
+                        <a href="javascript:void(0)" class="ms-3" (click)="DeleteAccountPopUp(bank)">
+                          <span class="badge bg-danger"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  <div class="td align-middle fe-5">
-                    <div class="cell-wrapper">
-                      {{bank.BankName}}
-                    </div>
+                </ng-container>
+                <ng-container *ngIf="CompanyAccountDetails.length == 0">
+                  <div class="custom-height fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                    Record Not Found
                   </div>
-                  <div class="td align-middle fe-2">
-                    <div class="cell-wrapper">
-                      {{bank.AccountNo}}
-                    </div>
-                  </div>
-                  <div class="td align-middle fe-2">
-                    <div class="cell-wrapper">
-                      {{bank.Branch}}
-                    </div>
-                  </div>
-                  <div class="td align-middle fe-2">
-                    <div class="cell-wrapper">
-                      {{bank.IFSC}}
-                    </div>
-                  </div>
-                  <div class="td align-middle fe-2">
-                    <div class="d-flex flex-row justify-content-center">
-                      <a href="javascript:void(0)" (click)="editAccountPopUp(bank)">
-                        <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
-                      </a>
-                      <a href="javascript:void(0)" class="ms-3" (click)="DeleteAccountPopUp(bank)">
-                        <span class="badge bg-danger"><i class="fa fa-trash" aria-hidden="true"></i></span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="CompanyAccountDetails.length == 0">
-                <div class="custom-height fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                  Record Not Found
-                </div>
-              </ng-container>
+                </ng-container>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="mt-3">
-          <app-pagination [pagination]="companyData" (onPageChange)="GetFilterResult($event)"></app-pagination>
-        </div>
+          <div class="mt-3">
+            <app-pagination [pagination]="companyData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+          </div>
+        </ng-container>
         <ng-container *ngIf="!isLoaded">
-          <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
+          <div class="py-5 my-5">
+            <h6 class="fw-bold fs-3 text-center text-dark">Company Account Details are loading</h6>
+            <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+              <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                <img src="assets/images/cog.gif" alt="" />
+                <h6 class="modal-title title-message">
+                  Please Wait ........
+                </h6>
+              </div>
             </div>
           </div>
         </ng-container>

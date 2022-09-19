@@ -14,133 +14,147 @@
         <div class="px-1">
           <app-breadcrums></app-breadcrums>
         </div>
-        <h4 class="fw-bold text-dark my-3 px-2 py-3">
-          <span>PAYROLL CYCLE SETTING</span>
-          <button class="float-end btn btn-outline-success" (click)="saveSettingModelOpen()"><i
-              class="fa fa-cog pe-2"></i>Save</button>
-        </h4>
-
-        <ng-container *ngIf="isReady">
-          <form [formGroup]="payrollForm">
-            <div class="card bg-light p-3 skeleton">
-              <div class="row px-2 py-2 vhide">
-                <div class="col-md-3">
-                  <label for="" class="form-label fs-6">Pay Frequency</label>
-                </div>
-                <div class="col-md-3">
-                  <select class="form-select" formControlName="PayFrequency"
-                    [ngClass]="{'error-field': submitted && f['PayFrequency'].errors !== null && f['PayFrequency'].errors['required']}">
-                    <option value="0">Select</option>
-                    <option value="monthly">Monthly</option>
-                    <option value="daily">Daily</option>
-                    <option value="hourly">Hourly</option>
-                  </select>
-                </div>
-              </div>
-              <div class="row px-2 py-2 vhide">
-                <div class="col-md-3">
-                  <label for="" class="form-label fs-6">Which pay cycle do you want to start using HiringBell for
-                    Payroll</label>
-                </div>
-                <div class="col-md-3">
-                  <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth"
-                    [ngClass]="{'error-field': submitted && f['PayCycleMonth'].errors !== null && f['PayCycleMonth'].errors['required']}">
-                    <option value="0">Select</option>
-                    <option *ngFor="let mon of months;let i = index;" [value]="i + 1">{{mon}}</option>
-                  </select>
-                </div>
-                <div class="col">
-                  <a href="javascript:void(0)" class="text-decoration-none fw-bold">cancel</a>
-                </div>
-              </div>
-              <div class="row px-2 py-2 vhide">
-                <div class="col-md-3">
-                  <label for="" class="form-label fs-6">Pay cycle date in every month</label>
-                </div>
-                <div class="col-md-3">
-                  <select class="form-select" formControlName="PayCycleDayOfMonth"
-                    [ngClass]="{'error-field': submitted && f['PayCycleDayOfMonth'].errors !== null && f['PayCycleDayOfMonth'].errors['required']}">
-                    <option value="0">Select date</option>
-                    <option value="0">Last day of month</option>
-                    <option *ngFor="let day of days" [value]="day.value">{{day.text}}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <h4 class="fw-bold text-dark my-3 px-2 py-3">
-              <span>PAYROLL PERIOD CALCULATION</span>
-            </h4>
-            <div class="row ">
-              <div class="col-md-6 skeleton">
-                <div class="card bg-light p-3 vhide">
-                  <div class="row px-2 py-2">
-                    <div class="col-md-4">
-                      <label for="" class="form-label fs-6">Payment type</label>
-                    </div>
-                    <div class="col-md-4">
-                      <select class="form-select" formControlName="PayCalculationId"
-                        [ngClass]="{'error-field': submitted && f['PayCalculationId'].errors !== null && f['PayCalculationId'].errors['required']}">
-                        <option value="0">Select payment type</option>
-                        <option value="1">Actual Days in month</option>
-                        <option value="2">Weekday only</option>
-                      </select>
-                    </div>
+        <ng-container *ngIf="isPageReady">
+          <h4 class="fw-bold text-dark my-3 px-2 py-3">
+            <span>PAYROLL CYCLE SETTING</span>
+            <button class="float-end btn btn-outline-success" (click)="saveSettingModelOpen()"><i
+                class="fa fa-cog pe-2"></i>Save</button>
+          </h4>
+          <ng-container *ngIf="isReady">
+            <form [formGroup]="payrollForm">
+              <div class="card bg-light p-3 skeleton">
+                <div class="row px-2 py-2 vhide">
+                  <div class="col-md-3">
+                    <label for="" class="form-label fs-6">Pay Frequency</label>
                   </div>
-                  <div class="row px-2 py-2">
-                    <div class="col-md-4">
-                      <label for="" class="form-label fs-6">Exclude Weekly offs</label>
-                    </div>
-                    <div class="col-md-3">
-                      <input class="form-check-input" value="true" formControlName="IsExcludeWeeklyOffs" type="radio"
-                        name="IsExcludeWeeklyOffs">
-                      <label class="form-check-label ps-2" for="IsExcludeWeeklyOffs">
-                        Yes
-                      </label>
-                      <input class="form-check-input ms-4" value="false" formControlName="IsExcludeWeeklyOffs"
-                        type="radio" name="IsExcludeWeeklyOffs">
-                      <label class="form-check-label ps-2" for="IsExcludeWeeklyOffs">
-                        No
-                      </label>
-                    </div>
+                  <div class="col-md-3">
+                    <select class="form-select" formControlName="PayFrequency"
+                      [ngClass]="{'error-field': submitted && f['PayFrequency'].errors !== null && f['PayFrequency'].errors['required']}">
+                      <option value="0">Select</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="daily">Daily</option>
+                      <option value="hourly">Hourly</option>
+                    </select>
                   </div>
-                  <div class="row px-2 py-2">
-                    <div class="col-md-4">
-                      <label for="" class="form-label fs-6">Exclude Holidays</label>
-                    </div>
-                    <div class="col-md-3">
-                      <input class="form-check-input" value="true" formControlName="IsExcludeHolidays" type="radio"
-                        name="IsExcludeHolidays">
-                      <label class="form-check-label ps-2" for="IsExcludeHolidays">
-                        Yes
-                      </label>
-                      <input class="form-check-input ms-4" value="false" formControlName="IsExcludeHolidays"
-                        type="radio" name="IsExcludeHolidays">
-                      <label class="form-check-label ps-2" for="IsExcludeHolidays">
-                        No
-                      </label>
-                    </div>
+                </div>
+                <div class="row px-2 py-2 vhide">
+                  <div class="col-md-3">
+                    <label for="" class="form-label fs-6">Which pay cycle do you want to start using HiringBell for
+                      Payroll</label>
+                  </div>
+                  <div class="col-md-3">
+                    <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth"
+                      [ngClass]="{'error-field': submitted && f['PayCycleMonth'].errors !== null && f['PayCycleMonth'].errors['required']}">
+                      <option value="0">Select</option>
+                      <option *ngFor="let mon of months;let i = index;" [value]="i + 1">{{mon}}</option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <a href="javascript:void(0)" class="text-decoration-none fw-bold">cancel</a>
+                  </div>
+                </div>
+                <div class="row px-2 py-2 vhide">
+                  <div class="col-md-3">
+                    <label for="" class="form-label fs-6">Pay cycle date in every month</label>
+                  </div>
+                  <div class="col-md-3">
+                    <select class="form-select" formControlName="PayCycleDayOfMonth"
+                      [ngClass]="{'error-field': submitted && f['PayCycleDayOfMonth'].errors !== null && f['PayCycleDayOfMonth'].errors['required']}">
+                      <option value="0">Select date</option>
+                      <option value="0">Last day of month</option>
+                      <option *ngFor="let day of days" [value]="day.value">{{day.text}}</option>
+                    </select>
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 pb-3">
-                <h4 class="text-dark">NOTE:</h4>
-                <p class="mb-0">Calculation of number of days for a given pay period has significant impact when
-                  deducting
-                  salary for Loss of Pay due to Leave or other reason.</p>
-                <p class="mb-0">Ex: Loss of Pay for 1 day for an employee salary is Rs 30,000/month is calculated as
-                  below.</p>
-                <p class="mb-0 pt-2">Loss of Pay when days = 30</p>
-                <p class="mb-0 pb-2">-> Rs 30,000/30 = Rs 1000</p>
-                <p class="mb-0">Loss of Pay when days are calculated excluding Weekends</p>
-                <p class="mb-0">Let's say there are 8 Saturday & Sunday in month.</p>
-                <p class="mb-0">Effective days = 30 - 8 = 22 days</p>
-                <p class="mb-0">Loss of Pay = Rs 30,000 = Rs 1364.</p>
+              <h4 class="fw-bold text-dark my-3 px-2 py-3">
+                <span>PAYROLL PERIOD CALCULATION</span>
+              </h4>
+              <div class="row ">
+                <div class="col-md-6 skeleton">
+                  <div class="card bg-light p-3 vhide">
+                    <div class="row px-2 py-2">
+                      <div class="col-md-4">
+                        <label for="" class="form-label fs-6">Payment type</label>
+                      </div>
+                      <div class="col-md-4">
+                        <select class="form-select" formControlName="PayCalculationId"
+                          [ngClass]="{'error-field': submitted && f['PayCalculationId'].errors !== null && f['PayCalculationId'].errors['required']}">
+                          <option value="0">Select payment type</option>
+                          <option value="1">Actual Days in month</option>
+                          <option value="2">Weekday only</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row px-2 py-2">
+                      <div class="col-md-4">
+                        <label for="" class="form-label fs-6">Exclude Weekly offs</label>
+                      </div>
+                      <div class="col-md-3">
+                        <input class="form-check-input" value="true" formControlName="IsExcludeWeeklyOffs" type="radio"
+                          name="IsExcludeWeeklyOffs">
+                        <label class="form-check-label ps-2" for="IsExcludeWeeklyOffs">
+                          Yes
+                        </label>
+                        <input class="form-check-input ms-4" value="false" formControlName="IsExcludeWeeklyOffs"
+                          type="radio" name="IsExcludeWeeklyOffs">
+                        <label class="form-check-label ps-2" for="IsExcludeWeeklyOffs">
+                          No
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row px-2 py-2">
+                      <div class="col-md-4">
+                        <label for="" class="form-label fs-6">Exclude Holidays</label>
+                      </div>
+                      <div class="col-md-3">
+                        <input class="form-check-input" value="true" formControlName="IsExcludeHolidays" type="radio"
+                          name="IsExcludeHolidays">
+                        <label class="form-check-label ps-2" for="IsExcludeHolidays">
+                          Yes
+                        </label>
+                        <input class="form-check-input ms-4" value="false" formControlName="IsExcludeHolidays"
+                          type="radio" name="IsExcludeHolidays">
+                        <label class="form-check-label ps-2" for="IsExcludeHolidays">
+                          No
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 pb-3">
+                  <h4 class="text-dark">NOTE:</h4>
+                  <p class="mb-0">Calculation of number of days for a given pay period has significant impact when
+                    deducting
+                    salary for Loss of Pay due to Leave or other reason.</p>
+                  <p class="mb-0">Ex: Loss of Pay for 1 day for an employee salary is Rs 30,000/month is calculated as
+                    below.</p>
+                  <p class="mb-0 pt-2">Loss of Pay when days = 30</p>
+                  <p class="mb-0 pb-2">-> Rs 30,000/30 = Rs 1000</p>
+                  <p class="mb-0">Loss of Pay when days are calculated excluding Weekends</p>
+                  <p class="mb-0">Let's say there are 8 Saturday & Sunday in month.</p>
+                  <p class="mb-0">Effective days = 30 - 8 = 22 days</p>
+                  <p class="mb-0">Loss of Pay = Rs 30,000 = Rs 1364.</p>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </ng-container>
+          <ng-container *ngIf="!isReady">
+            <div>Fail to get current company payroll detail. Please contact to admin.</div>
+          </ng-container>
         </ng-container>
-        <ng-container *ngIf="!isReady">
-          <div>Fail to get current company payroll detail. Please contact to admin.</div>
+        <ng-container *ngIf="!isPageReady">
+          <div class="py-5 my-5">
+            <h6 class="fw-bold fs-3 text-center text-dark">General Payroll Settings are loading</h6>
+            <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+              <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                <img src="assets/images/cog.gif" alt="" />
+                <h6 class="modal-title title-message">
+                  Please Wait ........
+                </h6>
+              </div>
+            </div>
+          </div>
         </ng-container>
 
       </div>

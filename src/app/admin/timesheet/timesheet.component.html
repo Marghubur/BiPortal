@@ -540,12 +540,12 @@
       <div *ngSwitchCase="false" class="">
         <div class="x_panel d-flex flex-direction-column justify-content-center">
           <div class="x_content">
-            <div *ngIf="NoClient" class="x_panel d-flex align-items-center justify-content-center py-5 my-5">
+            <div *ngIf="NoClient && !isTimesheetDataLoaded" class="x_panel d-flex align-items-center justify-content-center py-5 my-5">
               <div class="py-5 my-5 fs-5 fw-bold text-dark">
                 Uhh!!! No client allocated on your name. Please contact your maanager.
               </div>
             </div>
-            <div *ngIf="!NoClient" class="x_panel d-flex align-items-center justify-content-center py-5 my-5">
+            <div *ngIf="!NoClient && !isTimesheetDataLoaded" class="x_panel d-flex align-items-center justify-content-center py-5 my-5">
               <div class="py-5 my-5 fs-5 fw-bold text-dark">
                 Please select Employee and Employer first.
               </div>
