@@ -8,220 +8,235 @@
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="col-md-12 d-flex align-items-center justify-content-center">
-      <div class="progress-step col-md-3 my-2">
-        <div class="custom-progress" id="progressbar"></div>
-        <div class="progress-step-item active" (click)="activePage(1)" data-title="RECURING COMPONENTS"></div>
-        <div class="progress-step-item" (click)="activePage(2)" data-title="ADHOC COMPONENTS"></div>
+    <ng-container *ngIf="isPageReady">
+      <div class="col-md-12 d-flex align-items-center justify-content-center">
+        <div class="progress-step col-md-3 my-2">
+          <div class="custom-progress" id="progressbar"></div>
+          <div class="progress-step-item active" (click)="activePage(1)" data-title="RECURING COMPONENTS"></div>
+          <div class="progress-step-item" (click)="activePage(2)" data-title="ADHOC COMPONENTS"></div>
+        </div>
       </div>
-    </div>
-    <div class="box px-3">
-      <ng-container *ngIf="ActivatedPage == 1">
-        <div class="d-flex flex-column">
-          <div class="mb-3">
-            <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage+1)">Next <i
-                class="fa fa-arrow-right ps-1"></i></button>
-          </div>
-          <div class="col-md-12 d-flex justify-content-between">
-            <div class="form-group">
-              <button class="btn btn-outline-primary" (click)="addComponentModal()">
-                <i class="fa fa-plus pe-2"></i>
-                Add Component</button>
+      <div class="box px-3">
+        <ng-container *ngIf="ActivatedPage == 1">
+          <div class="d-flex flex-column">
+            <div class="mb-3">
+              <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage+1)">Next <i
+                  class="fa fa-arrow-right ps-1"></i></button>
             </div>
-            <div class="col-md-3">
-              <div class="form-group has-search">
-                <span class="fa fa-search form-control-feedback"></span>
-                <input type="text" class="form-control" placeholder="Search" (keydown.enter)="filterComponent($event)"
-                  (keydown.esc)="resetFilter($event)">
+            <div class="col-md-12 d-flex justify-content-between">
+              <div class="form-group">
+                <button class="btn btn-outline-primary" (click)="addComponentModal()">
+                  <i class="fa fa-plus pe-2"></i>
+                  Add Component</button>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="t-table t-list t-border col-md-12 my-3">
-          <div class="hide-bar bg-light"></div>
-          <div class="t-head bg-light fw-bold">
-            <div class="tr">
-              <div class="th text-truncate ps-3 fe-2">
-                COMPONENT NAME
-              </div>
-              <div class="th text-truncate ps-3">
-                TYPE
-              </div>
-              <div class="th text-truncate ps-3">
-                TAX EXEMPT
-              </div>
-              <div class="th text-truncate ps-3">
-                REQUIRE DOCS
-              </div>
-              <div class="th text-truncate ps-3">
-                INCLUDE IN PAYSLIP
-              </div>
-              <div class="th text-truncate ps-3">
-                ACTIONS
+              <div class="col-md-3">
+                <div class="form-group has-search">
+                  <span class="fa fa-search form-control-feedback"></span>
+                  <input type="text" class="form-control" placeholder="Search" (keydown.enter)="filterComponent($event)"
+                    (keydown.esc)="resetFilter($event)">
+                </div>
               </div>
             </div>
           </div>
-          <div class="t-body custom-height">
-            <ng-container *ngIf="salaryComponentActiveFields.length > 0">
-              <div class="tr py-2" *ngFor="let item of salaryComponentActiveFields">
-                <div class="td ps-3 text-truncate fe-2">
-                  <div [ngSwitch]="item.IsOpted">
-                    <div *ngSwitchCase="1">
-                      <span class="badge bg-success me-2">ON</span>{{item.ComponentId}} ({{item.ComponentFullName}})
-                    </div>
-                    <div *ngSwitchDefault>
-                      <span class="badge bg-danger me-2">OFF</span>{{item.ComponentId}} ({{item.ComponentFullName}})
-                    </div>
-                  </div>
+          <div class="t-table t-list t-border col-md-12 my-3">
+            <div class="hide-bar bg-light"></div>
+            <div class="t-head bg-light fw-bold">
+              <div class="tr">
+                <div class="th text-truncate ps-3 fe-2">
+                  COMPONENT NAME
                 </div>
-                <div class="td ps-3 text-truncate">
-                  <div [ngSwitch]="item.ComponentTypeId">
-                    <div *ngSwitchCase="2">Allowance</div>
-                    <div *ngSwitchCase="3">Rembursment</div>
-                    <div *ngSwitchCase="4">Reimursable</div>
-                    <div *ngSwitchDefault>Application for all.</div>
-                  </div>
+                <div class="th text-truncate ps-3">
+                  TYPE
                 </div>
-                <div class="td ps-3 text-truncate">
-                  <div [ngSwitch]="item.TaxExempt">
-                    <div *ngSwitchCase="1">
-                      <b class="me-2">Yes</b>
-                      <small class="ps-2 badge bg-primary">{{item.Section}}</small>
-                    </div>
-                    <div *ngSwitchDefault>
-                      No
-                      <small class="ps-2 text-muted d-block">{{item.Section}}</small>
-                    </div>
-                  </div>
+                <div class="th text-truncate ps-3">
+                  TAX EXEMPT
                 </div>
-                <div class="td ps-3 text-truncate">
-                  <ng-container *ngIf="item.RequireDocs == true">Yes</ng-container>
-                  <ng-container *ngIf="item.RequireDocs == false">No</ng-container>
+                <div class="th text-truncate ps-3">
+                  REQUIRE DOCS
                 </div>
-                <div class="td ps-3 text-truncate">
-                  <ng-container *ngIf="item.IncludeInPayslip == true">Yes</ng-container>
-                  <ng-container *ngIf="item.IncludeInPayslip != true">No</ng-container>
+                <div class="th text-truncate ps-3">
+                  INCLUDE IN PAYSLIP
                 </div>
-                <div class="td ps-3">
-                  <a href="javascript:void(0)" (click)="openEditModal(item)" class="text-decoration-none"><i
-                      class="fa fa-pencil pe-1"></i> Edit</a>
-                  <a href="javascript:void(0)" (click)="inactiveComponentModal(item)"
-                    class="ps-4 text-decoration-none text-danger"><i class="fa fa-trash pe-1"></i> Delete</a>
+                <div class="th text-truncate ps-3">
+                  ACTIONS
                 </div>
               </div>
-            </ng-container>
+            </div>
+            <div class="t-body custom-height">
+              <ng-container *ngIf="salaryComponentActiveFields.length > 0">
+                <div class="tr py-2" *ngFor="let item of salaryComponentActiveFields">
+                  <div class="td ps-3 text-truncate fe-2">
+                    <div [ngSwitch]="item.IsOpted">
+                      <div *ngSwitchCase="1">
+                        <span class="badge bg-success me-2">ON</span>{{item.ComponentId}} ({{item.ComponentFullName}})
+                      </div>
+                      <div *ngSwitchDefault>
+                        <span class="badge bg-danger me-2">OFF</span>{{item.ComponentId}} ({{item.ComponentFullName}})
+                      </div>
+                    </div>
+                  </div>
+                  <div class="td ps-3 text-truncate">
+                    <div [ngSwitch]="item.ComponentTypeId">
+                      <div *ngSwitchCase="2">Allowance</div>
+                      <div *ngSwitchCase="3">Rembursment</div>
+                      <div *ngSwitchCase="4">Reimursable</div>
+                      <div *ngSwitchDefault>Application for all.</div>
+                    </div>
+                  </div>
+                  <div class="td ps-3 text-truncate">
+                    <div [ngSwitch]="item.TaxExempt">
+                      <div *ngSwitchCase="1">
+                        <b class="me-2">Yes</b>
+                        <small class="ps-2 badge bg-primary">{{item.Section}}</small>
+                      </div>
+                      <div *ngSwitchDefault>
+                        No
+                        <small class="ps-2 text-muted d-block">{{item.Section}}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="td ps-3 text-truncate">
+                    <ng-container *ngIf="item.RequireDocs == true">Yes</ng-container>
+                    <ng-container *ngIf="item.RequireDocs == false">No</ng-container>
+                  </div>
+                  <div class="td ps-3 text-truncate">
+                    <ng-container *ngIf="item.IncludeInPayslip == true">Yes</ng-container>
+                    <ng-container *ngIf="item.IncludeInPayslip != true">No</ng-container>
+                  </div>
+                  <div class="td ps-3">
+                    <a href="javascript:void(0)" (click)="openEditModal(item)" class="text-decoration-none"><i
+                        class="fa fa-pencil pe-1"></i> Edit</a>
+                    <a href="javascript:void(0)" (click)="inactiveComponentModal(item)"
+                      class="ps-4 text-decoration-none text-danger"><i class="fa fa-trash pe-1"></i> Delete</a>
+                  </div>
+                </div>
+              </ng-container>
 
-            <ng-container *ngIf="salaryComponentActiveFields.length == 0">
-              <div class="col-12 d-flex flex-column justify-content-center text-center p-5">
-                <h5>No component is available. Please add component using below button.</h5>
-              </div>
-            </ng-container>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="ActivatedPage == 2">
-        <div class="d-flex flex-column">
-          <div class="mb-3">
-            <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage-1)"><i
-                class="fa fa-arrow-left pe-1"></i> Back</button>
-          </div>
-          <div class="col-md-12 d-flex justify-content-between">
-            <div class="form-group">
-              <button class="btn btn-outline-primary" (click)="addAdhocComponentModal()">
-                <i class="fa fa-plus pe-2"></i>
-                Add Component</button>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group has-search">
-                <span class="fa fa-search form-control-feedback"></span>
-                <input type="text" class="form-control" placeholder="Search"
-                  (keydown.enter)="filterAdHocComponent($event)" (keydown.esc)="resetAdHocFilter($event)">
-              </div>
+              <ng-container *ngIf="salaryComponentActiveFields.length == 0">
+                <div class="col-12 d-flex flex-column justify-content-center text-center p-5">
+                  <h5>No component is available. Please add component using below button.</h5>
+                </div>
+              </ng-container>
             </div>
           </div>
-        </div>
-        <div class="t-table t-list t-border col-md-12 my-3">
-          <div class="hide-bar bg-light"></div>
-          <div class="t-head bg-light fw-bold">
-            <div class="tr">
-              <div class="th text-truncate ps-3 fe-2">
-                COMPONENT NAME
+        </ng-container>
+        <ng-container *ngIf="ActivatedPage == 2">
+          <div class="d-flex flex-column">
+            <div class="mb-3">
+              <button class="btn btn-outline-success float-end" (click)="activePage(ActivatedPage-1)"><i
+                  class="fa fa-arrow-left pe-1"></i> Back</button>
+            </div>
+            <div class="col-md-12 d-flex justify-content-between">
+              <div class="form-group">
+                <button class="btn btn-outline-primary" (click)="addAdhocComponentModal()">
+                  <i class="fa fa-plus pe-2"></i>
+                  Add Component</button>
               </div>
-              <div class="th text-truncate ps-3">
-                TYPE
-              </div>
-              <div class="th text-truncate ps-3">
-                TAX EXEMPT
-              </div>
-              <div class="th text-truncate ps-3">
-                REQUIRE DOCS
-              </div>
-              <div class="th text-truncate ps-3">
-                INCLUDE IN PAYSLIP
-              </div>
-              <div class="th text-truncate ps-3">
-                ACTIONS
+              <div class="col-md-3">
+                <div class="form-group has-search">
+                  <span class="fa fa-search form-control-feedback"></span>
+                  <input type="text" class="form-control" placeholder="Search"
+                    (keydown.enter)="filterAdHocComponent($event)" (keydown.esc)="resetAdHocFilter($event)">
+                </div>
               </div>
             </div>
           </div>
-          <div class="t-body custom-height">
-            <ng-container *ngIf="allAdHocComponent.length > 0">
-              <div class="tr py-2" *ngFor="let item of allAdHocComponent">
-                <div class="td ps-3 text-truncate fe-2">
-                  <div [ngSwitch]="item.IsActive">
-                    <div *ngSwitchCase="1">
-                      <span class="badge bg-success me-2">ON</span>{{item.ComponentId}} ({{item.ComponentFullName}})
-                    </div>
-                    <div *ngSwitchDefault>
-                      <span class="badge bg-danger me-2">OFF</span>{{item.ComponentId}} ({{item.ComponentFullName}})
-                    </div>
-                  </div>
+          <div class="t-table t-list t-border col-md-12 my-3">
+            <div class="hide-bar bg-light"></div>
+            <div class="t-head bg-light fw-bold">
+              <div class="tr">
+                <div class="th text-truncate ps-3 fe-2">
+                  COMPONENT NAME
                 </div>
-                <div class="td ps-3 text-truncate">
-                  <div [ngSwitch]="item.AdHocId">
-                    <div *ngSwitchCase="1">Allowance</div>
-                    <div *ngSwitchCase="2">Bonus</div>
-                    <div *ngSwitchCase="3">Deduction</div>
-                  </div>
+                <div class="th text-truncate ps-3">
+                  TYPE
                 </div>
-                <div class="td ps-3 text-truncate">
-                  <div [ngSwitch]="item.TaxExempt">
-                    <div *ngSwitchCase="1">
-                      <b class="me-2">Yes</b>
-                      <small class="ps-2 badge bg-primary">{{item.Section}}</small>
-                    </div>
-                    <div *ngSwitchDefault>
-                      No
-                      <small class="ps-2 text-muted d-block">{{item.Section}}</small>
-                    </div>
-                  </div>
+                <div class="th text-truncate ps-3">
+                  TAX EXEMPT
                 </div>
-                <div class="td ps-3 text-truncate">
-                  <ng-container *ngIf="item.RequireDocs == true">Yes</ng-container>
-                  <ng-container *ngIf="item.RequireDocs == false">No</ng-container>
+                <div class="th text-truncate ps-3">
+                  REQUIRE DOCS
                 </div>
-                <div class="td ps-3 text-truncate">
-                  <ng-container *ngIf="item.IncludeInPayslip == true">Yes</ng-container>
-                  <ng-container *ngIf="item.IncludeInPayslip != true">No</ng-container>
+                <div class="th text-truncate ps-3">
+                  INCLUDE IN PAYSLIP
                 </div>
-                <div class="td ps-3">
-                  <a href="javascript:void(0)" (click)="openEditModal(item)" class="text-decoration-none"><i
-                      class="fa fa-pencil pe-1"></i> Edit</a>
-                  <a href="javascript:void(0)" (click)="inactiveComponentModal(item)"
-                    class="ps-4 text-decoration-none text-danger"><i class="fa fa-trash pe-1"></i> Delete</a>
+                <div class="th text-truncate ps-3">
+                  ACTIONS
                 </div>
               </div>
-            </ng-container>
+            </div>
+            <div class="t-body custom-height">
+              <ng-container *ngIf="allAdHocComponent.length > 0">
+                <div class="tr py-2" *ngFor="let item of allAdHocComponent">
+                  <div class="td ps-3 text-truncate fe-2">
+                    <div [ngSwitch]="item.IsActive">
+                      <div *ngSwitchCase="1">
+                        <span class="badge bg-success me-2">ON</span>{{item.ComponentId}} ({{item.ComponentFullName}})
+                      </div>
+                      <div *ngSwitchDefault>
+                        <span class="badge bg-danger me-2">OFF</span>{{item.ComponentId}} ({{item.ComponentFullName}})
+                      </div>
+                    </div>
+                  </div>
+                  <div class="td ps-3 text-truncate">
+                    <div [ngSwitch]="item.AdHocId">
+                      <div *ngSwitchCase="1">Allowance</div>
+                      <div *ngSwitchCase="2">Bonus</div>
+                      <div *ngSwitchCase="3">Deduction</div>
+                    </div>
+                  </div>
+                  <div class="td ps-3 text-truncate">
+                    <div [ngSwitch]="item.TaxExempt">
+                      <div *ngSwitchCase="1">
+                        <b class="me-2">Yes</b>
+                        <small class="ps-2 badge bg-primary">{{item.Section}}</small>
+                      </div>
+                      <div *ngSwitchDefault>
+                        No
+                        <small class="ps-2 text-muted d-block">{{item.Section}}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="td ps-3 text-truncate">
+                    <ng-container *ngIf="item.RequireDocs == true">Yes</ng-container>
+                    <ng-container *ngIf="item.RequireDocs == false">No</ng-container>
+                  </div>
+                  <div class="td ps-3 text-truncate">
+                    <ng-container *ngIf="item.IncludeInPayslip == true">Yes</ng-container>
+                    <ng-container *ngIf="item.IncludeInPayslip != true">No</ng-container>
+                  </div>
+                  <div class="td ps-3">
+                    <a href="javascript:void(0)" (click)="openEditModal(item)" class="text-decoration-none"><i
+                        class="fa fa-pencil pe-1"></i> Edit</a>
+                    <a href="javascript:void(0)" (click)="inactiveComponentModal(item)"
+                      class="ps-4 text-decoration-none text-danger"><i class="fa fa-trash pe-1"></i> Delete</a>
+                  </div>
+                </div>
+              </ng-container>
 
-            <ng-container *ngIf="salaryComponentActiveFields.length == 0">
-              <div class="col-12 d-flex flex-column justify-content-center text-center p-5">
-                <h5>No component is available. Please add component using below button.</h5>
-              </div>
-            </ng-container>
+              <ng-container *ngIf="salaryComponentActiveFields.length == 0">
+                <div class="col-12 d-flex flex-column justify-content-center text-center p-5">
+                  <h5>No component is available. Please add component using below button.</h5>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!isPageReady">
+      <div class="py-5 my-5">
+        <h6 class="fw-bold fs-3 text-center text-dark">Salary Component and Structure are loading</h6>
+        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+            <h6 class="modal-title title-message">
+              Please Wait ........
+            </h6>
           </div>
         </div>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
   </div>
 </div>
 

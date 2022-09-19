@@ -33,7 +33,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   SalaryGroupForm: FormGroup;
   selectedSalaryStructure: SalaryStructureType = new SalaryStructureType();
   isSalaryGrpSelected: boolean = false;
-  isPageReady: boolean = false;
+  isPageReady: boolean = true;
   filterText: string = "";
   payrollCompoent: string = PayrollComponents;
   groupComponents: Array<any> = [];
@@ -182,6 +182,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   loadData() {
+    this.isPageReady = false;
     this.salaryStructureType = [];
     this.http.get(`SalaryComponent/GetCustomSalryPageData/${this.compnayDetail.CompanyId}`).then(res => {
       if(res.ResponseBody && res.ResponseBody.SalaryComponents != null && res.ResponseBody.SalaryGroups != null) {
@@ -194,6 +195,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       } else {
         ErrorToast("Salary components loaded successfully.");
       }
+    }).catch(e => {
+      this.isPageReady = true;
     });
   }
 

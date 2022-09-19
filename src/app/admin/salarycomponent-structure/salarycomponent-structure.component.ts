@@ -25,7 +25,7 @@ export class SalarycomponentStructureComponent implements OnInit {
   AddActiveComponent: Array<SalaryComponentFields> = [];
   inactiveComponentDeatil: SalaryComponentFields = new SalaryComponentFields();
   allAdHocComponent: Array<AdHocComponentsModal> = [];
-
+  isPageReady: boolean = true;
   constructor(private fb: FormBuilder,
               private http: AjaxService) { }
 
@@ -38,6 +38,7 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   loadOnChange() {
     this.isReady = false;
+    this.isPageReady = false;
     this.http.get(`Settings/FetchActiveComponents`)
     .then(res => {
       if(res.ResponseBody) {
@@ -45,13 +46,17 @@ export class SalarycomponentStructureComponent implements OnInit {
           this.salaryComponentFields = res.ResponseBody
           this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsOpted);
           this.allAdHocComponent = res.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId > 0);
+          this.isPageReady = true;
           Toast("Component structure table loaded successfully.");
         } else {
+          this.isPageReady = true;
           WarningToast("0 item found under this catagroy. Please add one.");
         }
-
         this.isReady = false;
       }
+    }).catch(e => {
+      this.isPageReady = true;
+      this.isReady = false;
     });
   }
 

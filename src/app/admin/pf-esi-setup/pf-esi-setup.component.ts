@@ -43,6 +43,7 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
   }
 
   loadData() {
+    this.IsReady = false;
     this.http.get(`Settings/GetSalaryComponents/${this.companyId}`).then(res => {
       if(res.ResponseBody) {
         this.IsReady = true;
@@ -162,5 +163,5 @@ class pfesisetting {
   MaximumGrossForESI: number = 0;
   EsiEmployeeContribution: number = 0;
   EsiEmployerContribution: number = 0;
-  CompanyId: number = 0;  
+  CompanyId: number = 0;
 }
