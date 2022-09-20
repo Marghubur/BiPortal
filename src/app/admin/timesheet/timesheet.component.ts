@@ -451,11 +451,22 @@ export class TimesheetComponent implements OnInit {
     return totalTime;
   }
 
-  onSubmit(){
+  removeOtherMonthDetail(records: Array<any>): Array<any> {
+    let presentMonth = new Date().getMonth() + 1;
+    let filteredRecords = records.filter(x => new Date(x.PresentDate).getMonth() + 1 == presentMonth);
+    if (filteredRecords.length == 0){
+      ErrorToast("Fail to filter other months detail.");
+      throw "Fail to filter other months detail";
+    }
+
+    return filteredRecords;
+  }
+
+  onSubmit() {
     this.isLoading = true;
     this.isBlocked = false;
-    let values = JSON.stringify(this.timesheetForm.get("timesheetArray").value);
-    let records: Array<any> = JSON.parse(values);
+    let records = this.timesheetForm.get("timesheetArray").value;
+    records = this.removeOtherMonthDetail(records);
     let index = 0;
     while(index < records.length) {
       records[index].TotalMinutes = this.calculateTime(records[index].UserHours, records[index].UserMin);

@@ -147,50 +147,40 @@ export class ManageComponent implements OnInit {
   }
 
   loadData(user: any) {
-    this.http.get(`user/GetUserDetail/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`).then((res: ResponseModel) => {
+    this.http.get(`user/GetUserDetail/${this.userDetail.UserId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        let roleId = res.ResponseBody.RoleId;
-        let detail = null;
         let educations = null;
-        switch(roleId) {
-          case 1:
-            this.isUser = false;
-            break;
-          default:
-            this.isUser = true;
-            detail = res.ResponseBody.professionalUser;
-            let profile = res.ResponseBody.profileDetail;
-            if (profile.length > 0) {
-              this.profile = profile.filter(x => x.FileName == ProfileImage);
-              this.profileId = this.profile[0].FileId;
-              this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
-            }
-            this.userModal = detail;
-            let document = profile.filter(x => x.FileName == "resume");
-            if (document.length > 0) {
-              this.documentId = document[0].FileId;
-              this.resumePath = document[0].FilePath;
-              this.resumeFileName = document[0].FileName;
-              this.extension = document[0].FileExtension;
-              this.isResumeUploaded = true;
-            }
-            educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
-            this.userModal.Educational_Detail = educations;
-            this.UserId = this.userModal.UserId;
-            if (this.userModal.Employments.length == 0)
-              this.isEmpData = true;
-            if (this.userModal.Educational_Detail.length == 0)
-              this.isEducationData = true;
-            if (this.userModal.Skills.length == 0)
-              this.isItSkillData = true;
-            if (this.userModal.Projects.length == 0)
-              this.isProjectData = true;
-            if (this.userModal.Companies.length == 0)
-              this.isCarrerProfileData = true;
-            break;
+
+        this.isUser = true;
+        this.userModal = res.ResponseBody.professionalUser;
+        let profile = res.ResponseBody.profileDetail;
+        if (profile && profile.length > 0) {
+          this.profile = profile.filter(x => x.FileName == ProfileImage);
+          this.profileId = this.profile[0].FileId;
+          this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
+          let document = profile.filter(x => x.FileName == "resume");
+          if (document.length > 0) {
+            this.documentId = document[0].FileId;
+            this.resumePath = document[0].FilePath;
+            this.resumeFileName = document[0].FileName;
+            this.extension = document[0].FileExtension;
+            this.isResumeUploaded = true;
+          }
         }
-      } else {
-        ErrorToast("Invalid user. Please login again.");
+
+        educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+        this.userModal.EducationalDetails = educations;
+        this.UserId = this.userModal.EmployeeId;
+        if (this.userModal.Employments.length == 0)
+          this.isEmpData = true;
+        if (this.userModal.EducationalDetails.length == 0)
+          this.isEducationData = true;
+        if (this.userModal.Skills.length == 0)
+          this.isItSkillData = true;
+        if (this.userModal.Projects.length == 0)
+          this.isProjectData = true;
+        if (this.userModal.Companies.length == 0)
+          this.isCarrerProfileData = true;
       }
 
       this.initForm();
@@ -215,10 +205,14 @@ export class ManageComponent implements OnInit {
   //----------------- Personal Detail form, group and add new ------------------------
 
   buildPersonalDetailForm() {
-    let date = new Date(this.userModal.PersonalDetail.DOB);
-    if (date.getFullYear() == 1) {
-      date = new Date();
+    let date = new Date();
+    if(this.userModal.PersonalDetail.DOB) {
+      let date = new Date(this.userModal.PersonalDetail.DOB);
+      if (date.getFullYear() == 1) {
+        date = new Date();
+      }
     }
+    
     this.model.year = date.getFullYear();
     this.model.month = date.getMonth() + 1;
     this.model.day = date.getDate();
@@ -450,7 +444,7 @@ export class ManageComponent implements OnInit {
   //----------------- Accomplishments form, group and add new ------------------------
 
     buildAccomplishmentsForm() {
-      if(this.userModal.Accomplishments.Certification !== null && this.userModal.Accomplishments.OnlineProfile !== null) {
+      if(this.userModal.Accomplishments && this.userModal.Accomplishments.Certification !== null && this.userModal.Accomplishments.OnlineProfile !== null) {
         this.accomplishmentsForm = this.fb.group({
           OnlineProfiles: this.fb.array(this.userModal.Accomplishments.OnlineProfile.map(item => this.buildOnlieProfiles(item))),
           WorkSamples: this.fb.array(this.userModal.Accomplishments.WorkSample.map(item => this.buildWorkSamples(item))),
@@ -458,7 +452,7 @@ export class ManageComponent implements OnInit {
           Presentations: this.fb.array(this.userModal.Accomplishments.Presentation.map(item => this.buildPresentations(item))),
           Patents: this.fb.array(this.userModal.Accomplishments.Patent.map(item => this.buildPatents(item))),
           Certifications: this.fb.array(this.userModal.Accomplishments.Certification.map((item, index) => this.buildCertifications(item)))
-        })
+        });
       } else {
         this.accomplishmentsForm = this.fb.group({
           OnlineProfiles: this.fb.array([this.buildOnlieProfiles('')]),
@@ -852,7 +846,7 @@ export class ManageComponent implements OnInit {
 
   buildEducationForm() {
     this.educationForm = this.fb.group({
-      Educations: this.fb.array(this.userModal.Educational_Detail.map((item, index) => {
+      Educations: this.fb.array(this.userModal.EducationalDetails.map((item, index) => {
         return this.createEducationForm(item, index)
       }))
     })
@@ -1054,20 +1048,12 @@ export class ManageComponent implements OnInit {
 
 
   initForm() {
-    if (this.userModal.Name != null && this.userModal.Name != '') {
-      let fullName = this.userModal.Name.split(" ");
-      if(fullName.length > 0 && this.userModal.FirstName == null && this.userModal.FirstName == '') {
-        this.userModal.FirstName = fullName[0];
-        this.userModal.LastName = fullName.splice(1, 1).join(" ");
-      }
-    }
-
     this.manageUserForm = this.fb .group({
-      UserId: new FormControl(this.userModal.UserId),
+      UserId: new FormControl(this.userModal.EmployeeId),
       FirstName: new FormControl(this.userModal.FirstName),
       LastName: new FormControl (this.userModal.LastName),
       Email: new FormControl(this.userModal.Email),
-      Mobile: new FormControl(this.userModal.Mobile_Number),
+      Mobile: new FormControl(this.userModal.Mobile),
       ResumeHeadline: new FormControl(this.userModal.ResumeHeadline),
       ProfileImgPath: new FormControl(''),
       ResumePath: new FormControl(''),
@@ -1089,7 +1075,7 @@ export class ManageComponent implements OnInit {
   submitEducationDetail() {
     this.isLoading = true;
     let educations = this.educationForm.controls['Educations'].value;
-    this.userModal.Educational_Detail = educations;
+    this.userModal.EducationalDetails = educations;
     this.updateProfile();
     this.isLoading = false;
   }
@@ -1155,12 +1141,12 @@ export class ManageComponent implements OnInit {
               this.profile = res.ResponseBody.profileDetail;
               this.userModal = detail;
               this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
-              educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
-              this.userModal.Educational_Detail = educations;
-              this.UserId = this.userModal.UserId;
+              educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+              this.userModal.EducationalDetails = educations;
+              this.UserId = this.userModal.EmployeeId;
               if (this.userModal.Employments.length == 0)
                 this.isEmpData = true;
-              if (this.userModal.Educational_Detail.length == 0)
+              if (this.userModal.EducationalDetails.length == 0)
                 this.isEducationData = true;
               if (this.userModal.Skills.length == 0)
                 this.isItSkillData = true;
@@ -1362,30 +1348,17 @@ export class ManageComponent implements OnInit {
 }
 
 class ProfessionalUser {
-  UserId: number = 0;
+  EmployeeId: number = 0;
   FileId: number = -1;
-  Name: string = '';
   FirstName: string = '';
   LastName: string = '';
   ResumeHeadline: string = '';
   Email: string= '';
-  Gender: string = '';
+  Mobile: string = null;
   Skills: Skills[] = [];
   Companies: Company[] = [];
-  Job_Title: string = '';
-  OtherDetail: OtherDetail = null;
-  ExpectedCTC: number = null;
-  Mobile_Number: string = null;
-  Notice_Period: number = 0;
-  Salary_Package: number = 0;
-  Activity_Status: ActivityStatus = null;
-  Alternate_Number: number = null;
-  Current_Location: string = '';
-  Educational_Detail: EducationalDetail[] = [];
-  Date_Of_Application: Date = null;
-  Preferred_Location: string[] = [];
-  Total_Experience_In_Months: number = 0;
-  Key_Skills: string = '';
+  OtherDetails: OtherDetail = null;
+  EducationalDetails: EducationalDetail[] = [];
   Projects: Project[] = [];
   Accomplishments: Accomplishment = null;
   PersonalDetail: PersonalDetail = null;

@@ -54,7 +54,6 @@ export class BuildPdfComponent implements OnInit {
   downlodFilePath: string = "";
   basePath: string = "";
   viewer: any = null;
-  missingTimesheetStatus: boolean = false;
   allTimesheet: Array<any> = [];
   dayList: Array<any> = [];
   template: any = null;
@@ -125,62 +124,62 @@ export class BuildPdfComponent implements OnInit {
   }
 
   getAttendance() {
-    this.missingTimesheetStatus = false;
     this.allTimesheet = [];
     let timesheetStatusFor = {
-      "EmployeeUid": this.currentEmployee.EmployeeUid,
+      "EmployeeId": this.currentEmployee.EmployeeUid,
       "UserTypeId": UserType.Employee,
       "ForMonth": this.originalBillingMonth,
-      "ForYear": this.model.year
+      "ForYear": this.model.year,
+      "ClientId": this.clientDetail.CompanyId
     }
+
     this.http.post("Timesheet/GetEmployeeTimeSheet", timesheetStatusFor).then ((response: ResponseModel) => {
       if (response.ResponseBody) {
-        let missinngAtt = response.ResponseBody.MissingDate;
-        let timesheetDetails = response.ResponseBody.TimesheetDetails;
-        if (missinngAtt.length > 0 && timesheetDetails.length > 0) {
-          this.missingTimesheetStatus = true;
-          timesheetDetails.map(item => {
-            item.PresentDate = new Date(item.PresentDate);
-            item.TimesheetStatus = 8;
-          });
-        } else {
-          this.missingTimesheetStatus = false;
-        }
-
-        if (missinngAtt.length > 0) {
-          let i = 0;
-          while(i < missinngAtt.length) {
-            timesheetDetails.push({
-              UserTypeId: 2,
-              PresentDate: new Date(missinngAtt[i]),
-              EmployeeUid: this.currentEmployee.EmployeeUid,
-              TimesheetStatus: ItemStatus.NotGenerated
-            });
-
-            i++;
-          }
-        }
-
-        let burnDays = timesheetDetails.length - missinngAtt.length;
-        if (burnDays > 0)
-          this.pdfForm.get('actualDaysBurned').setValue(burnDays)
-        else
-          burnDays = this.pdfForm.get('actualDaysBurned').value;
-
-        this._calculateAmount(burnDays);
-        this.allTimesheet = timesheetDetails.sort((a,b) => Date.parse(a.PresentDate) - Date.parse(b.PresentDate));
-        this.dayList = [];
-        let i = 0;
-        while(i < 7) {
-          this.dayList.push(new Date(this.allTimesheet[i]["PresentDate"]).getDay());
-          i++;
-        }
+        this.buildTimeSheet(response.ResponseBody);      
       }
       this.isClientSelected = true;
-    })
+    });
   }
 
+  buildTimeSheet(data: any) {
+    let burnDays = 0;
+    let missinngAtt = data.MissingDate;
+    let timesheetDetails = data.TimesheetDetails;
+    
+    if (missinngAtt.length > 0) {
+      let i = 0;
+      while(i < missinngAtt.length) {
+        timesheetDetails.push({
+          UserTypeId: 2,
+          PresentDate: new Date(missinngAtt[i]),
+          EmployeeUid: this.currentEmployee.EmployeeUid,
+          TimesheetStatus: ItemStatus.NotGenerated
+        });
 
+        i++;
+      }
+    }
+
+    timesheetDetails.map(item => {
+      item.PresentDate = new Date(item.PresentDate);
+      if(item.TimesheetStatus == 8)
+        burnDays++;
+    });
+
+    if (burnDays > 0)
+      this.pdfForm.get('actualDaysBurned').setValue(burnDays)
+    else
+      burnDays = this.pdfForm.get('actualDaysBurned').value;
+
+    this._calculateAmount(burnDays);
+    this.allTimesheet = timesheetDetails.sort((a,b) => Date.parse(a.PresentDate) - Date.parse(b.PresentDate));
+    this.dayList = [];
+    let i = 0;
+    while(i < 7) {
+      this.dayList.push(new Date(this.allTimesheet[i]["PresentDate"]).getDay());
+      i++;
+    }
+  }
 
   editBillDetail(billDetail: any) {
     // "EditEmployeeBillDetail" => post
@@ -773,8 +772,12 @@ export class BuildPdfComponent implements OnInit {
     }
   }
 
-  findReceiverClientDetail(e: any) {
-    this.bindClientDetail(e.target.value);
+  findReceiverClientDetail() {
+    let value = this.pdfForm.get('receiverCompanyId').value;
+    if(value) 
+      this.bindClientDetail(value);
+    else
+      ErrorToast("Company not selected properly.");
   }
 
   bindClientDetail(Id: any) {
@@ -808,7 +811,6 @@ export class BuildPdfComponent implements OnInit {
         }
 
         this.getAttendance();
-        this.isClientSelected = true;
       }
     }
   }
@@ -838,6 +840,7 @@ export class BuildPdfComponent implements OnInit {
 
   getFileExtension(value: any) {
     this.downLoadFileExtension = "." + value.target.value;
+    this.downloadPdfDocx();
   }
 
   downloadFile(userFile: any) {
@@ -924,13 +927,24 @@ export class BuildPdfComponent implements OnInit {
 
   submitTimesheet() {
     this.isLoading = true;
-    let value = ( <HTMLInputElement>document.getElementById('commentsection')).value;
-    if (value != null && value != '') {
+    try {
+      let value = (<HTMLInputElement>document.getElementById('commentsection')).value;
       let formData = new FormData();
+      let firstDate = new Date(this.allTimesheet[0].PresentDate);
+      let timeSheetDetail = {
+        EmployeeId: this.pdfForm.get("developerId").value,
+        UserTypeId: UserType.Employee,
+        ForMonth: firstDate.getMonth() + 1,
+        ForYear: firstDate.getFullYear(),
+        ClientId: this.pdfForm.get("receiverCompanyId").value
+      };
+  
       formData.append('comment', JSON.stringify(value));
-      formData.append('timesheet', JSON.stringify(this.allTimesheet));
+      formData.append('dailyTimesheetDetail', JSON.stringify(this.allTimesheet));
+      formData.append('timesheet', JSON.stringify(timeSheetDetail));
       this.http.post('Timesheet/UpdateTimesheet', formData).then(res => {
         if (res.ResponseBody) {
+          this.buildTimeSheet(res.ResponseBody);
           this.isLoading = false;
           $('#timesheet-view').modal('hide');
         } else
@@ -938,6 +952,8 @@ export class BuildPdfComponent implements OnInit {
       }).catch(e => {
         this.isLoading = false;
       })
+    } catch(e) {
+      ErrorToast("Getting calculation error from client side. Please contact to admin.");
     }
   }
 
