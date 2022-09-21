@@ -558,21 +558,23 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</p>
-                            <ng-container
-                              *ngFor="let item of accomplishmentsForm.controls.OnlineProfiles['controls'];let index = index">
-                              <div class="col-md-12 mt-3" [formGroupName]="index">
-                                <div class="col-md-12 btn btn-info">
-                                  <span class="fw-bold float-start">{{item.get("OnlineProfile").value}}</span>
-                                  <div class="ms-3 float-end d-inline-block">
-                                    <a href="javascript:void(0)" class="pe-3" (click)="editOnlineProfile(item)">
-                                      <i class="fa fa-pencil text-dark"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" (click)="deleteOnlineProfilePopup(item)">
-                                      <i class="fa fa-trash text-dark"></i>
-                                    </a>
+                            <ng-container *ngIf="userModal.Accomplishments.OnlineProfiles != null">
+                              <ng-container
+                                *ngFor="let item of accomplishmentsForm.controls.OnlineProfiles['controls'];let index = index">
+                                <div class="col-md-12 mt-3" [formGroupName]="index">
+                                  <div class="col-md-12 btn btn-info">
+                                    <span class="fw-bold float-start">{{item.get("OnlineProfile").value}}</span>
+                                    <div class="ms-3 float-end d-inline-block">
+                                      <a href="javascript:void(0)" class="pe-3" (click)="editOnlineProfile(item)">
+                                        <i class="fa fa-pencil text-dark"></i>
+                                      </a>
+                                      <a href="javascript:void(0)" (click)="deleteOnlineProfilePopup(item)">
+                                        <i class="fa fa-trash text-dark"></i>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              </ng-container>
                             </ng-container>
                           </div>
 
@@ -583,20 +585,22 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add link to your Projects (e.g. Github links etc.).</p>
-                            <ng-container *ngFor="let item of workSamples.controls;let index = index">
-                              <div class="col-md-12 mt-3" [formGroupName]="index">
-                                <div class="col-md-12 btn btn-dark">
-                                  <span class="fw-bold float-start">{{item.get("WorkSample").value}}</span>
-                                  <div class="ms-3 float-end d-inline-block">
-                                    <a href="javascript:void(0)" class="pe-3" (click)="editWorkSample(item)">
-                                      <i class="fa fa-pencil text-white"></i>
-                                    </a>
-                                    <a href="javascript:void(0)">
-                                      <i class="fa fa-trash text-white" (click)="deleteWorkSamplePopup(item)"></i>
-                                    </a>
+                            <ng-container *ngIf="userModal.Accomplishments.WorkSample != null">
+                              <ng-container *ngFor="let item of workSamples.controls;let index = index">
+                                <div class="col-md-12 mt-3" [formGroupName]="index">
+                                  <div class="col-md-12 btn btn-dark">
+                                    <span class="fw-bold float-start">{{item.get("WorkSample").value}}</span>
+                                    <div class="ms-3 float-end d-inline-block">
+                                      <a href="javascript:void(0)" class="pe-3" (click)="editWorkSample(item)">
+                                        <i class="fa fa-pencil text-white"></i>
+                                      </a>
+                                      <a href="javascript:void(0)">
+                                        <i class="fa fa-trash text-white" (click)="deleteWorkSamplePopup(item)"></i>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              </ng-container>
                             </ng-container>
                           </div>
 
@@ -607,20 +611,22 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add links to your Online publications.</p>
-                            <ng-container *ngFor="let item of researchs.controls;let index = index">
-                              <div class="col-md-12 mt-3" [formGroupName]="index">
-                                <div class="col-md-12 btn btn-secondary">
-                                  <span class="fw-bold float-start">{{item.get("Research").value}}</span>
-                                  <div class="ms-3 float-end d-inline-block">
-                                    <a href="javascript:void(0)" class="pe-3" (click)="editResaerch(item)">
-                                      <i class="fa fa-pencil text-white"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" (click)="deleteResearchPopup(item)">
-                                      <i class="fa fa-trash text-white"></i>
-                                    </a>
+                            <ng-container *ngIf="userModal.Accomplishments.Research != null">
+                              <ng-container *ngFor="let item of researchs.controls;let index = index">
+                                <div class="col-md-12 mt-3" [formGroupName]="index">
+                                  <div class="col-md-12 btn btn-secondary">
+                                    <span class="fw-bold float-start">{{item.get("Research").value}}</span>
+                                    <div class="ms-3 float-end d-inline-block">
+                                      <a href="javascript:void(0)" class="pe-3" (click)="editResaerch(item)">
+                                        <i class="fa fa-pencil text-white"></i>
+                                      </a>
+                                      <a href="javascript:void(0)" (click)="deleteResearchPopup(item)">
+                                        <i class="fa fa-trash text-white"></i>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              </ng-container>
                             </ng-container>
                           </div>
 
@@ -631,20 +637,22 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add links to your Online presentations (e.g. Slideshare presentation links etc.).</p>
-                            <ng-container *ngFor="let item of presentations.controls;let index = index">
-                              <div class="col-md-12 mt-3" [formGroupName]="index">
-                                <div class="col-md-12 btn btn-primary-c">
-                                  <span class="fw-bold float-start">{{item.get("Presentation").value}}</span>
-                                  <div class="ms-3 float-end d-inline-block">
-                                    <a href="javascript:void(0)" class="pe-3" (click)="editPresentation(item)">
-                                      <i class="fa fa-pencil text-white"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" (click)="deletePresentationPopup(item)">
-                                      <i class="fa fa-trash text-white"></i>
-                                    </a>
+                            <ng-container *ngIf="userModal.Accomplishments.Presentation != null">
+                              <ng-container *ngFor="let item of presentations.controls;let index = index">
+                                <div class="col-md-12 mt-3" [formGroupName]="index">
+                                  <div class="col-md-12 btn btn-primary-c">
+                                    <span class="fw-bold float-start">{{item.get("Presentation").value}}</span>
+                                    <div class="ms-3 float-end d-inline-block">
+                                      <a href="javascript:void(0)" class="pe-3" (click)="editPresentation(item)">
+                                        <i class="fa fa-pencil text-white"></i>
+                                      </a>
+                                      <a href="javascript:void(0)" (click)="deletePresentationPopup(item)">
+                                        <i class="fa fa-trash text-white"></i>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              </ng-container>
                             </ng-container>
                           </div>
 
@@ -655,20 +663,22 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add details of Patents you have filed.</p>
-                            <ng-container *ngFor="let item of patents.controls;let index = index">
-                              <div class="col-md-12 mt-3" [formGroupName]="index">
-                                <div class="col-md-12 btn btn-success">
-                                  <span class="fw-bold float-start">{{item.get("Patent").value}}</span>
-                                  <div class="ms-3 float-end d-inline-block">
-                                    <a href="javascript:void(0)" class="pe-3" (click)="editPatent(item)">
-                                      <i class="fa fa-pencil text-white"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" (click)="deletePatentPopup(item)">
-                                      <i class="fa fa-trash text-white"></i>
-                                    </a>
+                            <ng-container *ngIf="userModal.Accomplishments.Patent != null">
+                              <ng-container *ngFor="let item of patents.controls;let index = index">
+                                <div class="col-md-12 mt-3" [formGroupName]="index">
+                                  <div class="col-md-12 btn btn-success">
+                                    <span class="fw-bold float-start">{{item.get("Patent").value}}</span>
+                                    <div class="ms-3 float-end d-inline-block">
+                                      <a href="javascript:void(0)" class="pe-3" (click)="editPatent(item)">
+                                        <i class="fa fa-pencil text-white"></i>
+                                      </a>
+                                      <a href="javascript:void(0)" (click)="deletePatentPopup(item)">
+                                        <i class="fa fa-trash text-white"></i>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              </ng-container>
                             </ng-container>
                           </div>
 
@@ -679,20 +689,22 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add details of Certifications you have achieved/completed</p>
-                            <ng-container *ngFor="let item of certifications.controls;let index = index">
-                              <div class="col-md-12 mt-3" [formGroupName]="index">
-                                <div class="col-md-12 btn btn-warning">
-                                  <span class="fw-bold float-start">{{item.get("Certification").value}}</span>
-                                  <div class="ms-3 float-end d-inline-block">
-                                    <a href="javascript:void(0)" class="pe-3" (click)="editCertification(item)">
-                                      <i class="fa fa-pencil text-dark"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" (click)="deleteCertificationPopup(item)">
-                                      <i class="fa fa-trash text-dark"></i>
-                                    </a>
+                            <ng-container *ngIf="userModal.Accomplishments.Certification != null">
+                              <ng-container *ngFor="let item of certifications.controls;let index = index">
+                                <div class="col-md-12 mt-3" [formGroupName]="index">
+                                  <div class="col-md-12 btn btn-warning">
+                                    <span class="fw-bold float-start">{{item.get("Certification").value}}</span>
+                                    <div class="ms-3 float-end d-inline-block">
+                                      <a href="javascript:void(0)" class="pe-3" (click)="editCertification(item)">
+                                        <i class="fa fa-pencil text-dark"></i>
+                                      </a>
+                                      <a href="javascript:void(0)" (click)="deleteCertificationPopup(item)">
+                                        <i class="fa fa-trash text-dark"></i>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              </ng-container>
                             </ng-container>
                           </div>
                         </div>
@@ -871,7 +883,7 @@
                             <label class="form-label">Marital Status </label>
                             <select name="" id="" class="form-control" formControlName="MaritalStatus"
                               name="MaritalStatus" disabled>
-                              <option value="0" selected>Marital Status</option>
+                              <option value="" selected>Marital Status</option>
                               <option value="Single">Single/Unmarried</option>
                               <option value="Married">Married</option>
                               <option value="Widowed">Widowed</option>
@@ -883,6 +895,7 @@
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Category</label>
                             <select name="" id="" class="form-control" formControlName="Category" disabled>
+                              <option value="">Select Category</option>
                               <option value="General">General</option>
                               <option value="SC">SC</option>
                               <option value="ST">ST</option>
@@ -1429,8 +1442,19 @@
               <div class="mb-3">
                 <label class="form-label">Project Duration</label>
                 <select class="form-control" name="ProjectDuration" [(ngModel)]="editProjectModal.ProjectDuration">
-                  <option value="1" selected>1 month</option>
+                  <option value="">Select Project Status</option>
+                  <option value="1">1 month</option>
                   <option value="2">2 month</option>
+                  <option value="3">3 month</option>
+                  <option value="4">4 month</option>
+                  <option value="5">5 month</option>
+                  <option value="6">6 month</option>
+                  <option value="7">7 month</option>
+                  <option value="8">8 month</option>
+                  <option value="9">9 month</option>
+                  <option value="10">10 month</option>
+                  <option value="22">11 month</option>
+                  <option value="12">12 month</option>
                 </select>
               </div>
               <div class="mb-3">
@@ -1448,7 +1472,8 @@
               <div class="mb-3">
                 <label class="form-label">Project Status</label>
                 <select class="form-control" name="ProjectStatus" [(ngModel)]="editProjectModal.ProjectStatus">
-                  <option value="Completed" selected>Completed</option>
+                  <option value="">Select Project Status</option>
+                  <option value="Completed">Completed</option>
                   <option value="Pending">Pending</option>
                 </select>
               </div>
@@ -1894,6 +1919,7 @@
                 <label class="form-label">Desired Job Type</label>
                 <select class="form-select" aria-label="Default select example"
                   [(ngModel)]="editCarrerProfileModal.DesiredTypePermanent">
+                  <option value="">Select Desire Job Type</option>
                   <option value="1">Permanent</option>
                   <option value="2">Contractual</option>
                 </select>
@@ -1902,6 +1928,7 @@
                 <label class="form-label">Desired Emp Type</label>
                 <select class="form-select" aria-label="Default select example"
                   [(ngModel)]="editCarrerProfileModal.DesiredEmploymentType">
+                  <option value="">Select Desired Emp Type</option>
                   <option value="1">Full Time</option>
                   <option value="2">Part Time</option>
                 </select>
@@ -1915,7 +1942,7 @@
                 </div>
                 <div class="col-md-6">
                   <select name="CurrencyType" class="form-control" [(ngModel)]="editCarrerProfileModal.CurrencyType">
-                    <option value="">Select Currenty</option>
+                    <option value="">Select Currency</option>
                     <option value="INR">Indian Rupees</option>
                     <option value="USD">US Dollar</option>
                   </select>
@@ -1937,6 +1964,7 @@
               <label class="form-label">Preferred Shift</label>
               <select class="form-select" aria-label="Default select example"
                 [(ngModel)]="editCarrerProfileModal.PreferredShift">
+                <option value="">Select Preferred Shift</option>
                 <option value="1">Day</option>
                 <option value="2">Night</option>
                 <option value="2">Flexible</option>
@@ -1975,7 +2003,7 @@
         </div>
       </div>
       <div class="modal-body">
-        <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
+        <div class="col-md-12 mb-3 row py-3">
           <div class="col-md-6 pb-3">
             <label class="form-label">Date of birth </label>
             <form class="form-inline">
@@ -2028,9 +2056,9 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Marital Status </label>
-            <select name="" id="" class="form-control" [(ngModel)]="editPersonalDetailModal.MaritalStatus"
+            <select class="form-control" [(ngModel)]="editPersonalDetailModal.MaritalStatus"
               name="MaritalStatus">
-              <option value="0" selected>Marital Status</option>
+              <option value="">Select Marital Status</option>
               <option value="Single">Single/Unmarried</option>
               <option value="Married">Married</option>
               <option value="Widowed">Widowed</option>
@@ -2041,7 +2069,8 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Category</label>
-            <select name="" id="" class="form-control" [(ngModel)]="editPersonalDetailModal.Category">
+            <select class="form-control" [(ngModel)]="editPersonalDetailModal.Category">
+              <option value="">Select Category</option>
               <option value="General">General</option>
               <option value="SC">SC</option>
               <option value="ST">ST</option>

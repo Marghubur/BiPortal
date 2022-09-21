@@ -20,6 +20,9 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   isUserMode: boolean = true;
   userType: string = 'system';
+  isLoginPage: boolean = false;
+  registrationValue: any = {};
+  loginValue: any = {};
 
   @Output() userAuthState = new EventEmitter();
 
@@ -52,7 +55,7 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     if (this.UserForm) {
       this.isLoading = true;
-      let request = {
+      this.loginValue = {
         Password: null,
         EmailId: null,
         Mobile: null,
@@ -65,9 +68,9 @@ export class LoginComponent implements OnInit {
 
       if (userId.value !== "" && password.value !== "") {
         if(userId.value.indexOf("@") !== -1) {
-          request.EmailId = userId.value;
+          this.loginValue.EmailId = userId.value;
         } else {
-          request.Mobile = userId.value;
+          this.loginValue.Mobile = userId.value;
         }
 
         let url = null;
@@ -80,8 +83,8 @@ export class LoginComponent implements OnInit {
             break
         }
 
-        request.Password = password.value;
-        this.http.login(url, request).then((result: ResponseModel) => {
+        this.loginValue.Password = password.value;
+        this.http.login(url, this.loginValue).then((result: ResponseModel) => {
           if (result.ResponseBody) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
@@ -138,6 +141,74 @@ export class LoginComponent implements OnInit {
       // }
     } else {
       this.isLoading = false;
+    }
+  }
+
+  changePopup(status: string) {
+    if (status == 'loginPage') {
+      this.isLoginPage = true;
+      this.loginValue = null;
+      this.registrationValue = null;
+    }
+    else {
+      this.isLoginPage = false;
+      this.loginValue = null;
+      this.registrationValue = null;
+    }
+  }
+
+  userRegistration() {
+    this.isLoading = true;
+    this.registrationValue = {
+      Password: null,
+      EmailId: null,
+      Mobile: null,
+      OrganizationName: null,
+      CompanyName: null,
+      UserTypeId: UserType.Admin
+    };
+    this.registrationValue.EmailId = (<HTMLInputElement>document.getElementById("Email")).value;
+    this.registrationValue.Password = (<HTMLInputElement>document.getElementById("NewPassword")).value;
+    this.registrationValue.Mobile =(<HTMLInputElement>document.getElementById("Mobile")).value;
+    this.registrationValue.CompanyName =(<HTMLInputElement>document.getElementById("CompanyName")).value;
+    this.registrationValue.OrganizationName =(<HTMLInputElement>document.getElementById("OrganizationName")).value;
+    let errorCounter = 0;
+    if (this.registrationValue.EmailId == '' || this.registrationValue.EmailId == null)
+      errorCounter++;
+    if (this.registrationValue.Password == '' || this.registrationValue.Password == null)
+      errorCounter++;
+    if (this.registrationValue.CompanyName == '' || this.registrationValue.CompanyName == null)
+      errorCounter++;
+    if (this.registrationValue.Mobile == '' || this.registrationValue.Mobile == null)
+      errorCounter++;
+    if (this.registrationValue.OrganizationName == '' || this.registrationValue.OrganizationName == null)
+      errorCounter++;
+    if ((<HTMLInputElement>document.getElementById("acceptTerm")).checked == false)
+      errorCounter++;
+
+    if (this.registrationValue && errorCounter === 0) {
+      this.http.post('', this.registrationValue).then((result: ResponseModel) => {
+        if (result.ResponseBody) {
+          Toast("Registration done");
+        } else {
+          ErrorToast("Fail to registration. Please contact to admin.");
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      });
+    } else {
+      this.isLoading = false;
+    }
+  }
+
+  validateEmail() {
+    let value = (<HTMLInputElement>document.getElementById("Email")).value
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (regex.test(value))
+      return (true)
+    else {
+      ErrorToast("Invalid email address!")
+      return (false)
     }
   }
 
