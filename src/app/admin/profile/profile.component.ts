@@ -92,7 +92,6 @@ export class ManageComponent implements OnInit {
   resumeFileName: string = '';
   extension: string = '';
   isResumeUploaded: boolean = false;
-
   manageUserForm: FormGroup;
   educationForm: FormGroup;
   employmentForm: FormGroup;
@@ -147,12 +146,20 @@ export class ManageComponent implements OnInit {
   }
 
   loadData(user: any) {
+    this.isFormReady = false;
     this.http.get(`user/GetUserDetail/${this.userDetail.UserId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         let educations = null;
-
         this.isUser = true;
+        let employee = res.ResponseBody.employee;
         this.userModal = res.ResponseBody.professionalUser;
+        if (this.userModal.FirstName == "" || this.userModal.FirstName == null) {
+          this.userModal.FirstName = employee.FirstName;
+          this.userModal.LastName = employee.LastName;
+          this.userModal.Email = employee.Email;
+          this.userModal.Mobile = employee.Mobile;
+          this.userModal.EmployeeId = employee.EmployeeUid;
+        }
         let profile = res.ResponseBody.profileDetail;
         if (profile && profile.length > 0) {
           this.profile = profile.filter(x => x.FileName == ProfileImage);
@@ -192,6 +199,8 @@ export class ManageComponent implements OnInit {
       this.buildCarrerProfileForm();
       this.buildPersonalDetailForm();
       this.isFormReady = true;
+    }).catch(e => {
+      this.isFormReady = false;
     });
   }
 
@@ -212,7 +221,7 @@ export class ManageComponent implements OnInit {
         date = new Date();
       }
     }
-    
+
     this.model.year = date.getFullYear();
     this.model.month = date.getMonth() + 1;
     this.model.day = date.getDate();
@@ -227,22 +236,40 @@ export class ManageComponent implements OnInit {
       DifferentlyAbled: new FormControl(this.userModal.PersonalDetail.DifferentlyAbled),
       PermitUSA: new FormControl(this.userModal.PersonalDetail.PermitUSA),
       PermitOtherCountry: new FormControl(this.userModal.PersonalDetail.PermitOtherCountry),
-      Languages: this.fb.array([this.buildLanguages()]),
+      Languages: this.buildLanguages(),
     })
   }
 
-  buildLanguages() {
-    return this.fb.group({
-      Language: new FormControl(''),
-      CanLanguageRead: new FormControl(''),
-      CanLanguageWrite: new FormControl(''),
-      ProficiencyLanguage: new FormControl(''),
-      CanLanguageSpeak: new FormControl('')
-    });
+  buildLanguages():FormArray {
+    let data = this.userModal.PersonalDetail.LanguageDetails;
+    let dataArray: FormArray = this.fb.array([]);
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          Language: new FormControl(data[i].Language),
+          LanguageRead: new FormControl(data[i].LanguageRead),
+          LanguageWrite: new FormControl(data[i].LanguageWrite),
+          ProficiencyLanguage: new FormControl(data[i].ProficiencyLanguage),
+          LanguageSpeak: new FormControl(data[i].LanguageSpeak)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.addLanguages());
+    }
+
+    return dataArray;
   }
 
-  addLanguages() {
-    this.langauge.push(this.buildLanguages());
+  addLanguages(): FormGroup {
+    return this.fb.group({
+      Language: new FormControl(''),
+      LanguageRead: new FormControl(false),
+      LanguageWrite: new FormControl(false),
+      ProficiencyLanguage: new FormControl(''),
+      LanguageSpeak: new FormControl(false)
+    });
   }
 
   get langauge() {
@@ -269,6 +296,7 @@ export class ManageComponent implements OnInit {
     this.userModal.PersonalDetail.DifferentlyAbled = this.editPersonalDetailModal.DifferentlyAbled;
     this.userModal.PersonalDetail.PermitUSA = this.editPersonalDetailModal.PermitUSA;
     this.userModal.PersonalDetail.PermitOtherCountry = this.editPersonalDetailModal.PermitOtherCountry;
+    this.userModal.PersonalDetail.LanguageDetails = languages;
     this.updateProfile();
     $('#PersonalDetailModal').modal('hide');
     this.isLoading = false;
@@ -315,9 +343,9 @@ export class ManageComponent implements OnInit {
   addOrUpdateProject() {
     this.isLoading = true;
     let currentProjectOnEdit;
-    this.editProjectModal = new Project();
     let project = this.projectsForm.get('Projects') as FormArray;
     if (this.isEdit == false) {
+      this.editProjectModal = new Project();
       let newProject = new Project();
       currentProjectOnEdit = this.projectForm(newProject, project.length + 1);
       project.push(currentProjectOnEdit);
@@ -394,7 +422,7 @@ export class ManageComponent implements OnInit {
     return this.skillsForm.get("TechnicalSkills") as FormArray;
   }
 
-  editItSkillDetail(current: FormGroup) {
+  editItSkillDetail() {
     $("#itSkillModal").modal('show');
     this.ExptLanguage = '';
     this.ExptVersion = null;
@@ -427,6 +455,21 @@ export class ManageComponent implements OnInit {
     let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
     skill.removeAt(skill.value.findIndex(item => item.SkillIndex == skillValue.SkillIndex));
     this.userModal.Skills = skill.value;
+    this.ExptLanguage = '';
+    this.ExptVersion = null;
+    this.ExptinYrs = null;
+    this.ExptinMonths = null;
+    this.Exptdate = null;
+  }
+
+  editItSkill(e: any) {
+    let skillValue = e.value;
+    this.ExptLanguage = skillValue.Language;
+    this.ExptVersion = skillValue.Version;
+    this.ExptinYrs = skillValue.ExperienceInYear;
+    this.ExptinMonths = skillValue.ExperienceInMonth;
+    this.Exptdate = skillValue.LastUsed;
+    this.isEditItSkill = true;
   }
 
   // closeSkillModal() {
@@ -1121,6 +1164,7 @@ export class ManageComponent implements OnInit {
   }
 
   updateProfile() {
+    this.isFormReady = false;
     this.isEmpData = false;
     this.isEducationData = false;
     this.isItSkillData = false;
@@ -1128,34 +1172,27 @@ export class ManageComponent implements OnInit {
     this.isCarrerProfileData = false;
     this.http.post(`user/UpdateUserProfile/${this.userDetail.UserTypeId}`, this.userModal).then((res:ResponseModel) => {
       if (res.ResponseBody) {
-        let roleId = res.ResponseBody.RoleId;
         let detail = null;
         let educations = null;
-        switch(roleId) {
-          case 1:
-            this.isUser = false;
-            break;
-            default:
-              this.isUser = true;
-              detail = res.ResponseBody.professionalUser;
-              this.profile = res.ResponseBody.profileDetail;
-              this.userModal = detail;
-              this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
-              educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
-              this.userModal.EducationalDetails = educations;
-              this.UserId = this.userModal.EmployeeId;
-              if (this.userModal.Employments.length == 0)
-                this.isEmpData = true;
-              if (this.userModal.EducationalDetails.length == 0)
-                this.isEducationData = true;
-              if (this.userModal.Skills.length == 0)
-                this.isItSkillData = true;
-              if (this.userModal.Projects.length == 0)
-                this.isProjectData = true;
-              if (this.userModal.Companies.length == 0)
-                this.isCarrerProfileData = true;
-              break;
-        }
+        this.isUser = true;
+        detail = res.ResponseBody.professionalUser;
+        this.profile = res.ResponseBody.profileDetail;
+        this.userModal = detail;
+        if (this.profile != null)
+          this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
+        educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+        this.userModal.EducationalDetails = educations;
+        this.UserId = this.userModal.EmployeeId;
+        if (this.userModal.Employments.length == 0)
+          this.isEmpData = true;
+        if (this.userModal.EducationalDetails.length == 0)
+          this.isEducationData = true;
+        if (this.userModal.Skills.length == 0)
+          this.isItSkillData = true;
+        if (this.userModal.Projects.length == 0)
+          this.isProjectData = true;
+        if (this.userModal.Companies.length == 0)
+          this.isCarrerProfileData = true;
         this.isLoading = false;
         Toast("Employment Form submitted successfully")
       } else {
@@ -1174,6 +1211,7 @@ export class ManageComponent implements OnInit {
 
     }).catch(e => {
       this.isLoading = false;
+      this.isFormReady = false;
     })
   }
 
