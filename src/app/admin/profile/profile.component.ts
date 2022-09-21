@@ -121,6 +121,8 @@ export class ManageComponent implements OnInit {
     this.editCarrerProfileModal = new Company();
     this.editPersonalDetailModal = new PersonalDetail();
     this.editProjectModal = new Project();
+    this.userModal.PersonalDetail.MaritalStatus = '';
+    this.userModal.PersonalDetail.Category = '';
     this.basePath = this.http.GetImageBasePath();
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
@@ -281,6 +283,7 @@ export class ManageComponent implements OnInit {
     let date = new Date(this.personalDetailForm.value.DOB);
     this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
     this.editPersonalDetailModal = this.personalDetailForm.value;
+    this.buildPersonalDetailForm();
   }
 
   submitPersonalDetails() {
@@ -1399,7 +1402,7 @@ class ProfessionalUser {
   EducationalDetails: EducationalDetail[] = [];
   Projects: Project[] = [];
   Accomplishments: Accomplishment = null;
-  PersonalDetail: PersonalDetail = null;
+  PersonalDetail: PersonalDetail = new PersonalDetail();
   Employments: Array<Employment> = [];
 }
 
