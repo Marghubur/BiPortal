@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   isLoginPage: boolean = false;
   registrationValue: any = {};
   loginValue: any = {};
+  agreeWithTermsAndCondition: boolean = false;
 
   @Output() userAuthState = new EventEmitter();
 
@@ -157,42 +158,48 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  enableSignUp(e: any) {
+    if (e.currentTarget.checked == true)
+      this.agreeWithTermsAndCondition = true;
+    else
+      this.agreeWithTermsAndCondition = false;
+  }
+
   userRegistration() {
     this.isLoading = true;
     this.registrationValue = {
-      Password: null,
       EmailId: null,
       Mobile: null,
       OrganizationName: null,
       CompanyName: null,
-      UserTypeId: UserType.Admin
+      AuthenticationCode: null,
     };
     this.registrationValue.EmailId = (<HTMLInputElement>document.getElementById("Email")).value;
-    this.registrationValue.Password = (<HTMLInputElement>document.getElementById("NewPassword")).value;
     this.registrationValue.Mobile =(<HTMLInputElement>document.getElementById("Mobile")).value;
     this.registrationValue.CompanyName =(<HTMLInputElement>document.getElementById("CompanyName")).value;
     this.registrationValue.OrganizationName =(<HTMLInputElement>document.getElementById("OrganizationName")).value;
+    this.registrationValue.AuthenticationCode =(<HTMLInputElement>document.getElementById("AuthenticationCode")).value;
+    
     let errorCounter = 0;
-    if (this.registrationValue.EmailId == '' || this.registrationValue.EmailId == null)
+    if (!this.registrationValue.EmailId || this.registrationValue.EmailId == "")
       errorCounter++;
-    if (this.registrationValue.Password == '' || this.registrationValue.Password == null)
+    if (!this.registrationValue.Mobile || this.registrationValue.Mobile == "")
       errorCounter++;
-    if (this.registrationValue.CompanyName == '' || this.registrationValue.CompanyName == null)
+    if (!this.registrationValue.CompanyName || this.registrationValue.CompanyName == "")
       errorCounter++;
-    if (this.registrationValue.Mobile == '' || this.registrationValue.Mobile == null)
+    if (!this.registrationValue.OrganizationName || this.registrationValue.OrganizationName == "")
       errorCounter++;
-    if (this.registrationValue.OrganizationName == '' || this.registrationValue.OrganizationName == null)
-      errorCounter++;
-    if ((<HTMLInputElement>document.getElementById("acceptTerm")).checked == false)
+    if (!this.registrationValue.AuthenticationCode || this.registrationValue.AuthenticationCode == '')
       errorCounter++;
 
     if (this.registrationValue && errorCounter === 0) {
-      this.http.post('', this.registrationValue).then((result: ResponseModel) => {
+      this.http.post('login/SignUpNew', this.registrationValue).then((result: ResponseModel) => {
         if (result.ResponseBody) {
           Toast("Registration done");
         } else {
           ErrorToast("Fail to registration. Please contact to admin.");
         }
+        this.isLoading = false;
       }).catch(e => {
         this.isLoading = false;
       });
