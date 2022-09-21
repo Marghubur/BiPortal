@@ -135,7 +135,7 @@ export class BuildPdfComponent implements OnInit {
 
     this.http.post("Timesheet/GetEmployeeTimeSheet", timesheetStatusFor).then ((response: ResponseModel) => {
       if (response.ResponseBody) {
-        this.buildTimeSheet(response.ResponseBody);      
+        this.buildTimeSheet(response.ResponseBody);
       }
       this.isClientSelected = true;
     });
@@ -145,7 +145,7 @@ export class BuildPdfComponent implements OnInit {
     let burnDays = 0;
     let missinngAtt = data.MissingDate;
     let timesheetDetails = data.TimesheetDetails;
-    
+
     if (missinngAtt.length > 0) {
       let i = 0;
       while(i < missinngAtt.length) {
@@ -201,7 +201,7 @@ export class BuildPdfComponent implements OnInit {
         if (response.ResponseBody) {
           this.applicationData = response.ResponseBody as ApplicationData;
           this.employees = this.applicationData.Employees;
-          this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === 1);
+          this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === 3);
           this.pdfModal = new PdfModal();
           if (this.currentOrganization != null) {
             this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
@@ -312,7 +312,7 @@ export class BuildPdfComponent implements OnInit {
       if (response.ResponseBody !== null) {
         this.applicationData = response.ResponseBody as ApplicationData;
         this.employees = this.applicationData.Employees;
-        this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === 1);
+        this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === 3);
         if (this.currentOrganization != null) {
           this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
           this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
@@ -774,7 +774,7 @@ export class BuildPdfComponent implements OnInit {
 
   findReceiverClientDetail() {
     let value = this.pdfForm.get('receiverCompanyId').value;
-    if(value) 
+    if(value)
       this.bindClientDetail(value);
     else
       ErrorToast("Company not selected properly.");
@@ -839,7 +839,7 @@ export class BuildPdfComponent implements OnInit {
   }
 
   getFileExtension(value: any) {
-    this.downLoadFileExtension = "." + value.target.value;
+    this.downLoadFileExtension = "." + value;
     this.downloadPdfDocx();
   }
 
@@ -938,7 +938,7 @@ export class BuildPdfComponent implements OnInit {
         ForYear: firstDate.getFullYear(),
         ClientId: this.pdfForm.get("receiverCompanyId").value
       };
-  
+
       formData.append('comment', JSON.stringify(value));
       formData.append('dailyTimesheetDetail', JSON.stringify(this.allTimesheet));
       formData.append('timesheet', JSON.stringify(timeSheetDetail));

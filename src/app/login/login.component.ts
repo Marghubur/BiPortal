@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   isUserMode: boolean = true;
   userType: string = 'system';
-  isLoginPage: boolean = false;
+  isLoginPage: boolean = true;
   registrationValue: any = {};
   loginValue: any = {};
   agreeWithTermsAndCondition: boolean = false;
@@ -179,7 +179,7 @@ export class LoginComponent implements OnInit {
     this.registrationValue.CompanyName =(<HTMLInputElement>document.getElementById("CompanyName")).value;
     this.registrationValue.OrganizationName =(<HTMLInputElement>document.getElementById("OrganizationName")).value;
     this.registrationValue.AuthenticationCode =(<HTMLInputElement>document.getElementById("AuthenticationCode")).value;
-    
+
     let errorCounter = 0;
     if (!this.registrationValue.EmailId || this.registrationValue.EmailId == "")
       errorCounter++;
