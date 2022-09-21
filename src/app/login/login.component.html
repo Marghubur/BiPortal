@@ -21,52 +21,110 @@
         </div>
         <div class="col-md-5 d-flex flex-column justify-content-center log-vh-95">
           <div class="d-flex flex-column justify-content-between">
-            <ng-container *ngIf="isUserMode">
+            <ng-container *ngIf="isLoginPage">
+              <ng-container *ngIf="isUserMode">
+                <div class="col-lg-12">
+                  <div class="card2 card border-0 px-4 py-5">
+                    <div class="d-flex justify-content-between">
+                      <div class="login-box-header btn-primary-dark">
+                        <div class="active role-box" (click)="enableEmployee()"
+                          [ngClass]="{'active': userType == 'employee'}">
+                          <label class="form-check-label">Employee</label>
+                        </div>
+                        <div class="role-box" (click)="enableSystem()" [ngClass]="{'active': userType == 'system'}">
+                          <label class="form-check-label">System User</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-1">
+                      <div class="row m-0 p-0"> <label class="mb-1">
+                          <h6 class="mb-0 text-sm">Email Address</h6>
+                        </label> <input class="mb-4" id="EmailOrMobile" placeholder="Email or Mobile Number"
+                          name="UserId">
+                      </div>
+                      <div class="row m-0 p-0">
+                        <label class="mb-1">
+                          <h6 class="mb-0 text-sm">Password</h6>
+                        </label>
+                        <input type="password" (keyup.enter)="UserLogin()" placeholder="Password" id="Password"
+                          name="Password">
+                      </div>
+                      <div class="d-flex pe-1 ps-3 pt-3 mb-4 col-md-12 justify-content-between">
+                        <div class="form-check d-flex">
+                          <input class="form-check-input form-check-inputbox" type="checkbox" id="gridCheck">
+                          <label class="form-check-label ps-2" for="gridCheck">
+                            I agree to our Terms of Service
+                          </label>
+                        </div>
+                        <a href="javascript:void(0)" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+                      </div>
+                      <div class="row mb-3 px-3">
+                        <button type="button" (click)="UserLogin()" [disabled]="isLoading"
+                          class="btn btn-primary-dark text-center">
+                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                          {{ isLoading ? 'Signing' : 'Sing In' }}</button>
+                      </div>
+                    </div>
+                    <div class="row mb-4 px-3"> <small class="fw-bold register-msg">Don't have an account? <a
+                          class="text-danger" href="javascript:void(0)" (click)="changePopup('registrationPage')">
+                          Register</a></small> </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="!isLoginPage">
               <div class="col-lg-12">
                 <div class="card2 card border-0 px-4 py-5">
-                  <div class="d-flex justify-content-between">
-                    <div class="login-box-header btn-primary-dark">
-                      <div class="active role-box" (click)="enableEmployee()"
-                        [ngClass]="{'active': userType == 'employee'}">
-                        <label class="form-check-label">Employee</label>
-                      </div>
-                      <div class="role-box" (click)="enableSystem()" [ngClass]="{'active': userType == 'system'}">
-                        <label class="form-check-label">System User</label>
-                      </div>
-                    </div>
+                  <div class="row m-0 p-0">
+                    <label class="mb-1">
+                      <h6 class="mb-0 text-sm">Organization Name</h6>
+                    </label>
+                    <input class="mb-4" id="OrganizationName" placeholder="Organization Name" name="OrganizationName" oninput="this.value = this.value.toUpperCase()">
                   </div>
-                  <div class="mt-1">
-                    <div class="row m-0 p-0"> <label class="mb-1">
-                        <h6 class="mb-0 text-sm">Email Address</h6>
-                      </label> <input class="mb-4" id="EmailOrMobile" placeholder="Email or Mobile Number"
-                        name="UserId">
-                    </div>
-                    <div class="row m-0 p-0">
-                      <label class="mb-1">
-                        <h6 class="mb-0 text-sm">Password</h6>
+                  <div class="row m-0 p-0">
+                    <label class="mb-1">
+                      <h6 class="mb-0 text-sm">Company Name</h6>
+                    </label>
+                    <input class="mb-4" id="CompanyName" placeholder="Company Name" name="CompanyName" oninput="this.value = this.value.toUpperCase()">
+                  </div>
+                  <div class="row m-0 p-0">
+                    <label class="mb-1">
+                      <h6 class="mb-0 text-sm">Mobile No</h6>
+                    </label>
+                    <input class="mb-4" type="text" id="Mobile" placeholder="Mobile Number" name="Mobile" pattern="[1-9]{1}[0-9]{9}">
+                  </div>
+                  <div class="row m-0 p-0">
+                    <label class="mb-1">
+                      <h6 class="mb-0 text-sm">Email Address</h6>
+                    </label>
+                    <input class="mb-4" id="Email" placeholder="Email" name="Email" (blur)="validateEmail()">
+                  </div>
+                  <div class="row m-0 p-0">
+                    <label class="mb-1">
+                      <h6 class="mb-0 text-sm">Password</h6>
+                    </label>
+                    <input type="password" placeholder="Password" id="NewPassword"
+                      name="Password">
+                  </div>
+                  <div class="d-flex pe-1 ps-3 pt-3 mb-4 col-md-12 justify-content-between">
+                    <div class="form-check d-flex">
+                      <input class="form-check-input form-check-inputbox" type="checkbox" id="acceptTerm">
+                      <label class="form-check-label ps-2" for="acceptTerm">
+                        I agree to our Terms of Service
                       </label>
-                      <input type="password" (keyup.enter)="UserLogin()" placeholder="Password" id="Password"
-                        name="Password">
-                    </div>
-                    <div class="d-flex pe-1 ps-3 pt-3 mb-4 col-md-12 justify-content-between">
-                      <div class="form-check d-flex">
-                        <input class="form-check-input form-check-inputbox" type="checkbox" id="gridCheck">
-                        <label class="form-check-label ps-2" for="gridCheck">
-                          I agree to our Terms of Service
-                        </label>
-                      </div>
-                      <a href="javascript:void(0)" class="ml-auto mb-0 text-sm">Forgot Password?</a>
-                    </div>
-                    <div class="row mb-3 px-3">
-                      <button type="button" (click)="UserLogin()" [disabled]="isLoading"
-                        class="btn btn-primary-dark text-center">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                        {{ isLoading ? 'Signing' : 'Sing In' }}</button>
                     </div>
                   </div>
-                  <div class="row mb-4 px-3"> <small class="fw-bold register-msg">Don't have an account? <a
-                        class="text-danger" href="javascript:void(0)">
-                        Register</a></small> </div>
+                  <div class="row mb-3 px-3">
+                    <button type="button" (click)="userRegistration()" [disabled]="isLoading"
+                      class="btn btn-primary-dark text-center">
+                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+                      {{ isLoading ? 'Wait' : 'Register' }}</button>
+                  </div>
+                  <div class="row mb-4 px-3">
+                    <small class="fw-bold register-msg">I have an account <a class="text-danger" href="javascript:void(0)" (click)="changePopup('loginPage')">
+                        Login</a>
+                    </small>
+                  </div>
                 </div>
               </div>
             </ng-container>
