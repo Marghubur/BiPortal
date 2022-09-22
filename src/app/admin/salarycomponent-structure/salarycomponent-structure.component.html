@@ -32,8 +32,7 @@
               <div class="col-md-3">
                 <div class="form-group has-search">
                   <span class="fa fa-search form-control-feedback"></span>
-                  <input type="text" class="form-control" placeholder="Search" (keydown.enter)="filterComponent($event)"
-                    (keydown.esc)="resetFilter($event)">
+                  <input type="text" class="form-control" placeholder="Search" (keyup)="filterFixedComponent($event)" (keydown.esc)="resetFixedCompFilter($event)">
                 </div>
               </div>
             </div>
@@ -253,7 +252,7 @@
         <div class="col-md-3 float-end">
           <div class="form-group has-search">
             <span class="fa fa-search form-control-feedback"></span>
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="text" class="form-control" placeholder="Search" oninput="this.value = this.value.toUpperCase()" (keyup)="filterComponent($event)">
           </div>
         </div>
         <!-- <form [formGroup]="addComponentForm" *ngIf="addComponentForm"> -->

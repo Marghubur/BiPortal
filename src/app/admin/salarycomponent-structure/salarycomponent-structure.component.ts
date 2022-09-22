@@ -13,6 +13,7 @@ declare var $: any;
 export class SalarycomponentStructureComponent implements OnInit {
   ActivatedPage: number = 1;
   salaryComponentFields: Array<any> = [];
+  allSalaryCOmponents: Array<any> = [];
   salaryComponentActiveFields: Array<SalaryComponentFields> = [];
   currentSalaryComponent: SalaryComponentFields = null;
   editSalaryComponent: FormGroup;
@@ -43,7 +44,8 @@ export class SalarycomponentStructureComponent implements OnInit {
     .then(res => {
       if(res.ResponseBody) {
         if(res.ResponseBody.length > 0) {
-          this.salaryComponentFields = res.ResponseBody
+          this.salaryComponentFields = res.ResponseBody;
+          this.allSalaryCOmponents = res.ResponseBody;
           this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsOpted);
           this.allAdHocComponent = res.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId > 0);
           this.isPageReady = true;
@@ -223,20 +225,36 @@ export class SalarycomponentStructureComponent implements OnInit {
   filterComponent(e: any) {
     let value = e.target.value.toUpperCase();
     if (value) {
-      this.salaryComponentActiveFields = this.salaryComponentActiveFields.filter(x => x.ComponentId == value || x.ComponentFullName.toUpperCase().indexOf(value) != -1);
-    }
+      this.salaryComponentFields = this.allSalaryCOmponents.filter(x => x.ComponentId.toUpperCase().indexOf(value) != -1 || x.ComponentFullName.toUpperCase().indexOf(value) != -1);
+    } else
+      this.salaryComponentFields = this.allSalaryCOmponents;
   }
 
   filterAdHocComponent(e: any) {
     let value = e.target.value.toUpperCase();
-    if (value) {
-      this.allAdHocComponent = this.allAdHocComponent.filter(x => x.ComponentId == value || x.ComponentFullName.toUpperCase().indexOf(value) != -1);
+    if (value && value != '') {
+      this.allAdHocComponent = this.allAdHocComponent.filter(x => x.ComponentId.toUpperCase().indexOf(value) != -1 || x.ComponentFullName.toUpperCase().indexOf(value) != -1);
     }
+  }
+
+  filterFixedComponent(e: any) {
+    let value = e.target.value.toUpperCase();
+    let data = this.salaryComponentFields.filter(x => x.IsOpted);
+    if (value) {
+      this.salaryComponentActiveFields = data.filter(x => x.ComponentId.toUpperCase().indexOf(value) != -1 || x.ComponentFullName.toUpperCase().indexOf(value) != -1);
+    } else
+      this.salaryComponentActiveFields = data;
+  }
+
+  resetFixedCompFilter(e: any) {
+    e.target.value = '';
+    this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsOpted);
   }
 
   resetFilter(e: any) {
     e.target.value = '';
-    this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsOpted);
+    this.salaryComponentFields = this.allSalaryCOmponents;
+    //this.salaryComponentActiveFields = this.salaryComponentFields.filter(x => x.IsOpted);
   }
 
   resetAdHocFilter(e: any) {
