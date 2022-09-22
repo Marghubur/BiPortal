@@ -34,7 +34,6 @@ export class CustomsalaryStructureComponent implements OnInit {
   selectedSalaryStructure: SalaryStructureType = new SalaryStructureType();
   isSalaryGrpSelected: boolean = false;
   isPageReady: boolean = true;
-  filterText: string = "";
   payrollCompoent: string = PayrollComponents;
   groupComponents: Array<any> = [];
   groupAllComponents: Array<any> = [];
@@ -496,9 +495,10 @@ export class CustomsalaryStructureComponent implements OnInit {
   filterRecords(e: any) {
     this.isReady = false;
     let value = e.target.value.toUpperCase();
-    if (value) {
-      this.groupComponents =  this.groupAllComponents.filter(x => x.ComponentId == value || x.ComponentFullName == value)
-    }
+    if (value && value != '') {
+      this.groupComponents =  this.groupAllComponents.filter(x => x.ComponentId.toUpperCase().indexOf(value) != -1 || x.ComponentFullName.toUpperCase().indexOf(value) != -1)
+    } else
+    this.groupComponents =  this.groupAllComponents;
     this.isReady = true;
   }
 
@@ -511,9 +511,10 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   filterSalaryComponent(event: any) {
     let value = event.target.value.toUpperCase();
-    if (value) {
-      this.salaryComponentFields =  this.allComponentFields.filter(x => x.ComponentId == value || x.ComponentFullName == value)
-    }
+    if (value && value != '') {
+      this.salaryComponentFields =  this.allComponentFields.filter(x => x.ComponentId.toUpperCase().indexOf(value) != -1 || x.ComponentFullName.toUpperCase().indexOf(value) != -1)
+    } else
+      this.salaryComponentFields = this.allComponentFields;
   }
 
   resetSalaryFilter(e: any) {

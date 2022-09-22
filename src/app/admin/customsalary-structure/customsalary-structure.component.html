@@ -95,8 +95,7 @@
                       </span>
                     </div>
                     <input type="text" class="form-control border-start-0" (keyup.esc)="clearFilter($event)"
-                      (keydown.enter)="filterRecords($event)" placeholder="Search component by name"
-                      [(ngModel)]="filterText" [ngModelOptions]="{standalone: true}">
+                      (keyup)="filterRecords($event)" placeholder="Search component by name">
                   </div>
                 </div>
               </div>
@@ -318,7 +317,7 @@
           <div class="form-group has-search">
             <span class="fa fa-search form-control-feedback"></span>
             <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-              (keyup.Tab)="resetSalaryFilter($event)" (keyup.enter)="filterSalaryComponent($event)">
+              (keyup.Tab)="resetSalaryFilter($event)" (keyup)="filterSalaryComponent($event)">
           </div>
         </div>
         <div class="t-table mt-5 t-list t-border col-md-12 my-3">

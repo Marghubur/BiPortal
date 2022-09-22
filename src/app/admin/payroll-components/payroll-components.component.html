@@ -41,7 +41,7 @@
                           <div class="form-group has-search">
                             <span class="fa fa-search form-control-feedback"></span>
                             <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
-                              (keydown.esc)="reloadAllRecurring($event)" (keyup.enter)="filterRecords($event)"
+                              (keydown.esc)="reloadAllRecurring($event)" (keyup)="filterRecords($event)"
                               placeholder="Search Component">
                           </div>
                         </div>
@@ -291,7 +291,7 @@
             <div class="col-md-12 mt-3">
               <label for="" class="form-label">COMPONENT DESCRIPTION</label>
               <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
-                [readonly]="ComponentType == ''" class="form-control"></textarea>
+                [readonly]="ComponentType == ''" oninput="this.value = this.value.toUpperCase()" class="form-control"></textarea>
             </div>
           </div>
           <div class="col-md-12">
