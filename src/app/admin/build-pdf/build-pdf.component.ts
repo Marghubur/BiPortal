@@ -62,6 +62,7 @@ export class BuildPdfComponent implements OnInit {
   email:Array<string> = [];
   billAllDetails: any = null;
   templateText: any = null;
+  isClientAssigned: boolean = true;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -75,6 +76,7 @@ export class BuildPdfComponent implements OnInit {
     this.viewer = document.getElementById("file-container");
     let data = this.nav.getValue();
     this.editMode = false;
+    this.isClientAssigned = true;
     this.basePath = this.http.GetImageBasePath();
     //----- edit mode -----
     if (data) {
@@ -312,7 +314,7 @@ export class BuildPdfComponent implements OnInit {
       if (response.ResponseBody !== null) {
         this.applicationData = response.ResponseBody as ApplicationData;
         this.employees = this.applicationData.Employees;
-        this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === 3);
+        this.currentOrganization = this.applicationData.Organizations.find(x => x.IsPrimaryCompany === true);
         if (this.currentOrganization != null) {
           this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
           this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
@@ -567,11 +569,15 @@ export class BuildPdfComponent implements OnInit {
 
   findEmployeeById(employeeId: any) {
     this.isClientSelected = false;
+    this.isClientAssigned = true;
     if (employeeId) {
       this.currentEmployee = this.employees.find(x => x.EmployeeUid === parseInt(employeeId));
       if (this.currentEmployee) {
         if(this.currentEmployee.ClientJson != null && this.currentEmployee.ClientJson != '')
           this.assignedClients = JSON.parse(this.currentEmployee.ClientJson); // this.applicationData.allocatedClients.filter(x => x.EmployeeUid == this.currentEmployee.EmployeeUid);
+        else
+          this.isClientAssigned = false;
+
         this.pdfForm.controls["developerName"].setValue(this.currentEmployee.FirstName + " " + this.currentEmployee.LastName);
         if (!this.editMode) {
           this.pdfForm.controls["packageAmount"].setValue(this.currentEmployee.FinalPackage);
