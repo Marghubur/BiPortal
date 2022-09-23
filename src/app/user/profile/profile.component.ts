@@ -16,7 +16,7 @@ declare var $: any;
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  active = 1;
+  active = 8;
   model: NgbDateStruct;
   submitted: boolean = false;
   userModal: ProfessionalUser = null;
@@ -133,7 +133,7 @@ export class ProfileComponent implements OnInit {
       let Master = this.local.get(null);
       if(Master !== null && Master !== "") {
         this.userDetail = Master["UserDetail"];
-        this.loadData(this.userDetail)
+        this.loadData()
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -141,55 +141,58 @@ export class ProfileComponent implements OnInit {
       this.userDetail = data;
       this.userDetail.UserId = data.EmployeeUid;
       this.userDetail.UserTypeId = UserType.Employee;
-      this.loadData(this.userDetail);
+      this.loadData();
     }
   }
 
-  loadData(user: any) {
-    this.http.get(`user/GetUserDetail/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`).then((res: ResponseModel) => {
+  loadData() {
+    this.isFormReady = false;
+    this.http.get(`user/GetUserDetail/${this.userDetail.UserId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        let roleId = res.ResponseBody.RoleId;
-        let detail = null;
         let educations = null;
-        switch(roleId) {
-          case 1:
-            this.isUser = false;
-            break;
-          default:
-            this.isUser = true;
-            detail = res.ResponseBody.professionalUser;
-            let profile = res.ResponseBody.profileDetail;
-            if (profile.length > 0) {
-              this.profile = profile.filter(x => x.FileName == ProfileImage);
-              this.profileId = this.profile[0].FileId;
-              this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
-            }
-            this.userModal = detail;
-            let document = profile.filter(x => x.FileName == "resume");
-            if (document.length > 0) {
-              this.documentId = document[0].FileId;
-              this.resumePath = document[0].FilePath;
-              this.resumeFileName = document[0].FileName;
-              this.extension = document[0].FileExtension;
-              this.isResumeUploaded = true;
-            }
-            educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
-            this.userModal.Educational_Detail = educations;
-            this.UserId = this.userModal.UserId;
-            if (this.userModal.Employments.length == 0)
-              this.isEmpData = true;
-            if (this.userModal.Educational_Detail.length == 0)
-              this.isEducationData = true;
-            if (this.userModal.Skills.length == 0)
-              this.isItSkillData = true;
-            if (this.userModal.Projects.length == 0)
-              this.isProjectData = true;
-            if (this.userModal.Companies.length == 0)
-              this.isCarrerProfileData = true;
-            break;
+        this.isUser = true;
+        let employee = res.ResponseBody.employee;
+        this.userModal = res.ResponseBody.professionalUser;
+        if (this.userModal.FirstName == "" || this.userModal.FirstName == null) {
+          this.userModal.FirstName = employee.FirstName;
+          this.userModal.LastName = employee.LastName;
+          this.userModal.Email = employee.Email;
+          this.userModal.Mobile = employee.Mobile;
+          this.userModal.EmployeeId = employee.EmployeeUid;
+          this.userModal.PersonalDetail.Address = employee.Address;
+          this.userModal.PersonalDetail.Gender = employee.Gender;
+          this.userModal.PersonalDetail.HomeTown = employee.City;
+          this.userModal.PersonalDetail.PinCode = employee.Pincode;
+          this.userModal.PersonalDetail.DOB = employee.DOB;
         }
-      } else {
-        ErrorToast("Invalid user. Please login again.");
+        let profile = res.ResponseBody.profileDetail;
+        if (profile && profile.length > 0) {
+          this.profile = profile.filter(x => x.FileName == ProfileImage);
+          this.profileId = this.profile[0].FileId;
+          this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
+          let document = profile.filter(x => x.FileName == "resume");
+          if (document.length > 0) {
+            this.documentId = document[0].FileId;
+            this.resumePath = document[0].FilePath;
+            this.resumeFileName = document[0].FileName;
+            this.extension = document[0].FileExtension;
+            this.isResumeUploaded = true;
+          }
+        }
+
+        educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+        this.userModal.EducationalDetails = educations;
+        this.UserId = this.userModal.EmployeeId;
+        if (this.userModal.Employments.length == 0)
+          this.isEmpData = true;
+        if (this.userModal.EducationalDetails.length == 0)
+          this.isEducationData = true;
+        if (this.userModal.Skills.length == 0)
+          this.isItSkillData = true;
+        if (this.userModal.Projects.length == 0)
+          this.isProjectData = true;
+        if (this.userModal.Companies.length == 0)
+          this.isCarrerProfileData = true;
       }
 
       this.initForm();
@@ -201,6 +204,8 @@ export class ProfileComponent implements OnInit {
       this.buildCarrerProfileForm();
       this.buildPersonalDetailForm();
       this.isFormReady = true;
+    }).catch(e => {
+      this.isFormReady = false;
     });
   }
 
@@ -214,16 +219,20 @@ export class ProfileComponent implements OnInit {
   //----------------- Personal Detail form, group and add new ------------------------
 
   buildPersonalDetailForm() {
-    let date = new Date(this.userModal.PersonalDetail.DOB);
-    if (date.getFullYear() == 1) {
-      date = new Date();
+    let date = new Date();
+    if(this.userModal.PersonalDetail.DOB) {
+      let date = new Date(this.userModal.PersonalDetail.DOB);
+      if (date.getFullYear() == 1) {
+        date = new Date();
+      }
     }
+
     this.model.year = date.getFullYear();
     this.model.month = date.getMonth() + 1;
     this.model.day = date.getDate();
     this.personalDetailForm = this.fb.group({
       DOB: new FormControl(date),
-      Gender: new FormControl(this.userModal.PersonalDetail.Gender),
+      Gender: new FormControl(this.userModal.PersonalDetail.Gender ? 'male' : 'female'),
       Address: new FormControl(this.userModal.PersonalDetail.Address),
       HomeTown: new FormControl(this.userModal.PersonalDetail.HomeTown),
       PinCode: new FormControl(this.userModal.PersonalDetail.PinCode),
@@ -232,22 +241,40 @@ export class ProfileComponent implements OnInit {
       DifferentlyAbled: new FormControl(this.userModal.PersonalDetail.DifferentlyAbled),
       PermitUSA: new FormControl(this.userModal.PersonalDetail.PermitUSA),
       PermitOtherCountry: new FormControl(this.userModal.PersonalDetail.PermitOtherCountry),
-      Languages: this.fb.array([this.buildLanguages()]),
+      Languages: this.buildLanguages(),
     })
   }
 
-  buildLanguages() {
-    return this.fb.group({
-      Language: new FormControl(''),
-      CanLanguageRead: new FormControl(''),
-      CanLanguageWrite: new FormControl(''),
-      ProficiencyLanguage: new FormControl(''),
-      CanLanguageSpeak: new FormControl('')
-    });
+  buildLanguages():FormArray {
+    let data = this.userModal.PersonalDetail.LanguageDetails;
+    let dataArray: FormArray = this.fb.array([]);
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          Language: new FormControl(data[i].Language),
+          LanguageRead: new FormControl(data[i].LanguageRead),
+          LanguageWrite: new FormControl(data[i].LanguageWrite),
+          ProficiencyLanguage: new FormControl(data[i].ProficiencyLanguage),
+          LanguageSpeak: new FormControl(data[i].LanguageSpeak)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.addLanguages());
+    }
+
+    return dataArray;
   }
 
-  addLanguages() {
-    this.langauge.push(this.buildLanguages());
+  addLanguages(): FormGroup {
+    return this.fb.group({
+      Language: new FormControl(''),
+      LanguageRead: new FormControl(false),
+      LanguageWrite: new FormControl(false),
+      ProficiencyLanguage: new FormControl(''),
+      LanguageSpeak: new FormControl(false)
+    });
   }
 
   get langauge() {
@@ -259,6 +286,7 @@ export class ProfileComponent implements OnInit {
     let date = new Date(this.personalDetailForm.value.DOB);
     this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
     this.editPersonalDetailModal = this.personalDetailForm.value;
+    this.buildPersonalDetailForm();
   }
 
   submitPersonalDetails() {
@@ -274,6 +302,7 @@ export class ProfileComponent implements OnInit {
     this.userModal.PersonalDetail.DifferentlyAbled = this.editPersonalDetailModal.DifferentlyAbled;
     this.userModal.PersonalDetail.PermitUSA = this.editPersonalDetailModal.PermitUSA;
     this.userModal.PersonalDetail.PermitOtherCountry = this.editPersonalDetailModal.PermitOtherCountry;
+    this.userModal.PersonalDetail.LanguageDetails = languages;
     this.updateProfile();
     $('#PersonalDetailModal').modal('hide');
     this.isLoading = false;
@@ -320,9 +349,9 @@ export class ProfileComponent implements OnInit {
   addOrUpdateProject() {
     this.isLoading = true;
     let currentProjectOnEdit;
-    this.editProjectModal = new Project();
     let project = this.projectsForm.get('Projects') as FormArray;
     if (this.isEdit == false) {
+      //this.editProjectModal = new Project();
       let newProject = new Project();
       currentProjectOnEdit = this.projectForm(newProject, project.length + 1);
       project.push(currentProjectOnEdit);
@@ -399,7 +428,7 @@ export class ProfileComponent implements OnInit {
     return this.skillsForm.get("TechnicalSkills") as FormArray;
   }
 
-  editItSkillDetail(current: FormGroup) {
+  editItSkillDetail() {
     $("#itSkillModal").modal('show');
     this.ExptLanguage = '';
     this.ExptVersion = null;
@@ -432,6 +461,21 @@ export class ProfileComponent implements OnInit {
     let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
     skill.removeAt(skill.value.findIndex(item => item.SkillIndex == skillValue.SkillIndex));
     this.userModal.Skills = skill.value;
+    this.ExptLanguage = '';
+    this.ExptVersion = null;
+    this.ExptinYrs = null;
+    this.ExptinMonths = null;
+    this.Exptdate = null;
+  }
+
+  editItSkill(e: any) {
+    let skillValue = e.value;
+    this.ExptLanguage = skillValue.Language;
+    this.ExptVersion = skillValue.Version;
+    this.ExptinYrs = skillValue.ExperienceInYear;
+    this.ExptinMonths = skillValue.ExperienceInMonth;
+    this.Exptdate = skillValue.LastUsed;
+    this.isEditItSkill = true;
   }
 
   // closeSkillModal() {
@@ -449,7 +493,7 @@ export class ProfileComponent implements OnInit {
   //----------------- Accomplishments form, group and add new ------------------------
 
     buildAccomplishmentsForm() {
-      if(this.userModal.Accomplishments.Certification !== null && this.userModal.Accomplishments.OnlineProfile !== null) {
+      if(this.userModal.Accomplishments && this.userModal.Accomplishments.Certification !== null && this.userModal.Accomplishments.OnlineProfile !== null) {
         this.accomplishmentsForm = this.fb.group({
           OnlineProfiles: this.fb.array(this.userModal.Accomplishments.OnlineProfile.map(item => this.buildOnlieProfiles(item))),
           WorkSamples: this.fb.array(this.userModal.Accomplishments.WorkSample.map(item => this.buildWorkSamples(item))),
@@ -457,7 +501,7 @@ export class ProfileComponent implements OnInit {
           Presentations: this.fb.array(this.userModal.Accomplishments.Presentation.map(item => this.buildPresentations(item))),
           Patents: this.fb.array(this.userModal.Accomplishments.Patent.map(item => this.buildPatents(item))),
           Certifications: this.fb.array(this.userModal.Accomplishments.Certification.map((item, index) => this.buildCertifications(item)))
-        })
+        });
       } else {
         this.accomplishmentsForm = this.fb.group({
           OnlineProfiles: this.fb.array([this.buildOnlieProfiles('')]),
@@ -851,7 +895,7 @@ export class ProfileComponent implements OnInit {
 
   buildEducationForm() {
     this.educationForm = this.fb.group({
-      Educations: this.fb.array(this.userModal.Educational_Detail.map((item, index) => {
+      Educations: this.fb.array(this.userModal.EducationalDetails.map((item, index) => {
         return this.createEducationForm(item, index)
       }))
     })
@@ -1053,20 +1097,12 @@ export class ProfileComponent implements OnInit {
 
 
   initForm() {
-    if (this.userModal.Name != null && this.userModal.Name != '') {
-      let fullName = this.userModal.Name.split(" ");
-      if(fullName.length > 0 && this.userModal.FirstName == null && this.userModal.FirstName == '') {
-        this.userModal.FirstName = fullName[0];
-        this.userModal.LastName = fullName.splice(1, 1).join(" ");
-      }
-    }
-
     this.manageUserForm = this.fb .group({
-      UserId: new FormControl(this.userModal.UserId),
+      UserId: new FormControl(this.userModal.EmployeeId),
       FirstName: new FormControl(this.userModal.FirstName),
       LastName: new FormControl (this.userModal.LastName),
       Email: new FormControl(this.userModal.Email),
-      Mobile: new FormControl(this.userModal.Mobile_Number),
+      Mobile: new FormControl(this.userModal.Mobile),
       ResumeHeadline: new FormControl(this.userModal.ResumeHeadline),
       ProfileImgPath: new FormControl(''),
       ResumePath: new FormControl(''),
@@ -1088,7 +1124,7 @@ export class ProfileComponent implements OnInit {
   submitEducationDetail() {
     this.isLoading = true;
     let educations = this.educationForm.controls['Educations'].value;
-    this.userModal.Educational_Detail = educations;
+    this.userModal.EducationalDetails = educations;
     this.updateProfile();
     this.isLoading = false;
   }
@@ -1134,6 +1170,7 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile() {
+    this.isFormReady = false;
     this.isEmpData = false;
     this.isEducationData = false;
     this.isItSkillData = false;
@@ -1141,34 +1178,28 @@ export class ProfileComponent implements OnInit {
     this.isCarrerProfileData = false;
     this.http.post(`user/UpdateUserProfile/${this.userDetail.UserTypeId}`, this.userModal).then((res:ResponseModel) => {
       if (res.ResponseBody) {
-        let roleId = res.ResponseBody.RoleId;
         let detail = null;
         let educations = null;
-        switch(roleId) {
-          case 1:
-            this.isUser = false;
-            break;
-            default:
-              this.isUser = true;
-              detail = res.ResponseBody.professionalUser;
-              this.profile = res.ResponseBody.profileDetail;
-              this.userModal = detail;
-              this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
-              educations = this.userModal.Educational_Detail.filter(x => x.Degree_Name !== null);
-              this.userModal.Educational_Detail = educations;
-              this.UserId = this.userModal.UserId;
-              if (this.userModal.Employments.length == 0)
-                this.isEmpData = true;
-              if (this.userModal.Educational_Detail.length == 0)
-                this.isEducationData = true;
-              if (this.userModal.Skills.length == 0)
-                this.isItSkillData = true;
-              if (this.userModal.Projects.length == 0)
-                this.isProjectData = true;
-              if (this.userModal.Companies.length == 0)
-                this.isCarrerProfileData = true;
-              break;
-            }
+        this.isUser = true;
+        detail = res.ResponseBody.professionalUser;
+        this.profile = res.ResponseBody.profileDetail;
+        this.userModal = detail;
+        if (this.profile != null)
+          this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
+        educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+        this.userModal.EducationalDetails = educations;
+        this.UserId = this.userModal.EmployeeId;
+        if (this.userModal.Employments.length == 0)
+          this.isEmpData = true;
+        if (this.userModal.EducationalDetails.length == 0)
+          this.isEducationData = true;
+        if (this.userModal.Skills.length == 0)
+          this.isItSkillData = true;
+        if (this.userModal.Projects.length == 0)
+          this.isProjectData = true;
+        if (this.userModal.Companies.length == 0)
+          this.isCarrerProfileData = true;
+        this.isLoading = false;
         Toast("Employment Form submitted successfully")
       } else {
         ErrorToast("Invalid user. Please login again.");
@@ -1184,6 +1215,9 @@ export class ProfileComponent implements OnInit {
       this.buildPersonalDetailForm();
       this.isFormReady = true;
 
+    }).catch(e => {
+      this.isLoading = false;
+      this.isFormReady = false;
     })
   }
 
@@ -1299,14 +1333,18 @@ export class ProfileComponent implements OnInit {
       if(response.ResponseBody) {
         Toast(response.ResponseBody);
       }
+    }).catch(e => {
+      this.isLoading = false;
     })
     this.fileDetail = [];
   }
 
-  public submitManageUserForm() {
+  submitManageUserForm() {
     let formData = new FormData();
     let userInfo = this.manageUserForm.value;
     this.userModal.FirstName = userInfo.FirstName;
+    this.userModal.Mobile = userInfo.Mobile;
+    this.userModal.Email = userInfo.Email;
     this.userModal.LastName = userInfo.LastName;
     this.userModal.ResumeHeadline = userInfo.ResumeHeadline;
     this.userModal.FileId = userInfo.FileId;
@@ -1317,10 +1355,40 @@ export class ProfileComponent implements OnInit {
       i++;
     }
     formData.append("userInfo", JSON.stringify(this.userModal));
-    this.http.post(`user/UploadProfileDetailFile/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        Toast(response.ResponseBody);
+    this.http.post(`user/UploadProfileDetailFile/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((res: ResponseModel) => {
+      if(res.ResponseBody) {
+        this.isUser = true;
+        let employee = res.ResponseBody.employee;
+        this.userModal = res.ResponseBody.professionalUser;
+        if (this.userModal.FirstName == "" || this.userModal.FirstName == null) {
+          this.userModal.FirstName = employee.FirstName;
+          this.userModal.LastName = employee.LastName;
+          this.userModal.Email = employee.Email;
+          this.userModal.Mobile = employee.Mobile;
+          this.userModal.EmployeeId = employee.EmployeeUid;
+        }
+        let profile = res.ResponseBody.profileDetail;
+        if (profile && profile.length > 0) {
+          this.profile = profile.filter(x => x.FileName == ProfileImage);
+          this.profileId = this.profile[0].FileId;
+          this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
+          let document = profile.filter(x => x.FileName == "resume");
+          if (document.length > 0) {
+            this.documentId = document[0].FileId;
+            this.resumePath = document[0].FilePath;
+            this.resumeFileName = document[0].FileName;
+            this.extension = document[0].FileExtension;
+            this.isResumeUploaded = true;
+          }
+        }
+        this.UserId = this.userModal.EmployeeId;
+        this.initForm();
+        Toast("Profile insert/updated successfully")
       }
+
+      this.isFormReady = true;
+    }).catch(e => {
+      this.isLoading = false;
     })
     this.fileDetail = [];
   }
@@ -1354,33 +1422,20 @@ export class ProfileComponent implements OnInit {
 }
 
 class ProfessionalUser {
-  UserId: number = 0;
+  EmployeeId: number = 0;
   FileId: number = -1;
-  Name: string = '';
   FirstName: string = '';
   LastName: string = '';
   ResumeHeadline: string = '';
   Email: string= '';
-  Gender: string = '';
+  Mobile: string = null;
   Skills: Skills[] = [];
   Companies: Company[] = [];
-  Job_Title: string = '';
-  OtherDetail: OtherDetail = null;
-  ExpectedCTC: number = null;
-  Mobile_Number: string = null;
-  Notice_Period: number = 0;
-  Salary_Package: number = 0;
-  Activity_Status: ActivityStatus = null;
-  Alternate_Number: number = null;
-  Current_Location: string = '';
-  Educational_Detail: EducationalDetail[] = [];
-  Date_Of_Application: Date = null;
-  Preferred_Location: string[] = [];
-  Total_Experience_In_Months: number = 0;
-  Key_Skills: string = '';
+  OtherDetails: OtherDetail = null;
+  EducationalDetails: EducationalDetail[] = [];
   Projects: Project[] = [];
   Accomplishments: Accomplishment = null;
-  PersonalDetail: PersonalDetail = null;
+  PersonalDetail: PersonalDetail = new PersonalDetail();
   Employments: Array<Employment> = [];
 }
 
@@ -1392,7 +1447,7 @@ class Employment {
   Years: number = 0;
   Months: number = 0;
   CurrentSalary: number = 0;
-  CurrencyType: string = null;
+  CurrencyType: string = '';
   Experties: string = null;
   JobProfile: string = null;
 }
@@ -1510,8 +1565,8 @@ class Accomplishment {
 }
 
 class PersonalDetail {
-  DOB: Date = new Date();
-  Gender: string = '';
+  DOB: Date = null;
+  Gender: string = 'male';
   Address: string = '';
   HomeTown: string = '';
   PinCode: number = 0;

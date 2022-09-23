@@ -438,7 +438,7 @@
                                         v: {{skills.get("Version").value}}
                                       </span>
                                       <span class="badge bg-light text-dark ms-2">
-                                        {{skills.get("LastUsed").value}} | date
+                                        {{skills.get("LastUsed").value | date}}
                                       </span>
                                       <span class="badge bg-light text-dark ms-2">
                                         Exp:
@@ -558,7 +558,7 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</p>
-                            <ng-container *ngIf="userModal.Accomplishments.OnlineProfiles != null">
+                            <ng-container *ngIf="userModal.Accomplishments.OnlineProfile != null">
                               <ng-container
                                 *ngFor="let item of accomplishmentsForm.controls.OnlineProfiles['controls'];let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
@@ -2058,7 +2058,7 @@
             <label class="form-label">Marital Status </label>
             <select class="form-control" [(ngModel)]="editPersonalDetailModal.MaritalStatus"
               name="MaritalStatus">
-              <option value="">Select Marital Status</option>
+              <option value=null selected>Select Marital Status</option>
               <option value="Single">Single/Unmarried</option>
               <option value="Married">Married</option>
               <option value="Widowed">Widowed</option>
@@ -2070,7 +2070,7 @@
           <div class="col-md-6 mb-3">
             <label class="form-label">Category</label>
             <select class="form-control" [(ngModel)]="editPersonalDetailModal.Category">
-              <option value="">Select Category</option>
+              <option value=null>Select Category</option>
               <option value="General">General</option>
               <option value="SC">SC</option>
               <option value="ST">ST</option>
@@ -2100,6 +2100,7 @@
           <div class="col-md-6 mb-3">
             <label class="form-label">Work Permit for USA</label>
             <select name="" id="" class="form-control" [(ngModel)]="editPersonalDetailModal.PermitUSA">
+              <option value=null>Select Work Permit</option>
               <option value="HaveH1Visa">Have H1 Visa</option>
               <option value="NeedH1Visa">Need H1 Visa</option>
               <option value="TNPermitHolder">TN Permit Holder</option>

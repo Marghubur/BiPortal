@@ -105,16 +105,19 @@ export class LeaveComponent implements OnInit {
       value.RequestType = 1;
       if (this.leaveForm.get('LeaveFromDay').errors !== null) {
         WarningToast("Please select start and end date first.");
+        this.isLoading = false;
         return;
       }
 
       if (this.leaveForm.get('LeaveToDay').errors !== null) {
         WarningToast("Please select start and end date first.");
+        this.isLoading = false;
         return;
       }
 
       if (this.leaveForm.get('LeaveType').errors !== null) {
         WarningToast("Please select Leave Type first.");
+        this.isLoading = false;
         return;
       }
 
@@ -135,7 +138,7 @@ export class LeaveComponent implements OnInit {
 
   onDateSelect(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
-    if (value.getTime() >= this.leaveDetail.LeaveFromDay.getTime() && value.getTime() >= new Date().getTime()) {
+    if (value.getTime() >= this.leaveDetail.LeaveFromDay.getTime()) {
       this.leaveDetail.LeaveToDay = value;
       this.leaveDays = Math.floor((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate()) ) /(1000 * 60 * 60 * 24));
       this.leaveForm.get('LeaveToDay').setValue(value);

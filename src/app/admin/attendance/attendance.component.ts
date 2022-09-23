@@ -101,10 +101,30 @@ export class AttendanceComponent implements OnInit {
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
     if(this.cachedData) {
-      this.isRedirected = true;
+      this.isRedirected = false;
+      //this.clientId = this.cachedData.ClientUid;
+      this.loadData();
       this.employeeId = this.cachedData.EmployeeUid;
-      this.clientId = this.cachedData.ClientUid;
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
+      let clients = this.cachedData.ClientJson;
+      this.clientDetail.className = '';
+      if (clients.length == 1) {
+        this.clientDetail.data.push({
+          text: clients[0].CompanyName,
+          value: clients[0].CompanyId,
+        });
+        this.clientId = clients[0].CompanyId;
+        this.loadMappedClients(this.clientId);
+      } else {
+        let i= 0;
+        while (i < clients.length) {
+          this.clientDetail.data.push({
+            text: clients[i].CompanyName,
+            value: clients[i].CompanyId,
+          });
+          i++;
+        }
+      }
     } else {
       this.isRedirected = false;
       this.userDetail = this.user.getInstance() as UserDetail;
@@ -117,10 +137,10 @@ export class AttendanceComponent implements OnInit {
           return;
         }
       }
-
       this.employeeId = 0;
       this.userName = "";
       this.loadData();
+
     }
 
     let i = 0;
