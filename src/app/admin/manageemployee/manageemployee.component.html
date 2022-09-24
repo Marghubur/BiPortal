@@ -62,7 +62,7 @@
                             [ngClass]="{'error-field': submitted && f.LastName.errors !== null && f.LastName.errors.required}" />
                         </div>
                         <div class="col-md-4 mb-3">
-                          <label class="form-label">Mobile Number </label>
+                          <label class="form-label">Mobile Number *</label>
                           <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#"
                             [ngClass]="{'error-field': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}"
                             OnlyNumber="10" name="Mobile" formControlName="Mobile" />
@@ -71,7 +71,7 @@
 
                       <div class="col-md-12 m-0 row">
                         <div class="col-md-4 mb-3">
-                          <label class="form-label">Email Id </label>
+                          <label class="form-label">Email Id *</label>
                           <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email"
                             [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.Email.errors.required}" />
                         </div>
@@ -81,7 +81,7 @@
                             formControlName="SecondaryMobile" />
                         </div>
                         <div class="col-md-4 pb-3">
-                          <label class="form-label">Date of birth </label>
+                          <label class="form-label">Date of birth *</label>
                           <form class="form-inline">
                             <div class="form-group w-100">
                               <div class="input-group w-100">
@@ -140,7 +140,7 @@
                       </div>
                       <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                         <div class="col-md-4 mb-3">
-                          <label class="form-label">Designation</label>
+                          <label class="form-label">Designation *</label>
                           <select name="DesignationId" class="form-control" formControlName="DesignationId"
                             [ngClass]="{'error-field': submitted && f.DesignationId.errors !== null && f.DesignationId.errors.required}">
                             <option value=null>Select Designation</option>
@@ -159,13 +159,13 @@
                           </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                          <label class="form-label">Reporting Manager</label>
+                          <label class="form-label">Reporting Manager *</label>
                           <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId"
                             name="ReportingManagerId">
                           </app-iautocomplete>
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label">Role</label>
+                          <label class="form-label">Role *</label>
                           <select name="AccessLevelId" class="form-control" formControlName="AccessLevelId"
                             [ngClass]="{'error-field': submitted && f.AccessLevelId.errors !== null && f.AccessLevelId.errors.required}">
                             <option value=null>Allocate role</option>
@@ -175,7 +175,7 @@
                           </select>
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label">User Type</label>
+                          <label class="form-label">User Type *</label>
                           <select name="UserTypeId" class="form-control" formControlName="UserTypeId"
                             [ngClass]="{'error-field': submitted && f.UserTypeId.errors !== null && f.UserTypeId.errors.required}">
                             <option value=null>Select User Type</option>
@@ -187,7 +187,7 @@
                           </select>
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label">Company</label>
+                          <label class="form-label">Company *</label>
                           <select class="form-control" formControlName="CompanyId"
                             [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
                             <option value="">Select Company</option>
