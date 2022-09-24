@@ -83,7 +83,7 @@
             <div [ngClass]="{'blur-section': !isClientSelected}">
               <div class="blur-section__highlight" [ngClass]="{'d-none': isClientSelected}">
                 <div class="blur-section__content">
-                  Please select Company first
+                  {{isClientAssigned ? 'Please select Company first' : 'No client Assigned. Please assign client first.'}}
                 </div>
               </div>
 

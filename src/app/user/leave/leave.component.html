@@ -156,7 +156,7 @@
                 </div>
               </div>
             </div>
-          </div>          
+          </div>
         </div>
         <h5 class="mt-3 pt-3 pb-3">Leave Balances</h5>
         <div class="row" *ngIf="chartDataset.length > 0">
@@ -403,7 +403,7 @@
                 <option value="">Select leave type</option>
                 <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveTypes">
                   <div class="col-md-12">
-                    {{l.PlanName}} [{{l.AvailableLeave}}]
+                    {{l.PlanName}} [{{l.AvailableLeave | number: '1.2-2'}}]
                   </div>
                 </option>
               </select>

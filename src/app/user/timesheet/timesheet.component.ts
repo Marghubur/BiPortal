@@ -143,6 +143,8 @@ export class TimesheetComponent implements OnInit {
 
           if(mappedClient.length == 1) {
             this.clientId = mappedClient[0].ClientId;
+            this.clientDetail.className = 'disabled-input';
+            this.presentWeek();
           }
           Toast("Client loaded successfully.");
         } else {

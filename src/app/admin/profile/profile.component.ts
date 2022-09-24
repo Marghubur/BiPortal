@@ -135,7 +135,7 @@ export class ManageComponent implements OnInit {
       let Master = this.local.get(null);
       if(Master !== null && Master !== "") {
         this.userDetail = Master["UserDetail"];
-        this.loadData(this.userDetail)
+        this.loadData()
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -143,11 +143,11 @@ export class ManageComponent implements OnInit {
       this.userDetail = data;
       this.userDetail.UserId = data.EmployeeUid;
       this.userDetail.UserTypeId = UserType.Employee;
-      this.loadData(this.userDetail);
+      this.loadData();
     }
   }
 
-  loadData(user: any) {
+  loadData() {
     this.isFormReady = false;
     this.http.get(`user/GetUserDetail/${this.userDetail.UserId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
@@ -161,6 +161,11 @@ export class ManageComponent implements OnInit {
           this.userModal.Email = employee.Email;
           this.userModal.Mobile = employee.Mobile;
           this.userModal.EmployeeId = employee.EmployeeUid;
+          this.userModal.PersonalDetail.Address = employee.Address;
+          this.userModal.PersonalDetail.Gender = employee.Gender;
+          this.userModal.PersonalDetail.HomeTown = employee.City;
+          this.userModal.PersonalDetail.PinCode = employee.Pincode;
+          this.userModal.PersonalDetail.DOB = employee.DOB;
         }
         let profile = res.ResponseBody.profileDetail;
         if (profile && profile.length > 0) {
@@ -348,7 +353,7 @@ export class ManageComponent implements OnInit {
     let currentProjectOnEdit;
     let project = this.projectsForm.get('Projects') as FormArray;
     if (this.isEdit == false) {
-      this.editProjectModal = new Project();
+      //this.editProjectModal = new Project();
       let newProject = new Project();
       currentProjectOnEdit = this.projectForm(newProject, project.length + 1);
       project.push(currentProjectOnEdit);
