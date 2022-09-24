@@ -589,13 +589,14 @@
                     <div class="fw-bold p-2 bg-ant" *ngSwitchDefault>Sunday</div>
                   </div>
                 </div>
+                <div class="th fe-index text-center fw-bold p-2 bg-ant">Action</div>
               </div>
             </div>
             <div class="t-body overflow-hidden">
               <ng-container>
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:0:7">
-                    <div class="td align-middle text-center">
+                    <div class="td fe-1 align-middle text-center">
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
@@ -607,10 +608,13 @@
                       </div>
                     </div>
                   </ng-container>
+                  <div class="td align-middle text-center fe-index">
+                    <input class="form-check-input" type="checkbox" (click)="weekSelected($event, 1)">
+                  </div>
                 </div>
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:7:14">
-                    <div class="td align-middle text-center">
+                    <div class="td fe-1 align-middle text-center">
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
@@ -622,10 +626,13 @@
                       </div>
                     </div>
                   </ng-container>
+                  <div class="td align-middle text-center fe-index">
+                    <input class="form-check-input" type="checkbox" (click)="weekSelected($event, 2)">
+                  </div>
                 </div>
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:14:21">
-                    <div class="td align-middle text-center">
+                    <div class="td fe-1 align-middle text-center">
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
@@ -637,10 +644,13 @@
                       </div>
                     </div>
                   </ng-container>
+                  <div class="td align-middle text-center fe-index">
+                    <input class="form-check-input" type="checkbox" (click)="weekSelected($event, 3)">
+                  </div>
                 </div>
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:21:28">
-                    <div class="td align-middle text-center">
+                    <div class="td fe-1 align-middle text-center">
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
@@ -652,10 +662,13 @@
                       </div>
                     </div>
                   </ng-container>
+                  <div class="td align-middle text-center fe-index">
+                    <input class="form-check-input" type="checkbox" (click)="weekSelected($event, 4)">
+                  </div>
                 </div>
                 <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:28:31">
-                    <div class="td align-middle text-center">
+                    <div class="td fe-1 align-middle text-center">
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8">
@@ -672,6 +685,9 @@
                     <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                       <span class="d-none">{{item}}</span>
                     </div>
+                  </div>
+                  <div class="td align-middle text-center fe-index">
+                    <input class="form-check-input" type="checkbox" (click)="weekSelected($event, 5)">
                   </div>
                 </div>
               </ng-container>

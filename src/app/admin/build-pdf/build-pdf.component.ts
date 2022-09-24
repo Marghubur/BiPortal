@@ -147,7 +147,6 @@ export class BuildPdfComponent implements OnInit {
     let burnDays = 0;
     let missinngAtt = data.MissingDate;
     let timesheetDetails = data.TimesheetDetails;
-
     if (missinngAtt.length > 0) {
       let i = 0;
       while(i < missinngAtt.length) {
@@ -918,16 +917,63 @@ export class BuildPdfComponent implements OnInit {
 
   enableDate(current: any) {
     if (current) {
-      this.allTimesheet.find(x => x.PresentDate == current.PresentDate).TimesheetStatus = 8;
+      if (current.TimesheetStatus == 4) {
+        let value = this.allTimesheet.find(x => x.PresentDate == current.PresentDate);
+        value.TimesheetStatus = 8;
+        value.EmployeeId = this.currentEmployee.EmployeeUid;
+        value.ClientId = this.currentOrganization.CompanyId
+      }
+      else {
+        let value = this.allTimesheet.find(x => x.PresentDate == current.PresentDate);
+        value.TimesheetStatus = 4;
+        value.EmployeeId = this.currentEmployee.EmployeeUid;
+        value.ClientId = this.currentOrganization.CompanyId
+      }
+    }
+  }
+
+  weekSelected(e: any, week:number) {
+    let init = 0;
+    let end = 7;
+    let add = 0;
+    if (week <= 4) {
+      add = (week-1) * 7;
+    } else {
+      init = (week -1) * 7;
+      end = this.allTimesheet.length;
+      add = 0;
+    }
+    let data = this.allTimesheet.slice((init+add), (end+add));
+    if (e.target.checked == true) {
+      data.map(x => {
+        x.TimesheetStatus = 8;
+        x.EmployeeId = this.currentEmployee.EmployeeUid;
+        x.ClientId = this.currentOrganization.CompanyId
+      });
+    }
+    else {
+      data.map(x => {
+        x.TimesheetStatus = 4;
+        x.EmployeeId = this.currentEmployee.EmployeeUid;
+        x.ClientId = this.currentOrganization.CompanyId
+      });
     }
   }
 
   selectUnselect(status: string) {
     if (status == 'select') {
-      this.allTimesheet.map(x => x.TimesheetStatus = 8);
+      this.allTimesheet.map(x => {
+        x.TimesheetStatus = 8;
+        x.EmployeeId = this.currentEmployee.EmployeeUid;
+        x.ClientId = this.currentOrganization.CompanyId
+      });
     }
     else if('deselect') {
-      this.allTimesheet.map(x => x.TimesheetStatus = 4);
+      this.allTimesheet.map(x => {
+        x.TimesheetStatus = 4;
+        x.EmployeeId = this.currentEmployee.EmployeeUid;
+        x.ClientId = this.currentOrganization.CompanyId
+      });
     }
   }
 
@@ -945,6 +991,11 @@ export class BuildPdfComponent implements OnInit {
         ClientId: this.pdfForm.get("receiverCompanyId").value
       };
 
+      this.allTimesheet.map(x => {
+        x.EmployeeId = this.currentEmployee.EmployeeUid;
+        x.ClientId = this.pdfForm.get("receiverCompanyId").value
+      });
+      
       formData.append('comment', JSON.stringify(value));
       formData.append('dailyTimesheetDetail', JSON.stringify(this.allTimesheet));
       formData.append('timesheet', JSON.stringify(timeSheetDetail));
