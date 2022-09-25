@@ -945,35 +945,27 @@ export class BuildPdfComponent implements OnInit {
     }
     let data = this.allTimesheet.slice((init+add), (end+add));
     if (e.target.checked == true) {
-      data.map(x => {
-        x.TimesheetStatus = 8;
-        x.EmployeeId = this.currentEmployee.EmployeeUid;
-        x.ClientId = this.currentOrganization.CompanyId
-      });
+      data.map(x => x.TimesheetStatus = 8);
     }
     else {
-      data.map(x => {
-        x.TimesheetStatus = 4;
-        x.EmployeeId = this.currentEmployee.EmployeeUid;
-        x.ClientId = this.currentOrganization.CompanyId
-      });
+      data.map(x => x.TimesheetStatus = 4);
     }
   }
 
   selectUnselect(status: string) {
     if (status == 'select') {
-      this.allTimesheet.map(x => {
-        x.TimesheetStatus = 8;
-        x.EmployeeId = this.currentEmployee.EmployeeUid;
-        x.ClientId = this.currentOrganization.CompanyId
-      });
+      this.allTimesheet.map(x => x.TimesheetStatus = 8);
+      let elem = document.querySelectorAll('[data-checktype="weekly"]') ;
+      for (let i = 0; i < elem.length; i++) {
+        (elem[i] as HTMLInputElement).checked= true;
+      }
     }
     else if('deselect') {
-      this.allTimesheet.map(x => {
-        x.TimesheetStatus = 4;
-        x.EmployeeId = this.currentEmployee.EmployeeUid;
-        x.ClientId = this.currentOrganization.CompanyId
-      });
+      this.allTimesheet.map(x => x.TimesheetStatus = 4);
+      let elem = document.querySelectorAll('[data-checktype="weekly"]') ;
+      for (let i = 0; i < elem.length; i++) {
+        (elem[i] as HTMLInputElement).checked= false;
+      }
     }
   }
 
@@ -995,7 +987,7 @@ export class BuildPdfComponent implements OnInit {
         x.EmployeeId = this.currentEmployee.EmployeeUid;
         x.ClientId = this.pdfForm.get("receiverCompanyId").value
       });
-      
+
       formData.append('comment', JSON.stringify(value));
       formData.append('dailyTimesheetDetail', JSON.stringify(this.allTimesheet));
       formData.append('timesheet', JSON.stringify(timeSheetDetail));
