@@ -380,20 +380,25 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         file = this.fileDetail[0].file;
       formData.append(ProfileImage, file);
 
+      this.isReady = false;
       this.http.post(`Employee/employeeregistration/${this.isUpdate}`, formData).then((response: ResponseModel) => {
         this.buildPageData(response);
+        this.bindForm();
+        this.bindClientDetails();
         if(this.isUpdate)
           Toast("Profile updated successfully");
         else
           Toast("Registration done successfully");
         this.isLoading = false;
+        this.isReady = true;
       }).catch(e => {
         this.isLoading = false;
         ErrorToast(e.HttpStatusMessage);
       });
     } else {
       this.isLoading = false;
-      ErrorToast("Please correct all the mandaroty field marded red");
+      this.isReady = true;
+      ErrorToast("Please correct all the mandaroty field marked red");
     }
   }
 
