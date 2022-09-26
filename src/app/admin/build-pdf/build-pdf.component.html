@@ -618,8 +618,11 @@
           </div>
           <div>
             <a href="javascript:void(0)" class="text-primary-c fw-bold" (click)="sendEmail()">
-              <i class="fa fa fa-paper-plane pe-2" aria-hidden="true"></i>
-              <u>Send Email</u>
+              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}" aria-hidden="true"></i>
+              <span class="ps-2">
+                <ng-container *ngIf="isLoading">Sending...</ng-container>
+                <ng-container *ngIf="!isLoading"><u>Send Email</u></ng-container>
+              </span>
             </a>
           </div>
         </div>

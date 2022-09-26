@@ -1105,29 +1105,37 @@
               </ng-container>
             </form>
           </div>
-          <div class="col-md-12 row mt-4">
+          <div class="col-md-12 row my-4">
             <div class="col-md-3">
               <label class="form-label">Language</label>
-              <input type="text" class="form-control my-3" placeholder="Enter your area of Expertise/Specialization"
+              <input type="text" class="form-control" placeholder="Enter your area of Expertise/Specialization" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="ExptLanguage">
             </div>
             <div class="col-md-2">
               <label class="form-label">Version</label>
-              <input type="text" class="form-control my-3" placeholder="Version" [(ngModel)]="ExptVersion">
+              <input type="text" class="form-control" placeholder="Version" [(ngModel)]="ExptVersion">
             </div>
             <div class="row col-md-4">
               <div class="col-md-6">
                 <label class="form-label">Exp in Yrs</label>
-                <input type="text" class="form-control my-3" placeholder="Experience" [(ngModel)]="ExptinYrs">
+                <input type="text" class="form-control" placeholder="Experience" [(ngModel)]="ExptinYrs">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Exp in Mo</label>
-                <input type="text" class="form-control my-3" placeholder="Experience" [(ngModel)]="ExptinMonths">
+                <input type="text" class="form-control" placeholder="Experience" [(ngModel)]="ExptinMonths">
               </div>
             </div>
             <div class="col-md-3">
               <label class="form-label">Date</label>
-              <input type="text" class="form-control my-3" placeholder="Date" [(ngModel)]="Exptdate">
+              <form class="row row-cols-sm-auto">
+                <div class="col-12">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onkeyskillDateSelection($event)"
+                           name="dp" [(ngModel)]="keySkilldate" ngbDatepicker #kd="ngbDatepicker">
+                    <button class="btn btn-outline-secondary calendar" (click)="kd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -1354,12 +1362,12 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Education </label>
-                  <input class="form-control" placeholder="Education" name="Degree_Name"
+                  <input class="form-control" placeholder="Education" name="Degree_Name" oninput="this.value = this.value.toUpperCase()"
                     [(ngModel)]="editEducationModal.Degree_Name" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Specialization </label>
-                  <input class="form-control " placeholder="Specialization" name="Specialization"
+                  <input class="form-control " placeholder="Specialization" name="Specialization" oninput="this.value = this.value.toUpperCase()"
                     [(ngModel)]="editEducationModal.Specialization" />
                 </div>
                 <div class="mb-3">
@@ -1376,12 +1384,12 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Course </label>
-                  <input class="form-control " placeholder="Course" name="Course"
+                  <input class="form-control " placeholder="Course" name="Course" oninput="this.value = this.value.toUpperCase()"
                     [(ngModel)]="editEducationModal.Course" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">University </label>
-                  <input class="form-control " placeholder="University Name" name="University_Name"
+                  <input class="form-control " placeholder="University Name" name="University_Name" oninput="this.value = this.value.toUpperCase()"
                     [(ngModel)]="editEducationModal.University_Name" />
                 </div>
                 <div class="mb-3 row">
@@ -1436,7 +1444,7 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">Project Title </label>
-                <input class="form-control" placeholder="Enter Project Title"
+                <input class="form-control" placeholder="Enter Project Title" oninput="this.value = this.value.toUpperCase()"
                   [(ngModel)]="editProjectModal.ProjectTitle" name="ProjectTitle" />
               </div>
               <div class="mb-3">
@@ -1459,14 +1467,14 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Technalogy Stack</label>
-                <input class="form-control" placeholder="Technalogy Stack" name="TechnalogyStack"
+                <input class="form-control" placeholder="Technalogy Stack" name="TechnalogyStack" oninput="this.value = this.value.toUpperCase()"
                   [(ngModel)]="editProjectModal.TechnalogyStack" />
               </div>
             </div>
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">Tag project to client.</label>
-                <input class="form-control " placeholder="Select Employment/Education" name="ClientName"
+                <input class="form-control " placeholder="Select Employment/Education" name="ClientName" oninput="this.value = this.value.toUpperCase()"
                   [(ngModel)]="editProjectModal.ClientName" />
               </div>
               <div class="mb-3">
@@ -1479,7 +1487,7 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Roles and Responsibility</label>
-                <input class="form-control" placeholder="Roles and Responsibility" name="RolesResponsibility"
+                <input class="form-control" placeholder="Roles and Responsibility" name="RolesResponsibility" oninput="this.value = this.value.toUpperCase()"
                   [(ngModel)]="editProjectModal.RolesResponsibility" />
               </div>
             </div>
@@ -1488,7 +1496,7 @@
               <div class="mb-3">
                 <label class="form-label">Project Description</label>
                 <textarea name="ProjectDetails" row="10" placeholder="Type here ....." name="ProjectDetails"
-                  class="form-control  Detail-Project-txtarea" [(ngModel)]="editProjectModal.ProjectDetails"></textarea>
+                  class="form-control  Detail-Project-txtarea" [(ngModel)]="editProjectModal.ProjectDetails" oninput="this.value = this.value.toUpperCase()"></textarea>
                 <small>1500 Character(s) Left</small>
               </div>
             </div>

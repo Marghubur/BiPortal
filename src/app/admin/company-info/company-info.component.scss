@@ -27,6 +27,10 @@
   justify-content: center;
 }
 
+.x_panel {
+  min-height: 200px;
+}
+
 .progress-step-item::before {
   counter-increment: step;
   content: counter(step);
