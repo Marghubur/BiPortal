@@ -1030,11 +1030,14 @@ export class BuildPdfComponent implements OnInit {
   }
 
   sendEmail() {
+    this.isLoading = true;
     if (this.currentOrganization.CompanyId > 0 && this.senderClient.CompanyId >0 && this.fileDetail.FileId > 0) {
       let data = {
         ClientId: this.currentOrganization.CompanyId,
         SenderId: this.senderClient.CompanyId,
         FileId: this.fileDetail.FileId,
+        MonthName: this.pdfModal.billForMonth.toUpperCase(),
+        ForYear: this.pdfModal.billYear,
         EmployeeId: this.currentEmployee.EmployeeUid,
         EmailTemplateDetail: this.emailTemplate
       };
@@ -1043,9 +1046,13 @@ export class BuildPdfComponent implements OnInit {
         if (response.ResponseBody) {
           Toast("Email send successfully");
           $('#viewFileModal').modal('hide');
+          this.isLoading = false;
         }
+      }).catch(e => {
+        this.isLoading = false;
       });
     } else {
+      this.isLoading = false;
       ErrorToast("Unable to send email. Please contact to admin.");
     }
   }
@@ -1091,7 +1098,7 @@ export class BuildPdfComponent implements OnInit {
 
   removeEmail(index: number) {
     if (index >-1) {
-      this.emailTemplate.splice(index, 1);
+      this.emailTemplate.Emails.splice(index, 1);
     }
   }
 }

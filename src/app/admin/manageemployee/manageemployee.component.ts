@@ -205,6 +205,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.bindClientDetails();
 
       this.isReady = true;
+    }).catch(e => {
+      this.isCompaniesDetails = false;
+      this.isReady = true;
     });
   }
 

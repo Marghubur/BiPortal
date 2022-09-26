@@ -113,6 +113,12 @@ export class EmailComponent implements OnInit {
       //formData.append("files", JSON.stringify(value));
       this.http.post("Email/SendEmailRequest", formData).then((res:ResponseModel) => {
         if (res.ResponseBody) {
+          this.FileDocumentList = [];
+          this.FilesCollection = [];
+          this.bccEmail = [];
+          this.ccEmail = [];
+          this.toEmail = [];
+          this.emailForm.reset();
           $('#composeMailModal').modal('hide');
           Toast("Email send successfully");
           this.isLoading = false;
@@ -271,8 +277,6 @@ export class EmailComponent implements OnInit {
   }
 
   uploadProfilePicture(fileinput: any) {
-    // this.FileDocumentList = [];
-    // this.FilesCollection = [];
     let selectedFile = fileinput.target.files;
     if (selectedFile.length > 0) {
       let index = 0;

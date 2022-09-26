@@ -25,7 +25,8 @@ export class CompanyInfoComponent implements OnInit {
   model: NgbDateStruct;
   signURL: string = '';
   fileDetail: Array<any> = null;
-  BankDetails: Array<organizationAccountModal> = [];
+  BankDetails: organizationAccountModal = new organizationAccountModal();
+  primaryCompanyAccountInfo: organizationAccountModal = new organizationAccountModal();
   signwithoutstamp: string = '';
   FileDocuments: Array<any> = [];
   FileDocumentList: Array<Files> = [];
@@ -37,6 +38,10 @@ export class CompanyInfoComponent implements OnInit {
   isPageReady: boolean = true;
   companyData: Filter = new Filter();
   CurrentCompany: any= null;
+  openingmodel: NgbDateStruct;
+  closingDatemodel: NgbDateStruct;
+  organizationAccountsForm: FormGroup = null;
+
   constructor(private fb: FormBuilder,
               private http: AjaxService,
               private dateFormat: DateFormatter,
@@ -51,6 +56,7 @@ export class CompanyInfoComponent implements OnInit {
     this.ActivatedPage = 1;
     this.companyInformation = new CompanyInformationClass();
     this.companyInformation.LegalEntity = '';
+    this.initAccountForm();
     let data = this.nav.getValue();
     if (data) {
       this.CurrentCompany = data;
@@ -119,7 +125,8 @@ export class CompanyInfoComponent implements OnInit {
     if (this.CompanyId > 0 && this.OrganizationId > 0) {
       this.http.post('Company/GetCompanyBankDetail', this.companyData).then((response:ResponseModel) => {
         if (response.ResponseBody) {
-          this.BankDetails = response.ResponseBody;
+          let accounts =response.ResponseBody
+          this.BankDetails = accounts.find(x => x.IsPrimaryAccount == true);
           Toast("Record found.")
         }
       })
@@ -128,7 +135,12 @@ export class CompanyInfoComponent implements OnInit {
     }
   }
 
-  activePage(page: number) {
+  activePage(page: number, status: string) {
+    if(status == 'next' && page >= 0 && page <3)
+      page = page + 1
+    else if (status == 'previous' && page > 0 )
+      page = page -1;
+
     switch (page) {
       case 2:
         this.ActivatedPage = 2;
@@ -247,6 +259,88 @@ export class CompanyInfoComponent implements OnInit {
     }).catch(e => {
       this.isLoading = false;
     });
+  }
+
+  onOpeningDateSelect(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month, e.day);
+    this.organizationAccountsForm.get('OpeningDate').setValue(date);
+  }
+
+  onClosingDateSelect(e: any) {
+    let date = new Date(e.year, e.month, e.day);
+    this.organizationAccountsForm.get('ClosingDate').setValue(date);
+  }
+
+  get m() {
+    let data = this.organizationAccountsForm.controls;
+    return data;
+  }
+
+  addBankAccount() {
+    this.primaryCompanyAccountInfo = new organizationAccountModal();
+    this.initAccountForm();
+    $('#accountModal').modal('show');
+  }
+
+  editBankAccount(item: any) {
+    if (item) {
+      this.primaryCompanyAccountInfo = item;
+      this.initAccountForm();
+      $('#accountModal').modal('show');
+    }
+  }
+
+  initAccountForm() {
+    this.organizationAccountsForm = this.fb.group({
+      CompanyId: new FormControl(this.primaryCompanyAccountInfo.CompanyId),
+      GSTNo: new FormControl(this.primaryCompanyAccountInfo.GSTNo),
+      AccountNo: new FormControl(this.primaryCompanyAccountInfo.AccountNo, [Validators.required]),
+      BankName: new FormControl(this.primaryCompanyAccountInfo.BankName),
+      Branch: new FormControl(this.primaryCompanyAccountInfo.Branch),
+      BranchCode: new FormControl(this.primaryCompanyAccountInfo.BranchCode),
+      IFSC: new FormControl(this.primaryCompanyAccountInfo.IFSC),
+      PANNo: new FormControl(this.primaryCompanyAccountInfo.PANNo),
+      TradeLicenseNo: new FormControl (this.primaryCompanyAccountInfo.TradeLicenseNo),
+      IsPrimaryAccount: new FormControl (this.primaryCompanyAccountInfo.IsPrimaryAccount ? 'true': 'false'),
+      OrganizationId: new FormControl(this.primaryCompanyAccountInfo.OrganizationId),
+      BankAccountId: new FormControl(this.primaryCompanyAccountInfo.BankAccountId),
+      OpeningDate: new FormControl(this.primaryCompanyAccountInfo.OpeningDate),
+      ClosingDate: new FormControl(this.primaryCompanyAccountInfo.ClosingDate)
+    });
+  }
+
+
+  addUpdateAccount() {
+    let errroCounter = 0;
+    this.submitted = true;
+    if (this.organizationAccountsForm.get("AccountNo").value === "" || this.organizationAccountsForm.get("AccountNo").value === null)
+      errroCounter++;
+
+    let request: organizationAccountModal = this.organizationAccountsForm.value;
+    if (errroCounter === 0) {
+      this.submitted = true;
+      this.isLoading = true;
+      request.OrganizationId = this.OrganizationId;
+      request.CompanyId = this.CurrentCompany.CompanyId;
+      if (request.OrganizationId > 0 && request.CompanyId > 0) {
+        this.http.post("Company/InsertUpdateCompanyAccounts", request).then((response: ResponseModel) => {
+          if (response.ResponseBody !== null && response.ResponseBody.length > 0) {
+            let accounts =response.ResponseBody
+            this.BankDetails = accounts.find(x => x.IsPrimaryAccount == true);
+            $('#accountModal').modal('hide');
+            Toast("Company account deatils inserted/updated successfully");
+          } else {
+            ErrorToast("Failed to generated, Please contact to admin.");
+          }
+          this.isLoading = false;
+        }).catch(e => {
+          this.isLoading = false;
+        });
+      }
+    } else {
+      this.isLoading = false;
+      ErrorToast("All read marked fields are mandatory.");
+    }
   }
 }
 
