@@ -202,7 +202,11 @@ export class BuildPdfComponent implements OnInit {
         if (response.ResponseBody) {
           this.applicationData = response.ResponseBody as ApplicationData;
           this.employees = this.applicationData.Employees;
-          this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === 3);
+          let result = this.applicationData.Organizations.filter(x => x.IsPrimaryCompany == 1);
+          if (result.length > 0)
+            this.applicationData.Organizations.map(x => x.IsPrimaryCompany = true);
+
+          this.currentOrganization = this.applicationData.Organizations.find(x => x.IsPrimaryCompany === true);
           this.pdfModal = new PdfModal();
           if (this.currentOrganization != null) {
             this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;

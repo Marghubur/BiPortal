@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
   registrationValue: any = {};
   loginValue: any = {};
   agreeWithTermsAndCondition: boolean = false;
+  isRegistrationDone: boolean = false;
 
   @Output() userAuthState = new EventEmitter();
 
@@ -43,6 +44,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.isRegistrationDone = false;
     localStorage.clear();
     sessionStorage.clear();
     this.nav.clearNavigation();
@@ -146,6 +148,7 @@ export class LoginComponent implements OnInit {
   }
 
   changePopup(status: string) {
+    this.isRegistrationDone = false;
     if (status == 'loginPage') {
       this.isLoginPage = true;
       this.loginValue = null;
@@ -196,6 +199,8 @@ export class LoginComponent implements OnInit {
       this.http.post('login/SignUpNew', this.registrationValue).then((result: ResponseModel) => {
         if (result.ResponseBody) {
           Toast("Registration done");
+          this.isLoginPage = false;
+          this.isRegistrationDone = true;
         } else {
           ErrorToast("Fail to registration. Please contact to admin.");
         }
@@ -281,6 +286,11 @@ export class LoginComponent implements OnInit {
     // }).catch(e => {
     //   this.isGoogleLogin = false;
     // });
+  }
+
+  gotoLogin() {
+    this.isLoginPage = true;
+    this.isRegistrationDone = false;
   }
 
   backToHomePage() {

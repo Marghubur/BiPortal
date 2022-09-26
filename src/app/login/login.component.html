@@ -21,7 +21,7 @@
         </div>
         <div class="col-md-5 d-flex flex-column justify-content-center log-vh-95">
           <div class="d-flex flex-column justify-content-between">
-            <ng-container *ngIf="isLoginPage">
+            <ng-container *ngIf="isLoginPage && !isRegistrationDone">
               <ng-container *ngIf="isUserMode">
                 <div class="col-lg-12">
                   <div class="card2 card border-0 px-4 py-5">
@@ -72,7 +72,7 @@
                 </div>
               </ng-container>
             </ng-container>
-            <ng-container *ngIf="!isLoginPage">
+            <ng-container *ngIf="!isLoginPage && !isRegistrationDone">
               <div class="col-lg-12">
                 <div class="card2 card border-0 px-4 py-5">
                   <h4 class="btn-primary-dark text-center py-2 mb-4 rounded">Registration Form</h4>
@@ -126,6 +126,15 @@
                         Login</a>
                     </small>
                   </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="isRegistrationDone">
+              <div class="col-lg-12">
+                <div class="card2 card border-0 px-4 py-5">
+                  <h4 class="text-center">Registration done ...</h4>
+                  <h4 class="text-center">Please check your email for user name and password</h4>
+                  <p class="text-center fw-bold"><a href="javascript:void(0)" class="text-primary" (click)="gotoLogin()">Click here</a> to go login page.</p>
                 </div>
               </div>
             </ng-container>

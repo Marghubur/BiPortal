@@ -103,6 +103,7 @@ export class CompanyAccountsComponent implements OnInit {
 
   addUpdateAccount() {
     let errroCounter = 0;
+    this.submitted = true;
     if (this.organizationAccountsForm.get("AccountNo").value === "" || this.organizationAccountsForm.get("AccountNo").value === null)
       errroCounter++;
 
@@ -156,6 +157,7 @@ export class CompanyAccountsComponent implements OnInit {
 
   addAccountPopUp() {
     this.singleCompanyAccountInfo = new organizationAccountModal();
+    this.submitted = false;
     let value = this.CompanyAccountDetails.filter(x => x.PANNo != null || x.GSTNo != null || x.TradeLicenseNo != null);
       if (value.length > 0)
         this.isCompanyrInfoSubmitted = true;

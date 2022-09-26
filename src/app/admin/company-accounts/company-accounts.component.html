@@ -193,7 +193,7 @@
                       oninput="this.value = this.value.toUpperCase()" formControlName="BankName" />
                   </div>
                   <div class="col-md-4 my-2">
-                    <label class="form-label">Account No.#</label>
+                    <label class="form-label">Account No.# *</label>
                     <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNo"
                       [ngClass]="{'error-field': submitted && f.AccountNo.errors !== null && f.AccountNo.errors.required}"
                       formControlName="AccountNo" />

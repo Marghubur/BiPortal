@@ -15,7 +15,7 @@
           <app-breadcrums></app-breadcrums>
         </div>
         <div class="x_content mt-4" *ngIf="isLoaded">
-          <form [formGroup]="organizationForm" autocomplete="off" class="col-md-12 row">
+          <form [formGroup]="organizationForm" *ngIf="organizationForm" autocomplete="off" class="col-md-12 row">
             <div class="mb-5">
               <div class="col-12 row m-0">
                 <div class="col-md-4">

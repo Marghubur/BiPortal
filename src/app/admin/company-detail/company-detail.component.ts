@@ -44,8 +44,10 @@ export class CompanyDetailComponent implements OnInit {
   buildProfileImage(fileDetail: any) {
     if (fileDetail && fileDetail.length > 0) {
       let logoFile = fileDetail.find(x => x.FileName == "CompanyLogo")
-      this.profileURL = `${this.http.GetImageBasePath()}${logoFile.FilePath}/${logoFile.FileName}.${logoFile.FileExtension}`;
-      this.organizationModal.FileId = logoFile.FileId;
+      if (logoFile) {
+        this.profileURL = `${this.http.GetImageBasePath()}${logoFile.FilePath}/${logoFile.FileName}.${logoFile.FileExtension}`;
+        this.organizationModal.FileId = logoFile.FileId;
+      }
     }
   }
 
@@ -177,7 +179,7 @@ export class CompanyDetailComponent implements OnInit {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.fileDetail.push({
-        name: "logo",
+        name: "CompanyLogo",
         file: file
       });
     }

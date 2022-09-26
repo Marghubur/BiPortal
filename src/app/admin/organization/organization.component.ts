@@ -64,10 +64,11 @@ export class OrganizationComponent implements OnInit, OnDestroy {
           this.initForm();
           this.isLoaded = true;
         }
-        // let profileDetail = response.ResponseBody.file;
-        // if(profileDetail.length > 0) {
-        //   this.buildProfileImage(profileDetail[0]);
-        // }
+        let profileDetail = response.ResponseBody.Files;
+        if(profileDetail.length > 0) {
+          let file = profileDetail.find(x => x.FileOwnerId == this.organization.OrganizationId && x.FileName == "OrganizationLogo");
+          this.buildProfileImage(file);
+        }
       } else {
         this.organization = new OrganizationModal;
         this.initForm();
@@ -182,7 +183,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
-      formData.append(ProfileImage, file)
+      formData.append("OrganizationLogo", file)
       this.http.post('Company/InsertUpdateOrganizationDetail', formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.organization = response.ResponseBody as OrganizationModal;
@@ -222,7 +223,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.fileDetail.push({
-        name: "profile",
+        name: "organizationlogo",
         file: file
       });
     }
