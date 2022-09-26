@@ -1199,12 +1199,12 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Organization </label>
-                  <input class="form-control" placeholder="Organization name" name="Organization"
+                  <input class="form-control" placeholder="Organization name" name="Organization" oninput="this.value = this.value.toUpperCase()"
                     [(ngModel)]="editEmploymentModal.Organization" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Designation </label>
-                  <input class="form-control" placeholder="Enter Designation" name="Designation"
+                  <input class="form-control" placeholder="Enter Designation" name="Designation" oninput="this.value = this.value.toUpperCase()"
                     [(ngModel)]="editEmploymentModal.Designation" />
                 </div>
               </div>
@@ -1275,8 +1275,8 @@
                 <fieldset>
                   <div class="mb-3">
                     <label class="form-label">Describe your Job Profile</label>
-                    <textarea name="JobProfile" rows="5" placeholder="Type here ....." class="form-control"
-                      (keydown)="countNumberofCharacter($event)"
+                    <textarea name="JobProfile" rows="5" placeholder="Type here ....." class="form-control" maxlength="4000"
+                      (keydown)="countNumberofCharacter($event)" oninput="this.value = this.value.toUpperCase()"
                       [(ngModel)]="editEmploymentModal.JobProfile"></textarea>
                     <small class="float-end">{{remainingNumber}} Character(s) Left</small>
                   </div>
@@ -1285,7 +1285,7 @@
                     <label class="form-label">Top 5 key skills that you think are important for current
                       employment</label>
                     <textarea name="Experties" rows="5" maxlength="4000"
-                      placeholder="Enter your area of Experties/Specialization" class="form-control"
+                      placeholder="Enter your area of Experties/Specialization" class="form-control" oninput="this.value = this.value.toUpperCase()"
                       [(ngModel)]="editEmploymentModal.Experties"></textarea>
                   </div>
                 </fieldset>

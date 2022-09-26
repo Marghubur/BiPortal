@@ -480,6 +480,7 @@ export class PayrollComponentsComponent implements OnInit {
         this.isLoading = false;
       });
     } else {
+      this.isLoading = false;
       WarningToast("Please upload atleast one record");
     }
   }
