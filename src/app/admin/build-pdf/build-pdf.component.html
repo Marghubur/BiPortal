@@ -448,8 +448,12 @@
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="viewFileModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
-      <div class="modal-header border-bottom-0">
+      <div class="modal-header border-bottom-0 d-flex">
         <h5 class="modal-title">Download Or Send Bill As EMail</h5>
+        <div class="position-relative" *ngIf="isBillGenerated">
+          <p class="mb-0 no-focus-line text-dark me-4" contenteditable="true">{{emailTemplate.EmailTitle}}</p>
+          <i class="edit fa fa-pencil position-absolute"></i>
+        </div>
         <!-- <button type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button> -->
@@ -458,7 +462,7 @@
         <div class="d-flex flex-column align-items-center" *ngIf="isBillGenerated">
           <div class="col-12">
             <div class="d-flex">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <div class="d-flex align-items-center justify-content-around">
                   <div class="form-check">
                     <div class="donwload-file-ext text-center">
@@ -467,7 +471,7 @@
                     <div class="d-flex align-items-center justify-content-center">
                         <a href="javascript:void(0)" (click)="getFileExtension('pdf')" class="text-primary-c fw-b">
                           <i class="fa fa-download text-primary-c pe-2"></i>
-                          Download PDF
+                          PDF
                         </a>
                     </div>
                   </div>
@@ -478,27 +482,34 @@
                     <div class="d-flex align-items-center justify-content-center">
                       <a href="javascript:void(0)" (click)="getFileExtension('docx')" class="text-primary-c fw-b">
                         <i class="fa fa-download text-primary-c pe-2"></i>
-                        Download DOCX
+                        DOCX
                       </a>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="col-md-6">
-                <div class="row justify-content-between align-items-end">
-                  <div class="col-md-6">
-                    <label class="form-label">Email Template</label>
+              <div class="col-md-8">
+                <div class="row justify-content-end align-items-end">
+                  <div class="col-md-4">
                     <select name="staffingTemplate" class="form-control" (change)="viewSendTemplete($event)">
                       <option value="">Select Template</option>
                       <option value="1" selected>Staffing Template</option>
                     </select>
                   </div>
+
+                  <div class="col-md-8">
+                    <div class="input-group">
+                      <input type="email" class="form-control" placeholder="Email Id" name="add-email" aria-label="Email Id" aria-describedby="add-email">
+                      <button class="btn btn-primary-c" type="button" (click)="addEmailId()" id="add-email">
+                        <i class="fa fa-plus pe-2"></i>Add
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div class="py-3">
-                  <p class="text-dark mb-2">Mail Send To:</p>
-                  <ng-container *ngFor="let e of emailAddress"></ng-container>
-                  <ng-container *ngFor="let email of email; let i = index">
+                  <p class="text-dark mb-2">Send To:</p>
+                  <ng-container *ngFor="let email of emailTemplate.Emails; let i = index">
                     <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
                       {{email}} 
                       <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none">
@@ -506,12 +517,6 @@
                       </a>
                     </span>
                   </ng-container>
-                </div>
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="col-md-9">
-                    <input type="email" class="form-control" placeholder="Email Id" name="add-email">
-                  </div>
-                  <button class="btn btn-primary-c" (click)="addEmailId()"><i class="fa fa-plus pe-2"></i>Add Email Id</button>
                 </div>
               </div>
             </div>
@@ -522,6 +527,13 @@
               <div class="mt-4">
                 <div class="mb-1">
                   {{emailTemplate.Salutation}}
+                </div>
+                <div class="mb-1">
+                  <div class="position-relative">
+                    <input type="text" class="border-0" 
+                      placeholder="Enter your title" value="Staffing Bill">
+                    <i class="edit fa fa-pencil position-absolute"></i>
+                  </div>
                 </div>
                 <div class="border py-3 px-2">
                   <div class="col-12">
@@ -571,9 +583,9 @@
                 </div>
                 <div class="d-flex position-relative" *ngIf="emailTemplate.EmailNote !== null && emailTemplate.EmailNote !== ''">
                   <div class="fw-bold">Note: </div> 
-                  <div>
-                    <input type="text" class="w-100 ps-2 border-0" 
-                      placeholder="Enter your name" [value]="emailTemplate.EmailNote">
+                  <div class="w-100">
+                    <input class="w-100 ps-2 border-0" 
+                      placeholder="Enter your name" [(ngModel)]="emailTemplate.EmailNote">
                   </div>
                   <i class="edit fa fa-pencil position-absolute"></i>
                 </div>
@@ -581,14 +593,14 @@
                   {{emailTemplate.EmailClosingStatement}}
                 </div>
                 <div class="position-relative">
-                  <input type="text" class="border-0" 
-                    placeholder="Enter your name" [value]="emailTemplate.SignatureDetail">
+                    <input [(ngModel)]="emailTemplate.SignatureDetail" placeholder="Enter your name" class="border-0">
                   <i class="edit fa fa-pencil position-absolute"></i>
                 </div>
                 <div class="position-relative">
                   Contact No#:
                   <ng-container *ngIf="emailTemplate.ContactNo !== null && emailTemplate.ContactNo !== ''">
-                    +91-{{emailTemplate.ContactNo}}
+                    <span class="text-dark">+91-</span>
+                    <input [(ngModel)]="emailTemplate.ContactNo" placeholder="Enter your contact detail" class="border-0">
                   </ng-container>
                   <i class="edit fa fa-pencil position-absolute"></i>
                 </div>
