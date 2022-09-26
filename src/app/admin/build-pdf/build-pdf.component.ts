@@ -673,8 +673,7 @@ export class BuildPdfComponent implements OnInit {
             this.downloadFile(response.ResponseBody.FileDetail);
             this.isBillGenerated = true;
             this.Bindtemplate(
-              response.ResponseBody.EmailTemplate,
-              response.ResponseBody.EmailAddress
+              response.ResponseBody.EmailTemplate
               );
             $('#viewFileModal').modal('show');
             Toast("Bill pdf generated successfully");
@@ -1031,20 +1030,14 @@ export class BuildPdfComponent implements OnInit {
   }
 
   sendEmail() {
-    // this.staffingTemplateType &&
     if (this.currentOrganization.CompanyId > 0 && this.senderClient.CompanyId >0 && this.fileDetail.FileId > 0) {
       let data = {
         ClientId: this.currentOrganization.CompanyId,
         SenderId: this.senderClient.CompanyId,
         FileId: this.fileDetail.FileId,
         EmployeeId: this.currentEmployee.EmployeeUid,
-        Emails: [],
         EmailTemplateDetail: this.emailTemplate
       };
-
-      for (let i = 0; i < this.email.length; i++) {
-        data.Emails.push(this.email[i])
-      }
 
       this.http.post("bill/SendBillToClient", data).then((response: ResponseModel) => {
         if (response.ResponseBody) {
@@ -1060,15 +1053,17 @@ export class BuildPdfComponent implements OnInit {
   viewTemplate() {
     this.http.get('Template/GetBillingTemplateDetail').then((res:ResponseModel) => {
       if (res.ResponseBody) {
-        this.Bindtemplate(res.ResponseBody, []);
+        this.Bindtemplate(res.ResponseBody);
       }
     });
   }
 
-  Bindtemplate(res: any, emails: Array<any>) {
+  Bindtemplate(res: any) {
     if (res) {
       this.emailTemplate = res;
-      this.email = emails;
+      if(this.emailTemplate) {
+        this.emailTemplate.EmailTitle = `Bill for the month ${this.pdfModal.billForMonth}, ${this.pdfModal.billYear}`;
+      }
     } else {
       WarningToast("No default template found.");
     }
@@ -1084,8 +1079,10 @@ export class BuildPdfComponent implements OnInit {
     let value = (document.querySelector('input[name="add-email"]') as HTMLInputElement).value;
     var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (value.match(validRegex)) {
-      this.email.push(value);
-      (document.querySelector('input[name="add-email"]') as HTMLInputElement).value = '';
+      if (this.emailTemplate.Emails.find(i => i == value) == null){
+        this.emailTemplate.Emails.push(value);
+        (document.querySelector('input[name="add-email"]') as HTMLInputElement).value = '';
+      }
     }
     else
       ErrorToast("Please enter a valid email id.");
@@ -1093,7 +1090,7 @@ export class BuildPdfComponent implements OnInit {
 
   removeEmail(index: number) {
     if (index >-1) {
-      this.email.splice(index, 1);
+      this.emailTemplate.splice(index, 1);
     }
   }
 }
