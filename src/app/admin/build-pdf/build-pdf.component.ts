@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
 import { NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AddNumbers, CommonService, ErrorToast, Toast, ToFixed } from 'src/providers/common-service/common.service';
+import { AddNumbers, CommonService, ErrorToast, Toast, ToFixed, WarningToast } from 'src/providers/common-service/common.service';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -49,7 +49,7 @@ export class BuildPdfComponent implements OnInit {
   isHalfDay: boolean = false;
   halfDayDisable: boolean = false;
   downLoadFileExtension: string = ".pdf";
-  FileDetail: any = "";
+  fileDetail: any = "";
   downloadFileLink: string = "";
   downlodFilePath: string = "";
   basePath: string = "";
@@ -63,6 +63,8 @@ export class BuildPdfComponent implements OnInit {
   billAllDetails: any = null;
   templateText: any = null;
   isClientAssigned: boolean = true;
+  existingData: any = null;
+  emailTemplate: any = null;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -74,16 +76,16 @@ export class BuildPdfComponent implements OnInit {
 
   ngOnInit(): void {
     this.viewer = document.getElementById("file-container");
-    let data = this.nav.getValue();
+    this.existingData = this.nav.getValue();
     this.editMode = false;
     this.isClientAssigned = true;
     this.basePath = this.http.GetImageBasePath();
     //----- edit mode -----
-    if (data) {
+    if (this.existingData) {
       this.editMode = true;
       this.model = this.calendar.getToday();
       this.initMonths();
-      this.editBillDetail(data);
+      this.editBillDetail();
     } else {
       this.getNewForm();
     }
@@ -137,13 +139,13 @@ export class BuildPdfComponent implements OnInit {
 
     this.http.post("Timesheet/GetEmployeeTimeSheet", timesheetStatusFor).then ((response: ResponseModel) => {
       if (response.ResponseBody) {
-        this.buildTimeSheet(response.ResponseBody);
+        this.buildTimeSheet(response.ResponseBody, this.currentEmployee.EmployeeUid);
       }
       this.isClientSelected = true;
     });
   }
 
-  buildTimeSheet(data: any) {
+  buildTimeSheet(data: any, employeeId: number) {
     let burnDays = 0;
     let missinngAtt = data.MissingDate;
     let timesheetDetails = data.TimesheetDetails;
@@ -151,9 +153,9 @@ export class BuildPdfComponent implements OnInit {
       let i = 0;
       while(i < missinngAtt.length) {
         timesheetDetails.push({
-          UserTypeId: 2,
+          UserTypeId: UserType.Employee,
           PresentDate: new Date(missinngAtt[i]),
-          EmployeeUid: this.currentEmployee.EmployeeUid,
+          EmployeeUid: employeeId,
           TimesheetStatus: ItemStatus.NotGenerated
         });
 
@@ -182,17 +184,20 @@ export class BuildPdfComponent implements OnInit {
     }
   }
 
-  editBillDetail(billDetail: any) {
+  editBillDetail() {
     // "EditEmployeeBillDetail" => post
-    let FileId = Number(billDetail.FileUid);
+    let FileId = Number(this.existingData.FileUid);
     if (isNaN(FileId)) {
       Toast("Invalid FileUid.");
       return;
     } else {
       let employeeBillDetail = {
-        "EmployeeId": billDetail.FileOwnerId,
-        "ClientId": billDetail.ClientId,
-        "FileId": FileId
+        "EmployeeId": this.existingData.FileOwnerId,
+        "ClientId": this.existingData.ClientId,
+        "FileId": FileId,
+        "UserTypeId": UserType.Employee,
+        "ForMonth": new Date(this.existingData.Month + '-1-01').getMonth() + 1,
+        "ForYear": this.existingData.Year
       };
 
       this.http.post("FileMaker/EditEmployeeBillDetail", employeeBillDetail).then((response: ResponseModel) => {
@@ -202,13 +207,9 @@ export class BuildPdfComponent implements OnInit {
         if (response.ResponseBody) {
           this.applicationData = response.ResponseBody as ApplicationData;
           this.employees = this.applicationData.Employees;
-          let result = this.applicationData.Organizations.filter(x => x.IsPrimaryCompany == 1);
-          if (result.length > 0)
-            this.applicationData.Organizations.map(x => x.IsPrimaryCompany = true);
-
-          this.currentOrganization = this.applicationData.Organizations.find(x => x.IsPrimaryCompany === true);
+          this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === this.existingData.ClientId);
           this.pdfModal = new PdfModal();
-          if (this.currentOrganization != null) {
+          if (this.currentOrganization) {
             this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
             this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
             this.pdfModal.senderFirstAddress = this.currentOrganization.FirstAddress;
@@ -218,8 +219,8 @@ export class BuildPdfComponent implements OnInit {
             this.pdfModal.senderId = this.currentOrganization.CompanyId;
           }
 
-          if (this.applicationData.fileDetail.length > 0) {
-            fileDetail = this.applicationData.fileDetail[0];
+          if (this.applicationData.FileDetail && this.applicationData.FileDetail.length > 0) {
+            fileDetail = this.applicationData.FileDetail[0];
             this.pdfModal.IsCustomBill = fileDetail.IsCustomBill == 0 ? false : true;
             this.isCustome = this.pdfModal.IsCustomBill;
             this.pdfModal.receiverCompanyId = fileDetail.ClientId;
@@ -304,6 +305,15 @@ export class BuildPdfComponent implements OnInit {
         if(this.editMode && editPackageAmount > 0) {
           this.packageAmount = editPackageAmount;
           this.grandTotalAmount = editGrandTotalAmount;
+        }
+
+        if (this.applicationData.TimesheetDetails) {
+          this.buildTimeSheet({
+            TimesheetDetails: this.applicationData.TimesheetDetails,
+            MissingDate: this.applicationData.MissingDate
+          }, this.existingData.FileOwnerId);
+
+          this.isClientSelected = true;
         }
 
         this.pageDataIsReady = true;
@@ -658,19 +668,21 @@ export class BuildPdfComponent implements OnInit {
       this.billAllDetails = request;
       if(modalStatus == null) {
         this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
-          if(response.ResponseBody) {
-            this.downloadFile(response.ResponseBody);
+          if(response.ResponseBody.FileDetail !== null &&
+            response.ResponseBody.EmailTemplate !== null) {
+            this.downloadFile(response.ResponseBody.FileDetail);
             this.isBillGenerated = true;
-            this.viewTemplate();
+            this.Bindtemplate(
+              response.ResponseBody.EmailTemplate,
+              response.ResponseBody.EmailAddress
+              );
             $('#viewFileModal').modal('show');
             Toast("Bill pdf generated successfully");
           }
           this.isLoading = false;
         }).catch(e => {
           this.isLoading = false;
-          if(e.error && e.error.ResponseBody) {
-            ErrorToast(e.error.ResponseBody.UserMessage);
-          }
+          ErrorToast("Fail to generate bill. Please contact to admin.");
         });
       } else {
         this.isLoading = false;
@@ -853,16 +865,16 @@ export class BuildPdfComponent implements OnInit {
   }
 
   downloadFile(userFile: any) {
-    this.FileDetail = userFile;
+    this.fileDetail = userFile;
     userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
     //this.downloadFileLink = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
   }
 
   downloadPdfDocx() {
     this.downlodFilePath = "";
-    if(this.FileDetail.FileId > 0) {
-      this.FileDetail.FileName = this.FileDetail.FileName.replace(/\.[^/.]+$/, "");
-      let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
+    if(this.fileDetail.FileId > 0) {
+      this.fileDetail.FileName = this.fileDetail.FileName.replace(/\.[^/.]+$/, "");
+      let updateFilePath = `${this.basePath}${this.fileDetail.FilePath}/${this.fileDetail.FileName}${this.downLoadFileExtension}`;
       this.viewer = document.getElementById("file-container");
       this.viewer.classList.remove('d-none');
       this.viewer.querySelector('iframe').setAttribute('src', updateFilePath);
@@ -997,7 +1009,7 @@ export class BuildPdfComponent implements OnInit {
       formData.append('timesheet', JSON.stringify(timeSheetDetail));
       this.http.post('Timesheet/UpdateTimesheet', formData).then(res => {
         if (res.ResponseBody) {
-          this.buildTimeSheet(res.ResponseBody);
+          this.buildTimeSheet(res.ResponseBody, this.currentEmployee.EmployeeUid);
           this.isLoading = false;
           $('#timesheet-view').modal('hide');
         } else
@@ -1020,14 +1032,16 @@ export class BuildPdfComponent implements OnInit {
 
   sendEmail() {
     // this.staffingTemplateType &&
-    if (this.currentOrganization.CompanyId > 0 && this.senderClient.CompanyId >0 && this.FileDetail.FileId > 0) {
+    if (this.currentOrganization.CompanyId > 0 && this.senderClient.CompanyId >0 && this.fileDetail.FileId > 0) {
       let data = {
         ClientId: this.currentOrganization.CompanyId,
         SenderId: this.senderClient.CompanyId,
-        FileId: this.FileDetail.FileId,
+        FileId: this.fileDetail.FileId,
         EmployeeId: this.currentEmployee.EmployeeUid,
-        Emails: [this.billAllDetails.receiverEmail, this.billAllDetails.senderEmail]
+        Emails: [],
+        EmailTemplateDetail: this.emailTemplate
       };
+
       for (let i = 0; i < this.email.length; i++) {
         data.Emails.push(this.email[i])
       }
@@ -1044,13 +1058,20 @@ export class BuildPdfComponent implements OnInit {
   }
 
   viewTemplate() {
-    this.http.get('Template/GetStaffingTemplate').then((res:ResponseModel) => {
+    this.http.get('Template/GetBillingTemplateDetail').then((res:ResponseModel) => {
       if (res.ResponseBody) {
-        this.template = this.sanitizer.bypassSecurityTrustHtml(res.ResponseBody);
-        this.templateText = this.convertToPlain(res.ResponseBody);
-        this.templateText = (this.templateText.trim());
+        this.Bindtemplate(res.ResponseBody, []);
       }
     });
+  }
+
+  Bindtemplate(res: any, emails: Array<any>) {
+    if (res) {
+      this.emailTemplate = res;
+      this.email = emails;
+    } else {
+      WarningToast("No default template found.");
+    }
   }
 
   convertToPlain(html){
@@ -1126,7 +1147,9 @@ class PdfModal {
 }
 
 export class ApplicationData {
-  fileDetail: Array<any> = [];
-  Employees: Array<any> = [];
+  FileDetail: any = null;
+  Employees: Array<any> = null;
   Organizations: Array<any> = [];
+  TimesheetDetails: Array<any> = [];
+  MissingDate: Array<any> = [];
 }
