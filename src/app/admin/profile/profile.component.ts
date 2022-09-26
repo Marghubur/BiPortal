@@ -100,6 +100,7 @@ export class ManageComponent implements OnInit {
   accomplishmentsForm: FormGroup;
   carrerProfileForm: FormGroup;
   personalDetailForm: FormGroup;
+  keySkilldate:NgbDateStruct;
 
   @Output() authentication = new EventEmitter();
 
@@ -217,6 +218,10 @@ export class ManageComponent implements OnInit {
     this.personalDetailForm.controls["DOB"].setValue(date);
   }
 
+  onkeyskillDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.Exptdate = date;
+  }
 
   //----------------- Personal Detail form, group and add new ------------------------
 
@@ -476,7 +481,8 @@ export class ManageComponent implements OnInit {
     this.ExptVersion = skillValue.Version;
     this.ExptinYrs = skillValue.ExperienceInYear;
     this.ExptinMonths = skillValue.ExperienceInMonth;
-    this.Exptdate = skillValue.LastUsed;
+    let date = new Date(skillValue.LastUsed)
+    this.keySkilldate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
     this.isEditItSkill = true;
   }
 

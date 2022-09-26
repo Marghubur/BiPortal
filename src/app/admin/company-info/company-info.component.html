@@ -12,12 +12,20 @@
     </div>
     <div class="my-3 px-5" *ngIf="isPageReady">
       <form [formGroup]="companyInformationForm">
-        <div class="col-md-4 mb-4 mt-2">
-          <!-- <select class="form-select" formControlName="CompanyId" disabled>
-            <option value="0">Select Company</option>
-            <option value="{{companyInformation.CompanyId}}">{{companyInformation.CompanyName}}</option>
-          </select> -->
-          <label for="" class="form-control bg-muted">{{companyInformation.CompanyName}}</label>
+        <div class="row justify-content-between">
+          <div class="col-md-4 mb-4 mt-2">
+            <!-- <select class="form-select" formControlName="CompanyId" disabled>
+              <option value="0">Select Company</option>
+              <option value="{{companyInformation.CompanyId}}">{{companyInformation.CompanyName}}</option>
+            </select> -->
+            <label for="" class="form-control bg-muted">{{companyInformation.CompanyName}}</label>
+          </div>
+          <div class="text-end col-md-4">
+            <button class="btn my-2 me-1 btn-outline-primary" *ngIf="ActivatedPage > 0 && ActivatedPage <3" (click)="activePage(ActivatedPage, 'next')">Next<i
+                class="fa fa-arrow-right ps-2"></i></button>
+            <button class="btn my-2 me-1 btn-outline-success" *ngIf="ActivatedPage > 1 && ActivatedPage <=3" (click)="activePage(ActivatedPage, 'previous')"><i
+                class="fa fa-arrow-left pe-2"></i>Previous</button>
+          </div>
         </div>
         <div class="progress-step col-md-6 mx-3 my-2">
           <div class="custom-progress" id="progress"></div>
@@ -27,10 +35,6 @@
         </div>
         <ng-container *ngIf="ActivatedPage == 1">
           <div class="box">
-            <button class=" btn my-2 me-1 btn-outline-primary float-end" (click)="activePage(ActivatedPage+1)">
-              Next
-              <i class="fa fa-arrow-right ps-2"></i>
-            </button>
             <h6 class="mb-0 py-3">Please provide the company information. This is the company that pays for the Payroll.
             </h6>
             <div class="col-md-3 my-2">
@@ -109,72 +113,72 @@
         </ng-container>
         <ng-container *ngIf="ActivatedPage == 2">
           <div class="box">
-            <button class="float-end btn my-2 me-1 btn-outline-primary" (click)="activePage(3)">Next<i
-                class="fa fa-arrow-right ps-2"></i></button>
-            <button class="float-end btn my-2 me-1 btn-outline-success" (click)="activePage(1)"><i
-                class="fa fa-arrow-left pe-2"></i>Previous</button>
-            <h6 class="mb-0 py-3 mt-5">BANK ACCOUNT INFORMATION.</h6>
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="mb-0">BANK ACCOUNT INFORMATION.</h6>
+              <div>
+                <button class="btn my-2 me-1 btn-outline-primary" (click)="addBankAccount()"><i class="fa fa-plus pe-2"></i> Add Acoount</button>
+                <button class="btn my-2 me-1 btn-outline-primary" (click)="editBankAccount(BankDetails)"><i class="fa fa-pencil pe-2"></i> Edit Acoount</button>
+              </div>
+            </div>
             <div class="row">
-              <ng-container *ngFor="let BankDetails of BankDetails">
-                <div class="col-md-6">
-                  <div class="col-md-12 row my-2">
-                    <div class="form-label col-md-6 fw-bold">Account Number :</div>
-                    <div class="form-label col-md-6">
-                      <ng-container *ngIf="BankDetails.AccountNumber != null && BankDetails.AccountNumber != ''">{{BankDetails.AccountNumber}}</ng-container>
-                      <ng-container *ngIf="BankDetails.AccountNumber == null || BankDetails.AccountNumber == ''">NA</ng-container>
-                    </div>
-                  </div>
-                  <div class="col-md-12 row my-2">
-                    <div class="form-label col-md-6 fw-bold">Bank Name :</div>
-                    <div class="form-label col-md-6">
-                      <ng-container *ngIf="BankDetails.BankName != null && BankDetails.BankName != ''">{{BankDetails.BankName}}</ng-container>
-                      <ng-container *ngIf="BankDetails.BankName == null || BankDetails.BankName == ''">NA</ng-container>
-                    </div>
-                  </div>
-                  <div class="col-md-12 row my-2">
-                    <div class="form-label col-md-6 fw-bold">Branch Name :</div>
-                    <div class="form-label col-md-6">
-                      <ng-container *ngIf="BankDetails.Branch != null && BankDetails.Branch != ''">{{BankDetails.Branch}}</ng-container>
-                      <ng-container *ngIf="BankDetails.Branch == null || BankDetails.Branch == ''">NA</ng-container>
-                    </div>
-                  </div>
-                  <div class="col-md-12 row my-2">
-                    <div class="form-label col-md-6 fw-bold">Branch Code :</div>
-                    <div class="form-label col-md-6">
-                      <ng-container *ngIf="BankDetails.Branch != null && BankDetails.Branch != ''">{{BankDetails.Branch}}</ng-container>
-                      <ng-container *ngIf="BankDetails.Branch == null || BankDetails.Branch == ''">NA</ng-container>
-                    </div>
-                  </div>
-                  <div class="col-md-12 row my-2">
-                    <div class="form-label col-md-6 fw-bold">IFSC Code :</div>
-                    <div class="form-label col-md-6">
-                      <ng-container *ngIf="BankDetails.IFSCCode != null && BankDetails.IFSCCode != ''">{{BankDetails.IFSCCode}}</ng-container>
-                      <ng-container *ngIf="BankDetails.IFSCCode == null || BankDetails.IFSCCode == ''">NA</ng-container>
-                    </div>
-                  </div>
-                  <div class="col-md-12 row my-2">
-                    <div class="form-label col-md-6 fw-bold">GSTIN Number :</div>
-                    <div class="form-label col-md-6">
-                      <ng-container *ngIf="BankDetails.GSTNO != null && BankDetails.GSTNO != ''">{{BankDetails.GSTNO}}</ng-container>
-                      <ng-container *ngIf="BankDetails.GSTNO == null || BankDetails.GSTNO == ''">NA</ng-container>
-                    </div>
-                  </div>
-                  <div class="col-md-12 row my-2">
-                    <div class="form-label col-md-6 fw-bold">TradeLiecence Number :</div>
-                    <div class="form-label col-md-6">
-                      <ng-container *ngIf="BankDetails.TradeLiecenceNumber != null && BankDetails.TradeLiecenceNumber != ''">{{BankDetails.TradeLiecenceNumber}}</ng-container>
-                      <ng-container *ngIf="BankDetails.TradeLiecenceNumber == null || BankDetails.TradeLiecenceNumber == ''">NA</ng-container>
-                    </div>
-                  </div>
-                  <div class="col-md-12 row my-2">
-                    <div class="form-label col-md-6 fw-bold">PAN Number :</div>
-                    <div class="form-label col-md-6">
-                      <ng-container *ngIf="BankDetails.PANNo != null && BankDetails.PANNo != ''">{{BankDetails.PANNo}}</ng-container>
-                      <ng-container *ngIf="BankDetails.PANNo == null || BankDetails.PANNo == ''">NA</ng-container>
-                    </div>
+              <div class="col-md-12">
+                <div class="col-md-12 row my-2">
+                  <div class="form-label col-md-6 fw-bold">Account Number :</div>
+                  <div class="form-label col-md-6">
+                    <ng-container *ngIf="BankDetails.AccountNumber != null && BankDetails.AccountNumber != ''">{{BankDetails.AccountNumber}}</ng-container>
+                    <ng-container *ngIf="BankDetails.AccountNumber == null || BankDetails.AccountNumber == ''">NA</ng-container>
                   </div>
                 </div>
-              </ng-container>
+                <div class="col-md-12 row my-2">
+                  <div class="form-label col-md-6 fw-bold">Bank Name :</div>
+                  <div class="form-label col-md-6">
+                    <ng-container *ngIf="BankDetails.BankName != null && BankDetails.BankName != ''">{{BankDetails.BankName}}</ng-container>
+                    <ng-container *ngIf="BankDetails.BankName == null || BankDetails.BankName == ''">NA</ng-container>
+                  </div>
+                </div>
+                <div class="col-md-12 row my-2">
+                  <div class="form-label col-md-6 fw-bold">Branch Name :</div>
+                  <div class="form-label col-md-6">
+                    <ng-container *ngIf="BankDetails.Branch != null && BankDetails.Branch != ''">{{BankDetails.Branch}}</ng-container>
+                    <ng-container *ngIf="BankDetails.Branch == null || BankDetails.Branch == ''">NA</ng-container>
+                  </div>
+                </div>
+                <div class="col-md-12 row my-2">
+                  <div class="form-label col-md-6 fw-bold">Branch Code :</div>
+                  <div class="form-label col-md-6">
+                    <ng-container *ngIf="BankDetails.BranchCode != null && BankDetails.BranchCode != ''">{{BankDetails.BranchCode}}</ng-container>
+                    <ng-container *ngIf="BankDetails.BranchCode == null || BankDetails.BranchCode == ''">NA</ng-container>
+                  </div>
+                </div>
+                <div class="col-md-12 row my-2">
+                  <div class="form-label col-md-6 fw-bold">IFSC Code :</div>
+                  <div class="form-label col-md-6">
+                    <ng-container *ngIf="BankDetails.IFSC != null && BankDetails.IFSC != ''">{{BankDetails.IFSC}}</ng-container>
+                    <ng-container *ngIf="BankDetails.IFSC == null || BankDetails.IFSC == ''">NA</ng-container>
+                  </div>
+                </div>
+                <div class="col-md-12 row my-2">
+                  <div class="form-label col-md-6 fw-bold">GSTIN Number :</div>
+                  <div class="form-label col-md-6">
+                    <ng-container *ngIf="BankDetails.GSTNo != null && BankDetails.GSTNo != ''">{{BankDetails.GSTNo}}</ng-container>
+                    <ng-container *ngIf="BankDetails.GSTNo == null || BankDetails.GSTNo == ''">NA</ng-container>
+                  </div>
+                </div>
+                <div class="col-md-12 row my-2">
+                  <div class="form-label col-md-6 fw-bold">TradeLiecence Number :</div>
+                  <div class="form-label col-md-6">
+                    <ng-container *ngIf="BankDetails.TradeLicenseNo != null && BankDetails.TradeLicenseNo != ''">{{BankDetails.TradeLicenseNo}}</ng-container>
+                    <ng-container *ngIf="BankDetails.TradeLicenseNo == null || BankDetails.TradeLicenseNo == ''">NA</ng-container>
+                  </div>
+                </div>
+                <div class="col-md-12 row my-2">
+                  <div class="form-label col-md-6 fw-bold">PAN Number :</div>
+                  <div class="form-label col-md-6">
+                    <ng-container *ngIf="BankDetails.PANNo != null && BankDetails.PANNo != ''">{{BankDetails.PANNo}}</ng-container>
+                    <ng-container *ngIf="BankDetails.PANNo == null || BankDetails.PANNo == ''">NA</ng-container>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </ng-container>
@@ -265,5 +269,127 @@
         </div>
       </div>
     </ng-container>
+  </div>
+</div>
+
+<div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0 ms-3">
+        <h5 class="modal-title" id="accountModalLabel">Add Account Deatils</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="organizationAccountsForm" autocomplete="off" class="col-md-12 row">
+          <div class="col-12 row m-0">
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Bank Detail<small>Bank related detail for transaction.</small></h2>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3 mb-3 row">
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">Bank Name</label>
+                    <input placeholder="Bank Name" class="form-control" name="BankName"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="BankName" />
+                  </div>
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">Account No.# *</label>
+                    <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNo"
+                      [ngClass]="{'error-field': submitted && m.AccountNo.errors !== null && m.AccountNo.errors.required}"
+                      formControlName="AccountNo" />
+                  </div>
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">IFSC Code</label>
+                    <input placeholder="IFSC Code" class="form-control" name="IFSC"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" />
+                  </div>
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">Branch Name</label>
+                    <input placeholder="Branch name" class="form-control" name="Branch"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="Branch" />
+                  </div>
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">Branch Code</label>
+                    <input placeholder="Branch Code" class="form-control" name="BranchCode" OnlyNumber="5"
+                      formControlName="BranchCode" />
+                  </div>
+                </div>
+              </div>
+              <div class="x_panel mt-3">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Other Details<small>Company other deatils.</small></h2>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3 mb-3 row">
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">PAN No.</label>
+                    <input placeholder="PAN Number" class="form-control" name="PANNo"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="PANNo" />
+                  </div>
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">GSTIN No.#</label>
+                    <input placeholder="GSTIN No.#" class="form-control" name="GSTNo"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="GSTNo" />
+                  </div>
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">Trade Liecence No.</label>
+                    <input placeholder="Trade Liecence Number" class="form-control" name="TradeLicenseNo"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="TradeLicenseNo" />
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3 mb-3 row">
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">Opening Date</label>
+                    <form class="form-inline">
+                      <div class="form-group w-100">
+                        <div class="input-group w-100">
+                          <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onOpeningDateSelect($event)"
+                                 name="dp" [(ngModel)]="openingmodel" ngbDatepicker #od="ngbDatepicker">
+                          <button class="btn btn-outline-secondary calendar" (click)="od.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">Closing Date</label>
+                    <form class="form-inline">
+                      <div class="form-group w-100">
+                        <div class="input-group w-100">
+                          <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onClosingDateSelect($event)"
+                                 name="dp" [(ngModel)]="closingDatemodel" ngbDatepicker #cd="ngbDatepicker">
+                          <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-md-4 my-2">
+                    <label class="form-label">IsPrimayAccount</label>
+                    <select class="form-select" formControlName="IsPrimaryAccount">
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</button>
+        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addUpdateAccount()" *ngIf="primaryCompanyAccountInfo.BankAccountId > 0">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Processing' : 'Add' }}</span>
+        </button>
+        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addUpdateAccount()" *ngIf="primaryCompanyAccountInfo.BankAccountId == 0">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Processing' : 'Update' }}</span>
+        </button>
+      </div>
+    </div>
   </div>
 </div>

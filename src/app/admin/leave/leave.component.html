@@ -858,17 +858,17 @@
           </div>
           <div class="form-check mt-3">
             <input class="form-check-input" [checked]="leaveTypeCheck == 'PaidLeave'" type="checkbox"
-              formControlName="IsPaidLeave" (click)="leaveType('PaidLeave')" />
+              formControlName="IsPaidLeave" />
             <label class="form-check-label"> This is a paid leave </label>
           </div>
           <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" [checked]="leaveTypeCheck == 'SickLeave'"
-              formControlName="IsSickLeave" (click)="leaveType('SickLeave')" />
+              formControlName="IsSickLeave"/>
             <label class="form-check-label"> This is a sick leave </label>
           </div>
           <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" [checked]="leaveTypeCheck == 'StatutoryLeave'"
-              formControlName="IsStatutoryLeave" (click)="leaveType('StatutoryLeave')" />
+              formControlName="IsStatutoryLeave" />
             <label class="form-check-label"> This is a statutory leave </label>
           </div>
           <div class="form-check mt-3">
