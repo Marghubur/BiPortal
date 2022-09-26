@@ -25,7 +25,7 @@ export class CompanyInfoComponent implements OnInit {
   model: NgbDateStruct;
   signURL: string = '';
   fileDetail: Array<any> = null;
-  BankDetails: organizationAccountModal = null;
+  BankDetails: Array<organizationAccountModal> = [];
   signwithoutstamp: string = '';
   FileDocuments: Array<any> = [];
   FileDocumentList: Array<Files> = [];

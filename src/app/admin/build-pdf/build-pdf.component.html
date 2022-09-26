@@ -450,8 +450,9 @@
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0 d-flex">
         <h5 class="modal-title">Download Or Send Bill As EMail</h5>
-        <div class="position-relative" *ngIf="isBillGenerated">
-          <p class="mb-0 no-focus-line text-dark me-4" contenteditable="true">{{emailTemplate.EmailTitle}}</p>
+        <div class="position-relative w-75 text-end" *ngIf="isBillGenerated">
+          <input type="text" class="border-0 me-4 w-75 text-end"  [(ngModel)]="emailTemplate.EmailSubject" oninput="this.value = this.value.toUpperCase()"
+                      placeholder="Enter your subject">
           <i class="edit fa fa-pencil position-absolute"></i>
         </div>
         <!-- <button type="button" class="close" aria-label="Close">
@@ -511,7 +512,7 @@
                   <p class="text-dark mb-2">Send To:</p>
                   <ng-container *ngFor="let email of emailTemplate.Emails; let i = index">
                     <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
-                      {{email}} 
+                      {{email}}
                       <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none">
                         <i class="fa fa-close ps-2 text-dark"></i>
                       </a>
@@ -526,12 +527,12 @@
             <ng-container *ngIf="emailTemplate !== null">
               <div class="mt-4">
                 <div class="mb-1">
-                  {{emailTemplate.Salutation}}
+                  {{emailTemplate.Salutation | uppercase}}
                 </div>
                 <div class="mb-1">
                   <div class="position-relative">
-                    <input type="text" class="border-0" 
-                      placeholder="Enter your title" value="Staffing Bill">
+                    <input type="text" class="border-0 w-75"  [(ngModel)]="emailTemplate.EmailTitle" oninput="this.value = this.value.toUpperCase()"
+                      placeholder="Enter your title">
                     <i class="edit fa fa-pencil position-absolute"></i>
                   </div>
                 </div>
@@ -539,16 +540,16 @@
                   <div class="col-12">
                     <ng-container *ngIf="emailTemplate.BodyContentDetail.FirstPhase != null">
                       <div class="no-focus-line" *ngFor="let msg of emailTemplate.BodyContentDetail.FirstPhase" contenteditable>
-                        {{msg}}
-                      </div> 
+                        {{msg | uppercase}}
+                      </div>
                     </ng-container>
                   </div>
-                  
+
                   <div class="col-12">
                     <ng-container *ngIf="emailTemplate.BodyContentDetail.Body != null">
                       <div class="no-focus-line" *ngFor="let msg of emailTemplate.BodyContentDetail.Body" contenteditable>
-                        {{msg}}
-                      </div> 
+                        {{msg | uppercase}}
+                      </div>
                     </ng-container>
                   </div>
 
@@ -557,50 +558,50 @@
                       <div>
                         <div class="d-flex">
                           <span class="px-4 fw-bold">CANDIDATE NAME: </span>
-                          <span>{{currentEmployee.FirstName + ' ' + currentEmployee.LastName}}</span>
+                          <span>{{currentEmployee.FirstName + ' ' + currentEmployee.LastName }}</span>
                         </div>
 
                         <div class="d-flex">
                           <span class="px-4 fw-bold">CANDIDATE ROLE: </span>
                           <span>SOFTWARE DEVELOPER</span>
                         </div>
-                        
+
                         <div class="d-flex">
                           <span class="px-4 fw-bold">BILLING MONTH: </span>
                           <span>{{pdfModal.billForMonth}}, {{pdfModal.billYear}}</span>
                         </div>
-                      </div> 
+                      </div>
                     </ng-container>
                   </div>
 
                   <div class="col-12">
                     <ng-container *ngIf="emailTemplate.BodyContentDetail.EndPhase != null">
                       <div class="no-focus-line" *ngFor="let msg of emailTemplate.BodyContentDetail.EndPhase" contenteditable>
-                        {{msg}}
-                      </div>  
+                        {{msg | uppercase}}
+                      </div>
                     </ng-container>
                   </div>
                 </div>
                 <div class="d-flex position-relative" *ngIf="emailTemplate.EmailNote !== null && emailTemplate.EmailNote !== ''">
-                  <div class="fw-bold">Note: </div> 
+                  <div class="fw-bold">Note: </div>
                   <div class="w-100">
-                    <input class="w-100 ps-2 border-0" 
+                    <input class="w-100 ps-2 border-0" oninput="this.value = this.value.toUpperCase()"
                       placeholder="Enter your name" [(ngModel)]="emailTemplate.EmailNote">
                   </div>
                   <i class="edit fa fa-pencil position-absolute"></i>
                 </div>
                 <div class="mt-3">
-                  {{emailTemplate.EmailClosingStatement}}
+                  {{emailTemplate.EmailClosingStatement | uppercase}}
                 </div>
                 <div class="position-relative">
-                    <input [(ngModel)]="emailTemplate.SignatureDetail" placeholder="Enter your name" class="border-0">
+                    <input [(ngModel)]="emailTemplate.SignatureDetail" placeholder="Enter your name" class="border-0 w-100" oninput="this.value = this.value.toUpperCase()">
                   <i class="edit fa fa-pencil position-absolute"></i>
                 </div>
                 <div class="position-relative">
                   Contact No#:
                   <ng-container *ngIf="emailTemplate.ContactNo !== null && emailTemplate.ContactNo !== ''">
                     <span class="text-dark">+91-</span>
-                    <input [(ngModel)]="emailTemplate.ContactNo" placeholder="Enter your contact detail" class="border-0">
+                    <input [(ngModel)]="emailTemplate.ContactNo" placeholder="Enter your contact detail" class="border-0 w-75">
                   </ng-container>
                   <i class="edit fa fa-pencil position-absolute"></i>
                 </div>
@@ -612,12 +613,12 @@
       <div class="modal-footer border-top-0">
         <div class="d-flex flex-row justify-context-end">
           <div class="me-3">
-            <a href="javascript:void(0)" class="text-decoration-none text-muted" 
+            <a href="javascript:void(0)" class="text-decoration-none text-muted"
             (click)="closePopUp()">Close</a>
           </div>
           <div>
             <a href="javascript:void(0)" class="text-primary-c fw-bold" (click)="sendEmail()">
-              <i class="fa fa fa-paper-plane pe-2" aria-hidden="true"></i> 
+              <i class="fa fa fa-paper-plane pe-2" aria-hidden="true"></i>
               <u>Send Email</u>
             </a>
           </div>

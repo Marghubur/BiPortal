@@ -668,7 +668,7 @@ export class BuildPdfComponent implements OnInit {
       this.billAllDetails = request;
       if(modalStatus == null) {
         this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
-          if(response.ResponseBody.FileDetail !== null && 
+          if(response.ResponseBody.FileDetail !== null &&
             response.ResponseBody.EmailTemplate !== null) {
             this.downloadFile(response.ResponseBody.FileDetail);
             this.isBillGenerated = true;
@@ -1062,7 +1062,8 @@ export class BuildPdfComponent implements OnInit {
     if (res) {
       this.emailTemplate = res;
       if(this.emailTemplate) {
-        this.emailTemplate.EmailTitle = `Bill for the month ${this.pdfModal.billForMonth}, ${this.pdfModal.billYear}`;
+        this.emailTemplate.EmailSubject = `Bill for the month ${this.pdfModal.billForMonth}, ${this.pdfModal.billYear}`;
+        this.emailTemplate.EmailTitle = this.pdfForm.get('header').value
       }
     } else {
       WarningToast("No default template found.");
