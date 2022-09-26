@@ -66,8 +66,8 @@
           <div class="email-address-box my-4 border-bottom d-flex align-items-center d-none" data-name="Cc-address">
             <label for="Cc-email-address" class="form-label fs-5 m-0 pe-1">Cc</label>
             <div class="d-flex flex-row flex-wrap w-100 align-items-center">
-              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of ccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-danger" (click)="removeToEmail(i, 'cc-emails')"></i></a></span>
-              <input type="text" class="col border-0 ms-2 fs-5" formControlName="CC" (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'cc-emails')">
+              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of ccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-white" (click)="removeToEmail(i, 'cc-emails')"></i></a></span>
+              <input type="text" class="col border-0 ms-2 fs-5" formControlName="CC" (click)="emailAddress()" (blur)="addToList($event, 'cc-emails')" (keyup)="addEmailChip($event, 'cc-emails')">
               <div class="col-auto float-end" data-name="Add-Bcc-btn">
                 <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
               </div>
@@ -76,8 +76,8 @@
           <div class="email-address-box my-4 border-bottom d-flex align-items-center d-none" data-name="Bcc-address">
             <label for="Bcc-email-address" class="form-label fs-5 m-0 pe-1">Bcc</label>
             <div class="d-flex flex-row flex-wrap w-100 align-items-center">
-              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of bccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-danger" (click)="removeToEmail(i, 'bcc-emails')"></i></a></span>
-              <input type="text" class="col border-0 ms-2 fs-5" formControlName="BCC"  (click)="emailAddress()" (keyup.Space)="addEmailChip($event, 'bcc-emails')">
+              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of bccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-white" (click)="removeToEmail(i, 'bcc-emails')"></i></a></span>
+              <input type="text" class="col border-0 ms-2 fs-5" formControlName="BCC"  (click)="emailAddress()" (keyup)="addEmailChip($event, 'bcc-emails')" (blur)="addToList($event, 'bcc-emails')">
               <div class="col-auto float-end" data-name="Add-Cc-btn">
                 <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
               </div>
