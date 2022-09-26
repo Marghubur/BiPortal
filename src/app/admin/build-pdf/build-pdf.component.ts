@@ -1062,7 +1062,8 @@ export class BuildPdfComponent implements OnInit {
     if (res) {
       this.emailTemplate = res;
       if(this.emailTemplate) {
-        this.emailTemplate.EmailTitle = `Bill for the month ${this.pdfModal.billForMonth}, ${this.pdfModal.billYear}`;
+        this.emailTemplate.EmailSubject = `Bill for the month ${this.pdfModal.billForMonth}, ${this.pdfModal.billYear}`;
+        this.emailTemplate.EmailTitle = this.pdfForm.get('header').value
       }
     } else {
       WarningToast("No default template found.");
