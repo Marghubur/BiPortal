@@ -395,6 +395,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.isReady = true;
       }).catch(e => {
+        this.isReady = true;
         this.isLoading = false;
         ErrorToast(e.HttpStatusMessage);
       });
