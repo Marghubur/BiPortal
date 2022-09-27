@@ -69,6 +69,7 @@ export class SalaryBreakupComponent implements OnInit {
       this.buildAndBindData(completeSalaryDetail);
     }).catch(e => {
       this.isReady = false;
+      this.isSalaryGroup = true;
     });
   }
 

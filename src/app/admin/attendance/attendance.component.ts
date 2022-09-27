@@ -107,7 +107,7 @@ export class AttendanceComponent implements OnInit {
       this.employeeId = this.cachedData.EmployeeUid;
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       let clients = this.cachedData.ClientJson;
-      this.clientDetail.className = '';
+      this.clientDetail.className = 'disabled-input';
       if (clients.length == 1) {
         this.clientDetail.data.push({
           text: clients[0].CompanyName,
@@ -359,6 +359,8 @@ export class AttendanceComponent implements OnInit {
       }
 
       $('#commentModal').modal('hide');
+    }).catch(e => {
+      this.isLoading = false;
     })
   }
 
@@ -423,7 +425,12 @@ export class AttendanceComponent implements OnInit {
           });
           i++;
         }
-
+        if (clients.length  == 1) {
+          this.clientId = clients[0].CompanyId;
+          this.loadMappedClients(this.clientId);
+        }
+        else
+          this.clientId = 0;
       }
     }
   }
