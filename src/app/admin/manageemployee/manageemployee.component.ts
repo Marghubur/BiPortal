@@ -395,6 +395,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           Toast("Registration done successfully");
         this.isLoading = false;
       }).catch(e => {
+        this.isReady = true;
         this.isLoading = false;
         ErrorToast(e.HttpStatusMessage);
       });

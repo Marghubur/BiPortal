@@ -127,44 +127,13 @@ export class SalaryBreakupComponent implements OnInit {
   }
 
   buildComponents(): FormArray {
-    let i = 0;
-    let elems = [];
     let flag = false;
     let finalItemArray: FormArray = this.fb.array([]);
-    while(i < 6) {
-      flag = false;
-      switch(i) {
-        case 0: // fixed
-          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 2);
-          break;
-        case 1: // special
-          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 102);
-          flag = true;
-          break;
-        case 2: // perquisite
-          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 6);
-          break;
-        case 3: // gross
-          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 100);
-          flag = true;
-          break;
-        case 4: // employer
-          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 7);
-          break;
-        case 5: // ctc
-          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 101);
-          flag = true;
-          break;
-      }
-
-      this.fb.array(
-        elems.map((elem, index) => {
-          finalItemArray.push(this.addGroupItems(elem, flag))
-        })
-      );
-
-      i++;
-    }
+    this.fb.array(
+      this.salaryComponents.map((item) => {
+        finalItemArray.push(this.addGroupItems(item, flag))
+      })
+    );
 
     return finalItemArray;
   }
@@ -196,6 +165,8 @@ export class SalaryBreakupComponent implements OnInit {
         if (res.ResponseBody) {
           this.buildAndBindData(res.ResponseBody);
         }
+      }).catch(e => {
+        ErrorToast(e.ResponseBody.UserMessage);
       });
     }
   }
