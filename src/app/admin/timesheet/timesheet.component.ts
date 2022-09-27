@@ -481,6 +481,7 @@ export class TimesheetComponent implements OnInit {
     this.http.post("timesheet/InsertUpdateTimesheet", records)
     .then(response => {
       if (response.ResponseBody) {
+        $("#timesheetModal").modal('hide');
         Toast("Created/Updated successfully");
         //this.initForm(response.ResponseBody);
       } else {
@@ -996,8 +997,10 @@ export class TimesheetComponent implements OnInit {
         }
         this.isFormReady = false;
         this.NoClient = false;
-        if (clients.length  == 1)
+        if (clients.length  == 1) {
           this.clientId = clients[0].CompanyId;
+          this.presentWeek();
+        }
         else
           this.clientId = 0;
 

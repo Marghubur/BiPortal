@@ -423,7 +423,12 @@ export class AttendanceComponent implements OnInit {
           });
           i++;
         }
-
+        if (clients.length  == 1) {
+          this.clientId = clients[0].CompanyId;
+          this.loadMappedClients(this.clientId);
+        }
+        else
+          this.clientId = 0;
       }
     }
   }

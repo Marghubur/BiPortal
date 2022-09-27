@@ -1497,7 +1497,6 @@
                 <label class="form-label">Project Description</label>
                 <textarea name="ProjectDetails" row="10" placeholder="Type here ....." name="ProjectDetails"
                   class="form-control  Detail-Project-txtarea" [(ngModel)]="editProjectModal.ProjectDetails" oninput="this.value = this.value.toUpperCase()"></textarea>
-                <small>1500 Character(s) Left</small>
               </div>
             </div>
           </form>
@@ -1557,7 +1556,7 @@
       <div class="modal-body" *ngIf="isEditOnlineProfile">
         <ng-container class="col-md-6 mt-2">
           <div>
-            <input type=" text" placeholder="Add link to Online profiles (e.g. Linkedin, Facebook etc.)."
+            <input type=" text" placeholder="Add link to Online profiles (e.g. Linkedin, Facebook etc.)." oninput="this.value = this.value.toUpperCase()"
               [(ngModel)]="siteURL" class="mb-2 form-control" name="OnlineProfile">
           </div>
         </ng-container>
@@ -1617,7 +1616,7 @@
       <div class="modal-body" *ngIf="isEditWorkSample">
         <ng-container class="mt-2">
           <div>
-            <input type=" text" placeholder="Add link to your Projects (e.g. Github links etc.)." [(ngModel)]="siteURL"
+            <input type=" text" placeholder="Add link to your Projects (e.g. Github links etc.)." [(ngModel)]="siteURL" oninput="this.value = this.value.toUpperCase()"
               class="mb-2 form-control" name="WorkSample">
           </div>
         </ng-container>
@@ -1675,7 +1674,7 @@
       <div class="modal-body" *ngIf="isEditResearch">
         <ng-container class="mt-2">
           <div>
-            <input type=" text" placeholder="Add links to your Online publications." [(ngModel)]="siteURL"
+            <input type=" text" placeholder="Add links to your Online publications." [(ngModel)]="siteURL" oninput="this.value = this.value.toUpperCase()"
               class="mb-2 form-control" name="Research">
           </div>
         </ng-container>
@@ -1733,7 +1732,7 @@
         <ng-container class="col-md-6 mt-2">
           <form autocomplete="off">
             <div>
-              <input type=" text" placeholder="Add details of Certifications you have achieved/completed."
+              <input type=" text" placeholder="Add details of Certifications you have achieved/completed." oninput="this.value = this.value.toUpperCase()"
                 class="mb-2 form-control" [(ngModel)]="siteURL" name="Certification">
             </div>
           </form>
@@ -1791,7 +1790,7 @@
       <div class="modal-body" *ngIf="isEditPresentation">
         <ng-container class="mt-2">
           <div>
-            <input type=" text" [(ngModel)]="siteURL" name="Presentation"
+            <input type=" text" [(ngModel)]="siteURL" name="Presentation" oninput="this.value = this.value.toUpperCase()"
               placeholder="Add links to your Online presentations (e.g. Slideshare presentation links etc.)."
               class="mb-2 form-control">
           </div>
@@ -1849,7 +1848,7 @@
       <div class="modal-body" *ngIf="isEditPatent">
         <ng-container class="col-md-6 mt-2">
           <div>
-            <input type=" text" placeholder="Add details of Patents you have filed." class="mb-2 form-control"
+            <input type=" text" placeholder="Add details of Patents you have filed." class="mb-2 form-control" oninput="this.value = this.value.toUpperCase()"
               [(ngModel)]="siteURL" name="Patent">
           </div>
         </ng-container>
@@ -1914,12 +1913,12 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Industry</label>
-              <input class="form-control " placeholder="Industry" name="Industry"
+              <input class="form-control " placeholder="Industry" name="Industry" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="editCarrerProfileModal.Industry" />
             </div>
             <div class="mb-3">
               <label class="form-label">Role Category</label>
-              <input class="form-control " placeholder="RoleCategory" name="RoleCategory"
+              <input class="form-control " placeholder="RoleCategory" name="RoleCategory" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="editCarrerProfileModal.RoleCategory" />
             </div>
             <div class="row">
@@ -1946,7 +1945,7 @@
               <label class="form-label">Expected Salary </label>
               <div class="row">
                 <div class="col-md-6">
-                  <input class="form-control" name="ExpectedSalary" [(ngModel)]="editCarrerProfileModal.ExpectedSalary">
+                  <input class="form-control" name="ExpectedSalary" [(ngModel)]="editCarrerProfileModal.ExpectedSalary" oninput="this.value = this.value.toUpperCase()">
                 </div>
                 <div class="col-md-6">
                   <select name="CurrencyType" class="form-control" [(ngModel)]="editCarrerProfileModal.CurrencyType">
@@ -1961,12 +1960,12 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Department</label>
-              <input class="form-control " placeholder="Department" name="Department"
+              <input class="form-control " placeholder="Department" name="Department" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="editCarrerProfileModal.Department" />
             </div>
             <div class="mb-3">
               <label class="form-label">Job Role</label>
-              <input class="form-control " placeholder="Role" name="Role" [(ngModel)]="editCarrerProfileModal.Role" />
+              <input class="form-control " placeholder="Role" name="Role" [(ngModel)]="editCarrerProfileModal.Role" oninput="this.value = this.value.toUpperCase()"/>
             </div>
             <div class="mb-3">
               <label class="form-label">Preferred Shift</label>
@@ -1980,7 +1979,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Preferred Work Location (Max 3)</label>
-              <input class="form-control " placeholder="Preferred Work Location" name="PreferredWorkLocation"
+              <input class="form-control " placeholder="Preferred Work Location" name="PreferredWorkLocation" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="editCarrerProfileModal.PreferredWorkLocation" />
             </div>
           </div>
@@ -2049,12 +2048,12 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Permanent Address </label>
-            <input class="form-control" placeholder="Full Address" name="Address"
+            <input class="form-control" placeholder="Full Address" name="Address" oninput="this.value = this.value.toUpperCase()"
               [(ngModel)]="editPersonalDetailModal.Address" />
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Home Town</label>
-            <input class="form-control" placeholder="Home Town" name="HomeTown" transform=""
+            <input class="form-control" placeholder="Home Town" name="HomeTown" oninput="this.value = this.value.toUpperCase()"
               [(ngModel)]="editPersonalDetailModal.HomeTown" />
           </div>
           <div class="col-md-6 mb-3">
@@ -2119,7 +2118,7 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Work Permit for Other Countries</label>
-            <input class="form-control" placeholder="You can choose 3 countries at max" name="PermitOtherCountry"
+            <input class="form-control" placeholder="You can choose 3 countries at max" name="PermitOtherCountry" oninput="this.value = this.value.toUpperCase()"
               [(ngModel)]="editPersonalDetailModal.PermitOtherCountry" />
           </div>
         </div>
@@ -2130,7 +2129,7 @@
               [formGroupName]="e">
               <div class="col-md-6 mb-3 ps-0">
                 <label class="form-label">Language </label>
-                <input class="form-control" placeholder="Language" name="Language" formControlName="Language" />
+                <input class="form-control" placeholder="Language" name="Language" formControlName="Language" oninput="this.value = this.value.toUpperCase()"/>
                 <div class="row ps-3 mt-2">
                   <div class="form-check col">
                     <input class="form-check-input" type="checkbox" formControlName="LanguageRead" value="true">
