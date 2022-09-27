@@ -31,7 +31,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   clients: Array<any> = [];
   allocatedClients: Array<any> = [];
-  allocatedCompany: Array<any> = [];
+  companies: Array<any> = [];
   currentCompanyDetail: any = null;
   isAllocated: boolean = false;
   isUpdate: boolean = false;
@@ -134,16 +134,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.buildProfileImage(profileDetail[0]);
       }
 
-      if(response.ResponseBody.Companies.length > 0)
-        this.allocatedCompany = response.ResponseBody.Companies;
-      else {
-        this.allocatedCompany = [{
-          CompanyName: "",
-          CompanyId: ""
-        }];
-        this.isCompaniesDetails = false;
-      }
-
       if (this.employeeModal.CompanyId > 0)
         this.currentCompanyDetail = response.ResponseBody.Companies.find(x => x.CompanyId == this.employeeModal.CompanyId);
       else
@@ -174,6 +164,16 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         }
       } else {
         this.leavePlans = [];
+      }
+
+      if(response.ResponseBody.Companies.length > 0)
+        this.companies = response.ResponseBody.Companies;
+      else {
+        this.companies = [{
+          CompanyName: "",
+          CompanyId: ""
+        }];
+        this.isCompaniesDetails = false;
       }
     } else {
       ErrorToast("Fail to get employee detail. Please contact to admin.");
