@@ -631,7 +631,7 @@ export class ManageComponent implements OnInit {
 
     submitCertification() {
       if (this.siteURL == '')
-      return ErrorToast("Please enter certification")
+        return ErrorToast("Please enter certification")
       this.isLoading = true;
       let certification = this.accomplishmentsForm.get("Certifications") as FormArray;
       this.siteURLForm = this.buildCertifications(this.siteURL);
@@ -1153,11 +1153,17 @@ export class ManageComponent implements OnInit {
 
   submitAccomplishmentDetail() {
     let onlineProfiles = this.accomplishmentsForm.controls['OnlineProfiles'].value;
+    onlineProfiles = onlineProfiles.filter(x => x.OnlineProfile != '');
     let certifications = this.accomplishmentsForm.controls['Certifications'].value;
+    certifications = certifications.filter(x => x.Certifications != '');
     let patents = this.accomplishmentsForm.controls['Patents'].value;
+    patents = patents.filter(x => x.Patents != '');
     let presentations = this.accomplishmentsForm.controls['Presentations'].value;
+    presentations = presentations.filter(x => x.Presentations != '');
     let researches = this.accomplishmentsForm.controls['Researchs'].value;
+    researches = researches.filter(x => x.Researchs != '');
     let workSamples = this.accomplishmentsForm.controls['WorkSamples'].value;
+    workSamples = workSamples.filter(x => x.WorkSamples != '');
     this.userModal.Accomplishments = {
       OnlineProfile: onlineProfiles.map(item => item.OnlineProfile),
       Certification: certifications.map(item => item.Certification),
@@ -1346,12 +1352,21 @@ export class ManageComponent implements OnInit {
     formData.append("userInfo", JSON.stringify(this.userModal));
     this.http.post(`user/UploadResume/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        Toast(response.ResponseBody);
+        let document = response.ResponseBody;
+          if (document) {
+            this.documentId = document.FileUid;
+            this.resumePath = document.FilePath;
+            this.resumeFileName = document.FileName;
+            this.extension = document.FileExtension;
+            this.isResumeUploaded = true;
+            this.uploading = false;
+            this.fileDetail = [];
+          }
+        Toast("Resume Uploaded Successfully.");
       }
     }).catch(e => {
       this.isLoading = false;
     })
-    this.fileDetail = [];
   }
 
   submitManageUserForm() {
