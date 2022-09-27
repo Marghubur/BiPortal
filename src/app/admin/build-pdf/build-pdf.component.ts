@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
 import { NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -19,7 +19,7 @@ declare var $: any;
   styleUrls: ['./build-pdf.component.scss'],
   providers: [{ provide: NgbDateParserFormatter, useClass: DateFormatter }]
 })
-export class BuildPdfComponent implements OnInit {
+export class BuildPdfComponent implements OnInit, AfterViewChecked {
   model: NgbDateStruct;
   selectedDate: any = null;
   submitted: boolean = false;
@@ -73,6 +73,16 @@ export class BuildPdfComponent implements OnInit {
     private nav: iNavigation,
     private sanitizer: DomSanitizer
   ) { }
+
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('dispose');
+    });
+  }
 
   ngOnInit(): void {
     this.viewer = document.getElementById("file-container");
@@ -163,11 +173,11 @@ export class BuildPdfComponent implements OnInit {
       }
     }
 
-    timesheetDetails.map(item => {
-      item.PresentDate = new Date(item.PresentDate);
-      if(item.TimesheetStatus == 8)
-        burnDays++;
-    });
+    // timesheetDetails.map(item => {
+    //   item.PresentDate = new Date(item.PresentDate);
+    //   if(item.TimesheetStatus == 8)
+    //     burnDays++;
+    // });
 
     if (burnDays > 0)
       this.pdfForm.get('actualDaysBurned').setValue(burnDays)
@@ -1034,6 +1044,21 @@ export class BuildPdfComponent implements OnInit {
     } catch(e) {
       ErrorToast("Getting calculation error from client side. Please contact to admin.");
     }
+  }
+
+  updateActualDays() {
+    let burnDays = 0;
+    this.allTimesheet.map(item => {
+      item.PresentDate = new Date(item.PresentDate);
+      if(item.TimesheetStatus == 8)
+        burnDays++;
+    });
+    if (burnDays > 0)
+      this.pdfForm.get('actualDaysBurned').setValue(burnDays)
+    else
+      burnDays = this.pdfForm.get('actualDaysBurned').value;
+
+    this._calculateAmount(burnDays);
   }
 
   viewSendTemplete(e: any) {

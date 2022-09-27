@@ -186,6 +186,12 @@ export class ManageComponent implements OnInit {
         }
 
         educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+        this.userModal.Accomplishments.Certification = this.userModal.Accomplishments.Certification.filter(x => x !== '');
+        this.userModal.Accomplishments.OnlineProfile = this.userModal.Accomplishments.OnlineProfile.filter(x => x !== '');
+        this.userModal.Accomplishments.Patent = this.userModal.Accomplishments.Patent.filter(x => x !== '');
+        this.userModal.Accomplishments.Presentation = this.userModal.Accomplishments.Presentation.filter(x => x !== '');
+        this.userModal.Accomplishments.Research = this.userModal.Accomplishments.Research.filter(x => x !== '');
+        this.userModal.Accomplishments.WorkSample = this.userModal.Accomplishments.WorkSample.filter(x => x !== '');
         this.userModal.EducationalDetails = educations;
         this.UserId = this.userModal.EmployeeId;
         if (this.userModal.Employments.length == 0)
@@ -631,7 +637,7 @@ export class ManageComponent implements OnInit {
 
     submitCertification() {
       if (this.siteURL == '')
-      return ErrorToast("Please enter certification")
+        return ErrorToast("Please enter certification")
       this.isLoading = true;
       let certification = this.accomplishmentsForm.get("Certifications") as FormArray;
       this.siteURLForm = this.buildCertifications(this.siteURL);
@@ -1197,6 +1203,13 @@ export class ManageComponent implements OnInit {
         if (this.profile != null)
           this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
         educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+        this.userModal.Accomplishments.Certification = this.userModal.Accomplishments.Certification.filter(x => x !== '');
+        this.userModal.Accomplishments.OnlineProfile = this.userModal.Accomplishments.OnlineProfile.filter(x => x !== '');
+        this.userModal.Accomplishments.Patent = this.userModal.Accomplishments.Patent.filter(x => x !== '');
+        this.userModal.Accomplishments.Presentation = this.userModal.Accomplishments.Presentation.filter(x => x !== '');
+        this.userModal.Accomplishments.Research = this.userModal.Accomplishments.Research.filter(x => x !== '');
+        this.userModal.Accomplishments.WorkSample = this.userModal.Accomplishments.WorkSample.filter(x => x !== '');
+
         this.userModal.EducationalDetails = educations;
         this.UserId = this.userModal.EmployeeId;
         if (this.userModal.Employments.length == 0)
@@ -1346,12 +1359,21 @@ export class ManageComponent implements OnInit {
     formData.append("userInfo", JSON.stringify(this.userModal));
     this.http.post(`user/UploadResume/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        Toast(response.ResponseBody);
+        let document = response.ResponseBody;
+          if (document) {
+            this.documentId = document.FileUid;
+            this.resumePath = document.FilePath;
+            this.resumeFileName = document.FileName;
+            this.extension = document.FileExtension;
+            this.isResumeUploaded = true;
+            this.uploading = false;
+            this.fileDetail = [];
+          }
+        Toast("Resume Uploaded Successfully.");
       }
     }).catch(e => {
       this.isLoading = false;
     })
-    this.fileDetail = [];
   }
 
   submitManageUserForm() {

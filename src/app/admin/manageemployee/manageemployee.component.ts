@@ -121,6 +121,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         date = new Date(this.employeeModal.CreatedOn);
         this.joiningDatemodel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        if (this.employeeModal.DesignationId == 0)
+          this.employeeModal.DesignationId = null;
       }
 
       if(response.ResponseBody.Roles)
@@ -383,7 +385,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         file = this.fileDetail[0].file;
       formData.append(ProfileImage, file);
 
-      this.isReady = false;
       this.http.post(`Employee/employeeregistration/${this.isUpdate}`, formData).then((response: ResponseModel) => {
         this.buildPageData(response);
         this.bindForm();
@@ -393,7 +394,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         else
           Toast("Registration done successfully");
         this.isLoading = false;
-        this.isReady = true;
       }).catch(e => {
         this.isReady = true;
         this.isLoading = false;
@@ -401,7 +401,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       });
     } else {
       this.isLoading = false;
-      this.isReady = true;
       ErrorToast("Please correct all the mandaroty field marked red");
     }
   }
