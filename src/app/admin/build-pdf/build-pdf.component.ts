@@ -800,8 +800,23 @@ export class BuildPdfComponent implements OnInit {
       ErrorToast("Company not selected properly.");
   }
 
+  setCurrentOrganization(): boolean {
+    this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === this.existingData.FileOwnerId);
+    if (this.currentEmployee) {
+      this.currentOrganization = this.applicationData.Organizations
+        .find(i => i.CompanyId == this.currentEmployee.CompanyId);
+      return true;
+    }
+    return false;
+  }
+
   bindClientDetail(Id: any) {
     this.isClientSelected = false;
+    if(!this.setCurrentOrganization()){
+      ErrorToast("Fail to load bill detail. Please contact to admin.")
+      return;
+    }
+
     if (Id !== null) {
       let companyId: number = Number(Id);
       this.senderClient = this.applicationData.Organizations.find(x => x.CompanyId === this.currentOrganization.CompanyId);

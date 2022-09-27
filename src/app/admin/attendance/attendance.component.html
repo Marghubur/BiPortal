@@ -28,20 +28,11 @@
             </div>
             <div class="col-md-4 p-0 m-0">
               <label class="form-label">Select Compnay</label>
-              <app-iautocomplete [data]="clientDetail" (OnSelect)="loadMappedClients($event)"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+              <app-iautocomplete [data]="clientDetail" (OnSelect)="loadAttendance()"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
               </app-iautocomplete>
             </div>
           </div>
         </ng-container>
-        <div class="col-md-4 vhide elem-row justify-content-end">
-          <div class="elem-row-item-base justify-content-end ps-2">
-            <a href="javascript:void(0)"
-              class="p-2 p-2 badge bg-success text-light head-badge">
-              <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
-              My pending attendance
-            </a>
-          </div>
-        </div>
       </div>
     </div>
     <div *ngIf="isEmployeesReady">
