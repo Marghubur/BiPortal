@@ -79,6 +79,8 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       }
 
       this.isLoaded = true;
+    }).catch(e => {
+      this.isLoaded = true;
     });
   }
 

@@ -320,6 +320,8 @@ export class AttendanceComponent implements OnInit {
       }
 
       $('#commentModal').modal('hide');
+    }).catch(e => {
+      this.isLoading = false;
     })
   }
 
