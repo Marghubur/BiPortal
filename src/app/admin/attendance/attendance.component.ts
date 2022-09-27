@@ -101,30 +101,11 @@ export class AttendanceComponent implements OnInit {
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
     if(this.cachedData) {
-      this.isRedirected = false;
-      //this.clientId = this.cachedData.ClientUid;
-      this.loadData();
+      this.isRedirected = true;
       this.employeeId = this.cachedData.EmployeeUid;
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
-      let clients = this.cachedData.ClientJson;
-      this.clientDetail.className = 'disabled-input';
-      if (clients.length == 1) {
-        this.clientDetail.data.push({
-          text: clients[0].CompanyName,
-          value: clients[0].CompanyId,
-        });
-        this.clientId = clients[0].CompanyId;
-        this.loadMappedClients(this.clientId);
-      } else {
-        let i= 0;
-        while (i < clients.length) {
-          this.clientDetail.data.push({
-            text: clients[i].CompanyName,
-            value: clients[i].CompanyId,
-          });
-          i++;
-        }
-      }
+      this.clientId = this.cachedData.CompanyId;
+      this.loadAttendanceData();
     } else {
       this.isRedirected = false;
       this.userDetail = this.user.getInstance() as UserDetail;
@@ -137,10 +118,10 @@ export class AttendanceComponent implements OnInit {
           return;
         }
       }
+
       this.employeeId = 0;
       this.userName = "";
       this.loadData();
-
     }
 
     let i = 0;
@@ -159,93 +140,72 @@ export class AttendanceComponent implements OnInit {
 
   loadData() {
     this.isEmployeesReady = false;
-    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+    let fileter = new Filter();
+    this.http.post(`employee/GetEmployees/`, fileter).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        this.applicationData = response.ResponseBody;
+        this.applicationData["Employees"] = response.ResponseBody;        
         this.employeesList.data = [];
         this.employeesList.placeholder = "Employee";
         let employees = this.applicationData.Employees;
         if(employees) {
-          let i = 0;
-          while(i < employees.length) {
-            this.employeesList.data.push({
-              text: `${employees[i].FirstName} ${employees[i].LastName}`,
-              value: employees[i].EmployeeUid
-            });
-            i++;
-          }
+            let i = 0;
+            while(i < employees.length) {
+              this.employeesList.data.push({
+                text: `${employees[i].FirstName} ${employees[i].LastName}`,
+                value: employees[i].EmployeeUid
+              });
+              i++;
+            }
+        } else {
+          ErrorToast("Fail to load employee list. Please contact to admin.");
         }
-        this.employeesList.className = "";
 
+        this.employeesList.className = "";
         this.isEmployeesReady = true;
       }
     });
   }
 
-  // loadMappedClients() {
-  //   this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
-  //     if(response.ResponseBody) {
-  //       this.applicationData = response.ResponseBody;
-  //       if(this.applicationData.AllocatedClients && this.applicationData.EmployeesList) {
-
-  //         if(!this.isRedirected) {
-  //           this.employeesList.data = [];
-  //           this.employeesList.placeholder = "Employee";
-  //           let employees = this.applicationData.EmployeesList;
-  //           if(employees) {
-  //             let i = 0;
-  //             while(i < employees.length) {
-  //               this.employeesList.data.push({
-  //                 text: `${employees[i].FirstName} ${employees[i].LastName}`,
-  //                 value: employees[i].EmployeeUid
-  //               });
-  //               i++;
-  //             }
-  //           }
-  //         } else {
-  //           let mappedClient = this.applicationData.AllocatedClients;
-  //           if(mappedClient != null && mappedClient.length > 0) {
-  //             let i = 0;
-  //             while(i < mappedClient.length) {
-  //               this.clientDetail.data.push({
-  //                 text: mappedClient[i].ClientName,
-  //                 value: mappedClient[i].ClientUid,
-  //               });
-  //               i++;
-  //             }
-
-  //             if(mappedClient.length == 1) {
-  //               this.clientId = mappedClient[0].ClientUid;
-  //             } else {
-  //               this.clientDetail.className = '';
-  //             }
-
-  //             Toast("Client loaded successfully.");
-  //           }
-  //         }
-  //       }  else {
-  //         ErrorToast("Unable to load data. Please contact admin.");
-  //       }
-
-  //       this.isEmployeesReady = true;
-  //       $('#loader').modal('hide');
-  //     } else {
-  //       ErrorToast("Unable to get client detail. Please contact admin.");
-  //     }
+  // bindDefaultCompany() {
+  //   this.isEmployeeSelected = false;
+  //   this.clientDetail.data.push({
+  //     text: this.applicationData.Company.CompanyName,
+  //     value: this.applicationData.Company.CompanyId,
   //   });
   // }
 
-  loadMappedClients(id: number) {
+  findEmployeeCompany() {
+    let companies: Array<any> = this.local.findRecord("Companies") as Array<any>;
+    if (companies) {
+      let company = companies.find(x => x.CompanyId == this.clientId);
+      if (!company) {
+        ErrorToast("Company not found for this user.")
+        throw new Error("Company not found for this user.")
+      }
+
+      this.applicationData.Company = company;
+      this.clientDetail.data.push({
+        text: this.applicationData.Company.CompanyName,
+        value: this.applicationData.Company.CompanyId,
+      });
+    } else {
+      ErrorToast("No company found for current employee.");
+      throw new Error("Company not found for this user.")
+    }
+  }
+
+  loadAttendanceData() {
     this.isLoading = true;
-    this.isEmployeeSelected = true;
+    this.isEmployeeSelected = false;
     if(this.employeeId <= 0) {
       Toast("Invalid user selected.")
       return;
     }
-    this.clientId = id;
+    
+    this.findEmployeeCompany();
     let now = new Date();
     this.fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
-    this.toDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    this.toDate = now;
 
     let data = {
       EmployeeUid: Number(this.employeeId),
@@ -267,12 +227,13 @@ export class AttendanceComponent implements OnInit {
 
       if (response.ResponseBody.AttendacneDetails) {
         this.bindAttendace(response.ResponseBody.AttendacneDetails);
-        //this.createPageData(response.ResponseBody.AttendacneDetails);
         this.isAttendanceDataLoaded = true;
       }
 
       this.divisionCode = 1;
       this.isLoading = false;
+      this.isEmployeesReady = true;
+      this.isEmployeeSelected = true;
     }).catch(err => {
       this.isLoading = false;
       WarningToast(err.error.HttpStatusMessage);
@@ -405,33 +366,10 @@ export class AttendanceComponent implements OnInit {
   findEmployeeById(employeeId: any) {
     if (employeeId) {
       this.isEmployeeSelected = false;
-      this.clientId =0;
+      this.clientId = 0;
       this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === parseInt(employeeId));
-      if (this.currentEmployee && this.currentEmployee.ClientJson != null) {
-        this.userName = `${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
-        let clients = JSON.parse(this.currentEmployee.ClientJson);
-        this.clientDetail = {
-          data: [],
-          className: "",
-          placeholder: "Select Organization"
-        }
-
-        //let assignedClients = this.applicationData.Clients.filter(x => clients.indexOf(x.ClientId) !== -1);
-        let i = 0;
-        while(i < clients.length) {
-          this.clientDetail.data.push({
-            text: clients[i].CompanyName,
-            value: clients[i].CompanyId,
-          });
-          i++;
-        }
-        if (clients.length  == 1) {
-          this.clientId = clients[0].CompanyId;
-          this.loadMappedClients(this.clientId);
-        }
-        else
-          this.clientId = 0;
-      }
+      this.clientId = this.currentEmployee.CompanyId;
+      this.loadAttendanceData();
     }
   }
 }

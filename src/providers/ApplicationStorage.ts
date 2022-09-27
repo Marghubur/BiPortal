@@ -39,7 +39,7 @@ export class ApplicationStorage {
     localStorage.clear();
   }
 
-  getSingle(storageName: string, key: string) {
+  findRecord(key: string, storageName: string = null) {
     let ResultingData = null;
     if (
       storageName === undefined ||

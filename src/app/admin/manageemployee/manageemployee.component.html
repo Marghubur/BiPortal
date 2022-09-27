@@ -191,7 +191,7 @@
                           <select class="form-control" formControlName="CompanyId"
                             [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
                             <option value="">Select Company</option>
-                            <option *ngFor="let item of allocatedCompany" [value]="item.CompanyId">
+                            <option *ngFor="let item of companies" [value]="item.CompanyId">
                               {{item.CompanyName}}
                             </option>
                           </select>
