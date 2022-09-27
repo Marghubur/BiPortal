@@ -186,6 +186,12 @@ export class ManageComponent implements OnInit {
         }
 
         educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+        this.userModal.Accomplishments.Certification = this.userModal.Accomplishments.Certification.filter(x => x !== '');
+        this.userModal.Accomplishments.OnlineProfile = this.userModal.Accomplishments.OnlineProfile.filter(x => x !== '');
+        this.userModal.Accomplishments.Patent = this.userModal.Accomplishments.Patent.filter(x => x !== '');
+        this.userModal.Accomplishments.Presentation = this.userModal.Accomplishments.Presentation.filter(x => x !== '');
+        this.userModal.Accomplishments.Research = this.userModal.Accomplishments.Research.filter(x => x !== '');
+        this.userModal.Accomplishments.WorkSample = this.userModal.Accomplishments.WorkSample.filter(x => x !== '');
         this.userModal.EducationalDetails = educations;
         this.UserId = this.userModal.EmployeeId;
         if (this.userModal.Employments.length == 0)
@@ -1153,17 +1159,11 @@ export class ManageComponent implements OnInit {
 
   submitAccomplishmentDetail() {
     let onlineProfiles = this.accomplishmentsForm.controls['OnlineProfiles'].value;
-    onlineProfiles = onlineProfiles.filter(x => x.OnlineProfile != '');
     let certifications = this.accomplishmentsForm.controls['Certifications'].value;
-    certifications = certifications.filter(x => x.Certifications != '');
     let patents = this.accomplishmentsForm.controls['Patents'].value;
-    patents = patents.filter(x => x.Patents != '');
     let presentations = this.accomplishmentsForm.controls['Presentations'].value;
-    presentations = presentations.filter(x => x.Presentations != '');
     let researches = this.accomplishmentsForm.controls['Researchs'].value;
-    researches = researches.filter(x => x.Researchs != '');
     let workSamples = this.accomplishmentsForm.controls['WorkSamples'].value;
-    workSamples = workSamples.filter(x => x.WorkSamples != '');
     this.userModal.Accomplishments = {
       OnlineProfile: onlineProfiles.map(item => item.OnlineProfile),
       Certification: certifications.map(item => item.Certification),
@@ -1203,6 +1203,13 @@ export class ManageComponent implements OnInit {
         if (this.profile != null)
           this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
         educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+        this.userModal.Accomplishments.Certification = this.userModal.Accomplishments.Certification.filter(x => x !== '');
+        this.userModal.Accomplishments.OnlineProfile = this.userModal.Accomplishments.OnlineProfile.filter(x => x !== '');
+        this.userModal.Accomplishments.Patent = this.userModal.Accomplishments.Patent.filter(x => x !== '');
+        this.userModal.Accomplishments.Presentation = this.userModal.Accomplishments.Presentation.filter(x => x !== '');
+        this.userModal.Accomplishments.Research = this.userModal.Accomplishments.Research.filter(x => x !== '');
+        this.userModal.Accomplishments.WorkSample = this.userModal.Accomplishments.WorkSample.filter(x => x !== '');
+
         this.userModal.EducationalDetails = educations;
         this.UserId = this.userModal.EmployeeId;
         if (this.userModal.Employments.length == 0)

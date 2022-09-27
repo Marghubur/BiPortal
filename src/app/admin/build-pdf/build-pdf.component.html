@@ -76,6 +76,8 @@
                 <div class="col-6 text-end">
                   <a href="javascript:void(0)" class="text-primary-c fw-bold pe-4" [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="viewTimesheetDetail()">
                     Edit TimeSheet</a>
+                  <a href="javascript:void(0)" class="text-primary-c fw-bold pe-4" [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="updateActualDays()">
+                    Update <i class="fa fa-exclamation-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Update actual days accrording to timesheet"></i></a>
                 </div>
               </div>
             </div>
