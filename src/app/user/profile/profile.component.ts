@@ -70,7 +70,7 @@ export class ProfileComponent implements OnInit {
   ExptinMonths: number = 0;
   Exptdate: Date = null;
   isUser: boolean = true;
-  remainingNumber: number = 0;
+  remainingNumber: number = 4000;
   isEdit: boolean = false;
   indexValue: number = 0;
   editEmploymentModal: Employment;
@@ -1320,7 +1320,12 @@ export class ProfileComponent implements OnInit {
   }
 
   countNumberofCharacter(e: any) {
-    this.remainingNumber = 4000 - e.length;
+    if (this.remainingNumber < 0) {
+      ErrorToast("No more character added.");
+      e.target.value = e.target.value;
+      return;
+    }
+    this.remainingNumber = 4000 - e.target.value.length;
   }
 
   reset() {

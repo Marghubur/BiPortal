@@ -74,10 +74,10 @@
                   </label>
                 </div>
                 <div class="col-6 text-end">
-                  <a href="javascript:void(0)" class="text-primary-c fw-bold pe-4" [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="viewTimesheetDetail()">
+                  <a href="javascript:void(0)" class="text-primary-c fw-bold pe-5" [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="viewTimesheetDetail()">
                     Edit TimeSheet</a>
-                  <a href="javascript:void(0)" class="text-primary-c fw-bold pe-4" [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="updateActualDays()">
-                    Update <i class="fa fa-exclamation-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Update actual days accrording to timesheet"></i></a>
+                  <a href="javascript:void(0)" class="text-primary-c fw-bold pe-4" [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="updateActualDaysPopup()">
+                    Update [{{timesheetAprovalDays}} days] <i class="fa fa-exclamation-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Update {{timesheetAprovalDays}} actual days based on timesheet"></i></a>
                 </div>
               </div>
             </div>
@@ -812,3 +812,21 @@
   </div>
 </div>
 <!-- End modal -->
+
+<!--Update Actual burnd days Modal -->
+<div class="modal fade" id="updateburnDaysModal" tabindex="-1" aria-labelledby="updateburnDaysModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="updateburnDaysModalLabel">Update Actaul Days</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="fw-bold text-dark">Are you want to update {{timesheetAprovalDays}} actual days based on timesheet?</h5>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class=" fa fa-close pe-2"></i> Close</button>
+        <button type="button" class="btn btn-primary-c" (click)="updateActualDays()"><i class="fa fa-file-o pe-2"></i>Update</button>
+      </div>
+    </div>
+  </div>

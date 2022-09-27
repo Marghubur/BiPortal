@@ -65,6 +65,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   isClientAssigned: boolean = true;
   existingData: any = null;
   emailTemplate: any = null;
+  timesheetAprovalDays: number = 0;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -172,12 +173,12 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         i++;
       }
     }
-
-    // timesheetDetails.map(item => {
-    //   item.PresentDate = new Date(item.PresentDate);
-    //   if(item.TimesheetStatus == 8)
-    //     burnDays++;
-    // });
+    this.timesheetAprovalDays = 0;
+    timesheetDetails.map(item => {
+      item.PresentDate = new Date(item.PresentDate);
+      if(item.TimesheetStatus == 8)
+        this.timesheetAprovalDays++;
+    });
 
     if (burnDays > 0)
       this.pdfForm.get('actualDaysBurned').setValue(burnDays)
@@ -1046,6 +1047,10 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  updateActualDaysPopup() {
+    $('#updateburnDaysModal').modal('show');
+  }
+
   updateActualDays() {
     let burnDays = 0;
     this.allTimesheet.map(item => {
@@ -1053,12 +1058,13 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       if(item.TimesheetStatus == 8)
         burnDays++;
     });
-    if (burnDays > 0)
+    if (burnDays >= 0)
       this.pdfForm.get('actualDaysBurned').setValue(burnDays)
-    else
-      burnDays = this.pdfForm.get('actualDaysBurned').value;
+    // else
+    //   burnDays = this.pdfForm.get('actualDaysBurned').value;
 
     this._calculateAmount(burnDays);
+    $('#updateburnDaysModal').modal('hide');
   }
 
   viewSendTemplete(e: any) {

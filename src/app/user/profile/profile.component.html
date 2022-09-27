@@ -1275,7 +1275,7 @@
                 <fieldset>
                   <div class="mb-3">
                     <label class="form-label">Describe your Job Profile</label>
-                    <textarea name="JobProfile" rows="5" placeholder="Type here ....." class="form-control"
+                    <textarea name="JobProfile" rows="5" placeholder="Type here ....." class="form-control" maxlength="4000"
                       (keydown)="countNumberofCharacter($event)"
                       [(ngModel)]="editEmploymentModal.JobProfile"></textarea>
                     <small class="float-end">{{remainingNumber}} Character(s) Left</small>
