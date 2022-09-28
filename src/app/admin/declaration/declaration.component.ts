@@ -2,7 +2,7 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { Files } from 'src/app/admin/documents/documents.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -679,19 +679,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.applicationData = response.ResponseBody;
         this.employeesList.data = [];
         this.employeesList.placeholder = "Employee";
-        let employees = this.applicationData.Employees;
-        if(employees) {
-          let i = 0;
-          while(i < employees.length) {
-            this.employeesList.data.push({
-              text: `${employees[i].FirstName} ${employees[i].LastName}`,
-              value: employees[i].EmployeeUid
-            });
-            i++;
-          }
-        }
+        this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
-
         this.isEmployeesReady = true;
       }
     });
