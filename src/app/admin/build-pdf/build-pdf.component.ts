@@ -211,7 +211,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         "ForYear": this.existingData.Year
       };
 
-      this.http.post("FileMaker/EditEmployeeBillDetail", employeeBillDetail).then((response: ResponseModel) => {
+      this.http.post("Timesheet/EditEmployeeBillDetail", employeeBillDetail).then((response: ResponseModel) => {
         let fileDetail: any = null;
         let editPackageAmount: number = 0;
         let editGrandTotalAmount: number = 0;
@@ -630,6 +630,30 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     this.common.ShowToast("Form is reset.");
   }
 
+  getTimeSheetData(): FormData {
+    let value = (<HTMLInputElement>document.getElementById('commentsection')).value;
+    let formData = new FormData();
+    let firstDate = new Date(this.allTimesheet[0].PresentDate);
+    let timeSheetDetail = {
+      EmployeeId: this.pdfForm.get("developerId").value,
+      UserTypeId: UserType.Employee,
+      ForMonth: firstDate.getMonth() + 1,
+      ForYear: firstDate.getFullYear(),
+      ClientId: this.pdfForm.get("receiverCompanyId").value
+    };
+
+    this.allTimesheet.map(x => {
+      x.EmployeeId = this.currentEmployee.EmployeeUid;
+      x.ClientId = this.pdfForm.get("receiverCompanyId").value
+    });
+
+    formData.append('Comment', JSON.stringify(value));
+    formData.append('DailyTimesheetDetail', JSON.stringify(this.allTimesheet));
+    formData.append('TimesheetDetail', JSON.stringify(timeSheetDetail));
+
+    return formData;
+  }
+
   generate() {
     this.isLoading = true;
     this.submitted = true;
@@ -678,7 +702,10 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       let modalStatus = this.validateBillRequest(request);
       this.billAllDetails = request;
       if(modalStatus == null) {
-        this.http.post("FileMaker/GenerateBill", request).then((response: ResponseModel) => {
+        let timesheetForm: FormData = this.getTimeSheetData();
+        timesheetForm.append('BillRequestData', JSON.stringify(request));
+        
+        this.http.post("FileMaker/GenerateBill", timesheetForm).then((response: ResponseModel) => {
           if(response.ResponseBody.FileDetail !== null &&
             response.ResponseBody.EmailTemplate !== null) {
             this.downloadFile(response.ResponseBody.FileDetail);
@@ -1016,35 +1043,35 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   submitTimesheet() {
     this.isLoading = true;
     try {
-      let value = (<HTMLInputElement>document.getElementById('commentsection')).value;
-      let formData = new FormData();
-      let firstDate = new Date(this.allTimesheet[0].PresentDate);
-      let timeSheetDetail = {
-        EmployeeId: this.pdfForm.get("developerId").value,
-        UserTypeId: UserType.Employee,
-        ForMonth: firstDate.getMonth() + 1,
-        ForYear: firstDate.getFullYear(),
-        ClientId: this.pdfForm.get("receiverCompanyId").value
-      };
+      // let value = (<HTMLInputElement>document.getElementById('commentsection')).value;
+      // let formData = new FormData();
+      // let firstDate = new Date(this.allTimesheet[0].PresentDate);
+      // let timeSheetDetail = {
+      //   EmployeeId: this.pdfForm.get("developerId").value,
+      //   UserTypeId: UserType.Employee,
+      //   ForMonth: firstDate.getMonth() + 1,
+      //   ForYear: firstDate.getFullYear(),
+      //   ClientId: this.pdfForm.get("receiverCompanyId").value
+      // };
 
-      this.allTimesheet.map(x => {
-        x.EmployeeId = this.currentEmployee.EmployeeUid;
-        x.ClientId = this.pdfForm.get("receiverCompanyId").value
-      });
+      // this.allTimesheet.map(x => {
+      //   x.EmployeeId = this.currentEmployee.EmployeeUid;
+      //   x.ClientId = this.pdfForm.get("receiverCompanyId").value
+      // });
 
-      formData.append('comment', JSON.stringify(value));
-      formData.append('dailyTimesheetDetail', JSON.stringify(this.allTimesheet));
-      formData.append('timesheet', JSON.stringify(timeSheetDetail));
-      this.http.post('Timesheet/UpdateTimesheet', formData).then(res => {
-        if (res.ResponseBody) {
-          this.buildTimeSheet(res.ResponseBody, this.currentEmployee.EmployeeUid);
-          this.isLoading = false;
-          $('#timesheet-view').modal('hide');
-        } else
-          this.isLoading = false;
-      }).catch(e => {
-        this.isLoading = false;
-      })
+      // formData.append('comment', JSON.stringify(value));
+      // formData.append('dailyTimesheetDetail', JSON.stringify(this.allTimesheet));
+      // formData.append('timesheet', JSON.stringify(timeSheetDetail));
+      // this.http.post('Timesheet/UpdateTimesheet', formData).then(res => {
+      //   if (res.ResponseBody) {
+      //     this.buildTimeSheet(res.ResponseBody, this.currentEmployee.EmployeeUid);
+      //     this.isLoading = false;
+      //     $('#timesheet-view').modal('hide');
+      //   } else
+      //     this.isLoading = false;
+      // }).catch(e => {
+      //   this.isLoading = false;
+      // })
     } catch(e) {
       ErrorToast("Getting calculation error from client side. Please contact to admin.");
     }
