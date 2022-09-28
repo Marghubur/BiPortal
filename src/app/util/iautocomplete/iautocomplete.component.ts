@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, forwardRef } from "@ang
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import * as $ from "jquery";
 import { CommonService } from "src/providers/common-service/common.service";
+import { API } from "src/providers/constants";
 
 /*
 
@@ -122,6 +123,11 @@ export class IautocompleteComponent implements OnInit, ControlValueAccessor {
   constructor(private commonService: CommonService) {
     this.HeightValue = 250;
     this.AutofillDroopdownHeight = this.HeightValue.toString() + "px";
+  }
+
+  LoadFromApi(e: any) {
+    alert(e.target.value);
+    API.GETEMPLOYEEBYFILTER;
   }
 
   BindDefaultValue() {
@@ -599,6 +605,7 @@ export class pairData {
   value: any = null
   text: string = "";
 }
+
 export class autoCompleteModal {
   constructor(text: string = 'Select your option') {
     this.placeholder = text;

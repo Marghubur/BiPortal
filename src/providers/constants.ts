@@ -153,6 +153,10 @@ export const UserImage = "assets/images/faces/face.jpg";
 export const OrgLogo = "assets/images/organization-logo.jpg"
 
 
+export class API {
+  public static GETEMPLOYEEBYFILTER: string = "employee/GetEmployees";
+}
+
 
 export const MaxAllowedFileSize = 2048
 

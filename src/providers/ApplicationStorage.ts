@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { CommonService, UserDetail } from "./common-service/common.service";
+import { pairData } from "src/app/util/iautocomplete/iautocomplete.component";
+import { CommonService, ErrorToast, UserDetail } from "./common-service/common.service";
 import { Master } from "./constants";
 
 @Injectable()
@@ -134,4 +135,21 @@ export class ApplicationStorage {
     }
     return flag;
   }
+
+  //--------------------- Handle employee cache -----------------------------
+
+}
+
+export function GetEmployees(): Array<pairData> {
+  let employees: Array<pairData> = [];
+  let Data: any = localStorage.getItem(Master);
+  if (Data && Data.trim().length > 0) {
+    Data = JSON.parse(Data);
+    employees = Data['EmployeeList'];      
+    if (!employees) {
+      ErrorToast("Unable to load employee list. Please contact to admin.");
+    }
+  }
+
+  return employees;
 }
