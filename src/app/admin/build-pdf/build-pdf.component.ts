@@ -152,6 +152,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     this.http.post("Timesheet/GetEmployeeTimeSheet", timesheetStatusFor).then ((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.buildTimeSheet(response.ResponseBody, this.currentEmployee.EmployeeUid);
+        this.timesheetbreakup();
       }
       this.isClientSelected = true;
     });
