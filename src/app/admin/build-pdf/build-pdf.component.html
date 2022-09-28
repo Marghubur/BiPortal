@@ -681,7 +681,7 @@
           <div class="t-table border-cell t-list t-border col-md-12">
             <div class="t-head overflow-hidden">
               <div class="tr">
-                <div class="th fe-1 text-center" *ngFor="let day of dayList">
+                <!-- <div class="th fe-1 text-center" *ngFor="let day of dayList">
                   <div [ngSwitch]="day">
                     <div class="fw-bold p-2 bg-ant" *ngSwitchCase="1">Monday</div>
                     <div class="fw-bold p-2 bg-ant" *ngSwitchCase="2">Tuesday</div>
@@ -691,14 +691,40 @@
                     <div class="fw-bold p-2 bg-ant" *ngSwitchCase="6">Saturday</div>
                     <div class="fw-bold p-2 bg-ant" *ngSwitchDefault>Sunday</div>
                   </div>
-                </div>
+                </div> -->
+                <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Monday</div>
+                <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Tuesday</div>
+                <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Wednesday</div>
+                <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Thursday</div>
+                <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Friday</div>
+                <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Saturday</div>
+                <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Sunday</div>
                 <div class="th fe-index text-center fw-bold p-2 bg-ant">Action</div>
               </div>
             </div>
             <div class="t-body overflow-hidden">
               <ng-container>
-                <div class="tr py-2">
-                  <ng-container *ngFor="let item of allTimesheet | slice:0:7">
+                <div class="tr py-2" *ngFor="let items of timesheetBreakup; let i = index; let last = last;">
+                  <!-- <ng-container *ngFor="let item of allTimesheet | slice:0:7">
+                    <div class="td fe-1 align-middle text-center">
+                      <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
+                        {{item.PresentDate | date}}
+                        <ng-container *ngIf="item.TimesheetStatus == 8">
+                          <i class="ps-2 text-success fa fa-check"></i>
+                        </ng-container>
+                        <ng-container *ngIf="item.TimesheetStatus != 8">
+                          <i class="ps-2 text-danger fa fa-close"></i>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container> -->
+                  <div class="td align-middle text-center" *ngIf="i == 0"
+                    [ngClass]="{'fe-1': items.length == 6, 'fe-2': items.length == 5, 'fe-3': items.length == 4, 'fe-4': items.length == 3, 'fe-5': items.length == 2, 'fe-6': items.length == 1, 'd-none': items.length == 7}">
+                    <div class="cell-wrapper edit-cellwrapper">
+                      <span class="d-none">{{items}}</span>
+                    </div>
+                  </div>
+                  <ng-container *ngFor="let item of items">
                     <div class="td fe-1 align-middle text-center">
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
@@ -711,11 +737,17 @@
                       </div>
                     </div>
                   </ng-container>
+                  <div class="td align-middle text-center" *ngIf="i == 4|| i == 3"
+                    [ngClass]="{'fe-1': items.length == 6, 'fe-2': items.length == 5, 'fe-3': items.length == 4, 'fe-4': items.length == 3, 'fe-5': items.length == 2, 'fe-6': items.length == 1, 'd-none': items.length == 7}">
+                    <div class="cell-wrapper edit-cellwrapper">
+                      <span class="d-none">{{items}}</span>
+                    </div>
+                  </div>
                   <div class="td align-middle text-center fe-index">
-                    <input class="form-check-input" type="checkbox" data-checktype="weekly" (click)="weekSelected($event, 1)">
+                    <input class="form-check-input" type="checkbox" data-checktype="weekly" (click)="weekSelected($event, items)">
                   </div>
                 </div>
-                <div class="tr py-2">
+                <!-- <div class="tr py-2">
                   <ng-container *ngFor="let item of allTimesheet | slice:7:14">
                     <div class="td fe-1 align-middle text-center">
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
@@ -792,7 +824,7 @@
                   <div class="td align-middle text-center fe-index">
                     <input class="form-check-input" type="checkbox" data-checktype="weekly" (click)="weekSelected($event, 5)">
                   </div>
-                </div>
+                </div> -->
               </ng-container>
             </div>
           </div>
