@@ -6,7 +6,7 @@
       [placeholder]="placeholder" [attr.value]="InitValue" [attr.data]="InitData" />
     <div class="iautofill-suggestion-dv d-none" name="suggestionBox-dv">
       <input type="text" (keyup)="onKeyUp($event)" (keydown)="onKeyPress($event)" (keydown.shift.tab)="NoAction()"
-        class="biginput nb simple-field form-control" name="autocomplete" (blur)="onBlur()" />
+        (keydown.control.space)="LoadFromApi($event)" class="biginput nb simple-field form-control" [ngClass]="ClassName" name="autocomplete" (blur)="onBlur()" />
       <div *ngIf="!isShowEmptyRow" class="autocomplete-suggestions w-100" name="iautofill-div"
         style="position: relative; max-height: 300px; z-index: 9999;">
         <div class="autocomplete-suggestion" *ngFor="let item of BindingData; let index = index" data="index"
