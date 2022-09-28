@@ -17,7 +17,17 @@
 
     <div [ngSwitch]="pageDataIsReady">
       <div class="data-loading-loader" *ngSwitchCase="false">
-        <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+        <div class="py-5 my-5">
+          <h6 class="fw-bold fs-3 text-center text-dark">Generate bill page is loading</h6>
+          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-12 modal-container f-12 text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </div>
       </div>
       <div *ngSwitchDefault>
         <div class="x_content mt-4">
@@ -91,7 +101,7 @@
 
               <div class="blur-this">
                 <div class="col-md-12 px-3 mt-3" *ngIf="allTimesheet.length > 0">
-                  <div class="t-table border-cell t-list t-border col-md-12">
+                  <!-- <div class="t-table border-cell t-list t-border col-md-12">
                     <div class="t-head overflow-hidden">
                       <div class="tr">
                         <div class="th fe-1 text-center" *ngFor="let day of dayList">
@@ -187,6 +197,50 @@
                             [ngClass]="{'fe-5': allTimesheet.length == 30, 'fe-4': allTimesheet.length == 31, 'fe-7': allTimesheet.length == 28, 'fe-6': allTimesheet.length == 29}">
                             <div class="cell-wrapper">
                               <span class="d-none">{{item}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div> -->
+                  <div class="t-table border-cell t-list t-border col-md-12">
+                    <div class="t-head overflow-hidden">
+                      <div class="tr">
+                        <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Monday</div>
+                        <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Tuesday</div>
+                        <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Wednesday</div>
+                        <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Thursday</div>
+                        <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Friday</div>
+                        <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Saturday</div>
+                        <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Sunday</div>
+                      </div>
+                    </div>
+                    <div class="t-body overflow-hidden">
+                      <ng-container>
+                        <div class="tr py-2" *ngFor="let items of timesheetBreakup; let i = index; let last = last;">
+                          <div class="td align-middle text-center" *ngIf="i == 0"
+                            [ngClass]="{'fe-1': items.length == 6, 'fe-2': items.length == 5, 'fe-3': items.length == 4, 'fe-4': items.length == 3, 'fe-5': items.length == 2, 'fe-6': items.length == 1, 'd-none': items.length == 7}">
+                            <div class="cell-wrapper edit-cellwrapper">
+                              <span class="d-none">{{items}}</span>
+                            </div>
+                          </div>
+                          <ng-container *ngFor="let item of items">
+                            <div class="td fe-1 align-middle text-center">
+                              <div class="cell-wrapper edit-cellwrapper">
+                                {{item.PresentDate | date}}
+                                <ng-container *ngIf="item.TimesheetStatus == 8">
+                                  <i class="ps-2 text-success fa fa-check"></i>
+                                </ng-container>
+                                <ng-container *ngIf="item.TimesheetStatus != 8">
+                                  <i class="ps-2 text-danger fa fa-close"></i>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <div class="td align-middle text-center" *ngIf="i == 4|| i == 3"
+                            [ngClass]="{'fe-1': items.length == 6, 'fe-2': items.length == 5, 'fe-3': items.length == 4, 'fe-4': items.length == 3, 'fe-5': items.length == 2, 'fe-6': items.length == 1, 'd-none': items.length == 7}">
+                            <div class="cell-wrapper edit-cellwrapper">
+                              <span class="d-none">{{items}}</span>
                             </div>
                           </div>
                         </div>
