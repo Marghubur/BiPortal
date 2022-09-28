@@ -811,11 +811,14 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   }
 
   setCurrentOrganization(): boolean {
-    this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === this.existingData.FileOwnerId);
-    if (this.currentEmployee) {
-      this.currentOrganization = this.applicationData.Organizations
-        .find(i => i.CompanyId == this.currentEmployee.CompanyId);
-      return true;
+    let developerId = Number(this.pdfForm.get('developerId').value);
+    if (!isNaN(developerId)) {
+      this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === developerId);
+      if (this.currentEmployee) {
+        this.currentOrganization = this.applicationData.Organizations
+          .find(i => i.CompanyId == this.currentEmployee.CompanyId);
+        return true;
+      }
     }
     return false;
   }
