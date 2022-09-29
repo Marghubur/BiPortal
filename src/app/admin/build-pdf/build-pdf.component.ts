@@ -66,6 +66,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   existingData: any = null;
   emailTemplate: any = null;
   timesheetAprovalDays: number = 0;
+  timesheetBreakup: Array <any> = [];
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -151,6 +152,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     this.http.post("Timesheet/GetEmployeeTimeSheet", timesheetStatusFor).then ((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.buildTimeSheet(response.ResponseBody, this.currentEmployee.EmployeeUid);
+        this.timesheetbreakup();
       }
       this.isClientSelected = true;
     });
@@ -983,6 +985,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   }
 
   viewTimesheetDetail() {
+    this.timesheetbreakup();
     $('#timesheet-view').modal('show');
   }
 
@@ -1003,18 +1006,11 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  weekSelected(e: any, week:number) {
-    let init = 0;
-    let end = 7;
-    let add = 0;
-    if (week <= 4) {
-      add = (week-1) * 7;
-    } else {
-      init = (week -1) * 7;
-      end = this.allTimesheet.length;
-      add = 0;
-    }
-    let data = this.allTimesheet.slice((init+add), (end+add));
+  weekSelected(e: any, item: any) {
+    let i = item.length;
+    let init = (item[0].PresentDate.getDate()) - 1;
+    let end = item.at(-1).PresentDate.getDate();
+    let data = this.allTimesheet.slice(init, end);
     if (e.target.checked == true) {
       data.map(x => x.TimesheetStatus = 8);
     }
@@ -1175,6 +1171,29 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   removeEmail(index: number) {
     if (index >-1) {
       this.emailTemplate.Emails.splice(index, 1);
+    }
+  }
+
+  timesheetbreakup() {
+    this.timesheetBreakup = [];
+    let days = this.allTimesheet[0].PresentDate.getDay();
+    let end = 0;
+    let start = 0;
+    if (days > 0 && days <= 6)
+      end = 7 - (days-1)
+    else
+      end = 1;
+    let i = 0;
+    while (i <= this.allTimesheet.length) {
+      let weeks = this.allTimesheet.slice(start, end);
+      this.timesheetBreakup.push(weeks);
+      if (end == this.allTimesheet.length)
+        return;
+      start = end;
+      end = end + 7;
+      if (end > this.allTimesheet.length)
+        end = this.allTimesheet.length;
+      i++;
     }
   }
 }

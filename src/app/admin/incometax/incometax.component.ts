@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
+import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -184,16 +185,7 @@ export class IncometaxComponent implements OnInit {
         this.employeesList.data = [];
         this.employeesList.placeholder = "Employee";
         let employees = this.applicationData.Employees;
-        if(employees) {
-          let i = 0;
-          while(i < employees.length) {
-            this.employeesList.data.push({
-              text: `${employees[i].FirstName} ${employees[i].LastName}`,
-              value: employees[i].EmployeeUid
-            });
-            i++;
-          }
-        }
+        this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
 
         this.isEmployeesReady = true;

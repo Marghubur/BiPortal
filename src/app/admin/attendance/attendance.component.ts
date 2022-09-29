@@ -4,7 +4,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, Leave, Timesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -143,23 +143,11 @@ export class AttendanceComponent implements OnInit {
     let fileter = new Filter();
     this.http.post(`employee/GetEmployees/`, fileter).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        this.applicationData["Employees"] = response.ResponseBody;        
+        this.applicationData["Employees"] = response.ResponseBody;
         this.employeesList.data = [];
         this.employeesList.placeholder = "Employee";
         let employees = this.applicationData.Employees;
-        if(employees) {
-            let i = 0;
-            while(i < employees.length) {
-              this.employeesList.data.push({
-                text: `${employees[i].FirstName} ${employees[i].LastName}`,
-                value: employees[i].EmployeeUid
-              });
-              i++;
-            }
-        } else {
-          ErrorToast("Fail to load employee list. Please contact to admin.");
-        }
-
+        this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
         this.isEmployeesReady = true;
       }
@@ -201,7 +189,7 @@ export class AttendanceComponent implements OnInit {
       Toast("Invalid user selected.")
       return;
     }
-    
+
     this.findEmployeeCompany();
     let now = new Date();
     this.fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
