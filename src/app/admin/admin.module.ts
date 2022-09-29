@@ -44,7 +44,6 @@ import { NotificationComponent } from './notification/notification.component';
 import { SettingsComponent } from './settings/settings.component';
 import { CompaySettingsComponent } from './compay-settings/compay-settings.component';
 import { PayrollComponent } from './payroll/payroll.component';
-import { LeavesAndHolidaysComponent } from './leaves-and-holidays/leaves-and-holidays.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
@@ -103,7 +102,6 @@ import { OrganizationComponent } from './organization/organization.component';
     SettingsComponent,
     CompaySettingsComponent,
     PayrollComponent,
-    LeavesAndHolidaysComponent,
     ExpensesComponent,
     PfEsiSetupComponent,
     CompanyInfoComponent,
