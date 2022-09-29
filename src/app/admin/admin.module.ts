@@ -59,6 +59,11 @@ import { ManageYearEndingComponent } from './manage-year-ending/manage-year-endi
 import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.component';
 import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
+import { HolidayComponent } from './holiday/holiday.component';
+import { ProjectComponent } from './project/project.component';
+import { EmailsettingComponent } from './emailsetting/emailsetting.component';
+import { MenusettingComponent } from './menusetting/menusetting.component';
+import { CompanyComponent } from './company/company.component';
 
 @NgModule({
   declarations: [
@@ -114,7 +119,12 @@ import { OrganizationComponent } from './organization/organization.component';
     ManageYearEndingComponent,
     SalaryBreakupComponent,
     EmailComponent,
-    OrganizationComponent
+    OrganizationComponent,
+    HolidayComponent,
+    ProjectComponent,
+    EmailsettingComponent,
+    MenusettingComponent,
+    CompanyComponent
   ],
   imports: [
     CommonModule,
