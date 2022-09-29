@@ -861,7 +861,13 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let developerId = Number(this.pdfForm.get('developerId').value);
     if (!isNaN(developerId)) {
       this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === developerId);
+      
       if (this.currentEmployee) {
+        if (this.currentEmployee.CompanyId == 0){
+          ErrorToast("Company is not set for the current employee.");
+          throw "Company is not set for the current employee.";
+        }
+
         this.currentOrganization = this.applicationData.Organizations
           .find(i => i.CompanyId == this.currentEmployee.CompanyId);
         return true;
