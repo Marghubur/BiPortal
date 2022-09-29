@@ -1,0 +1,82 @@
+.thead-gray {
+  background: lightgray;
+}
+
+.gst-text {
+  font-size: 12px;
+  padding-top: 4px;
+}
+
+.x_panel {
+  min-height: 200px;
+}
+
+thead.fixedHeader th {
+  background: #c96;
+  border-left: 1px solid #eb8;
+  border-right: 1px solid #b74;
+  border-top: 1px solid #eb8;
+  font-weight: normal;
+  padding: 4px 3px;
+  text-align: left;
+}
+
+tbody.scrollContent {
+  display: block;
+  height: 262px;
+  overflow: auto;
+  width: 100%;
+}
+
+thead.fixedHeader {
+  display: table;
+  overflow: auto;
+  width: 100%;
+}
+
+/* make TD elements pretty. Provide alternating classes for striping the table */
+/* http://www.alistapart.com/articles/zebratables/                             */
+tbody.scrollContent td,
+tbody.scrollContent tr.normalRow td {
+  background: #fff;
+  border-bottom: none;
+  border-left: none;
+  border-right: 1px solid #ccc;
+  border-top: 1px solid #ddd;
+  padding: 2px 3px 3px 4px;
+}
+
+tbody.scrollContent tr.alternateRow td {
+  background: #eee;
+  border-bottom: none;
+  border-left: none;
+  border-right: 1px solid #ccc;
+  border-top: 1px solid #ddd;
+  padding: 2px 3px 3px 4px;
+}
+
+.user-edit-icon {
+  font-size: 13px !important;
+}
+
+.t-body {
+  max-height: 49vh !important;
+}
+
+.cell-wrapper {
+  padding-left: .6rem;
+  padding-right: .6rem;
+}
+
+.t-table .t-head,
+.t-body {
+  overflow-y: auto;
+}
+
+.t-filter {
+  justify-content: flex-start !important;
+}
+
+.custom-height {
+  height: 43vh !important;
+}

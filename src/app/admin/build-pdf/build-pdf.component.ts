@@ -1006,13 +1006,19 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         let value = this.allTimesheet.find(x => x.PresentDate == current.PresentDate);
         value.TimesheetStatus = 8;
         value.EmployeeId = this.currentEmployee.EmployeeUid;
-        value.ClientId = this.currentOrganization.CompanyId
+        value.ClientId = this.currentOrganization.CompanyId;
+        for (let i = 0; i < this.timesheetBreakup.length; i++) {
+          this.timesheetBreakup[i].find(x => x => x.PresentDate == current.PresentDate).TimesheetStatus = 8;
+        }
       }
       else {
         let value = this.allTimesheet.find(x => x.PresentDate == current.PresentDate);
         value.TimesheetStatus = 4;
         value.EmployeeId = this.currentEmployee.EmployeeUid;
-        value.ClientId = this.currentOrganization.CompanyId
+        value.ClientId = this.currentOrganization.CompanyId;
+        for (let i = 0; i < this.timesheetBreakup.length; i++) {
+          this.timesheetBreakup[i].find(x => x => x.PresentDate == current.PresentDate).TimesheetStatus = 4;
+        }
       }
     }
   }
@@ -1033,6 +1039,9 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   selectUnselect(status: string) {
     if (status == 'select') {
       this.allTimesheet.map(x => x.TimesheetStatus = 8);
+      for (let i = 0; i < this.timesheetBreakup.length; i++) {
+        this.timesheetBreakup[i].map(x => x.TimesheetStatus = 8);
+      }
       let elem = document.querySelectorAll('[data-checktype="weekly"]') ;
       for (let i = 0; i < elem.length; i++) {
         (elem[i] as HTMLInputElement).checked= true;
@@ -1040,6 +1049,9 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     }
     else if('deselect') {
       this.allTimesheet.map(x => x.TimesheetStatus = 4);
+      for (let i = 0; i < this.timesheetBreakup.length; i++) {
+        this.timesheetBreakup[i].map(x => x.TimesheetStatus = 4);
+      }
       let elem = document.querySelectorAll('[data-checktype="weekly"]') ;
       for (let i = 0; i < elem.length; i++) {
         (elem[i] as HTMLInputElement).checked= false;

@@ -174,24 +174,36 @@ export class ManageComponent implements OnInit {
           if (this.profile) {
             this.profileId = this.profile.FileId;
             this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
-          }
-          let document = profile.filter(x => x.FileName == "resume");
-          if (document.length > 0) {
-            this.documentId = document[0].FileId;
-            this.resumePath = document[0].FilePath;
-            this.resumeFileName = document[0].FileName;
-            this.extension = document[0].FileExtension;
-            this.isResumeUploaded = true;
+            let document = profile.filter(x => x.FileName == "resume");
+            if (document.length > 0) {
+              this.documentId = document[0].FileId;
+              this.resumePath = document[0].FilePath;
+              this.resumeFileName = document[0].FileName;
+              this.extension = document[0].FileExtension;
+              this.isResumeUploaded = true;
+            }
           }
         }
 
         educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
-        this.userModal.Accomplishments.Certification = this.userModal.Accomplishments.Certification.filter(x => x !== '');
-        this.userModal.Accomplishments.OnlineProfile = this.userModal.Accomplishments.OnlineProfile.filter(x => x !== '');
-        this.userModal.Accomplishments.Patent = this.userModal.Accomplishments.Patent.filter(x => x !== '');
-        this.userModal.Accomplishments.Presentation = this.userModal.Accomplishments.Presentation.filter(x => x !== '');
-        this.userModal.Accomplishments.Research = this.userModal.Accomplishments.Research.filter(x => x !== '');
-        this.userModal.Accomplishments.WorkSample = this.userModal.Accomplishments.WorkSample.filter(x => x !== '');
+        if (this.userModal.Accomplishments.Certification)
+          this.userModal.Accomplishments.Certification = this.userModal.Accomplishments.Certification.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.OnlineProfile)
+          this.userModal.Accomplishments.OnlineProfile = this.userModal.Accomplishments.OnlineProfile.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.Patent)
+          this.userModal.Accomplishments.Patent = this.userModal.Accomplishments.Patent.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.Presentation)
+          this.userModal.Accomplishments.Presentation = this.userModal.Accomplishments.Presentation.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.Research)
+          this.userModal.Accomplishments.Research = this.userModal.Accomplishments.Research.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.WorkSample)
+          this.userModal.Accomplishments.WorkSample = this.userModal.Accomplishments.WorkSample.filter(x => x !== '');
+
         this.userModal.EducationalDetails = educations;
         this.UserId = this.userModal.EmployeeId;
         if (this.userModal.Employments.length == 0)
