@@ -51,7 +51,6 @@ export class TimesheetComponent implements OnInit {
   divisionCode: number = 0;
   daysInMonth: number = 0;
   PendingAttendacneMessage: string = 'Select above pending attendance link to submit before end of the month.';
-  monthName: Array<any> = [];
   allDays: Array<any> = [];
   changeMonth: string = '';
   presentMonth: boolean = true;
@@ -68,6 +67,7 @@ export class TimesheetComponent implements OnInit {
   timesheetForm: FormGroup;
   isBlocked: boolean = false;
   isTimesheetDataLoaded: boolean = false;
+  month: any = "";
 
 
   commentValue: string = null;
@@ -107,10 +107,10 @@ export class TimesheetComponent implements OnInit {
 
   ngOnInit(): void {
     var dt = new Date();
-    var month = dt.getMonth();
+    this.month = dt.getMonth() + 1;
     var year = dt.getFullYear();
     this.today = new Date();
-    this.daysInMonth = new Date(year, month + 1, 0).getDate();
+    this.daysInMonth = new Date(year, this.month, 0).getDate();
     this.clientDetail = {
       data: [],
       className: "disabled-input",
@@ -159,18 +159,6 @@ export class TimesheetComponent implements OnInit {
       } else {
         Toast("Invalid user. Please login again.")
       }
-    }
-    let i = 0;
-    while( i < 6) {
-      var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
-      if (month == 1) {
-        month = 12;
-        year --
-      } else {
-        month --;
-      }
-      this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
-      i++;
     }
 
     this.fromPresentDatea();
@@ -442,22 +430,11 @@ export class TimesheetComponent implements OnInit {
     return totalTime;
   }
 
-  removeOtherMonthDetail(records: Array<any>): Array<any> {
-    let presentMonth = new Date().getMonth() + 1;
-    let filteredRecords = records.filter(x => new Date(x.PresentDate).getMonth() + 1 == presentMonth);
-    if (filteredRecords.length == 0){
-      ErrorToast("Fail to filter other months detail.");
-      throw "Fail to filter other months detail";
-    }
-
-    return filteredRecords;
-  }
-
   onSubmit() {
     this.isLoading = true;
     this.isBlocked = false;
     let records = this.timesheetForm.get("timesheetArray").value;
-    records = this.removeOtherMonthDetail(records);
+    // records = this.removeOtherMonthDetail(records);
     let index = 0;
     while(index < records.length) {
       records[index].TotalMinutes = this.calculateTime(records[index].UserHours, records[index].UserMin);
@@ -476,7 +453,7 @@ export class TimesheetComponent implements OnInit {
         Toast("Created/Updated successfully");
         //this.initForm(response.ResponseBody);
       } else {
-        Toast("Fail to inser/update, please contact to admin.");
+        Toast("Fail to insert/update, please contact to admin.");
       }
       this.isLoading = false;
     }).catch(e => {
@@ -614,21 +591,22 @@ export class TimesheetComponent implements OnInit {
     this.emptyFields = [];
     let day = this.fromDate.getDay();
     let value = 0;
-    if(this.fromDate.getDate() < 6  && (day > 1 || day == 0)) {
-      value = day == 0 ? 6 : day-1 ;
-      for (let i = 0; i < value; i++) {
-        let  currentDate = new Date(this.fromDate.getTime());
-        currentDate.setDate(this.fromDate.getDate() - (value-i));
-        let data = {
-          date: new Date(currentDate),
-          hrs: "00",
-          mins: "00"
-        };
-        weekDaysList.push(data);
-        this.emptyFields.push(data);
-        currentDate = null;
-      }
-    }
+    // if(this.fromDate.getDate() < 6  && (day > 1 || day == 0)) {
+    //   value = day == 0 ? 6 : day-1 ;
+    //   for (let i = 0; i < value; i++) {
+    //     let  currentDate = new Date(this.fromDate.getTime());
+    //     currentDate.setDate(this.fromDate.getDate() - (value-i));
+    //     let data = {
+    //       date: new Date(currentDate),
+    //       hrs: "00",
+    //       mins: "00"
+    //     };
+    //     weekDaysList.push(data);
+    //     this.emptyFields.push(data);
+    //     currentDate = null;
+    //   }
+    // }
+
     if((this.toDate - this.fromDate) > 0){
       let index = 0;
       //let to = 7;
@@ -724,21 +702,30 @@ export class TimesheetComponent implements OnInit {
     this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
   }
 
+  getCurrentMonthTimesheet() {
+    this.presentWeek();
+  }
+
   presentWeek() {
     if(this.clientId > 0) {
       this.isLoading = true;
-      let currentDate = new Date(new Date().setHours(0, 0, 0, 0));
-      //this.fromDate = this.getMonday(new Date(currentDate));
-      this.fromDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      this.fromModel = { day: this.fromDate.getDate(), month: this.fromDate.getMonth() + 1, year: this.fromDate.getFullYear()};
+      this.fromDate = new Date(2022, this.month - 1, 1);
+      this.fromModel = { 
+        day: this.fromDate.getDate(), 
+        month: this.fromDate.getMonth() + 1, 
+        year: this.fromDate.getFullYear()
+      };
+
       if(this.fromDate) {
-        // this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
-        // this.toDate.setDate(this.toDate.getDate() + 6);
-        this.toDate = new Date();
-        if (this.toDate.getDay() == 4)
-          this.toDate.setDate(this.toDate.getDate() + 1);
-        else if (this.toDate.getDay() == 5)
-          this.toDate.setDate(this.toDate.getDate() + 2);
+        if (this.month - 1 < new Date().getMonth()) {
+          this.toDate = new Date(this.fromModel.year, this.month, 0);
+        } else {
+          this.toDate = new Date();
+          if (this.toDate.getDay() == 4)
+            this.toDate.setDate(this.toDate.getDate() + 1);
+          else if (this.toDate.getDay() == 5)
+            this.toDate.setDate(this.toDate.getDate() + 2);
+        }
 
         this.getUserTimesheetData();
       }

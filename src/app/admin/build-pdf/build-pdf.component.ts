@@ -67,6 +67,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   emailTemplate: any = null;
   timesheetBreakup: Array <any> = [];
   generateBillUrl: string = "";
+  timesheetId: number = 0;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -165,6 +166,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let timesheetDetails = timesheetData.TimesheetDetails;
 
     if (!timesheetDetails) timesheetDetails = [];
+    else this.timesheetId = timesheetDetails[0].TimesheetId;
     while(i < missinngAtt.length) {
       timesheetDetails.push({
         UserTypeId: UserType.Employee,
@@ -182,10 +184,12 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   buildTimeSheet(data: any, employeeId: number) {
     let burnDays = 0;
     let isTimeSheetExists = true;
-    if(data.TimesheetDetails.length == 0)
+    if(data.TimesheetDetails.length == 0) {
+      this.timesheetId = 0;
       isTimeSheetExists = false;
-    this.prepareTimesheet(data, employeeId);      
+    }
 
+    this.prepareTimesheet(data, employeeId);      
     this.allTimesheet.map(item => {
       item.PresentDate = new Date(item.PresentDate);
       if(item.TimesheetStatus == 8)
@@ -655,7 +659,8 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       UserTypeId: UserType.Employee,
       ForMonth: firstDate.getMonth() + 1,
       ForYear: firstDate.getFullYear(),
-      ClientId: this.pdfForm.get("receiverCompanyId").value
+      ClientId: this.pdfForm.get("receiverCompanyId").value,
+      TimesheetId: this.timesheetId
     };
 
     this.allTimesheet.map(x => {
@@ -861,7 +866,13 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let developerId = Number(this.pdfForm.get('developerId').value);
     if (!isNaN(developerId)) {
       this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === developerId);
+      
       if (this.currentEmployee) {
+        if (this.currentEmployee.CompanyId == 0){
+          ErrorToast("Company is not set for the current employee.");
+          throw "Company is not set for the current employee.";
+        }
+
         this.currentOrganization = this.applicationData.Organizations
           .find(i => i.CompanyId == this.currentEmployee.CompanyId);
         return true;
