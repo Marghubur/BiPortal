@@ -16,7 +16,14 @@
             <ng-container *ngFor="let item of catagory.Value">
               <a [routerLink]="['/' + item.Link]" class="nav-link a-font" [routerLinkActiveOptions]="{exact: true}"
                 routerLinkActive="active-link">
-                <i class="{{item.Icon}} me-2"></i>{{item.Catagory}}
+                <div class="row align-items-center">
+                  <div class="col-md-1">
+                    <i class="{{item.Icon}}"></i>
+                  </div>
+                  <div class="col-md-8">
+                    {{item.Catagory}}
+                  </div>
+                </div>
               </a>
             </ng-container>
           </div>
@@ -27,8 +34,6 @@
     <div class="title_menu ms-3 mt-3">
       <a [routerLink]="['/admin/email']" routerLinkActive="router-link-active"><i class="fa fa-envelope-o me-3 pb-3"
           aria-hidden="true"></i>Email </a>
-      <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active"><i class="fa fa-bell-o me-3 pb-3"
-          aria-hidden="true"></i>Notification</a>
       <a [routerLink]="['/user/resetpassword']" *ngIf="!admin" routerLinkActive="router-link-active"><i
           class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>Reset Password</a>
       <a [routerLink]="['/admin/resetpassword']" *ngIf="admin" routerLinkActive="router-link-active"><i

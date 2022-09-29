@@ -33,10 +33,9 @@ import { AdminResetPassword, AdminDeclaration,
   AdminTaxcalculation,
   AdminNotification,
   AdminApprovalRequest,
-  Settings,
+  PayrollSettings,
   CompanySettings,
   Payroll,
-  LeavesAndHoliday,
   Expenses,
   PFESISetup,
   CompanyInfo,
@@ -88,7 +87,6 @@ import { ApprovalRequestComponent } from './approval-request/approval-request.co
 import { SettingsComponent } from './settings/settings.component';
 import { CompaySettingsComponent } from './compay-settings/compay-settings.component';
 import { PayrollComponent } from './payroll/payroll.component';
-import { LeavesAndHolidaysComponent } from './leaves-and-holidays/leaves-and-holidays.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
@@ -138,11 +136,10 @@ const routes: Routes = [
   { path: AdminPaySlip, component: PayslipComponent},
   { path: AdminNotification, component: NotificationComponent},
   { path: AdminApprovalRequest, component: ApprovalRequestComponent},
-  { path: Settings, component: SettingsComponent},
+  { path: PayrollSettings, component: SettingsComponent},
   { path: CompanySettings, component: CompaySettingsComponent},
   { path: CompanyInfo, component: CompanyInfoComponent},
   { path: Payroll, component: PayrollComponent},
-  { path: LeavesAndHoliday, component: LeavesAndHolidaysComponent},
   { path: PFESISetup, component: PfEsiSetupComponent},
   { path: Expenses, component: ExpensesComponent},
   { path: CompanyDetail, component: CompanyDetailComponent},
