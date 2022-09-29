@@ -48,7 +48,12 @@ import { AdminResetPassword, AdminDeclaration,
   ManageYearEnding,
   SalaryBreakup,
   EmailService,
-  OrganizationSetting
+  OrganizationSetting,
+  Holiday,
+  Project,
+  EmailSetting,
+  MenuSetting,
+  Company
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -100,6 +105,11 @@ import { ManageYearEndingComponent } from './manage-year-ending/manage-year-endi
 import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.component';
 import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
+import { HolidayComponent } from './holiday/holiday.component';
+import { ProjectComponent } from './project/project.component';
+import { EmailsettingComponent } from './emailsetting/emailsetting.component';
+import { MenusettingComponent } from './menusetting/menusetting.component';
+import { CompanyComponent } from './company/company.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -152,7 +162,12 @@ const routes: Routes = [
   { path: ManageYearEnding, component: ManageYearEndingComponent},
   { path: SalaryBreakup, component: SalaryBreakupComponent},
   { path: EmailService, component: EmailComponent},
-  { path: OrganizationSetting, component: OrganizationComponent}
+  { path: OrganizationSetting, component: OrganizationComponent},
+  { path: Holiday, component: HolidayComponent},
+  { path: Project, component: ProjectComponent},
+  { path: EmailSetting, component: EmailsettingComponent},
+  { path: MenuSetting, component: MenusettingComponent},
+  { path: Company, component: CompanyComponent}
 ];
 
 @NgModule({

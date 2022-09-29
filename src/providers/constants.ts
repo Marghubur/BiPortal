@@ -97,6 +97,10 @@ export const SalaryBreakup = 'admin/salarybreakup';
 export const EmailService = 'admin/email';
 export const OrganizationSetting = 'admin/organization-setting';
 export const Holiday = 'admin/planholidays';
+export const Project = 'admin/project';
+export const EmailSetting = 'admin/emailsetting';
+export const MenuSetting = 'admin/menu';
+export const Company = 'admin/companysettings';
 
 
 // ********************** Admin route pages  *******************
