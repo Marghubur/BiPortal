@@ -67,6 +67,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   emailTemplate: any = null;
   timesheetAprovalDays: number = 0;
   timesheetBreakup: Array <any> = [];
+  generateBillUrl: string = "";
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -95,10 +96,12 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     //----- edit mode -----
     if (this.existingData) {
       this.editMode = true;
+      this.generateBillUrl = `filemaker/UpdateGeneratedBill`;
       this.model = this.calendar.getToday();
       this.initMonths();
       this.editBillDetail();
     } else {
+      this.generateBillUrl = `filemaker/GenerateBill`;
       this.getNewForm();
     }
   }
@@ -715,7 +718,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         let timesheetForm: FormData = this.getTimeSheetData();
         timesheetForm.append('BillRequestData', JSON.stringify(request));
 
-        this.http.post("FileMaker/GenerateBill", timesheetForm).then((response: ResponseModel) => {
+        this.http.post(this.generateBillUrl, timesheetForm).then((response: ResponseModel) => {
           if(response.ResponseBody.FileDetail !== null &&
             response.ResponseBody.EmailTemplate !== null) {
             this.downloadFile(response.ResponseBody.FileDetail);

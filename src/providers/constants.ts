@@ -49,7 +49,7 @@ export const Employees = "admin/employees";
 export const Dashboard = "admin/dashboard";
 export const Documents = "admin/documents";
 export const DocumentsPage = "admin/documentspage/:path";
-export const BuildPdf = "admin/BuildPdf";
+export const BuildPdf = "admin/generatebill";
 export const ManageEmployee = 'admin/manageemployee';
 export const Clients = 'admin/clients';
 export const RegisterClient = 'admin/registerclient';
@@ -83,13 +83,12 @@ export const AdminPaySlip = 'admin/payslip';
 export const AdminNotification = 'admin/notification';
 export const PayrollComponents = 'admin/payrollcomponents';
 export const AdminApprovalRequest = 'admin/request';
-export const Settings = 'admin/settings';
+export const PayrollSettings = 'admin/payrollsettings';
 export const CompanyInfo = 'admin/company-info';
 export const CompanyDetail = 'admin/company-detail';
 export const CompanyAccounts = 'admin/company-accounts';
 export const CompanySettings = 'admin/company-settings';
 export const Payroll = 'admin/payroll';
-export const LeavesAndHoliday = 'admin/leaves-holidays';
 export const PFESISetup = 'admin/pfesisetup';
 export const Expenses = 'admin/expenses';
 export const ManageLeavePlan = 'admin/manageleaveplan';
@@ -97,6 +96,8 @@ export const ManageYearEnding = 'admin/manageyearending';
 export const SalaryBreakup = 'admin/salarybreakup';
 export const EmailService = 'admin/email';
 export const OrganizationSetting = 'admin/organization-setting';
+export const Holiday = 'admin/planholidays';
+
 
 // ********************** Admin route pages  *******************
 

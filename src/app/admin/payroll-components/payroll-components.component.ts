@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService, tableConfig } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { Settings } from 'src/providers/constants';
+import { PayrollSettings } from 'src/providers/constants';
 import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
@@ -71,7 +71,7 @@ export class PayrollComponentsComponent implements OnInit {
   }
 
   navigate() {
-    this.nav.navigate(Settings, null)
+    this.nav.navigate(PayrollSettings, null)
   }
 
   loadData() {
