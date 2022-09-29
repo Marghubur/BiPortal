@@ -146,7 +146,6 @@ export class AttendanceComponent implements OnInit {
         this.applicationData["Employees"] = response.ResponseBody;
         this.employeesList.data = [];
         this.employeesList.placeholder = "Employee";
-        let employees = this.applicationData.Employees;
         this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
         this.isEmployeesReady = true;

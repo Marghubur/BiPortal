@@ -317,7 +317,7 @@ export class TimesheetComponent implements OnInit {
     this.timesheetForm = this.fb.group({
       timesheetArray: this.fb.array(weekDaysList.map(item => {
         item.date.setHours(0,0,0,0);
-        let value = timesheetDetail.find(x => new Date(x.PresentDate).getDate() == item.date.getDate());
+        let value = timesheetDetail.find(x => new Date(x.PresentDate).getDate() == item.date.getDate() && new Date(x.PresentDate).getMonth() == item.date.getMonth());
         return this.buildWeekForm(item, value, timesheetId);
       }))
     });
@@ -737,8 +737,7 @@ export class TimesheetComponent implements OnInit {
         this.toDate = new Date();
         if (this.toDate.getDay() == 4)
           this.toDate.setDate(this.toDate.getDate() + 1);
-
-        if (this.toDate.getDay() == 5)
+        else if (this.toDate.getDay() == 5)
           this.toDate.setDate(this.toDate.getDate() + 2);
 
         this.getUserTimesheetData();
@@ -778,6 +777,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   viewTimeSheet(index: number) {
+    this.dailyTimesheetDetails = this.dailyTimesheetDetails.sort((a,b) =>{return a.PresentDate - b.PresentDate});
     this.initForm(this.dailyTimesheetDetails, index);
     this.viewTimesheetWeek = this.currentMonthWeek[index];
     $('#timesheetModal').modal('show')
