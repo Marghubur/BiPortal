@@ -182,7 +182,15 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         this.timesheetAprovalDays++;
     });
 
-    if (burnDays > 0)
+    if (this.editMode == true) {
+      this.allTimesheet.map(item => {
+        item.PresentDate = new Date(item.PresentDate);
+        if(item.TimesheetStatus == 8)
+          burnDays++;
+      });
+    }
+
+    if (this.editMode == true)
       this.pdfForm.get('actualDaysBurned').setValue(burnDays)
     else
       burnDays = this.pdfForm.get('actualDaysBurned').value;
@@ -220,7 +228,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         if (response.ResponseBody) {
           this.applicationData = response.ResponseBody as ApplicationData;
           this.employees = this.applicationData.Employees;
-          this.currentOrganization = this.applicationData.Organizations.find(x => x.CompanyId === this.existingData.ClientId);
+          this.currentOrganization = this.applicationData.Organizations.find(x => x.IsPrimaryCompany == 1);//.find(x => x.CompanyId === this.existingData.ClientId);
           this.pdfModal = new PdfModal();
           if (this.currentOrganization) {
             this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
@@ -706,7 +714,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       if(modalStatus == null) {
         let timesheetForm: FormData = this.getTimeSheetData();
         timesheetForm.append('BillRequestData', JSON.stringify(request));
-        
+
         this.http.post("FileMaker/GenerateBill", timesheetForm).then((response: ResponseModel) => {
           if(response.ResponseBody.FileDetail !== null &&
             response.ResponseBody.EmailTemplate !== null) {
