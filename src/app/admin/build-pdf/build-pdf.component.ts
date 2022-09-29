@@ -65,7 +65,6 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   isClientAssigned: boolean = true;
   existingData: any = null;
   emailTemplate: any = null;
-  timesheetAprovalDays: number = 0;
   timesheetBreakup: Array <any> = [];
   generateBillUrl: string = "";
 
@@ -154,58 +153,61 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
     this.http.post("Timesheet/GetEmployeeTimeSheet", timesheetStatusFor).then ((response: ResponseModel) => {
       if (response.ResponseBody) {
-        this.buildTimeSheet(response.ResponseBody, this.currentEmployee.EmployeeUid);
-        this.timesheetbreakup();
+          this.buildTimeSheet(response.ResponseBody, this.currentEmployee.EmployeeUid);
       }
       this.isClientSelected = true;
-    });
+    });    
+  }
+
+  prepareTimesheet(timesheetData: any, employeeId: number) {
+    let i = 0;
+    let missinngAtt = timesheetData.MissingDate;
+    let timesheetDetails = timesheetData.TimesheetDetails;
+
+    if (!timesheetDetails) timesheetDetails = [];
+    while(i < missinngAtt.length) {
+      timesheetDetails.push({
+        UserTypeId: UserType.Employee,
+        PresentDate: new Date(missinngAtt[i]),
+        EmployeeUid: employeeId,
+        TimesheetStatus: ItemStatus.NotGenerated
+      });
+
+      i++;
+    }
+
+    this.allTimesheet = timesheetDetails.sort((a,b) => Date.parse(a.PresentDate) - Date.parse(b.PresentDate));
   }
 
   buildTimeSheet(data: any, employeeId: number) {
     let burnDays = 0;
-    let missinngAtt = data.MissingDate;
-    let timesheetDetails = data.TimesheetDetails;
-    if (missinngAtt.length > 0) {
-      let i = 0;
-      while(i < missinngAtt.length) {
-        timesheetDetails.push({
-          UserTypeId: UserType.Employee,
-          PresentDate: new Date(missinngAtt[i]),
-          EmployeeUid: employeeId,
-          TimesheetStatus: ItemStatus.NotGenerated
-        });
+    let isTimeSheetExists = true;
+    if(data.TimesheetDetails.length == 0)
+      isTimeSheetExists = false;
+    this.prepareTimesheet(data, employeeId);      
 
-        i++;
-      }
-    }
-    this.timesheetAprovalDays = 0;
-    timesheetDetails.map(item => {
+    this.allTimesheet.map(item => {
       item.PresentDate = new Date(item.PresentDate);
       if(item.TimesheetStatus == 8)
-        this.timesheetAprovalDays++;
+        burnDays++;
     });
 
-    if (this.editMode == true) {
-      this.allTimesheet.map(item => {
-        item.PresentDate = new Date(item.PresentDate);
-        if(item.TimesheetStatus == 8)
-          burnDays++;
-      });
+    if (this.editMode && !isTimeSheetExists) {
+      burnDays = this.pdfModal.workingDay - this.pdfModal.daysAbsent;
+      this.pdfForm.get('actualDaysBurned').setValue(burnDays)
+    } else {
+      this.pdfForm.get('actualDaysBurned').setValue(burnDays)
     }
 
-    if (this.editMode == true)
-      this.pdfForm.get('actualDaysBurned').setValue(burnDays)
-    else
-      burnDays = this.pdfForm.get('actualDaysBurned').value;
-
     this._calculateAmount(burnDays);
-    this.allTimesheet = timesheetDetails.sort((a,b) => Date.parse(a.PresentDate) - Date.parse(b.PresentDate));
     this.dayList = [];
     let i = 0;
     while(i < 7) {
       this.dayList.push(new Date(this.allTimesheet[i]["PresentDate"]).getDay());
       i++;
     }
+
+    this.timesheetbreakup();
   }
 
   editBillDetail() {
@@ -310,13 +312,14 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           this.model.day = billingDate.getDate();
           this.model.month = billingDate.getMonth() + 1;
           this.model.year = billingDate.getFullYear();
+          
+          this.originalBillingMonth = fileDetail.BillForMonth;
+          this.pdfModal.billYear = fileDetail.BillYear;
+          if(fileDetail.BillYear == null) {
+            this.pdfModal.billYear = new Date().getFullYear();
+          }
         }
 
-        this.originalBillingMonth = fileDetail.BillForMonth;
-        this.pdfModal.billYear = fileDetail.BillYear;
-        if(fileDetail.BillYear == null) {
-          this.pdfModal.billYear = new Date().getFullYear();
-        }
         this.generateDaysCount();
         this.manageBillDates();
         this.initForm();
@@ -845,10 +848,13 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
   findReceiverClientDetail() {
     let value = this.pdfForm.get('receiverCompanyId').value;
-    if(value)
+    if(value) {
       this.bindClientDetail(value);
-    else
+      this.getAttendance();
+    }
+    else {
       ErrorToast("Company not selected properly.");
+    }
   }
 
   setCurrentOrganization(): boolean {
@@ -898,8 +904,6 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           this.igstAmount = this.calculateGSTAmount( this.pdfModal.iGST);
           this.calculateGrandTotal();
         }
-
-        this.getAttendance();
       }
     }
   }
@@ -984,15 +988,6 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       this.packageAmount = amount;
       this.pdfForm.get("grandTotalAmount").setValue(amount);
     }
-  }
-
-  viewStaffingTemplte() {
-    this.http.get('Template/GetStaffingTemplate').then((res:ResponseModel) => {
-      if (res.ResponseBody) {
-        this.template = this.sanitizer.bypassSecurityTrustHtml(res.ResponseBody);
-      $('#template-view').modal('show');
-      }
-    });
   }
 
   viewTimesheetDetail() {
