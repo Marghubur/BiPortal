@@ -68,7 +68,7 @@ export class CompanyComponent implements OnInit {
 
   loadData() {
     this.isLoaded = false;
-    let companyId = 1;
+    let companyId = this.currentCompany.CompanyId;
     this.http.get(`Company/GetCompanyById/${companyId}`).then((response: ResponseModel) => {
       if(response.ResponseBody ) {
         this.currentCompany = response.ResponseBody.OrganizationDetail;;
