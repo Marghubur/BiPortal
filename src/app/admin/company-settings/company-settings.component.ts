@@ -6,11 +6,11 @@ import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
-  selector: 'app-compay-settings',
-  templateUrl: './compay-settings.component.html',
-  styleUrls: ['./compay-settings.component.scss']
+  selector: 'app-company-settings',
+  templateUrl: './company-settings.component.html',
+  styleUrls: ['./company-settings.component.scss']
 })
-export class CompaySettingsComponent implements OnInit {
+export class CompanySettingsComponent implements OnInit {
   companySettingForm: FormGroup;
   companySetting: CompanySetting = new CompanySetting();
   currentCompany: any = null;

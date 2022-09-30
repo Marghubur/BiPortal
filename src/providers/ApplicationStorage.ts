@@ -40,31 +40,20 @@ export class ApplicationStorage {
     localStorage.clear();
   }
 
-  findRecord(key: string, storageName: string = null) {
+  findRecord(key: string, storageName: string = Master) {
     let ResultingData = null;
-    if (
-      storageName === undefined ||
-      storageName === null ||
-      storageName === ""
-    ) {
-      storageName = Master;
+
+    if (!key || key == ''){
+      ErrorToast(`key: [${key}] must be not null or empty.`);
+      return null;
     }
-    storageName = storageName.toLocaleLowerCase();
+
     let Data: any = localStorage.getItem(storageName);
-    if (this.commonService.IsValid(Data)) {
+    if (Data) {
       Data = JSON.parse(Data);
-      let DataKeys = Object.keys(Data);
-      if (DataKeys.length > 0) {
-        let index = 0;
-        while (index < DataKeys.length) {
-          if (DataKeys[index].toLocaleLowerCase() === key.toLocaleLowerCase()) {
-            ResultingData = Data[DataKeys[index]];
-            break;
-          }
-          index++;
-        }
-      }
+      ResultingData = Data[key];
     }
+
     return ResultingData;
   }
 

@@ -41,7 +41,7 @@
               <label for="" class="foem-label pb-2 fw-bold">SELECT LEGAL ENTITY</label>
               <select class="form-select" formControlName="LegalEntity">
                 <option value="">Select Legal Entity</option>
-                <option value="CS TEST">CS TEST</option>
+                <option [value]="companyInformation.CompanyName">{{companyInformation.CompanyName}}</option>
               </select>
             </div>
             <div class="row col-md-6 py-3">
