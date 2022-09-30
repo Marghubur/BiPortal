@@ -46,21 +46,21 @@
                           <input type="text" class="form-control" readonly formControlName="OrganizationName" oninput="this.value = this.value.toUpperCase()"
                           [ngClass]="{'error-field': submitted && c.OrganizationName.errors !== null && c.OrganizationName.errors.required}">
                         </div>
-  
+
                         <div class="col-md-6 mt-3">
                           <label class="form-label">Company Name</label>
                           <input readonly class="form-control" formControlName="CompanyName" oninput="this.value = this.value.toUpperCase()"
                           [ngClass]="{'error-field': submitted && c.CompanyName.errors !== null && c.CompanyName.errors.required}"/>
                         </div>
                       </div>
-  
+
                       <div class="row">
                         <div class="col-md-6 mt-4">
                           <label class="form-label">Primary No.#</label>
                           <input readonly class="form-control" formControlName="PrimaryPhoneNo" OnlyNumber="11"
                           [ngClass]="{'error-field': submitted && c.PrimaryPhoneNo.errors !== null && c.PrimaryPhoneNo.errors.required}"/>
                         </div>
-  
+
                         <div class="col-md-6 mt-4">
                           <label class="form-label">Email Id</label>
                           <input readonly class="form-control" formControlName="Email"
@@ -69,7 +69,7 @@
                       </div>
                     </div>
                   </div>
-  
+
                   <div class="x_panel pt-0 my-3">
                     <div class="row col-md-12">
                       <div class="col-md-3 mt-4">
@@ -97,7 +97,7 @@
                         </form>
                       </div>
                     </div>
-  
+
                     <div class="row col-md-12">
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Other Email 1</label>
@@ -116,7 +116,7 @@
                         <input class="form-control" formControlName="ForthEmail"/>
                       </div>
                     </div>
-  
+
                     <div class="row col-md-12">
                       <div class="col-md-3 mt-4">
                         <label class="form-label">GSTIN No.#</label>
@@ -135,7 +135,7 @@
                         <input class="form-control" formControlName="LegalNameOfCompany" oninput="this.value = this.value.toUpperCase()"/>
                       </div>
                     </div>
-  
+
                     <div class="row col-md-12 mb-3">
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Sector Type</label>
@@ -147,9 +147,9 @@
                       </div>
                       <div class="col-md-6 mt-4 d-flex flex-column justify-content-end">
                         <div class="d-flex flex-row justify-content-end">
-                          <button class="btn-primary-c btn" (click)="submitChanges()">
-                            <i class="fa fa-paper-plane pe-2" aria-hidden="true"></i>
-                            Save Changes
+                          <button class="btn-primary-c btn" [disabled]="isLoading" (click)="submitChanges()">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
+                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Save Changes' }}</span>
                           </button>
                         </div>
                       </div>
