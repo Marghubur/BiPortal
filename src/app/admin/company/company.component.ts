@@ -4,8 +4,8 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { CommonService, ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn } from 'src/providers/constants';
+import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { organizationAccountModal } from '../company-accounts/company-accounts.component';
@@ -19,10 +19,10 @@ declare var $: any;
 export class CompanyComponent implements OnInit {
   submitted: boolean = false;
   organizationAccountsForm: FormGroup = null;
+  companyForm: FormGroup = null;
   CompanyAccountDetails: Array<any> = [];
   isLoading: boolean = false;
   isLoaded: boolean = false;
-  CurrentCompany: any = null;
   OrganizationId: number = 0;
   orderByNameAsc: boolean = null;
   orderByBranchAsc: boolean = null;
@@ -33,10 +33,11 @@ export class CompanyComponent implements OnInit {
   filterCompanyAccountInfo: organizationAccountModal = new organizationAccountModal();
   model: NgbDateStruct;
   closingDatemodel: NgbDateStruct;
-  isCompanyrInfoSubmitted: boolean = false;
-  userDetail: UserDetail = new UserDetail();
-  companies: Array<any> = [];
+  corporationDateModal: NgbDateStruct;
+
   currentCompany: any = null;
+  fileDetail: Array<any> = [];
+  profileURL: string = UserImage;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -47,37 +48,36 @@ export class CompanyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    let data = null;
-    this.singleCompanyAccountInfo = new organizationAccountModal();
-    this.filterCompanyAccountInfo = new organizationAccountModal();
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
-    if (expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-    else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-    let Master = this.local.get(null);
-    if (Master !== null && Master !== "") {
-      data = Master["Companies"];
+    let data = this.local.findRecord("Companies");
+    if (!data) {
+      return;
     } else {
-      ErrorToast("Invalid user. Please login again.")
-    }
-    this.companyData = new Filter();
-    if (data) {
-      this.CurrentCompany = data.find(x => x.IsPrimaryCompany == 1);
-      this.OrganizationId = this.CurrentCompany.OrganizationId;
-      this.companyData.SearchString = `1=1 And CompanyId=${this.CurrentCompany.CompanyId} And OrganizationId=${this.OrganizationId}`;
-      this.loadData();
-      this.initForm();
+      this.companyData = new Filter();
+      this.currentCompany = data.find(x => x.IsPrimaryCompany == 1);
+
+      if (!this.currentCompany) {
+        ErrorToast("Fail to get company detail. Please contact to admin.");
+        return;
+      } else {
+        this.OrganizationId = this.currentCompany.OrganizationId;
+        this.companyData.SearchString = `1=1 And CompanyId=${this.currentCompany.CompanyId} And OrganizationId=${this.OrganizationId}`;
+        this.loadData();
+      }
     }
   }
-
+  
   loadData() {
     this.isLoaded = false;
-    this.http.get('Company/GetAllCompany').then((response: ResponseModel) => {
-      if(response.ResponseBody && response.ResponseBody.length > 0) {
-        this.companies = response.ResponseBody;
-        this.currentCompany = this.companies.find (x => x.IsPrimaryCompany == true);
+    let companyId = 1;
+    this.http.get(`Company/GetCompanyById/${companyId}`).then((response: ResponseModel) => {
+      if(response.ResponseBody ) {
+        this.currentCompany = response.ResponseBody.OrganizationDetail;;
+        let date = new Date(this.currentCompany.InCorporationDate);
+        this.corporationDateModal = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        this.buildProfileImage(response.ResponseBody.Files);
         this.getBankDetail();
+        this.initBankAccountForm();
+        this.initCompanyForm();
         this.isLoaded = true;
       }
     }).catch(e => {
@@ -85,18 +85,30 @@ export class CompanyComponent implements OnInit {
     });
   }
 
+  buildProfileImage(fileDetail: any) {
+    if (fileDetail && fileDetail.length > 0) {
+      let logoFile = fileDetail.find(x => x.FileName == "CompanyLogo")
+      if (logoFile) {
+        this.profileURL = `${this.http.GetImageBasePath()}${logoFile.FilePath}/${logoFile.FileName}.${logoFile.FileExtension}`;
+        this.currentCompany.FileId = logoFile.FileId;
+      }
+    }
+  }
+
   getBankDetail() {
+    this.isLoaded = false;
     this.http.post('Company/GetCompanyBankDetail', this.companyData).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         this.CompanyAccountDetails = response.ResponseBody;
         if (this.CompanyAccountDetails.length > 0) {
           this.companyData.TotalRecords = this.CompanyAccountDetails[0].Total;
-          this.isLoaded = true;
         } else {
           this.companyData.TotalRecords = 0;
-          this.isLoaded = true;
         }
-        this.initForm();
+        
+        this.initBankAccountForm();
+        this.initCompanyForm();
+        this.isLoaded = true;
       }
     }).catch(e => {
       this.isLoaded = true;
@@ -108,23 +120,103 @@ export class CompanyComponent implements OnInit {
     return data;
   }
 
-  initForm() {
+  initBankAccountForm() {
     this.organizationAccountsForm = this.fb.group({
       CompanyId: new FormControl(this.singleCompanyAccountInfo.CompanyId),
-      GSTNo: new FormControl(this.singleCompanyAccountInfo.GSTNo),
       AccountNo: new FormControl(this.singleCompanyAccountInfo.AccountNo, [Validators.required]),
       BankName: new FormControl(this.singleCompanyAccountInfo.BankName),
       Branch: new FormControl(this.singleCompanyAccountInfo.Branch),
       BranchCode: new FormControl(this.singleCompanyAccountInfo.BranchCode),
       IFSC: new FormControl(this.singleCompanyAccountInfo.IFSC),
-      PANNo: new FormControl(this.singleCompanyAccountInfo.PANNo),
-      TradeLicenseNo: new FormControl (this.singleCompanyAccountInfo.TradeLicenseNo),
       IsPrimaryAccount: new FormControl (this.singleCompanyAccountInfo.IsPrimaryAccount ? 'true': 'false'),
       OrganizationId: new FormControl(this.singleCompanyAccountInfo.OrganizationId),
       BankAccountId: new FormControl(this.singleCompanyAccountInfo.BankAccountId),
       OpeningDate: new FormControl(this.singleCompanyAccountInfo.OpeningDate),
       ClosingDate: new FormControl(this.singleCompanyAccountInfo.ClosingDate)
     });
+  }
+
+  initCompanyForm() {
+    this.companyForm = this.fb.group({
+      CompanyId: new FormControl(this.currentCompany.CompanyId),
+      OrganizationId: new FormControl(this.currentCompany.OrganizationId),
+      OrganizationName: new FormControl(this.currentCompany.OrganizationName, [Validators.required]),
+      CompanyName: new FormControl(this.currentCompany.CompanyName, [Validators.required]),
+      CompanyDetail: new FormControl(this.currentCompany.CompanyDetail),
+      SectorType: new FormControl(this.currentCompany.SectorType),
+      City: new FormControl(this.currentCompany.City),
+      State: new FormControl(this.currentCompany.State),
+      Country: new FormControl(this.currentCompany.Country),
+      FirstAddress: new FormControl(this.currentCompany.FirstAddress),
+      SecondAddress: new FormControl(this.currentCompany.SecondAddress),
+      ThirdAddress: new FormControl(this.currentCompany.ThirdAddress),
+      ForthAddress: new FormControl(this.currentCompany.ForthAddress),
+      FullAddress: new FormControl(this.currentCompany.FullAddress),
+      MobileNo: new FormControl(this.currentCompany.MobileNo),
+      Email: new FormControl(this.currentCompany.Email, [Validators.required]),
+      FirstEmail: new FormControl(this.currentCompany.FirstEmail),
+      SecondEmail: new FormControl(this.currentCompany.SecondEmail),
+      ThirdEmail: new FormControl(this.currentCompany.ThirdEmail),
+      ForthEmail: new FormControl(this.currentCompany.ForthEmail),
+      PrimaryPhoneNo: new FormControl(this.currentCompany.PrimaryPhoneNo, [Validators.required]),
+      SecondaryPhoneNo: new FormControl(this.currentCompany.SecondaryPhoneNo),
+      Fax: new FormControl(this.currentCompany.Fax),
+      Pincode: new FormControl(this.currentCompany.Pincode),
+      PANNo: new FormControl(this.currentCompany.PANNo),
+      TradeLicenseNo: new FormControl(this.currentCompany.TradeLicenseNo),
+      GSTNo: new FormControl(this.currentCompany.GSTNo),
+      LegalEntity: new FormControl(this.currentCompany.LegalEntity),
+      LegalNameOfCompany: new FormControl(this.currentCompany.LegalNameOfCompany),
+      TypeOfBusiness: new FormControl(this.currentCompany.TypeOfBusiness),
+      InCorporationDate: new FormControl(new Date(this.currentCompany.InCorporationDate)),
+      IsPrimaryCompany: new FormControl(this.currentCompany.IsPrimaryCompany),
+      FixedComponentsId: new FormControl(this.currentCompany.FixedComponentsId),
+      FileId: new FormControl(this.currentCompany.FileId),
+      LogoImgPath: new FormControl('')
+    })
+  }
+
+  submitChanges() {
+    this.submitted = true;
+    this.isLoading = true;
+    let errroCounter = 0;
+
+    if (this.companyForm.get("CompanyName").value === "" || this.companyForm.get("CompanyName").value === null)
+      errroCounter++;
+
+    if (this.companyForm.get("PrimaryPhoneNo").value === "" || this.companyForm.get("PrimaryPhoneNo").value === null)
+      errroCounter++;
+
+    if (this.companyForm.get("Email").value === "" || this.companyForm.get("Email").value === null)
+      errroCounter++;
+
+    if (this.companyForm.get("FileId").value == null)
+      this.companyForm.get("FileId").setValue(0);
+
+    let companyDetails = this.companyForm.value;
+    if (errroCounter === 0) {
+      let formData = new FormData()
+      formData.append("CompanyInfo", JSON.stringify(companyDetails));
+      let file = null;
+      if(this.fileDetail.length > 0)
+        file = this.fileDetail[0].file;
+      formData.append('CompanyLogo', file)
+      this.http.post("Company/UpdateCompanyDetails", formData).then((response: ResponseModel) => {
+        if (response.ResponseBody !== null) {
+          this.currentCompany = response.ResponseBody;
+          this.initCompanyForm();
+          Toast("Company detail updated successfully");
+        } else {
+          ErrorToast("Failed to generated, Please contact to admin.");
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      });
+    } else {
+      this.isLoading = false;
+      ErrorToast("All read marked fields are mandatory.");
+    }
   }
 
   reset() {
@@ -143,7 +235,7 @@ export class CompanyComponent implements OnInit {
       this.submitted = true;
       this.isLoading = true;
       request.OrganizationId = this.OrganizationId;
-      request.CompanyId = this.CurrentCompany.CompanyId;
+      request.CompanyId = this.currentCompany.CompanyId;
       if (request.OrganizationId > 0 && request.CompanyId > 0) {
         this.http.post("Company/InsertUpdateCompanyAccounts", request).then((response: ResponseModel) => {
           if (response.ResponseBody !== null && response.ResponseBody.length > 0) {
@@ -168,16 +260,11 @@ export class CompanyComponent implements OnInit {
     if (item && item.OrganizationId > 0) {
       this.singleCompanyAccountInfo = item;
 
-      if ((this.singleCompanyAccountInfo.PANNo != null &&this.singleCompanyAccountInfo.PANNo != null) || (this.singleCompanyAccountInfo.GSTNo != null && this.singleCompanyAccountInfo.GSTNo != null) || (this.singleCompanyAccountInfo.TradeLicenseNo != null && this.singleCompanyAccountInfo.TradeLicenseNo))
-        this.isCompanyrInfoSubmitted = false;
-      else
-        this.isCompanyrInfoSubmitted = true;
-
       let date = new Date(this.singleCompanyAccountInfo.OpeningDate);
       this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
       date = new Date(this.singleCompanyAccountInfo.ClosingDate);
       this.closingDatemodel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-      this.initForm();
+      this.initBankAccountForm();
       $('#accountModal').modal('show');
     }
   }
@@ -189,12 +276,7 @@ export class CompanyComponent implements OnInit {
   addAccountPopUp() {
     this.singleCompanyAccountInfo = new organizationAccountModal();
     this.submitted = false;
-    let value = this.CompanyAccountDetails.filter(x => x.PANNo != null || x.GSTNo != null || x.TradeLicenseNo != null);
-      if (value.length > 0)
-        this.isCompanyrInfoSubmitted = true;
-      else
-        this.isCompanyrInfoSubmitted = false;
-    this.initForm();
+    this.initBankAccountForm();
     $('#accountModal').modal('show');
   }
 
@@ -229,7 +311,7 @@ export class CompanyComponent implements OnInit {
 
   resetFilter() {
     this.companyData = new Filter();
-    this.companyData.SearchString = `1=1 And CompanyId=${this.CurrentCompany.CompanyId} And OrganizationId=${this.OrganizationId}`;
+    this.companyData.SearchString = `1=1 And CompanyId=${this.currentCompany.CompanyId} And OrganizationId=${this.OrganizationId}`;
     this.filterCompanyAccountInfo = new organizationAccountModal();
     this.loadData();
   }
@@ -283,5 +365,35 @@ export class CompanyComponent implements OnInit {
   onClosingDateSelect(e: any) {
     let date = new Date(e.year, e.month, e.day);
     this.organizationAccountsForm.get('ClosingDate').setValue(date);
+  }
+
+  onDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.companyForm.controls["InCorporationDate"].setValue(date);
+  }
+
+  uploadorganizationLogo(event: any) {
+    if (event.target.files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.profileURL = event.target.result;
+      };
+      let selectedfile = event.target.files;
+      let file = <File>selectedfile[0];
+      this.fileDetail.push({
+        name: "CompanyLogo",
+        file: file
+      });
+    }
+  }
+
+  fireBrowserFile() {
+    this.submitted = true;
+    $("#uploadocument").click();
+  }
+
+  get c() {
+    return this.companyForm.controls;
   }
 }

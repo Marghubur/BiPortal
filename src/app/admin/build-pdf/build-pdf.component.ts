@@ -166,7 +166,8 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let timesheetDetails = timesheetData.TimesheetDetails;
 
     if (!timesheetDetails) timesheetDetails = [];
-    else this.timesheetId = timesheetDetails[0].TimesheetId;
+    
+    if (timesheetDetails.length > 0) this.timesheetId = timesheetDetails[0].TimesheetId;
     while(i < missinngAtt.length) {
       timesheetDetails.push({
         UserTypeId: UserType.Employee,

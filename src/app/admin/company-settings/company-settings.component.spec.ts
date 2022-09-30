@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CompaySettingsComponent } from './compay-settings.component';
+import { CompanySettingsComponent } from './company-settings.component';
 
 describe('CompaySettingsComponent', () => {
-  let component: CompaySettingsComponent;
-  let fixture: ComponentFixture<CompaySettingsComponent>;
+  let component: CompanySettingsComponent;
+  let fixture: ComponentFixture<CompanySettingsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CompaySettingsComponent ]
+      declarations: [ CompanySettingsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CompaySettingsComponent);
+    fixture = TestBed.createComponent(CompanySettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

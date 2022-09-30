@@ -90,7 +90,7 @@ import { TaxcalculationComponent } from './taxcalculation/taxcalculation.compone
 import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { SettingsComponent } from './settings/settings.component';
-import { CompaySettingsComponent } from './compay-settings/compay-settings.component';
+import { CompanySettingsComponent } from './company-settings/company-settings.component';
 import { PayrollComponent } from './payroll/payroll.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
@@ -147,7 +147,7 @@ const routes: Routes = [
   { path: AdminNotification, component: NotificationComponent},
   { path: AdminApprovalRequest, component: ApprovalRequestComponent},
   { path: PayrollSettings, component: SettingsComponent},
-  { path: CompanySettings, component: CompaySettingsComponent},
+  { path: CompanySettings, component: CompanySettingsComponent},
   { path: CompanyInfo, component: CompanyInfoComponent},
   { path: Payroll, component: PayrollComponent},
   { path: PFESISetup, component: PfEsiSetupComponent},

@@ -22,95 +22,141 @@
           <div *ngSwitchDefault>
             <ng-container>
               <div class="x_content">
-                <div class="row justify-content-between">
-                  <div class="col-md-4 mt-3">
-                    <label class="form-label">Organization Name</label>
-                    <input type="text" class="form-control" readonly [value]="CurrentCompany.OrganizationName">
+                <div [formGroup]="companyForm">
+                  <div class="row col-12">
+                    <div class="col-md-4">
+                      <div class="x_header_title position-relative">
+                        <div class="img-container-sq" (change)="uploadorganizationLogo($event)">
+                          <div class="img-container__box">
+                            <img [attr.src]="profileURL" alt="User">
+                            <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
+                              formControlName="LogoImgPath" />
+                            <div class="img-container__btn mt-2">
+                              <button class="btn btn-outline-success form-control"
+                                (click)="fireBrowserFile()">Browse</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="row">
+                        <div class="col-md-6 mt-3">
+                          <label class="form-label">Organization Name</label>
+                          <input type="text" class="form-control" readonly formControlName="OrganizationName" oninput="this.value = this.value.toUpperCase()"
+                          [ngClass]="{'error-field': submitted && c.OrganizationName.errors !== null && c.OrganizationName.errors.required}">
+                        </div>
+  
+                        <div class="col-md-6 mt-3">
+                          <label class="form-label">Company Name</label>
+                          <input readonly class="form-control" formControlName="CompanyName" oninput="this.value = this.value.toUpperCase()"
+                          [ngClass]="{'error-field': submitted && c.CompanyName.errors !== null && c.CompanyName.errors.required}"/>
+                        </div>
+                      </div>
+  
+                      <div class="row">
+                        <div class="col-md-6 mt-4">
+                          <label class="form-label">Primary No.#</label>
+                          <input readonly class="form-control" formControlName="PrimaryPhoneNo" OnlyNumber="11"
+                          [ngClass]="{'error-field': submitted && c.PrimaryPhoneNo.errors !== null && c.PrimaryPhoneNo.errors.required}"/>
+                        </div>
+  
+                        <div class="col-md-6 mt-4">
+                          <label class="form-label">Email Id</label>
+                          <input readonly class="form-control" formControlName="Email"
+                          [ngClass]="{'error-field': submitted && c.Email.errors !== null && c.Email.errors.required}"/>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-md-4 mt-3">
-                    <label class="form-label">Company Name</label>
-                    <select [disabled]="companies.length == 1" class="form-select">
-                      <option disabled value="">Select Company</option>
-                      <option [value]="item.CompanyId" *ngFor="let item of companies">{{item.CompanyName}}</option>
-                    </select>
+  
+                  <div class="x_panel pt-0 my-3">
+                    <div class="row col-md-12">
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Mobile No.#</label>
+                        <input class="form-control" formControlName="MobileNo" OnlyNumber="11"/>
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Alternate No.#</label>
+                        <input class="form-control" formControlName="SecondaryPhoneNo" OnlyNumber="11"/>
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">FAX No.#</label>
+                        <input class="form-control" formControlName="Fax" oninput="this.value = this.value.toUpperCase()"/>
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">In Corporation Date</label>
+                        <form class="form-inline">
+                          <div class="form-group w-100">
+                            <div class="input-group w-100">
+                              <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)"
+                                     name="dp" [(ngModel)]="corporationDateModal" ngbDatepicker #cd="ngbDatepicker">
+                              <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+  
+                    <div class="row col-md-12">
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Other Email 1</label>
+                        <input class="form-control" formControlName="FirstEmail"/>
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Other Email 2</label>
+                        <input class="form-control" formControlName="SecondEmail"/>
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Other Email 3</label>
+                        <input class="form-control" formControlName="ThirdEmail"/>
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Other Email 4</label>
+                        <input class="form-control" formControlName="ForthEmail"/>
+                      </div>
+                    </div>
+  
+                    <div class="row col-md-12">
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">GSTIN No.#</label>
+                        <input class="form-control" formControlName="GSTNo" oninput="this.value = this.value.toUpperCase()"/>
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">PAN No.#</label>
+                        <input class="form-control" formControlName="PANNo" oninput="this.value = this.value.toUpperCase()"/>
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Trade License Number</label>
+                        <input class="form-control" formControlName="TradeLicenseNo" oninput="this.value = this.value.toUpperCase()"/>
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Legal Name Of Company</label>
+                        <input class="form-control" formControlName="LegalNameOfCompany" oninput="this.value = this.value.toUpperCase()"/>
+                      </div>
+                    </div>
+  
+                    <div class="row col-md-12 mb-3">
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Sector Type</label>
+                        <input class="form-control" formControlName="SectorType" />
+                      </div>
+                      <div class="col-md-3 mt-4">
+                        <label class="form-label">Type Of Business</label>
+                        <input class="form-control" formControlName="TypeOfBusiness" oninput="this.value = this.value.toUpperCase()"/>
+                      </div>
+                      <div class="col-md-6 mt-4 d-flex flex-column justify-content-end">
+                        <div class="d-flex flex-row justify-content-end">
+                          <button class="btn-primary-c btn" (click)="submitChanges()">
+                            <i class="fa fa-paper-plane pe-2" aria-hidden="true"></i>
+                            Save Changes
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="x_panel pt-0 my-3">
-                  <div class="row">
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Company Name</label>
-                      <input readonly class="form-control" [value]="currentCompany.CompanyName"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Primary No.#</label>
-                      <input readonly class="form-control" [value]="currentCompany.PrimaryPhoneNo"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Email Id</label>
-                      <input readonly class="form-control" [value]="currentCompany.Email"/>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                      <label class="form-label">Alternate No.#</label>
-                      <input readonly class="form-control" [value]="currentCompany.SecondaryPhoneNo"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">FAX No.#</label>
-                      <input readonly class="form-control" [value]="currentCompany.Fax"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Mobile No.# (optional)</label>
-                      <input readonly class="form-control" [value]="currentCompany.MobileNo"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Other Email 1</label>
-                      <input readonly class="form-control" [value]="currentCompany.FirstEmail"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Other Email 2</label>
-                      <input readonly class="form-control" [value]="currentCompany.SecondEmail"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Other Email 3</label>
-                      <input readonly class="form-control" [value]="currentCompany.ThirdEmail"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Other Email 4</label>
-                      <input readonly class="form-control" [value]="currentCompany.ForthEmail"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">GSTIN No.#</label>
-                      <input readonly class="form-control" [value]="currentCompany.GSTNo"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">PAN No.#</label>
-                      <input readonly class="form-control" [value]="currentCompany.PANNo"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Sector Type</label>
-                      <input readonly class="form-control" [value]="currentCompany.SectorType"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">In Corporation Date</label>
-                      <input readonly class="form-control" [value]="currentCompany.InCorporationDate"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Trade License Number</label>
-                      <input readonly class="form-control" [value]="currentCompany.TradeLicenseNo"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Legal Entity</label>
-                      <input readonly class="form-control" [value]="currentCompany.LegalEntity"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Legal Name Of Company</label>
-                      <input readonly class="form-control" [value]="currentCompany.LegalNameOfCompany"/>
-                    </div>
-                    <div class="col-md-4 mt-4">
-                      <label class="form-label">Type Of Business</label>
-                      <input readonly class="form-control" [value]="currentCompany.TypeOfBusiness"/>
-                    </div>
-                  </div>
-                </div>
+
                 <div class="t-table t-list t-border col-md-12 mt-3">
                   <div class="hide-bar"></div>
                   <div class="t-head">
@@ -182,6 +228,7 @@
                       </div>
                     </div>
                   </div>
+
                   <div class="t-body">
                     <ng-container *ngIf="CompanyAccountDetails.length > 0">
                       <div class="tr py-2" *ngFor="let bank of CompanyAccountDetails; let i=index">
@@ -293,23 +340,6 @@
                 <div class="x_header">
                   <div class="x_header_title">
                     <h2>Other Details<small>Company other deatils.</small></h2>
-                  </div>
-                </div>
-                <div class="col-md-12 mb-3 mb-3 row" *ngIf="!isCompanyrInfoSubmitted">
-                  <div class="col-md-4 my-2">
-                    <label class="form-label">PAN No.</label>
-                    <input placeholder="PAN Number" class="form-control" name="PANNo"
-                      oninput="this.value = this.value.toUpperCase()" formControlName="PANNo" />
-                  </div>
-                  <div class="col-md-4 my-2">
-                    <label class="form-label">GSTIN No.#</label>
-                    <input placeholder="GSTIN No.#" class="form-control" name="GSTNo"
-                      oninput="this.value = this.value.toUpperCase()" formControlName="GSTNo" />
-                  </div>
-                  <div class="col-md-4 my-2">
-                    <label class="form-label">Trade Liecence No.</label>
-                    <input placeholder="Trade Liecence Number" class="form-control" name="TradeLicenseNo"
-                      oninput="this.value = this.value.toUpperCase()" formControlName="TradeLicenseNo" />
                   </div>
                 </div>
                 <div class="col-md-12 mb-3 mb-3 row">

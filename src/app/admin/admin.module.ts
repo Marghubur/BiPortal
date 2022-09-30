@@ -42,7 +42,7 @@ import { PayslipComponent } from './payslip/payslip.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { NotificationComponent } from './notification/notification.component';
 import { SettingsComponent } from './settings/settings.component';
-import { CompaySettingsComponent } from './compay-settings/compay-settings.component';
+import { CompanySettingsComponent } from './company-settings/company-settings.component';
 import { PayrollComponent } from './payroll/payroll.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
@@ -105,7 +105,7 @@ import { CompanyComponent } from './company/company.component';
     ApprovalRequestComponent,
     NotificationComponent,
     SettingsComponent,
-    CompaySettingsComponent,
+    CompanySettingsComponent,
     PayrollComponent,
     ExpensesComponent,
     PfEsiSetupComponent,
