@@ -8,7 +8,7 @@ import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/c
 import { UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
-import { organizationAccountModal } from '../company-accounts/company-accounts.component';
+import { organizationAccountModal } from '../company-info/company-info.component';
 declare var $: any;
 
 @Component({
@@ -65,10 +65,10 @@ export class CompanyComponent implements OnInit {
       }
     }
   }
-  
+
   loadData() {
     this.isLoaded = false;
-    let companyId = 1;
+    let companyId = this.currentCompany.CompanyId;
     this.http.get(`Company/GetCompanyById/${companyId}`).then((response: ResponseModel) => {
       if(response.ResponseBody ) {
         this.currentCompany = response.ResponseBody.OrganizationDetail;;
@@ -105,7 +105,7 @@ export class CompanyComponent implements OnInit {
         } else {
           this.companyData.TotalRecords = 0;
         }
-        
+
         this.initBankAccountForm();
         this.initCompanyForm();
         this.isLoaded = true;
@@ -166,7 +166,6 @@ export class CompanyComponent implements OnInit {
       TradeLicenseNo: new FormControl(this.currentCompany.TradeLicenseNo),
       GSTNo: new FormControl(this.currentCompany.GSTNo),
       LegalEntity: new FormControl(this.currentCompany.LegalEntity),
-      LegalNameOfCompany: new FormControl(this.currentCompany.LegalNameOfCompany),
       TypeOfBusiness: new FormControl(this.currentCompany.TypeOfBusiness),
       InCorporationDate: new FormControl(new Date(this.currentCompany.InCorporationDate)),
       IsPrimaryCompany: new FormControl(this.currentCompany.IsPrimaryCompany),

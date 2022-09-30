@@ -4,7 +4,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { CompanyAccounts, CompanyDetail, CompanyInfo, CompanySettings, CustomSalaryStructure, OrganizationSetting, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
+import { CompanyInfo, CompanySettings, CustomSalaryStructure, OrganizationSetting, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -16,8 +16,6 @@ declare var $: any;
 export class SettingsComponent implements OnInit {
   PfNEsiPage: string = PFESISetup;
   CompanyInfoPage: string = CompanyInfo
-  ManageCompanyDetail: string = CompanyDetail;
-  ManageCompanyAccounts: string = CompanyAccounts;
   SalaryStructure: string = SalaryComponentStructure;
   CustomSalary: string = CustomSalaryStructure;
   PayrollComponent: string = PayrollComponents;
@@ -68,12 +66,6 @@ export class SettingsComponent implements OnInit {
         break;
       case Payroll:
         this.nav.navigate(Payroll, this.currentCompnay);
-        break;
-      case CompanyDetail:
-        this.nav.navigate(CompanyDetail, this.CompanyId);
-        break;
-      case CompanyAccounts:
-        this.nav.navigate(CompanyAccounts, this.currentCompnay);
         break;
       case SalaryComponentStructure:
         this.nav.navigate(SalaryComponentStructure, null)

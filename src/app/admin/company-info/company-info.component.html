@@ -73,8 +73,8 @@
                   <label for="" class="form-label">LEGAL NAME OF THE COMPANY</label>
                   <input type="text" oninput="this.value = this.value.toUpperCase()" class="form-control"
                     placeholder="COMPANY FULL NAME"
-                    [ngClass]="{'error-field': submitted && f['LegalNameOfCompany'].errors !== null && f['LegalNameOfCompany'].errors['required']}"
-                    formControlName="LegalNameOfCompany">
+                    [ngClass]="{'error-field': submitted && f['LegalEntity'].errors !== null && f['LegalEntity'].errors['required']}"
+                    formControlName="LegalEntity">
                 </div>
                 <div class="col-md-6 my-2">
                   <label for="" class="form-label">TYPE OF BUSINESS</label>
@@ -106,74 +106,73 @@
               </div>
             </div>
             <button class="btn btn-primary-c float-end mb-3" [disabled]="isLoading" (click)="updateDetail()">
-              <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
-              {{ isLoading ? 'Processing' : 'Submit' }}
+              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
+              <span class="ps-2">{{ isLoading ? 'Processing' : 'Submit' }}</span>
             </button>
           </div>
         </ng-container>
         <ng-container *ngIf="ActivatedPage == 2">
           <div class="box">
             <div class="d-flex justify-content-between align-items-center">
-              <h6 class="mb-0">BANK ACCOUNT INFORMATION.</h6>
+              <h6 class="mb-0">PRIMARY BANK ACCOUNT INFORMATION.</h6>
               <div>
-                <button class="btn my-2 me-1 btn-outline-primary" (click)="addBankAccount()"><i class="fa fa-plus pe-2"></i> Add Acoount</button>
                 <button class="btn my-2 me-1 btn-outline-primary" (click)="editBankAccount(BankDetails)"><i class="fa fa-pencil pe-2"></i> Edit Acoount</button>
               </div>
             </div>
             <div class="row">
               <div class="col-md-12">
-                <div class="col-md-12 row my-2">
-                  <div class="form-label col-md-6 fw-bold">Account Number :</div>
-                  <div class="form-label col-md-6">
+                <div class="d-flex my-2">
+                  <div class="form-label fe-1">Account Number :</div>
+                  <div class="form-label fe-4">
                     <ng-container *ngIf="BankDetails.AccountNumber != null && BankDetails.AccountNumber != ''">{{BankDetails.AccountNumber}}</ng-container>
                     <ng-container *ngIf="BankDetails.AccountNumber == null || BankDetails.AccountNumber == ''">NA</ng-container>
                   </div>
                 </div>
-                <div class="col-md-12 row my-2">
-                  <div class="form-label col-md-6 fw-bold">Bank Name :</div>
-                  <div class="form-label col-md-6">
+                <div class="d-flex my-2">
+                  <div class="form-label fe-1">Bank Name :</div>
+                  <div class="form-label fe-4">
                     <ng-container *ngIf="BankDetails.BankName != null && BankDetails.BankName != ''">{{BankDetails.BankName}}</ng-container>
                     <ng-container *ngIf="BankDetails.BankName == null || BankDetails.BankName == ''">NA</ng-container>
                   </div>
                 </div>
-                <div class="col-md-12 row my-2">
-                  <div class="form-label col-md-6 fw-bold">Branch Name :</div>
-                  <div class="form-label col-md-6">
+                <div class="d-flex my-2">
+                  <div class="form-label fe-1">Branch Name :</div>
+                  <div class="form-label fe-4">
                     <ng-container *ngIf="BankDetails.Branch != null && BankDetails.Branch != ''">{{BankDetails.Branch}}</ng-container>
                     <ng-container *ngIf="BankDetails.Branch == null || BankDetails.Branch == ''">NA</ng-container>
                   </div>
                 </div>
-                <div class="col-md-12 row my-2">
-                  <div class="form-label col-md-6 fw-bold">Branch Code :</div>
-                  <div class="form-label col-md-6">
+                <div class="d-flex my-2">
+                  <div class="form-label fe-1">Branch Code :</div>
+                  <div class="form-label fe-4">
                     <ng-container *ngIf="BankDetails.BranchCode != null && BankDetails.BranchCode != ''">{{BankDetails.BranchCode}}</ng-container>
                     <ng-container *ngIf="BankDetails.BranchCode == null || BankDetails.BranchCode == ''">NA</ng-container>
                   </div>
                 </div>
-                <div class="col-md-12 row my-2">
-                  <div class="form-label col-md-6 fw-bold">IFSC Code :</div>
-                  <div class="form-label col-md-6">
+                <div class="d-flex my-2">
+                  <div class="form-label fe-1">IFSC Code :</div>
+                  <div class="form-label fe-4">
                     <ng-container *ngIf="BankDetails.IFSC != null && BankDetails.IFSC != ''">{{BankDetails.IFSC}}</ng-container>
                     <ng-container *ngIf="BankDetails.IFSC == null || BankDetails.IFSC == ''">NA</ng-container>
                   </div>
                 </div>
-                <div class="col-md-12 row my-2">
-                  <div class="form-label col-md-6 fw-bold">GSTIN Number :</div>
-                  <div class="form-label col-md-6">
+                <div class="d-flex my-2">
+                  <div class="form-label fe-1">GSTIN Number :</div>
+                  <div class="form-label fe-4">
                     <ng-container *ngIf="BankDetails.GSTNo != null && BankDetails.GSTNo != ''">{{BankDetails.GSTNo}}</ng-container>
                     <ng-container *ngIf="BankDetails.GSTNo == null || BankDetails.GSTNo == ''">NA</ng-container>
                   </div>
                 </div>
-                <div class="col-md-12 row my-2">
-                  <div class="form-label col-md-6 fw-bold">TradeLiecence Number :</div>
-                  <div class="form-label col-md-6">
+                <div class="d-flex my-2">
+                  <div class="form-label fe-1">TradeLiecence Number :</div>
+                  <div class="form-label fe-4">
                     <ng-container *ngIf="BankDetails.TradeLicenseNo != null && BankDetails.TradeLicenseNo != ''">{{BankDetails.TradeLicenseNo}}</ng-container>
                     <ng-container *ngIf="BankDetails.TradeLicenseNo == null || BankDetails.TradeLicenseNo == ''">NA</ng-container>
                   </div>
                 </div>
-                <div class="col-md-12 row my-2">
-                  <div class="form-label col-md-6 fw-bold">PAN Number :</div>
-                  <div class="form-label col-md-6">
+                <div class="d-flex my-2">
+                  <div class="form-label fe-1">PAN Number :</div>
+                  <div class="form-label fe-4">
                     <ng-container *ngIf="BankDetails.PANNo != null && BankDetails.PANNo != ''">{{BankDetails.PANNo}}</ng-container>
                     <ng-container *ngIf="BankDetails.PANNo == null || BankDetails.PANNo == ''">NA</ng-container>
                   </div>

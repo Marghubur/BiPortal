@@ -5,7 +5,6 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DateFormatter } from 'src/providers/DateFormatter';
-import { organizationAccountModal } from '../company-accounts/company-accounts.component';
 import { Files } from '../documents/documents.component';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
@@ -55,7 +54,6 @@ export class CompanyInfoComponent implements OnInit {
     this.imageBasePath = this.http.GetImageBasePath();
     this.ActivatedPage = 1;
     this.companyInformation = new CompanyInformationClass();
-    this.companyInformation.LegalEntity = '';
     this.initAccountForm();
     let data = this.nav.getValue();
     if (data) {
@@ -276,12 +274,6 @@ export class CompanyInfoComponent implements OnInit {
     return data;
   }
 
-  addBankAccount() {
-    this.primaryCompanyAccountInfo = new organizationAccountModal();
-    this.initAccountForm();
-    $('#accountModal').modal('show');
-  }
-
   editBankAccount(item: any) {
     if (item) {
       this.primaryCompanyAccountInfo = item;
@@ -354,4 +346,22 @@ class CompanyInformationClass {
   CompanyId: number = 0;
   CompanyName: string = '';
   OrganizationId: number = 0;
+}
+
+
+export class organizationAccountModal {
+  OrganizationId: number = 0;
+  GSTNo: string = null;
+  AccountNo: string = null;
+  BankName: string = null;
+  Branch: string = null;
+  IFSC: string = null;
+  PANNo: string = null;
+  IsPrimaryAccount: boolean = false;
+  TradeLicenseNo: string = '';
+  BranchCode: string = '';
+  CompanyId: number = 0;
+  BankAccountId: number = 0;
+  OpeningDate: Date = null;
+  ClosingDate: Date = null;
 }
