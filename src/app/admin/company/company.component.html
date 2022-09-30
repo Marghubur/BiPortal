@@ -136,7 +136,7 @@
                       </div>
                     </div>
 
-                    <div class="row col-md-12">
+                    <div class="row col-md-12 mb-3">
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Sector Type</label>
                         <input class="form-control" formControlName="SectorType" />
@@ -191,9 +191,9 @@
                       </div>
                       <div class="col-md-6 mt-4 d-flex flex-column justify-content-end">
                         <div class="d-flex flex-row justify-content-end">
-                          <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitChanges()">
+                          <button class="btn-primary-c btn" [disabled]="isLoading" (click)="submitChanges()">
                             <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
-                            <span class="ps-2">{{ isLoading ? 'Processing' : 'Save Changes' }}</span>
+                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Save Changes' }}</span>
                           </button>
                         </div>
                       </div>

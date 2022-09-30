@@ -34,7 +34,6 @@ export class CompanyComponent implements OnInit {
   model: NgbDateStruct;
   closingDatemodel: NgbDateStruct;
   corporationDateModal: NgbDateStruct;
-
   currentCompany: any = null;
   fileDetail: Array<any> = [];
   profileURL: string = UserImage;
@@ -42,9 +41,7 @@ export class CompanyComponent implements OnInit {
   constructor(private http: AjaxService,
     private fb: FormBuilder,
     private local: ApplicationStorage,
-    private user: UserService,
     private common: CommonService,
-    private nav: iNavigation
   ) { }
 
   ngOnInit(): void {

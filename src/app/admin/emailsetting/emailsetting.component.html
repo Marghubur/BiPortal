@@ -1,1 +1,144 @@
-<p>emailsetting works!</p>
+<div class="col-12 full-v main-container">
+  <div>
+    <form>
+      <div class="x_panel mh-auto">
+        <div class="x_header">
+          <div class="x_header_title">
+            <h2>Company Email Settings
+              <small>Compnay email settings like: email id, port no, email host etc.</small>
+              <i class="fa text-dark edit-icon ps-2"></i>
+            </h2>
+          </div>
+        </div>
+        <div class="px-1">
+          <app-breadcrums></app-breadcrums>
+        </div>
+        <ng-container *ngIf="isLoaded">
+          <div class="x_content">
+            <div [formGroup]="emailSettingForm">
+              <div class="row col-12">
+                <div class="col-md-4">
+                  <div class="x_header_title position-relative">
+                    <div class="img-container-sq" (change)="uploadCompanyLogo($event)">
+                      <div class="img-container__box">
+                        <img [attr.src]="profileURL" alt="User">
+                        <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
+                          formControlName="LogoImgPath" />
+                        <div class="img-container__btn mt-2">
+                          <button class="btn btn-outline-success form-control"
+                            (click)="fireBrowserFile()">Browse</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="row">
+                    <div class="col-md-6 mt-3">
+                      <label class="form-label">Organization Name</label>
+                      <input type="text" class="form-control" readonly formControlName="OrganizationName">
+                    </div>
+                    <div class="col-md-6 mt-3">
+                      <label class="form-label">Company Name</label>
+                      <input readonly class="form-control" formControlName="CompanyName"/>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mt-4">
+                      <label class="form-label">Email Name *</label>
+                      <input class="form-control" formControlName="EmailName" placeholder="Email Name" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && c.EmailName.errors !== null && c.EmailName.errors.required}"/>
+                    </div>
+                    <div class="col-md-6 mt-4">
+                      <label class="form-label">Email Id *</label>
+                      <input class="form-control" formControlName="EmailAddress" placeholder="Email Id" [ngClass]="{'error-field': submitted && c.EmailAddress.errors !== null && c.EmailAddress.errors.required}"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 row m-0 mt-5">
+                <div class="col-md-6">
+                  <div class="x_panel">
+                    <div class="x_header">
+                      <div class="x_header_title">
+                        <h2>HOST Setting<small>Send email setting</small></h2>
+                      </div>
+                    </div>
+                    <div class="row col-md-12">
+                      <div class="col-md-6 mt-4">
+                        <label class="form-label">Email Host *</label>
+                        <input class="form-control" formControlName="EmailHost" placeholder="Email Host" [ngClass]="{'error-field': submitted && c.formControlName.errors !== null && c.formControlName.errors.required}"/>
+                      </div>
+                      <div class="col-md-6 mt-4">
+                        <label class="form-label">Port No.# *</label>
+                        <input class="form-control" formControlName="PortNo" placeholder="Port Number" OnlyNumber="11" [ngClass]="{'error-field': submitted && c.PortNo.errors !== null && c.PortNo.errors.required}"/>
+                      </div>
+                      <div class="col-md-6 mt-4">
+                        <label class="form-label">Enable SSL *</label>
+                        <select formControlName="EnableSsl" class="form-select" [ngClass]="{'error-field': submitted && c.EnableSsl.errors !== null && c.EnableSsl.errors.required}">
+                          <option disabled value="">Select SSL is enable</option>
+                          <option value="true">Yes</option>
+                          <option value="false">No</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mt-4">
+                        <label class="form-label">Delivery Method *</label>
+                        <input class="form-control" formControlName="DeliveryMethod" placeholder="Port Number"/>
+                      </div>
+                      <div class="col-md-6 mt-4">
+                        <label class="form-label">User Default Credentials *</label>
+                        <select formControlName="UserDefaultCredentials" class="form-select" [ngClass]="{'error-field': submitted && c.UserDefaultCredentials.errors !== null && c.UserDefaultCredentials.errors.required}">
+                          <option disabled value="">Select Default Credentials</option>
+                          <option value="true">Yes</option>
+                          <option value="false">No</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mt-4">
+                        <label class="form-label">Credentials *</label>
+                        <input class="form-control" formControlName="Credentials" placeholder="Credentials" [ngClass]="{'error-field': submitted && c.Credentials.errors !== null && c.Credentials.errors.required}" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="x_panel">
+                    <div class="x_header">
+                      <div class="x_header_title">
+                        <h2>POP3 Setting<small>Read email setting.</small></h2>
+                      </div>
+                    </div>
+                    <div class="row col-md-12">
+                      <div class="col-md-6 mt-4">
+                        <label class="form-label">POP3 Email Host</label>
+                        <input class="form-control" formControlName="POP3EmailHost" placeholder="POP3 Email Host"/>
+                      </div>
+                      <div class="col-md-6 mt-4">
+                        <label class="form-label">POP3 Port No.#</label>
+                        <input class="form-control" formControlName="POP3PortNo" placeholder="POP3 Port Number" OnlyNumber="11"/>
+                      </div>
+                      <div class="col-md-6 mt-4">
+                        <label class="form-label">Enable POP3 SSL</label>
+                        <select formControlName="POP3EnableSsl" class="form-select">
+                          <option disabled value="">Select SSL is enable</option>
+                          <option value="true">Yes</option>
+                          <option value="false">No</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-12 mt-4 d-flex flex-column justify-content-end">
+                      <div class="d-flex flex-row justify-content-end">
+                        <button class="btn-primary-c btn" [disabled]="isLoading" (click)="submitChanges()">
+                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
+                          <span class="ps-2">{{ isLoading ? 'Wait' : 'Save Changes' }}</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+</div>
