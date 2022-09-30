@@ -12,6 +12,8 @@
 .large-message-box {
   height: 60vh;
   resize: none;
+  overflow-x: none !important;
+  overflow-y: auto !important;
 }
 
 .small-message-box {
@@ -19,6 +21,8 @@
   outline: 0;
   box-shadow: none !important;
   resize: none;
+  overflow-x: none !important;
+  overflow-y: auto !important;
 }
 
 .email-address-box input::placeholder {
@@ -67,4 +71,8 @@
 
 .construction-img {
   max-width: 50vw !important;
+}
+
+#closeModal {
+  background: #1a19198f !important;
 }

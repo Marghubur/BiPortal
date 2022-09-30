@@ -41,7 +41,7 @@
           <a href="javascript:void(0)" class="text-decoration-none" (click)="maximizeMailbox()">
             <i class="fa fa-window-maximize px-2 text-dark"></i>
           </a>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" (click)="closeModalpopup()"></button>
         </div>
       </div>
       <div class="modal-body">
@@ -102,3 +102,21 @@
     </div>
   </div>
 </div>
+
+<!-- Close Modal -->
+<div class="modal fade" id="closeModal" tabindex="-1" aria-labelledby="closeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="closeModalLabel">Close mail box</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="text-dark fw-bold">Are you want to close? if yes then you will lose the data.</h5>
+      </div>
+      <div class="modal-footer border-top-0">
+        <a href="javascript:void(0)" class="text-decoration-none text-primary fw-bold" data-bs-dismiss="modal">No</a>
+        <a href="javascript:void(0)" class="text-decoration-none text-danger fw-bold ps-3" (click)="closeEmailBox()">Yes</a>
+      </div>
+    </div>
+  </div>

@@ -157,7 +157,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           this.buildTimeSheet(response.ResponseBody, this.currentEmployee.EmployeeUid);
       }
       this.isClientSelected = true;
-    });    
+    });
   }
 
   prepareTimesheet(timesheetData: any, employeeId: number) {
@@ -166,7 +166,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let timesheetDetails = timesheetData.TimesheetDetails;
 
     if (!timesheetDetails) timesheetDetails = [];
-    
+
     if (timesheetDetails.length > 0) this.timesheetId = timesheetDetails[0].TimesheetId;
     while(i < missinngAtt.length) {
       timesheetDetails.push({
@@ -190,7 +190,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       isTimeSheetExists = false;
     }
 
-    this.prepareTimesheet(data, employeeId);      
+    this.prepareTimesheet(data, employeeId);
     this.allTimesheet.map(item => {
       item.PresentDate = new Date(item.PresentDate);
       if(item.TimesheetStatus == 8)
@@ -317,7 +317,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           this.model.day = billingDate.getDate();
           this.model.month = billingDate.getMonth() + 1;
           this.model.year = billingDate.getFullYear();
-          
+
           this.originalBillingMonth = fileDetail.BillForMonth;
           this.pdfModal.billYear = fileDetail.BillYear;
           if(fileDetail.BillYear == null) {
@@ -867,7 +867,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let developerId = Number(this.pdfForm.get('developerId').value);
     if (!isNaN(developerId)) {
       this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid === developerId);
-      
+
       if (this.currentEmployee) {
         if (this.currentEmployee.CompanyId == 0){
           ErrorToast("Company is not set for the current employee.");
@@ -1101,10 +1101,6 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     } catch(e) {
       ErrorToast("Getting calculation error from client side. Please contact to admin.");
     }
-  }
-
-  updateActualDaysPopup() {
-    $('#updateburnDaysModal').modal('show');
   }
 
   updateActualDays() {
