@@ -47,8 +47,6 @@ import { PayrollComponent } from './payroll/payroll.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
-import { CompanyDetailComponent } from './company-detail/company-detail.component';
-import { CompanyAccountsComponent } from './company-accounts/company-accounts.component';
 import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
 import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 import { PayrollComponentsComponent } from './payroll-components/payroll-components.component';
@@ -110,8 +108,6 @@ import { CompanyComponent } from './company/company.component';
     ExpensesComponent,
     PfEsiSetupComponent,
     CompanyInfoComponent,
-    CompanyDetailComponent,
-    CompanyAccountsComponent,
     SalarycomponentStructureComponent,
     CustomsalaryStructureComponent,
     PayrollComponentsComponent,

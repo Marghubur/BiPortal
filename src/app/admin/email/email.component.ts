@@ -206,11 +206,6 @@ export class EmailComponent implements OnInit {
         document.querySelector('div[data-name="Cc-Bcc-address"]').classList.add('d-none');
   }
 
-  // removeToLabel() {
-  //   document.querySelector('label[for="to-email-address"]').classList.add('d-none');
-  //   document.querySelector('div[data-name="Cc-Bcc-address"]').classList.add('d-none');
-  // }
-
   otherAddress(e: any, address: string) {
     e.target.closest('div').classList.add('d-none');
     if (address == 'Cc-address') {
@@ -316,5 +311,19 @@ export class EmailComponent implements OnInit {
       let boldText = "<b>" + value + "</b>";
       document.getElementById('emailbody').innerHTML = text.replace(value, boldText);
     }
+  }
+  closeModalpopup() {
+    $('#closeModal').modal('show');
+  }
+
+  closeEmailBox() {
+    $('#closeModal').modal('hide');
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    this.bccEmail = [];
+    this.ccEmail = [];
+    this.toEmail = [];
+    this.emailForm.reset();
+    $('#composeMailModal').modal('hide');
   }
 }
