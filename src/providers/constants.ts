@@ -99,6 +99,8 @@ export const Project = 'admin/project';
 export const EmailSetting = 'admin/emailsetting';
 export const MenuSetting = 'admin/menu';
 export const Company = 'admin/companysettings';
+export const ProjectWiki = 'admin/wiki';
+export const ProjectList = 'admin/projects';
 
 
 // ********************** Admin route pages  *******************
