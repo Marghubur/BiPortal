@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 declare var $: any;
 
 @Component({
@@ -6,12 +6,24 @@ declare var $: any;
   templateUrl: './wiki.component.html',
   styleUrls: ['./wiki.component.scss']
 })
-export class WikiComponent implements OnInit {
+export class WikiComponent implements OnInit, AfterViewChecked {
   isLoaded: boolean = true;
   projectDetail: ProjectWiki = new ProjectWiki();
   titleValue: string = '';
+  imageUrl: string = '';
+  anchorLink: string = '';
 
   constructor() { }
+
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('dispose');
+    });
+  }
 
   ngOnInit(): void {
     this.projectDetail.ProjectName= "HIRINGBELL ACCOUNTS";
@@ -41,6 +53,105 @@ export class WikiComponent implements OnInit {
       this.titleValue = '';
       $("#addSubSectionModal").modal('hide');
     }
+  }
+
+  addTextPopUp() {
+    this.titleValue = '';
+    $("#addTextModal").modal('show');
+  }
+
+  addText() {
+    if(this.titleValue && this.titleValue != '') {
+      let tag = document.createElement("p");
+      tag.className="mb-0";
+      let text = document.createTextNode(this.titleValue);
+      tag.appendChild(text);
+      let elem = document.querySelector('[data-name="editable-div"]');
+      elem.appendChild(tag);
+      this.titleValue = '';
+      $("#addTextModal").modal('hide');
+    }
+  }
+
+  addLinkPopUp() {
+    this.titleValue = '';
+    this.anchorLink = null;
+    $("#addLinkModal").modal('show');
+  }
+
+  addLink() {
+    if(this.titleValue && this.titleValue != '') {
+      let tag = document.createElement("a");
+      if (this.anchorLink && this.anchorLink != '') {
+        tag.setAttribute('href', this.anchorLink);
+        tag.setAttribute('target', '_blank')
+      }
+      else
+        tag.setAttribute('href', 'javascript:void(0)');
+
+      let text = document.createTextNode(this.titleValue);
+      tag.appendChild(text);
+      let elem = document.querySelector('[data-name="editable-div"]');
+      elem.appendChild(tag);
+      this.titleValue = '';
+      $("#addLinkModal").modal('hide');
+    }
+  }
+
+  addListPopUp() {
+    this.titleValue = '';
+    this.anchorLink = null;
+    $("#addListModal").modal('show');
+  }
+
+  addList() {
+    if(this.titleValue && this.titleValue != '') {
+      let tag = document.createElement("ul");
+      tag.className="mb-0";
+      let subTag = document.createElement('li');
+      if (this.anchorLink && this.anchorLink != '') {
+        let anchor = document.createElement("a");
+        anchor.setAttribute('href', this.anchorLink);
+        anchor.setAttribute('target', '_blank')
+        let text = document.createTextNode(this.titleValue);
+        anchor.appendChild(text);
+        subTag.appendChild(anchor);
+      } else {
+        let text = document.createTextNode(this.titleValue);
+        subTag.appendChild(text);
+      }
+      tag.appendChild(subTag);
+      let elem = document.querySelector('[data-name="editable-div"]');
+      elem.appendChild(tag);
+      this.titleValue = '';
+      $("#addListModal").modal('hide');
+    }
+  }
+
+  fireBrowser() {
+    $('#insert-image').click();
+  }
+
+  uploadImage(event: any) {
+    this.imageUrl = 'assets/images/faces/face.jpg';
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.imageUrl = event.target.result;
+      };
+      this.createImageTag(this.imageUrl);
+    }
+  }
+
+  createImageTag(imageUrl: string) {
+    let tag = document.createElement('div');
+    let img = document.createElement('img');
+    img.src = `{{${imageUrl}}}`
+    img.setAttribute('src', '{{imageUrl}}')
+    tag.appendChild(img);
+    let elem = document.querySelector('[data-name="editable-div"]');
+    elem.appendChild(tag);
   }
 
 }
