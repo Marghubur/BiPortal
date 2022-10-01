@@ -542,7 +542,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ErrorToast("Please enter ctc");
       return;
     }
-    this.http.get(`SalaryComponent/GetSalaryGroupByCTC/${ctc}`).then(res => {
+    this.http.get(`SalaryComponent/GetSalaryGroupByCTC/${ctc}/${this.employeeUid}`).then(res => {
       if (res.ResponseBody) {
         this.nav.navigate(SalaryBreakup, this.employeeForm.value);
       }
