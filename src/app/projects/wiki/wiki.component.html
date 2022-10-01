@@ -1,0 +1,115 @@
+<div class="col-12 full-v main-container" [ngClass]="{'preload': !isLoaded}">
+    <div>
+      <form>
+        <div class="x_panel mh-auto">
+          <div class="x_header">
+            <div class="x_header_title">
+              <h2>{{projectDetail.ProjectName}}
+                <small>Project detail to update.</small>
+                <i class="fa text-dark edit-icon ps-2"></i>
+              </h2>
+            </div>
+          </div>
+          <div class="px-1">
+            <app-breadcrums></app-breadcrums>
+          </div>
+          <div [ngSwitch]="isLoaded">
+            <div *ngSwitchCase="false">
+              <div class="mt-5">
+                <app-pre-load-table></app-pre-load-table>
+              </div>
+            </div>
+            <div *ngSwitchDefault>
+                <ng-container>
+                    <div class="row col-12 mt-3 x_content">
+                        <!-- <h2>Title</h2>
+                        <div>Project brief</div>
+                        <div>Content detail 1</div>
+                        <div>Content detail 1</div>
+                        <div>Content detail 1</div>
+                        <div>Content detail 1</div> -->
+                        <div class="col-md-3 x_panel mx-2">
+                            <div class="x_header">
+                                <div class="x_header_title d-flex flex-row justify-content-between">
+                                    <h6>{{projectDetail.ProjectName}}</h6>
+                                    <a href="javascript:void(0)" class="text-decoration-none" (click)="addSectionPopUp()">
+                                        <i class="fa fa-plus pe-2"></i> Add Section
+                                    </a>
+                                </div>
+                            </div>
+                            <div>
+                                <ul class="list-unstyled">
+                                    <li *ngFor="let item of projectDetail.Section">
+                                        <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
+                                            <span>{{item}}</span>
+                                            <span>
+                                                <i class="fa fa-plus pe-3" (click)="addSubSectionPopUp()"></i>
+                                                <i class="fa fa-caret-left fa-lg"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="list-unstyled">
+                                            <li *ngFor="let item of projectDetail.Section">
+                                                <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
+                                                    <span>{{item}}</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-9"></div>
+                    </div>
+                </ng-container>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+
+<!-- Add Section Modal -->
+<div class="modal fade" id="addSectionModal" tabindex="-1" aria-labelledby="addSectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content px-4">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="addSectionModalLabel">Add Section</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <label for="" class="form-label">Section Title</label>
+            <input type="text" class="form-control" [(ngModel)]="titleValue">
+          </div>
+        </div>
+        <div class="modal-footer border-top-0">
+          <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
+          <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addSection()"><i class="fa fa-plus pe-2"></i>Add</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End -->
+
+  <!-- Add Section Modal -->
+<div class="modal fade" id="addSubSectionModal" tabindex="-1" aria-labelledby="addSubSectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content px-4">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="addSubSectionModalLabel">Add Sub Section</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <label for="" class="form-label">Sub Section Title</label>
+            <input type="text" class="form-control" [(ngModel)]="titleValue">
+          </div>
+        </div>
+        <div class="modal-footer border-top-0">
+          <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
+          <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addSubSection()"><i class="fa fa-plus pe-2"></i>Add</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End -->

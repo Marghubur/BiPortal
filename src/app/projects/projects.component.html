@@ -1,0 +1,33 @@
+<div class="col-12 full-v main-container" [ngClass]="{'preload': !isLoaded}">
+    <div>
+      <form>
+        <div class="x_panel mh-auto">
+          <div class="x_header">
+            <div class="x_header_title">
+              <h2>Company Detail
+                <small>Compnay details like: Company name, Bank account etc.</small>
+                <i class="fa text-dark edit-icon ps-2"></i>
+              </h2>
+            </div>
+          </div>
+          <div class="px-1">
+            <app-breadcrums></app-breadcrums>
+          </div>
+          <div [ngSwitch]="isLoaded">
+            <div *ngSwitchCase="false">
+              <div class="mt-5">
+                <app-pre-load-table></app-pre-load-table>
+              </div>
+            </div>
+            <div *ngSwitchDefault>
+              <ng-container>
+                <div class="x_content">
+                    <button class="btn-primary-c btn" (click)="loadWiki()">Get Wiki</button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>

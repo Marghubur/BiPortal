@@ -62,6 +62,7 @@ import { ProjectComponent } from './project/project.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
 import { MenusettingComponent } from './menusetting/menusetting.component';
 import { CompanyComponent } from './company/company.component';
+import { ProjectsModule } from '../projects/projects.module';
 
 @NgModule({
   declarations: [
@@ -128,7 +129,8 @@ import { CompanyComponent } from './company/company.component';
     NgbModule,
     ReactiveFormsModule,
     FormsModule,
-    UtilModule
+    UtilModule,
+    ProjectsModule
   ],
   providers: [
     CommonService,
