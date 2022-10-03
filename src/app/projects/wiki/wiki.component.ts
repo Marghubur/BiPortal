@@ -1,4 +1,9 @@
 import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ResponseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
+import { Toast } from 'src/providers/common-service/common.service';
 declare var $: any;
 
 @Component({
@@ -13,9 +18,12 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   imageUrl: string = '';
   anchorLink: string = '';
   tag: HTMLElement = null;
-  editableFlag: boolean = true;
+  editableFlag: boolean = false;
+  wikiForm: FormGroup = null;
 
-  constructor() { }
+  constructor(private fb: FormBuilder,
+              private sanitize: DomSanitizer,
+              private http: AjaxService) { }
 
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -31,8 +39,51 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.projectDetail.ProjectName= "HIRINGBELL ACCOUNTS";
-    this.projectDetail.Section = ['Section 1', 'Section - 2', 'Section -3'];
-    this.projectDetail.SubSection = ['Sub Section 1', 'Sub Section - 2', 'Sub Section -3'];
+    this.loadData();
+    this.initForm();
+  }
+
+  loadData() {
+    this.editableFlag = false;
+    this.http.get("Project/GetAllProject").then(res => {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
+        if (res.ResponseBody[0].DocumentationDetail) {
+          let value = JSON.parse(res.ResponseBody[0].DocumentationDetail);
+          //value = this.sanitize.bypassSecurityTrustUrl(res.ResponseBody[0].DocumentationDetail);
+          document.getElementById('main-container').innerHTML = value;
+        }
+        if (res.ResponseBody[0].PageIndexDetail) {
+          let value = JSON.parse(res.ResponseBody[0].PageIndexDetail);
+          //value = this.sanitize.bypassSecurityTrustUrl(res.ResponseBody[0].PageIndexDetail);
+          document.getElementById('side-menu-item').innerHTML = value;
+        }
+        this.editableFlag = false;
+        Toast("Record found");
+      }
+    })
+  }
+
+  initForm() {
+    this.wikiForm = this.fb.group({
+      Projects: this.fb.array([this.ProjectForm(this.titleValue)])
+    })
+  }
+
+  ProjectForm(value : string) {
+    return this.fb.group({
+      WikiSection: new FormControl('')
+    })
+  }
+
+  AdProject() {
+    let project = this.wikiForm.get('Projects') as FormArray;
+    project.push(this.ProjectForm(this.titleValue));
+    $("#addTitleModal").modal('hide');
+  }
+
+  addTitlePopUp() {
+    this.titleValue = '';
+    $("#addTitleModal").modal('show');
   }
 
   addSectionPopUp() {
@@ -41,21 +92,9 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   addSection() {
     if(this.titleValue && this.titleValue != '') {
-      this.projectDetail.Section.push(this.titleValue);
+      this.projectDetail.Section = this.titleValue;
       this.titleValue = '';
       $("#addSectionModal").modal('hide');
-    }
-  }
-
-  addSubSectionPopUp() {
-    $("#addSubSectionModal").modal('show');
-  }
-
-  addSubSection() {
-    if(this.titleValue && this.titleValue != '') {
-      this.projectDetail.Section.push(this.titleValue);
-      this.titleValue = '';
-      $("#addSubSectionModal").modal('hide');
     }
   }
 
@@ -65,6 +104,22 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   trackElement(e: any) {
     alert(e);
+  }
+
+  addTitle() {
+    if(this.titleValue && this.titleValue != '') {
+      this.projectDetail.Section = this.titleValue;
+      this.titleValue = '';
+      $("#addTitleModal").modal('hide');
+    }
+  }
+
+  addSubSection(e: any) {
+    this.projectDetail.SubSection = '';
+    let value = e.target.innerText;
+    if(value && value != '') {
+      this.projectDetail.SubSection = value ;
+    }
   }
 
   addTextPopUp() {
@@ -174,10 +229,27 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     $('#addLinkModal').modal('hide');
   }
 
+  saveProjectDetails() {
+    this.editableFlag = false;
+    let value = document.getElementById('main-container').innerHTML;
+    let sidemenu = document.getElementById('side-menu-item').innerHTML;
+    let project = {
+      DocumentationDetail: value,
+      PageIndexDetail: sidemenu,
+      ProjectName: "HiringBell"
+    }
+    this.http.post("Project/AddProject", project).then((res: ResponseModel) => {
+      if (res.ResponseBody)
+        Toast(res.ResponseBody);
+    }).catch(e => {
+      Error(e);
+    })
+  }
+
 }
 
 class ProjectWiki {
-  Section: Array<string> = [];
-  SubSection: Array<String> = [];
+  Section: string = '';
+  SubSection: String = '';
   ProjectName: string = '';
 }

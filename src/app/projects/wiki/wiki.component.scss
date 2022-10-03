@@ -20,3 +20,11 @@ div[contenteditable] {
     border: 1px solid #d9d9d9;
     height: 40vh;
 }
+.full-height {
+  min-height: 74vh;
+}
+.icon-section {
+  position: fixed;
+  bottom: 7px;
+  right: 31px;
+}
