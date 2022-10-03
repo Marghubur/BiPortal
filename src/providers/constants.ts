@@ -100,7 +100,7 @@ export const EmailSetting = 'admin/emailsetting';
 export const MenuSetting = 'admin/menu';
 export const Company = 'admin/companysettings';
 export const ProjectWiki = 'admin/wiki';
-export const ProjectList = 'admin/projects';
+export const ProjectList = 'admin/project';
 
 
 // ********************** Admin route pages  *******************
