@@ -62,53 +62,37 @@
                                         </a>
                                     </div>
                                 </h2>
-                                <div class="col-12" name="section1">
-                                    GitLab offers tiers of features. Your subscription determines which tier you have access to. Subscriptions are valid for 12 months.
-                                </div>
-                                <div class="col-12" name="section1">
-                                    GitLab provides special subscriptions to participants in:
-                                    <div class="my-2">
-                                        <ul>
-                                            <li>Education</li>
-                                            <li>Open Source</li>
-                                            <li>Testing</li>
-                                        </ul>
-                                    </div>
-                                    <p>
-                                        <a class="no-attachment-icon" href="img/license-overview.png" target="_blank" rel="noopener noreferrer">
-                                            <img src="https://docs.gitlab.com/ee/subscriptions/img/license-overview.png" alt="License overview" />
-                                        </a>
-                                    </p>
-                                </div>
 
                                 <div class="col-md-12 mx-3">
                                     <h5>
                                         <div class="d-flex flex-row justify-content-between">
                                             Sub Title
                                             <div class="d-flex justify-content-around">
-                                                <a href="javascript:void(0)" class="fs-6 px-2 text-primary-c" (click)="fireBrowser()">
+                                                <a href="javascript:void(0)" class="fs-6 px-2 text-muted" (click)="addLinkPopUp()">
                                                     <i class="fa fa-picture-o" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image"></i>
                                                 </a>
-                                                <a href="javascript:void(0)" class="fs-6 px-2 text-primary-c" (click)="addTextPopUp()">
+                                                <a href="javascript:void(0)" class="fs-6 px-2 text-muted" (click)="addTextPopUp()">
                                                     <i class="fa fa-file-text" data-bs-toggle="tooltip" data-bs-placement="top" title="Add paragraph"></i>
                                                 </a>
-                                                <a href="javascript:void(0)" class="fs-6 px-2 text-primary-c" (click)="addLinkPopUp()">
+                                                <a href="javascript:void(0)" class="fs-6 px-2 text-muted" (click)="addLinkPopUp()">
                                                     <i class="fa fa-anchor" data-bs-toggle="tooltip" data-bs-placement="top" title="Add link"></i>
                                                 </a>
-                                                <a href="javascript:void(0)" class="fs-6 px-2 text-primary-c" (click)="addListPopUp()">
+                                                <a href="javascript:void(0)" class="fs-6 px-2 text-muted" (click)="enableListItem()">
                                                     <i class="fa fa-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Add list"></i>
                                                 </a>
-                                                <a href="javascript:void(0)" class="fs-6 px-2 text-primary-c">
+                                                <a href="javascript:void(0)" class="fs-6 px-2 text-muted">
                                                     <i class="fa fa-line-chart" data-bs-toggle="tooltip" data-bs-placement="top" title="Add chart"></i>
                                                 </a>
-                                                <a href="javascript:void(0)" class="fs-6 px-2 text-primary-c">
+                                                <a href="javascript:void(0)" class="fs-6 px-2 text-muted" (click)="editCurrentSection()">
                                                     <i class="fa fa-pencil" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i>
                                                 </a>
                                             </div>
                                         </div>
                                     </h5>
-                                    <input type="file" class="d-none" id="insert-image" accept=".jpg, .jpeg, .png" (change)="uploadImage($event)">
-                                    <div class="mt-3 content-dv ooverflow-none" data-name="editable-div"></div>
+                                    <div class="mt-3 content-dv ooverflow-none py-2 px-3" 
+                                    [ngClass]="{'border': editableFlag}" id="content-container" 
+                                    [attr.contenteditable]="editableFlag"
+                                    (keypress.ctrl)="trackElement($event)"></div>
                                 </div>
                             </div>
                         </div>
@@ -199,32 +183,43 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="row ms-0">
-          <div class="form-check col-md-3">
-            <input class="form-check-input" type="radio" name="linktag">
-            <label class="form-check-label" >
-              With link
-            </label>
+        <div class="row col-md-12 p-0 mx-0">
+          <div class="col-md-12">
+            <div class="col-md-6">
+              <label for="">Alternative Text</label>
+              <input type="text" class="form-control" placeholder="Enter alt text">
+            </div>
+
+            <div class="d-flex justify-content-start ms-0 mt-2">
+              <div>
+                <label for="" class="form-label">Enter image URL or browse your local computer.</label>
+              </div>
+              <div class="form-check">
+                <input type="file" class="d-none" id="insert-image" accept=".jpg, .jpeg, .png" (change)="uploadImage($event)">
+                <a href="javascript:void(0)" (click)="fireBrowser()">Browser Local</a>
+              </div>
+            </div>
+    
+            <div class="col-md-12">
+              <input type="text" class="form-control" [(ngModel)]="anchorLink" placeholder="Enter your link">
+            </div>
           </div>
-          <div class="col-md-9">
-            <label for="" class="form-label">To what URL should this link go?</label>
-            <input type="text" class="form-control" [(ngModel)]="anchorLink" placeholder="Enter your link">
+
+          <div class="col-md-12 mt-3">
+            <div class="position-relative">
+              <div class="mb-2">
+                Image Preview Container
+              </div>
+              <div class="pic-container">
+                <img *ngIf="imageUrl != '' && imageUrl != null" [src]="imageUrl" width="100%" height="100%" alt="">
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="linktag" checked>
-          <label class="form-check-label">
-            Without Link
-          </label>
-        </div>
-        <div class="mt-3">
-          <label for="" class="form-label">Text to display</label>
-          <textarea placeholder="Enter your text here" rows="3" type="text" class="form-control" [(ngModel)]="titleValue"></textarea>
         </div>
       </div>
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
-        <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addLink()"><i class="fa fa-plus pe-2"></i>Add</a>
+        <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addImage()"><i class="fa fa-plus pe-2"></i>Add</a>
       </div>
     </div>
   </div>
