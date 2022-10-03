@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 declare var $: any;
 
 @Component({
@@ -12,6 +12,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   titleValue: string = '';
   imageUrl: string = '';
   anchorLink: string = '';
+  tag: HTMLElement = null;
+  editableFlag: boolean = true;
 
   constructor() { }
 
@@ -23,6 +25,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     $('[data-bs-toggle="tooltip"]').on('click', function () {
       $(this).tooltip('dispose');
     });
+
+    this.tag = document.getElementById('content-container');
   }
 
   ngOnInit(): void {
@@ -55,6 +59,14 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  editCurrentSection() {
+    this.editableFlag = !this.editableFlag;
+  }
+
+  trackElement(e: any) {
+    alert(e);
+  }
+
   addTextPopUp() {
     this.titleValue = '';
     $("#addTextModal").modal('show');
@@ -66,11 +78,20 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       tag.className="mb-0";
       let text = document.createTextNode(this.titleValue);
       tag.appendChild(text);
-      let elem = document.querySelector('[data-name="editable-div"]');
-      elem.appendChild(tag);
+      this.tag.appendChild(tag);
       this.titleValue = '';
       $("#addTextModal").modal('hide');
     }
+  }
+
+  enableListItem() {
+    let dv = document.createElement('div');
+    let ol = document.createElement('ol');
+    ol.setAttribute('type', '1');
+    let li = document.createElement("li");
+    ol.appendChild(li);
+    dv.appendChild(ol);
+    this.tag.appendChild(dv);
   }
 
   addLinkPopUp() {
@@ -81,6 +102,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   addLink() {
     if(this.titleValue && this.titleValue != '') {
+      let img = document.createElement('img');
       let tag = document.createElement("a");
       if (this.anchorLink && this.anchorLink != '') {
         tag.setAttribute('href', this.anchorLink);
@@ -91,8 +113,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
       let text = document.createTextNode(this.titleValue);
       tag.appendChild(text);
-      let elem = document.querySelector('[data-name="editable-div"]');
-      elem.appendChild(tag);
+      this.tag.appendChild(tag);
       this.titleValue = '';
       $("#addLinkModal").modal('hide');
     }
@@ -133,25 +154,24 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   uploadImage(event: any) {
-    this.imageUrl = 'assets/images/faces/face.jpg';
+    this.imageUrl = '';
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event: any) => {
         this.imageUrl = event.target.result;
       };
-      this.createImageTag(this.imageUrl);
     }
   }
 
-  createImageTag(imageUrl: string) {
+  addImage() {
     let tag = document.createElement('div');
     let img = document.createElement('img');
-    img.src = `{{${imageUrl}}}`
-    img.setAttribute('src', '{{imageUrl}}')
+    img.setAttribute('src', this.imageUrl);
+    img.setAttribute('style', 'width:44vw;')
     tag.appendChild(img);
-    let elem = document.querySelector('[data-name="editable-div"]');
-    elem.appendChild(tag);
+    this.tag.appendChild(tag);
+    $('#addLinkModal').modal('hide');
   }
 
 }

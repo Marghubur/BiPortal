@@ -102,7 +102,6 @@ import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.componen
 import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { HolidayComponent } from './holiday/holiday.component';
-import { ProjectComponent } from './project/project.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
 import { MenusettingComponent } from './menusetting/menusetting.component';
 import { CompanyComponent } from './company/company.component';
@@ -158,7 +157,6 @@ const routes: Routes = [
   { path: EmailService, component: EmailComponent},
   { path: OrganizationSetting, component: OrganizationComponent},
   { path: Holiday, component: HolidayComponent},
-  { path: Project, component: ProjectComponent},
   { path: EmailSetting, component: EmailsettingComponent},
   { path: MenuSetting, component: MenusettingComponent},
   { path: Company, component: CompanyComponent}

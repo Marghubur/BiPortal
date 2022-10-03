@@ -58,7 +58,6 @@ import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.componen
 import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { HolidayComponent } from './holiday/holiday.component';
-import { ProjectComponent } from './project/project.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
 import { MenusettingComponent } from './menusetting/menusetting.component';
 import { CompanyComponent } from './company/company.component';
@@ -118,7 +117,6 @@ import { ProjectsModule } from '../projects/projects.module';
     EmailComponent,
     OrganizationComponent,
     HolidayComponent,
-    ProjectComponent,
     EmailsettingComponent,
     MenusettingComponent,
     CompanyComponent
