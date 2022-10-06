@@ -20,6 +20,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   tag: HTMLElement = null;
   editableFlag: boolean = false;
   wikiForm: FormGroup = null;
+  WikiDetails: Array<WikiDetail> = [];
 
   constructor(private fb: FormBuilder,
               private sanitize: DomSanitizer,
@@ -38,6 +39,14 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.WikiDetails.push({
+      SectionName: "Test 1",
+      SectionDescription: "<div>hello user</div>"
+    }, {
+      SectionName: "Test 2",
+      SectionDescription: "<div>hello user 2</div>"
+    });
+
     this.projectDetail.ProjectName= "HIRINGBELL ACCOUNTS";
     this.loadData();
     this.initForm();
@@ -252,4 +261,10 @@ class ProjectWiki {
   Section: string = '';
   SubSection: String = '';
   ProjectName: string = '';
+  ProjectContent: Array<WikiDetail> = [];
+}
+
+class WikiDetail {
+  SectionName: string = '';
+  SectionDescription: String = '';
 }
