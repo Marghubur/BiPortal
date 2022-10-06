@@ -21,7 +21,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   editableFlag: boolean = false;
   wikiForm: FormGroup = null;
   WikiDetails: Array<WikiDetail> = [];
-
+  projectId: number = 0;
   constructor(private fb: FormBuilder,
               private sanitize: DomSanitizer,
               private http: AjaxService) { }
@@ -35,37 +35,27 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       $(this).tooltip('dispose');
     });
 
-    this.tag = document.getElementById('content-container');
+    //this.tag = document.getElementById('content-container');
   }
 
   ngOnInit(): void {
-    this.WikiDetails.push({
-      SectionName: "Test 1",
-      SectionDescription: "<div>hello user</div>"
-    }, {
-      SectionName: "Test 2",
-      SectionDescription: "<div>hello user 2</div>"
-    });
-
+    this.WikiDetails = []
+    this.projectDetail.Title = 'Wikipedia';
     this.projectDetail.ProjectName= "HIRINGBELL ACCOUNTS";
     this.loadData();
-    this.initForm();
   }
 
   loadData() {
     this.editableFlag = false;
     this.http.get("Project/GetAllProject").then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
+        this.projectId = res.ResponseBody[0].ProjectId;
         if (res.ResponseBody[0].DocumentationDetail) {
-          let value = JSON.parse(res.ResponseBody[0].DocumentationDetail);
+          this.projectDetail = JSON.parse(res.ResponseBody[0].DocumentationDetail);
           //value = this.sanitize.bypassSecurityTrustUrl(res.ResponseBody[0].DocumentationDetail);
-          document.getElementById('main-container').innerHTML = value;
+          //document.getElementById('main-container').innerHTML = value;
         }
-        if (res.ResponseBody[0].PageIndexDetail) {
-          let value = JSON.parse(res.ResponseBody[0].PageIndexDetail);
-          //value = this.sanitize.bypassSecurityTrustUrl(res.ResponseBody[0].PageIndexDetail);
-          document.getElementById('side-menu-item').innerHTML = value;
-        }
+        this.initForm();
         this.editableFlag = false;
         Toast("Record found");
       }
@@ -74,20 +64,50 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   initForm() {
     this.wikiForm = this.fb.group({
-      Projects: this.fb.array([this.ProjectForm(this.titleValue)])
+      Wikis: this.buildWiki()
     })
   }
 
-  ProjectForm(value : string) {
+  ProjectForm(value : WikiDetail) {
     return this.fb.group({
-      WikiSection: new FormControl('')
+      WikiSection: new FormControl(value.SectionName),
+      WikiSectionDetail: new FormControl(value.SectionDescription)
     })
   }
 
-  AdProject() {
-    let project = this.wikiForm.get('Projects') as FormArray;
-    project.push(this.ProjectForm(this.titleValue));
-    $("#addTitleModal").modal('hide');
+  adddProject() {
+    let project = this.wikiForm.get('Wikis') as FormArray;
+    let index = project.value.findIndex(x => x.WikiSection == '');
+    if (index == 0)
+      project.removeAt(index);
+    project.push(this.createWiki());
+  }
+
+  buildWiki(): FormArray {
+    let data = this.projectDetail.ProjectContent;
+    let dataArray: FormArray = this.fb.array([]);
+
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          WikiSection: new FormControl(data[i].SectionName),
+          WikiSectionDetail: new FormControl(data[i].SectionDescription)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.createWiki());
+    }
+
+    return dataArray;
+  }
+
+  createWiki(): FormGroup {
+    return this.fb.group({
+      WikiSection: new FormControl(this.titleValue),
+      WikiSectionDetail: new FormControl('')
+    });
   }
 
   addTitlePopUp() {
@@ -95,15 +115,21 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     $("#addTitleModal").modal('show');
   }
 
-  addSectionPopUp() {
-    $("#addSectionModal").modal('show');
+
+  addSubTitlePopUp() {
+    this.titleValue = '';
+    $("#addSubTitleModal").modal('show');
   }
 
-  addSection() {
+  addSubTitle() {
     if(this.titleValue && this.titleValue != '') {
-      this.projectDetail.Section = this.titleValue;
+      this.projectDetail.ProjectContent.push( {
+        SectionName: this.titleValue,
+        SectionDescription: ''
+      })
+      this.adddProject();
       this.titleValue = '';
-      $("#addSectionModal").modal('hide');
+      $("#addSubTitleModal").modal('hide');
     }
   }
 
@@ -117,22 +143,15 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   addTitle() {
     if(this.titleValue && this.titleValue != '') {
-      this.projectDetail.Section = this.titleValue;
+      this.projectDetail.Title = this.titleValue;
       this.titleValue = '';
       $("#addTitleModal").modal('hide');
     }
   }
 
-  addSubSection(e: any) {
-    this.projectDetail.SubSection = '';
-    let value = e.target.innerText;
-    if(value && value != '') {
-      this.projectDetail.SubSection = value ;
-    }
-  }
-
-  addTextPopUp() {
+  addTextPopUp(index: number) {
     this.titleValue = '';
+    this.tag = document.getElementById(`content-container${index}`);
     $("#addTextModal").modal('show');
   }
 
@@ -148,7 +167,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  enableListItem() {
+  enableListItem(index: number) {
+    this.tag = document.getElementById(`content-container${index}`);
     let dv = document.createElement('div');
     let ol = document.createElement('ol');
     ol.setAttribute('type', '1');
@@ -158,9 +178,11 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.tag.appendChild(dv);
   }
 
-  addLinkPopUp() {
+  addLinkPopUp(index: number) {
     this.titleValue = '';
     this.anchorLink = null;
+    this.imageUrl = '';
+    this.tag = document.getElementById(`content-container${index}`);
     $("#addLinkModal").modal('show');
   }
 
@@ -240,14 +262,12 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   saveProjectDetails() {
     this.editableFlag = false;
-    let value = document.getElementById('main-container').innerHTML;
-    let sidemenu = document.getElementById('side-menu-item').innerHTML;
-    let project = {
-      DocumentationDetail: value,
-      PageIndexDetail: sidemenu,
-      ProjectName: "HiringBell"
+    for (let i = 0; i < this.projectDetail.ProjectContent.length; i++) {
+      let tags = document.getElementById(`content-container${i}`).innerHTML;
+      this.projectDetail.ProjectContent[i].SectionDescription = tags;
     }
-    this.http.post("Project/AddProject", project).then((res: ResponseModel) => {
+    this.projectDetail.ProjectId = this.projectId;
+    this.http.post("Project/AddProject", this.projectDetail).then((res: ResponseModel) => {
       if (res.ResponseBody)
         Toast(res.ResponseBody);
     }).catch(e => {
@@ -258,8 +278,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 }
 
 class ProjectWiki {
-  Section: string = '';
-  SubSection: String = '';
+  ProjectId: number = 0;
+  Title: string = '';
   ProjectName: string = '';
   ProjectContent: Array<WikiDetail> = [];
 }
