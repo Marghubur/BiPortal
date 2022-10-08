@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ResponseModel } from 'src/auth/jwtService';
@@ -22,6 +22,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   wikiForm: FormGroup = null;
   WikiDetails: Array<WikiDetail> = [];
   projectId: number = 0;
+  target: HTMLElement = null;
+
   constructor(private fb: FormBuilder,
               private sanitize: DomSanitizer,
               private http: AjaxService) { }
@@ -40,32 +42,34 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.WikiDetails = []
-    this.projectDetail.Title = 'Wikipedia';
+    this.projectDetail.Title = '';
     this.projectDetail.ProjectName= "HIRINGBELL ACCOUNTS";
     this.loadData();
   }
 
   loadData() {
+    this.isLoaded = false;
     this.editableFlag = false;
     this.http.get("Project/GetAllProject").then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.projectId = res.ResponseBody[0].ProjectId;
         if (res.ResponseBody[0].DocumentationDetail) {
           this.projectDetail = JSON.parse(res.ResponseBody[0].DocumentationDetail);
-          //value = this.sanitize.bypassSecurityTrustUrl(res.ResponseBody[0].DocumentationDetail);
-          //document.getElementById('main-container').innerHTML = value;
         }
-        this.initForm();
+
         this.editableFlag = false;
-        Toast("Record found");
+        Toast("Wiki page loaded successfully.");
       }
+
+      this.initForm();
+      this.isLoaded = true;
     })
   }
 
   initForm() {
     this.wikiForm = this.fb.group({
       Wikis: this.buildWiki()
-    })
+    });
   }
 
   ProjectForm(value : WikiDetail) {
@@ -86,13 +90,13 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   buildWiki(): FormArray {
     let data = this.projectDetail.ProjectContent;
     let dataArray: FormArray = this.fb.array([]);
-
+    let content: string = null;
     if(data != null && data.length > 0) {
       let i = 0;
       while(i < data.length) {
         dataArray.push(this.fb.group({
           WikiSection: new FormControl(data[i].SectionName),
-          WikiSectionDetail: new FormControl(data[i].SectionDescription)
+          WikiSectionDetail: new FormControl(this.sanitize.bypassSecurityTrustHtml(data[i].SectionDescription  as string))
         }));
         i++;
       }
@@ -150,9 +154,17 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   addTextPopUp(index: number) {
-    this.titleValue = '';
-    this.tag = document.getElementById(`content-container${index}`);
-    $("#addTextModal").modal('show');
+    // this.titleValue = '';
+    // $("#addTextModal").modal('show');
+
+    let divtag = document.createElement("div");
+    divtag.setAttribute('style', 'margin-top: 3rem;');
+    let tag = document.createElement("p");
+    tag.className="mb-0";
+    tag.appendChild(document.createTextNode('YOUR TEXT'));
+    divtag.appendChild(tag);
+    this.target.appendChild(divtag);
+    this.target.focus();
   }
 
   addText() {
@@ -161,7 +173,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       tag.className="mb-0";
       let text = document.createTextNode(this.titleValue);
       tag.appendChild(text);
-      this.tag.appendChild(tag);
+      this.target.appendChild(tag);
       this.titleValue = '';
       $("#addTextModal").modal('hide');
     }
@@ -275,6 +287,19 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     })
   }
 
+  enableCurrentSection(e: any) {
+    this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
+    if (this.target) {
+      this.target.setAttribute('contenteditable', 'true');
+      this.target.classList.add('enable-section');
+      this.target.focus();
+    }
+  }
+
+  deactivateTag() {
+    this.target.setAttribute('contenteditable', 'false');
+    this.target.classList.remove('enable-section');
+  }
 }
 
 class ProjectWiki {
