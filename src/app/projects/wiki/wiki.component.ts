@@ -157,7 +157,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  addTextPopUp() {
+  addParagraph() {
     let divtag = document.createElement("div");
     divtag.setAttribute('style', 'margin-top: 3rem;');
     let tag = document.createElement("p");
@@ -166,6 +166,11 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     divtag.appendChild(tag);
     this.target.appendChild(divtag);
     this.target.focus();
+    let selection = window.getSelection();
+    let range = document.createRange();
+    range.selectNodeContents(tag);
+    selection.removeAllRanges();
+    selection.addRange(range);
   }
 
   enableListItem() {
