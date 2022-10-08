@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ResponseModel } from 'src/auth/jwtService';
@@ -12,6 +12,7 @@ declare var $: any;
   styleUrls: ['./wiki.component.scss']
 })
 export class WikiComponent implements OnInit, AfterViewChecked {
+  popover: HTMLElement = null;
   isLoaded: boolean = true;
   projectDetail: ProjectWiki = new ProjectWiki();
   titleValue: string = '';
@@ -24,10 +25,13 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   projectId: number = 0;
   target: HTMLElement = null;
   isSectionEdited: boolean = false;
+  sectionIndex: number = -1;
 
   constructor(private fb: FormBuilder,
               private sanitize: DomSanitizer,
-              private http: AjaxService) { }
+              private http: AjaxService,
+              private renderer: Renderer2
+              ) { }
 
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -39,6 +43,17 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     });
 
     //this.tag = document.getElementById('content-container');
+    this.popover = (<HTMLElement> document.getElementById('popoverTemplate'));
+  }
+
+  manipulateSection(e: any){
+    e.preventDefault();
+    this.popover.classList.remove('d-none');
+    this.popover.setAttribute('style', `left: ${e.pageX}px; top: ${e.pageY}px`);
+  }
+
+  closePopOver(){
+    this.popover.classList.add('d-none');
   }
 
   ngOnInit(): void {
@@ -100,8 +115,6 @@ export class WikiComponent implements OnInit, AfterViewChecked {
         }));
         i++;
       }
-    } else {
-      dataArray.push(this.createWiki());
     }
 
     return dataArray;
@@ -130,7 +143,10 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       this.projectDetail.ProjectContent.push( {
         SectionName: this.titleValue,
         SectionDescription: ''
-      })
+      });
+      
+      let len = this.wikiForm.controls.Wikis.value.length;
+      this.sectionIndex = len;
       this.adddProject();
       this.titleValue = '';
       $("#addSubTitleModal").modal('hide');
@@ -227,6 +243,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   enableCurrentSection(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
     this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
     if (this.target) {
       if (this.target.classList.contains('enable-section')) {

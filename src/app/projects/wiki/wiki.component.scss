@@ -58,12 +58,35 @@ div[contenteditable] {
   background-color: transparent;
 }
 .enable-section {
-    background: #fffff3 !important;
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    background: #fffefe !important;
+    box-shadow: 0 0rem 1rem rgba(0,0,0,.15)!important;
 }
 .blur-icon {
   color: #d6d6d6 !important;
 }
 .icon-section a:hover {
   color: #6c757d!important;
+}
+
+.c-po {
+    z-index: 99999;
+    border: 1px solid #d9d9d9;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 0.2rem 1rem rgb(0 0 0 / 14%) !important;
+}
+
+.nav-item a {
+    padding: 6px 1rem !important;
+    font-size: 14px !important;
+    color: #4b486e !important;
+    font-weight: 300 !important;
+}
+
+.nav-item a:hover {
+    background-color: #d6d6d6 !important;
+}
+
+.outline-none{
+    outline: none !important;
 }
