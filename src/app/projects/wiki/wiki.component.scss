@@ -90,3 +90,9 @@ div[contenteditable] {
 .outline-none{
     outline: none !important;
 }
+
+.content-dv > img {
+  max-width: 44vw !important;
+  object-fit: cover !important;
+  display: block;
+}
