@@ -98,11 +98,13 @@
                                           </div>
                                         </h5>
                                         <div class="mt-3 content-dv ooverflow-none py-2 px-3" 
-                                        (dblclick)="enableCurrentSection($event)"
-                                        name="content-container"
-                                        [attr.contenteditable]="editableFlag"
-                                        (keypress.ctrl)="trackElement($event)"
-                                        [innerHTML]='item.get("WikiSectionDetail").value'></div>
+                                          (dblclick)="enableCurrentSection($event)"
+                                          name="content-container"
+                                          [attr.contenteditable]="editableFlag"
+                                          (keypress.ctrl)="trackElement($event)"
+                                          (contextmenu)="manipulateSection($event)"
+                                          [innerHTML]='item.get("WikiSectionDetail").value'>
+                                        </div>
                                       </div>
                                     </ng-container>
                                   </div>

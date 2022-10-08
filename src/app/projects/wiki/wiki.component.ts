@@ -40,6 +40,10 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     //this.tag = document.getElementById('content-container');
   }
 
+  manipulateSection(e: any){
+    alert('Hello');
+  }
+
   ngOnInit(): void {
     this.WikiDetails = []
     this.projectDetail.Title = '';
