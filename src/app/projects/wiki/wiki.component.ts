@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 declare var $: any;
 
 @Component({
@@ -132,6 +132,12 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     $("#addTitleModal").modal('show');
   }
 
+  editSubSection(e: any, i: number) {
+    let value = e.target.innerText;
+    this.projectDetail.ProjectContent[i].SectionName = '';
+    this.projectDetail.ProjectContent[i].SectionName =  value;
+
+  }
 
   addSubTitlePopUp() {
     this.titleValue = '';
@@ -144,11 +150,12 @@ export class WikiComponent implements OnInit, AfterViewChecked {
         SectionName: this.titleValue,
         SectionDescription: ''
       });
-      
+
       let len = this.wikiForm.controls.Wikis.value.length;
       this.sectionIndex = len;
       this.adddProject();
       this.titleValue = '';
+      this.isSectionEdited = true;
       $("#addSubTitleModal").modal('hide');
     }
   }
@@ -178,6 +185,10 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     divtag.appendChild(tag);
     this.target.appendChild(divtag);
     this.target.focus();
+    this.selectedText(tag);
+  }
+
+  selectedText(tag: any) {
     let selection = window.getSelection();
     let range = document.createRange();
     range.selectNodeContents(tag);
@@ -185,7 +196,40 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     selection.addRange(range);
   }
 
+  addParagraphBelow() {
+    if (this.target == null) {
+      ErrorToast("Please select a section first");
+      this.closePopOver();
+      return;
+    }
+    let tag = document.createElement("p");
+    tag.className="mb-0";
+    tag.appendChild(document.createTextNode('YOUR TEXT'));
+    this.target.appendChild(tag);
+    this.target.focus();
+    this.selectedText(tag);
+  }
+
+  addParagraphAbove() {
+    if (this.target == null) {
+      ErrorToast("Please select a section first");
+      this.closePopOver();
+      return;
+    }
+    let tag = document.createElement("p");
+    tag.className="mb-0";
+    tag.appendChild(document.createTextNode('YOUR TEXT'));
+    this.target.appendChild(tag);
+    this.target.focus();
+    this.selectedText(tag);
+  }
+
   enableListItem() {
+    if (this.target == null) {
+      ErrorToast("Please select a section first");
+      this.closePopOver();
+      return;
+    }
     let dv = document.createElement('div');
     let ol = document.createElement('ol');
     ol.setAttribute('type', '1');
@@ -193,6 +237,29 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     ol.appendChild(li);
     dv.appendChild(ol);
     this.target.appendChild(dv);
+    this.closePopOver();
+    this.target.focus();
+  }
+
+  enableBulletItem() {
+    if (this.target == null) {
+      ErrorToast("Please select a section first");
+      this.closePopOver();
+      return;
+    }
+    let dv = document.createElement('div');
+    let ul = document.createElement('ul');
+    let li = document.createElement("li");
+    ul.appendChild(li);
+    dv.appendChild(ul);
+    this.target.appendChild(dv);
+    this.closePopOver();
+    this.target.focus();
+  }
+
+  disabeSection() {
+    this.target = null;
+    this.closePopOver();
   }
 
   addLinkPopUp() {
@@ -230,7 +297,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   saveProjectDetails() {
     this.editableFlag = false;
     for (let i = 0; i < this.projectDetail.ProjectContent.length; i++) {
-      let tags = document.querySelectorAll('div[name="content-container"]')[0].innerHTML;
+      let tags = document.querySelectorAll('div[name="content-container"]')[i].innerHTML;
       this.projectDetail.ProjectContent[i].SectionDescription = tags;
     }
     this.projectDetail.ProjectId = this.projectId;
@@ -259,9 +326,33 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  enableSection(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
+  }
+
   deactivateTag() {
     this.target.setAttribute('contenteditable', 'false');
     this.target.classList.remove('enable-section');
+  }
+
+  onPaste(e: any) {
+    e.preventDefault();
+    let items = (e.clipboardData || e.orignalEvent.clipboardData).items;
+    let blob = null;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image/png') === 0)
+        blob = items[i].getAsFile();
+    }
+    if (blob != null) {
+      var reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onload = (event: any) => {
+        this.imageUrl = event.target.result;
+      };
+      this.addImage();
+    }
   }
 }
 
