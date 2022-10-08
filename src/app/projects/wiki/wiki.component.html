@@ -33,10 +33,6 @@
                                     <li >
                                         <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
                                             <span>{{projectDetail.Title}}</span>
-                                            <!-- <span>
-                                                <i class="fa fa-plus pe-3" (click)="addSubSectionPopUp()"></i>
-                                                <i class="fa fa-caret-left fa-lg"></i>
-                                            </span> -->
                                         </a>
                                         <ul class="list-unstyled ms-3" *ngIf="projectDetail.ProjectContent.length > 0">
                                             <li *ngFor="let item of projectDetail.ProjectContent">
@@ -51,38 +47,34 @@
                         </div>
                         <div class="col-md-10 col-sm-9" id="main-container" >
                           <div class="col-md-12 px-4 dv-space">
-                            <h2>
-                              <div class="d-flex flex-row justify-content-between">
-                                {{projectDetail.Title}}
-                                <a href="javascript:void(0)" class="fs-6 ms-auto" (click)="addSubTitlePopUp()">
-                                  <i class="fa fa-plus" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Title"></i>
-                                </a>
-                              </div>
-                            </h2>
+                            <h2>{{projectDetail.Title}}</h2>
 
                             <ng-container *ngIf="isLoaded">
                               <form [formGroup]="wikiForm">
                                 <div formArrayName="Wikis">
-                                  <div class="d-flex justify-content-around icon-section">
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image" class="fs-6 px-2 text-muted" (click)="addLinkPopUp(i)">
+                                  <div class="d-flex justify-content-around icon-section rounded">
+                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-muted" (click)="addSubTitlePopUp()">
+                                      <i class="fa fa-plus"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image" class="fs-6 px-2 text-muted" (click)="addLinkPopUp()">
                                         <i class="fa fa-picture-o"></i>
                                     </a>
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add paragraph" class="fs-6 px-2 text-muted" (click)="addTextPopUp(i)">
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add paragraph" class="fs-6 px-2 text-muted" (click)="addTextPopUp()">
                                         <i class="fa fa-file-text"></i>
                                     </a>
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add link" class="fs-6 px-2 text-muted" (click)="addLinkPopUp(i)">
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add link" class="fs-6 px-2 text-muted" (click)="addLinkPopUp()">
                                         <i class="fa fa-anchor"></i>
                                     </a>
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add list" class="fs-6 px-2 text-muted" (click)="enableListItem(i)">
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add list" class="fs-6 px-2 text-muted" (click)="enableListItem()">
                                         <i class="fa fa-link"></i>
                                     </a>
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add chart" class="fs-6 px-2 text-muted">
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add chart" class="fs-6 px-2 text-muted">
                                         <i class="fa fa-line-chart"></i>
                                     </a>
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="fs-6 px-2 text-muted" *ngIf="!editableFlag" (click)="editCurrentSection()">
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="fs-6 px-2 text-muted" *ngIf="isSectionEdited" (click)="editCurrentSection()">
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a href="javascript:void(0)" class="fs-6 px-2 text-muted" *ngIf="editableFlag" (click)="saveProjectDetails()">
+                                    <a href="javascript:void(0)" class="fs-6 px-2 text-muted" *ngIf="!isSectionEdited" (click)="saveProjectDetails()">
                                       <i class="fa fa-paper-plane" data-bs-toggle="tooltip" data-bs-placement="top" title="Save"></i>
                                     </a>
                                   </div>
@@ -97,14 +89,12 @@
                                               </div>
                                           </div>
                                         </h5>
-                                        <div class="mt-3 content-dv ooverflow-none py-2 px-3" 
-                                          (dblclick)="enableCurrentSection($event)"
-                                          name="content-container"
-                                          [attr.contenteditable]="editableFlag"
-                                          (keypress.ctrl)="trackElement($event)"
-                                          (contextmenu)="manipulateSection($event)"
-                                          [innerHTML]='item.get("WikiSectionDetail").value'>
-                                        </div>
+                                        <div class="mt-3 content-dv ooverflow-none py-2 px-3"
+                                        (dblclick)="enableCurrentSection($event)"
+                                        name="content-container"
+                                        [attr.contenteditable]="editableFlag"
+                                        (keypress.ctrl)="trackElement($event)"
+                                        [innerHTML]='item.get("WikiSectionDetail").value'></div>
                                       </div>
                                     </ng-container>
                                   </div>
@@ -117,7 +107,8 @@
                 </ng-container>
                 <ng-container *ngIf="projectDetail.Title == null || projectDetail.Title == ''">
                   <div class="my-5 py-5 text-center">
-                    <button class="btn btn-primary-c" (click)="addTitlePopUp()"><i class="fa fa-plus pe-2"></i> Add Project Title</button>
+                    <h3 class="mt-5 pt-5">Please add project name and project title</h3>
+                    <button class="btn btn-primary-c my-4" (click)="addTitlePopUp()"><i class="fa fa-plus pe-2"></i> Add Project Title</button>
                   </div>
                 </ng-container>
             </div>
@@ -132,10 +123,14 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addTitleModalLabel">Add Title of the Project</h5>
+        <h5 class="modal-title" id="addTitleModalLabel">Add Project Name and Project Title of the Project</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <div>
+          <label for="" class="form-label">Add Project Name</label>
+          <input placeholder="Enter the Project name" type="text" class="form-control" [(ngModel)]="projectDetail.ProjectName"/>
+        </div>
         <div>
           <label for="" class="form-label">Add Title</label>
           <textarea placeholder="Enter the title of this project" rows="3" type="text" class="form-control" [(ngModel)]="titleValue"></textarea>
@@ -150,46 +145,23 @@
 </div>
 <!-- End -->
 
-<!-- Add Title Modal -->
+<!-- Add Section Title Modal -->
 <div class="modal fade" id="addSubTitleModal" tabindex="-1" aria-labelledby="addSubTitleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addSubTitleModalLabel">Add Sub Title of the Project</h5>
+        <h5 class="modal-title" id="addSubTitleModalLabel">Add Section Title of the Project</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div>
-          <label for="" class="form-label">Add SubTitle</label>
-          <textarea placeholder="Enter the sub title of this project" rows="3" type="text" class="form-control" [(ngModel)]="titleValue"></textarea>
+          <label for="" class="form-label">Add Section Title</label>
+          <textarea placeholder="Enter the section title of this project" rows="3" type="text" class="form-control" [(ngModel)]="titleValue"></textarea>
         </div>
       </div>
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
         <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addSubTitle()"><i class="fa fa-plus pe-2"></i>Add</a>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End -->
-
-<!-- Add Paragraph Modal -->
-<div class="modal fade" id="addTextModal" tabindex="-1" aria-labelledby="addTextModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content px-4">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addTextModalLabel">Add Text</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div>
-          <label for="" class="form-label">Add Text</label>
-          <textarea placeholder="Enter your text here" rows="3" type="text" class="form-control" [(ngModel)]="titleValue"></textarea>
-        </div>
-      </div>
-      <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
-        <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addText()"><i class="fa fa-plus pe-2"></i>Add</a>
       </div>
     </div>
   </div>
@@ -242,47 +214,6 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
         <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addImage()"><i class="fa fa-plus pe-2"></i>Add</a>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End -->
-
-<!-- Add List Modal -->
-<div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="addListModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content px-4">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addTextModalLabel">Add List</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row ms-0">
-          <div class="form-check col-md-3">
-            <input class="form-check-input" type="radio" name="linklisttag">
-            <label class="form-check-label" >
-              With link
-            </label>
-          </div>
-          <div class="col-md-9">
-            <label for="" class="form-label">To what URL should this link go?</label>
-            <input type="text" class="form-control" [(ngModel)]="anchorLink" placeholder="Enter your link">
-          </div>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="linklisttag" checked>
-          <label class="form-check-label">
-            Without Link
-          </label>
-        </div>
-        <div class="mt-3">
-          <label for="" class="form-label">Add List</label>
-          <textarea placeholder="Enter your text here" rows="3" type="text" class="form-control" [(ngModel)]="titleValue"></textarea>
-        </div>
-      </div>
-      <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
-        <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addList()"><i class="fa fa-plus pe-2"></i>Add</a>
       </div>
     </div>
   </div>

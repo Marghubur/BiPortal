@@ -23,6 +23,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   WikiDetails: Array<WikiDetail> = [];
   projectId: number = 0;
   target: HTMLElement = null;
+  isSectionEdited: boolean = false;
 
   constructor(private fb: FormBuilder,
               private sanitize: DomSanitizer,
@@ -46,8 +47,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.WikiDetails = []
-    this.projectDetail.Title = '';
-    this.projectDetail.ProjectName= "HIRINGBELL ACCOUNTS";
+    this.projectDetail.Title = 'HiringBel';
+    this.projectDetail.ProjectName= "HiringBel Documentation";
     this.loadData();
   }
 
@@ -94,7 +95,6 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   buildWiki(): FormArray {
     let data = this.projectDetail.ProjectContent;
     let dataArray: FormArray = this.fb.array([]);
-    let content: string = null;
     if(data != null && data.length > 0) {
       let i = 0;
       while(i < data.length) {
@@ -157,10 +157,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  addTextPopUp(index: number) {
-    // this.titleValue = '';
-    // $("#addTextModal").modal('show');
-
+  addTextPopUp() {
     let divtag = document.createElement("div");
     divtag.setAttribute('style', 'margin-top: 3rem;');
     let tag = document.createElement("p");
@@ -171,84 +168,21 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.target.focus();
   }
 
-  addText() {
-    if(this.titleValue && this.titleValue != '') {
-      let tag = document.createElement("p");
-      tag.className="mb-0";
-      let text = document.createTextNode(this.titleValue);
-      tag.appendChild(text);
-      this.target.appendChild(tag);
-      this.titleValue = '';
-      $("#addTextModal").modal('hide');
-    }
-  }
-
-  enableListItem(index: number) {
-    this.tag = document.getElementById(`content-container${index}`);
+  enableListItem() {
     let dv = document.createElement('div');
     let ol = document.createElement('ol');
     ol.setAttribute('type', '1');
     let li = document.createElement("li");
     ol.appendChild(li);
     dv.appendChild(ol);
-    this.tag.appendChild(dv);
+    this.target.appendChild(dv);
   }
 
-  addLinkPopUp(index: number) {
+  addLinkPopUp() {
     this.titleValue = '';
     this.anchorLink = null;
     this.imageUrl = '';
-    this.tag = document.getElementById(`content-container${index}`);
     $("#addLinkModal").modal('show');
-  }
-
-  addLink() {
-    if(this.titleValue && this.titleValue != '') {
-      let img = document.createElement('img');
-      let tag = document.createElement("a");
-      if (this.anchorLink && this.anchorLink != '') {
-        tag.setAttribute('href', this.anchorLink);
-        tag.setAttribute('target', '_blank')
-      }
-      else
-        tag.setAttribute('href', 'javascript:void(0)');
-
-      let text = document.createTextNode(this.titleValue);
-      tag.appendChild(text);
-      this.tag.appendChild(tag);
-      this.titleValue = '';
-      $("#addLinkModal").modal('hide');
-    }
-  }
-
-  addListPopUp() {
-    this.titleValue = '';
-    this.anchorLink = null;
-    $("#addListModal").modal('show');
-  }
-
-  addList() {
-    if(this.titleValue && this.titleValue != '') {
-      let tag = document.createElement("ul");
-      tag.className="mb-0";
-      let subTag = document.createElement('li');
-      if (this.anchorLink && this.anchorLink != '') {
-        let anchor = document.createElement("a");
-        anchor.setAttribute('href', this.anchorLink);
-        anchor.setAttribute('target', '_blank')
-        let text = document.createTextNode(this.titleValue);
-        anchor.appendChild(text);
-        subTag.appendChild(anchor);
-      } else {
-        let text = document.createTextNode(this.titleValue);
-        subTag.appendChild(text);
-      }
-      tag.appendChild(subTag);
-      let elem = document.querySelector('[data-name="editable-div"]');
-      elem.appendChild(tag);
-      this.titleValue = '';
-      $("#addListModal").modal('hide');
-    }
   }
 
   fireBrowser() {
@@ -272,14 +206,14 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     img.setAttribute('src', this.imageUrl);
     img.setAttribute('style', 'width:44vw;')
     tag.appendChild(img);
-    this.tag.appendChild(tag);
+    this.target.appendChild(tag);
     $('#addLinkModal').modal('hide');
   }
 
   saveProjectDetails() {
     this.editableFlag = false;
     for (let i = 0; i < this.projectDetail.ProjectContent.length; i++) {
-      let tags = document.getElementById(`content-container${i}`).innerHTML;
+      let tags = document.querySelectorAll('div[name="content-container"]')[0].innerHTML;
       this.projectDetail.ProjectContent[i].SectionDescription = tags;
     }
     this.projectDetail.ProjectId = this.projectId;
@@ -294,9 +228,15 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   enableCurrentSection(e: any) {
     this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
     if (this.target) {
-      this.target.setAttribute('contenteditable', 'true');
-      this.target.classList.add('enable-section');
-      this.target.focus();
+      if (this.target.classList.contains('enable-section')) {
+        this.deactivateTag();
+        this.isSectionEdited = false;
+      } else {
+        this.target.setAttribute('contenteditable', 'true');
+        this.target.classList.add('enable-section');
+        this.target.focus();
+        this.isSectionEdited = true;
+      }
     }
   }
 
