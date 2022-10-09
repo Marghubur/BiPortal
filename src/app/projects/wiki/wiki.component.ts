@@ -58,8 +58,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.WikiDetails = []
-    this.projectDetail.Title = 'HiringBel';
-    this.projectDetail.ProjectName= "HiringBel Documentation";
+    this.projectDetail.Title = '';
+    this.projectDetail.ProjectName= "";
     this.loadData();
   }
 
@@ -232,13 +232,19 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
     let dv = document.createElement('div');
     let ol = document.createElement('ol');
+    let anc = document.createElement('a');
+    anc.setAttribute('href', 'javascript:void(0)')
+    let text = document.createTextNode("[ YOUR TEXT HERE ]");
+    anc.appendChild(text);
     ol.setAttribute('type', '1');
     let li = document.createElement("li");
+    li.appendChild(anc);
     ol.appendChild(li);
     dv.appendChild(ol);
     this.target.appendChild(dv);
     this.closePopOver();
-    this.target.focus();
+    anc.focus();
+    this.selectedText(anc);
   }
 
   enableBulletItem() {
@@ -328,7 +334,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   enableSection(e: any) {
     e.preventDefault();
-    e.stopPropagation();
+    // e.stopPropagation();
     this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
   }
 
