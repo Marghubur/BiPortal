@@ -88,18 +88,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  ProjectForm(value : WikiDetail) {
-    return this.fb.group({
-      WikiSection: new FormControl(value.SectionName),
-      WikiSectionDetail: new FormControl(value.SectionDescription)
-    })
-  }
-
   adddProject() {
     let project = this.wikiForm.get('Wikis') as FormArray;
-    let index = project.value.findIndex(x => x.WikiSection == '');
-    if (index == 0)
-      project.removeAt(index);
     project.push(this.createWiki());
   }
 
@@ -134,34 +124,40 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   editSubSection(e: any, i: number) {
     let value = e.target.innerText;
+    let project = this.wikiForm.get('Wikis') as FormArray;
     this.projectDetail.ProjectContent[i].SectionName = '';
     this.projectDetail.ProjectContent[i].SectionName =  value;
-
-  }
-
-  addSubTitlePopUp() {
-    this.titleValue = '';
-    $("#addSubTitleModal").modal('show');
+    //this.wikiForm.get('Wikis')['controls'][i].get('WikiSection').setValue(value);
   }
 
   addSubTitle() {
-    if(this.titleValue && this.titleValue != '') {
-      this.projectDetail.ProjectContent.push( {
-        SectionName: this.titleValue,
-        SectionDescription: ''
-      });
+    this.titleValue = '';
+    this.titleValue = '[Add Section Title]';
+    this.projectDetail.ProjectContent.push( {
+      SectionName: this.titleValue,
+      SectionDescription: ''
+    });
 
-      let len = this.wikiForm.controls.Wikis.value.length;
-      this.sectionIndex = len;
-      this.adddProject();
-      this.titleValue = '';
-      this.isSectionEdited = true;
-      $("#addSubTitleModal").modal('hide');
-    }
+    let len = this.wikiForm.controls.Wikis.value.length;
+    this.sectionIndex = len;
+    this.adddProject();
+    this.titleValue = '';
+    this.closePopOver();
+    this.isSectionEdited = true;
   }
 
   editCurrentSection() {
     this.editableFlag = !this.editableFlag;
+  }
+
+  deleteSection(i: number) {
+    this.projectDetail.ProjectContent.splice(i, 1);
+    let project = this.wikiForm.get('Wikis') as FormArray;
+    project.removeAt(i);
+    if (project.length == 1) {
+      this.projectDetail.ProjectContent.splice(0, 1);
+      project.removeAt(0);
+    }
   }
 
   trackElement(e: any) {
@@ -208,6 +204,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.target.appendChild(tag);
     this.target.focus();
     this.selectedText(tag);
+    this.closePopOver();
   }
 
   addParagraphAbove() {
@@ -325,7 +322,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
         this.isSectionEdited = false;
       } else {
         this.target.setAttribute('contenteditable', 'true');
-        this.target.classList.add('enable-section');
+        this.target.classList.add('enable-section', 'py-2');
         this.target.focus();
         this.isSectionEdited = true;
       }
@@ -334,13 +331,42 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   enableSection(e: any) {
     e.preventDefault();
-    // e.stopPropagation();
+    e.stopPropagation();
     this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
+    if (this.target.getAttribute('contenteditable') == 'false') {
+      this.target = null;
+      ErrorToast("Please select section first");
+    }
   }
 
   deactivateTag() {
     this.target.setAttribute('contenteditable', 'false');
-    this.target.classList.remove('enable-section');
+    this.target.classList.remove('enable-section', 'py-2');
+    this.target = null;
+  }
+
+  addindex() {
+    if (this.projectDetail.ProjectContent[0].SectionName != 'index') {
+      this.titleValue = '';
+      this.titleValue = 'Index';
+      this.projectDetail.ProjectContent.unshift({
+        SectionName: this.titleValue,
+        SectionDescription: ''
+      })
+      let len = this.wikiForm.controls.Wikis.value.length;
+      this.sectionIndex = len;
+      let project = this.wikiForm.get('Wikis') as FormArray;
+      project.insert(0, this.createIndex());
+      this.titleValue = '';
+      this.isSectionEdited = true;
+    }
+  }
+
+  createIndex(): FormGroup {
+    return this.fb.group({
+      WikiSection: new FormControl(this.titleValue),
+      WikiSectionDetail: new FormControl(`<p>${this.projectDetail.ProjectContent[1].SectionName}</p>`)
+    });
   }
 
   onPaste(e: any) {
