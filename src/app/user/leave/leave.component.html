@@ -76,7 +76,7 @@
                   <ng-container *ngIf="leaveData.length <= 0">
                     <div class="px-5 mx-5">
                       <div class="text-dark px-5 mx-5 fw-bold">
-                        No Leave Apply..
+                        Wow!!! You have not requested any leave till now.
                       </div>
                     </div>
                   </ng-container>
@@ -103,7 +103,7 @@
           </div>
         </div>
       </div>
-      <div id="leave-chart" [ngClass]="{'d-none': leaveData.length <= 0}">
+      <div id="leave-chart" [ngClass]="{'d-none': leaveTypes.length <= 0}">
         <h5 class="mt-3 pt-3 pb-3">My Leave Status</h5>
         <div class="row">
           <div class="col-md-4">
