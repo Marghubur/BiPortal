@@ -290,7 +290,7 @@ export class LeaveComponent implements OnInit {
     let graph = new Chart(context, {
       type: 'doughnut',
       data: {
-        labels: ['Used', 'Available'],
+        labels: ['Not Allocated', 'Available'],
         datasets: [{
           label: 'My leave plan',
           backgroundColor: bgColor,
