@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
@@ -41,6 +41,7 @@ export class LeaveComponent implements OnInit {
   graphInstances: Array<any> = [];
   observer: Subscription = null;
   isEnabled: boolean = false;
+  minDate: any;
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -49,14 +50,18 @@ export class LeaveComponent implements OnInit {
               private local: ApplicationStorage,
               private user: UserService,
               private fb: FormBuilder,
-              private elementRef: ElementRef
-              ) { }
+              private elementRef: ElementRef,
+              private calendar: NgbCalendar
+              ) {}
 
   ngOnInit(): void {
     this.cachedData = this.nav.getValue();
+    this.fromdateModal = this.calendar.getToday();
+    this.model = this.calendar.getToday();
     this.leaveDetail = new LeaveModal();
-    this.leaveDetail.LeaveFromDay = new Date();
+    this.leaveDetail.LeaveFromDay = new Date(this.model.year, this.model.month, this.model.day);
     this.leaveDetail.LeaveToDay = new Date(new Date().setDate( this.leaveDetail.LeaveFromDay.getDate() + 1));
+    this.disablebackDate(this.leaveDetail.LeaveFromDay, 9);
     this.leaveDetail.Session ='fullday';
     this.leaveDetail.LeaveType = null;
     this.managerList = new autoCompleteModal();
@@ -86,6 +91,16 @@ export class LeaveComponent implements OnInit {
         Toast("Invalid user. Please login again.")
       }
     }
+  }
+
+  disablebackDate(current: Date, noDays: number) {
+    const daysAgo = new Date(current.getTime());
+    daysAgo.setDate(current.getDate() - noDays);
+    this.minDate = {
+      year: daysAgo.getFullYear(),
+      month: daysAgo.getMonth(),
+      day: daysAgo.getDate()
+                }
   }
 
   leavePopUp() {

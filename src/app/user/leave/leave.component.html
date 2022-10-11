@@ -338,7 +338,7 @@
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control d-none" placeholder="yyyy-mm-dd"
+                          <input class="form-control d-none" placeholder="yyyy-mm-dd"  [minDate]="minDate"
                             (dateSelect)="onDateSelection($event)" name="dp" [(ngModel)]="fromdateModal" ngbDatepicker
                             #fromdate="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()"
