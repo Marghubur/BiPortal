@@ -7,12 +7,14 @@ import { WikiComponent } from './wiki/wiki.component';
 import { UtilModule } from '../util/util.module';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ManageProjectComponent } from './manage-project/manage-project.component';
 
 
 @NgModule({
   declarations: [
     ProjectsComponent,
-    WikiComponent
+    WikiComponent,
+    ManageProjectComponent
   ],
   imports: [
     CommonModule,

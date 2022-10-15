@@ -101,6 +101,7 @@ export const MenuSetting = 'admin/menu';
 export const Company = 'admin/companysettings';
 export const ProjectWiki = 'admin/wiki';
 export const ProjectList = 'admin/project';
+export const ManageProject = 'admin/manage-project';
 
 
 // ********************** Admin route pages  *******************

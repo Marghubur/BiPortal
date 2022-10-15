@@ -15,7 +15,7 @@
         </div>
         <ng-container *ngIf="isLoaded">
           <div class="x_content">
-            <div [formGroup]="emailSettingForm">
+            <div [formGroup]="emailSettingForm" >
               <div class="row col-12">
                 <div class="col-md-4">
                   <div class="x_header_title position-relative">
@@ -53,6 +53,15 @@
                       <input class="form-control" formControlName="EmailAddress" placeholder="Email Id" [ngClass]="{'error-field': submitted && c.EmailAddress.errors !== null && c.EmailAddress.errors.required}"/>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-md-6 mt-4">
+                      <label class="form-label">Is Primary</label>
+                      <select formControlName="IsPrimary" class="form-select">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="col-12 row m-0 mt-5">
@@ -66,7 +75,7 @@
                     <div class="row col-md-12">
                       <div class="col-md-6 mt-4">
                         <label class="form-label">Email Host *</label>
-                        <input class="form-control" formControlName="EmailHost" placeholder="Email Host" [ngClass]="{'error-field': submitted && c.formControlName.errors !== null && c.formControlName.errors.required}"/>
+                        <input class="form-control" formControlName="EmailHost" placeholder="Email Host" [ngClass]="{'error-field': submitted && c.EmailHost.errors !== null && c.EmailHost.errors.required}"/>
                       </div>
                       <div class="col-md-6 mt-4">
                         <label class="form-label">Port No.# *</label>
@@ -81,8 +90,8 @@
                         </select>
                       </div>
                       <div class="col-md-6 mt-4">
-                        <label class="form-label">Delivery Method *</label>
-                        <input class="form-control" formControlName="DeliveryMethod" placeholder="Port Number"/>
+                        <label class="form-label">Delivery Method </label>
+                        <input class="form-control" formControlName="DeliveryMethod" placeholder="Delivery Method"/>
                       </div>
                       <div class="col-md-6 mt-4">
                         <label class="form-label">User Default Credentials *</label>
