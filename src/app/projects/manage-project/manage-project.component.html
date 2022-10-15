@@ -1,0 +1,106 @@
+<div class="col-12 full-v main-container">
+  <div class="col-12 row p-0 m-0">
+    <div class="right-panel container col-md-12 p-0">
+      <div class="col-md-12 row m-0 pe-4">
+        <!-- Tabs navs -->
+        <h4 class="p-0">Project details page</h4>
+        <!-- Tabs navs -->
+      </div>
+
+      <div class="x_panel mt-2">
+        <div class="px-1">
+          <app-breadcrums></app-breadcrums>
+        </div>
+        <ng-container *ngIf="isReady">
+          <div class="x_content mt-4">
+            <div [ngClass]="{'blur-section': !isCompaniesDetails}">
+              <!-- <div class="blur-section__highlight" [ngClass]="{'d-none': isCompaniesDetails}">
+                <div class="blur-section__content">
+                  {{'Please add company first'}}
+                  <p class="mb-0 py-3">
+                    <button class="btn btn-primary fs-5 fw-bold" (click)="gotoCompany()"><i class="fa fa-cog pe-2"></i> Configure Company</button>
+                  </p>
+                </div>
+              </div> -->
+              <div class="blur-this">
+                <form [formGroup]="projectForm" autocomplete="off">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <label for="" class="form-label">Company Name</label>
+                      <input type="text" class="form-control" placeholder="Company Name">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="" class="form-label">Project Name</label>
+                      <input type="text" class="form-control" placeholder="Project Name">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="" class="form-label">Project Description</label>
+                      <input type="text" class="form-control" placeholder="Project Description">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <label class="form-label">Project Manager</label>
+                      <!-- <app-iautocomplete [data]="managerList" formControlName="ReportingManagerId"
+                        name="ReportingManagerId">
+                      </app-iautocomplete> -->
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Architech</label>
+
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Homepage URL</label>
+                      <input type="text" class="form-control" placeholder="Home page URL">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <label class="form-label">IsClient Project</label>
+                      <select class="form-select">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Client Name</label>
+
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Architech</label>
+
+                    </div>
+                  </div>
+                  <div class="col-12 row m-0 pt-5">
+                    <div class="col-md-12 button groups text-end">
+                      <div class="btn-group">
+                        <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+                      </div>
+                      <div class="btn-group ms-2">
+                        <button class="btn btn-success" [disabled]="isLoading" (click)="RegisterEmployee()">
+                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                          {{ isLoading ? 'Wait' : 'Register' }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!isReady">
+          <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+

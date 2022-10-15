@@ -41,66 +41,57 @@
 
         <ng-container *ngIf="isRolesLoaded">
           <div class="row col-md-12 pt-3">
-            <div class="col-md-12 pt-3 skeleton" *ngFor="let catagory of Menu; let i = index;">
+            <div class="col-md-6 row pt-3 skeleton" *ngFor="let catagory of Menu; let i = index;">
               <div class="vhide">
-                <div>
-                  <button class="w-100 py-3 btn btn-primary-c text-start" type="button" (click)="openCloseTab($event, i)"
-                    [attr.data-bs-target]="'#collapseExample'+i" aria-expanded="false"
-                    [attr.aria-controls]="'collapseExample'+i">
-                    {{catagory.Name}}
-                    <i class="fa fa-caret-down float-end"></i>
-                  </button>
-                </div>
-                <div class="d-none" [id]="'collapseExample'+i">
-                  <div class="card card-body mt-3">
-                    <div formArrayName="menuItems" class="card-body pt-0 pb-0">
-                      <ng-container *ngFor="let item of rolesForm.get('menuItems').controls;let index = index;">
-                        <ng-container [formGroupName]="index">
-                          <div *ngIf="catagory.Name === item.get('ParentMenu').value"
-                            class="d-flex row-items justify-content-between border-bottom pt-4 pb-4">
-                            <div class="d-flex justify-content-center align-items-center">
-                              <i class="{{item.get('Icon').value}} menu-icon"></i>
-                              <label class="category-name ps-3">
-                                {{item.get('Catagory').value}}
-                              </label>
-                            </div>
-                            <div class="btn-group dropstart">
-                              <label class="noaccess pe-4" [ngClass]="{
-                                  'readonly': item.get('Permission').value == 2,
-                                  'readwrite': item.get('Permission').value == 3,
-                                  'fullaccess': item.get('Permission').value == 1
-                                }">{{getPermessionName(item.get('Permission').value)}}</label>
+                <div class="card card-body mt-3">
+                  <h6 class="bg-c text-white fw-bold rounded px-3 py-2" >{{catagory.Name}}</h6>
+                  <div formArrayName="menuItems" class="card-body pt-0 pb-0">
+                    <ng-container *ngFor="let item of rolesForm.get('menuItems').controls;let index = index;">
+                      <ng-container [formGroupName]="index">
+                        <div *ngIf="catagory.Name === item.get('ParentMenu').value"
+                          class="d-flex row-items justify-content-between border-bottom pt-4 pb-4">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <i class="{{item.get('Icon').value}} menu-icon"></i>
+                            <label class="category-name ps-3">
+                              {{item.get('Catagory').value}}
+                            </label>
+                          </div>
+                          <div class="btn-group dropstart">
+                            <label class="noaccess pe-4" [ngClass]="{
+                                'readonly': item.get('Permission').value == 2,
+                                'readwrite': item.get('Permission').value == 3,
+                                'fullaccess': item.get('Permission').value == 1
+                              }">{{getPermessionName(item.get('Permission').value)}}</label>
 
-                              <div class="col">
-                                <div ngbDropdown class="d-inline-block">
-                                  <button type="button" class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle>
-                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                            <div class="col">
+                              <div ngbDropdown class="d-inline-block">
+                                <button type="button" class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle>
+                                  <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                </button>
+                                <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                  <button ngbDropdownItem>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                      (click)="selectPermission(0, index)">Block Access</a>
                                   </button>
-                                  <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                                    <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)"
-                                        (click)="selectPermission(0, index)">Block Access</a>
-                                    </button>
-                                    <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)"
-                                        (click)="selectPermission(2, index)">Read only</a>
-                                    </button>
-                                    <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)"
-                                        (click)="selectPermission(3, index)">Read & Write</a>
-                                    </button>
-                                    <button ngbDropdownItem>
-                                      <a class="dropdown-item" href="javascript:void(0)"
-                                        (click)="selectPermission(1, index)">Full Access</a>
-                                    </button>
-                                  </div>
+                                  <button ngbDropdownItem>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                      (click)="selectPermission(2, index)">Read only</a>
+                                  </button>
+                                  <button ngbDropdownItem>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                      (click)="selectPermission(3, index)">Read & Write</a>
+                                  </button>
+                                  <button ngbDropdownItem>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                      (click)="selectPermission(1, index)">Full Access</a>
+                                  </button>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </ng-container>
+                        </div>
                       </ng-container>
-                    </div>
+                    </ng-container>
                   </div>
                 </div>
               </div>

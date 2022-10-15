@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectWiki } from 'src/providers/constants';
+import { ManageProject, ProjectWiki } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -9,15 +9,19 @@ import { iNavigation } from 'src/providers/iNavigation';
 })
 export class ProjectsComponent implements OnInit {
   isLoaded: boolean = true;
-  
+
   constructor(private nav: iNavigation) { }
 
   ngOnInit(): void {
   }
 
   loadWiki() {
-    this.nav.navigate(ProjectWiki, { 
+    this.nav.navigate(ProjectWiki, {
       ProjectId: 0
     });
+  }
+
+  addProject() {
+    this.nav.navigate(ManageProject, null);
   }
 }

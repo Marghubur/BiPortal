@@ -49,6 +49,9 @@ export class EmailsettingComponent implements OnInit {
         this.emailSettings = res.ResponseBody;
         this.initForm();
         Toast("Email setting found");
+      } else {
+        this.initForm();
+        ErrorToast("Email seeting not found")
       }
       this.isLoaded = true;
     }).catch(e => {
@@ -59,7 +62,7 @@ export class EmailsettingComponent implements OnInit {
   initForm() {
     this.emailSettingForm = this.fb.group({
       EmailSettingDetailId: new FormControl(this.emailSettings.EmailSettingDetailId),
-      CompanyId: new FormControl(this.emailSettings.CompanyId, [Validators.required]),
+      CompanyId: new FormControl(this.currentCompany.CompanyId, [Validators.required]),
       OrganizationName: new FormControl(this.currentCompany.OrganizationName),
       CompanyName: new FormControl(this.currentCompany.CompanyName),
       EmailAddress: new FormControl(this.emailSettings.EmailAddress, [Validators.required]),
@@ -74,7 +77,8 @@ export class EmailsettingComponent implements OnInit {
       EmailName: new FormControl(this.emailSettings.EmailName, [Validators.required]),
       POP3EmailHost: new FormControl(this.emailSettings.POP3EmailHost),
       POP3PortNo: new FormControl(this.emailSettings.POP3PortNo),
-      POP3EnableSsl: new FormControl(this.emailSettings.POP3EnableSsl ? 'true' : 'false')
+      POP3EnableSsl: new FormControl(this.emailSettings.POP3EnableSsl ? 'true' : 'false'),
+      IsPrimary: new FormControl(this.emailSettings.IsPrimary ? 'true' : 'false'),
     })
   }
 
@@ -144,6 +148,7 @@ class EmailSettings {
   FileId: number = 0;
   EmailName: string = null;
   POP3EmailHost: string = null;
-  POP3PortNo: number = null;
+  POP3PortNo: number = 0;
   POP3EnableSsl: boolean = false;
+  IsPrimary: boolean = false;
 }
