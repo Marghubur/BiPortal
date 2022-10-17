@@ -184,24 +184,19 @@ export class AttendanceComponent implements OnInit {
     return null;
   }
 
-  commentPopUp(e: any) {
+  applyWorkFromHome(e: any) {
     this.currentAttendance = e;
     this.today = this.currentAttendance.AttendanceDay;
-    this.tomorrow = new Date(this.today);
 
-    let now = new Date();
     this.today = new Date(
       this.today.getFullYear(),
       this.today.getMonth(),
       this.today.getDate()
     );
-    this.currentAttendance.AttendanceDay = this.today;
 
-    this.tomorrow = new Date(
-      this.tomorrow.getFullYear(),
-      this.tomorrow.getMonth(),
-      this.tomorrow.getDate() + 1
-    );
+    this.tomorrow = this.today;
+    
+    this.currentAttendance.AttendanceDay = this.today;
     this.commentValue = this.currentAttendance.UserComments;
     $('#commentModal').modal('show');
   }
