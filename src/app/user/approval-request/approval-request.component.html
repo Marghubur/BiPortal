@@ -35,11 +35,11 @@
                     <div class="col-md-6">
                       <p class="mb-0 fs-6">
                         <span class="fw-bold text-primary-c me-2">Attendance Date: {{item.AttendanceDay | date}}</span>
-                        <span class="fw-bold text-primary-c">[{{item.EmployeeUid}}]</span>
+                        <span class="fw-bold text-primary-c">[{{item.EmployeeName}}]</span>
                       </p>
                       <span>
                         <span class="fw-bold">Message:</span>
-                        Pending for approval
+                        {{item.UserComments}}
                       </span>
                     </div>
                     <div class="col-md-2">
@@ -68,25 +68,25 @@
                       </p> -->
                     </div>
                     <div class="col-md-3">
-                      {{item.EmployeeUid}}
-                      <!-- <p class="mb-0">{{item.Email}}</p>
-                      <p class="mb-0">{{item.Mobile}}</p> -->
+                      {{item.EmployeeName}}
+                      <p class="mb-0">{{item.Email}}</p>
+                      <p class="mb-0">{{item.Mobile}}</p>
                     </div>
                     <div class="col-md-1">
-                      <ng-container [ngSwitch]="item.AttendenceStatus">
+                      <ng-container [ngSwitch]="item.PresentDayStatus">
                         <p *ngSwitchCase="2">Pending</p>
                         <p *ngSwitchCase="9">Approved</p>
                         <p *ngSwitchCase="5">Rejected</p>
                       </ng-container>
                     </div>
                     <div class="d-flex my-1">
-                      <a *ngIf="item.RequestStatusId != 5" (click)="openPopup('Rejected', item)" href="javascript:void(0)"
+                      <a *ngIf="item.RequestStatusId != 5" (click)="openAttendacneModal('Rejected', item)" href="javascript:void(0)"
                         class="text-danger btn-sm fw-bold"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
-                      <a *ngIf="item.RequestStatusId != 9" (click)="openPopup('Approved', item)" href="javascript:void(0)"
+                      <a *ngIf="item.RequestStatusId != 9" (click)="openAttendacneModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a (click)="openPopup('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
+                      <a (click)="openAttendacneModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
                           class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
                         Re-Assigne</a>
                     </div>
@@ -323,7 +323,7 @@
         <div class="row py-3">
           <div class="col-md-6">
             <p class="mb-0 fw-bold fs-6">
-              Request by [{{currentRequest.UserName}}]
+              Request by [{{currentRequest.EmployeeName}}]
             </p>
             <!-- <input type="text" class="form-control" name="message" [(ngModel)]="editedMessage" value="{{singleLeave.Message}}"> -->
             <span>{{currentRequest.Message}}</span>
@@ -333,7 +333,7 @@
             <p class="mb-0"><span class="badge bg-primary">{{currentRequest.ProjectName}}</span></p>
           </div>
           <div class="col-md-3">
-            {{currentRequest.UserName}}
+            {{currentRequest.EmployeeName}}
             <p class="mb-0">{{currentRequest.Email}}</p>
             <p class="mb-0">{{currentRequest.Mobile}}</p>
           </div>
