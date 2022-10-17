@@ -103,9 +103,6 @@ export class AttendanceComponent implements OnInit {
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
         //$('#loader').modal('show');
         this.loadMappedClients();
-        setTimeout(() => {
-        }, 900);
-
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -225,10 +222,13 @@ export class AttendanceComponent implements OnInit {
         this.isLoading = false;
         Toast("Wow!!!  Your attendance submitted successfully.");
       } else {
+        this.isLoading = false;
         ErrorToast(response.ResponseBody, 20);
       }
 
       $('#commentModal').modal('hide');
+    }).catch(e => {
+      this.isLoading = false;
     })
   }
 
