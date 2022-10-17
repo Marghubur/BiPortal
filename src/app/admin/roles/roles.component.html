@@ -12,10 +12,10 @@
             </button>
             <button class="btn btn-outline-success btn-sm float-end" [disabled]="ispermissionAdding || !isRolesLoaded"
               (click)="submitRole()">
-              <i class="fa  pe-2"
+              <i class="fa"
                 [ngClass]="{'fa-sign-in': !ispermissionAdding, 'fa-spin fa-spinner': ispermissionAdding}"
                 aria-hidden="true"></i>
-              {{ispermissionAdding ? 'Wait' : 'Save' }}
+              <span class="ps-2">{{ispermissionAdding ? 'Wait' : 'Save' }}</span>
             </button>
           </div>
         </div>
