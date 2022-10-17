@@ -72,7 +72,8 @@ export class ApprovalRequestComponent implements OnInit {
     this.attendanceDetail = [];
     if(req.AttendaceDetail) {
       let detail = JSON.parse(req.AttendaceDetail);
-      this.attendanceDetail = detail.filter(x => x.AttendenceStatus == 2);
+      this.attendanceDetail = detail.filter(x => x.AttendenceStatus !== 3 
+        && x.PresentDayStatus === 2);
     }
   }
 
