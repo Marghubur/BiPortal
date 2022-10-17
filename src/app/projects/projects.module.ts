@@ -5,7 +5,7 @@ import { ProjectsRoutingModule } from './projects-routing.module';
 import { ProjectsComponent } from './projects.component';
 import { WikiComponent } from './wiki/wiki.component';
 import { UtilModule } from '../util/util.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ManageProjectComponent } from './manage-project/manage-project.component';
 
@@ -20,6 +20,7 @@ import { ManageProjectComponent } from './manage-project/manage-project.componen
     CommonModule,
     UtilModule,
     FormsModule,
+    ReactiveFormsModule,
     NgbModule,
     ProjectsRoutingModule
   ]

@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
 @Component({
@@ -28,6 +29,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   sectionIndex: number = -1;
 
   constructor(private fb: FormBuilder,
+              private nav:iNavigation,
               private sanitize: DomSanitizer,
               private http: AjaxService,
               private renderer: Renderer2
@@ -57,22 +59,30 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
-    this.WikiDetails = []
-    this.projectDetail.Title = '';
+    this.WikiDetails = [];
+    // this.projectDetail.Title = '';
     this.projectDetail.ProjectName= "";
-    this.loadData();
+    let data = this.nav.getValue();
+    if (data){
+      this.projectDetail.ProjectName = data.ProjectName;
+      this.projectDetail.ProjectId = data.ProjectId;
+      this.projectId = data.ProjectId;
+      //this.initForm();
+
+      this.loadData();
+    } else {
+      ErrorToast("Invalid project selected");
+    }
   }
 
   loadData() {
     this.isLoaded = false;
     this.editableFlag = false;
-    this.http.get("Project/GetAllProject").then(res => {
-      if (res.ResponseBody && res.ResponseBody.length > 0) {
-        this.projectId = res.ResponseBody[0].ProjectId;
-        if (res.ResponseBody[0].DocumentationDetail) {
-          this.projectDetail = JSON.parse(res.ResponseBody[0].DocumentationDetail);
-        }
-
+    this.http.get(`Project/GetAllWiki/${this.projectId}`).then(res => {
+      if (res.ResponseBody) {
+        let data = JSON.parse(res.ResponseBody.DocumentationDetail);
+        this.projectDetail.Title = data.Title;
+        this.projectDetail.ProjectContent = data.ProjectContent;
         this.editableFlag = false;
         Toast("Wiki page loaded successfully.");
       }
@@ -261,7 +271,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   disabeSection() {
-    this.target = null;
+    //this.target = null;
     this.closePopOver();
   }
 
@@ -304,7 +314,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       this.projectDetail.ProjectContent[i].SectionDescription = tags;
     }
     this.projectDetail.ProjectId = this.projectId;
-    this.http.post("Project/AddProject", this.projectDetail).then((res: ResponseModel) => {
+    this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
       if (res.ResponseBody)
         Toast(res.ResponseBody);
     }).catch(e => {
@@ -346,7 +356,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   addindex() {
-    if (this.projectDetail.ProjectContent[0].SectionName != 'index') {
+    if (!this.projectDetail.ProjectContent[0].SectionName.includes('Index')) {
       this.titleValue = '';
       this.titleValue = 'Index';
       this.projectDetail.ProjectContent.unshift({
