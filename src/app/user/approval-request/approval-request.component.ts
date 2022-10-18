@@ -51,8 +51,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.isPageLoading = true;
     this.http.get(`Request/GetPendingRequests/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
       if(response.ResponseBody) {
-        if(response.ResponseBody)
-          this.buildPage(response.ResponseBody);
+        this.buildPage(response.ResponseBody);
         this.isPageLoading = false;
       } else {
         ErrorToast("Fail to fetch data. Please contact to admin.");
@@ -99,10 +98,10 @@ export class ApprovalRequestComponent implements OnInit {
         this.filterAttendance(this.itemStatus);
         break;
       case 2:
-      
+
         break;
       case 3:
-      
+
         break;
     }
   }
@@ -111,7 +110,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.attendanceDetail = [];
     if(this.attendance && this.attendance.length > 0) {
       this.attendance.map(item => {
-        let detail:Array<any> = JSON.parse(item.AttendanceDetail);        
+        let detail:Array<any> = JSON.parse(item.AttendanceDetail);
         if(detail && detail.length > 0) {
           if (status > 0)
             detail = detail.filter(x => x.PresentDayStatus === status);
@@ -126,7 +125,7 @@ export class ApprovalRequestComponent implements OnInit {
                 detail[i].AttendanceId = item.AttendanceId;
               }
             }
-            this.attendanceDetail.push(...detail);          
+            this.attendanceDetail.push(...detail);
           }
         }
       });
@@ -195,7 +194,7 @@ export class ApprovalRequestComponent implements OnInit {
 
   submitAttendanceUpdate() {
     if (this.attendance) {
-      this.http.put(`attendance/AttendanceRequestAction/${this.currentAttendanceDetail.AttendanceId}/${ItemStatus.Approved}`, 
+      this.http.put(`attendance/AttendanceRequestAction/${this.currentAttendanceDetail.AttendanceId}/${ItemStatus.Approved}`,
       this.currentAttendanceDetail).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.reBindAttendanceData(response.ResponseBody);
@@ -212,15 +211,15 @@ export class ApprovalRequestComponent implements OnInit {
     this.attendanceDetail = req;
     if(this.attendance && this.attendance.length > 0) {
       this.attendance.map(item => {
-        let detail:Array<any> = JSON.parse(item.AttendanceDetail);        
-        if(detail && detail.length > 0) {          
+        let detail:Array<any> = JSON.parse(item.AttendanceDetail);
+        if(detail && detail.length > 0) {
           detail = detail.filter(x => x.AttendenceStatus !== 3 && x.PresentDayStatus === 2);
           if(detail.length > 0) {
             for (let i = 0; i < detail.length; i++) {
-              detail[i].AttendanceId = item.AttendanceId;        
+              detail[i].AttendanceId = item.AttendanceId;
             }
 
-            this.attendanceDetail.push(...detail);          
+            this.attendanceDetail.push(...detail);
           }
         }
       });

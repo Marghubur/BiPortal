@@ -29,23 +29,22 @@
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
-              <ng-container *ngIf="request.length > 0">
-                <ng-container *ngFor="let item of request">
+              <ng-container *ngIf="attendanceDetail.length > 0">
+                <ng-container *ngFor="let item of attendanceDetail">
                   <div class="row py-3 border-bottom px-3 leave-box">
                     <div class="col-md-6">
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c me-2">From: {{item.FromDate | date}}</span>
-                        <span class="fw-bold text-primary-c me-4">To: {{item.ToDate | date}}</span>
-                        <span class="fw-bold text-primary-c">[{{item.UserName}}]</span>
+                        <span class="fw-bold text-primary-c me-2">Attendance Date: {{item.AttendanceDay | date}}</span>
+                        <span class="fw-bold text-primary-c">[{{item.EmployeeName}}]</span>
                       </p>
                       <span>
                         <span class="fw-bold">Message:</span>
-                        {{item.Message}}
+                        {{item.UserComments}}
                       </span>
                     </div>
                     <div class="col-md-2">
                       Attendance approval Request
-                      <p class="mb-0">
+                      <!-- <p class="mb-0">
                         <span class="badge bg-primary">
                           Project: &nbsp;
                           <ng-container *ngIf="item.ProjectName == '' || item.ProjectName == null">
@@ -55,8 +54,8 @@
                             {{item.ProjectName}}
                           </ng-container>
                         </span>
-                      </p>
-                      <p class="mb-0">
+                      </p> -->
+                      <!-- <p class="mb-0">
                         <span class="badge bg-success">
                           Manager &nbsp;
                           <ng-container *ngIf="item.AssigneeId == 0">
@@ -66,35 +65,35 @@
                             {{item.AssigneeId}}
                           </ng-container>
                         </span>
-                      </p>
+                      </p> -->
                     </div>
                     <div class="col-md-3">
-                      {{item.UserName}}
+                      {{item.EmployeeName}}
                       <p class="mb-0">{{item.Email}}</p>
                       <p class="mb-0">{{item.Mobile}}</p>
                     </div>
                     <div class="col-md-1">
-                      <ng-container [ngSwitch]="item.RequestStatusId">
+                      <ng-container [ngSwitch]="item.PresentDayStatus">
                         <p *ngSwitchCase="2">Pending</p>
                         <p *ngSwitchCase="9">Approved</p>
                         <p *ngSwitchCase="5">Rejected</p>
                       </ng-container>
                     </div>
                     <div class="d-flex my-1">
-                      <a *ngIf="item.RequestStatusId != 5" (click)="openPopup('Rejected', item)" href="javascript:void(0)"
+                      <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)" href="javascript:void(0)"
                         class="text-danger btn-sm fw-bold"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
-                      <a *ngIf="item.RequestStatusId != 9" (click)="openPopup('Approved', item)" href="javascript:void(0)"
+                      <a *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a (click)="openPopup('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
+                      <a (click)="openAttendacneModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
                           class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
                         Re-Assigne</a>
                     </div>
                   </div>
                 </ng-container>
               </ng-container>
-              <ng-container *ngIf="request.length ==0">
+              <ng-container *ngIf="attendanceDetail.length ==0">
                 <div class="text-center fw-bold fs-4 py-5 my-5 text-dark">
                   No record found
                 </div>

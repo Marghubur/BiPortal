@@ -24,6 +24,10 @@ export class ApprovalRequestComponent implements OnInit {
   itemStatus: number = 0;
   currentUser: any = null;
   isPageLoading: boolean = false;
+  attendance: any = null;
+  attendanceDetail: Array<any> = [];
+  currentAttendanceDetail: any = null;
+  requestModal: number = 0;
 
   constructor(
     private http: AjaxService,
@@ -59,22 +63,88 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   buildPage(req: any) {
-    this.request = req.filter(x => x.RequestType == 2);
-    this.leave_request = req.filter(x => x.RequestType == 1);
+    this.request = [];
+    this.leave_request = [];
+
+    if(req.ApprovalRequest) {
+      this.request = req.ApprovalRequest.filter(x => x.RequestType == 2);
+      this.leave_request = req.ApprovalRequest.filter(x => x.RequestType == 1);
+    }
+
+    this.attendance = req.AttendaceTable;
+    this.filterAttendance(ItemStatus.Pending);
   }
 
   openPopup(state: string, request: any) {
     $('#leaveModal').modal('show');
     this.requestState = state;
+    this.requestModal = 1; // leave
     this.currentRequest = request;
   }
 
+  openAttendacneModal(state: string, request: any) {
+    $('#leaveModal').modal('show');
+    this.requestState = state;
+    this.requestModal = 3; // leave
+    this.currentAttendanceDetail = request;
+    this.currentRequest = request;
+    this.currentRequest["EmployeeName"]  = this.currentAttendanceDetail.EmployeeName;
+  }
+
   filterRequest(e: any) {
-    this.itemStatus =Number(e.target.value);
-    this.loadData();
+    this.itemStatus = Number(e.target.value);
+    switch (this.active) {
+      case 1:
+        this.filterAttendance(this.itemStatus);
+        break;
+      case 2:
+
+        break;
+      case 3:
+
+        break;
+    }
+  }
+
+  filterAttendance(status: number) {
+    this.attendanceDetail = [];
+    if(this.attendance && this.attendance.length > 0) {
+      this.attendance.map(item => {
+        let detail:Array<any> = JSON.parse(item.AttendanceDetail);
+        if(detail && detail.length > 0) {
+          if (status > 0)
+            detail = detail.filter(x => x.PresentDayStatus === status);
+          else
+            detail = detail.filter(x => x.PresentDayStatus === ItemStatus.Approved || x.PresentDayStatus === ItemStatus.Pending || x.PresentDayStatus === ItemStatus.Rejected);
+          if(detail.length > 0) {
+            for (let i = 0; i < detail.length; i++) {
+              detail[i].AttendanceDay = new Date(detail[i].AttendanceDay);
+              if(detail[i].AttendanceDay.getDay() === 0 || detail[i].AttendanceDay.getDay() === 6) {
+                detail.splice(i, 1);
+              } else {
+                detail[i].AttendanceId = item.AttendanceId;
+              }
+            }
+            this.attendanceDetail.push(...detail);
+          }
+        }
+      });
+    }
   }
 
   submitRequest(header: string) {
+    switch(this.requestModal) {
+      case 1: // leave
+      case 2: // timesheet
+        this.actionForLeaveAndTimesheet(header);
+      break;
+      case 3: // attendance
+        this.submitAttendanceUpdate();
+      break;
+    }
+  }
+
+  actionForLeaveAndTimesheet(header: string) {
     this.isLoading = true;
     let endPoint = '';
 
@@ -121,11 +191,50 @@ export class ApprovalRequestComponent implements OnInit {
       this.isLoading = false;
     })
   }
+
+  submitAttendanceUpdate() {
+    if (this.attendance) {
+      this.http.put(`attendance/AttendanceRequestAction/${this.currentAttendanceDetail.AttendanceId}/${ItemStatus.Approved}`,
+      this.currentAttendanceDetail).then((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          this.reBindAttendanceData(response.ResponseBody);
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    } else {
+      ErrorToast("Attendance detail not found. Please contact to admin.");
+    }
+  }
+
+  reBindAttendanceData(req: any) {
+    this.attendanceDetail = req;
+    if(this.attendance && this.attendance.length > 0) {
+      this.attendance.map(item => {
+        let detail:Array<any> = JSON.parse(item.AttendanceDetail);
+        if(detail && detail.length > 0) {
+          detail = detail.filter(x => x.AttendenceStatus !== 3 && x.PresentDayStatus === 2);
+          if(detail.length > 0) {
+            for (let i = 0; i < detail.length; i++) {
+              detail[i].AttendanceId = item.AttendanceId;
+            }
+
+            this.attendanceDetail.push(...detail);
+          }
+        }
+      });
+    }
+
+    $('#leaveModal').modal('hide');
+    this.isLoading = false;
+    Toast("Submitted Successfully");
+  }
 }
 
 export class ApprovalRequest {
   ApprovalRequestId: number = null;
 	UserName:string = '';
+  EmployeeName: string = '';
 	Message:string = '';
 	UserId:number = null;
 	UserTypeId: number = null;
@@ -140,3 +249,4 @@ export class ApprovalRequest {
   RequestStatusId: number = 0;
   RequestType: string = "";
 }
+

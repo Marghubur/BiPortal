@@ -1,0 +1,17 @@
+.th {
+  font-weight: bold;
+}
+
+.t-body {
+  max-height: 49vh !important;
+  min-height: 49vh !important;
+}
+
+.t-table .t-head,
+.t-body {
+  overflow-y: auto;
+}
+
+.hide-bar {
+  height: 3.1rem !important;
+}
