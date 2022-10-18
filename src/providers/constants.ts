@@ -102,8 +102,8 @@ export const Company = 'admin/companysettings';
 export const ProjectWiki = 'admin/wiki';
 export const ProjectList = 'admin/project';
 export const ManageProject = 'admin/manage-project';
-
-
+export const EmailTemplate = 'admin/emailtemplate';
+export const ManageEmailTemplate = 'admin/manageemailtemplate';
 // ********************** Admin route pages  *******************
 
 export const UserDashboard = "user/dashboard";

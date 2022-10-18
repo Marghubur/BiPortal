@@ -1,0 +1,81 @@
+<div class="main-container">
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="x_header_title">
+        <h2>Email Template <small>Template list</small></h2>
+        <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa fa-plus pe-2"></i> Add Template</button>
+      </div>
+    </div>
+    <div>
+      <app-breadcrums></app-breadcrums>
+    </div>
+    <ng-container *ngIf="!isPageLoading">
+      <div class="x_content">
+        <div class="t-table t-list t-border col-md-12">
+          <div class="hide-bar"></div>
+          <div class="t-head">
+            <div class="tr">
+              <div class="th fe-index">
+                <div class="t-index">#</div>
+              </div>
+              <div class="th fe-2">Template Name</div>
+              <div class="th fe-2">Subject Title</div>
+              <div class="th fe-2">Signature Detail</div>
+              <div class="th fe-2">ContactNo</div>
+              <div class="th fe-1 text-center">ACTIONS</div>
+            </div>
+          </div>
+          <div class="t-body">
+            <ng-container *ngIf="isRecordFound">
+              <div class="tr py-2" *ngFor="let template of allEmailtemplate; let i = index;">
+                <div class="td align-middle text-center fe-index">
+                    {{i+1}}
+                </div>
+                <div class="td align-middle fe-2">
+                    {{template.TemplateName}}
+                </div>
+                <div class="td align-middle fe-2">
+                    {{template.SubjectLine}}
+                </div>
+                <div class="td align-middle fe-2">
+                    {{template.SignatureDetail}}
+                </div>
+                <div class="td align-middle fe-2">
+                    {{template.ContactNo}}
+                </div>
+                <div class="td align-middle fe-1">
+                  <div class="d-flex flex-row justify-content-evenly">
+                    <a href="javascript:void(0)" (click)="addeditTemplate(template)">
+                      <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!isRecordFound">
+              <div class="custom-height fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                Record Not Found
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <app-pagination [pagination]="templateData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isPageLoading">
+      <div class="py-5 my-5">
+        <h6 class="fw-bold fs-3 text-center text-dark">Email template are loading</h6>
+        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+            <h6 class="modal-title title-message">
+              Please Wait ........
+            </h6>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

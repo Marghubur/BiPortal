@@ -51,7 +51,9 @@ import { AdminResetPassword, AdminDeclaration,
   Project,
   EmailSetting,
   MenuSetting,
-  Company
+  Company,
+  EmailTemplate,
+  ManageEmailTemplate
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -105,6 +107,8 @@ import { HolidayComponent } from './holiday/holiday.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
 import { MenusettingComponent } from './menusetting/menusetting.component';
 import { CompanyComponent } from './company/company.component';
+import { EmailTemplateComponent } from './email-template/email-template.component';
+import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -159,7 +163,9 @@ const routes: Routes = [
   { path: Holiday, component: HolidayComponent},
   { path: EmailSetting, component: EmailsettingComponent},
   { path: MenuSetting, component: MenusettingComponent},
-  { path: Company, component: CompanyComponent}
+  { path: Company, component: CompanyComponent},
+  { path: EmailTemplate, component: EmailTemplateComponent},
+  { path: ManageEmailTemplate, component: ManageEmailtemplateComponent}
 ];
 
 @NgModule({
