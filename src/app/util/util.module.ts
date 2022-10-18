@@ -8,7 +8,8 @@ import { TransformDirective } from './directives/transform.directive';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
 import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component";
-import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component'
+import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component';
+import { ImageLoaderComponent } from './image-loader/image-loader.component'
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component
     PaginationComponent,
     IautocompleteComponent,
     BreadcrumsComponent,
-    PreLoadTableComponent
+    PreLoadTableComponent,
+    ImageLoaderComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component
     PaginationComponent,
     BreadcrumsComponent,
     IautocompleteComponent,
-    PreLoadTableComponent
+    PreLoadTableComponent,
+    ImageLoaderComponent
   ]
 })
 export class UtilModule { }
