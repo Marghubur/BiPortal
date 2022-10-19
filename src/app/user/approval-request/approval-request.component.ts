@@ -26,7 +26,6 @@ export class ApprovalRequestComponent implements OnInit {
   isPageLoading: boolean = false;
   attendance: any = null;
   attendanceDetail: Array<any> = [];
-  currentAttendanceDetail: any = null;
   requestModal: number = 0;
 
   constructor(
@@ -72,10 +71,10 @@ export class ApprovalRequestComponent implements OnInit {
     }
 
     this.attendance = req.AttendaceTable;
-    this.filterAttendance(ItemStatus.Pending);
+    this.filterAttendance();
   }
 
-  openPopup(state: string, request: any) {
+  openTimesheetLeaveModal(state: string, request: any) {
     $('#leaveModal').modal('show');
     this.requestState = state;
     this.requestModal = 1; // leave
@@ -86,34 +85,43 @@ export class ApprovalRequestComponent implements OnInit {
     $('#leaveModal').modal('show');
     this.requestState = state;
     this.requestModal = 3; // leave
-    this.currentAttendanceDetail = request;
     this.currentRequest = request;
-    this.currentRequest["EmployeeName"]  = this.currentAttendanceDetail.EmployeeName;
+    this.currentRequest["EmployeeName"] = request.EmployeeName;
+  }
+
+  submitRequest() {
+    switch(this.requestModal) {
+      case 1: // leave
+      case 2: // timesheet
+        this.actionForLeaveAndTimesheet();
+      break;
+      case 3: // attendance
+        this.submitAttendanceUpdate();
+      break;
+    }
   }
 
   filterRequest(e: any) {
     this.itemStatus = Number(e.target.value);
     switch (this.active) {
       case 1:
-        this.filterAttendance(this.itemStatus);
+        this.filterAttendance();
         break;
       case 2:
-
         break;
       case 3:
-
         break;
     }
   }
 
-  filterAttendance(status: number) {
+  filterAttendance() {
     this.attendanceDetail = [];
     if(this.attendance && this.attendance.length > 0) {
       this.attendance.map(item => {
         let detail:Array<any> = JSON.parse(item.AttendanceDetail);
         if(detail && detail.length > 0) {
-          if (status > 0)
-            detail = detail.filter(x => x.PresentDayStatus === status);
+          if (this.itemStatus > 0)
+            detail = detail.filter(x => x.PresentDayStatus === this.itemStatus);
           else
             detail = detail.filter(x => x.PresentDayStatus === ItemStatus.Approved || x.PresentDayStatus === ItemStatus.Pending || x.PresentDayStatus === ItemStatus.Rejected);
           if(detail.length > 0) {
@@ -132,19 +140,27 @@ export class ApprovalRequestComponent implements OnInit {
     }
   }
 
-  submitRequest(header: string) {
-    switch(this.requestModal) {
-      case 1: // leave
-      case 2: // timesheet
-        this.actionForLeaveAndTimesheet(header);
-      break;
-      case 3: // attendance
-        this.submitAttendanceUpdate();
-      break;
+  getStatusId() {
+    let statusId: number = 0;
+    switch(this.requestState) {
+      case 'Approved':
+        statusId = ItemStatus.Approved;
+        break;
+      case 'Rejected':
+        statusId = ItemStatus.Rejected;
+        break;
+      case 'Othermember':
+        statusId = ItemStatus.ReAssigned
+        break;
+      default:
+        throw 'Invalid option selected.';
+        break;
     }
+
+    return statusId;
   }
 
-  actionForLeaveAndTimesheet(header: string) {
+  actionForLeaveAndTimesheet() {
     this.isLoading = true;
     let endPoint = '';
 
@@ -163,7 +179,7 @@ export class ApprovalRequestComponent implements OnInit {
         return;
     }
 
-    switch(header) {
+    switch(this.requestState) {
       case 'Approved':
         this.currentRequest.RequestStatusId = ItemStatus.Approved;
         endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
@@ -194,11 +210,17 @@ export class ApprovalRequestComponent implements OnInit {
 
   submitAttendanceUpdate() {
     if (this.attendance) {
-      this.http.put(`attendance/AttendanceRequestAction/${this.currentAttendanceDetail.AttendanceId}/${ItemStatus.Approved}`,
-      this.currentAttendanceDetail).then((response:ResponseModel) => {
-        if (response.ResponseBody) {
-          this.reBindAttendanceData(response.ResponseBody);
+      let statusId = this.getStatusId();
+      this.http.put(`attendance/AttendanceRequestAction/${this.currentRequest.AttendanceId}/${statusId}`,
+      this.currentRequest).then((response:ResponseModel) => {
+        if(response.ResponseBody) {
+          this.buildPage(response.ResponseBody);
+          this.isPageLoading = false;
+        } else {
+          ErrorToast("Fail to fetch data. Please contact to admin.");
         }
+
+        $('#leaveModal').modal('hide');
       }).catch(e => {
         this.isLoading = false;
       })
@@ -206,33 +228,11 @@ export class ApprovalRequestComponent implements OnInit {
       ErrorToast("Attendance detail not found. Please contact to admin.");
     }
   }
-
-  reBindAttendanceData(req: any) {
-    this.attendanceDetail = req;
-    if(this.attendance && this.attendance.length > 0) {
-      this.attendance.map(item => {
-        let detail:Array<any> = JSON.parse(item.AttendanceDetail);
-        if(detail && detail.length > 0) {
-          detail = detail.filter(x => x.AttendenceStatus !== 3 && x.PresentDayStatus === 2);
-          if(detail.length > 0) {
-            for (let i = 0; i < detail.length; i++) {
-              detail[i].AttendanceId = item.AttendanceId;
-            }
-
-            this.attendanceDetail.push(...detail);
-          }
-        }
-      });
-    }
-
-    $('#leaveModal').modal('hide');
-    this.isLoading = false;
-    Toast("Submitted Successfully");
-  }
 }
 
 export class ApprovalRequest {
   ApprovalRequestId: number = null;
+  AttendanceId: number = 0;
 	UserName:string = '';
   EmployeeName: string = '';
 	Message:string = '';

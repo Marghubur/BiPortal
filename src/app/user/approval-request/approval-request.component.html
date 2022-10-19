@@ -25,7 +25,7 @@
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifies</div>
+              <div class="col-md-3 fw-bold text-dark">Notifie</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
@@ -44,28 +44,6 @@
                     </div>
                     <div class="col-md-2">
                       Attendance approval Request
-                      <!-- <p class="mb-0">
-                        <span class="badge bg-primary">
-                          Project: &nbsp;
-                          <ng-container *ngIf="item.ProjectName == '' || item.ProjectName == null">
-                            NA
-                          </ng-container>
-                          <ng-container *ngIf="item.ProjectName != ''">
-                            {{item.ProjectName}}
-                          </ng-container>
-                        </span>
-                      </p> -->
-                      <!-- <p class="mb-0">
-                        <span class="badge bg-success">
-                          Manager &nbsp;
-                          <ng-container *ngIf="item.AssigneeId == 0">
-                            NA
-                          </ng-container>
-                          <ng-container *ngIf="item.AssigneeId != 0">
-                            {{item.AssigneeId}}
-                          </ng-container>
-                        </span>
-                      </p> -->
                     </div>
                     <div class="col-md-3">
                       {{item.EmployeeName}}
@@ -111,13 +89,14 @@
             </ng-container>
           </ng-template>
         </li>
+
         <li [ngbNavItem]="2">
           <a ngbNavLink>TimeSheet</a>
           <ng-template ngbNavContent>
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifies</div>
+              <div class="col-md-3 fw-bold text-dark">Notifie</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
@@ -173,13 +152,13 @@
                       </ng-container>
                     </div>
                     <div class="d-flex my-1">
-                      <a *ngIf="item.RequestStatusId != 5" (click)="openPopup('Rejected', item)" href="javascript:void(0)"
+                      <a *ngIf="item.RequestStatusId != 5" (click)="openTimesheetLeaveModal('Rejected', item)" href="javascript:void(0)"
                         class="text-danger btn-sm fw-bold"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
-                      <a *ngIf="item.RequestStatusId != 9" (click)="openPopup('Approved', item)" href="javascript:void(0)"
+                      <a *ngIf="item.RequestStatusId != 9" (click)="openTimesheetLeaveModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a (click)="openPopup('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
+                      <a (click)="openTimesheetLeaveModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
                           class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
                         Re-Assigne</a>
                     </div>
@@ -204,6 +183,7 @@
             </ng-container>
           </ng-template>
         </li>
+        
         <li [ngbNavItem]="3">
           <a ngbNavLink>Leave</a>
           <ng-template ngbNavContent>
@@ -260,13 +240,13 @@
                       </ng-container>
                     </div>
                     <div class="d-flex my-1">
-                      <a *ngIf="item.RequestStatusId != 5" href="javascript:void(0)" (click)="openPopup('Rejected', item)"
+                      <a *ngIf="item.RequestStatusId != 5" href="javascript:void(0)" (click)="openTimesheetLeaveModal('Rejected', item)"
                         class="text-danger fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
-                      <a *ngIf="item.RequestStatusId != 9" href="javascript:void(0)" (click)="openPopup('Approved', item)"
+                      <a *ngIf="item.RequestStatusId != 9" href="javascript:void(0)" (click)="openTimesheetLeaveModal('Approved', item)"
                         class="text-succes fw-bolds ms-2 btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a href="javascript:void(0)" (click)="openPopup('Othermember', item)" class="text-primar fw-boldy-c ms-2 btn-sm"><i
+                      <a href="javascript:void(0)" (click)="openTimesheetLeaveModal('Othermember', item)" class="text-primar fw-boldy-c ms-2 btn-sm"><i
                           class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
                         Re-Assigne</a>
                     </div>
@@ -307,7 +287,7 @@
       <div class="modal-header border-bottom-0 pt-4">
         <ng-container [ngSwitch]="requestState">
           <h5 *ngSwitchCase="'Rejected'" class="modal-title ps-4" id="leaveModalLabel">Rejection Request modal</h5>
-          <h5 *ngSwitchCase="'Approved'" class="modal-title ps-4" id="leaveModalLabel">Approvval request modal
+          <h5 *ngSwitchCase="'Approved'" class="modal-title ps-4" id="leaveModalLabel">Approval request modal
           </h5>
           <h5 *ngSwitchCase="'Othermember'" class="modal-title ps-4" id="leaveModalLabel">Assign to other member</h5>
         </ng-container>
@@ -317,7 +297,7 @@
         <div class="row bg-light py-3 border-bottom">
           <div class="col-md-6 fw-bold text-dark">Description</div>
           <div class="col-md-2 fw-bold text-dark">Type</div>
-          <div class="col-md-3 fw-bold text-dark">Notifies</div>
+          <div class="col-md-3 fw-bold text-dark">Notifie</div>
           <div class="col-md-1 fw-bold text-dark">State</div>
         </div>
         <div class="row py-3">
@@ -353,7 +333,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" (click)="submitRequest(requestState)">
+        <button type="button" class="btn btn-success" (click)="submitRequest()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Submit' }}
         </button>

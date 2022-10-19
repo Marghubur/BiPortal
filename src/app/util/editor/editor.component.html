@@ -1,0 +1,67 @@
+<div (focusout)="closePopOver()" (keydown.esc)="closePopOver()">
+    <div (contextmenu)="manipulateSection($event)">
+        <div>
+            <div class="content-dv enable-section overflow-none py-2 px-3" 
+                contenteditable="true"
+                id="content-container"
+                (keyup.enter)="addindex()"
+                (click)="enableSection($event)" 
+                (paste)="onPaste($event)"
+                (dblclick)="enableCurrentSection($event)"
+                (keypress.ctrl)="trackElement($event)"
+                [innerHTML]='innerHtmlText'>
+            </div>
+        </div>    
+    </div>
+</div>
+
+
+<!-- Right click event popover -->
+
+<div class="position-fixed c-po d-none" id="popoverTemplate">
+    <nav class ="navbar">
+      <ul class ="nav navbar-nav">
+        <ng-container *ngIf="target != null">
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" (click)="enableListItem()">
+              <i class="fa fa-list-ol pe-3" aria-hidden="true"></i>Add numeric list
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" (click)="enableBulletItem($event)">
+              <i class="fa fa-list-ul pe-3" aria-hidden="true"></i>Add bulleted points
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link">
+              <i class="fa fa-text-height pe-3" aria-hidden="true"></i>Insert paragraph above
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" (click)="addParagraphBelow()">
+              <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Insert paragraph below
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" (click)="closePopOver()" class="nav-link">
+              <i class="fa fa-external-link pe-3" aria-hidden="true"></i>Exit
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="target == null">
+          <li class="nav-item">
+            <a href="javascript:void(0)" (click)="addSubTitle()" class="nav-link">
+              <i class="fa fa-plus pe-3" aria-hidden="true"></i>Add Section
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" (click)="closePopOver()" class="nav-link">
+              <i class="fa fa-external-link pe-3" aria-hidden="true"></i>Exit
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </nav>
+</div>
+  
+  <!-- End -->

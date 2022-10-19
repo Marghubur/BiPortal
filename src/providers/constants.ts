@@ -185,5 +185,6 @@ export enum ItemStatus
     Generated = 6,
     Raised = 7,
     Submitted = 8,
-    Approved = 9
+    Approved = 9,
+    ReAssigned = 10
 }
