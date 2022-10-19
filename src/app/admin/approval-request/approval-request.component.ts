@@ -166,14 +166,14 @@ export class ApprovalRequestComponent implements OnInit {
     switch(header) {
       case 'Approved':
         this.currentRequest.RequestStatusId = ItemStatus.Approved;
-        endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
+        endPoint = `${endPoint}/LeaveRquestManagerAction/${this.itemStatus}`;
         break;
       case 'Rejected':
         this.currentRequest.RequestStatusId = ItemStatus.Rejected;
-        endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
+        endPoint = `${endPoint}/LeaveRquestManagerAction/${this.itemStatus}`;
         break;
       case 'Othermember':
-        endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
+        endPoint = `${endPoint}/LeaveRquestManagerAction/${this.itemStatus}`;
         break;
       default:
         throw 'Invalid option selected.';
