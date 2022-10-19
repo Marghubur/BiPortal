@@ -9,7 +9,8 @@ import { PaginationComponent } from '../pagination/pagination.component';
 import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
 import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component";
 import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component';
-import { ImageLoaderComponent } from './image-loader/image-loader.component'
+import { ImageLoaderComponent } from './image-loader/image-loader.component';
+import { EditorComponent } from './editor/editor.component'
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { ImageLoaderComponent } from './image-loader/image-loader.component'
     IautocompleteComponent,
     BreadcrumsComponent,
     PreLoadTableComponent,
-    ImageLoaderComponent
+    ImageLoaderComponent,
+    EditorComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { ImageLoaderComponent } from './image-loader/image-loader.component'
     BreadcrumsComponent,
     IautocompleteComponent,
     PreLoadTableComponent,
-    ImageLoaderComponent
+    ImageLoaderComponent,
+    EditorComponent
   ]
 })
 export class UtilModule { }

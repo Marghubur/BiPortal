@@ -71,7 +71,7 @@ export class ManageEmailtemplateComponent implements OnInit {
       SubjectLine: new FormControl(this.emailTemplateDetail.SubjectLine, [Validators.required]),
       Salutation: new FormControl(this.emailTemplateDetail.Salutation, [Validators.required]),
       EmailClosingStatement: new FormControl(this.emailTemplateDetail.EmailClosingStatement, [Validators.required]),
-      BodyContent: new FormControl(this.emailTemplateDetail.BodyContent, [Validators.required]),
+      BodyContent: new FormControl(this.emailTemplateDetail.BodyContent),
       EmailNote: new FormControl(this.emailTemplateDetail.EmailNote),
       SignatureDetail: new FormControl(this.emailTemplateDetail.SignatureDetail, [Validators.required]),
       ContactNo: new FormControl(this.emailTemplateDetail.ContactNo)
@@ -82,14 +82,26 @@ export class ManageEmailtemplateComponent implements OnInit {
     return this.emailTemplateForm.controls;
   }
 
+  buildBody() {
+    let bodyContent = this.emailTemplateForm.get("BodyContent").value; 
+    if(bodyContent != null && bodyContent != "") {
+      
+    } else {
+
+    }
+  }
+
   saveEmailTemplate() {
+    this.buildBody();
     this.isLoading = true;
     this.submitted = true;
-    if (this.emailTemplateForm.invalid) {
+    let data = document.getElementById("content-container").innerHTML;
+    if (this.emailTemplateForm.invalid || (data && data == '')) {
       this.isLoading = false;
       return;
     }
     let value = this.emailTemplateForm.value;
+    value.BodyContent = data;
     this.http.post("Email/InsertUpdateEmailTemplate", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.isLoading = false;
