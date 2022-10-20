@@ -272,10 +272,8 @@ export class TimesheetComponent implements OnInit {
       }
       let status = 0;
       let filterrecord = value.filter(x => x.PresentDate.getTime() >= this.distributedWeek[i][index].date.getTime() && x.PresentDate.getTime() <= this.distributedWeek[i][this.distributedWeek[i].length-1].date.getTime())
-      if (filterrecord.filter(x => x.TimesheetStatus == 2).length > 0)
-        status = 2;
-      else
-        status = 8;
+      if (filterrecord.length > 0)
+        status = filterrecord[0].TimesheetStatus;
       this.currentMonthWeek.push( {
         startWeek: this.distributedWeek[i][index].date,
         endWeek: this.distributedWeek[i][this.distributedWeek[i].length-1].date,
@@ -395,6 +393,10 @@ export class TimesheetComponent implements OnInit {
     this.http.post("timesheet/InsertUpdateTimesheet", records)
     .then(response => {
       if (response.ResponseBody) {
+        let index = response.ResponseBody.length;
+        let submitTimesheetWeek =  this.currentMonthWeek.find(x => x.endWeek.getTime() == new Date(response.ResponseBody[index-1].PresentDate).getTime());
+        submitTimesheetWeek.status = response.ResponseBody[index-1].TimesheetStatus;
+        $('#timesheetModal').modal('hide');
         Toast("Created/Updated successfully");
         //this.initForm(response.ResponseBody);
       } else {
@@ -656,7 +658,7 @@ export class TimesheetComponent implements OnInit {
         // this.toDate = new Date(`${this.fromDate.getFullYear()}-${this.fromDate.getMonth() + 1}-${this.fromDate.getDate()}`);
         // this.toDate.setDate(this.toDate.getDate() + 6);
         this.toDate = new Date();
-        if (this.toDate.getDay() == 4)
+        if (this.toDate.getDay() == 6)
           this.toDate.setDate(this.toDate.getDate() + 1);
 
         if (this.toDate.getDay() == 5)
@@ -701,6 +703,10 @@ export class TimesheetComponent implements OnInit {
   viewTimeSheet(index: number) {
     this.initForm(this.dailyTimesheetDetails, index);
     this.viewTimesheetWeek = this.currentMonthWeek[index];
+    if (this.viewTimesheetWeek.status != 6)
+      this.isSubmitted = true;
+    else
+      this.isSubmitted = false;
     $('#timesheetModal').modal('show')
   }
 

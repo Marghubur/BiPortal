@@ -49,7 +49,7 @@ export class ApprovalRequestComponent implements OnInit {
 
     loadData() {
       this.isPageLoading = true;
-      this.http.get(`Request/GetPendingRequests/${this.currentUser.ReportingManagerId}/${this.itemStatus}`).then(response => {
+      this.http.get(`AttendanceRequest/GetPendingRequests/${this.currentUser.ReportingManagerId}/${this.itemStatus}`).then(response => {
         if(response.ResponseBody) {
           this.buildPage(response.ResponseBody);
           this.isPageLoading = false;
@@ -94,7 +94,7 @@ export class ApprovalRequestComponent implements OnInit {
       switch(this.requestModal) {
         case 1: // leave
         case 2: // timesheet
-          this.actionForLeaveAndTimesheet();
+          this.actionForLeaveAndTimesheet(null);
         break;
         case 3: // attendance
           this.submitAttendanceUpdate();

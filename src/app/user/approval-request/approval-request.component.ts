@@ -25,7 +25,9 @@ export class ApprovalRequestComponent implements OnInit {
   currentUser: any = null;
   isPageLoading: boolean = false;
   attendance: any = null;
+  timesheet: any = null;
   attendanceDetail: Array<any> = [];
+  timesheetDetail: Array<any> = [];
   requestModal: number = 0;
 
   constructor(
@@ -48,7 +50,7 @@ export class ApprovalRequestComponent implements OnInit {
 
   loadData() {
     this.isPageLoading = true;
-    this.http.get(`Request/GetPendingRequests/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
+    this.http.get(`AttendanceRequest/GetPendingRequests/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
       if(response.ResponseBody) {
         this.buildPage(response.ResponseBody);
         this.isPageLoading = false;
@@ -70,8 +72,15 @@ export class ApprovalRequestComponent implements OnInit {
       this.leave_request = req.ApprovalRequest.filter(x => x.RequestType == 1);
     }
 
-    this.attendance = req.AttendaceTable;
-    this.filterAttendance();
+    if (req.AttendaceTable) {
+      this.attendance = req.AttendaceTable;
+      this.filterAttendance();
+    }
+
+    if (req.TimesheetTable) {
+      this.timesheet = req.TimesheetTable;
+      this.weekDistributed();
+    }
   }
 
   openTimesheetLeaveModal(state: string, request: any) {
@@ -108,6 +117,7 @@ export class ApprovalRequestComponent implements OnInit {
         this.filterAttendance();
         break;
       case 2:
+        this.weekDistributed();
         break;
       case 3:
         break;
@@ -137,6 +147,30 @@ export class ApprovalRequestComponent implements OnInit {
           }
         }
       });
+    }
+  }
+
+  weekDistributed() {
+    this.timesheetDetail = [];
+    if(this.timesheet && this.timesheet.length > 0) {
+      this.timesheet.map(item => {
+        let detail:Array<any> = JSON.parse(item.TimesheetMonthJson);
+        let index = 0;
+        while (index <detail.length) {
+          let increment = index + 7;
+          let data = detail.slice(index, increment);
+          data = data.filter(x => new Date(x.PresentDate).getMonth() == new Date().getMonth());
+          if (this.itemStatus > 0)
+            data = data.filter(x => x.TimesheetStatus === this.itemStatus);
+          else
+            data = data.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Pending || x.TimesheetStatus === ItemStatus.Rejected);
+          if (data.length > 0)
+            this.timesheetDetail.push(data);
+          //let totalTimeBurned = data.map(x => x.TotalMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
+          index=(index+7);
+        }
+      });
+
     }
   }
 
