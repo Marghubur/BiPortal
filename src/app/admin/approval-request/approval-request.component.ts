@@ -161,7 +161,7 @@ export class ApprovalRequestComponent implements OnInit {
       return statusId;
     }
 
-    actionForLeaveAndTimesheet() {
+    actionForLeaveAndTimesheet(header: string) {
       this.isLoading = true;
       let endPoint = '';
 
@@ -180,17 +180,17 @@ export class ApprovalRequestComponent implements OnInit {
           return;
       }
 
-      switch(this.requestState) {
+      switch(header) {
         case 'Approved':
           this.currentRequest.RequestStatusId = ItemStatus.Approved;
-          endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
+          endPoint = `${endPoint}/LeaveRquestManagerAction/${this.itemStatus}`;
           break;
         case 'Rejected':
           this.currentRequest.RequestStatusId = ItemStatus.Rejected;
-          endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
+          endPoint = `${endPoint}/LeaveRquestManagerAction/${this.itemStatus}`;
           break;
         case 'Othermember':
-          endPoint = `${endPoint}/ApprovalAction/${this.itemStatus}`;
+          endPoint = `${endPoint}/LeaveRquestManagerAction/${this.itemStatus}`;
           break;
         default:
           throw 'Invalid option selected.';
