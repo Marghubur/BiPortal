@@ -308,8 +308,9 @@
                           </a>
                         </td>
                         <td>
-                          <span *ngIf="item.status == 2"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Pending</span>
-                          <span *ngIf="item.status == 8"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
+                          <span *ngIf="item.status == 2"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Penidng</span>
+                          <span *ngIf="item.status == 9"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
+                          <span *ngIf="item.status != 9 && item.status"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
                         </td>
                       </tr>
                     </tbody>
