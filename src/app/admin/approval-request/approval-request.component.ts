@@ -28,6 +28,8 @@ export class ApprovalRequestComponent implements OnInit {
   attendanceDetail: Array<any> = [];
   currentAttendanceDetail: any = null;
   requestModal: number = 0;
+  requestUrl: string = "AttendanceRequest/GetManagerRequestedData";
+  timesheet: Array<any> = [];
 
   constructor(
     private http: AjaxService,
@@ -47,9 +49,13 @@ export class ApprovalRequestComponent implements OnInit {
       this.loadData();
     }
 
+    pagereload() {
+      this.loadData();
+    }
+
     loadData() {
       this.isPageLoading = true;
-      this.http.get(`AttendanceRequest/GetPendingRequests/${this.currentUser.ReportingManagerId}/${this.itemStatus}`).then(response => {
+      this.http.get(`${this.requestUrl}/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
         if(response.ResponseBody) {
           this.buildPage(response.ResponseBody);
           this.isPageLoading = false;
@@ -65,6 +71,7 @@ export class ApprovalRequestComponent implements OnInit {
     buildPage(req: any) {
       this.request = [];
       this.leave_request = [];
+      this.timesheet = [];
 
       if(req.ApprovalRequest) {
         this.request = req.ApprovalRequest.filter(x => x.RequestType == 2);
@@ -73,6 +80,14 @@ export class ApprovalRequestComponent implements OnInit {
 
       this.attendance = req.AttendaceTable;
       this.filterAttendance();
+
+      this.filterTimesheet(req.TimesheetTable);
+    }
+
+    filterTimesheet(timesheetData: any) {
+      if(timesheetData && timesheetData.length == 1) {
+        this.timesheet = JSON.parse(timesheetData[0].TimesheetMonthJson);
+      }
     }
 
     openTimesheetLeaveModal(state: string, request: any) {
@@ -104,13 +119,22 @@ export class ApprovalRequestComponent implements OnInit {
 
     filterRequest(e: any) {
       this.itemStatus = Number(e.target.value);
-      switch (this.active) {
-        case 1:
-          this.filterAttendance();
+      this.requestUrl = "AttendanceRequest/GetManagerRequestedData";
+      switch (this.itemStatus) {
+        case 0:
+          this.requestUrl = "AttendanceRequest/GetAllRequestedData";
+          this.loadData();
           break;
-        case 2:
-          break;
-        case 3:
+        default:
+          switch (this.active) {
+            case 1:
+              this.filterAttendance();
+              break;
+            case 2:
+              break;
+            case 3:
+              break;
+          }
           break;
       }
     }
