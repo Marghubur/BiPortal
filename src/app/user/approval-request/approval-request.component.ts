@@ -19,6 +19,7 @@ export class ApprovalRequestComponent implements OnInit {
   requestState: string = '';
   isLoading: boolean = false;
   currentRequest: ApprovalRequest = new ApprovalRequest();
+  currentTimesheet: Array<any> = [];
   managerList: autoCompleteModal = null;
   editedMessage: string = '';
   itemStatus: number = 0;
@@ -50,7 +51,7 @@ export class ApprovalRequestComponent implements OnInit {
 
   loadData() {
     this.isPageLoading = true;
-    this.http.get(`AttendanceRequest/GetPendingRequests/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
+    this.http.get(`AttendanceRequest/GetManagerRequestedData/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
       if(response.ResponseBody) {
         this.buildPage(response.ResponseBody);
         this.isPageLoading = false;
@@ -90,6 +91,12 @@ export class ApprovalRequestComponent implements OnInit {
     this.currentRequest = request;
   }
 
+  openTimesheetModal(state: string, request: any) {
+    $('#timesheetModal').modal('show');
+    this.requestState = state;
+    this.currentTimesheet = request;
+  }
+
   openAttendacneModal(state: string, request: any) {
     $('#leaveModal').modal('show');
     this.requestState = state;
@@ -101,13 +108,45 @@ export class ApprovalRequestComponent implements OnInit {
   submitRequest() {
     switch(this.requestModal) {
       case 1: // leave
-      case 2: // timesheet
-        this.actionForLeaveAndTimesheet();
+        this.submitActionForLeave();
       break;
       case 3: // attendance
-        this.submitAttendanceUpdate();
+        this.submitActionForAttendance();
       break;
     }
+  }
+
+  submitTimesheetRequest() {
+    this.isLoading = true;
+    let endPoint = '';
+
+    switch(this.requestState) {
+      case 'Approved':
+        this.currentRequest.RequestStatusId = ItemStatus.Approved;
+        endPoint = 'TimesheetRequest/ApproveTimesheet';
+        break;
+      case 'Rejected':
+        this.currentRequest.RequestStatusId = ItemStatus.Rejected;
+        endPoint = 'TimesheetRequest/RejectAction';
+        break;
+      case 'Othermember':
+        endPoint = 'TimesheetRequest/ReAssigneToOtherManager';
+        break;
+      default:
+        throw 'Invalid option selected.';
+        break;
+    }
+
+    this.http.put(endPoint, this.currentTimesheet).then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        this.buildPage(response.ResponseBody);
+        $('#timesheetModal').modal('hide');
+        Toast("Submitted Successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   filterRequest(e: any) {
@@ -164,8 +203,12 @@ export class ApprovalRequestComponent implements OnInit {
             data = data.filter(x => x.TimesheetStatus === this.itemStatus);
           else
             data = data.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Pending || x.TimesheetStatus === ItemStatus.Rejected);
-          if (data.length > 0)
+          if (data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+              data[i].TimesheetId = item.TimesheetId;
+            }
             this.timesheetDetail.push(data);
+          }
           //let totalTimeBurned = data.map(x => x.TotalMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
           index=(index+7);
         }
@@ -194,36 +237,21 @@ export class ApprovalRequestComponent implements OnInit {
     return statusId;
   }
 
-  actionForLeaveAndTimesheet() {
+  submitActionForLeave() {
     this.isLoading = true;
     let endPoint = '';
-
-    switch(this.active) {
-      case 1:
-        endPoint = `Request`;
-        break;
-      case 2:
-        endPoint = `Leave`;
-        break;
-      case 3:
-        WarningToast("Invalid tab selected");
-        return;
-      default:
-        WarningToast("Invalid tab selected");
-        return;
-    }
 
     switch(this.requestState) {
       case 'Approved':
         this.currentRequest.RequestStatusId = ItemStatus.Approved;
-        endPoint = `${endPoint}/LeaveRquestManagerAction/${this.itemStatus}`;
+        endPoint = `LeaveRequest/LeaveRquestManagerAction/${this.itemStatus}`;
         break;
       case 'Rejected':
         this.currentRequest.RequestStatusId = ItemStatus.Rejected;
-        endPoint = `${endPoint}/LeaveRquestManagerAction/${this.itemStatus}`;
+        endPoint = `LeaveRequest/LeaveRquestManagerAction/${this.itemStatus}`;
         break;
       case 'Othermember':
-        endPoint = `${endPoint}/LeaveRquestManagerAction/${this.itemStatus}`;
+        endPoint = `LeaveRequest/LeaveRquestManagerAction/${this.itemStatus}`;
         break;
       default:
         throw 'Invalid option selected.';
@@ -242,7 +270,7 @@ export class ApprovalRequestComponent implements OnInit {
     })
   }
 
-  submitAttendanceUpdate() {
+  submitActionForAttendance() {
     if (this.attendance) {
       let statusId = this.getStatusId();
       this.http.put(`attendance/AttendanceRequestAction/${this.currentRequest.AttendanceId}/${statusId}`,
