@@ -32,6 +32,7 @@ export class ApprovalRequestComponent implements OnInit {
   requestUrl: string = "AttendanceRequest/GetManagerRequestedData";
   timesheetDetail: Array<any> = [];
   currentTimesheet: Array<any> = [];
+  filterText: string = "Assigned to me";
 
   constructor(
     private http: AjaxService,
@@ -49,6 +50,18 @@ export class ApprovalRequestComponent implements OnInit {
       });
       this.itemStatus = 2;
       this.loadData();
+    }
+
+    updatePage(index: number) {
+      if(index == 1) {
+        this.requestUrl = "AttendanceRequest/GetManagerRequestedData";
+        this.filterText = "Assigned to me";
+        this.loadData();
+      } else {
+        this.requestUrl = "AttendanceRequest/GetAllRequestedData";
+        this.filterText = "All request(s)";
+        this.loadData();
+      }
     }
 
     pagereload() {
@@ -158,22 +171,14 @@ export class ApprovalRequestComponent implements OnInit {
     filterRequest(e: any) {
       this.itemStatus = Number(e.target.value);
       this.requestUrl = "AttendanceRequest/GetManagerRequestedData";
-      switch (this.itemStatus) {
-        case 0:
-          this.requestUrl = "AttendanceRequest/GetAllRequestedData";
-          this.loadData();
+      switch (this.active) {
+        case 1:
+          this.filterAttendance();
           break;
-        default:
-          switch (this.active) {
-            case 1:
-              this.filterAttendance();
-              break;
-            case 2:
-              this.weekDistributed();
-              break;
-            case 3:
-              break;
-          }
+        case 2:
+          this.weekDistributed();
+          break;
+        case 3:
           break;
       }
     }
