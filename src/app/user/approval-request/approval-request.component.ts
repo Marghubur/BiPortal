@@ -30,6 +30,7 @@ export class ApprovalRequestComponent implements OnInit {
   attendanceDetail: Array<any> = [];
   timesheetDetail: Array<any> = [];
   requestModal: number = 0;
+  attendanceUrl: string = null;
 
   constructor(
     private http: AjaxService,
@@ -105,12 +106,30 @@ export class ApprovalRequestComponent implements OnInit {
     this.currentRequest["EmployeeName"] = request.EmployeeName;
   }
 
+  buildAttendanceActionUrl() {
+    switch(this.requestState) {
+      case 'Approved':
+        this.currentRequest.RequestStatusId = ItemStatus.Approved;
+        this.attendanceUrl = 'AttendanceRequest/ApprovalAction';
+        break;
+      case 'Rejected':
+        this.currentRequest.RequestStatusId = ItemStatus.Rejected;
+        this.attendanceUrl = 'AttendanceRequest/RejectAction';
+        break;
+      case 'Othermember':
+        this.attendanceUrl = 'AttendanceRequest/ReAssigneToOtherManager';
+        break;
+    }
+  }
+
   submitRequest() {
+
     switch(this.requestModal) {
       case 1: // leave
         this.submitActionForLeave();
       break;
       case 3: // attendance
+      this.requestState
         this.submitActionForAttendance();
       break;
     }
@@ -272,8 +291,9 @@ export class ApprovalRequestComponent implements OnInit {
 
   submitActionForAttendance() {
     if (this.attendance) {
+      this.buildAttendanceActionUrl()
       let statusId = this.getStatusId();
-      this.http.put(`attendance/AttendanceRequestAction/${this.currentRequest.AttendanceId}/${statusId}`,
+      this.http.put(this.attendanceUrl,
       this.currentRequest).then((response:ResponseModel) => {
         if(response.ResponseBody) {
           this.buildPage(response.ResponseBody);
