@@ -2,12 +2,14 @@
   <div class="x_panel">
     <div class="x_header">
       <div class="x_header_title d-flex justify-content-between">
-        <h2 class=" fw-bold text-dark">Request</h2>
+        <div>
+          <h2 class=" fw-bold text-dark">Request</h2>
+        </div>
         <div class="d-flex align-items-center">
-          <div class="col-md-4">
+          <div class="">
             <label>2022&nbsp;&nbsp;/</label>
           </div>
-          <div class="col-md-9">
+          <div class="">
             <select class="form-select text-muted border-0">
               <option value="1">January</option>
               <option value="2">Febuary</option>
@@ -19,13 +21,25 @@
           </div>
         </div>
         <div class="d-flex">
-          <select class="form-select" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
+          <select class="form-select border-0 text-muted" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
             <option selected value="2">Pending</option>
             <option value="9">Approved</option>
             <option value="5">Rejected</option>
             <option value="0">All</option>
           </select>
-          <button class="btn btn-sm ms-2 btn-primary-c"><i class="fa fa-filter"></i></button>
+          <div class="row">
+            <div class="col">
+              <div ngbDropdown class="d-inline-block">
+                <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                  {{filterText}}
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem (click)="updatePage(1)">Assigned to me</button>
+                  <button ngbDropdownItem (click)="updatePage(2)">All request(s)</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
