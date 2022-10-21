@@ -3,6 +3,21 @@
     <div class="x_header">
       <div class="x_header_title d-flex justify-content-between">
         <h2 class=" fw-bold text-dark">Request</h2>
+        <div class="d-flex align-items-center">
+          <div class="col-md-4">
+            <label>2022&nbsp;&nbsp;/</label>
+          </div>
+          <div class="col-md-9">
+            <select class="form-select text-muted border-0">
+              <option value="1">January</option>
+              <option value="2">Febuary</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option selected value="9">September</option>
+              <option value="10">October</option>
+            </select>
+          </div>
+        </div>
         <div class="d-flex">
           <select class="form-select" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
             <option selected value="2">Pending</option>
@@ -14,8 +29,9 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="position-relative">
       <app-breadcrums></app-breadcrums>
+      <a href="javascript:void(0)" class="page-reload-icon"><i class="fa fa-refresh"></i></a>
     </div>
     <div class="mt-3">
       <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
@@ -126,13 +142,13 @@
                       </ng-container>
                     </div>
                     <div class="d-flex my-1">
-                      <a *ngIf="item.RequestStatusId != 5" (click)="openTimesheetLeaveModal('Rejected', item)" href="javascript:void(0)"
+                      <a *ngIf="item[0].TimesheetStatus!= 5" (click)="openTimesheetModal('Rejected', item)" href="javascript:void(0)"
                         class="text-danger btn-sm fw-bold"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
-                      <a *ngIf="item.RequestStatusId != 9" (click)="openTimesheetLeaveModal('Approved', item)" href="javascript:void(0)"
+                      <a *ngIf="item[0].TimesheetStatus != 9" (click)="openTimesheetModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a (click)="openTimesheetLeaveModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
+                      <a (click)="openTimesheetModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
                           class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
                         Re-Assigne</a>
                     </div>
@@ -308,6 +324,71 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" (click)="submitRequest()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Submit' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Timesheet Model -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="timesheetModal" tabindex="-1"
+  aria-labelledby="timesheetModalLabel" aria-hidden="true" *ngIf="currentTimesheet.length > 0">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0 pt-4">
+        <ng-container [ngSwitch]="requestState">
+          <h5 *ngSwitchCase="'Rejected'" class="modal-title ps-4" id="timesheetModalLabel">Rejection Request modal</h5>
+          <h5 *ngSwitchCase="'Approved'" class="modal-title ps-4" id="timesheetModalLabel">Approval request modal
+          </h5>
+          <h5 *ngSwitchCase="'Othermember'" class="modal-title ps-4" id="timesheetModalLabel">Assign to other member</h5>
+        </ng-container>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5">
+        <div class="row bg-light py-3 border-bottom">
+          <div class="col-md-6 fw-bold text-dark">Description</div>
+          <div class="col-md-2 fw-bold text-dark">Type</div>
+          <div class="col-md-3 fw-bold text-dark">Notifie</div>
+          <div class="col-md-1 fw-bold text-dark">State</div>
+        </div>
+        <div class="row py-3">
+          <div class="col-md-6">
+            <p class="mb-0 fw-bold fs-6">
+              Request by [{{currentTimesheet[0].EmployeeName}}]
+            </p>
+            <p class="mb-0 fw-bold fs-6">
+              <span class="fw-bold text-primary-c me-2">From: {{currentTimesheet[0].PresentDate | date}}</span>
+              <span class="fw-bold text-primary-c me-2">To: {{currentTimesheet[currentTimesheet.length-1].PresentDate | date}}</span>
+            </p>
+            <!-- <input type="text" class="form-control" name="message" [(ngModel)]="editedMessage" value="{{singleLeave.Message}}"> -->
+          </div>
+          <div class="col-md-2">
+            TimeSheet approval request
+          </div>
+          <div class="col-md-3">
+            {{currentTimesheet[0].EmployeeName}}
+            <p class="mb-0">{{currentTimesheet[0].Email}}</p>
+            <p class="mb-0">{{currentTimesheet[0].Mobile}}</p>
+          </div>
+          <div class="col-md-1">
+            <ng-container [ngSwitch]="currentTimesheet[0].TimesheetStatus">
+              <p *ngSwitchCase="2">Pending</p>
+              <p *ngSwitchCase="9">Approvval</p>
+              <p *ngSwitchCase="5">Rejected</p>
+            </ng-container>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3" *ngIf="requestState == 'Othermember'">
+          <label class="form-label">Reporting Manager</label>
+          <app-iautocomplete [data]="managerList">
+          </app-iautocomplete>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="submitTimesheetRequest()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Submit' }}
         </button>
