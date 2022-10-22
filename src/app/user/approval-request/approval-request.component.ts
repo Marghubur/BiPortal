@@ -142,18 +142,13 @@ export class ApprovalRequestComponent implements OnInit {
 
     switch(this.requestState) {
       case 'Approved':
-        this.currentRequest.RequestStatusId = ItemStatus.Approved;
         endPoint = 'TimesheetRequest/ApproveTimesheet';
         break;
       case 'Rejected':
-        this.currentRequest.RequestStatusId = ItemStatus.Rejected;
         endPoint = 'TimesheetRequest/RejectAction';
         break;
       case 'Othermember':
         endPoint = 'TimesheetRequest/ReAssigneToOtherManager';
-        break;
-      default:
-        throw 'Invalid option selected.';
         break;
     }
 

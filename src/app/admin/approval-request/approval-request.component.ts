@@ -29,7 +29,8 @@ export class ApprovalRequestComponent implements OnInit {
   attendanceDetail: Array<any> = [];
   currentAttendanceDetail: any = null;
   requestModal: number = 0;
-  requestUrl: string = "AttendanceRequest/GetManagerRequestedData";
+  controller: string = "AttendanceRequest";
+  requestUrl: string = null;
   timesheetDetail: Array<any> = [];
   currentTimesheet: Array<any> = [];
   filterText: string = "Assigned to me";
@@ -40,6 +41,7 @@ export class ApprovalRequestComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+      this.requestUrl = `${this.controller}/GetManagerRequestedData`;
       this.currentUser = this.userService.getInstance();
       this.managerList = new autoCompleteModal();
       this.managerList.data = [];
@@ -70,7 +72,7 @@ export class ApprovalRequestComponent implements OnInit {
 
     loadData() {
       this.isPageLoading = true;
-      this.http.get(`${this.requestUrl}/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
+      this.http.get(`${this.requestUrl}/${this.currentUser.UserId}`).then(response => {
         if(response.ResponseBody) {
           this.buildPage(response.ResponseBody);
           this.isPageLoading = false;
@@ -237,24 +239,14 @@ export class ApprovalRequestComponent implements OnInit {
       }
     }
 
-    getStatusId() {
-      let statusId: number = 0;
-      switch(this.requestState) {
-        case 'Approved':
-          statusId = ItemStatus.Approved;
-          break;
-        case 'Rejected':
-          statusId = ItemStatus.Rejected;
-          break;
-        case 'Othermember':
-          statusId = ItemStatus.ReAssigned
-          break;
-        default:
-          throw 'Invalid option selected.';
+    getFilterType() {
+      let assignTo: number = 0;
+      switch(this.filterText) {
+        case 'Assigned to me':
+          assignTo = 1;
           break;
       }
-
-      return statusId;
+      return assignTo;
     }
 
     submitActionForLeave() {
@@ -292,8 +284,8 @@ export class ApprovalRequestComponent implements OnInit {
 
     submitActionForAttendance() {
       if (this.attendance) {
-        let statusId = this.getStatusId();
-        this.http.put(`attendance/AttendanceRequestAction/${this.currentRequest.AttendanceId}/${statusId}`,
+        let filterId = this.getFilterType();
+        this.http.put(`${this.controller}/ApproveAttendance/${filterId}`,
         this.currentRequest).then((response:ResponseModel) => {
           if(response.ResponseBody) {
             this.buildPage(response.ResponseBody);
