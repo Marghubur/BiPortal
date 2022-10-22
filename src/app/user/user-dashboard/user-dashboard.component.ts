@@ -18,7 +18,7 @@ export class UserDashboardComponent implements OnInit {
   userName: string = "";
   isPageReady: boolean = false;
   employeeDetails: any = null;
-  allocatedClients: Array<any> = [];
+  allocatedClients: any = null;
   paySlipsmonth: Array<any> = [];
   currentPayslip: any = null;
   isActive: boolean = false;
@@ -31,14 +31,15 @@ export class UserDashboardComponent implements OnInit {
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     let userDetail = this.user.getInstance() as UserDetail;
     if(expiredOn === null || expiredOn === "")
-    userDetail["TokenExpiryDuration"] = new Date();
+      userDetail["TokenExpiryDuration"] = new Date();
     else
-    userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+      userDetail["TokenExpiryDuration"] = new Date(expiredOn);
     let Master = this.local.get(null);
     if(Master !== null && Master !== "") {
       userDetail = Master["UserDetail"];
       this.employeeUid = userDetail.UserId;
-      this.getEmpDetails();
+      this.employeeDetails = userDetail;
+      this.getAllocateCompany();
     } else {
       Toast("Invalid user. Please login again.")
     }
@@ -49,6 +50,13 @@ export class UserDashboardComponent implements OnInit {
         month: this.paySlipsmonth[0].months,
         year: this.paySlipsmonth[0].years,
       }
+  }
+
+  getAllocateCompany() {
+    let data = this.local.findRecord("Companies");
+    if (data) {
+      this.allocatedClients = data.find(x => x.CompanyId == this.employeeDetails.CompanyId);
+    }
   }
 
   getAllPayslips() {
@@ -70,24 +78,6 @@ export class UserDashboardComponent implements OnInit {
       })
       i++;
     };
-  }
-
-  getEmpDetails() {
-    this.isPageReady = false;
-    this.http.get(`Employee/GetManageEmployeeDetail/${this.employeeUid}`)
-    .then(response => {
-      if (response.ResponseBody) {
-        if (response.ResponseBody) {
-          let data = response.ResponseBody;
-          this.employeeDetails = data.Employees[0];
-          this.allocatedClients = data.AllocatedClients;
-          Toast("Dashboard is loading ......");
-          this.isPageReady = true;
-        }
-      } else {
-        Toast("Fail to inser/update, please contact to admin.");
-      }
-    })
   }
 
   paySlipsChart() {

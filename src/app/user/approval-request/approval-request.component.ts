@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { data } from 'jquery';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -14,11 +15,10 @@ declare var $: any;
 })
 export class ApprovalRequestComponent implements OnInit {
   active = 1;
-  request: Array<ApprovalRequest> = [];
-  leave_request: Array<ApprovalRequest> = [];
+  leave_request: any = null;
   requestState: string = '';
   isLoading: boolean = false;
-  currentRequest: ApprovalRequest = new ApprovalRequest();
+  currentRequest: any = null;
   currentTimesheet: Array<any> = [];
   managerList: autoCompleteModal = null;
   editedMessage: string = '';
@@ -29,6 +29,7 @@ export class ApprovalRequestComponent implements OnInit {
   timesheet: any = null;
   attendanceDetail: Array<any> = [];
   timesheetDetail: Array<any> = [];
+  leaveDeatil: Array<any> = [];
   requestModal: number = 0;
 
   constructor(
@@ -65,12 +66,11 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   buildPage(req: any) {
-    this.request = [];
     this.leave_request = [];
 
     if(req.ApprovalRequest) {
-      this.request = req.ApprovalRequest.filter(x => x.RequestType == 2);
-      this.leave_request = req.ApprovalRequest.filter(x => x.RequestType == 1);
+      this.leave_request = req.ApprovalRequest;
+      this.filterLeave();
     }
 
     if (req.AttendaceTable) {
@@ -89,6 +89,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.requestState = state;
     this.requestModal = 1; // leave
     this.currentRequest = request;
+    this.currentRequest["EmployeeName"] = request.FirstName + " " + request.LastName;
   }
 
   openTimesheetModal(state: string, request: any) {
@@ -159,6 +160,7 @@ export class ApprovalRequestComponent implements OnInit {
         this.weekDistributed();
         break;
       case 3:
+        this.filterLeave();
         break;
     }
   }
@@ -186,6 +188,19 @@ export class ApprovalRequestComponent implements OnInit {
           }
         }
       });
+    }
+  }
+
+  filterLeave() {
+    this.leaveDeatil = [];
+    if (this.leave_request && this.leave_request.length > 0) {
+      let detail = [];
+      if (this.itemStatus > 0)
+        detail = this.leave_request.filter(x => x.RequestStatusId === this.itemStatus);
+      else
+        detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
+      if (detail && detail.length > 0)
+        this.leaveDeatil = detail;
     }
   }
 
@@ -244,22 +259,28 @@ export class ApprovalRequestComponent implements OnInit {
     switch(this.requestState) {
       case 'Approved':
         this.currentRequest.RequestStatusId = ItemStatus.Approved;
-        endPoint = `LeaveRequest/LeaveRquestManagerAction/${this.itemStatus}`;
+        endPoint = 'LeaveRequest/ApprovalAction';
         break;
       case 'Rejected':
         this.currentRequest.RequestStatusId = ItemStatus.Rejected;
-        endPoint = `LeaveRequest/LeaveRquestManagerAction/${this.itemStatus}`;
+        endPoint = 'LeaveRequest/RejectAction';
         break;
       case 'Othermember':
-        endPoint = `LeaveRequest/LeaveRquestManagerAction/${this.itemStatus}`;
+        endPoint = 'LeaveRequest/ReAssigneToOtherManager';
         break;
       default:
         throw 'Invalid option selected.';
         break;
     }
-
-    this.http.put(endPoint, this.currentRequest).then((response:ResponseModel) => {
+    let currentResponse = {
+      LeaveFromDay: this.currentRequest.FromDate,
+      LeaveToDay: this.currentRequest.ToDate,
+      EmployeeId: this.currentRequest.EmployeeId,
+      LeaveRequestNotificationId : this.currentRequest.LeaveRequestNotificationId,
+    }
+    this.http.put(endPoint, currentResponse).then((response:ResponseModel) => {
       if (response.ResponseBody) {
+        this.buildPage(response.ResponseBody);
         $('#leaveModal').modal('hide');
         this.isLoading = false;
         Toast("Submitted Successfully");
@@ -277,6 +298,7 @@ export class ApprovalRequestComponent implements OnInit {
       this.currentRequest).then((response:ResponseModel) => {
         if(response.ResponseBody) {
           this.buildPage(response.ResponseBody);
+        $('#leaveModal').modal('hide');
           this.isPageLoading = false;
         } else {
           ErrorToast("Fail to fetch data. Please contact to admin.");
@@ -293,7 +315,7 @@ export class ApprovalRequestComponent implements OnInit {
 }
 
 export class ApprovalRequest {
-  ApprovalRequestId: number = null;
+  LeaveRequestNotificationId: number = null;
   AttendanceId: number = 0;
 	UserName:string = '';
   EmployeeName: string = '';
