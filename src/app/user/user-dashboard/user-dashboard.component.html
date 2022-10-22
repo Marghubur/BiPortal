@@ -1,12 +1,10 @@
 <div class="main-container">
   <div class="x_panel">
-    <div class="x_header" *ngIf="isPageReady">
+    <div class="x_header">
       <div class="x_header_title">
-        <h2 class="fw-bold text-dark">Welcome {{employeeDetails.FirstName}}!</h2>
+        <h2 class="fw-bold text-dark">Welcome {{employeeDetails.FirstName}} !</h2>
       </div>
-      <ng-container *ngFor="let item of allocatedClients |slice:0:1">
-        <h6>Developer at {{item.ClientName}}</h6>
-      </ng-container>
+      <h6>Developer at {{allocatedClients.CompanyName}}</h6>
     </div>
     <div class="bg-light d-flex p-3">
       <i class="fa fa-envelope text-dark fa-2x pe-4 pt-1"></i>
