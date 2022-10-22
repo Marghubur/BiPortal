@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { data } from 'jquery';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -14,7 +15,7 @@ declare var $: any;
 })
 export class ApprovalRequestComponent implements OnInit {
   active = 1;
-  leave_request: Array<any> = [];
+  leave_request: any = null;
   requestState: string = '';
   isLoading: boolean = false;
   currentRequest: any = null;
@@ -28,6 +29,7 @@ export class ApprovalRequestComponent implements OnInit {
   timesheet: any = null;
   attendanceDetail: Array<any> = [];
   timesheetDetail: Array<any> = [];
+  leaveDeatil: Array<any> = [];
   requestModal: number = 0;
 
   constructor(
@@ -68,6 +70,7 @@ export class ApprovalRequestComponent implements OnInit {
 
     if(req.ApprovalRequest) {
       this.leave_request = req.ApprovalRequest;
+      this.filterLeave();
     }
 
     if (req.AttendaceTable) {
@@ -157,6 +160,7 @@ export class ApprovalRequestComponent implements OnInit {
         this.weekDistributed();
         break;
       case 3:
+        this.filterLeave();
         break;
     }
   }
@@ -184,6 +188,19 @@ export class ApprovalRequestComponent implements OnInit {
           }
         }
       });
+    }
+  }
+
+  filterLeave() {
+    this.leaveDeatil = [];
+    if (this.leave_request && this.leave_request.length > 0) {
+      let detail = [];
+      if (this.itemStatus > 0)
+        detail = this.leave_request.filter(x => x.RequestStatusId === this.itemStatus);
+      else
+        detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
+      if (detail && detail.length > 0)
+        this.leaveDeatil = detail;
     }
   }
 
