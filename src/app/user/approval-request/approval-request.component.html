@@ -230,13 +230,13 @@
                       </ng-container>
                     </div>
                     <div class="d-flex my-1">
-                      <a *ngIf="item.RequestStatusId!= 5" (click)="openTimesheetLeaveModal('Rejected', item)" href="javascript:void(0)"
+                      <a *ngIf="item.RequestStatusId!= 5" (click)="openLeaveModal('Rejected', item)" href="javascript:void(0)"
                         class="text-danger btn-sm fw-bold"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
-                      <a *ngIf="item.RequestStatusId != 9" (click)="openTimesheetLeaveModal('Approved', item)" href="javascript:void(0)"
+                      <a *ngIf="item.RequestStatusId != 9" (click)="openLeaveModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a (click)="openTimesheetLeaveModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
+                      <a (click)="openLeaveModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
                           class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
                         Re-Assigne</a>
                     </div>
@@ -310,7 +310,7 @@
           <div class="col-md-1">
             <ng-container [ngSwitch]="currentRequest.RequestStatusId">
               <p *ngSwitchCase="2">Pending</p>
-              <p *ngSwitchCase="9">Approvval</p>
+              <p *ngSwitchCase="9">Approved</p>
               <p *ngSwitchCase="5">Rejected</p>
             </ng-container>
           </div>

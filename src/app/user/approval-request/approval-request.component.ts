@@ -84,7 +84,7 @@ export class ApprovalRequestComponent implements OnInit {
     }
   }
 
-  openTimesheetLeaveModal(state: string, request: any) {
+  openLeaveModal(state: string, request: any) {
     $('#leaveModal').modal('show');
     this.requestState = state;
     this.requestModal = 1; // leave
@@ -124,7 +124,6 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   submitRequest() {
-
     switch(this.requestModal) {
       case 1: // leave
         this.submitActionForLeave();
@@ -134,34 +133,6 @@ export class ApprovalRequestComponent implements OnInit {
         this.submitActionForAttendance();
       break;
     }
-  }
-
-  submitTimesheetRequest() {
-    this.isLoading = true;
-    let endPoint = '';
-
-    switch(this.requestState) {
-      case 'Approved':
-        endPoint = 'TimesheetRequest/ApproveTimesheet';
-        break;
-      case 'Rejected':
-        endPoint = 'TimesheetRequest/RejectAction';
-        break;
-      case 'Othermember':
-        endPoint = 'TimesheetRequest/ReAssigneToOtherManager';
-        break;
-    }
-
-    this.http.put(endPoint, this.currentTimesheet).then((response:ResponseModel) => {
-      if (response.ResponseBody) {
-        this.buildPage(response.ResponseBody);
-        $('#timesheetModal').modal('hide');
-        Toast("Submitted Successfully");
-        this.isLoading = false;
-      }
-    }).catch(e => {
-      this.isLoading = false;
-    })
   }
 
   filterRequest(e: any) {
@@ -258,12 +229,36 @@ export class ApprovalRequestComponent implements OnInit {
       case 'Othermember':
         statusId = ItemStatus.ReAssigned
         break;
-      default:
-        throw 'Invalid option selected.';
+    }
+    return statusId;
+  }
+
+  submitTimesheetRequest() {
+    this.isLoading = true;
+    let endPoint = '';
+
+    switch(this.requestState) {
+      case 'Approved':
+        endPoint = 'TimesheetRequest/ApproveTimesheet';
+        break;
+      case 'Rejected':
+        endPoint = 'TimesheetRequest/RejectAction';
+        break;
+      case 'Othermember':
+        endPoint = 'TimesheetRequest/ReAssigneToOtherManager';
         break;
     }
 
-    return statusId;
+    this.http.put(endPoint, this.currentTimesheet).then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        this.buildPage(response.ResponseBody);
+        $('#timesheetModal').modal('hide');
+        Toast("Submitted Successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   submitActionForLeave() {
@@ -306,6 +301,7 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   submitActionForAttendance() {
+    this.isLoading = true;
     if (this.attendance) {
       this.buildAttendanceActionUrl()
       let statusId = this.getStatusId();
@@ -318,7 +314,7 @@ export class ApprovalRequestComponent implements OnInit {
         } else {
           ErrorToast("Fail to fetch data. Please contact to admin.");
         }
-
+        this.isLoading = false;
         $('#leaveModal').modal('hide');
       }).catch(e => {
         this.isLoading = false;
