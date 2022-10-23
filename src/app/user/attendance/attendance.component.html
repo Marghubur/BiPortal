@@ -97,39 +97,42 @@
                               <span class=" ms-2" *ngSwitchCase="2">Waiting..</span>
                               <span class=" ms-2" *ngSwitchCase="1">Not applied</span>
                               <span class=" ms-2" *ngSwitchCase="0">-</span>
+                              <span class=" ms-2" *ngSwitchCase="5">00:00</span>
                               <span class=" ms-2" *ngSwitchCase="9">
                                 <i class="fa fa-check pe-2 text-success"></i> On Time
                               </span>
                             </div>
                           </ng-container>
                         </td>
-                        <td>
-                          <span class=" ms-2" [ngSwitch]="item.PresentDayStatus">
-                            <span class="ms-2">
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
-                              *ngSwitchCase = "2">
-                                <i class="fa fa-clock-o pe-2 text-warning"></i> Waiting...
-                              </div>
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
-                              *ngSwitchCase = "0">
-                                <i class="fa fa-clock-o pe-2 text-warning"></i> Not Applied
-                              </div>
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
-                              *ngSwitchCase = "3">
-                                <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
-                              </div>
-                              <div placement="top" ngbTooltip="waiting" aria-expanded="false"
-                              *ngSwitchCase = "9">
-                                <i class="fa fa-check-square-o pe-2 text-success"></i> Approved
-                              </div>
-                            </span>
-                          </span>
+                        <td class="align-middle">
+                          <div class=" ms-2" [ngSwitch]="item.PresentDayStatus">
+                            <div placement="top" ngbTooltip="waiting" aria-expanded="false"
+                            *ngSwitchCase = "2">
+                              <i class="fa fa-clock-o pe-2 text-warning"></i> Waiting...
+                            </div>
+                            <div placement="top" ngbTooltip="Not Applied" aria-expanded="false"
+                            *ngSwitchCase = "0">
+                              <i class="fa fa-clock-o pe-2 text-warning"></i> Not Applied
+                            </div>
+                            <div placement="top" ngbTooltip="Weekend" aria-expanded="false"
+                            *ngSwitchCase = "3">
+                              <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
+                            </div>
+                            <div placement="top" ngbTooltip="Approved" aria-expanded="false"
+                            *ngSwitchCase = "9">
+                              <i class="fa fa-check-square-o pe-2 text-success"></i> Approved
+                            </div>
+                            <div placement="top" ngbTooltip="Rejected" aria-expanded="false"
+                            *ngSwitchCase = "5">
+                              <i class="fa fa-close pe-2 text-danger"></i> Rejected
+                            </div>
+                          </div>
                         </td>
                         <td class="align-middle">
                           <div class="d-flex align-items-center">
-                            <div class="col" *ngIf="item.PresentDayStatus == 0">
+                            <div class="col" *ngIf="item.PresentDayStatus == 0 || item.PresentDayStatus == 5">
                               <div ngbDropdown class="d-inline-block">
-                                <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Absent"
+                                <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Apply"
                                   id="dropdownBasic1" ngbDropdownToggle>
                                   <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                 </button>
@@ -164,6 +167,7 @@
                                 <i class="fa fa-clock-o zoom-2 text-warning" aria-hidden="true"></i>
                               </div>
                             </span>
+
                           </div>
                         </td>
                       </tr>
