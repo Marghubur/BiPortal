@@ -18,7 +18,7 @@ export class ApprovalRequestComponent implements OnInit {
   leave_request: Array<ApprovalRequest> = [];
   requestState: string = '';
   isLoading: boolean = false;
-  currentRequest: ApprovalRequest = new ApprovalRequest();
+  currentRequest: any = null;
   managerList: autoCompleteModal = null;
   editedMessage: string = '';
   itemStatus: number = 0;
@@ -29,11 +29,15 @@ export class ApprovalRequestComponent implements OnInit {
   attendanceDetail: Array<any> = [];
   currentAttendanceDetail: any = null;
   requestModal: number = 0;
-  controller: string = "AttendanceRequest";
+  attendanceController: string = "AttendanceRequest";
+  leaveController: string = "LeaveRequest";
+  timesheetController: string = "TimesheetRequest";
   requestUrl: string = null;
   timesheetDetail: Array<any> = [];
+  leaveDeatil: Array<any> = [];
   currentTimesheet: Array<any> = [];
   filterText: string = "Assigned to me";
+  filterId: number = 0;
 
   constructor(
     private http: AjaxService,
@@ -41,7 +45,7 @@ export class ApprovalRequestComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-      this.requestUrl = `${this.controller}/GetManagerRequestedData`;
+      this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
       this.currentUser = this.userService.getInstance();
       this.managerList = new autoCompleteModal();
       this.managerList.data = [];
@@ -56,11 +60,11 @@ export class ApprovalRequestComponent implements OnInit {
 
     updatePage(index: number) {
       if(index == 1) {
-        this.requestUrl = "AttendanceRequest/GetManagerRequestedData";
+        this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
         this.filterText = "Assigned to me";
         this.loadData();
       } else {
-        this.requestUrl = "AttendanceRequest/GetAllRequestedData";
+        this.requestUrl = `${this.attendanceController}/GetAllRequestedData`;
         this.filterText = "All request(s)";
         this.loadData();
       }
@@ -90,8 +94,8 @@ export class ApprovalRequestComponent implements OnInit {
       this.leave_request = [];
 
       if(req.ApprovalRequest) {
-        this.request = req.ApprovalRequest.filter(x => x.RequestType == 2);
-        this.leave_request = req.ApprovalRequest.filter(x => x.RequestType == 1);
+        this.leave_request = req.ApprovalRequest;
+        this.filterLeave();
       }
 
       if (req.AttendaceTable) {
@@ -105,11 +109,12 @@ export class ApprovalRequestComponent implements OnInit {
       }
     }
 
-    openTimesheetLeaveModal(state: string, request: any) {
+    openLeaveModal(state: string, request: any) {
       $('#leaveModal').modal('show');
       this.requestState = state;
       this.requestModal = 1; // leave
       this.currentRequest = request;
+      this.currentRequest["EmployeeName"] = request.FirstName + " " + request.LastName;
     }
 
     openTimesheetModal(state: string, request: any) {
@@ -137,42 +142,9 @@ export class ApprovalRequestComponent implements OnInit {
       }
     }
 
-    submitTimesheetRequest() {
-      this.isLoading = true;
-      let endPoint = '';
-
-      switch(this.requestState) {
-        case 'Approved':
-          this.currentRequest.RequestStatusId = ItemStatus.Approved;
-          endPoint = 'TimesheetRequest/ApproveTimesheet';
-          break;
-        case 'Rejected':
-          this.currentRequest.RequestStatusId = ItemStatus.Rejected;
-          endPoint = 'TimesheetRequest/RejectAction';
-          break;
-        case 'Othermember':
-          endPoint = 'TimesheetRequest/ReAssigneToOtherManager';
-          break;
-        default:
-          throw 'Invalid option selected.';
-          break;
-      }
-
-      this.http.put(endPoint, this.currentTimesheet).then((response:ResponseModel) => {
-        if (response.ResponseBody) {
-          this.buildPage(response.ResponseBody);
-          $('#timesheetModal').modal('hide');
-          Toast("Submitted Successfully");
-          this.isLoading = false;
-        }
-      }).catch(e => {
-        this.isLoading = false;
-      })
-    }
-
     filterRequest(e: any) {
       this.itemStatus = Number(e.target.value);
-      this.requestUrl = "AttendanceRequest/GetManagerRequestedData";
+      this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
       switch (this.active) {
         case 1:
           this.filterAttendance();
@@ -181,6 +153,7 @@ export class ApprovalRequestComponent implements OnInit {
           this.weekDistributed();
           break;
         case 3:
+          this.filterLeave();
           break;
       }
     }
@@ -208,6 +181,19 @@ export class ApprovalRequestComponent implements OnInit {
             }
           }
         });
+      }
+    }
+
+    filterLeave() {
+      this.leaveDeatil = [];
+      if (this.leave_request && this.leave_request.length > 0) {
+        let detail = [];
+        if (this.itemStatus > 0)
+          detail = this.leave_request.filter(x => x.RequestStatusId === this.itemStatus);
+        else
+          detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
+        if (detail && detail.length > 0)
+          this.leaveDeatil = detail;
       }
     }
 
@@ -240,13 +226,12 @@ export class ApprovalRequestComponent implements OnInit {
     }
 
     getFilterType() {
-      let assignTo: number = 0;
+      this.filterId = 0;
       switch(this.filterText) {
         case 'Assigned to me':
-          assignTo = 1;
+          this.filterId = 1;
           break;
       }
-      return assignTo;
     }
 
     submitActionForLeave() {
@@ -255,22 +240,24 @@ export class ApprovalRequestComponent implements OnInit {
 
       switch(this.requestState) {
         case 'Approved':
-          this.currentRequest.RequestStatusId = ItemStatus.Approved;
-          endPoint = `LeaveRequest/LeaveRquestManagerAction/${this.itemStatus}`;
+          endPoint = `${this.leaveController}/ApproveLeaveRequest`;
           break;
         case 'Rejected':
-          this.currentRequest.RequestStatusId = ItemStatus.Rejected;
-          endPoint = `LeaveRequest/LeaveRquestManagerAction/${this.itemStatus}`;
+          endPoint = `${this.leaveController}/RejectLeaveRequest`;
           break;
         case 'Othermember':
-          endPoint = `LeaveRequest/LeaveRquestManagerAction/${this.itemStatus}`;
-          break;
-        default:
-          throw 'Invalid option selected.';
+          endPoint = `${this.leaveController}/ReAssigneLeaveRequest`;
           break;
       }
 
-      this.http.put(endPoint, this.currentRequest).then((response:ResponseModel) => {
+      let currentResponse = {
+        LeaveFromDay: this.currentRequest.FromDate,
+        LeaveToDay: this.currentRequest.ToDate,
+        EmployeeId: this.currentRequest.EmployeeId,
+        LeaveRequestNotificationId : this.currentRequest.LeaveRequestNotificationId,
+      }
+
+      this.http.put(`${endPoint}/${this.filterId}`, currentResponse).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           $('#leaveModal').modal('hide');
           this.isLoading = false;
@@ -282,10 +269,50 @@ export class ApprovalRequestComponent implements OnInit {
       })
     }
 
+    submitTimesheetRequest() {
+      this.isLoading = true;
+      let endPoint = '';
+
+      switch(this.requestState) {
+        case 'Approved':
+          endPoint = `${this.timesheetController}/ApproveTimesheetRequest`;
+          break;
+        case 'Rejected':
+          endPoint = `${this.timesheetController}/RejectTimesheetRequest`;
+          break;
+        case 'Othermember':
+          endPoint = `${this.timesheetController}/ReAssigneTimesheetRequest`;
+          break;
+      }
+
+      this.http.put(`${endPoint}/${this.filterId}`, this.currentTimesheet).then((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          this.buildPage(response.ResponseBody);
+          $('#timesheetModal').modal('hide');
+          Toast("Submitted Successfully");
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
+
     submitActionForAttendance() {
       if (this.attendance) {
-        let filterId = this.getFilterType();
-        this.http.put(`${this.controller}/ApproveAttendance/${filterId}`,
+        let endPoint = "";
+        switch(this.requestState) {
+          case 'Approved':
+            endPoint = `${this.attendanceController}/ApproveAttendanceRequest`;
+            break;
+          case 'Rejected':
+            endPoint = `${this.attendanceController}/RejectAttendanceRequest`;
+            break;
+          case 'Othermember':
+            endPoint = `${this.attendanceController}/ReAssigneAttendanceRequest`;
+            break;
+        }
+
+        this.http.put(`${endPoint}/${this.filterId}`,
         this.currentRequest).then((response:ResponseModel) => {
           if(response.ResponseBody) {
             this.buildPage(response.ResponseBody);
