@@ -84,6 +84,10 @@ export class ApprovalRequestComponent implements OnInit {
     }
   }
 
+  reloadPage() {
+    this.loadData();
+  }
+
   openLeaveModal(state: string, request: any) {
     $('#leaveModal').modal('show');
     this.requestState = state;
@@ -132,6 +136,21 @@ export class ApprovalRequestComponent implements OnInit {
       this.requestState
         this.submitActionForAttendance();
       break;
+    }
+  }
+
+  changeTab() {
+    this.itemStatus = ItemStatus.Pending;
+    switch (this.active) {
+      case 1:
+        this.filterAttendance();
+        break;
+      case 2:
+        this.weekDistributed();
+        break;
+      case 3:
+        this.filterLeave();
+        break;
     }
   }
 
@@ -267,11 +286,9 @@ export class ApprovalRequestComponent implements OnInit {
 
     switch(this.requestState) {
       case 'Approved':
-        this.currentRequest.RequestStatusId = ItemStatus.Approved;
         endPoint = 'LeaveRequest/ApprovalAction';
         break;
       case 'Rejected':
-        this.currentRequest.RequestStatusId = ItemStatus.Rejected;
         endPoint = 'LeaveRequest/RejectAction';
         break;
       case 'Othermember':
@@ -293,7 +310,6 @@ export class ApprovalRequestComponent implements OnInit {
         $('#leaveModal').modal('hide');
         this.isLoading = false;
         Toast("Submitted Successfully");
-        this.buildPage(response.ResponseBody);
       }
     }).catch(e => {
       this.isLoading = false;
@@ -304,12 +320,9 @@ export class ApprovalRequestComponent implements OnInit {
     this.isLoading = true;
     if (this.attendance) {
       this.buildAttendanceActionUrl()
-      let statusId = this.getStatusId();
-      this.http.put(this.attendanceUrl,
-      this.currentRequest).then((response:ResponseModel) => {
+      this.http.put(this.attendanceUrl,this.currentRequest).then((response:ResponseModel) => {
         if(response.ResponseBody) {
           this.buildPage(response.ResponseBody);
-        $('#leaveModal').modal('hide');
           this.isPageLoading = false;
         } else {
           ErrorToast("Fail to fetch data. Please contact to admin.");
