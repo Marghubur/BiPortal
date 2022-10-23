@@ -142,6 +142,21 @@ export class ApprovalRequestComponent implements OnInit {
       }
     }
 
+    changeTab() {
+      this.itemStatus = ItemStatus.Pending;
+      switch (this.active) {
+        case 1:
+          this.filterAttendance();
+          break;
+        case 2:
+          this.weekDistributed();
+          break;
+        case 3:
+          this.filterLeave();
+          break;
+      }
+    }
+
     filterRequest(e: any) {
       this.itemStatus = Number(e.target.value);
       this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
@@ -221,7 +236,6 @@ export class ApprovalRequestComponent implements OnInit {
             index=(index+7);
           }
         });
-
       }
     }
 
@@ -259,10 +273,10 @@ export class ApprovalRequestComponent implements OnInit {
 
       this.http.put(`${endPoint}/${this.filterId}`, currentResponse).then((response:ResponseModel) => {
         if (response.ResponseBody) {
+          this.buildPage(response.ResponseBody);
           $('#leaveModal').modal('hide');
           this.isLoading = false;
           Toast("Submitted Successfully");
-          this.buildPage(response.ResponseBody);
         }
       }).catch(e => {
         this.isLoading = false;
@@ -298,6 +312,7 @@ export class ApprovalRequestComponent implements OnInit {
     }
 
     submitActionForAttendance() {
+      this.isLoading = true;
       if (this.attendance) {
         let endPoint = "";
         switch(this.requestState) {
@@ -320,7 +335,7 @@ export class ApprovalRequestComponent implements OnInit {
           } else {
             ErrorToast("Fail to fetch data. Please contact to admin.");
           }
-
+          this.isLoading = false;
           $('#leaveModal').modal('hide');
         }).catch(e => {
           this.isLoading = false;
