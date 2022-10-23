@@ -299,7 +299,7 @@
             <span>{{currentRequest.Message}}</span>
           </div>
           <div class="col-md-2">
-            TimeSheet approval request
+            {{requestModal==3 ? 'Attendance' : 'Leave'}} {{requestState | lowercase}} request
             <p class="mb-0"><span class="badge bg-primary">{{currentRequest.ProjectName}}</span></p>
           </div>
           <div class="col-md-3">

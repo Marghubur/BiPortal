@@ -117,8 +117,10 @@ export class AttendanceComponent implements OnInit {
       while(index < data.length) {
         data[index].AttendanceDay = new Date(data[index].AttendanceDay);
         let dayValue = data[index].AttendanceDay.getDay();
-        if (dayValue == 0 || dayValue == 6)
+        if (dayValue == 0 || dayValue == 6) {
           data[index].PresentDayStatus = 3;
+          data[index].AttendenceStatus = 3;
+        }
         index++;
       }
 
@@ -192,7 +194,7 @@ export class AttendanceComponent implements OnInit {
     );
 
     this.tomorrow = this.today;
-    
+
     this.currentAttendance.AttendanceDay = this.today;
     this.commentValue = this.currentAttendance.UserComments;
     $('#commentModal').modal('show');

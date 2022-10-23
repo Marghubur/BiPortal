@@ -101,8 +101,9 @@ export class ApprovalRequestComponent implements OnInit {
   openAttendacneModal(state: string, request: any) {
     $('#leaveModal').modal('show');
     this.requestState = state;
-    this.requestModal = 3; // leave
+    this.requestModal = 3; // attendance
     this.currentRequest = request;
+    this.currentRequest.RequestStatusId = request.PresentDayStatus;
     this.currentRequest["EmployeeName"] = request.EmployeeName;
   }
 
