@@ -31,12 +31,12 @@
     </div>
     <div class="position-relative">
       <app-breadcrums></app-breadcrums>
-      <a href="javascript:void(0)" class="page-reload-icon"><i class="fa fa-refresh"></i></a>
+      <a href="javascript:void(0)" class="page-reload-icon" (click)="reloadPage()"><i class="fa fa-refresh"></i></a>
     </div>
     <div class="mt-3">
       <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
         <li [ngbNavItem]="1">
-          <a ngbNavLink>Attendance</a>
+          <a ngbNavLink (click)="changeTab()">Attendance</a>
           <ng-template ngbNavContent>
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
@@ -107,7 +107,7 @@
         </li>
 
         <li [ngbNavItem]="2">
-          <a ngbNavLink>TimeSheet</a>
+          <a ngbNavLink (click)="changeTab()">TimeSheet</a>
           <ng-template ngbNavContent>
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
@@ -175,8 +175,14 @@
         </li>
 
         <li [ngbNavItem]="3">
-          <a ngbNavLink>Leave</a>
+          <a ngbNavLink (click)="changeTab()">Leave</a>
           <ng-template ngbNavContent>
+            <div class="row bg-light py-3 border-bottom px-3">
+              <div class="col-md-6 fw-bold text-dark">Description</div>
+              <div class="col-md-2 fw-bold text-dark">Type</div>
+              <div class="col-md-3 fw-bold text-dark">Notifie</div>
+              <div class="col-md-1 fw-bold text-dark">State</div>
+            </div>
             <ng-container *ngIf="!isPageLoading">
               <ng-container *ngIf="leaveDeatil.length > 0">
                 <ng-container *ngFor="let item of leaveDeatil">
@@ -230,13 +236,13 @@
                       </ng-container>
                     </div>
                     <div class="d-flex my-1">
-                      <a *ngIf="item.TimesheetStatus!= 5" (click)="openTimesheetLeaveModal('Rejected', item)" href="javascript:void(0)"
+                      <a *ngIf="item.RequestStatusId!= 5" (click)="openLeaveModal('Rejected', item)" href="javascript:void(0)"
                         class="text-danger btn-sm fw-bold"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
-                      <a *ngIf="item.TimesheetStatus != 9" (click)="openTimesheetLeaveModal('Approved', item)" href="javascript:void(0)"
+                      <a *ngIf="item.RequestStatusId != 9" (click)="openLeaveModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a (click)="openTimesheetLeaveModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
+                      <a (click)="openLeaveModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
                           class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
                         Re-Assigne</a>
                     </div>
@@ -244,8 +250,8 @@
                 </ng-container>
               </ng-container>
               <ng-container *ngIf="leaveDeatil.length == 0">
-                <div class="x_panel d-flex align-items-center justify-content-center">
-                  <h2 class=" text-dark">No Record Found...</h2>
+                <div class="text-center fw-bold fs-4 py-5 my-5 text-dark">
+                  No record found
                 </div>
               </ng-container>
             </ng-container>
@@ -299,7 +305,7 @@
             <span>{{currentRequest.Message}}</span>
           </div>
           <div class="col-md-2">
-            TimeSheet approval request
+            {{requestModal==3 ? 'Attendance' : 'Leave'}} {{requestState | lowercase}} request
             <p class="mb-0"><span class="badge bg-primary">{{currentRequest.ProjectName}}</span></p>
           </div>
           <div class="col-md-3">
@@ -310,7 +316,7 @@
           <div class="col-md-1">
             <ng-container [ngSwitch]="currentRequest.RequestStatusId">
               <p *ngSwitchCase="2">Pending</p>
-              <p *ngSwitchCase="9">Approvval</p>
+              <p *ngSwitchCase="9">Approved</p>
               <p *ngSwitchCase="5">Rejected</p>
             </ng-container>
           </div>

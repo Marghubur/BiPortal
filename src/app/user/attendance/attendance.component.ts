@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { data } from 'jquery';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -57,29 +58,12 @@ export class AttendanceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    var dt = new Date();
-    var month = dt.getMonth();
-    var year = dt.getFullYear();
     this.today = new Date();
     this.tomorrow = new Date(new Date().setDate(this.today.getDate() + 1));
-    this.daysInMonth = new Date(year, month + 1, 0).getDate();
     this.isFormReady = false;
     this.intervalId = setInterval(() => {
       this.time = new Date();
     }, 1000);
-
-    let i = 0;
-    while( i < 6) {
-      var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
-      if (month == 1) {
-        month = 12;
-        year --
-      } else {
-        month --;
-      }
-      this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
-      i++;
-    }
 
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
@@ -117,8 +101,10 @@ export class AttendanceComponent implements OnInit {
       while(index < data.length) {
         data[index].AttendanceDay = new Date(data[index].AttendanceDay);
         let dayValue = data[index].AttendanceDay.getDay();
-        if (dayValue == 0 || dayValue == 6)
+        if (dayValue == 0 || dayValue == 6) {
           data[index].PresentDayStatus = 3;
+          data[index].AttendenceStatus = 3;
+        }
         index++;
       }
 
@@ -150,8 +136,10 @@ export class AttendanceComponent implements OnInit {
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      if(response.ResponseBody.EmployeeDetail)
+      if(response.ResponseBody.EmployeeDetail) {
         this.client = response.ResponseBody.EmployeeDetail;
+        this.getMonths();
+      }
       else {
         this.NoClient = true;
         this.isAttendanceDataLoaded = false;
@@ -169,6 +157,30 @@ export class AttendanceComponent implements OnInit {
       this.isLoading = false;
       WarningToast(err.error.HttpStatusMessage);
     });
+  }
+
+  getMonths() {
+    var dt = new Date(this.client.CreatedOn);
+    var month = dt.getMonth()+1;
+    var year = dt.getFullYear();
+    if (month == new Date().getMonth() && year == new Date().getFullYear()) {
+      this.daysInMonth = new Date(year, month + 1, dt.getDate()).getDate();
+    } else {
+      let i = 0;
+      while( i < new Date().getMonth()) {
+        var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
+        // if (month == 1) {
+        //   month = 12;
+        //   year --
+        // } else {
+        //   month --;
+        // }
+        month++;
+        this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
+        i++;
+      }
+    }
+    this.monthName.reverse();
   }
 
   getMonday(d: Date) {
@@ -192,7 +204,7 @@ export class AttendanceComponent implements OnInit {
     );
 
     this.tomorrow = this.today;
-    
+
     this.currentAttendance.AttendanceDay = this.today;
     this.commentValue = this.currentAttendance.UserComments;
     $('#commentModal').modal('show');
