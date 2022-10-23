@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { data } from 'jquery';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -53,7 +52,7 @@ export class ApprovalRequestComponent implements OnInit {
 
   loadData() {
     this.isPageLoading = true;
-    this.http.get(`AttendanceRequest/GetManagerRequestedData/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
+    this.http.get(`AttendanceRequest/GetManagerRequestedData/${this.currentUser.UserId}`).then(response => {
       if(response.ResponseBody) {
         this.buildPage(response.ResponseBody);
         this.isPageLoading = false;
