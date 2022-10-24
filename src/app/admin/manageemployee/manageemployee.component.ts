@@ -208,6 +208,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
       this.isReady = true;
     }).catch(e => {
+      this.bindForm();
       this.isCompaniesDetails = false;
       this.isReady = true;
     });
