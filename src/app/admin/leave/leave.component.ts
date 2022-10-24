@@ -46,7 +46,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   leavePlan: LeavePlan = new LeavePlan();
   submit: boolean = false;
   isLoading: boolean = false;
-  leaveTypeCheck: string = null;
   // ------------------End------------------
 
   constructor(private nav: iNavigation,
@@ -340,11 +339,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
   }
 
-  leaveType(leaveType: string) {
-    this.leaveTypeCheck = '';
-    this.leaveTypeCheck = leaveType
-  }
-
   showHideReasonList(){
     this.isListOfReason = !this.isListOfReason;
   }
@@ -353,6 +347,15 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     this.leaveTypeData = new LeaveType();
     this.initLeaveTypeForm();
     $('#addLeaveTypeModal').modal('show');
+  }
+
+  checkLeaveType(e: any) {
+    if (e.target.name == 'IsSickLeave') {
+      this.leaveTypeForm.get('IsStatutoryLeave').setValue(false);
+    } else {
+      this.leaveTypeForm.get('IsSickLeave').setValue(false);
+    }
+
   }
 
   assignLeaveType(e: any, item: LeaveType) {
@@ -469,6 +472,28 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       case 'YearEnding':
         this.menuItem.YearEnding = true;
         break;
+    }
+  }
+
+  enableRestrictionToGender(e: any) {
+    let data = e.target.checked;
+    if (data == false) {
+      document.querySelector('[name="IsMale"]').setAttribute("disabled", '');
+      let value = document.querySelector('[name="IsMale"]')as HTMLInputElement;
+      value.checked = false;
+    } else {
+      document.querySelector('[name="IsMale"]').removeAttribute("disabled");
+    }
+  }
+
+  enableRestrictionOnMaritalStatus(e: any) {
+    let data = e.target.checked;
+    if (data == false) {
+      document.querySelector('[name="IsMarried"]').setAttribute("disabled", '');
+      let value = document.querySelector('[name="IsMarried"]')as HTMLInputElement;
+      value.checked = false;
+    } else {
+      document.querySelector('[name="IsMarried"]').removeAttribute("disabled");
     }
   }
 
@@ -595,9 +620,9 @@ class LeaveType {
   IsSickLeave: boolean = false;
   IsStatutoryLeave: boolean = false;
   IsRestrictOnGender: boolean = false;
-  IsMale: boolean = false;
+  IsMale: boolean = null;
   IsRestrictOnMaritalStatus: boolean = false;
-  IsMarried: boolean = false;
+  IsMarried: boolean = null;
   Reasons: any = null;
   IsActive: boolean = false;
 }

@@ -857,26 +857,28 @@
             </label>
           </div>
           <div class="form-check mt-3">
-            <input class="form-check-input" [checked]="leaveTypeCheck == 'PaidLeave'" type="checkbox"
+            <input class="form-check-input" type="checkbox"
               formControlName="IsPaidLeave" />
             <label class="form-check-label"> This is a paid leave </label>
           </div>
+          <fieldset class="mt-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" (click)="checkLeaveType($event)" name="IsSickLeave"
+                formControlName="IsSickLeave"/>
+              <label class="form-check-label"> This is a sick leave </label>
+            </div>
+            <div class="form-check mt-3">
+              <input class="form-check-input" type="checkbox" (click)="checkLeaveType($event)" name="IsStatutoryLeave"
+                formControlName="IsStatutoryLeave" />
+              <label class="form-check-label"> This is a statutory leave </label>
+            </div>
+          </fieldset>
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" [checked]="leaveTypeCheck == 'SickLeave'"
-              formControlName="IsSickLeave"/>
-            <label class="form-check-label"> This is a sick leave </label>
-          </div>
-          <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" [checked]="leaveTypeCheck == 'StatutoryLeave'"
-              formControlName="IsStatutoryLeave" />
-            <label class="form-check-label"> This is a statutory leave </label>
-          </div>
-          <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" formControlName="IsRestrictOnGender" />
+            <input class="form-check-input" type="checkbox" formControlName="IsRestrictOnGender" (click)="enableRestrictionToGender($event)"/>
             <div class="d-flex align-items-center">
               <label class="form-check-label"> Restrict to </label>
               <div class="col-md-2 ms-3">
-                <select class="form-select form-select-sm" aria-label="Default select example" formControlName="IsMale">
+                <select class="form-select form-select-sm" aria-label="Default select example" disabled name="IsMale" formControlName="IsMale">
                   <option value="null">Select</option>
                   <option value="true">Male</option>
                   <option value="false">Female</option>
@@ -887,13 +889,13 @@
           </div>
 
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" formControlName="IsRestrictOnMaritalStatus" />
+            <input class="form-check-input" type="checkbox" formControlName="IsRestrictOnMaritalStatus" (click)="enableRestrictionOnMaritalStatus($event)"/>
             <div class="d-flex">
               <label class="form-check-label">
                 Restrict to employees having
               </label>
               <div class="col-md-2 ms-3">
-                <select class="form-select form-select-sm" aria-label="Default select example"
+                <select class="form-select form-select-sm" aria-label="Default select example" disabled name="IsMarried"
                   formControlName="IsMarried">
                   <option value="null">Select</option>
                   <option value="true">Married</option>
