@@ -263,13 +263,15 @@
                                   </ng-container>
                                 </ng-container>
                                 <ng-container *ngIf="!employeeIsReady">
-                                  <div
-                                    class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                                    <div class="col-md-3 modal-container f-12 text-center cog-wheel">
-                                      <img src="assets/images/cog.gif" alt="" />
-                                      <h6 class="modal-title title-message">
-                                        Please Wait ........
-                                      </h6>
+                                  <div class="py-5 my-5">
+                                    <h6 class="fw-bold fs-3 text-center text-dark">Employee details are loading</h6>
+                                    <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                                      <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                                        <img src="assets/images/cog.gif" alt="" />
+                                        <h6 class="modal-title title-message">
+                                          Please Wait ........
+                                        </h6>
+                                      </div>
                                     </div>
                                   </div>
                                 </ng-container>
@@ -445,12 +447,15 @@
                   </ng-container>
                 </ng-container>
                 <ng-container *ngIf="!leaveTypeDateIsReady">
-                  <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                    <div class="col-md-3 modal-container f-12 text-center cog-wheel">
-                      <img src="assets/images/cog.gif" alt="" />
-                      <h6 class="modal-title title-message">
-                        Please Wait ........
-                      </h6>
+                  <div class="py-5 my-5">
+                    <h6 class="fw-bold fs-3 text-center text-dark">Leave plan types are loading</h6>
+                    <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                      <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                        <img src="assets/images/cog.gif" alt="" />
+                        <h6 class="modal-title title-message">
+                          Please Wait ........
+                        </h6>
+                      </div>
                     </div>
                   </div>
                 </ng-container>
@@ -461,12 +466,19 @@
       </ul>
       <div [ngbNavOutlet]="nav" class="mt-2"></div>
     </div>
-    <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center" *ngIf="!isLeavePageReady">
-      <div class="col-md-3 modal-container f-12 text-center cog-wheel my-5 py-5">
-        <img src="assets/images/cog.gif" alt="" />
-        <h6 class="modal-title title-message">Please Wait ........</h6>
+    <ng-container *ngIf="!isLeavePageReady">
+      <div class="py-5 my-5">
+        <h6 class="fw-bold fs-3 text-center text-dark">Leave details are loading</h6>
+        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+            <h6 class="modal-title title-message">
+              Please Wait ........
+            </h6>
+          </div>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 </div>
 
@@ -773,12 +785,15 @@
                 </ng-container>
               </ng-container>
               <ng-container *ngIf="!employeeIsReady">
-                <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                  <div class="col-md-3 modal-container f-12 text-center cog-wheel">
-                    <img src="assets/images/cog.gif" alt="" />
-                    <h6 class="modal-title title-message">
-                      Please Wait ........
-                    </h6>
+                <div class="py-5 my-5">
+                  <h6 class="fw-bold fs-3 text-center text-dark">Employee deatils are loading</h6>
+                  <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                    <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                      <img src="assets/images/cog.gif" alt="" />
+                      <h6 class="modal-title title-message">
+                        Please Wait ........
+                      </h6>
+                    </div>
                   </div>
                 </div>
               </ng-container>

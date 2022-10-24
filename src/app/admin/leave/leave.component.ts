@@ -277,7 +277,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   GetFilterResult(e: any) {
     if(e != null) {
       this.employeeFilter = e;
-      this.addEmployeeToPlan();
+      this.loadLeaveData();
     }
   }
 
@@ -505,7 +505,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       PlanName: new FormControl(this.leavePlan.PlanName, [Validators.required]),
       PlanDescription: new FormControl(this.leavePlan.PlanDescription),
       AssociatedPlanTypes: new FormControl(this.leavePlan.AssociatedPlanTypes),
-      PlanStartCalendarDate: new FormControl(null, [Validators.required]),
+      PlanStartCalendarDate: new FormControl(this.leavePlan.PlanStartCalendarDate, [Validators.required]),
       IsShowLeavePolicy: new FormControl(this.leavePlan.IsShowLeavePolicy),
       IsUploadedCustomLeavePolicy: new FormControl(this.leavePlan.IsUploadedCustomLeavePolicy),
       IsApplyEntireLeave: new FormControl(this.leavePlan.IsApplyEntireLeave)
@@ -542,13 +542,14 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           this.isLoading = false;
         } else {
           ErrorToast("Fail to inserted/update.");
+          this.isLoading = false;
         }
       }).catch(e => {
         this.isLoading = false;
       });
       this.submit = false;
     }
-
+    this.isLoading = false;
   }
 
   fireBrowseOption() {
