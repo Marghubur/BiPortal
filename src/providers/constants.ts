@@ -125,7 +125,7 @@ export const Taxcalculation = 'user/taxcalculation';
 export const ResetPassword = 'user/resetpassword';
 export const Notification = 'user/notification';
 export const ApprovalRequest = 'user/request';
-
+export const UserHoliday = 'user/planholidays';
 
 
 // *************************** file name constancts  *************
