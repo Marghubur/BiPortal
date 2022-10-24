@@ -25,6 +25,7 @@ import { ResetpasswordComponent } from './resetpassword/resetpassword.component'
 import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { CommonService } from 'src/providers/common-service/common.service';
+import { HolidayComponent } from './holiday/holiday.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { CommonService } from 'src/providers/common-service/common.service';
     TaxcalculationComponent,
     ResetpasswordComponent,
     NotificationComponent,
-    ApprovalRequestComponent
+    ApprovalRequestComponent,
+    HolidayComponent
   ],
   imports: [
     CommonModule,
