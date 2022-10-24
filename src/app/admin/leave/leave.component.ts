@@ -46,7 +46,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   leavePlan: LeavePlan = new LeavePlan();
   submit: boolean = false;
   isLoading: boolean = false;
-  leaveTypeCheck: string = null;
   // ------------------End------------------
 
   constructor(private nav: iNavigation,
@@ -278,7 +277,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   GetFilterResult(e: any) {
     if(e != null) {
       this.employeeFilter = e;
-      this.addEmployeeToPlan();
+      this.loadLeaveData();
     }
   }
 
@@ -340,11 +339,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
   }
 
-  leaveType(leaveType: string) {
-    this.leaveTypeCheck = '';
-    this.leaveTypeCheck = leaveType
-  }
-
   showHideReasonList(){
     this.isListOfReason = !this.isListOfReason;
   }
@@ -353,6 +347,15 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     this.leaveTypeData = new LeaveType();
     this.initLeaveTypeForm();
     $('#addLeaveTypeModal').modal('show');
+  }
+
+  checkLeaveType(e: any) {
+    if (e.target.name == 'IsSickLeave') {
+      this.leaveTypeForm.get('IsStatutoryLeave').setValue(false);
+    } else {
+      this.leaveTypeForm.get('IsSickLeave').setValue(false);
+    }
+
   }
 
   assignLeaveType(e: any, item: LeaveType) {
@@ -472,6 +475,28 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     }
   }
 
+  enableRestrictionToGender(e: any) {
+    let data = e.target.checked;
+    if (data == false) {
+      document.querySelector('[name="IsMale"]').setAttribute("disabled", '');
+      let value = document.querySelector('[name="IsMale"]')as HTMLInputElement;
+      value.checked = false;
+    } else {
+      document.querySelector('[name="IsMale"]').removeAttribute("disabled");
+    }
+  }
+
+  enableRestrictionOnMaritalStatus(e: any) {
+    let data = e.target.checked;
+    if (data == false) {
+      document.querySelector('[name="IsMarried"]').setAttribute("disabled", '');
+      let value = document.querySelector('[name="IsMarried"]')as HTMLInputElement;
+      value.checked = false;
+    } else {
+      document.querySelector('[name="IsMarried"]').removeAttribute("disabled");
+    }
+  }
+
   // -------------------Start---------------------
 
   initLeavePlanForm() {
@@ -480,7 +505,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       PlanName: new FormControl(this.leavePlan.PlanName, [Validators.required]),
       PlanDescription: new FormControl(this.leavePlan.PlanDescription),
       AssociatedPlanTypes: new FormControl(this.leavePlan.AssociatedPlanTypes),
-      PlanStartCalendarDate: new FormControl(null, [Validators.required]),
+      PlanStartCalendarDate: new FormControl(this.leavePlan.PlanStartCalendarDate, [Validators.required]),
       IsShowLeavePolicy: new FormControl(this.leavePlan.IsShowLeavePolicy),
       IsUploadedCustomLeavePolicy: new FormControl(this.leavePlan.IsUploadedCustomLeavePolicy),
       IsApplyEntireLeave: new FormControl(this.leavePlan.IsApplyEntireLeave)
@@ -517,13 +542,14 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           this.isLoading = false;
         } else {
           ErrorToast("Fail to inserted/update.");
+          this.isLoading = false;
         }
       }).catch(e => {
         this.isLoading = false;
       });
       this.submit = false;
     }
-
+    this.isLoading = false;
   }
 
   fireBrowseOption() {
@@ -595,9 +621,9 @@ class LeaveType {
   IsSickLeave: boolean = false;
   IsStatutoryLeave: boolean = false;
   IsRestrictOnGender: boolean = false;
-  IsMale: boolean = false;
+  IsMale: boolean = null;
   IsRestrictOnMaritalStatus: boolean = false;
-  IsMarried: boolean = false;
+  IsMarried: boolean = null;
   Reasons: any = null;
   IsActive: boolean = false;
 }
