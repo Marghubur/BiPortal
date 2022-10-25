@@ -311,9 +311,9 @@ export class LoginComponent implements OnInit {
 
   sendForgotPassword() {
     this.isLoading = true;
-    let email = (<HTMLInputElement> document.getElementById('registeredEmailId')).value;
+    let email: string = (<HTMLInputElement> document.getElementById('registeredEmailId')).value;
     if(email && email != '') {
-      this.http.put('Login/ForgotPassword', email).then(res => {
+      this.http.post('Login/ForgotPassword', { Email: email}).then(res => {
         if (res.ResponseBody) {
           Toast("Password send on your email id. Please check your email");
         }
