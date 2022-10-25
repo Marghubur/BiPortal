@@ -319,7 +319,7 @@ export class LoginComponent implements OnInit {
       this.http.post('Login/ForgotPassword', { Email: email}).then(res => {
         if (res.ResponseBody) {
           Toast("Password send on your email id. Please check your email");
-          $('#ForgotPasswordModal').modal('show');
+          $('#ForgotPasswordModal').modal('hide');
         }
         this.isLoading = false;
       }).catch(e => {
