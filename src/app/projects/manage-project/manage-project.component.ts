@@ -72,9 +72,13 @@ export class ManageProjectComponent implements OnInit {
   }
 
   initForm() {
+    if(this.projectDetail.ProjectManagerId == null)
+      this.projectDetail.ProjectManagerId = 0;
+
     this.projectForm = this.fb.group({
       OrganizationName: new FormControl(this.currentCompany.OrganizationName),
       ProjectId: new FormControl(this.projectDetail.ProjectId),
+      CompanyId: new FormControl(this.currentCompany.CompanyId),
       CompanyName: new FormControl(this.currentCompany.CompanyName),
       ProjectName: new FormControl(this.projectDetail.ProjectName, [Validators.required]),
       ProjectDescription: new FormControl(this.projectDetail.ProjectDescription, [Validators.required]),
@@ -106,14 +110,22 @@ export class ManageProjectComponent implements OnInit {
   RegisterProject() {
     this.isLoading = true;
     this.submitted = true;
-    if(this.projectForm.invalid) {
-      this.isLoading = false;;
+    if(this.projectForm.get("ProjectName").value == null && 
+      this.projectForm.get("ProjectName").value == "") {
+      this.isLoading = false;
+      ErrorToast("Project name if mandatory. Please provide a valid name.");
       return;
     }
+
+    let managerId = this.projectDetail.ProjectManagerId;
+    if(managerId == null) {
+      this.projectForm.get("ProjectName").setValue(0);
+    }
+
     let value = this.projectForm.value;
     this.http.post("Project/AddUpdateProjectDetail", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
-        Toast(res.ResponseBody);
+        Toast("Project created/updated successfully.");
       }
       this.isLoading = false;
     }).then(e => {

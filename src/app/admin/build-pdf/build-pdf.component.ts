@@ -68,6 +68,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   timesheetBreakup: Array <any> = [];
   generateBillUrl: string = "";
   timesheetId: number = 0;
+  bodyContent: any = null;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -1144,9 +1145,12 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         if (response.ResponseBody) {
           Toast("Email send successfully");
           $('#viewFileModal').modal('hide');
-          this.isLoading = false;
+        } else {
+          ErrorToast("Fail to send email. Please contact to admin.");
         }
+        this.isLoading = false;
       }).catch(e => {
+        ErrorToast("Fail to send email. Please contact to admin.");
         this.isLoading = false;
       });
     } else {
@@ -1167,8 +1171,14 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     if (res) {
       this.emailTemplate = res;
       if(this.emailTemplate) {
-        this.emailTemplate.EmailSubject = `Bill for the month ${this.pdfModal.billForMonth}, ${this.pdfModal.billYear}`;
-        this.emailTemplate.EmailTitle = this.pdfForm.get('header').value
+        let employee = this.employees.find(x => x.EmployeeUid == this.pdfForm.get("developerId").value)
+        this.bodyContent = this.emailTemplate.BodyContent;
+        this.bodyContent = this.bodyContent
+        .replaceAll("[[DEVELOPER-NAME]]", employee.FirstName + " " + employee.LastName)
+        .replaceAll("[[YEAR]]", this.pdfModal.billYear.toString())
+        .replaceAll("[[MONTH]]", this.pdfModal.billForMonth);
+
+        this.bodyContent = this.sanitizer.bypassSecurityTrustHtml(this.bodyContent);
       }
     } else {
       WarningToast("No default template found.");
