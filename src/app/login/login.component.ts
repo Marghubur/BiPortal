@@ -215,6 +215,10 @@ export class LoginComponent implements OnInit {
 
   validateEmail() {
     let value = (<HTMLInputElement>document.getElementById("Email")).value
+    this.emailValidation(value);
+  }
+
+  emailValidation(value: any) {
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (regex.test(value))
       return (true)
@@ -223,7 +227,6 @@ export class LoginComponent implements OnInit {
       return (false)
     }
   }
-
   AllowMobilenoOnly(e: any) {
     let $e: any = event;
     // if (!this.commonService.MobileNumberFormat(e.which, $($e.currentTarget).val().length)) {
@@ -312,10 +315,11 @@ export class LoginComponent implements OnInit {
   sendForgotPassword() {
     this.isLoading = true;
     let email: string = (<HTMLInputElement> document.getElementById('registeredEmailId')).value;
-    if(email && email != '') {
+    if(email && email != '' && this.emailValidation(email)) {
       this.http.post('Login/ForgotPassword', { Email: email}).then(res => {
         if (res.ResponseBody) {
           Toast("Password send on your email id. Please check your email");
+          $('#ForgotPasswordModal').modal('hide');
         }
         this.isLoading = false;
       }).catch(e => {
