@@ -183,6 +183,8 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       this.orderByMonthAsc = !flag;
     if (FieldName == 'GSTStatus')
       this.orderByGSTStatusAsc = !flag;
+    if (FieldName == 'BillYear')
+      this.orderByYearAsc = !flag;
     this.singleEmployee = new Filter();
     this.singleEmployee.SortBy = FieldName +" "+ Order;
     this.LoadFiles()

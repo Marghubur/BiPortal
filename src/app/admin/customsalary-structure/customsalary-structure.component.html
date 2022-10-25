@@ -368,7 +368,7 @@
                 <span *ngIf="item.MaxLimit < 0">No Limit</span>
               </div>
               <div class="td ps-3">
-                <input class="form-check-input" [checked]="item.IsActive == true" [disabled]="item.IsOpted"
+                <input class="form-check-input" [checked]="item.IsActive == true || item.IsOpted" [disabled]="item.IsOpted"
                   (click)="selectToAddComponent($event, item)" type="checkbox" value="">
               </div>
             </div>

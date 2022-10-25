@@ -42,8 +42,8 @@ export class ManageComponent implements OnInit {
   isDeleted: boolean = false;
   isEditWorkSample: boolean = false;
   editItSkillModal: Skills;
-  currentItSkillOnEdit: FormGroup;
   deleteSkillDetail: any = null;
+  currentItSkillOnEdit: any;
   isDeletedSkill: boolean = false;
   editProjectModal: Project;
   currentProjectOnEdit: FormGroup;
@@ -69,6 +69,7 @@ export class ManageComponent implements OnInit {
   ExptVersion: number = 0;
   ExptinYrs: number = 0;
   ExptinMonths: number = 0;
+  SkillIndex: number = 0;
   Exptdate: Date = null;
   isUser: boolean = true;
   remainingNumber: number = 4000;
@@ -457,6 +458,7 @@ export class ManageComponent implements OnInit {
 
   editItSkillDetail() {
     $("#itSkillModal").modal('show');
+    this.SkillIndex = 0;
     this.ExptLanguage = '';
     this.ExptVersion = null;
     this.ExptinYrs = null;
@@ -470,13 +472,18 @@ export class ManageComponent implements OnInit {
     let newSkill = new Skills();
     if (this.ExptLanguage != '') {
       let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
-      this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
+      if (this.SkillIndex == 0)
+        this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
+      else
+        this.currentItSkillOnEdit = skill.at(this.SkillIndex);
+
       this.currentItSkillOnEdit.get("Language").setValue(this.ExptLanguage);
       this.currentItSkillOnEdit.get("Version").setValue(this.ExptVersion);
       this.currentItSkillOnEdit.get("ExperienceInMonth").setValue(this.ExptinMonths);
       this.currentItSkillOnEdit.get("ExperienceInYear").setValue(this.ExptinYrs);
       this.currentItSkillOnEdit.get("LastUsed").setValue(this.Exptdate);
-      skill.push(this.currentItSkillOnEdit);
+      if (this.SkillIndex == 0)
+        skill.push(this.currentItSkillOnEdit);
     }
     this.submitSkillDetail();
     this.isLoading = false;
@@ -497,6 +504,7 @@ export class ManageComponent implements OnInit {
 
   editItSkill(e: any) {
     let skillValue = e.value;
+    this.SkillIndex = skillValue.SkillIndex;
     this.ExptLanguage = skillValue.Language;
     this.ExptVersion = skillValue.Version;
     this.ExptinYrs = skillValue.ExperienceInYear;
@@ -1030,7 +1038,7 @@ export class ManageComponent implements OnInit {
   editEmployment(emp: any) {
     this.isEdit = true;
     this.editEmploymentModal = emp.value;
-    this.countNumberofCharacter(this.editEmploymentModal.JobProfile)
+    this.remainingNumber = 4000 - this.editEmploymentModal.JobProfile.length;
     $('#EmploymentModal').modal('show');
   }
 
@@ -1214,13 +1222,25 @@ export class ManageComponent implements OnInit {
         this.userModal = detail;
         if (this.profile != null)
           this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
+
         educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
-        this.userModal.Accomplishments.Certification = this.userModal.Accomplishments.Certification.filter(x => x !== '');
-        this.userModal.Accomplishments.OnlineProfile = this.userModal.Accomplishments.OnlineProfile.filter(x => x !== '');
-        this.userModal.Accomplishments.Patent = this.userModal.Accomplishments.Patent.filter(x => x !== '');
-        this.userModal.Accomplishments.Presentation = this.userModal.Accomplishments.Presentation.filter(x => x !== '');
-        this.userModal.Accomplishments.Research = this.userModal.Accomplishments.Research.filter(x => x !== '');
-        this.userModal.Accomplishments.WorkSample = this.userModal.Accomplishments.WorkSample.filter(x => x !== '');
+        if (this.userModal.Accomplishments.Certification != null && this.userModal.Accomplishments.Certification)
+          this.userModal.Accomplishments.Certification = this.userModal.Accomplishments.Certification.filter(x => x !== '' && x != null);
+
+        if (this.userModal.Accomplishments.OnlineProfile != null && this.userModal.Accomplishments.OnlineProfile)
+          this.userModal.Accomplishments.OnlineProfile = this.userModal.Accomplishments.OnlineProfile.filter(x => x !== '' && x != null);
+
+        if (this.userModal.Accomplishments.Patent != null && this.userModal.Accomplishments.Patent)
+          this.userModal.Accomplishments.Patent = this.userModal.Accomplishments.Patent.filter(x => x !== '' && x != null);
+
+        if (this.userModal.Accomplishments.Presentation != null && this.userModal.Accomplishments.Presentation)
+          this.userModal.Accomplishments.Presentation = this.userModal.Accomplishments.Presentation.filter(x => x !== '' && x != null);
+
+        if (this.userModal.Accomplishments.Research != null && this.userModal.Accomplishments.Research)
+          this.userModal.Accomplishments.Research = this.userModal.Accomplishments.Research.filter(x => x !== '' && x != null);
+
+        if (this.userModal.Accomplishments.WorkSample != null && this.userModal.Accomplishments.WorkSample)
+          this.userModal.Accomplishments.WorkSample = this.userModal.Accomplishments.WorkSample.filter(x => x !== '' && x != null);
 
         this.userModal.EducationalDetails = educations;
         this.UserId = this.userModal.EmployeeId;
@@ -1252,7 +1272,7 @@ export class ManageComponent implements OnInit {
 
     }).catch(e => {
       this.isLoading = false;
-      this.isFormReady = false;
+      this.isFormReady = true;
     })
   }
 

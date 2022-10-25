@@ -69,7 +69,7 @@
               <div class="th fe-1">
                 <div class="cell-wrapper">
                   <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
+                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
                   <div class="t-filter" (click)="arrangeDetails(orderByBillNoAsc, 'BillNo')">
                     <a href="javascript:void()" class="pe-2">Bill No.#</a>
                     <i class="fa fa-sort-amount-asc"
@@ -82,7 +82,7 @@
               <div class="th fe-3">
                 <div class="cell-wrapper">
                   <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
+                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
                   <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ClientName')">
                     <a href="javascript:void()" class="pe-2">Client Name</a>
                     <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }"
@@ -95,7 +95,7 @@
               <div class="th f-small">
                 <div class="cell-wrapper">
                   <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Status">
+                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Status">
                     <option value="0">Status</option>
                     <option value="1">Completed</option>
                     <option value="2">Pending</option>
@@ -117,7 +117,7 @@
               <div class="th f-small">
                 <div class="cell-wrapper">
                   <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Month">
+                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Month">
                     <option value="0" selected>Month</option>
                     <option value="1">Jan</option>
                     <option value="2">Feb</option>
@@ -144,11 +144,11 @@
               <div class="th f-small">
                 <div class="cell-wrapper">
                   <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Year">
+                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Year">
                     <option value="0" selected>Year</option>
                     <option [value]="item" *ngFor="let item of allBillingYears">{{item}}</option>
                   </select>
-                  <div class="t-filter" (click)="arrangeDetails('', 'BillForYear')">
+                  <div class="t-filter" (click)="arrangeDetails(orderByYearAsc, 'BillYear')">
                     <a href="javascript:void()" class="pe-2">Year</a>
                     <i class="fa fa-sort-amount-asc"
                       [ngClass]="{'d-none': orderByYearAsc == null || !orderByYearAsc }" aria-hidden="true"></i>
@@ -160,7 +160,7 @@
               <div class="th fe-1">
                 <div class="cell-wrapper">
                   <input class="form-control table-filter-control form-control-sm" readonly
-                    (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()" (keydown.esc)="refreshFilter()"
                     [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
                   <div class="t-filter">
                     <a href="javascript:void()" class="ps-2">Billed Amt</a>
@@ -170,7 +170,7 @@
               <div class="th fe-1">
                 <div class="cell-wrapper">
                   <input class="form-control table-filter-control form-control-sm" readonly
-                    (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()" (keydown.esc)="refreshFilter()"
                     [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
                   <div class="t-filter">
                     <a href="javascript:void()" class="pe-2">Received</a>
@@ -180,7 +180,7 @@
               <div class="th fe-1">
                 <div class="cell-wrapper">
                   <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                    readonly (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.TakeHome"
+                    readonly (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.TakeHome"
                     placeholder="By Take Home">
                   <div class="t-filter">
                     <a href="javascript:void()" class="pe-2">Take Home</a>
@@ -190,7 +190,7 @@
               <div class="th f-small">
                 <div class="cell-wrapper">
                   <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.GSTStatus">
+                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.GSTStatus">
                     <option value="0">Status</option>
                     <option value="1">Completed</option>
                     <option value="2">Pending</option>
