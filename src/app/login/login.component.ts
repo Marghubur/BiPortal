@@ -304,4 +304,23 @@ export class LoginComponent implements OnInit {
   enableEmployee() {
     this.userType = "employee";
   }
+
+  forgotPasswordModal() {
+    $('#ForgotPasswordModal').modal('show');
+  }
+
+  sendForgotPassword() {
+    this.isLoading = true;
+    let email = (<HTMLInputElement> document.getElementById('registeredEmailId')).value;
+    if(email && email != '') {
+      this.http.put('Login/ForgotPassword', email).then(res => {
+        if (res.ResponseBody) {
+          Toast("Password send on your email id. Please check your email");
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
+  }
 }

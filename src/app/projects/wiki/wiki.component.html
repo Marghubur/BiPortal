@@ -32,7 +32,7 @@
                                 <ul class="list-unstyled">
                                     <li >
                                         <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
-                                            <span [innerHTML]="projectDetail.Title"></span>
+                                            <span>{{projectDetail.Title}}</span>
                                         </a>
                                         <ul class="list-unstyled ms-3" *ngIf="projectDetail.ProjectContent.length > 0">
                                             <li *ngFor="let item of projectDetail.ProjectContent">
@@ -47,9 +47,7 @@
                         </div>
                         <div class="col-md-10 col-sm-9 outline-none" id="main-container" (contextmenu)="manipulateSection($event)" (click)="disabeSection()" (keydown.esc)="closePopOver()" tabindex="0">
                           <div class="col-md-12 px-4 dv-space">
-                            <input type="text" placeholder="Enter Title" class="form-control border-0 fw-bold fs-3" 
-                            [(ngModel)]="projectDetail.Title">
-
+                            <input type="text" placeholder="Enter Title" class="form-control border-0 fw-bold fs-3" (keyup)="editProjectTitle($event)" [value]="projectDetail.Title">
                             <ng-container *ngIf="isLoaded">
                               <form [formGroup]="wikiForm">
                                 <div formArrayName="Wikis">
