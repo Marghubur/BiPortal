@@ -81,10 +81,10 @@ export class ManageProjectComponent implements OnInit {
       CompanyId: new FormControl(this.currentCompany.CompanyId),
       CompanyName: new FormControl(this.currentCompany.CompanyName),
       ProjectName: new FormControl(this.projectDetail.ProjectName, [Validators.required]),
-      ProjectDescription: new FormControl(this.projectDetail.ProjectDescription, [Validators.required]),
-      TeamMemberIds: new FormControl(this.projectDetail.TeamMemberIds, [Validators.required]),
+      ProjectDescription: new FormControl(this.projectDetail.ProjectDescription),
+      TeamMemberIds: new FormControl(this.projectDetail.TeamMemberIds),
       HomePageUrl: new FormControl(this.projectDetail.HomePageUrl),
-      ProjectManagerId: new FormControl(this.projectDetail.ProjectManagerId, [Validators.required]),
+      ProjectManagerId: new FormControl(this.projectDetail.ProjectManagerId),
       ArchitectId: new FormControl(this.projectDetail.ArchitectId),
       IsClientProject: new FormControl(this.projectDetail.IsClientProject),
       ClientId: new FormControl(this.projectDetail.ClientId),
@@ -110,7 +110,7 @@ export class ManageProjectComponent implements OnInit {
   RegisterProject() {
     this.isLoading = true;
     this.submitted = true;
-    if(this.projectForm.get("ProjectName").value == null && 
+    if(this.projectForm.get("ProjectName").value == null &&
       this.projectForm.get("ProjectName").value == "") {
       this.isLoading = false;
       ErrorToast("Project name if mandatory. Please provide a valid name.");

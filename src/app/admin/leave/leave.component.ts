@@ -35,9 +35,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   leaveTypeDateIsReady: boolean = false;
   employeeFilter: Filter = new Filter();
   employees: Array<any> = [];
-  assignEmpList: Array<any> = [];
-  currentPlanEmpList: Array<any> = [];
-  employeeIsReady: boolean = false;
   isLeavePageReady: boolean = false;
 
   // -------------------Start--------------
@@ -84,18 +81,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           this.leavePlanList = result.ResponseBody.LeavePlan;
         } else {
           ErrorToast("Fail to load leave plan data.");
-          return;
-        }
-
-        if(result.ResponseBody.Employees) {
-          this.employees = result.ResponseBody.Employees;
-          if(this.employees.length > 0)
-            this.employeeFilter.TotalRecords = this.employees[0].Total;
-          else
-            this.employeeFilter.TotalRecords = 0;
-        } else {
-          this.employeeFilter.TotalRecords = 0;
-          ErrorToast("Fail to load page data.");
           return;
         }
 
@@ -226,59 +211,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
         ErrorToast("Fail to laod Leave types. Please contact to admin");
       }
     });
-  }
-
-  loadEmployeeData() {
-    this.employeeIsReady = true;
-    this.currentPlanEmpList = this.employees.filter(x => x.LeavePlanId == this.currentPlan.LeavePlanId);
-  }
-
-  addEmployeeToPlan() {
-    this.assignEmpList = [];
-    this.assignEmpList = this.employees.filter(x => x.LeavePlanId == this.currentPlan.LeavePlanId);
-    $('#showemployeesdetail').modal('show');
-  }
-
-  assignEmpListToPlan(item: any, e: any) {
-    if (e.target.checked == true) {
-      let elem = this.assignEmpList.find(x => x.EmployeeUid === item.EmployeeUid);
-      if (elem == null) {
-        item.LeavePlanId = this.currentPlan.LeavePlanId;
-        this.assignEmpList.push(item);
-      }
-    } else {
-        let emp = this.assignEmpList.find(x => x.EmployeeUid === item.EmployeeUid);
-        if (emp != null)
-          emp.LeavePlanId = 0;
-    }
-  }
-
-  assignEmpToPlan() {
-    if (this.assignEmpList && this.assignEmpList.length > 0) {
-      this.http.put(`ManageLeavePlan/AddUpdateEmpLeavePlan/${this.currentPlan.LeavePlanId}`, this.assignEmpList).
-      then((res:ResponseModel) => {
-        if (res.ResponseBody) {
-          this.currentPlanEmpList = [];
-          let i = 0;
-          while(i < this.assignEmpList.length) {
-            this.assignEmpList = this.assignEmpList.filter(x => x.LeavePlanId == this.currentPlan.LeavePlanId);
-            this.currentPlanEmpList.push(this.assignEmpList[i]);
-            i++;
-          }
-          $('#showemployeesdetail').modal('hide');
-          Toast("Employee's leave plan updated successfully");
-        } else {
-          Toast("Fail to update the plan");
-        }
-      })
-    }
-  }
-
-  GetFilterResult(e: any) {
-    if(e != null) {
-      this.employeeFilter = e;
-      this.loadLeaveData();
-    }
   }
 
   selectedPlan(index: number, item: any) {
@@ -455,7 +387,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   changeMenu(code: string) {
     this.menuItem = {
       Config: false,
-      Emp: false,
       YearEnding: false,
     };
 
@@ -464,10 +395,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       case 'Config':
         this.menuItem.Config = true;
         this.bindFirstPlanOnPage();
-        break;
-      case 'Emp':
-        this.menuItem.Emp = true;
-        this.loadEmployeeData();
         break;
       case 'YearEnding':
         this.menuItem.YearEnding = true;

@@ -399,7 +399,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       { "sno": 7, "name": "July", "days": this.daysInMonth(7) },
       { "sno": 8, "name": "August", "days": this.daysInMonth(8) },
       { "sno": 9, "name": "September", "days": this.daysInMonth(9) },
-      { "sno": 10, "name": "Octuber", "days": this.daysInMonth(10) },
+      { "sno": 10, "name": "October", "days": this.daysInMonth(10) },
       { "sno": 11, "name": "November", "days": this.daysInMonth(11) },
       { "sno": 12, "name": "December", "days": this.daysInMonth(12) }
     ];

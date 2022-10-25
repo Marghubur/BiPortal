@@ -205,7 +205,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.buildPageData(res);
       this.bindForm();
       this.bindClientDetails();
-
       this.isReady = true;
     }).catch(e => {
       this.bindForm();
@@ -379,27 +378,31 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       formData.append("employeeDetail", JSON.stringify(this.employeeForm.value));
       if(this.employeeForm.value.AllocatedClients == undefined || this.employeeForm.value.AllocatedClients == undefined)
         this.employeeForm.value.AllocatedClients = [];
+
       formData.append("allocatedClients", JSON.stringify(this.employeeForm.value.AllocatedClients));
-      formData.append("ProfessuinalDetail_JSON", this.ProfessuinalDetail_JSON)
+      formData.append("ProfessuinalDetail_JSON", this.ProfessuinalDetail_JSON);
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
-      formData.append(ProfileImage, file);
 
-      this.http.post(`Employee/employeeregistration/${this.isUpdate}`, formData).then((response: ResponseModel) => {
-        this.buildPageData(response);
+      formData.append(ProfileImage, file);
+      this.http.post(`Employee/employeeregistration/${this.isUpdate}`, formData)
+      .then(res => {
+        this.buildPageData(res);
         this.bindForm();
         this.bindClientDetails();
         if(this.isUpdate)
           Toast("Profile updated successfully");
         else
           Toast("Registration done successfully");
+
+          this.isReady = true;
         this.isLoading = false;
       }).catch(e => {
         this.isReady = true;
         this.isLoading = false;
         ErrorToast(e.HttpStatusMessage);
-      });
+      })
     } else {
       this.isLoading = false;
       ErrorToast("Please correct all the mandaroty field marked red");

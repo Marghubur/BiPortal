@@ -15,7 +15,7 @@ declare var $: any;
 export class WikiComponent implements OnInit, AfterViewChecked {
   popover: HTMLElement = null;
   isLoaded: boolean = true;
-  projectDetail: ProjectWiki = new ProjectWiki();
+  projectDetail: ProjectWiki = null;
   titleValue: string = '';
   imageUrl: string = '';
   anchorLink: string = '';
@@ -60,7 +60,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.WikiDetails = [];
-    // this.projectDetail.Title = '';
+    this.projectDetail= new ProjectWiki();
     this.projectDetail.ProjectName= "";
     let data = this.nav.getValue();
     if (data){
@@ -128,8 +128,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   addTitlePopUp() {
-    this.titleValue = '';
-    $("#addTitleModal").modal('show');
+    this.projectDetail.Title = '[Add Title]';
+    this.projectDetail.ProjectContent = [];
   }
 
   editSubSection(e: any, i: number) {
@@ -138,6 +138,11 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.projectDetail.ProjectContent[i].SectionName = '';
     this.projectDetail.ProjectContent[i].SectionName =  value;
     //this.wikiForm.get('Wikis')['controls'][i].get('WikiSection').setValue(value);
+  }
+
+  editProjectTitle(e: any) {
+    let value = e.target.innerText;
+    this.projectDetail.Title =  value;
   }
 
   addSubTitle() {
@@ -174,13 +179,6 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     alert(e);
   }
 
-  addTitle() {
-    if(this.titleValue && this.titleValue != '') {
-      this.projectDetail.Title = this.titleValue;
-      this.titleValue = '';
-      $("#addTitleModal").modal('hide');
-    }
-  }
 
   addParagraph() {
     let divtag = document.createElement("div");

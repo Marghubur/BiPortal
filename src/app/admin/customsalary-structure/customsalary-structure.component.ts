@@ -527,12 +527,13 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   removeFromSalaryGroup() {
+    this.isLoading = true;
     this.http.delete(`SalaryComponent/RemoveAndUpdateSalaryGroup/${this.componentFields.ComponentId}/${this.currentGroup.SalaryGroupId}`)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
-        this.salaryStructureType = response.ResponseBody;
-        Toast("Salary Group added suuccessfully.");
-        $('#addSalaryGroupModal').modal('hide');
+        this.groupComponents = JSON.parse(response.ResponseBody.SalaryComponents);
+        Toast("Component removed from salary group successfully");
+        $('#componentDeleteOrUpdateModel').modal('hide');
         this.isLoading = false;
       } else {
         ErrorToast("Unable to add salary group.")

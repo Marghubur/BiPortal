@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 /*----------------------- how to use ---------------
 
 
-  <app-image-loader 
+  <app-image-loader
     [Url]="'imagepath.png'"
     [ClassName]="'custom-class-name'">
   </app-image-loader>
@@ -44,6 +44,6 @@ export class ImageLoaderComponent implements OnInit {
 
   hideLoader() {
     if(this.imageUrl && this.imageUrl !== "")
-      this.isLoading = !this.isLoading;
+      this.isLoading = false;
   }
 }
