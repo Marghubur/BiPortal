@@ -47,7 +47,9 @@
                         </div>
                         <div class="col-md-10 col-sm-9 outline-none" id="main-container" (contextmenu)="manipulateSection($event)" (click)="disabeSection()" (keydown.esc)="closePopOver()" tabindex="0">
                           <div class="col-md-12 px-4 dv-space">
-                            <h2>{{projectDetail.Title}}</h2>
+                            <div contenteditable="true" class="fw-bold fs-3" (keyup)="editProjectTitle($event)">
+                              {{projectDetail.Title}}
+                            </div>
 
                             <ng-container *ngIf="isLoaded">
                               <form [formGroup]="wikiForm">
@@ -122,33 +124,6 @@
       </form>
     </div>
 </div>
-
-<!-- Add Title Modal -->
-<div class="modal fade" id="addTitleModal" tabindex="-1" aria-labelledby="addTitleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content px-4">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addTitleModalLabel">Add Project Title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- <div>
-          <label for="" class="form-label">Add Project Name</label>
-          <input placeholder="Enter the Project name" type="text" class="form-control" [(ngModel)]="projectDetail.ProjectName"/>
-        </div> -->
-        <div>
-          <label for="" class="form-label">Add Title</label>
-          <textarea placeholder="Enter the title of this project" rows="3" type="text" class="form-control" [(ngModel)]="titleValue"></textarea>
-        </div>
-      </div>
-      <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
-        <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addTitle()"><i class="fa fa-plus pe-2"></i>Add</a>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End -->
 
 <!-- Add Link Modal -->
 <div class="modal fade" id="addLinkModal" tabindex="-1" aria-labelledby="addLinkModalLabel" aria-hidden="true">

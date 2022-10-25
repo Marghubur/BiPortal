@@ -828,21 +828,50 @@
       <div class="modal-body px-5">
         <form [formGroup]="SalaryGroupForm" *ngIf="SalaryGroupForm">
           <div class="col-md-12 row m-0 p-0">
-            
+
             <div class="col-md-12 mt-3">
               <label for="" class="form-label">Please confirm component</label>
-              <div>
-                {{componentFields.ComponentFullName}}
+              <div class="t-table t-list t-border col-md-12 my-3">
+                <div class="hide-bar bg-light"></div>
+                <div class="t-head bg-light fw-bold">
+                  <div class="tr">
+                    <div class="th text-truncate ps-3 fe-2">
+                      COMPONENT NAME
+                    </div>
+                    <div class="th text-truncate ps-3">
+                      TAX EXEMPT
+                    </div>
+                    <div class="th text-truncate ps-3">
+                      ANNUAL CALCULATION
+                    </div>
+                  </div>
+                </div>
+                <div class="t-body custom-height">
+                  <div class="tr py-2" *ngIf="componentFields != null">
+                    <div class="td ps-3 text-truncate fe-2">
+                      {{componentFields.ComponentId}} ({{componentFields.ComponentFullName}})
+                    </div>
+                    <div class="td ps-3 text-truncate">
+                      <ng-container [ngSwitch]="componentFields.TaxExempt">
+                        <div *ngSwitchCase="true">Tax Exempt</div>
+                        <div *ngSwitchDefault>Taxable</div>
+                      </ng-container>
+                    </div>
+                    <div class="td ps-3 text-truncate">
+                      <span class="badge bg-primary">{{componentFields.Formula}}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
+              <p><span class="text-dark fw-bold">Note:</span> <span class="text-danger ps-2">If you remove this component then it will be removed permanently from this alary group.</span></p>
             </div>
-                        
           </div>
         </form>
       </div>
       <div class="modal-footer border-top-0 me-3">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary-c" (click)="removeFromSalaryGroup()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Removing' : 'Remove From Group' }}</span>
           </button>
       </div>
