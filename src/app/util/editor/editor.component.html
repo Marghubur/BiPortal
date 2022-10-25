@@ -1,4 +1,4 @@
-<div (focusout)="closePopOver()" (keydown.esc)="closePopOver()">
+<div (click)="closePopOver()" (keydown.esc)="closePopOver()">
     <div (contextmenu)="manipulateSection($event)">
         <div>
             <div class="content-dv enable-section overflow-none py-2 px-3" 

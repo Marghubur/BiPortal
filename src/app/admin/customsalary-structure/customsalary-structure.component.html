@@ -136,8 +136,12 @@
                     </div>
                     <ng-container>
                       <div class="td ps-3">
-                        <a class="text-decoration-none text-dark" href="javascript:void(0)"
-                          (click)="updateCalcModel(item)"><i class="fa fa-ellipsis-h fa-lg" aria-hidden="true"></i></a>
+                        <a class="text-decoration-none text-muted" href="javascript:void(0)"
+                          (click)="updateCalcModel(item)"><i class="fa fa-ellipsis-h fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <a class="text-decoration-none text-muted ms-4" href="javascript:void(0)"
+                          (click)="openComponentDeleteOrUpdateModel(item)"><i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
                       </div>
                     </ng-container>
                   </div>
@@ -805,6 +809,42 @@
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Create Salary Group' }}</span>
           </button>
         </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+
+<!-- Add Salary Group Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="componentDeleteOrUpdateModel" tabindex="-1"
+  aria-labelledby="componentDeleteOrUpdateModel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title px-4" id="componentDeleteOrUpdateModel">Remove and update component(s)</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5">
+        <form [formGroup]="SalaryGroupForm" *ngIf="SalaryGroupForm">
+          <div class="col-md-12 row m-0 p-0">
+            
+            <div class="col-md-12 mt-3">
+              <label for="" class="form-label">Please confirm component</label>
+              <div>
+                {{componentFields.ComponentFullName}}
+              </div>
+            </div>
+                        
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0 me-3">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary-c" (click)="removeFromSalaryGroup()">
+            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+            <span class="ps-2">{{ isLoading ? 'Removing' : 'Remove From Group' }}</span>
+          </button>
       </div>
     </div>
   </div>

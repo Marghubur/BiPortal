@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-md-4 mt-3">
                       <label for="" class="form-label">Team Members</label>
-                      <textarea type="text" rows="2"  formControlName="TeamMemberIds"class="form-control" placeholder="Team Members" [ngClass]="{'error-field': submitted && f.TeamMemberIds.errors !== null && f.TeamMemberIds.errors.required}"></textarea>
+                      <textarea type="text" rows="2"  formControlName="TeamMemberIds"class="form-control" placeholder="Team Members"></textarea>
                     </div>
                     <div class="col-md-4 mt-3">
                       <label class="form-label">Homepage URL</label>
@@ -55,8 +55,8 @@
                   <div class="row">
                     <div class="col-md-4 mt-3">
                       <label class="form-label">Project Manager</label>
-                      <select class="form-select" formControlName="ProjectManagerId" [ngClass]="{'error-field': submitted && f.ProjectManagerId.errors !== null && f.ProjectManagerId.errors.required}">
-                        <option value=null>Select Project Manager</option>
+                      <select class="form-select" formControlName="ProjectManagerId">
+                        <option value="0">Select Project Manager</option>
                         <option [value]="item.EmployeeUid" *ngFor="let item of projectManagers">{{item.FirstName}} {{item.LastName}}</option>
                       </select>
                     </div>

@@ -44,7 +44,6 @@ export class CustomsalaryStructureComponent implements OnInit {
   customSalaryStructureForm: FormGroup;
   currentGroup: any = null;
   compnayDetail: any = null;
-
   constructor(
     private fb: FormBuilder,
     private http: AjaxService,
@@ -520,6 +519,28 @@ export class CustomsalaryStructureComponent implements OnInit {
   resetSalaryFilter(e: any) {
     e.target.value = '';
     this.salaryComponentFields = this.allComponentFields;
+  }
+
+  openComponentDeleteOrUpdateModel(item: any) {
+    $("#componentDeleteOrUpdateModel").modal('show');
+    this.componentFields = item;
+  }
+
+  removeFromSalaryGroup() {
+    this.http.delete(`SalaryComponent/RemoveAndUpdateSalaryGroup/${this.componentFields.ComponentId}/${this.currentGroup.SalaryGroupId}`)
+    .then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        this.salaryStructureType = response.ResponseBody;
+        Toast("Salary Group added suuccessfully.");
+        $('#addSalaryGroupModal').modal('hide');
+        this.isLoading = false;
+      } else {
+        ErrorToast("Unable to add salary group.")
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+
   }
 }
 
