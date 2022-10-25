@@ -56,7 +56,7 @@
                             I agree to our Terms of Service
                           </label>
                         </div>
-                        <a href="javascript:void(0)" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+                        <a href="javascript:void(0)" (click)="forgotPasswordModal()" class="ml-auto mb-0 text-sm">Forgot Password?</a>
                       </div>
                       <div class="row mb-3 px-3">
                         <button type="button" (click)="UserLogin()" [disabled]="isLoading"
@@ -149,6 +149,32 @@
       <div class="social-contact ms-4 ms-sm-auto"> <span class="fa fa-facebook me-4 text-sm"></span> <span
           class="fa fa-google-plus me-4 text-sm"></span> <span class="fa fa-linkedin me-4 text-sm"></span> <span
           class="fa fa-twitter me-4 me-sm-5 text-sm"></span> </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="ForgotPasswordModal" tabindex="-1" aria-labelledby="ForgotPasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="ForgotPasswordModalLabel">Forgot Password Modal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <div>
+        <label for="">Enter your register email</label>
+        <input type="text" placeholder="Enter your register email" class="form-control" id="registeredEmailId">
+       </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="button" (click)="sendForgotPassword()" [disabled]="isLoading"
+                      class="btn btn-primary-dark text-center">
+                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, ' fa-paper-plane': !isLoading}"></i>
+                      {{ isLoading ? 'Sending' : 'Send' }}</button>
+      </div>
     </div>
   </div>
 </div>

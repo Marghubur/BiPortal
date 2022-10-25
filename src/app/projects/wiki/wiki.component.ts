@@ -141,7 +141,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   editProjectTitle(e: any) {
-    let value = e.target.innerText;
+    let value = e.target.value;
     this.projectDetail.Title =  value;
   }
 
