@@ -477,8 +477,9 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-success"
-                            (click)="nextDeclaration('otherExemptions')">Next<i
-                              class="fa fa-arrow-right ps-2"></i></button>
+                            (click)="nextDeclaration('otherExemptions')"> {{isLoading ? 'Wait': 'Next'}}
+                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-right': !isLoading}"></i>
+                          </button>
                         </div>
                       </ng-container>
                     </ng-template>
@@ -676,11 +677,12 @@
                           </div>
                         </div>
                         <div class="modal-footer border-top-0">
-                          <button type="button" class="btn btn-outline-primary"
-                            (click)="nextDeclaration('exemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
-                          <button type="button" class="btn btn-outline-success"
-                            (click)="nextDeclaration('taxSavingAllowance')">Next <i
-                              class="fa fa-arrow-right ps-2"></i></button>
+                          <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('exemptions')">
+                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>{{isLoading ? 'Wait': 'Prev'}}
+                          </button>
+                          <button type="button" class="btn btn-outline-success" (click)="nextDeclaration('taxSavingAllowance')"> {{isLoading ? 'Wait': 'Next'}}
+                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-right': !isLoading}"></i>
+                          </button>
                         </div>
                       </ng-container>
                     </ng-template>
@@ -874,11 +876,11 @@
                           </div>
                         </div>
                         <div class="modal-footer border-top-0">
-                          <button type="button" class="btn btn-outline-primary"
-                            (click)="nextDeclaration('otherExemptions')"><i class="fa fa-arrow-left pe-2"></i>
-                            Prev</button>
-                          <button type="button" class="btn btn-outline-success"
-                            (click)="submitDeclaration()">Submit</button>
+                          <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('otherExemptions')">
+                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>{{isLoading ? 'Wait': 'Prev'}}
+                          </button>
+                          <!-- <button type="button" class="btn btn-outline-success"
+                            (click)="submitDeclaration()">Submit</button> -->
                         </div>
                       </ng-container>
                     </ng-template>

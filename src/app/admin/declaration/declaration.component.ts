@@ -655,6 +655,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
             this.isLoading = false;
             Toast("Declaration detail loaded successfully");
           }
+          this.isLoading = false;
+        }).catch(e => {
+          this.isLoading = false;
         });
       }
     } else {
