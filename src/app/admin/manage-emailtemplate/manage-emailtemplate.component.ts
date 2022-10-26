@@ -65,7 +65,7 @@ export class ManageEmailtemplateComponent implements OnInit {
 
   initForm() {
     this.emailTemplateForm = this.fb.group({
-      EmailTemplateId: new FormControl(this.emailTemplateDetail.EmailTemplateId),
+      EmailTemplateId: new FormControl(this.emailTemplateId),
       CompanyId: new FormControl(this.companyId),
       TemplateName: new FormControl(this.emailTemplateDetail.TemplateName, [Validators.required]),
       SubjectLine: new FormControl(this.emailTemplateDetail.SubjectLine, [Validators.required]),
@@ -83,9 +83,9 @@ export class ManageEmailtemplateComponent implements OnInit {
   }
 
   buildBody() {
-    let bodyContent = this.emailTemplateForm.get("BodyContent").value; 
+    let bodyContent = this.emailTemplateForm.get("BodyContent").value;
     if(bodyContent != null && bodyContent != "") {
-      
+
     } else {
 
     }
@@ -103,9 +103,11 @@ export class ManageEmailtemplateComponent implements OnInit {
     let value = this.emailTemplateForm.value;
     value.BodyContent = data;
     this.http.post("Email/InsertUpdateEmailTemplate", value).then((res:ResponseModel) => {
-      if (res.ResponseBody) {
+      if (res.ResponseBody && res.ResponseBody != '') {
+        this.emailTemplateId = Number(res.ResponseBody);
+        this.emailTemplateForm.get('EmailTemplateId').setValue(this.emailTemplateId);
         this.isLoading = false;
-        Toast(res.ResponseBody);
+        Toast("Template inserted/ updated successfully.");
       }
     }).catch(e => {
       this.isLoading = false;
