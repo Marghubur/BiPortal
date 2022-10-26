@@ -88,6 +88,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.employeesList.placeholder = "Employee";
     this.employeesList.className = 'disable-field';
     this.isEmployeesReady = true;
+
+    this.EmployeeId = this.local.getByKey("EmployeeId");
     this.loadData();
     this.rentedResidence();
     var dt = new Date();
@@ -123,16 +125,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       });
       i++;
     }
-
-    let empId = this.local.getByKey("EmployeeId");
-    if(empId != null){
-      if (isNaN(Number(empId))) {
-        WarningToast("Unable to fetch previous EmployeeId. Please selecte from given dropdown.");
-      } else {
-        this.getDeclaration(Number(empId));
-      }
-    }
-    // this.getDeclaration(32);
   }
 
   ngAfterViewChecked(): void {
@@ -682,6 +674,14 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
         this.isEmployeesReady = true;
+      }
+
+      if(this.EmployeeId != null){
+        if (isNaN(Number(this.EmployeeId))) {
+          WarningToast("Unable to fetch previous EmployeeId. Please selecte from given dropdown.");
+        } else {
+          this.getDeclaration(Number(this.EmployeeId));
+        }
       }
     });
   }
