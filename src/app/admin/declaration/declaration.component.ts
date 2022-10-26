@@ -654,12 +654,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
             i++;
           }
         }
-        this.SectionIsReady = false;
+        this.isLoading = true;
         formData.append('declaration', JSON.stringify(value));
         formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
             this.bindData(response.ResponseBody);
+            this.isLoading = false;
             Toast("Declaration detail loaded successfully");
           }
         });

@@ -454,11 +454,14 @@
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
                                     name="cancel-declaration">
-                                    <a href="javascript:void(0)" class="text-decoration-none"
-                                      (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
+                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isLoading}"
+                                      (click)="saveDeclaration(r, $event)">
+                                      <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
+                                      <span *ngIf="!isLoading">Save</span>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
                                       (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                                 <div class="td text-center fe-1" *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
@@ -653,11 +656,14 @@
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
                                     name="cancel-declaration">
-                                    <a href="javascript:void(0)" class="text-decoration-none"
-                                      (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
+                                    <a href="javascript:void(0)" class="text-decoration-none"  [ngClass]="{'pe-none': isLoading}"
+                                      (click)="saveDeclaration(r, $event)">
+                                      <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
+                                      <span *ngIf="!isLoading">Save</span>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
                                       (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                               </div>
@@ -848,11 +854,14 @@
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
                                     name="cancel-declaration">
-                                    <a href="javascript:void(0)" class="text-decoration-none"
-                                      (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
+                                    <a href="javascript:void(0)" class="text-decoration-none"  [ngClass]="{'pe-none': isLoading}"
+                                      (click)="saveDeclaration(r, $event)">
+                                      <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
+                                      <span *ngIf="!isLoading">Save</span>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
                                       (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                               </div>
