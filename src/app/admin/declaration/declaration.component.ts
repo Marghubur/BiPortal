@@ -320,7 +320,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           i++;
         }
       }
-      this.SectionIsReady = false;
       formData.append('declaration', JSON.stringify(value));
       formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
       this.http.upload(`Declaration/HousingPropertyDeclaration/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
@@ -328,7 +327,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.bindData(response.ResponseBody);
           Toast("House property deatils added successfully.");
           $('#rentedResidenceModal').modal('hide')
-          this.SectionIsReady = true;
           this.isLoading = false;
         }
       }).catch(e => {

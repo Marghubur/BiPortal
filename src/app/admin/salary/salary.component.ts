@@ -124,15 +124,26 @@ export class SalaryComponent implements OnInit {
 
       if (singleDetail) {
         this.salaryComponents = singleDetail.SalaryBreakupDetails;
+        let annual = 0;
+        let other = 0;
+        let salary = 0;
+        if (this.salaryComponents.find(x => x.ComponentId == "Gross")) {
+          salary = ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount), 2);
+          annual = ToFixed((salary * 12), 2);
+        }
+
+        if (this.salaryComponents.find(x => x.ComponentId == "EPER-PF"))
+          other = ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2);
+
         this.myAnnualSalary = {
-          Annual: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount * 12), 2),
+          Annual: annual,
           Bonus: 0,
-          Other: ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2),
-          Total: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount * 12) + (this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2),
+          Other: other,
+          Total: annual + other,
           Effective: this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId).UpdatedOn,
-          PFperMonth: ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2)/12,
+          PFperMonth: other/12,
           Perks: 0,
-          SalaryMonth: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount), 2)
+          SalaryMonth: salary
         }
         this.isReady = true;
       } else {
