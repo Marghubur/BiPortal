@@ -3,8 +3,8 @@ import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary } from 's
 import { BillDetails } from 'src/app/admin/files/files.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
+import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, Declaration, Preferences, Salary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -49,20 +49,19 @@ export class SummaryComponent implements OnInit {
 
   ngOnInit(): void {
     let date = new Date();
-    this.loadData();
     this.currentMonth = date.getMonth();
     this.currentYear = date.getFullYear();
     this.monthName = this.convertNumberToMonth(this.currentYear, this.currentMonth);
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     if(expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-      else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-      if(Master !== null && Master !== "") {
-        this.userDetail = Master["UserDetail"];
-        this.employeeId = this.userDetail.UserId;
-        this.LoadFiles();
+    this.userDetail["TokenExpiryDuration"] = new Date();
+    else
+    this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
+    let Master = this.local.get(null);
+    if(Master !== null && Master !== "") {
+      this.userDetail = Master["UserDetail"];
+      this.employeeId = this.userDetail.UserId;
+      this.loadData();
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -92,20 +91,16 @@ export class SummaryComponent implements OnInit {
         this.applicationData = response.ResponseBody;
         this.employeesList.data = [];
         this.employeesList.placeholder = "Employee";
-        let employees = this.applicationData.Employees;
-        if(employees) {
-          let i = 0;
-          while(i < employees.length) {
-            this.employeesList.data.push({
-              text: `${employees[i].FirstName} ${employees[i].LastName}`,
-              value: employees[i].EmployeeUid
-            });
-            i++;
-          }
-        }
+        this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
+      }
 
-        this.isSummaryReady = true;
+      if(this.employeeId != null){
+        if (isNaN(Number(this.employeeId))) {
+          WarningToast("Unable to fetch previous EmployeeId. Please selecte from given dropdown.");
+        } else {
+          this.LoadFiles();
+        }
       }
     });
   }

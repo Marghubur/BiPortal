@@ -320,7 +320,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           i++;
         }
       }
-      this.SectionIsReady = false;
       formData.append('declaration', JSON.stringify(value));
       formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
       this.http.upload(`Declaration/HousingPropertyDeclaration/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
@@ -328,7 +327,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.bindData(response.ResponseBody);
           Toast("House property deatils added successfully.");
           $('#rentedResidenceModal').modal('hide')
-          this.SectionIsReady = true;
           this.isLoading = false;
         }
       }).catch(e => {
@@ -646,14 +644,18 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
             i++;
           }
         }
-        this.SectionIsReady = false;
+        this.isLoading = true;
         formData.append('declaration', JSON.stringify(value));
         formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
             this.bindData(response.ResponseBody);
+            this.isLoading = false;
             Toast("Declaration detail loaded successfully");
           }
+          this.isLoading = false;
+        }).catch(e => {
+          this.isLoading = false;
         });
       }
     } else {
