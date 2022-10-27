@@ -136,7 +136,6 @@ export class TimesheetComponent implements OnInit {
       this.clientId = this.cachedData.ClientUid;
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.isEmployeesReady = true;
-      this.loadMappedClients();
       this.loadData();
     } else {
       let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
@@ -153,48 +152,11 @@ export class TimesheetComponent implements OnInit {
         //$('#loader').modal('show');
         this.employeeId =0;
         this.loadData();
-        this.loadMappedClients();
-
-
       } else {
         Toast("Invalid user. Please login again.")
       }
     }
-
     this.fromPresentDatea();
-  }
-
-
-
-  loadMappedClients() {
-    // this.isEmployeesReady = false;
-    // this.http.get(`employee/GetManageEmployeeDetail/${this.employeeId}`).then((response: ResponseModel) => {
-    //   if(response.ResponseBody) {
-    //     let mappedClient = response.ResponseBody.AllocatedClients;
-    //     if(mappedClient != null && mappedClient.length > 0) {
-    //       let i = 0;
-    //       while(i < mappedClient.length) {
-    //         this.clientDetail.data.push({
-    //           text: mappedClient[i].ClientName,
-    //           value: mappedClient[i].ClientUid,
-    //         });
-    //         i++;
-    //       }
-
-    //       if(mappedClient.length == 1) {
-    //         this.clientId = mappedClient[0].ClientUid;
-    //       }
-    //       Toast("Client loaded successfully.");
-    //     } else {
-    //       ErrorToast("Unable to get client detail. Please contact admin.");
-    //     }
-
-    //     this.isEmployeesReady = true;
-    //     $('#loader').modal('hide');
-    //   } else {
-    //     ErrorToast("Unable to get client detail. Please contact admin.");
-    //   }
-    // });
   }
 
   loadData() {
@@ -207,7 +169,6 @@ export class TimesheetComponent implements OnInit {
         let employees = this.applicationData.Employees;
         this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
-
         this.isEmployeesReady = true;
       }
     });
@@ -710,9 +671,9 @@ export class TimesheetComponent implements OnInit {
     if(this.clientId > 0) {
       this.isLoading = true;
       this.fromDate = new Date(2022, this.month - 1, 1);
-      this.fromModel = { 
-        day: this.fromDate.getDate(), 
-        month: this.fromDate.getMonth() + 1, 
+      this.fromModel = {
+        day: this.fromDate.getDate(),
+        month: this.fromDate.getMonth() + 1,
         year: this.fromDate.getFullYear()
       };
 
