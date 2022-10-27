@@ -4,7 +4,7 @@ import { tableConfig } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { Attendance, Documents, DocumentsPage, Employees, Files, ManageEmployee, Profile, UserType } from 'src/providers/constants';
+import { Attendance, Documents, DocumentsPage, EmployeePerformance, Employees, Files, ManageEmployee, Profile, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { DocumentUser } from '../documents/documents.component';
@@ -382,6 +382,14 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   goToAttendancePage(user: any) {
     if(user) {
       this.nav.navigate(Attendance, user);
+    } else {
+      Toast("Please select an employee")
+    }
+  }
+
+  goToPerformancePage(user: any) {
+    if(user) {
+      this.nav.navigate(EmployeePerformance, user);
     } else {
       Toast("Please select an employee")
     }

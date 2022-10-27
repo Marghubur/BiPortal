@@ -64,6 +64,7 @@ import { CompanyComponent } from './company/company.component';
 import { ProjectsModule } from '../projects/projects.module';
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
+import { EmployeePerformanceComponent } from '../Admin/employee-performance/employee-performance.component';
 
 @NgModule({
   declarations: [
@@ -123,7 +124,8 @@ import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emai
     MenusettingComponent,
     CompanyComponent,
     EmailTemplateComponent,
-    ManageEmailtemplateComponent
+    ManageEmailtemplateComponent,
+    EmployeePerformanceComponent
   ],
   imports: [
     CommonModule,
