@@ -53,7 +53,8 @@ import { AdminResetPassword, AdminDeclaration,
   MenuSetting,
   Company,
   EmailTemplate,
-  ManageEmailTemplate
+  ManageEmailTemplate,
+  EmployeePerformance
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -109,6 +110,7 @@ import { MenusettingComponent } from './menusetting/menusetting.component';
 import { CompanyComponent } from './company/company.component';
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
+import { EmployeePerformanceComponent } from './employee-performance/employee-performance.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -165,7 +167,8 @@ const routes: Routes = [
   { path: MenuSetting, component: MenusettingComponent},
   { path: Company, component: CompanyComponent},
   { path: EmailTemplate, component: EmailTemplateComponent},
-  { path: ManageEmailTemplate, component: ManageEmailtemplateComponent}
+  { path: ManageEmailTemplate, component: ManageEmailtemplateComponent},
+  { path: EmployeePerformance, component: EmployeePerformanceComponent}
 ];
 
 @NgModule({

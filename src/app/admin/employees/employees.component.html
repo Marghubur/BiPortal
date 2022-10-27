@@ -128,9 +128,12 @@
                         <a href="javascript:void(0)" (click)="EditCurrent(user)">{{user.FirstName}}
                           {{user.LastName}}</a>
                         <div class="float-end">
+                          <a href="javascript:void(0)"  data-bs-toggle="tooltip" (click)="goToPerformancePage(user)"
+                            data-bs-placement="right" title="View Employee Performance"><span class="badge bg-secondary me-3"><i
+                                class="fa fa-line-chart"></i></span></a>
                           <a href="javascript:void(0)" (click)="editProfile(user)" data-bs-toggle="tooltip"
                             data-bs-placement="right" title="View Profile"><span class="badge bg-dark me-3"><i
-                                class="fa fa fa-user-circle-o user-edit-icon"></i></span></a>
+                                class="fa fa-user-circle-o user-edit-icon"></i></span></a>
                           <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o"
                               data-bs-toggle="tooltip" data-bs-placement="right"
                               title="{{user.FirstName}} {{user.LastName}} is associated with {{user.ClientJson.length}} clients">
