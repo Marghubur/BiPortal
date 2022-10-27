@@ -379,14 +379,20 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       if(this.employeeForm.value.AllocatedClients == undefined || this.employeeForm.value.AllocatedClients == undefined)
         this.employeeForm.value.AllocatedClients = [];
 
-      formData.append("allocatedClients", JSON.stringify(this.employeeForm.value.AllocatedClients));
+      // formData.append("allocatedClients", JSON.stringify(this.employeeForm.value.AllocatedClients));
       formData.append("ProfessuinalDetail_JSON", this.ProfessuinalDetail_JSON);
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
 
       formData.append(ProfileImage, file);
-      this.http.post(`Employee/employeeregistration/${this.isUpdate}`, formData)
+      let url: string = "";
+      if(this.isUpdate)
+      url = `Employee/updateemployeedetail`;
+      else
+      url = `Employee/employeeregistration`;
+
+      this.http.post(url, formData)
       .then(res => {
         this.buildPageData(res);
         this.bindForm();
@@ -456,7 +462,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.http.post(`employee/UpdateEmployeeDetail/${this.isUpdated}`, this.activeAssignedClient).then((response: ResponseModel) => {
+    this.http.post(`employee/UpdateEmployeeMappedClientDetail/${this.isUpdated}`, this.activeAssignedClient).then((response: ResponseModel) => {
       if (response.ResponseBody.Table) {
         this.allocatedClients = response.ResponseBody.Table;
         if(this.allocatedClients.length > 0) {
