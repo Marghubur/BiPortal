@@ -337,6 +337,98 @@
                             <h6 class="text-dark">INR 0</h6>
                           </div>
                         </div>
+                        <!-- <table class="table">
+                          <thead>
+                            <tr>
+                              <th>SECTION</th>
+                              <th>DEDUCTION NAME</th>
+                              <th>DECLARATION</th>
+                              <th>PROOF</th>
+                              <th>STATUS</th>
+                              <th>ACTIONS</th>
+                            </tr>
+                          </thead>
+                          <tbody *ngIf="SectionIsReady">
+                            <ng-container *ngFor="let r of ExemptionDeclaration; let i=index">
+                              <tr>
+                                <td name="table-row">
+                                  <div name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
+                                    {{r.Section}} <sup>$</sup>
+                                  </div>
+                                </td>
+                                <td>
+                                  {{r.ComponentId}} ({{r.ComponentFullName}})
+                                  <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-question-circle ps-3 text-secondary text-justify" data-bs-toggle="tooltip" data-bs-placement="right" title='{{r.ComponentDescription}}'></i></a>
+                                </td>
+                                <td>
+                                  <div name="view-control">
+                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
+                                      number:'':'en'}}</span>
+                                    <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
+                                    <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
+                                      name="edit-control">
+                                      <span class="pe-2 d-flex flex-column justify-content-center">
+                                        <i class="fa fa-inr"></i>
+                                      </span>
+                                      <input [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control">
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div *ngIf="r.UploadedFileIds != null">
+                                    <a href="javascript:void(0)" name="upload-proof"
+                                      class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
+                                      <div class="d-flex align-items-center">
+
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2">Uploaded</span>
+                                      </div>
+                                    </a>
+                                  </div>
+                                  <div *ngIf="r.UploadedFileIds == null">
+                                    <a href="javascript:void(0)" name="upload-proof"
+                                      class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
+                                      <i class="fa fa-paperclip pe-2"></i>Not Upload
+                                    </a>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="d-flex align-items-center">
+                                      <ng-container *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2 fw-bold text-dark">Auto Accepted</span>
+                                      </ng-container>
+                                      <ng-container *ngIf="r.DeclaredValue > 0 && (r.ComponentId != 'EPF' || r.ComponentId != 'VPF')">
+                                        <i class="fa fa-check-circle fa-lg text-success"></i>
+                                        <span class="ps-2">Submitted</span>
+                                      </ng-container>
+                                    </div>
+                                    <span *ngIf="r.DeclaredValue <= 0 && (r.ComponentId != 'EPF' && r.ComponentId != 'VPF')">Not Submitted</span>
+                                </td>
+                                <td *ngIf="r.ComponentId != 'EPF' && r.ComponentId != 'VPF'">
+                                  <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
+                                    ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
+                                  <div class="d-flex align-items-center justify-content-center d-none"
+                                    name="cancel-declaration">
+                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isLoading}"
+                                      (click)="saveDeclaration(r, $event)">
+                                      <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
+                                      <span *ngIf="!isLoading">Save</span>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
+                                      (click)="closeDeclaration(r, $event)">Cancel</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
+                                  </div>
+                                </td>
+                                <td *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'"></td>
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                          <div class="t-body fs-5 text-center p-5 m-5" *ngIf="!SectionIsReady">
+                            Unable to load the declaration.
+                            Please contact to admin.
+                          </div>
+                        </table> -->
                         <div class="t-table t-list t-border col-md-12">
                           <div class="hide-bar"></div>
                           <div class="t-head">
@@ -417,10 +509,7 @@
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
-                                          <!-- <div class="circle">
-                                            <div class="checkmark">
-                                            </div>
-                                          </div> -->
+
                                           <i class="fa fa-check-circle fa-lg text-success"></i>
                                           <span class="ps-2">Uploaded</span>
                                         </div>
@@ -477,8 +566,8 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-success"
-                            (click)="nextDeclaration('otherExemptions')"> {{isLoading ? 'Wait': 'Next'}}
-                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-right': !isLoading}"></i>
+                            (click)="nextDeclaration('otherExemptions')"> <span class="pe-2">{{isLoading ? 'Wait': 'Next'}}</span>
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-right': !isLoading}"></i>
                           </button>
                         </div>
                       </ng-container>
@@ -678,10 +767,11 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('exemptions')">
-                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>{{isLoading ? 'Wait': 'Prev'}}
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+                            <span class="ps-2">{{isLoading ? 'Wait': 'Prev'}}</span>
                           </button>
-                          <button type="button" class="btn btn-outline-success" (click)="nextDeclaration('taxSavingAllowance')"> {{isLoading ? 'Wait': 'Next'}}
-                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-right': !isLoading}"></i>
+                          <button type="button" class="btn btn-outline-success" (click)="nextDeclaration('taxSavingAllowance')"><span class="pe-2">{{isLoading ? 'Wait': 'Next'}}</span>
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-right': !isLoading}"></i>
                           </button>
                         </div>
                       </ng-container>
@@ -877,7 +967,8 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('otherExemptions')">
-                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>{{isLoading ? 'Wait': 'Prev'}}
+                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+                            <span class="ps-2">{{isLoading ? 'Wait': 'Prev'}}</span>
                           </button>
                           <!-- <button type="button" class="btn btn-outline-success"
                             (click)="submitDeclaration()">Submit</button> -->
@@ -1403,3 +1494,9 @@
   </div>
 </div>
 <!-- End -->
+
+
+<!-- <div class="circle">
+  <div class="checkmark">
+  </div>
+</div> -->
