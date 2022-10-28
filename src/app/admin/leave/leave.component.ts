@@ -77,13 +77,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     this.isLeavePageReady = false;
     this.http.post("leave/GetLeavePlans", this.employeeFilter).then((result: ResponseModel) => {
       if(result.ResponseBody) {
-        if(result.ResponseBody.LeavePlan) {
-          this.leavePlanList = result.ResponseBody.LeavePlan;
-        } else {
-          ErrorToast("Fail to load leave plan data.");
-          return;
-        }
-
+        this.leavePlanList = result.ResponseBody;
         this.bindFirstPlanOnPage();
         this.isLeavePageReady = true;
         Toast("Leave plan loaded successfully.");
@@ -150,14 +144,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       this.currentPlan = this.leavePlanList[0];
       if(this.currentPlan.AssociatedPlanTypes){
         this.planLeaveTypes = JSON.parse(this.currentPlan.AssociatedPlanTypes);
-
-        if(this.planLeaveTypes && this.planLeaveTypes.length > 0) {
-          let i = 0;
-          while(i < this.planLeaveTypes.length) {
-            this.planLeaveTypes[i].LeavePlanId = this.currentPlan.LeavePlanId;
-            i++;
-          }
-        } else {
+        if(!this.planLeaveTypes) {
           this.planLeaveTypes = [];
         }
       }
