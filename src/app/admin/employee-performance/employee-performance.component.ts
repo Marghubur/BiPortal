@@ -13,23 +13,18 @@ import { UserService } from 'src/providers/userService';
   styleUrls: ['./employee-performance.component.scss']
 })
 export class EmployeePerformanceComponent implements OnInit {
-  userId: number = 0;
   employeeUid: number = 0;
-  userName: string = "";
-  isPageReady: boolean = false;
   employeeDetails: any = null;
   allocatedClients: any = null;
   performanceMonthsYears: Array<any> = [];
-  currentPayslip: any = null;
+  currentPerformance: any = null;
   isActive: boolean = false;
   daysInMonth: Array<number> = [];
   graphInstances: Array<any> = [];
-  performanecMonths: Array<string> = [];
+  months: Array<string> = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   constructor(private nav:iNavigation,
-              private http: AjaxService,
-              private local: ApplicationStorage,
-              private user: UserService) { }
+              private local: ApplicationStorage) { }
 
   ngOnInit(): void {
     let data = this.nav.getValue();
@@ -45,12 +40,12 @@ export class EmployeePerformanceComponent implements OnInit {
       this.allocatedClients = company.find(x => x.CompanyId == this.employeeDetails.CompanyId);
     let date = new Date();
     this.findNoOfDaysinMonth(date.getMonth(), date.getFullYear());
-    this.getAllMonthPerformance();
+    this.getLastFourMonth();
     this.DestroyGraphInstances();
     this.monthlyPerformaceChart();
     this.yearlyPerformaceChart();
     this.performanceMonthsYears[0].isActive = false;
-    this.currentPayslip = {
+    this.currentPerformance = {
         month: this.performanceMonthsYears[0].months,
         year: this.performanceMonthsYears[0].years,
       }
@@ -63,24 +58,22 @@ export class EmployeePerformanceComponent implements OnInit {
     }
   }
 
-  getAllMonthPerformance() {
+  getLastFourMonth() {
     let month = new Date().getMonth()+1;
     let year = new Date().getFullYear();
     let i =0;
-    while (i < new Date().getMonth()) {
+    while (i < 4) {
       if (month == 1) {
         month = 12;
         year --;
       } else {
         month --;
       }
-      let mnth = new Date(year, month-1, 1).toLocaleString("en-us", { month: "long"});
       this.performanceMonthsYears.push({
-        months: mnth,
+        months: new Date(year, month-1, 1).toLocaleString("en-us", { month: "long"}),
         years: year,
         isActive: true
       });
-      this.performanecMonths.push(mnth)
       i++;
     };
   }
@@ -117,13 +110,36 @@ export class EmployeePerformanceComponent implements OnInit {
     const yearlyChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels:  this.performanecMonths.reverse(),
+        labels:  this.months,
         datasets: [{
           label: 'Yearly Performance',
-          backgroundColor: 'rgb(255, 99, 132)',
-          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: '#7570b3',
+          borderColor: '#7570b3',
+          pointBackgroundColor: '#443f7c',
+          pointHoverBorderColor: '#443f7c',
+          pointBorderColor: '#443f7c',
+          pointHoverBackgroundColor: '#443f7c',
           data: [0, 10, 5, 2, 20, 30, 45],
-      }]
+        },{
+          label: 'Yearly Performance',
+          backgroundColor: '#66a61e',
+          borderColor: '#66a61e',
+          pointBackgroundColor: '#66a61e',
+          pointHoverBorderColor: '#66a61e',
+          pointBorderColor: '#66a61e',
+          pointHoverBackgroundColor: '#66a61e',
+          data: [5, 15, 25, 20, 20, 20, 15],
+        },
+        {
+          label: 'Yearly Performance',
+          backgroundColor: '#d95f02',
+          borderColor: '#d95f02',
+          pointBackgroundColor: '#d95f02',
+          pointHoverBorderColor: '#d95f02',
+          pointBorderColor: '#d95f02',
+          pointHoverBackgroundColor: '#d95f02',
+          data: [10, 25, 15, 10, 3, 5, 100],
+        }]
       }
     })
   };
@@ -132,7 +148,7 @@ export class EmployeePerformanceComponent implements OnInit {
     console.log(item);
     this.DestroyGraphInstances();
     this.isActive = false;
-    this.currentPayslip = {
+    this.currentPerformance = {
       month: this.performanceMonthsYears[index].months,
       year: this.performanceMonthsYears[index].years
     };

@@ -305,7 +305,9 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     $('#addLinkModal').modal('hide');
   }
 
-  saveProjectDetails() {
+  saveProjectDetails(e: any) {
+    e.stopPropagation();
+    e.preventDefault();
     this.editableFlag = false;
     for (let i = 0; i < this.projectDetail.ProjectContent.length; i++) {
       let tags = document.querySelectorAll('div[name="content-container"]')[i].innerHTML;
@@ -314,7 +316,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.projectDetail.ProjectId = this.projectId;
     this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
       if (res.ResponseBody)
-        Toast(res.ResponseBody);
+        Toast("Project details inserted/ updated successfully");
     }).catch(e => {
       Error(e);
     })
@@ -327,23 +329,28 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     if (this.target) {
       if (this.target.classList.contains('enable-section')) {
         this.deactivateTag();
-        this.isSectionEdited = false;
+        this.isSectionEdited = true;
       } else {
         this.target.setAttribute('contenteditable', 'true');
         this.target.classList.add('enable-section', 'py-2');
         this.target.focus();
-        this.isSectionEdited = true;
+        this.isSectionEdited = false;
       }
     }
   }
 
-  enableSection(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
-    if (this.target.getAttribute('contenteditable') == 'false') {
-      this.target = null;
-      ErrorToast("Please select section first");
+  enableSection(index: number) {
+    let elem = (document.querySelectorAll('div[name="content-container"]'))
+    this.target = (<HTMLElement> document.querySelectorAll('div[name="content-container"]')[index]);
+    for (let i = 0; i < elem.length; i++) {
+      elem[i].setAttribute('contenteditable', 'false');
+      elem[i].classList.remove('enable-section', 'py-2');
+    }
+    if (this.target) {
+      this.target.setAttribute('contenteditable', 'true');
+      this.target.classList.add('enable-section', 'py-2');
+      this.target.focus();
+      this.isSectionEdited = false;
     }
   }
 
