@@ -262,7 +262,7 @@ export class PayslipComponent implements OnInit {
     return this.fb.group({
       ComponentId: new FormControl(item.ComponentId),
       ComponentName: new FormControl(item.ComponentName),
-      FinalAmount: new FormControl(item.FinalAmount * 12),
+      FinalAmount: new FormControl(ToFixed(item.FinalAmount * 12, 2)),
       MonthlyAmount: new FormControl(ToFixed(item.FinalAmount, 2)),
       ComponentTypeId: new FormControl(item.ComponentTypeId),
       IsHighlight: new FormControl(flag),

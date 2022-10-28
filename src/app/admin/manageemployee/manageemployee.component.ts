@@ -94,11 +94,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.isUpdate = false;
       this.employeeModal = new EmployeeDetail();
       this.joiningDate();
-      this.employeeModal.ReportingManagerId = null;
       this.employeeModal.DesignationId = null;
-      this.employeeModal.AccessLevelId = null;
       this.employeeModal.CompanyId = null;
-      this.employeeModal.UserTypeId = null;
       this.currentCompanyDetail = {
         CompanyId: ""
       };
@@ -630,10 +627,10 @@ export class EmployeeDetail {
   TakeHomeByCandidate: number = null;
   DOB: Date = null;
   CreatedOn: Date = null;
-  ReportingManagerId: number = -1;
+  ReportingManagerId: number = 0;
   DesignationId: number = null;
-  AccessLevelId: number = null;
-  UserTypeId: number = null;
+  AccessLevelId: number = 2;
+  UserTypeId: number = 2;
   CTC: number = null;
   AllocatedClients: Array<AssignedClients> = [];
   ClientJson: string = '';

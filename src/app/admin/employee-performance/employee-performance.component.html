@@ -35,7 +35,7 @@
         <div class="card px-2">
           <h4 class="pt-3 px-2 text-dark"><span class="border-2 border border-dark rounded me-1"><i class="fa fa-area-chart px-2"></i></span> Monthly Performance</h4>
           <ul class="list-unstyled d-flex border-bottom">
-            <li *ngFor="let item of performanceMonthsYears | slice:0:4; let i=index;" class="payslip mb-2 mt-3 mx-3 fs-5" [ngClass]="{'active': item.isActive == isActive}" (click)="performanceMonth(i, item)">
+            <li *ngFor="let item of performanceMonthsYears; let i=index;" class="payslip mb-2 mt-3 mx-3 fs-5" [ngClass]="{'active': item.isActive == isActive}" (click)="performanceMonth(i, item)">
               <a href="javascript:void(0)" class="text-decoration-none">{{item.months}} {{item.years}}</a>
             </li>
           </ul>
@@ -84,15 +84,9 @@
       <div class="col-md-8">
         <div class="card px-2">
           <h4 class="pt-3 px-2 text-dark"><span class="border-2 border border-dark rounded me-1"><i class="fa fa-area-chart px-2"></i></span> Yearly Performance</h4>
-          <div class="row align-items-center">
-            <div class="col-md-12">
-              <div class="d-block mt-2">
-                <canvas id="yearlyPerformance" width="100" height="35"></canvas>
-              </div>
-            </div>
+          <div class="d-block mt-2 py-3">
+            <canvas id="yearlyPerformance" width="100" height="35"></canvas>
           </div>
-          <hr>
-          <a href="javascript:void(0)" class="text-decoration-none text-center pt-2 pb-4 fw-bold fs-6"> View More Details <i class="fa fa-arrow-right"></i></a>
         </div>
       </div>
       <div class="col-md-4">
@@ -103,8 +97,7 @@
             <h4 class="text-dark text-center">0000</h4>
             <h5 class="text-center">You have an Unpaid Amount of <span class="text-dark">00</span></h5>
           </div>
-          <h6 class="ps-3 fs-4 py-4">CLAIM FOR JUNE 2022</h6>
-          <p class="ps-3 pb-4 fs-5 mb-0 text-dark"><i class="fa fa-exclamation-circle pe-1 text-secondary"></i>Submit your reimbursement claims on or before <span class="text-danger">28</span> of this month.</p>
+          <p class="ps-3 pb-4 fs-5 mb-0 text-dark"><i class="fa fa-exclamation-circle pe-1 text-secondary"></i>Submit your reimbursement  <span class="text-danger">28</span> of this month.</p>
           <hr>
           <a href="javascript:void(0)" class="text-decoration-none text-center pt-2 pb-4 fw-bold fs-6"> View More Details <i class="fa fa-arrow-right"></i></a>
         </div>
