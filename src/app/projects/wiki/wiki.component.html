@@ -22,7 +22,7 @@
             <div *ngSwitchDefault>
                 <ng-container *ngIf="projectDetail.Title != null && projectDetail.Title != ''">
                     <div class="row col-12 mt-3 x_content full-height">
-                        <div class="col-sm-3 col-md-2 x_panel" >
+                        <div class="col-sm-3 col-md-2 x_panel" (click)="deactivateTag()">
                             <div class="x_header">
                                 <div class="x_header_title d-flex flex-row justify-content-between">
                                     <h6>{{projectDetail.ProjectName}}</h6>
@@ -45,7 +45,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-md-10 col-sm-9 outline-none" id="main-container" (contextmenu)="manipulateSection($event)" (click)="disabeSection()" (keydown.esc)="closePopOver()" tabindex="0">
+                        <div class="col-md-10 col-sm-9 outline-none" id="main-container" (contextmenu)="manipulateSection($event)" (click)="disabeSection()" (focus)="deactivateTag()" (keydown.esc)="closePopOver()" tabindex="0">
                           <div class="col-md-12 px-4 dv-space">
                             <input type="text" placeholder="Enter Title" class="form-control border-0 fw-bold fs-3" (keyup)="editProjectTitle($event)" [value]="projectDetail.Title">
                             <ng-container *ngIf="isLoaded">
@@ -73,7 +73,7 @@
                                     <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="fs-6 px-2 text-muted" *ngIf="isSectionEdited" (click)="editCurrentSection()">
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a href="javascript:void(0)" class="fs-6 px-2 text-muted" *ngIf="!isSectionEdited" (click)="saveProjectDetails()">
+                                    <a href="javascript:void(0)" class="fs-6 px-2 text-muted" *ngIf="!isSectionEdited" (click)="saveProjectDetails($event)">
                                       <i class="fa fa-paper-plane" data-bs-toggle="tooltip" data-bs-placement="top" title="Save"></i>
                                     </a>
                                   </div>
@@ -86,19 +86,25 @@
                                               <div contenteditable="true" (keyup)="editSubSection($event, i)">
                                                 {{item.get("WikiSection").value}}
                                               </div>
-                                              <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
-                                                <i class="fa fa-trash text-danger"></i>
-                                              </a>
+                                              <div>
+                                                <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
+                                                  <i class="fa fa-trash text-danger"></i>
+                                                </a>
+                                                <a href="javascript:void(0)" class="text-decoration-none" (click)="enableSection(i)">
+                                                  <i class="fa fa-pencil ps-3 text-primary"></i>
+                                                </a>
+                                              </div>
                                           </div>
                                         </h5>
                                         <div class="content-dv overflow-none py-2 px-3" (keyup.enter)="addindex()"
-                                        (click)="enableSection($event)" (paste)="onPaste($event)"
-                                        (dblclick)="enableCurrentSection($event)"
-                                        name="content-container"
-                                        [ngClass]="{'enable-section': i == sectionIndex}"
-                                        [attr.contenteditable]="i == sectionIndex"
-                                        (keypress.ctrl)="trackElement($event)"
-                                        [innerHTML]='item.get("WikiSectionDetail").value'></div>
+                                          (paste)="onPaste($event)"
+                                          (dblclick)="enableCurrentSection($event)"
+                                          name="content-container"
+                                          [ngClass]="{'enable-section': i == sectionIndex}"
+                                          [attr.contenteditable]="i == sectionIndex"
+                                          (keypress.ctrl)="trackElement($event)"
+                                          [innerHTML]='item.get("WikiSectionDetail").value'>
+                                        </div>
                                       </div>
                                     </ng-container>
                                   </div>

@@ -689,7 +689,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   rentedDecalrationPopup() {
-      $('#rentedResidenceModal').modal('show');
+    this.FileDocumentList = [];
+    this.hPLetterList = [];
+    $('#rentedResidenceModal').modal('show');
   }
 
   signDeclFieldEnable(e: any) {
