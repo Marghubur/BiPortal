@@ -142,7 +142,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       CanCompoffCreditedByManager: new FormControl(this.leaveDetail.CanCompoffCreditedByManager? 'true':'false')
     })
   }
-  
+
   initManagementLeave() {
     this.managementLeave = this.fb.group({
       CanManagerAwardCausalLeave: new FormControl(this.managementLeaveDetail.CanManagerAwardCausalLeave? 'true':'false')
@@ -273,9 +273,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       IsLeaveAccruedPatternAvail: new FormControl(this.leaveAccrual.IsLeaveAccruedPatternAvail?'true' : 'false'),
       LeaveDistributionSequence: new FormControl(this.leaveAccrual.LeaveDistributionSequence),
       LeaveDistributionAppliedFrom: new FormControl(this.leaveAccrual.LeaveDistributionAppliedFrom),
-      
+
       IsLeaveAccruedProrateDefined: new FormControl(this.leaveAccrual.IsLeaveAccruedProrateDefined),
-      LeaveDistributionRateOnStartOfPeriod: this.buildFormArrayBetweenProbationPeriod(),
+      LeaveDistributionRateOnStartOfPeriod: this.buildFormArrayForLeaveProrate(),
 
       IsLeavesProratedForJoinigMonth: new FormControl(this.leaveAccrual.IsLeavesProratedForJoinigMonth ? 'true' : 'false'),
       JoiningMonthLeaveDistribution: this.buildFormArrayBetweenJoiningDate(),
