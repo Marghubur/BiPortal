@@ -37,6 +37,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   isLoading: boolean = false;
   leavePlanTypeId: number = 0;
   isDataLoaded: boolean = false;
+  errorCounter: number = 0;
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -262,6 +263,11 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     this.inputDateValidation(e, data);
   }
 
+  empLeaveMiddleDateValidation(e: any) {
+    let data = this.leaveAccrualForm.get('ExitMonthLeaveDistribution').value;
+    this.inputDateValidation(e, data);
+  }
+
   inputDateValidation(e: any, data: any) {
     let value = Number(e.target.value);
     let name = e.target.name;
@@ -291,50 +297,51 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       e.target.classList.remove('error-field');
   }
 
+  fromandTodateValidation(data: any) {
+    for (let i = 0; i < data.length; i++) {
+      if (Number(data[i].FromDate) == 0) {
+        WarningToast("If you submit 0 in from date then first month leave cann't be calculated.");
+        this.isLoading = false;
+        return;
+      }
+      if (Number(data[i].ToDate) == 0) {
+        WarningToast("If you submit 0 in to date then last month leave cann't be calculated.");
+        this.isLoading = false;
+        return;
+      }
+      if (Number(data[i].AllocatedLeave) == 0) {
+        WarningToast("If you submit 0 in allocate leave then leave cann't be calculated.")
+        this.isLoading = false;
+        return;
+      }
+
+      if (Number(data[i].ToDate) > 31) {
+        ErrorToast("Invalid to date enter in leave accrual quota");
+        this.isLoading = false;
+        return;
+      }
+
+      if (i > 0) {
+        let fromDate = Number(data[i].FromDate);
+        let toDate = Number(data[i].ToDate);
+        if (fromDate < Number(data[(i-1)].FromDate) || fromDate < Number(data[(i-1)].ToDate)) {
+          ErrorToast("From date must be greater than previous from date");
+          this.errorCounter++;
+        }
+        if (toDate <= Number(data[(i-1)].ToDate)) {
+          ErrorToast("To date must be greater than previous to date");
+          this.errorCounter++;
+        }
+      }
+    }
+  }
+
   submitLeaveAccrual() {
     this.submit = true;
     this.isLoading = true;
-    let errorCounter = 0;
     let value = this.leaveAccrualForm.value;
     if (value.IsLeaveAccruedProrateDefined == true && value.LeaveDistributionRateOnStartOfPeriod.length > 0) {
-      for (let i = 0; i < value.LeaveDistributionRateOnStartOfPeriod.length; i++) {
-        let data = value.LeaveDistributionRateOnStartOfPeriod;
-        if (Number(data[i].FromDate) == 0) {
-          WarningToast("If you submit 0 in from date then first month leave cann't be calculated.");
-          this.isLoading = false;
-          return;
-        }
-        if (Number(data[i].ToDate) == 0) {
-          WarningToast("If you submit 0 in to date then last month leave cann't be calculated.");
-          this.isLoading = false;
-          return;
-        }
-        if (Number(data[i].AllocatedLeave) == 0) {
-          WarningToast("If you submit 0 in allocate leave then leave cann't be calculated.")
-          this.isLoading = false;
-          return;
-        }
-
-        if (Number(data[i].ToDate) > 31) {
-          ErrorToast("Invalid to date enter in leave accrual quota");
-          this.isLoading = false;
-          return;
-        }
-
-        if (i > 0) {
-          let fromDate = Number(data[i].FromDate);
-          let toDate = Number(data[i].ToDate);
-          if (fromDate < Number(data[(i-1)].FromDate) || fromDate < Number(data[(i-1)].ToDate)) {
-            errorCounter++;
-            ErrorToast("From date must be greater than previous from date");
-          }
-          if (toDate <= Number(data[(i-1)].ToDate)) {
-            errorCounter++;
-            ErrorToast("To date must be greater than previous to date");
-          }
-        }
-      }
-
+      this.fromandTodateValidation(value.LeaveDistributionRateOnStartOfPeriod);
       let allocatedleave = value.LeaveDistributionRateOnStartOfPeriod.map(x => Number(x.AllocatedLeave)).reduce((acc, curr) => {return acc + curr;}, 0);
       if (value.IsLeaveAccruedPatternAvail) {
         switch (value.LeaveDistributionSequence) {
@@ -342,13 +349,20 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
             let monthlyLeave = this.leaveDetail.LeaveLimit/12;
             if(monthlyLeave !== allocatedleave) {
               ErrorToast("Monthly leave distribution is not matched with actual monthly leave limit");
-              errorCounter++;
+              this.errorCounter++;
             }
             break;
         }
       }
     }
-    if (value && errorCounter == 0) {
+
+    if(value.IsLeavesProratedForJoinigMonth == false && value.JoiningMonthLeaveDistribution.length > 0)
+      this.fromandTodateValidation(value.JoiningMonthLeaveDistribution);
+
+    if(value.IsNotAllowProratedOnNotice && value.ExitMonthLeaveDistribution.length > 0)
+      this.fromandTodateValidation(value.ExitMonthLeaveDistribution);
+
+    if (value && this.errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateLeaveAccrual/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.configPageNo = this.configPageNo + 1;

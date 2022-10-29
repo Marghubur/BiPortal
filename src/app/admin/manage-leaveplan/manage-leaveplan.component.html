@@ -360,8 +360,8 @@
                                     <label class="form-label">of the month allocate</label>
                                     <div class="col-md-1 mx-3">
                                       <input type="text" class="form-control"
-                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'"
-                                        formControlName="AllocatedLeave">
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'" OnlyNumber="3"
+                                            formControlName="AllocatedLeave">
                                     </div>
                                     <label class="form-label">days(s) of leave.</label>
                                   </div>
@@ -421,16 +421,17 @@
                                   <div class="d-flex align-items-center">
                                     <label class="form-label me-3">If date of joining between</label>
                                     <div class="col-md-1">
-                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate">
+                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate" (keyup)="empLeaveMiddleDateValidation($event)">
                                     </div>
                                     <span class="px-2">to</span>
                                     <div class="col-md-1 mx-3">
-                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate">
+                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate" (keyup)="empLeaveMiddleDateValidation($event)">
                                     </div>
                                     <label for="" class="form-label">of the month allocate</label>
                                     <div class="col-md-1 mx-3">
-                                      <input type="text" class="form-control" OnlyNumber="2"
-                                        formControlName="AllocatedLeave">
+                                      <input type="text" class="form-control"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'" OnlyNumber="3"
+                                            formControlName="AllocatedLeave">
                                     </div>
                                     <label for="" class="form-label">days(s) of leave.</label>
                                   </div>
