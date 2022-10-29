@@ -25,14 +25,28 @@ export class CompanySettingsComponent implements OnInit {
     let data = this.nav.getValue();
     if (data) {
       this.currentCompany = data;
+      if(this.currentCompany.CompanyId == 0) {
+        ErrorToast("Please selecte company first.");
+        return;
+      }
       this.companySetting.CompanyId = this.currentCompany.CompanyId;
-      this.isPageReady = true;
+      this.loadPageData();
     }
     else {
-      this.isPageReady = false;
       ErrorToast("Company information doesn't found. Please contact to admin.");
     }
-    this.initForm();
+  }
+  
+  loadPageData() {
+    this.http.get(`company/getcompanysettingdetail/${this.currentCompany.CompanyId}`).then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        this.companySetting = res.ResponseBody;
+        this.isPageReady = true;
+      }
+      
+      this.isLoading = false;
+      this.initForm();
+    })
   }
 
   initForm() {
@@ -49,7 +63,7 @@ export class CompanySettingsComponent implements OnInit {
     if (value.CompanyId > 0) {
       this.isLoading = true;
       console.log(value)
-      this.http.post("", value).then((res:ResponseModel) => {
+      this.http.put(`company/UpdateSetting/${value.CompanyId}`, value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.isLoading = false;
           Toast("Setting save successfully")
