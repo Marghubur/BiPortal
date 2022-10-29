@@ -45,13 +45,17 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-md-10 col-sm-9 outline-none" id="main-container" (contextmenu)="manipulateSection($event)" (click)="disabeSection()" (focus)="deactivateTag()" (keydown.esc)="closePopOver()" tabindex="0">
+                        <div class="col-md-10 col-sm-9 outline-none" id="main-container" 
+                        (contextmenu)="manipulateSection($event)" 
+                        (click)="disabeSection()" 
+                        (focus)="deactivateTag()" 
+                        (keyup)="tractPressEvent($event)" tabindex="0">
                           <div class="col-md-12 px-4 dv-space">
                             <input type="text" placeholder="Enter Title" class="form-control border-0 fw-bold fs-3" (keyup)="editProjectTitle($event)" [value]="projectDetail.Title">
                             <ng-container *ngIf="isLoaded">
                               <form [formGroup]="wikiForm">
                                 <div formArrayName="Wikis">
-                                  <div class="d-flex justify-content-around icon-section rounded" (contextmenu)="alert('hello')">
+                                  <div class="d-flex justify-content-around icon-section rounded">
                                     <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-muted" (click)="addSubTitle()">
                                       <i class="fa fa-plus"></i>
                                     </a>
@@ -97,7 +101,6 @@
                                           </div>
                                         </h5>
                                         <div class="content-dv overflow-none py-2 px-3" (keyup.enter)="addindex()"
-                                          (paste)="onPaste($event)"
                                           (dblclick)="enableCurrentSection($event)"
                                           name="content-container"
                                           [ngClass]="{'enable-section': i == sectionIndex}"
@@ -206,6 +209,11 @@
             <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Insert paragraph below
           </a>
         </li>
+        <!-- <li class="nav-item">
+          <a href="javascript:void(0)" class="nav-link" (click)="pasteCopiedContent($event)">
+            <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Paste screenshot
+          </a>
+        </li> -->
         <li class="nav-item">
           <a href="javascript:void(0)" (click)="closePopOver()" class="nav-link">
             <i class="fa fa-external-link pe-3" aria-hidden="true"></i>Exit

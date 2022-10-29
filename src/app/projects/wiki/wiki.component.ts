@@ -27,6 +27,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   target: HTMLElement = null;
   isSectionEdited: boolean = false;
   sectionIndex: number = -1;
+  activeEvent: any = null;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -143,6 +144,14 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   editProjectTitle(e: any) {
     let value = e.target.value;
     this.projectDetail.Title =  value;
+  }
+
+ async tractPressEvent(e: any) {
+    switch(e.key){
+      case "esc":
+        this.closePopOver();
+        break;
+    }
   }
 
   addSubTitle() {
@@ -322,23 +331,6 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     })
   }
 
-  enableCurrentSection(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
-    if (this.target) {
-      if (this.target.classList.contains('enable-section')) {
-        this.deactivateTag();
-        this.isSectionEdited = true;
-      } else {
-        this.target.setAttribute('contenteditable', 'true');
-        this.target.classList.add('enable-section', 'py-2');
-        this.target.focus();
-        this.isSectionEdited = false;
-      }
-    }
-  }
-
   enableSection(index: number) {
     let elem = (document.querySelectorAll('div[name="content-container"]'))
     this.target = (<HTMLElement> document.querySelectorAll('div[name="content-container"]')[index]);
@@ -384,9 +376,27 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  onPaste(e: any) {
+  enableCurrentSection(e: any) {
+    this.activeEvent = e;
     e.preventDefault();
-    let items = (e.clipboardData || e.orignalEvent.clipboardData).items;
+    e.stopPropagation();
+    this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
+    if (this.target) {
+      if (this.target.classList.contains('enable-section')) {
+        this.deactivateTag();
+        this.isSectionEdited = true;
+      } else {
+        this.target.setAttribute('contenteditable', 'true');
+        this.target.classList.add('enable-section', 'py-2');
+        this.target.focus();
+        this.isSectionEdited = false;
+      }
+    }
+  }
+
+  pasteCopiedContent(e: any) {
+    e.preventDefault();
+    let items = (this.activeEvent.clipboardData || this.activeEvent.orignalEvent.clipboardData).items;
     let blob = null;
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.indexOf('image/png') === 0)
