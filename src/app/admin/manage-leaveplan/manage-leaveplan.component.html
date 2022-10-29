@@ -249,7 +249,7 @@
                                 </div>
                               </label>
                               <div class="col-md-1 me-3">
-                                <input type="number" class="form-control" step="0.1" name="LeaveDistributionAppliedFrom"
+                                <input type="number" class="form-control" step="0.1" name="LeaveDistributionAppliedFrom" OnlyNumber="2"
                                   formControlName="LeaveDistributionAppliedFrom" (keyup)="findDay($event)">
                               </div>
                               <label name="AccrualRateBasedon" class="form-label d-flex">
@@ -282,16 +282,16 @@
                                       <div class="d-flex align-items-center">
                                         <label class="form-label me-3">If from date is</label>
                                         <div class="col-md-1">
-                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate">
+                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate" name="FromDate" (keyup)="accrualRateDateValidation($event)">
                                         </div>
                                         <span class="px-2">to</span>
                                         <div class="col-md-1 mx-3">
-                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate">
+                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate" name="ToDate" (keyup)="accrualRateDateValidation($event)">
                                         </div>
                                         <label class="form-label">then </label>
                                         <div class="col-md-1 mx-3">
                                           <input type="text" class="form-control"
-                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'" OnlyNumber="3"
                                             formControlName="AllocatedLeave">
                                         </div>
                                         <label class="form-label">days(s) will be accrualed or earned.</label>
@@ -351,11 +351,11 @@
                                   <div class="d-flex align-items-center">
                                     <label class="form-label me-3">If date of joining between</label>
                                     <div class="col-md-1">
-                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate">
+                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate" name="FromDate" (keyup)="empJoinMiddleDateValidation($event)">
                                     </div>
                                     <span class="px-2">to</span>
                                     <div class="col-md-1 mx-3">
-                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate">
+                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate" name="ToDate" (keyup)="empJoinMiddleDateValidation($event)">
                                     </div>
                                     <label class="form-label">of the month allocate</label>
                                     <div class="col-md-1 mx-3">
