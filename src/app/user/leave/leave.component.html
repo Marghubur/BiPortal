@@ -24,7 +24,7 @@
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="x_content">
+    <div class="x_content" [hidden]="!isPageReady">
       <ng-container>
         <div class="row pt-3">
           <div class="col-md-8">
@@ -311,20 +311,20 @@
           </div>
         </ng-container>
       </ng-container>
-      <ng-container *ngIf="!isPageReady">
-        <div class="py-5 my-5">
-          <h6 class="fw-bold fs-3 text-center text-dark">Leave details are loading</h6>
-          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
+    </div>
+    <ng-container>
+      <div class="py-5 my-5" [hidden]="isPageReady">
+        <h6 class="fw-bold fs-3 text-center text-dark">Leave details are loading</h6>
+        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+            <h6 class="modal-title title-message">
+              Please Wait ........
+            </h6>
           </div>
         </div>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
   </div>
 </div>
 
