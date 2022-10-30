@@ -19,7 +19,7 @@ export class AllownumberDirective {
   @HostListener('keydown', ['$event']) onKeyDown(e) {
     if (this.input) {
       var keyCode = (e.which) ? e.which : keyCode;
-      if ([46, 9, 8, 37, 38, 39, 40].indexOf(keyCode) !== -1) {
+      if ([46, 9, 8, 37, 38, 39, 40].indexOf(keyCode) !== -1 || e.key == ".") {
         return;
       }
 
