@@ -202,12 +202,14 @@ export class LeaveComponent implements OnInit {
       if (res.ResponseBody)
         this.bindData(res);
     }).catch(e => {
+      this.isPageReady = true;
       ErrorToast("No record found");
     })
   }
 
   bindData(res: any) {
     if(res.ResponseBody.Employee && res.ResponseBody.LeavePlanTypes) {
+      this.isPageReady = true;
       if(!res.ResponseBody.EmployeeLeaveDetail) {
         ErrorToast("Fail to get leave detail. Please contact to admin.");
         return;
@@ -253,10 +255,8 @@ export class LeaveComponent implements OnInit {
       //   //}
       //   i++;
       // }
-
       this.DestroyGraphInstances();
       this.bindChartData();
-      this.isPageReady = true;
     }
   }
 
