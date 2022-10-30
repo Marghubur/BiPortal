@@ -608,14 +608,18 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
             i++;
           }
         }
-        this.SectionIsReady = false;
+        this.isLoading = true;
         formData.append('declaration', JSON.stringify(value));
         formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
             this.bindData(response.ResponseBody);
+            this.isLoading = false;
             Toast("Declaration detail loaded successfully");
           }
+          this.isLoading = false;
+        }).catch(e => {
+          this.isLoading = false;
         });
       }
     } else {
@@ -627,6 +631,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   rentedDecalrationPopup() {
+    this.FileDocumentList = [];
+    this.hPLetterList = [];
     $('#rentedResidenceModal').modal('show');
   }
 
@@ -663,9 +669,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.isRentedResidenceEdit = true;
       this.FileDocumentList = [];
       this.hPLetterList = [];
-      let value = this.declarationFiles.filter(x => x.FileName.split('_')[0] == 'HP');
-      this.housingPropertyRentFile = value.filter(x => x.FileName.split('_')[1] == "Receipt");
-      this.housingPropertyLetterFile = value.filter(x => x.FileName.split('_')[1] == "Dec");
+      let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP');
+      this.housingPropertyRentFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
+      this.housingPropertyLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");
       this.housingPropertyDetail = data;
       this.rentedResidence();
       $('#rentedResidenceModal').modal('show');
@@ -673,6 +679,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     else
       this.isRentedResidenceEdit = false;
   }
+
 
   viewHousingPropertyFilePopUp(item: any) {
     this.viewHousingPropFile = [];
