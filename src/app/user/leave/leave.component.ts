@@ -64,7 +64,7 @@ export class LeaveComponent implements OnInit {
     this.leaveDetail.LeaveToDay = new Date(new Date().setDate( this.leaveDetail.LeaveFromDay.getDate() + 1));
     this.disablebackDate(this.leaveDetail.LeaveFromDay, 9);
     this.leaveDetail.Session ='fullday';
-    this.leaveDetail.LeaveType = null;
+    this.leaveDetail.LeaveTypeId = 0;
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
     this.managerList.placeholder = "Reporting Manager";
@@ -133,7 +133,7 @@ export class LeaveComponent implements OnInit {
         return;
       }
 
-      if (this.leaveForm.get('LeaveType').errors !== null) {
+      if (this.leaveForm.get('LeaveTypeId').errors !== null) {
         WarningToast("Please select Leave Type first.");
         this.isLoading = false;
         return;
@@ -145,7 +145,7 @@ export class LeaveComponent implements OnInit {
         return;
       }
 
-      this.http.post('Attendance/ApplyLeave', value).then ((res:ResponseModel) => {
+      this.http.post('Leave/ApplyLeave', value).then ((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.bindData(res);
           $('#leaveModal').modal('hide');
@@ -190,7 +190,7 @@ export class LeaveComponent implements OnInit {
       Reason: new FormControl(this.leaveDetail.Reason, [Validators.required]),
       AssignTo: new FormControl(this.leaveDetail.AssignTo, [Validators.required]),
       RequestType: new FormControl(this.leaveDetail.RequestType),
-      LeaveType: new FormControl("", [Validators.required]),
+      LeaveTypeId: new FormControl('', [Validators.required]),
       UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
       EmployeeId: new FormControl(this.employeeId),
       LeavePlanName: new FormControl('')
@@ -207,7 +207,7 @@ export class LeaveComponent implements OnInit {
     let value = {
       EmployeeId :this.employeeId
     }
-    this.http.post('Attendance/GetAllLeavesByEmpId', value)
+    this.http.post('Leave/GetAllLeavesByEmpId', value)
     .then((res: ResponseModel) => {
       if (res.ResponseBody)
         this.bindData(res);
@@ -380,7 +380,7 @@ export class LeaveComponent implements OnInit {
   GetFilterResult() {
     this.leaveData = [];
     let year = new Date().getFullYear();
-    this.http.post('Attendance/GetAllLeavesByEmpId',this.employeeId)
+    this.http.post('Leave/GetAllLeavesByEmpId',this.employeeId)
     .then ((response:ResponseModel) => {
       if (response.ResponseBody) {
         if(!response.ResponseBody.EmployeeLeaveDetail && !response.ResponseBody.LeavePlan) {
@@ -598,7 +598,7 @@ class LeaveModal {
   AssignTo: number = 0;
   ForYear: number = 0;
   RequestType: number = 0;
-  LeaveType: number = 0;
+  LeaveTypeId: number = 0;
   ForMonth: number = 0;
   UserTypeId: number = 0;
   EmployeeId: number = 0;
@@ -610,7 +610,7 @@ class LeaveDetails {
   EmployeeName: string = '';
   ProjectId: number = 0;
   AssignTo: number = 0;
-  LeaveType: number = 0;
+  LeaveTypeId: number = 0;
   Session: string = '';
   LeaveFromDay: Date = null;
   LeaveToDay: Date = null;

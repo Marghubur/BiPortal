@@ -52,7 +52,7 @@
                           </div>
                           <div class="me-4">
                             <small class="blinking">REQUEST TYPE</small>
-                            <div [ngSwitch]="leaveData[0].LeaveType" class="blinking">
+                            <div [ngSwitch]="leaveData[0].LeaveTypeId" class="blinking">
                               <div *ngSwitchCase=1>Sick Leave</div>
                               <div *ngSwitchCase=2>Compensatory Leave</div>
                               <div *ngSwitchCase=3>Paid Leave</div>
@@ -261,7 +261,7 @@
                   </div>
                   <div class="td align-middle">
                     <div class="cell-wrapper">
-                      <div [ngSwitch]="item.LeaveType">
+                      <div [ngSwitch]="item.LeaveTypeId">
                         <div *ngSwitchCase=1> <b>Sick Leave</b> </div>
                         <div *ngSwitchCase=2> <b>Compensatory Leave</b> </div>
                         <div *ngSwitchCase=3> <b>Paid Leave</b> </div>
@@ -415,8 +415,8 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Leave Type</label>
-              <select class="form-select mb-3" (change)="validateLeaveStatus($event)" aria-label=".form-select-lg example" formControlName="LeaveType"
-                [ngClass]="{'error-field':submitted && f['LeaveType'].errors != null && f['LeaveType'].errors['required']}">
+              <select class="form-select mb-3" (change)="validateLeaveStatus($event)" aria-label=".form-select-lg example" formControlName="LeaveTypeId"
+                [ngClass]="{'error-field':submitted && f['LeaveTypeId'].errors != null && f['LeaveTypeId'].errors['required']}">
                 <option value="">Select leave type</option>
                 <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveTypes">
                   <div class="col-md-12">
