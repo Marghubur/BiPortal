@@ -404,11 +404,13 @@
                   [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
                   value="fullday">
                 <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
-                <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off"
-                  formControlName="Session"
-                  [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
-                  value="halfday">
-                <label class="btn btn-outline-primary" for="btnradio11">Half Day</label>
+                <ng-container *ngIf="isHalfDay">
+                  <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off"
+                    formControlName="Session"
+                    [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
+                    value="halfday">
+                  <label class="btn btn-outline-primary" for="btnradio11">Half Day</label>
+                </ng-container>
               </div>
             </div>
             <div class="col-md-6">

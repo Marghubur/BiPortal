@@ -42,6 +42,7 @@ export class LeaveComponent implements OnInit {
   observer: Subscription = null;
   isEnabled: boolean = false;
   minDate: any;
+  isHalfDay: boolean = true;
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -569,9 +570,13 @@ export class LeaveComponent implements OnInit {
           this.isEnabled = true;
         }
       }
-    } else {
+
+      if (JSON.parse(leaveType.PlanConfigurationDetail).leaveApplyDetail.IsAllowForHalfDay)
+        this.isHalfDay = true;
+      else
+        this.isHalfDay = false;
+    } else
       ErrorToast("Invalid selection");
-    }
   }
 }
 

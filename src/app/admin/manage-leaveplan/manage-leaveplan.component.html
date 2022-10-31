@@ -587,7 +587,7 @@
                           Yes. Leave are prorate on actual attendance/number of days worked by employees.
                         </label>
                       </div>
-                      <div class="my-4">
+                      <div class="my-4" [ngClass]="{'d-none': leaveAccrualForm.controls.IsImpactedOnWorkDaysEveryMonth.value == 'true'}">
                         <h6 class="fw-bold text-dark">For the purpose of accrual based on attendance of employee, how do
                           you
                           consider Weekly-Off & Holidays:</h6>
@@ -619,7 +619,7 @@
                         <input class="form-check-input" value="true" type="radio" name="CanApplyForFutureDate"
                           formControlName="CanApplyForFutureDate">
                         <label class="form-check-label">
-                          Yes, Employee can avail the leave balance as of the day fot which leave being applied.
+                          Yes, Employee can avail the leave balance as of the day for which leave being applied.
                         </label>
                       </div>
                       <div class="form-check">
@@ -1328,7 +1328,7 @@
                           <input class="form-check-input" value="true" type="radio" name="IfLeaveLieBetweenWeekOff"
                             (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfLeaveLieBetweenWeekOff">
                           <label class="form-check-label">
-                            If week off day is right between two leave days (Week off is sandwitched between leave
+                            If week off day is right between two leave days (Week off is sandwiched  between leave
                             days).
                           </label>
                         </div>
