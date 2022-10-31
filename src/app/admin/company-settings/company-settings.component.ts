@@ -36,16 +36,18 @@ export class CompanySettingsComponent implements OnInit {
       ErrorToast("Company information doesn't found. Please contact to admin.");
     }
   }
-  
+
   loadPageData() {
     this.http.get(`company/getcompanysettingdetail/${this.currentCompany.CompanyId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.companySetting = res.ResponseBody;
-        this.isPageReady = true;
       }
-      
+      this.isPageReady = true;
+
       this.isLoading = false;
       this.initForm();
+    }).then(e => {
+
     })
   }
 

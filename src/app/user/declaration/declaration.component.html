@@ -413,10 +413,7 @@
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
-                                          <!-- <div class="circle">
-                                            <div class="checkmark">
-                                            </div>
-                                          </div> -->
+
                                           <i class="fa fa-check-circle fa-lg text-success"></i>
                                           <span class="ps-2">Uploaded</span>
                                         </div>
@@ -450,11 +447,14 @@
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
                                     name="cancel-declaration">
-                                    <a href="javascript:void(0)" class="text-decoration-none"
-                                      (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
+                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isLoading}"
+                                      (click)="saveDeclaration(r, $event)">
+                                      <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
+                                      <span *ngIf="!isLoading">Save</span>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
                                       (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                                 <div class="td text-center fe-1" *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
@@ -470,8 +470,9 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-success"
-                            (click)="nextDeclaration('otherExemptions')">Next<i
-                              class="fa fa-arrow-right ps-2"></i></button>
+                            (click)="nextDeclaration('otherExemptions')"> <span class="pe-2">{{isLoading ? 'Wait': 'Next'}}</span>
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-right': !isLoading}"></i>
+                          </button>
                         </div>
                       </ng-container>
                     </ng-template>
@@ -649,11 +650,14 @@
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
                                     name="cancel-declaration">
-                                    <a href="javascript:void(0)" class="text-decoration-none"
-                                      (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
+                                    <a href="javascript:void(0)" class="text-decoration-none"  [ngClass]="{'pe-none': isLoading}"
+                                      (click)="saveDeclaration(r, $event)">
+                                      <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
+                                      <span *ngIf="!isLoading">Save</span>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
                                       (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                               </div>
@@ -666,11 +670,13 @@
                           </div>
                         </div>
                         <div class="modal-footer border-top-0">
-                          <button type="button" class="btn btn-outline-primary"
-                            (click)="nextDeclaration('exemptions')"><i class="fa fa-arrow-left pe-2"></i> Prev</button>
-                          <button type="button" class="btn btn-outline-success"
-                            (click)="nextDeclaration('taxSavingAllowance')">Next <i
-                              class="fa fa-arrow-right ps-2"></i></button>
+                          <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('exemptions')">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+                            <span class="ps-2">{{isLoading ? 'Wait': 'Prev'}}</span>
+                          </button>
+                          <button type="button" class="btn btn-outline-success" (click)="nextDeclaration('taxSavingAllowance')"><span class="pe-2">{{isLoading ? 'Wait': 'Next'}}</span>
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-right': !isLoading}"></i>
+                          </button>
                         </div>
                       </ng-container>
                     </ng-template>
@@ -844,11 +850,14 @@
                                     ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
                                     name="cancel-declaration">
-                                    <a href="javascript:void(0)" class="text-decoration-none"
-                                      (click)="saveDeclaration(r, $event)">Save</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"
+                                    <a href="javascript:void(0)" class="text-decoration-none"  [ngClass]="{'pe-none': isLoading}"
+                                      (click)="saveDeclaration(r, $event)">
+                                      <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
+                                      <span *ngIf="!isLoading">Save</span>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
                                       (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3" (click)="uploadDocument(r, 'only-view')">view</a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
                                   </div>
                                 </div>
                               </div>
@@ -861,11 +870,12 @@
                           </div>
                         </div>
                         <div class="modal-footer border-top-0">
-                          <button type="button" class="btn btn-outline-primary"
-                            (click)="nextDeclaration('otherExemptions')"><i class="fa fa-arrow-left pe-2"></i>
-                            Prev</button>
-                          <button type="button" class="btn btn-outline-success"
-                            (click)="submitDeclaration()">Submit</button>
+                          <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('otherExemptions')">
+                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+                            <span class="ps-2">{{isLoading ? 'Wait': 'Prev'}}</span>
+                          </button>
+                          <!-- <button type="button" class="btn btn-outline-success"
+                            (click)="submitDeclaration()">Submit</button> -->
                         </div>
                       </ng-container>
                     </ng-template>
