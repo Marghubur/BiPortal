@@ -1206,7 +1206,7 @@ class Managementleave {
 class LeaveAccrual {
   LeaveAccrualId: number = 0;
   LeavePlanTypeId: number = 0;
-  CanApplyEntireLeave: boolean = null;
+  CanApplyEntireLeave: boolean = true;
   IsLeaveAccruedPatternAvail: boolean = null;
   IsLeaveAccruedProrateDefined: boolean = false;
   JoiningMonthLeaveDistribution: any = {};

@@ -104,7 +104,7 @@
             </div>
           </div>
         </div>
-        <div id="leave-chart" [ngClass]="{'d-none': leaveTypes.length <= 0}">
+        <div id="leave-chart" [hidden]="leaveTypes.length <=0">
           <h5 class="mt-3 pt-3 pb-3">My Leave Status</h5>
           <div class="row">
             <div class="col-md-4">
@@ -349,21 +349,21 @@
                 <div class="d-flex align-items-center float-start">
                   <div class="mb-0 text-dark fs-5">
                     <small>START DATE</small>
-                    <p class="mb-0" (click)="fromdate.toggle()">{{leaveDetail.LeaveFromDay | date}}</p>
+                    <p class="mb-0">{{leaveDetail.LeaveFromDay | date}}</p>
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
                           <input class="form-control d-none" placeholder="yyyy-mm-dd"  [minDate]="minDate"
                             (dateSelect)="onDateSelection($event)" name="dp" [(ngModel)]="fromdateModal" ngbDatepicker
                             #fromdate="ngbDatepicker">
-                          <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()"
+                          <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()" [disabled]="!isEnabled"
                             type="button"></button>
                         </div>
                       </div>
                     </form>
                   </div>
                   <div class="ms-3">
-                    <button class="btn btn-outline-secondary calendar" (click)="fromdate.toggle()" type="button"><i
+                    <button class="btn btn-outline-secondary calendar" (click)="fromdate.toggle()" type="button" [disabled]="!isEnabled"><i
                         class="fa fa-calendar"></i></button>
                   </div>
                 </div>
@@ -373,21 +373,21 @@
                 <div class="d-flex align-items-center float-end">
                   <div class="mb-0 text-dark fs-5">
                     <small>END DATE</small>
-                    <p class="mb-0" (click)="d.toggle()">{{leaveDetail.LeaveToDay | date}}</p>
+                    <p class="mb-0">{{leaveDetail.LeaveToDay | date}}</p>
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
                           <input class="form-control d-none" placeholder="yyyy-mm-dd"
                             (dateSelect)="onDateSelect($event)" name="dp" [(ngModel)]="model" ngbDatepicker
                             #d="ngbDatepicker">
-                          <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()"
+                          <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()" [disabled]="!isEnabled"
                             type="button"></button>
                         </div>
                       </div>
                     </form>
                   </div>
                   <div class="ms-3">
-                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button" [disabled]="!isEnabled"><i
                         class="fa fa-calendar"></i></button>
                   </div>
                 </div>
