@@ -15,7 +15,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 })
 export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   leaveTypeDeatils: any = null;
-  configPageNo: number = 3;
+  configPageNo: number = 1;
   isPageReady: boolean = false;
   leaveDetailForm: FormGroup;
   leaveDetail: LeaveDetail = new LeaveDetail();
@@ -1206,7 +1206,7 @@ class Managementleave {
 class LeaveAccrual {
   LeaveAccrualId: number = 0;
   LeavePlanTypeId: number = 0;
-  CanApplyEntireLeave: boolean = null;
+  CanApplyEntireLeave: boolean = true;
   IsLeaveAccruedPatternAvail: boolean = null;
   IsLeaveAccruedProrateDefined: boolean = false;
   JoiningMonthLeaveDistribution: any = {};

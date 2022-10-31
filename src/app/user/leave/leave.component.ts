@@ -42,6 +42,7 @@ export class LeaveComponent implements OnInit {
   observer: Subscription = null;
   isEnabled: boolean = false;
   minDate: any;
+  isHalfDay: boolean = true;
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -107,6 +108,8 @@ export class LeaveComponent implements OnInit {
     this.isPageReady = true;
     this.leaveDetail = new LeaveModal();
     this.leaveRequestForm();
+    this.leaveDetail.LeaveFromDay = new Date();
+    this.leaveDetail.LeaveToDay = new Date();
     $('#leaveModal').modal('show');
   }
 
@@ -132,6 +135,12 @@ export class LeaveComponent implements OnInit {
 
       if (this.leaveForm.get('LeaveTypeId').errors !== null) {
         WarningToast("Please select Leave Type first.");
+        this.isLoading = false;
+        return;
+      }
+
+      if (this.leaveForm.get('Reason').errors !== null) {
+        WarningToast("Please enter reason.");
         this.isLoading = false;
         return;
       }
@@ -183,7 +192,8 @@ export class LeaveComponent implements OnInit {
       RequestType: new FormControl(this.leaveDetail.RequestType),
       LeaveTypeId: new FormControl('', [Validators.required]),
       UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
-      EmployeeId: new FormControl(this.employeeId)
+      EmployeeId: new FormControl(this.employeeId),
+      LeavePlanName: new FormControl('')
     })
   }
 
@@ -351,11 +361,11 @@ export class LeaveComponent implements OnInit {
     this.isLeaveDataFilter = false;
     let elem = document.getElementById('leave-chart')
     if (this.isLeaveDetails == true) {
-      elem.classList.add('d-none');
+      elem.setAttribute('hidden', null)
     }
     else {
       if (elem.classList.contains('d-none') && this.leaveData.length >0)
-        document.getElementById('leave-chart').classList.remove('d-none');
+        document.getElementById('leave-chart').removeAttribute('hidden');
     }
 
   }
@@ -567,11 +577,16 @@ export class LeaveComponent implements OnInit {
           this.isEnabled = false;
         } else {
           this.isEnabled = true;
+          this.leaveForm.get('LeavePlanName').setValue(leaveType.PlanName);
         }
       }
-    } else {
+
+      if (JSON.parse(leaveType.PlanConfigurationDetail).leaveApplyDetail.IsAllowForHalfDay)
+        this.isHalfDay = true;
+      else
+        this.isHalfDay = false;
+    } else
       ErrorToast("Invalid selection");
-    }
   }
 }
 
@@ -587,6 +602,7 @@ class LeaveModal {
   ForMonth: number = 0;
   UserTypeId: number = 0;
   EmployeeId: number = 0;
+  LeavePlanName: string = null;
 }
 
 class LeaveDetails {
