@@ -63,7 +63,7 @@ export class LeaveComponent implements OnInit {
     this.leaveDetail.LeaveToDay = new Date(new Date().setDate( this.leaveDetail.LeaveFromDay.getDate() + 1));
     this.disablebackDate(this.leaveDetail.LeaveFromDay, 9);
     this.leaveDetail.Session ='fullday';
-    this.leaveDetail.LeaveType = null;
+    this.leaveDetail.LeaveTypeId = 0;
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
     this.managerList.placeholder = "Reporting Manager";
@@ -130,7 +130,7 @@ export class LeaveComponent implements OnInit {
         return;
       }
 
-      if (this.leaveForm.get('LeaveType').errors !== null) {
+      if (this.leaveForm.get('LeaveTypeId').errors !== null) {
         WarningToast("Please select Leave Type first.");
         this.isLoading = false;
         return;
@@ -181,7 +181,7 @@ export class LeaveComponent implements OnInit {
       Reason: new FormControl(this.leaveDetail.Reason, [Validators.required]),
       AssignTo: new FormControl(this.leaveDetail.AssignTo, [Validators.required]),
       RequestType: new FormControl(this.leaveDetail.RequestType),
-      LeaveType: new FormControl("", [Validators.required]),
+      LeaveTypeId: new FormControl('', [Validators.required]),
       UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
       EmployeeId: new FormControl(this.employeeId)
     })
@@ -583,7 +583,7 @@ class LeaveModal {
   AssignTo: number = 0;
   ForYear: number = 0;
   RequestType: number = 0;
-  LeaveType: number = 0;
+  LeaveTypeId: number = 0;
   ForMonth: number = 0;
   UserTypeId: number = 0;
   EmployeeId: number = 0;
@@ -594,7 +594,7 @@ class LeaveDetails {
   EmployeeName: string = '';
   ProjectId: number = 0;
   AssignTo: number = 0;
-  LeaveType: number = 0;
+  LeaveTypeId: number = 0;
   Session: string = '';
   LeaveFromDay: Date = null;
   LeaveToDay: Date = null;

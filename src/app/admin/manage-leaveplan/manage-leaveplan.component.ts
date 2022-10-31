@@ -283,7 +283,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       let fromDate = Number(data[(data.length -2)].FromDate);
       let toDate = Number(data[(data.length -2)].ToDate);
       if (name == 'FromDate') {
-        if (value < fromDate || value < toDate) {
+        if (value <= fromDate || value <= toDate) {
           errorCounter++;
           ErrorToast("From date must be greater than previous from date");
         }
@@ -386,10 +386,10 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       }
     }
 
-    if(value.IsLeavesProratedForJoinigMonth == false && value.JoiningMonthLeaveDistribution.length > 0)
+    if(value.IsLeavesProratedForJoinigMonth == 'false' && value.JoiningMonthLeaveDistribution.length > 0)
       this.fromandTodateValidation(value.JoiningMonthLeaveDistribution);
 
-    if(value.IsNotAllowProratedOnNotice && value.ExitMonthLeaveDistribution.length > 0)
+    if(value.IsNotAllowProratedOnNotice == 'true' && value.ExitMonthLeaveDistribution.length > 0)
       this.fromandTodateValidation(value.ExitMonthLeaveDistribution);
 
     if (value && this.errorCounter == 0) {
