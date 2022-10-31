@@ -202,6 +202,7 @@ export class LeaveComponent implements OnInit {
       if (res.ResponseBody)
         this.bindData(res);
     }).catch(e => {
+      this.isPageReady = true;
       ErrorToast("No record found");
     })
   }
@@ -238,25 +239,24 @@ export class LeaveComponent implements OnInit {
       });
 
       // if(!res.ResponseBody.Employees) {
-      //   ErrorToast("Unable to bind manage detail. Please contact to admin.");
-      // }
+        //   ErrorToast("Unable to bind manage detail. Please contact to admin.");
+        // }
 
-      // this.managerList.className ="";
-      // let i = 0;
-      // let managers = res.ResponseBody.Employees;
-      // while(i < managers.length) {
-      //   //if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
-      //     this.managerList.data.push({
-      //       value: managers[i].EmployeeUid,
-      //       text: `${managers[i].FirstName} ${managers[i].LastName}`
-      //     });
-      //   //}
-      //   i++;
-      // }
-
+        // this.managerList.className ="";
+        // let i = 0;
+        // let managers = res.ResponseBody.Employees;
+        // while(i < managers.length) {
+          //   //if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
+            //     this.managerList.data.push({
+              //       value: managers[i].EmployeeUid,
+              //       text: `${managers[i].FirstName} ${managers[i].LastName}`
+              //     });
+              //   //}
+              //   i++;
+              // }
+      this.isPageReady = true;
       this.DestroyGraphInstances();
       this.bindChartData();
-      this.isPageReady = true;
     }
   }
 
