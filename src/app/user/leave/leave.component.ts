@@ -121,6 +121,13 @@ export class LeaveComponent implements OnInit {
       let value: LeaveModal = this.leaveForm.value;
       value.UserTypeId = UserType.Employee;
       value.RequestType = 1;
+
+      if (this.leaveForm.get('EmployeeId').errors !== null) {
+        WarningToast("Employee is not selected properly.");
+        this.isLoading = false;
+        return;
+      }
+
       if (this.leaveForm.get('LeaveFromDay').errors !== null) {
         WarningToast("Please select start and end date first.");
         this.isLoading = false;
@@ -205,8 +212,9 @@ export class LeaveComponent implements OnInit {
     this.isPageReady = false;
     let year = new Date().getFullYear();
     let value = {
-      EmployeeId :this.employeeId
+      EmployeeId: this.employeeId
     }
+
     this.http.post('Leave/GetAllLeavesByEmpId', value)
     .then((res: ResponseModel) => {
       if (res.ResponseBody)
@@ -248,22 +256,6 @@ export class LeaveComponent implements OnInit {
         text: "Default Manager",
       });
 
-      // if(!res.ResponseBody.Employees) {
-        //   ErrorToast("Unable to bind manage detail. Please contact to admin.");
-        // }
-
-        // this.managerList.className ="";
-        // let i = 0;
-        // let managers = res.ResponseBody.Employees;
-        // while(i < managers.length) {
-          //   //if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
-            //     this.managerList.data.push({
-              //       value: managers[i].EmployeeUid,
-              //       text: `${managers[i].FirstName} ${managers[i].LastName}`
-              //     });
-              //   //}
-              //   i++;
-              // }
       this.isPageReady = true;
       this.DestroyGraphInstances();
       this.bindChartData();
@@ -348,10 +340,12 @@ export class LeaveComponent implements OnInit {
     this.chartDataset.push({
       PlanName: item.PlanName,
       AvailableLeaves: item.AvailableLeave,
+      AccrualedTillDate: item.AvailableLeave + item.ConsumedLeave,
       MaxLeaveLimit: item.MaxLeaveLimit,
       PlanDescription: item.PlanDescription,
       LeavePlanCode: item.LeavePlanCode,
       LeavePlanTypeId: item.LeavePlanTypeId,
+      ConsumedLeave: item.ConsumedLeave,
       Config: null
     });
   }
