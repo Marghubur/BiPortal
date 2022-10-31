@@ -120,7 +120,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   test() {
-    this.http.post("attendance/ApplyLeaveService_Testing", {
+    this.http.post("Leave/ApplyLeaveService_Testing", {
       EmployeeId: 4,
       FromDate: new Date(),
       ToDate: new Date()

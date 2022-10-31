@@ -136,7 +136,7 @@ export class LeaveComponent implements OnInit {
         return;
       }
 
-      this.http.post('Attendance/ApplyLeave', value).then ((res:ResponseModel) => {
+      this.http.post('Leave/ApplyLeave', value).then ((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.bindData(res);
           $('#leaveModal').modal('hide');
@@ -197,7 +197,7 @@ export class LeaveComponent implements OnInit {
     let value = {
       EmployeeId :this.employeeId
     }
-    this.http.post('Attendance/GetAllLeavesByEmpId', value)
+    this.http.post('Leave/GetAllLeavesByEmpId', value)
     .then((res: ResponseModel) => {
       if (res.ResponseBody)
         this.bindData(res);
@@ -370,7 +370,7 @@ export class LeaveComponent implements OnInit {
   GetFilterResult() {
     this.leaveData = [];
     let year = new Date().getFullYear();
-    this.http.post('Attendance/GetAllLeavesByEmpId',this.employeeId)
+    this.http.post('Leave/GetAllLeavesByEmpId',this.employeeId)
     .then ((response:ResponseModel) => {
       if (response.ResponseBody) {
         if(!response.ResponseBody.EmployeeLeaveDetail && !response.ResponseBody.LeavePlan) {
