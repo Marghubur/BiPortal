@@ -110,6 +110,8 @@ export class LeaveComponent implements OnInit {
     this.leaveRequestForm();
     this.leaveDetail.LeaveFromDay = new Date();
     this.leaveDetail.LeaveToDay = new Date();
+    this.leaveForm.get('LeaveFromDay').setValue(this.leaveDetail.LeaveFromDay);
+    this.leaveForm.get('LeaveToDay').setValue(this.leaveDetail.LeaveToDay);
     $('#leaveModal').modal('show');
   }
 
@@ -236,6 +238,7 @@ export class LeaveComponent implements OnInit {
       if(leaveDetail && leaveDetail.LeaveDetail) {
         this.leaveData = (JSON.parse(leaveDetail.LeaveDetail)).map(obj => {return {...obj, RequestedOn: new Date(obj.RequestedOn)}});
         this.leaveData = this.leaveData.sort((a, b) => Number(b.RequestedOn) - Number(a.RequestedOn));
+        console.log(this.leaveData)
       }
 
       let plandetail = res.ResponseBody.LeavePlanTypes;
@@ -291,10 +294,10 @@ export class LeaveComponent implements OnInit {
     let bgColor = []
     switch(index % 7) {
       case 0:
-        bgColor = ['red', 'rgba(255, 99, 132, 0.2)'];
+        bgColor = ['red', '#379237'];
         break;
       case 1:
-        bgColor = ['red', 'rgba(255, 206, 86, 0.2)'];
+        bgColor = ['red', '#379237'];
         break;
        case 2:
         bgColor = ['red', 'rgba(255, 159, 64, 0.2)'];
@@ -307,12 +310,12 @@ export class LeaveComponent implements OnInit {
     let graph = new Chart(context, {
       type: 'doughnut',
       data: {
-        labels: ['Not Allocated', 'Available'],
+        labels: ['Consumed', 'Available'],
         datasets: [{
           label: 'My leave plan',
           backgroundColor: bgColor,
           borderWidth: 0,
-          data: [(item.MaxLeaveLimit - item.AvailableLeaves), item.AvailableLeaves],
+          data: [item.ConsumedLeave, item.AvailableLeaves],
           hoverOffset: 4,
           hoverBackgroundColor: bgColor,
         }]
@@ -353,14 +356,14 @@ export class LeaveComponent implements OnInit {
   showLeaveDetails() {
     this.isLeaveDetails = !this.isLeaveDetails;
     this.isLeaveDataFilter = false;
-    let elem = document.getElementById('leave-chart')
-    if (this.isLeaveDetails == true) {
-      elem.setAttribute('hidden', null)
-    }
-    else {
-      if (elem.classList.contains('d-none') && this.leaveData.length >0)
-        document.getElementById('leave-chart').removeAttribute('hidden');
-    }
+    // let elem = document.getElementById('leave-chart')
+    // if (this.isLeaveDetails == true) {
+    //   elem.setAttribute('hidden', null)
+    // }
+    // else {
+    //   if (elem.classList.contains('d-none') && this.leaveData.length >0)
+    //     document.getElementById('leave-chart').removeAttribute('hidden');
+    // }
 
   }
 

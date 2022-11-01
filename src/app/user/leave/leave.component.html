@@ -52,11 +52,9 @@
                           </div>
                           <div class="me-4">
                             <small class="blinking">REQUEST TYPE</small>
-                            <div [ngSwitch]="leaveData[0].LeaveTypeId" class="blinking">
-                              <div *ngSwitchCase=1>Sick Leave</div>
-                              <div *ngSwitchCase=2>Compensatory Leave</div>
-                              <div *ngSwitchCase=3>Paid Leave</div>
-                            </div>
+                            <p class="blinking mb-0">
+                              {{leaveData[0].LeaveTypeName}}
+                            </p>
                           </div>
                           <div class="me-4">
                             <small class="blinking">REQUESTED ON</small>
@@ -104,7 +102,7 @@
             </div>
           </div>
         </div>
-        <div id="leave-chart" [hidden]="leaveTypes.length <=0">
+        <div id="leave-chart" [hidden]="leaveTypes.length <=0 || isLeaveDetails">
           <h5 class="mt-3 pt-3 pb-3">My Leave Status</h5>
           <div class="row">
             <div class="col-md-4">
@@ -149,7 +147,7 @@
                       Monthly Status
                     </h6>
                     <div>
-                      <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
+                      <i class="fa fa-info-circle fa-lg p-3"  aria-hidden="true"></i>
                     </div>
                   </div>
                   <div class="d-block mt-2">
@@ -169,7 +167,7 @@
                       {{leave.PlanName}}
                     </h6>
                     <div>
-                      <i class="fa fa-refresh fa-lg p-3" aria-hidden="true"></i>
+                      <i class="fa fa-refresh fa-lg p-3" aria-hidden="true"  (click)="loadData()"></i>
                     </div>
                   </div>
                   <div class="d-block mt-2">
@@ -206,17 +204,22 @@
             </div>
           </div>
         </div>
-        <ng-container *ngIf="isLeaveDetails">
+        <div [hidden]="!isLeaveDetails">
           <div class="t-table t-list t-border col-md-12 mt-3">
             <div class="hide-bar"></div>
             <div class="t-head custom-bg text-dark">
               <div class="tr">
                 <div class="th fe-2">
                   <div class="cell-wrapper ps-3">
-                    From - To Dates
+                    FROM - TO DATES
                   </div>
                 </div>
                 <div class="th">
+                  <div class="cell-wrapper">
+                    NO. OF DAYS
+                  </div>
+                </div>
+                <div class="th fe-2">
                   <div class="cell-wrapper">
                     REQUEST DETAIL
                   </div>
@@ -233,7 +236,7 @@
                 </div>
                 <div class="th">
                   <div class="cell-wrapper">
-                    ACTIONS
+                    REQUESTED ON
                   </div>
                 </div>
               </div>
@@ -261,11 +264,14 @@
                   </div>
                   <div class="td align-middle">
                     <div class="cell-wrapper">
-                      <div [ngSwitch]="item.LeaveTypeId">
-                        <div *ngSwitchCase=1> <b>Sick Leave</b> </div>
-                        <div *ngSwitchCase=2> <b>Compensatory Leave</b> </div>
-                        <div *ngSwitchCase=3> <b>Paid Leave</b> </div>
-                      </div>
+                      {{item.NumOfDays}}
+                    </div>
+                  </div>
+                  <div class="td align-middle fe-2">
+                    <div class="cell-wrapper">
+                      <p>
+                        <b>{{item.LeaveTypeName}}</b>
+                      </p>
                       <div class="cell-wrapper">
                         <span class="text-primary-c">{{item.RequestedOn | date}}</span>
                         <p class="mb-0">BY:
@@ -293,8 +299,7 @@
                   </div>
                   <div class="td align-middle">
                     <div class="cell-wrapper">
-                      <a href="javascript:void(0)" class="text-decoration-none text-dark"><i
-                          class="fa fa-ellipsis-v"></i></a>
+                      {{item.RequestedOn | date}}
                     </div>
                   </div>
                 </div>
@@ -309,7 +314,7 @@
           <div class="mt-3 ps-2" *ngIf="isLeaveDataFilter">
             <app-pagination [pagination]="employeeData" (onPageChange)="PageChange($event)"></app-pagination>
           </div>
-        </ng-container>
+        </div>
       </ng-container>
     </div>
     <ng-container>
