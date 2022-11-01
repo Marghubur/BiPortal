@@ -25,9 +25,28 @@
           <label for="" class="form-label">Salutation</label>
           <input type="text" formControlName="Salutation" class="form-control" placeholder="e.g Dear Sir/ Madam" [ngClass]="{'error-field': submitted && f.Salutation.errors !== null && f.Salutation.errors.required}">
         </div>
-        <div class="mt-3 col-md-12">
-          <label for="" class="form-label">Body Content</label>
-          <!-- <textarea type="text" formControlName="BodyContent" rows="15" class="form-control" placeholder="Body Content" [ngClass]="{'error-field': submitted && f.BodyContent.errors !== null && f.BodyContent.errors.required}"></textarea> -->
+        <div class="mt-5 col-md-12">
+          <div class="d-flex justify-content-between">
+            <label for="" class="form-label">Body Content</label>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+              <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="#">Employee</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Company</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Manager</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Datetime</a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </div>
           <app-editor [content]="emailTemplateDetail.BodyContent"></app-editor>    
         </div>
         <div class="mt-3 col-md-4">
