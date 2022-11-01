@@ -42,6 +42,7 @@ export class LeaveComponent implements OnInit {
   observer: Subscription = null;
   isEnabled: boolean = false;
   minDate: any;
+  maxDate: any;
   isHalfDay: boolean = true;
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
@@ -101,7 +102,17 @@ export class LeaveComponent implements OnInit {
       year: daysAgo.getFullYear(),
       month: daysAgo.getMonth(),
       day: daysAgo.getDate()
-                }
+    }
+  }
+
+  disablefutureDate(current: Date, noDays: number) {
+    const daysAgo = new Date(current.getTime());
+    daysAgo.setDate(current.getDate() - noDays);
+    this.maxDate = {
+      year: daysAgo.getFullYear(),
+      month: daysAgo.getMonth(),
+      day: daysAgo.getDate()
+    }
   }
 
   leavePopUp() {
@@ -170,6 +181,7 @@ export class LeaveComponent implements OnInit {
   }
 
   onDateSelect(e: NgbDateStruct) {
+    this.disablefutureDate(this.leaveDetail.LeaveFromDay, -1)
     let value  = new Date(e.year, e.month-1, e.day);
     if (value.getTime() >= this.leaveDetail.LeaveFromDay.getTime()) {
       this.leaveDetail.LeaveToDay = value;

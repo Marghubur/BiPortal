@@ -382,7 +382,7 @@
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control d-none" placeholder="yyyy-mm-dd"
+                          <input class="form-control d-none" placeholder="yyyy-mm-dd" [minDate]="maxDate"
                             (dateSelect)="onDateSelect($event)" name="dp" [(ngModel)]="model" ngbDatepicker
                             #d="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()" [disabled]="!isEnabled"
