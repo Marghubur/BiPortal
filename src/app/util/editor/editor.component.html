@@ -6,7 +6,6 @@
                 id="content-container"
                 (keyup.enter)="addindex()"
                 (click)="enableSection($event)" 
-                (paste)="onPaste($event)"
                 (dblclick)="enableCurrentSection($event)"
                 (keypress.ctrl)="trackElement($event)"
                 [innerHTML]='innerHtmlText'>
