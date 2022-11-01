@@ -639,6 +639,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     this.isLoading = true
     let errorCounter = 0;
     let value = this.applyForLeaveForm.value;
+    if (value.ApplyPriorBeforeLeaveDate == null || value.ApplyPriorBeforeLeaveDate == '')
+      value.ApplyPriorBeforeLeaveDate = -1;
+
+    if (value.BackDateLeaveApplyNotBeyondDays == null || value.BackDateLeaveApplyNotBeyondDays == '')
+      value.BackDateLeaveApplyNotBeyondDays = -1;
+
     if (value && errorCounter == 0) {
       this.http.put(`ManageLeavePlan/UpdateApplyForLeave/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
@@ -658,8 +664,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       LeavePlanTypeId: new FormControl(this.leavePlanTypeId),
       IsAllowForHalfDay: new FormControl(this.appplyingForLeave.IsAllowForHalfDay ? 'true': 'false'),
       EmployeeCanSeeAndApplyCurrentPlanLeave: new FormControl(this.appplyingForLeave.EmployeeCanSeeAndApplyCurrentPlanLeave ? 'true': 'false'),
-      ApplyPriorBeforeLeaveDate: new FormControl(this.appplyingForLeave.ApplyPriorBeforeLeaveDate),
-      BackDateLeaveApplyNotBeyondDays: new FormControl(this.appplyingForLeave.BackDateLeaveApplyNotBeyondDays),
+      ApplyPriorBeforeLeaveDate: new FormControl(this.appplyingForLeave.ApplyPriorBeforeLeaveDate == -1 ? null : this.appplyingForLeave.ApplyPriorBeforeLeaveDate),
+      BackDateLeaveApplyNotBeyondDays: new FormControl(this.appplyingForLeave.BackDateLeaveApplyNotBeyondDays == -1 ? null : this.appplyingForLeave.BackDateLeaveApplyNotBeyondDays),
       CurrentLeaveRequiredComments: new FormControl(this.appplyingForLeave.CurrentLeaveRequiredComments ? 'true': 'false'),
       ProofRequiredIfDaysExceeds: new FormControl(this.appplyingForLeave.ProofRequiredIfDaysExceeds ? 'true': 'false'),
       NoOfDaysExceeded: new FormControl(this.appplyingForLeave.NoOfDaysExceeded),
@@ -1254,8 +1260,8 @@ class ApplyingForLeave {
   LeavePlanTypeId: number = 0;
   IsAllowForHalfDay: boolean = null;
   EmployeeCanSeeAndApplyCurrentPlanLeave: boolean = true;
-  ApplyPriorBeforeLeaveDate: number = 0;
-  BackDateLeaveApplyNotBeyondDays: number = 0;
+  ApplyPriorBeforeLeaveDate: number = null;
+  BackDateLeaveApplyNotBeyondDays: number = null;
   RestrictBackDateLeaveApplyAfter: number = 0;
   CurrentLeaveRequiredComments: boolean = null;
   ProofRequiredIfDaysExceeds: boolean = null;
