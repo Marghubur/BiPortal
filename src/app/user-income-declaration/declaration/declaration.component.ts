@@ -10,7 +10,7 @@ import { UserService } from 'src/providers/userService';
 import 'bootstrap';
 import { MonthlyTax } from '../incometax/incometax.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { HouseProperty } from 'src/app/admin/declaration/declaration.component';
+import { HouseProperty } from 'src/app/income-declaration/declaration/declaration.component';
 declare var $: any;
 
 @Component({

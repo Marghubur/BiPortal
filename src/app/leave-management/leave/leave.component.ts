@@ -8,8 +8,8 @@ import 'bootstrap'
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
-import { Files } from '../documents/documents.component';
 import { Filter } from 'src/providers/userService';
+import { Files } from 'src/app/admin/documents/documents.component';
 
 @Component({
   selector: 'app-leave',

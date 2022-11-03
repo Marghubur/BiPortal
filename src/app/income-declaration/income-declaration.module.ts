@@ -1,13 +1,47 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SummaryComponent } from '../income-declaration/summary/summary.component';
+import { DeclarationComponent } from './declaration/declaration.component';
+import { PreferencesComponent } from './preferences/preferences.component';
+import { PreviousincomeComponent } from './previousincome/previousincome.component';
+import { Form12BbComponent } from '../income-declaration/form12-bb/form12-bb.component';
+import { FreetaxfillingComponent } from '../income-declaration/freetaxfilling/freetaxfilling.component';
+import { TaxsavinginvestmentComponent } from '../income-declaration/taxsavinginvestment/taxsavinginvestment.component';
+import { IncometaxComponent } from '../income-declaration/incometax/incometax.component';
+import { PayslipComponent } from '../income-declaration/payslip/payslip.component';
+import { PayrollComponent } from '../income-declaration/payroll/payroll.component';
+import { PfEsiSetupComponent } from '../income-declaration/pf-esi-setup/pf-esi-setup.component';
+import { PayrollComponentsComponent } from '../income-declaration/payroll-components/payroll-components.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UtilModule } from '../util/util.module';
+import { SalaryComponent } from '../income-declaration/salary/salary.component';
 
 import { IncomeDeclarationRoutingModule } from './income-declaration-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    DeclarationComponent,
+    Form12BbComponent,
+    FreetaxfillingComponent,
+    IncometaxComponent,
+    PayslipComponent,
+    PayrollComponent,
+    PayrollComponentsComponent,
+    PfEsiSetupComponent,
+    PreferencesComponent,
+    PreviousincomeComponent,
+    SummaryComponent,
+    TaxsavinginvestmentComponent,
+    SalaryComponent,
+  ],
   imports: [
     CommonModule,
+    NgbModule,
+    ReactiveFormsModule,
+    FormsModule,
+    UtilModule,
     IncomeDeclarationRoutingModule
   ]
 })
