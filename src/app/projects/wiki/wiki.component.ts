@@ -167,7 +167,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.adddProject();
     this.titleValue = '';
     this.closePopOver();
-    this.isSectionEdited = true;
+    this.isSectionEdited = false;
   }
 
   editCurrentSection() {
@@ -347,10 +347,20 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   deactivateTag() {
-    this.target.setAttribute('contenteditable', 'false');
-    this.target.classList.remove('enable-section', 'py-2');
-    this.target = null;
-    this.isSectionEdited = true;
+    if (this.target) {
+      this.target.setAttribute('contenteditable', 'false');
+      this.target.classList.remove('enable-section', 'py-2');
+      this.target = null;
+      this.isSectionEdited = true;
+    } else {
+      let elem = document.querySelectorAll('div[name="content-container"]');
+      for (let i = 0; i < elem.length; i++) {
+        elem[i].setAttribute('contenteditable', 'false');
+        elem[i].classList.remove('enable-section', 'py-2');
+      }
+      this.target = null;
+      this.isSectionEdited = true;
+    }
   }
 
   addindex() {
@@ -366,7 +376,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       let project = this.wikiForm.get('Wikis') as FormArray;
       project.insert(0, this.createIndex());
       this.titleValue = '';
-      this.isSectionEdited = true;
+      this.isSectionEdited = false;
     }
   }
 

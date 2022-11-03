@@ -239,25 +239,20 @@ export class AttendanceComponent implements OnInit {
   }
 
   getMonths() {
+    this.monthName = [];
     var dt = new Date(this.client.CreatedOn);
     var month = dt.getMonth()+1;
     var year = dt.getFullYear();
-    if (month == new Date().getMonth() && year == new Date().getFullYear()) {
-      this.daysInMonth = new Date(year, month + 1, dt.getDate()).getDate();
-    } else {
-      let i = 0;
-      while( i < new Date().getMonth()) {
-        var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
-        // if (month == 1) {
-        //   month = 12;
-        //   year --
-        // } else {
-        //   month --;
-        // }
-        month++;
-        this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
-        i++;
-      }
+    let i = 1;
+    if (year == new Date().getFullYear()) {
+      //this.daysInMonth = new Date(year, month, dt.getDate()).getDate();
+      i = month;
+    }
+    while( i <= new Date().getMonth()) {
+      var mnth = Number((((i+1) > 9 ? "" : "0") + i));
+      month++;
+      this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
+      i++;
     }
     this.monthName.reverse();
   }
