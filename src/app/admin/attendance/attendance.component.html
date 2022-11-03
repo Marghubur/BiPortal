@@ -77,8 +77,7 @@
                           Days</label>
                         <ng-container *ngFor="let month of monthName; let i = index">
                           <input type="radio" class="btn-check" name="btnradio" id="btnradio{{i}}" autocomplete="off">
-                          <label class="btn btn-outline-primary month-btn" for="btnradio{{i}}"
-                            (click)="getAllDays(month, i)">{{month}}</label>
+                          <label class="btn btn-outline-primary month-btn" for="btnradio{{i}}">{{month}}</label>
                         </ng-container>
                       </div>
                     </div>
