@@ -242,6 +242,8 @@ export class PayrollComponentsComponent implements OnInit {
           ErrorToast("Fail to add component. Please contact to admin.");
         });
       }
+    } else {
+      this.isLoading = false;
     }
   }
 

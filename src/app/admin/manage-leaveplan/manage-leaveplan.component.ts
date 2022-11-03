@@ -56,6 +56,32 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  ngOnInit(): void {
+    let data = this.nav.getValue();
+    if(data != null) {
+      this.isPageReady = true;
+      this.leaveTypeDeatils = data;
+      let id = data.LeavePlanTypeId;
+      this.leavePlanTypeId = Number(id);
+
+      if (this.leaveTypeDeatils.LeavePlanId <=0) {
+        ErrorToast("Please select a vlid leave plan first");
+        return;
+      }
+
+      this.loadPlanDetail();
+    } else {
+      ErrorToast("Invlaid plan selected please select again.");
+      return;
+    }
+  }
+
+  loadPlanDetail() {
+    this.http.get(`ManageLeavePlan/GetLeavePlanTypeConfiguration/${this.leavePlanTypeId}`).then(response => {
+      this.bindPage(response.ResponseBody)
+    });
+  }
+
   bindPage(data) {
     if(data) {
       if(data.leaveDetail)
@@ -96,26 +122,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       this.isDataLoaded = true;
     } else {
       ErrorToast("Unable to lead plan detail. Please contact to admin.");
-    }
-  }
-
-  loadPlanDetail() {
-    this.http.get(`ManageLeavePlan/GetLeavePlanTypeConfiguration/${this.leavePlanTypeId}`).then(response => {
-      this.bindPage(response.ResponseBody)
-    });
-  }
-
-  ngOnInit(): void {
-    let data = this.nav.getValue();
-    if(data != null) {
-      this.isPageReady = true;
-      this.leaveTypeDeatils = data;
-      let id = data.LeavePlanTypeId;
-      this.leavePlanTypeId = Number(id);
-      this.loadPlanDetail();
-    } else {
-      ErrorToast("Invlaid plan selected please select again.");
-      return;
     }
   }
 
@@ -371,10 +377,23 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     this.submit = true;
     this.isLoading = true;
     let value = this.leaveAccrualForm.value;
+    if (value.IsLeaveAccruedPatternAvail== 'true') {
+      if (!value.LeaveDistributionSequence || value.LeaveDistributionSequence == '') {
+        ErrorToast("Please select leave accrual of annual quota");
+        this.isLoading = false;
+        return;
+      }
+      if (Number(value.LeaveDistributionAppliedFrom) <= 0) {
+        ErrorToast("Please enter a valid date for which accrula rate applied");
+        this.isLoading = false;
+        return;
+      }
+    }
+
     if (value.IsLeaveAccruedProrateDefined == true && value.LeaveDistributionRateOnStartOfPeriod.length > 0) {
       this.fromandTodateValidation(value.LeaveDistributionRateOnStartOfPeriod);
       let allocatedleave = value.LeaveDistributionRateOnStartOfPeriod.map(x => Number(x.AllocatedLeave)).reduce((acc, curr) => {return acc + curr;}, 0);
-      if (value.IsLeaveAccruedPatternAvail) {
+      if (value.IsLeaveAccruedPatternAvail== 'true') {
         switch (value.LeaveDistributionSequence) {
           case '1':
             if(this.monthlyLeave !== allocatedleave) {
@@ -383,6 +402,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
             }
             break;
         }
+
       }
     }
 
