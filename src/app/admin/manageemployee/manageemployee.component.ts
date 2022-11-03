@@ -114,9 +114,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.clients = response.ResponseBody.Clients;
       if (response.ResponseBody.Employee.length > 0) {
         this.employeeModal = response.ResponseBody.Employee[0] as EmployeeDetail;
-        let date = new Date(this.employeeModal.DOB);
-        this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-        date = new Date(this.employeeModal.CreatedOn);
+        this.employeeModal.DOB = new Date(this.employeeModal.DOB);
+        this.model = { day: this.employeeModal.DOB.getDate(), month: this.employeeModal.DOB.getMonth() + 1, year: this.employeeModal.DOB.getFullYear()};
+        let date = new Date(this.employeeModal.CreatedOn);
         this.joiningDatemodel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         if (this.employeeModal.DesignationId == 0)
           this.employeeModal.DesignationId = null;

@@ -41,9 +41,6 @@
                 (click)="bindLeaveTypeModal()">
                 <i class="fa fa-plus pe-2"></i>Assign Leave
               </button>
-              <button [ngClass]="{ 'd-none': !menuItem.Emp }" class="btn btn-primary-c" (click)="addEmployeeToPlan()">
-                <i class="fa fa-plus pe-2"></i>Add Employees
-              </button>
             </div>
             <div class="row">
               <div class="col-md-3">
@@ -232,40 +229,27 @@
                                   </div>
                                 </div>
                               </div>
-
                               <div class="t-body custom-height">
-                                <ng-container>
-                                  <ng-container>
-                                    <div class="tr align-items-center py-2 ps-2">
-                                      <div class="td">
-                                        <div class="cell-wrapper">Dec 2022</div>
-                                      </div>
-                                      <div class="td">
-                                        <div class="cell-wrapper">3</div>
-                                      </div>
-                                      <div class="td">
-                                        <div class="cell-wrapper">
-                                          Ready to process
-                                        </div>
-                                      </div>
-                                      <div class="td">
-                                        <div class="cell-wrapper">
-                                          <button class="btn btn-outline-primary px-2" (click)="yearEndSetting()">
-                                            Begin Year End Process
-                                          </button>
-                                        </div>
-                                      </div>
+                                <div class="tr align-items-center py-2 ps-2">
+                                  <div class="td">
+                                    <div class="cell-wrapper">Dec 2022</div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">3</div>
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      Ready to process
                                     </div>
-                                  </ng-container>
-                                  <ng-container>
-                                    <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
-                                      No leave employee were found. Please add
-                                      one by using
-                                      <b class="text-primary-c">Add Employee</b>
-                                      button.
+                                  </div>
+                                  <div class="td">
+                                    <div class="cell-wrapper">
+                                      <button class="btn btn-outline-primary px-2" (click)="yearEndSetting()">
+                                        Begin Year End Process
+                                      </button>
                                     </div>
-                                  </ng-container>
-                                </ng-container>
+                                  </div>
+                                </div>
                                 <!-- <ng-container *ngIf="!leaveTypeDateIsReady">
                                               <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
                                                 <div class="col-md-3 modal-container f-12 text-center cog-wheel">
