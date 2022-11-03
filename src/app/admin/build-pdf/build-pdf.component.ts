@@ -168,7 +168,9 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
     if (!timesheetDetails) timesheetDetails = [];
 
-    if (timesheetDetails.length > 0) this.timesheetId = timesheetDetails[0].TimesheetId;
+    if (this.applicationData.TimesheetDetail) 
+      this.timesheetId = this.applicationData.TimesheetDetail.TimesheetId;
+
     while(i < missinngAtt.length) {
       timesheetDetails.push({
         UserTypeId: UserType.Employee,
@@ -1289,4 +1291,5 @@ export class ApplicationData {
   Organizations: Array<any> = [];
   TimesheetDetails: Array<any> = [];
   MissingDate: Array<any> = [];
+  TimesheetDetail: any = null;
 }
