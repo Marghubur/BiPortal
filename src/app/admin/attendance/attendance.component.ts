@@ -123,19 +123,6 @@ export class AttendanceComponent implements OnInit {
       this.userName = "";
       this.loadData();
     }
-
-    let i = 0;
-    while( i < 6) {
-      var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
-      if (month == 1) {
-        month = 12;
-        year --
-      } else {
-        month --;
-      }
-      this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
-      i++;
-    }
   }
 
   loadData() {
@@ -205,8 +192,10 @@ export class AttendanceComponent implements OnInit {
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      if(response.ResponseBody.EmployeeDetail)
+      if(response.ResponseBody.EmployeeDetail) {
         this.client = response.ResponseBody.EmployeeDetail;
+        this.getMonths();
+      }
       else {
         this.NoClient = true;
         this.isAttendanceDataLoaded = false;
@@ -236,8 +225,10 @@ export class AttendanceComponent implements OnInit {
       while(index < data.length) {
         data[index].AttendanceDay = new Date(data[index].AttendanceDay);
         let dayValue = data[index].AttendanceDay.getDay();
-        if (dayValue == 0 || dayValue == 6)
+        if (dayValue == 0 || dayValue == 6) {
           data[index].PresentDayStatus = 3;
+          data[index].AttendenceStatus = 3;
+        }
         index++;
       }
 
@@ -245,6 +236,30 @@ export class AttendanceComponent implements OnInit {
     } else {
       WarningToast("Unable to bind data. Please contact admin.");
     }
+  }
+
+  getMonths() {
+    var dt = new Date(this.client.CreatedOn);
+    var month = dt.getMonth()+1;
+    var year = dt.getFullYear();
+    if (month == new Date().getMonth() && year == new Date().getFullYear()) {
+      this.daysInMonth = new Date(year, month + 1, dt.getDate()).getDate();
+    } else {
+      let i = 0;
+      while( i < new Date().getMonth()) {
+        var mnth = Number((((month + 1) > 9 ? "" : "0") + month));
+        // if (month == 1) {
+        //   month = 12;
+        //   year --
+        // } else {
+        //   month --;
+        // }
+        month++;
+        this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
+        i++;
+      }
+    }
+    this.monthName.reverse();
   }
 
   getMonday(d: Date) {
@@ -257,24 +272,19 @@ export class AttendanceComponent implements OnInit {
     return null;
   }
 
-  commentPopUp(e: any) {
+  applyWorkFromHome(e: any) {
     this.currentAttendance = e;
     this.today = this.currentAttendance.AttendanceDay;
-    this.tomorrow = new Date(this.today);
 
-    let now = new Date();
     this.today = new Date(
       this.today.getFullYear(),
       this.today.getMonth(),
       this.today.getDate()
     );
-    this.currentAttendance.AttendanceDay = this.today;
 
-    this.tomorrow = new Date(
-      this.tomorrow.getFullYear(),
-      this.tomorrow.getMonth(),
-      this.tomorrow.getDate() + 1
-    );
+    this.tomorrow = this.today;
+
+    this.currentAttendance.AttendanceDay = this.today;
     this.commentValue = this.currentAttendance.UserComments;
     $('#commentModal').modal('show');
   }
@@ -303,6 +313,7 @@ export class AttendanceComponent implements OnInit {
         this.isLoading = false;
         Toast("Wow!!!  Your attendance submitted successfully.");
       } else {
+        this.isLoading = false;
         ErrorToast(response.ResponseBody, 20);
       }
 
@@ -328,6 +339,7 @@ export class AttendanceComponent implements OnInit {
     }
     return false;
   }
+
   activateMe(elemId: string) {
     switch(elemId) {
       case "attendance-tab":

@@ -175,14 +175,14 @@ export class ManageComponent implements OnInit {
           if (this.profile) {
             this.profileId = this.profile.FileId;
             this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
-            let document = profile.filter(x => x.FileName == "resume");
-            if (document.length > 0) {
-              this.documentId = document[0].FileId;
-              this.resumePath = document[0].FilePath;
-              this.resumeFileName = document[0].FileName;
-              this.extension = document[0].FileExtension;
-              this.isResumeUploaded = true;
-            }
+          }
+          let document = profile.filter(x => x.FileName == "resume");
+          if (document.length > 0) {
+            this.documentId = document[0].FileId;
+            this.resumePath = document[0].FilePath;
+            this.resumeFileName = document[0].FileName;
+            this.extension = document[0].FileExtension;
+            this.isResumeUploaded = true;
           }
         }
 

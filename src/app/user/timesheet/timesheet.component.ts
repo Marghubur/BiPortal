@@ -272,8 +272,18 @@ export class TimesheetComponent implements OnInit {
       }
       let status = 0;
       let filterrecord = value.filter(x => x.PresentDate.getTime() >= this.distributedWeek[i][index].date.getTime() && x.PresentDate.getTime() <= this.distributedWeek[i][this.distributedWeek[i].length-1].date.getTime())
-      if (filterrecord.length > 0)
-        status = filterrecord[0].TimesheetStatus;
+      if (filterrecord.length > 0){
+        if (filterrecord.length > 0) {
+          if ((filterrecord.filter(x => x.TimesheetStatus == 6)).length > 0)
+            status = 6;
+          else if ((filterrecord.filter(x => x.TimesheetStatus == 2)).length > 0)
+            status = 2;
+          else if ((filterrecord.filter(x => x.TimesheetStatus == 9)).length > 0)
+            status = 9;
+          else if ((filterrecord.filter(x => x.TimesheetStatus == 5)).length > 0)
+            status = 5;
+        }
+      }
       this.currentMonthWeek.push( {
         startWeek: this.distributedWeek[i][index].date,
         endWeek: this.distributedWeek[i][this.distributedWeek[i].length-1].date,
@@ -293,7 +303,7 @@ export class TimesheetComponent implements OnInit {
     let i = 0;
     while (i < records.length) {
       let date = new Date(records[i].get("PresentDate").value);
-      if (date.getMonth() == new Date().getMonth()) {
+      if (date.getMonth() == new Date().getMonth() && (records[i].get("TimesheetStatus").value != 11 && records[i].get("TimesheetStatus").value != -1)) {
         let day = Number(date.getDay());
         if(!isNaN(day) && day !== 6 && day !== 0) {
           hrsValue +=  Number(records[i].get("UserHours").value);

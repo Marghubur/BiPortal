@@ -132,44 +132,9 @@
   transform: rotate(180deg);
 }
 
-.month-btn {
-  border: 1px solid #dbdbdb !important;
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-}
-
-.custom-th {
-  font-size: 9px !important;
-}
-
-.circle {
-  position: relative;
-  background: #8cc63e;
-  border-radius: 50%;
-  width: 17px;
-  height: 17px;
-}
-
-.checkmark {
-  position: absolute;
-  transform: rotate(45deg) translate(-50%, -50%);
-  left: 28%;
-  top: 50%;
-  height: 9px;
-  width: 5px;
-  border-bottom: 3px solid white;
-  border-right: 3px solid white;
-}
-
-.comment-text-area {
-  resize: none;
-  width: 100%;
-  height: 10rem;
-}
-
-.day-wfh {
-  position: absolute;
-  top: 7%;
-  left: 28%;
-  background: #dcd7d7;
+.status-icon {
+  margin-bottom: -0.09rem !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 }

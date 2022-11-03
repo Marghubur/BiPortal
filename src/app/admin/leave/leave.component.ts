@@ -487,9 +487,8 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 
   filterLeaveType(e: any) {
     let value = e.target.value;
-    let filterLeaveType = this.leaveTypes.filter(x => x.LeavePlanCode == value || x.PlanName == value);
-    if (filterLeaveType.length > 0)
-      this.leaveTypes = filterLeaveType;
+    let filterLeaveType = this.allLeaveTypes.filter(x => x.LeavePlanCode.indexOf(value) != -1 || x.PlanName.indexOf(value) != -1);
+    this.leaveTypes = filterLeaveType;
   }
 
   resetFilterLeaveType(e: any) {

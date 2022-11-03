@@ -125,6 +125,8 @@ export class ManageProjectComponent implements OnInit {
     let value = this.projectForm.value;
     this.http.post("Project/AddUpdateProjectDetail", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
+        let id = Number(res.ResponseBody);
+        this.projectForm.get("ProjectId").setValue(id);
         Toast("Project created/updated successfully.");
       }
       this.isLoading = false;

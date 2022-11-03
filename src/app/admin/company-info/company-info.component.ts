@@ -103,9 +103,8 @@ export class CompanyInfoComponent implements OnInit {
   initForm() {
     this.companyInformationForm = this.fb.group({
       CompanyId: new FormControl(this.companyInformation.CompanyId),
-      LegalEntity: new FormControl(this.companyInformation.LegalEntity),
-      Signature: new FormControl(this.companyInformation.Signature),
-      LegalNameOfCompany: new FormControl(this.companyInformation.LegalNameOfCompany, [Validators.required]),
+      LegalEntity: new FormControl(this.companyInformation.CompanyName),
+      LegalNameOfCompany: new FormControl(this.companyInformation.LegalEntity, [Validators.required]),
       TypeOfBusiness: new FormControl(this.companyInformation.TypeOfBusiness),
       InCorporationDate: new FormControl(this.companyInformation.InCorporationDate),
       FullAddress: new FormControl(this.companyInformation.FullAddress),
