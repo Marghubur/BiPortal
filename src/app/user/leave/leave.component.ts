@@ -250,7 +250,6 @@ export class LeaveComponent implements OnInit {
       if(leaveDetail && leaveDetail.LeaveDetail) {
         this.leaveData = (JSON.parse(leaveDetail.LeaveDetail)).map(obj => {return {...obj, RequestedOn: new Date(obj.RequestedOn)}});
         this.leaveData = this.leaveData.sort((a, b) => Number(b.RequestedOn) - Number(a.RequestedOn));
-        console.log(this.leaveData)
       }
 
       let plandetail = res.ResponseBody.LeavePlanTypes;
@@ -278,20 +277,20 @@ export class LeaveComponent implements OnInit {
   }
 
   bindChartData() {
-    this.LeaveReportChart();
-    this.LoadDoughnutchart();
-    this.MonthlyStatusChart();
-    this.leaveRequestForm();
-
     let i = 0;
     this.chartDataset = [];
     while(i < this.leaveTypes.length) {
       this.LeaveChart(i, this.leaveTypes[i]);
       i++;
     }
+    this.LoadDoughnutchart();
+    this.LeaveReportChart();
+    this.MonthlyStatusChart();
+    this.leaveRequestForm();
+
 
     if(this.observer != null)
-      this.observer.unsubscribe();
+    this.observer.unsubscribe();
 
     this.observer = this.entireChart.changes.subscribe(t => {
       let canvasChars: Array<any> = t._results;
@@ -299,6 +298,7 @@ export class LeaveComponent implements OnInit {
         this.buildChartData(item.nativeElement.getContext('2d'), i);
       });
     });
+
   }
 
   buildChartData(context: any, index: any) {
@@ -474,37 +474,36 @@ export class LeaveComponent implements OnInit {
   }
 
   LoadDoughnutchart() {
+    let label = [];
+    label = this.chartDataset.map(x => x.PlanName);
+    let bgColor = ['#E14D2A', '#3F0071', 'blue'];
+    let data = [];
+    for (let i = 0; i <  this.chartDataset.length; i++) {
+      let value = (this.chartDataset[i].ConsumedLeave/this.chartDataset[i].MaxLeaveLimit) *100;
+      data.push(value);
+    }
     let elem: any = document.getElementById('consumeLeaveChart');
     let ctx = elem.getContext('2d');
-    let myChart = new Chart(ctx, {
+    let consumeChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: ['Leave Types'],
+        labels: label,
         datasets: [{
           label: 'My First dataset',
-          backgroundColor: [
-            'rgb(192,146,146)',
-            'rgb(143,178,168)',
-            'rgb(109,209,255)'
-          ],
+          backgroundColor: bgColor,
           borderWidth: 0,
-          data: [100, 100, 50],
+          data: data,
           hoverOffset: 4,
-          hoverBackgroundColor: [
-            'rgb(192,146,146)',
-            'rgb(143,178,168)',
-            'rgb(109,209,255)'
-          ],
+          hoverBackgroundColor: bgColor,
       }]
       },
       options: {
         maintainAspectRatio: false,
         responsive: true,
-        cutout: 60,
-    }
+        cutout: 40,
+      }
     });
-
-    this.graphInstances.push(myChart);
+    this.graphInstances.push(consumeChart);
   }
 
   MonthlyStatusChart(){

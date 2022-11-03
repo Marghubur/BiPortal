@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -41,6 +41,7 @@ export class CompanyComponent implements OnInit {
     private fb: FormBuilder,
     private local: ApplicationStorage,
     private common: CommonService,
+    private calendar: NgbCalendar
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +51,7 @@ export class CompanyComponent implements OnInit {
     } else {
       this.companyData = new Filter();
       this.currentCompany = data.find(x => x.IsPrimaryCompany == 1);
-
+      this.corporationDateModal = this.calendar.getToday();
       if (!this.currentCompany) {
         ErrorToast("Fail to get company detail. Please contact to admin.");
         return;
@@ -67,8 +68,13 @@ export class CompanyComponent implements OnInit {
     let companyId = this.currentCompany.CompanyId;
     this.http.get(`Company/GetCompanyById/${companyId}`).then((response: ResponseModel) => {
       if(response.ResponseBody ) {
-        this.currentCompany = response.ResponseBody.OrganizationDetail;;
-        let date = new Date(this.currentCompany.InCorporationDate);
+        this.currentCompany = response.ResponseBody.OrganizationDetail;
+        let date;
+        if (this.currentCompany.InCorporationDate)
+          date = new Date(this.currentCompany.InCorporationDate);
+        else
+          date = new Date() ;
+
         this.corporationDateModal = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         this.buildProfileImage(response.ResponseBody.Files);
         this.getBankDetail();

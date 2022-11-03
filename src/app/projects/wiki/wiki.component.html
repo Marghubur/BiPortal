@@ -45,10 +45,10 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-md-10 col-sm-9 outline-none" id="main-container" 
-                        (contextmenu)="manipulateSection($event)" 
-                        (click)="disabeSection()" 
-                        (focus)="deactivateTag()" 
+                        <div class="col-md-10 col-sm-9 outline-none" id="main-container"
+                        (contextmenu)="manipulateSection($event)"
+                        (click)="disabeSection()"
+                        (focus)="deactivateTag()"
                         (keyup)="tractPressEvent($event)" tabindex="0">
                           <div class="col-md-12 px-4 dv-space">
                             <input type="text" placeholder="Enter Title" class="form-control border-0 fw-bold fs-3" (keyup)="editProjectTitle($event)" [value]="projectDetail.Title">
@@ -57,28 +57,28 @@
                                 <div formArrayName="Wikis">
                                   <div class="d-flex justify-content-around icon-section rounded">
                                     <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-muted" (click)="addSubTitle()">
-                                      <i class="fa fa-plus"></i>
+                                      <i class="fa fa-plus" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image" class="fs-6 px-2 text-muted" (click)="addLinkPopUp()">
-                                        <i class="fa fa-picture-o"></i>
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image" class="fs-6 px-2" (click)="addLinkPopUp()">
+                                        <i class="fa fa-picture-o" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add paragraph" class="fs-6 px-2 text-muted" (click)="addParagraph()">
-                                        <i class="fa fa-file-text"></i>
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add paragraph" class="fs-6 px-2" (click)="addParagraph()">
+                                        <i class="fa fa-file-text" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add link" class="fs-6 px-2 text-muted" (click)="addLinkPopUp()">
-                                        <i class="fa fa-anchor"></i>
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add link" class="fs-6 px-2" (click)="addLinkPopUp()">
+                                        <i class="fa fa-anchor" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add list" class="fs-6 px-2 text-muted" (click)="enableListItem()">
-                                        <i class="fa fa-link"></i>
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add list" class="fs-6 px-2" (click)="enableListItem()">
+                                        <i class="fa fa-link" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add chart" class="fs-6 px-2 text-muted">
-                                        <i class="fa fa-line-chart"></i>
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add chart" class="fs-6 px-2">
+                                        <i class="fa fa-line-chart" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isSectionEdited, 'blur-icon': !isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="fs-6 px-2 text-muted" *ngIf="isSectionEdited" (click)="editCurrentSection()">
-                                        <i class="fa fa-pencil"></i>
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="fs-6 px-2" *ngIf="isSectionEdited" (click)="editCurrentSection()">
+                                        <i class="fa fa-pencil" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
                                     <a href="javascript:void(0)" class="fs-6 px-2 text-muted" *ngIf="!isSectionEdited" (click)="saveProjectDetails($event)">
-                                      <i class="fa fa-paper-plane" data-bs-toggle="tooltip" data-bs-placement="top" title="Save"></i>
+                                      <i class="fa fa-paper-plane" data-bs-toggle="tooltip" data-bs-placement="top" title="Save" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
                                   </div>
 

@@ -25,7 +25,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   WikiDetails: Array<WikiDetail> = [];
   projectId: number = 0;
   target: HTMLElement = null;
-  isSectionEdited: boolean = false;
+  isSectionEdited: boolean = true;
   sectionIndex: number = -1;
   activeEvent: any = null;
 
@@ -350,6 +350,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.target.setAttribute('contenteditable', 'false');
     this.target.classList.remove('enable-section', 'py-2');
     this.target = null;
+    this.isSectionEdited = true;
   }
 
   addindex() {
