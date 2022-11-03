@@ -187,7 +187,8 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let burnDays = 0;
     let isTimeSheetExists = true;
     if(data.TimesheetDetails.length == 0) {
-      this.timesheetId = 0;
+      if(!this.editMode)
+        this.timesheetId = 0;
       isTimeSheetExists = false;
     }
 
