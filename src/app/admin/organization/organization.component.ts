@@ -51,16 +51,26 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.isLoaded = false;
+    let date;
     this.http.get(`Company/GetOrganizationDetail`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         if (response.ResponseBody.OrganizationDetail) {
           this.organization = response.ResponseBody.OrganizationDetail as OrganizationModal;
-          let date = new Date(this.organization.InCorporationDate);
+          if (this.organization.InCorporationDate != null)
+            date = new Date(this.organization.InCorporationDate);
+          else
+            date = new Date();
           this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-          let openingdate = new Date(this.organization.OpeningDate);
-          this.openingDate = { day: openingdate.getDate(), month: openingdate.getMonth() + 1, year: openingdate.getFullYear()};
-          let closingdate = new Date(this.organization.ClosingDate);
-          this.closingDate = { day: closingdate.getDate(), month: closingdate.getMonth() + 1, year: closingdate.getFullYear()};
+          if (this.organization.OpeningDate != null)
+            date = new Date(this.organization.OpeningDate);
+          else
+            date = new Date();
+          this.openingDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          if (this.organization.ClosingDate != null)
+            date = new Date(this.organization.ClosingDate);
+          else
+            date = new Date();
+          this.closingDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
           this.initForm();
           this.isLoaded = true;
         }

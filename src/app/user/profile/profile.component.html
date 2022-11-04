@@ -1105,62 +1105,39 @@
               </ng-container>
             </form>
           </div>
-          <div class="col-md-12 row mt-4">
+          <div class="col-md-12 row my-4">
             <div class="col-md-3">
               <label class="form-label">Language</label>
-              <input type="text" class="form-control my-3" placeholder="Enter your area of Expertise/Specialization"
+              <input type="text" class="form-control" placeholder="Enter your area of Expertise/Specialization" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="ExptLanguage">
             </div>
             <div class="col-md-2">
               <label class="form-label">Version</label>
-              <input type="text" class="form-control my-3" placeholder="Version" [(ngModel)]="ExptVersion">
+              <input type="text" class="form-control" placeholder="Version" [(ngModel)]="ExptVersion">
             </div>
             <div class="row col-md-4">
               <div class="col-md-6">
                 <label class="form-label">Exp in Yrs</label>
-                <input type="text" class="form-control my-3" placeholder="Experience" [(ngModel)]="ExptinYrs">
+                <input type="text" class="form-control" placeholder="Experience" [(ngModel)]="ExptinYrs">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Exp in Mo</label>
-                <input type="text" class="form-control my-3" placeholder="Experience" [(ngModel)]="ExptinMonths">
+                <input type="text" class="form-control" placeholder="Experience" [(ngModel)]="ExptinMonths">
               </div>
             </div>
             <div class="col-md-3">
               <label class="form-label">Date</label>
-              <input type="text" class="form-control my-3" placeholder="Date" [(ngModel)]="Exptdate">
+              <form class="row row-cols-sm-auto">
+                <div class="col-12">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onkeyskillDateSelection($event)"
+                           name="dp" [(ngModel)]="keySkilldate" ngbDatepicker #kd="ngbDatepicker">
+                    <button class="btn btn-outline-secondary calendar" (click)="kd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-        </div>
-        <p class="mt-5">Or you can select from the suggested set of skills</p>
-        <div class="">
-          <span class="x_panel w-auto d-inline-block">
-            CWI
-            <i class="fa fa-plus ps-3"></i>
-          </span>
-          <span class="x_panel w-auto d-inline-block ms-3">
-            Certified Welding Inspector
-            <i class="fa fa-plus ps-3"></i>
-          </span>
-          <span class="x_panel w-auto d-inline-block ms-3">
-            Bgas
-            <i class="fa fa-plus ps-3"></i>
-          </span>
-          <span class="x_panel w-auto d-inline-block ms-3">
-            NACE
-            <i class="fa fa-plus ps-3"></i>
-          </span>
-          <span class="x_panel w-auto d-inline-block ms-3">
-            IX
-            <i class="fa fa-plus ps-3"></i>
-          </span>
-          <span class="x_panel w-auto d-inline-block ms-3">
-            ASTM
-            <i class="fa fa-plus ps-3"></i>
-          </span>
-          <span class="x_panel w-auto d-inline-block">
-            Aramco
-            <i class="fa fa-plus ps-3"></i>
-          </span>
         </div>
       </div>
       <div class="modal-footer border-top-0">
