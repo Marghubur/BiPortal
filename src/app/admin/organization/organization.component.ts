@@ -56,10 +56,10 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       if(response.ResponseBody) {
         if (response.ResponseBody.OrganizationDetail) {
           this.organization = response.ResponseBody.OrganizationDetail as OrganizationModal;
-          if (this.organization.InCorporationDate != null)
-            date = new Date(this.organization.InCorporationDate);
-          else
+          if (this.organization.InCorporationDate == null || this.organization.InCorporationDate == '0001-01-01T00:00:00')
             date = new Date();
+          else
+            date = new Date(this.organization.InCorporationDate);
           this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
           if (this.organization.OpeningDate != null)
             date = new Date(this.organization.OpeningDate);
