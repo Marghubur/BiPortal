@@ -218,3 +218,16 @@ a {
   position: fixed;
   width: 100%;
 }
+
+
+.view-c {
+  position: absolute;
+  right: 20px;
+  top: 0px;
+  bottom: 0px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+}

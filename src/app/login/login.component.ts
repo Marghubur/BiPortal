@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   loginValue: any = {};
   agreeWithTermsAndCondition: boolean = false;
   isRegistrationDone: boolean = false;
+  isShowPassword: boolean = false;
 
   @Output() userAuthState = new EventEmitter();
 
@@ -36,6 +37,16 @@ export class LoginComponent implements OnInit {
     ShopName: "",
     MobileNo: ""
   };
+
+  showPassword() {
+    document.getElementById('Password').setAttribute('type', 'text');
+    this.isShowPassword = true;
+  }
+
+  hidePassword() {
+    document.getElementById('Password').setAttribute('type', 'password');
+    this.isShowPassword = false;
+  }
 
   constructor(
     private http: AjaxService,
