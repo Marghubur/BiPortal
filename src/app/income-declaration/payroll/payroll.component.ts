@@ -25,6 +25,8 @@ export class PayrollComponent implements OnInit {
   compnayDetail: any = null;
   submitted: boolean = false;
   isPageReady: boolean = true;
+  isLoading: boolean = false;
+  agreeAction: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +65,13 @@ export class PayrollComponent implements OnInit {
       this.isReady = true;
       this.isPageReady = true;
     });
+  }
+
+  agreeActionPayroll(e: any) {
+    if (e.target.checked)
+      this.agreeAction = true;
+    else
+      this.agreeAction = false;
   }
 
   onPayCycleChanged(e: any) {
@@ -121,6 +130,7 @@ export class PayrollComponent implements OnInit {
 
   savePayRollSetting() {
     this.submitted = true;
+    this.isLoading = true;
     let value:PayRoll = this.payrollForm.value;
     let errorCounter = 0;
     if (this.payrollForm.get('PayFrequency').errors !== null)
@@ -137,9 +147,12 @@ export class PayrollComponent implements OnInit {
           Toast("Submitted Successfully.")
         }
         this.submitted = false;
+        this.isLoading = false;
+        $('#saveConfirmationModal').modal('hide');
+      }).catch(e => {
+        this.isLoading = false;
       })
     }
-    $('#saveConfirmationModal').modal('hide');
   }
 
   saveSettingModelOpen() {
