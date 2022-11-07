@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit {
   isDeleted: boolean = false;
   isEditWorkSample: boolean = false;
   editItSkillModal: Skills;
-  currentItSkillOnEdit: FormGroup;
+  currentItSkillOnEdit: any;
   deleteSkillDetail: any = null;
   isDeletedSkill: boolean = false;
   editProjectModal: Project;
@@ -91,7 +91,7 @@ export class ProfileComponent implements OnInit {
   resumeFileName: string = '';
   extension: string = '';
   isResumeUploaded: boolean = false;
-
+  SkillIndex: number = 0;
   manageUserForm: FormGroup;
   educationForm: FormGroup;
   employmentForm: FormGroup;
@@ -100,6 +100,7 @@ export class ProfileComponent implements OnInit {
   accomplishmentsForm: FormGroup;
   carrerProfileForm: FormGroup;
   personalDetailForm: FormGroup;
+  keySkilldate:NgbDateStruct;
 
   @Output() authentication = new EventEmitter();
 
@@ -183,6 +184,24 @@ export class ProfileComponent implements OnInit {
         }
 
         educations = this.userModal.EducationalDetails.filter(x => x.Degree_Name !== null);
+        if (this.userModal.Accomplishments.Certification)
+          this.userModal.Accomplishments.Certification = this.userModal.Accomplishments.Certification.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.OnlineProfile)
+          this.userModal.Accomplishments.OnlineProfile = this.userModal.Accomplishments.OnlineProfile.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.Patent)
+          this.userModal.Accomplishments.Patent = this.userModal.Accomplishments.Patent.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.Presentation)
+          this.userModal.Accomplishments.Presentation = this.userModal.Accomplishments.Presentation.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.Research)
+          this.userModal.Accomplishments.Research = this.userModal.Accomplishments.Research.filter(x => x !== '');
+
+        if(this.userModal.Accomplishments.WorkSample)
+          this.userModal.Accomplishments.WorkSample = this.userModal.Accomplishments.WorkSample.filter(x => x !== '');
+
         this.userModal.EducationalDetails = educations;
         this.UserId = this.userModal.EmployeeId;
         if (this.userModal.Employments.length == 0)
@@ -215,6 +234,11 @@ export class ProfileComponent implements OnInit {
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
     this.personalDetailForm.controls["DOB"].setValue(date);
+  }
+
+  onkeyskillDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.Exptdate = date;
   }
 
 
@@ -432,6 +456,7 @@ export class ProfileComponent implements OnInit {
 
   editItSkillDetail() {
     $("#itSkillModal").modal('show');
+    this.SkillIndex = 0;
     this.ExptLanguage = '';
     this.ExptVersion = null;
     this.ExptinYrs = null;
@@ -445,13 +470,18 @@ export class ProfileComponent implements OnInit {
     let newSkill = new Skills();
     if (this.ExptLanguage != '') {
       let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
-      this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
+      if (this.SkillIndex == 0)
+        this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
+      else
+        this.currentItSkillOnEdit = skill.at(this.SkillIndex);
+
       this.currentItSkillOnEdit.get("Language").setValue(this.ExptLanguage);
       this.currentItSkillOnEdit.get("Version").setValue(this.ExptVersion);
       this.currentItSkillOnEdit.get("ExperienceInMonth").setValue(this.ExptinMonths);
       this.currentItSkillOnEdit.get("ExperienceInYear").setValue(this.ExptinYrs);
       this.currentItSkillOnEdit.get("LastUsed").setValue(this.Exptdate);
-      skill.push(this.currentItSkillOnEdit);
+      if (this.SkillIndex == 0)
+        skill.push(this.currentItSkillOnEdit);
     }
     this.submitSkillDetail();
     this.isLoading = false;
@@ -472,11 +502,13 @@ export class ProfileComponent implements OnInit {
 
   editItSkill(e: any) {
     let skillValue = e.value;
+    this.SkillIndex = skillValue.SkillIndex;
     this.ExptLanguage = skillValue.Language;
     this.ExptVersion = skillValue.Version;
     this.ExptinYrs = skillValue.ExperienceInYear;
     this.ExptinMonths = skillValue.ExperienceInMonth;
-    this.Exptdate = skillValue.LastUsed;
+    let date = new Date(skillValue.LastUsed)
+    this.keySkilldate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
     this.isEditItSkill = true;
   }
 

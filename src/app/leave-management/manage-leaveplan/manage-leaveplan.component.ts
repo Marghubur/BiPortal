@@ -368,6 +368,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.errorCounter++;
       } else {
         e.target.classList.remove('error-field');
+        this.errorCounter--;
       }
     }
 
