@@ -238,6 +238,7 @@ export class LoginComponent implements OnInit {
       return (false)
     }
   }
+
   AllowMobilenoOnly(e: any) {
     let $e: any = event;
     // if (!this.commonService.MobileNumberFormat(e.which, $($e.currentTarget).val().length)) {

@@ -5,7 +5,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, PlaceEmpty, Toast, ToFixed } from 'src/providers/common-service/common.service';
-import { OrganizationSetting, ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
+import { Employees, OrganizationSetting, ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -63,7 +63,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
-    private common: CommonService,
     private calendar: NgbCalendar,
     private nav: iNavigation
   ) { }
@@ -100,7 +99,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         CompanyId: ""
       };
     }
-
     this.loadData(this.employeeUid);
   }
 
@@ -249,7 +247,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       FirstName: new FormControl(this.employeeModal.FirstName, [Validators.required]),
       LastName: new FormControl(this.employeeModal.LastName, [Validators.required]),
       Mobile: new FormControl(this.employeeModal.Mobile, [Validators.required]),
-      Email: new FormControl(this.employeeModal.Email, [Validators.required]),
+      Email: new FormControl(this.employeeModal.Email, [Validators.required, Validators.email]),
       SecondaryMobile: new FormControl(this.employeeModal.SecondaryMobile),
       LeavePlanId: new FormControl(this.employeeModal.LeavePlanId),
       FatherName: new FormControl(this.employeeModal.FatherName),
@@ -323,7 +321,13 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.submitted = true;
     let errroCounter = 0;
-
+    let email = this.employeeForm.get('Email').value;
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!regex.test(email)){
+      this.isLoading = false;
+      ErrorToast("Invalid email address!")
+      return ;
+    }
     if (this.employeeForm.get('FirstName').errors !== null)
       errroCounter++;
     if (this.employeeForm.get('LastName').errors !== null)
@@ -356,7 +360,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (this.employeeForm.get('CompanyId').value == 0)
       errroCounter++;
     this.employeeModal = this.employeeForm.value;
-
     if (this.employeeModal.Pincode === null)
       this.employeeModal.Pincode = 0;
     if (this.employeeModal.ExprienceInYear === null)
@@ -371,6 +374,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.TakeHomeByCandidate = 0;
     if (this.employeeModal.FileId === null)
       this.employeeModal.FileId = 0;
+
     if (errroCounter == 0) {
       if (this.ProfessuinalDetail_JSON == null) {
         this.ProfessuinalDetail_JSON = "";
@@ -402,8 +406,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
           Toast("Profile updated successfully");
         else
           Toast("Registration done successfully");
-
-          this.isReady = true;
+        $('#messageModal').modal('show');
+        this.isReady = true;
         this.isLoading = false;
       }).catch(e => {
         this.isReady = true;
@@ -414,6 +418,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.isLoading = false;
       ErrorToast("Please correct all the mandaroty field marked red");
     }
+  }
+
+  gotoEmpPage() {
+    $('#messageModal').modal('hide');
+    this.nav.navigate(Employees, null)
   }
 
   addDetail() {
@@ -501,6 +510,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       }
     }
   }
+
 
   deleteCurrentClient(client: any) {
     this.activeAssignedClient = client.value;

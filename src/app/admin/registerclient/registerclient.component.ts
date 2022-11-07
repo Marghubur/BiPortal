@@ -5,6 +5,7 @@ import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/c
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Clients, ProfileImage, UserImage, UserType } from 'src/providers/constants';
+declare var $: any;
 
 @Component({
   selector: 'app-registerclient',
@@ -56,6 +57,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     //   this.initForm();
     //   this.isLoaded = true;
     // }
+
   }
 
   buildProfileImage(fileDetail: any) {
@@ -96,7 +98,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       MobileNo: new FormControl(this.clientModal.MobileNo),
       PrimaryPhoneNo: new FormControl(this.clientModal.PrimaryPhoneNo, [Validators.required]),
       SecondaryPhoneNo: new FormControl(this.clientModal.SecondaryPhoneNo),
-      Email: new FormControl(this.clientModal.Email, [Validators.required]),
+      Email: new FormControl(this.clientModal.Email, [Validators.required, Validators.email]),
       OtherEmail_1: new FormControl(this.clientModal.OtherEmail_1),
       OtherEmail_2: new FormControl(this.clientModal.OtherEmail_2),
       OtherEmail_3: new FormControl(this.clientModal.OtherEmail_3),
@@ -152,6 +154,13 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       clientDetail.Pincode = 0;
 
     clientDetail.IsActive = true;
+    let email = this.clientForm.get('Email').value;
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!regex.test(email)){
+      this.isLoading = false;
+      ErrorToast("Invalid email address!")
+      return ;
+    }
 
     if (errroCounter === 0) {
       let request: clientModal = this.clientForm.value;
@@ -165,8 +174,8 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
         if (response.ResponseBody !== null) {
           this.clientModal = response.ResponseBody as clientModal;
           this.initForm();
-
           Toast("Client Inserted/Updated successfully");
+           $('#messageModal').modal('show');
         } else {
           ErrorToast("Failed to generated, Please contact to admin.");
         }
@@ -187,6 +196,11 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   fireBrowserFile() {
     this.submitted = true;
     $("#uploadocument").click();
+  }
+
+  gotoEmpPage() {
+    $('#messageModal').modal('hide');
+    this.nav.navigate(Clients, null)
   }
 
   uploadClientLogo(event: any) {
