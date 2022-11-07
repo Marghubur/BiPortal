@@ -412,7 +412,7 @@ export class TimesheetComponent implements OnInit {
       records[index]["PresentDate"] = new Date(records[index]["PresentDate"]);
       index++;
     }
-
+    records = records.filter(x => x.PresentDate.getMonth() == new Date().getMonth());
     this.http.post("timesheet/InsertUpdateTimesheet", records)
     .then(response => {
       if (response.ResponseBody) {
