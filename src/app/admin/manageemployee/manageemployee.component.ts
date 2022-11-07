@@ -100,7 +100,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         CompanyId: ""
       };
     }
-    
+
     this.loadData(this.employeeUid);
   }
 
@@ -281,6 +281,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       UserTypeId: new FormControl(this.employeeModal.UserTypeId, [Validators.required]),
       ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId),
       DesignationId: new FormControl(this.employeeModal.DesignationId, [Validators.required]),
+      OrganizationId: new FormControl(this.currentCompanyDetail.OrganizationId, [Validators.required]),
       CompanyId: new FormControl(this.currentCompanyDetail.CompanyId, [Validators.required]),
       CTC: new FormControl(this.employeeModal.CTC, [Validators.required]),
       Gender: new FormControl(this.employeeModal.Gender ? 'true' : 'false')
@@ -350,7 +351,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       errroCounter++;
     if (this.employeeForm.get('Mobile').errors !== null)
       errroCounter++;
-
+    if (this.employeeForm.get('OrganizationId').value == 0)
+      errroCounter++;
+    if (this.employeeForm.get('CompanyId').value == 0)
+      errroCounter++;
     this.employeeModal = this.employeeForm.value;
 
     if (this.employeeModal.Pincode === null)
@@ -635,4 +639,5 @@ export class EmployeeDetail {
   AllocatedClients: Array<AssignedClients> = [];
   ClientJson: string = '';
   Gender: boolean = true;
+  OrganizationId: number = 0;
 }
