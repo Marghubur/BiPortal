@@ -36,14 +36,14 @@
                 </div>
                 <div class="col-md-4">
                   <label class="form-label">Primary No.# *</label>
-                  <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="10"
+                  <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="10" onkeypress="return event.charCode >=48 && event.charCode <=57"
                     [ngClass]="{'error': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
                     name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
                 </div>
                 <div class="col-md-4 pb-3">
                   <label class="form-label">Email Id *</label>
                   <input class="form-control" placeholder="Email Id"
-                    [ngClass]="{'error': submitted && f.Email.errors !== null && f.Email.errors.required}" name="Email"
+                    [ngClass]="{'error': submitted && f.Email.errors !== null && (f.Email.errors.required || f.Email.errors.email)}" name="Email"
                     formControlName="Email" />
                 </div>
               </div>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Mobile No.# (optional)</label>
-                  <input class="form-control" placeholder="Mobile No.#" name="MobileNo" formControlName="MobileNo"
+                  <input class="form-control" placeholder="Mobile No.#" name="MobileNo" formControlName="MobileNo" onkeypress="return event.charCode >=48 && event.charCode <=57"
                     OnlyNumber="10" />
                 </div>
               </div>
@@ -235,3 +235,23 @@
     </ng-container>
   </div>
 </div>
+
+
+<!-- Employee Register or Update message modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="p-2 modal-content">
+      <div class="modal-body text-dark d-flex align-items-center mb-0 pb-0">
+        <div class="wrapper me-3">
+          <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/> <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          </svg>
+        </div>
+        Congratulation!! client detail registered/ updated successfully!
+      </div>
+      <div class="modal-footer mt-0 pt-0 border-top-0">
+        <button type="button" class="btn btn-primary-c" (click)="gotoEmpPage()"><i class="fa fa-check-circle pe-1"></i> OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->
