@@ -282,6 +282,8 @@ export class TimesheetComponent implements OnInit {
             status = 9;
           else if ((filterrecord.filter(x => x.TimesheetStatus == 5)).length > 0)
             status = 5;
+          else if ((filterrecord.filter(x => x.TimesheetStatus == -1)).length > 0)
+            status = -1;
         }
       }
       this.currentMonthWeek.push( {
