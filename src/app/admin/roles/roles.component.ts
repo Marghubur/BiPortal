@@ -175,6 +175,7 @@ export class RolesComponent implements OnInit {
   }
 
   addRolePopUp() {
+    this.Roleform();
     $('#addRole').modal('show');
   }
 
