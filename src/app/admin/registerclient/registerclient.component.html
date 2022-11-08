@@ -238,7 +238,7 @@
 
 
 <!-- Employee Register or Update message modal -->
-<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="p-2 modal-content">
       <div class="modal-body text-dark d-flex align-items-center mb-0 pb-0">
@@ -249,7 +249,7 @@
         Congratulation!! client detail registered/ updated successfully!
       </div>
       <div class="modal-footer mt-0 pt-0 border-top-0">
-        <button type="button" class="btn btn-primary-c" (click)="gotoEmpPage()"><i class="fa fa-check-circle pe-1"></i> OK</button>
+        <button type="button" class="btn btn-success" (click)="gotoEmpPage()"><i class="fa fa-check-circle pe-1"></i> OK</button>
       </div>
     </div>
   </div>

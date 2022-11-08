@@ -99,6 +99,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         CompanyId: ""
       };
     }
+
     this.loadData(this.employeeUid);
   }
 
