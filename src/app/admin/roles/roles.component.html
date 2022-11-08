@@ -116,11 +116,11 @@
           <form [formGroup]="addRoleForm">
             <div class=" col-md-12">
               <label class="form-label">Role Name</label>
-              <input type="text" class="form-control" placeholder="Role Name" formControlName="RoleName">
+              <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Role Name" formControlName="RoleName" [ngClass]="{'error-field': submitted && f.RoleName.errors !== null && f.RoleName.errors.required}">
             </div>
             <div class="pt-3">
               <label class="form-label">Access Code Defination</label>
-              <textarea class="form-control code-defination-txtarea" placeholder="Access Code Defination"
+              <textarea class="form-control code-defination-txtarea" oninput="this.value = this.value.toUpperCase()" placeholder="Access Code Defination" [ngClass]="{'error-field': submitted && f.AccessCodeDefination.errors !== null && f.AccessCodeDefination.errors.required}"
                 formControlName="AccessCodeDefination"></textarea>
             </div>
           </form>
