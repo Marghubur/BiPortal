@@ -732,11 +732,11 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         timesheetForm.append('BillRequestData', JSON.stringify(request));
 
         this.http.post(this.generateBillUrl, timesheetForm).then((response: ResponseModel) => {
-          if(response.ResponseBody.Result.FileDetail !== null &&
-            response.ResponseBody.Result.EmailTemplate !== null) {
-            this.downloadFile(response.ResponseBody.Result.FileDetail);
+          if(response.ResponseBody.FileDetail !== null &&
+            response.ResponseBody.EmailTemplate !== null) {
+            this.downloadFile(response.ResponseBody.FileDetail);
             this.isBillGenerated = true;
-            this.Bindtemplate(response.ResponseBody.Result.EmailTemplate);
+            this.Bindtemplate(response.ResponseBody.EmailTemplate);
             $('#viewFileModal').modal('show');
             Toast("Bill pdf generated successfully");
           }
