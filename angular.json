@@ -89,6 +89,9 @@
           "configurations": {
             "production": {
               "browserTarget": "odbui:build:production"
+            },
+            "staging": {
+              "browserTarget": "odbui:build:staging"
             }
           }
         },
