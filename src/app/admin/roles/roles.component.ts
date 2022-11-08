@@ -23,6 +23,7 @@ export class RolesComponent implements OnInit {
   addRoleForm: FormGroup;
   isLoading: boolean = false;
   ispermissionAdding: boolean = false;
+  submitted: boolean = false;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService) { }
@@ -153,7 +154,7 @@ export class RolesComponent implements OnInit {
   Roleform() {
     this.addRoleForm = this.fb.group({
       RoleName: new FormControl('', Validators.required),
-      AccessCodeDefination: new FormControl('')
+      AccessCodeDefination: new FormControl('', Validators.required)
     })
   }
 
@@ -181,8 +182,17 @@ export class RolesComponent implements OnInit {
     $('#addRole').modal('hide');
   }
 
+  get f() {
+    return this.addRoleForm.controls;
+  }
+
   AddRole() {
     this.isLoading = true;
+    this.submitted = true;
+    if (this.addRoleForm.invalid){
+      this.isLoading = false;
+      return;
+    }
     let formValue = this.addRoleForm.value;
     if (formValue) {
       this.http.post("Roles/AddRole", formValue).then((response: ResponseModel) => {
@@ -195,6 +205,7 @@ export class RolesComponent implements OnInit {
         this.isLoading = false;
       });
       $('#addRole').modal('hide');
+      this.submitted = false;
     };
   }
 }
