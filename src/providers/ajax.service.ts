@@ -18,9 +18,9 @@ export class AjaxService {
     private http: HttpClient
   ) {
     if (environment.production) {
-      console.log("[Bottomhalf]: Bottomhalf/builder Running");
+      console.log(`[Bottomhalf]: BiPortal Running on ${environment.env}`);
     } else {
-      console.log("[Bottomhalf]: localhost Running");
+      console.log("[Bottomhalf]: BiPortal Running on localhost");
     }
   }
 
