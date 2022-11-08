@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
-import { Clients, ProfileImage, UserImage, UserType } from 'src/providers/constants';
+import { Clients, OrgLogo, ProfileImage, UserImage, UserType } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -19,7 +19,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   isUpdating: boolean = false;
   isLoaded: boolean = false;
-  profileURL: string = UserImage;
+  profileURL: string = OrgLogo;
   fileDetail: Array<any> = [];
   UserTypeId: UserType= UserType.Client;
 

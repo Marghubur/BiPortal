@@ -68,6 +68,7 @@ export class ManageEmailtemplateComponent implements OnInit {
       EmailTemplateId: new FormControl(this.emailTemplateId),
       CompanyId: new FormControl(this.companyId),
       TemplateName: new FormControl(this.emailTemplateDetail.TemplateName, [Validators.required]),
+      EmailTitle: new FormControl(this.emailTemplateDetail.EmailTitle, [Validators.required]),
       SubjectLine: new FormControl(this.emailTemplateDetail.SubjectLine, [Validators.required]),
       Salutation: new FormControl(this.emailTemplateDetail.Salutation, [Validators.required]),
       EmailClosingStatement: new FormControl(this.emailTemplateDetail.EmailClosingStatement, [Validators.required]),
@@ -120,6 +121,7 @@ class EmailTemplate {
   EmailTemplateId: number = 0;
   TemplateName: string = null;
   SubjectLine: string = null;
+  EmailTitle: string = null;
   Salutation: string = null;
   EmailClosingStatement: string = null;
   BodyContent: string = null;
