@@ -203,8 +203,6 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     if (errorCount === 0) {
       this.http.post(`OnlineDocument/UpdateRecord/${this.currentFileId}`, this.documentForm.value).then(response => {
         if (response.ResponseBody) {
-          this.LoadFiles();
-          this.refreshFilter();
           Toast(response.ResponseBody);
           this.isLoading = false;
         }
@@ -280,9 +278,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     if (errorCount === 0) {
       this.http.upload(`Bill/UpdateGstStatus/${this.currentRecordBillNo}`, formData).then(response => {
         if (response.ResponseBody) {
-          this.LoadFiles();
           this.closeWindow();
-          this.refreshFilter();
           this.isLoading = false;
           Toast(response.ResponseBody);
         }

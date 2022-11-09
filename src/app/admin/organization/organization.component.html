@@ -38,7 +38,7 @@
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization Mobile No.#</label>
                     <input placeholder="Organization Mobile No." class="form-control" name="OrgMobileNo"
-                      formControlName="OrgMobileNo"  oninput="this.value = this.value.toUpperCase()"/>
+                      formControlName="OrgMobileNo"  onkeypress="return event.charCode >=48 && event.charCode <=57"/>
                   </div>
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization Email</label>
@@ -48,12 +48,12 @@
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization Primary No.#</label>
                     <input placeholder="Organization Primary No.# " class="form-control" name="OrgPrimaryPhoneNo"
-                      formControlName="OrgPrimaryPhoneNo"  oninput="this.value = this.value.toUpperCase()"/>
+                      formControlName="OrgPrimaryPhoneNo" onkeypress="return event.charCode >=48 && event.charCode <=57"/>
                   </div>
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization Alternate No.#</label>
                     <input placeholder="Organization Alternate Phone No.#" class="form-control" name="OrgSecondaryPhoneNo"
-                      formControlName="OrgSecondaryPhoneNo"  oninput="this.value = this.value.toUpperCase()"/>
+                      formControlName="OrgSecondaryPhoneNo" onkeypress="return event.charCode >=48 && event.charCode <=57"/>
                   </div>
                   <div class="col-md-4 mt-4">
                     <label class="form-label">Organization FAX No.#</label>
@@ -82,7 +82,7 @@
                     </div>
                     <div class="col-md-6 mt-4">
                       <label class="form-label">Primary No.# *</label>
-                      <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="11"
+                      <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="10" onkeypress="return event.charCode >=48 && event.charCode <=57"
                         [ngClass]="{'error-field': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
                         name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
                     </div>
@@ -94,7 +94,7 @@
                     </div>
                     <div class="col-md-6 mt-3">
                       <label class="form-label">Alternate No.#</label>
-                      <input class="form-control" placeholder="Alternate Phone No.#" name="SecondaryPhoneNo"
+                      <input class="form-control" placeholder="Alternate Phone No.#" name="SecondaryPhoneNo" onkeypress="return event.charCode >=48 && event.charCode <=57"
                         formControlName="SecondaryPhoneNo" />
                     </div>
                     <div class="col-md-6 mt-4">
@@ -104,7 +104,7 @@
                     </div>
                     <div class="col-md-6 mt-4">
                       <label class="form-label">Mobile No.# (optional)</label>
-                      <input class="form-control" placeholder="Mobile No.#" name="MobileNo" formControlName="MobileNo"
+                      <input class="form-control" placeholder="Mobile No.#" name="MobileNo" formControlName="MobileNo" onkeypress="return event.charCode >=48 && event.charCode <=57"
                         OnlyNumber="11" />
                     </div>
                     <div class="col-md-6 mt-4">
@@ -206,7 +206,7 @@
                   </div>
                   <div class="col-md-12 mt-4">
                     <label class="form-label">Account No.#</label>
-                    <input placeholder="Account No.#" class="form-control" name="AccountNo" formControlName="AccountNo" />
+                    <input placeholder="Account No.#" class="form-control" name="AccountNo" formControlName="AccountNo" onkeypress="return event.charCode >=48 && event.charCode <=57"/>
                   </div>
                   <div class="col-md-12 mt-4">
                     <label class="form-label">IFSC Code</label>
@@ -220,7 +220,7 @@
                   </div>
                   <div class="col-md-12 mt-4">
                     <label class="form-label">Branch Code (Optional)</label>
-                    <input placeholder="Branch Code" class="form-control" name="BranchCode" transform="" oninput="this.value = this.value.toUpperCase()"
+                    <input placeholder="Branch Code" class="form-control" name="BranchCode" transform="" onkeypress="return event.charCode >=48 && event.charCode <=57"
                       formControlName="BranchCode" />
                   </div>
                   <div class="col-md-6 mt-4">
@@ -282,7 +282,7 @@
                   </div>
                   <div class="col-md-6 mt-4">
                     <label class="form-label">Pincode</label>
-                    <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6"
+                    <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6" onkeypress="return event.charCode >=48 && event.charCode <=57"
                       formControlName="Pincode" />
                   </div>
                   <div class="col-md-6 mt-4">
