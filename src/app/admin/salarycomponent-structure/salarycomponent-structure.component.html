@@ -350,7 +350,7 @@
             </div>
             <div class="col-md-5 my-2">
               <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
-              <input type="text" class="form-control" formControlName="MaxLimit">
+              <input type="text" class="form-control" formControlName="MaxLimit" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div>
           </div>
           <div>

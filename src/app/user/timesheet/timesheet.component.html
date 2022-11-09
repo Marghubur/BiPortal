@@ -210,6 +210,10 @@
                           <span *ngIf="item.status == 9"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
                           <span *ngIf="item.status == 6 "><i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
                           <span *ngIf="item.status == 5 "><i class="fa fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Rejected</span>
+                          <span class="text-danger"  *ngIf="item.status == -1">
+                            <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            Readonly
+                          </span>
                         </td>
                       </tr>
                     </tbody>
@@ -336,14 +340,9 @@
                             <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Readonly
                           </span>
-                          <span class="text-danger" *ngSwitchCase="-1">
-                            <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
-                            Readonly
-                          </span>
                         </ng-container>
                       </td>
                       <td>
-
                       </td>
                     </ng-container>
                   </ng-container>

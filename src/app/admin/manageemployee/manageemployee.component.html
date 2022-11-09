@@ -254,7 +254,7 @@
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Pincode</label>
-                            <input class="form-control" placeholder="Pincode" OnlyNumber="6" name="Pincode" oninput="this.value = this.value.toUpperCase()"
+                            <input class="form-control" placeholder="Pincode" OnlyNumber="6" name="Pincode" onkeypress="return event.charCode >=48 && event.charCode <=57"
                               formControlName="Pincode" />
                           </div>
                           <div class="col-md-12 mb-3">
@@ -281,11 +281,11 @@
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Aadhar No. #</label>
-                            <input class="form-control" placeholder="Aadhar No. #" name="AadharNo" OnlyNumber="18" formControlName="AadharNo" />
+                            <input class="form-control" placeholder="Aadhar No. #" name="AadharNo" OnlyNumber="18" formControlName="AadharNo" onkeypress="return event.charCode >=48 && event.charCode <=57"/>
                           </div>
                           <div class="col-md-12 mb-3">
                             <label class="form-label">Bank Account No.#</label>
-                            <input class="form-control" placeholder="Bank Account No.#" name="AccountNumber" OnlyNumber="30"
+                            <input class="form-control" placeholder="Bank Account No.#" name="AccountNumber" OnlyNumber="30" onkeypress="return event.charCode >=48 && event.charCode <=57"
                               formControlName="AccountNumber" />
                           </div>
                           <div class="col-md-12 mb-3">
@@ -305,7 +305,7 @@
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Work Exprience in month</label>
-                            <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="5"
+                            <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="5" onkeypress="return event.charCode >=48 && event.charCode <=57"
                               name="ExprienceInYear" formControlName="ExprienceInYear" />
                           </div>
                           <div class="col-md-6 mb-3">

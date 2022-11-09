@@ -286,7 +286,7 @@
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
-              <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9"
+              <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 [readonly]="ComponentType == ''" class="form-control">
             </div>
             <div class="col-md-12 mt-3">
@@ -312,7 +312,7 @@
               </div>
               <div class="col-md-6 mt-2">
                 <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
-                <input type="number" [readonly]="!isTaxExempt" formControlName="SectionMaxLimit"
+                <input type="number" [readonly]="!isTaxExempt" formControlName="SectionMaxLimit" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                   placeholder="Section Maximum Limit" class="form-control">
               </div>
             </div>
@@ -388,7 +388,7 @@
             </div>
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
-              <input type="text" OnlyNumber="9" formControlName="SectionMaxLimit" [readonly]="!isTaxExempt"
+              <input type="text" OnlyNumber="9" formControlName="SectionMaxLimit" [readonly]="!isTaxExempt" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 placeholder="Section Maximum Limit" class="form-control">
             </div>
           </div>
