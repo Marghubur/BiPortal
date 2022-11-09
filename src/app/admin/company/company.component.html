@@ -74,11 +74,11 @@
                     <div class="row col-md-12">
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Mobile No.#</label>
-                        <input class="form-control" formControlName="MobileNo" OnlyNumber="11"/>
+                        <input class="form-control" formControlName="MobileNo" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Alternate No.#</label>
-                        <input class="form-control" formControlName="SecondaryPhoneNo" OnlyNumber="11"/>
+                        <input class="form-control" formControlName="SecondaryPhoneNo" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">FAX No.#</label>
@@ -164,7 +164,7 @@
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Pincode</label>
-                        <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6"
+                        <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                           formControlName="Pincode" />
                       </div>
                       <div class="col-md-3 mt-4">
@@ -356,7 +356,7 @@
                   </div>
                   <div class="col-md-4 my-2">
                     <label class="form-label">Account No.# *</label>
-                    <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNo"
+                    <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNo" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                       [ngClass]="{'error-field': submitted && f.AccountNo.errors !== null && f.AccountNo.errors.required}"
                       formControlName="AccountNo" />
                   </div>
@@ -372,7 +372,7 @@
                   </div>
                   <div class="col-md-4 my-2">
                     <label class="form-label">Branch Code</label>
-                    <input placeholder="Branch Code" class="form-control" name="BranchCode" OnlyNumber="5"
+                    <input placeholder="Branch Code" class="form-control" name="BranchCode" OnlyNumber="5" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                       formControlName="BranchCode" />
                   </div>
                 </div>
