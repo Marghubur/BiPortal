@@ -294,7 +294,7 @@
                   </div>
                   <div class="col-md-4 my-2">
                     <label class="form-label">Account No.# *</label>
-                    <input placeholder="Account No.#" OnlyNumber="20" class="form-control" name="AccountNo" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                    <input placeholder="Account No.#" class="form-control" name="AccountNo" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                       [ngClass]="{'error-field': submitted && m.AccountNo.errors !== null && m.AccountNo.errors.required}"
                       formControlName="AccountNo" />
                   </div>
@@ -310,7 +310,7 @@
                   </div>
                   <div class="col-md-4 my-2">
                     <label class="form-label">Branch Code</label>
-                    <input placeholder="Branch Code" class="form-control" name="BranchCode" OnlyNumber="5" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                    <input placeholder="Branch Code" class="form-control" name="BranchCode" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                       formControlName="BranchCode" />
                   </div>
                 </div>
