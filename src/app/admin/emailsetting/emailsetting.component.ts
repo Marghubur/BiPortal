@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { UserImage } from 'src/providers/constants';
+import { OrgLogo } from 'src/providers/constants';
 
 @Component({
   selector: 'app-emailsetting',
@@ -15,7 +15,7 @@ export class EmailsettingComponent implements OnInit {
   emailSettingForm: FormGroup = null;
   submitted: boolean = false;
   fileDetail: Array<any> = [];
-  profileURL: string = UserImage;
+  profileURL: string = OrgLogo;
   emailSettings: EmailSettings = new EmailSettings();
   currentCompany: any = null;
   companyId: number = 0;

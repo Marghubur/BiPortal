@@ -782,13 +782,13 @@
             </div>
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">Minimum Amount</label>
-              <input type="text" OnlyNumber="9"
+              <input type="text" OnlyNumber="9" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 [ngClass]="{'error-field': submitted && f.MinAmount.errors !== null && (f.MinAmount.errors.required || f.MinAmount.errors.numberZero)}"
                 placeholder="Enter Minimum Amount" formControlName="MinAmount" class="form-control">
             </div>
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">Maximum Amount</label>
-              <input type="text" OnlyNumber="9"
+              <input type="text" OnlyNumber="9" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 [ngClass]="{'error-field': submitted && f.MaxAmount.errors !== null && (f.MaxAmount.errors.required || f.MinAmount.errors.numberZero)}"
                 placeholder="Enter Maximum Amount" formControlName="MaxAmount" class="form-control">
             </div>
