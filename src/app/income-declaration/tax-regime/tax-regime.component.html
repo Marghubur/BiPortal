@@ -1,0 +1,122 @@
+<div class="col-12 full-v main-container">
+  <div class="col-12 x_panel p-0 m-0">
+    <div class="">
+      <app-breadcrums></app-breadcrums>
+    </div>
+   <div class="m-3 px-2">
+    <div class="col-md-12 d-flex">
+      <div class="col-md-2 ms-auto">
+        <select class="form-select">
+          <option value="" selected disabled>Select age group</option>
+          <option value="">Less than 60</option>
+          <option value="">Above 60</option>
+          <option value="">Above 80</option>
+        </select>
+      </div>
+      <button class="btn btn-primary-c ms-3" (click)="ageGroupPopUp()"><i class="fa fa-plus circle pe-2"></i> Add Age Group</button>
+    </div>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+      <li [ngbNavItem]="1">
+        <a ngbNavLink>Old Tax Regime</a>
+        <ng-template ngbNavContent>
+          <div class="text-end">
+            <button class="btn btn-primary-c" *ngIf="!isEditable" (click)="editSlab()"><i class="fa fa-pencil pe-2"></i> Edit Regime</button>
+          </div>
+          <form [formGroup]="oldTaxRegimeForm">
+            <div class="row mt-3 mx-1">
+              <div class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark">Income Tax Slab</div>
+              <div class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark">Income Tax Rate</div>
+              <div class="col-md-3 border-bottom py-2 fw-bold text-dark border-dark">Tax Amount</div>
+              <div class="col-md-1 border-bottom py-2 fw-bold text-dark border-dark">Action</div>
+            </div>
+            <ng-container formArrayName="OldTaxSlab">
+              <div class="row mx-1 mt-3 align-items-center" *ngFor="let item of oldSlab.controls; let i = index" [formGroupName]="i">
+                <div class="col-md-4 mx-0 ps-0 d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
+                    <i class="fa fa-inr px-1" aria-hidden="true"></i>
+                    <input type="number" [readonly]="!isEditable" class="form-control border-0" placeholder="From" formControlName="From">
+                  </div>
+                  <label for="" class="form-label px-2">to</label>
+                  <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
+                    <i class="fa fa-inr px-1" aria-hidden="true"></i>
+                    <input type="number" [readonly]="!isEditable" class="form-control border-0" placeholder="To" formControlName="To" (blur)="checkToAmount($event, i)">
+                  </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                  <div class="d-flex align-items-center form-control p-0 m-0 w-50" [ngClass]="{'border-0': !isEditable}">
+                    <input type="number" [readonly]="!isEditable" class="form-control border-0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Rate" formControlName="Rate" (keyup)="calcTaxAmount()">
+                    <i class="fa fa-percent px-2"></i>
+                  </div>
+                  <label for="" class="form-label ps-3">above &#x20B9; {{item.get("From").value}}</label>
+                </div>
+                <div class="col-md-3">
+                  <label for="" class="form-label">&#x20B9; {{item.get("TaxAmount").value}}</label>
+                </div>
+                <div class="col-md-1">
+                  <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': !isEditable}">
+                    <i class="fa fa-trash-o text-danger fa-lg" [ngClass]="{'text-muted': !isEditable}" (click)="removeOldTaxSlab(i)"></i>
+                  </a>
+                  <a href="javascript:void(0)" class="text-decoration-none" *ngIf="i+1 == oldSlab.controls.length" [ngClass]="{'pe-none': !isEditable}">
+                    <i class="fa fa-plus-circle text-success fa-lg ps-3" [ngClass]="{'text-muted': !isEditable}" (click)="addOldTaxSlab()"></i>
+                  </a>
+                </div>
+              </div>
+            </ng-container>
+            <div class="mt-5 text-end" *ngIf="isEditable">
+              <button class="btn btn-success" (click)="saveOldRegime()"><i class="fa fa-plus pe-2"></i> Save</button>
+            </div>
+          </form>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2">
+        <a ngbNavLink>New Tax Regime</a>
+        <ng-template ngbNavContent>
+          <p>
+            Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
+            farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
+            ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
+            helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson
+            8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
+            stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
+          </p>
+        </ng-template>
+      </li>
+    </ul>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+   </div>
+  </div>
+</div>
+
+<!-- Age Group Modal -->
+<div class="modal fade" id="ageGroupModal" tabindex="-1" aria-labelledby="ageGroupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="ageGroupModalLabel">Add Age Group</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="ageGroupForm">
+          <div class="row">
+            <div class="col-md-6">
+              <label for="" class="form-label">From</label>
+              <select class="form-select" (change)="fromAgeSelect($event)" formControlName="FromAge">
+                <option  [value]="item" *ngFor="let item of fromAgeGroup">{{item}}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="" class="form-label">To</label>
+              <select class="form-select" formControlName="ToAge">
+                <option [value]="item" *ngFor="let item of toAgeGroup">{{item == 110 ? 'Above': item}}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

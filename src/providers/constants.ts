@@ -105,6 +105,7 @@ export const ManageProject = 'admin/manage-project';
 export const EmailTemplate = 'admin/emailtemplate';
 export const ManageEmailTemplate = 'admin/manageemailtemplate';
 export const EmployeePerformance = 'admin/employeeperformance';
+export const TaxRegime = 'admin/taxregime';
 
 // ********************** Admin route pages  *******************
 
