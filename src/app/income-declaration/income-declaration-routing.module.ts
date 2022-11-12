@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminDeclaration, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment, Payroll, PayrollComponents, PFESISetup } from 'src/providers/constants';
+import { AdminDeclaration, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment, Payroll, PayrollComponents, PFESISetup, TaxRegime } from 'src/providers/constants';
 import { DeclarationComponent } from './declaration/declaration.component';
 import { Form12BbComponent } from './form12-bb/form12-bb.component';
 import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
@@ -13,6 +13,7 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import { PreviousincomeComponent } from './previousincome/previousincome.component';
 import { SalaryComponent } from './salary/salary.component';
 import { SummaryComponent } from './summary/summary.component';
+import { TaxRegimeComponent } from './tax-regime/tax-regime.component';
 import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
 
 const routes: Routes = [
@@ -29,7 +30,7 @@ const routes: Routes = [
   { path: Payroll, component: PayrollComponent},
   { path: PFESISetup, component: PfEsiSetupComponent},
   { path: PayrollComponents, component: PayrollComponentsComponent},
-
+  { path: TaxRegime, component: TaxRegimeComponent}
 ];
 
 @NgModule({

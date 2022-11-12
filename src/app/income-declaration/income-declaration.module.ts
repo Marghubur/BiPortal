@@ -18,6 +18,7 @@ import { SalaryComponent } from '../income-declaration/salary/salary.component';
 
 import { IncomeDeclarationRoutingModule } from './income-declaration-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TaxRegimeComponent } from './tax-regime/tax-regime.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SummaryComponent,
     TaxsavinginvestmentComponent,
     SalaryComponent,
+    TaxRegimeComponent,
   ],
   imports: [
     CommonModule,

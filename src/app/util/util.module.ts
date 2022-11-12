@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CommonRoutingModule } from './util-routing.module';
 import { UtilComponent } from './util.component';
 import { AllownumberDirective } from './directives/allownumber.directive';
+import { DecimalnumberDirective } from './directives/decimalnumber.directive';
 import { TransformDirective } from './directives/transform.directive';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
@@ -17,6 +18,7 @@ import { EditorComponent } from './editor/editor.component'
   declarations: [
     UtilComponent,
     AllownumberDirective,
+    DecimalnumberDirective,
     TransformDirective,
     PaginationComponent,
     IautocompleteComponent,
@@ -32,6 +34,7 @@ import { EditorComponent } from './editor/editor.component'
   exports: [
     AllownumberDirective,
     TransformDirective,
+    DecimalnumberDirective,
     PaginationComponent,
     BreadcrumsComponent,
     IautocompleteComponent,
