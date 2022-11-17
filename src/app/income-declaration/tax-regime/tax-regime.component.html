@@ -3,119 +3,217 @@
     <div class="">
       <app-breadcrums></app-breadcrums>
     </div>
-   <div class="m-3 px-2">
+   <div class="m-3 px-2" *ngIf="isRecordFound">
     <div class="col-md-12 d-flex">
-      <div class="col-md-2 ms-auto">
-        <select class="form-select">
-          <option value="" selected disabled>Select age group</option>
-          <option value="">Less than 60</option>
-          <option value="">Above 60</option>
-          <option value="">Above 80</option>
+      <div class="col-md-2">
+        <select class="form-select" (change)="selectRegime($event)">
+          <option value="" selected disabled>Select Tax Regime</option>
+          <option [value]="item.TaxRegimeDescId" *ngFor="let item of allTaxRegimeDesc">{{item.RegimeName}}</option>
         </select>
       </div>
-      <button class="btn btn-primary-c ms-3" (click)="ageGroupPopUp()"><i class="fa fa-plus circle pe-2"></i> Add Age Group</button>
+      <div class="col-md-2 ms-2">
+        <select class="form-select" (change)="selectAgeGroup($event)" [disabled]="currentRegime.TaxRegimeDescId == 0">
+          <option value="" selected disabled>Select age group</option>
+          <option [value]="item.AgeGroupId" *ngFor="let item of allAgeGroup">{{item.StartAgeGroup}} to {{item.EndAgeGroup == 110 ? 'Above' : item.EndAgeGroup}}</option>
+        </select>
+      </div>
+      <button class="btn btn-primary-c ms-3" (click)="taxRegimePopUp()"><i class="fa fa-plus circle pe-2"></i> Add/Update Regime</button>
+      <button class="btn btn-primary-c ms-3" (click)="ageGroupPopUp()"><i class="fa fa-plus circle pe-2"></i> Add/Update Age Group</button>
+      <button class="btn btn-primary-c ms-auto" *ngIf="!isEditable && isPageReady" (click)="editSlab()"><i class="fa fa-pencil pe-2"></i> Edit Regime</button>
     </div>
-    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-      <li [ngbNavItem]="1">
-        <a ngbNavLink>Old Tax Regime</a>
-        <ng-template ngbNavContent>
-          <div class="text-end">
-            <button class="btn btn-primary-c" *ngIf="!isEditable" (click)="editSlab()"><i class="fa fa-pencil pe-2"></i> Edit Regime</button>
+    <div>
+      <ng-container *ngIf="isPageReady">
+        <form [formGroup]="taxRegimeForm" *ngIf="taxRegimeForm">
+          <div class="row mt-3 mx-1">
+            <div class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark">Income Tax Slab</div>
+            <div class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark">Income Tax Rate</div>
+            <div class="col-md-3 border-bottom py-2 fw-bold text-dark border-dark">Tax Amount</div>
+            <div class="col-md-1 border-bottom py-2 fw-bold text-dark border-dark">Action</div>
           </div>
-          <form [formGroup]="oldTaxRegimeForm">
-            <div class="row mt-3 mx-1">
-              <div class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark">Income Tax Slab</div>
-              <div class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark">Income Tax Rate</div>
-              <div class="col-md-3 border-bottom py-2 fw-bold text-dark border-dark">Tax Amount</div>
-              <div class="col-md-1 border-bottom py-2 fw-bold text-dark border-dark">Action</div>
-            </div>
-            <ng-container formArrayName="OldTaxSlab">
-              <div class="row mx-1 mt-3 align-items-center" *ngFor="let item of oldSlab.controls; let i = index" [formGroupName]="i">
-                <div class="col-md-4 mx-0 ps-0 d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                    <i class="fa fa-inr px-1" aria-hidden="true"></i>
-                    <input type="number" [readonly]="!isEditable" class="form-control border-0" placeholder="From" formControlName="From">
-                  </div>
-                  <label for="" class="form-label px-2">to</label>
-                  <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                    <i class="fa fa-inr px-1" aria-hidden="true"></i>
-                    <input type="number" [readonly]="!isEditable" class="form-control border-0" placeholder="To" formControlName="To" (blur)="checkToAmount($event, i)">
-                  </div>
+          <ng-container formArrayName="OldTaxSlab">
+            <div class="row mx-1 mt-3 align-items-center" *ngFor="let item of oldSlab.controls; let i = index" [formGroupName]="i">
+              <div class="col-md-4 mx-0 ps-0 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
+                  <i class="fa fa-inr px-1" aria-hidden="true"></i>
+                  <input type="number" [readonly]="!isEditable" class="form-control w-75 border-0" placeholder="From" formControlName="MinTaxSlab" (keyup)="calcTaxAmount()">
                 </div>
-                <div class="col-md-4 d-flex align-items-center">
-                  <div class="d-flex align-items-center form-control p-0 m-0 w-50" [ngClass]="{'border-0': !isEditable}">
-                    <input type="number" [readonly]="!isEditable" class="form-control border-0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Rate" formControlName="Rate" (keyup)="calcTaxAmount()">
-                    <i class="fa fa-percent px-2"></i>
-                  </div>
-                  <label for="" class="form-label ps-3">above &#x20B9; {{item.get("From").value}}</label>
-                </div>
-                <div class="col-md-3">
-                  <label for="" class="form-label">&#x20B9; {{item.get("TaxAmount").value}}</label>
-                </div>
-                <div class="col-md-1">
-                  <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': !isEditable}">
-                    <i class="fa fa-trash-o text-danger fa-lg" [ngClass]="{'text-muted': !isEditable}" (click)="removeOldTaxSlab(i)"></i>
-                  </a>
-                  <a href="javascript:void(0)" class="text-decoration-none" *ngIf="i+1 == oldSlab.controls.length" [ngClass]="{'pe-none': !isEditable}">
-                    <i class="fa fa-plus-circle text-success fa-lg ps-3" [ngClass]="{'text-muted': !isEditable}" (click)="addOldTaxSlab()"></i>
-                  </a>
+                <label for="" class="form-label px-5">to</label>
+                <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
+                  <i class="fa fa-inr px-1" aria-hidden="true"></i>
+                  <input type="number" [readonly]="!isEditable" class="form-control w-50 border-0" placeholder="To" formControlName="MaxTaxSlab" (keyup)="calcTaxAmount()" (blur)="checkToAmount($event, i)">
                 </div>
               </div>
-            </ng-container>
-            <div class="mt-5 text-end" *ngIf="isEditable">
-              <button class="btn btn-success" (click)="saveOldRegime()"><i class="fa fa-plus pe-2"></i> Save</button>
+              <div class="col-md-4 d-flex align-items-center">
+                <div class="d-flex align-items-center form-control p-0 m-0 w-25" [ngClass]="{'border-0': !isEditable}">
+                  <input type="number" [readonly]="!isEditable" class="form-control border-0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Rate" formControlName="TaxRatePercentage" (keyup)="calcTaxAmount()">
+                  <i class="fa fa-percent px-2"></i>
+                </div>
+                <label for="" class="form-label ps-3">above &#x20B9; {{item.get("MinTaxSlab").value}}</label>
+              </div>
+              <div class="col-md-3">
+                <label for="" class="form-label">&#x20B9; {{item.get("TaxAmount").value}}</label>
+              </div>
+              <div class="col-md-1">
+                <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': !isEditable}">
+                  <i class="fa fa-trash-o text-danger fa-lg" [ngClass]="{'text-muted': !isEditable}" (click)="removeOldTaxSlab(i)"></i>
+                </a>
+                <a href="javascript:void(0)" class="text-decoration-none" *ngIf="i+1 == oldSlab.controls.length" [ngClass]="{'pe-none': !isEditable}">
+                  <i class="fa fa-plus-circle text-success fa-lg ps-3" [ngClass]="{'text-muted': !isEditable}" (click)="addOldTaxSlab()"></i>
+                </a>
+              </div>
             </div>
-          </form>
-        </ng-template>
-      </li>
-      <li [ngbNavItem]="2">
-        <a ngbNavLink>New Tax Regime</a>
-        <ng-template ngbNavContent>
-          <p>
-            Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
-            farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
-            ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-            helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson
-            8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
-            stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-          </p>
-        </ng-template>
-      </li>
-    </ul>
-    <div [ngbNavOutlet]="nav" class="mt-2"></div>
-   </div>
+          </ng-container>
+          <div class="mt-5 text-end" *ngIf="isEditable">
+            <button class="btn btn-success" (click)="saveRegime()">
+              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+              <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+            </button>
+          </div>
+        </form>
+      </ng-container>
+      <ng-container *ngIf="!isPageReady">
+        <div class="fs-5 my-5 py-5">
+            <h6 class="modal-title title-message text-center my-5 py-5">
+              Please select Tax Regime and Age Group first.
+            </h6>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <ng-container *ngIf="!isRecordFound">
+    <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+      <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+        <img src="assets/images/cog.gif" alt="" />
+        <h6 class="modal-title title-message">
+          Please Wait ........
+        </h6>
+      </div>
+    </div>
+  </ng-container>
   </div>
 </div>
 
 <!-- Age Group Modal -->
-<div class="modal fade" id="ageGroupModal" tabindex="-1" aria-labelledby="ageGroupModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="ageGroupModal" tabindex="-1" aria-labelledby="ageGroupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="ageGroupModalLabel">Add Age Group</h5>
+        <h5 class="modal-title" id="ageGroupModalLabel">Add/Update Age Group</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="ageGroupForm">
-          <div class="row">
-            <div class="col-md-6">
-              <label for="" class="form-label">From</label>
-              <select class="form-select" (change)="fromAgeSelect($event)" formControlName="FromAge">
-                <option  [value]="item" *ngFor="let item of fromAgeGroup">{{item}}</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label for="" class="form-label">To</label>
-              <select class="form-select" formControlName="ToAge">
-                <option [value]="item" *ngFor="let item of toAgeGroup">{{item == 110 ? 'Above': item}}</option>
-              </select>
-            </div>
+        <div class="row">
+          <div class="col-md-6 border-end border-2">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Start Age Group</th>
+                  <th>End Age Group</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of allAgeGroup; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{item.StartAgeGroup}}</td>
+                  <td>{{item.EndAgeGroup == 110 ? 'Above' : item.EndAgeGroup}}</td>
+                  <td>
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="editAgeGroup(item)">
+                      <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </form>
+          <div class="col-md-6">
+            <form [formGroup]="ageGroupForm" *ngIf="ageGroupForm">
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="" class="form-label">Start Age Group</label>
+                  <select class="form-select" (change)="fromAgeSelect($event)" formControlName="StartAgeGroup" [ngClass]="{'error-field': isSubmitted && a.StartAgeGroup.errors !== null && a.StartAgeGroup.errors.required}">
+                    <option value=null disabled>Select Start Age Group</option>
+                    <option  [value]="item" *ngFor="let item of fromAgeGroup">{{item}}</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="" class="form-label">End Age Group</label>
+                  <select class="form-select" formControlName="EndAgeGroup" [ngClass]="{'error-field': isSubmitted && a.EndAgeGroup.errors !== null && a.EndAgeGroup.errors.required}">
+                    <option value=null disabled>Select End Age Group</option>
+                    <option [value]="item" *ngFor="let item of toAgeGroup">{{item == 110 ? 'Above': item}}</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button class="btn btn-success" (click)="saveAgeGroup()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Wait' : 'Add/Update' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tax Regime Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="taxRegimeModal" tabindex="-1" aria-labelledby="taxRegimeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="taxRegimeModalLabel">Add/Update Age Group</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6 border-end border-2">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Regime Name</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of allTaxRegimeDesc; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{item.RegimeName}}</td>
+                  <td>{{item.Description}}</td>
+                  <td>
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="editRegimeDesc(item)">
+                      <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <form [formGroup]="taxRegimeDescForm" *ngIf="taxRegimeDescForm">
+              <div class="col-md-12">
+                <label for="" class="form-label">Tax Regime Name</label>
+                <input type="text" class="form-control" placeholder="Tax Regime Name" formControlName="RegimeName" [ngClass]="{'error-field': isSubmitted && f.RegimeName.errors !== null && f.RegimeName.errors.required}">
+              </div>
+              <div class="col-md-12 mt-3">
+                <label for="" class="form-label">Tax Regime Description</label>
+                <textarea class="form-control regime-desc-box" placeholder="Tax Regime Description" cols="30" rows="4" formControlName="Description" [ngClass]="{'error-field': isSubmitted && f.Description.errors !== null && f.Description.errors.required}"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-success" (click)="saveTaxRegimeDesc()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Wait' : 'Add/ Update Tax Regime' }}</span>
+        </button>
       </div>
     </div>
   </div>

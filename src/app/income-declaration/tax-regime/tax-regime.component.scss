@@ -1,3 +1,8 @@
 .form-control[readonly] {
   background-color: transparent !important;
 }
+
+.regime-desc-box {
+  max-height: 30rem !important;
+  overflow-y: auto;
+}

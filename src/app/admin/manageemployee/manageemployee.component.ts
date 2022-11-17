@@ -329,6 +329,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ErrorToast("Invalid email address!")
       return ;
     }
+    if (this.employeeForm.get('Mobile').value.length < 10 || this.employeeForm.get('Mobile').value.length > 10) {
+      this.isLoading = false;
+      ErrorToast("Mobile number must be 10 digit only");
+      return;
+    }
     if (this.employeeForm.get('FirstName').errors !== null)
       errroCounter++;
     if (this.employeeForm.get('LastName').errors !== null)

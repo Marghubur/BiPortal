@@ -54,12 +54,13 @@
                           <label class="form-label">First Name *</label>
                           <input inputtype="mandatory" class="form-control" placeholder="First Name" transform="" oninput="this.value = this.value.toUpperCase()"
                             [ngClass]="{'error-field': submitted && f.FirstName.errors !== null && f.FirstName.errors.required}"
+                            onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
                             name="FirstName" formControlName="FirstName" />
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Last Name *</label>
                           <input class="form-control" placeholder="Last Name" name="LastName" formControlName="LastName"
-                            transform="" oninput="this.value = this.value.toUpperCase()"
+                            transform="" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
                             [ngClass]="{'error-field': submitted && f.LastName.errors !== null && f.LastName.errors.required}" />
                         </div>
                         <div class="col-md-4 mb-3">
@@ -217,26 +218,26 @@
                         <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Father Name</label>
-                            <input class="form-control" placeholder="Mother Name" name="FatherName" transform="" oninput="this.value = this.value.toUpperCase()"
+                            <input class="form-control" placeholder="Mother Name" name="FatherName" transform="" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
                               formControlName="FatherName" />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Mother Name</label>
-                            <input class="form-control" placeholder="Mother Name" name="MotherName" transform="" oninput="this.value = this.value.toUpperCase()"
+                            <input class="form-control" placeholder="Mother Name" name="MotherName" transform="" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
                               formControlName="MotherName" />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Spouse Name (if maried)</label>
-                            <input class="form-control" placeholder="Spouse Name" name="SpouseName" transform="" oninput="this.value = this.value.toUpperCase()"
+                            <input class="form-control" placeholder="Spouse Name" name="SpouseName" transform="" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
                               formControlName="SpouseName" />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Domain</label>
-                            <input class="form-control" placeholder="Domain" name="Domain" formControlName="Domain" oninput="this.value = this.value.toUpperCase()"/>
+                            <input class="form-control" placeholder="Domain" name="Domain" formControlName="Domain" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Specification</label>
-                            <input class="form-control" placeholder="Specification" name="Specification" oninput="this.value = this.value.toUpperCase()"
+                            <input class="form-control" placeholder="Specification" name="Specification" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
                               formControlName="Specification" />
                           </div>
                           <!-- <div class="col-md-6 mb-3">
@@ -246,11 +247,11 @@
                           </div> -->
                           <div class="col-md-6 mb-3">
                             <label class="form-label">State</label>
-                            <input class="form-control" placeholder="State" name="State" formControlName="State" oninput="this.value = this.value.toUpperCase()"/>
+                            <input class="form-control" placeholder="State" name="State" formControlName="State" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">City</label>
-                            <input class="form-control" placeholder="City" name="City" formControlName="City" oninput="this.value = this.value.toUpperCase()"/>
+                            <input class="form-control" placeholder="City" name="City" formControlName="City" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Pincode</label>
@@ -290,7 +291,7 @@
                           </div>
                           <div class="col-md-12 mb-3">
                             <label class="form-label">Bank Name</label>
-                            <input class="form-control" placeholder="Bank Name" name="BankName" transform="" oninput="this.value = this.value.toUpperCase()"
+                            <input class="form-control" placeholder="Bank Name" name="BankName" transform="" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
                               formControlName="BankName" />
                           </div>
                           <div class="col-md-6 mb-3">
@@ -300,12 +301,12 @@
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Branch (Optional)</label>
-                            <input class="form-control" placeholder="Branch name" name="BranchName"
+                            <input class="form-control" placeholder="Branch name" name="BranchName" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
                               oninput="this.value = this.value.toUpperCase()" formControlName="BranchName" />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Work Exprience in month</label>
-                            <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="5" onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="3" onkeypress="return event.charCode >=48 && event.charCode <=57"
                               name="ExprienceInYear" formControlName="ExprienceInYear" />
                           </div>
                           <div class="col-md-6 mb-3">

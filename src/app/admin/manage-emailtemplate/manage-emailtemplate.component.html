@@ -53,17 +53,24 @@
           </div>
           <app-editor [content]="emailTemplateDetail.BodyContent"></app-editor>
         </div>
-        <div class="mt-3 col-md-4">
-          <input type="text" formControlName="EmailNote" class="form-control border-0 border-bottom" placeholder="Note: Will be appended with body content (Optional)">
-        </div>
-        <div class="mt-3 col-md-4">
-          <input type="text" formControlName="EmailClosingStatement" class="form-control border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.EmailClosingStatement.errors !== null && f.EmailClosingStatement.errors.required}" placeholder="Thanks & Regards or Define custom">
-        </div>
-        <div class="mt-3 col-md-4">
-          <input type="text" formControlName="SignatureDetail" class="form-control border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.SignatureDetail.errors !== null && f.SignatureDetail.errors.required}" placeholder="Name or Signature">
-        </div>
-        <div class="mt-3 col-md-4">
-          <input type="text" formControlName="ContactNo" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control border-0 border-bottom" placeholder="+91-000000000 (Optional)">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mt-3 col-md-8">
+              <input type="text" formControlName="EmailNote" class="form-control border-0 border-bottom" placeholder="Note: Will be appended with body content (Optional)">
+            </div>
+            <div class="mt-3 col-md-8">
+              <input type="text" formControlName="EmailClosingStatement" class="form-control border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.EmailClosingStatement.errors !== null && f.EmailClosingStatement.errors.required}" placeholder="Thanks & Regards or Define custom">
+            </div>
+            <div class="mt-3 col-md-8">
+              <input type="text" formControlName="SignatureDetail" class="form-control border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.SignatureDetail.errors !== null && f.SignatureDetail.errors.required}" placeholder="Name or Signature">
+            </div>
+            <div class="mt-3 col-md-8">
+              <input type="text" formControlName="ContactNo" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control border-0 border-bottom" placeholder="+91-000000000 (Optional)">
+            </div>
+          </div>
+          <div class="mt-3 col-md-6">
+            <button class="btn btn-primary-c" (click)="uploadFilePopup()">Upload Logo</button>
+          </div>
         </div>
         <div class="text-end mt-3 col-md-12">
           <button class="btn btn-outline-danger"><i class="fa fa-trash pe-2"></i> Reset</button>
@@ -73,6 +80,86 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!--Sign Upload Modal -->
+<div class="modal fade" id="signUpoadModal" tabindex="-1" aria-labelledby="signUpoadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="signUpoadModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="">
+              <input type="file" id="uploadlogo" class="d-none" accept=".jpg, .jpeg, .png" (change)="uploadLogo($event)"/>
+              <div class="page-card">
+                <div class="card">
+                  <div class="col-md-12 p-0">
+                    <div class="table-responsive">
+                      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
+                          aria-labelledby="home-tab">
+                          <div id="classmasterdata" class="col-md-12">
+                            <div name="ifilezone" class="ifilezone mb-4" (click)="fireBrowserFile()">
+                              <div *ngIf="fileDetail.length == 0">
+                                <span style="color: darkgray;margin-top: 9rem;display: block;">
+                                  Drop files here.
+                                </span>
+                              </div>
+                              <div class="col-md-12 custom-bg justify-content-center" *ngIf="fileDetail.length > 0"
+                                name="uploading">
+                                <img src="assets/img/ExcelFile.png" />
+                                <div class="filetitle">
+                                  File:
+                                  <div name="filename" style="display: inline-block !important;">
+                                    {{ fileDetail[0].name }}
+                                  </div>
+                                </div>
+                                <div>
+                                  File size: &nbsp;
+                                  <div name="filesize" style="display: inline-block !important;">
+                                    {{ this.fileDetail[0].file.size }}
+                                  </div>
+                                  KB
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="col-md-12 border overflow-hidden sign-container" [ngClass]="{'d-none': logoUrl == ''}">
+              <img [attr.src]="logoUrl" alt="" class="img-fluid ">
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 col-md-6">
+          <label for="" class="form-label">File Name (optional)</label>
+          <input type="text" class="form-control" placeholder="File Name" [(ngModel)]="fileName">
+          <small>* If you want to change file name then enter name, the file will be save by that name</small>
+        </div>
+      </div>
+      <div class="modal-footer borde-top-0">
+        <button type="button" class="btn btn-primary-c" [disabled]="fileDetail.length == 0" (click)="saveFile()">
+          <i class="fa fa-upload pe-2"></i>
+          Upload file
+        </button>
+        <button type="button" class="btn btn-outline-info ms-2" (click)="resetFile()"
+          [disabled]="fileDetail.length == 0">
+          <i class="fa fa-eraser pe-2"></i> Cancel
+        </button>
+      </div>
     </div>
   </div>
 </div>
