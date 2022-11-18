@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ResponseModel } from 'src/auth/jwtService';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 declare var $: any;
 
 @Component({
@@ -8,38 +11,88 @@ declare var $: any;
   styleUrls: ['./tax-regime.component.scss']
 })
 export class TaxRegimeComponent implements OnInit {
-  active = 1;
-  oldTaxRegimeForm: FormGroup;
+  taxRegimeForm: FormGroup;
   taxSlab:Slab = new Slab();
   isEditable: boolean = false;
-  fromAgeGroup: Array<number> = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  toAgeGroup: Array<number> = [20];
+  fromAgeGroup: Array<number> = [];
+  toAgeGroup: Array<number> = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110];
   ageGroupForm: FormGroup;
+  taxRegimeDescForm: FormGroup;
+  taxRegimeDesc: TaxRegimeDesc = null;
+  isLoading: boolean = false;
+  isSubmitted: boolean = false;
+  allTaxRegimeDesc: Array<TaxRegimeDesc> = [];
+  isRecordFound: boolean = false;
+  isPageReady: boolean = false;
+  taxRegimeSlabs: Array<any> = [];
+  allAgeGroup: Array<AgeGroup> = [];
+  currentAgeGroup: AgeGroup = new AgeGroup();
+  currentRegime: TaxRegimeDesc = new TaxRegimeDesc();;
+  taxAgeGroup: AgeGroup = null;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+              private http: AjaxService) { }
 
   ngOnInit(): void {
-    this.oldTaxRegime();
-    this.initAgeGroup();
+    this.loadData();
+
   }
 
-  oldTaxRegime() {
-    this.oldTaxRegimeForm = this.fb.group({
+  loadData() {
+    this.isRecordFound = false;
+    this.http.get("TaxRegime/GetAllRegime").then(res => {
+      if (res.ResponseBody) {
+        this.bindPage(res.ResponseBody);
+        Toast("Page loaded successfully");
+        this.isRecordFound = true;
+      } else {
+        ErrorToast("Record not found");
+      }
+      this.initAgeGroup();
+      this.initTaxRegimeDesc();
+    }).catch(e => {
+      this.isRecordFound = true;
+    })
+  }
+
+  bindPage(data) {
+    if (data) {
+      if (data.taxRegime)
+        this.taxRegimeSlabs = data.taxRegime;
+
+      if (data.taxRegimeDesc)
+        this.allTaxRegimeDesc = data.taxRegimeDesc;
+
+      if (data.ageGroup)
+        this.allAgeGroup = data.ageGroup;
+      this.taxRegime();
+    } else {
+      ErrorToast("Unable to load regime data. Please contact to admin.")
+    }
+  }
+
+  taxRegime() {
+    this.taxRegimeForm = this.fb.group({
       OldTaxSlab: this.buildOldTaxSlab()
     })
   }
 
   buildOldTaxSlab(): FormArray {
-    let data = [];
+    let data = this.taxRegimeSlabs.filter(x => x.RegimeDescId == this.currentRegime.TaxRegimeDescId && x.StartAgeGroup == this.currentAgeGroup.StartAgeGroup && x.EndAgeGroup == this.currentAgeGroup.EndAgeGroup);
     let dataArray: FormArray = this.fb.array([]);
 
     if(data != null && data.length > 0) {
       let i = 0;
       while(i < data.length) {
         dataArray.push(this.fb.group({
-          From: new FormControl(data[i].From),
-          To: new FormControl(data[i].To),
-          Rate: new FormControl(data[i].Rate),
+          TaxRegimeId: new FormControl(data[i].TaxRegimeId),
+          RegimeDescId: new FormControl(data[i].RegimeDescId),
+          StartAgeGroup: new FormControl(data[i].StartAgeGroup),
+          EndAgeGroup: new FormControl(data[i].EndAgeGroup),
+          RegimeIndex: new FormControl(i),
+          MinTaxSlab: new FormControl(data[i].MinTaxSlab),
+          MaxTaxSlab: new FormControl(data[i].MaxTaxSlab),
+          TaxRatePercentage: new FormControl(data[i].TaxRatePercentage),
           TaxAmount: new FormControl(data[i].TaxAmount)
         }));
         i++;
@@ -53,57 +106,65 @@ export class TaxRegimeComponent implements OnInit {
 
   createOldaTaxSlab(): FormGroup {
     return this.fb.group({
-      From: new FormControl(this.taxSlab.From),
-      To: new FormControl(this.taxSlab.To),
-      Rate: new FormControl(this.taxSlab.Rate),
-      TaxAmount: new FormControl(this.taxSlab.TaxAmount)
+      TaxRegimeId: new FormControl(this.taxSlab.TaxRegimeId, [Validators.required]),
+      RegimeDescId: new FormControl(this.currentRegime.TaxRegimeDescId, [Validators.required]),
+      StartAgeGroup: new FormControl(this.currentAgeGroup.StartAgeGroup, [Validators.required]),
+      EndAgeGroup: new FormControl(this.currentAgeGroup.EndAgeGroup, [Validators.required]),
+      RegimeIndex: new FormControl(this.taxSlab.RegimeIndex, [Validators.required]),
+      MinTaxSlab: new FormControl(this.taxSlab.MinTaxSlab, [Validators.required]),
+      MaxTaxSlab: new FormControl(this.taxSlab.MaxTaxSlab, [Validators.required]),
+      TaxRatePercentage: new FormControl(this.taxSlab.TaxRatePercentage, [Validators.required]),
+      TaxAmount: new FormControl(this.taxSlab.TaxAmount, [Validators.required])
     });
   }
 
   addOldTaxSlab() {
-    let item = this.oldTaxRegimeForm.get('OldTaxSlab') as FormArray;
+    let item = this.taxRegimeForm.get('OldTaxSlab') as FormArray;
     let value = item.value[item.length - 1];
-    if (value.To > value.From && value.To > 0) {
+    if (value.MaxTaxSlab > value.MinTaxSlab && value.MaxTaxSlab > 0) {
       this.taxSlab = new Slab();
-      this.taxSlab.From = value.To + 1;
+      this.taxSlab.RegimeIndex = item.length;
+      this.taxSlab.MinTaxSlab = value.MaxTaxSlab + 1;
       item.push(this.createOldaTaxSlab());
+    } else {
+      ErrorToast("Tax slab minimum value is greater than maximum value");
     }
   }
 
   removeOldTaxSlab(i: number) {
-    let item = this.oldTaxRegimeForm.get('OldTaxSlab') as FormArray;
-    item.removeAt(i);
-    if (item.length === 0)
-      this.addOldTaxSlab();
+    let item = this.taxRegimeForm.get('OldTaxSlab') as FormArray;
+    if (item.length > 1)
+      item.removeAt(i);
     if (i > 0) {
-      let value = (item.value[i-1].To) + 1;
-      (<FormArray>item).controls[i].get('From').setValue(value);
+      let value = (item.value[i-1].MaxTaxSlab) + 1;
+      (<FormArray>item).controls[i].get('MinTaxSlab').setValue(value);
       this.calcTaxAmount();
     }
   }
 
   get oldSlab() {
-    return this.oldTaxRegimeForm.get('OldTaxSlab') as FormArray;
+    return this.taxRegimeForm.get('OldTaxSlab') as FormArray;
   }
 
   calcTaxAmount() {
     let taxAmount = 0;
-    let length = this.oldTaxRegimeForm.get('OldTaxSlab').value.length;
-    let formArray = this.oldTaxRegimeForm.get('OldTaxSlab');
+    let length = this.taxRegimeForm.get('OldTaxSlab').value.length;
+    let formArray = this.taxRegimeForm.get('OldTaxSlab');
     for (let index = 0; index < length; index++) {
       let value = formArray.value[index];
-      if (index > 0)
-        taxAmount += formArray.value[index-1].TaxAmount
-      if(value.From > 0)
-        value.From = value.From -1 ;
-      taxAmount = taxAmount + ((value.From * value.Rate) /100);
-      (<FormArray>formArray).controls[index].get('TaxAmount').setValue(taxAmount);
+      if (value.MinTaxSlab >= 0 && value.MaxTaxSlab >=0 && value.TaxRatePercentage > 1) {
+        if(value.MinTaxSlab > 0)
+          value.MinTaxSlab = value.MinTaxSlab -1 ;
+        let calculatedAmount = (((value.MaxTaxSlab - value.MinTaxSlab) * value.TaxRatePercentage) /100);
+        taxAmount = taxAmount + Math.abs(calculatedAmount);
+        (<FormArray>formArray).controls[index].get('TaxAmount').setValue(taxAmount);
+      }
     }
   }
 
   checkToAmount(e: any, i: number) {
-    let value = this.oldTaxRegimeForm.get('OldTaxSlab').value[i];
-    if (value.From >= value.To)
+    let value = this.taxRegimeForm.get('OldTaxSlab').value[i];
+    if (value.MinTaxSlab >= value.MaxTaxSlab && Number(e.target.value) > 0)
       e.target.closest('div').classList.add('error-field');
     else
       e.target.closest('div').classList.remove('error-field');
@@ -113,13 +174,44 @@ export class TaxRegimeComponent implements OnInit {
     this.isEditable = true;
   }
 
-  saveOldRegime() {
-    this.isEditable = false;
+  saveRegime() {
+    this.isLoading = true;
+    this.isSubmitted = true;
+    if (this.taxRegimeForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
+    let value = this.taxRegimeForm.value.OldTaxSlab;
+    for (let i = 0; i < value.length; i++) {
+      value[i].StartAgeGroup = this.currentAgeGroup.StartAgeGroup;
+      value[i].EndAgeGroup = this.currentAgeGroup.EndAgeGroup;
+    }
+    this.http.post("TaxRegime/AddUpdateTaxRegime", value).then(res => {
+      if (res.ResponseBody) {
+        this.bindPage(res.ResponseBody)
+        Toast("Regime add or update successfully");
+        this.isLoading = false;
+        this.isEditable = false;
+      }
+    }).catch(e => {
+      this.isSubmitted = false;
+      this.isLoading = false;
+    })
   }
 
   ageGroupPopUp() {
+    this.isSubmitted = false;
     this.fromAgeGroup = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+    this.taxAgeGroup = new AgeGroup();
+    this.initAgeGroup();
     $('#ageGroupModal').modal('show');
+  }
+
+  taxRegimePopUp() {
+    this.isSubmitted = false;
+    this.taxRegimeDesc = new TaxRegimeDesc();
+    this.initTaxRegimeDesc();
+    $('#taxRegimeModal').modal('show');
   }
 
   fromAgeSelect(e: any) {
@@ -129,21 +221,144 @@ export class TaxRegimeComponent implements OnInit {
       this.toAgeGroup.push(value);
       value = value+10;
     }
-    // let index = this.toAgeGroup.findIndex(x => x == value) + 1;
-    // this.toAgeGroup = this.toAgeGroup.splice(index, this.toAgeGroup.length);
   }
 
   initAgeGroup() {
     this.ageGroupForm = this.fb.group({
-      FromAge: new FormControl(10),
-      ToAge: new FormControl(20),
+      AgeGroupId: new FormControl(this.taxAgeGroup.AgeGroupId, [Validators.required]),
+      StartAgeGroup: new FormControl(this.taxAgeGroup.StartAgeGroup, [Validators.required]),
+      EndAgeGroup: new FormControl(this.taxAgeGroup.EndAgeGroup, [Validators.required]),
+    })
+  }
+
+  initTaxRegimeDesc() {
+    this.taxRegimeDescForm = this.fb.group({
+      TaxRegimeDescId: new FormControl(this.taxRegimeDesc.TaxRegimeDescId, [Validators.required]),
+      RegimeName: new FormControl(this.taxRegimeDesc.RegimeName, [Validators.required]),
+      Description: new FormControl(this.taxRegimeDesc.Description, [Validators.required]),
+    })
+  }
+
+  saveTaxRegimeDesc() {
+    this.isLoading = true;
+    this.isSubmitted = true;
+    if (this.taxRegimeDescForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
+    this.http.post("TaxRegime/AddUpdateTaxRegimeDesc", this.taxRegimeDescForm.value).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        let taxRegime = res.ResponseBody;
+        let value = this.allTaxRegimeDesc.find(x => x.TaxRegimeDescId == taxRegime.TaxRegimeDescId);
+        if (value == null)
+          this.allTaxRegimeDesc.push(taxRegime);
+        else {
+          value.RegimeName = taxRegime.RegimeName;
+          value.Description = taxRegime.Description;
+        }
+        Toast("Tax Regime added or updated successfully");
+        this.isLoading = false;
+        this.isSubmitted = false
+      }
+    $('#taxRegimeModal').modal('hide');
+    }).catch(e => {
+      this.isLoading = false;
+      this.isSubmitted = false
+    })
+  }
+
+  get f() {
+    return this.taxRegimeDescForm.controls;
+  }
+
+  get a() {
+    return this.ageGroupForm.controls;
+  }
+
+  selectRegime(e: any) {
+    let value = Number(e.target.value);
+    this.currentRegime = this.allTaxRegimeDesc.find(x => x.TaxRegimeDescId == value);
+    if (!this.currentRegime || this.currentRegime == null) {
+      ErrorToast("Please select a valid tax regime");
+      return;
+    }
+    this.isPageReady = false;
+  }
+
+  selectAgeGroup(e: any) {
+    let value = Number(e.target.value);
+    this.currentAgeGroup = this.allAgeGroup.find(x => x.AgeGroupId == value);
+    if (!this.currentAgeGroup || this.currentAgeGroup == null) {
+      ErrorToast("Please select a valid tax regime");
+      return;
+    }
+    this.taxRegime();
+    this.isPageReady = true;
+  }
+
+  editRegimeDesc(item: TaxRegimeDesc) {
+    if (item) {
+      this.taxRegimeDesc = item;
+      this.initTaxRegimeDesc();
+    }
+  }
+
+  editAgeGroup(item: AgeGroup) {
+    if (item) {
+      this.taxAgeGroup = item;
+      this.initAgeGroup();
+    }
+  }
+
+  saveAgeGroup() {
+    this.isLoading = true;
+    this.isSubmitted = true;
+    if (this.ageGroupForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
+    this.http.post("TaxRegime/AddUpdateAgeGroup", this.ageGroupForm.value).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        let ageGroup = res.ResponseBody;
+        let value = this.allAgeGroup.find(x => x.AgeGroupId == ageGroup.AgeGroupId);
+        if (value == null)
+          this.allAgeGroup.push(ageGroup);
+        else {
+          value.EndAgeGroup = ageGroup.EndAgeGroup;
+          value.StartAgeGroup = ageGroup.StartAgeGroup;
+        }
+        Toast("Age Groupe added or updated successfully");
+        this.isLoading = false;
+        this.isSubmitted = false
+      }
+    $('#ageGroupModal').modal('hide');
+    }).catch(e => {
+      this.isLoading = false;
+      this.isSubmitted = false
     })
   }
 }
 
 class Slab {
-  To: number = 0;
-  From: number = 0;
-  Rate: number = 0;
-  TaxAmount: number = 0;
+  TaxRegimeId: number =0;
+  RegimeDescId: number =0;
+  StartAgeGroup: number =0;
+  EndAgeGroup: number =0;
+  MinTaxSlab: number =0;
+  MaxTaxSlab: number =0;
+  TaxRatePercentage: number =0;
+  TaxAmount: number =0;
+  RegimeIndex: number =0;
+}
+
+class TaxRegimeDesc {
+  TaxRegimeDescId: number = 0;
+  RegimeName: string = null;
+  Description: string = null;
+}
+
+class AgeGroup {
+  AgeGroupId: number = 0;
+  StartAgeGroup: number = null;
+  EndAgeGroup: number = null;
 }

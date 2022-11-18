@@ -32,18 +32,18 @@
                   <label class="form-label">Client/Organization Name *</label>
                   <input placeholder="Client or organization name" class="form-control" name="ClientName" oninput="this.value = this.value.toUpperCase()"
                     formControlName="ClientName"
-                    [ngClass]="{'error': submitted && f.ClientName.errors !== null && f.ClientName.errors.required}" />
+                    [ngClass]="{'error-field': submitted && f.ClientName.errors !== null && f.ClientName.errors.required}" />
                 </div>
                 <div class="col-md-4">
                   <label class="form-label">Primary No.# *</label>
                   <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="10" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                    [ngClass]="{'error': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
+                    [ngClass]="{'error-field': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
                     name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
                 </div>
                 <div class="col-md-4 pb-3">
                   <label class="form-label">Email Id *</label>
                   <input class="form-control" placeholder="Email Id"
-                    [ngClass]="{'error': submitted && f.Email.errors !== null && (f.Email.errors.required || f.Email.errors.email)}" name="Email"
+                    [ngClass]="{'error-field': submitted && f.Email.errors !== null && (f.Email.errors.required || f.Email.errors.email)}" name="Email"
                     formControlName="Email" />
                 </div>
               </div>

@@ -5,6 +5,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-manage-emailtemplate',
@@ -19,6 +20,9 @@ export class ManageEmailtemplateComponent implements OnInit {
   emailTemplateId: number = 0;
   isPageLoading: boolean = false;
   companyId: number = 0;
+  logoUrl: string = '';
+  fileDetail: Array<any> = [];
+  fileName: string = "";
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
@@ -75,7 +79,9 @@ export class ManageEmailtemplateComponent implements OnInit {
       BodyContent: new FormControl(this.emailTemplateDetail.BodyContent),
       EmailNote: new FormControl(this.emailTemplateDetail.EmailNote),
       SignatureDetail: new FormControl(this.emailTemplateDetail.SignatureDetail, [Validators.required]),
-      ContactNo: new FormControl(this.emailTemplateDetail.ContactNo)
+      ContactNo: new FormControl(this.emailTemplateDetail.ContactNo),
+      FileId: new FormControl(this.emailTemplateDetail.FileId),
+      LogoPath: new FormControl(this.emailTemplateDetail.LogoPath)
     })
   }
 
@@ -101,20 +107,66 @@ export class ManageEmailtemplateComponent implements OnInit {
       this.isLoading = false;
       return;
     }
+    let formData = new FormData();
     let value = this.emailTemplateForm.value;
     value.BodyContent = data;
-    this.http.post("Email/InsertUpdateEmailTemplate", value).then((res:ResponseModel) => {
+    formData.append('emailtemplate', JSON.stringify(value));
+    let file = null;
+    if (this.fileDetail.length > 0)
+      file = this.fileDetail[0].file;
+    formData.append(this.fileDetail[0].name, file)
+    this.http.post("Email/InsertUpdateEmailTemplate", formData).then((res:ResponseModel) => {
       if (res.ResponseBody && res.ResponseBody != '') {
         this.emailTemplateId = Number(res.ResponseBody);
         this.emailTemplateForm.get('EmailTemplateId').setValue(this.emailTemplateId);
-        this.isLoading = false;
         Toast("Template inserted/ updated successfully.");
       }
+      this.isLoading = false;
     }).catch(e => {
       this.isLoading = false;
     })
   }
 
+  fireBrowserFile() {
+    $('#uploadlogo').click();
+  }
+
+  uploadLogo(event: any) {
+    if (event.target.files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.logoUrl = event.target.result;
+      };
+      let selectedfile = event.target.files;
+      let file = <File>selectedfile[0];
+      this.fileDetail.push({
+        name: file.name,
+        file: file
+      });
+      console.log(this.fileDetail[0].file)
+    }
+  }
+
+  uploadFilePopup(){
+    this.logoUrl = '';
+    this.fileDetail = [];
+    this.fileName = "";
+    $('#signUpoadModal').modal('show');
+  }
+
+  resetFile() {
+    this.fileDetail = [];
+    this.logoUrl = "";
+    this.fileName = "";
+  }
+
+  saveFile() {
+    if (this.fileName && this.fileName != null) {
+      this.fileDetail[0].name = this.fileName;
+    }
+    $('#signUpoadModal').modal('hide');
+  }
 }
 
 class EmailTemplate {
@@ -128,4 +180,6 @@ class EmailTemplate {
   EmailNote: string = null;
   SignatureDetail: string = null;
   ContactNo: string = null;
+  FileId: number = 0;
+  LogoPath: string = "";
 }

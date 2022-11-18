@@ -134,13 +134,13 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     let errroCounter = 0;
 
-    if (this.clientForm.get("ClientName").value === "")
+    if (this.clientForm.get("ClientName").value === "" || this.clientForm.get("ClientName").errors !== null)
       errroCounter++;
 
-    if (this.clientForm.get("PrimaryPhoneNo").value === "")
+    if (this.clientForm.get("PrimaryPhoneNo").value === "" || this.clientForm.get("PrimaryPhoneNo").errors !== null)
       errroCounter++;
 
-    if (this.clientForm.get("Email").value === "")
+    if (this.clientForm.get("Email").value === "" || this.clientForm.get("Email").errors !== null)
       errroCounter++;
 
     if (this.clientForm.get("FileId").value == null)
@@ -155,12 +155,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
 
     clientDetail.IsActive = true;
     let email = this.clientForm.get('Email').value;
-    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (!regex.test(email)){
-      this.isLoading = false;
-      ErrorToast("Invalid email address!")
-      return ;
-    }
+    this.emailValidation(email);
 
     if (errroCounter === 0) {
       let request: clientModal = this.clientForm.value;
@@ -186,6 +181,15 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     } else {
       this.isLoading = false;
       ErrorToast("All read marked fields are mandatory.");
+    }
+  }
+
+  emailValidation(email: string) {
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!regex.test(email)){
+      this.isLoading = false;
+      ErrorToast("Invalid email address!")
+      return ;
     }
   }
 
