@@ -50,7 +50,14 @@ export class InitialpageComponent implements OnInit {
       BranchCode: new FormControl(null, ),
       IFSC: new FormControl(null, [Validators.required]),
       IsPrimaryAccount: new FormControl (true, [Validators.required]),
-      Mobile: new FormControl(null, [Validators.required])
+      Mobile: new FormControl(null, [Validators.required]),
+      FirstAddress: new FormControl(null, [Validators.required]),
+      SecondAddress: new FormControl(null, [Validators.required]),
+      ThirdAddress: new FormControl(null),
+      ForthAddress: new FormControl(null),
+      Country: new FormControl(null),
+      State: new FormControl(null),
+      City: new FormControl(null),
     })
   }
 

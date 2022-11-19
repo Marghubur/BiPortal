@@ -70,7 +70,7 @@ export class CompanyComponent implements OnInit {
       if(response.ResponseBody ) {
         this.currentCompany = response.ResponseBody.OrganizationDetail;
         let date;
-        if (this.currentCompany.InCorporationDate != null || this.currentCompany.InCorporationDate != '0001-01-01T00:00:00')
+        if (this.currentCompany.InCorporationDate == null || this.currentCompany.InCorporationDate != '0001-01-01T00:00:00')
           date = new Date(this.currentCompany.InCorporationDate);
         else
           date = new Date() ;
