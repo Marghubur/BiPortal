@@ -23,13 +23,17 @@ import { ToastComponent } from './toast/toast.component'
 import { LayoutModule } from "./layout/layout.module"
 import { UserService } from 'src/providers/userService';
 import { NgChartsModule } from 'ng2-charts';
+import { InitialpageComponent } from './initialpage/initialpage.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     FooterComponent,
     ToastComponent,
-    LoginComponent
+    LoginComponent,
+    InitialpageComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +42,10 @@ import { NgChartsModule } from 'ng2-charts';
     HttpClientModule,
     BrowserAnimationsModule,
     LayoutModule,
-    NgChartsModule
+    NgChartsModule,
+    NgbModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     AjaxService,
