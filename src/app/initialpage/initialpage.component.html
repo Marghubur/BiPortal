@@ -1,0 +1,207 @@
+<div class="container my-4">
+  <div>
+    <form [formGroup]="initialForm">
+      <div class="x_panel">
+        <div class="x_header">
+          <div class="x_header_title">
+            <h2>Company Detail<small>Basic Company Details.</small></h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 mt-3">
+            <label class="form-label">Organization Name</label>
+            <input type="text" class="form-control" placeholder="Enter Organization Name" formControlName="OrganizationName" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.OrganizationName.errors !== null && f.OrganizationName.errors.required}">
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">Company Name</label>
+            <input type="text" class="form-control" placeholder="Enter Company Name" formControlName="CompanyName" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.CompanyName.errors !== null && f.CompanyName.errors.required}">
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">Email Id *</label>
+            <input class="form-control" formControlName="EmailId" placeholder="Email Id" [ngClass]="{'error-field': submitted && f.EmailId.errors !== null && (f.EmailId.errors.required || f.EmailId.errors.email)}"/>
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">GSTIN No.#</label>
+            <input placeholder="GSTIN No.#" class="form-control" name="GSTNo" [ngClass]="{'error-field': submitted && f.GSTNo.errors !== null && f.GSTNo.errors.required}"
+              oninput="this.value = this.value.toUpperCase()" formControlName="GSTNo" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 mt-3">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-control" placeholder="Enter First Name" formControlName="FirstName" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.FirstName.errors !== null && f.FirstName.errors.required}">
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-control" placeholder="Enter Last Name" formControlName="LastName" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.LastName.errors !== null && f.LastName.errors.required}">
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">Mobile No.</label>
+            <input type="text" class="form-control" placeholder="Enter Mobile Name" formControlName="Mobile" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" [ngClass]="{'error-field': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}">
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">First Address</label>
+            <input type="text" class="form-control" placeholder="Enter First Address" formControlName="FirstAddress" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.FirstAddress.errors !== null && f.FirstAddress.errors.required}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 mt-3">
+            <label class="form-label">Second Address</label>
+            <input type="text" class="form-control" placeholder="Enter Second Address" formControlName="SecondAddress" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.SecondAddress.errors !== null && f.SecondAddress.errors.required}">
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">Third Address</label>
+            <input type="text" class="form-control" placeholder="Enter Third Address" formControlName="ThirdAddress" oninput="this.value = this.value.toUpperCase()">
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">Fourth Address</label>
+            <input type="text" class="form-control" placeholder="Enter Fourth Address" formControlName="ForthAddress" oninput="this.value = this.value.toUpperCase()">
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">Country</label>
+            <input type="text" class="form-control" placeholder="Enter Country" formControlName="Country" oninput="this.value = this.value.toUpperCase()">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 mt-3">
+            <label class="form-label">State</label>
+            <input type="text" class="form-control" placeholder="Enter State" formControlName="State" oninput="this.value = this.value.toUpperCase()">
+          </div>
+          <div class="col-md-3 mt-3">
+            <label class="form-label">City</label>
+            <input type="text" class="form-control" placeholder="Enter City" formControlName="City" oninput="this.value = this.value.toUpperCase()">
+          </div>
+        </div>
+      </div>
+      <div class="row ">
+        <div class="col-md-6 mt-3">
+          <div class="x_panel">
+            <div class="x_header">
+              <div class="x_header_title">
+                <h2>Bank Detail<small>Bank related detail for transaction.</small></h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Bank Name</label>
+                <input placeholder="Bank Name" class="form-control" name="BankName" [ngClass]="{'error-field': submitted && f.BankName.errors !== null && f.BankName.errors.required}"
+                  oninput="this.value = this.value.toUpperCase()" formControlName="BankName" />
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Account No.# *</label>
+                <input placeholder="Account No.#" class="form-control" name="AccountNo" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                  [ngClass]="{'error-field': submitted && f.AccountNo.errors !== null && f.AccountNo.errors.required}"
+                  formControlName="AccountNo" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mt-3">
+                <label class="form-label">IFSC Code</label>
+                <input placeholder="IFSC Code" class="form-control" name="IFSC" [ngClass]="{'error-field': submitted && f.IFSC.errors !== null && f.IFSC.errors.required}"
+                  oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" />
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Branch Name</label>
+                <input placeholder="Branch name" class="form-control" name="Branch" [ngClass]="{'error-field': submitted && f.Branch.errors !== null && f.Branch.errors.required}"
+                  oninput="this.value = this.value.toUpperCase()" formControlName="Branch" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Branch Code</label>
+                <input placeholder="Branch Code" class="form-control" name="BranchCode" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                  formControlName="BranchCode" />
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">IsPrimayAccount</label>
+                <select class="form-select" formControlName="IsPrimaryAccount">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mt-3">
+          <div class="x_panel">
+            <div class="x_header">
+              <div class="x_header_title">
+                <h2>HOST Setting<small>Send email setting</small></h2>
+              </div>
+            </div>
+            <div class="row col-md-12">
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Email Host *</label>
+                <input class="form-control" formControlName="EmailHost" placeholder="Email Host" [ngClass]="{'error-field': submitted && f.EmailHost.errors !== null && f.EmailHost.errors.required}"/>
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Port No.# *</label>
+                <input class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" formControlName="PortNo" placeholder="Port Number" OnlyNumber="11" [ngClass]="{'error-field': submitted && f.PortNo.errors !== null && f.PortNo.errors.required}"/>
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Enable SSL *</label>
+                <select formControlName="EnableSsl" class="form-select" [ngClass]="{'error-field': submitted && f.EnableSsl.errors !== null && f.EnableSsl.errors.required}">
+                  <option disabled value="">Select SSL is enable</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Delivery Method </label>
+                <input class="form-control" formControlName="DeliveryMethod" placeholder="Delivery Method"/>
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">User Default Credentials *</label>
+                <select formControlName="UserDefaultCredentials" class="form-select" [ngClass]="{'error-field': submitted && f.UserDefaultCredentials.errors !== null && f.UserDefaultCredentials.errors.required}">
+                  <option disabled value="">Select Default Credentials</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Credentials *</label>
+                <input class="form-control" formControlName="Credentials" placeholder="Credentials" [ngClass]="{'error-field': submitted && f.Credentials.errors !== null && f.Credentials.errors.required}" />
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Email Name *</label>
+                <input class="form-control" formControlName="EmailName" placeholder="Email Name" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.EmailName.errors !== null && f.EmailName.errors.required}"/>
+              </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Is Primary</label>
+                <select formControlName="IsPrimary" class="form-select">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="text-end mt-3">
+    <button class="btn btn-success" [disabled]="isLoading" (click)="registerAccount()">
+      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-send': !isLoading}"></i>
+      <span class="ps-2">{{ isLoading ? 'Wait' : 'Register' }}</span>
+    </button>
+  </div>
+</div>
+
+<!-- New Registeration modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="p-2 modal-content">
+      <div class="modal-body text-dark d-flex align-items-center mb-0 pb-0">
+        <div class="wrapper me-3">
+          <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/> <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          </svg>
+        </div>
+        Congratulation!! initial registration successfully!
+      </div>
+      <div class="modal-footer mt-0 pt-0 border-top-0">
+        <button type="button" class="btn btn-success" (click)="gotoLoginPage()"><i class="fa fa-check-circle pe-1"></i> OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->

@@ -1,4 +1,5 @@
 export const Login = "login";
+export const Initialpage = "initialpage";
 export const Users = "users";
 export const Sales = "sales";
 export const Setting = "setting";

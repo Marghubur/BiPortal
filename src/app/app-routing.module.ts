@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Login } from 'src/providers/constants';
+import { Initialpage, Login } from 'src/providers/constants';
+import { InitialpageComponent } from './initialpage/initialpage.component';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent},
-  { path: Login, component: LoginComponent }
+  { path: Login, component: LoginComponent },
+  { path: Initialpage, component: InitialpageComponent }
 ];
 
 @NgModule({
