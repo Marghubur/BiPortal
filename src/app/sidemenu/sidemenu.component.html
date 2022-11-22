@@ -3,7 +3,6 @@
     <div class="accordion" id="accordionExample">
       <div class="accordion-div" *ngFor="let catagory of Menu;let i = index;">
         <h2 class="accordion-header" [id]="'heading'+i">
-          <i class="fa fa-pencil"></i>
           <button class="accordion-button" [ngClass]="{ 'collapsed': i == CatagoryPosition }" type="button"
             data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+i" aria-expanded="true"
             [attr.aria-controls]="'collapse'+i">
