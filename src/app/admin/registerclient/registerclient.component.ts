@@ -198,11 +198,10 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   }
 
   fireBrowserFile() {
-    this.submitted = true;
     $("#uploadocument").click();
   }
 
-  gotoEmpPage() {
+  gotoClientPage() {
     $('#messageModal').modal('hide');
     this.nav.navigate(Clients, null)
   }
