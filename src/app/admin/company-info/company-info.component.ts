@@ -82,14 +82,18 @@ export class CompanyInfoComponent implements OnInit {
           response.ResponseBody.Files.map(item => {
             if(item.FileName.toLowerCase() == "signwithstamp") {
               this.signURL = `${this.imageBasePath}/${item.FilePath}/${item.FileName}.${item.FileExtension}`;
-            } else {
+            } else if (item.FileName.toLowerCase() == "signwithoutStamp") {
               this.signwithoutstamp = `${this.imageBasePath}/${item.FilePath}/${item.FileName}.${item.FileExtension}`;
             }
           });
         }
 
         this.CompanyId = this.companyInformation.CompanyId;
-        let date = new Date(this.companyInformation.InCorporationDate);
+        let date = null;
+        if (this.companyInformation.InCorporationDate == null || new Date(this.companyInformation.InCorporationDate).getFullYear() == 1)
+          date = new Date();
+        else
+          date = new Date(this.companyInformation.InCorporationDate);
         this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         this.initForm();
         this.findBankDetails();

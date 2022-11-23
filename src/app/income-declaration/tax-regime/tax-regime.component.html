@@ -13,7 +13,7 @@
       </div>
       <div class="col-md-2 ms-2">
         <select class="form-select" (change)="selectAgeGroup($event)" [disabled]="currentRegime.TaxRegimeDescId == 0">
-          <option value="" selected disabled>Select age group</option>
+          <option [value]=null [selected]="currentAgeGroup.AgeGroupId == 0" disabled>Select age group</option>
           <option [value]="item.AgeGroupId" *ngFor="let item of allAgeGroup">{{item.StartAgeGroup}} to {{item.EndAgeGroup == 110 ? 'Above' : item.EndAgeGroup}}</option>
         </select>
       </div>

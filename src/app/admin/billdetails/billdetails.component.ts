@@ -730,7 +730,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     }
 
     if(this.employeeFile.GSTStatus !== '0' && this.employeeFile.GSTStatus !== "") {
-      searchQuery += ` ${delimiter} GSTStatus = '${this.employeeFile.GSTStatus}' `;
+      searchQuery += ` ${delimiter} GstStatus = '${this.employeeFile.GSTStatus}' `;
       delimiter = "and";
     }
 

@@ -732,12 +732,13 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         timesheetForm.append('BillRequestData', JSON.stringify(request));
 
         this.http.post(this.generateBillUrl, timesheetForm).then((response: ResponseModel) => {
-          if(response.ResponseBody.FileDetail !== null &&
-            response.ResponseBody.EmailTemplate !== null) {
-            this.downloadFile(response.ResponseBody.FileDetail);
+          if(response.ResponseBody.Result.FileDetail !== null &&
+            response.ResponseBody.Result.EmailTemplate !== null) {
+            this.downloadFile(response.ResponseBody.Result.FileDetail);
             this.isBillGenerated = true;
-            this.Bindtemplate(response.ResponseBody.EmailTemplate);
+            this.Bindtemplate(response.ResponseBody.Result.EmailTemplate);
             $('#viewFileModal').modal('show');
+            this.timesheetBreakup = [];
             Toast("Bill pdf generated successfully");
           }
           this.isLoading = false;
@@ -1223,7 +1224,15 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let i = 0;
     while (i <= this.allTimesheet.length) {
       let weeks = this.allTimesheet.slice(start, end);
-      this.timesheetBreakup.push(weeks);
+      let status = 0;
+      if (weeks.filter(x => x.TimesheetStatus == 4).length > 0)
+        status = 4;
+      else
+        status = 8;
+      this.timesheetBreakup.push({
+        Timesheet: weeks,
+        Status : status
+      });
       if (end == this.allTimesheet.length)
         return;
       start = end;

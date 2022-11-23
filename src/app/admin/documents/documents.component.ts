@@ -128,6 +128,9 @@ export class documentsComponent implements OnInit, OnDestroy {
         this.getDocxHtml(file);
         break;
       case Txt:
+      case JImage:
+      case PImage:
+      case AImage:
         this.viewer = document.getElementById("file-container");
         this.viewer.classList.remove('d-none');
         this.viewer.querySelector('iframe').classList.add('bg-white');

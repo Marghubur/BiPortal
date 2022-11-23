@@ -133,8 +133,16 @@ export class TaxRegimeComponent implements OnInit {
 
   removeOldTaxSlab(i: number) {
     let item = this.taxRegimeForm.get('OldTaxSlab') as FormArray;
-    if (item.length > 1)
-      item.removeAt(i);
+    if (item.length > 1) {
+      let taxregimeId = item.value[i];
+      this.http.post("TaxRegime/DeleteTaxRegime", taxregimeId).then(res => {
+        if (res.ResponseBody) {
+          this.bindPage(res.ResponseBody)
+          item.removeAt(i);
+          Toast("Regime deleted successfully");
+        }
+      })
+    }
     if (i > 0) {
       let value = (item.value[i-1].MaxTaxSlab) + 1;
       (<FormArray>item).controls[i].get('MinTaxSlab').setValue(value);
@@ -282,16 +290,19 @@ export class TaxRegimeComponent implements OnInit {
       ErrorToast("Please select a valid tax regime");
       return;
     }
+    this.currentAgeGroup.AgeGroupId = 0;
     this.isPageReady = false;
   }
 
   selectAgeGroup(e: any) {
     let value = Number(e.target.value);
+    this.taxSlab = new Slab();
     this.currentAgeGroup = this.allAgeGroup.find(x => x.AgeGroupId == value);
     if (!this.currentAgeGroup || this.currentAgeGroup == null) {
       ErrorToast("Please select a valid tax regime");
       return;
     }
+
     this.taxRegime();
     this.isPageReady = true;
   }

@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
-import { Clients, OrgLogo, ProfileImage, UserImage, UserType } from 'src/providers/constants';
+import { Clients, OrgLogo, ProfileImage, UserType } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -104,15 +104,15 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       OtherEmail_3: new FormControl(this.clientModal.OtherEmail_3),
       OtherEmail_4: new FormControl(this.clientModal.OtherEmail_4),
       Fax: new FormControl(this.clientModal.Fax),
-      FirstAddress: new FormControl(this.clientModal.FirstAddress),
-      SecondAddress: new FormControl(this.clientModal.SecondAddress),
+      FirstAddress: new FormControl(this.clientModal.FirstAddress, [Validators.required]),
+      SecondAddress: new FormControl(this.clientModal.SecondAddress, [Validators.required]),
       ThirdAddress: new FormControl(this.clientModal.ThirdAddress),
       ForthAddress: new FormControl(this.clientModal.ForthAddress),
-      Pincode: new FormControl(this.clientModal.Pincode === 0 ? null : this.clientModal.Pincode),
-      City: new FormControl(this.clientModal.City),
-      State: new FormControl(this.clientModal.State),
-      Country: new FormControl(this.clientModal.Country),
-      GSTNO: new FormControl(this.clientModal.GSTNO),
+      Pincode: new FormControl(this.clientModal.Pincode === 0 ? null : this.clientModal.Pincode, [Validators.required]),
+      City: new FormControl(this.clientModal.City, [Validators.required]),
+      State: new FormControl(this.clientModal.State, [Validators.required]),
+      Country: new FormControl(this.clientModal.Country, [Validators.required]),
+      GSTNO: new FormControl(this.clientModal.GSTNO, [Validators.required]),
       AccountNo: new FormControl(this.clientModal.AccountNo),
       BankName: new FormControl(this.clientModal.BankName),
       BranchName: new FormControl(this.clientModal.BranchName),
@@ -143,8 +143,30 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     if (this.clientForm.get("Email").value === "" || this.clientForm.get("Email").errors !== null)
       errroCounter++;
 
+    if (this.clientForm.get("Country").value === "" || this.clientForm.get("Country").errors !== null)
+      errroCounter++;
+
+    if (this.clientForm.get("State").value === "" || this.clientForm.get("State").errors !== null)
+      errroCounter++;
+
+    if (this.clientForm.get("City").value === "" || this.clientForm.get("City").errors !== null)
+      errroCounter++;
+
+    if (this.clientForm.get("FirstAddress").value === "" || this.clientForm.get("FirstAddress").errors !== null)
+      errroCounter++;
+
+    if (this.clientForm.get("SecondAddress").value === "" || this.clientForm.get("SecondAddress").errors !== null)
+      errroCounter++;
+
+    if (this.clientForm.get("GSTNO").value === "" || this.clientForm.get("GSTNO").errors !== null)
+      errroCounter++;
+
+    if (this.clientForm.get("Pincode").value === 0 || this.clientForm.get("Pincode").errors !== null)
+      errroCounter++;
+
     if (this.clientForm.get("FileId").value == null)
       this.clientForm.get("FileId").setValue(0);
+
     if (this.clientForm.get("AdminId").value == null)
       this.clientForm.get("AdminId").setValue(0);
 
@@ -198,11 +220,10 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   }
 
   fireBrowserFile() {
-    this.submitted = true;
     $("#uploadocument").click();
   }
 
-  gotoEmpPage() {
+  gotoClientPage() {
     $('#messageModal').modal('hide');
     this.nav.navigate(Clients, null)
   }
