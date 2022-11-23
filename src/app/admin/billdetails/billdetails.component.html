@@ -15,12 +15,43 @@
         <div class="x_header_title mt-3">
           <div class="d-flex justify-content-between">
             <div class="row col-md-7">
-              <div class="d-flex col-md-6" *ngIf="fileLoaded">
+              <div class="d-flex col-md-5" *ngIf="fileLoaded">
                 <label class="form-label pe-3 mt-1">Developer</label>
                 <div class="col-md-9">
                   <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
                     (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
                   </app-iautocomplete>
+                </div>
+              </div>
+              <div class="col-md-4 d-flex">
+                <div class="th f-small">
+                  <div class="cell-wrapper">
+                    <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Month">
+                      <option value="0" selected>Month</option>
+                      <option value="1">Jan</option>
+                      <option value="2">Feb</option>
+                      <option value="3">Mar</option>
+                      <option value="4">Apr</option>
+                      <option value="5">May</option>
+                      <option value="6">June</option>
+                      <option value="7">July</option>
+                      <option value="8">Aug</option>
+                      <option value="9">Sep</option>
+                      <option value="10">Oct</option>
+                      <option value="11">Nov</option>
+                      <option value="12">Dec</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="th f-small">
+                  <div class="cell-wrapper">
+                    <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Year">
+                      <option value="0" selected>Year</option>
+                      <option [value]="item" *ngFor="let item of allBillingYears">{{item}}</option>
+                    </select>
+                  </div>
                 </div>
               </div>
               <div class="col-md-3">
@@ -66,7 +97,7 @@
           <div class="hide-bar"></div>
           <div class="t-head">
             <div class="tr">
-              <div class="th fe-1">
+              <div class="th fe-2">
                 <div class="cell-wrapper">
                   <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                     (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
@@ -116,7 +147,7 @@
               </div>
               <div class="th f-small">
                 <div class="cell-wrapper">
-                  <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                  <!-- <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                     (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Month">
                     <option value="0" selected>Month</option>
                     <option value="1">Jan</option>
@@ -131,7 +162,7 @@
                     <option value="10">Oct</option>
                     <option value="11">Nov</option>
                     <option value="12">Dec</option>
-                  </select>
+                  </select> -->
                   <div class="t-filter" (click)="arrangeDetails(orderByMonthAsc, 'BillForMonth')">
                     <a href="javascript:void()" class="pe-2">Month</a>
                     <i class="fa fa-sort-amount-asc"
@@ -141,7 +172,7 @@
                   </div>
                 </div>
               </div>
-              <div class="th f-small">
+              <!-- <div class="th f-small">
                 <div class="cell-wrapper">
                   <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                     (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Year">
@@ -156,7 +187,7 @@
                       [ngClass]="{'d-none': orderByYearAsc == null || orderByYearAsc }" aria-hidden="true"></i>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="th fe-1">
                 <div class="cell-wrapper">
                   <input class="form-control table-filter-control form-control-sm" readonly
@@ -213,10 +244,10 @@
               <div class="t-body custom-height">
                 <ng-container *ngIf="isFileFound">
                   <div class="tr py-2" *ngFor="let user of billDetails">
-                    <div class="td align-middle fe-1">
+                    <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
                         <div class="d-flex flex-row justify-content-between">
-                          <a href="javascript:void(0)" (click)="EditCurrentDocument(user)">{{user.BillNo}}</a>
+                          <a href="javascript:void(0)" class="bold-anc" (click)="EditCurrentDocument(user)">{{user.BillNo}}</a>
                           <div class="d-flex flex-row justify-content-around">
                             <a href="javascript:void(0)">
                               <span class="badge bg-success ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true"
@@ -225,6 +256,10 @@
                             <a href="javascript:void(0)">
                               <span class="badge bg-primary ms-1 me-1"><i class="fa fa-download" aria-hidden="true"
                                   (click)="downloadFile(user)"></i></span>
+                            </a>
+                            <a href="javascript:void(0)">
+                              <span class="badge bg-danger ms-1 me-1"><i class="fa fa-send" aria-hidden="true"
+                                  (click)="getEmailTemplate(user)"></i></span>
                             </a>
                           </div>
                         </div>
@@ -271,12 +306,7 @@
                     </div>
                     <div class="td align-middle f-small">
                       <div class="cell-wrapper">
-                        {{user.Month | slice: 0:3}}
-                      </div>
-                    </div>
-                    <div class="td align-middle f-small">
-                      <div class="cell-wrapper">
-                        {{user.Year}}
+                        {{user.Month | slice: 0:3}}, {{user.Year}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
@@ -764,6 +794,130 @@
         <a class="btn btn-primary-c" [attr.disabled]="isLoading" (click)="downloadPdfDocx()" download>
           <i class="fa fa-download text-light pe-2"></i> Download
         </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--view Pdf, Doc, Excel and send Email Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="sendfileModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0 d-flex">
+        <h5 class="modal-title">Download Or Send Bill As EMail</h5>
+        <div class="position-relative w-75 text-end" *ngIf="isBillGenerated">
+          <input type="text" class="border-0 me-4 w-75 text-end"  [(ngModel)]="emailTemplate.EmailSubject" oninput="this.value = this.value.toUpperCase()"
+                      placeholder="Enter your subject">
+          <i class="edit fa fa-pencil position-absolute"></i>
+        </div>
+      </div>
+      <div class="modal-body f-12 ">
+        <div class="d-flex flex-column align-items-center" *ngIf="isBillGenerated">
+          <div class="col-12">
+            <div class="d-flex">
+              <div class="col-md-4">
+                <div class="d-flex align-items-center justify-content-around">
+                  <div class="form-check">
+                    <div class="donwload-file-ext text-center">
+                      <img src="assets/ext/pdf.png" alt="pdf extension">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" (click)="getFileExtension('pdf')" class="text-primary-c fw-b">
+                          <i class="fa fa-download text-primary-c pe-2"></i>
+                          PDF
+                        </a>
+                    </div>
+                  </div>
+                  <div class="form-check">
+                    <div class="donwload-file-ext text-center">
+                      <img src="assets/ext/doc.jpg" alt="word extension">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                      <a href="javascript:void(0)" (click)="getFileExtension('docx')" class="text-primary-c fw-b">
+                        <i class="fa fa-download text-primary-c pe-2"></i>
+                        DOCX
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-8">
+                <div class="row justify-content-end align-items-end">
+                  <div class="col-md-4">
+                    <select name="staffingTemplate" class="form-control" (change)="viewSendTemplete($event)">
+                      <option value="">Select Template</option>
+                      <option value="1" selected>Staffing Template</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-8">
+                    <div class="input-group">
+                      <input type="email" class="form-control" placeholder="Email Id" name="add-email" aria-label="Email Id" aria-describedby="add-email">
+                      <button class="btn btn-primary-c" type="button" (click)="addEmailId()" id="add-email">
+                        <i class="fa fa-plus pe-2"></i>Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="py-3">
+                  <p class="text-dark mb-2">Send To:</p>
+                  <ng-container *ngFor="let email of emailTemplate.Emails; let i = index">
+                    <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
+                      {{email}}
+                      <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none">
+                        <i class="fa fa-close ps-2 text-dark"></i>
+                      </a>
+                    </span>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 text-start">
+            <ng-container *ngIf="emailTemplate !== null">
+              <div class="mt-4">
+                <div class="mb-1">
+                  {{emailTemplate.Salutation | uppercase}}
+                </div>
+                <div class="mb-1">
+                  <div class="position-relative">
+                    <input type="text" class="border-0 w-75"  [(ngModel)]="emailTemplate.EmailTitle" oninput="this.value = this.value.toUpperCase()"
+                      placeholder="Enter your title">
+                    <i class="edit fa fa-pencil position-absolute"></i>
+                  </div>
+                </div>
+                <div class="border py-3 px-2">
+
+                  <div class="col-12">
+                    <ng-container *ngIf="bodyContent != null">
+                      <div class="no-focus-line" [innerHTML]="bodyContent" contenteditable>
+                      </div>
+                    </ng-container>
+                  </div>
+
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <div class="d-flex flex-row justify-context-end">
+          <div class="me-3">
+            <a href="javascript:void(0)" class="text-decoration-none text-muted"
+            (click)="closePopUp()">Close</a>
+          </div>
+          <div>
+            <a href="javascript:void(0)" class="text-primary-c fw-bold" (click)="sendEmail()">
+              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}" aria-hidden="true"></i>
+              <span class="ps-2">
+                <ng-container *ngIf="isLoading">Sending...</ng-container>
+                <ng-container *ngIf="!isLoading"><u>Send Email</u></ng-container>
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
