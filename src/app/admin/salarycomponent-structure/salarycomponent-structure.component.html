@@ -316,8 +316,10 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="submitComponents()"><i class="fa fa-plus pe-2"></i>
-          Add</button>
+        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitComponents()">
+          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Wait' : 'Add' }}</span>
+          </button>
       </div>
     </div>
   </div>

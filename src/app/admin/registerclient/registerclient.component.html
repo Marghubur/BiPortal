@@ -70,7 +70,7 @@
                 <div class="col-md-4 mb-3"></div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">GSTIN No.#</label>
-                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No."
+                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No." [ngClass]="{'error-field': submitted && f.GSTNO.errors !== null && f.GSTNO.errors.required}"
                     name="GSTNO" formControlName="GSTNO" />
                 </div>
                 <div class="col-md-4 mb-3">
@@ -164,29 +164,29 @@
               <div class="col-md-12 mb-3 mb-3 row">
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Country</label>
-                  <input placeholder="Country" class="form-control" name="Country" formControlName="Country" oninput="this.value = this.value.toUpperCase()"/>
+                  <input placeholder="Country" class="form-control" name="Country" formControlName="Country" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}"/>
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">State</label>
-                  <input placeholder="State" class="form-control" name="State" formControlName="State"  oninput="this.value = this.value.toUpperCase()"/>
+                  <input placeholder="State" class="form-control" name="State" formControlName="State"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.State.errors !== null && f.State.errors.required}"/>
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">City</label>
-                  <input placeholder="City" class="form-control" name="City" formControlName="City"  oninput="this.value = this.value.toUpperCase()"/>
+                  <input placeholder="City" class="form-control" name="City" formControlName="City"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.City.errors !== null && f.City.errors.required}"/>
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Pincode</label>
-                  <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6"
+                  <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6" [ngClass]="{'error-field': submitted && f.Pincode.errors !== null && f.Pincode.errors.required}"
                     formControlName="Pincode" />
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Address Line 1</label>
-                  <input placeholder="Address Line 1" class="form-control" name="FirstAddress" oninput="this.value = this.value.toUpperCase()"
+                  <input placeholder="Address Line 1" class="form-control" name="FirstAddress" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.FirstAddress.errors !== null && f.FirstAddress.errors.required}"
                     formControlName="FirstAddress" />
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Address Line 2</label>
-                  <input placeholder="Address Line 2" class="form-control" name="SecondAddress" oninput="this.value = this.value.toUpperCase()"
+                  <input placeholder="Address Line 2" class="form-control" name="SecondAddress" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.SecondAddress.errors !== null && f.SecondAddress.errors.required}"
                     formControlName="SecondAddress" />
                 </div>
                 <div class="col-md-6 mt-4">
