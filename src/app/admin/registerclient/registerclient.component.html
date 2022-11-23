@@ -70,7 +70,7 @@
                 <div class="col-md-4 mb-3"></div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">GSTIN No.#</label>
-                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No."
+                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No." [ngClass]="{'error-field': submitted && f.GSTNO.errors !== null && f.GSTNO.errors.required}"
                     name="GSTNO" formControlName="GSTNO" />
                 </div>
                 <div class="col-md-4 mb-3">
@@ -164,29 +164,29 @@
               <div class="col-md-12 mb-3 mb-3 row">
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Country</label>
-                  <input placeholder="Country" class="form-control" name="Country" formControlName="Country" oninput="this.value = this.value.toUpperCase()"/>
+                  <input placeholder="Country" class="form-control" name="Country" formControlName="Country" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}"/>
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">State</label>
-                  <input placeholder="State" class="form-control" name="State" formControlName="State"  oninput="this.value = this.value.toUpperCase()"/>
+                  <input placeholder="State" class="form-control" name="State" formControlName="State"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.State.errors !== null && f.State.errors.required}"/>
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">City</label>
-                  <input placeholder="City" class="form-control" name="City" formControlName="City"  oninput="this.value = this.value.toUpperCase()"/>
+                  <input placeholder="City" class="form-control" name="City" formControlName="City"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.City.errors !== null && f.City.errors.required}"/>
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Pincode</label>
-                  <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6"
+                  <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6" [ngClass]="{'error-field': submitted && f.Pincode.errors !== null && f.Pincode.errors.required}"
                     formControlName="Pincode" />
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Address Line 1</label>
-                  <input placeholder="Address Line 1" class="form-control" name="FirstAddress" oninput="this.value = this.value.toUpperCase()"
+                  <input placeholder="Address Line 1" class="form-control" name="FirstAddress" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.FirstAddress.errors !== null && f.FirstAddress.errors.required}"
                     formControlName="FirstAddress" />
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Address Line 2</label>
-                  <input placeholder="Address Line 2" class="form-control" name="SecondAddress" oninput="this.value = this.value.toUpperCase()"
+                  <input placeholder="Address Line 2" class="form-control" name="SecondAddress" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.SecondAddress.errors !== null && f.SecondAddress.errors.required}"
                     formControlName="SecondAddress" />
                 </div>
                 <div class="col-md-6 mt-4">
@@ -242,14 +242,14 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="p-2 modal-content">
       <div class="modal-body text-dark d-flex align-items-center mb-0 pb-0">
-        <div class="wrapper me-3">
-          <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/> <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        <div class="wrapper-checkmark me-3">
+          <svg class="checkmark-register" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/> <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
           </svg>
         </div>
         Congratulation!! client detail registered/ updated successfully!
       </div>
       <div class="modal-footer mt-0 pt-0 border-top-0">
-        <button type="button" class="btn btn-success" (click)="gotoEmpPage()"><i class="fa fa-check-circle pe-1"></i> OK</button>
+        <a href="javascript:void(0)" class="text-decoration-none text-dark fw-bold" (click)="gotoClientPage()">OK</a>
       </div>
     </div>
   </div>

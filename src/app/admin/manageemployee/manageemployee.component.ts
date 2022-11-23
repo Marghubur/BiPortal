@@ -551,7 +551,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
 
   fireBrowserFile() {
-    this.submitted = true;
     $("#uploadocument").click();
   }
 
