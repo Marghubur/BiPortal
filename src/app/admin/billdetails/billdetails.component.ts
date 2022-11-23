@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap'
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { AddNumbers, CommonService, ErrorToast, GetStatus, MonthName, Toast, ToFixed } from 'src/providers/common-service/common.service';
+import { AddNumbers, CommonService, ErrorToast, GetStatus, MonthName, Toast, ToFixed, WarningToast } from 'src/providers/common-service/common.service';
 import { BuildPdf, Employees, ManageEmployee, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -12,6 +12,7 @@ import { ApplicationData } from '../build-pdf/build-pdf.component';
 import { DocumentUser, Files } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import 'bootstrap';
+import { DomSanitizer } from '@angular/platform-browser';
 declare var $: any;
 
 @Component({
@@ -78,13 +79,17 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   isFileFound: boolean = false;
   isError: boolean = false;
   allBillingYears: Array<any> = [];
+  isBillGenerated: boolean = false;
+  emailTemplate: any = null;
+  email:Array<string> = [];
+  bodyContent: any = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
     private common: CommonService,
     private calendar: NgbCalendar,
-    private userService: UserService
+    private sanitizer: DomSanitizer
   ) {
     this.singleEmployee = new Filter();
     this.placeholderName = "All result";
@@ -399,6 +404,45 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     //this.downloadFileLink = `${this.basePath}${userFile.FilePath}/${userFile.FileName}`;
     this.isDownloadModal = true;
     $('#downloadPopUp').modal('show')
+  }
+
+  getEmailTemplate(userDetail: any) {
+    if(userDetail.BillNo && userDetail.BillNo != '') {
+      this.http.get(`filemaker/GetBillDetailWithTemplate/${userDetail.BillNo}`).then((response: ResponseModel) => {
+        if(response.ResponseBody.FileDetail !== null &&
+          response.ResponseBody.EmailTemplate !== null) {
+          this.isBillGenerated = true;
+          this.Bindtemplate(response.ResponseBody.EmailTemplate);
+          $('#sendfileModal').modal('show');
+          Toast("Bill pdf generated successfully");
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+        ErrorToast("Fail to generate bill. Please contact to admin.");
+      });
+    }
+  }
+
+  Bindtemplate(res: any) {
+    if (res) {
+      this.emailTemplate = res;
+      if(this.emailTemplate) {
+        this.bodyContent = this.emailTemplate.BodyContent;
+        this.bodyContent = this.bodyContent
+        .replaceAll("[[DEVELOPER-NAME]]", 'DEVELOPER NAME')
+        .replaceAll("[[YEAR]]", 'YEAR')
+        .replaceAll("[[MONTH]]", 'MONTH');
+
+        this.bodyContent = this.sanitizer.bypassSecurityTrustHtml(this.bodyContent);
+      }
+    } else {
+      WarningToast("No default template found.");
+    }
+  }
+
+  closePopUp() {
+    $('#sendfileModal').modal('hide');
   }
 
   downloadPdfDocx() {
@@ -865,6 +909,60 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
         })
       }
     }
+  }
+
+  viewSendTemplete(e: any) {
+    let value = e.target.value;
+  }
+
+  addEmailId() {
+    let value = (document.querySelector('input[name="add-email"]') as HTMLInputElement).value;
+    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (value.match(validRegex)) {
+      if (this.emailTemplate.Emails.find(i => i == value) == null){
+        this.emailTemplate.Emails.push(value);
+        (document.querySelector('input[name="add-email"]') as HTMLInputElement).value = '';
+      }
+    }
+    else
+      ErrorToast("Please enter a valid email id.");
+  }
+
+  removeEmail(index: number) {
+    if (index >-1) {
+      this.emailTemplate.Emails.splice(index, 1);
+    }
+  }
+
+  sendEmail() {
+    // this.isLoading = true;
+    // if (this.currentOrganization.CompanyId > 0 && this.senderClient.CompanyId >0 && this.fileDetail.FileId > 0) {
+    //   let data = {
+    //     ClientId: this.currentOrganization.CompanyId,
+    //     SenderId: this.senderClient.CompanyId,
+    //     FileId: this.fileDetail.FileId,
+    //     MonthName: this.pdfModal.billForMonth.toUpperCase(),
+    //     ForYear: this.pdfModal.billYear,
+    //     EmployeeId: this.currentEmployee.EmployeeUid,
+    //     EmailTemplateDetail: this.emailTemplate
+    //   };
+
+    //   this.http.post("bill/SendBillToClient", data).then((response: ResponseModel) => {
+    //     if (response.ResponseBody) {
+    //       Toast("Email send successfully");
+    //       $('#viewFileModal').modal('hide');
+    //     } else {
+    //       ErrorToast("Fail to send email. Please contact to admin.");
+    //     }
+    //     this.isLoading = false;
+    //   }).catch(e => {
+    //     ErrorToast("Fail to send email. Please contact to admin.");
+    //     this.isLoading = false;
+    //   });
+    // } else {
+    //   this.isLoading = false;
+    //   ErrorToast("Unable to send email. Please contact to admin.");
+    // }
   }
 }
 
