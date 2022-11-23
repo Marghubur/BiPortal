@@ -1,10 +1,14 @@
-.nav-parent {
-  background: wheat !important;
-}
+// .nav-parent {
+//   background: var(--primary-dark) !important;
+// }
 
 .anc-link {
-  font-weight: 600;
+  font-weight: 500;
   font-size: smaller;
   color: darkblue;
   padding: 0px 4px;
+}
+
+.arrow{
+  margin-top: .6rem;
 }

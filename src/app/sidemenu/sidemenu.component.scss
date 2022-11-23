@@ -30,8 +30,9 @@ a {
 }
 
 .accordion-header button {
-  font-size: 14px !important;
+  font-size: 1.1rem !important;
   font-weight: 700 !important;
+  color: var(--primary-dark) !important;
 }
 
 .accordion-div {
@@ -95,7 +96,6 @@ a {
 }
 
 .accordion-button:not(.collapsed) {
-  color: #212529 !important;
   background: #fff;
 }
 
