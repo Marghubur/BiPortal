@@ -96,8 +96,15 @@
                       </div>
                     </a>
                   </li>
+                  <li class="py-3">
+                    <a href="javascript:void(0)" (click)="ConfigPageTab(9)" class="text-decoration-none text-muted">
+                      <div name="tab-index" [attr.index]="9" class="d-flex align-items-center">
+                        <div class="index-count border me-3 rounded-circle fw-bold">9</div>
+                        <span>Confirmation Detail</span>
+                      </div>
+                    </a>
+                  </li>
                 </ul>
-                <button class="btn btn-primary" (click)="test()">Call For Leave</button>
               </div>
             </div>
             <div class="col-md-9 panel-h">
@@ -218,7 +225,7 @@
                     <div class="my-4">
                       <div class="d-flex justify-content-between">
                         <h6 class="fw-bold text-dark">
-                          How is available leave balance of an employee calculated? 
+                          How is available leave balance of an employee calculated?
                         </h6>
                         <span class="ps-5 text-muted">(Section 1)</span>
                       </div>
@@ -1742,6 +1749,20 @@
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="configPageNo == 9">
+                  <div class="wrapper-checkmark flex-column">
+                    <svg class="checkmark-register" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                      <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                  </div>
+                  <div class="text-center">
+                    <h4 class="text-center">
+                      {{leaveTypeDeatils.PlanName | titlecase}} Type configuration is completed successfully!
+                    </h4>
+                    <button class="btn btn-primary mt-2" (click)="gotoLeave()">Go To Leave</button>
                   </div>
                 </ng-container>
               </div>
