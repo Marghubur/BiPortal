@@ -307,3 +307,24 @@
   width: 60px !important;
   height: 60px !important;
 }
+
+.icon-action{
+  a{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--primary-dark);
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    padding-left: 2px;
+  }
+
+  img {
+    width: 2.4rem;
+  }
+}
