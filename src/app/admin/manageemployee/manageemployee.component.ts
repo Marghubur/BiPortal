@@ -189,12 +189,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         let i = 0;
         let managers = res.ResponseBody.EmployeesList;
         while(i < managers.length) {
-          if([1, 2, 3, 10].indexOf(managers[i].DesignationId) !== -1) {
-            this.managerList.data.push({
-              value: managers[i].EmployeeUid,
-              text: `${managers[i].FirstName} ${managers[i].LastName}`
-            });
-          }
+          this.managerList.data.push({
+            value: managers[i].EmployeeUid,
+            text: `${managers[i].FirstName} ${managers[i].LastName}`
+          });
           i++;
         }
       }
