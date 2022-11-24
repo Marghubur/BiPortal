@@ -4,11 +4,19 @@
 
 .anc-link {
   font-weight: 500;
-  font-size: smaller;
-  color: darkblue;
-  padding: 0px 4px;
+  background: #f0eeee;
+  padding: 4px 10px;
+  font-size: .7rem;
+  border-radius: 8px;
+  color: darkslateblue;
 }
 
 .arrow{
   margin-top: .6rem;
+}
+
+.first-link {
+  color: darkblue;
+  background: #e5d5d5;
+  cursor: not-allowed;
 }
