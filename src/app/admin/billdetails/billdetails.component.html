@@ -249,17 +249,14 @@
                         <div class="d-flex flex-row justify-content-between">
                           <a href="javascript:void(0)" class="bold-anc" (click)="EditCurrentDocument(user)">{{user.BillNo}}</a>
                           <div class="d-flex flex-row justify-content-around">
-                            <a href="javascript:void(0)">
-                              <span class="badge bg-success ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true"
-                                  (click)="viewPdfFile(user)"></i></span>
+                            <a href="javascript:void(0)" (click)="viewPdfFile(user)">
+                              <span class="badge bg-success ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
                             </a>
-                            <a href="javascript:void(0)">
-                              <span class="badge bg-primary ms-1 me-1"><i class="fa fa-download" aria-hidden="true"
-                                  (click)="downloadFile(user)"></i></span>
+                            <a href="javascript:void(0)" (click)="downloadFile(user)">
+                              <span class="badge bg-primary ms-1 me-1"><i class="fa fa-download" aria-hidden="true"></i></span>
                             </a>
-                            <a href="javascript:void(0)">
-                              <span class="badge bg-danger ms-1 me-1"><i class="fa fa-send" aria-hidden="true"
-                                  (click)="getEmailTemplate(user)"></i></span>
+                            <a href="javascript:void(0)" (click)="getEmailTemplate(user)">
+                              <span class="badge bg-danger ms-1 me-1"><i class="fa fa-send" aria-hidden="true"></i></span>
                             </a>
                           </div>
                         </div>
@@ -805,7 +802,7 @@
       <div class="modal-header border-bottom-0 d-flex">
         <h5 class="modal-title">Download Or Send Bill As EMail</h5>
         <div class="position-relative w-75 text-end" *ngIf="isBillGenerated">
-          <input type="text" class="border-0 me-4 w-75 text-end"  [(ngModel)]="emailTemplate.EmailSubject" oninput="this.value = this.value.toUpperCase()"
+          <input type="text" class="border-0 me-4 w-75 text-end"  [(ngModel)]="emailTemplate.EmailSubject"
                       placeholder="Enter your subject">
           <i class="edit fa fa-pencil position-absolute"></i>
         </div>
@@ -861,7 +858,7 @@
                 </div>
                 <div class="py-3">
                   <p class="text-dark mb-2">Send To:</p>
-                  <ng-container *ngFor="let email of emailTemplate.Emails; let i = index">
+                  <ng-container *ngFor="let email of allSendRecEmails; let i = index">
                     <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
                       {{email}}
                       <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none">
@@ -882,7 +879,7 @@
                 </div>
                 <div class="mb-1">
                   <div class="position-relative">
-                    <input type="text" class="border-0 w-75"  [(ngModel)]="emailTemplate.EmailTitle" oninput="this.value = this.value.toUpperCase()"
+                    <input type="text" class="border-0 w-75"  [(ngModel)]="emailTemplate.EmailTitle"
                       placeholder="Enter your title">
                     <i class="edit fa fa-pencil position-absolute"></i>
                   </div>

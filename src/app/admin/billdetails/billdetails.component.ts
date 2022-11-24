@@ -83,6 +83,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   emailTemplate: any = null;
   email:Array<string> = [];
   bodyContent: any = null;
+  allSendRecEmails: Array<any> = [];
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -407,12 +408,25 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   }
 
   getEmailTemplate(userDetail: any) {
+    this.allSendRecEmails = [];
+    this.FileDetail = userDetail;
     if(userDetail.BillNo && userDetail.BillNo != '') {
       this.http.get(`filemaker/GetBillDetailWithTemplate/${userDetail.BillNo}/${userDetail.FileOwnerId}`).then((response: ResponseModel) => {
         if(response.ResponseBody.FileDetail !== null &&
           response.ResponseBody.EmailTemplate !== null) {
           this.isBillGenerated = true;
           this.Bindtemplate(response.ResponseBody.EmailTemplate[0]);
+          let senderEmails = response.ResponseBody.Sender[0];
+          let receiverEmails = response.ResponseBody.Receiver[0];
+          for(const value in receiverEmails) {
+              if(receiverEmails[value]) this.allSendRecEmails.push(receiverEmails[value]);
+          }
+          if (senderEmails.FirstEmail != null)
+            this.allSendRecEmails.push(senderEmails.FirstEmail);
+
+          if (senderEmails.SecondEmail != null)
+            this.allSendRecEmails.push(senderEmails.SecondEmail);
+
           $('#sendfileModal').modal('show');
           Toast("Bill pdf generated successfully");
         }
@@ -919,8 +933,8 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     let value = (document.querySelector('input[name="add-email"]') as HTMLInputElement).value;
     var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (value.match(validRegex)) {
-      if (this.emailTemplate.Emails.find(i => i == value) == null){
-        this.emailTemplate.Emails.push(value);
+      if (this.allSendRecEmails.find(i => i == value) == null){
+        this.allSendRecEmails.push(value);
         (document.querySelector('input[name="add-email"]') as HTMLInputElement).value = '';
       }
     }
@@ -930,39 +944,40 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
 
   removeEmail(index: number) {
     if (index >-1) {
-      this.emailTemplate.Emails.splice(index, 1);
+      this.allSendRecEmails.splice(index, 1);
     }
   }
 
   sendEmail() {
-    // this.isLoading = true;
-    // if (this.currentOrganization.CompanyId > 0 && this.senderClient.CompanyId >0 && this.fileDetail.FileId > 0) {
-    //   let data = {
-    //     ClientId: this.currentOrganization.CompanyId,
-    //     SenderId: this.senderClient.CompanyId,
-    //     FileId: this.fileDetail.FileId,
-    //     MonthName: this.pdfModal.billForMonth.toUpperCase(),
-    //     ForYear: this.pdfModal.billYear,
-    //     EmployeeId: this.currentEmployee.EmployeeUid,
-    //     EmailTemplateDetail: this.emailTemplate
-    //   };
+    this.isLoading = true;
+    if (this.FileDetail.ClientId >0 && Number(this.FileDetail.FileUid) > 0) {
+      this.emailTemplate.Emails = this.allSendRecEmails;
+      let data = {
+        ClientId: this.FileDetail.ClientId,
+        SenderId: 1,
+        FileId: Number(this.FileDetail.FileUid),
+        MonthName: this.FileDetail.Month.toUpperCase(),
+        ForYear: this.FileDetail.Year,
+        EmployeeId: this.FileDetail.FileOwnerId,
+        EmailTemplateDetail: this.emailTemplate
+      };
 
-    //   this.http.post("bill/SendBillToClient", data).then((response: ResponseModel) => {
-    //     if (response.ResponseBody) {
-    //       Toast("Email send successfully");
-    //       $('#viewFileModal').modal('hide');
-    //     } else {
-    //       ErrorToast("Fail to send email. Please contact to admin.");
-    //     }
-    //     this.isLoading = false;
-    //   }).catch(e => {
-    //     ErrorToast("Fail to send email. Please contact to admin.");
-    //     this.isLoading = false;
-    //   });
-    // } else {
-    //   this.isLoading = false;
-    //   ErrorToast("Unable to send email. Please contact to admin.");
-    // }
+      this.http.post("bill/SendBillToClient", data).then((response: ResponseModel) => {
+        if (response.ResponseBody) {
+          Toast("Email send successfully");
+          $('#sendfileModal').modal('hide');
+        } else {
+          ErrorToast("Fail to send email. Please contact to admin.");
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        ErrorToast("Fail to send email. Please contact to admin.");
+        this.isLoading = false;
+      });
+    } else {
+      this.isLoading = false;
+      ErrorToast("Unable to send email. Please contact to admin.");
+    }
   }
 }
 

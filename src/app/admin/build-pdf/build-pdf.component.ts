@@ -1050,7 +1050,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     if (status == 'select') {
       this.allTimesheet.map(x => x.TimesheetStatus = 8);
       for (let i = 0; i < this.timesheetBreakup.length; i++) {
-        this.timesheetBreakup[i].map(x => x.TimesheetStatus = 8);
+        this.timesheetBreakup[i].Timesheet.map(x => x.TimesheetStatus = 8);
       }
       let elem = document.querySelectorAll('[data-checktype="weekly"]') ;
       for (let i = 0; i < elem.length; i++) {
@@ -1060,7 +1060,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     else if('deselect') {
       this.allTimesheet.map(x => x.TimesheetStatus = 4);
       for (let i = 0; i < this.timesheetBreakup.length; i++) {
-        this.timesheetBreakup[i].map(x => x.TimesheetStatus = 4);
+        this.timesheetBreakup[i].Timesheet.map(x => x.TimesheetStatus = 4);
       }
       let elem = document.querySelectorAll('[data-checktype="weekly"]') ;
       for (let i = 0; i < elem.length; i++) {
