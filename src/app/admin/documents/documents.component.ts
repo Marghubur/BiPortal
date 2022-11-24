@@ -47,7 +47,8 @@ export class documentsComponent implements OnInit, OnDestroy {
   currentFolder: string = "";
   routeParam: any = null;
   renderedDocxFile: any = null;
-
+  isLoading: boolean = false;
+  isPageReady: boolean = false;
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
@@ -189,6 +190,7 @@ export class documentsComponent implements OnInit, OnDestroy {
   }
 
   RefreshDocuments() {
+    this.isPageReady = false;
     this.documentDetails = [];
     if(this.currentUser.UserId > 0 && this.currentUser.UserTypeId > 0) {
       this.http.post("OnlineDocument/GetDocumentByUserId", {
@@ -202,9 +204,11 @@ export class documentsComponent implements OnInit, OnDestroy {
           } else {
             this.isDocumentReady = false;
           }
+          this.isPageReady = true;
         }
       });
     } else {
+      this.isPageReady = true;
       ErrorToast("Invalid user.")
     }
   }
@@ -549,6 +553,7 @@ export class documentsComponent implements OnInit, OnDestroy {
   }
 
   SubmitFiles() {
+    this.isLoading = true;
     let formData = new FormData();
     let files = Array<Files>();
     if (this.FileDocumentList.length > 0 && this.currentUser.UserId > 0) {
@@ -569,11 +574,14 @@ export class documentsComponent implements OnInit, OnDestroy {
           $('#staticBackdropDown').modal('hide');
           this.cleanFileHandler();
           Toast("Created successfully.");
+          this.isLoading = false;
         } else {
           ErrorToast("Fail to delte the file");
+          this.isLoading = false;
         }
       }).catch(err => {
         $('#staticBackdropDown').modal('hide');
+        this.isLoading = false;
         this.cleanFileHandler();
       });
     } else {

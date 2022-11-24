@@ -38,79 +38,92 @@
   </div>
   <div class="x_panel">
     <div class="x_content mt-4">
-      <ng-container>
+      <ng-container *ngIf="isPageReady">
         <a href="javascript:void(0)" *ngFor="let f of folderNav" (click)="navigateTo(f.name, f.route)"
           class="navigation-link">
           /{{f.name}}
         </a>
-      </ng-container>
-      <div class="col-md-12 item-row" *ngIf="isDocumentReady">
-        <ng-container *ngFor="let folders of documentDetails">
-          <ng-container *ngIf="folders.IsFolder">
-            <div class="col-12 row m-0 mt-3 mb-3 p-4 border border-warning rounded position-relative">
-              <div class="col-md-3">
-                <a href="javascript:void(0)" class="ps-2">
-                  <i class="fa fa-folder text-warning f-zoom" aria-hidden="true"></i>
-                </a>
-                <label class="d-block ps-2">
-                  {{getFolderName(folders.FilePath)}}
-                </label>
-              </div>
-              <div class="col-md-9 content-end">
-                <div class="text-start">
-                  <h6 class="text-danger">Total: {{fileCount(folders.FilePath)}} item(s) present.</h6>
-                  <a href="javascript:void(0)" (click)="openSubFolder(folders.FilePath)">
-                    Open
+        <div class="col-md-12 item-row" *ngIf="isDocumentReady">
+          <ng-container *ngFor="let folders of documentDetails">
+            <ng-container *ngIf="folders.IsFolder">
+              <div class="col-12 row m-0 mt-3 mb-3 p-4 border border-warning rounded position-relative">
+                <div class="col-md-3">
+                  <a href="javascript:void(0)" class="ps-2">
+                    <i class="fa fa-folder text-warning f-zoom" aria-hidden="true"></i>
+                  </a>
+                  <label class="d-block ps-2">
+                    {{getFolderName(folders.FilePath)}}
+                  </label>
+                </div>
+                <div class="col-md-9 content-end">
+                  <div class="text-start">
+                    <h6 class="text-danger">Total: {{fileCount(folders.FilePath)}} item(s) present.</h6>
+                    <a href="javascript:void(0)" (click)="openSubFolder(folders.FilePath)">
+                      Open
+                    </a>
+                  </div>
+                </div>
+                <div class="folder-action">
+                  <!-- <a href="javascript:void(0)" class="ac-dv" (click)="addSubFolder(folders.FolderPath)">
+                    <i class="fa fa-folder text-warning" aria-hidden="true"></i>
+                  </a>
+                  <a href="javascript:void(0)" class="ac-dv" (click)="addFiles(folders.FolderPath)">
+                    <i class="fa fa-plus-square text-success" aria-hidden="true"></i>
+                  </a> -->
+                  <a href="javascript:void(0)" class="ac-dv">
+                    <i class="fa fa-trash text-danger" aria-hidden="true"></i>
                   </a>
                 </div>
               </div>
-              <div class="folder-action">
-                <!-- <a href="javascript:void(0)" class="ac-dv" (click)="addSubFolder(folders.FolderPath)">
-                  <i class="fa fa-folder text-warning" aria-hidden="true"></i>
+            </ng-container>
+            <ng-container *ngIf="!folders.IsFolder">
+              <div class="file-type mt-2 mb-2">
+                <a href="javascript:void(0)" class="sh-icon" data-bs-toggle="modal"
+                  (click)="selectItemForDelete(folders.FileId)">
+                  <i class="fa fa-trash text-danger"></i>
                 </a>
-                <a href="javascript:void(0)" class="ac-dv" (click)="addFiles(folders.FolderPath)">
-                  <i class="fa fa-plus-square text-success" aria-hidden="true"></i>
-                </a> -->
-                <a href="javascript:void(0)" class="ac-dv">
-                  <i class="fa fa-trash text-danger" aria-hidden="true"></i>
-                </a>
-              </div>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="!folders.IsFolder">
-            <div class="file-type mt-2 mb-2">
-              <a href="javascript:void(0)" class="sh-icon" data-bs-toggle="modal"
-                (click)="selectItemForDelete(folders.FileId)">
-                <i class="fa fa-trash text-danger"></i>
-              </a>
-              <!-- <div class="file-link col-md-12">
-                <h6 class="float-end">
-                  <div class="mt-2 file-action">
-                    <a href="javascript:void(0)" class="d-block">
-                      <i class="fa fa-download mt-1 text-success"></i>
-                    </a>
-                    <a href="javascript:void(0)" class="pt-2" data-bs-toggle="modal"
-                      (click)="selectItemForDelete(folders.FileId)" data-bs-target="#staticBackdrop">
-                      <i class="fa fa-trash text-danger"></i>
-                    </a>
+                <!-- <div class="file-link col-md-12">
+                  <h6 class="float-end">
+                    <div class="mt-2 file-action">
+                      <a href="javascript:void(0)" class="d-block">
+                        <i class="fa fa-download mt-1 text-success"></i>
+                      </a>
+                      <a href="javascript:void(0)" class="pt-2" data-bs-toggle="modal"
+                        (click)="selectItemForDelete(folders.FileId)" data-bs-target="#staticBackdrop">
+                        <i class="fa fa-trash text-danger"></i>
+                      </a>
+                    </div>
+                  </h6>
+                </div> -->
+                <div class="d-flex flex-column justify-content-between">
+                  <a href="javascript:void(0)" class="d-block" (click)="viewFile(folders)">
+                    <img class="upload-img" [src]="folders.LocalImgPath" alt="document_image">
+                  </a>
+                  <div class="file-name mt-2">
+                    {{folders.FileName}}
                   </div>
-                </h6>
-              </div> -->
-              <div class="d-flex flex-column justify-content-between">
-                <a href="javascript:void(0)" class="d-block" (click)="viewFile(folders)">
-                  <img class="upload-img" [src]="folders.LocalImgPath" alt="document_image">
-                </a>
-                <div class="file-name mt-2">
-                  {{folders.FileName}}
                 </div>
               </div>
-            </div>
+            </ng-container>
           </ng-container>
-        </ng-container>
-      </div>
-      <div class="select-message" *ngIf="!isDocumentReady">
-        <h3>There are no file and folder. Please select at least one file or folder.</h3>
-      </div>
+        </div>
+        <div class="select-message" *ngIf="!isDocumentReady">
+          <h3>There are no file and folder. Please select at least one file or folder.</h3>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!isPageReady">
+        <div class="py-5 my-5">
+          <h6 class="fw-bold fs-3 text-center text-dark">Files and Folders are loading</h6>
+          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
@@ -130,9 +143,11 @@
       </div>
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" (click)="CloseFolderPopup()"
-          class="text-decoration-none text-danger btn-white pe-3" data-dismiss="modal">Cancel</a>
-        <a href="javascript:void(0)" (click)="CreateNewfolder()"
-          class="text-decoration-none btn-white text-primary">Create</a>
+          class="text-decoration-none text-danger btn-white pe-3" data-dismiss="modal"><i class="fa fa-close pe-1"></i>Cancel</a>
+        <a href="javascript:void(0)" (click)="CreateNewfolder()" class="text-decoration-none btn-white text-primary">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-send': !isLoading}"></i>
+          <span class="pe-1">{{ isLoading ? 'Waiting...' : 'Create' }}</span>
+        </a>
       </div>
     </div>
   </div>
@@ -181,9 +196,11 @@
       </div>
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-decoration-none text-danger btn-white pe-3"
-          data-bs-dismiss="modal">Close</a>
-        <a href="javascript:void(0)" (click)="deleteFile()"
-          class="text-decoration-none btn-white text-primary">Delete</a>
+          data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</a>
+        <a href="javascript:void(0)" (click)="deleteFile()" class="text-decoration-none btn-white text-primary">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash-o': !isLoading}"></i>
+          {{ isLoading ? 'Waiting...' : 'Delete' }}
+        </a>
       </div>
     </div>
   </div>
@@ -266,9 +283,9 @@
                       </div>
                     </div>
                     <div class="mt-4">
-                      <button type="button" class="btn btn-primary-c me-2" (click)="SubmitFiles()"
-                        [disabled]="btnDisable ||isLargeFile">
-                        <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
+                      <button class="btn btn-primary-c" [disabled]="isLoading || btnDisable ||isLargeFile" (click)="SubmitFiles()">
+                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-upload': !isLoading}"></i>
+                        {{ isLoading ? 'Waiting...' : 'Upload selected File' }}
                       </button>
                       <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
                         [disabled]="btnDisable">
