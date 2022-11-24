@@ -51,6 +51,7 @@ import { LeaveManagementModule} from '../leave-management/leave-management.modul
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
 import { EmployeePerformanceComponent } from './employee-performance/employee-performance.component';
+import { CompanylogoComponent } from './companylogo/companylogo.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,9 @@ import { EmployeePerformanceComponent } from './employee-performance/employee-pe
     CompanyComponent,
     EmailTemplateComponent,
     ManageEmailtemplateComponent,
-    EmployeePerformanceComponent
+    EmployeePerformanceComponent,
+    CompanylogoComponent
+
   ],
   imports: [
     CommonModule,
