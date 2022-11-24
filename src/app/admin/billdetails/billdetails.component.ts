@@ -408,11 +408,11 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
 
   getEmailTemplate(userDetail: any) {
     if(userDetail.BillNo && userDetail.BillNo != '') {
-      this.http.get(`filemaker/GetBillDetailWithTemplate/${userDetail.BillNo}`).then((response: ResponseModel) => {
+      this.http.get(`filemaker/GetBillDetailWithTemplate/${userDetail.BillNo}/${userDetail.FileOwnerId}`).then((response: ResponseModel) => {
         if(response.ResponseBody.FileDetail !== null &&
           response.ResponseBody.EmailTemplate !== null) {
           this.isBillGenerated = true;
-          this.Bindtemplate(response.ResponseBody.EmailTemplate);
+          this.Bindtemplate(response.ResponseBody.EmailTemplate[0]);
           $('#sendfileModal').modal('show');
           Toast("Bill pdf generated successfully");
         }
