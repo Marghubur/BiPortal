@@ -1,7 +1,7 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { Attendance, Timesheet } from 'src/providers/constants';
+import { Attendance, Leave, Timesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
@@ -123,16 +123,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     } else {
       ErrorToast("Unable to lead plan detail. Please contact to admin.");
     }
-  }
-
-  test() {
-    this.http.post("Leave/ApplyLeaveService_Testing", {
-      EmployeeId: 4,
-      FromDate: new Date(),
-      ToDate: new Date()
-    }).then((response: ResponseModel) => {
-
-    });
   }
 
   initLeaveDetail() {
@@ -1194,7 +1184,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   ConfigPageTab(index: number) {
-    if (index > 0 && index <= 8) {
+    if (index > 0 && index <= 9) {
       this.configPageNo = index;
       let tab = document.getElementById('leaveConfigModal');
       let elem = tab.querySelectorAll('div[name="tab-index"]');
@@ -1211,6 +1201,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  gotoLeave() {
+    this,this.nav.navigate(Leave, null)
+  }
 }
 
 class LeaveDetail {
