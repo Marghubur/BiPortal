@@ -96,9 +96,9 @@
                       </div>
                     </a>
                   </li>
-                  <li class="py-3">
+                  <li class="py-3" *ngIf="isConfigCompleted">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(9)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="9" class="d-flex align-items-center">
+                      <div name="tab-index" [attr.index]="9" class="d-flex align-items-center" [ngClass]="{'active-index': configPageNo == 9}">
                         <div class="index-count border me-3 rounded-circle fw-bold">9</div>
                         <span>Confirmation Detail</span>
                       </div>
@@ -1752,13 +1752,13 @@
                   </div>
                 </ng-container>
 
-                <ng-container *ngIf="configPageNo == 9">
+                <ng-container *ngIf="configPageNo == 9 && isConfigCompleted">
                   <div class="wrapper-checkmark flex-column">
                     <svg class="checkmark-register" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
                       <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
                     </svg>
                   </div>
-                  <div class="text-center">
+                  <div class="text-center mt-4">
                     <h4 class="text-center">
                       {{leaveTypeDeatils.PlanName | titlecase}} Type configuration is completed successfully!
                     </h4>

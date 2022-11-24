@@ -387,8 +387,8 @@
                       <div class="t-body overflow-hidden">
                         <div class="tr tax-slab text-dark py-3"
                           *ngFor="let item of allDeclarationSalaryDetails.IncomeTaxSlab">
-                          <div class="td ps-1">{{item[0]}}</div>
-                          <div class="td ps-1 text-end pe-3">{{item[1] | number:'1.2-2'}}</div>
+                          <div class="td ps-1">{{item[1].Description}}</div>
+                          <div class="td ps-1 text-end pe-3">{{item[1].Value | number:'1.2-2'}}</div>
                         </div>
                       </div>
                     </div>
