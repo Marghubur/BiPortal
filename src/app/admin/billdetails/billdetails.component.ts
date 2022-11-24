@@ -412,10 +412,10 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.FileDetail = userDetail;
     if(userDetail.BillNo && userDetail.BillNo != '') {
       this.http.get(`filemaker/GetBillDetailWithTemplate/${userDetail.BillNo}/${userDetail.FileOwnerId}`).then((response: ResponseModel) => {
-        if(response.ResponseBody.FileDetail !== null &&
+        if(response.ResponseBody.EmployeeDetail !== null &&
           response.ResponseBody.EmailTemplate !== null) {
           this.isBillGenerated = true;
-          this.Bindtemplate(response.ResponseBody.EmailTemplate[0]);
+          this.Bindtemplate(response.ResponseBody.EmailTemplate[0], response.ResponseBody.EmployeeDetail[0]);
           let senderEmails = response.ResponseBody.Sender[0];
           let receiverEmails = response.ResponseBody.Receiver[0];
           for(const value in receiverEmails) {
@@ -438,15 +438,15 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  Bindtemplate(res: any) {
+  Bindtemplate(res: any, employee: any) {
     if (res) {
       this.emailTemplate = res;
       if(this.emailTemplate) {
         this.bodyContent = this.emailTemplate.BodyContent;
         this.bodyContent = this.bodyContent
-        .replaceAll("[[DEVELOPER-NAME]]", 'DEVELOPER NAME')
-        .replaceAll("[[YEAR]]", 'YEAR')
-        .replaceAll("[[MONTH]]", 'MONTH');
+        .replaceAll("[[DEVELOPER-NAME]]", employee.FirstName + ' ' + employee.LastName)
+        .replaceAll("[[YEAR]]", this.FileDetail.Year)
+        .replaceAll("[[MONTH]]", this.FileDetail.Month);
 
         this.bodyContent = this.sanitizer.bypassSecurityTrustHtml(this.bodyContent);
       }
