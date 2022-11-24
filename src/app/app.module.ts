@@ -33,7 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FooterComponent,
     ToastComponent,
     LoginComponent,
-    InitialpageComponent
+    InitialpageComponent,
   ],
   imports: [
     BrowserModule,

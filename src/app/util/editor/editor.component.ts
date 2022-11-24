@@ -13,6 +13,7 @@ export class EditorComponent implements OnInit {
   popover: HTMLElement = null;
   imageUrl: string = "";
   isSectionEdited: boolean = false;
+  targetElem: HTMLElement = null;
 
   @Input()
   set content(textContent: any) {
@@ -29,10 +30,18 @@ export class EditorComponent implements OnInit {
   }
 
   manipulateSection(e: any){
+    this.targetElem = e.target;
     e.preventDefault();
     e.target.focus();
     this.popover.classList.remove('d-none');
     this.popover.setAttribute('style', `left: ${e.pageX}px; top: ${e.pageY}px`);
+  }
+
+  addHorizontalLine() {
+    let tag = document.createElement("hr");
+    tag.className="w-100";
+    this.targetElem.insertAdjacentElement("afterend", tag);
+    this.closePopOver();
   }
 
   addindex() {

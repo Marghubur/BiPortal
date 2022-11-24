@@ -1,0 +1,60 @@
+<div class="col-md-12 main-container">
+    <div class="x_panel">
+      <div class="x_header">
+        <div class="x_header_title row">
+          <div class="col-md-3">
+            <h2>Company Logo<small>Company Logo details</small></h2>
+          </div>
+        </div>
+      </div>
+      <div class="px-1">
+        <app-breadcrums></app-breadcrums>
+      </div>
+
+      <div>
+        <input type="file" (change)="logoFile($event)" class="d-none"  accept=".jpg, .jpeg, .png" id="uploadCompanyLogo">
+        <button class="btn btn-primary-c" (click)="fireBrowser()">Upload Logo</button>
+      </div>
+      
+      <ng-container>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Company Logo</th>
+                    <th>Logo Description</th>
+                    <th width="25%">Preview</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="fileList.length != 0">
+                    <tr *ngFor="let item of fileList; let index = index">
+                        <td>
+                            {{index + 1}}
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" [attr.value]="item.FileDescription">
+                        </td>
+                        <td>
+                            <div>
+                                <img [src]="item.FilePath" alt="logo" class="logo-img">
+                            </div>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" class="text-decoration-none" (click)="saveLogo()">
+                                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-send-o': !isLoading}" aria-hidden="true"></i>
+                                {{isLoading ? 'Wait..' : 'Save'}}
+                            </a>
+                        </td>
+                    </tr>
+                </ng-container>
+                <ng-container *ngIf="fileList.length == 0">
+                    <div class="m-5">
+                        No available to list found. Please use above add button to add one.
+                    </div>
+                </ng-container>
+            </tbody>
+        </table>
+      </ng-container>
+    </div>
+</div>
