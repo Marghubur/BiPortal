@@ -39,6 +39,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   isDataLoaded: boolean = false;
   errorCounter: number = 0;
   monthlyLeave: number = 0;
+  isConfigCompleted: boolean = false;
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -1081,6 +1082,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       this.http.put(`ManageLeavePlan/UpdateYearEndProcessing/${this.leavePlanTypeId}/${this.leaveTypeDeatils.LeavePlanId}`, value).then((res:ResponseModel) => {
         this.bindPage(res.ResponseBody);
         this.submit = false;
+        this.isConfigCompleted = true;
+        this.ConfigPageTab(9);
         this.isLoading = false;
       }).catch(e => {
         this.isLoading = false;

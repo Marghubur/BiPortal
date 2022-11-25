@@ -193,3 +193,10 @@ export enum ItemStatus
     Approved = 9,
     ReAssigned = 10
 }
+
+class FileRoleType
+{
+    PrimaryLogo = "Company Primary Logo";
+    CompanyLogo = "Company Logo";
+    OtherFile = "Other File";
+}

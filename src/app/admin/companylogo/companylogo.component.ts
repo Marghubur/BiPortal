@@ -4,6 +4,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Files } from '../documents/documents.component';
+declare var $: any;
 
 @Component({
   selector: 'app-companylogo',
@@ -18,7 +19,11 @@ export class CompanylogoComponent implements OnInit {
   currentCompany: any = null;
   fileList: Array<any> = [];
   basePath: string = "";
-
+  fileDescription: string = "";
+  fileRoles: Array<string> = ["Company Primary Logo", "Company Logo", "Other File"];
+  fileRole: string = "";
+  fileId: number = 0;
+  isPageReady: boolean = false;
   constructor(
     private http: AjaxService,
     private local: ApplicationStorage
@@ -42,8 +47,11 @@ export class CompanylogoComponent implements OnInit {
   }
 
   loadCompanyFiles() {
+    this.isPageReady = false;
     this.http.get(`company/getcompanyfiles/${this.currentCompany.CompanyId}`).then((res: ResponseModel) => {
       this.manangeCompanyFiles(res.ResponseBody);
+    }).catch(e => {
+      this.isPageReady = true;
     });
   }
 
@@ -57,6 +65,7 @@ export class CompanylogoComponent implements OnInit {
     } else {
       ErrorToast("Fail to load company file detail.");
     }
+    this.isPageReady = true;
   }
 
   fireBrowser() {
@@ -87,27 +96,77 @@ export class CompanylogoComponent implements OnInit {
   saveLogo() {
     this.isLoading = true;
     if (this.FilesCollection.length < 0) {
-      ErrorToast("Please add logo firs.");
+      ErrorToast("Please add logo first.");
+      this.isLoading = false;
+      return;
+    }
+    if (this.fileRole == null || this.fileRole == "") {
+      ErrorToast("File role is manditory");
+      this.fileRole = null;
       this.isLoading = false;
       return;
     }
     let formData = new FormData();
     formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
     let files = {
-      FileId: 0,
+      FileId: this.fileId,
       Email: this.currentCompany.Email,
       CompanyId: this.currentCompany.CompanyId,
-      FileDescription: 'Company file',
-      FileRole: "Company Primary Logo"
+      FileDescription: this.fileDescription,
+      FileRole: this.fileRole
     };
 
     formData.append('FileDetail', JSON.stringify(files));
     this.http.post("company/addcompanyfiles", formData).then((res:ResponseModel) => {
-      if (res.ResponseBody)
+      if (res.ResponseBody) {
+        this.manangeCompanyFiles(res.ResponseBody);
+        $('#logoModal').modal('hide');
         Toast('Logo uploaded successfully.');
+      }
       this.isLoading = false;
     }).catch(e => {
       this.isLoading = false;
+    })
+  }
+
+  editFile(item: any) {
+    this.companyLogo = item.FilePath;
+    this.fileId = item.FileId
+    this.fileDescription = item.FileDescription;
+    this.fileRole = item.FileRole;
+    $('#logoModal').modal('show');
+  }
+
+  resetFile() {
+    this.fileId = 0;
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    this.companyLogo = "";
+    this.fileDescription = "";
+    this.fileRole = "";
+  }
+
+  logoPopUp() {
+    this.resetFile();
+    $('#logoModal').modal('show');
+  }
+
+  deleteFile(item: any) {
+    this.isLoading = true;
+    if (item == null) {
+      this.isLoading = false;
+      ErrorToast("Invalid file sselected");
+      return;
+    }
+    this.http.post("Company/DeleteCompanyFile", item).then(res => {
+      if (res.ResponseBody) {
+        this.manangeCompanyFiles(res.ResponseBody);
+        Toast("File deleted successfully.");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+      ErrorToast('Fail to delete the file');
     })
   }
 
