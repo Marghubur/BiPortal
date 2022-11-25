@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { data } from 'jquery';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -108,7 +107,7 @@ export class AttendanceComponent implements OnInit {
         index++;
       }
 
-      this.currentDays = data;
+      this.currentDays = data.reverse();
     } else {
       WarningToast("Unable to bind data. Please contact admin.");
     }
@@ -226,6 +225,7 @@ export class AttendanceComponent implements OnInit {
         if(current) {
           current.PresentDayStatus = 2;
         }
+        this.currentDays = this.currentDays.reverse();
         this.isLoading = false;
         Toast("Wow!!!  Your attendance submitted successfully.");
       } else {
