@@ -53,6 +53,13 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     e.preventDefault();
     this.popover.classList.remove('d-none');
     this.popover.setAttribute('style', `left: ${e.pageX}px; top: ${e.pageY}px`);
+    if (this.target == null) {
+      let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
+      if (target)
+        this.target = target;
+      else
+        ErrorToast("Please select section first");
+    }
   }
 
   closePopOver(){
@@ -154,7 +161,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  addSubTitle() {
+  addsection() {
     this.titleValue = '';
     this.titleValue = '[Add Section Title]';
     this.projectDetail.ProjectContent.push( {
@@ -196,6 +203,13 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     tag.className="mb-0";
     tag.appendChild(document.createTextNode('YOUR TEXT'));
     divtag.appendChild(tag);
+    if (this.target == null) {
+      let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
+      if (target)
+        this.target = target;
+      else
+        ErrorToast("Please select section first");
+    }
     this.target.appendChild(divtag);
     this.target.focus();
     this.selectedText(tag);
@@ -211,9 +225,11 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   addParagraphBelow() {
     if (this.target == null) {
-      ErrorToast("Please select a section first");
-      this.closePopOver();
-      return;
+      let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
+      if (target)
+        this.target = target;
+      else
+        ErrorToast("Please select section first");
     }
     let tag = document.createElement("p");
     tag.className="mb-0";
@@ -226,9 +242,11 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   addParagraphAbove() {
     if (this.target == null) {
-      ErrorToast("Please select a section first");
-      this.closePopOver();
-      return;
+      let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
+      if (target)
+        this.target = target;
+      else
+        ErrorToast("Please select section first");
     }
     let tag = document.createElement("p");
     tag.className="mb-0";
@@ -240,9 +258,11 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   enableListItem() {
     if (this.target == null) {
-      ErrorToast("Please select a section first");
-      this.closePopOver();
-      return;
+      let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
+      if (target)
+        this.target = target;
+      else
+        ErrorToast("Please select section first");
     }
     let dv = document.createElement('div');
     let ol = document.createElement('ol');
@@ -263,9 +283,11 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   enableBulletItem() {
     if (this.target == null) {
-      ErrorToast("Please select a section first");
-      this.closePopOver();
-      return;
+      let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
+      if (target)
+        this.target = target;
+      else
+        ErrorToast("Please select section first");
     }
     let dv = document.createElement('div');
     let ul = document.createElement('ul');
@@ -310,6 +332,13 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     img.setAttribute('src', this.imageUrl);
     img.setAttribute('style', 'width:44vw;')
     tag.appendChild(img);
+    if (this.target == null) {
+      let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
+      if (target)
+        this.target = target;
+      else
+        ErrorToast("Please select section first");
+    }
     this.target.appendChild(tag);
     $('#addLinkModal').modal('hide');
   }

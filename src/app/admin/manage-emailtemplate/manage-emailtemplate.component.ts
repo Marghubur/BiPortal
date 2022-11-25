@@ -111,11 +111,6 @@ export class ManageEmailtemplateComponent implements OnInit {
     let value = this.emailTemplateForm.value;
     value.BodyContent = data;
     formData.append('emailtemplate', JSON.stringify(value));
-    let file = null;
-    if (this.fileDetail.length > 0) {
-      file = this.fileDetail[0].file;
-      formData.append(this.fileDetail[0].name, file)
-    }
     this.http.post("Email/InsertUpdateEmailTemplate", formData).then((res:ResponseModel) => {
       if (res.ResponseBody && res.ResponseBody != '') {
         this.emailTemplateId = Number(res.ResponseBody);
@@ -126,47 +121,6 @@ export class ManageEmailtemplateComponent implements OnInit {
     }).catch(e => {
       this.isLoading = false;
     })
-  }
-
-  fireBrowserFile() {
-    $('#uploadlogo').click();
-  }
-
-  uploadLogo(event: any) {
-    if (event.target.files) {
-      var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = (event: any) => {
-        this.logoUrl = event.target.result;
-      };
-      let selectedfile = event.target.files;
-      let file = <File>selectedfile[0];
-      this.fileDetail.push({
-        name: file.name,
-        file: file
-      });
-      console.log(this.fileDetail[0].file)
-    }
-  }
-
-  uploadFilePopup(){
-    this.logoUrl = '';
-    this.fileDetail = [];
-    this.fileName = "";
-    $('#signUpoadModal').modal('show');
-  }
-
-  resetFile() {
-    this.fileDetail = [];
-    this.logoUrl = "";
-    this.fileName = "";
-  }
-
-  saveFile() {
-    if (this.fileName && this.fileName != null) {
-      this.fileDetail[0].name = this.fileName;
-    }
-    $('#signUpoadModal').modal('hide');
   }
 }
 

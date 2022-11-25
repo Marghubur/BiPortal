@@ -4,6 +4,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Files } from '../documents/documents.component';
+declare var $: any;
 
 @Component({
   selector: 'app-companylogo',
@@ -18,6 +19,7 @@ export class CompanylogoComponent implements OnInit {
   currentCompany: any = null;
   fileList: Array<any> = [];
   basePath: string = "";
+  FileDescription: string = "";
 
   constructor(
     private http: AjaxService,
@@ -97,7 +99,7 @@ export class CompanylogoComponent implements OnInit {
       FileId: 0,
       Email: this.currentCompany.Email,
       CompanyId: this.currentCompany.CompanyId,
-      FileDescription: 'Company file',
+      FileDescription: this.FileDescription,
       FileRole: "Company Primary Logo"
     };
 
@@ -109,6 +111,18 @@ export class CompanylogoComponent implements OnInit {
     }).catch(e => {
       this.isLoading = false;
     })
+  }
+
+  resetFile() {
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    this.companyLogo = "";
+    this.FileDescription = "";
+  }
+
+  logoPopUp() {
+    this.resetFile();
+    $('#logoModal').modal('show');
   }
 
 }
