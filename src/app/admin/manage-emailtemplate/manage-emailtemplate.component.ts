@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -23,6 +23,9 @@ export class ManageEmailtemplateComponent implements OnInit {
   logoUrl: string = '';
   fileDetail: Array<any> = [];
   fileName: string = "";
+  companyFiles: Array<any> = [];
+  basePath: string = null;
+  defaultLogoId: string = null;
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
@@ -30,6 +33,8 @@ export class ManageEmailtemplateComponent implements OnInit {
               private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.defaultLogoId = "";
+    this.basePath = this.http.GetImageBasePath();
     this.isPageLoading = true;
     let data = this.nav.getValue();
     let companies = this.local.findRecord("Companies");
@@ -54,17 +59,37 @@ export class ManageEmailtemplateComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get(`Email/GetEmailTemplateById/${this.emailTemplateId}`).then(res => {
-      if (res.ResponseBody) {
+    this.http.get(`Email/GetEmailTemplateById/${this.emailTemplateId}/${this.companyId}`).then(res => {
+      if (res.ResponseBody && res.ResponseBody.EmailTemplate !== null) {
         this.isPageLoading = false;
-        this.emailTemplateDetail = res.ResponseBody;
+        this.emailTemplateDetail = res.ResponseBody.EmailTemplate;
+        this.companyFiles = res.ResponseBody.Files;
         this.emailTemplateDetail.BodyContent = JSON.parse(this.emailTemplateDetail.BodyContent);
         this.initForm();
+        this.bindImage(this.emailTemplateDetail.FileId);
       } else {
       }
     }).catch(e => {
       ErrorToast("Invalid template selected");
     })
+  }
+
+  bindImage(fileId: number) {
+    let currentFile = this.companyFiles.find(x => x.FileId == fileId);
+    if (currentFile) {
+      this.logoUrl = `${this.basePath}${currentFile.FilePath}/${currentFile.FileName}`;
+    } else {
+      WarningToast("Unable to find the current file.");
+    }
+  }
+
+  loadImageLocally(e: any) {
+    if(e) {
+      let fileId = Number(e.target.value);
+      if(!isNaN(fileId)) {
+        this.bindImage(fileId);
+      }
+    }
   }
 
   initForm() {
