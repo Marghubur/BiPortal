@@ -388,7 +388,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     if (item) {
       this.currentGroup = item;
       this.isSalaryGrpSelected = false;
-      this.http.get(`SalaryComponent/GetSalaryGroupComponents/${item.SalaryGroupId}`)
+      this.http.get(`SalaryComponent/GetSalaryGroupComponents/${item.SalaryGroupId}/0`)
       .then(res => {
         if (res.ResponseBody) {
           let value = res.ResponseBody;
@@ -433,7 +433,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   addSalaryStrutModal() {
     let SalaryGroupId = 0;
-    this.http.get(`SalaryComponent/GetSalaryGroupComponents/${SalaryGroupId}`)
+    this.http.get(`SalaryComponent/GetSalaryGroupComponents/${SalaryGroupId}/0`)
       .then(res => {
         if (res.ResponseBody) {
           this.customSalaryStructComp = res.ResponseBody;
