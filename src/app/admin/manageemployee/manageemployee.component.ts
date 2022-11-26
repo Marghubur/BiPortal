@@ -272,7 +272,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       AllocatedClientName: new FormControl(this.employeeModal.AllocatedClientName),
       ProfileImgPath: new FormControl(""),
       DateOfJoining: new FormControl(this.employeeModal.CreatedOn),
-      DOB: new FormControl(this.employeeModal.DOB),
+      DOB: new FormControl(this.employeeModal.DOB, [Validators.required]),
       FileId: new FormControl(this.employeeModal.FileId),
       AccessLevelId: new FormControl(this.employeeModal.AccessLevelId, [Validators.required]),
       UserTypeId: new FormControl(this.employeeModal.UserTypeId, [Validators.required]),
@@ -334,14 +334,22 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     }
     if (this.employeeForm.get('FirstName').errors !== null)
       errroCounter++;
+
     if (this.employeeForm.get('LastName').errors !== null)
       errroCounter++;
+
     if (this.employeeForm.get('Email').errors !== null)
       errroCounter++;
+
     if (this.employeeForm.get('DesignationId').errors !== null)
       errroCounter++;
+
     if (this.employeeForm.get('CompanyId').errors !== null)
       errroCounter++;
+
+    if (this.employeeForm.get('DOB').errors !== null)
+      errroCounter++;
+
     if (this.employeeForm.get('ReportingManagerId').errors !== null) {
       this.managerList = new autoCompleteModal();
       this.managerList.data = [];
@@ -355,27 +363,38 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     }
     if (this.employeeForm.get('AccessLevelId').errors !== null)
       errroCounter++;
+
     if (this.employeeForm.get('UserTypeId').errors !== null)
       errroCounter++;
+
     if (this.employeeForm.get('Mobile').errors !== null)
       errroCounter++;
+
     if (this.employeeForm.get('OrganizationId').value == 0)
       errroCounter++;
+
     if (this.employeeForm.get('CompanyId').value == 0)
       errroCounter++;
+
     this.employeeModal = this.employeeForm.value;
     if (this.employeeModal.Pincode === null)
       this.employeeModal.Pincode = 0;
+
     if (this.employeeModal.ExprienceInYear === null)
       this.employeeModal.ExprienceInYear = 0;
+
     if (this.employeeModal.AllocatedClientId === null)
       this.employeeModal.AllocatedClientId = 0;
+
     if (this.employeeModal.ActualPackage === null)
       this.employeeModal.ActualPackage = 0;
+
     if (this.employeeModal.FinalPackage === null)
       this.employeeModal.FinalPackage = 0;
+
     if (this.employeeModal.TakeHomeByCandidate === null)
       this.employeeModal.TakeHomeByCandidate = 0;
+
     if (this.employeeModal.FileId === null)
       this.employeeModal.FileId = 0;
 

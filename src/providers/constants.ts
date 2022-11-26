@@ -149,7 +149,7 @@ export const JImage = 'jpg';
 export const PImage = 'png';
 export const AImage = "jpeg";
 
-export const DocImg = "assets/ext/doc.jpg";
+export const DocImg = "assets/ext/doc.png";
 export const PdfImg = "assets/ext/pdf.png";
 export const TxtImg = "assets/ext/txt.png";
 export const FlatFileImg = "assets/ext/file.png";
