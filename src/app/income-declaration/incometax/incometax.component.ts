@@ -277,6 +277,19 @@ export class IncometaxComponent implements OnInit {
     }
   }
 
+  saveTaxDetail() {
+      let presentMonth = new Date().getMonth() + 1;
+      let presentYear = new Date().getFullYear();
+      let formData = new FormData();
+      formData.append('completeTaxDetail', JSON.stringify(this.TaxDetails));
+      this.http.post(`SalaryComponent/UpdateTaxDetail/
+          ${this.EmployeeId}/${presentMonth}/${presentYear}`, formData).then(res => {
+        if (res.ResponseBody) {
+          Toast("Salary breakup added successfully.");
+        }
+      })
+  }
+
 }
 
 class TaxSlab {
