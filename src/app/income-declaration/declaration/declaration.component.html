@@ -131,7 +131,6 @@
                         <h5 class="text-dark pt-3">My Declarations</h5>
                         <p class="mb-0 pb-2">Below are the declarations done by you under various sections.</p>
                         <div class="t-table t-list t-border col-md-12 my-3">
-                          <div class="hide-bar"></div>
                           <div class="t-head bg-light">
                             <div class="tr">
                               <div class="th fe-3">
@@ -162,6 +161,11 @@
                               <div class="th fe-2">
                                 <div class="cell-wrapper">
                                   AMOUNT ACCEPTED
+                                </div>
+                              </div>
+                              <div class="th fe-1">
+                                <div class="cell-wrapper">
+                                  ACTION
                                 </div>
                               </div>
                             </div>
@@ -195,8 +199,10 @@
                                   </ng-container>
                                 </div>
                                 <div class="td align-middle fe-2">
-                                  <div class="cell-wrapper">
-                                    INR {{declaration.TotalAmountDeclared}}
+                                  <div class="cell-wrapper d-flex align-items-baseline">
+                                    <i class="fa fa-inr pe-2" aria-hidden="true"></i>
+                                    <input type="text" readonly class="w-50 ps-2 border-0 bg-transparent" 
+                                      [attr.value]="declaration.TotalAmountDeclared">
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-2">
@@ -205,14 +211,24 @@
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-2">
-                                  <div class="cell-wrapper">
-                                    INR {{declaration.RejectedAmount}}
+                                  <div class="cell-wrapper d-flex align-items-baseline">
+                                    <i class="fa fa-inr pe-2" aria-hidden="true"></i>
+                                    <input type="text" class="w-50 ps-2 border-0 bg-transparent" 
+                                      [attr.value]="declaration.RejectedAmount">
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-2">
-                                  <div class="cell-wrapper">
-                                    INR {{declaration.AcceptedAmount}}
+                                  <div class="cell-wrapper d-flex align-items-baseline">
+                                    <i class="fa fa-inr pe-2" aria-hidden="true"></i>
+                                    <input type="text" class="w-50 ps-2 border-0 bg-transparent" 
+                                      [attr.value]="declaration.AcceptedAmount">
                                   </div>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <a class="cell-wrapper d-flex primary-text align-items-baseline">
+                                    <i class="fa fa-hdd-o" aria-hidden="true"></i>
+                                    <span class="ps-2">Save</span>
+                                  </a>
                                 </div>
                               </div>
                             </ng-container>

@@ -33,11 +33,6 @@
   padding-right: .6rem !important;
 }
 
-.hide-bar {
-  width: 17px !important;
-  height: 3.9rem !important;
-}
-
 .t-table .t-head, .t-body {
   overflow-y: auto;
 }
@@ -141,4 +136,9 @@ textarea {
 
 .delete-modal {
   background-color: #22222278 !important;
+}
+
+.primary-text {
+  color: var(--primary-dark);
+  cursor: pointer;
 }

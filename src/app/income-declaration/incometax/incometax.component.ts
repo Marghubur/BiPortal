@@ -194,7 +194,7 @@ export class IncometaxComponent implements OnInit {
   }
 
   getSalaryGroup() {
-    this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryDetail.GroupId}`).
+    this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryDetail.GroupId}/${this.salaryDetail.CTC}`).
     then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
         let salaryComponents = response.ResponseBody;
