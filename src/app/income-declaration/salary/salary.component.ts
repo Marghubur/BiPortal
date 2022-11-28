@@ -4,7 +4,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, ToFixed } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToFixed } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary, AdminTaxcalculation } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
@@ -20,7 +20,6 @@ export class SalaryComponent implements OnInit {
   myAnnualSalary: MyAnnualSalary = new MyAnnualSalary();
   isSalaryDetail: boolean = true;
   isLoading: boolean = false;
-  incomeTaxSlab: Array<IncomeTaxSlab> =[];
   currentYear: number = 0;
   employeesList: autoCompleteModal = new autoCompleteModal();
   applicationData: any = [];
@@ -32,6 +31,9 @@ export class SalaryComponent implements OnInit {
   isReady: boolean = false;
   SectionIsReady: boolean = false;
   isEmployeeSelect: boolean = false;
+  taxRegimeDetails: any = [];
+  taxSlab: Array<any> = [];
+  currentEmployee: any = null;
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -40,36 +42,28 @@ export class SalaryComponent implements OnInit {
   ngOnInit(): void {
     this.currentYear = new Date().getFullYear();
     this.loadData();
+  }
 
-    this.incomeTaxSlab.push({
-      taxSlab: 'Income Upto 2,50,000',
-      rate: 'NIL'
-    },
-    {
-      taxSlab: 'Income between 2,50,001 to 5,00,000',
-      rate: '5% (Tax rebate of Rs 12,500 available under secction 87A'
-    },
-    {
-      taxSlab: 'Income between 5,00,001 to 7,50,000',
-      rate: '10%'
-    },
-    {
-      taxSlab: 'Income between 7,50,001 to 10,00,000',
-      rate: '15%'
-    },
-    {
-      taxSlab: 'Income between 10,00,001 to 12,50,000',
-      rate: '20%'
-    },
-    {
-      taxSlab: 'Income between 12,50,001 to 15,00,000',
-      rate: '25%'
-    },
-    {
-      taxSlab: 'Income above 15,00,000',
-      rate: '30%'
-    });
+  newIncomeTaxRegimePopUp() {
+    this.http.get("TaxRegime/GetAllRegime").then(res => {
+      if (res.ResponseBody) {
+        this.taxRegimeDetails = res.ResponseBody;
+        this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
+        let empRegime = this.currentEmployee.EmployeeCurrentRegime;
+        if (empRegime == 0 || empRegime == null)
+          this.active = this.taxRegimeDetails.taxRegimeDesc.find(x => x.IsDefaultRegime == 1).TaxRegimeDescId;
+        else
+          this.active = empRegime;
+        this.filterTaxSlab();
+        $('#newIncomeTaxRegime').modal('show');
+      }
+    })
+  }
 
+  filterTaxSlab() {
+    let dob = this.currentEmployee.DOB;
+    let age = new Date().getFullYear() - new Date(dob).getFullYear();
+    this.taxSlab = this.taxRegimeDetails.taxRegime.filter(x => x.RegimeDescId == this.active && x.StartAgeGroup < age && x.EndAgeGroup >= age);
   }
 
   loadData() {
@@ -79,7 +73,6 @@ export class SalaryComponent implements OnInit {
         this.applicationData = response.ResponseBody;
         this.employeesList.data = GetEmployees();
         this.employeesList.placeholder = "Employee";
-        let employees = this.applicationData.Employees;
         this.employeesList.className = "";
         this.isSalaryReady = true;
       }
@@ -219,9 +212,23 @@ export class SalaryComponent implements OnInit {
     });
   }
 
-  continueCurrentTaxRegime() {
-    $('#newIncomeTaxRegime').modal('hide');
-    this.nav.navigate(AdminSalary, null);
+  switchTaxRegime() {
+    this.isLoading = true;
+    let value = {
+      EmployeeId: this.EmployeeId,
+      EmployeeCurrentRegime: this.active
+    }
+    this.http.post("Declaration/SwitchEmployeeTaxRegime", value).then(res => {
+      if (res.ResponseBody) {
+        let emp = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
+        emp.EmployeeCurrentRegime = this.active;
+        Toast("Tax regime switced successfully");
+      }
+      $('#newIncomeTaxRegime').modal('hide');
+      this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   activateMe(ele: string) {
@@ -274,9 +281,7 @@ export class SalaryComponent implements OnInit {
     $('#fullSalaryDetail').modal('hide');
   }
 
-  newIncomeTaxRegimePopUp() {
-    $('#newIncomeTaxRegime').modal('show');
-  }
+
 
 
 }
@@ -292,10 +297,5 @@ class MyAnnualSalary {
   PFperMonth: number = 0;
   Perks: number = 0;
   SalaryMonth: number = 0
-}
-
-class IncomeTaxSlab {
-  taxSlab: string = '';
-  rate: string = '';
 }
 
