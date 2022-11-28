@@ -1437,7 +1437,7 @@ export class ProfileComponent implements OnInit {
         }
         this.UserId = this.userModal.EmployeeId;
         this.initForm();
-        Toast("Profile insert/updated successfully")
+        Toast("Data updated successfully.");
       }
 
       this.isFormReady = true;

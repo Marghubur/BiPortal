@@ -56,9 +56,6 @@
                               <form [formGroup]="wikiForm">
                                 <div formArrayName="Wikis">
                                   <div class="d-flex justify-content-around icon-section rounded">
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-dark" (click)="addsection()">
-                                      <i class="fa fa-plus text-dark" ></i>
-                                    </a>
                                     <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image" class="fs-6 px-2" (click)="addLinkPopUp()">
                                         <i class="fa fa-picture-o" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>

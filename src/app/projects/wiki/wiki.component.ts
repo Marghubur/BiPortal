@@ -161,21 +161,21 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  addsection() {
-    this.titleValue = '';
-    this.titleValue = '[Add Section Title]';
-    this.projectDetail.ProjectContent.push( {
-      SectionName: this.titleValue,
-      SectionDescription: ''
-    });
+  // addsection() {
+  //   this.titleValue = '';
+  //   this.titleValue = '[Add Section Title]';
+  //   this.projectDetail.ProjectContent.push( {
+  //     SectionName: this.titleValue,
+  //     SectionDescription: ''
+  //   });
 
-    let len = this.wikiForm.controls.Wikis.value.length;
-    this.sectionIndex = len;
-    this.adddProject();
-    this.titleValue = '';
-    this.closePopOver();
-    this.isSectionEdited = false;
-  }
+  //   let len = this.wikiForm.controls.Wikis.value.length;
+  //   this.sectionIndex = len;
+  //   this.adddProject();
+  //   this.titleValue = '';
+  //   this.closePopOver();
+  //   this.isSectionEdited = false;
+  // }
 
   editCurrentSection() {
     this.editableFlag = !this.editableFlag;

@@ -1424,7 +1424,7 @@ export class ManageComponent implements OnInit {
     formData.append("userInfo", JSON.stringify(this.userModal));
     this.http.post(`user/UploadProfileDetailFile/${this.userDetail.UserId}/${this.userDetail.UserTypeId}`, formData).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        Toast(response.ResponseBody);
+        Toast("Data updated successfully.");
       }
     }).catch(e => {
       this.isLoading = false;
