@@ -34,10 +34,10 @@
                                         <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
                                             <span>{{projectDetail.Title}}</span>
                                         </a>
-                                        <ul class="list-unstyled ms-3" *ngIf="projectDetail.ProjectContent.length > 0">
-                                            <li *ngFor="let item of projectDetail.ProjectContent">
+                                        <ul class="list-unstyled ms-3" *ngIf="projectDetail.SectionName != null || projectDetail.SectionName != ''">
+                                            <li>
                                                 <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
-                                                    <span>{{item.SectionName}}</span>
+                                                    <span>{{projectDetail.SectionName}}</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -52,13 +52,13 @@
                         (keyup)="tractPressEvent($event)" tabindex="0">
                           <div class="col-md-12 px-4 dv-space">
                             <input type="text" placeholder="Enter Title" class="form-control border-0 fw-bold fs-3" (keyup)="editProjectTitle($event)" [value]="projectDetail.Title">
-                            <ng-container *ngIf="isLoaded">
+                            <ng-container>
                               <form [formGroup]="wikiForm">
-                                <div formArrayName="Wikis">
+                                <div>
                                   <div class="d-flex justify-content-around icon-section rounded">
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-dark" (click)="addsection()">
+                                    <!-- <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-dark" (click)="addsection()">
                                       <i class="fa fa-plus text-dark" ></i>
-                                    </a>
+                                    </a> -->
                                     <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image" class="fs-6 px-2" (click)="addLinkPopUp()">
                                         <i class="fa fa-picture-o" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
@@ -77,40 +77,33 @@
                                     <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="fs-6 px-2" *ngIf="isSectionEdited" (click)="editCurrentSection()">
                                         <i class="fa fa-pencil" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
-                                    <a href="javascript:void(0)" class="fs-6 px-2 text-muted" *ngIf="!isSectionEdited" (click)="saveProjectDetails($event)">
+                                    <a href="javascript:void(0)" class="fs-6 px-2 text-muted"  (click)="saveProjectDetails($event)">
                                       <i class="fa fa-paper-plane" data-bs-toggle="tooltip" data-bs-placement="top" title="Save" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
                                   </div>
 
-                                  <div *ngFor="let item of wikiForm.controls.Wikis['controls']; let i = index;"  [formGroupName]="i" id="section_{{i}}">
-                                    <ng-container *ngIf="projectDetail.ProjectContent.length > 0">
+                                    <ng-container >
                                       <div class="col-md-12 mx-3">
                                         <h5 >
                                           <div class="d-flex flex-row justify-content-between">
-                                              <div contenteditable="true" (keyup)="editSubSection($event, i)">
-                                                {{item.get("WikiSection").value}}
+                                              <div contenteditable="true" (keyup)="editSubSection($event)">
+                                                {{wikiForm.get('WikiSection').value}}
                                               </div>
                                               <div>
-                                                <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
+                                                <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
                                                   <i class="fa fa-trash text-danger"></i>
-                                                </a>
-                                                <a href="javascript:void(0)" class="text-decoration-none" (click)="enableSection(i)">
-                                                  <i class="fa fa-pencil ps-3 text-primary"></i>
+                                                </a> -->
+                                                <a href="javascript:void(0)" class="text-decoration-none" (click)="enableSection()">
+                                                  <i class="fa fa-pencil ps-3 blur-icon"></i>
                                                 </a>
                                               </div>
                                           </div>
                                         </h5>
-                                        <div class="content-dv overflow-none py-2 px-3" (keyup.enter)="addindex()"
-                                          (dblclick)="enableCurrentSection($event)"
-                                          name="content-container"
-                                          [ngClass]="{'enable-section': i == sectionIndex}"
-                                          [attr.contenteditable]="i == sectionIndex"
-                                          (keypress.ctrl)="trackElement($event)"
-                                          [innerHTML]='item.get("WikiSectionDetail").value'>
+                                        <div class="content-dv overflow-none py-2 px-3" (dblclick)="enableCurrentSection($event)" name="content-container"
+                                          (keypress.ctrl)="trackElement($event)" [innerHTML]="wikiForm.get('WikiSectionDetail').value">
                                         </div>
                                       </div>
                                     </ng-container>
-                                  </div>
                                 </div>
                               </form>
                             </ng-container>

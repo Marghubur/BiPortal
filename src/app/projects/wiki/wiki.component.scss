@@ -43,7 +43,7 @@
     flex-direction: column;
     position: fixed;
     width: 2vw;
-    bottom: 7px;
+    bottom: 9px;
     right: 31px;
     a {
         height: 2rem;
@@ -95,4 +95,11 @@ div[contenteditable] {
   max-width: 44vw !important;
   object-fit: cover !important;
   display: block;
+}
+
+.blur-icon {
+  color: #bcbcbc !important;
+}
+.blur-icon:hover {
+  color: #222 !important;
 }
