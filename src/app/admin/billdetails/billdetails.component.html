@@ -81,17 +81,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Pdf viewer modal -->
-      <div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
-        <div class="text-end">
-          <a (click)="closePdfViewer()" class="close_view">
-            <i class="fa fa-times fa-2x" aria-hidden="true"></i>
-          </a>
-        </div>
-        <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
-      </div>
-      <!-- End pdf view modal -->
       <div class="x_content">
         <div class="t-table t-list t-border col-md-12">
           <div class="hide-bar"></div>
@@ -919,3 +908,14 @@
     </div>
   </div>
 </div>
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
+<!-- End pdf view modal -->
