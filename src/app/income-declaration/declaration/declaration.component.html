@@ -562,11 +562,16 @@
                                     <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isLoading}"
                                       (click)="saveDeclaration(r, $event)">
                                       <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
-                                      <span *ngIf="!isLoading">Save</span>
+                                      <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                     </a>
                                     <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
-                                      (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
+                                      (click)="closeDeclaration(r, $event)">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  
+                                      [ngClass]="{'pe-none': isLoading}" (click)="viewDocument(r, 'only-view')">
+                                      <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
                                   </div>
                                 </div>
                                 <div class="td text-center fe-1" *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
@@ -1464,7 +1469,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <h5>Are you want delete <span class="text-dark fw-bold">{{deleteFile.FileName}}</span> attachment</h5>
+        <h5>You are trying to delete <span class="text-dark fw-bold">{{deleteFile.FileName}}</span> attachment file</h5>
+
+        <p>Please press the confirm button to delete the file permanently</p>
+        <p><b>Note:</b> Make sure after deleting your declaration and tax amount may vary.</p>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>

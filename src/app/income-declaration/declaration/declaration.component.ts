@@ -367,15 +367,28 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  viewDocument(item: any, type?: string) {
+    this.uploadDocument(item, type);  
+  }
+
   uploadDocument(item: any, type?: string) {
     this.slectedDeclarationnFile = [];
     if (item) {
       this.attachmentForDeclaration = item.ComponentId ;
       this.isLargeFile = false;
       this.viewAttachment = '';
-      let currentDeclaration = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item.ComponentId);
-      if (currentDeclaration.length > 0)
-        this.slectedDeclarationnFile = currentDeclaration;
+      this.slectedDeclarationnFile = [];
+      if(item.UploadedFileIds != null) {
+        let fileIds = item.UploadedFileIds as Array<number>;
+        if (fileIds.length > 0 && this.declarationFiles.length > 0) {
+          fileIds.map(x => {
+            let currentFile = this.declarationFiles.find(i => i.FileId == x);
+            if(currentFile != null){
+              this.slectedDeclarationnFile.push(currentFile);
+            }
+          });
+        }
+      }
 
       if (this.FilesCollection.length > 0) {
         this.FileDocumentList = [];
