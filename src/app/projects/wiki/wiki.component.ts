@@ -22,12 +22,12 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   tag: HTMLElement = null;
   editableFlag: boolean = false;
   wikiForm: FormGroup = null;
-  WikiDetails: Array<WikiDetail> = [];
   projectId: number = 0;
   target: HTMLElement = null;
   isSectionEdited: boolean = true;
   sectionIndex: number = -1;
   activeEvent: any = null;
+  targetElem: HTMLElement = null;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -50,6 +50,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   manipulateSection(e: any){
+    this.targetElem = e.target;
     e.preventDefault();
     this.popover.classList.remove('d-none');
     this.popover.setAttribute('style', `left: ${e.pageX}px; top: ${e.pageY}px`);
@@ -67,7 +68,6 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
-    this.WikiDetails = [];
     this.projectDetail= new ProjectWiki();
     this.projectDetail.ProjectName= "";
     let data = this.nav.getValue();
@@ -88,9 +88,12 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.editableFlag = false;
     this.http.get(`Project/GetAllWiki/${this.projectId}`).then(res => {
       if (res.ResponseBody) {
-        let data = JSON.parse(res.ResponseBody.DocumentationDetail);
+        let data = res.ResponseBody;
+        if (data.DocumentationDetail != null && data.DocumentationDetail != '[]')
+          this.projectDetail.SectionDescription = res.ResponseBody.DocumentationDetail;
+        else
+          this.projectDetail.SectionDescription = null;
         this.projectDetail.Title = data.Title;
-        this.projectDetail.ProjectContent = data.ProjectContent;
         this.editableFlag = false;
         Toast("Wiki page loaded successfully.");
       }
@@ -102,49 +105,48 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   initForm() {
     this.wikiForm = this.fb.group({
-      Wikis: this.buildWiki()
-    });
-  }
-
-  adddProject() {
-    let project = this.wikiForm.get('Wikis') as FormArray;
-    project.push(this.createWiki());
-  }
-
-  buildWiki(): FormArray {
-    let data = this.projectDetail.ProjectContent;
-    let dataArray: FormArray = this.fb.array([]);
-    if(data != null && data.length > 0) {
-      let i = 0;
-      while(i < data.length) {
-        dataArray.push(this.fb.group({
-          WikiSection: new FormControl(data[i].SectionName),
-          WikiSectionDetail: new FormControl(this.sanitize.bypassSecurityTrustHtml(data[i].SectionDescription  as string))
-        }));
-        i++;
-      }
-    }
-
-    return dataArray;
-  }
-
-  createWiki(): FormGroup {
-    return this.fb.group({
-      WikiSection: new FormControl(this.titleValue),
-      WikiSectionDetail: new FormControl('')
+      WikiSection: new FormControl(this.projectDetail.SectionName),
+      WikiSectionDetail: new FormControl(this.sanitize.bypassSecurityTrustHtml(this.projectDetail.SectionDescription  as string))
     });
   }
 
   addTitlePopUp() {
     this.projectDetail.Title = '[Add Title]';
-    this.projectDetail.ProjectContent = [];
+    this.titleValue = '';
+    this.titleValue = '[Add Section Title]';
+    this.projectDetail.SectionName =  this.titleValue;
+
+    let titleTag = document.createElement("div");
+    titleTag.appendChild(document.createTextNode('[Add Title]'));
+    let sectionTag = document.createElement("div");
+    sectionTag.appendChild(document.createTextNode('[Add Section Detail]'));
+    let value = titleTag.outerHTML + sectionTag.outerHTML;
+    this.projectDetail.SectionDescription = value;
+    this.initForm();
+    this.titleValue = '';
+    // if (this.target == null) {
+    //   let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
+    //   if (target)
+    //     this.target = target;
+    //   else
+    //     ErrorToast("Please select section first");
+    // }
+    // this.target.appendChild(titleTag);
+    // this.target.appendChild(sectionTag);
+    // this.closePopOver();
   }
 
-  editSubSection(e: any, i: number) {
+  addHorizontalLine() {
+    let tag = document.createElement("hr");
+    tag.className="w-100";
+    this.targetElem.insertAdjacentElement("afterend", tag);
+    this.closePopOver();
+  }
+
+  editSubSection(e: any, i: number = 0) {
     let value = e.target.innerText;
-    let project = this.wikiForm.get('Wikis') as FormArray;
-    this.projectDetail.ProjectContent[i].SectionName = '';
-    this.projectDetail.ProjectContent[i].SectionName =  value;
+    this.projectDetail.SectionName = '';
+    this.projectDetail.SectionName =  value;
     //this.wikiForm.get('Wikis')['controls'][i].get('WikiSection').setValue(value);
   }
 
@@ -181,15 +183,15 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.editableFlag = !this.editableFlag;
   }
 
-  deleteSection(i: number) {
-    this.projectDetail.ProjectContent.splice(i, 1);
-    let project = this.wikiForm.get('Wikis') as FormArray;
-    project.removeAt(i);
-    if (project.length == 1) {
-      this.projectDetail.ProjectContent.splice(0, 1);
-      project.removeAt(0);
-    }
-  }
+  // deleteSection(i: number) {
+  //   this.projectDetail.ProjectContent.splice(i, 1);
+  //   let project = this.wikiForm.get('Wikis') as FormArray;
+  //   project.removeAt(i);
+  //   if (project.length == 1) {
+  //     this.projectDetail.ProjectContent.splice(0, 1);
+  //     project.removeAt(0);
+  //   }
+  // }
 
   trackElement(e: any) {
     alert(e);
@@ -234,7 +236,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     let tag = document.createElement("p");
     tag.className="mb-0";
     tag.appendChild(document.createTextNode('YOUR TEXT'));
-    this.target.appendChild(tag);
+    this.targetElem.insertAdjacentElement('afterend', tag);
     this.target.focus();
     this.selectedText(tag);
     this.closePopOver();
@@ -251,9 +253,10 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     let tag = document.createElement("p");
     tag.className="mb-0";
     tag.appendChild(document.createTextNode('YOUR TEXT'));
-    this.target.appendChild(tag);
+    this.targetElem.insertAdjacentElement('beforebegin', tag);
     this.target.focus();
     this.selectedText(tag);
+    this.closePopOver();
   }
 
   enableListItem() {
@@ -275,7 +278,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     li.appendChild(anc);
     ol.appendChild(li);
     dv.appendChild(ol);
-    this.target.appendChild(dv);
+    this.targetElem.appendChild(dv);
     this.closePopOver();
     anc.focus();
     this.selectedText(anc);
@@ -294,7 +297,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     let li = document.createElement("li");
     ul.appendChild(li);
     dv.appendChild(ul);
-    this.target.appendChild(dv);
+    this.targetElem.appendChild(dv);
     this.closePopOver();
     this.target.focus();
   }
@@ -326,20 +329,17 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  enablePosition(e: any) {
+    this.targetElem = e.target;
+  }
+
   addImage() {
     let tag = document.createElement('div');
     let img = document.createElement('img');
     img.setAttribute('src', this.imageUrl);
     img.setAttribute('style', 'width:44vw;')
     tag.appendChild(img);
-    if (this.target == null) {
-      let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
-      if (target)
-        this.target = target;
-      else
-        ErrorToast("Please select section first");
-    }
-    this.target.appendChild(tag);
+    this.targetElem.appendChild(tag);
     $('#addLinkModal').modal('hide');
   }
 
@@ -347,10 +347,9 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     e.stopPropagation();
     e.preventDefault();
     this.editableFlag = false;
-    for (let i = 0; i < this.projectDetail.ProjectContent.length; i++) {
-      let tags = document.querySelectorAll('div[name="content-container"]')[i].innerHTML;
-      this.projectDetail.ProjectContent[i].SectionDescription = tags;
-    }
+    let tags = document.querySelector('div[name="content-container"]').innerHTML;
+    //let tags = document.getElementById('main-container').innerHTML;
+    this.projectDetail.SectionDescription= tags;
     this.projectDetail.ProjectId = this.projectId;
     this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
       if (res.ResponseBody)
@@ -360,18 +359,14 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     })
   }
 
-  enableSection(index: number) {
-    let elem = (document.querySelectorAll('div[name="content-container"]'))
-    this.target = (<HTMLElement> document.querySelectorAll('div[name="content-container"]')[index]);
-    for (let i = 0; i < elem.length; i++) {
-      elem[i].setAttribute('contenteditable', 'false');
-      elem[i].classList.remove('enable-section', 'py-2');
-    }
+  enableSection() {
+    this.target = (<HTMLElement> document.querySelector('div[name="content-container"]'));
     if (this.target) {
       this.target.setAttribute('contenteditable', 'true');
       this.target.classList.add('enable-section', 'py-2');
       this.target.focus();
-      this.isSectionEdited = false;
+      if (this.isSectionEdited == true)
+        this.isSectionEdited = false;
     }
   }
 
@@ -380,57 +375,55 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       this.target.setAttribute('contenteditable', 'false');
       this.target.classList.remove('enable-section', 'py-2');
       this.target = null;
-      this.isSectionEdited = true;
     } else {
       let elem = document.querySelectorAll('div[name="content-container"]');
-      for (let i = 0; i < elem.length; i++) {
-        elem[i].setAttribute('contenteditable', 'false');
-        elem[i].classList.remove('enable-section', 'py-2');
-      }
+      elem[0].setAttribute('contenteditable', 'false');
+      elem[0].classList.remove('enable-section', 'py-2');
       this.target = null;
-      this.isSectionEdited = true;
     }
   }
 
-  addindex() {
-    if (!this.projectDetail.ProjectContent[0].SectionName.includes('Index')) {
-      this.titleValue = '';
-      this.titleValue = 'Index';
-      this.projectDetail.ProjectContent.unshift({
-        SectionName: this.titleValue,
-        SectionDescription: ''
-      })
-      let len = this.wikiForm.controls.Wikis.value.length;
-      this.sectionIndex = len;
-      let project = this.wikiForm.get('Wikis') as FormArray;
-      project.insert(0, this.createIndex());
-      this.titleValue = '';
-      this.isSectionEdited = false;
-    }
-  }
+  // addindex() {
+  //   if (!this.projectDetail.ProjectContent[0].SectionName.includes('Index')) {
+  //     this.titleValue = '';
+  //     this.titleValue = 'Index';
+  //     // this.projectDetail.ProjectContent.unshift({
+  //     //   SectionName: this.titleValue,
+  //     //   SectionDescription: ''
+  //     // })
+  //     let len = this.wikiForm.controls.Wikis.value.length;
+  //     this.sectionIndex = len;
+  //     let project = this.wikiForm.get('Wikis') as FormArray;
+  //     project.insert(0, this.createIndex());
+  //     this.titleValue = '';
+  //     this.isSectionEdited = false;
+  //   }
+  // }
 
-  createIndex(): FormGroup {
-    return this.fb.group({
-      WikiSection: new FormControl(this.titleValue),
-      WikiSectionDetail: new FormControl(`<p>${this.projectDetail.ProjectContent[1].SectionName}</p>`)
-    });
-  }
+  // createIndex(): FormGroup {
+  //   return this.fb.group({
+  //     WikiSection: new FormControl(this.titleValue),
+  //     WikiSectionDetail: new FormControl(`<p>${this.projectDetail.ProjectContent[1].SectionName}</p>`)
+  //   });
+  // }
 
   enableCurrentSection(e: any) {
     this.activeEvent = e;
     e.preventDefault();
     e.stopPropagation();
-    this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
+    //this.target = (<HTMLElement> e.target.closest('div[name="content-container"]'));
+    this.target = (<HTMLElement> document.querySelector('div[name="content-container"]'));
     if (this.target) {
-      if (this.target.classList.contains('enable-section')) {
-        this.deactivateTag();
-        this.isSectionEdited = true;
-      } else {
-        this.target.setAttribute('contenteditable', 'true');
-        this.target.classList.add('enable-section', 'py-2');
-        this.target.focus();
+      // if (this.target.classList.contains('enable-section')) {
+      //   this.deactivateTag();
+      //   this.isSectionEdited = true;
+      // } else {
+      // }
+      this.target.setAttribute('contenteditable', 'true');
+      this.target.classList.add('enable-section', 'py-2');
+      this.target.focus();
+      if (this.isSectionEdited == true)
         this.isSectionEdited = false;
-      }
     }
   }
 
@@ -457,10 +450,6 @@ class ProjectWiki {
   ProjectId: number = 0;
   Title: string = '';
   ProjectName: string = '';
-  ProjectContent: Array<WikiDetail> = [];
-}
-
-class WikiDetail {
   SectionName: string = '';
   SectionDescription: String = '';
 }
