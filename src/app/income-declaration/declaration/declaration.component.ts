@@ -74,6 +74,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   housingPropertyLetterFile: Array<any> = [];
   viewHousingPropFile: Array<any> = [];
   viewAttachment: string = '';
+  deleteType: string = '';
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -193,8 +194,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     })
   }
 
-  deletePopup(item: any) {
+  deletePopup(item: any, type: string) {
+    this.deleteType = '';
     if (item) {
+      this.deleteType = type;
       this.deleteFile = item;
       $('#deleteAttachmentModal').modal('show');
     }
@@ -343,7 +346,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.rentResidenceForm.get('OwnerAddress').setValue(value);
   }
 
-  editDeclaration(e: any) {
+  editDeclaration(item: any, e: any) {
     this.editException = true;
     let current = e.target;
     this.presentRow = current.closest('div[name="table-row"]');
@@ -354,6 +357,16 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.presentRow.querySelector('a[name="upload-proof"]').classList.remove('pe-none', 'text-decoration-none', 'text-muted');
     this.presentRow.querySelector('a[name="upload-proof"]').classList.add('pe-auto', 'fw-bold', 'text-primary-c');
     this.presentRow.querySelector('input[name="DeclaratedValue"]').focus();
+    if(item.UploadedFileIds > 0) {
+      this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
+      let tag = document.createElement("i");
+      tag.classList.add("fa", "fa-check-circle", "text-success", "fa-lg", "pe-2");
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+      tag = document.createElement("span");
+      var text = document.createTextNode("Changed");
+      tag.appendChild(text);
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+    }
   }
 
   checkMaxLimit(e: any, maxlimit: number) {
@@ -367,11 +380,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  viewDocument(item: any, type?: string) {
-    this.uploadDocument(item, type);  
+  removeDelaration(item: any) {
+
   }
 
-  uploadDocument(item: any, type?: string) {
+  uploadDocument(item: any) {
     this.slectedDeclarationnFile = [];
     if (item) {
       this.attachmentForDeclaration = item.ComponentId ;
@@ -395,10 +408,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.FilesCollection = [];
         this.removeSelectedFile()
       }
-
-      if (type != null && type !== '')
-        this.viewAttachment = type;
-
       $("#addAttachmentModal").modal('show');
     }
   }

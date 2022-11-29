@@ -201,7 +201,7 @@
                                 <div class="td align-middle fe-2">
                                   <div class="cell-wrapper d-flex align-items-baseline">
                                     <i class="fa fa-inr pe-2" aria-hidden="true"></i>
-                                    <input type="text" readonly class="w-50 ps-2 border-0 bg-transparent" 
+                                    <input type="text" readonly class="w-50 ps-2 border-0 bg-transparent"
                                       [attr.value]="declaration.TotalAmountDeclared">
                                   </div>
                                 </div>
@@ -213,14 +213,14 @@
                                 <div class="td align-middle fe-2">
                                   <div class="cell-wrapper d-flex align-items-baseline">
                                     <i class="fa fa-inr pe-2" aria-hidden="true"></i>
-                                    <input type="text" class="w-50 ps-2 border-0 bg-transparent" 
+                                    <input type="text" class="w-50 ps-2 border-0 bg-transparent"
                                       [attr.value]="declaration.RejectedAmount">
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-2">
                                   <div class="cell-wrapper d-flex align-items-baseline">
                                     <i class="fa fa-inr pe-2" aria-hidden="true"></i>
-                                    <input type="text" class="w-50 ps-2 border-0 bg-transparent" 
+                                    <input type="text" class="w-50 ps-2 border-0 bg-transparent"
                                       [attr.value]="declaration.AcceptedAmount">
                                   </div>
                                 </div>
@@ -556,21 +556,21 @@
                                 </div>
                                 <div class="td text-center fe-1" *ngIf="r.ComponentId != 'EPF' && r.ComponentId != 'VPF'">
                                   <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                    ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
+                                    ngbTooltip="Edit Declaration" (click)="editDeclaration(r, $event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
                                     name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isLoading}"
                                       (click)="saveDeclaration(r, $event)">
                                       <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
-                                      <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                      <i *ngIf="!isLoading" class="fa fa-floppy-o" aria-hidden="true" placement="top" ngbTooltip="Save"></i>
                                     </a>
                                     <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
                                       (click)="closeDeclaration(r, $event)">
-                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                      <i class="fa fa-times" placement="top" ngbTooltip="Close Declaration"></i>
                                     </a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  
-                                      [ngClass]="{'pe-none': isLoading}" (click)="viewDocument(r, 'only-view')">
-                                      <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"
+                                      [ngClass]="{'pe-none': isLoading}" (click)="deletePopup(r, 'delete-declaration')">
+                                      <i class="fa fa-trash-o" aria-hidden="true" placement="top" ngbTooltip="Remove Declaration"></i>
                                     </a>
                                   </div>
                                 </div>
@@ -764,17 +764,21 @@
                                 </div>
                                 <div class="td text-center fe-1">
                                   <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                    ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
+                                    ngbTooltip="Edit Declaration" (click)="editDeclaration(r, $event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
                                     name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"  [ngClass]="{'pe-none': isLoading}"
                                       (click)="saveDeclaration(r, $event)">
                                       <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
-                                      <span *ngIf="!isLoading">Save</span>
+                                      <i *ngIf="!isLoading" class="fa fa-floppy-o" aria-hidden="true" placement="top" ngbTooltip="Save"></i>
                                     </a>
                                     <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
-                                      (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
+                                      (click)="closeDeclaration(r, $event)">
+                                      <i class="fa fa-times" placement="top" ngbTooltip="Close Declaration"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="deletePopup(r, 'delete-declaration')">
+                                      <i class="fa fa-trash-o" aria-hidden="true" placement="top" ngbTooltip="Remove Declaration"></i>
+                                    </a>
                                   </div>
                                 </div>
                               </div>
@@ -963,18 +967,21 @@
                                   </div>
                                 </div>
                                 <div class="td text-center fe-1">
-                                  <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                    ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
+                                  <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top" ngbTooltip="Edit Declaration" (click)="editDeclaration(r, $event)"></i>
                                   <div class="d-flex align-items-center justify-content-center d-none"
                                     name="cancel-declaration">
                                     <a href="javascript:void(0)" class="text-decoration-none"  [ngClass]="{'pe-none': isLoading}"
                                       (click)="saveDeclaration(r, $event)">
                                       <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
-                                      <span *ngIf="!isLoading">Save</span>
+                                      <i *ngIf="!isLoading" class="fa fa-floppy-o" aria-hidden="true" placement="top" ngbTooltip="Save"></i>
                                     </a>
                                     <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
-                                      (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
+                                      (click)="closeDeclaration(r, $event)" >
+                                      <i class="fa fa-times" placement="top" ngbTooltip="Close Declaration"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="deletePopup(r, 'delete-declaration')">
+                                      <i class="fa fa-trash-o" aria-hidden="true" placement="top" ngbTooltip="Remove Declaration"></i>
+                                    </a>
                                   </div>
                                 </div>
                               </div>
@@ -1216,7 +1223,7 @@
                       <a href="javascript:void(0)" (click)="fireBrowser()" class="text-decoration-none"> <i
                           class="fa fa-pencil text-primary"></i></a> -->
                       <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
-                      <a href="javascript:void(0)" class="text-decoration-none" (click)="deletePopup(item)"><i class="fa fa-trash px-2 text-danger"></i></a>
+                      <a href="javascript:void(0)" class="text-decoration-none" (click)="deletePopup(item, 'deletefile')"><i class="fa fa-trash px-2 text-danger"></i></a>
                     </td>
                   </tr>
                   <tr *ngIf="viewAttachment == null || viewAttachment == ''">
@@ -1260,7 +1267,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer border-top-0 mb-2" *ngIf="viewAttachment == null || viewAttachment == ''">
+      <div class="modal-footer border-top-0 mb-2">
         <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
         <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="fireFileBrowser()"><i class="fa fa-paperclip pe-2"></i>Add Attachment</a>
         <button type="button" class="btn btn-outline-danger mx-2" (click)="closeAttachmentModal()">
@@ -1464,14 +1471,19 @@
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded">
-      <div class="modal-header bg-secondary text-light">
-        <h5 class="modal-title fw-normal" id="deleteAttachmentModalLabel">Delete Attachment</h5>
+      <div class="modal-header">
+        <h5 class="modal-title fw-normal" id="deleteAttachmentModalLabel">{{deleteType == 'deletefile' ? 'Delete Attachment' : 'Remove Declaration'}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <h5>You are trying to delete <span class="text-dark fw-bold">{{deleteFile.FileName}}</span> attachment file</h5>
-
-        <p>Please press the confirm button to delete the file permanently</p>
+        <ng-container *ngIf="deleteType == 'deletefile'">
+          <h5>You are trying to delete <span class="text-dark fw-bold">{{deleteFile.FileName}}</span> attachment file</h5>
+          <p>Please press the confirm button to delete the file permanently</p>
+        </ng-container>
+        <ng-container *ngIf="deleteType == 'delete-declaration'">
+          <h5>You are trying to delete <span class="text-dark fw-bold">{{deleteFile.ComponentFullName}}</span> component details</h5>
+          <p>Please press the confirm button to delete {{deleteFile.ComponentFullName}} record permanently</p>
+        </ng-container>
         <p><b>Note:</b> Make sure after deleting your declaration and tax amount may vary.</p>
       </div>
       <div class="modal-footer border-top-0">
