@@ -770,6 +770,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  navDeclarationTab(index: number) {
+    this.active = index;
+  }
+
   editRentedResidence(data: any) {
     if (data) {
       this.isRentedResidenceEdit = true;

@@ -117,6 +117,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.projectDetail.SectionName =  this.titleValue;
 
     let titleTag = document.createElement("div");
+    titleTag.className="fw-bold fs-4";
     titleTag.appendChild(document.createTextNode('[Add Title]'));
     let sectionTag = document.createElement("div");
     sectionTag.appendChild(document.createTextNode('[Add Section Detail]'));
