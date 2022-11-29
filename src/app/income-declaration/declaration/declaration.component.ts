@@ -380,8 +380,34 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  removeDelaration(item: any) {
+  deleteDeclaration() {
+    this.isLoading = true;
+    if (this.deleteFile) {
+      this.http.delete(`Declaration/DeleteDeclarationValue/${this.EmployeeId}/${this.deleteFile.ComponentId}`).then(res => {
+        if (res.ResponseBody) {
+          $('deleteAttachmentModal').modal('hide');
+          Toast("Declaration value is deleted successfully");
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
+  }
 
+  deleteOnlyFile() {
+    this.isLoading = true;
+    if (this.deleteFile) {
+      this.http.delete(`Declaration/DeleteDeclarationFile/${this.EmployeeId}/${this.deleteFile.FileId}`).then(res => {
+        if (res.ResponseBody) {
+          $('deleteAttachmentModal').modal('hide');
+          Toast("Declaration value is deleted successfully");
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
   }
 
   uploadDocument(item: any) {
