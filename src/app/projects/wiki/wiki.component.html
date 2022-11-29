@@ -20,7 +20,8 @@
               </div>
             </div>
             <div *ngSwitchDefault>
-                <ng-container *ngIf="projectDetail.Title != null && projectDetail.Title != ''">
+              <!-- *ngIf="projectDetail.Title != null && projectDetail.Title != ''" -->
+                <ng-container *ngIf="projectDetail.SectionDescription != null">
                     <div class="row col-12 mt-3 x_content full-height">
                         <div class="col-sm-3 col-md-2 x_panel" (click)="deactivateTag()">
                             <div class="x_header">
@@ -86,9 +87,9 @@
                                       <div class="col-md-12 mx-3">
                                         <h5 >
                                           <div class="d-flex flex-row justify-content-between">
-                                              <div contenteditable="true" (keyup)="editSubSection($event)">
+                                              <!-- <div contenteditable="true" (keyup)="editSubSection($event)">
                                                 {{wikiForm.get('WikiSection').value}}
-                                              </div>
+                                              </div> -->
                                               <div>
                                                 <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
                                                   <i class="fa fa-trash text-danger"></i>
@@ -99,7 +100,7 @@
                                               </div>
                                           </div>
                                         </h5>
-                                        <div class="content-dv overflow-none py-2 px-3" (dblclick)="enableCurrentSection($event)" name="content-container"
+                                        <div class="content-dv overflow-none py-2 px-3" (click)="enablePosition($event)" (dblclick)="enableCurrentSection($event)" name="content-container"
                                           (keypress.ctrl)="trackElement($event)" [innerHTML]="wikiForm.get('WikiSectionDetail').value">
                                         </div>
                                       </div>
@@ -111,7 +112,7 @@
                         </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="projectDetail.Title == null || projectDetail.Title == ''">
+                <ng-container *ngIf="projectDetail.SectionDescription == null || projectDetail.SectionDescription == ''">
                   <div class="my-5 py-5 text-center">
                     <h3 class="mt-5 pt-5">Please add project name and project title</h3>
                     <button class="btn btn-primary-c my-4" (click)="addTitlePopUp()"><i class="fa fa-plus pe-2"></i> Add Project Title</button>
@@ -188,12 +189,12 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="javascript:void(0)" class="nav-link" (click)="enableBulletItem()">
+          <a href="javascript:void(0)" class="nav-link" (click)="enableBulletItem($event)">
             <i class="fa fa-list-ul pe-3" aria-hidden="true"></i>Add bulleted points
           </a>
         </li>
         <li class="nav-item">
-          <a href="javascript:void(0)" class="nav-link">
+          <a href="javascript:void(0)" class="nav-link" (click)="addParagraphAbove()">
             <i class="fa fa-text-height pe-3" aria-hidden="true"></i>Insert paragraph above
           </a>
         </li>
@@ -202,11 +203,11 @@
             <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Insert paragraph below
           </a>
         </li>
-        <!-- <li class="nav-item">
-          <a href="javascript:void(0)" class="nav-link" (click)="pasteCopiedContent($event)">
-            <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Paste screenshot
+        <li class="nav-item">
+          <a href="javascript:void(0)" class="nav-link" (click)="addHorizontalLine()">
+            <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Add horizontal line
           </a>
-        </li> -->
+        </li>
         <li class="nav-item">
           <a href="javascript:void(0)" (click)="closePopOver()" class="nav-link">
             <i class="fa fa-external-link pe-3" aria-hidden="true"></i>Exit

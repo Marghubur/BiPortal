@@ -27,6 +27,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   isSectionEdited: boolean = true;
   sectionIndex: number = -1;
   activeEvent: any = null;
+  targetElem: HTMLElement = null;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -49,6 +50,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   manipulateSection(e: any){
+    this.targetElem = e.target;
     e.preventDefault();
     this.popover.classList.remove('d-none');
     this.popover.setAttribute('style', `left: ${e.pageX}px; top: ${e.pageY}px`);
@@ -86,7 +88,11 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.editableFlag = false;
     this.http.get(`Project/GetAllWiki/${this.projectId}`).then(res => {
       if (res.ResponseBody) {
-        let data = JSON.parse(res.ResponseBody.DocumentationDetail);
+        let data = res.ResponseBody;
+        if (data.DocumentationDetail != null && data.DocumentationDetail != '[]')
+          this.projectDetail.SectionDescription = res.ResponseBody.DocumentationDetail;
+        else
+          this.projectDetail.SectionDescription = null;
         this.projectDetail.Title = data.Title;
         this.editableFlag = false;
         Toast("Wiki page loaded successfully.");
@@ -109,9 +115,31 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.titleValue = '';
     this.titleValue = '[Add Section Title]';
     this.projectDetail.SectionName =  this.titleValue;
-    this.projectDetail.SectionDescription = '[Add Section Detail]';
+
+    let titleTag = document.createElement("div");
+    titleTag.appendChild(document.createTextNode('[Add Title]'));
+    let sectionTag = document.createElement("div");
+    sectionTag.appendChild(document.createTextNode('[Add Section Detail]'));
+    let value = titleTag.outerHTML + sectionTag.outerHTML;
+    this.projectDetail.SectionDescription = value;
     this.initForm();
     this.titleValue = '';
+    // if (this.target == null) {
+    //   let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
+    //   if (target)
+    //     this.target = target;
+    //   else
+    //     ErrorToast("Please select section first");
+    // }
+    // this.target.appendChild(titleTag);
+    // this.target.appendChild(sectionTag);
+    // this.closePopOver();
+  }
+
+  addHorizontalLine() {
+    let tag = document.createElement("hr");
+    tag.className="w-100";
+    this.targetElem.insertAdjacentElement("afterend", tag);
     this.closePopOver();
   }
 
@@ -208,7 +236,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     let tag = document.createElement("p");
     tag.className="mb-0";
     tag.appendChild(document.createTextNode('YOUR TEXT'));
-    this.target.appendChild(tag);
+    this.targetElem.insertAdjacentElement('afterend', tag);
     this.target.focus();
     this.selectedText(tag);
     this.closePopOver();
@@ -225,9 +253,10 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     let tag = document.createElement("p");
     tag.className="mb-0";
     tag.appendChild(document.createTextNode('YOUR TEXT'));
-    this.target.appendChild(tag);
+    this.targetElem.insertAdjacentElement('beforebegin', tag);
     this.target.focus();
     this.selectedText(tag);
+    this.closePopOver();
   }
 
   enableListItem() {
@@ -249,7 +278,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     li.appendChild(anc);
     ol.appendChild(li);
     dv.appendChild(ol);
-    this.target.appendChild(dv);
+    this.targetElem.appendChild(dv);
     this.closePopOver();
     anc.focus();
     this.selectedText(anc);
@@ -268,7 +297,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     let li = document.createElement("li");
     ul.appendChild(li);
     dv.appendChild(ul);
-    this.target.appendChild(dv);
+    this.targetElem.appendChild(dv);
     this.closePopOver();
     this.target.focus();
   }
@@ -300,20 +329,17 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  enablePosition(e: any) {
+    this.targetElem = e.target;
+  }
+
   addImage() {
     let tag = document.createElement('div');
     let img = document.createElement('img');
     img.setAttribute('src', this.imageUrl);
     img.setAttribute('style', 'width:44vw;')
     tag.appendChild(img);
-    if (this.target == null) {
-      let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
-      if (target)
-        this.target = target;
-      else
-        ErrorToast("Please select section first");
-    }
-    this.target.appendChild(tag);
+    this.targetElem.appendChild(tag);
     $('#addLinkModal').modal('hide');
   }
 
@@ -322,6 +348,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     e.preventDefault();
     this.editableFlag = false;
     let tags = document.querySelector('div[name="content-container"]').innerHTML;
+    //let tags = document.getElementById('main-container').innerHTML;
     this.projectDetail.SectionDescription= tags;
     this.projectDetail.ProjectId = this.projectId;
     this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
