@@ -39,7 +39,7 @@
 
 .nav-link.active {
   color: #222;
-  background-color: #dcefff !important;
+  font-weight: 600 !important;
   border-radius: 0px !important;
 }
 
@@ -141,4 +141,8 @@ textarea {
 .primary-text {
   color: var(--primary-dark);
   cursor: pointer;
+}
+
+.custom-text-color {
+  color: #bcbcbc ;
 }

@@ -125,7 +125,7 @@
               <div *ngIf="SectionIsReady" [ngClass]="{'d-none': !SectionIsReady}">
                 <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
                   <li [ngbNavItem]="1">
-                    <a ngbNavLink>My Declaration</a>
+                    <a ngbNavLink class="custom-text-color">My Declaration</a>
                     <ng-template ngbNavContent>
                       <ng-container>
                         <h5 class="text-dark pt-3">My Declarations</h5>
@@ -173,10 +173,12 @@
                           <div class="t-body">
                             <ng-container
                               *ngIf="employeeDeclaration.Declarations != null && employeeDeclaration.Declarations.length > 0">
-                              <div class="tr py-3" *ngFor="let declaration of employeeDeclaration.Declarations">
+                              <div class="tr py-3" *ngFor="let declaration of employeeDeclaration.Declarations; let i = index;">
                                 <div class="td align-middle fe-3">
                                   <div class="cell-wrapper">
-                                    {{declaration.DeclarationName}}
+                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': active == (i+1)}" class="text-muted" (click)="navDeclarationTab(i+1)">
+                                      {{declaration.DeclarationName}}
+                                    </a>
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-3">
@@ -310,7 +312,7 @@
                   </li>
 
                   <li [ngbNavItem]="2">
-                    <a ngbNavLink>1.5 Lac Exemptions</a>
+                    <a ngbNavLink class="custom-text-color">1.5 Lac Exemptions</a>
                     <ng-template ngbNavContent>
                       <ng-container>
                         <div class="row justify-content-between my-3">
@@ -596,7 +598,7 @@
                   </li>
 
                   <li [ngbNavItem]="3">
-                    <a ngbNavLink>Other Exemptions</a>
+                    <a ngbNavLink class="custom-text-color">Other Exemptions</a>
                     <ng-template ngbNavContent>
                       <ng-container>
                         <div class="row justify-content-between mt-3">
@@ -804,7 +806,7 @@
                   </li>
 
                   <li [ngbNavItem]="4">
-                    <a ngbNavLink>Tax Saving Allowances</a>
+                    <a ngbNavLink class="custom-text-color">Tax Saving Allowances</a>
                     <ng-template ngbNavContent>
                       <ng-container>
                         <div class="row justify-content-between mt-3 mb-2">
@@ -1006,7 +1008,7 @@
                   </li>
 
                   <li [ngbNavItem]="5">
-                    <a ngbNavLink>House Property</a>
+                    <a ngbNavLink class="custom-text-color">House Property</a>
                     <ng-template ngbNavContent>
                       <ng-container>
                         <h5 class="text-dark">House Property</h5>
@@ -1124,7 +1126,7 @@
                   </li>
 
                   <li [ngbNavItem]="6">
-                    <a ngbNavLink>Income From Other Sources</a>
+                    <a ngbNavLink class="custom-text-color">Income From Other Sources</a>
                     <ng-template ngbNavContent>
                       <ng-container>
                         <h5 class="text-dark">Income From Other Sources</h5>
