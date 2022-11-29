@@ -673,6 +673,7 @@ export class Files {
   FileExtension: string = "";
   FilePath: string = "";
   FileUid: number = 0;
+  FileId: number = 0;
   ProfileUid: string = "";
   DocumentId: number = 0;
   Mobile: string = "";
