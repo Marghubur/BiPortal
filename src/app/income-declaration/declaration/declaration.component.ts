@@ -383,9 +383,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   deleteDeclaration() {
     this.isLoading = true;
     if (this.deleteFile) {
-      this.http.delete(`Declaration/DeleteDeclarationValue/${this.EmployeeId}/${this.deleteFile.ComponentId}`).then(res => {
+      this.http.delete(`Declaration/DeleteDeclarationValue/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.ComponentId}`).then(res => {
         if (res.ResponseBody) {
-          $('deleteAttachmentModal').modal('hide');
+          this.bindData(res.ResponseBody);
+          $('#deleteAttachmentModal').modal('hide');
           Toast("Declaration value is deleted successfully");
         }
         this.isLoading = false;
@@ -398,10 +399,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   deleteOnlyFile() {
     this.isLoading = true;
     if (this.deleteFile) {
-      this.http.delete(`Declaration/DeleteDeclarationFile/${this.EmployeeId}/${this.deleteFile.FileId}`).then(res => {
+      this.http.delete(`Declaration/DeleteDeclarationFile/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.FileId}/${this.attachmentForDeclaration}`).then(res => {
         if (res.ResponseBody) {
-          $('deleteAttachmentModal').modal('hide');
-          Toast("Declaration value is deleted successfully");
+          $('#deleteAttachmentModal').modal('hide');
+          Toast("Declaration file is deleted successfully");
         }
         this.isLoading = false;
       }).catch(e => {
@@ -418,6 +419,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.viewAttachment = '';
       this.slectedDeclarationnFile = [];
       if(item.UploadedFileIds != null) {
+        if (isNaN(item.UploadedFileIds[0]))
+          item.UploadedFileIds = JSON.parse(item.UploadedFileIds)
         let fileIds = item.UploadedFileIds as Array<number>;
         if (fileIds.length > 0 && this.declarationFiles.length > 0) {
           fileIds.map(x => {
