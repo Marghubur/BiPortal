@@ -220,9 +220,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.employeeEmail = response.Email;
 
         if(this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
-          this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
-          this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
-          this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
+          // this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
+          // this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
+          // this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
+          let housingProperty = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HP");
           for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
             let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
             switch (component) {
@@ -236,7 +237,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.TaxSavingAlloance);
                 break;
               case "House Property":
-                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = (this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP')).length;
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(housingProperty);
                 break;
             }
           }
@@ -260,25 +261,25 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  addSubmittedFileIds(item: any):any {
-    let i = 0;
-    while(i < item.length) {
-      let currentDeclaration: any = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item[i].ComponentId);
-      if (currentDeclaration.length > 0)
-      item[i].UploadedFileIds = [];
-      for (let index = 0; index < currentDeclaration.length; index++) {
-        item[i].UploadedFileIds.push(currentDeclaration[index].FileId);
-      }
-      i++;
-    }
-    return item;
-  }
+  // addSubmittedFileIds(item: any):any {
+  //   let i = 0;
+  //   while(i < item.length) {
+  //     let currentDeclaration: any = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item[i].ComponentId);
+  //     if (currentDeclaration.length > 0)
+  //     item[i].UploadedFileIds = [];
+  //     for (let index = 0; index < currentDeclaration.length; index++) {
+  //       item[i].UploadedFileIds.push(currentDeclaration[index].FileId);
+  //     }
+  //     i++;
+  //   }
+  //   return item;
+  // }
 
   calculatedTotalUploadFile(item: any):number {
     let totalUploadedFile = 0;
-    let elem = item.filter(x => x.UploadedFileIds != null);
-    if (item.length > 0) {
-      totalUploadedFile = elem.map(x => x.UploadedFileIds.length).reduce((acc, curr) => {return acc + curr;}, 0)
+    let elem = item.filter(x => x.UploadedFileIds != null && x.UploadedFileIds != '[]');
+    if (elem.length > 0) {
+      totalUploadedFile = elem.map(x => JSON.parse(x.UploadedFileIds).length).reduce((acc, curr) => {return acc + curr;}, 0)
     }
     return totalUploadedFile;
   }
@@ -357,7 +358,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.presentRow.querySelector('a[name="upload-proof"]').classList.remove('pe-none', 'text-decoration-none', 'text-muted');
     this.presentRow.querySelector('a[name="upload-proof"]').classList.add('pe-auto', 'fw-bold', 'text-primary-c');
     this.presentRow.querySelector('input[name="DeclaratedValue"]').focus();
-    if(item.UploadedFileIds > 0) {
+    if(item.UploadedFileIds != null && item.UploadedFileIds != '[]') {
       this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
       let tag = document.createElement("i");
       tag.classList.add("fa", "fa-check-circle", "text-success", "fa-lg", "pe-2");
@@ -402,6 +403,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.http.delete(`Declaration/DeleteDeclarationFile/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.FileId}/${this.attachmentForDeclaration}`).then(res => {
         if (res.ResponseBody) {
           $('#deleteAttachmentModal').modal('hide');
+          $('#addAttachmentModal').modal('hide');
+          $('#housingPropertyFileModal').modal('hide');
+          $('#rentedResidenceModal').modal('hide');
+          this.bindData(res.ResponseBody);
           Toast("Declaration file is deleted successfully");
         }
         this.isLoading = false;
@@ -782,9 +787,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.isRentedResidenceEdit = true;
       this.FileDocumentList = [];
       this.hPLetterList = [];
-      let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP');
-      this.housingPropertyRentFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
-      this.housingPropertyLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");
+      this.attachmentForDeclaration = 'HP';
+      let hosuingProp = this.employeeDeclaration.SalaryComponentItems.find (x => x.ComponentId == "HP");
+      if (hosuingProp != null && hosuingProp.UploadedFileIds != null && hosuingProp.UploadedFileIds != '[]') {
+        let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP');
+        this.housingPropertyRentFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
+        this.housingPropertyLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");
+      }
       this.housingPropertyDetail = data;
       this.rentedResidence();
       $('#rentedResidenceModal').modal('show');
@@ -800,7 +809,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   deleteHousingPropertyFile(userFile: any) {
-
+    this.deletePopup(userFile, 'deletefile')
   }
 
   showrentedDetail() {
