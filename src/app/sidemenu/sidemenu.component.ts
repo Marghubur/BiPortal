@@ -77,6 +77,7 @@ export class SidemenuComponent implements OnInit {
 
   BuildMenu(menu: any) {
     this.Menu = [];
+    let isActive = false;
     if(menu) {
       let parentItems = menu.filter(x => x.Childs == null);
       if(parentItems.length > 0) {
@@ -85,15 +86,17 @@ export class SidemenuComponent implements OnInit {
         let i = 0;
         let index = 0;
         while(i < parentItems.length) {
+          isActive = false;
           menuItems = menu.filter(x => x.Childs === parentItems[i].Catagory);
           index = menuItems.findIndex(x => x.Link === this.MenuName);
           if(index >= 0) {
-            this.CatagoryPosition = index;
+            isActive = true;
           }
           filteredMenu.push({
             Name: parentItems[i].Catagory,
             ParentDetail: parentItems[i],
-            Value: menuItems
+            Value: menuItems,
+            IsActive: isActive
           });
 
           index = -1;
