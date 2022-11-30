@@ -223,6 +223,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           // this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
           // this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
           // this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
+          let housingProperty = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HP");
           for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
             let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
             switch (component) {
@@ -236,7 +237,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.TaxSavingAlloance);
                 break;
               case "House Property":
-                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = (this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP')).length;
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(housingProperty);
                 break;
             }
           }
@@ -401,9 +402,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     if (this.deleteFile) {
       this.http.delete(`Declaration/DeleteDeclarationFile/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.FileId}/${this.attachmentForDeclaration}`).then(res => {
         if (res.ResponseBody) {
-          this.bindData(res.ResponseBody);
           $('#deleteAttachmentModal').modal('hide');
           $('#addAttachmentModal').modal('hide');
+          $('#housingPropertyFileModal').modal('hide');
+          $('#rentedResidenceModal').modal('hide');
+          this.bindData(res.ResponseBody);
           Toast("Declaration file is deleted successfully");
         }
         this.isLoading = false;
@@ -784,9 +787,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.isRentedResidenceEdit = true;
       this.FileDocumentList = [];
       this.hPLetterList = [];
-      let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP');
-      this.housingPropertyRentFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
-      this.housingPropertyLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");
+      this.attachmentForDeclaration = 'HP';
+      let hosuingProp = this.employeeDeclaration.SalaryComponentItems.find (x => x.ComponentId == "HP");
+      if (hosuingProp != null && hosuingProp.UploadedFileIds != null && hosuingProp.UploadedFileIds != '[]') {
+        let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP');
+        this.housingPropertyRentFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
+        this.housingPropertyLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");
+      }
       this.housingPropertyDetail = data;
       this.rentedResidence();
       $('#rentedResidenceModal').modal('show');
@@ -802,7 +809,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   deleteHousingPropertyFile(userFile: any) {
-
+    this.deletePopup(userFile, 'deletefile')
   }
 
   showrentedDetail() {
