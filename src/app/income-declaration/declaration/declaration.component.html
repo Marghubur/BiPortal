@@ -176,7 +176,7 @@
                               <div class="tr py-3" *ngFor="let declaration of employeeDeclaration.Declarations; let i = index;">
                                 <div class="td align-middle fe-3">
                                   <div class="cell-wrapper">
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': active == (i+1)}" class="text-muted" (click)="navDeclarationTab(i+1)">
+                                    <a href="javascript:void(0)" class="text-muted" (click)="navDeclarationTab(i+2)">
                                       {{declaration.DeclarationName}}
                                     </a>
                                   </div>
@@ -523,7 +523,7 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
-                                    <div *ngIf="r.UploadedFileIds != null">
+                                    <div *ngIf="r.UploadedFileIds != null && r.UploadedFileIds != '[]'">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
@@ -533,7 +533,7 @@
                                         </div>
                                       </a>
                                     </div>
-                                    <div *ngIf="r.UploadedFileIds == null">
+                                    <div *ngIf="r.UploadedFileIds == null || r.UploadedFileIds == '[]'">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <i class="fa fa-paperclip pe-2"></i>Not Upload
@@ -729,7 +729,7 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
-                                    <div *ngIf="r.UploadedFileIds != null">
+                                    <div *ngIf="r.UploadedFileIds != null && r.UploadedFileIds != '[]'">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
@@ -738,7 +738,7 @@
                                         </div>
                                       </a>
                                     </div>
-                                    <div *ngIf="r.UploadedFileIds == null">
+                                    <div *ngIf="r.UploadedFileIds == null || r.UploadedFileIds == '[]'">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <i class="fa fa-paperclip pe-2"></i>Not Upload
@@ -940,7 +940,7 @@
                                 </div>
                                 <div class="td align-middle fe-1">
                                   <div class="cell-wrapper">
-                                    <div *ngIf="r.UploadedFileIds != null">
+                                    <div *ngIf="r.UploadedFileIds != null && r.UploadedFileIds != '[]'">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <div class="d-flex align-items-center">
@@ -949,7 +949,7 @@
                                         </div>
                                       </a>
                                     </div>
-                                    <div *ngIf="r.UploadedFileIds == null">
+                                    <div *ngIf="r.UploadedFileIds == null || r.UploadedFileIds == '[]'">
                                       <a href="javascript:void(0)" name="upload-proof"
                                         class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
                                         <i class="fa fa-paperclip pe-2"></i><span>Not Upload</span>
