@@ -60,6 +60,47 @@
                                     <!-- <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-dark" (click)="addsection()">
                                       <i class="fa fa-plus text-dark" ></i>
                                     </a> -->
+                                    <div ngbDropdown class="d-inline-block">
+                                      <a href="javascript:void(0)" id="dropdownBasic1" ngbDropdownToggle class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Font Size" class="fs-6 px-2">
+                                        <i class="fa fa-font" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                      </a>
+                                      <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                        <button ngbDropdownItem>
+                                          <a class="dropdown-item fw-bold" href="javascript:void(0)"
+                                            (click)="fontSize($event, 'fs-3')">Font Size 1</a>
+                                        </button>
+                                        <button ngbDropdownItem>
+                                          <a class="dropdown-item fw-bold" href="javascript:void(0)"
+                                            (click)="fontSize($event, 'fs-4')">Font Size 2</a>
+                                        </button>
+                                        <button ngbDropdownItem>
+                                          <a class="dropdown-item fw-bold" href="javascript:void(0)"
+                                            (click)="fontSize($event, 'fs-5')">Font Size 3</a>
+                                        </button>
+                                        <button ngbDropdownItem>
+                                          <a class="dropdown-item fw-bold" href="javascript:void(0)"
+                                            (click)="fontSize($event, 'fs-6')">Font Size 4</a>
+                                        </button>
+                                      </div>
+                                    </div>
+                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Right" class="fs-6 px-2" (click)="textAlignment($event, 'right')">
+                                      <i class="fa fa-align-right" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Center" class="fs-6 px-2" (click)="textAlignment($event, 'center')">
+                                      <i class="fa fa-align-center" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Left" class="fs-6 px-2" (click)="textAlignment($event, 'left')">
+                                      <i class="fa fa-align-left" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Bold" class="fs-6 px-2" (click)="textFont($event, 'bold')">
+                                      <i class="fa fa-bold" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Italic" class="fs-6 px-2" (click)="textFont($event, 'italic')">
+                                      <i class="fa fa-italic" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Underline" class="fs-6 px-2" (click)="textFont($event, 'underline')">
+                                      <i class="fa fa-underline" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                    </a>
                                     <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image" class="fs-6 px-2" (click)="addLinkPopUp()">
                                         <i class="fa fa-picture-o" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                     </a>
@@ -87,17 +128,17 @@
                                       <div class="col-md-12 mx-3">
                                         <h5 >
                                           <div class="">
-                                              <!-- <div contenteditable="true" (keyup)="editSubSection($event)">
-                                                {{wikiForm.get('WikiSection').value}}
-                                              </div> -->
-                                              <div class="text-end">
-                                                <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
-                                                  <i class="fa fa-trash text-danger"></i>
-                                                </a> -->
-                                                <a href="javascript:void(0)" class="text-decoration-none" (click)="enableSection()">
-                                                  <i class="fa fa-pencil ps-3 blur-icon"></i>
-                                                </a>
-                                              </div>
+                                            <!-- <div contenteditable="true" (keyup)="editSubSection($event)">
+                                              {{wikiForm.get('WikiSection').value}}
+                                            </div> -->
+                                            <div class="text-end">
+                                              <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
+                                                <i class="fa fa-trash text-danger"></i>
+                                              </a> -->
+                                              <a href="javascript:void(0)" class="text-decoration-none" (click)="enableSection()">
+                                                <i class="fa fa-pencil ps-3 blur-icon"></i>
+                                              </a>
+                                            </div>
                                           </div>
                                         </h5>
                                         <div class="content-dv overflow-none py-2 px-3" (click)="enablePosition($event)" (dblclick)="enableCurrentSection($event)" name="content-container"
@@ -179,7 +220,7 @@
 
 <!-- Right click event popover -->
 
-<div class="position-fixed c-po d-none" id="popoverTemplate">
+<div class="position-fixed c-po d-none" id="popoverTemplate" >
   <nav class ="navbar">
     <ul class ="nav navbar-nav">
       <ng-container *ngIf="target != null">
