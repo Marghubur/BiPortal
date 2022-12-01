@@ -28,6 +28,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   sectionIndex: number = -1;
   activeEvent: any = null;
   targetElem: HTMLElement = null;
+  pannelstyle: any = {};
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -53,7 +54,19 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.targetElem = e.target;
     e.preventDefault();
     this.popover.classList.remove('d-none');
-    this.popover.setAttribute('style', `left: ${e.pageX}px; top: ${e.pageY}px`);
+    let menutop = 0;
+    let menuleft = 0;
+    if (e.pageY >= (window.innerHeight - 200))
+      menutop= window.innerHeight - 250;
+    else
+      menutop = e.pageY;
+
+    if (e.pageX > window.innerWidth - 200)
+      menuleft=  window.innerWidth - 300;
+    else
+      menuleft = e.pageX;
+    this.popover.setAttribute('style', `left: ${menuleft}px; top: ${menutop}px`);
+    console.log(e.pageX, e.pageY);
     if (this.target == null) {
       let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
       if (target)
@@ -162,6 +175,76 @@ export class WikiComponent implements OnInit, AfterViewChecked {
         this.closePopOver();
         break;
     }
+  }
+
+  textAlignment(e: any, align: string) {
+    e.stopPropagation();
+    e.preventDefault();
+    let value = this.targetElem;
+    if (value.classList.contains('text-end'))
+      value.classList.remove("text-end");
+    else if (value.classList.contains('text-start'))
+      value.classList.remove("text-start");
+    else if (value.classList.contains('text-center'))
+      value.classList.remove("text-center");
+
+    if (align == 'right')
+      value.classList.add("text-end");
+    else if (align == 'left')
+      value.classList.add("text-start");
+    else if (align == 'center')
+      value.classList.add("text-center");
+
+    this.target.focus();
+  }
+
+  textFont(e: any, type: string) {
+    e.stopPropagation();
+    e.preventDefault();
+    let value = this.targetElem;
+    if (type == 'bold') {
+      if (value.classList.contains('fw-bold'))
+        value.classList.remove("fw-bold");
+      else
+      value.classList.add("fw-bold");
+    }
+    else if (type == 'italic') {
+      if (value.classList.contains('fst-italic'))
+        value.classList.remove("fst-italic");
+      else
+        value.classList.add("fst-italic");
+    }
+    else if (type == 'underline') {
+      if (value.classList.contains('text-decoration-underline'))
+        value.classList.remove("text-decoration-underline");
+      else
+        value.classList.add("text-decoration-underline");
+    }
+    this.target.focus();
+  }
+
+  fontSize(e: any, type: string) {
+    e.stopPropagation()
+    e.preventDefault();
+    let value = this.targetElem;
+    if (value.classList.contains('fs-6'))
+      value.classList.remove("fs-6");
+    else if (value.classList.contains('fs-5'))
+      value.classList.remove("fs-5");
+    else if (value.classList.contains('fs-4'))
+      value.classList.remove("fs-4");
+    else if (value.classList.contains('fs-3'))
+      value.classList.remove("fs-3");
+
+    if (type == 'fs-6')
+      value.classList.add("fs-6");
+    else if (type == 'fs-5')
+      value.classList.add("fs-5");
+    else if (type == 'fs-4')
+      value.classList.add("fs-4");
+    else if (type == 'fs-3')
+      value.classList.add("fs-3");
+    this.target.focus();
   }
 
   // addsection() {
@@ -376,11 +459,13 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       this.target.setAttribute('contenteditable', 'false');
       this.target.classList.remove('enable-section', 'py-2');
       this.target = null;
+      this.targetElem = null;
     } else {
       let elem = document.querySelectorAll('div[name="content-container"]');
       elem[0].setAttribute('contenteditable', 'false');
       elem[0].classList.remove('enable-section', 'py-2');
       this.target = null;
+      this.targetElem = null;
     }
   }
 

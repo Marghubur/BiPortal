@@ -1325,12 +1325,13 @@
                 <input type="text" formControlName="City" placeholder="City" class="form-control" oninput="this.value = this.value.toUpperCase()">
               </div>
               <div class="col-md-6 mt-3">
-                <label class="form-label">Total Rent</label>
+                <label class="form-label">Monthly Rent</label>
                 <div class="form-group has-search">
                   <span class="fa fa-inr form-control-feedback"></span>
                   <input type="text" class="form-control" formControlName="TotalRent" placeholder="Total Rent"
                     OnlyNumber="9">
                 </div>
+                <small>Total Rent: <i class="fa fa-inr pe-1" aria-hidden="true"></i>{{rentResidenceForm.get('TotalRent').value * 12 | number: '1.2-2'}}</small>
               </div>
             </div>
             <div class="mt-3">

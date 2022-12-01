@@ -129,7 +129,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    $('[data-bs-toggle = "tooltip"]').tooltip();
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('dispose');
+    });
   }
 
   filterDeduction(e: any, type: string) {
