@@ -94,7 +94,7 @@
                           <ul ngbNav #nav="ngbNav" [ngClass]="{'disabled-li': Companys.length == 0}"
                             [(activeId)]="groupActiveId" class="nav-tabs">
                             <li [ngbNavItem]="1">
-                              <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('PR')">
+                              <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('PR')">
                                 Payroll <i class="fa fa-inr px-2" aria-hidden="true"></i>
                               </a>
                               <ng-template ngbNavContent>
@@ -286,7 +286,7 @@
                               </ng-template>
                             </li>
                             <li [ngbNavItem]="2">
-                              <a ngbNavLink href="javascript:void(0)" (click)="changeMdneu('CS')">Company Settings <i
+                              <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('CS')">Company Settings <i
                                   class="fa fa-cog px-2"></i></a>
                               <ng-template ngbNavContent>
                                 <div *ngIf="menuItem.CS">
@@ -398,6 +398,90 @@
                                 </div>
                               </ng-template>
                             </li>
+                            <li [ngbNavItem]="3">
+                              <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('')">
+                                PTax Setting <i class="fa fa-money px-2" aria-hidden="true"></i>
+                              </a>
+                              <ng-template ngbNavContent>
+                                <ng-container *ngIf="isPageReady">
+                                  <div class="col-12 full-v main-container">
+                                    <div class="x_header">
+                                      <div class="x_header_title d-flex justify-content-between">
+                                        <h2>PTax<small>add or update professional tax deatils</small></h2>
+                                        <button class="btn btn-primary-c ms-auto" *ngIf="!isEditable && isPageReady" (click)="editPtax()"><i class="fa fa-pencil pe-2"></i> Edit PTax</button>
+                                      </div>
+                                    </div>
+                                    <form [formGroup]="ptaxForm" *ngIf="ptaxForm">
+                                      <table class="table">
+                                        <thead>
+                                          <tr>
+                                            <th>State</th>
+                                            <th>Min income per month</th>
+                                            <th>Max income per month</th>
+                                            <th>Tax Rate/Tax Amount (p.m.)</th>
+                                            <th>Gender</th>
+                                            <th>Action</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <ng-container formArrayName="PtaxSlabs">
+                                            <tr *ngFor="let item of ptaxSalab.controls; let i = index" [formGroupName]="i">
+                                              <td>
+                                                <input type="text" [ngClass]="{'border-0': !isEditable}" [readonly]="!isEditable" placeholder="State Name" class="form-control" formControlName="StateName"  oninput="this.value = this.value.toUpperCase()"
+                                                >
+                                              </td>
+                                              <td>
+                                                <input type="number" [ngClass]="{'border-0': !isEditable}" [readonly]="!isEditable" placeholder="Minimum income per month" class="form-control" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MinIncome">
+                                              </td>
+                                              <td>
+                                                <input type="number" [ngClass]="{'border-0': !isEditable}" [readonly]="!isEditable" placeholder="Maximum income per month" class="form-control" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MaxIncome" (blur)="checkToAmount($event, i)">
+                                              </td>
+                                              <td>
+                                                <input type="number" [ngClass]="{'border-0': !isEditable}" [readonly]="!isEditable" placeholder="Tax Rate/Tax Amount (p.m.)" class="form-control" formControlName="TaxAmount" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                                              </td>
+                                              <td>
+                                                <select class="form-select" formControlName="Gender" [disabled]="!isEditable" [ngClass]="{'border-0': !isEditable}">
+                                                  <option value="0">All</option>
+                                                  <option value="1">Male</option>
+                                                  <option value="2">Female</option>
+                                                </select>
+                                              </td>
+                                              <td class="align-middle">
+                                                <a href="javascript:void(0)" class="text-decoration-none pe-2" [ngClass]="{'pe-none': !isEditable}" (click)="removePTaxSlab(i, item)">
+                                                  <i class="fa fa-trash-o fa-lg text-danger" [ngClass]="{'text-muted-c': !isEditable}"></i>
+                                                </a>
+                                                <a *ngIf="ptaxSalab.controls.length == i+1" [ngClass]="{'pe-none': !isEditable}" href="javascript:void(0)" class="text-decoration-none" (click)="addPTaxSlab()">
+                                                  <i class="fa fa-plus-square-o fa-lg text-success" [ngClass]="{'text-muted-c': !isEditable}"></i>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                          </ng-container>
+                                        </tbody>
+                                      </table>
+                                      <div class="text-end" *ngIf="isEditable">
+                                        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="savePtaxSlab()">
+                                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-send-o': !isLoading}"></i>
+                                          {{ isLoading ? 'Wait' : 'Save' }}
+                                        </button>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </ng-container>
+                                <ng-container *ngIf="!isPageReady">
+                                  <div class="py-5 my-5">
+                                    <h6 class="fw-bold fs-3 text-center text-dark">PTax deatils are loading</h6>
+                                    <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                                      <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                                        <img src="assets/images/cog.gif" alt="" />
+                                        <h6 class="modal-title title-message">
+                                          Please Wait ........
+                                        </h6>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </ng-container>
+                              </ng-template>
+                            </li>
                           </ul>
                         <div>
                           <div [ngbNavOutlet]="nav" class="col-12 p-0 mt-2"></div>
@@ -462,7 +546,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form [formGroup]="companyGroupForm">
+            <form [formGroup]="companyGroupForm" *ngIf="companyGroupForm">
               <div class="row col-md-12">
                 <div class="col-md-6 mt-3">
                   <label for="" class="form-label">COMPANY NAME</label>

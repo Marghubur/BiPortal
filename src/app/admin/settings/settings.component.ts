@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -34,6 +34,10 @@ export class SettingsComponent implements OnInit {
   currentCompnay: CompanyGroup = null;
   isPageLoading: boolean = false;
   organizationId: number = 0;
+  ptaxForm: FormGroup;
+  ptaxSlab: Array<PTax> = [];
+  isEditable: boolean = false;
+  currentPTax: PTax = new PTax();
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -49,7 +53,6 @@ export class SettingsComponent implements OnInit {
       EX: false
     }
     this.loadData();
-    this.initForm();
   }
 
   get f() {
@@ -82,7 +85,7 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  changeMdneu(code: string) {
+  changeMenu(code: string) {
     this.menuItem = {
       CS: false,
       PR: false,
@@ -135,6 +138,8 @@ export class SettingsComponent implements OnInit {
           this.currentCompnay = this.Companys[0];
           this.organizationId = this.currentCompnay.OrganizationId;
           this.CompanyId = this.currentCompnay.CompanyId;
+          this.initForm();
+          this.loadPTax();
           Toast("Compnay list loaded successfully");
           this.isPageReady = true;
           this.isPageLoading = true;
@@ -236,6 +241,137 @@ export class SettingsComponent implements OnInit {
       ErrorToast("Please select a company.")
     }
   }
+
+  initPtax() {
+    this.ptaxForm = this.fb.group({
+      PtaxSlabs: this.buildPtaxSlab()
+    })
+  }
+
+  buildPtaxSlab(): FormArray{
+    let data = this.ptaxSlab;
+    let dataArray: FormArray = this.fb.array([]);
+    if (data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          StateName: new FormControl(data[i].StateName),
+          TaxAmount: new FormControl(data[i].TaxAmount),
+          Gender: new FormControl(data[i].Gender),
+          CompanyId: new FormControl(data[i].CompanyId),
+          PtaxSlabId: new FormControl(data[i].PtaxSlabId),
+          MinIncome: new FormControl(data[i].MinIncome),
+          MaxIncome: new FormControl(data[i].MaxIncome),
+        }))
+        i++;
+      }
+    } else {
+      dataArray.push(this.createPtaxSlab())
+    }
+    return dataArray;
+  }
+
+  createPtaxSlab(): FormGroup {
+    return this.fb.group({
+      StateName: new FormControl(this.currentPTax.StateName, [Validators.required]),
+      MinIncome: new FormControl(this.currentPTax.MinIncome, [Validators.required]),
+      MaxIncome: new FormControl(this.currentPTax.MaxIncome, [Validators.required]),
+      TaxAmount: new FormControl(this.currentPTax.TaxAmount, [Validators.required]),
+      Gender: new FormControl(this.currentPTax.Gender, [Validators.required]),
+      PtaxSlabId: new FormControl(this.currentPTax.PtaxSlabId),
+      CompanyId: new FormControl(this.currentCompnay.CompanyId)
+    })
+  }
+
+  get ptaxSalab() {
+    return this.ptaxForm.get('PtaxSlabs') as FormArray;
+  }
+
+  addPTaxSlab() {
+    let item = this.ptaxForm.get('PtaxSlabs') as FormArray;
+    let value = item.value[item.length - 1];
+    if (value.MaxIncome > value.MinIncome && value.MaxIncome > 0) {
+      this.currentPTax = new PTax();
+      this.currentPTax.MinIncome = value.MaxIncome + 1;
+      this.currentPTax.StateName = value.StateName;
+      item.push(this.createPtaxSlab());
+    } else {
+      ErrorToast("PTax slab minimum value is greater than maximum value");
+    }
+  }
+
+  removePTaxSlab(index: number, item: any) {
+    let value = this.ptaxForm.get('PtaxSlabs') as FormArray;
+    let ptaxslabId = item.value.PtaxSlabId;
+    if (value.length > 1) {
+      if (ptaxslabId > 0) {
+        this.http.delete(`TaxRegime/DeletePTaxSlab/${ptaxslabId}`).then(res => {
+          if (res.ResponseBody) {
+            Toast("Ptax slab deleted successfully.");
+          }
+        }).catch(e => {
+          ErrorToast(e.error.HttpStatusMessage);
+        })
+      }
+      value.removeAt(index);
+    }
+    if (index > 0) {
+      let income = (value.value[index-1].MaxIncome) + 1;
+      (<FormArray>value).controls[index].get('MinIncome').setValue(income);
+    }
+  }
+
+  checkToAmount(e: any, i: number) {
+    let item = this.ptaxForm.get('PtaxSlabs') as FormArray;
+    if (item.length < i+1) {
+      let value = item.value[i];
+      if (value.MinIncome >= value.MaxIncome && Number(e.target.value) <= 0)
+        e.target.classList.add('error-field');
+      else
+        e.target.classList.remove('error-field');
+    }
+  }
+
+  savePtaxSlab() {
+    this.isLoading = true;
+    if (this.ptaxForm.invalid) {
+      ErrorToast("Fill all mandatory column")
+      this.isLoading = false;
+      return;
+    }
+    let value = this.ptaxForm.value.PtaxSlabs
+    this.http.post("TaxRegime/AddUpdatePTaxSlab", value).then(res => {
+      if (res.ResponseBody) {
+        this.ptaxSlab = res.ResponseBody;
+        this.initPtax();
+        this.isEditable = false;
+        this.isLoading = false;
+        Toast("Ptax slab added successfully.");
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  editPtax() {
+    this.isEditable = true;
+  }
+
+  loadPTax() {
+    this.isPageReady = false;
+    this.http.get(`TaxRegime/GetPTaxSlabByCompId/${this.CompanyId}`).then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        this.ptaxSlab = response.ResponseBody;
+        this.initPtax();
+        this.isPageReady = true;
+      } else {
+        this.isPageReady = true;
+        ErrorToast("Record not found.")
+      }
+    }).catch(e => {
+      this.isPageReady = true;
+    })
+  }
 }
 
 class CompanyGroup {
@@ -246,6 +382,13 @@ class CompanyGroup {
   Email: string = '';
   OrganizationId: number = 0;
 }
-interface Payroll {
 
+class PTax {
+  StateName: string = null;
+  MinIncome: number = 0;
+  MaxIncome: number = 0;
+  TaxAmount: number = 0;
+  Gender: number = 0;
+  PtaxSlabId: number = 0;
+  CompanyId: number = 0;
 }

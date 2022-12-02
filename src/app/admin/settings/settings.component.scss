@@ -40,3 +40,12 @@
 .skeleton {
   margin: 10px 0px !important;
 }
+
+.form-control[readonly],
+.form-select[disabled] {
+  background-color: transparent !important;
+}
+
+.text-muted-c {
+  color: #bcbcbc !important;
+}
