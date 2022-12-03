@@ -135,13 +135,16 @@ export class TaxRegimeComponent implements OnInit {
     let item = this.taxRegimeForm.get('OldTaxSlab') as FormArray;
     if (item.length > 1) {
       let taxregimeId = item.value[i];
-      this.http.post("TaxRegime/DeleteTaxRegime", taxregimeId).then(res => {
-        if (res.ResponseBody) {
-          this.bindPage(res.ResponseBody)
-          item.removeAt(i);
-          Toast("Regime deleted successfully");
-        }
-      })
+      if (taxregimeId > 0) {
+        this.http.delete(`TaxRegime/DeleteTaxRegime/${taxregimeId}`).then(res => {
+          if (res.ResponseBody) {
+            Toast("Regime deleted successfully");
+          }
+        }).catch(e => {
+          ErrorToast(e.error.HttpStatusMessage);
+        })
+      }
+      item.removeAt(i);
     }
     if (i > 0) {
       let value = (item.value[i-1].MaxTaxSlab) + 1;
@@ -172,7 +175,7 @@ export class TaxRegimeComponent implements OnInit {
 
   checkToAmount(e: any, i: number) {
     let value = this.taxRegimeForm.get('OldTaxSlab').value[i];
-    if (value.MinTaxSlab >= value.MaxTaxSlab && Number(e.target.value) > 0)
+    if (value.MinTaxSlab >= value.MaxTaxSlab && Number(e.target.value) <= 0)
       e.target.closest('div').classList.add('error-field');
     else
       e.target.closest('div').classList.remove('error-field');
@@ -200,9 +203,9 @@ export class TaxRegimeComponent implements OnInit {
         Toast("Regime add or update successfully");
         this.isLoading = false;
         this.isEditable = false;
+        this.isSubmitted = false;
       }
     }).catch(e => {
-      this.isSubmitted = false;
       this.isLoading = false;
     })
   }

@@ -40,12 +40,12 @@
               <div class="col-md-4 mx-0 ps-0 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
                   <i class="fa fa-inr px-1" aria-hidden="true"></i>
-                  <input type="number" [readonly]="!isEditable" class="form-control w-75 border-0" placeholder="From" formControlName="MinTaxSlab" (keyup)="calcTaxAmount()">
+                  <input type="number" [readonly]="!isEditable" class="form-control w-75 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="From" formControlName="MinTaxSlab" (keyup)="calcTaxAmount()">
                 </div>
                 <label for="" class="form-label px-5">to</label>
                 <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
                   <i class="fa fa-inr px-1" aria-hidden="true"></i>
-                  <input type="number" [readonly]="!isEditable" class="form-control w-50 border-0" placeholder="To" formControlName="MaxTaxSlab" (keyup)="calcTaxAmount()" (blur)="checkToAmount($event, i)">
+                  <input type="number" [readonly]="!isEditable" class="form-control w-50 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="To" formControlName="MaxTaxSlab" (keyup)="calcTaxAmount()" (blur)="checkToAmount($event, i)">
                 </div>
               </div>
               <div class="col-md-4 d-flex align-items-center">
