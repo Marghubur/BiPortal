@@ -412,7 +412,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           $('#addAttachmentModal').modal('hide');
           $('#housingPropertyFileModal').modal('hide');
           $('#rentedResidenceModal').modal('hide');
-          this.bindData(res.ResponseBody);
+          // this.bindData(res.ResponseBody);
           Toast("Declaration file is deleted successfully");
         }
         this.isLoading = false;
