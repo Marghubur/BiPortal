@@ -311,7 +311,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.SectionIsReady = false;
       formData.append('declaration', JSON.stringify(value));
       formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
-      this.http.upload(`Declaration/HousingPropertyDeclaration/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
+      this.http.upload(`Declaration/HouseRentDeclaration/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
         if (response.ResponseBody) {
           this.bindData(response.ResponseBody);
           Toast("House property deatils added successfully.");
