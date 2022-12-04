@@ -93,11 +93,11 @@ export class IncometaxComponent implements OnInit {
         if ((this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
           this.ExemptionDeclaration = [];
 
-          this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
+        this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
         if ((this.OtherDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
           this.OtherDeclaration = [];
 
-          this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
+        this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
         if ((this.TaxSavingAlloance.filter(x => x.DeclaredValue > 0).length <= 0))
           this.TaxSavingAlloance = [];
         this.salaryDetail = response.ResponseBody.SalaryDetail;
@@ -289,6 +289,26 @@ export class IncometaxComponent implements OnInit {
       })
   }
 
+  getTotalTaxableAmount(index: number) {
+    let value: number = 0; 
+    switch(index) {
+      case 1:
+        value = (this.salaryDetail.GrossIncome - this.totalAllowTaxExemptAmount -
+          52400 - this.totalOtherExemptAmount - this.totalSection80CExempAmount - 
+          this.allDeclarationSalaryDetails.HRADeatils.HRAAmount * 12);
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+      case 5:
+        break;
+    }
+
+    return value;
+  }
 }
 
 class TaxSlab {
