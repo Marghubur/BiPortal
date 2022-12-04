@@ -223,17 +223,9 @@
                           <div class="tr py-3 " *ngIf="item.DeclaredValue > 0">
                             <div class="th ps-3">{{item.Section}}</div>
                             <div class="th ps-3 fe-4">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
-                            <div class="th ps-3 fe-1">
-                              <ng-container *ngIf="item.ComponentId == 'HRA'">
-                                <a href="javascript:void(0)" (click)="viewHRAPopUp()" class="text-decoration-none">View
-                                  Detail</a>
-                              </ng-container>
-                            </div>
                             <div class="th ps-3">{{item.DeclaredValue | number:'1.2-2'}}</div>
-                            <div class="th pe-3 text-end" *ngIf="item.ComponentId != 'HRA'">{{item.DeclaredValue |
+                            <div class="th pe-3 text-end">{{item.DeclaredValue |
                               number:'1.2-2'}}</div>
-                            <div class="th pe-3 text-end" *ngIf="item.ComponentId == 'HRA'">
-                              {{allDeclarationSalaryDetails.HRADeatils.HRAAmount*12 | number:'1.2-2'}}</div>
                           </div>
                         </ng-container>
                         <div class="tr py-3">
@@ -250,12 +242,6 @@
                     <h6 class="ms-5 py-3 text-dark">Less: Section 16 Tax Exemptions</h6>
                     <div class="t-table t-border t-list bg-white ms-5">
                       <div class="t-head overflow-hidden">
-                        <!-- <div class="tr py-3" *ngFor="let item of Section16TaxExemption">
-                            <div class="th ps-3">{{item.Section}}</div>
-                            <div class="th ps-3">{{item.ComponentId}} ({{item.ComponentFullName}})</div>
-                            <div class="th ps-3">{{item.ComponentId == 'PTAX' ? 'View Details': ''}}</div>
-                            <div class="th pe-3 text-end">{{item.DeclaredValue}}</div>
-                          </div> -->
                         <div class="tr py-3">
                           <div class="th ps-3">16(iii)</div>
                           <div class="th ps-3 fe-4">PTAX (Professional Tax)</div>
@@ -363,17 +349,49 @@
                       </div>
                     </div>
                   </ng-container>
+
+                  <div class="t-table t-border t-list mt-3">
+                    <div class="t-head overflow-hidden">
+                      <div class="tr py-3">
+                        <div class="th fw-bold ps-3">HRA Applied</div>
+                        <div class="th fw-bold pe-3 text-end">AMOUNT DECLARED</div>
+                      </div>
+                      <div class="tr py-3">
+                        <div class="th ps-3 d-inline">Actual HRA 
+                          <span class="ps-2"><small class="text-muted">[Per Month]</small></span>
+                        </div>
+                        <div class="th ps-3 fe-1">
+                          <ng-container>
+                            <a href="javascript:void(0)" (click)="viewHRAPopUp()" class="text-decoration-none">View
+                              Detail</a>
+                          </ng-container>
+                        </div>
+                        <div class="th pe-3 text-end">
+                          {{allDeclarationSalaryDetails.HRADeatils.HRAAmount | number:'1.2-2'}}
+                        </div>
+                      </div>
+                      <div class="tr py-3 border-bottom-0">
+                        <div class="th ps-3"><b>Total</b></div>
+                        <div class="th pe-3 text-end">
+                          {{allDeclarationSalaryDetails.HRADeatils.HRAAmount*12 | number:'1.2-2'}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="t-table t-border t-list mt-3">
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3">
                         <div class="th fw-bold ps-3">Total Taxable Amount</div>
-                        <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount -
-                          52400 - totalOtherExemptAmount - totalSection80CExempAmount | number:'1.2-2'}}</div>
+                        <div class="th fw-bold pe-3 text-end">
+                          {{getTotalTaxableAmount(1) | number:'1.2-2'}}
+                        </div>
                       </div>
                       <div class="tr py-3 border-bottom-0">
                         <div class="th ps-3">Net taxable income is</div>
-                        <div class="th pe-3 text-end">{{salaryDetail.GrossIncome - totalAllowTaxExemptAmount - 52400 -
-                          totalOtherExemptAmount - totalSection80CExempAmount | number:'1.2-2'}}</div>
+                        <div class="th pe-3 text-end">
+                          {{getTotalTaxableAmount(1) | number:'1.2-2'}}
+                        </div>
                       </div>
                     </div>
                   </div>
