@@ -92,7 +92,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.EmployeeId = this.local.getByKey("EmployeeId");
     this.loadData();
     this.rentedResidence();
-    $('#rentedResidenceModal').modal('show');
     var dt = new Date();
     var month = 3;
     var year = dt.getFullYear();
@@ -820,20 +819,17 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   deleteRentDeclaration() {
     this.isLoading = true;
-    if (this.deleteFile) {
-      let componentId = "HRA";
-      this.http.delete(`Declaration/DeleteDeclarationValue/${this.employeeDeclaration.EmployeeDeclarationId}/${componentId}`).then(res => {
-        if (res.ResponseBody) {
-          $('#deleteRentDeclrModal').modal('hide');
-          $('#rentedResidenceModal').modal('hide');
-          this.bindData(res.ResponseBody);
-          Toast("Declaration value is deleted successfully");
-        }
-        this.isLoading = false;
-      }).catch(e => {
-        this.isLoading = false;
-      })
-    }
+    this.http.delete(`Declaration/DeleteDeclaredHRA/${this.employeeDeclaration.EmployeeDeclarationId}`).then(res => {
+      if (res.ResponseBody) {
+        $('#deleteRentDeclrModal').modal('hide');
+        $('#rentedResidenceModal').modal('hide');
+        this.bindData(res.ResponseBody);
+        Toast("Declaration value is deleted successfully");
+      }
+      this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   deleteRentFile(userFile: any) {
