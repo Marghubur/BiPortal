@@ -355,98 +355,6 @@
                             <h6 class="text-dark">INR 0</h6>
                           </div>
                         </div>
-                        <!-- <table class="table">
-                          <thead>
-                            <tr>
-                              <th>SECTION</th>
-                              <th>DEDUCTION NAME</th>
-                              <th>DECLARATION</th>
-                              <th>PROOF</th>
-                              <th>STATUS</th>
-                              <th>ACTIONS</th>
-                            </tr>
-                          </thead>
-                          <tbody *ngIf="SectionIsReady">
-                            <ng-container *ngFor="let r of ExemptionDeclaration; let i=index">
-                              <tr>
-                                <td name="table-row">
-                                  <div name="table-row" [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
-                                    {{r.Section}} <sup>$</sup>
-                                  </div>
-                                </td>
-                                <td>
-                                  {{r.ComponentId}} ({{r.ComponentFullName}})
-                                  <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-question-circle ps-3 text-secondary text-justify" data-bs-toggle="tooltip" data-bs-placement="right" title='{{r.ComponentDescription}}'></i></a>
-                                </td>
-                                <td>
-                                  <div name="view-control">
-                                    <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
-                                      number:'':'en'}}</span>
-                                    <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
-                                    <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
-                                      name="edit-control">
-                                      <span class="pe-2 d-flex flex-column justify-content-center">
-                                        <i class="fa fa-inr"></i>
-                                      </span>
-                                      <input [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control">
-                                    </div>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div *ngIf="r.UploadedFileIds != null">
-                                    <a href="javascript:void(0)" name="upload-proof"
-                                      class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
-                                      <div class="d-flex align-items-center">
-
-                                        <i class="fa fa-check-circle fa-lg text-success"></i>
-                                        <span class="ps-2">Uploaded</span>
-                                      </div>
-                                    </a>
-                                  </div>
-                                  <div *ngIf="r.UploadedFileIds == null">
-                                    <a href="javascript:void(0)" name="upload-proof"
-                                      class="text-muted pe-none text-decoration-none" (click)="uploadDocument(r)">
-                                      <i class="fa fa-paperclip pe-2"></i>Not Upload
-                                    </a>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div class="d-flex align-items-center">
-                                      <ng-container *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
-                                        <i class="fa fa-check-circle fa-lg text-success"></i>
-                                        <span class="ps-2 fw-bold text-dark">Auto Accepted</span>
-                                      </ng-container>
-                                      <ng-container *ngIf="r.DeclaredValue > 0 && (r.ComponentId != 'EPF' || r.ComponentId != 'VPF')">
-                                        <i class="fa fa-check-circle fa-lg text-success"></i>
-                                        <span class="ps-2">Submitted</span>
-                                      </ng-container>
-                                    </div>
-                                    <span *ngIf="r.DeclaredValue <= 0 && (r.ComponentId != 'EPF' && r.ComponentId != 'VPF')">Not Submitted</span>
-                                </td>
-                                <td *ngIf="r.ComponentId != 'EPF' && r.ComponentId != 'VPF'">
-                                  <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                    ngbTooltip="Edit Declaration" (click)="editDeclaration($event)"></i>
-                                  <div class="d-flex align-items-center justify-content-center d-none"
-                                    name="cancel-declaration">
-                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isLoading}"
-                                      (click)="saveDeclaration(r, $event)">
-                                      <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
-                                      <span *ngIf="!isLoading">Save</span>
-                                    </a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-danger ps-3"  [ngClass]="{'pe-none': isLoading}"
-                                      (click)="closeDeclaration(r, $event)">Cancel</a>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-success ps-3"  [ngClass]="{'pe-none': isLoading}" (click)="uploadDocument(r, 'only-view')">view</a>
-                                  </div>
-                                </td>
-                                <td *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'"></td>
-                              </tr>
-                            </ng-container>
-                          </tbody>
-                          <div class="t-body fs-5 text-center p-5 m-5" *ngIf="!SectionIsReady">
-                            Unable to load the declaration.
-                            Please contact to admin.
-                          </div>
-                        </table> -->
                         <div class="t-table t-list t-border col-md-12">
                           <div class="hide-bar"></div>
                           <div class="t-head">
@@ -1164,38 +1072,6 @@
       </div>
       <div class="modal-body">
         <div class="col-12 row m-0">
-          <!-- <div class="col-md-4 card mt-4 me-2">
-            <div class="">
-              <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
-              <div class="col-md-12 p-0">
-                <div class="table-responsive">
-                  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1" aria-labelledby="home-tab">
-                      <div id="classmasterdata" class="col-md-12">
-                        <div name="ifilezone" class="ifilezone mb-4" (click)="fireFileBrowser()">
-                          <div>
-                            <img class="img-thumbnail" src="assets/img/drop-back.png" />
-                          </div>
-                          <div class="col-md-12 bg-light justify-content-center p-5 d-none" name="uploading">
-                            <img src="assets/img/ExcelFile.png" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="my-4">
-              <button type="button" class="btn btn-primary-c me-2" (click)="saveAttachment()"
-                [disabled]="isLargeFile || FilesCollection.length == 0">
-                <i class="fa fa-upload pe-2" aria-hidden="true"></i>Upload selected File
-              </button>
-              <button type="button" class="btn btn-outline-info" (click)="closeAttachmentModal()">
-                <i class="fa fa-eraser pe-2"></i> Cancel
-              </button>
-            </div>
-          </div> -->
           <div class="col-md-12 mt-4 overflow-auto" style="height: 33vh">
             <ng-container *ngIf="slectedDeclarationnFile.length > 0">
               <table class="table">
@@ -1291,7 +1167,8 @@
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="rentedResidenceModalLabel">{{isRentedResidenceEdit ? 'Edit': 'Add'}} Rented Residence</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button class="btn btn-danger" (click)="deleteRentDeclarationPopUp()"><i class="fa fa-trash-o pe-2"></i>Reset</button>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
       </div>
       <div class="modal-body">
         <form [formGroup]="rentResidenceForm" *ngIf="rentResidenceForm">
@@ -1535,6 +1412,31 @@
             </tbody>
           </table>
         </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+<!-- Delete rented declaration Popup -->
+<div class="modal delete-modal fade delete-popup" id="deleteRentDeclrModal" tabindex="-1" aria-labelledby="deleteRentDeclrModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title fw-normal" id="deleteRentDeclrModalLabel">Remove Rent Declaration</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <h5>You are trying to delete <span class="text-dark fw-bold">Rent Declaration</span> details and files</h5>
+          <p>Please press the confirm button to delete Rent Declaration record permanently</p>
+          <p><b>Note:</b> Make sure after deleting your rent declaration and amount may vary.</p>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn btn-primary-c" [disabled]="isLoading" (click)="deleteRentDeclaration()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-save': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Confirm' }}
+        </button>
       </div>
     </div>
   </div>
