@@ -62,16 +62,16 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   TaxDetails: Array<any> = [];
   isEmployeeSelect: boolean = false;
   isLoading: boolean = false;
-  housingPropertyDetail: HouseProperty = new HouseProperty;
+  houseRentDetail: HouseRentDetail = new HouseRentDetail();
   isRentedResidenceEdit: boolean = false;
   isShowRentedDetail: boolean = false;
   basePath: string = '';
   viewer: any = null;
   deleteFile: any = null;
-  housingPropertyRentFile: Array<any> = [];
+  houseRentDetailFile: Array<any> = [];
   hPLetterList:Array<Files> = [];
   hPLetterCollection:Array<any> = [];
-  housingPropertyLetterFile: Array<any> = [];
+  houseRentDetailLetterFile: Array<any> = [];
   viewHousingPropFile: Array<any> = [];
   viewAttachment: string = '';
   deleteType: string = '';
@@ -229,7 +229,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           // this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
           // this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
           // this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
-          let housingProperty = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HP");
+          let housingProperty = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
           for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
             let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
             switch (component) {
@@ -251,8 +251,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.salaryDetails = response.SalaryDetail;
           if(this.salaryDetails !== null)
           this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
-          if (response.HousingProperty && response.HousingProperty != '{}') {
-            this.housingPropertyDetail = JSON.parse(response.HousingProperty);
+          if (response.HouseRentDetail && response.HouseRentDetail != '{}') {
+            this.houseRentDetail = JSON.parse(response.HouseRentDetail);
           }
 
           this.calculateDeclarations();
@@ -292,18 +292,18 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   rentedResidence() {
     this.rentResidenceForm = this.fb.group({
-      RentedFrom: new FormControl(this.housingPropertyDetail.RentedFrom),
-      RentedTo: new FormControl(this.housingPropertyDetail.RentedTo),
-      TotalRent: new FormControl(this.housingPropertyDetail.TotalRent),
-      Address: new FormControl(this.housingPropertyDetail.Address),
-      City: new FormControl(this.housingPropertyDetail.City),
-      OwnerName: new FormControl (this.housingPropertyDetail.OwnerName),
-      IsPANNo: new FormControl (this.housingPropertyDetail.IsPANNo),
-      PANNo: new FormControl (this.housingPropertyDetail.PANNo),
-      IsOwnerAddressSame: new FormControl (this.housingPropertyDetail.IsOwnerAddressSame),
-      LandlordType: new FormControl (this.housingPropertyDetail.LandlordType),
-      OwnerAddress:new FormControl (this.housingPropertyDetail.OwnerAddress),
-      IsSignedDeclaration: new FormControl (this.housingPropertyDetail.IsSignedDeclaration )
+      RentedFrom: new FormControl(this.houseRentDetail.RentedFrom),
+      RentedTo: new FormControl(this.houseRentDetail.RentedTo),
+      TotalRent: new FormControl(this.houseRentDetail.TotalRent),
+      Address: new FormControl(this.houseRentDetail.Address),
+      City: new FormControl(this.houseRentDetail.City),
+      OwnerName: new FormControl (this.houseRentDetail.OwnerName),
+      IsPANNo: new FormControl (this.houseRentDetail.IsPANNo),
+      PANNo: new FormControl (this.houseRentDetail.PANNo),
+      IsOwnerAddressSame: new FormControl (this.houseRentDetail.IsOwnerAddressSame),
+      LandlordType: new FormControl (this.houseRentDetail.LandlordType),
+      OwnerAddress:new FormControl (this.houseRentDetail.OwnerAddress),
+      IsSignedDeclaration: new FormControl (this.houseRentDetail.IsSignedDeclaration )
     })
   }
 
@@ -793,14 +793,14 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.isRentedResidenceEdit = true;
       this.FileDocumentList = [];
       this.hPLetterList = [];
-      this.attachmentForDeclaration = 'HP';
-      let hosuingProp = this.employeeDeclaration.SalaryComponentItems.find (x => x.ComponentId == "HP");
+      this.attachmentForDeclaration = 'HRA';
+      let hosuingProp = this.employeeDeclaration.SalaryComponentItems.find (x => x.ComponentId == "HRA");
       if (hosuingProp != null && hosuingProp.UploadedFileIds != null && hosuingProp.UploadedFileIds != '[]') {
-        let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP');
-        this.housingPropertyRentFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
-        this.housingPropertyLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");
+        let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HRA');
+        this.houseRentDetailFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
+        this.houseRentDetailLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");
       }
-      this.housingPropertyDetail = data;
+      this.houseRentDetail = data;
       this.rentedResidence();
       $('#rentedResidenceModal').modal('show');
     }
@@ -895,7 +895,7 @@ class MyDeclaration {
   AmountAccepted: number = 0;
 }
 
-export class HouseProperty {
+export class HouseRentDetail {
   RentedFrom: string = '';
   RentedTo: string = '';
   TotalRent: number = 0;
