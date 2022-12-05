@@ -69,10 +69,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   viewer: any = null;
   deleteFile: any = null;
   houseRentDetailFile: Array<any> = [];
-  hPLetterList:Array<Files> = [];
-  hPLetterCollection:Array<any> = [];
+  hraLetterList:Array<Files> = [];
+  hraLetterCollection:Array<any> = [];
   houseRentDetailLetterFile: Array<any> = [];
-  viewHousingPropFile: Array<any> = [];
+  viewRentPropFile: Array<any> = [];
   viewAttachment: string = '';
   deleteType: string = '';
 
@@ -229,7 +229,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           // this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
           // this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
           // this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
-          let housingProperty = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
+          let rentDetail = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
           for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
             let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
             switch (component) {
@@ -243,7 +243,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.TaxSavingAlloance);
                 break;
               case "House Property":
-                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(housingProperty);
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(rentDetail);
                 break;
             }
           }
@@ -311,7 +311,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.isLoading = true;
     let data = this.rentResidenceForm.value;
     let value = {
-      ComponentId: 'HP',
+      ComponentId: 'HRA',
       HousePropertyDetail: data,
       EmployeeId: this.EmployeeId,
       Email: this.employeeEmail
@@ -319,9 +319,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
     let formData = new FormData();
     if (this.EmployeeId > 0 && this.EmployeeDeclarationId > 0) {
-      for (let i = 0; i < this.hPLetterList.length; i++) {
-        this.FileDocumentList.push(this.hPLetterList[i]);
-        this.FilesCollection.push(this.hPLetterCollection[i]);
+      for (let i = 0; i < this.hraLetterList.length; i++) {
+        this.FileDocumentList.push(this.hraLetterList[i]);
+        this.FilesCollection.push(this.hraLetterCollection[i]);
       }
       if (this.FileDocumentList.length > 0) {
         let i = 0;
@@ -335,7 +335,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.http.upload(`Declaration/HouseRentDeclaration/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
         if (response.ResponseBody) {
           this.bindData(response.ResponseBody);
-          Toast("House property deatils added successfully.");
+          Toast("Rent deatils added successfully.");
           $('#rentedResidenceModal').modal('hide')
           this.isLoading = false;
         }
@@ -410,7 +410,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         if (res.ResponseBody) {
           $('#deleteAttachmentModal').modal('hide');
           $('#addAttachmentModal').modal('hide');
-          $('#housingPropertyFileModal').modal('hide');
+          $('#rentFileModal').modal('hide');
           $('#rentedResidenceModal').modal('hide');
           this.bindData(res.ResponseBody);
           Toast("Declaration file is deleted successfully");
@@ -585,8 +585,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   uploadHPLetter(fileInput: any) {
-    this.hPLetterList = [];
-    this.hPLetterCollection = [];
+    this.hraLetterList = [];
+    this.hraLetterCollection = [];
     let selectedFile = fileInput.target.files;
     if (selectedFile.length > 0) {
       let index = 0;
@@ -603,8 +603,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         item.ParentFolder = '';
         item.Email = this.employeeEmail;
         item.UserId = this.EmployeeId;
-        this.hPLetterList.push(item);
-        this.hPLetterCollection.push(file);
+        this.hraLetterList.push(item);
+        this.hraLetterCollection.push(file);
         index++;
       };
       this.totalFileSize = 0;
@@ -752,7 +752,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   rentedDecalrationPopup() {
     this.FileDocumentList = [];
-    this.hPLetterList = [];
+    this.hraLetterList = [];
     $('#rentedResidenceModal').modal('show');
   }
 
@@ -792,7 +792,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     if (data) {
       this.isRentedResidenceEdit = true;
       this.FileDocumentList = [];
-      this.hPLetterList = [];
+      this.hraLetterList = [];
       this.attachmentForDeclaration = 'HRA';
       let hosuingProp = this.employeeDeclaration.SalaryComponentItems.find (x => x.ComponentId == "HRA");
       if (hosuingProp != null && hosuingProp.UploadedFileIds != null && hosuingProp.UploadedFileIds != '[]') {
@@ -808,10 +808,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.isRentedResidenceEdit = false;
   }
 
-  viewHousingPropertyFilePopUp(item: any) {
-    this.viewHousingPropFile = [];
-    this.viewHousingPropFile = item;
-    $('#housingPropertyFileModal').modal('show');
+  viewRentFilePopUp(item: any) {
+    this.viewRentPropFile = [];
+    this.viewRentPropFile = item;
+    $('#rentFileModal').modal('show');
   }
 
   deleteRentDeclarationPopUp() {
@@ -836,7 +836,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  deleteHousingPropertyFile(userFile: any) {
+  deleteRentFile(userFile: any) {
     this.deletePopup(userFile, 'deletefile')
   }
 
