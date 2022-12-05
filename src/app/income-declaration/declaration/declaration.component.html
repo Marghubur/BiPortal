@@ -921,7 +921,7 @@
                       <ng-container>
                         <h5 class="text-dark">House Property</h5>
                         <p>Here you can declare all the gouse property rented or owned.</p>
-                        <div class="alert alert-warning fs-6" role="alert" *ngIf="housingPropertyDetail.TotalRent > 0 && housingPropertyDetail.TotalRent > 100000">
+                        <div class="alert alert-warning fs-6" role="alert" *ngIf="houseRentDetail.TotalRent > 0 && houseRentDetail.TotalRent > 100000">
                           The total rent amount for this financial year exceeds INR 1,00,000. You need to provide Owner PAN details or Signed documents.
                         </div>
                         <div class="col-md-12 row">
@@ -929,22 +929,22 @@
                             <div class="col-md-12">
                               <div class="card px-3 pb-3">
                                 <h5 class="pt-3 pb-2">I live in a rented residence</h5>
-                                <div class="alert alert-info" role="alert" *ngIf="housingPropertyDetail== null || housingPropertyDetail == ''">
+                                <div class="alert alert-info" role="alert" *ngIf="houseRentDetail== null || houseRentDetail == ''">
                                   There are no rental details available
                                 </div>
-                                <p class="mb-0">{{housingPropertyDetail.RentedFrom}} - {{housingPropertyDetail.RentedTo}}</p>
-                                <div class="custom-bg text-dark d-flex align-items-center py-2 my-3 rounded" *ngIf="housingPropertyDetail.TotalRent > 0">
+                                <p class="mb-0">{{houseRentDetail.RentedFrom}} - {{houseRentDetail.RentedTo}}</p>
+                                <div class="custom-bg text-dark d-flex align-items-center py-2 my-3 rounded" *ngIf="houseRentDetail.TotalRent > 0">
                                   <a href="javascript:void(0)" class="text-decoration-none" (click)="showrentedDetail()">
                                     <i class="fa fa-lg ps-4" [ngClass]="{'fa-caret-right': !isShowRentedDetail, 'fa-caret-down': isShowRentedDetail}"></i>
                                   </a>
                                   <div class="pe-2 ps-4">
                                     <small>MONTH</small>
-                                    <p class="mb-0">{{housingPropertyDetail.RentedFrom}} - {{housingPropertyDetail.RentedTo}}</p>
+                                    <p class="mb-0">{{houseRentDetail.RentedFrom}} - {{houseRentDetail.RentedTo}}</p>
                                   </div>
                                   <span class="fs-5 px-4"></span>
                                   <div class="px-2">
                                     <small>CITY</small>
-                                    <p class="mb-0">{{housingPropertyDetail.City}}</p>
+                                    <p class="mb-0">{{houseRentDetail.City}}</p>
                                   </div>
                                   <span class="fs-5 px-4"></span>
                                   <div class="px-2">
@@ -954,40 +954,40 @@
                                   <div class="ms-auto">
                                     <span class="badge bg-primary">RENTED</span>
                                     <span class="badge bg-success ms-2">AUTO APPROVED TILL CUTOFF DATE</span>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="editRentedResidence(housingPropertyDetail)">
+                                    <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="editRentedResidence(houseRentDetail)">
                                       <i class="fa fa-ellipsis-v ps-3 pe-4" aria-hidden="true"></i>
                                     </a>
                                   </div>
                                 </div>
                                 <div class="card mb-4" *ngIf="isShowRentedDetail">
                                   <p class="mb-0 custom-bg text-dark py-2 ps-2">Rentail Details</p>
-                                  <div class="bg-white d-flex align-items-center py-2 my-3 rounded" *ngIf="housingPropertyDetail.TotalRent > 0">
+                                  <div class="bg-white d-flex align-items-center py-2 my-3 rounded" *ngIf="houseRentDetail.TotalRent > 0">
                                     <div class="pe-2 ps-4 col-md-4">
                                       <small>RENTED DECLARED</small>
-                                      <p class="mb-0 text-dark">INR {{housingPropertyDetail.TotalRent}}</p>
+                                      <p class="mb-0 text-dark">INR {{houseRentDetail.TotalRent}}</p>
                                     </div>
                                     <div class="px-2 col-md-4">
                                       <small>ADDRESS</small>
-                                      <p class="mb-0 text-dark">{{housingPropertyDetail.Address}}</p>
+                                      <p class="mb-0 text-dark">{{houseRentDetail.Address}}</p>
                                     </div>
                                   </div>
                                   <p class="mb-0 custom-bg text-dark py-2 ps-2">Owner Details</p>
-                                  <div class="bg-white d-flex align-items-center py-2 my-3 rounded" *ngIf="housingPropertyDetail.TotalRent > 0">
+                                  <div class="bg-white d-flex align-items-center py-2 my-3 rounded" *ngIf="houseRentDetail.TotalRent > 0">
                                     <div class="pe-2 ps-4 col-md-2">
                                       <small>NAME</small>
-                                      <p class="mb-0 text-dark">{{housingPropertyDetail.OwnerName}}</p>
+                                      <p class="mb-0 text-dark">{{houseRentDetail.OwnerName}}</p>
                                     </div>
                                     <div class="px-2 col-md-2">
                                       <small>PAN NUMBER</small>
-                                      <p class="mb-0 text-dark">{{housingPropertyDetail.PANNo}}</p>
+                                      <p class="mb-0 text-dark">{{houseRentDetail.PANNo}}</p>
                                     </div>
                                     <div class="px-2 col-md-4">
                                       <small>ADDRESS</small>
-                                      <p class="mb-0 text-dark">{{housingPropertyDetail.OwnerAddress}}</p>
+                                      <p class="mb-0 text-dark">{{houseRentDetail.OwnerAddress}}</p>
                                     </div>
                                   </div>
                                 </div>
-                                <div *ngIf="housingPropertyDetail.TotalRent <= 0">
+                                <div *ngIf="houseRentDetail.TotalRent <= 0">
                                   <button class="btn btn-outline-primary" (click)="rentedDecalrationPopup()"> <i
                                       class="fa fa-plus"></i> Add Rented
                                     Residence</button>
@@ -1214,12 +1214,12 @@
             <div class="mt-3">
               <input type="file" class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf"
                 (change)="uploadReceipts($event)" multiple id="uploadreceipt">
-              <a href="javascript:void(0)" *ngIf="housingPropertyRentFile.length <=0" (click)="fireuploadreceipt()" class="text-decoration-none"><i
+              <a href="javascript:void(0)" *ngIf="houseRentDetailFile.length <=0" (click)="fireuploadreceipt()" class="text-decoration-none"><i
                   class="fa fa-paperclip pe-2 pt-3"></i>Rent Receipts or Agreement <i
                   class="fa fa-exclamation-circle ps-2 text-secondary"></i></a>
               <span class="ps-3 fw-bold" *ngIf="FileDocumentList.length > 0">{{FileDocumentList.length}} file selected</span>
-              <a href="javascript:void(0)" (click)="viewHousingPropertyFilePopUp(housingPropertyRentFile)">
-                <span class="ps-3 fw-bold" *ngIf="FileDocumentList.length == 0 && housingPropertyRentFile.length > 0">{{housingPropertyRentFile.length}} file uploaded</span>
+              <a href="javascript:void(0)" (click)="viewHousingPropertyFilePopUp(houseRentDetailFile)">
+                <span class="ps-3 fw-bold" *ngIf="FileDocumentList.length == 0 && houseRentDetailFile.length > 0">{{houseRentDetailFile.length}} file uploaded</span>
               </a>
             </div>
             <div class="modal-footer border-top-0">
@@ -1276,11 +1276,11 @@
                 <div class="mt-3">
                   <input type="file" class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf"
                     (change)="uploadHPLetter($event)" multiple id="uploadHPLetter">
-                  <a href="javascript:void(0)" class="text-decoration-none" (click)="fireuploadHPLetter()" *ngIf="housingPropertyLetterFile.length <= 0"><i
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="fireuploadHPLetter()" *ngIf="houseRentDetailLetterFile.length <= 0"><i
                       class="fa fa-paperclip pe-2 pt-3"></i>Upload declaration letter</a>
                   <span class="ps-3 fw-bold" *ngIf="hPLetterList.length > 0">{{this.hPLetterList.length}} file selected</span>
-                  <a href="javascript:void(0)" (click)="viewHousingPropertyFilePopUp(housingPropertyLetterFile)">
-                    <span class="ps-3 fw-bold" *ngIf="hPLetterList.length == 0 && housingPropertyLetterFile.length > 0">{{housingPropertyLetterFile.length}} file uploaded</span>
+                  <a href="javascript:void(0)" (click)="viewHousingPropertyFilePopUp(houseRentDetailLetterFile)">
+                    <span class="ps-3 fw-bold" *ngIf="hPLetterList.length == 0 && houseRentDetailLetterFile.length > 0">{{houseRentDetailLetterFile.length}} file uploaded</span>
                   </a>
                 </div>
               </div>
@@ -1347,7 +1347,7 @@
 <!-- End pdf view modal -->
 
 <!-- Delete Attachment Popup -->
-<div class="modal delete-modal fade delete-popup" id="deleteAttachmentModal" tabindex="-1" aria-labelledby="deleteAttachmentModalLabel" *ngIf="deleteFile != null"
+<div class="modal delete-modal fade delete-popup" id="deleteAttachmentModal" tabindex="-1" aria-labelledby="deleteAttachmentModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded">
@@ -1355,7 +1355,7 @@
         <h5 class="modal-title fw-normal" id="deleteAttachmentModalLabel">{{deleteType == 'deletefile' ? 'Delete Only File' : 'Remove Declaration'}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" *ngIf="deleteFile != null">
         <ng-container *ngIf="deleteType == 'deletefile'">
           <h5>You are trying to delete <span class="text-dark fw-bold">{{deleteFile.FileName}}</span> attachment file only.</h5>
           <p>Please press the confirm button to delete the file permanently</p>

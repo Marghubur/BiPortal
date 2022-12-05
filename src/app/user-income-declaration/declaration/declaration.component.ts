@@ -10,7 +10,7 @@ import { UserService } from 'src/providers/userService';
 import 'bootstrap';
 import { MonthlyTax } from '../incometax/incometax.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { HouseProperty } from 'src/app/income-declaration/declaration/declaration.component';
+import { HouseRentDetail } from 'src/app/income-declaration/declaration/declaration.component';
 declare var $: any;
 
 @Component({
@@ -60,7 +60,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   salaryDetails: any = null;
   TaxDetails: Array<any> = [];
   isLoading: boolean = false;
-  housingPropertyDetail: HouseProperty = new HouseProperty;
+  housingPropertyDetail: HouseRentDetail = new HouseRentDetail();
   isRentedResidenceEdit: boolean = false;
   isShowRentedDetail: boolean = false;
   basePath: string = '';
