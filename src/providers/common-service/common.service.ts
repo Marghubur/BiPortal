@@ -2,6 +2,7 @@ import { Home, UserType } from "./../constants";
 import { Injectable, ElementRef } from "@angular/core";
 import { ApplicationStorage } from "./../ApplicationStorage";
 import * as $ from 'jquery';
+import { ResponseModel } from "src/auth/jwtService";
 
 const AllowedKey = [8, 9, 46];
 @Injectable({
@@ -385,6 +386,16 @@ export class CommonService {
       $elem.removeClass("invalid-field");
     }, 5000);
   }
+
+  PrintError(err: ResponseModel) {
+    if (err) {
+        if (err.ResponseBody.UserMessage && err.ResponseBody.UserMessage != "") {
+            ErrorToast(`[Error]: ${err.ResponseBody.UserMessage}`)
+        } else {
+            ErrorToast(`[Error]: Received internal error. Please contact to admin.`);
+        }
+    }
+}
 }
 
 export function ToFixed(amount: number, precision: number): number {

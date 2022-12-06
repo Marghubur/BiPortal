@@ -732,11 +732,11 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         timesheetForm.append('BillRequestData', JSON.stringify(request));
 
         this.http.post(this.generateBillUrl, timesheetForm).then((response: ResponseModel) => {
-          if(response.ResponseBody.Result.FileDetail !== null &&
-            response.ResponseBody.Result.EmailTemplate !== null) {
-            this.downloadFile(response.ResponseBody.Result.FileDetail);
+          if(response.ResponseBody.FileDetail !== null &&
+            response.ResponseBody.EmailTemplate !== null) {
+            this.downloadFile(response.ResponseBody.FileDetail);
             this.isBillGenerated = true;
-            this.Bindtemplate(response.ResponseBody.Result.EmailTemplate);
+            this.Bindtemplate(response.ResponseBody.EmailTemplate);
             $('#viewFileModal').modal('show');
             this.timesheetBreakup = [];
             Toast("Bill pdf generated successfully");
@@ -744,7 +744,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           this.isLoading = false;
         }).catch(e => {
           this.isLoading = false;
-          ErrorToast("Fail to generate bill. Please contact to admin.");
+          this.common.PrintError(e);
         });
       } else {
         this.isLoading = false;

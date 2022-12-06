@@ -14,8 +14,9 @@ export class BreadcrumsComponent implements OnInit {
     let value = this.nav.getRouteList();
     let i = 0;
     while(i < value.length) {
+      let sliceses = value[i].Key.split("/");
       this.routePath.push({
-        name: value[i].Key.replace("admin/", "").replace("user/", ""),
+        name: sliceses[sliceses.length - 1],
         path: value[i].Key
       });
       i++;

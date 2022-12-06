@@ -62,6 +62,7 @@ export class iNavigation {
         Value: value,
         PageQuery: filter
       });
+      this.pageRoute.PageName = route;
     }
 
     sessionStorage.setItem(NAVPARAMNAME, JSON.stringify(this.pageRoute));
@@ -113,6 +114,7 @@ export class iNavigation {
 
   public navigateWithoutArgs(Path: string) {
     if (Path !== null) {
+      this.pageRoute.PageName = Path;
       this.route.navigate(["/" + Path, ]);
     } else {
       Toast("Invalid component path passed.");
