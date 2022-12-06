@@ -62,7 +62,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   TaxDetails: Array<any> = [];
   isEmployeeSelect: boolean = false;
   isLoading: boolean = false;
-  houseRentDetail: HouseRentDetail = new HouseRentDetail();
+  houseRentDetail: HouseRentDetail = null;
   isRentedResidenceEdit: boolean = false;
   isShowRentedDetail: boolean = false;
   basePath: string = '';
@@ -91,7 +91,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.isEmployeesReady = true;
     this.EmployeeId = this.local.getByKey("EmployeeId");
     this.loadData();
-    this.rentedResidence();
     var dt = new Date();
     var month = 3;
     var year = dt.getFullYear();
@@ -241,7 +240,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
               case "Tax Saving Allowance":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.TaxSavingAlloance);
                 break;
-              case "House Property":
+              case "HRA":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(rentDetail);
                 break;
             }
@@ -252,6 +251,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
           if (response.HouseRentDetail && response.HouseRentDetail != '{}') {
             this.houseRentDetail = JSON.parse(response.HouseRentDetail);
+          } else {
+            this.houseRentDetail = new HouseRentDetail();
           }
 
           this.calculateDeclarations();
@@ -497,8 +498,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $("#uploadreceipt").click();
   }
 
-  fireuploadHPLetter() {
-    $("#uploadHPLetter").click();
+  fireuploadHRALetter() {
+    $("#uploadHRALetter").click();
   }
 
   fireBrowser() {
@@ -555,7 +556,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       while (index < selectedFile.length) {
         file = <File>selectedFile[index];
         let item: Files = new Files();
-        item.AlternateName = "HP_Receipt";
+        item.AlternateName = "HRA_Receipt";
         item.FileName = file.name;
         item.FileType = file.type;
         item.FileSize = (Number(file.size) / 1024);
@@ -583,7 +584,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  uploadHPLetter(fileInput: any) {
+  uploadHRALetter(fileInput: any) {
     this.hraLetterList = [];
     this.hraLetterCollection = [];
     let selectedFile = fileInput.target.files;
@@ -593,7 +594,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       while (index < selectedFile.length) {
         file = <File>selectedFile[index];
         let item: Files = new Files();
-        item.AlternateName = "HP_Dec_Letter";
+        item.AlternateName = "HRA_Dec_Letter";
         item.FileName = file.name;
         item.FileType = file.type;
         item.FileSize = (Number(file.size) / 1024);
@@ -752,6 +753,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   rentedDecalrationPopup() {
     this.FileDocumentList = [];
     this.hraLetterList = [];
+    this.houseRentDetail = new HouseRentDetail();
+    this.rentedResidence();
     $('#rentedResidenceModal').modal('show');
   }
 
@@ -789,6 +792,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   editRentedResidence(data: any) {
     if (data) {
+      this.rentalPage = 1;
       this.isRentedResidenceEdit = true;
       this.FileDocumentList = [];
       this.hraLetterList = [];

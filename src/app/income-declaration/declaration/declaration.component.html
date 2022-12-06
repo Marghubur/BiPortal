@@ -182,7 +182,7 @@
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-3">
-                                  <ng-container *ngIf="declaration.DeclarationName == 'House Property'">
+                                  <ng-container *ngIf="declaration.DeclarationName == 'HRA'">
                                     <ng-container *ngIf="declaration.TotalAmountDeclared > 0">
                                       <div class="cell-wrapper">
                                         1
@@ -194,7 +194,7 @@
                                       </div>
                                     </ng-container>
                                   </ng-container>
-                                  <ng-container *ngIf="declaration.DeclarationName != 'House Property'">
+                                  <ng-container *ngIf="declaration.DeclarationName != 'HRA'">
                                     <div class="cell-wrapper">
                                       {{declaration.Declarations.length}}
                                     </div>
@@ -1275,8 +1275,8 @@
                 </select>
                 <div class="mt-3">
                   <input type="file" class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf"
-                    (change)="uploadHPLetter($event)" multiple id="uploadHPLetter">
-                  <a href="javascript:void(0)" class="text-decoration-none" (click)="fireuploadHPLetter()" *ngIf="houseRentDetailLetterFile.length <= 0"><i
+                    (change)="uploadHRALetter($event)" multiple id="uploadHRALetter">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="fireuploadHRALetter()" *ngIf="houseRentDetailLetterFile.length <= 0"><i
                       class="fa fa-paperclip pe-2 pt-3"></i>Upload declaration letter</a>
                   <span class="ps-3 fw-bold" *ngIf="hraLetterList.length > 0">{{this.hraLetterList.length}} file selected</span>
                   <a href="javascript:void(0)" (click)="viewRentFilePopUp(houseRentDetailLetterFile)">
