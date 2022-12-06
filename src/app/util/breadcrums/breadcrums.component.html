@@ -1,23 +1,19 @@
 <ul class="nav nav-parent p-2">
   <ng-container *ngFor="let nav of routePath;let index = index; let last = last;">
-    <container-element [ngSwitch]="index">
-      <!-- the same view can be shown in more than one case -->
-      <li class="nav-item" *ngSwitchCase="index == last">
-        <a class="nav-link text-uppercase anc-link first-link" href="javascript:void(0)">
-            <i class="fa fa-home pe-2 fs-6 text-muted" *ngIf="index == 0"></i>
-            {{nav.name}}
-        </a>
-      </li>
-      <ng-container>
-        <li class="nav-item d-flex" *ngSwitchDefault>
-          <a class="nav-link text-uppercase anc-link" href="javascript:void(0)"
-            (click)="changeRouter(nav.path)">
-            <i class="fa fa-home pe-2 fs-6 text-muted" *ngIf="index == 0"></i>
-            <u>{{nav.name}}</u>
-          </a>
-          <span class="mx-2">/</span>
-        </li>
-      </ng-container>
-    </container-element>
+    <!-- the same view can be shown in more than one case -->
+    <li class="nav-item" *ngIf="last">
+      <a class="nav-link text-uppercase anc-link first-link" href="javascript:void(0)">
+          <i class="fa fa-home pe-2 fs-6 text-muted" *ngIf="index == 0"></i>
+          {{nav.name}}
+      </a>
+    </li>
+    <li class="nav-item d-flex" *ngIf="!last">
+      <a class="nav-link text-uppercase anc-link" href="javascript:void(0)"
+        (click)="changeRouter(nav.path)">
+        <i class="fa fa-home pe-2 fs-6 text-muted" *ngIf="index == 0"></i>
+        <u>{{nav.name}}</u>
+      </a>
+      <span class="mx-2">/</span>
+    </li>
   </ng-container>
 </ul>
