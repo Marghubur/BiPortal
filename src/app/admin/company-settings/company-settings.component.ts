@@ -43,11 +43,9 @@ export class CompanySettingsComponent implements OnInit {
         this.companySetting = res.ResponseBody;
       }
       this.isPageReady = true;
-
-      this.isLoading = false;
       this.initForm();
     }).then(e => {
-
+      this.isPageReady = true;
     })
   }
 
@@ -56,7 +54,11 @@ export class CompanySettingsComponent implements OnInit {
       SettingId: new FormControl(this.companySetting.SettingId),
       CompanyId: new FormControl(this.companySetting.CompanyId),
       ProbationPeriodInDays: new FormControl(this.companySetting.ProbationPeriodInDays),
-      NoticePeriodInDays: new FormControl(this.companySetting.NoticePeriodInDays)
+      NoticePeriodInDays: new FormControl(this.companySetting.NoticePeriodInDays),
+      IsPrimary: new FormControl(this.companySetting.IsPrimary),
+      DeclarationStartMonth: new FormControl(this.companySetting.DeclarationStartMonth),
+      DeclarationEndMonth: new FormControl(this.companySetting.DeclarationEndMonth),
+      FinancialYear: new FormControl(this.companySetting.FinancialYear)
     })
   }
 
@@ -84,5 +86,8 @@ export class CompanySetting {
   CompanyId: number = 0;
   ProbationPeriodInDays: number = 0;
   NoticePeriodInDays: number = 0;
-
+  IsPrimary: boolean = true;
+  DeclarationStartMonth: number = 0;
+  DeclarationEndMonth: number = 0;
+  FinancialYear: number = 0;
 }
