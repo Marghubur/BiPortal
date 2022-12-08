@@ -17,7 +17,9 @@ export class CompanySettingsComponent implements OnInit {
   currentCompany: any = null;
   isPageReady: boolean  = false;
   isLoading: boolean = false;
+  managerLevel: Array<any> = [{
 
+  }];
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
               private nav: iNavigation,
@@ -76,7 +78,7 @@ export class CompanySettingsComponent implements OnInit {
       while(i < data.length) {
         dataArray.push(
           this.fb.group({
-            DesignationId: new FormControl(data[i].DesignationId)
+            ManagerId: new FormControl(data[i].ManagerId)
           })
         )
       }
@@ -88,7 +90,7 @@ export class CompanySettingsComponent implements OnInit {
 
   createDefaultManager(): FormGroup {
     return this.fb.group({
-      DesignationId: new FormControl(0)
+      ManagerId: new FormControl(0)
     })
   }
 
