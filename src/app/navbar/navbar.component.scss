@@ -294,10 +294,10 @@
 }
 
 .logo {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   justify-content: center;
-  margin-left: 1rem;
+  text-align: center;
 }
 .dropdown-menu-text {
   font-size: 13px !important;

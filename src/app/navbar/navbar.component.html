@@ -1,126 +1,131 @@
 <nav class="navbar default-layout col-12 p-0 d-flex flex-row">
-  <div class="nav-content">
-    <div class="logo">
+  <div class="nav-content d-flex justify-content-between">
+    <div class="logo l-panel">
       <a href="javascript:void(0)" routerLink="/admin"><img src="assets/images/logo.png" class="img-fluid"
           alt="logo"></a>
     </div>
 
-    <div class="px-4 d-flex justify-content-start icon-action ms-3">
-      <a href="javascript:void(0)" (click)="navLogoPage()">
-        <div class="d-flex text-center flex-column pt-2">
-          <img src="../../assets/ext/image.png" alt="" >
-          <span class="w-100 d-flex justify-content-center">Logo</span>
-        </div>
-      </a>
-    </div>
-    <div class="d-flex col-auto justify-content-start icon-action">
-      <a href="javascript:void(0)" (click)="navCompanySetting()">
-        <div class="d-flex text-center flex-column col-md-12">
-          <i class="fa fa-cog fa-lg py-3"></i>
-          <span class="w-100 d-flex justify-content-center">Company Setting</span>
-        </div>
-      </a>
-    </div>
-    <div class="navbar-menu-wrapper d-flex align-items-center">
-      <ul class="navbar-nav navbar-nav-right">
-        <li class="d-none d-sm-block">
-          <div class="btn-group">
-            <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa fa-bell-o" aria-hidden="true"></i>
-              <span class="count badge-counter">{{NotificationBadge}}</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item dropdown-menu-text" href="#">Action</a></li>
-              <li><a class="dropdown-item dropdown-menu-text" href="#">Another action</a></li>
-              <li><a class="dropdown-item dropdown-menu-text" href="#">Something else here</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="d-none d-sm-block">
-          <div class="btn-group">
-            <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa fa-envelope-o" aria-hidden="true"></i>
-              <span class="count badge-counter">{{NotificationBadge}}</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item dropdown-menu-text" href="#">Action</a></li>
-              <li><a class="dropdown-item dropdown-menu-text" href="#">Another action</a></li>
-              <li><a class="dropdown-item dropdown-menu-text" href="#">Something else here</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
-            </ul>
-          </div>
-        </li>
-
-        <li>
-          <a type="button" id="btn-user" class="btn btn-user position-relative" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <a href="javascript:void" id="anc-user"
-              class="d-flex flex-column justify-content-center text-dark pe-3 text-decoration-none"
-              (click)="ViewUserProfile()">
-              <span class="profile-text">{{userDetail.LastName}}</span>
-            </a>
-            <img class="img-xs rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
+    <div class="fe-2">
+      <div class="d-flex justify-content-start">
+        <div class="px-4 d-flex justify-content-start icon-action ms-3">
+          <a href="javascript:void(0)" (click)="navLogoPage()">
+            <div class="d-flex text-center flex-column pt-2">
+              <img src="../../assets/ext/image.png" alt="" >
+              <span class="w-100 d-flex justify-content-center">Logo</span>
+            </div>
           </a>
-
-          <div *ngIf="!IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown lpp" ngbDropdownMenu
-            aria-labelledby="UserDropdown">
-            <a class="dropdown-item p-over-header p-0 lpp__a">
-              <div class="d-inline-block">
-                <div
-                  class="py-3 px-4 d-flex align-items-center justify-content-center border-left border-right lpp__icon-circle">
-                  <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i>
-                </div>
-              </div>
-            </a>
-            <hr />
-            <a *ngIf="!IsLoggedIn" class="dropdown-item c-pointer ml-5" (click)="landLoginPage()">
-              Sign In
-            </a>
-          </div>
-
-          <div *ngIf="IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown adject-p-o lpp"
-            ngbDropdownMenu aria-labelledby="UserDropdown">
-            <a class="dropdown-item p-over-header p-0 lpp__a">
-              <div class="d-inline-block">
-                <div class="d-flex align-items-center justify-content-center">
-                  <!-- <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i> -->
-                  <img class="img-xl rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
-                </div>
-              </div>
-            </a>
-            <hr class="m-0 p-0" />
-            <a class="dropdown-item c-pointer dropdown-menu-text mt-2">
-              Manage Accounts
-            </a>
-            <a class="dropdown-item c-pointer dropdown-menu-text">
-              Change Password
-            </a>
-            <a class="dropdown-item c-pointer dropdown-menu-text">
-              Check Inbox
-            </a>
-            <a class="dropdown-item c-pointer dropdown-menu-text" (click)="LogoutUser()">
-              Sign Out
-            </a>
-          </div>
-        </li>
-      </ul>
-
-
-      <div class="menu-sm-burger" id="hamburger-item">
-        <a href="javascript:void(0)" class="icon-deep" (click)="toggleMenu()">
-          <i class="fa fa-bars" aria-hidden="true"></i>
-        </a>
+        </div>
+        <div class="d-flex col-auto justify-content-start icon-action">
+          <a href="javascript:void(0)" (click)="navCompanySetting()">
+            <div class="d-flex text-center flex-column col-md-12">
+              <i class="fa fa-cog fa-lg py-3"></i>
+              <span class="w-100 d-flex justify-content-center">Setting</span>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
 
-
+    <div>
+      <div class="navbar-menu-wrapper d-flex align-items-center">
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="d-none d-sm-block">
+            <div class="btn-group">
+              <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-bell-o" aria-hidden="true"></i>
+                <span class="count badge-counter">{{NotificationBadge}}</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item dropdown-menu-text" href="#">Action</a></li>
+                <li><a class="dropdown-item dropdown-menu-text" href="#">Another action</a></li>
+                <li><a class="dropdown-item dropdown-menu-text" href="#">Something else here</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
+              </ul>
+            </div>
+          </li>
+  
+          <li class="d-none d-sm-block">
+            <div class="btn-group">
+              <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                <span class="count badge-counter">{{NotificationBadge}}</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item dropdown-menu-text" href="#">Action</a></li>
+                <li><a class="dropdown-item dropdown-menu-text" href="#">Another action</a></li>
+                <li><a class="dropdown-item dropdown-menu-text" href="#">Something else here</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
+              </ul>
+            </div>
+          </li>
+  
+          <li>
+            <a type="button" id="btn-user" class="btn btn-user position-relative" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <a href="javascript:void" id="anc-user"
+                class="d-flex flex-column justify-content-center text-dark pe-3 text-decoration-none"
+                (click)="ViewUserProfile()">
+                <span class="profile-text">{{userDetail.LastName}}</span>
+              </a>
+              <img class="img-xs rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
+            </a>
+  
+            <div *ngIf="!IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown lpp" ngbDropdownMenu
+              aria-labelledby="UserDropdown">
+              <a class="dropdown-item p-over-header p-0 lpp__a">
+                <div class="d-inline-block">
+                  <div
+                    class="py-3 px-4 d-flex align-items-center justify-content-center border-left border-right lpp__icon-circle">
+                    <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i>
+                  </div>
+                </div>
+              </a>
+              <hr />
+              <a *ngIf="!IsLoggedIn" class="dropdown-item c-pointer ml-5" (click)="landLoginPage()">
+                Sign In
+              </a>
+            </div>
+  
+            <div *ngIf="IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown adject-p-o lpp"
+              ngbDropdownMenu aria-labelledby="UserDropdown">
+              <a class="dropdown-item p-over-header p-0 lpp__a">
+                <div class="d-inline-block">
+                  <div class="d-flex align-items-center justify-content-center">
+                    <!-- <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i> -->
+                    <img class="img-xl rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
+                  </div>
+                </div>
+              </a>
+              <hr class="m-0 p-0" />
+              <a class="dropdown-item c-pointer dropdown-menu-text mt-2">
+                Manage Accounts
+              </a>
+              <a class="dropdown-item c-pointer dropdown-menu-text">
+                Change Password
+              </a>
+              <a class="dropdown-item c-pointer dropdown-menu-text">
+                Check Inbox
+              </a>
+              <a class="dropdown-item c-pointer dropdown-menu-text" (click)="LogoutUser()">
+                Sign Out
+              </a>
+            </div>
+          </li>
+        </ul>
+  
+  
+        <div class="menu-sm-burger" id="hamburger-item">
+          <a href="javascript:void(0)" class="icon-deep" (click)="toggleMenu()">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </nav>
