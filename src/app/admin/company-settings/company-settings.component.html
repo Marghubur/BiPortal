@@ -71,7 +71,7 @@
                       <div class="d-flex bg-light ps-5 align-items-center py-2 my-2" *ngFor="let item of ManagerControl.controls; let i=index;" [formGroupName]="i">
                         <label for="" class="form-label">LEVEL {{i+1}}</label>
                         <i class="fa fa-circle text-primary ps-3 pe-4"></i>
-                        <select class="form-select w-75" formControlName="DesignationId">
+                        <select class="form-select w-75" formControlName="ManagerId">
                           <option value="0">Select Level</option>
                           <option value="1">Direct HR</option>
                           <option value="2">Senior HR</option>
