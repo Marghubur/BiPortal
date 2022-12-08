@@ -17,9 +17,7 @@ export class CompanySettingsComponent implements OnInit {
   currentCompany: any = null;
   isPageReady: boolean  = false;
   isLoading: boolean = false;
-  managerLevel: Array<any> = [{
-
-  }];
+  roles: Array<any> = [];
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
               private nav: iNavigation,
@@ -47,13 +45,21 @@ export class CompanySettingsComponent implements OnInit {
   loadPageData() {
     this.http.get(`company/getcompanysettingdetail/${this.currentCompany.CompanyId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        this.companySetting = res.ResponseBody;
+        this.buildPage(res.ResponseBody)
       }
       this.isPageReady = true;
-      this.initForm();
     }).then(e => {
       this.isPageReady = true;
     })
+  }
+
+  buildPage(res) {
+    if (res.companySettingDetail)
+      this.companySetting = res.companySettingDetail;
+
+    if (res.roles)
+      this.roles = res.roles;
+    this.initForm();
   }
 
   initForm() {
@@ -71,16 +77,17 @@ export class CompanySettingsComponent implements OnInit {
   }
 
   buildManager(): FormArray {
-    let data = [];
+    let data = JSON.parse(this.companySetting.DefaultManagers);
     let dataArray = this.fb.array([]);
     if (data.length > 0) {
       let i = 0;
       while(i < data.length) {
         dataArray.push(
           this.fb.group({
-            ManagerId: new FormControl(data[i].ManagerId)
+            ManagerId: new FormControl(data[i])
           })
         )
+        i++;
       }
     } else {
       dataArray.push(this.createDefaultManager())
@@ -114,9 +121,10 @@ export class CompanySettingsComponent implements OnInit {
     let value = this.companySettingForm.value;
     if (value.CompanyId > 0) {
       this.isLoading = true;
-      console.log(value)
+      value.ManagerLevelId = value.DefaultManager.map( x=> x.ManagerId);
       this.http.put(`company/UpdateSetting/${value.CompanyId}`, value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
+          this.buildPage(res.ResponseBody);
           this.isLoading = false;
           Toast("Setting save successfully")
         }
@@ -138,4 +146,5 @@ export class CompanySetting {
   DeclarationStartMonth: number = 0;
   DeclarationEndMonth: number = 0;
   FinancialYear: number = 0;
+  DefaultManagers: string = "";
 }
