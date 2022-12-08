@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 
@@ -18,11 +19,16 @@ export class CompanySettingsComponent implements OnInit {
   isLoading: boolean = false;
 
   constructor(private fb: FormBuilder,
+              private local: ApplicationStorage,
               private nav: iNavigation,
               private http: AjaxService) { }
 
   ngOnInit(): void {
     let data = this.nav.getValue();
+    if (!data) {
+      let item = this.local.findRecord("Companies");
+      data = item.find(x => x.IsPrimaryCompany == 1);
+    }
     if (data) {
       this.currentCompany = data;
       if(this.currentCompany.CompanyId == 0) {
@@ -31,8 +37,7 @@ export class CompanySettingsComponent implements OnInit {
       }
       this.companySetting.CompanyId = this.currentCompany.CompanyId;
       this.loadPageData();
-    }
-    else {
+    }else {
       ErrorToast("Company information doesn't found. Please contact to admin.");
     }
   }
@@ -58,8 +63,49 @@ export class CompanySettingsComponent implements OnInit {
       IsPrimary: new FormControl(this.companySetting.IsPrimary),
       DeclarationStartMonth: new FormControl(this.companySetting.DeclarationStartMonth),
       DeclarationEndMonth: new FormControl(this.companySetting.DeclarationEndMonth),
-      FinancialYear: new FormControl(this.companySetting.FinancialYear)
+      FinancialYear: new FormControl(this.companySetting.FinancialYear),
+      DefaultManager: this.buildManager()
     })
+  }
+
+  buildManager(): FormArray {
+    let data = [];
+    let dataArray = this.fb.array([]);
+    if (data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(
+          this.fb.group({
+            DesignationId: new FormControl(data[i].DesignationId)
+          })
+        )
+      }
+    } else {
+      dataArray.push(this.createDefaultManager())
+    }
+    return dataArray;
+  }
+
+  createDefaultManager(): FormGroup {
+    return this.fb.group({
+      DesignationId: new FormControl(0)
+    })
+  }
+
+  get ManagerControl() {
+    return this.companySettingForm.get('DefaultManager') as FormArray;
+  }
+
+  addManagerLevel() {
+    let item = this.companySettingForm.get('DefaultManager') as FormArray;
+    item.push(this.createDefaultManager());
+  }
+
+  removeManagerLevel(index: number) {
+    let item = this.companySettingForm.get('DefaultManager') as FormArray;
+    if (item.length > 1) {
+      item.removeAt(index);
+    }
   }
 
   saveSetting() {

@@ -5,15 +5,22 @@
           alt="logo"></a>
     </div>
 
-    <div class="px-4 d-flex justify-content-start icon-action">      
+    <div class="px-4 d-flex justify-content-start icon-action ms-3">
       <a href="javascript:void(0)" (click)="navLogoPage()">
-        <div class="d-flex">
-          <img src="../../assets/ext/image.png" alt="">
-          <span>Logo</span>
+        <div class="d-flex text-center flex-column pt-2">
+          <img src="../../assets/ext/image.png" alt="" >
+          <span class="w-100 d-flex justify-content-center">Logo</span>
         </div>
       </a>
     </div>
-
+    <div class="d-flex col-auto justify-content-start icon-action">
+      <a href="javascript:void(0)" (click)="navCompanySetting()">
+        <div class="d-flex text-center flex-column col-md-12">
+          <i class="fa fa-cog fa-lg py-3"></i>
+          <span class="w-100 d-flex justify-content-center">Company Setting</span>
+        </div>
+      </a>
+    </div>
     <div class="navbar-menu-wrapper d-flex align-items-center">
       <ul class="navbar-nav navbar-nav-right">
         <li class="d-none d-sm-block">
