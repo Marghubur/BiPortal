@@ -73,9 +73,7 @@
                         <i class="fa fa-circle text-primary ps-3 pe-4"></i>
                         <select class="form-select w-75" formControlName="ManagerId">
                           <option value="0">Select Level</option>
-                          <option value="1">Direct HR</option>
-                          <option value="2">Senior HR</option>
-                          <option value="3">Admin</option>
+                          <option [value]="item.RoleId" *ngFor="let item of roles">{{item.RoleName}}</option>
                         </select>
                         <a *ngIf="ManagerControl.controls.length == i+1 && i > 0" href="javascript:void(0)" class="text-decoration-none" (click)="removeManagerLevel(i)">
                           <i class="fa fa-trash text-muted ps-3 fa-lg"></i>
