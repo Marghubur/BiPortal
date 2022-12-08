@@ -2,50 +2,93 @@
   <div class="x_panel">
     <div class="x_header">
       <div class="x_header_title">
-        <div class="col-md-3">
-          <h2>COMPANY SETTINGS</h2>
-        </div>
+        <h2>Company Setting<small>notice period, financiaal year etc</small></h2>
       </div>
     </div>
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
     </div>
-    <div class="container mt-5">
+    <div class="x_content mt-4">
       <ng-container *ngIf="isPageReady">
-        <form [formGroup]="companySettingForm">
-          <div class="col-md-4">
-            <label class="form-label">Company Name</label>
-            <input type="text" class="form-control border-0" readonly [value]="currentCompany.CompanyName">
-          </div>
+        <form [formGroup]="companySettingForm" *ngIf="companySettingForm">
           <div class="row">
-            <div class="col-md-4 mt-4">
-              <label for="" class="form-label">Probation Period In Days</label>
-              <input maxlength="3" type="text" class="form-control" formControlName="ProbationPeriodInDays" placeholder="Enter probation period days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            <div class="col-md-6">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Company Setting<small>financial and notice period setting.</small></h2>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Company Name</label>
+                  <input type="text" class="form-control border-0" readonly [value]="currentCompany.CompanyName">
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mt-4">
+                    <label for="" class="form-label">Probation Period In Days</label>
+                    <input maxlength="3" type="text" class="form-control" formControlName="ProbationPeriodInDays" placeholder="Enter probation period days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                  </div>
+                  <div class="col-md-4 mt-4">
+                    <label for="" class="form-label">Notice Period In Days</label>
+                    <input maxlength="3" type="text" class="form-control" formControlName="NoticePeriodInDays" placeholder="Enter notice period in days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                  </div>
+                  <div class="col-md-4 mt-4">
+                    <label for="" class="form-label">Is Primary</label>
+                    <select class="form-select" formControlName="IsPrimary">
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mt-4">
+                    <label for="" class="form-label">Declaration Start Month</label>
+                    <input maxlength="3" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                  </div>
+                  <div class="col-md-4 mt-4">
+                    <label for="" class="form-label">Declaration End Month</label>
+                    <input maxlength="3" type="text" class="form-control" formControlName="DeclarationEndMonth" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                  </div>
+                  <div class="col-md-4 mt-4">
+                    <label for="" class="form-label">Financial Year</label>
+                    <input maxlength="3" type="text" class="form-control" formControlName="FinancialYear" placeholder="Enter financial year" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="col-md-4 mt-4">
-              <label for="" class="form-label">Notice Period In Days</label>
-              <input maxlength="3" type="text" class="form-control" formControlName="NoticePeriodInDays" placeholder="Enter notice period in days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-            </div>
-            <div class="col-md-4 mt-4">
-              <label for="" class="form-label">Is Primary</label>
-              <select class="form-select" formControlName="IsPrimary">
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 mt-4">
-              <label for="" class="form-label">Declaration Start Month</label>
-              <input maxlength="3" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-            </div>
-            <div class="col-md-4 mt-4">
-              <label for="" class="form-label">Declaration End Month</label>
-              <input maxlength="3" type="text" class="form-control" formControlName="DeclarationEndMonth" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-            </div>
-            <div class="col-md-4 mt-4">
-              <label for="" class="form-label">Financial Year</label>
-              <input maxlength="3" type="text" class="form-control" formControlName="FinancialYear" placeholder="Enter financial year" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            <div class="col-md-6">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Default Manager Setting<small>Multiple level setting.</small></h2>
+                  </div>
+                </div>
+                <div class="card">
+                  <label for="" class="form-label fw-bold ps-3 pt-3">Default Manager Chain</label>
+                  <label for="" class="form-label fw-bold ps-3">If the manager of an employee is not assign then the default manager should be</label>
+                  <div class="pt-1 pb-2">
+                    <ng-container formArrayName="DefaultManager" >
+                      <div class="d-flex bg-light ps-5 align-items-center py-2 my-2" *ngFor="let item of ManagerControl.controls; let i=index;" [formGroupName]="i">
+                        <label for="" class="form-label">LEVEL {{i+1}}</label>
+                        <i class="fa fa-circle text-primary ps-3 pe-4"></i>
+                        <select class="form-select w-75" formControlName="DesignationId">
+                          <option value="0">Select Level</option>
+                          <option value="1">Direct HR</option>
+                          <option value="2">Senior HR</option>
+                          <option value="3">Admin</option>
+                        </select>
+                        <a *ngIf="ManagerControl.controls.length == i+1 && i > 0" href="javascript:void(0)" class="text-decoration-none" (click)="removeManagerLevel(i)">
+                          <i class="fa fa-trash text-muted ps-3 fa-lg"></i>
+                        </a>
+                      </div>
+                    </ng-container>
+                    <a href="javascript:void(0)" class="text-decoration-none ps-5 pt-3" (click)="addManagerLevel()">
+                      <i class="fa fa-plus pe-2"></i>
+                      Add New Level
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="text-end mt-3">
@@ -55,6 +98,19 @@
             </button>
           </div>
         </form>
+      </ng-container>
+      <ng-container *ngIf="!isPageReady">
+        <div class="py-5 my-5">
+          <h6 class="fw-bold fs-3 text-center text-dark">Company settings are loading</h6>
+          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </div>
       </ng-container>
     </div>
   </div>

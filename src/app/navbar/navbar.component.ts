@@ -1,7 +1,7 @@
 import { ApplicationStorage } from "./../../providers/ApplicationStorage";
 import { AjaxService } from "./../../providers/ajax.service";
 import { CommonService, Toast, UserDetail } from "./../../providers/common-service/common.service";
-import { AccessTokenExpiredOn, Blogs, BuildPdf, CompanyLogo, Documents, Employees, Login } from "./../../providers/constants";
+import { AccessTokenExpiredOn, Blogs, BuildPdf, Company, CompanyLogo, CompanySettings, Documents, Employees, Login } from "./../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
@@ -131,6 +131,10 @@ export class NavbarComponent implements OnInit {
 
   AutoDemo() {
     this.nav.navigate("/", null);
+  }
+
+  navCompanySetting() {
+    this.nav.navigate(CompanySettings, null);
   }
 
   toggleMenu() {
