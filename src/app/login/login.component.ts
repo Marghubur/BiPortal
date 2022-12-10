@@ -87,26 +87,16 @@ export class LoginComponent implements OnInit {
           this.loginValue.Mobile = userId.value;
         }
 
-        let url = null;
-        switch(this.userType) {
-          case 'system':
-            url = 'Login/Authenticate';
-            break
-          case 'employee':
-            url = 'Login/AuthenticateUser';
-            break
-        }
-
         this.loginValue.Password = password.value;
-        this.http.login(url, this.loginValue).then((result: ResponseModel) => {
+        this.http.login('Login/Authenticate', this.loginValue).then((result: ResponseModel) => {
           if (result.ResponseBody) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
             Toast("Please wait loading dashboard ...", 15);
-            if(this.userType == 'employee')
-              this.nav.navigate(UserDashboard, null);
-            else
+            if(Data.UserTypeId == 1)
               this.nav.navigate(Dashboard, null);
+            else
+              this.nav.navigate(UserDashboard, null);
           } else {
             ErrorToast("Incorrect username or password. Please try again.");
           }
