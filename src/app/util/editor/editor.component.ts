@@ -44,11 +44,11 @@ export class EditorComponent implements OnInit, AfterViewChecked {
     this.enableEditMode();
     // iframe.body.innerHTML = this.innerHtmlText;
   }
-  
-  
+
+
   enableEditMode (){
     let iframe = this.richTextField.contentDocument || this.richTextField.contentWindow.document;
-    iframe.contentDocument.designMode  = 'On';
+    iframe.designMode  = 'On';
   }
 
   execCmd (command) {
@@ -253,7 +253,7 @@ export class EditorComponent implements OnInit, AfterViewChecked {
 //   closePopOver(){
 //     this.popover.classList.add('d-none');
 //   }
-  
+
 //   onPaste(e: any) {
 //     e.preventDefault();
 //     let items = (e.clipboardData || e.orignalEvent.clipboardData).items;
