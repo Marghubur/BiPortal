@@ -102,7 +102,6 @@ import { OfferletterComponent } from './offerletter/offerletter.component';
     CompanylogoComponent,
     AnnexureComponent,
     OfferletterComponent
-
   ],
   imports: [
     CommonModule,

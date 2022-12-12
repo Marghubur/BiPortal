@@ -1,0 +1,29 @@
+<!-- Employee Register or Update message modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" [ngClass]="modalSize">
+    <div class="p-2 modal-content">
+      <div class="modal-header border-bottom-0 pt-4">
+        <h5 class="modal-title">{{data.Title}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-dark d-flex align-items-center mb-0 pb-0">
+        <ng-container *ngIf="data.IsSuccessFullCreation">
+          <div class="wrapper-checkmark me-3">
+            <svg class="checkmark-register" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/> <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="data.IsHtml">
+          <div [innerHTML]="bodyContent"></div>
+        </ng-container>
+        <ng-container *ngIf="!data.IsHtml">
+          {{bodyContent}}
+        </ng-container>
+      </div>
+      <div class="modal-footer mt-0 border-top-0">
+        <a href="javascript:void(0)" class="text-decoration-none text-dark fw-bold" (click)="closeModal()">OK</a>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- End -->

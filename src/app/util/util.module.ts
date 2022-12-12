@@ -11,7 +11,8 @@ import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
 import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component";
 import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component';
 import { ImageLoaderComponent } from './image-loader/image-loader.component';
-import { EditorComponent } from './editor/editor.component'
+import { EditorComponent } from './editor/editor.component';
+import { MessageModalComponent } from './message-modal/message-modal.component'
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { EditorComponent } from './editor/editor.component'
     BreadcrumsComponent,
     PreLoadTableComponent,
     ImageLoaderComponent,
-    EditorComponent
+    EditorComponent,
+    MessageModalComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +42,8 @@ import { EditorComponent } from './editor/editor.component'
     IautocompleteComponent,
     PreLoadTableComponent,
     ImageLoaderComponent,
-    EditorComponent
+    EditorComponent,
+    MessageModalComponent
   ]
 })
 export class UtilModule { }
