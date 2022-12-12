@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IModalData } from 'src/app/util/message-modal/message-modal.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { Filter } from 'src/providers/userService';
-declare var $: any;
 import { EmailTemplate } from '../manage-emailtemplate/manage-emailtemplate.component';
+declare var $: any;
 
 @Component({
   selector: 'app-email-config',
@@ -16,8 +15,7 @@ import { EmailTemplate } from '../manage-emailtemplate/manage-emailtemplate.comp
 })
 export class EmailConfigComponent implements OnInit {
   isPageLoading: boolean = false;
-  templateData: Filter = null;
-  allEmailtemplate: Array<any> = [];
+  allMappedtemplate: Array<EmpTempMapping> = [];
   companyId: number = 0;
   modalData: IModalData = null;
   emailTemplateDetail: EmailTemplate = null;
@@ -25,6 +23,9 @@ export class EmailConfigComponent implements OnInit {
   currentEmailTemp: EmpTempMapping = null;
   isLoading: boolean = false;
   submitted: boolean = false;
+  allEmailTemplate: Array<any> = [];
+  requestTypes: Array<any> = [{RequestTypeId: 1, RequestTypeName: "Billing"}, {RequestTypeId: 2, RequestTypeName: "New Registration"}, {RequestTypeId: 3, RequestTypeName: "Forgot Password"},
+                              {RequestTypeId: 4, RequestTypeName: "Notification"}, {RequestTypeId: 5, RequestTypeName: "Approval Notification"}];
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
@@ -41,7 +42,6 @@ export class EmailConfigComponent implements OnInit {
         return;
       } else {
         this.companyId = currentCompany.CompanyId;
-        this.templateData = new Filter();
         this.loadData();
       }
     }
@@ -49,19 +49,34 @@ export class EmailConfigComponent implements OnInit {
 
   loadData() {
     this.isPageLoading = true;
-    this.templateData.SearchString = `1=1 and CompanyId=${this.companyId}`;
-    this.http.post("Email/GetEmailTemplate", this.templateData).then(res => {
-      if (res.ResponseBody && res.ResponseBody.length > 0) {
-        this.allEmailtemplate = res.ResponseBody;
-        this.templateData.TotalRecords = this.allEmailtemplate[0].Total;
+    this.http.get(`Email/GetEmailTempMapping/${this.companyId}`).then(res => {
+      if (res.ResponseBody) {
+        this.bindData(res.ResponseBody);
         this.isPageLoading = false;
         Toast("Email Template found");
-      } else
-        this.templateData.TotalRecords = 0;
+      } else {
+        this.isPageLoading = false;
+      }
     }).catch(e => {
       this.isPageLoading = false;
       ErrorToast("No Email Template found");
     })
+  }
+
+  bindData(res: any) {
+    if (res.emailTemplate)
+      this.allEmailTemplate = res.emailTemplate;
+
+    if (res.emailMappedTemplate) {
+      this.allMappedtemplate = res.emailMappedTemplate;
+      let i = 0;
+      while(i < this.allMappedtemplate.length) {
+        let tempId = this.allMappedtemplate[i].EmailTemplateId;
+        this.allMappedtemplate[i].EmailTemplateName = this.allEmailTemplate.find (x => x.EmailTemplateId == tempId).TemplateName;
+        this.allMappedtemplate[i].RequestTypeName = this.requestTypes.find (x => x.RequestTypeId == this.allMappedtemplate[i].RequestType).RequestTypeName;
+        i++;
+      }
+    }
   }
 
   emailConfigPopUp() {
@@ -104,11 +119,15 @@ export class EmailConfigComponent implements OnInit {
   initForm() {
     this.emailTempMapForm = this.fb.group({
       EmailTempMappingId: new FormControl(this.currentEmailTemp.EmailTempMappingId),
-      RequestType: new FormControl(this.currentEmailTemp.RequestType),
-      EmailTemplateId: new FormControl(this.currentEmailTemp.EmailTemplateId),
-      Description: new FormControl(this.currentEmailTemp.Description),
-      CompanyId: new FormControl(this.companyId)
+      RequestType: new FormControl(this.currentEmailTemp.RequestType, [Validators.required]),
+      EmailTemplateId: new FormControl(this.currentEmailTemp.EmailTemplateId, [Validators.required]),
+      Description: new FormControl(this.currentEmailTemp.Description, [Validators.required]),
+      CompanyId: new FormControl(this.companyId, [Validators.required])
     })
+  }
+
+  get f() {
+    return this.emailTempMapForm.controls;
   }
 
   addMapping() {
@@ -119,8 +138,9 @@ export class EmailConfigComponent implements OnInit {
       return;
     }
     let value = this.emailTempMapForm.value;
-    this.http.post("", value).then((res:ResponseModel) => {
+    this.http.post("Email/EmailTempMappingInsertUpdate", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
+        this.bindData(res.ResponseBody);
         $('#emailConfigModal').modal('hide');
         Toast("Email template mapping successfully");
       }
@@ -135,7 +155,9 @@ export class EmailConfigComponent implements OnInit {
 
 class EmpTempMapping {
   EmailTempMappingId: number = 0;
-  RequestType: number = 0;
-  EmailTemplateId: number = 0;
+  RequestType: number = null;
+  EmailTemplateId: number = null;
   Description: string = null;
+  EmailTemplateName: string = "";
+  RequestTypeName: string = "";
 }

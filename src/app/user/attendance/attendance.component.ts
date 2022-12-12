@@ -225,7 +225,6 @@ export class AttendanceComponent implements OnInit {
         if(current) {
           current.PresentDayStatus = 2;
         }
-        this.currentDays = this.currentDays.reverse();
         this.isLoading = false;
         Toast("Wow!!!  Your attendance submitted successfully.");
       } else {
