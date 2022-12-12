@@ -150,7 +150,7 @@ export class ManageEmailtemplateComponent implements OnInit {
   }
 }
 
-class EmailTemplate {
+export class EmailTemplate {
   EmailTemplateId: number = 0;
   TemplateName: string = null;
   SubjectLine: string = null;

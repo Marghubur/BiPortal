@@ -44,9 +44,12 @@
                     {{template.ContactNo}}
                 </div>
                 <div class="td align-middle fe-1">
-                  <div class="d-flex flex-row justify-content-evenly">
-                    <a href="javascript:void(0)" (click)="addeditTemplate(template)">
+                  <div class="d-flex flex-row justify-content-center">
+                    <a href="javascript:void(0)" class="px-2" (click)="addeditTemplate(template)">
                       <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                    </a>
+                    <a href="javascript:void(0)" class="px-2" (click)="getMessageModal(template.EmailTemplateId)">
+                      <span class="badge bg-dark"><i class="fa fa-eye" aria-hidden="true"></i></span>
                     </a>
                   </div>
                 </div>
@@ -78,4 +81,6 @@
       </div>
     </ng-container>
   </div>
+
+  <app-message-modal [Data]="modalData"></app-message-modal>
 </div>
