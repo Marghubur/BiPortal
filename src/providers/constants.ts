@@ -108,6 +108,8 @@ export const ManageEmailTemplate = 'admin/emailtemplate/manageemailtemplate';
 export const EmployeePerformance = 'admin/employees/employeeperformance';
 export const TaxRegime = 'admin/taxregime';
 export const CompanyLogo = 'admin/companylogo';
+export const Annexure = 'admin/annexure';
+export const OfferLetter = 'admin/offerletter';
 
 // ********************** Admin route pages  *******************
 

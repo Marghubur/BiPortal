@@ -1,22 +1,22 @@
 <!-- <div (click)="closePopOver()" (keydown.esc)="closePopOver()">
     <div (contextmenu)="manipulateSection($event)">
         <div>
-            <div class="content-dv enable-section overflow-none py-2 px-3" 
+            <div class="content-dv enable-section overflow-none py-2 px-3"
                 contenteditable="true"
                 id="content-container"
                 (keyup.enter)="addindex()"
-                (click)="enableSection($event)" 
+                (click)="enableSection($event)"
                 (dblclick)="enableCurrentSection($event)"
                 (keypress.ctrl)="trackElement($event)"
                 [innerHTML]='innerHtmlText'>
             </div>
-        </div>    
+        </div>
     </div>
 </div>
  -->
 
 <!-- Right click event popover -->
-<!-- 
+<!--
 <div class="position-fixed c-po d-none" id="popoverTemplate">
     <nav class ="navbar">
       <ul class ="nav navbar-nav">
@@ -149,7 +149,6 @@
       <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Select All" (click)="execCmd('selectAll');">Select All</a>
     </div>
     <div class="col-md-12 mt-3 px-4">
-      <iframe id="richTextField" [srcdoc]="innerHtmlText" class="h-75 rounded w-100"></iframe>
+      <iframe id="richTextField" (dblclick)="toggleEdit()" [srcdoc]="innerHtmlText" class="h-75 rounded w-100"></iframe>
     </div>
   </div>
-  

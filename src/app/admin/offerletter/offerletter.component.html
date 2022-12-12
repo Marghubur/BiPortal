@@ -1,0 +1,49 @@
+<div class="main-container">
+    <div class="x_panel">
+      <div class="x_header">
+        <div class="x_header_title">
+          <h2>Offer Letter <small>Offer letter template</small></h2>
+        </div>
+      </div>
+      <div>
+        <app-breadcrums></app-breadcrums>
+      </div>
+      <ng-container *ngIf="isPageReady">
+        <div class="x_content">
+          <form [formGroup]="offerletterForm" *ngIf="offerletterForm">
+            <div class="row px-4 justify-content-between">
+              <div class="col-md-4 my-3">
+                <label for="" class="form-label">Company Name</label>
+                <input type="text" readonly class="form-control" formControlName="CompanyName">
+              </div>
+              <div class="col-md-4 my-3">
+                <label for="" class="form-label">Template Name</label>
+                <input type="text" class="form-control" placeholder="Template Name" formControlName="TemplateName">
+              </div>
+            </div>
+            <app-editor [content]="htmlText"></app-editor>
+          </form>
+          <div class="text-end pe-4">
+            <button class="btn btn-success" (click)="generateOfferLetter()">Generate Offer Letter</button>
+            <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveofferletter()">
+              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+              <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!isPageReady">
+        <div class="py-5 my-5">
+          <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+</div>

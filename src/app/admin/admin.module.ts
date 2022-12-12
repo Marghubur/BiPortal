@@ -52,6 +52,8 @@ import { EmailTemplateComponent } from './email-template/email-template.componen
 import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
 import { EmployeePerformanceComponent } from './employee-performance/employee-performance.component';
 import { CompanylogoComponent } from './companylogo/companylogo.component';
+import { AnnexureComponent } from './annexure/annexure.component';
+import { OfferletterComponent } from './offerletter/offerletter.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +99,9 @@ import { CompanylogoComponent } from './companylogo/companylogo.component';
     EmailTemplateComponent,
     ManageEmailtemplateComponent,
     EmployeePerformanceComponent,
-    CompanylogoComponent
+    CompanylogoComponent,
+    AnnexureComponent,
+    OfferletterComponent
 
   ],
   imports: [
