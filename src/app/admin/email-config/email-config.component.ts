@@ -1,30 +1,34 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IModalData } from 'src/app/util/message-modal/message-modal.component';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { ManageEmailTemplate } from 'src/providers/constants';
-import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
+declare var $: any;
 import { EmailTemplate } from '../manage-emailtemplate/manage-emailtemplate.component';
 
 @Component({
-  selector: 'app-email-template',
-  templateUrl: './email-template.component.html',
-  styleUrls: ['./email-template.component.scss']
+  selector: 'app-email-config',
+  templateUrl: './email-config.component.html',
+  styleUrls: ['./email-config.component.scss']
 })
-export class EmailTemplateComponent implements OnInit {
-  allEmailtemplate: Array<any> = [];
-  isRecordFound: boolean = false;
-  templateData: Filter = null;
+export class EmailConfigComponent implements OnInit {
   isPageLoading: boolean = false;
+  templateData: Filter = null;
+  allEmailtemplate: Array<any> = [];
   companyId: number = 0;
   modalData: IModalData = null;
   emailTemplateDetail: EmailTemplate = null;
+  emailTempMapForm: FormGroup;
+  currentEmailTemp: EmpTempMapping = null;
+  isLoading: boolean = false;
+  submitted: boolean = false;
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
-              private nav:iNavigation) { }
+              private fb: FormBuilder) { }
 
   ngOnInit(): void {
     let data = this.local.findRecord("Companies");
@@ -44,14 +48,12 @@ export class EmailTemplateComponent implements OnInit {
   }
 
   loadData() {
-    this.isRecordFound = false;
     this.isPageLoading = true;
     this.templateData.SearchString = `1=1 and CompanyId=${this.companyId}`;
     this.http.post("Email/GetEmailTemplate", this.templateData).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.allEmailtemplate = res.ResponseBody;
         this.templateData.TotalRecords = this.allEmailtemplate[0].Total;
-        this.isRecordFound = true;
         this.isPageLoading = false;
         Toast("Email Template found");
       } else
@@ -62,15 +64,16 @@ export class EmailTemplateComponent implements OnInit {
     })
   }
 
-  addeditTemplate(item: any) {
-    this.nav.navigate(ManageEmailTemplate, item);
+  emailConfigPopUp() {
+    this.currentEmailTemp = new EmpTempMapping();
+    this.initForm();
+    $('#emailConfigModal').modal('show');
   }
 
-  GetFilterResult(e: Filter) {
-    if(e != null) {
-      this.templateData = e;
-      this.loadData();
-    }
+  editEmailTempConfig(item: EmpTempMapping) {
+    this.currentEmailTemp = item;
+    this.initForm();
+    $('#emailConfigModal').modal('show');
   }
 
   getMessageModal(emailTemplateId: number) {
@@ -97,4 +100,42 @@ export class EmailTemplateComponent implements OnInit {
       ErrorToast("Invalid template selected");
     })
   }
+
+  initForm() {
+    this.emailTempMapForm = this.fb.group({
+      EmailTempMappingId: new FormControl(this.currentEmailTemp.EmailTempMappingId),
+      RequestType: new FormControl(this.currentEmailTemp.RequestType),
+      EmailTemplateId: new FormControl(this.currentEmailTemp.EmailTemplateId),
+      Description: new FormControl(this.currentEmailTemp.Description),
+      CompanyId: new FormControl(this.companyId)
+    })
+  }
+
+  addMapping() {
+    this.isLoading = true;
+    this.submitted = true;
+    if (this.emailTempMapForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
+    let value = this.emailTempMapForm.value;
+    this.http.post("", value).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        $('#emailConfigModal').modal('hide');
+        Toast("Email template mapping successfully");
+      }
+      this.isLoading = false;
+      this.submitted = false;
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+}
+
+class EmpTempMapping {
+  EmailTempMappingId: number = 0;
+  RequestType: number = 0;
+  EmailTemplateId: number = 0;
+  Description: string = null;
 }

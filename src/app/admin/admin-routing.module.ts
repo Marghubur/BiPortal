@@ -41,7 +41,8 @@ import { AdminResetPassword,
   EmployeePerformance,
   CompanyLogo,
   Annexure,
-  OfferLetter
+  OfferLetter,
+  EmailConfiguration
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -85,6 +86,7 @@ import { EmployeePerformanceComponent } from './employee-performance/employee-pe
 import { CompanylogoComponent } from './companylogo/companylogo.component';
 import { AnnexureComponent } from './annexure/annexure.component';
 import { OfferletterComponent } from './offerletter/offerletter.component';
+import { EmailConfigComponent } from './email-config/email-config.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -129,7 +131,8 @@ const routes: Routes = [
   { path: EmployeePerformance, component: EmployeePerformanceComponent},
   { path: CompanyLogo, component: CompanylogoComponent},
   { path: Annexure, component: AnnexureComponent},
-  { path: OfferLetter, component: OfferletterComponent}
+  { path: OfferLetter, component: OfferletterComponent},
+  { path: EmailConfiguration, component: EmailConfigComponent}
 ];
 
 @NgModule({
