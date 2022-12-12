@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+declare var $: any;
 
 @Component({
   selector: 'app-offerletter',
@@ -18,6 +20,9 @@ export class OfferletterComponent implements OnInit {
   offerletterForm: FormGroup;
   currentOfferLetter: AnnexureOfferLeter = new AnnexureOfferLeter();
   currentCompany: any = null;
+  employeeForm: FormGroup;
+  model: NgbDateStruct;
+  submitted: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -90,11 +95,50 @@ export class OfferletterComponent implements OnInit {
     })
   }
 
+  generateOfferLetterPopUp() {
+    this.initEmpForm();
+    $("#offerLetterModal").modal('show');
+  }
+
   generateOfferLetter() {
-    this.http.post("Employee/GenerateOfferLetter", this.companyId).then(res => {
-      if (res.ResponseBody)
+    this.submitted = true;
+    this.isLoading = true;
+    if (this.employeeForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
+    let value = this.employeeForm.value;
+    this.http.post("Employee/GenerateOfferLetter", value).then(res => {
+      if (res.ResponseBody) {
         Toast("Offer letter generated successfully");
+        $("#offerLetterModal").modal('hide');
+      }
+      this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
     })
+  }
+
+  initEmpForm() {
+    this.employeeForm = this.fb.group({
+      FirstName: new FormControl('', [Validators.required]),
+      LastName: new FormControl('', [Validators.required]),
+      CompanyName: new FormControl(this.currentCompany.CompanyName, [Validators.required]),
+      CompanyId: new FormControl(this.companyId, [Validators.required]),
+      Designation: new FormControl('', [Validators.required]),
+      CTC: new FormControl(null, [Validators.required]),
+      Email: new FormControl('', [Validators.required, Validators.email]),
+      JoiningDate: new FormControl('', [Validators.required])
+    })
+  }
+
+  get f() {
+    return this.employeeForm.controls;
+  }
+
+  onDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.employeeForm.controls["JoiningDate"].setValue(date);
   }
 
 }

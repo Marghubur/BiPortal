@@ -24,7 +24,10 @@
             <app-editor [content]="htmlText"></app-editor>
           </form>
           <div class="text-end pe-4">
-            <button class="btn btn-success" (click)="generateOfferLetter()">Generate Offer Letter</button>
+            <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="generateOfferLetterPopUp()">
+              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+              <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate Offer Letter' }}</span>
+            </button>
             <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveofferletter()">
               <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
               <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
@@ -46,4 +49,74 @@
         </div>
       </ng-container>
     </div>
+</div>
+
+
+<!-- Employee Offer Letter modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="offerLetterModal"
+  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="offerLetterModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content px-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="offerLetterModalLabel">Employee Detail</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="employeeForm" *ngIf="employeeForm">
+          <div class="mt-3 col-md-4">
+            <label for="" class="form-label">Company Name</label>
+            <input type="text" class="form-control" placeholder="Company Name" readonly formControlName="CompanyName">
+          </div>
+          <div class="row">
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">First Name</label>
+              <input type="text" class="form-control" placeholder="First Name" oninput="this.value = this.value.toUpperCase()" formControlName="FirstName" [ngClass]="{'error-field': submitted && f.FirstName.errors !== null && f.FirstName.errors.required}">
+            </div>
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">Last Name</label>
+              <input type="text" class="form-control" placeholder="Last Name" oninput="this.value = this.value.toUpperCase()" formControlName="LastName" [ngClass]="{'error-field': submitted && f.LastName.errors !== null && f.LastName.errors.required}">
+            </div>
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">Email</label>
+              <input type="text" class="form-control" placeholder="Email" formControlName="Email" [ngClass]="{'error-field': submitted && f.Email.errors !== null && (f.Email.errors.required || f.Email.errors.email)}">
+            </div>
+          </div>
+          <div class="row">
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">Designation</label>
+              <input type="text" class="form-control" placeholder="Designation" oninput="this.value = this.value.toUpperCase()" formControlName="Designation" [ngClass]="{'error-field': submitted && f.Designation.errors !== null && f.Designation.errors.required}">
+            </div>
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">CTC</label>
+              <input type="number" class="form-control" placeholder="CTC" formControlName="CTC" [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" oninput="this.value = this.value.toUpperCase()" onkeypress="return event.charCode >=48 && event.charCode <=57">
+            </div>
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">Date of Joining</label>
+              <form class="form-inline">
+                <div class="form-group w-100">
+                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.JoiningDate.errors !== null && f.JoiningDate.errors.required}">
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                      (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                          class="fa fa-calendar" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="generateOfferLetter()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
