@@ -49,6 +49,9 @@ export class OfferletterComponent implements OnInit {
       if (res.ResponseBody) {
         this.buildData(res.ResponseBody);
         this.isPageReady = true;
+      } else {
+        this.isPageReady = true;
+        this.initForm();
       }
     }).catch(e => {
       this.isPageReady = true;
