@@ -96,6 +96,7 @@ export class ManageEmailtemplateComponent implements OnInit {
     this.emailTemplateForm = this.fb.group({
       EmailTemplateId: new FormControl(this.emailTemplateId),
       CompanyId: new FormControl(this.companyId),
+      Description: new FormControl(this.emailTemplateDetail.Description),
       TemplateName: new FormControl(this.emailTemplateDetail.TemplateName, [Validators.required]),
       EmailTitle: new FormControl(this.emailTemplateDetail.EmailTitle, [Validators.required]),
       SubjectLine: new FormControl(this.emailTemplateDetail.SubjectLine, [Validators.required]),
@@ -163,4 +164,5 @@ export class EmailTemplate {
   ContactNo: string = null;
   FileId: number = 0;
   LogoPath: string = "";
+  Description: string = null;
 }
