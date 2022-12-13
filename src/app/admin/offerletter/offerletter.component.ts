@@ -70,16 +70,21 @@ export class OfferletterComponent implements OnInit {
       AnnexureOfferLetterId: new FormControl(this.currentOfferLetter.AnnexureOfferLetterId),
       CompanyId: new FormControl(this.companyId),
       CompanyName: new FormControl(this.currentCompany.CompanyName),
-      TemplateName: new FormControl(this.currentOfferLetter.TemplateName),
+      TemplateName: new FormControl(this.currentOfferLetter.TemplateName, [Validators.required]),
       BodyContent: new FormControl(this.currentOfferLetter.BodyContent),
       FileId: new FormControl(this.currentOfferLetter.FileId),
     })
   }
 
+  get m () {
+    return this.offerletterForm.controls;
+  }
+
   saveofferletter() {
     this.isLoading = true;
+    this.submitted = true;
     let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
-    if (data && data == "" && this.offerletterForm.invalid) {
+    if (!data && data == "" && this.offerletterForm.invalid) {
       this.isLoading = false;
       return;
     }
@@ -91,6 +96,7 @@ export class OfferletterComponent implements OnInit {
         let data = res.ResponseBody;
         this.buildData(data);
         Toast("Template inserted/ updated successfully.");
+        this.submitted = false;
       }
       this.isLoading = false;
     }).catch(e => {
@@ -99,6 +105,7 @@ export class OfferletterComponent implements OnInit {
   }
 
   generateOfferLetterPopUp() {
+    this.submitted = false;
     this.initEmpForm();
     $("#offerLetterModal").modal('show');
   }
@@ -151,7 +158,7 @@ class AnnexureOfferLeter {
   AnnexureOfferLetterId: number= 0;
   CompanyId: number= 0;
   CompanyName: string= '';
-  TemplateName: string= '';
+  TemplateName: string= null;
   BodyContent: string= '';
   FileId: number= 0;
 }

@@ -93,7 +93,7 @@
                     <div class="mt-3">
                         <label for="" class="form-label">Request Type</label>
                         <select class="form-select" formControlName="RequestType" [ngClass]="{'error-field': submitted && f.RequestType.errors !== null && f.RequestType.errors.required}">
-                            <option value="null">Select Email Template</option>
+                            <option value=null>Select Email Template</option>
                             <option [value]="item.RequestTypeId" *ngFor="let item of requestTypes">{{item.RequestTypeName}}</option>
                         </select>
                     </div>

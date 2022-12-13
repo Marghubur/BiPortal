@@ -18,7 +18,7 @@
               </div>
               <div class="col-md-4 my-3">
                 <label for="" class="form-label">Template Name</label>
-                <input type="text" class="form-control" placeholder="Template Name" formControlName="TemplateName">
+                <input type="text" class="form-control" placeholder="Template Name" oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName" [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
               </div>
             </div>
             <app-editor [content]="htmlText"></app-editor>

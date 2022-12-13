@@ -80,12 +80,14 @@ export class EmailConfigComponent implements OnInit {
   }
 
   emailConfigPopUp() {
+    this.submitted = false;
     this.currentEmailTemp = new EmpTempMapping();
     this.initForm();
     $('#emailConfigModal').modal('show');
   }
 
   editEmailTempConfig(item: EmpTempMapping) {
+    this.submitted = false;
     this.currentEmailTemp = item;
     this.initForm();
     $('#emailConfigModal').modal('show');
@@ -133,6 +135,12 @@ export class EmailConfigComponent implements OnInit {
   addMapping() {
     this.isLoading = true;
     this.submitted = true;
+    if (this.emailTempMapForm.get('RequestType').value == "null")
+      this.emailTempMapForm.get('RequestType').setValue(null);
+
+    if (this.emailTempMapForm.get('EmailTemplateId').value == "null")
+      this.emailTempMapForm.get('EmailTemplateId').setValue(null);
+
     if (this.emailTempMapForm.invalid) {
       this.isLoading = false;
       return;
