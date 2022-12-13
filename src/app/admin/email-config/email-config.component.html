@@ -18,10 +18,10 @@
                 <div class="th fe-index">
                   <div class="t-index">#</div>
                 </div>
-                <div class="th fe-2">Request Type</div>
-                <div class="th fe-2">Email Template Name</div>
+                <div class="th fe-2">Action Type</div>
+                <div class="th fe-2">Template Name</div>
                 <div class="th fe-2">Description</div>
-                <div class="th fe-1 text-center">ACTIONS</div>
+                <div class="th fe-1 text-center">Link</div>
               </div>
             </div>
             <div class="t-body">
@@ -31,10 +31,10 @@
                       {{i+1}}
                   </div>
                   <div class="td align-middle fe-2">
-                      {{template.RequestTypeName}}
+                      {{template.EmailTemplateName}}
                   </div>
                   <div class="td align-middle fe-2">
-                    {{template.EmailTemplateName}}
+                    {{template.TemplateName}}
                   </div>
                   <div class="td align-middle fe-2">
                       {{template.Description}}
@@ -44,7 +44,7 @@
                       <a href="javascript:void(0)" class="px-2" (click)="editEmailTempConfig(template)">
                         <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
                       </a>
-                      <a href="javascript:void(0)" class="px-2" (click)="getMessageModal(template.EmailTemplateId)">
+                      <a href="javascript:void(0)" class="px-2" (click)="getMessageModal(template.TemplateId)">
                         <span class="badge bg-dark"><i class="fa fa-eye" aria-hidden="true"></i></span>
                       </a>
                     </div>
@@ -91,22 +91,22 @@
             <div class="modal-body">
                 <form [formGroup]="emailTempMapForm" *ngIf="emailTempMapForm">
                     <div class="mt-3">
-                        <label for="" class="form-label">Request Type</label>
-                        <select class="form-select" formControlName="RequestType" [ngClass]="{'error-field': submitted && f.RequestType.errors !== null && f.RequestType.errors.required}">
-                            <option value=null>Select Email Template</option>
-                            <option [value]="item.RequestTypeId" *ngFor="let item of requestTypes">{{item.RequestTypeName}}</option>
+                        <label for="" class="form-label">Actiom Type</label>
+                        <select class="form-select" formControlName="EmailTemplateName" [ngClass]="{'error-field': submitted && f.EmailTemplateName.errors !== null && f.EmailTemplateName.errors.required}">
+                            <option value=null>Select Action Type</option>
+                            <option [value]="item.EmailTemplateName" *ngFor="let item of allMappedtemplate">{{item.EmailTemplateName}}</option>
                         </select>
                     </div>
                     <div class="mt-3">
-                        <label for="" class="form-label">Email Template Name</label>
-                        <select class="form-select" formControlName="EmailTemplateId" [ngClass]="{'error-field': submitted && f.EmailTemplateId.errors !== null && f.EmailTemplateId.errors.required}">
-                            <option value="null">Select Email Template</option>
+                        <label for="" class="form-label">Template Name</label>
+                        <select class="form-select" (change)="changeTemplate($event)" formControlName="TemplateId" [ngClass]="{'error-field': submitted && f.TemplateId.errors !== null && f.TemplateId.errors.required}">
+                            <option value="0">Select Email Template</option>
                             <option [value]="item.EmailTemplateId" *ngFor="let item of allEmailTemplate">{{item.TemplateName}}</option>
                         </select>
                     </div>
                     <div class="mt-3">
                         <label for="" class="form-label">Description</label>
-                        <textarea class="form-control" formControlName="Description" [ngClass]="{'error-field': submitted && f.Description.errors !== null && f.Description.errors.required}" oninput="this.value = this.value.toUpperCase()" placeholder="Template Mapping Description" cols="30" rows="10"></textarea>
+                        <textarea class="form-control" readonly formControlName="Description" [ngClass]="{'error-field': submitted && f.Description.errors !== null && f.Description.errors.required}" oninput="this.value = this.value.toUpperCase()" placeholder="No description found" cols="30" rows="10"></textarea>
                     </div>
                 </form>
             </div>

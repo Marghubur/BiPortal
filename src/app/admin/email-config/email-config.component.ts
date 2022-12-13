@@ -24,8 +24,6 @@ export class EmailConfigComponent implements OnInit {
   isLoading: boolean = false;
   submitted: boolean = false;
   allEmailTemplate: Array<any> = [];
-  requestTypes: Array<any> = [{RequestTypeId: 1, RequestTypeName: "Billing"}, {RequestTypeId: 2, RequestTypeName: "New Registration"}, {RequestTypeId: 3, RequestTypeName: "Forgot Password"},
-                              {RequestTypeId: 4, RequestTypeName: "Notification"}, {RequestTypeId: 5, RequestTypeName: "Approval Notification"}];
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
@@ -71,9 +69,14 @@ export class EmailConfigComponent implements OnInit {
       this.allMappedtemplate = res.emailMappedTemplate;
       let i = 0;
       while(i < this.allMappedtemplate.length) {
-        let tempId = this.allMappedtemplate[i].EmailTemplateId;
-        this.allMappedtemplate[i].EmailTemplateName = this.allEmailTemplate.find (x => x.EmailTemplateId == tempId).TemplateName;
-        this.allMappedtemplate[i].RequestTypeName = this.requestTypes.find (x => x.RequestTypeId == this.allMappedtemplate[i].RequestType).RequestTypeName;
+        let tempId = this.allMappedtemplate[i].TemplateId;
+        if (tempId > 0) {
+          this.allMappedtemplate[i].TemplateName = this.allEmailTemplate.find (x => x.EmailTemplateId == tempId).TemplateName;
+          this.allMappedtemplate[i].Description = this.allEmailTemplate.find (x => x.EmailTemplateId == tempId).Description;
+        } else {
+          this.allMappedtemplate[i].TemplateName = null;
+          this.allMappedtemplate[i].Description = null;
+        }
         i++;
       }
     }
@@ -95,7 +98,7 @@ export class EmailConfigComponent implements OnInit {
 
   getMessageModal(emailTemplateId: number) {
     if (emailTemplateId <=0) {
-      ErrorToast("Please select a vlid email template.");
+      ErrorToast("Please select a valid email template.");
       return;
     }
     this.http.get(`Email/GetEmailTemplateById/${emailTemplateId}/${this.companyId}`).then(res => {
@@ -121,9 +124,9 @@ export class EmailConfigComponent implements OnInit {
   initForm() {
     this.emailTempMapForm = this.fb.group({
       EmailTempMappingId: new FormControl(this.currentEmailTemp.EmailTempMappingId),
-      RequestType: new FormControl(this.currentEmailTemp.RequestType, [Validators.required]),
-      EmailTemplateId: new FormControl(this.currentEmailTemp.EmailTemplateId, [Validators.required]),
-      Description: new FormControl(this.currentEmailTemp.Description, [Validators.required]),
+      EmailTemplateName: new FormControl(this.currentEmailTemp.EmailTemplateName, [Validators.required]),
+      TemplateId: new FormControl(this.currentEmailTemp.TemplateId, [Validators.required]),
+      Description: new FormControl(this.currentEmailTemp.Description),
       CompanyId: new FormControl(this.companyId, [Validators.required])
     })
   }
@@ -135,11 +138,11 @@ export class EmailConfigComponent implements OnInit {
   addMapping() {
     this.isLoading = true;
     this.submitted = true;
-    if (this.emailTempMapForm.get('RequestType').value == "null")
-      this.emailTempMapForm.get('RequestType').setValue(null);
+    if (this.emailTempMapForm.get('EmailTemplateName').value == "null")
+      this.emailTempMapForm.get('EmailTemplateName').setValue(null);
 
-    if (this.emailTempMapForm.get('EmailTemplateId').value == "null")
-      this.emailTempMapForm.get('EmailTemplateId').setValue(null);
+    if (this.emailTempMapForm.get('TemplateId').value == "0")
+      this.emailTempMapForm.get('TemplateId').setValue(null);
 
     if (this.emailTempMapForm.invalid) {
       this.isLoading = false;
@@ -159,13 +162,23 @@ export class EmailConfigComponent implements OnInit {
     })
   }
 
+  changeTemplate(e: any) {
+    let value = Number(e.target.value);
+    if (value > 0) {
+      let Description = this.allEmailTemplate.find (x => x.EmailTemplateId == value).Description;
+      this.emailTempMapForm.get('Description').setValue(Description);
+    } else {
+      this.emailTempMapForm.get('Description').setValue(null);
+    }
+  }
+
 }
 
 class EmpTempMapping {
   EmailTempMappingId: number = 0;
-  RequestType: number = null;
-  EmailTemplateId: number = null;
+  TemplateId: number = null;
   Description: string = null;
   EmailTemplateName: string = "";
-  RequestTypeName: string = "";
+  TemplateName: string = "";
+  ActionType: string = "";
 }
