@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+declare var $: any;
 
 @Component({
   selector: 'app-offerletter',
@@ -18,6 +20,9 @@ export class OfferletterComponent implements OnInit {
   offerletterForm: FormGroup;
   currentOfferLetter: AnnexureOfferLeter = new AnnexureOfferLeter();
   currentCompany: any = null;
+  employeeForm: FormGroup;
+  model: NgbDateStruct;
+  submitted: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -44,6 +49,9 @@ export class OfferletterComponent implements OnInit {
       if (res.ResponseBody) {
         this.buildData(res.ResponseBody);
         this.isPageReady = true;
+      } else {
+        this.isPageReady = true;
+        this.initForm();
       }
     }).catch(e => {
       this.isPageReady = true;
@@ -62,16 +70,21 @@ export class OfferletterComponent implements OnInit {
       AnnexureOfferLetterId: new FormControl(this.currentOfferLetter.AnnexureOfferLetterId),
       CompanyId: new FormControl(this.companyId),
       CompanyName: new FormControl(this.currentCompany.CompanyName),
-      TemplateName: new FormControl(this.currentOfferLetter.TemplateName),
+      TemplateName: new FormControl(this.currentOfferLetter.TemplateName, [Validators.required]),
       BodyContent: new FormControl(this.currentOfferLetter.BodyContent),
       FileId: new FormControl(this.currentOfferLetter.FileId),
     })
   }
 
+  get m () {
+    return this.offerletterForm.controls;
+  }
+
   saveofferletter() {
     this.isLoading = true;
+    this.submitted = true;
     let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
-    if (data && data == "" && this.offerletterForm.invalid) {
+    if (!data && data == "" && this.offerletterForm.invalid) {
       this.isLoading = false;
       return;
     }
@@ -83,6 +96,7 @@ export class OfferletterComponent implements OnInit {
         let data = res.ResponseBody;
         this.buildData(data);
         Toast("Template inserted/ updated successfully.");
+        this.submitted = false;
       }
       this.isLoading = false;
     }).catch(e => {
@@ -90,11 +104,51 @@ export class OfferletterComponent implements OnInit {
     })
   }
 
+  generateOfferLetterPopUp() {
+    this.submitted = false;
+    this.initEmpForm();
+    $("#offerLetterModal").modal('show');
+  }
+
   generateOfferLetter() {
-    this.http.post("Employee/GenerateOfferLetter", this.companyId).then(res => {
-      if (res.ResponseBody)
+    this.submitted = true;
+    this.isLoading = true;
+    if (this.employeeForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
+    let value = this.employeeForm.value;
+    this.http.post("Employee/GenerateOfferLetter", value).then(res => {
+      if (res.ResponseBody) {
         Toast("Offer letter generated successfully");
+        $("#offerLetterModal").modal('hide');
+      }
+      this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
     })
+  }
+
+  initEmpForm() {
+    this.employeeForm = this.fb.group({
+      FirstName: new FormControl('', [Validators.required]),
+      LastName: new FormControl('', [Validators.required]),
+      CompanyName: new FormControl(this.currentCompany.CompanyName, [Validators.required]),
+      CompanyId: new FormControl(this.companyId, [Validators.required]),
+      Designation: new FormControl('', [Validators.required]),
+      CTC: new FormControl(null, [Validators.required]),
+      Email: new FormControl('', [Validators.required, Validators.email]),
+      JoiningDate: new FormControl('', [Validators.required])
+    })
+  }
+
+  get f() {
+    return this.employeeForm.controls;
+  }
+
+  onDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.employeeForm.controls["JoiningDate"].setValue(date);
   }
 
 }
@@ -104,7 +158,7 @@ class AnnexureOfferLeter {
   AnnexureOfferLetterId: number= 0;
   CompanyId: number= 0;
   CompanyName: string= '';
-  TemplateName: string= '';
+  TemplateName: string= null;
   BodyContent: string= '';
   FileId: number= 0;
 }

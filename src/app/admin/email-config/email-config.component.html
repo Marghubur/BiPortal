@@ -1,0 +1,122 @@
+<div class="main-container">
+    <div class="x_panel">
+      <div class="x_header">
+        <div class="x_header_title">
+          <h2>Email Template Mapping<small>Mapping email template with request type</small></h2>
+          <button class="btn btn-primary-c float-end" (click)="emailConfigPopUp()"><i class="fa fa-plus pe-2"></i> Add Template Mapping</button>
+        </div>
+      </div>
+      <div>
+        <app-breadcrums></app-breadcrums>
+      </div>
+      <ng-container *ngIf="!isPageLoading">
+        <div class="x_content">
+          <div class="t-table t-list t-border mt-3 col-md-12">
+            <div class="hide-bar"></div>
+            <div class="t-head">
+              <div class="tr">
+                <div class="th fe-index">
+                  <div class="t-index">#</div>
+                </div>
+                <div class="th fe-2">Request Type</div>
+                <div class="th fe-2">Email Template Name</div>
+                <div class="th fe-2">Description</div>
+                <div class="th fe-1 text-center">ACTIONS</div>
+              </div>
+            </div>
+            <div class="t-body">
+              <ng-container *ngIf="allMappedtemplate.length > 0">
+                <div class="tr py-2" *ngFor="let template of allMappedtemplate; let i = index;">
+                  <div class="td align-middle text-center fe-index">
+                      {{i+1}}
+                  </div>
+                  <div class="td align-middle fe-2">
+                      {{template.RequestTypeName}}
+                  </div>
+                  <div class="td align-middle fe-2">
+                    {{template.EmailTemplateName}}
+                  </div>
+                  <div class="td align-middle fe-2">
+                      {{template.Description}}
+                  </div>
+                  <div class="td align-middle fe-1">
+                    <div class="d-flex flex-row justify-content-center">
+                      <a href="javascript:void(0)" class="px-2" (click)="editEmailTempConfig(template)">
+                        <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                      </a>
+                      <a href="javascript:void(0)" class="px-2" (click)="getMessageModal(template.EmailTemplateId)">
+                        <span class="badge bg-dark"><i class="fa fa-eye" aria-hidden="true"></i></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="allMappedtemplate.length == 0">
+                <div class="custom-height fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                  Record Not Found
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="mt-3">
+          <app-pagination [pagination]="templateData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+        </div> -->
+      </ng-container>
+      <ng-container *ngIf="isPageLoading">
+        <div class="py-5 my-5">
+          <h6 class="fw-bold fs-3 text-center text-dark">Email template are loading</h6>
+          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  <app-message-modal [Data]="modalData"></app-message-modal>
+</div>
+
+  <!-- Email Config Mapping modal -->
+<div class="modal fade remoteClient" data-bs-backdrop="static" data-bs-keyboard="false" id="emailConfigModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="emailConfigModalLabel"aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content px-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailConfigModalLabel">Email Template Mapping</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="emailTempMapForm" *ngIf="emailTempMapForm">
+                    <div class="mt-3">
+                        <label for="" class="form-label">Request Type</label>
+                        <select class="form-select" formControlName="RequestType" [ngClass]="{'error-field': submitted && f.RequestType.errors !== null && f.RequestType.errors.required}">
+                            <option value=null>Select Email Template</option>
+                            <option [value]="item.RequestTypeId" *ngFor="let item of requestTypes">{{item.RequestTypeName}}</option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label for="" class="form-label">Email Template Name</label>
+                        <select class="form-select" formControlName="EmailTemplateId" [ngClass]="{'error-field': submitted && f.EmailTemplateId.errors !== null && f.EmailTemplateId.errors.required}">
+                            <option value="null">Select Email Template</option>
+                            <option [value]="item.EmailTemplateId" *ngFor="let item of allEmailTemplate">{{item.TemplateName}}</option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label for="" class="form-label">Description</label>
+                        <textarea class="form-control" formControlName="Description" [ngClass]="{'error-field': submitted && f.Description.errors !== null && f.Description.errors.required}" oninput="this.value = this.value.toUpperCase()" placeholder="Template Mapping Description" cols="30" rows="10"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-success" [disabled]="isLoading" (click)="addMapping()">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                    <span class="ps-2">{{ isLoading ? 'Wait' : 'Mapped' }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

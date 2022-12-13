@@ -54,6 +54,7 @@ import { EmployeePerformanceComponent } from './employee-performance/employee-pe
 import { CompanylogoComponent } from './companylogo/companylogo.component';
 import { AnnexureComponent } from './annexure/annexure.component';
 import { OfferletterComponent } from './offerletter/offerletter.component';
+import { EmailConfigComponent } from './email-config/email-config.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { OfferletterComponent } from './offerletter/offerletter.component';
     EmployeePerformanceComponent,
     CompanylogoComponent,
     AnnexureComponent,
-    OfferletterComponent
+    OfferletterComponent,
+    EmailConfigComponent
   ],
   imports: [
     CommonModule,

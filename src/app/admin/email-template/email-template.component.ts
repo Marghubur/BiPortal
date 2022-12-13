@@ -97,8 +97,4 @@ export class EmailTemplateComponent implements OnInit {
       ErrorToast("Invalid template selected");
     })
   }
-
-  convertToPlain(html: any) {
-
-  }
 }
