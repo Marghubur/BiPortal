@@ -54,8 +54,10 @@ export class EmailTemplateComponent implements OnInit {
         this.isRecordFound = true;
         this.isPageLoading = false;
         Toast("Email Template found");
-      } else
+      } else {
         this.templateData.TotalRecords = 0;
+        this.isPageLoading = false;
+      }
     }).catch(e => {
       this.isPageLoading = false;
       ErrorToast("No Email Template found");
