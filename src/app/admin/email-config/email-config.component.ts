@@ -26,6 +26,7 @@ export class EmailConfigComponent implements OnInit {
   submitted: boolean = false;
   allEmailTemplate: Array<any> = [];
   mappedData: Filter = null;
+  filterEmailTemp: EmpTempMapping = new EmpTempMapping();
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
@@ -190,13 +191,13 @@ export class EmailConfigComponent implements OnInit {
     let delimiter = "";
     this.mappedData.SearchString = ""
 
-    if(this.currentEmailTemp.EmailTemplateName !== null && this.currentEmailTemp.EmailTemplateName !== "") {
-      this.mappedData.SearchString += ` 1=1 and EmailTemplateName like '%${this.currentEmailTemp.EmailTemplateName}%'`;
+    if(this.filterEmailTemp.EmailTemplateName !== null && this.filterEmailTemp.EmailTemplateName !== "") {
+      this.mappedData.SearchString += ` 1=1 and EmailTemplateName like '%${this.filterEmailTemp.EmailTemplateName}%'`;
         delimiter = "and";
     }
 
-    if(this.currentEmailTemp.TemplateId !== null && this.currentEmailTemp.TemplateId !== 0) {
-      this.mappedData.SearchString += `1=1 And TemplateId = ${this.currentEmailTemp.TemplateId}`;
+    if(this.filterEmailTemp.TemplateId !== null && this.filterEmailTemp.TemplateId !== 0) {
+      this.mappedData.SearchString += `1=1 And TemplateId = ${this.filterEmailTemp.TemplateId}`;
         delimiter = "and";
     }
 

@@ -19,12 +19,12 @@
                   <div class="t-index">#</div>
                 </div>
                 <div class="th fe-2 px-2">
-                  <input class="form-control form-control-sm" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()" [(ngModel)]="currentEmailTemp.EmailTemplateName"
+                  <input class="form-control form-control-sm" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()" [(ngModel)]="filterEmailTemp.EmailTemplateName"
                         (keydown.esc)="resetFilter()"  placeholder="Search by Action Type">
                   Action Type
                 </div>
                 <div class="th fe-2 px-2">
-                  <select (change)="filterRecords()" class="form-select" [(ngModel)]="currentEmailTemp.TemplateId">
+                  <select (change)="filterRecords()" class="form-select" [(ngModel)]="filterEmailTemp.TemplateId">
                     <option value="null">Select Template Name</option>
                     <option [value]="item.EmailTemplateId" *ngFor="let item of allEmailTemplate">{{item.TemplateName}}</option>
                   </select>
@@ -104,10 +104,7 @@
                 <form [formGroup]="emailTempMapForm" *ngIf="emailTempMapForm">
                     <div class="mt-3">
                         <label for="" class="form-label">Action Type</label>
-                        <select class="form-select" formControlName="EmailTemplateName" [ngClass]="{'error-field': submitted && f.EmailTemplateName.errors !== null && f.EmailTemplateName.errors.required}">
-                            <option value=null>Select Action Type</option>
-                            <option [value]="item.EmailTemplateName" *ngFor="let item of allMappedtemplate">{{item.EmailTemplateName}}</option>
-                        </select>
+                        <input type="text" class="form-control" formControlName="EmailTemplateName" [ngClass]="{'error-field': submitted && f.EmailTemplateName.errors !== null && f.EmailTemplateName.errors.required}">
                     </div>
                     <div class="mt-3">
                         <label for="" class="form-label">Template Name</label>
