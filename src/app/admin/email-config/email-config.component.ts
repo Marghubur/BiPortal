@@ -5,6 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { Filter } from 'src/providers/userService';
 import { EmailTemplate } from '../manage-emailtemplate/manage-emailtemplate.component';
 declare var $: any;
 
@@ -20,10 +21,11 @@ export class EmailConfigComponent implements OnInit {
   modalData: IModalData = null;
   emailTemplateDetail: EmailTemplate = null;
   emailTempMapForm: FormGroup;
-  currentEmailTemp: EmpTempMapping = null;
+  currentEmailTemp: EmpTempMapping = new EmpTempMapping();
   isLoading: boolean = false;
   submitted: boolean = false;
   allEmailTemplate: Array<any> = [];
+  mappedData: Filter = null;
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
@@ -40,6 +42,8 @@ export class EmailConfigComponent implements OnInit {
         return;
       } else {
         this.companyId = currentCompany.CompanyId;
+        this.mappedData = new Filter();
+        this.mappedData.SearchString  = "1=1"
         this.loadData();
       }
     }
@@ -47,7 +51,8 @@ export class EmailConfigComponent implements OnInit {
 
   loadData() {
     this.isPageLoading = true;
-    this.http.get(`Email/GetEmailTempMapping/${this.companyId}`).then(res => {
+    this.mappedData.SearchString += ` and CompanyId = ${this.companyId}`;
+    this.http.post('Email/GetEmailTempMapping', this.mappedData).then(res => {
       if (res.ResponseBody) {
         this.bindData(res.ResponseBody);
         this.isPageLoading = false;
@@ -67,6 +72,7 @@ export class EmailConfigComponent implements OnInit {
 
     if (res.emailMappedTemplate) {
       this.allMappedtemplate = res.emailMappedTemplate;
+      this.mappedData.TotalRecords = this.allMappedtemplate[0].Total;
       let i = 0;
       while(i < this.allMappedtemplate.length) {
         let tempId = this.allMappedtemplate[i].TemplateId;
@@ -172,13 +178,45 @@ export class EmailConfigComponent implements OnInit {
     }
   }
 
+  GetFilterResult(e: any) {
+    if(e != null) {
+      this.mappedData = e;
+      this.loadData();
+    }
+  }
+
+  filterRecords() {
+    let searchQuery = "";
+    let delimiter = "";
+    this.mappedData.SearchString = ""
+
+    if(this.currentEmailTemp.EmailTemplateName !== null && this.currentEmailTemp.EmailTemplateName !== "") {
+      this.mappedData.SearchString += ` 1=1 and EmailTemplateName like '%${this.currentEmailTemp.EmailTemplateName}%'`;
+        delimiter = "and";
+    }
+
+    if(this.currentEmailTemp.TemplateId !== null && this.currentEmailTemp.TemplateId !== 0) {
+      this.mappedData.SearchString += `1=1 And TemplateId = ${this.currentEmailTemp.TemplateId}`;
+        delimiter = "and";
+    }
+
+    this.mappedData.CompanyId = Number(this.companyId);
+    this.loadData();
+  }
+
+  resetFilter() {
+    this.mappedData = new Filter();
+    this.currentEmailTemp = new EmpTempMapping();
+    this.loadData();
+  }
 }
 
 class EmpTempMapping {
   EmailTempMappingId: number = 0;
   TemplateId: number = null;
   Description: string = null;
-  EmailTemplateName: string = "";
+  EmailTemplateName: string = null;
   TemplateName: string = "";
   ActionType: string = "";
+  Total: number = 0;
 }
