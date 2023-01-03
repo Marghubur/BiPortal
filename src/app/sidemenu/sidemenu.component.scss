@@ -18,25 +18,21 @@ a {
 @media (min-width: 320px) and (min-width: 961px) {
   /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
   a {
-    font-size: 0.9vw;
+    font-size: 0.8vw;
   }
 }
 
 @media (min-width: 1025px) and (min-width: 1281px) {
   /* big landscape tablets, laptops, and desktops */
   a {
-    font-size: 0.7vw;
+    font-size: 0.66vw;
   }
 }
 
 .accordion-header button {
-  font-size: 1.1rem !important;
+  font-size: 0.84vw !important;
   font-weight: 700 !important;
   color: var(--primary-dark) !important;
-}
-
-.accordion-div {
-  // border-bottom: 1px solid #d9d9d9;
 }
 
 .side-panel {
@@ -125,4 +121,10 @@ a {
     flex: 1;
     text-align: center;
   }
+}
+
+.accordion-button::after {
+  width: 1rem !important;
+  height: 1rem !important;
+  background-size: 1rem !important;
 }

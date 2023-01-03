@@ -109,7 +109,7 @@
                     <div class="mt-3">
                         <label for="" class="form-label">Template Name</label>
                         <select class="form-select" (change)="changeTemplate($event)" formControlName="TemplateId" [ngClass]="{'error-field': submitted && f.TemplateId.errors !== null && f.TemplateId.errors.required}">
-                            <option value="null">Select Email Template</option>
+                            <option value="0">Select Email Template</option>
                             <option [value]="item.EmailTemplateId" *ngFor="let item of allEmailTemplate">{{item.TemplateName}}</option>
                         </select>
                     </div>
