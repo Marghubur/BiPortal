@@ -4,7 +4,7 @@
       <div class="x_header_title">
         <h2 class="fw-bold text-dark">Welcome {{employeeDetails.FirstName}} !</h2>
       </div>
-      <h6>Developer at {{allocatedClients.CompanyName}}</h6>
+      <h6>Developer at {{allocatedClients == null ? '' : allocatedClients.CompanyName}}</h6>
     </div>
     <div class="bg-light d-flex p-3">
       <i class="fa fa-envelope text-dark fa-2x pe-4 pt-1"></i>

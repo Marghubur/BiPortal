@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminDeclaration, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment, Payroll, PayrollComponents, PFESISetup, TaxRegime } from 'src/providers/constants';
+import { AdminDeclaration, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment, CustomSalaryStructure, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure, TaxRegime } from 'src/providers/constants';
+import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 import { DeclarationComponent } from './declaration/declaration.component';
 import { Form12BbComponent } from './form12-bb/form12-bb.component';
 import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
@@ -12,6 +13,7 @@ import { PfEsiSetupComponent } from './pf-esi-setup/pf-esi-setup.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { PreviousincomeComponent } from './previousincome/previousincome.component';
 import { SalaryComponent } from './salary/salary.component';
+import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
 import { SummaryComponent } from './summary/summary.component';
 import { TaxRegimeComponent } from './tax-regime/tax-regime.component';
 import { TaxsavinginvestmentComponent } from './taxsavinginvestment/taxsavinginvestment.component';
@@ -30,7 +32,9 @@ const routes: Routes = [
   { path: Payroll, component: PayrollComponent},
   { path: PFESISetup, component: PfEsiSetupComponent},
   { path: PayrollComponents, component: PayrollComponentsComponent},
-  { path: TaxRegime, component: TaxRegimeComponent}
+  { path: TaxRegime, component: TaxRegimeComponent},
+  { path: SalaryComponentStructure, component: SalarycomponentStructureComponent},
+  { path: CustomSalaryStructure, component: CustomsalaryStructureComponent},
 ];
 
 @NgModule({

@@ -81,47 +81,7 @@ export class IncometaxComponent implements OnInit {
     } else {
       ErrorToast("Invalid user. Please login again.")
     }
-
-
-
-    this.taxSlab.push({
-      taxableincomeslab: '0% Tax on income up to 250000',
-      taxamount: 0
-    },
-    {
-      taxableincomeslab: '5% Tax on income between 250001 and 500000',
-      taxamount: 12500
-    },
-    {
-      taxableincomeslab: '20% Tax on income between 500001 and 1000000',
-      taxamount: 100000
-    },
-    {
-      taxableincomeslab: '30% Tax on income above 1000000',
-      taxamount: 315000
-    },
-    {
-      taxableincomeslab: 'Gross Income Tax',
-      taxamount: 427500
-    });
-
-
-    this.monthlyTaxAmount = {
-      april: 37050,
-      may: 37050,
-      june: 37050,
-      july: 37050,
-      aug: 37050,
-      sep: 37050,
-      oct: 37050,
-      nov: 37050,
-      dec: 37050,
-      jan: 37050,
-      feb: 37050,
-      march: 37050
-    };
   }
-
 
   loadData() {
     this.isPageReady = false;
@@ -131,18 +91,25 @@ export class IncometaxComponent implements OnInit {
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.allDeclarationSalaryDetails = response.ResponseBody;
-        this.allDeclarationSalaryDetails.IncomeTaxSlab = Object.entries(response.ResponseBody.IncomeTaxSlab);
+        this.allDeclarationSalaryDetails.IncomeTaxSlab = Object.entries(response.ResponseBody.IncomeTaxSlab).reverse();
         this.ExemptionDeclaration = response.ResponseBody.ExemptionDeclaration;
         if ((this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
           this.ExemptionDeclaration = [];
 
-          this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
+        this.OtherDeclaration = response.ResponseBody.OtherDeclaration;
         if ((this.OtherDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
           this.OtherDeclaration = [];
 
-          this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
+        this.TaxSavingAlloance = response.ResponseBody.TaxSavingAlloance;
         if ((this.TaxSavingAlloance.filter(x => x.DeclaredValue > 0).length <= 0))
           this.TaxSavingAlloance = [];
+
+        this.Section16TaxExemption = response.ResponseBody.Section16TaxExemption;
+        this.Sec16TaxExemptAmount = 0;
+        for (let i = 0; i < this.Section16TaxExemption.length; i++) {
+          this.Sec16TaxExemptAmount += this.Section16TaxExemption[i].DeclaredValue;
+        }
+
         this.salaryDetail = response.ResponseBody.SalaryDetail;
         this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
 
@@ -211,25 +178,10 @@ export class IncometaxComponent implements OnInit {
         }
 
         this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance) ;
-        this.getSalaryGroup();
         this.totalAllowTaxExemptAmount = this.totalAllowTaxExemptAmount + hraAmount;
         this.isPageReady = true;
          this.isEmployeeSelect = true;
         Toast("Details get successfully")
-      }
-    })
-  }
-
-  getSalaryGroup() {
-    this.http.get(`SalaryComponent/GetSalaryGroupComponents/${this.salaryDetail.GroupId}/${this.salaryDetail.CTC}`).
-    then((response:ResponseModel) => {
-      if (response.ResponseBody && response.ResponseBody.length > 0) {
-        let salaryComponents = response.ResponseBody;
-        this.Section16TaxExemption = salaryComponents.filter(x => x.Section == "16(IA)" || x.Section == "16(III)");
-        this.Sec16TaxExemptAmount = 0;
-        for (let i = 0; i < this.Section16TaxExemption.length; i++) {
-          this.Sec16TaxExemptAmount += this.Section16TaxExemption[i].DeclaredValue;
-        }
       }
     })
   }
@@ -263,16 +215,19 @@ export class IncometaxComponent implements OnInit {
     }
   }
 
-  viewStandardDeductionPopUp() {
+  viewStandardDeductionPopUp(amount: number) {
     this.standardDeductionDetails = [];
-    $('#standardDeductionModal').modal('show');
+    var monthlyPTax = 0;
+    if (amount > 0)
+      monthlyPTax = amount/12;
     for (let i = 0; i < this.taxCalender.length; i++) {
       this.standardDeductionDetails.push({
         Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
-        Amount: 2400,
+        Amount: monthlyPTax,
         Source: 'Proceed'
       })
     }
+    $('#standardDeductionModal').modal('show');
   }
 
   activateMe(ele: string) {
@@ -303,6 +258,39 @@ export class IncometaxComponent implements OnInit {
         break;
     }
   }
+
+  saveTaxDetail() {
+    let presentMonth = new Date().getMonth() + 1;
+    let presentYear = new Date().getFullYear();
+    let formData = new FormData();
+    this.http.get(`Declaration/UpdateTaxDetail/
+        ${this.EmployeeId}/${presentMonth}/${presentYear}`).then(res => {
+      if (res.ResponseBody) {
+        Toast("Salary breakup added successfully.");
+      }
+    })
+}
+
+getTotalTaxableAmount(index: number) {
+  let value: number = 0;
+  switch(index) {
+    case 1:
+      value = (this.salaryDetail.GrossIncome - this.totalAllowTaxExemptAmount -
+        52400 - this.totalOtherExemptAmount - this.totalSection80CExempAmount -
+        this.allDeclarationSalaryDetails.HRADeatils.HRAAmount * 12);
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    case 4:
+      break;
+    case 5:
+      break;
+  }
+
+  return value;
+}
 
 }
 

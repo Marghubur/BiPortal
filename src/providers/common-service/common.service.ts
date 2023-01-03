@@ -551,7 +551,7 @@ export class UserDetail {
   CompanyName: string = null;
   CreatedOn: Date = null;
   Designation: string = null;
-  Dob: Date = null;
+  DOB: Date = null;
   EmailId: string = null;
   FirstName: string = "User";
   LastName: string = "User";

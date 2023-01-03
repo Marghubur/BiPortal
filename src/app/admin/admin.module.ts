@@ -34,8 +34,6 @@ import { SettingsComponent } from './settings/settings.component';
 import { CompanySettingsComponent } from './company-settings/company-settings.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
-import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
-import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { DateFormatter } from 'src/providers/DateFormatter';
 import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.component';
@@ -88,8 +86,6 @@ import { EmailConfigComponent } from './email-config/email-config.component';
     CompanySettingsComponent,
     ExpensesComponent,
     CompanyInfoComponent,
-    SalarycomponentStructureComponent,
-    CustomsalaryStructureComponent,
     SalaryBreakupComponent,
     EmailComponent,
     OrganizationComponent,
