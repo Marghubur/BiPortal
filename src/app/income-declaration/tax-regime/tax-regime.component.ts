@@ -29,13 +29,16 @@ export class TaxRegimeComponent implements OnInit {
   currentAgeGroup: AgeGroup = new AgeGroup();
   currentRegime: TaxRegimeDesc = new TaxRegimeDesc();;
   taxAgeGroup: AgeGroup = null;
+  active = 1;
+  surchargeForm: FormGroup;
+  surchargeSlabs:Surcharge = new Surcharge();
+  allSurchargeSlabs: Array<Surcharge> = [];
 
   constructor(private fb: FormBuilder,
               private http: AjaxService) { }
 
   ngOnInit(): void {
     this.loadData();
-
   }
 
   loadData() {
@@ -48,6 +51,7 @@ export class TaxRegimeComponent implements OnInit {
       } else {
         ErrorToast("Record not found");
       }
+      this.getSurcharge();
       this.initAgeGroup();
       this.initTaxRegimeDesc();
     }).catch(e => {
@@ -351,6 +355,140 @@ export class TaxRegimeComponent implements OnInit {
       this.isSubmitted = false
     })
   }
+
+  cancelEditRegime() {
+    this.isEditable = false;
+  }
+
+  initSurcharge() {
+    this.surchargeForm = this.fb.group({
+      SurchargeSlab: this.buildSurchargeSlab()
+    })
+  }
+
+  buildSurchargeSlab(): FormArray {
+    let data = this.allSurchargeSlabs;
+    let dataArray: FormArray = this.fb.array([]);
+
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          SurchargeSlabId: new FormControl(data[i].SurchargeSlabId),
+          MinSurcahrgeSlab: new FormControl(data[i].MinSurcahrgeSlab),
+          MaxSurchargeSlab: new FormControl(data[i].MaxSurchargeSlab),
+          SurchargeRatePercentage: new FormControl(data[i].SurchargeRatePercentage)
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.createSurchargeSlab());
+    }
+
+    return dataArray;
+  }
+
+  createSurchargeSlab(): FormGroup {
+    return this.fb.group({
+      SurchargeSlabId: new FormControl(this.surchargeSlabs.SurchargeSlabId, [Validators.required]),
+      MinSurcahrgeSlab: new FormControl(this.surchargeSlabs.MinSurcahrgeSlab, [Validators.required]),
+      MaxSurchargeSlab: new FormControl(this.surchargeSlabs.MaxSurchargeSlab, [Validators.required]),
+      SurchargeRatePercentage: new FormControl(this.surchargeSlabs.SurchargeRatePercentage, [Validators.required])
+    });
+  }
+
+  addSurchargeSlab() {
+    let item = this.surchargeForm.get('SurchargeSlab') as FormArray;
+    let value = item.value[item.length - 1];
+    if (value.MaxSurchargeSlab > value.MinSurcahrgeSlab && value.MaxSurchargeSlab > 0) {
+      this.surchargeSlabs = new Surcharge();
+      this.surchargeSlabs.MinSurcahrgeSlab  = value.MaxSurchargeSlab + 1;
+      item.push(this.createSurchargeSlab());
+    } else {
+      ErrorToast("Surcharge slab minimum value is greater than maximum value");
+    }
+  }
+
+  removeSurchargeSlab(i: number) {
+    let item = this.surchargeForm.get('SurchargeSlab') as FormArray;
+    if (item.length > 1) {
+      let SurchargeSlabId = item.value[i].SurchargeSlabId;
+      if (SurchargeSlabId > 0) {
+        this.http.delete(`TaxRegime/DeleteSurchargeSlab/${SurchargeSlabId}`).then(res => {
+          if (res.ResponseBody) {
+            Toast("Regime deleted successfully");
+          }
+        }).catch(e => {
+          ErrorToast(e.error.HttpStatusMessage);
+        })
+      }
+      item.removeAt(i);
+    }
+    if (i > 0) {
+      let value = (item.value[i-1].MaxSurchargeSlab) + 1;
+      (<FormArray>item).controls[i].get('MinSurcahrgeSlab').setValue(value);
+    }
+  }
+
+  get surchargeSlab() {
+    return this.surchargeForm.get('SurchargeSlab') as FormArray;
+  }
+
+  checkSurchargeToAmount(e: any, i: number) {
+    let value = this.surchargeForm.get('SurchargeSlab').value[i];
+    if (value.MinSurcahrgeSlab >= value.MaxSurchargeSlab && Number(e.target.value) <= 0)
+      e.target.closest('div').classList.add('error-field');
+    else
+      e.target.closest('div').classList.remove('error-field');
+  }
+
+  saveSurcharge() {
+    this.isLoading = true;
+    this.isSubmitted = true;
+    if (this.surchargeForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
+    let value = this.surchargeForm.value.SurchargeSlab;
+    this.http.post("TaxRegime/AddUpdateSurchargeSlab", value).then(res => {
+      if (res.ResponseBody) {
+        this.bindSurcharge(res.ResponseBody)
+        Toast("Surcharge add or update successfully");
+        this.isLoading = false;
+        this.isEditable = false;
+        this.isSubmitted = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  getSurcharge() {
+      this.isLoading = true;
+      this.http.get("TaxRegime/GetAllSurchargeSlab").then(res => {
+        if (res.ResponseBody) {
+          this.bindSurcharge(res.ResponseBody)
+          Toast("Surcharge loaded successfully");
+          this.isLoading = false;
+          this.isEditable = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+  }
+
+  cancelEditSurcharge() {
+    this.isEditable = false;
+  }
+
+  bindSurcharge(data) {
+    if (data) {
+      this.allSurchargeSlabs = data;
+      this.initSurcharge();
+    } else {
+      ErrorToast("Unable to load regime data. Please contact to admin.")
+    }
+  }
 }
 
 class Slab {
@@ -375,4 +513,11 @@ class AgeGroup {
   AgeGroupId: number = 0;
   StartAgeGroup: number = null;
   EndAgeGroup: number = null;
+}
+
+class Surcharge {
+  SurchargeSlabId: number = 0;
+  MinSurcahrgeSlab: number = 0;
+  MaxSurchargeSlab: number = 0;
+  SurchargeRatePercentage: number = 0;
 }

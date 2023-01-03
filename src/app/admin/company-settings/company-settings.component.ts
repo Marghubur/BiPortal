@@ -77,7 +77,9 @@ export class CompanySettingsComponent implements OnInit {
   }
 
   buildManager(): FormArray {
-    let data = JSON.parse(this.companySetting.DefaultManagers);
+    let data = [];
+    if (this.companySetting.DefaultManagers && this.companySetting.DefaultManagers != "")
+      data = JSON.parse(this.companySetting.DefaultManagers);
     let dataArray = this.fb.array([]);
     if (data.length > 0) {
       let i = 0;
@@ -124,7 +126,8 @@ export class CompanySettingsComponent implements OnInit {
       value.ManagerLevelId = value.DefaultManager.map( x=> x.ManagerId);
       this.http.put(`company/UpdateSetting/${value.CompanyId}`, value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
-          this.buildPage(res.ResponseBody);
+          this.companySetting = res.ResponseBody;
+          this.initForm();
           this.isLoading = false;
           Toast("Setting save successfully")
         }

@@ -68,9 +68,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   basePath: string = '';
   viewer: any = null;
   deleteFile: any = null;
-  houseRentDetailFile: Array<any> = [];
   hraLetterList:Array<Files> = [];
   hraLetterCollection:Array<any> = [];
+  houseRentDetailFile: Array<any> = [];
   houseRentDetailLetterFile: Array<any> = [];
   viewRentPropFile: Array<any> = [];
   viewAttachment: string = '';

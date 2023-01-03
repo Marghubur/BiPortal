@@ -28,18 +28,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
   userDetail: UserDetail = new UserDetail();
-  isPPFSubmitted: boolean = false;
   exemptions: Array<IncomeDeclaration> = [];
-  otherExemptions: Array<IncomeDeclaration> = [];
-  taxSavingAllowance: Array<IncomeDeclaration> = [];
   cachedData: any = null;
   taxAmount: TaxAmount = new TaxAmount();
   myDeclaration: Array<MyDeclaration> = [];
   year: number = 0;
   taxCalender: Array<any> = [];
-  monthlyTaxAmount: MonthlyTax;
   employeeDeclaration: any = {};
-  exemptionComponent: Array<any> = [];
   editException: boolean = false;
   EmployeeId: number = 0;
   EmployeeDeclarationId: number = 0;
@@ -54,24 +49,23 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   ExemptionDeclaration: Array<any> = [];
   OtherDeclaration: Array<any> = [];
   TaxSavingAlloance: Array<any> = [];
-  isEmployeesReady: boolean = false;
-  applicationData: any = [];
   isAmountExceed: boolean = false;
   salaryDetails: any = null;
   TaxDetails: Array<any> = [];
   isLoading: boolean = false;
-  housingPropertyDetail: HouseRentDetail = new HouseRentDetail();
   isRentedResidenceEdit: boolean = false;
   isShowRentedDetail: boolean = false;
   basePath: string = '';
   viewer: any = null;
   deleteFile: any = null;
-  housingPropertyRentFile: Array<any> = [];
-  hPLetterList: Array<Files> = [];
-  hPLetterCollection: Array<any> = [];
-  housingPropertyLetterFile: Array<any> = [];
-  viewHousingPropFile: Array<any> = [];
   viewAttachment: string = '';
+  deleteType: string = '';
+  houseRentDetail: HouseRentDetail = null;
+  viewRentPropFile: Array<any> = [];
+  hraLetterList:Array<Files> = [];
+  hraLetterCollection:Array<any> = [];
+  houseRentDetailFile: Array<any> = [];
+  houseRentDetailLetterFile: Array<any> = [];
 
   constructor(private local: ApplicationStorage,
     private user: UserService,
@@ -82,8 +76,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.rentalPage = 1;
-    this.monthlyTaxAmount = new MonthlyTax();
-    this.isEmployeesReady = true;
     var dt = new Date();
     var month = 3;
     var year = dt.getFullYear();
@@ -123,7 +115,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    $('[data-bs-toggle = "tooltip"]').tooltip();
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('dispose');
+    });
   }
 
   filterDeduction(e: any, type: string) {
@@ -149,22 +147,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   calculateDeclarations() {
-    if (this.employeeDeclaration.Declarations != null &&
+    if(this.employeeDeclaration.Declarations != null &&
       this.employeeDeclaration.Declarations.length > 0) {
-      let i = 0;
-      while (i < this.employeeDeclaration.Declarations.length) {
-        this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].TotalAmountDeclared;
-        this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].AcceptedAmount;
-        this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].RejectedAmount;
-        i++;
-      }
+        let i = 0;
+        while(i < this.employeeDeclaration.Declarations.length) {
+          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].TotalAmountDeclared;
+          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].AcceptedAmount;
+          this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].RejectedAmount;
+          i++;
+        }
 
-      this.taxAmount = {
-        NetTaxableAmount: 2050000,
-        TotalTaxPayable: 444600,
-        TaxAlreadyPaid: 37050,
-        RemainingTaxAMount: 444600 - 37050
-      };
+        this.taxAmount = {
+          NetTaxableAmount: 2050000,
+          TotalTaxPayable: 444600,
+          TaxAlreadyPaid: 37050,
+          RemainingTaxAMount: 444600 - 37050
+        };
     } else {
       this.taxAmount = {
         NetTaxableAmount: 0,
@@ -185,22 +183,24 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     })
   }
 
-  deletePopup(item: any) {
+  deletePopup(item: any, type: string) {
+    this.deleteType = '';
     if (item) {
+      this.deleteType = type;
       this.deleteFile = item;
       $('#deleteAttachmentModal').modal('show');
     }
   }
 
   bindData(response) {
-    if (!response || response == undefined) {
+    if(!response || response == undefined){
       ErrorToast("Fail to load declaration data. Please contact to admin.");
       return;
     } else {
       if (response.FileDetails)
         this.declarationFiles = response.FileDetails;
 
-      if (response.SalaryComponentItems && response.SalaryComponentItems.length > 0) {
+      if(response.SalaryComponentItems && response.SalaryComponentItems.length > 0) {
         this.employeeDeclaration = response;
         this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
         this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
@@ -208,35 +208,40 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.EmployeeDeclarationId = response.EmployeeDeclarationId;
         this.employeeEmail = response.Email;
 
-        if (this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
-          this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
-          this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
-          this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
+        if(this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
+          // this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
+          // this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
+          // this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
+          let rentDetail = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
           for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
-            let component = this.employeeDeclaration.Declarations[index].DeclarationName;
+            let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
             switch (component) {
               case "1.5 Lac Exemptions":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(this.ExemptionDeclaration);
                 break;
               case "Other Exemptions":
-                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(this.OtherDeclaration);
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.OtherDeclaration);
                 break;
               case "Tax Saving Allowance":
-                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(this.TaxSavingAlloance);
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.TaxSavingAlloance);
                 break;
-              case "House Property":
-                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = (this.declarationFiles.filter(x => x.FileName.split('_')[0] == 'HP')).length;
+              case "HRA":
+                this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(rentDetail);
                 break;
             }
           }
 
           this.salaryDetails = response.SalaryDetail;
-          if (this.salaryDetails !== null)
-            this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
-          if (response.HousingProperty && response.HousingProperty != '{}') {
-            this.housingPropertyDetail = JSON.parse(response.HousingProperty);
+          if(this.salaryDetails !== null)
+          this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
+          if (response.HouseRentDetail && response.HouseRentDetail != '{}') {
+            this.houseRentDetail = JSON.parse(response.HouseRentDetail);
+          } else {
+            this.houseRentDetail = new HouseRentDetail();
           }
+
           this.calculateDeclarations();
+
           this.SectionIsReady = true;
         }
       } else {
@@ -245,43 +250,44 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  addSubmittedFileIds(item: any): any {
-    let i = 0;
-    while (i < item.length) {
-      let currentDeclaration: any = this.declarationFiles.filter(x => x.FileName.split('_')[0] == item[i].ComponentId);
-      if (currentDeclaration.length > 0)
-        item[i].UploadedFileIds = [];
-      for (let index = 0; index < currentDeclaration.length; index++) {
-        item[i].UploadedFileIds.push(currentDeclaration[index].FileId);
-      }
-      i++;
-    }
-    return item;
-  }
+  // addSubmittedFileIds(item: any): any {
+  //   let i = 0;
+  //   while (i < item.length) {
+  //     let currentDeclaration: any = this.declarationFiles.filter(x => x.FileName.split('_')[0] == item[i].ComponentId);
+  //     if (currentDeclaration.length > 0)
+  //       item[i].UploadedFileIds = [];
+  //     for (let index = 0; index < currentDeclaration.length; index++) {
+  //       item[i].UploadedFileIds.push(currentDeclaration[index].FileId);
+  //     }
+  //     i++;
+  //   }
+  //   return item;
+  // }
 
-  calculatedTotalUploadFile(item: any): number {
+  calculatedTotalUploadFile(item: any):number {
     let totalUploadedFile = 0;
-    let elem = item.filter(x => x.UploadedFileIds != null);
-    if (item.length > 0) {
-      totalUploadedFile = elem.map(x => x.UploadedFileIds.length).reduce((acc, curr) => { return acc + curr; }, 0)
+    let elem = item.filter(x => x.UploadedFileIds != null && x.UploadedFileIds != '[]');
+    if (elem.length > 0) {
+      totalUploadedFile = elem.map(x => JSON.parse(x.UploadedFileIds).length).reduce((acc, curr) => {return acc + curr;}, 0)
     }
     return totalUploadedFile;
   }
 
+
   rentedResidence() {
     this.rentResidenceForm = this.fb.group({
-      RentedFrom: new FormControl(this.housingPropertyDetail.RentedFrom),
-      RentedTo: new FormControl(this.housingPropertyDetail.RentedTo),
-      TotalRent: new FormControl(this.housingPropertyDetail.TotalRent),
-      Address: new FormControl(this.housingPropertyDetail.Address),
-      City: new FormControl(this.housingPropertyDetail.City),
-      OwnerName: new FormControl(this.housingPropertyDetail.OwnerName),
-      IsPANNo: new FormControl(this.housingPropertyDetail.IsPANNo),
-      PANNo: new FormControl(this.housingPropertyDetail.PANNo),
-      IsOwnerAddressSame: new FormControl(this.housingPropertyDetail.IsOwnerAddressSame),
-      LandlordType: new FormControl(this.housingPropertyDetail.LandlordType),
-      OwnerAddress: new FormControl(this.housingPropertyDetail.OwnerAddress),
-      IsSignedDeclaration: new FormControl(this.housingPropertyDetail.IsSignedDeclaration)
+      RentedFrom: new FormControl(this.houseRentDetail.RentedFrom),
+      RentedTo: new FormControl(this.houseRentDetail.RentedTo),
+      TotalRent: new FormControl(this.houseRentDetail.TotalRent),
+      Address: new FormControl(this.houseRentDetail.Address),
+      City: new FormControl(this.houseRentDetail.City),
+      OwnerName: new FormControl (this.houseRentDetail.OwnerName),
+      IsPANNo: new FormControl (this.houseRentDetail.IsPANNo),
+      PANNo: new FormControl (this.houseRentDetail.PANNo),
+      IsOwnerAddressSame: new FormControl (this.houseRentDetail.IsOwnerAddressSame),
+      LandlordType: new FormControl (this.houseRentDetail.LandlordType),
+      OwnerAddress:new FormControl (this.houseRentDetail.OwnerAddress),
+      IsSignedDeclaration: new FormControl (this.houseRentDetail.IsSignedDeclaration )
     })
   }
 
@@ -289,7 +295,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.isLoading = true;
     let data = this.rentResidenceForm.value;
     let value = {
-      ComponentId: 'HP',
+      ComponentId: 'HRA',
       HousePropertyDetail: data,
       EmployeeId: this.EmployeeId,
       Email: this.employeeEmail
@@ -297,9 +303,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
     let formData = new FormData();
     if (this.EmployeeId > 0 && this.EmployeeDeclarationId > 0) {
-      for (let i = 0; i < this.hPLetterList.length; i++) {
-        this.FileDocumentList.push(this.hPLetterList[i]);
-        this.FilesCollection.push(this.hPLetterCollection[i]);
+      for (let i = 0; i < this.hraLetterList.length; i++) {
+        this.FileDocumentList.push(this.hraLetterList[i]);
+        this.FilesCollection.push(this.hraLetterCollection[i]);
       }
       if (this.FileDocumentList.length > 0) {
         let i = 0;
@@ -308,15 +314,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           i++;
         }
       }
-      this.SectionIsReady = false;
       formData.append('declaration', JSON.stringify(value));
       formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
       this.http.upload(`Declaration/HouseRentDeclaration/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
         if (response.ResponseBody) {
           this.bindData(response.ResponseBody);
-          Toast("House property deatils added successfully.");
+          Toast("Rent deatils added successfully.");
           $('#rentedResidenceModal').modal('hide')
-          this.SectionIsReady = true;
           this.isLoading = false;
         }
       }).catch(e => {
@@ -333,7 +337,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.rentResidenceForm.get('OwnerAddress').setValue(value);
   }
 
-  editDeclaration(e: any) {
+  editDeclaration(item: any, e: any) {
     this.editException = true;
     let current = e.target;
     this.presentRow = current.closest('div[name="table-row"]');
@@ -344,11 +348,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.presentRow.querySelector('a[name="upload-proof"]').classList.remove('pe-none', 'text-decoration-none', 'text-muted');
     this.presentRow.querySelector('a[name="upload-proof"]').classList.add('pe-auto', 'fw-bold', 'text-primary-c');
     this.presentRow.querySelector('input[name="DeclaratedValue"]').focus();
+    if(item.UploadedFileIds != null && item.UploadedFileIds != '[]') {
+      this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
+      let tag = document.createElement("i");
+      tag.classList.add("fa", "fa-check-circle", "text-success", "fa-lg", "pe-2");
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+      tag = document.createElement("span");
+      var text = document.createTextNode("Changed");
+      tag.appendChild(text);
+      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+    }
   }
+
 
   checkMaxLimit(e: any, maxlimit: number) {
     let value = e.target.value;
-    if (value > maxlimit) {
+    if (value > maxlimit && maxlimit != -1) {
       ErrorToast("Amount is exceed from maxlimit");
       this.isAmountExceed = true;
       return;
@@ -357,25 +372,67 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  uploadDocument(item: any, type?: string) {
+  deleteDeclaration() {
+    this.isLoading = true;
+    if (this.deleteFile) {
+      this.http.delete(`Declaration/DeleteDeclarationValue/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.ComponentId}`).then(res => {
+        if (res.ResponseBody) {
+          this.bindData(res.ResponseBody);
+          $('#deleteAttachmentModal').modal('hide');
+          Toast("Declaration value is deleted successfully");
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
+  }
+
+  deleteOnlyFile() {
+    this.isLoading = true;
+    if (this.deleteFile) {
+      this.http.delete(`Declaration/DeleteDeclarationFile/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.FileId}/${this.attachmentForDeclaration}`).then(res => {
+        if (res.ResponseBody) {
+          $('#deleteAttachmentModal').modal('hide');
+          $('#addAttachmentModal').modal('hide');
+          $('#rentFileModal').modal('hide');
+          $('#rentedResidenceModal').modal('hide');
+          this.bindData(res.ResponseBody);
+          Toast("Declaration file is deleted successfully");
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
+  }
+
+  uploadDocument(item: any) {
     this.slectedDeclarationnFile = [];
     if (item) {
-      this.attachmentForDeclaration = item.ComponentId;
+      this.attachmentForDeclaration = item.ComponentId ;
       this.isLargeFile = false;
       this.viewAttachment = '';
-      let currentDeclaration = this.declarationFiles.filter(x => x.FileName.split('_')[0] == item.ComponentId);
-      if (currentDeclaration.length > 0)
-        this.slectedDeclarationnFile = currentDeclaration;
+      this.slectedDeclarationnFile = [];
+      if(item.UploadedFileIds != null) {
+        if (isNaN(item.UploadedFileIds[0]))
+          item.UploadedFileIds = JSON.parse(item.UploadedFileIds)
+        let fileIds = item.UploadedFileIds as Array<number>;
+        if (fileIds.length > 0 && this.declarationFiles.length > 0) {
+          fileIds.map(x => {
+            let currentFile = this.declarationFiles.find(i => i.FileId == x);
+            if(currentFile != null){
+              this.slectedDeclarationnFile.push(currentFile);
+            }
+          });
+        }
+      }
 
       if (this.FilesCollection.length > 0) {
         this.FileDocumentList = [];
         this.FilesCollection = [];
         this.removeSelectedFile()
       }
-
-      if (type != null && type !== '')
-        this.viewAttachment = type;
-
       $("#addAttachmentModal").modal('show');
     }
   }
@@ -426,8 +483,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $("#uploadreceipt").click();
   }
 
-  fireuploadHPLetter() {
-    $("#uploadHPLetter").click();
+  fireuploadHRALetter() {
+    $("#uploadHRALetter").click();
   }
 
   fireBrowser() {
@@ -458,7 +515,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       while (index < selectedFile.length) {
         file = <File>selectedFile[index];
         let item: Files = new Files();
-        item.AlternateName = "HP_Receipt";
+        item.AlternateName = "HRA_Receipt";
         item.FileName = file.name;
         item.FileType = file.type;
         item.FileSize = (Number(file.size) / 1024);
@@ -486,9 +543,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  uploadHPLetter(fileInput: any) {
-    this.hPLetterList = [];
-    this.hPLetterCollection = [];
+  uploadHRALetter(fileInput: any) {
+    this.hraLetterList = [];
+    this.hraLetterCollection = [];
     let selectedFile = fileInput.target.files;
     if (selectedFile.length > 0) {
       let index = 0;
@@ -496,7 +553,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       while (index < selectedFile.length) {
         file = <File>selectedFile[index];
         let item: Files = new Files();
-        item.AlternateName = "HP_Dec_Letter";
+        item.AlternateName = "HRA_Dec_Letter";
         item.FileName = file.name;
         item.FileType = file.type;
         item.FileSize = (Number(file.size) / 1024);
@@ -505,8 +562,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         item.ParentFolder = '';
         item.Email = this.employeeEmail;
         item.UserId = this.EmployeeId;
-        this.hPLetterList.push(item);
-        this.hPLetterCollection.push(file);
+        this.hraLetterList.push(item);
+        this.hraLetterCollection.push(file);
         index++;
       };
       this.totalFileSize = 0;
@@ -542,7 +599,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     elem.querySelector('div[name="cancel-declaration"]').classList.add('d-none');
     elem.querySelector('a[name="upload-proof"]').classList.remove('pe-auto', 'fw-bold', 'text-primary-c');
     elem.querySelector('a[name="upload-proof"]').classList.add('pe-none', 'text-decoration-none', 'text-muted');
-    if (item.UploadedFileIds <= 0) {
+    if(item.UploadedFileIds <= 0) {
       this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
       let tag = document.createElement("i");
       tag.classList.add("fa", "fa-paperclip", "pe-2");
@@ -570,7 +627,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   removeSelectedFile() {
     let elem = document.querySelectorAll('a[name="upload-proof"]');
     for (let i = 0; i < elem.length; i++) {
-      (<HTMLElement>elem[i]).innerText = '';
+      (<HTMLElement> elem[i]).innerText = '';
       let tag = document.createElement("i");
       tag.classList.add("fa", "fa-paperclip", "pe-2");
       elem[i].appendChild(tag);
@@ -632,7 +689,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   rentedDecalrationPopup() {
     this.FileDocumentList = [];
-    this.hPLetterList = [];
+    this.hraLetterList = [];
+    this.houseRentDetail = new HouseRentDetail();
+    this.rentedResidence();
     $('#rentedResidenceModal').modal('show');
   }
 
@@ -664,15 +723,24 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  navDeclarationTab(index: number) {
+    this.active = index;
+  }
+
   editRentedResidence(data: any) {
     if (data) {
+      this.rentalPage = 1;
       this.isRentedResidenceEdit = true;
       this.FileDocumentList = [];
-      this.hPLetterList = [];
-      let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HP');
-      this.housingPropertyRentFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
-      this.housingPropertyLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");
-      this.housingPropertyDetail = data;
+      this.hraLetterList = [];
+      this.attachmentForDeclaration = 'HRA';
+      let hosuingProp = this.employeeDeclaration.SalaryComponentItems.find (x => x.ComponentId == "HRA");
+      if (hosuingProp != null && hosuingProp.UploadedFileIds != null && hosuingProp.UploadedFileIds != '[]') {
+        let value = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == 'HRA');
+        this.houseRentDetailFile = value.filter(x =>x.FileName.split('_')[1] == "Receipt");
+        this.houseRentDetailLetterFile = value.filter(x =>x.FileName.split('_')[1] == "Dec");
+      }
+      this.houseRentDetail = data;
       this.rentedResidence();
       $('#rentedResidenceModal').modal('show');
     }
@@ -680,15 +748,33 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.isRentedResidenceEdit = false;
   }
 
-
-  viewHousingPropertyFilePopUp(item: any) {
-    this.viewHousingPropFile = [];
-    this.viewHousingPropFile = item;
-    $('#housingPropertyFileModal').modal('show');
+  viewRentFilePopUp(item: any) {
+    this.viewRentPropFile = [];
+    this.viewRentPropFile = item;
+    $('#rentFileModal').modal('show');
   }
 
-  deleteHousingPropertyFile(userFile: any) {
+  deleteRentDeclarationPopUp() {
+    $('#deleteRentDeclrModal').modal('show');
+  }
 
+  deleteRentDeclaration() {
+    this.isLoading = true;
+    this.http.delete(`Declaration/DeleteDeclaredHRA/${this.employeeDeclaration.EmployeeDeclarationId}`).then(res => {
+      if (res.ResponseBody) {
+        $('#deleteRentDeclrModal').modal('hide');
+        $('#rentedResidenceModal').modal('hide');
+        this.bindData(res.ResponseBody);
+        Toast("Declaration value is deleted successfully");
+      }
+      this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  deleteRentFile(userFile: any) {
+    this.deletePopup(userFile, 'deletefile')
   }
 
   showrentedDetail() {

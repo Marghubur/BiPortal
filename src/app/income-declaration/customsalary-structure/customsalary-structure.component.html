@@ -34,7 +34,7 @@
                   <h5 class="text-center">{{item.GroupName}}</h5>
                   <p class="mb-0 text-truncate text-center">{{item.MinAmount}} - {{item.MaxAmount}}</p>
                   <div ngbDropdown class="d-inline-block menu-btn">
-                    <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
+                    <button type="button" [disabled]="item.SalaryGroupId == 1" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
                       <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">

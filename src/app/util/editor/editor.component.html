@@ -101,13 +101,11 @@
       <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Code" href="javascript:void(0)" (click)="toggleSource();"><i class="fa fa-code"></i></a>
       <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Editor" href="javascript:void(0)" (click)="toggleEdit();"><i class="fa fa-pencil"></i></a>
       <div class="col-auto">
-        <!-- <label for="" class="form-label me-2">Font Color:</label> -->
         <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Font Color" class="text-decoration-none" (change)="execCommandWithArg('foreColor', $event);">
           <input type="color" >
         </a>
       </div>
       <div class="col-auto">
-        <!-- <label for="" class="form-label me-2">Background:</label> -->
         <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Background Color" class="text-decoration-none" >
           <input type="color" >
         </a>
@@ -146,9 +144,41 @@
       </div>
       <input type="file" id="uploarichimage" class="d-none" accept=".jpg, .jpeg, .png" (change)="uploadProfilePicture($event)">
       <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Attach Image" (click)="fireBrowserFile()"><i class="fa fa-file-image-o"></i></a>
+      <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Table" (click)="tabelPopUp()"><i class="fa fa-table"></i></a>
       <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Select All" (click)="execCmd('selectAll');">Select All</a>
     </div>
     <div class="col-md-12 mt-3">
       <iframe id="richTextField" (dblclick)="toggleEdit()" [srcdoc]="innerHtmlText" class="h-75 rounded w-100"></iframe>
     </div>
   </div>
+
+  <!-- Add Table -->
+  <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="tableModal" tabindex="-1" aria-labelledby="tableModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content px-4">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="tableModalLabel">Add Table</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <label for="" class="form-label">No of Column</label>
+              <input type="number" class="form-control" [(ngModel)]="columns" placeholder="No of column">
+            </div>
+            <div class="col-md-6">
+              <label for="" class="form-label">No of Row</label>
+              <input type="number" class="form-control" [(ngModel)]="rows" placeholder="No of row">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-success" (click)="addTable()">
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End -->

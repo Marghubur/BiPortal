@@ -20,19 +20,18 @@ export class MysalaryComponent implements OnInit {
   salaryDetail: any = null;
   isLoading: boolean = false;
   salaryBreakup: any = {};
-  salaryDeducation: Array<SalaryDeduction> = [];
   incomeTaxSlab: Array<IncomeTaxSlab> =[];
   currentYear: number = 0;
   EmployeeId: number = 0;
   userDetail: UserDetail = new UserDetail();
-  salaryDetails: any = null;
   isSalaryDetail: boolean = true;
-  applicationData: any = [];
-  isSalaryReady: boolean = false;
   salaryBreakupForm: FormGroup = null;
   salaryComponents: Array<any> = [];
   isReady: boolean = false;
   SectionIsReady: boolean = false;
+  taxRegimeDetails: any = [];
+  taxSlab: Array<any> = [];
+  currentEmployee: any = null;
 
   constructor(private nav: iNavigation,
               private user: UserService,
@@ -53,50 +52,33 @@ export class MysalaryComponent implements OnInit {
       let Master = this.local.get(null);
     if(Master !== null && Master !== "") {
       this.userDetail = Master["UserDetail"];
+      this.currentEmployee = this.userDetail;
       this.EmployeeId = this.userDetail.UserId;
       this.loadData();
     } else {
       ErrorToast("Invalid user. Please login again.")
     }
-    this.myAnnualSalary = {
-      Annual: 2124000,
-      Bonus: 0,
-      Other: 21600,
-      Total: 2145600,
-      Effective: new Date(),
-      PFperMonth: 1800,
-      Perks: 0,
-      SalaryMonth: 177000
-    }
+  }
 
-    this.incomeTaxSlab.push({
-      taxSlab: 'Income Upto 2,50,000',
-      rate: 'NIL'
-    },
-    {
-      taxSlab: 'Income between 2,50,001 to 5,00,000',
-      rate: '5% (Tax rebate of Rs 12,500 available under secction 87A'
-    },
-    {
-      taxSlab: 'Income between 5,00,001 to 7,50,000',
-      rate: '10%'
-    },
-    {
-      taxSlab: 'Income between 7,50,001 to 10,00,000',
-      rate: '15%'
-    },
-    {
-      taxSlab: 'Income between 10,00,001 to 12,50,000',
-      rate: '20%'
-    },
-    {
-      taxSlab: 'Income between 12,50,001 to 15,00,000',
-      rate: '25%'
-    },
-    {
-      taxSlab: 'Income above 15,00,000',
-      rate: '30%'
-    });
+  newIncomeTaxRegimePopUp() {
+    this.http.get("TaxRegime/GetAllRegime").then(res => {
+      if (res.ResponseBody) {
+        this.taxRegimeDetails = res.ResponseBody;
+        let empRegime = this.currentEmployee.EmployeeCurrentRegime;
+        if (empRegime == 0 || empRegime == null)
+          this.active = this.taxRegimeDetails.taxRegimeDesc.find(x => x.IsDefaultRegime == 1).TaxRegimeDescId;
+        else
+          this.active = empRegime;
+        this.filterTaxSlab();
+        $('#newIncomeTaxRegime').modal('show');
+      }
+    })
+  }
+
+  filterTaxSlab() {
+    let dob = this.currentEmployee.DOB;
+    let age = new Date().getFullYear() - new Date(dob).getFullYear();
+    this.taxSlab = this.taxRegimeDetails.taxRegime.filter(x => x.RegimeDescId == this.active && x.StartAgeGroup < age && x.EndAgeGroup >= age);
   }
 
   loadData() {
@@ -135,15 +117,26 @@ export class MysalaryComponent implements OnInit {
 
       if (singleDetail) {
         this.salaryComponents = singleDetail.SalaryBreakupDetails;
+        let annual = 0;
+        let other = 0;
+        let salary = 0;
+        if (this.salaryComponents.find(x => x.ComponentId == "Gross")) {
+          salary = ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount), 2);
+          annual = ToFixed((salary * 12), 2);
+        }
+
+        if (this.salaryComponents.find(x => x.ComponentId == "EPER-PF"))
+          other = ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2);
+
         this.myAnnualSalary = {
-          Annual: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount * 12), 2),
+          Annual: annual,
           Bonus: 0,
-          Other: ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2),
-          Total: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount * 12) + (this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2),
-          Effective: this.userDetail.CreatedOn,
-          PFperMonth: ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2)/12,
+          Other: other,
+          Total: annual + other,
+          Effective: this.currentEmployee.UpdatedOn,
+          PFperMonth: other/12,
           Perks: 0,
-          SalaryMonth: ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount), 2)
+          SalaryMonth: salary
         }
         this.isReady = true;
       } else {
@@ -153,6 +146,7 @@ export class MysalaryComponent implements OnInit {
     } else {
       this.salaryComponents = [];
     }
+
     this.initForm();
     this.SectionIsReady= true;
   }
@@ -217,9 +211,23 @@ export class MysalaryComponent implements OnInit {
     });
   }
 
-  continueCurrentTaxRegime() {
-    $('#newIncomeTaxRegime').modal('hide');
-    this.nav.navigate(AdminSalary, null);
+  switchTaxRegime() {
+    this.isLoading = true;
+    let value = {
+      EmployeeId: this.EmployeeId,
+      EmployeeCurrentRegime: this.active
+    }
+    this.http.post("Declaration/SwitchEmployeeTaxRegime", value).then(res => {
+      if (res.ResponseBody) {
+        let emp = this.currentEmployee;
+        emp.EmployeeCurrentRegime = this.active;
+        Toast("Tax regime switced successfully");
+      }
+      $('#newIncomeTaxRegime').modal('hide');
+      this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   activateMe(ele: string) {
@@ -270,10 +278,6 @@ export class MysalaryComponent implements OnInit {
 
   closeSalaryDetails() {
     $('#fullSalaryDetail').modal('hide');
-  }
-
-  newIncomeTaxRegimePopUp() {
-    $('#newIncomeTaxRegime').modal('show');
   }
 
 }

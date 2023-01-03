@@ -13,6 +13,7 @@ import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component
 import { ImageLoaderComponent } from './image-loader/image-loader.component';
 import { EditorComponent } from './editor/editor.component';
 import { MessageModalComponent } from './message-modal/message-modal.component'
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { MessageModalComponent } from './message-modal/message-modal.component'
   ],
   imports: [
     CommonModule,
-    CommonRoutingModule
+    CommonRoutingModule,
+    FormsModule
   ],
   exports: [
     AllownumberDirective,

@@ -16,6 +16,8 @@ export class EditorComponent implements OnInit, AfterViewChecked {
   imageURL: string = "";
   innerHtmlText: any = null;
   doc: any = null;
+  rows: number = 0;
+  columns: number = 0;
 
   @ViewChild('textFrame', {static: false}) iframe: ElementRef;
 
@@ -42,7 +44,6 @@ export class EditorComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
     this.richTextField = document.getElementById("richTextField");
     this.enableEditMode();
-    // iframe.body.innerHTML = this.innerHtmlText;
   }
 
 
@@ -94,10 +95,6 @@ export class EditorComponent implements OnInit, AfterViewChecked {
         this.imageURL = event.target.result;
       };
       this.richTextField.contentDocument.execCommand('insertImage', false, this.imageURL);
-
-      // this.employeeForm.patchValue({
-      //   ProfileImgPath: event.target.result,
-      // });
     }
   }
 
@@ -105,20 +102,30 @@ export class EditorComponent implements OnInit, AfterViewChecked {
     $("#uploarichimage").click();
   }
 
-  // createComponent(){
-  //   const comRef = this.vcRef.createComponent(this.innerHtmlText);
-  //   comRef.location.nativeElement.id = "content-data";
-  //   // (<EditorComponent>this.comRef.instance).firstInput = this.firstInput;
-  //   // (<EditorComponent>this.comRef.instance).emitOutput.subscribe(response => {
-  //   //console.log(response);
-  //   //});
-  //   this.doc.body.appendChild(comRef.location.nativeElement);
-  // }
+  tabelPopUp() {
+    $('#tableModal').modal('show');
+  }
 
-  // bindLoadedContent(iframe) {
-  //   this.doc = iframe.contentDocument || iframe.contentWindow;
-  //   this.createComponent();
-  // }
+  addTable() {
+    var html = this.generateTable();
+    this.richTextField.contentDocument.execCommand('insertHTML', false, html.toString());
+    $('#tableModal').modal('hide');
+  }
+
+  generateTable() {
+    let myRows = this.rows;
+    let myColumns = this.columns;
+    var html = '<table style="border-collapse: collapse; width: 100%;"><tbody>';
+    for (let i = 0; i <myRows; i++) {
+      html += "<tr>";
+      for (let j = 0; j <myColumns; j++) {
+        html += "<td style='padding: 15px; border: 1px solid #222; vertical-align: middle;'>&nbsp;</td>"
+      }
+      html += "</tr>";
+    }
+    html += "</tbody></table>";
+    return html;
+  }
 }
 
 
