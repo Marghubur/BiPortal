@@ -372,6 +372,10 @@ export class SettingsComponent implements OnInit {
       this.isPageReady = true;
     })
   }
+
+  closePTaxSetting() {
+    this.isEditable = false;
+  }
 }
 
 class CompanyGroup {

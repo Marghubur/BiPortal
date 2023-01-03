@@ -27,8 +27,6 @@ import { AdminResetPassword,
   CompanySettings,
   Expenses,
   CompanyInfo,
-  SalaryComponentStructure,
-  CustomSalaryStructure,
   SalaryBreakup,
   EmailService,
   OrganizationSetting,
@@ -71,8 +69,6 @@ import { SettingsComponent } from './settings/settings.component';
 import { CompanySettingsComponent } from './company-settings/company-settings.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
-import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
-import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.component';
 import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
@@ -117,8 +113,6 @@ const routes: Routes = [
   { path: CompanyInfo, component: CompanyInfoComponent},
   { path: Expenses, component: ExpensesComponent},
   { path: AdminTaxcalculation, component: TaxcalculationComponent},
-  { path: SalaryComponentStructure, component: SalarycomponentStructureComponent},
-  { path: CustomSalaryStructure, component: CustomsalaryStructureComponent},
   { path: SalaryBreakup, component: SalaryBreakupComponent},
   { path: EmailService, component: EmailComponent},
   { path: OrganizationSetting, component: OrganizationComponent},

@@ -427,17 +427,25 @@
                                           <ng-container formArrayName="PtaxSlabs">
                                             <tr *ngFor="let item of ptaxSalab.controls; let i = index" [formGroupName]="i">
                                               <td>
-                                                <input type="text" [ngClass]="{'border-0': !isEditable}" [readonly]="!isEditable" placeholder="State Name" class="form-control" formControlName="StateName"  oninput="this.value = this.value.toUpperCase()"
-                                                >
+                                                  <input type="text" [ngClass]="{'border-0': !isEditable}"  [readonly]="!isEditable" placeholder="State Name" class="form-control" formControlName="StateName"  oninput="this.value = this.value.toUpperCase()">
                                               </td>
                                               <td>
-                                                <input type="number" [ngClass]="{'border-0': !isEditable}" [readonly]="!isEditable" placeholder="Minimum income per month" class="form-control" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MinIncome">
+                                                <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0">
+                                                  <i class="fa fa-inr ps-3"></i>
+                                                  <input type="number" [readonly]="!isEditable" placeholder="Minimum income per month" class="form-control border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MinIncome">
+                                                </div>
+                                                </td>
+                                              <td>
+                                                <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0">
+                                                  <i class="fa fa-inr ps-3"></i>
+                                                  <input type="number" [readonly]="!isEditable" placeholder="Maximum income per month" class="form-control border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MaxIncome" (blur)="checkToAmount($event, i)">
+                                                </div>
                                               </td>
                                               <td>
-                                                <input type="number" [ngClass]="{'border-0': !isEditable}" [readonly]="!isEditable" placeholder="Maximum income per month" class="form-control" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MaxIncome" (blur)="checkToAmount($event, i)">
-                                              </td>
-                                              <td>
-                                                <input type="number" [ngClass]="{'border-0': !isEditable}" [readonly]="!isEditable" placeholder="Tax Rate/Tax Amount (p.m.)" class="form-control" formControlName="TaxAmount" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                                                <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0">
+                                                  <i class="fa fa-inr ps-3"></i>
+                                                  <input type="number" [readonly]="!isEditable" placeholder="Tax Rate/Tax Amount (p.m.)" class="form-control border-0" formControlName="TaxAmount" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                                                </div>
                                               </td>
                                               <td>
                                                 <select class="form-select" formControlName="Gender" [disabled]="!isEditable" [ngClass]="{'border-0': !isEditable}">
@@ -459,6 +467,7 @@
                                         </tbody>
                                       </table>
                                       <div class="text-end" *ngIf="isEditable">
+                                        <button class="btn btn-danger me-2" (click)="closePTaxSetting()"><i class="fa fa-close pe-2"></i>Cancel</button>
                                         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="savePtaxSlab()">
                                           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-send-o': !isLoading}"></i>
                                           {{ isLoading ? 'Wait' : 'Save' }}

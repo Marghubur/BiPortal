@@ -114,7 +114,7 @@ export class SalaryComponent implements OnInit {
     if (completeSalaryDetail && completeSalaryDetail.length > 0) {
       let presentMonth = new Date().getMonth() + 1;
       let singleDetail = completeSalaryDetail.find(x => x.MonthNumber == presentMonth);
-
+      this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
       if (singleDetail) {
         this.salaryComponents = singleDetail.SalaryBreakupDetails;
         let annual = 0;
@@ -280,10 +280,6 @@ export class SalaryComponent implements OnInit {
   closeSalaryDetails() {
     $('#fullSalaryDetail').modal('hide');
   }
-
-
-
-
 }
 
 
