@@ -159,14 +159,19 @@ export class EmailConfigComponent implements OnInit {
     this.http.post("Email/EmailTempMappingInsertUpdate", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.bindData(res.ResponseBody);
-        $('#emailConfigModal').modal('hide');
-        Toast("Email template mapping successfully");
+        this.isPageLoading = false;
+        Toast("Email template mapping data loaded successfully");
+      } else {
+        ErrorToast("Fail to load email template mapping data");
       }
+
       this.isLoading = false;
-      this.submitted = false;
+      $('#emailConfigModal').modal('hide');
     }).catch(e => {
-      this.isLoading = false;
-    })
+      this.isPageLoading = false;
+      ErrorToast("Fail to load email template mapping data");
+      $('#emailConfigModal').modal('hide');
+    });
   }
 
   changeTemplate(e: any) {
@@ -207,14 +212,14 @@ export class EmailConfigComponent implements OnInit {
 
   resetFilter() {
     this.mappedData = new Filter();
-    this.currentEmailTemp = new EmpTempMapping();
+    this.filterEmailTemp = new EmpTempMapping();
     this.loadData();
   }
 }
 
 class EmpTempMapping {
   EmailTempMappingId: number = 0;
-  TemplateId: number = null;
+  TemplateId: number = 0;
   Description: string = null;
   EmailTemplateName: string = null;
   TemplateName: string = "";
