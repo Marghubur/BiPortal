@@ -233,7 +233,7 @@
                 <label for="" class="form-label">COMPONENT TYPE</label>
                 <div class="col-md-12">
                   <select class="form-select"
-                    [ngClass]="{'error-field': submitted && f.Type.errors !== null && f.Type.errors.required}"
+                    [ngClass]="{'error-field': submitted && f.ComponentTypeId.errors !== null && f.ComponentTypeId.errors.required}"
                     formControlName="ComponentTypeId" (change)="selectComponentType($event)">
                     <option value="0">Select Componet Type</option>
                     <option value="2">Allowance (By: Employee)</option>

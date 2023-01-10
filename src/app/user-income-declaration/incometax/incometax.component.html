@@ -579,13 +579,13 @@
 </div>
 <!-- End -->
 
-<!-- View Standard Deduction Modal -->
-<div class="modal fade" id="standardDeductionModal" tabindex="-1" aria-labelledby="standardDeductionModalLabel"
+<!-- View Professional Tax Modal -->
+<div class="modal fade" id="proTaxModal" tabindex="-1" aria-labelledby="proTaxModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content ps-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="standardDeductionModalLabel">STANDARD DEDUCTIONS DETAILS</h5>
+        <h5 class="modal-title" id="proTaxModalLabel">PROFESSIONAL TAX DETAILS</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -598,7 +598,7 @@
             </div>
           </div>
           <div class="t-head overflow-hidden">
-            <div class="tr py-2" *ngFor="let item of standardDeductionDetails">
+            <div class="tr py-2" *ngFor="let item of proTaxDetails">
               <div class="td">{{item.Month}}</div>
               <div class="td">{{item.Amount | number}}</div>
               <div class="td">{{item.Source}}</div>

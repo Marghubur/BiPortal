@@ -221,8 +221,8 @@
                         <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Father Name</label>
-                            <input class="form-control" placeholder="Mother Name" name="FatherName" transform="" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
-                              formControlName="FatherName" />
+                            <input class="form-control" placeholder="Father Name" name="FatherName" transform="" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
+                            [ngClass]="{'error-field': submitted && f.FatherName.errors !== null && f.FatherName.errors.required}" formControlName="FatherName" />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Mother Name</label>
@@ -280,7 +280,7 @@
                         <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                           <div class="col-md-6 mb-3">
                             <label class="form-label">PAN No. #</label>
-                            <input class="form-control" placeholder="PAN card no.#" name="PANNo"
+                            <input class="form-control" placeholder="PAN card no.#" name="PANNo" [ngClass]="{'error-field': submitted && f.PANNo.errors !== null && f.PANNo.errors.required}"
                               oninput="this.value = this.value.toUpperCase()" formControlName="PANNo" />
                           </div>
                           <div class="col-md-6 mb-3">
@@ -290,17 +290,17 @@
                           <div class="col-md-12 mb-3">
                             <label class="form-label">Bank Account No.#</label>
                             <input class="form-control" placeholder="Bank Account No.#" name="AccountNumber" OnlyNumber="30" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                              formControlName="AccountNumber" />
+                              [ngClass]="{'error-field': submitted && f.AccountNumber.errors !== null && f.AccountNumber.errors.required}" formControlName="AccountNumber" />
                           </div>
                           <div class="col-md-12 mb-3">
                             <label class="form-label">Bank Name</label>
                             <input class="form-control" placeholder="Bank Name" name="BankName" transform="" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
-                              formControlName="BankName" />
+                              [ngClass]="{'error-field': submitted && f.BankName.errors !== null && f.BankName.errors.required}" formControlName="BankName" />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">IFSC Code</label>
                             <input class="form-control" placeholder="IFSC Code" name="IFSCCode"
-                              oninput="this.value = this.value.toUpperCase()" formControlName="IFSCCode" />
+                              [ngClass]="{'error-field': submitted && f.IFSCCode.errors !== null && f.IFSCCode.errors.required}" oninput="this.value = this.value.toUpperCase()" formControlName="IFSCCode" />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Branch (Optional)</label>

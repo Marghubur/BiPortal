@@ -76,6 +76,7 @@ export class PreferencesComponent implements OnInit {
         if(response.ResponseBody) {
           if (response.ResponseBody.Employee.length > 0) {
             this.employeeDetail = response.ResponseBody.Employee[0] as EmployeeDetail;
+            this.employeeDetail.DOB = new Date(this.employeeDetail.DOB);
             Toast("Record found.")
           } else {
             ErrorToast("Record not found");

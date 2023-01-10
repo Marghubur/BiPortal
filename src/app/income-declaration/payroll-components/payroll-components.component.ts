@@ -199,7 +199,7 @@ export class PayrollComponentsComponent implements OnInit {
       if (item.ComponentTypeId != 0)
         this.ComponentType = item.ComponentTypeId;
 
-      if(item.TaxExempt == 'true')
+      if(item.TaxExempt == true)
         this.isTaxExempt = true;
       else
         this.isTaxExempt = false;

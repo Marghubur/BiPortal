@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, ErrorToast, PlaceEmpty, Toast, ToFixed } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, PlaceEmpty, Toast, ToFixed, ToLocateDate } from 'src/providers/common-service/common.service';
 import { Employees, OrganizationSetting, ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
@@ -45,7 +45,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   profileURL: string = UserImage;
   fileDetail: Array<any> = [];
   activeAssignedClient: AssignedClients = new AssignedClients();
-  ProfessuinalDetail_JSON: any = '';
   managerList: autoCompleteModal = null;
   userRoles: Array<any> = [];
   salaryBreakup: Array<any> = [];
@@ -87,7 +86,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.isUpdate = false;
     if (data) {
       this.employeeUid = data.EmployeeUid;
-      this.ProfessuinalDetail_JSON = data.ProfessionalDetail_Json;
       this.isUpdate = true;
     } else {
       this.isUpdate = false;
@@ -113,9 +111,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.clients = response.ResponseBody.Clients;
       if (response.ResponseBody.Employee.length > 0) {
         this.employeeModal = response.ResponseBody.Employee[0] as EmployeeDetail;
-        this.employeeModal.DOB = new Date(this.employeeModal.DOB);
+        this.employeeModal.DOB = ToLocateDate(this.employeeModal.DOB);
         this.model = { day: this.employeeModal.DOB.getDate(), month: this.employeeModal.DOB.getMonth() + 1, year: this.employeeModal.DOB.getFullYear()};
-        let date = new Date(this.employeeModal.CreatedOn);
+        let date = ToLocateDate(this.employeeModal.CreatedOn);
         this.joiningDatemodel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         if (this.employeeModal.DesignationId == 0)
           this.employeeModal.DesignationId = null;
@@ -213,14 +211,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.employeeForm.get("CTC").setValue(value);
   }
 
-  // getAllCompany() {
-  //   this.http.get("Company/GetAllCompany").then(res => {
-  //     if (res.ResponseBody && res.ResponseBody.length > 0) {
-  //       this.companyGroup = res.ResponseBody;
-  //     }
-  //   })
-  // }
-
   daysInMonth(monthNumber: number) {
     var now = new Date();
     return new Date(now.getFullYear(), monthNumber, 0).getDate();
@@ -249,18 +239,18 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       Email: new FormControl(this.employeeModal.Email, [Validators.required, Validators.email]),
       SecondaryMobile: new FormControl(this.employeeModal.SecondaryMobile),
       LeavePlanId: new FormControl(this.employeeModal.LeavePlanId),
-      FatherName: new FormControl(this.employeeModal.FatherName),
+      FatherName: new FormControl(this.employeeModal.FatherName, [Validators.required]),
       MotherName: new FormControl(this.employeeModal.MotherName),
       SpouseName: new FormControl(this.employeeModal.SpouseName),
       State: new FormControl(this.employeeModal.State),
       City: new FormControl(this.employeeModal.City),
       Pincode: new FormControl(PlaceEmpty(this.employeeModal.Pincode)),
       Address: new FormControl(this.employeeModal.Address),
-      PANNo: new FormControl(this.employeeModal.PANNo),
+      PANNo: new FormControl(this.employeeModal.PANNo, [Validators.required]),
       AadharNo: new FormControl(this.employeeModal.AadharNo),
-      AccountNumber: new FormControl(this.employeeModal.AccountNumber),
-      BankName: new FormControl(this.employeeModal.BankName),
-      IFSCCode: new FormControl(this.employeeModal.IFSCCode),
+      AccountNumber: new FormControl(this.employeeModal.AccountNumber, [Validators.required]),
+      BankName: new FormControl(this.employeeModal.BankName, [Validators.required]),
+      IFSCCode: new FormControl(this.employeeModal.IFSCCode, [Validators.required]),
       Domain: new FormControl(this.employeeModal.Domain),
       Specification: new FormControl(this.employeeModal.Specification),
       ExprienceInYear: new FormControl(PlaceEmpty(this.employeeModal.ExprienceInYear)),
@@ -271,7 +261,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       BranchName: new FormControl(this.employeeModal.BranchName),
       AllocatedClientName: new FormControl(this.employeeModal.AllocatedClientName),
       ProfileImgPath: new FormControl(""),
-      DateOfJoining: new FormControl(this.employeeModal.CreatedOn),
+      DateOfJoining: new FormControl(ToLocateDate(this.employeeModal.CreatedOn)),
       DOB: new FormControl(this.employeeModal.DOB, [Validators.required]),
       FileId: new FormControl(this.employeeModal.FileId),
       AccessLevelId: new FormControl(this.employeeModal.AccessLevelId, [Validators.required]),
@@ -341,6 +331,21 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (this.employeeForm.get('Email').errors !== null)
       errroCounter++;
 
+    if (this.employeeForm.get('PANNo').errors !== null)
+      errroCounter++;
+    
+    if (this.employeeForm.get('AccountNumber').errors !== null)
+      errroCounter++;
+
+    if (this.employeeForm.get('BankName').errors !== null)
+      errroCounter++;
+
+    if (this.employeeForm.get('IFSCCode').errors !== null)
+      errroCounter++;
+
+    if (this.employeeForm.get('FatherName').errors !== null)
+      errroCounter++;
+
     if (this.employeeForm.get('DesignationId').errors !== null)
       errroCounter++;
 
@@ -399,16 +404,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeModal.FileId = 0;
 
     if (errroCounter == 0) {
-      if (this.ProfessuinalDetail_JSON == null) {
-        this.ProfessuinalDetail_JSON = "";
-      }
       let formData = new FormData();
       formData.append("employeeDetail", JSON.stringify(this.employeeForm.value));
       if(this.employeeForm.value.AllocatedClients == undefined || this.employeeForm.value.AllocatedClients == undefined)
         this.employeeForm.value.AllocatedClients = [];
-
-      // formData.append("allocatedClients", JSON.stringify(this.employeeForm.value.AllocatedClients));
-      formData.append("ProfessuinalDetail_JSON", this.ProfessuinalDetail_JSON);
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
@@ -661,7 +660,7 @@ export class EmployeeDetail {
   ActualPackage: number = null;
   FinalPackage: number = null;
   TakeHomeByCandidate: number = null;
-  DOB: Date = null;
+  DOB: any = null;
   CreatedOn: Date = null;
   ReportingManagerId: number = 0;
   DesignationId: number = null;

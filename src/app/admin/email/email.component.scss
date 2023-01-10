@@ -76,3 +76,28 @@
 #closeModal {
   background: #1a19198f !important;
 }
+
+.selected {
+  background-color: #d1e3e8;
+  border-radius: 20px;
+}
+
+.e-row:hover {
+  background-color: #ebeff0;
+  cursor: pointer;
+}
+
+.e-row {
+  padding: 8px 10px;
+}
+
+.small-font {
+  font-weight: 700;
+}
+
+.wrap-content {
+  width: 92%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
