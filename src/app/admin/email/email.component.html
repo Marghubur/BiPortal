@@ -33,16 +33,16 @@
       <div class="col-md-10">
         <div [ngClass]="{'d-none': isBodyRequested}">
           <ng-container *ngIf="isPageReady">
-            <div class="d-flex justify-content-between border-bottom e-row" *ngFor="let e of inboxMail">
-              <div class="d-flex wrap-content fe-1">
-                <div class="me-2">
+            <div class="d-flex justify-content-between align-items-center border-bottom e-row" *ngFor="let e of inboxMail">
+              <div class="d-flex wrap-content align-items-center">
+                <div class="d-flex col-md-2 align-items-center">
                   <input type="checkbox">
+                  <div class="ms-2" (click)="loadBody(e.EMailIndex)">
+                    <label class="fw-bold text-dark">{{e.Name}}:</label>
+                  </div>
                 </div>
-                <div class="fe-1" (click)="loadBody(e.EMailIndex)">
-                  <label class="fw-bold text-dark">{{e.Name}}:</label>
-                </div>
-                <div class="fe-8" (click)="loadBody(e.EMailIndex)">
-                  <div class="fw-bold text-dark d-flex">
+                <div class="col-md-10" (click)="loadBody(e.EMailIndex)">
+                  <div class="fw-bold text-dark d-flex align-items-center">
                     <div>{{e.Subject}}</div>
                     <div class="text-muted ps-2 pe-3 fw-normal">
                       {{e.Text}}
@@ -50,7 +50,7 @@
                   </div>
                 </div>
               </div>
-              <div>
+              <div class="col-md-1 text-end">
                 <span class="small-font text-dark">9:40 AM</span>
               </div>
             </div>
@@ -68,15 +68,6 @@
             </div>
           </div>
         </ng-container>
-      </div>
-
-      <ng-container>
-        <ng-container *ngIf="inboxMail.length == 0 && isPageReady">
-          <div class="col-12 text-center p-4 m-5">
-            NO EMAIL AVAILABLE
-          </div>
-        </ng-container>
-
         <ng-container *ngIf="!isPageReady">
           <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
             <div class="col-md-3 modal-container f-12 text-center cog-wheel">
@@ -87,6 +78,11 @@
             </div>
           </div>
         </ng-container>
+      </div>
+      <ng-container *ngIf="inboxMail.length == 0 && isPageReady">
+        <div class="col-12 text-center p-4 m-5">
+          NO EMAIL AVAILABLE
+        </div>
       </ng-container>
     </div>
   </div>
