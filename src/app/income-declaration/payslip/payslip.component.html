@@ -58,17 +58,19 @@
                       <option value="{{currentYear - 1}}" >Year {{currentYear - 1}}</option>
                     </select>
                   </div>
-                  <div>
-                    <button class="btn btn-outline-success" *ngIf="isReady"><i class="fa fa-download pe-3"></i> {{paySlipDate.Month}} {{paySlipDate.Year}} Pay Slip</button>
+                  <div *ngIf="paySlipDate != null">
+                    <button class="btn btn-outline-success" (click)="downloadPdf()"><i class="fa fa-download pe-3"></i> {{paySlipDate.Month}} {{paySlipDate.Year}} Pay Slip</button>
                   </div>
                 </div>
-                <div class="row mx-3 my-3">
+                <div class="row mx-3 my-3 box-height">
                   <div class="col-md-2 ps-0">
                     <div class="card border-0">
                       <p class="mb-0 py-2 ps-3">PAYSLIPS</p>
-                      <div class="list-group" *ngFor="let item of paySlipSchedule">
-                        <a href="javascript:void(0)" (click)="getPaySlip(item.paySlipMonth)" class="ps-3 list-group-item list-group-item-action py-2 fs-5 text-dark rounded-0">{{item.paySlipMonth | date: 'MMM'}} {{item.paySlipYear}}</a>
-                      </div>
+                      <ng-container *ngIf="paySlipSchedule.length > 0">
+                        <div class="list-group" *ngFor="let item of paySlipSchedule">
+                          <a href="javascript:void(0)" (click)="getPaySlip(item.paySlipMonth, item.paySlipYear)" class="ps-3 list-group-item list-group-item-action py-2 fs-5 text-dark rounded-0">{{item.paySlipMonth | date: 'MMM'}} {{item.paySlipYear}}</a>
+                        </div>
+                      </ng-container>
                     </div>
                   </div>
                   <div class="col-md-9">
@@ -79,58 +81,11 @@
                         </div>
                       </div>
                     </ng-container>
-                    <form>
-                      <ng-container [formGroup]="salaryBreakupForm" *ngIf="salaryBreakupForm">
-                        <div class="pull-down">
-                          <div class="blur-this">
-                            <div class="col-md-12">
-                              <div class="t-table t-list t-border col-md-12">
-                                <div class="hide-bar alert-primary"></div>
-                                <div class="t-head alert-primary">
-                                  <div class="tr fw-bold text-dark">
-                                    <div class="th fe-4">
-                                      <div class="cell-wrappe ps-2">
-                                        DETAILS
-                                      </div>
-                                    </div>
-                                    <div class="th fe-2">
-                                      MONTHLY
-                                    </div>
-                                    <div class="th fe-2">
-                                      ANNUALLY
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="t-body" *ngIf="isReady">
-                                  <ng-container formArrayName="Components">
-                                    <div class="tr"
-                                      *ngFor="let item of salaryBreakupForm.get('Components').controls; let index = index;">
-                                      <ng-container [formGroupName]="index">
-                                        <div class="td d-flex flex-column justify-content-center fe-4 ps-2 py-2"
-                                          [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
-                                          {{item.get('ComponentName').value}}
-                                        </div>
-                                        <div class="td align-middle fe-2">
-                                          <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
-                                            {{item.get('MonthlyAmount').value}}
-                                          </div>
-                                        </div>
-                                        <div class="td align-middle fe-2">
-                                          <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
-                                            {{item.get('FinalAmount').value}}
-                                          </div>
-                                        </div>
-                                      </ng-container>
-                                    </div>
-                                  </ng-container>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </form>
-                    <p *ngIf="isReady" class="fs-6 my-2 text-success fw-bold">Note: Net Pay displayed does not include Income Tax, Professional Tax or Other deductions (if any).</p>
+                    <div class="position-absolute col-md-9">
+                      <div class="d-none file-container position-relative" id="file-container">
+                        <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </ng-container>
