@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
@@ -28,9 +29,14 @@ export class EmailComponent implements OnInit {
   isUploading: boolean = false;
   currentUser: any = null;
   isPageReady: boolean = false;
+  inboxMail: Array<any> = [];
+  isBodyRequested: boolean = false; 
+  bodyContent: any = null;
+  mailItems: Array<any> = [];
 
   constructor(private fb:FormBuilder,
               private http:AjaxService,
+              private sanitizer: DomSanitizer,
               private nav:iNavigation) { }
 
   ngOnInit(): void {
@@ -38,17 +44,86 @@ export class EmailComponent implements OnInit {
     if (data) {
       this.currentUser = data;
     }
-    this.isPageReady = true;
-    this.initForm();
+
+    this.createPreContent();
     this.isPageReady = false;
-    //this.loadMail();
+    this.loadMail();
+    // this.initForm();
+    // this.inboxMail = [{
+    //   Subject: "Hey Md Istayaque, The HDFC Bank Wheel of Fortune is here!",
+    //   From: "\"HDFC Bank\" abc@gmail.com",
+    //   Body: "Some content"
+    // },{
+    //   Subject: "Hey Md Istayaque, The HDFC Bank Wheel of Fortune is here!",
+    //   From: "\"Google\" abc@gmail.com",
+    //   Body: "Some content"
+    // },{
+    //   Subject: "Your Amazon.in order #408-1095473-3349140 of 4 items has been dispatched.",
+    //   From: "\"Amazon.in\" abc@gmail.com",
+    //   Body: "Some content"
+    // },{
+    //   Subject: "Test email with random data.",
+    //   From: "\"BottomHalf\" abc@gmail.com",
+    //   Body: "Some content"
+    // },{
+    //   Subject: "Test email with random data.",
+    //   From: "\"PhonePe\" abc@gmail.com",
+    //   Body: "Some content"
+    // },{
+    //   Subject: "Test email with random data.",
+    //   From: "\"HDFC Bank\" abc@gmail.com",
+    //   Body: "Some content"
+    // }];
+
+    // this.buildContent();
+    // this.isPageReady = true;
+  }
+
+  createPreContent() {
+    this.mailItems = [{
+      Name: "Inbox",
+      IsActive: true,
+      BadgeValue: '10',
+      Icon: 'fa fa-inbox text-dark'
+    }, {
+      Name: "Starred",
+      IsActive: false,
+      BadgeValue: '',
+      Icon: 'fa fa-star-o'
+    }, {
+      Name: "Snoozed",
+      IsActive: false,
+      BadgeValue: '',
+      Icon: 'fa fa-clock-o'
+    }, {
+      Name: "Sent",
+      IsActive: false,
+      BadgeValue: '',
+      Icon: 'fa fa-paper-plane-o'
+    }, {
+      Name: "Drafts",
+      IsActive: false,
+      BadgeValue: '',
+      Icon: 'fa fa-file-o'
+    }]
+  }
+
+  loadBody(EMailIndex: number) {
+    let body = this.inboxMail.find(x => x.EMailIndex == EMailIndex);
+    this.bodyContent = this.sanitizer.bypassSecurityTrustHtml(body.Body);
+    this.isBodyRequested = true;
+  }
+
+  showInbox() {
+    this.isBodyRequested = false;
   }
 
   loadMail() {
-    this.isPageReady = true;
     this.http.get(`email/GetMyMails`).then(response => {
       if (response.ResponseBody) {
-        this.isPageReady = false;
+        this.isPageReady = true;
+        this.inboxMail = response.ResponseBody;
+        this.buildContent();
         Toast("EMail loaded succcessfully.");
       } else {
         this.isPageReady = false;
@@ -59,6 +134,20 @@ export class EmailComponent implements OnInit {
     }).catch(e => {
       this.isPageReady = false;
     });
+  }
+
+  buildContent() {
+    if (this.inboxMail.length > 0) {
+      let i = 0;
+      let fromValue = '';
+      while(i < this.inboxMail.length) {
+        fromValue = this.inboxMail[i].From.split(" ");
+        if (fromValue && fromValue.length > 1) {
+          this.inboxMail[i]["Name"] = fromValue[0].replace(/\"/g, "").trim();
+        }
+        i++;
+      }
+    }
   }
 
   initForm() {

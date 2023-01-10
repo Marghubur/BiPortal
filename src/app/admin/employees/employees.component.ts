@@ -289,16 +289,19 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
 
   EditCurrent(item: any) {
     if (item !== null) {
-      let EmpId = item.EmployeeUid;
-      if (EmpId !== null && EmpId !== "") {
-        this.http.get(`Employee/GetEmployeeById/${EmpId}/${this.isActiveEmployee}`).then((response: ResponseModel) => {
-          if (response.ResponseBody !== null) {
-            this.nav.navigate(ManageEmployee, response.ResponseBody);
-          }
-        }).catch(e => {
-          this.common.ShowToast("Got error to get data. Please contact to admin.");
-        })
-      }
+      this.nav.navigate(ManageEmployee, item);
+      // let EmpId = item.EmployeeUid;
+      // if (EmpId !== null && EmpId !== "") {
+      //   this.http.get(`Employee/GetEmployeeById/${EmpId}/${this.isActiveEmployee}`).then((response: ResponseModel) => {
+      //     if (response.ResponseBody !== null) {
+      //       this.nav.navigate(ManageEmployee, response.ResponseBody);
+      //     }
+      //   }).catch(e => {
+      //     this.common.ShowToast("Got error to get data. Please contact to admin.");
+      //   })
+      // }
+    } else {
+      ErrorToast("Employee id not found. Please logout and login again.")
     }
   }
 

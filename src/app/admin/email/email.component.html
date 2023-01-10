@@ -1,35 +1,99 @@
 <div class="col-md-12 col-sm-12 main-container">
   <div class="x_panel">
-    <ng-container *ngIf="!isPageReady">
-      <div class="x_header">
-        <h2>Email service</h2>
-        <div class="clearfix"></div>
-      </div>
-      <div>
-        <div class="d-flex align-items-center justify-content-center">
-          <img src="assets/images/uc.jpg" alt="under_construction" class="construction-img">
+    <div class="x_header">
+      <h2>Email service</h2>
+      <div class="clearfix"></div>
+    </div>
+    <div class="col-12 row p-4">
+      <div class="col-md-2">
+        <div class="mb-5">
+          <button class="btn btn-outline-primary" (click)="composeMailPopUp()">
+            <i class="fa fa-edit px-2"></i>
+            Compose
+          </button>
         </div>
-        <p class="fw-bold fs-4 text-dark text-center">but still you can send email by clicking the below button</p>
-        <div class="compose-container float-end shadow-lg mt-4 me-3 rounded-circle d-flex align-items-center justify-content-center" (click)="composeMailPopUp()">
-          <a href="javascript:void(0)" class="text-decoration-none text-dark"><i class="fa fa-pencil fa-lg text-white"></i></a>
-        </div>
+        <ng-container *ngFor="let c of mailItems">
+          <div class="d-flex flex-column justify-content-start" [ngClass]="{'selected': c.IsActive}">
+            <div class="d-flex justify-content-between p-2">
+              <div class="d-flex">
+                <div class="px-3">
+                  <i class="{{c.Icon}}"></i>
+                </div>
+                <div>
+                  <label class="text-dark" [ngClass]="{'fw-bold': c.IsActive}">{{c.Name}}</label>
+                </div>
+              </div>
+              <div>
+                <span class="text-muted pe-2">{{c.BadgeValue}}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </div>
-    </ng-container>
-    <ng-container *ngIf="isPageReady">
-      <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-        <div class="col-md-3 modal-container f-12 text-center cog-wheel">
-          <img src="assets/images/cog.gif" alt="" />
-          <h6 class="modal-title title-message">
-            Please Wait ........
-          </h6>
+      <div class="col-md-10">
+        <div [ngClass]="{'d-none': isBodyRequested}">
+          <ng-container *ngIf="isPageReady">
+            <div class="d-flex justify-content-between border-bottom e-row" *ngFor="let e of inboxMail">
+              <div class="d-flex wrap-content fe-1">
+                <div class="me-2">
+                  <input type="checkbox">
+                </div>
+                <div class="fe-1" (click)="loadBody(e.EMailIndex)">
+                  <label class="fw-bold text-dark">{{e.Name}}:</label>
+                </div>
+                <div class="fe-8" (click)="loadBody(e.EMailIndex)">
+                  <div class="fw-bold text-dark d-flex">
+                    <div>{{e.Subject}}</div>
+                    <div class="text-muted ps-2 pe-3 fw-normal">
+                      {{e.Text}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <span class="small-font text-dark">9:40 AM</span>
+              </div>
+            </div>
+          </ng-container>
         </div>
+        <ng-container *ngIf="isBodyRequested">
+          <div class="col-12">
+            <div class="col-12">
+              <a href="javascript:void(0)" (click)="showInbox()">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+              </a>
+            </div>
+            <div class="mt-4">
+              <div [innerHTML]="bodyContent"></div>
+            </div>
+          </div>
+        </ng-container>
       </div>
-    </ng-container>
+
+      <ng-container>
+        <ng-container *ngIf="inboxMail.length == 0 && isPageReady">
+          <div class="col-12 text-center p-4 m-5">
+            NO EMAIL AVAILABLE
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!isPageReady">
+          <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
   </div>
 </div>
 
 <!-- Compose Mail Modal -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="composeMailModal" tabindex="-1" aria-labelledby="composeMailModalLabel" aria-hidden="true">
+<div class="modal fade" *ngIf="isPageReady" data-bs-backdrop="static" data-bs-keyboard="false" id="composeMailModal" tabindex="-1" aria-labelledby="composeMailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">

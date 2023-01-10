@@ -189,16 +189,16 @@
                         <div class="tr"
                           *ngFor="let item of salaryBreakupForm.get('Components').controls; let index = index;">
                           <ng-container [formGroupName]="index">
-                            <div class="td d-flex flex-column justify-content-center fe-4 ps-2 py-2"
+                            <div class="td text-truncate d-flex flex-column justify-content-center fe-4 ps-2 py-2"
                               [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
                               {{item.get('ComponentName').value}}
                             </div>
-                            <div class="td align-middle fe-2">
+                            <div class="td text-truncate align-middle fe-2">
                               <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
                                 {{item.get('MonthlyAmount').value | number:'1.2-2'}}
                               </div>
                             </div>
-                            <div class="td align-middle fe-2">
+                            <div class="td text-truncate align-middle fe-2">
                               <div class="cell-wrapper mx-2 py-2" [ngClass]="{'fw-bold': item.get('IsHighlight').value}">
                                 {{item.get('FinalAmount').value | number:'1.2-2'}}
                               </div>

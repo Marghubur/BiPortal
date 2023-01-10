@@ -33,7 +33,7 @@ export class IncometaxComponent implements OnInit {
   totalOtherExemptAmount: number = 0;
   isPageReady: boolean = false;
   hraDetails: Array<any> = [];
-  standardDeductionDetails: Array<any> = [];
+  proTaxDetails: Array<any> = [];
   employeesList: autoCompleteModal = new autoCompleteModal();
   applicationData: any = [];
   isEmployeesReady:boolean = false;
@@ -216,10 +216,15 @@ export class IncometaxComponent implements OnInit {
   }
 
   hraCalculation() {
+    let rent = 0;
+    let hpComponent = this.allDeclarationSalaryDetails.Declarations.find(x => x.DeclarationName == "House Property");
+    if (hpComponent && hpComponent!= null)
+      rent = hpComponent.TotalAmountDeclared;
+
     for (let i = 0; i < this.taxCalender.length; i++) {
       this.hraDetails.push({
         Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
-        RentPaid: (this.allDeclarationSalaryDetails.Declarations.find(x => x.DeclarationName == "House Property")).TotalAmountDeclared,
+        RentPaid: rent,
         HRA1: this.allDeclarationSalaryDetails.HRADeatils.HRA1,
         HRA2: this.allDeclarationSalaryDetails.HRADeatils.HRA2,
         HRA3: this.allDeclarationSalaryDetails.HRADeatils.HRA3,
@@ -228,19 +233,19 @@ export class IncometaxComponent implements OnInit {
     }
   }
 
-  viewStandardDeductionPopUp(amount: number) {
-    this.standardDeductionDetails = [];
+  viewProTaxPopUp(amount: number) {
+    this.proTaxDetails = [];
     var monthlyPTax = 0;
     if (amount > 0)
       monthlyPTax = amount/12;
     for (let i = 0; i < this.taxCalender.length; i++) {
-      this.standardDeductionDetails.push({
+      this.proTaxDetails.push({
         Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
         Amount: monthlyPTax,
         Source: 'Proceed'
       })
     }
-    $('#standardDeductionModal').modal('show');
+    $('#proTaxModal').modal('show');
   }
 
   activateMe(ele: string) {

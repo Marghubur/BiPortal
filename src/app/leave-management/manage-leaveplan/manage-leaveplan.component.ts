@@ -368,6 +368,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   submitLeaveAccrual() {
     this.submit = true;
     this.isLoading = true;
+    this.errorCounter = 0;
     let value = this.leaveAccrualForm.value;
     if (value.IsLeaveAccruedPatternAvail== 'true') {
       if (!value.LeaveDistributionSequence || value.LeaveDistributionSequence == '') {
