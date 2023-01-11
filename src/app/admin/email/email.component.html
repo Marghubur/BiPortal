@@ -4,10 +4,10 @@
       <h2>Email service</h2>
       <div class="clearfix"></div>
     </div>
-    <div class="col-12 row p-4">
-      <div class="col-md-2">
+    <div class="col-12 row p-0 m-0">
+      <div class="col-md-2 e-mail-side-menu">
         <div class="mb-5">
-          <button class="btn btn-outline-primary" (click)="composeMailPopUp()">
+          <button class="btn btn-outline-success btn-lg w-100 btn-round" (click)="composeMailPopUp()">
             <i class="fa fa-edit px-2"></i>
             Compose
           </button>
@@ -33,16 +33,49 @@
       <div class="col-md-10">
         <div [ngClass]="{'d-none': isBodyRequested}">
           <ng-container *ngIf="isPageReady">
-            <div class="d-flex justify-content-between align-items-center border-bottom e-row" *ngFor="let e of inboxMail">
-              <div class="d-flex wrap-content align-items-center">
-                <div class="d-flex col-md-2 align-items-center">
+            <div class="col-12 mt-4">
+              <div class="col-4">
+                <input type="text" class="form-control" placeholder="Search in main">
+              </div>
+              <div class="col-12 my-4 filter-row">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <div class="d-flex">
+                      <input type="checkbox">
+                      <div class="ps-4 pe-2">
+                        <i class="fa fa-refresh"></i>
+                      </div>
+                      <div class="ps-2 pe-2">
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="d-flex">
+                      <div class="px-4">
+                        <label class="text-muted">1-15 of 100012</label>
+                      </div>
+                      <div class="px-3">
+                        <div class="d-flex">
+                          <i class="fa fa-chevron-left pe-2" aria-hidden="true"></i>
+                          <i class="fa fa-chevron-right ps-2" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between border-bottom e-row" *ngFor="let e of inboxMail">
+              <div class="d-flex wrap-content">
+                <div class="d-flex title-w">
                   <input type="checkbox">
                   <div class="ms-2" (click)="loadBody(e.EMailIndex)">
                     <label class="fw-bold text-dark">{{e.Name}}:</label>
                   </div>
                 </div>
                 <div class="col-md-10" (click)="loadBody(e.EMailIndex)">
-                  <div class="fw-bold text-dark d-flex align-items-center">
+                  <div class="fw-bold text-dark d-flex">
                     <div>{{e.Subject}}</div>
                     <div class="text-muted ps-2 pe-3 fw-normal">
                       {{e.Text}}
@@ -59,9 +92,11 @@
         <ng-container *ngIf="isBodyRequested">
           <div class="col-12">
             <div class="col-12">
-              <a href="javascript:void(0)" (click)="showInbox()">
-                <i class="fa fa-arrow-left" aria-hidden="true"></i>
-              </a>
+              <button class="btn btn-outline-dark border back-btn" (click)="showInbox()">
+                <i class="fa fa-arrow-left" aria-hidden="true">
+                  <span class="px-2">Back</span>
+                </i>
+              </button>
             </div>
             <div class="mt-4">
               <div [innerHTML]="bodyContent"></div>
@@ -89,7 +124,7 @@
 </div>
 
 <!-- Compose Mail Modal -->
-<div class="modal fade" *ngIf="isPageReady" data-bs-backdrop="static" data-bs-keyboard="false" id="composeMailModal" tabindex="-1" aria-labelledby="composeMailModalLabel" aria-hidden="true">
+<div class="modal fade" *ngIf="sendFormIsReady" data-bs-backdrop="static" data-bs-keyboard="false" id="composeMailModal" tabindex="-1" aria-labelledby="composeMailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
