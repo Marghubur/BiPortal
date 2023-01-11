@@ -28,6 +28,7 @@ export class PayslipComponent implements OnInit {
   basePath: string = "";
   viewer: any = null;
   fileDetail: any = null;
+  isLoading: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }
@@ -164,13 +165,13 @@ export class PayslipComponent implements OnInit {
 
   getPaySlip(e: any, year: number) {
     let date = e;
+    this.isLoading = true;
     this.paySlipDate = null;
     this.paySlipDate = {
       Month: new Date(year, e.getMonth(), 1).toLocaleString("en-us", { month: 'long'}),
       Year: e.getFullYear()
     };
     if (this.EmployeeId > 0) {
-      this.isReady = false;
       let value = {
         Year: year,
         Month: date.getMonth() +1,
@@ -179,15 +180,13 @@ export class PayslipComponent implements OnInit {
       this.http.post("FileMaker/GeneratePayslip", value).then(res => {
         if (res.ResponseBody) {
           this.fileDetail = res.ResponseBody.FileDetail;
+          this.isReady = true;
+          this.isLoading = false;
           this.showFile(this.fileDetail);
           Toast("Payslip found");
         }
-      }).catch(e => {
-        this.closePdfViewer();
-        ErrorToast("Payslip not found");
       })
     }
-    this.isReady = true;
   }
 
   closePdfViewer() {
@@ -218,5 +217,5 @@ export class PayslipComponent implements OnInit {
     // Clean up
     URL.revokeObjectURL(objectUrl);
     a.remove();
-}
+  }
 }
