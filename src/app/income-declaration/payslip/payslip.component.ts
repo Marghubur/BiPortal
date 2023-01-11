@@ -28,7 +28,7 @@ export class PayslipComponent implements OnInit {
   basePath: string = "";
   viewer: any = null;
   fileDetail: any = null;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
 
   constructor(private nav: iNavigation,
               private http: AjaxService) { }

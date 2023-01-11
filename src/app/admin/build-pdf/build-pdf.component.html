@@ -205,7 +205,7 @@
                             <form class="form-inline">
                               <div class="form-group w-100">
                                 <div class="input-group w-100">
-                                  <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                                  <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                     readonly (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                                   <div class="input-group-append">
                                     <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
