@@ -30,76 +30,67 @@
           <div class="row mt-3">
             <div class="col-md-3 panel-h">
               <div class="x_panel px-3 pt-3 pb-1">
-                <ul class="d-flex justify-content-center flex-column list-unstyled px-3 config-tab"
+                <ul class="d-flex justify-content-center flex-column list-unstyled config-tab"
                   id="leaveConfigModal">
-                  <li class="py-3">
+                  <li class="py-3 px-3 active-index" name="tab-index" [attr.index]="1">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(1)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="1" class="d-flex align-items-center active-index">
-                        <div class="index-count border me-3 rounded-circle fw-bold">1</div>
+                      <div class="d-flex align-items-center">
                         <span>LEAVE QUOTA</span>
                       </div>
                     </a>
                   </li>
-                  <li class="py-3">
+                  <li class="py-3 px-3" name="tab-index" [attr.index]="2">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(2)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="2" class="d-flex align-items-center">
-                        <div class="index-count border me-3 rounded-circle fw-bold">2</div>
+                      <div class="d-flex align-items-center">
                         <span>LEAVE FROM MANAGMENT</span>
                       </div>
                     </a>
                   </li>
-                  <li class="py-3">
+                  <li class="py-3 px-3" name="tab-index" [attr.index]="3">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(3)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="3" class="d-flex align-items-center">
-                        <div class="index-count border me-3 rounded-circle fw-bold">3</div>
+                      <div class="d-flex align-items-center">
                         <span>LEAVE ACCRUAL</span>
                       </div>
                     </a>
                   </li>
-                  <li class="py-3">
+                  <li class="py-3 px-3" name="tab-index" [attr.index]="4">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(4)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="4" class="d-flex align-items-center">
-                        <div class="index-count border me-3 rounded-circle fw-bold">4</div>
+                      <div class="d-flex align-items-center">
                         <span>APPLYING FOR LEAVE</span>
                       </div>
                     </a>
                   </li>
-                  <li class="py-3">
+                  <li class="py-3 px-3" name="tab-index" [attr.index]="5">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(5)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="5" class="d-flex align-items-center">
-                        <div class="index-count border me-3 rounded-circle fw-bold">5</div>
+                      <div class="d-flex align-items-center">
                         <span>LEAVE RESTRICTIONS</span>
                       </div>
                     </a>
                   </li>
-                  <li class="py-3">
+                  <li class="py-3 px-3" name="tab-index" [attr.index]="6">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(6)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="6" class="d-flex align-items-center">
-                        <div class="index-count border me-3 rounded-circle fw-bold">6</div>
+                      <div class="d-flex align-items-center">
                         <span>HOLIDAYS AND WEEKOFFS</span>
                       </div>
                     </a>
                   </li>
-                  <li class="py-3">
+                  <li class="py-3 px-3" name="tab-index" [attr.index]="7">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(7)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="7" class="d-flex align-items-center">
-                        <div class="index-count border me-3 rounded-circle fw-bold">7</div>
+                      <div class="d-flex align-items-center">
                         <span>LEAVE APPROVAL</span>
                       </div>
                     </a>
                   </li>
-                  <li class="py-3">
+                  <li class="py-3 px-3" name="tab-index" [attr.index]="8">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(8)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="8" class="d-flex align-items-center">
-                        <div class="index-count border me-3 rounded-circle fw-bold">8</div>
+                      <div class="d-flex align-items-center">
                         <span>YEAR END PROCESSING</span>
                       </div>
                     </a>
                   </li>
-                  <li class="py-3" *ngIf="isConfigCompleted">
+                  <li class="py-3 px-3" *ngIf="isConfigCompleted" name="tab-index" [attr.index]="9" [ngClass]="{'active-index': configPageNo == 9}">
                     <a href="javascript:void(0)" (click)="ConfigPageTab(9)" class="text-decoration-none text-muted">
-                      <div name="tab-index" [attr.index]="9" class="d-flex align-items-center" [ngClass]="{'active-index': configPageNo == 9}">
-                        <div class="index-count border me-3 rounded-circle fw-bold">9</div>
+                      <div class="d-flex align-items-center">
                         <span>Confirmation Detail</span>
                       </div>
                     </a>

@@ -1191,12 +1191,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     if (index > 0 && index <= 9) {
       this.configPageNo = index;
       let tab = document.getElementById('leaveConfigModal');
-      let elem = tab.querySelectorAll('div[name="tab-index"]');
+      let elem = tab.querySelectorAll('li[name="tab-index"]');
       for (let i = 0; i < elem.length; i++) {
         elem[i].classList.remove('active-index');
         elem[i].classList.remove('submitted-index');
       };
-      tab.querySelector(`div[index='${this.configPageNo}']`).classList.add('active-index');
+      tab.querySelector(`li[index='${this.configPageNo}']`).classList.add('active-index');
       if (index > 1) {
         for (let i = 0; i < index-1; i++) {
           elem[i].classList.add('submitted-index');
