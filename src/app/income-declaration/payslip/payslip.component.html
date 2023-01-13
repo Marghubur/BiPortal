@@ -11,7 +11,7 @@
         <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')" href="javascript:void(0)">SUMMARY</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">Preference</a>
+        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">PREFERENCE</a>
       </li>
     </ul>
     <div class="col-md-3 pe-2 my-3" *ngIf="isPageReady">
@@ -81,24 +81,21 @@
                         </div>
                       </div>
                     </ng-container>
-                    <div class="py-5 my-5 x_panel" *ngIf="isLoading">
-                      <h6 class="fw-bold fs-3 text-center text-dark">Payslip is loading</h6>
-                      <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                        <div class="col-md-3 modal-container f-12 text-center cog-wheel">
-                          <img src="assets/images/cog.gif" alt="" />
-                          <h6 class="modal-title title-message">
-                            Please Wait ........
-                          </h6>
-                        </div>
+                    <div class="position-absolute col-md-9">
+                      <div class="d-none file-container position-relative" id="file-container" [ngClass]="{'d-none': isLoading}">
+                        <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
                       </div>
+                      <ng-container *ngIf="isLoading && isReady">
+                        <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                            <img src="assets/images/cog.gif" alt="" />
+                            <h6 class="modal-title title-message">
+                              Please Wait ........
+                            </h6>
+                          </div>
+                        </div>
+                      </ng-container>
                     </div>
-                    <ng-container *ngIf="!isLoading">
-                      <div class="position-absolute col-md-9">
-                        <div class="d-none file-container position-relative" id="file-container">
-                          <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
-                        </div>
-                      </div>
-                    </ng-container>
                   </div>
                 </div>
               </ng-container>

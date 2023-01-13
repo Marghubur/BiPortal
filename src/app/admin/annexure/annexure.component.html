@@ -14,67 +14,178 @@
                 <li [ngbNavItem]="1">
                   <a ngbNavLink>Annexure-I</a>
                   <ng-template ngbNavContent>
-                    <p>
-                      Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth
-                      master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro
-                      keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat
-                      salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
-                    </p>
+                    <ng-container *ngIf="isPageReady">
+                      <div class="x_content">
+                        <form [formGroup]="annextureIform" *ngIf="annextureIform">
+                          <div class="row px-4 justify-content-between">
+                            <div class="col-md-4 my-3">
+                              <label for="" class="form-label">Company Name</label>
+                              <input type="text" readonly class="form-control" formControlName="CompanyName">
+                            </div>
+                            <div class="col-md-4 my-3">
+                              <label for="" class="form-label">Template Name</label>
+                              <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name" oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName" [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
+                            </div>
+                          </div>
+                          <app-editor [content]="htmlText"></app-editor>
+                        </form>
+                        <div class="text-end pe-4">
+                          <button class="btn btn-primary-c ms-3" [disabled]="isLoading">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate Offer Letter' }}</span>
+                          </button>
+                          <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                          </button>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="!isPageReady">
+                      <div class="py-5 my-5">
+                        <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                            <img src="assets/images/cog.gif" alt="" />
+                            <h6 class="modal-title title-message">
+                              Please Wait ........
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
                   </ng-template>
                 </li>
                 <li [ngbNavItem]="2">
                   <a ngbNavLink>Annexure-II</a>
                   <ng-template ngbNavContent>
-                    <p>
-                      Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
-                      farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
-                      ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-                      helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson
-                      8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
-                      stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                    </p>
+                    <ng-container *ngIf="isPageReady">
+                      <div class="x_content">
+
+                        <div class="text-end pe-4">
+                          <button class="btn btn-primary-c ms-3" [disabled]="isLoading">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate Offer Letter' }}</span>
+                          </button>
+                          <button class="btn btn-primary-c ms-3" [disabled]="isLoading">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                          </button>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="!isPageReady">
+                      <div class="py-5 my-5">
+                        <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                            <img src="assets/images/cog.gif" alt="" />
+                            <h6 class="modal-title title-message">
+                              Please Wait ........
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
                   </ng-template>
                 </li>
                 <li [ngbNavItem]="3">
                   <a ngbNavLink>Annexure-III</a>
                   <ng-template ngbNavContent>
-                    <p>
-                      Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh elit id diam. Nulla facilisi.
-                      Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis, luctus eget tincidunt eu, congue et odio.
-                      Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu, et molestie lectus ultrices et. Sed diam urna,
-                      egestas ut ipsum vel, volutpat volutpat neque. Praesent fringilla tortor arcu. Vivamus faucibus nisl enim, nec
-                      tristique ipsum euismod facilisis. Morbi ut bibendum est, eu tincidunt odio. Orci varius natoque penatibus et
-                      magnis dis parturient montes, nascetur ridiculus mus. Mauris aliquet odio ac lorem aliquet ultricies in eget
-                      neque. Phasellus nec tortor vel tellus pulvinar feugiat.
-                    </p>
+                    <ng-container *ngIf="isPageReady">
+                      <div class="x_content">
+
+                        <div class="text-end pe-4">
+                          <button class="btn btn-primary-c ms-3" [disabled]="isLoading">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate Offer Letter' }}</span>
+                          </button>
+                          <button class="btn btn-primary-c ms-3" [disabled]="isLoading">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                          </button>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="!isPageReady">
+                      <div class="py-5 my-5">
+                        <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                            <img src="assets/images/cog.gif" alt="" />
+                            <h6 class="modal-title title-message">
+                              Please Wait ........
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
                   </ng-template>
                 </li>
                 <li [ngbNavItem]="4">
                     <a ngbNavLink>Annexure-IV</a>
                     <ng-template ngbNavContent>
-                      <p>
-                        Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh elit id diam. Nulla facilisi.
-                        Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis, luctus eget tincidunt eu, congue et odio.
-                        Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu, et molestie lectus ultrices et. Sed diam urna,
-                        egestas ut ipsum vel, volutpat volutpat neque. Praesent fringilla tortor arcu. Vivamus faucibus nisl enim, nec
-                        tristique ipsum euismod facilisis. Morbi ut bibendum est, eu tincidunt odio. Orci varius natoque penatibus et
-                        magnis dis parturient montes, nascetur ridiculus mus. Mauris aliquet odio ac lorem aliquet ultricies in eget
-                        neque. Phasellus nec tortor vel tellus pulvinar feugiat.
-                      </p>
+                      <ng-container *ngIf="isPageReady">
+                        <div class="x_content">
+
+                          <div class="text-end pe-4">
+                            <button class="btn btn-primary-c ms-3" [disabled]="isLoading">
+                              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                              <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate Offer Letter' }}</span>
+                            </button>
+                            <button class="btn btn-primary-c ms-3" [disabled]="isLoading">
+                              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                              <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                            </button>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="!isPageReady">
+                        <div class="py-5 my-5">
+                          <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                              <img src="assets/images/cog.gif" alt="" />
+                              <h6 class="modal-title title-message">
+                                Please Wait ........
+                              </h6>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
                     </ng-template>
                   </li>
                   <li [ngbNavItem]="5">
                     <a ngbNavLink>Annexure-V</a>
                     <ng-template ngbNavContent>
-                      <p>
-                        Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh elit id diam. Nulla facilisi.
-                        Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis, luctus eget tincidunt eu, congue et odio.
-                        Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu, et molestie lectus ultrices et. Sed diam urna,
-                        egestas ut ipsum vel, volutpat volutpat neque. Praesent fringilla tortor arcu. Vivamus faucibus nisl enim, nec
-                        tristique ipsum euismod facilisis. Morbi ut bibendum est, eu tincidunt odio. Orci varius natoque penatibus et
-                        magnis dis parturient montes, nascetur ridiculus mus. Mauris aliquet odio ac lorem aliquet ultricies in eget
-                        neque. Phasellus nec tortor vel tellus pulvinar feugiat.
-                      </p>
+                      <ng-container *ngIf="isPageReady">
+                        <div class="x_content">
+
+                          <div class="text-end pe-4">
+                            <button class="btn btn-primary-c ms-3" [disabled]="isLoading">
+                              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                              <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate Offer Letter' }}</span>
+                            </button>
+                            <button class="btn btn-primary-c ms-3" [disabled]="isLoading">
+                              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                              <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                            </button>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="!isPageReady">
+                        <div class="py-5 my-5">
+                          <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                              <img src="assets/images/cog.gif" alt="" />
+                              <h6 class="modal-title title-message">
+                                Please Wait ........
+                              </h6>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
                     </ng-template>
                   </li>
               </ul>

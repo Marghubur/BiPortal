@@ -89,7 +89,7 @@
                         <form class="form-inline">
                           <div class="form-group w-100">
                             <div class="input-group w-100">
-                              <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)"
+                              <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                      name="dp" [(ngModel)]="corporationDateModal" ngbDatepicker #cd="ngbDatepicker">
                               <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
                             </div>
@@ -389,7 +389,7 @@
                     <form class="form-inline">
                       <div class="form-group w-100">
                         <div class="input-group w-100">
-                          <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onOpeningDateSelect($event)"
+                          <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onOpeningDateSelect($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                  name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="fa fa-calendar"></i></button>
                         </div>
@@ -401,7 +401,7 @@
                     <form class="form-inline">
                       <div class="form-group w-100">
                         <div class="input-group w-100">
-                          <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onClosingDateSelect($event)"
+                          <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onClosingDateSelect($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                  name="dp" [(ngModel)]="closingDatemodel" ngbDatepicker #cd="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
                         </div>
