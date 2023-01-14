@@ -73,13 +73,14 @@ export class EditorComponent implements OnInit, AfterViewChecked {
   }
 
   toggleEdit() {
-      if(this.isInEditMode){
-          this.richTextField.contentDocument.designMode = 'Off';
-          this.isInEditMode = false;
-      }else{
-          this.richTextField.contentDocument.designMode = 'On';
-          this.isInEditMode = true;
-      }
+    this.richTextField = document.getElementById("richTextField");
+    if(this.isInEditMode){
+        this.richTextField.contentDocument.designMode = 'Off';
+        this.isInEditMode = false;
+    }else{
+        this.richTextField.contentDocument.designMode = 'On';
+        this.isInEditMode = true;
+    }
   }
   toggleDarkLight() {
       var element = document.getElementById("richtextcontainer");
