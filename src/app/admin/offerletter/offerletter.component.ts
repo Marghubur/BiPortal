@@ -45,7 +45,7 @@ export class OfferletterComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    this.http.get(`Template/GetAnnexureOfferLetter/${this.companyId}/1`).then(res => {
+    this.http.get(`Template/GetOfferLetter/${this.companyId}/1`).then(res => {
       if (res.ResponseBody) {
         this.buildData(res.ResponseBody);
         this.isPageReady = true;
