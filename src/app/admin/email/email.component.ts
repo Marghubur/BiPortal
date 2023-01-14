@@ -30,7 +30,7 @@ export class EmailComponent implements OnInit {
   currentUser: any = null;
   isPageReady: boolean = false;
   inboxMail: Array<any> = [];
-  isBodyRequested: boolean = false; 
+  isBodyRequested: boolean = false;
   bodyContent: any = null;
   mailItems: Array<any> = [];
   sendFormIsReady: boolean = false;

@@ -162,7 +162,7 @@ export class MysalaryComponent implements OnInit {
     let elems = [];
     let flag = false;
     let finalItemArray: FormArray = this.fb.array([]);
-    while(i < 6) {
+    while(i < 5) {
       flag = false;
       switch(i) {
         case 0: // fixed
@@ -179,10 +179,10 @@ export class MysalaryComponent implements OnInit {
           elems = this.salaryComponents.filter(x => x.ComponentTypeId == 100);
           flag = true;
           break;
-        case 4: // employer
-          elems = this.salaryComponents.filter(x => x.ComponentTypeId == 7);
-          break;
-        case 5: // ctc
+        // case 4: // employer
+        //   elems = this.salaryComponents.filter(x => x.ComponentTypeId == 7);
+        //   break;
+        case 4: // ctc
           elems = this.salaryComponents.filter(x => x.ComponentTypeId == 101);
           flag = true;
           break;

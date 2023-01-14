@@ -358,7 +358,7 @@
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control d-none" placeholder="yyyy-mm-dd"  [minDate]="minDate"
+                          <input class="form-control d-none" placeholder="yyyy-mm-dd"  [minDate]="minDate" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                             (dateSelect)="onDateSelection($event)" name="dp" [(ngModel)]="fromdateModal" ngbDatepicker
                             #fromdate="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()" [disabled]="!isEnabled"
@@ -383,7 +383,7 @@
                       <div class="col-12">
                         <div class="input-group">
                           <input class="form-control d-none" placeholder="yyyy-mm-dd" [minDate]="maxDate"
-                            (dateSelect)="onDateSelect($event)" name="dp" [(ngModel)]="model" ngbDatepicker
+                            (dateSelect)="onDateSelect($event)" name="dp" [(ngModel)]="model" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                             #d="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()" [disabled]="!isEnabled"
                             type="button"></button>

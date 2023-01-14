@@ -120,6 +120,7 @@ export class IncometaxComponent implements OnInit {
           let value = "";
           let selectedComponent = [];
           let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName}) => { return { ComponentId, ComponentName } });
+          props = props.filter(x => x.ComponentId != "ECI" && x.ComponentId != "EPER-PF" && x.ComponentId != "GRA");
           while(i < props.length) {
             value = props[i].ComponentId;
             selectedComponent = annualSalaryDetail.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));
@@ -138,7 +139,8 @@ export class IncometaxComponent implements OnInit {
           let finalAmount = 0;
           let totalAmounts: Array<any> = [];
           while(i < annualSalaryDetail.length) {
-            totalAmount = annualSalaryDetail[i].SalaryBreakupDetails.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+            let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.filter(x => x.ComponentId != "ECI" && x.ComponentId != "EPER-PF" && x.ComponentId != "GRA");
+            totalAmount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
             finalAmount += totalAmount;
             totalAmounts.push({ FinalAmount: totalAmount });
             i++;

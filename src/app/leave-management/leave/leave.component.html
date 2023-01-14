@@ -446,7 +446,7 @@
                             submit &&
                             f['PlanStartCalendarDate'].errors != null &&
                             f['PlanStartCalendarDate'].errors['required']
-                        }" #d="ngbDatepicker" (dateSelect)="onDateSelection($event)" />
+                        }" #d="ngbDatepicker" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}" (dateSelect)="onDateSelection($event)" />
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
                         <i class="fa fa-calendar"></i>
                       </button>
