@@ -214,12 +214,9 @@
                 <ng-container *ngIf="configPageNo == 3">
                   <form [formGroup]="leaveAccrualForm">
                     <div class="my-4">
-                      <div class="d-flex justify-content-between">
-                        <h6 class="fw-bold text-dark">
-                          How is available leave balance of an employee calculated?
-                        </h6>
-                        <span class="ps-5 text-muted">(Section 1)</span>
-                      </div>
+                      <h6 class="fw-bold text-dark">
+                        How is available leave balance of an employee calculated?
+                      </h6>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" value="true" name="CanApplyEntireLeave"
                           formControlName="CanApplyEntireLeave" (click)="toggleCurrent(1, $event)">
@@ -240,7 +237,7 @@
                             <h6 class="fw-bold text-dark">Leave accrual of Annual quota happens at the following rate</h6>
                             <div class="d-flex align-items-center">
                               <div class="col-md-1 me-3">
-                                <select class="form-select" formControlName="LeaveDistributionSequence">
+                                <select class="form-select" formControlName="LeaveDistributionSequence" (change)="changeAccrualRate($event)">
                                   <option value="1">Monthly</option>
                                   <option value="2">Quarterly</option>
                                   <option value="3">Half Yearly</option>
@@ -256,10 +253,19 @@
                                   formControlName="LeaveDistributionAppliedFrom" (keyup)="findDay($event)">
                               </div>
                               <label name="AccrualRateBasedon" class="form-label d-flex">
+                                <ng-container *ngIf="leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value == 1 || leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value == 21 || leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value == 31; then t1"></ng-container>
+                                <ng-container *ngIf="leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value == 2 || leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value == 22; then t2"></ng-container>
+                                <ng-container *ngIf="leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value == 3 || leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value == 23; then t3"></ng-container>
+                                <ng-container *ngIf="(leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value >= 4 && leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value <= 20) || (leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value >= 24 && leaveAccrualForm.controls.LeaveDistributionAppliedFrom.value <= 30); then t4"></ng-container>
+                                <ng-template #t1>st</ng-template>
+                                <ng-template #t2>nd</ng-template>
+                                <ng-template #t3>rd</ng-template>
+                                <ng-template #t4>th</ng-template>
+
                                 <div class="ps-1" [ngSwitch]="leaveAccrualForm.controls.LeaveDistributionSequence.value">
-                                  <div *ngSwitchCase="1">days on every month</div>
-                                  <div *ngSwitchCase="2">days on every Quarter</div>
-                                  <div *ngSwitchDefault>days Half Year</div>
+                                  <div *ngSwitchCase="1"> days on every month</div>
+                                  <div *ngSwitchCase="2"> days on every Quarter</div>
+                                  <div *ngSwitchDefault> days Half Year</div>
                                 </div>
                               </label>
                             </div>
@@ -269,7 +275,7 @@
                             <input class="form-check-input" type="checkbox" value="true" name="IsLeaveAccruedProrateDefined"
                               formControlName="IsLeaveAccruedProrateDefined" (click)="toggleCurrent(2, $event)">
                             <label class="form-check-label">
-                              Define leave accrued (earned) rate else defined above quota will be calculated automatically (recommended to unselected).
+                              Define leave accrued (earned) rate else defined above quota will be calculated automatically (Only for monthly leave accrual).
                             </label>
                           </div>
                           <div
@@ -290,11 +296,11 @@
                                         </div>
                                         <span class="px-2">to</span>
                                         <div class="col-md-1 mx-3">
-                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate" name="ToDate" (blur)="accrualRateDateValidation($event, i)">
+                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate" name="ToDate" (keyup)="accrualRateDateValidation($event, i)">
                                         </div>
                                         <label class="form-label">then </label>
                                         <div class="col-md-1 mx-3">
-                                          <input type="text" class="form-control" (blur)="accrualRateValidation($event)"
+                                          <input type="text" class="form-control" (keyup)="accrualRateValidation($event)"
                                             onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'" OnlyNumber="3"
                                             formControlName="AllocatedLeave">
                                         </div>
@@ -313,6 +319,9 @@
                                     </div>
                                   </div>
                                 </div>
+                              </div>
+                              <div class="alert alert-danger" role="alert" *ngIf="allocateleave != 0">
+                                Your monthly accrual limit i.e {{allocateleave | number: "1.2-2"}} is less than actual monthly accrual rate. Actual monthly accrual rate is {{monthlyLeave}};
                               </div>
                             </ng-container>
                           </div>
