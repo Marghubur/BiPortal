@@ -19,12 +19,13 @@ export class AnnexureComponent implements OnInit {
   htmlText: any = null;
   isLoading: boolean = false;
   companyId: number = 0;
-  annextureIform: FormGroup;
-  currentOfferLetter: AnnexureOfferLeter = new AnnexureOfferLeter();
+  annextureform: FormGroup;
+  annextureLetter: AnnexureOfferLeter = new AnnexureOfferLeter();
   currentCompany: any = null;
   employeeForm: FormGroup;
   model: NgbDateStruct;
   submitted: boolean = false;
+  annexureData: Array<AnnexureOfferLeter> = [];
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -47,13 +48,14 @@ export class AnnexureComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    this.http.get(`Template/GetAnnexureOfferLetter/${this.companyId}/2`).then(res => {
-      if (res.ResponseBody) {
-        this.buildData(res.ResponseBody);
+    this.http.get(`Template/GetAnnexture/${this.companyId}/2`).then(res => {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
+        this.annexureData = res.ResponseBody;
+        this.buildData(res.ResponseBody[0]);
         this.isPageReady = true;
       } else {
         this.isPageReady = true;
-        this.initannextureIform();
+        this.initannextureform();
       }
     }).catch(e => {
       this.isPageReady = true;
@@ -64,35 +66,47 @@ export class AnnexureComponent implements OnInit {
   }
 
   buildData(res: any) {
-    this.currentOfferLetter = res;
+    this.annextureLetter = res;
     this.htmlText = res.BodyContent;
-    this.initannextureIform();
+    this.initannextureform();
   }
 
-  initannextureIform() {
-    this.annextureIform = this.fb.group({
-      AnnexureOfferLetterId: new FormControl(this.currentOfferLetter.AnnexureOfferLetterId),
+  initannextureform() {
+    this.annextureform = this.fb.group({
+      AnnexureOfferLetterId: new FormControl(this.annextureLetter.AnnexureOfferLetterId),
       CompanyId: new FormControl(this.companyId),
       CompanyName: new FormControl(this.currentCompany.CompanyName),
-      TemplateName: new FormControl(this.currentOfferLetter.TemplateName, [Validators.required]),
-      BodyContent: new FormControl(this.currentOfferLetter.BodyContent),
-      FileId: new FormControl(this.currentOfferLetter.FileId),
+      TemplateName: new FormControl(this.annextureLetter.TemplateName, [Validators.required]),
+      BodyContent: new FormControl(this.annextureLetter.BodyContent),
+      FileId: new FormControl(this.annextureLetter.FileId),
     })
   }
 
   get m () {
-    return this.annextureIform.controls;
+    return this.annextureform.controls;
+  }
+
+  changeAnnexureSection() {
+    let index = this.active - 1;
+    let annexure = this.annexureData[index];
+    this.htmlText = "";
+    this.annextureLetter = new AnnexureOfferLeter();
+    if (annexure) {
+      this.buildData(annexure)
+    } else {
+      this.initannextureform();
+    }
   }
 
   saveAnnexture() {
     this.isLoading = true;
     this.submitted = true;
     let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
-    if (!data && data == "" && this.annextureIform.invalid) {
+    if (!data && data == "" && this.annextureform.invalid) {
       this.isLoading = false;
       return;
     }
-    let value = this.annextureIform.value;
+    let value = this.annextureform.value;
     value.BodyContent = data;
     let LetterType = 2;
     this.http.post(`Template/AnnexureOfferLetterInsertUpdate/${LetterType}`, value).then((res:ResponseModel) => {

@@ -40,6 +40,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   errorCounter: number = 0;
   monthlyLeave: number = 0;
   isConfigCompleted: boolean = false;
+  allocateleave: number = 0;
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -212,20 +213,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   findDay(e: any) {
     let value = Number(e.target.value);
-    // let text = document.getElementsByName("AccrualRateBasedon")[0].innerHTML;
-    // text = text.replace('st', "").replace("nd", "").replace("rd", "").replace("th", "");
-    // if (value != 0) {
-    //   if (value == 1 || value == 21 || value == 31)
-    //     document.getElementsByName("AccrualRateBasedon")[0].innerHTML = 'st' +' '+ text;
-    //   else if (value == 2 || value == 22)
-    //     document.getElementsByName("AccrualRateBasedon")[0].innerHTML = 'nd' +' '+ text;
-    //   else if (value == 3 || value == 23)
-    //     document.getElementsByName("AccrualRateBasedon")[0].innerHTML = 'rd' +' '+ text;
-    //   else if ((value > 3 && value < 21) || (value > 24 && value < 31))
-    //     document.getElementsByName("AccrualRateBasedon")[0].innerHTML = 'th' +' '+ text;
-    // }
-    // else
-    //   document.getElementsByName("AccrualRateBasedon")[0].innerHTML = text;
     if (value > 31) {
       e.target.classList.add('error-field');
       ErrorToast("Invalid date enter");
@@ -349,13 +336,17 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   accrualRateValidation(e: any) {
+    this.allocateleave = 0;
     let data = this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod').value;
     let value = this.leaveAccrualForm.get('LeaveDistributionSequence').value;
-    let allocatedleave = data.map(x => Number(x.AllocatedLeave)).reduce((acc, curr) => {return acc + curr;}, 0);
+    let totalRate = data.map(x => Number(x.AllocatedLeave)).reduce((acc, curr) => {return acc + curr;}, 0);
     if (value == '1') {
-      if(allocatedleave > this.monthlyLeave) {
+      if(totalRate > this.monthlyLeave) {
         ErrorToast("Monthly leave distribution is not matched with actual monthly leave limit");
         e.target.classList.add('error-field');
+        this.errorCounter++;
+      } else if(totalRate < this.monthlyLeave) {
+        this.allocateleave = totalRate;
         this.errorCounter++;
       } else {
         e.target.classList.remove('error-field');
@@ -386,16 +377,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     if (value.IsLeaveAccruedProrateDefined == true && value.LeaveDistributionRateOnStartOfPeriod.length > 0) {
       this.fromandTodateValidation(value.LeaveDistributionRateOnStartOfPeriod);
       let allocatedleave = value.LeaveDistributionRateOnStartOfPeriod.map(x => Number(x.AllocatedLeave)).reduce((acc, curr) => {return acc + curr;}, 0);
-      if (value.IsLeaveAccruedPatternAvail== 'true') {
-        switch (value.LeaveDistributionSequence) {
-          case '1':
-            if(this.monthlyLeave !== allocatedleave) {
-              ErrorToast("Monthly leave distribution is not matched with actual monthly leave limit");
-              this.errorCounter++;
-            }
-            break;
+      if (value.IsLeaveAccruedPatternAvail== 'true' && value.LeaveDistributionSequence == '1') {
+        if(this.monthlyLeave !== allocatedleave) {
+          ErrorToast("Monthly leave distribution is not matched with actual monthly leave limit");
+          this.isLoading = false;
+          return;
         }
-
       }
     }
 
@@ -1184,6 +1171,21 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
             this.leaveAccrualForm.get("AfterHowManyDays").setValue(0);
           }
         break;
+    }
+  }
+
+  changeAccrualRate(e: any) {
+    let value = e.target.value;
+    if (value > 1) {
+      document.getElementsByName('IsLeaveAccruedProrateDefined')[0].setAttribute('disabled', '');
+      this.leaveAccrualForm.get("IsLeaveAccruedProrateDefined").setValue(false);
+      let item = this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod') as FormArray;
+      item = new FormArray([]);
+      item.push(this.createFormLeaveProrate())
+      this.leaveAccrualForm.removeControl('LeaveDistributionRateOnStartOfPeriod');
+      this.leaveAccrualForm.addControl('LeaveDistributionRateOnStartOfPeriod', item);
+    } else {
+      document.getElementsByName('IsLeaveAccruedProrateDefined')[0].removeAttribute('disabled');
     }
   }
 
