@@ -1,6 +1,6 @@
 <div class="col-md-12 col-sm-12 main-container">
     <div class="x_panel">
-      <ng-container>
+      <!-- <ng-container>
         <div class="x_header">
           <h2>Manage Menu Detail</h2>
           <div class="clearfix"></div>
@@ -17,6 +17,122 @@
             Coming Soon...
         </p>
         </div>
-      </ng-container>
+      </ng-container> -->
+      <div class="x_panel x-panel-changed">
+        <div class="x_header">
+          <div class="x_header_title">
+            <h2>Email Link Config Details<small>like page name, emails etc</small></h2>
+          </div>
+        </div>
+        <form [formGroup]="emaillinkForm">
+          <div class="col-md-12 row">
+            <div class="mt-3 col-md-3">
+              <label for="" class="form-label">Template Name</label>
+              <input type="text" formControlName="TemplateName" class="form-control" placeholder="e.g Billing Template" [ngClass]="{'error-field': submitted && f.TemplateName.errors !== null && f.TemplateName.errors.required}">
+            </div>
+            <div class="col-md-3 mt-3">
+              <label for="" class="form-label">Page Name</label>
+              <input type="text" class="form-control" formControlName="PageName" readonly placeholder="Page Name" [ngClass]="{'error-field': submitted && f.PageName.errors !== null && f.PageName.errors.required}">
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">Page Description</label>
+              <input type="text" class="form-control" formControlName="PageDescription" placeholder="Page Description" [ngClass]="{'error-field': submitted && f.PageDescription.errors !== null && f.PageDescription.errors.required}">
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="col-md-3 mt-3">
+              <label for="" class="form-label">Is Email GroupUsed</label>
+              <select class="form-select" (change)="EmailGroupUsed($event)" formControlName="IsEmailGroupUsed" [ngClass]="{'error-field': submitted && f.IsEmailGroupUsed.errors !== null && f.IsEmailGroupUsed.errors.required}">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <div class="col-md-3 mt-3">
+              <label for="" class="form-label">Select Group</label>
+              <select class="form-select" disabled formControlName="EmailGroupId" name="EmailGroupId" [ngClass]="{'error-field': submitted && f.EmailGroupId.errors !== null && f.EmailGroupId.errors.required}">
+                <option value=null>Select Group</option>
+                <option value="1">No</option>
+              </select>
+            </div>
+            <div class="col-md-3 mt-3">
+              <label for="" class="form-label">Is TriggeredAutomatically <i class="ps-2 fa fa-exclamation-circle"></i></label>
+              <select class="form-select" formControlName="IsTriggeredAutomatically" [ngClass]="{'error-field': submitted && f.IsTriggeredAutomatically.errors !== null && f.IsTriggeredAutomatically.errors.required}">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <div class="col-md-3 mt-3" *ngIf="isEmployeesReady">
+              <label for="" class="form-label">Email</label>
+              <app-iautocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail()" [(ngModel)]="employeeId" [ngModelOptions]="{standalone: true}"></app-iautocomplete>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="py-3">
+              <p class="text-dark mb-2">Send To:</p>
+              <ng-container *ngFor="let employee of employees; let i = index">
+                <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
+                  {{employee.text}}
+                  <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none">
+                    <i class="fa fa-close ps-2 text-dark"></i>
+                  </a>
+                </span>
+              </ng-container>
+            </div>
+          </div>
+          <ng-container >
+            <div class="row">
+              <div class="mt-3 col-md-3">
+                <label for="" class="form-label">Subject</label>
+                <input type="text" formControlName="SubjectLine" class="form-control" placeholder="e.g Bill detail" [ngClass]="{'error-field': submitted && f.SubjectLine.errors !== null && f.SubjectLine.errors.required}">
+              </div>
+              <div class="mt-3 col-md-3">
+                <label for="" class="form-label">Title</label>
+                <input type="text" formControlName="EmailTitle" class="form-control" placeholder="e.g Title" [ngClass]="{'error-field': submitted && f.EmailTitle.errors !== null && f.EmailTitle.errors.required}">
+              </div>
+              <div class="my-3 col-md-3">
+                <label for="" class="form-label">Salutation</label>
+                <input type="text" formControlName="Salutation" class="form-control" placeholder="e.g Dear Sir/ Madam" [ngClass]="{'error-field': submitted && f.Salutation.errors !== null && f.Salutation.errors.required}">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <app-editor [content]="currentEmailLinkConfig.BodyContent"></app-editor>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mt-3 col-md-8">
+                  <input type="text" formControlName="EmailNote" class="form-control border-0 border-bottom" placeholder="Note: Will be appended with body content (Optional)">
+                </div>
+                <div class="mt-3 col-md-8">
+                  <input type="text" formControlName="EmailClosingStatement" class="form-control border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.EmailClosingStatement.errors !== null && f.EmailClosingStatement.errors.required}" placeholder="Thanks & Regards or Define custom">
+                </div>
+                <div class="mt-3 col-md-8">
+                  <input type="text" formControlName="SignatureDetail" class="form-control border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.SignatureDetail.errors !== null && f.SignatureDetail.errors.required}" placeholder="Name or Signature">
+                </div>
+                <div class="mt-3 col-md-8">
+                  <input type="text" formControlName="ContactNo" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control border-0 border-bottom" placeholder="+91-000000000 (Optional)">
+                </div>
+              </div>
+              <div class="mt-3 col-md-6">
+                <div class="col-auto col-md-6">
+                  <select class="form-select" (change)="loadImageLocally($event)" formControlName="FileId">
+                    <option value="" disabled>Select image</option>
+                    <option [attr.value]="img.FileId" *ngFor="let img of companyFiles">{{img.FileName}}</option>
+                  </select>
+                </div>
+                <div class="mt-3 col-md-6 ">
+                  <img [attr.src]="logoUrl" class="small-img-preview" alt="">
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </form>
+      </div>
+      <div class="text-end">
+        <button class="btn btn-primary-c"><i class="fa fa-paper-plane pe-2"></i> Send Template</button>
+        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="saveTemplate()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Save' }}
+        </button>
+      </div>
     </div>
 </div>
