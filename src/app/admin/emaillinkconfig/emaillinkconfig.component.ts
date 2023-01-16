@@ -5,14 +5,14 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 
 @Component({
-  selector: 'app-menusetting',
-  templateUrl: './menusetting.component.html',
-  styleUrls: ['./menusetting.component.scss']
+  selector: 'app-emaillinkconfig',
+  templateUrl: './emaillinkconfig.component.html',
+  styleUrls: ['./emaillinkconfig.component.scss']
 })
-export class MenusettingComponent implements OnInit {
+export class EmaillinkconfigComponent implements OnInit {
   isLoading: boolean = false;
   employees: Array<any> = [];
   currentPageName: string = "";
@@ -42,11 +42,12 @@ export class MenusettingComponent implements OnInit {
     let url = value.split('/');
     let length = url.length - 1;
     this.currentPageName =url[length].toUpperCase();
+    //this.currentPageName = "EMAILSETTING"
     this.defaultLogoId = "";
     this.employeesList.placeholder = "Employee";
     this.employeesList.className = 'disable-field';
     this.isEmployeesReady = true;
-    this.loadData();
+    //this.loadData();
     this.isPageLoading = true;
     this.basePath = this.http.GetImageBasePath();
     let companies = this.local.findRecord("Companies");
@@ -56,10 +57,16 @@ export class MenusettingComponent implements OnInit {
         ErrorToast("Fail to get company detail. Please contact to admin.");
         return;
       } else {
-        this.isPageLoading = false;
+        this.isPageLoading = true;
         this.companyId = currentCompany.CompanyId;
-        this.currentEmailLinkConfig = new EmailLink();
-        this.initForm();
+        if (this.currentPageName && this.companyId > 0) {
+          this.loadPageData();
+          this.currentEmailLinkConfig = new EmailLink();
+          this.initForm();
+          this.isPageLoading = false;
+        } else {
+          this.isPageLoading = false;
+        }
       }
     }
   }
@@ -78,14 +85,42 @@ export class MenusettingComponent implements OnInit {
     });
   }
 
+  loadPageData() {
+    this.http.get(`Template/GetEmailLinkConfigByPageName/${this.currentPageName}/${this.companyId}`).then(res => {
+      if (res.ResponseBody.Result && res.ResponseBody.Result.EmailLinkConfig) {
+        this.currentEmailLinkConfig = res.ResponseBody.Result.EmailLinkConfig;
+        this.companyFiles = res.ResponseBody.Result.Files;
+        this.currentEmailLinkConfig.BodyContent = JSON.parse(this.currentEmailLinkConfig.BodyContent);
+        this.emails = JSON.parse(this.currentEmailLinkConfig.EmailsJson);
+        // for (let i = 0; i < this.emails.length; i++) {
+        //   let employee = this.applicationData.Employees.find(x => x.Email == this.emails[i]);
+        //   if (employee) {
+        //     this.employees.push({
+        //       Id: employee.EmployeeUid,
+        //       Name: employee.FirstName + " " + employee.LastName,
+        //       Email: employee.Email
+        //     });
+        //     let index = this.employeesList.data.findIndex(x => x.value == employee.EmployeeUid);
+        //     this.employeesList.data.splice(index, 1);
+        //   }
+        // }
+        this.bindImage(this.currentEmailLinkConfig.FileId);
+        this.initForm();
+      } else {
+        this.currentEmailLinkConfig = new EmailLink();
+        this.initForm();
+      }
+    })
+  }
+
   initForm() {
     this.emaillinkForm = this.fb.group({
       TemplateName: new FormControl(this.currentEmailLinkConfig.TemplateName, [Validators.required]),
       PageName: new FormControl(this.currentPageName, [Validators.required]),
       PageDescription: new FormControl(this.currentEmailLinkConfig.PageDescription, [Validators.required]),
-      IsEmailGroupUsed: new FormControl(this.currentEmailLinkConfig.IsEmailGroupUsed, [Validators.required]),
+      IsEmailGroupUsed: new FormControl(this.currentEmailLinkConfig.IsEmailGroupUsed ? 'true' : 'false', [Validators.required]),
       EmailGroupId: new FormControl(this.currentEmailLinkConfig.EmailGroupId),
-      IsTriggeredAutomatically: new FormControl(this.currentEmailLinkConfig.IsTriggeredAutomatically, [Validators.required]),
+      IsTriggeredAutomatically: new FormControl(this.currentEmailLinkConfig.IsTriggeredAutomatically ? 'true' : 'false', [Validators.required]),
       Emails: new FormControl(this.currentEmailLinkConfig.Emails),
       EmailTemplateId: new FormControl(this.currentEmailLinkConfig.EmailTemplateId),
       CompanyId: new FormControl(this.companyId),
@@ -103,12 +138,17 @@ export class MenusettingComponent implements OnInit {
   }
 
   saveTemplate() {
-    if (this.emaillinkForm.get('EmailGroupId').value == null)
-      this.emaillinkForm.get('EmailGroupId').setValue(0);
-
+    this.submitted = true;
+    this.isLoading = true;
     if (this.emails.length > 0)
       this.emaillinkForm.get('Emails').setValue(this.emails);
 
+    if (this.emaillinkForm.get('IsEmailGroupUsed').value == 'true') {
+      if (this.emaillinkForm.get('EmailGroupId').value == 0)
+        this.emaillinkForm.get('EmailGroupId').setValue(null);
+    } else {
+      this.emaillinkForm.get('EmailGroupId').setValue(0);
+    }
     let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     if (this.emaillinkForm.invalid || (data && data == "")) {
       this.isLoading = false;
@@ -117,17 +157,26 @@ export class MenusettingComponent implements OnInit {
     let value = this.emaillinkForm.value;
     value.BodyContent = data;
 
-    console.log(this.emaillinkForm.value);
+    this.http.post("Template/EmailLinkConfigInsUpdate", value).then(res => {
+      if (res.ResponseBody) {
+        this.emailTemplateId = Number(res.ResponseBody);
+        this.emaillinkForm.get('EmailTemplateId').setValue(this.emailTemplateId);
+        Toast("Template inserted/ updated successfully.");
+      this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   addEmployeeEmail() {
-    let employeeid = this.employeeId;
     let data = this.applicationData.Employees;
     let employee = data.find(x => x.EmployeeUid == this.employeeId);
     this.emails.push(employee.Email);
     this.employees.push({
-      value: employee.EmployeeUid,
-      text: employee.FirstName + " " + employee.LastName
+      Id: employee.EmployeeUid,
+      Name: employee.FirstName + " " + employee.LastName,
+      Email: employee.Email
     });
     let index = this.employeesList.data.findIndex(x => x.value == this.employeeId);
     this.employeesList.data.splice(index, 1);
@@ -135,7 +184,10 @@ export class MenusettingComponent implements OnInit {
 
   removeEmail(index: number) {
     if (index >-1) {
-      this.employeesList.data.push(this.employees[index]);
+      this.employeesList.data.push({
+        value: this.employees[index].Id,
+        text: this.employees[index].Name
+      });
       this.employees.splice(index, 1);
     }
   }
@@ -170,16 +222,34 @@ export class MenusettingComponent implements OnInit {
       this.emaillinkForm.get('EmailGroupId').updateValueAndValidity();
     } else {
       document.getElementsByName("EmailGroupId")[0].setAttribute('disabled', '');
-      this.emaillinkForm.get('EmailGroupId').setValue(0);
+      this.emaillinkForm.get('EmailGroupId').setValue(null);
       this.emaillinkForm.get('EmailGroupId').removeValidators(Validators.required);
       this.emaillinkForm.get('EmailGroupId').updateValueAndValidity();
+    }
+  }
+
+  sendEmail() {
+    this.isLoading = true;
+    if (this.currentEmailLinkConfig.EmailTemplateId > 0 && this.emails.length > 0) {
+      let value = {
+        EmailTemplateId: this.currentEmailLinkConfig.EmailTemplateId,
+        Emails: this.emails
+      }
+      this.http.post("Template/GenerateUpdatedPageMail", value).then(res => {
+        if (res.ResponseBody){
+          Toast(res.ResponseBody);
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
     }
   }
 
 }
 
 class EmailLink {
-  EmailTemplateId: number = null;
+  EmailTemplateId: number = 0;
   TemplateName: string = null;
   PageName: string = null;
   PageDescription: string = null;
@@ -198,4 +268,6 @@ class EmailLink {
   FileId: number = 0;
   LogoPath: string = "";
   Description: string = null;
+  EmailsJson: string = null;
 }
+
