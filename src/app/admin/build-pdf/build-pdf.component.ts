@@ -7,7 +7,7 @@ import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
-import { Attendance, ItemStatus, UserType } from 'src/providers/constants';
+import { Attendance, BuildPdf, EmailLinkConfig, ItemStatus, UserType } from 'src/providers/constants';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Filter } from 'src/providers/userService';
 
@@ -1241,6 +1241,10 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         end = this.allTimesheet.length;
       i++;
     }
+  }
+
+  navToEmailLinkConfig() {
+    this.nav.navigate(EmailLinkConfig, BuildPdf);
   }
 }
 

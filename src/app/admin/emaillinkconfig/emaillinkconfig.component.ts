@@ -6,6 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
   selector: 'app-emaillinkconfig',
@@ -28,27 +29,29 @@ export class EmaillinkconfigComponent implements OnInit {
   companyFiles: Array<any> = [];
   isEmployeesReady: boolean = false;
   employeesList: autoCompleteModal = new autoCompleteModal();
-  applicationData: any = [];
+  applicationData: Array<any> = [];
   employeeId: number = 0;
   emails: Array<string> = [];
 
-  constructor(private router: Router,
+  constructor(private nav: iNavigation,
+              private route: Router,
               private fb: FormBuilder,
               private local: ApplicationStorage,
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    let value = this.router.url;
-    let url = value.split('/');
+    let data = this.nav.getValue();
+    if (data == null || data == undefined)
+      data = this.route.url;
+
+    let url = data.split('/');
     let length = url.length - 1;
     this.currentPageName =url[length].toUpperCase();
     //this.currentPageName = "EMAILSETTING"
     this.defaultLogoId = "";
     this.employeesList.placeholder = "Employee";
     this.employeesList.className = 'disable-field';
-    this.isEmployeesReady = true;
-    //this.loadData();
-    this.isPageLoading = true;
+    this.loadAutoComplete();
     this.basePath = this.http.GetImageBasePath();
     let companies = this.local.findRecord("Companies");
     if (companies) {
@@ -57,12 +60,9 @@ export class EmaillinkconfigComponent implements OnInit {
         ErrorToast("Fail to get company detail. Please contact to admin.");
         return;
       } else {
-        this.isPageLoading = true;
         this.companyId = currentCompany.CompanyId;
         if (this.currentPageName && this.companyId > 0) {
-          this.loadPageData();
-          this.currentEmailLinkConfig = new EmailLink();
-          this.initForm();
+          this.loadData();
           this.isPageLoading = false;
         } else {
           this.isPageLoading = false;
@@ -71,39 +71,39 @@ export class EmaillinkconfigComponent implements OnInit {
     }
   }
 
-  loadData() {
+  loadAutoComplete() {
     this.isEmployeesReady = false;
-    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        this.applicationData = response.ResponseBody;
-        this.employeesList.data = [];
-        this.employeesList.placeholder = "Employee";
-        this.employeesList.data = GetEmployees();
-        this.employeesList.className = "";
-        this.isEmployeesReady = true;
-      }
-    });
+    this.employeesList.data = [];
+    this.employeesList.placeholder = "Employee";
+    this.employeesList.data = GetEmployees();
+    this.employeesList.className = "";
+    this.isEmployeesReady = true;
   }
 
-  loadPageData() {
+  loadData() {
     this.http.get(`Template/GetEmailLinkConfigByPageName/${this.currentPageName}/${this.companyId}`).then(res => {
       if (res.ResponseBody.Result && res.ResponseBody.Result.EmailLinkConfig) {
         this.currentEmailLinkConfig = res.ResponseBody.Result.EmailLinkConfig;
         this.companyFiles = res.ResponseBody.Result.Files;
+        this.applicationData = res.ResponseBody.Result.Employees;
         this.currentEmailLinkConfig.BodyContent = JSON.parse(this.currentEmailLinkConfig.BodyContent);
         this.emails = JSON.parse(this.currentEmailLinkConfig.EmailsJson);
-        // for (let i = 0; i < this.emails.length; i++) {
-        //   let employee = this.applicationData.Employees.find(x => x.Email == this.emails[i]);
-        //   if (employee) {
-        //     this.employees.push({
-        //       Id: employee.EmployeeUid,
-        //       Name: employee.FirstName + " " + employee.LastName,
-        //       Email: employee.Email
-        //     });
-        //     let index = this.employeesList.data.findIndex(x => x.value == employee.EmployeeUid);
-        //     this.employeesList.data.splice(index, 1);
-        //   }
-        // }
+        if (this.emails && this.emails.length > 0) {
+          for (let i = 0; i < this.emails.length; i++) {
+            let employee = this.applicationData.find(x => x.Email == this.emails[i]);
+            if (employee) {
+              this.employees.push({
+                Id: employee.EmployeeUid,
+                Name: employee.FirstName + " " + employee.LastName,
+                Email: employee.Email
+              });
+              let index = this.employeesList.data.findIndex(x => x.value == employee.EmployeeUid);
+              this.employeesList.data.splice(index, 1);
+            }
+          }
+        } else {
+          this.emails = [];
+        }
         this.bindImage(this.currentEmailLinkConfig.FileId);
         this.initForm();
       } else {
@@ -170,8 +170,7 @@ export class EmaillinkconfigComponent implements OnInit {
   }
 
   addEmployeeEmail() {
-    let data = this.applicationData.Employees;
-    let employee = data.find(x => x.EmployeeUid == this.employeeId);
+    let employee = this.applicationData.find(x => x.EmployeeUid == this.employeeId);
     this.emails.push(employee.Email);
     this.employees.push({
       Id: employee.EmployeeUid,

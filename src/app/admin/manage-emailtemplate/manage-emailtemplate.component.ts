@@ -4,6 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { EmailLinkConfig, ManageEmailTemplate } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -148,6 +149,10 @@ export class ManageEmailtemplateComponent implements OnInit {
     }).catch(e => {
       this.isLoading = false;
     })
+  }
+
+  navToEmailLinkConfig() {
+    this.nav.navigate(EmailLinkConfig, ManageEmailTemplate);
   }
 }
 

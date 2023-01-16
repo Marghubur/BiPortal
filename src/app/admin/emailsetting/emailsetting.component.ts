@@ -3,7 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { OrgLogo } from 'src/providers/constants';
+import { EmailLinkConfig, EmailSetting, OrgLogo } from 'src/providers/constants';
+import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
   selector: 'app-emailsetting',
@@ -23,6 +24,7 @@ export class EmailsettingComponent implements OnInit {
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
+              private nav: iNavigation,
               private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -130,6 +132,9 @@ export class EmailsettingComponent implements OnInit {
     $("#uploadocument").click();
   }
 
+  navToEmailLinkConfig() {
+    this.nav.navigate(EmailLinkConfig, EmailSetting);
+  }
 }
 
 class EmailSettings {
