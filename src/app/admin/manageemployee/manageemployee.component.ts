@@ -5,7 +5,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, PlaceEmpty, Toast, ToFixed, ToLocateDate } from 'src/providers/common-service/common.service';
-import { Employees, OrganizationSetting, ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
+import { EmailLinkConfig, Employees, ManageEmployee, OrganizationSetting, ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -333,7 +333,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
     if (this.employeeForm.get('PANNo').errors !== null)
       errroCounter++;
-    
+
     if (this.employeeForm.get('AccountNumber').errors !== null)
       errroCounter++;
 
@@ -610,6 +610,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         file: file
       });
     }
+  }
+
+  navToEmailLinkConfig() {
+    this.nav.navigate(EmailLinkConfig, ManageEmployee);
   }
 }
 

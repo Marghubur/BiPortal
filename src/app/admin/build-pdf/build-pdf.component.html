@@ -1,11 +1,11 @@
 <div class="container-fluid main-container" [ngClass]="{'preload': !pageDataIsReady}">
   <div class="x_panel">
     <div class="x_header">
-      <div class="x_header_title row">
-        <div class="col-md-3">
+      <div class="x_header_title d-flex align-items-center justify-content-between">
           <h2>Generate bill<small>generate bill in docx and pdf format.</small></h2>
-        </div>
-        <div class="col-md-9 text-end">
+        <div class="d-flex align-items-center">
+          <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
+            class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
           <button class="btn btn-outline-success text-end" (click)="getNewForm()">New Bill</button>
         </div>
       </div>

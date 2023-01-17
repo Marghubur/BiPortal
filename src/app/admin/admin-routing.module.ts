@@ -32,7 +32,6 @@ import { AdminResetPassword,
   OrganizationSetting,
   Holiday,
   EmailSetting,
-  MenuSetting,
   Company,
   EmailTemplate,
   ManageEmailTemplate,
@@ -40,7 +39,8 @@ import { AdminResetPassword,
   CompanyLogo,
   Annexure,
   OfferLetter,
-  EmailConfiguration
+  EmailConfiguration,
+  EmailLinkConfig
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -74,7 +74,6 @@ import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { HolidayComponent } from './holiday/holiday.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
-import { MenusettingComponent } from './menusetting/menusetting.component';
 import { CompanyComponent } from './company/company.component';
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
@@ -83,6 +82,7 @@ import { CompanylogoComponent } from './companylogo/companylogo.component';
 import { AnnexureComponent } from './annexure/annexure.component';
 import { OfferletterComponent } from './offerletter/offerletter.component';
 import { EmailConfigComponent } from './email-config/email-config.component';
+import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -118,7 +118,7 @@ const routes: Routes = [
   { path: OrganizationSetting, component: OrganizationComponent},
   { path: Holiday, component: HolidayComponent},
   { path: EmailSetting, component: EmailsettingComponent},
-  { path: MenuSetting, component: MenusettingComponent},
+  { path: EmailLinkConfig, component: EmaillinkconfigComponent},
   { path: Company, component: CompanyComponent},
   { path: EmailTemplate, component: EmailTemplateComponent},
   { path: ManageEmailTemplate, component: ManageEmailtemplateComponent},

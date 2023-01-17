@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
-import { Clients, OrgLogo, ProfileImage, UserType } from 'src/providers/constants';
+import { Clients, EmailLinkConfig, OrgLogo, ProfileImage, RegisterClient, UserType } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -245,6 +245,10 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
         file: file
       });
     }
+  }
+
+  navToEmailLinkConfig() {
+    this.nav.navigate(EmailLinkConfig, RegisterClient);
   }
 }
 
