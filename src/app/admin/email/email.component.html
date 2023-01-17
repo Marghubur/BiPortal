@@ -14,19 +14,21 @@
         </div>
         <ng-container *ngFor="let c of mailItems">
           <div class="d-flex flex-column justify-content-start" [ngClass]="{'selected': c.IsActive}">
-            <div class="d-flex justify-content-between p-2">
-              <div class="d-flex">
-                <div class="px-3">
-                  <i class="{{c.Icon}}"></i>
+            <a href="javascript:void(0)" class="text-decoration-none">
+              <div class="d-flex justify-content-between p-2">
+                <div class="d-flex">
+                  <div class="px-3 text-dark">
+                    <i class="{{c.Icon}}"></i>
+                  </div>
+                  <div>
+                    <label class="text-dark" [ngClass]="{'fw-bold': c.IsActive}">{{c.Name}}</label>
+                  </div>
                 </div>
                 <div>
-                  <label class="text-dark" [ngClass]="{'fw-bold': c.IsActive}">{{c.Name}}</label>
+                  <span class="text-muted pe-2">{{c.BadgeValue}}</span>
                 </div>
               </div>
-              <div>
-                <span class="text-muted pe-2">{{c.BadgeValue}}</span>
-              </div>
-            </div>
+            </a>
           </div>
         </ng-container>
       </div>
@@ -41,7 +43,7 @@
                 <div class="d-flex justify-content-between">
                   <div>
                     <div class="d-flex">
-                      <input type="checkbox">
+                      <input type="checkbox" (click)="selectAll($event)">
                       <div class="ps-4 pe-2">
                         <i class="fa fa-refresh"></i>
                       </div>
@@ -69,7 +71,7 @@
             <div class="d-flex justify-content-between border-bottom e-row" *ngFor="let e of inboxMail">
               <div class="d-flex wrap-content">
                 <div class="d-flex title-w">
-                  <input type="checkbox">
+                  <input type="checkbox" name="SelectedMail">
                   <div class="ms-2" (click)="loadBody(e.EMailIndex)">
                     <label class="fw-bold text-dark">{{e.Name}}:</label>
                   </div>
@@ -103,7 +105,7 @@
             </div>
           </div>
         </ng-container>
-        <ng-container *ngIf="isPageReady">
+        <ng-container *ngIf="!isPageReady">
           <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
             <div class="col-md-3 modal-container f-12 text-center cog-wheel">
               <img src="assets/images/cog.gif" alt="" />

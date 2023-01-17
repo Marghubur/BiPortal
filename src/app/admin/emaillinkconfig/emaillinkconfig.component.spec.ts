@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenusettingComponent } from './menusetting.component';
+import { EmaillinkconfigComponent } from './emaillinkconfig.component';
 
-describe('MenusettingComponent', () => {
-  let component: MenusettingComponent;
-  let fixture: ComponentFixture<MenusettingComponent>;
+describe('EmaillinkconfigComponent', () => {
+  let component: EmaillinkconfigComponent;
+  let fixture: ComponentFixture<EmaillinkconfigComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MenusettingComponent ]
+      declarations: [ EmaillinkconfigComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenusettingComponent);
+    fixture = TestBed.createComponent(EmaillinkconfigComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

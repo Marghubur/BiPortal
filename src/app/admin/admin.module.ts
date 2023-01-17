@@ -41,7 +41,6 @@ import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { HolidayComponent } from './holiday/holiday.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
-import { MenusettingComponent } from './menusetting/menusetting.component';
 import { CompanyComponent } from './company/company.component';
 import { ProjectsModule } from '../projects/projects.module';
 import { IncomeDeclarationModule } from '../income-declaration/income-declaration.module';
@@ -53,6 +52,8 @@ import { CompanylogoComponent } from './companylogo/companylogo.component';
 import { AnnexureComponent } from './annexure/annexure.component';
 import { OfferletterComponent } from './offerletter/offerletter.component';
 import { EmailConfigComponent } from './email-config/email-config.component';
+import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.component';
+
 
 @NgModule({
   declarations: [
@@ -91,7 +92,6 @@ import { EmailConfigComponent } from './email-config/email-config.component';
     OrganizationComponent,
     HolidayComponent,
     EmailsettingComponent,
-    MenusettingComponent,
     CompanyComponent,
     EmailTemplateComponent,
     ManageEmailtemplateComponent,
@@ -99,7 +99,8 @@ import { EmailConfigComponent } from './email-config/email-config.component';
     CompanylogoComponent,
     AnnexureComponent,
     OfferletterComponent,
-    EmailConfigComponent
+    EmailConfigComponent,
+    EmaillinkconfigComponent
   ],
   imports: [
     CommonModule,
