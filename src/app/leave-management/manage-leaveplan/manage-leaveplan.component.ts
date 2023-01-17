@@ -222,19 +222,27 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   beyondAnnualQuota(e: any) {
-    let value = e.target.value;
-    if (value == 'true')
+    let value = e.currentTarget.querySelector('input[type="radio"]').value;
+    if (value == 'true') {
       document.getElementsByName('ExtraLeaveLimit')[0].removeAttribute('readonly');
-    else
+      this.leaveDetailForm.get('CanApplyExtraLeave').setValue('true');
+    }
+    else {
       document.getElementsByName('ExtraLeaveLimit')[0].setAttribute('readonly', '');
+      this.leaveDetailForm.get('CanApplyExtraLeave').setValue('false');
+    }
   }
 
   quotaLimit(e: any) {
-    let value = e.target.value;
-    if (value == 'true')
+    let value = e.currentTarget.querySelector('input[type="radio"]').value;
+    if (value == 'true') {
       document.getElementsByName('LeaveLimit')[0].removeAttribute('readonly');
-    else
+      this.leaveDetailForm.get('IsLeaveDaysLimit').setValue('true');
+    }
+    else {
       document.getElementsByName('LeaveLimit')[0].setAttribute('readonly', '');
+      this.leaveDetailForm.get('IsLeaveDaysLimit').setValue('false');
+    }
   }
 
   accrualRateDateValidation(e: any, i: number) {
