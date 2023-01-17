@@ -18,7 +18,7 @@
 
   <div class="x_panel pb-0 mb-0">
     <div class="x_header">
-      <h2>Config of {{leaveTypeDeatils.PlanName | titlecase}} Type</h2>
+      <h2>LEAVE TYPE: {{leaveTypeDeatils.PlanName | uppercase}}</h2>
       <div class="clearfix"></div>
     </div>
     <div class="px-1">
@@ -108,26 +108,36 @@
                           data-bs-placement="right"
                           title="The maximum number of leave days an employee is allocated within a calender year."></i>
                       </h6>
-                      <div class="form-check align-items-center d-flex">
-                        <input class="form-check-input" value="true" type="radio" name="IsLeaveDaysLimit"
-                          formControlName="IsLeaveDaysLimit" (click)="quotaLimit($event)">
-                        <div class="d-flex align-items-center">
-                          <label class="form-check-label ps-2">Limit to</label>
-                          <div class="col-md-2 mx-3">
-                            <input type="text" class="form-control form-control-sm" name="LeaveLimit" OnlyNumber="3"
-                              [readonly]="leaveDetailForm.controls.IsLeaveDaysLimit.value == 'false'"
-                              formControlName="LeaveLimit">
+                      <div class="form-check align-items-center d-flex border py-2" (click)="quotaLimit($event)">
+                        <div class="fe-1">
+                          <input class="form-check-input " value="true" type="radio" name="IsLeaveDaysLimit"
+                            formControlName="IsLeaveDaysLimit">
+                          <div class="d-flex align-items-center">
+                            <label class="form-check-label ps-2">Limit to</label>
+                            <div class="col-md-2 mx-3">
+                              <input type="text" class="form-control form-control-sm" name="LeaveLimit" OnlyNumber="3"
+                                [readonly]="leaveDetailForm.controls.IsLeaveDaysLimit.value == 'false'"
+                                formControlName="LeaveLimit">
+                            </div>
+                            <span>days per year</span>
                           </div>
-                          <span>days per year</span>
+                        </div>
+                        <div class="px-4">
+                          <i name="success-icon" class="fa fa-check text-success"></i>
                         </div>
                       </div>
-                      <div class="form-check mt-2">
-                        <input class="form-check-input" value="false" type="radio" name="IsLeaveDaysLimit"
-                          formControlName="IsLeaveDaysLimit" (click)="quotaLimit($event)">
-                        <label class="form-check-label">
-                          Unlimited <i class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
-                            data-bs-placement="right" title="Tooltip on top"></i>
-                        </label>
+                      <div class="form-check mt-2 d-flex border py-2" (click)="quotaLimit($event)">
+                        <div class="fe-1">
+                          <input class="form-check-input" value="false" type="radio" name="IsLeaveDaysLimit"
+                            formControlName="IsLeaveDaysLimit">
+                          <label class="form-check-label">
+                            Unlimited <i class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                              data-bs-placement="right" title="Tooltip on top"></i>
+                          </label>
+                        </div>
+                        <div class="px-4 position-relative">
+                          <i name="success-icon" class="fa fa-check text-success position-absolute i-center invisible"></i>
+                        </div>
                       </div>
                     </div>
                     <div class="my-4">
@@ -359,7 +369,7 @@
                             <div class="card bg-light p-3">
                               <div class="row align-items-center">
                                 <div class="col-md-10">
-                                  <h6 class="fw-bold text-dark">Define the leave credit below on employee's joining date
+                                  <h6 class="fw-bold text-dark">Define the leave credit below of an employee's joining date
                                   </h6>
                                   <div class="d-flex align-items-center">
                                     <label class="form-label me-3">If date of joining between</label>
