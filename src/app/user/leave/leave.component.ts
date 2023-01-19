@@ -240,7 +240,7 @@ export class LeaveComponent implements OnInit {
   }
 
   bindData(res: any) {
-    if(res.ResponseBody.Employee && res.ResponseBody.LeavePlanTypes) {
+    if(res.ResponseBody.LeavePlanTypes) {
       if(!res.ResponseBody.EmployeeLeaveDetail) {
         ErrorToast("Fail to get leave detail. Please contact to admin.");
         return;
