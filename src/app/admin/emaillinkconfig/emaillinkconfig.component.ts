@@ -7,6 +7,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-emaillinkconfig',
@@ -32,6 +33,7 @@ export class EmaillinkconfigComponent implements OnInit {
   applicationData: Array<any> = [];
   employeeId: number = 0;
   emails: Array<string> = [];
+  isAutoTrigger: boolean = false;
 
   constructor(private nav: iNavigation,
               private route: Router,
@@ -39,6 +41,15 @@ export class EmaillinkconfigComponent implements OnInit {
               private local: ApplicationStorage,
               private http: AjaxService) { }
 
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('dispose');
+    });
+  }
   ngOnInit(): void {
     let data = this.nav.getValue();
     if (data == null || data == undefined)
@@ -245,6 +256,13 @@ export class EmaillinkconfigComponent implements OnInit {
     }
   }
 
+  triggerStatus(e: any) {
+    let  value= e.target.value;
+    if (value == 'true')
+      this.isAutoTrigger = true;
+    else
+      this.isAutoTrigger = false;
+  }
 }
 
 class EmailLink {

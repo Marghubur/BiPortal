@@ -5,7 +5,7 @@
         <div class="x_header">
           <div class="x_header_title d-flex align-items-center justify-content-between">
             <h2>Email Link Config Details<small>like page name, emails etc</small></h2>
-            <button class="btn btn-primary-c" [disabled]="isLoading" (click)="sendEmail()">
+            <button class="btn btn-primary-c" [disabled]="isLoading || isAutoTrigger" (click)="sendEmail()">
               <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
               {{ isLoading ? 'Sending ...' : 'Send Manually' }}
             </button>
@@ -42,8 +42,8 @@
               </select>
             </div>
             <div class="col-md-3 mt-3">
-              <label for="" class="form-label">Is TriggeredAutomatically <i class="ps-2 fa fa-exclamation-circle"></i></label>
-              <select class="form-select" formControlName="IsTriggeredAutomatically" [ngClass]="{'error-field': submitted && f.IsTriggeredAutomatically.errors !== null && f.IsTriggeredAutomatically.errors.required}">
+              <label for="" class="form-label">Is Triggered Automatically <i class="ps-2 fa fa-exclamation-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Automaticaally means when any change occur then email is send to defined email"></i></label>
+              <select class="form-select" (change)="triggerStatus($event)" formControlName="IsTriggeredAutomatically" [ngClass]="{'error-field': submitted && f.IsTriggeredAutomatically.errors !== null && f.IsTriggeredAutomatically.errors.required}">
                 <option value="true">Yes</option>
                 <option value="false">No</option>
               </select>
