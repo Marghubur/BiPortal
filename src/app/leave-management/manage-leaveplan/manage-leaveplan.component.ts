@@ -41,6 +41,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   monthlyLeave: number = 0;
   isConfigCompleted: boolean = false;
   allocateleave: number = 0;
+  days:Array<number> = [];
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -70,7 +71,9 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         ErrorToast("Please select a vlid leave plan first");
         return;
       }
-
+      for (let i = 0; i <= 30; i++) {
+        this.days.push(i);
+      }
       this.loadPlanDetail();
     } else {
       ErrorToast("Invlaid plan selected please select again.");
