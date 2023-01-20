@@ -245,11 +245,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  accrualRateDateValidation(e: any, i: number) {
-    let data = this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod').value;
-    this.inputDateValidation(e, data, i);
-  }
-
   empJoinMiddleDateValidation(e: any, i: number) {
     let data = this.leaveAccrualForm.get('JoiningMonthLeaveDistribution').value;
     this.inputDateValidation(e, data, i);
@@ -343,27 +338,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  accrualRateValidation(e: any) {
-    this.allocateleave = 0;
-    let data = this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod').value;
-    let value = this.leaveAccrualForm.get('LeaveDistributionSequence').value;
-    let totalRate = data.map(x => Number(x.AllocatedLeave)).reduce((acc, curr) => {return acc + curr;}, 0);
-    if (value == '1') {
-      if(totalRate > this.monthlyLeave) {
-        ErrorToast("Monthly leave distribution is not matched with actual monthly leave limit");
-        e.target.classList.add('error-field');
-        this.errorCounter++;
-      } else if(totalRate < this.monthlyLeave) {
-        this.allocateleave = totalRate;
-        this.errorCounter++;
-      } else {
-        e.target.classList.remove('error-field');
-        this.errorCounter--;
-      }
-    }
-
-  }
-
   submitLeaveAccrual() {
     this.submit = true;
     this.isLoading = true;
@@ -379,18 +353,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         ErrorToast("Please enter a valid date for which accrula rate applied");
         this.isLoading = false;
         return;
-      }
-    }
-
-    if (value.IsLeaveAccruedProrateDefined == true && value.LeaveDistributionRateOnStartOfPeriod.length > 0) {
-      this.fromandTodateValidation(value.LeaveDistributionRateOnStartOfPeriod);
-      let allocatedleave = value.LeaveDistributionRateOnStartOfPeriod.map(x => Number(x.AllocatedLeave)).reduce((acc, curr) => {return acc + curr;}, 0);
-      if (value.IsLeaveAccruedPatternAvail== 'true' && value.LeaveDistributionSequence == '1') {
-        if(this.monthlyLeave !== allocatedleave) {
-          ErrorToast("Monthly leave distribution is not matched with actual monthly leave limit");
-          this.isLoading = false;
-          return;
-        }
       }
     }
 
@@ -425,8 +387,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       LeaveDistributionSequence: new FormControl(this.leaveAccrual.LeaveDistributionSequence),
       LeaveDistributionAppliedFrom: new FormControl(this.leaveAccrual.LeaveDistributionAppliedFrom),
 
-      IsLeaveAccruedProrateDefined: new FormControl(this.leaveAccrual.IsLeaveAccruedProrateDefined),
-      LeaveDistributionRateOnStartOfPeriod: this.buildFormArrayForLeaveProrate(),
 
       IsLeavesProratedForJoinigMonth: new FormControl(this.leaveAccrual.IsLeavesProratedForJoinigMonth ? 'true' : 'false'),
       JoiningMonthLeaveDistribution: this.buildFormArrayBetweenJoiningDate(),
@@ -556,49 +516,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       this.addFormBetweenJoiningDate();
   }
 
-  buildFormArrayForLeaveProrate(): FormArray {
-    let data = this.leaveAccrual.LeaveDistributionRateOnStartOfPeriod;
-    let dataArray: FormArray = this.fb.array([]);
-
-    if(data != null && data.length > 0) {
-      let i = 0;
-      while(i < data.length) {
-        dataArray.push(this.fb.group({
-          FromDate: new FormControl(data[i].FromDate),
-          ToDate: new FormControl(data[i].ToDate),
-          AllocatedLeave: new FormControl(data[i].AllocatedLeave)
-        }));
-        i++;
-      }
-    } else {
-      dataArray.push(this.createFormBetweenJoiningDate());
-    }
-
-    return dataArray;
-  }
-
   createFormLeaveProrate(): FormGroup {
     return this.fb.group({
       FromDate: new FormControl(0),
       ToDate: new FormControl(0),
       AllocatedLeave: new FormControl(0)
     });
-  }
-
-  get formLeaveProrate() {
-    return this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod') as FormArray;
-  }
-
-  addFormLeaveProrate() {
-    let item = this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod') as FormArray;
-    item.push(this.createFormLeaveProrate());
-  }
-
-  removeFormLeaveProrate(i: number) {
-    let item = this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod') as FormArray;
-    item.removeAt(i);
-    if (item.length === 0)
-      this.addFormLeaveProrate();
   }
 
   buildFormArrayBetweenProbationPeriod(): FormArray {
@@ -1111,8 +1034,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         else
           document.getElementById('LeaveBalanceCalculated').classList.add('d-none');
         break;
-      case 2:
-        break;
       case 3:
         this.leaveAccrualForm.get('IsNoLeaveOnNoticePeriod').setValue('false');
         this.leaveAccrualForm.get('IsNotAllowProratedOnNotice').setValue('false');
@@ -1182,21 +1103,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  changeAccrualRate(e: any) {
-    let value = e.target.value;
-    if (value > 1) {
-      document.getElementsByName('IsLeaveAccruedProrateDefined')[0].setAttribute('disabled', '');
-      this.leaveAccrualForm.get("IsLeaveAccruedProrateDefined").setValue(false);
-      let item = this.leaveAccrualForm.get('LeaveDistributionRateOnStartOfPeriod') as FormArray;
-      item = new FormArray([]);
-      item.push(this.createFormLeaveProrate())
-      this.leaveAccrualForm.removeControl('LeaveDistributionRateOnStartOfPeriod');
-      this.leaveAccrualForm.addControl('LeaveDistributionRateOnStartOfPeriod', item);
-    } else {
-      document.getElementsByName('IsLeaveAccruedProrateDefined')[0].removeAttribute('disabled');
-    }
-  }
-
   ConfigPageTab(index: number) {
     if (index > 0 && index <= 9) {
       this.configPageNo = index;
@@ -1242,9 +1148,7 @@ class LeaveAccrual {
   LeavePlanTypeId: number = 0;
   CanApplyEntireLeave: boolean = true;
   IsLeaveAccruedPatternAvail: boolean = null;
-  IsLeaveAccruedProrateDefined: boolean = false;
   JoiningMonthLeaveDistribution: any = {};
-  LeaveDistributionRateOnStartOfPeriod: any = {};
   ExitMonthLeaveDistribution: any = {};
   AccrualProrateDetail: any = {};
   LeaveDistributionAppliedFrom: number = 0;

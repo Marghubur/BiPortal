@@ -267,7 +267,7 @@
                             <h6 class="fw-bold text-dark">Leave accrual of Annual quota happens at the following rate</h6>
                             <div class="d-flex align-items-center">
                               <div class="col-md-1 me-3">
-                                <select class="form-select" formControlName="LeaveDistributionSequence" (change)="changeAccrualRate($event)">
+                                <select class="form-select" formControlName="LeaveDistributionSequence">
                                   <option value="1">Monthly</option>
                                   <option value="2">Quarterly</option>
                                   <option value="3">Half Yearly</option>
@@ -299,61 +299,6 @@
                                 </div>
                               </label>
                             </div>
-                          </div>
-
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="IsLeaveAccruedProrateDefined"
-                              formControlName="IsLeaveAccruedProrateDefined" (click)="toggleCurrent(2, $event)">
-                            <label class="form-check-label">
-                              Define leave accrued (earned) rate else defined above quota will be calculated automatically (Only for monthly leave accrual).
-                            </label>
-                          </div>
-                          <div
-                            [ngClass]="{'d-none': leaveAccrualForm.controls.IsLeaveAccruedProrateDefined.value == false}">
-                            <ng-container formArrayName="LeaveDistributionRateOnStartOfPeriod">
-                              <div class="my-4" [formGroupName]="i"
-                                *ngFor="let item of formLeaveProrate.controls; let i = index">
-                                <div class="card bg-light p-3">
-                                  <div class="row align-items-center">
-                                    <div class="col-md-10">
-                                      <h6 class="fw-bold text-dark">Define how leave will get credited to employee's bucket
-                                        <span *ngIf="monthlyLeave > 0">[monthly limit: {{monthlyLeave}}]</span>
-                                      </h6>
-                                      <div class="d-flex align-items-center">
-                                        <label class="form-label me-3">If from date is</label>
-                                        <div class="col-md-1">
-                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate" name="FromDate" (blur)="accrualRateDateValidation($event, i)">
-                                        </div>
-                                        <span class="px-2">to</span>
-                                        <div class="col-md-1 mx-3">
-                                          <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate" name="ToDate" (keyup)="accrualRateDateValidation($event, i)">
-                                        </div>
-                                        <label class="form-label">then </label>
-                                        <div class="col-md-1 mx-3">
-                                          <input type="text" class="form-control" (keyup)="accrualRateValidation($event)"
-                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'" OnlyNumber="3"
-                                            formControlName="AllocatedLeave">
-                                        </div>
-                                        <label class="form-label">days(s) will be accrualed or earned.</label>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-2" >
-                                      <a href="javascript:void(0)" class="text-decoration-none text-secondary" data-name="add-remove-setion"
-                                        (click)="addFormLeaveProrate()">
-                                        <i class="fa fa-plus-circle fa-lg"></i>
-                                      </a>
-                                      <a href="javascript:void(0)" class="text-decoration-none text-secondary"
-                                        (click)="removeFormLeaveProrate(i)">
-                                        <i class="fa fa-minus-circle fa-lg ms-2"></i>
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="alert alert-danger" role="alert" *ngIf="allocateleave != 0">
-                                Your monthly accrual limit i.e {{allocateleave | number: "1.2-2"}} is less than actual monthly accrual rate. Actual monthly accrual rate is {{monthlyLeave}};
-                              </div>
-                            </ng-container>
                           </div>
                         </div>
                       </ng-container>
