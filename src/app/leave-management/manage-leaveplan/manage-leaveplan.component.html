@@ -1465,12 +1465,13 @@
                             name="AdJoiningHolidayIsConsiderAsLeave" formControlName="AdJoiningHolidayIsConsiderAsLeave">
                           <div class="d-flex align-items-center ms-2">
                             <label class="form-check-label">
-                              Yes, Holidays accompanying leave is treated as leave when total number of leave includes
+                              Yes, Holidays accompanying leave is treated as leave when total number of leave includes (Holiday and Weekoff)
                             </label>
                             <div class="col-md-1 mx-2">
-                              <input type="text" OnlyNumber="3" class="c-input"
-                                [readonly]="holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'false'"
-                                formControlName="ConsiderLeaveIfNumOfDays">
+                              <select class="c-input" formControlName="ConsiderLeaveIfNumOfDays">
+                                <option value="0">Any</option>
+                                <option [value]="value" *ngFor="let value of days">{{value}}</option>
+                              </select>
                             </div>
                             <div class="col-md-2 mx-2">
                               <select class="c-input">
@@ -1488,51 +1489,81 @@
                       </div>
                       <div class="my-4 ms-3"
                         [ngClass]="{'d-none': holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'false'}">
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfLeaveLieBetweenTwoHolidays"
-                            (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfLeaveLieBetweenTwoHolidays">
-                          <label class="form-check-label">
-                            If Holiday is right between two leave days (Holiday is sanwiched between leave days)
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfLeaveLieBetweenTwoHolidays.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio" name="IfLeaveLieBetweenTwoHolidays"
+                              (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfLeaveLieBetweenTwoHolidays">
+                            <label class="form-check-label ms-2">
+                              If Holiday is right between two leave days (Holiday is sandwiched between leave days)
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfLeaveLieBetweenTwoHolidays.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfHolidayIsRightBeforLeave"
-                            (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsRightBeforLeave">
-                          <label class="form-check-label">
-                            If leave day is right before a holiday.
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsRightBeforLeave.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio" name="IfHolidayIsRightBeforLeave"
+                              (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsRightBeforLeave">
+                            <label class="form-check-label ms-2">
+                              If leave day is right before a holiday.
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightBeforLeave.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfHolidayIsRightAfterLeave"
-                            (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsRightAfterLeave">
-                          <label class="form-check-label">
-                            If leave day is right after a holiday.
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsRightAfterLeave.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio" name="IfHolidayIsRightAfterLeave"
+                              (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsRightAfterLeave">
+                            <label class="form-check-label ms-2">
+                              If leave day is right after a holiday.
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightAfterLeave.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfHolidayIsBetweenLeave"
-                            (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsBetweenLeave">
-                          <label class="form-check-label">
-                            If leave day is before or after or in-between a holiday.
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsBetweenLeave.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio" name="IfHolidayIsBetweenLeave"
+                              (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsBetweenLeave">
+                            <label class="form-check-label ms-2">
+                              If leave day is before or after or in-between a holiday.
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsBetweenLeave.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio"
-                            name="IfHolidayIsRightBeforeAfterOrInBetween" (click)="toogleHolidayAndWeekOff(1, $event)"
-                            formControlName="IfHolidayIsRightBeforeAfterOrInBetween">
-                          <label class="form-check-label">
-                            If leave day is between holidays.
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsRightBeforeAfterOrInBetween.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio"
+                              name="IfHolidayIsRightBeforeAfterOrInBetween" (click)="toogleHolidayAndWeekOff(1, $event)"
+                              formControlName="IfHolidayIsRightBeforeAfterOrInBetween">
+                            <label class="form-check-label ms-2">
+                              If leave day is between holidays.
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightBeforeAfterOrInBetween.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check d-flex align-items-center">
-                          <input class="form-check-input" type="checkbox"
-                            formControlName="AdjoiningHolidayRulesIsValidForHalfDay">
-                          <label class="form-check-label ms-2">
-                            Do not consider holidays accompanying Half day leave as leave (ignores the above rule if
-                            leave
-                            taken
-                            is half day. This rule doesn't apply if leave is taken on half day week off).
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforLeave.value == true}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" type="checkbox"
+                              formControlName="AdjoiningHolidayRulesIsValidForHalfDay">
+                            <label class="form-check-label ms-2">
+                              Do not consider holidays accompanying Half day leave as leave (ignores the above rule if
+                              leave
+                              taken
+                              is half day. This rule doesn't apply if leave is taken on half day week off).
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforLeave.value == false}"></i>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1557,12 +1588,13 @@
                             name="AdjoiningWeekOffIsConsiderAsLeave" formControlName="AdjoiningWeekOffIsConsiderAsLeave">
                             <div class="d-flex align-items-center ms-2">
                               <label class="form-check-label ms-2">
-                                Yes, Week Off accompanying leave is treated as leave when total number of leave includes
+                                Yes, Week Off accompanying leave is treated as leave when total number of leave includes (Holiday and Weekoff)
                               </label>
                               <div class="col-md-1 mx-2">
-                                <input type="text" OnlyNumber="3" class="c-input"
-                                  [readonly]="holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'false'"
-                                  formControlName="ConsiderLeaveIfIncludeDays">
+                                <select class="c-input" formControlName="ConsiderLeaveIfIncludeDays">
+                                  <option value="0">Any</option>
+                                  <option [value]="value" *ngFor="let value of days">{{value}}</option>
+                                </select>
                               </div>
                               <div class="col-md-2 mx-2">
                                 <select class="c-input">
@@ -1580,52 +1612,82 @@
                       </div>
                       <div class="my-4 ms-3"
                         [ngClass]="{'d-none': holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'false'}">
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfLeaveLieBetweenWeekOff"
-                            (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfLeaveLieBetweenWeekOff">
-                          <label class="form-check-label">
-                            If week off day is right between two leave days (Week off is sandwiched  between leave
-                            days).
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfLeaveLieBetweenWeekOff.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio" name="IfLeaveLieBetweenWeekOff"
+                              (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfLeaveLieBetweenWeekOff">
+                            <label class="form-check-label ms-2">
+                              If week off day is right between two leave days (Week off is sandwiched  between leave
+                              days).
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfLeaveLieBetweenWeekOff.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsRightBeforLeave"
-                            (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsRightBeforLeave">
-                          <label class="form-check-label">
-                            If leave day is right before a Week off.
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforLeave.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsRightBeforLeave"
+                              (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsRightBeforLeave">
+                            <label class="form-check-label ms-2">
+                              If leave day is right before a Week off.
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforLeave.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsRightAfterLeave"
-                            (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsRightAfterLeave">
-                          <label class="form-check-label">
-                            If leave day is right after a week off.
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightAfterLeave.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsRightAfterLeave"
+                              (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsRightAfterLeave">
+                            <label class="form-check-label ms-2">
+                              If leave day is right after a week off.
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightAfterLeave.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsBetweenLeave"
-                            (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsBetweenLeave">
-                          <label class="form-check-label">
-                            If leave day is before or after or in-between a week off.
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsBetweenLeave.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsBetweenLeave"
+                              (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsBetweenLeave">
+                            <label class="form-check-label ms-2">
+                              If leave day is before or after or in-between a week off.
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsBetweenLeave.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check">
-                          <input class="form-check-input" value="true" type="radio"
-                            name="IfWeekOffIsRightBeforeAfterOrInBetween" (click)="toogleHolidayAndWeekOff(2, $event)"
-                            formControlName="IfWeekOffIsRightBeforeAfterOrInBetween">
-                          <label class="form-check-label">
-                            If leave day is between week off.
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforeAfterOrInBetween.value == 'true'}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" value="true" type="radio"
+                              name="IfWeekOffIsRightBeforeAfterOrInBetween" (click)="toogleHolidayAndWeekOff(2, $event)"
+                              formControlName="IfWeekOffIsRightBeforeAfterOrInBetween">
+                            <label class="form-check-label ms-2">
+                              If leave day is between week off.
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforeAfterOrInBetween.value == 'false'}"></i>
+                          </div>
                         </div>
-                        <div class="form-check d-flex align-items-center">
-                          <input class="form-check-input" type="checkbox"
-                            formControlName="AdjoiningWeekOffRulesIsValidForHalfDay">
-                          <label class="form-check-label ms-2">
-                            Do not consider week off accompanying Half day leave as leave (ignores the above rule if
-                            leave
-                            taken
-                            is half day. This rule doesn't apply if leave is taken on half day week off).
-                          </label>
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.AdjoiningWeekOffRulesIsValidForHalfDay.value == true}">
+                          <div class="fe-1 d-flex align-items-center ps-3">
+                            <input class="form-check-input" type="checkbox"
+                              formControlName="AdjoiningWeekOffRulesIsValidForHalfDay">
+                            <label class="form-check-label ms-2">
+                              Do not consider week off accompanying Half day leave as leave (ignores the above rule if
+                              leave
+                              taken
+                              is half day. This rule doesn't apply if leave is taken on half day week off).
+                            </label>
+                          </div>
+                          <div class="px-4">
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdjoiningWeekOffRulesIsValidForHalfDay.value == false}"></i>
+                          </div>
                         </div>
                       </div>
                     </div>

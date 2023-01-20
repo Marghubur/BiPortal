@@ -83,42 +83,8 @@ export class EmailComponent implements OnInit {
     //   Body: "Some content"
     // }];
     //this.loadMail();
-    this.inboxMail = [{
-      Subject: "Hey Md Istayaque, The HDFC Bank Wheel of Fortune is here!",
-      From: "\"HDFC Bank\" abc@gmail.com",
-      Text: "Dear Customer, Your A/c xxxxxxxxxx3124 is debited for INR 1.00 on 10-01-23 and A/c xxxxxxxx5572 is credited. (IMPS Ref No. 301021320986).    Available balance is INR 54,481.11. Did you know? You can pay your utility bills automatically using BillPay, a bill payment facility applicable on Debit and Credit Card. For better control over your payments, it offers you the option of setting a Max Pay Limit for each biller.",
-      Body: "Some content"
-    },{
-      Subject: "Hey Md Istayaque, The HDFC Bank Wheel of Fortune is here!",
-      From: "\"Google\" abc@gmail.com",
-      Text: "Dear Customer, Your A/c xxxxxxxxxx3124 is debited for INR 1.00 on 10-01-23 and A/c xxxxxxxx5572 is credited. (IMPS Ref No. 301021320986).    Available balance is INR 54,481.11. Did you know? You can pay your utility bills automatically using BillPay, a bill payment facility applicable on Debit and Credit Card. For better control over your payments, it offers you the option of setting a Max Pay Limit for each biller.",
-      Body: "Some content"
-    },{
-      Subject: "Your Amazon.in order #408-1095473-3349140 of 4 items has been dispatched.",
-      From: "\"Amazon.in\" abc@gmail.com",
-      Text: "Dear Customer, Your A/c xxxxxxxxxx3124 is debited for INR 1.00 on 10-01-23 and A/c xxxxxxxx5572 is credited. (IMPS Ref No. 301021320986).    Available balance is INR 54,481.11. Did you know? You can pay your utility bills automatically using BillPay, a bill payment facility applicable on Debit and Credit Card. For better control over your payments, it offers you the option of setting a Max Pay Limit for each biller.",
-      Body: "Some content"
-    },{
-      Subject: "Test email with random data.",
-      From: "\"BottomHalf\" abc@gmail.com",
-      Text: "Dear Customer, Your A/c xxxxxxxxxx3124 is debited for INR 1.00 on 10-01-23 and A/c xxxxxxxx5572 is credited. (IMPS Ref No. 301021320986).    Available balance is INR 54,481.11. Did you know? You can pay your utility bills automatically using BillPay, a bill payment facility applicable on Debit and Credit Card. For better control over your payments, it offers you the option of setting a Max Pay Limit for each biller.",
-      Body: "Some content"
-    },{
-      Subject: "Test email with random data.",
-      From: "\"PhonePe\" abc@gmail.com",
-      Text: "Dear Customer, Your A/c xxxxxxxxxx3124 is debited for INR 1.00 on 10-01-23 and A/c xxxxxxxx5572 is credited. (IMPS Ref No. 301021320986).    Available balance is INR 54,481.11. Did you know? You can pay your utility bills automatically using BillPay, a bill payment facility applicable on Debit and Credit Card. For better control over your payments, it offers you the option of setting a Max Pay Limit for each biller.",
-      Body: "Some content"
-    },{
-      Subject: "Test email with random data.",
-      From: "\"HDFC Bank\" abc@gmail.com",
-      Text: "Dear Customer, Your A/c xxxxxxxxxx3124 is debited for INR 1.00 on 10-01-23 and A/c xxxxxxxx5572 is credited. (IMPS Ref No. 301021320986).    Available balance is INR 54,481.11. Did you know? You can pay your utility bills automatically using BillPay, a bill payment facility applicable on Debit and Credit Card. For better control over your payments, it offers you the option of setting a Max Pay Limit for each biller.",
-      Body: "Some content"
-    }];
-
     // this.buildContent();
     // this.isPageReady = true;
-    this.buildContent();
-    this.isPageReady = true;
   }
 
   createPreContent() {
