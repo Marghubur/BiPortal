@@ -1525,44 +1525,16 @@
                             <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightAfterLeave.value == 'false'}"></i>
                           </div>
                         </div>
-                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsBetweenLeave.value == 'true'}">
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsRightBeforeAfterOrInBetween.value == 'true'}">
                           <div class="fe-1 d-flex align-items-center ps-3">
-                            <input class="form-check-input" value="true" type="radio" name="IfHolidayIsBetweenLeave"
-                              (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsBetweenLeave">
+                            <input class="form-check-input" value="true" type="radio" name="IfHolidayIsRightBeforeAfterOrInBetween"
+                              (click)="toogleHolidayAndWeekOff(1, $event)" formControlName="IfHolidayIsRightBeforeAfterOrInBetween">
                             <label class="form-check-label ms-2">
                               If leave day is before or after or in-between a holiday.
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsBetweenLeave.value == 'false'}"></i>
-                          </div>
-                        </div>
-                        <!-- <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsRightBeforeAfterOrInBetween.value == 'true'}">
-                          <div class="fe-1 d-flex align-items-center ps-3">
-                            <input class="form-check-input" value="true" type="radio"
-                              name="IfHolidayIsRightBeforeAfterOrInBetween" (click)="toogleHolidayAndWeekOff(1, $event)"
-                              formControlName="IfHolidayIsRightBeforeAfterOrInBetween">
-                            <label class="form-check-label ms-2">
-                              If leave day is between holidays.
-                            </label>
-                          </div>
-                          <div class="px-4">
                             <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightBeforeAfterOrInBetween.value == 'false'}"></i>
-                          </div>
-                        </div> -->
-                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforLeave.value == true}">
-                          <div class="fe-1 d-flex align-items-center ps-3">
-                            <input class="form-check-input" type="checkbox"
-                              formControlName="AdjoiningHolidayRulesIsValidForHalfDay">
-                            <label class="form-check-label ms-2">
-                              Do not consider holidays accompanying Half day leave as leave (ignores the above rule if
-                              leave
-                              taken
-                              is half day. This rule doesn't apply if leave is taken on half day week off).
-                            </label>
-                          </div>
-                          <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforLeave.value == false}"></i>
                           </div>
                         </div>
                       </div>
@@ -1649,10 +1621,10 @@
                             <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightAfterLeave.value == 'false'}"></i>
                           </div>
                         </div>
-                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsBetweenLeave.value == 'true'}">
+                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforeAfterOrInBetween.value == 'true'}">
                           <div class="fe-1 d-flex align-items-center ps-3">
-                            <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsBetweenLeave"
-                              (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsBetweenLeave">
+                            <input class="form-check-input" value="true" type="radio" name="IfWeekOffIsRightBeforeAfterOrInBetween"
+                              (click)="toogleHolidayAndWeekOff(2, $event)" formControlName="IfWeekOffIsRightBeforeAfterOrInBetween">
                             <label class="form-check-label ms-2">
                               If leave day is before or after or in-between a week off.
                             </label>
@@ -1660,61 +1632,6 @@
                           <div class="px-4">
                             <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsBetweenLeave.value == 'false'}"></i>
                           </div>
-                        </div>
-                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforeAfterOrInBetween.value == 'true'}">
-                          <div class="fe-1 d-flex align-items-center ps-3">
-                            <input class="form-check-input" value="true" type="radio"
-                              name="IfWeekOffIsRightBeforeAfterOrInBetween" (click)="toogleHolidayAndWeekOff(2, $event)"
-                              formControlName="IfWeekOffIsRightBeforeAfterOrInBetween">
-                            <label class="form-check-label ms-2">
-                              If leave day is between week off.
-                            </label>
-                          </div>
-                          <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforeAfterOrInBetween.value == 'false'}"></i>
-                          </div>
-                        </div>
-                        <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.AdjoiningWeekOffRulesIsValidForHalfDay.value == true}">
-                          <div class="fe-1 d-flex align-items-center ps-3">
-                            <input class="form-check-input" type="checkbox"
-                              formControlName="AdjoiningWeekOffRulesIsValidForHalfDay">
-                            <label class="form-check-label ms-2">
-                              Do not consider week off accompanying Half day leave as leave (ignores the above rule if
-                              leave
-                              taken
-                              is half day. This rule doesn't apply if leave is taken on half day week off).
-                            </label>
-                          </div>
-                          <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdjoiningWeekOffRulesIsValidForHalfDay.value == false}"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="my-4">
-                      <h6 class="fw-bold text-dark">Do you want to club sandwich policy across leave types</h6>
-                      <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.ClubSandwichPolicy.value == 'true'}">
-                        <div class="fe-1 d-flex align-items-center ps-3">
-                          <input class="form-check-input" value="true" type="radio" name="ClubSandwichPolicy"
-                            formControlName="ClubSandwichPolicy">
-                          <label class="form-check-label ms-2">
-                            Yes, club sandwich policy across leave type.
-                          </label>
-                        </div>
-                        <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.ClubSandwichPolicy.value == 'false'}"></i>
-                        </div>
-                      </div>
-                      <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.ClubSandwichPolicy.value == 'false'}">
-                        <div class="fe-1 d-flex align-items-center ps-3">
-                          <input class="form-check-input" value="false" type="radio" name="ClubSandwichPolicy"
-                            formControlName="ClubSandwichPolicy">
-                          <label class="form-check-label ms-2">
-                            No, do not club sandwich policy across leave type.
-                          </label>
-                        </div>
-                        <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.ClubSandwichPolicy.value == 'true'}"></i>
                         </div>
                       </div>
                     </div>
