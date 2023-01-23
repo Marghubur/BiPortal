@@ -705,18 +705,13 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       IfLeaveLieBetweenTwoHolidays:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenTwoHolidays ? 'true' : 'false'),
       IfHolidayIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightBeforLeave ? 'true' : 'false'),
       IfHolidayIsRightAfterLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsRightAfterLeave ? 'true' : 'false'),
-      IfHolidayIsBetweenLeave:new FormControl(this.holidayWeekOffs.IfHolidayIsBetweenLeave ? 'true' : 'false'),
       IfHolidayIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfHolidayIsRightBeforeAfterOrInBetween ? 'true' : 'false'),
-      AdjoiningHolidayRulesIsValidForHalfDay:new FormControl(this.holidayWeekOffs.AdjoiningHolidayRulesIsValidForHalfDay),
       AdjoiningWeekOffIsConsiderAsLeave:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffIsConsiderAsLeave? 'true' : 'false'),
       ConsiderLeaveIfIncludeDays:new FormControl(this.holidayWeekOffs.ConsiderLeaveIfIncludeDays),
       IfLeaveLieBetweenWeekOff:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenWeekOff ? 'true' : 'false'),
       IfWeekOffIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforLeave ? 'true' : 'false'),
       IfWeekOffIsRightAfterLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightAfterLeave ? 'true' : 'false'),
-      IfWeekOffIsBetweenLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsBetweenLeave ? 'true' : 'false'),
-      IfWeekOffIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforeAfterOrInBetween ? 'true' : 'false'),
-      AdjoiningWeekOffRulesIsValidForHalfDay:new FormControl(this.holidayWeekOffs.AdjoiningWeekOffRulesIsValidForHalfDay),
-      ClubSandwichPolicy:new FormControl(this.holidayWeekOffs.ClubSandwichPolicy ? 'true' : 'false')
+      IfWeekOffIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforeAfterOrInBetween ? 'true' : 'false')
     })
   }
 
@@ -961,7 +956,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.holidayWeekendOffForm.get('IfLeaveLieBetweenTwoHolidays').setValue('false');
         this.holidayWeekendOffForm.get('IfHolidayIsRightBeforLeave').setValue('false');
         this.holidayWeekendOffForm.get('IfHolidayIsRightAfterLeave').setValue('false');
-        this.holidayWeekendOffForm.get('IfHolidayIsBetweenLeave').setValue('false');
         this.holidayWeekendOffForm.get('IfHolidayIsRightBeforeAfterOrInBetween').setValue('false');
         this.holidayWeekendOffForm.get(e.target.name).setValue(e.target.value);
         break;
@@ -969,7 +963,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         this.holidayWeekendOffForm.get('IfLeaveLieBetweenWeekOff').setValue('false');
         this.holidayWeekendOffForm.get('IfWeekOffIsRightBeforLeave').setValue('false');
         this.holidayWeekendOffForm.get('IfWeekOffIsRightAfterLeave').setValue('false');
-        this.holidayWeekendOffForm.get('IfWeekOffIsBetweenLeave').setValue('false');
         this.holidayWeekendOffForm.get('IfWeekOffIsRightBeforeAfterOrInBetween').setValue('false');
         this.holidayWeekendOffForm.get(e.target.name).setValue(e.target.value);
         break;
@@ -1240,18 +1233,13 @@ class HolidayWeekOffs {
   IfLeaveLieBetweenTwoHolidays: boolean = false;
   IfHolidayIsRightBeforLeave: boolean = false;
   IfHolidayIsRightAfterLeave: boolean = false;
-  IfHolidayIsBetweenLeave: boolean = false;
   IfHolidayIsRightBeforeAfterOrInBetween: boolean = false;
-  AdjoiningHolidayRulesIsValidForHalfDay: boolean = false;
   AdjoiningWeekOffIsConsiderAsLeave: boolean = false;
   ConsiderLeaveIfIncludeDays: number = 0;
   IfLeaveLieBetweenWeekOff: boolean = false;
   IfWeekOffIsRightBeforLeave: boolean = false;
   IfWeekOffIsRightAfterLeave: boolean = false;
-  IfWeekOffIsBetweenLeave: boolean = false;
   IfWeekOffIsRightBeforeAfterOrInBetween: boolean = false;
-  AdjoiningWeekOffRulesIsValidForHalfDay: boolean = false;
-  ClubSandwichPolicy: boolean = false;
 }
 
 class LeaveApproval {
