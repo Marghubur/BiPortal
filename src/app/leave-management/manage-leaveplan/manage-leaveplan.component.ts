@@ -71,7 +71,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         ErrorToast("Please select a vlid leave plan first");
         return;
       }
-      for (let i = 0; i <= 30; i++) {
+      for (let i = 1; i <= 30; i++) {
         this.days.push(i);
       }
       this.loadPlanDetail();
