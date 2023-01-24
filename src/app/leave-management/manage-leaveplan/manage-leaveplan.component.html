@@ -1182,7 +1182,7 @@
                           <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.CanApplyAfterJoining.value == 'false'}"></i>
                         </div>
                       </div>
-                      <div class="my-4">
+                      <div class="my-4"  [ngClass]="{'d-none': leaveRestrictionForm.controls.CanApplyAfterJoining.value == 'false'}">
                         <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.IsAvailRestrictedLeavesInProbation.value == 'true'}">
                           <div class="fe-1 d-flex align-items-center ps-3">
                             <input class="form-check-input" type="radio" value="true"
@@ -1630,7 +1630,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsBetweenLeave.value == 'false'}"></i>
+                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforeAfterOrInBetween.value == 'false'}"></i>
                           </div>
                         </div>
                       </div>
