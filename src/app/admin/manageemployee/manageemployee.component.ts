@@ -615,6 +615,16 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, ManageEmployee);
   }
+
+  reRunAccrual() {
+    this.http.put(`Leave/UpdateAccrualForEmployee/${this.employeeUid}`, null).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        Toast("Accrual for current employee run successfully.");
+      } else {
+        ErrorToast("Fail to run accrual cycle for current employee. Please contact to admin.");
+      }
+    });
+  }
 }
 
 export class AssignedClients {

@@ -1,13 +1,13 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDate, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, UserAttendance, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -44,6 +44,12 @@ export class LeaveComponent implements OnInit {
   minDate: any;
   maxDate: any;
   isHalfDay: boolean = true;
+  datePickerJson = {};
+  json = {
+    disable: [1,2],
+    disabledDates: [],
+  };
+  isDisabled;
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -51,10 +57,16 @@ export class LeaveComponent implements OnInit {
               private http: AjaxService,
               private local: ApplicationStorage,
               private user: UserService,
+              private config: NgbDatepickerConfig,
               private fb: FormBuilder,
               private elementRef: ElementRef,
               private calendar: NgbCalendar
-              ) {}
+              ) {
+    config.minDate = {year: 1970, month: 1, day: 1};
+    config.maxDate = {year: 2050, month: 12, day: 31};
+    config.outsideDays = 'hidden';
+    this.findDisabledDate();
+  }
 
   ngOnInit(): void {
     this.cachedData = this.nav.getValue();
@@ -63,7 +75,6 @@ export class LeaveComponent implements OnInit {
     this.leaveDetail = new LeaveModal();
     this.leaveDetail.LeaveFromDay = new Date(this.model.year, this.model.month, this.model.day);
     this.leaveDetail.LeaveToDay = new Date(new Date().setDate( this.leaveDetail.LeaveFromDay.getDate() + 1));
-    this.disablebackDate(this.leaveDetail.LeaveFromDay, 9);
     this.leaveDetail.Session ='fullday';
     this.leaveDetail.LeaveTypeId = 0;
     this.managerList = new autoCompleteModal();
@@ -92,16 +103,6 @@ export class LeaveComponent implements OnInit {
       } else {
         Toast("Invalid user. Please login again.")
       }
-    }
-  }
-
-  disablebackDate(current: Date, noDays: number) {
-    const daysAgo = new Date(current.getTime());
-    daysAgo.setDate(current.getDate() - noDays);
-    this.minDate = {
-      year: daysAgo.getFullYear(),
-      month: daysAgo.getMonth(),
-      day: daysAgo.getDate()
     }
   }
 
@@ -165,6 +166,19 @@ export class LeaveComponent implements OnInit {
         return;
       }
 
+      let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate())) /(1000 * 60 * 60 * 24));
+      if (leaveDay <=0) {
+        ErrorToast("Please select a valid end date");
+        this.isLoading = false;
+        return;
+      }
+
+      if (this.leaveDays > 0){
+        this.checkIsLeaveAvailabel();
+        this.isLoading = false;
+        return;
+      }
+
       this.http.post('Leave/ApplyLeave', value).then ((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.bindData(res);
@@ -181,11 +195,13 @@ export class LeaveComponent implements OnInit {
   }
 
   onDateSelect(e: NgbDateStruct) {
-    this.disablefutureDate(this.leaveDetail.LeaveFromDay, -1)
     let value  = new Date(e.year, e.month-1, e.day);
-    if (value.getTime() >= this.leaveDetail.LeaveFromDay.getTime()) {
+    if (value.setHours(0,0,0,0) >= this.leaveDetail.LeaveFromDay.setHours(0,0,0,0)) {
       this.leaveDetail.LeaveToDay = value;
       this.leaveDays = Math.floor((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate()) ) /(1000 * 60 * 60 * 24)) + 1;
+      if (this.leaveDays > 0)
+        this.checkIsLeaveAvailabel();
+
       this.leaveForm.get('LeaveToDay').setValue(value);
     }
     else
@@ -194,13 +210,18 @@ export class LeaveComponent implements OnInit {
 
   onDateSelection(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
-    if (value.getTime() >= new Date().getTime()) {
-      //this.leaveDays = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24));
+    let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24));
+    if (leaveDay > 0) {
+      this.leaveDays = leaveDay;
+      this.checkIsLeaveAvailabel();
     }
+    else {
+      this.leaveDays = 0;
+      ErrorToast("Please select a valid end date");
+    }
+
     this.leaveDetail.LeaveFromDay = value;
     this.leaveForm.get('LeaveFromDay').setValue(value);
-    // else
-    //   ErrorToast("Please select a valid date.")
   }
 
   leaveRequestForm() {
@@ -216,6 +237,14 @@ export class LeaveComponent implements OnInit {
       EmployeeId: new FormControl(this.employeeId),
       LeavePlanName: new FormControl('')
     })
+  }
+
+  checkIsLeaveAvailabel() {
+    let leavePlanTypeId = this.leaveForm.get('LeaveTypeId').value;
+    let leave = this.leaveTypes.find(x => x.LeavePlanTypeId == leavePlanTypeId);
+    if (this.leaveDays > leave.AvailableLeave) {
+      ErrorToast("Applying leave is greater than leave limit");
+    }
   }
 
   get f() {
@@ -262,6 +291,11 @@ export class LeaveComponent implements OnInit {
       } else {
         this.leaveTypes = [];
       }
+      let companyHoliday = res.ResponseBody.CompanyHoliday;
+      if (companyHoliday.length > 0) {
+        this.findHoliday(companyHoliday);
+        this.findDisabledDate();
+      }
 
       this.managerList.data = [];
       this.managerList.placeholder = "Reporting Manager";
@@ -298,7 +332,35 @@ export class LeaveComponent implements OnInit {
         this.buildChartData(item.nativeElement.getContext('2d'), i);
       });
     });
+  }
 
+  findHoliday(allHoliday: Array<any>) {
+    for (let i = 0; i < allHoliday.length; i++) {
+      let startDate = ToLocateDate(allHoliday[i].StartDate);
+      let endDate = ToLocateDate(allHoliday[i].EndDate);
+      let gap = (endDate.setHours(0,0,0,) - startDate.setHours(0,0,0,0))/ (1000*60*60*24);
+      for (let j = 0; j <= gap; j++) {
+        this.json.disabledDates.push({
+          year: startDate.getFullYear(),
+          month: startDate.getMonth() + 1,
+          day: startDate.getDate()
+        });
+        startDate.setDate(startDate.getDate() + 1);
+      }
+      
+    }
+  }
+
+  findDisabledDate() {
+    if (this.json.disabledDates.length > 0) {
+      this.isDisabled = (
+        date: NgbDateStruct
+      ) => {
+        return this.json.disabledDates.find((x) => 
+          new NgbDate(x.year, x.month, x.day).equals(date)
+        ) ? true : false;
+      }
+    }
   }
 
   buildChartData(context: any, index: any) {
