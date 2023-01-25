@@ -58,7 +58,6 @@ export class HolidayComponent implements OnInit {
       } else {
         this.companyId = this.currentCompany.CompanyId;
         this.holidayData.SearchString = `1=1 and CompanyId = ${this.companyId}`;
-        this.isPageReady = true;
         this.selectedHoliday = new CompanyHoliday();
         this.loadData();
         this.initForm();

@@ -15,7 +15,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 })
 export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   leaveTypeDeatils: any = null;
-  configPageNo: number = 1;
+  configPageNo: number = 7;
   isPageReady: boolean = false;
   leaveDetailForm: FormGroup;
   leaveDetail: LeaveDetail = new LeaveDetail();

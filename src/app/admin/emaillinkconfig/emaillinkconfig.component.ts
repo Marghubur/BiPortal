@@ -74,9 +74,6 @@ export class EmaillinkconfigComponent implements OnInit {
         this.companyId = currentCompany.CompanyId;
         if (this.currentPageName && this.companyId > 0) {
           this.loadData();
-          this.isPageLoading = false;
-        } else {
-          this.isPageLoading = false;
         }
       }
     }
@@ -87,28 +84,29 @@ export class EmaillinkconfigComponent implements OnInit {
     this.employeesList.data = [];
     this.employeesList.placeholder = "Employee";
     this.employeesList.data = GetEmployees();
+    this.applicationData = GetEmployees();
     this.employeesList.className = "";
     this.isEmployeesReady = true;
   }
 
   loadData() {
+    this.isPageLoading = true;
     this.http.get(`Template/GetEmailLinkConfigByPageName/${this.currentPageName}/${this.companyId}`).then(res => {
       if (res.ResponseBody.Result && res.ResponseBody.Result.EmailLinkConfig) {
         this.currentEmailLinkConfig = res.ResponseBody.Result.EmailLinkConfig;
         this.companyFiles = res.ResponseBody.Result.Files;
-        this.applicationData = res.ResponseBody.Result.Employees;
         this.currentEmailLinkConfig.BodyContent = JSON.parse(this.currentEmailLinkConfig.BodyContent);
         this.emails = JSON.parse(this.currentEmailLinkConfig.EmailsJson);
         if (this.emails && this.emails.length > 0) {
           for (let i = 0; i < this.emails.length; i++) {
-            let employee = this.applicationData.find(x => x.Email == this.emails[i]);
+            let employee = this.applicationData.find(x => x.email == this.emails[i]);
             if (employee) {
               this.employees.push({
-                Id: employee.EmployeeUid,
-                Name: employee.FirstName + " " + employee.LastName,
-                Email: employee.Email
+                Id: employee.value,
+                Name: employee.text,
+                Email: employee.email
               });
-              let index = this.employeesList.data.findIndex(x => x.value == employee.EmployeeUid);
+              let index = this.employeesList.data.findIndex(x => x.value == employee.value);
               this.employeesList.data.splice(index, 1);
             }
           }
@@ -117,10 +115,14 @@ export class EmaillinkconfigComponent implements OnInit {
         }
         this.bindImage(this.currentEmailLinkConfig.FileId);
         this.initForm();
+        this.isPageLoading = false;
       } else {
         this.currentEmailLinkConfig = new EmailLink();
         this.initForm();
+        this.isPageLoading = false;
       }
+    }).catch(e => {
+      this.isPageLoading = false;
     })
   }
 
@@ -181,12 +183,12 @@ export class EmaillinkconfigComponent implements OnInit {
   }
 
   addEmployeeEmail() {
-    let employee = this.applicationData.find(x => x.EmployeeUid == this.employeeId);
-    this.emails.push(employee.Email);
+    let employee = this.applicationData.find(x => x.value == this.employeeId);
+    this.emails.push(employee.email);
     this.employees.push({
-      Id: employee.EmployeeUid,
-      Name: employee.FirstName + " " + employee.LastName,
-      Email: employee.Email
+      Id: employee.value,
+      Name: employee.text,
+      Email: employee.email
     });
     let index = this.employeesList.data.findIndex(x => x.value == this.employeeId);
     this.employeesList.data.splice(index, 1);

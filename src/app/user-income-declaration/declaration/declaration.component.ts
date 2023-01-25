@@ -95,9 +95,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     } else {
       ErrorToast("Invalid user. Please login again.")
     }
-    this.rentedResidence();
+    //this.rentedResidence();
 
     let i = 0;
+    if (new Date().getMonth() + 1 <= 4)
+      year = year -1;
     while (i < 12) {
       var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
       if (month == 12) {
