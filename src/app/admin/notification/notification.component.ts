@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { ResponseModel } from 'src/auth/jwtService';
+import { environment } from 'src/environments/environment';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { AdminNotification, EmailLinkConfig } from 'src/providers/constants';
+import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
+import { AdminNotification, AImage, Doc, Docx, EmailLinkConfig, JImage, Pdf, PImage, Txt } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
+import { Files } from '../documents/documents.component';
 declare var $: any;
 
 @Component({
@@ -25,20 +30,36 @@ export class NotificationComponent implements OnInit {
   notificationData: Filter = null;
   notifiCationDetail: Notification= null;
   orderByTopicAsc: boolean = null;
-  orderByDepartmentAsc: boolean = null;
+  orderByAnnounceTypeAsc: boolean = null;
   orderByBriefDetailDateAsc: boolean = null;
   orderByCreatedAsc: boolean = null;
+  startDateModel: NgbDateStruct;
+  EndDateModel: NgbDateStruct;
+  departsments: Array<any> = [];
+  employeeRoles: Array<any> = [];
+  selectedDepartment: Array<any> = [];
+  fileCollection: Array<any> = [];
+  fileList: Array<Files> = [];
+  userDetail: any = null;
+  uploadedFile: Array<any> = [];
+  companyFile: Array<any> = [];
+  baseUrl: string = "";
+  viewer: any = null;
+  renderedDocxFile: any = null;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
               private local: ApplicationStorage,
+              private sanitizer: DomSanitizer,
               private nav: iNavigation) { }
 
   ngOnInit(): void {
     let data = this.local.findRecord("Companies");
+    this.userDetail = this.local.findRecord("UserDetail");
     this.currentNotification = new Notification();
     this.notificationData = new Filter();
     this.notifiCationDetail = new  Notification();
+    this.baseUrl = this.http.GetImageBasePath();
     if (!data) {
       return;
     } else {
@@ -74,11 +95,50 @@ export class NotificationComponent implements OnInit {
     this.allNotificationList = res;
     if (this.allNotificationList.length > 0) {
       for (let i = 0; i < this.allNotificationList.length; i++) {
-       this.allNotificationList[i].CompleteDetail = JSON.parse(this.allNotificationList[i].CompleteDetail);
+        let enddate = ToLocateDate(this.allNotificationList[i].EndDate).setHours(0,0,0,0);
+        let now = new Date().setHours(0,0,0,0);
+        if (now > enddate)
+          this.allNotificationList[i].IsExpired = true;
       }
       this.notificationData.TotalRecords= this.allNotificationList[0].Total;
     } else{
       this.notificationData.TotalRecords = 0;
+    }
+  }
+
+  getDepartmentAndRole(AnnouncementType: number, FileIds: any) {
+    this.http.get("CompanyNotification/GetDepartmentsAndRoles").then(res => {
+      if (res.ResponseBody) {
+        this.departsments = res.ResponseBody.Table;
+        this.employeeRoles = res.ResponseBody.Table1;
+        this.companyFile = res.ResponseBody.Table2;
+        this.bindPageData(AnnouncementType, FileIds);
+      }
+    })
+  }
+
+  onSelectAnnouncement(e: any) {
+    let value = e.target.value;
+    this.selectedDepartment = [];
+    if (value > 0) {
+      if (value == 2) {
+        for (let i = 0; i < this.departsments.length; i++) {
+          this.selectedDepartment.push({
+            Id: this.departsments[i].DepartmentId,
+            Value: this.departsments[i].DepartmentName
+          });
+        }
+      }
+      else if (value == 3) {
+        for (let i = 0; i < this.employeeRoles.length; i++) {
+          this.selectedDepartment.push({
+            Id: this.employeeRoles[i].RoleId,
+            Value: this.employeeRoles[i].RoleName
+          });
+        }
+      }
+    } else {
+      ErrorToast("Please select a valid announcement type");
     }
   }
 
@@ -89,8 +149,12 @@ export class NotificationComponent implements OnInit {
       CompanyName: new FormControl(this.currentCompany.CompanyName),
       CompanyId: new FormControl(this.companyId, [Validators.required]),
       BriefDetail: new FormControl(this.currentNotification.BriefDetail, [Validators.required]),
-      DepartmentId: new FormControl(this.currentNotification.DepartmentId, [Validators.required]),
-      CompleteDetail: new FormControl(this.currentNotification.CompleteDetail, [Validators.required])
+      CompleteDetail: new FormControl(this.currentNotification.CompleteDetail, [Validators.required]),
+      StartDate: new FormControl(this.currentNotification.StartDate, [Validators.required]),
+      EndDate: new FormControl(this.currentNotification.EndDate, [Validators.required]),
+      DepartmentId: new FormControl(this.currentNotification.DepartmentId),
+      AnnouncementType: new FormControl(this.currentNotification.AnnouncementType),
+      IsGeneralAnnouncement: new FormControl(this.currentNotification.IsGeneralAnnouncement ? 'true' : 'false')
     })
   }
 
@@ -106,7 +170,24 @@ export class NotificationComponent implements OnInit {
       return;
     }
     let value = this.notificationForm.value;
-    this.http.post("CompanyNotification/InsertUpdateNotification", value).then(res => {
+    if (this.selectedDepartment!= null) {
+      let department = this.selectedDepartment.find(x => x.Id == value.DepartmentId);
+      value.DepartmentsList =[{
+        Id: department.Id,
+        Value: department.Value
+      }];
+    }
+    let formData = new FormData();
+    formData.append("notification", JSON.stringify(value));
+    if (this.fileList.length > 0) {
+      let i = 0;
+      while (i < this.fileList.length) {
+        formData.append(this.fileList[i].FileName, this.fileCollection[i]);
+        i++;
+      }
+    }
+    formData.append('fileDetail', JSON.stringify(this.fileList));
+    this.http.post("CompanyNotification/InsertUpdateNotification", formData).then(res => {
       if (res.ResponseBody) {
         this.bindData(res.ResponseBody);
         $('#manageNotificationModal').modal('hide');
@@ -120,7 +201,11 @@ export class NotificationComponent implements OnInit {
   }
 
   addNotificationPopup() {
+    this.fileList = [];
+    this.fileCollection = [];
+    this.uploadedFile = [];
     this.currentNotification = new Notification();
+    this.getDepartmentAndRole(this.currentNotification.AnnouncementType, this.currentNotification.FileIds);
     this.initForm();
     $('#manageNotificationModal').modal('show');
   }
@@ -135,8 +220,8 @@ export class NotificationComponent implements OnInit {
         delimiter = "and";
     }
 
-    if(this.notifiCationDetail.DepartmentId > 0) {
-      this.notificationData.SearchString += ` and DepartmentId =${this.notifiCationDetail.DepartmentId}`;
+    if(this.notifiCationDetail.AnnouncementType > 0) {
+      this.notificationData.SearchString += ` and AnnouncementType =${this.notifiCationDetail.AnnouncementType}`;
         delimiter = "and";
     }
 
@@ -156,12 +241,49 @@ export class NotificationComponent implements OnInit {
     this.loadData();
     this.notifiCationDetail.Topic="";
     this.notifiCationDetail.BriefDetail = null;
-    this.notifiCationDetail.DepartmentId = null;
+    this.notifiCationDetail.AnnouncementType = 0;
   }
 
-  editNotificationPopup(data: Notification) {
+  bindPageData(AnnouncementType: number, FileIds) {
+    if (AnnouncementType > 0) {
+      if (AnnouncementType == 2) {
+        for (let i = 0; i < this.departsments.length; i++) {
+          this.selectedDepartment.push({
+            Id: this.departsments[i].DepartmentId,
+            Value: this.departsments[i].DepartmentName
+          });
+        }
+      }
+      else if (AnnouncementType == 3) {
+        for (let i = 0; i < this.employeeRoles.length; i++) {
+          this.selectedDepartment.push({
+            Id: this.employeeRoles[i].RoleId,
+            Value: this.employeeRoles[i].RoleName
+          });
+        }
+      }
+    }
+    let fileid = JSON.parse(FileIds);
+    if (fileid.length > 0) {
+      for (let i = 0; i < fileid.length; i++) {
+        let file = this.companyFile.find(x => x.CompanyFileId == fileid[i])
+        this.uploadedFile.push(file);
+      }
+    }
+  }
+
+  editNotificationPopup(data: any) {
     if (data) {
+      this.fileList = [];
+      this.fileCollection = [];
+      this.uploadedFile = [];
+      this.getDepartmentAndRole(data.AnnouncementType, data.FileIds);
       this.currentNotification = data;
+      this.currentNotification.DepartmentId = JSON.parse(data.Departments)[0].Id;
+      this.currentNotification.StartDate = ToLocateDate(this.currentNotification.StartDate);
+      this.startDateModel = { day: this.currentNotification.StartDate.getDate(), month: this.currentNotification.StartDate.getMonth() + 1, year: this.currentNotification.StartDate.getFullYear()};
+      this.currentNotification.EndDate = ToLocateDate(this.currentNotification.EndDate);
+      this.EndDateModel = { day: this.currentNotification.EndDate.getDate(), month: this.currentNotification.EndDate.getMonth() + 1, year: this.currentNotification.EndDate.getFullYear()};
       this.initForm();
       $('#manageNotificationModal').modal('show');
     }
@@ -183,22 +305,22 @@ export class NotificationComponent implements OnInit {
     }
     if (FieldName == 'Topic') {
       this.orderByTopicAsc = !flag;
-      this.orderByDepartmentAsc = null;
+      this.orderByAnnounceTypeAsc = null;
       this.orderByBriefDetailDateAsc = null;
       this.orderByCreatedAsc = null;
-    } else if (FieldName == 'DepartmentId') {
+    } else if (FieldName == 'AnnouncementType') {
       this.orderByTopicAsc = null;
-      this.orderByDepartmentAsc = !flag;
+      this.orderByAnnounceTypeAsc = !flag;
       this.orderByBriefDetailDateAsc = null;
       this.orderByCreatedAsc = null;
     } else if (FieldName == 'BriefDetail') {
       this.orderByTopicAsc = null;
-      this.orderByDepartmentAsc = null;
+      this.orderByAnnounceTypeAsc = null;
       this.orderByBriefDetailDateAsc = !flag;
       this.orderByCreatedAsc = null;
     } else if (FieldName == 'CreatedOn') {
       this.orderByTopicAsc = null;
-      this.orderByDepartmentAsc = null;
+      this.orderByAnnounceTypeAsc = null;
       this.orderByBriefDetailDateAsc = null;
       this.orderByCreatedAsc = !flag;
     }
@@ -220,6 +342,105 @@ export class NotificationComponent implements OnInit {
     this.nav.navigate(EmailLinkConfig, AdminNotification);
   }
 
+  onStartDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.notificationForm.controls["StartDate"].setValue(date);
+  }
+
+  onEndDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.notificationForm.controls["EndDate"].setValue(date);
+  }
+
+  onChangeAnnouncement(e: any) {
+    let value = e.target.value;
+  }
+
+  fireBrowserFile() {
+    $("#uploaAnnouncedoc").click();
+  }
+
+  uploadAttachment(fileInput: any) {
+    this.fileList = [];
+    this.fileCollection = [];
+    let selectedFile = fileInput.target.files;
+    if (selectedFile.length > 0) {
+      let index = 0;
+      let file = null;
+      while (index < selectedFile.length) {
+        file = <File>selectedFile[index];
+        let item: Files = new Files();
+        item.AlternateName = "Announce_Attach";
+        item.FileName = file.name;
+        item.FileType = file.type;
+        item.FileSize = (Number(file.size) / 1024);
+        item.FileExtension = file.type;
+        item.DocumentId = 0;
+        item.ParentFolder = '';
+        item.Email = this.userDetail.Email;
+        item.UserId = this.userDetail.UserId;
+        this.fileList.push(item);
+        this.fileCollection.push(file);
+        index++;
+      };
+    } else {
+      ErrorToast("You are not slected the file")
+    }
+  }
+
+  viewFile(file: Files) {
+    switch(file.FileExtension) {
+      case Pdf:
+        this.viewer = document.getElementById("viewfile-container");
+        this.viewer.classList.remove('d-none');
+        this.viewer.querySelector('iframe').classList.remove('bg-white');
+        this.viewer.querySelector('iframe').setAttribute('src',
+        `${this.baseUrl}${environment.FolderDelimiter}${file.FilePath}${environment.FolderDelimiter}${file.FileName}`);
+      break;
+      case Docx:
+      case Doc:
+        this.getDocxHtml(file);
+        break;
+      case Txt:
+      case JImage:
+      case PImage:
+      case AImage:
+        this.viewer = document.getElementById("viewfile-container");
+        this.viewer.classList.remove('d-none');
+        this.viewer.querySelector('iframe').classList.add('bg-white');
+        this.viewer.querySelector('iframe').setAttribute('src',
+        `${this.baseUrl}${environment.FolderDelimiter}${file.FilePath}${environment.FolderDelimiter}${file.FileName}`);
+    }
+  }
+
+  getDocxHtml(file: Files) {
+    this.renderedDocxFile = null;
+    let filePath = `${file.FilePath}${environment.FolderDelimiter}${file.FileName}`;
+    this.http.post("FileMaker/GetDocxHtml", { DiskFilePath: file.FilePath, FilePath: filePath }).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.renderedDocxFile = this.sanitizer.bypassSecurityTrustHtml(response.ResponseBody);
+        $('#showDocxFile').modal('show');
+      } else {
+        ErrorToast("Unable to render the file");
+      }
+    })
+  }
+
+  CloseDocxViewer() {
+    $('#showDocxFile').modal('hide');
+    this.renderedDocxFile = null;
+  }
+
+  closePdfViewer() {
+    event.stopPropagation();
+    this.viewer.classList.add('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', '');
+  }
+
+  uploadedFilePopUp() {
+    $('#viewFileModal').modal('show');
+  }
+
 }
 
 class Notification {
@@ -227,10 +448,18 @@ class Notification {
   Topic: string = null;
   CompanyId: number = 0;
   BriefDetail: string = null;
-  DepartmentId: number = 0;
   CompleteDetail: string = null;
   Total: number = 0;
   Index: number = 0;
   CreatedOn: Date = null;
   UpdatedOn: Date = null;
+  StartDate: Date = null;
+  EndDate: Date = null;
+  IsGeneralAnnouncement: boolean = false;
+  AnnouncementType: number = 0;
+  AnnouncementId: string = null;
+  Departments: Array<any> =null;
+  DepartmentId: number = 0;
+  IsExpired: boolean = false;
+  FileIds: Array<any>= [];
 }

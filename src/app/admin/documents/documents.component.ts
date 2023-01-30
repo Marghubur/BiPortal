@@ -49,6 +49,7 @@ export class documentsComponent implements OnInit, OnDestroy {
   renderedDocxFile: any = null;
   isLoading: boolean = false;
   isPageReady: boolean = false;
+
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,

@@ -31,6 +31,14 @@
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Total Days" readonly>
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="ps-3">Announcement Code</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
                       <input class="form-control form-control-sm" placeholder="Search by Name" [(ngModel)]="notifiCationDetail.Topic"
                         (keydown.esc)="resetFilter()" oninput="this.value = this.value.toUpperCase()"
                         (keyup.enter)="filterRecords()" autofocus>
@@ -45,15 +53,19 @@
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Name"
-                      [(ngModel)]="notifiCationDetail.DepartmentId" (keydown.esc)="resetFilter()"
-                      (keyup.enter)="filterRecords()">
-                      <div class="t-filter" (click)="arrangeDetails(orderByDepartmentAsc, 'DepartmentId')">
-                        <a href="javascript:void()" class="pe-2">Department</a>
+                      <select class="form-select" [(ngModel)]="notifiCationDetail.AnnouncementType"
+                      (change)="filterRecords()">
+                        <option value="0">Select Type</option>
+                        <option value="1">By Employee</option>
+                        <option value="2">By Department</option>
+                        <option value="3">By Job Position</option>
+                      </select>
+                      <div class="t-filter" (click)="arrangeDetails(orderByAnnounceTypeAsc, 'AnnouncementType')">
+                        <a href="javascript:void()" class="pe-2">Announcement Type</a>
                         <i class="fa fa-sort-amount-asc"
-                          [ngClass]="{'d-none': orderByDepartmentAsc == null || !orderByDepartmentAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByAnnounceTypeAsc == null || !orderByAnnounceTypeAsc }" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc"
-                          [ngClass]="{'d-none': orderByDepartmentAsc == null || orderByDepartmentAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByAnnounceTypeAsc == null || orderByAnnounceTypeAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -83,6 +95,14 @@
                       </div>
                     </div>
                   </div>
+                  <div class="th fe-index">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Status" readonly>
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Status</a>
+                      </div>
+                    </div>
+                  </div>
                   <div class="th fe-index text-center">ACTIONS</div>
                 </div>
               </div>
@@ -94,6 +114,11 @@
                         {{item.Index}}
                       </div>
                     </div>
+                    <div class="td align-middle text-center fe-1">
+                      <div class="cell-wrapper">
+                        {{item.AnnouncementId}}
+                      </div>
+                    </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
                         {{item.Topic}}
@@ -101,7 +126,7 @@
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.DepartmentId}}
+                        {{item.AnnouncementType == 1 ?'By Employee' : item.AnnouncementType == 2 ?'By Department' : item.AnnouncementType == 3 ?'By Job Position' : 'General Announcement'}}
                       </div>
                     </div>
                     <div class="td align-middle fe-3">
@@ -112,6 +137,11 @@
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
                         {{item.CreatedOn | date}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-index">
+                      <div class="cell-wrapper">
+                        {{item.IsExpired == true ? 'Expired': 'Not Expired'}}
                       </div>
                     </div>
                     <div class="td align-middle fe-index">
@@ -170,8 +200,64 @@
               <input type="text" placeholder="Company Name" readonly formControlName="CompanyName" class="form-control">
             </div>
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">Department</label>
-              <input type="text" placeholder="Enter Department ID" oninput="this.value = this.value.toUpperCase()" formControlName="DepartmentId" [ngClass]="{'error-field': submitted && f.DepartmentId.errors !== null && f.DepartmentId.errors.required}" class="form-control">
+              <label for="" class="form-label">General Announcement</label>
+              <select formControlName="IsGeneralAnnouncement" (change)="onChangeAnnouncement($event)" class="form-select">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">Start Date</label>
+              <form class="form-inline">
+                <div class="form-group w-100">
+                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="startDateModel"
+                      (dateSelect)="onStartDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}" #d="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                          class="fa fa-calendar" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">End Date</label>
+              <form class="form-inline">
+                <div class="form-group w-100">
+                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="EndDateModel"
+                      (dateSelect)="onEndDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}" #ed="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="ed.toggle()" type="button"><i
+                          class="fa fa-calendar" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-12 row" *ngIf="notificationForm.controls.IsGeneralAnnouncement.value == 'false'">
+            <div class="col-md-6 mt-3">
+              <label class="form-label">Announcement Type</label>
+              <select class="form-select" (change)="onSelectAnnouncement($event)" formControlName="AnnouncementType">
+                <option value="0">Select type</option>
+                <option value="1">By Employee</option>
+                <option value="2">By Department</option>
+                <option value="3">By Job Position</option>
+              </select>
+            </div>
+            <div class="col-md-6 mt-3">
+              <label class="form-label">Departments</label>
+              <select class="form-select" formControlName="DepartmentId">
+                <option value="0">Select type</option>
+                <option [value]="item.Id" *ngFor="let item of selectedDepartment">{{item.Value}}</option>
+
+              </select>
             </div>
           </div>
           <div class="col-md-12 mt-3">
@@ -185,6 +271,17 @@
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">Complete Detail</label>
             <textarea type="text" placeholder="Enter Complete Detail" oninput="this.value = this.value.toUpperCase()" formControlName="CompleteDetail" [ngClass]="{'error-field': submitted && f.CompleteDetail.errors !== null && f.CompleteDetail.errors.required}" class="form-control detail-area"></textarea>
+          </div>
+          <div class="mt-3">
+            <input type="file" id="uploaAnnouncedoc" class="d-none" multiple accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf" (change)="uploadAttachment($event)"/>
+            <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowserFile()">
+              <i class="fa fa-paperclip pe-2"></i>
+              <span>Add Attachment</span>
+            </a>
+            <span class="fw-bold text-primary ps-2" *ngIf="fileList.length > 0">{{fileList.length}} file selected</span>
+            <a href="javascript:void(0)" class="text-decoration-none" (click)="uploadedFilePopUp()">
+              <span class="fw-bold text-dark ps-2" *ngIf="uploadedFile.length > 0">{{uploadedFile.length}} file uploaded</span>
+            </a>
           </div>
         </form>
       </div>
@@ -214,6 +311,77 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- View File Modal -->
+<div class="modal fade view-popup" id="viewFileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="viewFileModalLabel">View Files</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ng-container >
+          <table class="table">
+            <thead>
+              <tr>
+                <th width="8%">#</th>
+                <th>File Name</th>
+                <td width="20%">Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of uploadedFile; let i = index">
+                <td class="counterCell">{{i+1}}</td>
+                <td>{{item.FileName}}.{{item.FileExtension}}</td>
+                <td>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
+                  <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteRentFile(item)"><i class="fa fa-trash px-2 text-danger"></i></a> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="viewfile-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
+
+<!--Doc View Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="showDocxFile" role="dialog"
+  aria-labelledby="showDocxFile" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle">Docx Viewer</h5>
+        <button type="button" class="btn-close" (click)="CloseDocxViewer()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-12 overflow-auto">
+          <iframe [srcdoc]="renderedDocxFile" style="width: 100%; height: 74vh;"></iframe>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <a href="javascript:void(0)" (click)="CloseDocxViewer()" class="text-decoration-none btn-white pe-3">Close</a>
       </div>
     </div>
   </div>

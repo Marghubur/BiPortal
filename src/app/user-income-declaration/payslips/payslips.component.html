@@ -71,7 +71,14 @@
                     </div>
                   </div>
                   <div class="col-md-9">
-                    <ng-container *ngIf="!isReady">
+                    <ng-container *ngIf="fileDetail != null">
+                      <div class="position-absolute col-md-9">
+                        <div class="d-none file-container position-relative" id="file-container">
+                          <iframe src="" width="100%" height="600px" style="border: none;"></iframe>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="!isReady && !isLoading">
                       <div class="d-flex align-items-center justify-content-center pb-5 my-5">
                         <div class="pb-5 fw-bold fs-5">
                           Please select Pay Slip month first.
@@ -89,13 +96,6 @@
                         </div>
                       </div>
                     </div>
-                    <ng-container *ngIf="!isLoading">
-                      <div class="position-absolute col-md-9">
-                        <div class="d-none file-container position-relative" id="file-container">
-                          <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
-                        </div>
-                      </div>
-                    </ng-container>
                   </div>
                 </div>
               </ng-container>

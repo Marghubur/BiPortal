@@ -1,42 +1,42 @@
 <div class="main-container">
-  <div class="x_header c_header">
-    <div class="x_header_title row">
-      <div class="x_header_title">
-        <h2>File(s) & Folder(s)
-          <small>user drives</small>
-        </h2>
-        <div class="float-end d-inline create-link pt-2">
-          <h6>
-            <div class="d-inline ps-1 pe-1">
-              <a href="javascript:void(0)" data-bs-toggle="modal" (click)="addFiles()">
-                <span class="badge bg-primary">
-                  <i class="fa fa-plus" aria-hidden="true"></i>
-                </span>
-              </a>
-            </div>
-            <div class="d-inline ps-1 pe-1">
-              <a href="javascript:void(0)" (click)="CreateFolderPopup()">
-                <span class="badge bg-success">
-                  <i class="fa fa-folder-o" aria-hidden="true"></i>
-                </span>
-              </a>
-            </div>
-            <div class="d-inline ps-1 pe-1">
-              <a href="javascript:void(0)" (click)="RefreshDocuments()">
-                <span class="badge bg-dark">
-                  <i class="fa fa-refresh"></i>
-                </span>
-              </a>
-            </div>
-          </h6>
+  <div class="x_panel">
+    <div class="x_header c_header">
+      <div class="x_header_title row">
+        <div class="x_header_title">
+          <h2>File(s) & Folder(s)
+            <small>user drives</small>
+          </h2>
+          <div class="float-end d-inline create-link pt-2">
+            <h6>
+              <div class="d-inline ps-1 pe-1">
+                <a href="javascript:void(0)" data-bs-toggle="modal" (click)="addFiles()">
+                  <span class="badge bg-primary">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                  </span>
+                </a>
+              </div>
+              <div class="d-inline ps-1 pe-1">
+                <a href="javascript:void(0)" (click)="CreateFolderPopup()">
+                  <span class="badge bg-success">
+                    <i class="fa fa-folder-o" aria-hidden="true"></i>
+                  </span>
+                </a>
+              </div>
+              <div class="d-inline ps-1 pe-1">
+                <a href="javascript:void(0)" (click)="RefreshDocuments()">
+                  <span class="badge bg-dark">
+                    <i class="fa fa-refresh"></i>
+                  </span>
+                </a>
+              </div>
+            </h6>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="px-0">
-    <app-breadcrums></app-breadcrums>
-  </div>
-  <div class="x_panel">
+    <div class="px-0">
+      <app-breadcrums></app-breadcrums>
+    </div>
     <div class="x_content mt-4">
       <ng-container *ngIf="isPageReady">
         <a href="javascript:void(0)" *ngFor="let f of folderNav" (click)="navigateTo(f.name, f.route)"

@@ -510,24 +510,24 @@ export function PlaceEmpty(data: any) {
   return data;
 }
 
-export function ToLocateDate(date: any) {  
+export function ToLocateDate(date: any) {
   if(date) {
     let type = typeof(date);
     switch(type) {
       case "string":
         if (date.indexOf("Z") == -1)
           return new Date(date + ".000Z");
-        else 
+        else
           return new Date(date)
       default:
-          var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);    
+          var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
           var offset = date.getTimezoneOffset() / 60;
           var hours = date.getHours();
           newDate.setHours(hours - offset);
-          return newDate;   
+          return newDate;
     }
   }
-  
+
   return null;
 }
 
@@ -586,4 +586,5 @@ export class UserDetail {
   TokenExpiryDuration: Date = null;
   UserId: number = null;
   UserTypeId: number = 0;
+  CompanyId: number = 0;
 }
