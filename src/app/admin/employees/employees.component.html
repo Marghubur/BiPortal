@@ -20,7 +20,7 @@
       </select>
     </div>
     <div class="col-md-2 inline-row d-r p-0 m-0 text-start">
-        <button class="btn btn-sp btn-lightorange" [routerLink]="['/' + manageEmployeeRouteName]"
+        <button class="btn btn-sp btn-lightorange" (click)="navtoAddEmp()"
           routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o ms-1" aria-hidden="true"></i>
           Add Employee
         </button>

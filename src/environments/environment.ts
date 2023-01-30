@@ -7,7 +7,8 @@ export const environment = {
   env: "local",
   OAuthClientId: "1084985264281-ehe21udg412eesl9p6uhksoh3s2r8d0c.apps.googleusercontent.com",
   OAuthSecret: "7pxr3O8iM4SVSs8ozTC5tXts",
-  baseUrl: "http://localhost:5000/api/",
+  //baseUrl: "http://localhost:5000/api/",
+  baseUrl: "http://192.168.0.101/api/",
   FolderDelimiter: "\\"
 };
 

@@ -80,7 +80,6 @@ export class documentsComponent implements OnInit, OnDestroy {
           this.folderNav.push({name: "home", route: this.rootLocation});
         }
         this.buildRoute();
-        console.log(this.routeParam);
       });
 
       this.currentFolder = this.rootLocation;

@@ -102,6 +102,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   buildProfileImage(fileDetail: any) {
+    this.profileURL = "";
     this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
     this.employeeModal.FileId = fileDetail.FileId;
   }
