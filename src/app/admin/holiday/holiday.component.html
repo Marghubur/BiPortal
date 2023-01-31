@@ -1,10 +1,6 @@
 <div class="col-12 full-v main-container">
   <div class="col-12 row p-0 m-0">
     <div class="right-panel container col-md-12 p-0">
-      <div class="col-md-12 row m-0 pe-4">
-        <h4 class="p-0">Holiday (s)</h4>
-      </div>
-
       <div class="x_panel mt-2">
         <div class="x_header">
           <div class="x_header_title d-flex justify-content-between align-items-center">
@@ -114,7 +110,7 @@
                   <div class="tr py-2" *ngFor="let holiday of allHolidayList; let i = index;">
                     <div class="td align-middle text-center fe-index">
                       <div class="cell-wrapper">
-                        {{i+1}}
+                        {{holiday.Index}}
                       </div>
                     </div>
                     <div class="td align-middle fe-2">

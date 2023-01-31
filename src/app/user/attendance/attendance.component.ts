@@ -99,8 +99,10 @@ export class AttendanceComponent implements OnInit {
       let index = 0;
       while(index < data.length) {
         data[index].AttendanceDay = new Date(data[index].AttendanceDay);
-        let dayValue = data[index].AttendanceDay.getDay();
-        if (dayValue == 0 || dayValue == 6) {
+        if (data[index].IsHoliday) {
+          data[index].PresentDayStatus = 4;
+          data[index].AttendenceStatus = 4;
+        } else if(data[index].IsWeekend) {
           data[index].PresentDayStatus = 3;
           data[index].AttendenceStatus = 3;
         }
@@ -131,7 +133,8 @@ export class AttendanceComponent implements OnInit {
       AttendenceFromDay: this.fromDate,
       AttendenceToDay: this.toDate,
       ForYear: this.fromDate.getFullYear(),
-      ForMonth: this.fromDate.getMonth() + 1
+      ForMonth: this.fromDate.getMonth() + 1,
+      CompanyId: this.userDetail.CompanyId
     }
 
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {

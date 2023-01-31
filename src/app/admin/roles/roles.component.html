@@ -7,13 +7,13 @@
             <h2>Roles <small>Manage user roles.</small>
               <i class="fa text-dark edit-icon ps-2"></i>
             </h2>
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center float-end">
               <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
                 class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
               <button class="btn btn-sm btn-outline-primary float-end ms-3" (click)="addRolePopUp()">
                 <i class="fa fa-plus-square-o pe-2" aria-hidden="true"></i>Add Role
               </button>
-              <button class="btn btn-outline-success btn-sm float-end" [disabled]="ispermissionAdding || !isRolesLoaded"
+              <button class="btn btn-outline-success btn-sm float-end ms-3" [disabled]="ispermissionAdding || !isRolesLoaded"
                 (click)="submitRole()">
                 <i class="fa"
                   [ngClass]="{'fa-sign-in': !ispermissionAdding, 'fa-spin fa-spinner': ispermissionAdding}"
@@ -38,7 +38,7 @@
         </div>
 
         <ng-container *ngIf="!isRolesLoaded">
-          <h2 class="mt-5 text-center text-muted select-role-message">
+          <h2 class="my-5 py-5 text-center text-muted select-role-message">
             Please select existing role from above dropdown and grant appropriate permission.
           </h2>
         </ng-container>

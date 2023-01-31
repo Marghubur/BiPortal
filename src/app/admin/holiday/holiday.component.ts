@@ -16,7 +16,6 @@ declare var $: any;
 })
 export class HolidayComponent implements OnInit {
   isPageReady: boolean = false;
-  isCompaniesDetails: boolean = false;
   holidayForm: FormGroup;
   allHolidayList: Array<CompanyHoliday> = [];
   selectedHoliday: CompanyHoliday = null;
@@ -33,7 +32,6 @@ export class HolidayComponent implements OnInit {
   orderByCountryAsc: boolean = null;
   orderByStartDateAsc: boolean = null;
   orderByEndDateAsc: boolean = null;
-  isFileFound: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -58,7 +56,6 @@ export class HolidayComponent implements OnInit {
       } else {
         this.companyId = this.currentCompany.CompanyId;
         this.holidayData.SearchString = `1=1 and CompanyId = ${this.companyId}`;
-        this.isPageReady = true;
         this.selectedHoliday = new CompanyHoliday();
         this.loadData();
         this.initForm();
@@ -290,7 +287,7 @@ export class HolidayComponent implements OnInit {
 
 }
 
-class CompanyHoliday {
+export class CompanyHoliday {
   CompanyCalendarId: number = 0;
   CompanyId: number = 0;
   StartDate: Date = null;
@@ -306,4 +303,5 @@ class CompanyHoliday {
   TotalDays: number = 0;
   IsCompanyCustomHoliday: boolean = false;
   Total: number = 0;
+  Index: number = 0;
 }

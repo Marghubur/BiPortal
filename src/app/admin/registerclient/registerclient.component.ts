@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Clients, EmailLinkConfig, OrgLogo, ProfileImage, RegisterClient, UserType } from 'src/providers/constants';
@@ -22,6 +22,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   profileURL: string = OrgLogo;
   fileDetail: Array<any> = [];
   UserTypeId: UserType= UserType.Client;
+  imageIndex: number = 0;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -63,6 +64,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   buildProfileImage(fileDetail: any) {
     this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
     this.clientModal.FileId = fileDetail.FileId;
+    this.clientModal.OldFileName = fileDetail.FileName;
   }
 
   loadData() {
@@ -120,13 +122,16 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       PanNo: new FormControl(this.clientModal.PanNo),
       AdminId: new FormControl(this.clientModal.AdminId),
       FileId: new FormControl(this.clientModal.FileId),
-      ProfileImgPath: new FormControl('')
+      ProfileImgPath: new FormControl(''),
+      OldFileName: new FormControl(this.clientModal.OldFileName)
     });
   }
 
   reset() {
     this.submitted = false;
-    this.common.ShowToast("Form is reset.");
+    this.clientModal = new clientModal();
+    this.initForm();
+    WarningToast("Form is reset.");
   }
 
   generate() {
@@ -177,7 +182,32 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
 
     clientDetail.IsActive = true;
     let email = this.clientForm.get('Email').value;
-    this.emailValidation(email);
+    if (!this.emailValidation(email, "Email"))
+      return;
+
+    if (this.clientForm.get('OtherEmail_1').value || this.clientForm.get('OtherEmail_1').value != "") {
+      email = this.clientForm.get('OtherEmail_1').value;
+      if (!this.emailValidation(email, "OtherEmail_1"))
+        return;
+    }
+
+    if (this.clientForm.get('OtherEmail_2').value || this.clientForm.get('OtherEmail_2').value != "") {
+      email = this.clientForm.get('OtherEmail_2').value;
+      if (!this.emailValidation(email, "OtherEmail_2"))
+        return;
+    }
+
+    if (this.clientForm.get('OtherEmail_3').value || this.clientForm.get('OtherEmail_3').value != "") {
+      email = this.clientForm.get('OtherEmail_3').value;
+      if (!this.emailValidation(email, "OtherEmail_3"))
+        return;
+    }
+
+    if (this.clientForm.get('OtherEmail_4').value || this.clientForm.get('OtherEmail_4').value != "") {
+      email = this.clientForm.get('OtherEmail_4').value;
+      if (!this.emailValidation(email, "OtherEmail_4"))
+        return;
+    }
 
     if (errroCounter === 0) {
       let request: clientModal = this.clientForm.value;
@@ -186,7 +216,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
-      formData.append(ProfileImage, file)
+      formData.append(`${ProfileImage}_${this.imageIndex}`, file)
       this.http.post(`Clients/RegisterClient/${this.isUpdating}`, formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.clientModal = response.ResponseBody as clientModal;
@@ -206,13 +236,15 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     }
   }
 
-  emailValidation(email: string) {
+  emailValidation(email: string, filedname: string) {
+    let flag = false;
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!regex.test(email)){
       this.isLoading = false;
-      ErrorToast("Invalid email address!")
-      return ;
+      ErrorToast(`Invalid ${filedname} address!`)
+      return flag;
     }
+    return flag = true;
   }
 
   replaceWithOriginalValues() {
@@ -240,8 +272,9 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       // });
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
+      this.imageIndex = new Date().getTime();
       this.fileDetail.push({
-        name: "profile",
+        name: $`profile_${this.imageIndex}`,
         file: file
       });
     }
@@ -281,4 +314,5 @@ class clientModal {
   AdminId: number = 0
   IsActive: boolean = false;
   FileId: number = 0;
+  OldFileName: string = null;
 }

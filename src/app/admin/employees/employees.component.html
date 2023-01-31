@@ -20,7 +20,7 @@
       </select>
     </div>
     <div class="col-md-2 inline-row d-r p-0 m-0 text-start">
-        <button class="btn btn-sp btn-lightorange" [routerLink]="['/' + manageEmployeeRouteName]"
+        <button class="btn btn-sp btn-lightorange" (click)="navtoAddEmp()"
           routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o ms-1" aria-hidden="true"></i>
           Add Employee
         </button>
@@ -164,21 +164,25 @@
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="d-flex flex-row justify-content-evenly">
-                        <a href="javascript:void(0)" (click)="ViewFiles(user)">
+                        <a href="javascript:void(0)" (click)="ViewFiles(user)" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="View Files">
                           <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"></i></span>
                         </a>
-                        <a href="javascript:void(0)" (click)="AddEditDocuments(user)">
+                        <a href="javascript:void(0)" (click)="AddEditDocuments(user)" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="View Documents">
                           <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"></i></span>
                         </a>
                         <a href="javascript:void(0)" (click)="CreatePopup(user)">
                           <ng-container [ngSwitch]="user.IsActive">
                             <span *ngSwitchCase="true">
-                              <span class="badge bg-danger">
+                              <span class="badge bg-danger" data-bs-toggle="tooltip"
+                              data-bs-placement="right" title="Inactive employee">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                               </span>
                             </span>
                             <span *ngSwitchDefault>
-                              <span class="badge bg-success">
+                              <span class="badge bg-success" data-bs-toggle="tooltip"
+                              data-bs-placement="right" title="Active Employee">
                                 <i class="fa fa-random" aria-hidden="true"></i>
                               </span>
                             </span>

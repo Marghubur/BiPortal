@@ -1,12 +1,12 @@
 <div class="col-12 full-v main-container">
-  <div class="col-12 x_panel p-0 m-0">
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
-    </div>
+  <div class="col-12 x_panel">
     <div class="right-panel col-md-12 p-0">
       <div class="container-fluid pt-4 pb-4">
         <p class="fs-1 text-dark text-center">Income Tax Calculator - FY {{currentYear}} - {{currentYear + 1}}</p>
         <p class="text-center fs-5">E-file tax returns in 7 minutes for <span class="fw-bold">Free</span> - <a href="javascript:void(0)" class="text-decoration-none">File ITR Now</a></p>
+        <div class="mb-3">
+          <app-breadcrums></app-breadcrums>
+        </div>
         <form [formGroup]="taxCalculationForm">
           <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
             <li [ngbNavItem]="1">

@@ -17,6 +17,7 @@ import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { HolidayComponent } from './holiday/holiday.component';
+import { ProjectsModule } from '../projects/projects.module';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { HolidayComponent } from './holiday/holiday.component';
     FormsModule,
     UserRoutingModule,
     UtilModule,
+    ProjectsModule,
     UserIncomeDeclarationModule
   ],
   providers: [

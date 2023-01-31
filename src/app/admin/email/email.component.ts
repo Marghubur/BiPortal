@@ -432,7 +432,12 @@ export class EmailComponent implements OnInit {
       else
       element.removeAttribute('checked');
     }
+  }
 
-
+  activeMenu(index: number) {
+    for (let i = 0; i < this.mailItems.length; i++) {
+      this.mailItems[i].IsActive = false;
+    }
+    this.mailItems[index].IsActive = true;
   }
 }

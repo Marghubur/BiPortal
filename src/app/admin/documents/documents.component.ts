@@ -49,6 +49,7 @@ export class documentsComponent implements OnInit, OnDestroy {
   renderedDocxFile: any = null;
   isLoading: boolean = false;
   isPageReady: boolean = false;
+
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
@@ -79,7 +80,6 @@ export class documentsComponent implements OnInit, OnDestroy {
           this.folderNav.push({name: "home", route: this.rootLocation});
         }
         this.buildRoute();
-        console.log(this.routeParam);
       });
 
       this.currentFolder = this.rootLocation;
