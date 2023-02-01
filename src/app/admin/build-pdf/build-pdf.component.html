@@ -20,7 +20,7 @@
         <div class="py-5 my-5">
           <h6 class="fw-bold fs-3 text-center text-dark">Generate bill page is loading</h6>
           <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-12 modal-container f-12 text-center cog-wheel">
+            <div class="col-md-12 modal-container  text-center cog-wheel">
               <img src="assets/images/cog.gif" alt="" />
               <h6 class="modal-title title-message">
                 Please Wait ........
@@ -38,7 +38,7 @@
                 <select name="developerId" class="form-control" formControlName="developerId"
                   (change)="findEmployee($event)"
                   [ngClass]="{'error': submitted && f.developerName.errors !== null && f.developerName.errors?.required}">
-                  <option value="0">Select Developer</option>
+                  <option value="0" disabled>Select Developer</option>
                   <option *ngFor="let emp of employees" value="{{emp.EmployeeUid}}">{{emp.FirstName}} {{emp.LastName}}
                   </option>
                 </select>
@@ -48,7 +48,7 @@
                 <select name="senderId" class="form-control" formControlName="senderId"
                   (change)="findSenderClientDetail($event)"
                   [ngClass]="{'error': submitted && f.senderId.errors !== null && f.senderId.errors.required}">
-                  <option value="0">Sender Organization</option>
+                  <option value="0" disabled>Sender Organization</option>
                   <option *ngFor="let client of applicationData.Organizations" value="{{client.CompanyId}}">
                     {{client.CompanyName}}
                   </option>
@@ -59,7 +59,7 @@
                 <select name="receiverCompanyId" class="form-control" formControlName="receiverCompanyId"
                   (change)="findReceiverClientDetail()"
                   [ngClass]="{'error': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
-                  <option value="0">Client Organization</option>
+                  <option value="0" disabled>Client Organization</option>
                   <option *ngFor="let client of assignedClients" value="{{client.CompanyId}}">
                     {{client.CompanyName}}
                   </option>
@@ -181,7 +181,7 @@
                           <div class="col-md-6 row m-0 p-0">
                             <div class="col-md-6">
                               <label class="form-label">Billing month*</label>
-                              <select name="billForMonth" class="form-control" (change)="calculateSpecificDays($event)"
+                              <select name="billForMonth" class="form-select" (change)="calculateSpecificDays($event)"
                                 [ngClass]="{'disable-field': !isClientSelected}" formControlName="billForMonth">
                                 <option *ngFor="let m of months" value="{{m.name}}">{{m.name}}</option>
                               </select>
@@ -189,7 +189,7 @@
                             <div class="col-md-6">
                               <label class="form-label">Billing year*</label>
                               <input inputtype="mandatory" class="form-control" placeholder="Year" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                                [ngClass]="{'error': submitted && f.header.errors !== null && f.header.errors.required}"
+                                [ngClass]="{'error': submitted && f.header.errors !== null && f.header.errors.required}" OnlyNumber="4"
                                 name="billYear" formControlName="billYear" />
                             </div>
                           </div>
@@ -197,7 +197,7 @@
                         <div class="col-md-12 mt-2 row">
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Bill No. (optional)</label>
-                            <input inputtype="mandatory" class="form-control" placeholder="Bill No." name="billNo"
+                            <input inputtype="mandatory" class="form-control" placeholder="Bill No." name="billNo" maxlength="10"
                               [readonly]="!editMode" formControlName="billNo" />
                           </div>
                           <div class="col-md-6 pb-3 ">
@@ -205,7 +205,7 @@
                             <form class="form-inline">
                               <div class="form-group w-100">
                                 <div class="input-group w-100">
-                                  <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
+                                  <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
                                     readonly (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                                   <div class="input-group-append">
                                     <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
@@ -400,7 +400,7 @@
           <i class="edit fa fa-pencil position-absolute"></i>
         </div>
       </div>
-      <div class="modal-body f-12 ">
+      <div class="modal-body  ">
         <div class="d-flex flex-column align-items-center" *ngIf="isBillGenerated">
           <div class="col-12">
             <div class="d-flex">
@@ -587,7 +587,7 @@
             </div>
           </div>
           <div class="mt-3">
-            <input class="form-control" type="text" placeholder="Comment" id="commentsection">
+            <input class="form-control" type="text" placeholder="Comment" maxlength="100" id="commentsection">
           </div>
         </div>
       </div>

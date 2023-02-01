@@ -171,7 +171,7 @@
         </ng-container>
         <ng-container *ngIf="!isPageReady">
           <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <div class="col-md-3 modal-container  text-center cog-wheel">
               <img src="assets/images/cog.gif" alt="" />
               <h6 class="modal-title title-message">
                 Please Wait ........
@@ -256,7 +256,6 @@
               <select class="form-select" formControlName="DepartmentId">
                 <option value="0">Select type</option>
                 <option [value]="item.Id" *ngFor="let item of selectedDepartment">{{item.Value}}</option>
-
               </select>
             </div>
           </div>

@@ -1,0 +1,19 @@
+.table a {
+  cursor: pointer;
+  color: darkblue;
+  text-decoration: underline;
+}
+
+.cell-wrapper {
+  padding-left: .6rem;
+  padding-right: .6rem;
+}
+
+.view-popup {
+  z-index: 2200 !important;
+  background: #222222a1 !important;
+}
+
+.description-area {
+  resize: none;
+}

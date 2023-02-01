@@ -128,6 +128,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.userRoles = response.ResponseBody.Roles;
 
       this.allocatedClients = response.ResponseBody.AllocatedClients;
+      if (this.allocatedClients.length > 0) {
+        for (let i = 0; i < this.allocatedClients.length; i++) {
+          let index = this.clients.findIndex( x=> x.ClientId == this.allocatedClients[i].ClientUid);
+          this.clients.splice(index, 1);
+        }
+      }
       let profileDetail = response.ResponseBody.FileDetail;
       if(profileDetail.length > 0) {
         this.buildProfileImage(profileDetail[0]);
@@ -612,11 +618,27 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.imageIndex = new Date().getTime();
-      this.fileDetail.push({
-        name: $`profile_${this.imageIndex}`,
-        file: file
-      });
+      this.resizeImage(file)
     }
+  }
+
+  resizeImage(file: File) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      canvas.width = img.width * 0.5;
+      canvas.height = img.height * 0.5;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => {
+        this.fileDetail.push({
+          name: $`profile_${this.imageIndex}`,
+          file: blob
+        });
+      });
+    };
   }
 
   navToEmailLinkConfig() {

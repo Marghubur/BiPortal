@@ -222,12 +222,12 @@
                         </div>
                         <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                           <div class="col-md-6 mb-3">
-                            <label class="form-label">Father Name</label>
+                            <label class="form-label">Father Name *</label>
                             <input class="form-control" placeholder="Father Name" name="FatherName" transform="" oninput="this.value = this.value.toUpperCase()" maxlength="40"
                             [ngClass]="{'error-field': submitted && f.FatherName.errors !== null && f.FatherName.errors.required}" formControlName="FatherName"/>
                           </div>
                           <div class="col-md-6 mb-3">
-                            <label class="form-label">Mother Name *</label>
+                            <label class="form-label">Mother Name</label>
                             <input class="form-control" placeholder="Mother Name" name="MotherName" transform="" oninput="this.value = this.value.toUpperCase()" maxlength="40"
                               formControlName="MotherName" />
                           </div>
@@ -356,7 +356,7 @@
         </ng-container>
         <ng-container *ngIf="!isReady">
           <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <div class="col-md-3 modal-container  text-center cog-wheel">
               <img src="assets/images/cog.gif" alt="" />
               <h6 class="modal-title title-message">
                 Please Wait ........
@@ -404,14 +404,14 @@
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="addUpdateClientModalLabel">Add/Update client allocation detail</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="addUpdateClientForm" *ngIf="addUpdateClientForm">
           <div class="col-md-12 row">
-            <div formArrayName="AllocatedClients" class="border-end col-md-6 m-0">
+            <div formArrayName="AllocatedClients" class="border-end col-md-5 m-0">
               <div class="pt-2">
                 <div class="col-md-12 p-2 pt-3">
                   <ng-container *ngIf="isAllocated">
@@ -419,15 +419,21 @@
                       <ng-container [formGroupName]="index">
                         <div class="d-block span-clients pe-2 pb-1 mb-2" *ngIf="client.get('IsActive').value"
                           [ngClass]="{'inactive-mode': client.get('IsActiveRow').value != 1}">
-                          <span class="text-start">{{client.get("ClientName").value}}</span>
-                          <span class="float-end">
-                            <a (click)="bindCurrentClientDetail(client)">
-                              <i class="fa fa-edit"></i>
-                            </a>
-                            <a (click)="deleteCurrentClient(client)">
-                              <i class="ps-2 fa fa-trash"></i>
-                            </a>
-                          </span>
+                          <div class="row">
+                            <div class="col" (click)="bindCurrentClientDetail(client)">
+                              <a >
+                                <span class="text-start">{{client.get("ClientName").value}}</span>
+                              </a>
+                            </div>
+                            <div class="col-auto">
+                              <a (click)="bindCurrentClientDetail(client)" >
+                                <i class="fa fa-edit"></i>
+                              </a>
+                              <a (click)="deleteCurrentClient(client)" >
+                                <i class="ps-2 fa fa-trash"></i>
+                              </a>
+                            </div>
+                          </div>
                         </div>
                       </ng-container>
                     </ng-container>
@@ -444,7 +450,7 @@
               </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-7">
               <div class="form-group">
                 <label class="form-label">Client (Allocated)</label>
                 <div class="col-md-12">
@@ -459,26 +465,26 @@
 
               <div class="row mt-3">
                 <div class="form-group col-md-4 mb-3">
-                  <label class="form-label">Actual Package / Mon</label>
+                  <label class="form-label">Actual / Mon</label>
                   <input class="form-control" placeholder="Actual Package" OnlyNumber="10" name="ActualPackage"
                     formControlName="ActualPackage" />
                 </div>
                 <div class="form-group col-md-4 mb-3">
-                  <label class="form-label">Final Package / Mon</label>
+                  <label class="form-label">Final / Mon</label>
                   <input class="form-control" placeholder="Final Package" OnlyNumber="10" name="Final Package"
                     formControlName="FinalPackage" />
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <label class="form-label">Take Home</label>
-                  <input class="form-control" placeholder="TakeHomeByCandidate" OnlyNumber="10"
-                    name="Take Home" formControlName="TakeHomeByCandidate" />
+                  <input class="form-control" placeholder="Take Home" OnlyNumber="10"
+                    name="TakeHomeByCandidate" formControlName="TakeHomeByCandidate" />
                 </div>
               </div>
             </div>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-outline-success" (click)="addDetail()">
           <i class="fa pe-3" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
