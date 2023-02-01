@@ -53,6 +53,7 @@ import { AnnexureComponent } from './annexure/annexure.component';
 import { OfferletterComponent } from './offerletter/offerletter.component';
 import { EmailConfigComponent } from './email-config/email-config.component';
 import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.component';
+import { ServiceRequestComponent } from './service-request/service-request.component';
 
 
 @NgModule({
@@ -100,7 +101,8 @@ import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.comp
     AnnexureComponent,
     OfferletterComponent,
     EmailConfigComponent,
-    EmaillinkconfigComponent
+    EmaillinkconfigComponent,
+    ServiceRequestComponent
   ],
   imports: [
     CommonModule,

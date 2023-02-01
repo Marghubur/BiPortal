@@ -1,0 +1,257 @@
+<div class="col-12 full-v main-container" [ngClass]="{'preload': !isPageReady}">
+    <div class="col-12 row p-0 m-0">
+        <div class="right-panel container col-md-12 p-0">
+            <div class="x_panel mt-2">
+                <div class="x_header">
+                    <div class="x_header_title">
+                        <h2>Service Request<small>List all service request</small></h2>
+                    </div>
+                </div>
+                <div class="px-1">
+                    <app-breadcrums></app-breadcrums>
+                </div>
+                <div class="x_content mt-4">
+                    <div class="x_panel">
+                        <div class="x_header">
+                          <div class="x_header_title">
+                            <h2>Employee detail <small>Add or update details</small>
+                            </h2>
+                          </div>
+                        </div>
+                        <div [ngSwitch]="isPageReady">
+                            <div *ngSwitchCase="false">
+                              <div class="mt-5">
+                                <app-pre-load-table></app-pre-load-table>
+                              </div>
+                            </div>
+                            <div *ngSwitchDefault>
+                                <ng-container>
+                                    <div class="x_content">
+                                      <div class="t-table t-list t-border col-md-12">
+                                        <div class="hide-bar"></div>
+                                        <div class="t-head">
+                                          <div class="tr">
+                                            <div class="th fe-index">
+                                              <div class="t-index">
+                                                <a href="javascript:void()" class="ps-3">#</a>
+                                              </div>
+                                            </div>
+                                            <div class="th fe-5">
+                                              <div class="cell-wrapper">
+                                                <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                                                  (keyup.enter)="filterRecords()" autofocus
+                                                  placeholder="Search by Name" id="namefilter">
+                                                <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ColumnName')">
+                                                  <a href="javascript:void()" class="pe-2">Full Name</a>
+                                                  <i class="fa fa-sort-amount-asc"
+                                                    [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                                                  <i class="fa fa-sort-amount-desc"
+                                                    [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="th fe-2">
+                                              <div class="cell-wrapper">
+                                                <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                                                  (keydown.esc)="resetFilter()"
+                                                  placeholder="Search by MobileNumber">
+                                                <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
+                                                  <a href="javascript:void()" class="pe-2">Mobile Number</a>
+                                                  <i class="fa fa-sort-amount-asc"
+                                                    [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
+                                                  <i class="fa fa-sort-amount-desc"
+                                                    [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="th fe-2">
+                                              <div class="cell-wrapper">
+                                                <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                                                  (keydown.esc)="resetFilter()" placeholder="Search by Email">
+                                                <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
+                                                  <a href="javascript:void()" class="pe-2">Email Id</a>
+                                                  <i class="fa fa-sort-amount-asc"
+                                                    [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
+                                                  <i class="fa fa-sort-amount-desc"
+                                                    [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="th fe-1 text-center">ACTIONS</div>
+                                          </div>
+                                        </div>
+                                        <div class="t-body">
+                                            <ng-container>
+                                                <div class="tr py-2" *ngFor="let service of requestDetail;let index = index;">
+                                                  <div class="td align-middle text-center fe-index">
+                                                    <div class="cell-wrapper">
+                                                        {{index + 1}}
+                                                    </div>
+                                                  </div>
+                                                  <div class="td align-middle fe-5">
+                                                    <div class="cell-wrapper">
+                                                      <a href="javascript:void(0)" (click)="EditCurrent(service)">
+                                                        {{service.RequestTitle}}
+                                                      </a>
+                                                      <div class="float-end">
+                                                        <a href="javascript:void(0)"  data-bs-toggle="tooltip"
+                                                          data-bs-placement="right" title="View Employee Performance"><span class="badge bg-secondary me-3"><i
+                                                              class="fa fa-line-chart"></i></span></a>
+                                                        <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                          data-bs-placement="right" title="View Profile"><span class="badge bg-dark me-3"><i
+                                                              class="fa fa-user-circle-o user-edit-icon"></i></span></a>
+                                                        <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o"
+                                                            data-bs-toggle="tooltip" data-bs-placement="right">
+                                                            </span>
+                                                        </a>
+                                                        <a href="javascript:void(0)" class="ms-3"
+                                                          data-bs-toggle="tooltip" data-bs-placement="right" title="View Attendance">
+                                                          <span class="text-sm-left text-muted">Attendance</span>
+                                                          <span class="ms-2 badge bg-success">
+                                                            <i class="fa fa-id-badge"></i>
+                                                          </span>
+                                                        </a>
+                                                        <span class="badge bg-danger ms-3">3</span>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="td align-middle fe-2">
+                                                    <div class="cell-wrapper">
+                                                      Mobile
+                                                    </div>
+                                                  </div>
+                                                  <div class="td align-middle fe-2">
+                                                    <div class="cell-wrapper">
+                                                      Email
+                                                    </div>
+                                                  </div>
+                                                  <div class="td align-middle fe-1">
+                                                    <div class="d-flex flex-row justify-content-evenly">
+                                                      <a href="javascript:void(0)" (click)="EditCurrent(service)">
+                                                        <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                                      </a>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </ng-container>
+                                            <ng-container *ngIf="requestDetail == null || requestDetail.length == 0">
+                                                <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                                                <p class="my-5 py-5">Record Not Found</p>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="mt-3">
+                                      <app-pagination [pagination]="requestFilter" (onPageChange)="GetFilterResult($event)"></app-pagination>
+                                    </div>
+                                  </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Active and Deactive  Model -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addupdateModal" tabindex="-1"
+        role="dialog" aria-labelledby="deleteTitleTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header border-bottom-0">
+            <h5 class="modal-title font-weight-bold text-dark">
+            Add/Update service request
+            </h5>
+        </div>
+        <div class="modal-body p-4">
+            <ng-container *ngIf="requestForm != null">
+                <div [formGroup]="requestForm" class="col-md-12 row m-0 p-0">
+                    <div class="form-group col-4">
+                        <label for="">Request Type</label>
+                        <select name="RequestTypeId" formControlName="RequestTypeId" (change)="enableAppropiateSection($event)" class="form-select">
+                            <option value="">Select request type</option>
+                            <option value="SERVICE">SERVICE</option>
+                            <option value="BOOKING">BOOKING</option>
+                            <option value="PRODUCT">PRODUCT</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Title</label>
+                            <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-4 m-0 p-0 row">                            
+                        <ng-container>
+                            <div class="border p-4">
+                                <div name="SERVICE" class="col-12">
+                                    <div class="min-h-25 px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'SERVICE'}">
+                                        <div class="form-group col-12">
+                                            <label for="">Description</label>
+                                            <textarea rows="5" name="RequestDescription" formControlName="RequestDescription" class="col-12 form-control">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div name="BOOKING" class="col-12">
+                                    <div class="min-h-25 px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'BOOKING'}">
+                                        <div class="form-group col-4">
+                                            <label for="">Duration</label>
+                                            <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
+                                        </div>
+                                        <div class="form-group col-4">
+                                            <label for="">From date</label>
+                                            <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
+                                        </div>
+                                        <div class="form-group col-4">
+                                            <label for="">To date</label>
+                                            <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div name="PRODUCT" class="col-12">
+                                    <div class="min-h-25 px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'PRODUCT'}">
+                                        <div class="form-group col-3">
+                                            <label for="">Catagory</label>
+                                            <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
+                                        </div>
+                                        <div class="form-group col-3">
+                                            <label for="">Brand</label>
+                                            <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
+                                        </div>
+                                        <div class="form-group col-4">
+                                            <label for="">Product</label>
+                                            <input type="number" name="Quantity" formControlName="Quantity" class="form-control">
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <label for="">Quantity</label>
+                                            <input type="text" name="Quantity" formControlName="Quantity" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div name="NOT" class="col-12" [ngClass]="{'d-none': requestId != ''}">
+                                    <div class="min-h-25 px-2 pt-4 d-flex flex-column justify-content-center">
+                                        <p class="disable-color display-6 fw-bold text-center m-0 p-0">
+                                            PLEASE SELECT REQUEST TYPE
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>                            
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="modal-footer border-top-0">
+            <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
+            <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateUpdateRequest()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+                {{ isLoading ? 'Processing' : 'Submit' }}
+            </button>
+        </div>
+        </div>
+    </div>
+</div>
