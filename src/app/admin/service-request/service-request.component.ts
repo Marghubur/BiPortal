@@ -24,6 +24,7 @@ export class ServiceRequestComponent implements OnInit {
   requestId: string = '';
   employeesList: autoCompleteModal = null;
   employeeId: number = 0;
+  managers: Array<any> = [];
   
   constructor(
     private http: AjaxService,
@@ -44,6 +45,12 @@ export class ServiceRequestComponent implements OnInit {
 
   selectedEmployee(e: any) {
     console.log(e);
+    let index = this.managers.findIndex(x => x.value == e.value);
+    if(index == -1) {
+      this.managers.push(e);
+    } else {
+      this.managers.splice(index, 1);
+    }
   }
 
   loadPageData() {

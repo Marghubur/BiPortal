@@ -417,7 +417,7 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
 
       this.DefaultValue = c.value;
       this.onChange(this.DefaultValue);
-      this.OnSelect.emit(c.value);
+      this.OnSelect.emit(c);
       return;
     }
 
