@@ -73,7 +73,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   isFileFound: boolean = false;
   isGSTStatusModalReady: boolean = false;
   isError: boolean = false;
-
+  maxDate: any = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -108,6 +108,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.employeeFile.Status = "0";
     this.employeeFile.GSTStatus = '0';
     this.employeeFile.Month = "0";
+    this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.basePath = this.http.GetImageBasePath();
     this.currentEmployeeDetail = this.nav.getValue();
     this.employeeId = this.currentEmployeeDetail.EmployeeUid;

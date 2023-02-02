@@ -54,6 +54,7 @@ import { OfferletterComponent } from './offerletter/offerletter.component';
 import { EmailConfigComponent } from './email-config/email-config.component';
 import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.component';
 import { ServiceRequestComponent } from './service-request/service-request.component';
+import { ProductsComponent } from './products/products.component';
 
 
 @NgModule({
@@ -102,7 +103,8 @@ import { ServiceRequestComponent } from './service-request/service-request.compo
     OfferletterComponent,
     EmailConfigComponent,
     EmaillinkconfigComponent,
-    ServiceRequestComponent
+    ServiceRequestComponent,
+    ProductsComponent
   ],
   imports: [
     CommonModule,

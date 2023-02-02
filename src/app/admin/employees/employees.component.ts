@@ -336,36 +336,6 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  CreateDocument() {
-    if (this.documentForm.valid) {
-      if (this.documentForm.controls['Title'].value !== "" &&
-        this.documentForm.controls['Description'].value !== "") {
-        this.isLoading = true;
-        let filter: Filter = new Filter();
-        filter.SearchString = `1=1 AND UD.MOBILENO = '${this.user.Mobile}' OR UD.EMAILID = '${this.user.EmailId}'`;
-        filter["OnlineDocumentModel"] = this.documentForm.value;
-        filter["Mobile"] = this.user.Mobile;
-        filter["Email"] = this.user.EmailId;
-        this.http.post('OnlineDocument/CreateDocument', filter)
-          .then((response: ResponseModel) => {
-            let data = response.ResponseBody;
-            if (data !== null) {
-              // this.BuildDocumentTable(data);
-              this.toggelAddUpdateModal();
-              this.LoadData();
-            } else {
-              this.toggelAddUpdateModal();
-            }
-            this.isLoading = false;
-          }).catch(e => {
-            this.isLoading = false;
-          });
-      } else {
-        this.common.ShowToast("Entry name is required field.");
-      }
-    }
-  }
-
   GetFilterResult(e: Filter) {
     if(e != null) {
       this.employeeData = e;
@@ -376,14 +346,6 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
 
   openDocument(path: OnlineDocModel) {
     this.nav.navigate(DocumentsPage, path);
-  }
-
-  toggelAddUpdateModal() {
-    if (this.openModal === 'showmodal')
-      this.openModal = 'hide';
-    else
-      this.openModal = 'showmodal';
-    $('#addupdateModal').modal(this.openModal)
   }
 
   goToAttendancePage(user: any) {

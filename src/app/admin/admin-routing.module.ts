@@ -41,7 +41,8 @@ import { AdminResetPassword,
   OfferLetter,
   EmailConfiguration,
   EmailLinkConfig,
-  ServiceRequest
+  ServiceRequest,
+  Products
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -85,6 +86,7 @@ import { OfferletterComponent } from './offerletter/offerletter.component';
 import { EmailConfigComponent } from './email-config/email-config.component';
 import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.component';
 import { ServiceRequestComponent } from './service-request/service-request.component';
+import { ProductsComponent } from './products/products.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -129,7 +131,8 @@ const routes: Routes = [
   { path: Annexure, component: AnnexureComponent},
   { path: OfferLetter, component: OfferletterComponent},
   { path: EmailConfiguration, component: EmailConfigComponent},
-  { path: ServiceRequest, component: ServiceRequestComponent}
+  { path: ServiceRequest, component: ServiceRequestComponent},
+  { path: Products, component: ProductsComponent}
 ];
 
 @NgModule({

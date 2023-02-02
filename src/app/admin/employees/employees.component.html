@@ -214,43 +214,6 @@
 </div>
 <!-- add update detail modal -->
 
-<div class="modal" id="addupdateModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title">Add Or Update</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body f-12">
-        <div class="col-md-12">
-          <div [formGroup]="documentForm" class="col-md-12 row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="">Entry Name</label>
-                <input type="text" name="Title" formControlName="Title" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="">Description</label>
-                <textarea name="Description" rows="3" name="Description" formControlName="Description"
-                  class="form-control"></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateDocument()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
-          {{ isLoading ? 'Processing' : 'Submit' }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Active and Deactive  Model -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="deleteEmployee" tabindex="-1"
   role="dialog" aria-labelledby="deleteTitleTitle" aria-hidden="true">

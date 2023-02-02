@@ -321,7 +321,7 @@
       <div class="py-5 my-5" [hidden]="isPageReady">
         <h6 class="fw-bold fs-3 text-center text-dark">Leave details are loading</h6>
         <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+          <div class="col-md-3 modal-container  text-center cog-wheel">
             <img src="assets/images/cog.gif" alt="" />
             <h6 class="modal-title title-message">
               Please Wait ........
@@ -358,7 +358,7 @@
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control d-none" placeholder="yyyy-mm-dd"   [markDisabled]="isDisabled" 
+                          <input class="form-control d-none" placeholder="yyyy-mm-dd"   [markDisabled]="isDisabled"
                             (dateSelect)="onDateSelection($event)" name="dp" [(ngModel)]="fromdateModal" ngbDatepicker
                             #fromdate="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()" [disabled]="!isEnabled"
@@ -383,7 +383,7 @@
                       <div class="col-12">
                         <div class="input-group">
                           <input class="form-control d-none" placeholder="yyyy-mm-dd" [minDate]="maxDate"
-                            (dateSelect)="onDateSelect($event)" name="dp" [markDisabled]="isDisabled" [(ngModel)]="model" ngbDatepicker 
+                            (dateSelect)="onDateSelect($event)" name="dp" [markDisabled]="isDisabled" [(ngModel)]="model" ngbDatepicker
                             #d="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()" [disabled]="!isEnabled"
                             type="button"></button>

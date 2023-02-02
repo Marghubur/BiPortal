@@ -43,7 +43,7 @@
         <div class="py-5 my-5 x_panel">
           <h6 class="fw-bold fs-3 text-center text-dark">Attendence Details are loading</h6>
           <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <div class="col-md-3 modal-container  text-center cog-wheel">
               <img src="assets/images/cog.gif" alt="" />
               <h6 class="modal-title title-message">
                 Please Wait ........
@@ -56,7 +56,7 @@
         <ng-container *ngIf="!isEmployeeSelected">
           <div class="my-5 py-5 d-flex align-items-center justify-content-center">
             <div class="my-5 py-5 fs-5 fw-bold text-dark">
-              Please select Employee and Employer first
+              Please select Employee first
             </div>
           </div>
         </ng-container>
@@ -73,12 +73,12 @@
                         <span class="ps-4 fw-bold" *ngIf="presentMonth">Last {{currentDays.length}} days</span>
                         <span class="ps-4 fw-bold" *ngIf="!presentMonth">{{changeMonth}}</span>
                         <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
-                          <input type="radio" class="btn-check" name="btnradio" id="btnradio20" autocomplete="off" checked>
-                          <label class="btn btn-outline-primary month-btn" for="btnradio20">{{currentDays.length}}
-                            Days</label>
+                          <!-- <input type="radio" class="btn-check" name="btnradio" id="btnradio20" autocomplete="off" checked> -->
+                          <!-- <label class="btn btn-outline-primary month-btn" for="btnradio20">{{currentDays.length}}
+                            Days</label> -->
                           <ng-container *ngFor="let month of monthName; let i = index">
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio{{i}}" autocomplete="off">
-                            <label class="btn btn-outline-primary month-btn" for="btnradio{{i}}">{{month}}</label>
+                            <input type="radio" class="btn-check" name="btnradio"  (click)="previousMonthAttendance(month.value, i)" id="btnradio{{i}}" autocomplete="off">
+                            <label class="btn btn-outline-primary month-btn" for="btnradio{{i}}">{{month.name}}</label>
                           </ng-container>
                         </div>
                       </div>
@@ -103,7 +103,7 @@
                                   <span class="badge bg-info ms-2" *ngSwitchCase="5">LEAVE</span>
                                   <span class="badge bg-warning ms-2" *ngSwitchCase="3">W-OFF</span>
                                   <span class="badge bg-secondary ms-2" *ngSwitchCase="4">HLDY</span>
-                                  <span class="badge bg-success ms-2" *ngSwitchCase="1">IN-OFFC</span>
+                                  <span class="badge bg-success ms-2" *ngSwitchCase="1">PRES</span>
                                   <span class="badge bg-danger ms-2" *ngSwitchDefault>EMPTY</span>
                                 </div>
                               </td>
@@ -117,27 +117,27 @@
                               <td class="align-middle">
                                 <ng-container *ngIf="item.AttendenceStatus == 9 || item.PresentDayStatu == 9">
                                   <div class="d-inline">
-                                    <span class=" ms-2">
+                                    <span class="">
                                       <i class="fa fa-check pe-2 text-success"></i> On Time
                                     </span>
                                   </div>
                                 </ng-container>
                                 <ng-container *ngIf="item.AttendenceStatus != 9">
                                   <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
-                                    <span class=" ms-2" *ngSwitchCase="3">Week off</span>
-                                    <span class=" ms-2" *ngSwitchCase="4">Holiday</span>
-                                    <span class=" ms-2" *ngSwitchCase="2">Waiting..</span>
-                                    <span class=" ms-2" *ngSwitchCase="1">Not applied</span>
-                                    <span class=" ms-2" *ngSwitchCase="0">-</span>
-                                    <span class=" ms-2" *ngSwitchCase="5">00:00</span>
-                                    <span class=" ms-2" *ngSwitchCase="9">
+                                    <span class="" *ngSwitchCase="3">Week off</span>
+                                    <span class="" *ngSwitchCase="2">Waiting..</span>
+                                    <span class="" *ngSwitchCase="1">Not applied</span>
+                                    <span class="" *ngSwitchCase="4">Holiday</span>
+                                    <span class="" *ngSwitchCase="0">-</span>
+                                    <span class="" *ngSwitchCase="5">00:00</span>
+                                    <span class="" *ngSwitchCase="9">
                                       <i class="fa fa-check pe-2 text-success"></i> On Time
                                     </span>
                                   </div>
                                 </ng-container>
                               </td>
                               <td class="align-middle">
-                                <div class=" ms-2" [ngSwitch]="item.PresentDayStatus">
+                                <div class="" [ngSwitch]="item.PresentDayStatus">
                                   <div placement="top" ngbTooltip="waiting" aria-expanded="false"
                                   *ngSwitchCase = "2">
                                     <i class="fa fa-clock-o pe-2 text-warning"></i> Waiting...
@@ -150,8 +150,7 @@
                                   *ngSwitchCase = "3">
                                     <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
                                   </div>
-                                  <div placement="top" ngbTooltip="Weekend" aria-expanded="false"
-                                  *ngSwitchCase = "4">
+                                  <div placement="top" ngbTooltip="Weekend" aria-expanded="false" *ngSwitchCase = "4">
                                     <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Holiday
                                   </div>
                                   <div placement="top" ngbTooltip="Approved" aria-expanded="false"
@@ -219,7 +218,7 @@
                       <div class="py-5 my-5">
                         <h6 class="fw-bold fs-3 text-center text-dark">Attendance are loading</h6>
                         <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+                          <div class="col-md-3 modal-container  text-center cog-wheel">
                             <img src="assets/images/cog.gif" alt="" />
                             <h6 class="modal-title title-message">
                               Please Wait ........

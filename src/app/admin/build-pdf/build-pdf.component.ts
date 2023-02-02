@@ -69,6 +69,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   generateBillUrl: string = "";
   timesheetId: number = 0;
   bodyContent: any = null;
+  maxDate: any = null;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -93,6 +94,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     this.existingData = this.nav.getValue();
     this.editMode = false;
     this.isClientAssigned = true;
+    this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.basePath = this.http.GetImageBasePath();
     //----- edit mode -----
     if (this.existingData) {
@@ -1133,6 +1135,10 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   sendEmail() {
     this.isLoading = true;
     if (this.currentOrganization.CompanyId > 0 && this.senderClient.CompanyId >0 && this.fileDetail.FileId > 0) {
+      let value = document.getElementById('billtemplatebody').innerHTML;
+      if (value)
+        this.emailTemplate.BodyContent = value;
+
       let data = {
         ClientId: this.currentOrganization.CompanyId,
         SenderId: this.senderClient.CompanyId,
