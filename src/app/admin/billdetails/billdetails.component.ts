@@ -84,6 +84,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   email:Array<string> = [];
   bodyContent: any = null;
   allSendRecEmails: Array<any> = [];
+  maxDate: any = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -119,6 +120,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.employeeData = new Filter();
     this.employeeFile = new BillDetails();
     let year = new Date().getFullYear();
+    this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.employeeFile.Status = '0';
     this.employeeFile.GSTStatus = '0';
     this.employeeFile.Month = '0';
