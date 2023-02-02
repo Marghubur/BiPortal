@@ -1135,6 +1135,10 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   sendEmail() {
     this.isLoading = true;
     if (this.currentOrganization.CompanyId > 0 && this.senderClient.CompanyId >0 && this.fileDetail.FileId > 0) {
+      let value = document.getElementById('billtemplatebody').innerHTML;
+      if (value)
+        this.emailTemplate.BodyContent = value;
+
       let data = {
         ClientId: this.currentOrganization.CompanyId,
         SenderId: this.senderClient.CompanyId,

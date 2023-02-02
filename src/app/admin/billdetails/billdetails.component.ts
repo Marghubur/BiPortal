@@ -397,8 +397,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   }
 
   getFileExtension(value: any) {
-    this.downLoadFileExtension = "." + value;
-    this.downloadPdfDocx();
+    this.downLoadFileExtension = "." + value.target.value;
   }
 
   downloadFile(userFile: any) {
@@ -544,6 +543,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.isFileFound = false;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
+      this.employeeDetails = [];
       this.TotalGSTAmount = 0;
       this.TotalReceivedAmount = 0;
       this.TotalBilledAmount = 0;
@@ -721,7 +721,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     }
 
     if(this.employeeFile.ClientName !== null && this.employeeFile.ClientName !== "") {
-      searchQuery += ` c.ClientName like '${this.employeeFile.ClientName}%' `;
+      searchQuery += ` ${delimiter} c.ClientName like '${this.employeeFile.ClientName}%' `;
       delimiter = "and";
     }
 
@@ -954,6 +954,10 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.isLoading = true;
     if (this.FileDetail.ClientId >0 && Number(this.FileDetail.FileUid) > 0) {
       this.emailTemplate.Emails = this.allSendRecEmails;
+      this.emailTemplate.FileId = Number(this.FileDetail.FileUid);
+      let value = document.getElementById('billtempbody').innerHTML;
+      if (value)
+        this.emailTemplate.BodyContent = value;
       let data = {
         ClientId: this.FileDetail.ClientId,
         SenderId: 1,

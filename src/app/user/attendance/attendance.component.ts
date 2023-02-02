@@ -136,7 +136,10 @@ export class AttendanceComponent implements OnInit {
       ForMonth: this.fromDate.getMonth() + 1,
       CompanyId: this.userDetail.CompanyId
     }
+    this.loadMappedData(data);
+  }
 
+  loadMappedData(data: any) {
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
       if(response.ResponseBody.EmployeeDetail) {
         this.client = response.ResponseBody.EmployeeDetail;
@@ -161,6 +164,8 @@ export class AttendanceComponent implements OnInit {
     });
   }
 
+
+
   getMonths() {
     this.monthName = [];
     var dt = new Date(this.client.CreatedOn);
@@ -171,13 +176,44 @@ export class AttendanceComponent implements OnInit {
       //this.daysInMonth = new Date(year, month, dt.getDate()).getDate();
       i = month;
     }
-    while( i <= new Date().getMonth()) {
+    while( i <= new Date().getMonth()+1) {
       var mnth = Number((((i+1) > 9 ? "" : "0") + i));
       month++;
-      this.monthName.push(new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" })); // result: Aug
+      this.monthName.push( {
+        name: new Date(year, mnth-1, 1).toLocaleString("en-us", { month: "short" }),
+        value: mnth-1
+      }); // result: Aug
       i++;
     }
     this.monthName.reverse();
+  }
+
+  previousMonthAttendance(month: number, index: number) {
+    let startDate = new Date(new Date().getFullYear(), month, 1);
+    let endDate;
+    if (month == new Date().getMonth())
+      endDate = new Date();
+    else
+      endDate = new Date(new Date().getFullYear(), month+1, 0);
+
+    let data = {
+      EmployeeUid: Number(this.employeeId),
+      ClientId: Number(this.clientId),
+      UserTypeId : UserType.Employee,
+      AttendenceFromDay: startDate,
+      AttendenceToDay: endDate,
+      ForYear: new Date().getFullYear(),
+      ForMonth: month + 1,
+      CompanyId: this.userDetail.CompanyId
+    }
+    let radiobtn = document.querySelectorAll('input[name="btnradio"]');
+    if (radiobtn.length > 0) {
+      for (let i = 0; i < radiobtn.length; i++) {
+        radiobtn[i].removeAttribute('checked');
+      }
+      radiobtn[index].setAttribute('checked', '');
+    }
+    this.loadMappedData(data);
   }
 
   getMonday(d: Date) {

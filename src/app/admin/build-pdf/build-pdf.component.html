@@ -394,8 +394,8 @@
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0 d-flex">
         <h5 class="modal-title">Download Or Send Bill As EMail</h5>
-        <div class="position-relative w-75 text-end" *ngIf="isBillGenerated">
-          <input type="text" class="border-0 me-4 w-75 text-end"  [(ngModel)]="emailTemplate.EmailSubject" oninput="this.value = this.value.toUpperCase()"
+        <div class="position-relative col-md-7 text-end pe-4" *ngIf="isBillGenerated">
+          <input type="text" class="border-0 me-4 w-100 text-end" maxlength="80"  [(ngModel)]="emailTemplate.EmailSubject" oninput="this.value = this.value.toUpperCase()"
                       placeholder="Enter your subject">
           <i class="edit fa fa-pencil position-absolute"></i>
         </div>
@@ -481,7 +481,7 @@
 
                   <div class="col-12">
                     <ng-container *ngIf="bodyContent != null">
-                      <div class="no-focus-line" [innerHTML]="bodyContent" contenteditable>
+                      <div class="no-focus-line" id="billtemplatebody" [innerHTML]="bodyContent" contenteditable>
                       </div>
                     </ng-container>
                   </div>

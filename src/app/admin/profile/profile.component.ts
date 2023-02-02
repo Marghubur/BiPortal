@@ -378,6 +378,26 @@ export class ManageComponent implements OnInit {
     this.isLoading = true;
     let currentProjectOnEdit;
     let project = this.projectsForm.get('Projects') as FormArray;
+    if (this.editProjectModal.ProjectTitle == null || this.editProjectModal.ProjectTitle == "") {
+      ErrorToast("Project title is manditory");
+      this.isLoading = false;
+      return;
+    }
+    if (this.editProjectModal.ProjectDuration == null || this.editProjectModal.ProjectDuration == "") {
+      ErrorToast("Project duration is manditory");
+      this.isLoading = false;
+      return;
+    }
+    if (this.editProjectModal.ProjectStatus == null || this.editProjectModal.ProjectStatus == "") {
+      ErrorToast("Project status is manditory");
+      this.isLoading = false;
+      return;
+    }
+    if (this.editProjectModal.RolesResponsibility == null || this.editProjectModal.RolesResponsibility == "") {
+      ErrorToast("Roles and Responsibility is manditory");
+      this.isLoading = false;
+      return;
+    }
     if (this.isEdit == false) {
       //this.editProjectModal = new Project();
       let newProject = new Project();

@@ -26,7 +26,7 @@
               <div class="col-md-4 d-flex">
                 <div class="th f-small">
                   <div class="cell-wrapper">
-                    <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                    <select class="form-select table-filter-control form-select-sm" (keyup.enter)="filterRecords()"
                       (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Month">
                       <option value="0" selected disabled>Month</option>
                       <option value="1">Jan</option>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="th f-small">
                   <div class="cell-wrapper">
-                    <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                    <select class="form-select table-filter-control form-select-sm" (keyup.enter)="filterRecords()"
                       (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Year">
                       <option value="0" selected disabled>Year</option>
                       <option [value]="item" *ngFor="let item of allBillingYears">{{item}}</option>
@@ -114,13 +114,14 @@
               </div>
               <div class="th f-small">
                 <div class="cell-wrapper">
-                  <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                  <select class="form-select table-filter-control form-select-sm" (keyup.enter)="filterRecords()"
                     (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Status">
                     <option value="0" disabled>Status</option>
                     <option value="1">Completed</option>
                     <option value="2">Pending</option>
                     <option value="3">Canceled</option>
                     <option value="7">Raised</option>
+                    <option value="5">Rejected</option>
                   </select>
                   <div class="t-filter align-items-center justify-content-center">
                     <a href="javascript:void()" class="pe-2">IsPaid</a>
@@ -209,7 +210,7 @@
               </div>
               <div class="th f-small">
                 <div class="cell-wrapper">
-                  <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
+                  <select class="form-select table-filter-control form-select-sm" (keyup.enter)="filterRecords()"
                     (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.GSTStatus">
                     <option value="0" disabled>Status</option>
                     <option value="1">Completed</option>
@@ -280,6 +281,8 @@
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Pending"></i>
                           <i class="fa fa-ban fa-lg text-danger" *ngIf="user.Status == '5'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Rejected"></i>
+                          <i class="fa fa-lg fa-calendar-times-o text-primary" *ngIf="user.Status == '6'"
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="Generated"></i>
                           <!-- <i class="fa" [ngClass]="{'fa-check fa-lg text-success': user.Status == 'Completed', 'fa-times text-danger fa-lg': user.Status == 'Canceled', 'fa-clock-o text-dark': user.Status == 'Raised', 'fa-exclamation-triangle fa-lg text-warning': user.Status == 'Pending', 'fa-ban fa-lg text-danger': user.Status == 'Rejected'}"></i> -->
                           <!-- {{user.Status}} -->
                         </a>
@@ -416,7 +419,6 @@
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
                   <option value="3">Canceled</option>
-                  <option value="4">Not Generated</option>
                   <option value="5">Rejected</option>
                   <option value="6">Generated</option>
                 </select>
@@ -451,7 +453,6 @@
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
                   <option value="3">Canceled</option>
-                  <option value="4">Not Generated</option>
                   <option value="5">Rejected</option>
                 </select>
               </div>
@@ -575,9 +576,9 @@
             <label class="form-label">
               Month
             </label>
-            <select class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+            <select class="form-select table-filter-control" (keyup.enter)="filterRecords()"
               (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Month">
-              <option value="0" selected>Month</option>
+              <option value="0" selected disabled>Month</option>
               <option value="1">January</option>
               <option value="2">February</option>
               <option value="3">March</option>
@@ -661,13 +662,14 @@
                 <label class="form-label">
                   GST
                 </label>
-                <select class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+                <select class="form-select table-filter-control" (keyup.enter)="filterRecords()"
                   (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.GSTStatus">
-                  <option value="0">Status</option>
+                  <option value="0" disabled selected>Status</option>
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
                   <option value="3">Canceled</option>
                   <option value="6">Raised</option>
+                  <option value="5">Rejected</option>
                 </select>
               </div>
             </div>
@@ -700,13 +702,14 @@
                 <label class="form-label">
                   Bill Status
                 </label>
-                <select class="form-control table-filter-control" (keyup.enter)="filterRecords()"
+                <select class="form-select table-filter-control" (keyup.enter)="filterRecords()"
                   (keydown.esc)="resetFilter()" [(ngModel)]="employeeFile.Status">
-                  <option value="0">Status</option>
+                  <option value="0" disabled selected>Status</option>
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
                   <option value="3">Canceled</option>
                   <option value="7">Raised</option>
+                  <option value="5">Rejected</option>
                 </select>
               </div>
             </div>
@@ -877,7 +880,7 @@
 
                   <div class="col-12">
                     <ng-container *ngIf="bodyContent != null">
-                      <div class="no-focus-line" [innerHTML]="bodyContent" contenteditable>
+                      <div class="no-focus-line" id="billtempbody" [innerHTML]="bodyContent" contenteditable>
                       </div>
                     </ng-container>
                   </div>
