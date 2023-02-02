@@ -1,22 +1,31 @@
-<div class="container m-0 p-0 auto-dd " name="autofill-container">
-  <div id="iautofill-searchfield">
-    <a class="anc-remove d-none" (click)="AddToAutoFillList()" name="remove-pointer">&#x2716;</a>
+<div class="container m-0 p-0 auto-dd" name="autofill-container" title="bt-autocomplete">
+  <div id="iautofill-searchfield" title="bt-autocomplete">
+    <a class="anc-remove d-none" (click)="AddToAutoFillList()" name="remove-pointer" title="bt-autocomplete">&#x2716;</a>
     <input type="text" class="biginput simple-field form-control" [ngClass]="ClassName" [attr.tabindex]="Tabindex"
       name="iautofill-textfield" (click)="ShowAutofillDropdown()" (focus)="ShowAutofillDropdown()"
-      [placeholder]="placeholder" [attr.value]="InitValue" [attr.data]="InitData" />
-    <div class="iautofill-suggestion-dv d-none" name="suggestionBox-dv">
-      <input type="text" (keyup)="onKeyUp($event)" (keydown)="onKeyPress($event)" (keydown.shift.tab)="NoAction()"
-        (keydown.control.space)="LoadFromApi($event)" class="biginput nb simple-field form-control" [ngClass]="ClassName" name="autocomplete" (blur)="onBlur()" />
+      [placeholder]="placeholder" [attr.value]="InitValue" [attr.data]="InitData"  title="bt-autocomplete"/>
+    <div class="iautofill-suggestion-dv d-none" name="suggestionBox-dv" title="bt-autocomplete">
+      <div class="d-flex justify-content-between">
+        <input type="text" (keyup)="onKeyUp($event)" (keydown)="onKeyPress($event)" (keydown.shift.tab)="NoAction()" title="bt-autocomplete" (blur)="onBlur()"
+          (keydown.control.space)="LoadFromApi($event)" class="biginput border-0 nb simple-field form-control" [ngClass]="ClassName" name="autocomplete" />
+        <div class="multi-icon" *ngIf="IsSingleMode">
+          <a href="javascript:void(0)">
+            &#10004;
+          </a>
+        </div>
+      </div>
       <div *ngIf="!isShowEmptyRow" class="autocomplete-suggestions w-100" name="iautofill-div"
-        style="position: relative; max-height: 300px; z-index: 9999;">
-        <div class="autocomplete-suggestion" *ngFor="let item of BindingData; let index = index" data="index"
-          (mousedown)="select(index, true)">
-          {{item.text}}
+        style="position: relative; max-height: 300px; z-index: 9999;" title="bt-autocomplete">
+        <div class="autocomplete-suggestion d-flex justify-content-between" *ngFor="let item of BindingData; let index = index" data="index"
+          (mousedown)="select(index, true)" title="bt-autocomplete">
+          <span title="bt-autocomplete">{{item.text}}</span>
+          <!-- <input type="checkbox" title="bt-autocomplete" *ngIf="IsSingleMode" (click)="SelectCurrent($event)"> -->
+          <span name="selected-check" title="bt-autocomplete" class="d-none">&#10004;</span>
         </div>
       </div>
       <div *ngIf="isShowEmptyRow" class="autocomplete-suggestions w-100" name="iautofill-div"
-        style="position: relative; max-height: 300px; z-index: 9999;">
-        <div class="autocomplete-suggestion empty-row" (click)="onBlur()">Not available</div>
+        style="position: relative; max-height: 300px; z-index: 9999;" title="bt-autocomplete">
+        <div class="autocomplete-suggestion empty-row" (click)="onBlur()" title="bt-autocomplete">Not available</div>
       </div>
     </div>
   </div>

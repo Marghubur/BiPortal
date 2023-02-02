@@ -488,3 +488,14 @@ input:focus {
 .dd {
   height: 35px;
 }
+
+.multi-icon {
+  padding: 0rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  a {
+    text-decoration: none;
+  }
+}

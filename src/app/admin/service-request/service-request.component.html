@@ -239,6 +239,9 @@
                                         </p>
                                     </div>
                                 </div>
+                                <app-iautocomplete [data]="employeesList"  (OnSelect)="selectedEmployee($event)" [(ngModel)]="employeeId"
+                                [ngModelOptions]="{standalone: true}">
+                                </app-iautocomplete>
                             </div>
                         </ng-container>                            
                     </div>
