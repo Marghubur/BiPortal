@@ -186,18 +186,14 @@
 
                     <div class="col-md-12 mt-4 m-0 p-0 row">                            
                         <ng-container>
-                            <div class="border p-4">
+                            <div class="min-h-25 border p-4">
                                 <div name="SERVICE" class="col-12">
-                                    <div class="min-h-25 px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'SERVICE'}">
-                                        <div class="form-group col-12">
-                                            <label for="">Description</label>
-                                            <textarea rows="5" name="RequestDescription" formControlName="RequestDescription" class="col-12 form-control">
-                                            </textarea>
-                                        </div>
+                                    <div class="px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'SERVICE'}">
+                                        
                                     </div>
                                 </div>
                                 <div name="BOOKING" class="col-12">
-                                    <div class="min-h-25 px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'BOOKING'}">
+                                    <div class="px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'BOOKING'}">
                                         <div class="form-group col-4">
                                             <label for="">Duration</label>
                                             <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
@@ -213,7 +209,7 @@
                                     </div>
                                 </div>
                                 <div name="PRODUCT" class="col-12">
-                                    <div class="min-h-25 px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'PRODUCT'}">
+                                    <div class="px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'PRODUCT'}">
                                         <div class="form-group col-3">
                                             <label for="">Catagory</label>
                                             <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
@@ -233,11 +229,21 @@
                                     </div>
                                 </div>
                                 <div name="NOT" class="col-12" [ngClass]="{'d-none': requestId != ''}">
-                                    <div class="min-h-25 px-2 pt-4 d-flex flex-column justify-content-center">
+                                    <div class="px-2 pt-4 d-flex flex-column justify-content-center">
                                         <p class="disable-color display-6 fw-bold text-center m-0 p-0">
                                             PLEASE SELECT REQUEST TYPE
                                         </p>
                                     </div>
+                                </div>
+                                <div class="form-group col-12">
+                                  <label for="">Description</label>
+                                  <textarea rows="5" name="RequestDescription" formControlName="RequestDescription" class="col-12 form-control">
+                                  </textarea>
+                                </div>
+                                <div class="d-flex">
+                                  <div *ngFor="let user of managers">
+                                    <span>{{user.text}}</span>
+                                  </div>
                                 </div>
                                 <app-iautocomplete [data]="employeesList"  (OnSelect)="selectedEmployee($event)" [(ngModel)]="employeeId"
                                 [ngModelOptions]="{standalone: true}">
