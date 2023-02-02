@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef } from "@angular/core";
+import { ThisReceiver } from "@angular/compiler";
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, HostListener } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import * as $ from "jquery";
 import { CommonService } from "src/providers/common-service/common.service";
@@ -37,7 +38,7 @@ import { API } from "src/providers/constants";
     },
   ],
 })
-export class IautocompleteComponent implements OnInit, ControlValueAccessor {
+export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueAccessor {
   BindingData: any = [];
   AutofillDroopdownHeight: any;
   HeightValue: number;
@@ -74,16 +75,16 @@ export class IautocompleteComponent implements OnInit, ControlValueAccessor {
   @Output() onKeyup = new EventEmitter();
   @Output() onFocus = new EventEmitter();
 
-  @Input()
-  set SingleMode(mode: string) {
-    if (typeof mode !== "undefined") {
-      if (mode === "on") {
-        this.IsSingleMode = true;
-      } else {
-        this.IsSingleMode = false;
-      }
-    }
-  }
+  // @Input()
+  // set SingleMode(mode: string) {
+  //   if (typeof mode !== "undefined") {
+  //     if (mode === "on") {
+  //       this.IsSingleMode = true;
+  //     } else {
+  //       this.IsSingleMode = false;
+  //     }
+  //   }
+  // }
 
 
   @Input()
@@ -93,6 +94,7 @@ export class IautocompleteComponent implements OnInit, ControlValueAccessor {
       this.ClassName = dataModal.className;
       this.DropdownData = dataModal.data;
       this.OriginalData = dataModal.data;
+      this.IsSingleMode = dataModal.isMultiSelect;
     }
 
     this.ManageBindingData();
@@ -123,6 +125,26 @@ export class IautocompleteComponent implements OnInit, ControlValueAccessor {
   constructor(private commonService: CommonService) {
     this.HeightValue = 250;
     this.AutofillDroopdownHeight = this.HeightValue.toString() + "px";
+    // this.RegisterListener();
+  }
+
+  ngOnDestroy(): void {
+    document.removeEventListener('click', null);
+    console.log("Handler removed.");
+  }
+
+  @HostListener('document:click', ['$event'])
+  CloseSuggestionBox(e: any) {
+    if(this.IsSingleMode) {
+      if (e.target.getAttribute('title') == "bt-autocomplete") {
+        // do nothing
+      } else {
+        if (this.$CurrentAutoComplete) {
+          this.hide();
+          this.killSuggestions();
+        }
+      }
+    }
   }
 
   LoadFromApi(e: any) {
@@ -386,6 +408,19 @@ export class IautocompleteComponent implements OnInit, ControlValueAccessor {
 
   select(a, b) {
     var c = this.BindingData[a];
+    if(this.IsSingleMode) {
+      let classlist = (event.currentTarget as any).querySelector('span[name="selected-check"]').classList;
+      if (classlist.length > 0)
+        classlist.remove('d-none');
+      else
+        classlist.add('d-none');
+
+      this.DefaultValue = c.value;
+      this.onChange(this.DefaultValue);
+      this.OnSelect.emit(c.value);
+      return;
+    }
+
     c &&
       (this.el.val(c),
       (this.ignoreValueChange = b),
@@ -409,16 +444,16 @@ export class IautocompleteComponent implements OnInit, ControlValueAccessor {
     this.onChange(this.DefaultValue);
     this.OnSelect.emit(c.value);
 
-    if (this.IsSingleMode) {
-      let index = 0;
-      while (index < this.BindingData.length) {
-        if (this.BindingData[index].value === c.value) {
-          this.BindingData.splice(index, 1);
-        }
-        index++;
-      }
-      this.ToggleRemoveIcon(JSON.stringify(c), false);
-    }
+    // if (this.IsSingleMode) {
+    //   let index = 0;
+    //   while (index < this.BindingData.length) {
+    //     if (this.BindingData[index].value === c.value) {
+    //       this.BindingData.splice(index, 1);
+    //     }
+    //     index++;
+    //   }
+    //   this.ToggleRemoveIcon(JSON.stringify(c), false);
+    // }
   }
 
   AddToAutoFillList() {
@@ -516,8 +551,10 @@ export class IautocompleteComponent implements OnInit, ControlValueAccessor {
   }
 
   onBlur() {
-    this.hide();
-    this.killSuggestions();
+    if(!this.IsSingleMode) {
+      this.hide();
+      this.killSuggestions();
+    }
   }
 
   setOptions(a) {
@@ -614,4 +651,5 @@ export class autoCompleteModal {
   className?: string = 'disabled-input';
   placeholder?: string = null;
   tabindex?: any = null;
+  isMultiSelect?: boolean = false;
 }

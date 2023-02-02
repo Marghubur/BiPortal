@@ -53,6 +53,7 @@ import { AnnexureComponent } from './annexure/annexure.component';
 import { OfferletterComponent } from './offerletter/offerletter.component';
 import { EmailConfigComponent } from './email-config/email-config.component';
 import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.component';
+import { ServiceRequestComponent } from './service-request/service-request.component';
 import { ProductsComponent } from './products/products.component';
 
 
@@ -102,6 +103,7 @@ import { ProductsComponent } from './products/products.component';
     OfferletterComponent,
     EmailConfigComponent,
     EmaillinkconfigComponent,
+    ServiceRequestComponent,
     ProductsComponent
   ],
   imports: [
