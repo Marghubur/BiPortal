@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ApprovalRequest, Notification, Declaration, Form12B, FreeTaxFilling, IncomeTax, PaySlip, Preferences, PreviousIncome, Profile, ResetPassword, Salary, Summary, Taxcalculation, TaxSavingInvestment, UserAttendance, UserDashboard, UserLeave, UserProfilePage, UserTimesheet, UserHoliday } from 'src/providers/constants';
+import { ApprovalRequest, Notification, ResetPassword, Taxcalculation, UserAttendance, UserDashboard, UserLeave, UserProfilePage, UserTimesheet, UserHoliday} from 'src/providers/constants';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: Notification, component: NotificationComponent},
   { path: ApprovalRequest, component: ApprovalRequestComponent},
   { path: UserHoliday, component: HolidayComponent},
-  { path: ResetPassword, component: ResetpasswordComponent}
+  { path: ResetPassword, component: ResetpasswordComponent},
 ];
 
 @NgModule({

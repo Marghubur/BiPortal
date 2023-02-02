@@ -106,16 +106,6 @@ export class LeaveComponent implements OnInit {
     }
   }
 
-  disablefutureDate(current: Date, noDays: number) {
-    const daysAgo = new Date(current.getTime());
-    daysAgo.setDate(current.getDate() - noDays);
-    this.maxDate = {
-      year: daysAgo.getFullYear(),
-      month: daysAgo.getMonth(),
-      day: daysAgo.getDate()
-    }
-  }
-
   leavePopUp() {
     this.isPageReady = true;
     this.leaveDetail = new LeaveModal();
@@ -166,7 +156,7 @@ export class LeaveComponent implements OnInit {
         return;
       }
 
-      let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate())) /(1000 * 60 * 60 * 24));
+      let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate())) /(1000 * 60 * 60 * 24)) + 1;
       if (leaveDay <=0) {
         ErrorToast("Please select a valid end date");
         this.isLoading = false;
@@ -175,8 +165,6 @@ export class LeaveComponent implements OnInit {
 
       if (this.leaveDays > 0){
         this.checkIsLeaveAvailabel();
-        this.isLoading = false;
-        return;
       }
 
       this.http.post('Leave/ApplyLeave', value).then ((res:ResponseModel) => {
@@ -210,7 +198,7 @@ export class LeaveComponent implements OnInit {
 
   onDateSelection(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
-    let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24));
+    let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24)) + 1;
     if (leaveDay > 0) {
       this.leaveDays = leaveDay;
       this.checkIsLeaveAvailabel();
@@ -244,6 +232,8 @@ export class LeaveComponent implements OnInit {
     let leave = this.leaveTypes.find(x => x.LeavePlanTypeId == leavePlanTypeId);
     if (this.leaveDays > leave.AvailableLeave) {
       ErrorToast("Applying leave is greater than leave limit");
+      this.isLoading = false;
+      return;
     }
   }
 
@@ -347,7 +337,7 @@ export class LeaveComponent implements OnInit {
         });
         startDate.setDate(startDate.getDate() + 1);
       }
-      
+
     }
   }
 
@@ -356,7 +346,7 @@ export class LeaveComponent implements OnInit {
       this.isDisabled = (
         date: NgbDateStruct
       ) => {
-        return this.json.disabledDates.find((x) => 
+        return this.json.disabledDates.find((x) =>
           new NgbDate(x.year, x.month, x.day).equals(date)
         ) ? true : false;
       }

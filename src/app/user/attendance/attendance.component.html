@@ -96,6 +96,7 @@
                               <span class=" ms-2" *ngSwitchCase="3">Week off</span>
                               <span class=" ms-2" *ngSwitchCase="2">Waiting..</span>
                               <span class=" ms-2" *ngSwitchCase="1">Not applied</span>
+                              <span class=" ms-2" *ngSwitchCase="4">Holiday</span>
                               <span class=" ms-2" *ngSwitchCase="0">-</span>
                               <span class=" ms-2" *ngSwitchCase="5">00:00</span>
                               <span class=" ms-2" *ngSwitchCase="9">
@@ -117,6 +118,9 @@
                             <div placement="top" ngbTooltip="Weekend" aria-expanded="false"
                             *ngSwitchCase = "3">
                               <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
+                            </div>
+                            <div placement="top" ngbTooltip="Weekend" aria-expanded="false" *ngSwitchCase = "4">
+                              <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Holiday
                             </div>
                             <div placement="top" ngbTooltip="Approved" aria-expanded="false"
                             *ngSwitchCase = "9">
@@ -162,12 +166,16 @@
                                 <i class="fa zoom-2 fa-gift text-primary-c" aria-hidden="true"></i>
                               </div>
                             </span>
+                            <span class=" ms-2" *ngIf="item.PresentDayStatus == 4">
+                              <div placement="top" ngbTooltip="Holiday" aria-expanded="false">
+                                <i class="fa zoom-2 fa-gift text-primary-c" aria-hidden="true"></i>
+                              </div>
+                            </span>
                             <span class="ms-2" *ngIf="item.PresentDayStatus == 2">
                               <div placement="top" ngbTooltip="Pending" aria-expanded="false">
                                 <i class="fa fa-clock-o zoom-2 text-warning" aria-hidden="true"></i>
                               </div>
                             </span>
-
                           </div>
                         </td>
                       </tr>

@@ -305,6 +305,10 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  navtoAddEmp() {
+    this.nav.navigate(ManageEmployee, null);
+  }
+
   editProfile(item: any) {
     if (item !== null) {
       let EmpId = item.EmployeeUid;

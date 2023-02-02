@@ -309,6 +309,10 @@ export class ClientsComponent implements OnInit {
   viewClientFile(client: any) {
     this.nav.navigate(BillDetail, client)
   }
+
+  navtoRegisterClient() {
+    this.nav.navigate(RegisterClient, null);
+  }
 }
 
 export class OnlineDocModel {

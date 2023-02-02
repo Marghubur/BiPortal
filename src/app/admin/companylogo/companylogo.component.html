@@ -138,7 +138,7 @@
           <div class="mt-3 col-md-6">
             <label for="" class="form-label">File Role</label>
             <select class="form-select" [(ngModel)]="fileRole" [ngClass]="{'error-field': fileRole == null}">
-              <option value="" selected>Select Role</option>
+              <option value=null selected>Select Role</option>
               <option [value]="item" *ngFor="let item of fileRoles">{{item}}</option>
             </select>
           </div>

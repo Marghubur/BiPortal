@@ -33,7 +33,7 @@
                 <div class="col-md-4">
                   <label class="form-label">Client/Organization Name *</label>
                   <input placeholder="Client or organization name" class="form-control" name="ClientName" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="ClientName"
+                    formControlName="ClientName" maxlength="150"
                     [ngClass]="{'error-field': submitted && f.ClientName.errors !== null && f.ClientName.errors.required}" />
                 </div>
                 <div class="col-md-4">
@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-md-4 pb-3">
                   <label class="form-label">Email Id *</label>
-                  <input class="form-control" placeholder="Email Id"
+                  <input class="form-control" placeholder="Email Id" maxlength="40"
                     [ngClass]="{'error-field': submitted && f.Email.errors !== null && (f.Email.errors.required || f.Email.errors.email)}" name="Email"
                     formControlName="Email" />
                 </div>
@@ -53,8 +53,8 @@
               <div class="col-md-12 row">
                 <div class="col-md-4 mb-3">
                   <label class="form-label">PAN No.#</label>
-                  <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()"
-                    name="PanNo" formControlName="PanNo" />
+                  <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()" max="10"
+                    name="PanNo" formControlName="PanNo" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Alternate No.#</label>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">FAX No.# (optional)</label>
-                  <input class="form-control" placeholder="FAX No.#" name="Fax"
+                  <input class="form-control" placeholder="FAX No.#" name="Fax" maxlength="10"
                     oninput="this.value = this.value.toUpperCase()" formControlName="Fax" />
                 </div>
               </div>
@@ -71,7 +71,7 @@
               <div class="col-md-12 row">
                 <div class="col-md-4 mb-3"></div>
                 <div class="col-md-4 mb-3">
-                  <label class="form-label">GSTIN No.#</label>
+                  <label class="form-label">GSTIN No.# *</label>
                   <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No." [ngClass]="{'error-field': submitted && f.GSTNO.errors !== null && f.GSTNO.errors.required}"
                     name="GSTNO" formControlName="GSTNO" />
                 </div>
@@ -81,13 +81,9 @@
                     OnlyNumber="10" />
                 </div>
               </div>
-
             </div>
           </div>
         </div>
-
-        <div class="col-12"></div>
-
         <div class="col-12 row m-0 mb-4">
           <div class="col-md-12">
             <div class="x_panel mh-auto">
@@ -99,22 +95,22 @@
               <div class="col-md-12 mt-4 mb-3 mb-3 row">
                 <div class="col-md-3">
                   <label class="form-label">Other Email 1</label>
-                  <input placeholder="Other Email 1" class="form-control" name="OtherEmail_4"
+                  <input placeholder="Other Email 1" class="form-control" name="OtherEmail_4" maxlength="40"
                     formControlName="OtherEmail_1" />
                 </div>
                 <div class="col-md-3">
                   <label class="form-label">Other Email 2</label>
-                  <input placeholder="Other Email 2" class="form-control" name="OtherEmail_2"
+                  <input placeholder="Other Email 2" class="form-control" name="OtherEmail_2" maxlength="40"
                     formControlName="OtherEmail_2" />
                 </div>
                 <div class="col-md-3">
                   <label class="form-label">Other Email 3</label>
-                  <input placeholder="Other Email 3" class="form-control" name="OtherEmail_3"
+                  <input placeholder="Other Email 3" class="form-control" name="OtherEmail_3" maxlength="40"
                     formControlName="OtherEmail_3" />
                 </div>
                 <div class="col-md-3">
                   <label class="form-label">Other Email 4</label>
-                  <input placeholder="Other Email 4" class="form-control" name="OtherEmail_4"
+                  <input placeholder="Other Email 4" class="form-control" name="OtherEmail_4" maxlength="40"
                     formControlName="OtherEmail_4" />
                 </div>
               </div>
@@ -134,22 +130,22 @@
                 <!-- <label class="form-label">Address *</label> -->
                 <div class="col-md-12 mt-4">
                   <label class="form-label">Bank Name</label>
-                  <input placeholder="Bank name" class="form-control" name="BankName"  oninput="this.value = this.value.toUpperCase()"
-                    formControlName="BankName" />
+                  <input placeholder="Bank name" class="form-control" name="BankName"  oninput="this.value = this.value.toUpperCase()" maxlength="40"
+                    formControlName="BankName" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
                 </div>
                 <div class="col-md-12 mt-4">
                   <label class="form-label">Account No.#</label>
-                  <input placeholder="Account No.#" class="form-control" OnlyNumber="30" name="AccountNo" formControlName="AccountNo" />
+                  <input placeholder="Account No.#" class="form-control" OnlyNumber="30" name="AccountNo" formControlName="AccountNo"  OnlyNumber="34" onkeypress="return event.charCode >=48 && event.charCode <=57"/>
                 </div>
                 <div class="col-md-12 mt-4">
                   <label class="form-label">IFSC Code</label>
-                  <input placeholder="IFSC Code" class="form-control" name="IFSC"
-                    oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" />
+                  <input placeholder="IFSC Code" class="form-control" name="IFSC" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
+                    oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" maxlength="11"/>
                 </div>
                 <div class="col-md-12 mt-4">
                   <label class="form-label">Branch Name (Optional)</label>
-                  <input placeholder="Branch name" class="form-control" name="BranchName"  oninput="this.value = this.value.toUpperCase()"
-                    formControlName="BranchName" />
+                  <input placeholder="Branch name" class="form-control" name="BranchName"  oninput="this.value = this.value.toUpperCase()" maxlength="40"
+                    formControlName="BranchName" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                 </div>
               </div>
             </div>
@@ -165,41 +161,41 @@
               </div>
               <div class="col-md-12 mb-3 mb-3 row">
                 <div class="col-md-6 mt-4">
-                  <label class="form-label">Country</label>
-                  <input placeholder="Country" class="form-control" name="Country" formControlName="Country" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}"/>
+                  <label class="form-label">Country *</label>
+                  <input placeholder="Country" class="form-control" name="Country" formControlName="Country" maxlength="50" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}"/>
                 </div>
                 <div class="col-md-6 mt-4">
-                  <label class="form-label">State</label>
-                  <input placeholder="State" class="form-control" name="State" formControlName="State"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.State.errors !== null && f.State.errors.required}"/>
+                  <label class="form-label">State *</label>
+                  <input placeholder="State" class="form-control" name="State" formControlName="State" maxlength="40" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.State.errors !== null && f.State.errors.required}"/>
                 </div>
                 <div class="col-md-6 mt-4">
-                  <label class="form-label">City</label>
-                  <input placeholder="City" class="form-control" name="City" formControlName="City"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.City.errors !== null && f.City.errors.required}"/>
+                  <label class="form-label">City *</label>
+                  <input placeholder="City" class="form-control" name="City" formControlName="City" maxlength="40" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.City.errors !== null && f.City.errors.required}"/>
                 </div>
                 <div class="col-md-6 mt-4">
-                  <label class="form-label">Pincode</label>
+                  <label class="form-label">Pincode *</label>
                   <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6" [ngClass]="{'error-field': submitted && f.Pincode.errors !== null && f.Pincode.errors.required}"
                     formControlName="Pincode" />
                 </div>
                 <div class="col-md-6 mt-4">
-                  <label class="form-label">Address Line 1</label>
+                  <label class="form-label">Address Line 1 *</label>
                   <input placeholder="Address Line 1" class="form-control" name="FirstAddress" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.FirstAddress.errors !== null && f.FirstAddress.errors.required}"
-                    formControlName="FirstAddress" />
+                    formControlName="FirstAddress" maxlength="40"/>
                 </div>
                 <div class="col-md-6 mt-4">
-                  <label class="form-label">Address Line 2</label>
-                  <input placeholder="Address Line 2" class="form-control" name="SecondAddress" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.SecondAddress.errors !== null && f.SecondAddress.errors.required}"
+                  <label class="form-label">Address Line 2 *</label>
+                  <input placeholder="Address Line 2" class="form-control" name="SecondAddress" maxlength="40" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.SecondAddress.errors !== null && f.SecondAddress.errors.required}"
                     formControlName="SecondAddress" />
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Address Line 3</label>
                   <input placeholder="Address Line 3" class="form-control" name="ThirdAddress" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="ThirdAddress" />
+                    formControlName="ThirdAddress" maxlength="40"/>
                 </div>
                 <div class="col-md-6 mt-4">
                   <label class="form-label">Address Line 4</label>
                   <input placeholder="Address Line 4" class="form-control" name="ForthAddress" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="ForthAddress" />
+                    formControlName="ForthAddress" maxlength="40"/>
                 </div>
               </div>
             </div>

@@ -1,7 +1,20 @@
-.right-box {
-  min-height: 11rem !important;
+.table a {
+  cursor: pointer;
+  color: darkblue;
+  text-decoration: underline;
 }
 
-.message-box:last-child {
-  border-bottom: none !important;
+.cell-wrapper {
+  padding-left: .6rem;
+  padding-right: .6rem;
+}
+
+.detail-area {
+  min-height: 14rem;
+  max-height: 14rem;
+}
+
+.view-popup {
+  z-index: 2200 !important;
+  background: #222222a1 !important;
 }

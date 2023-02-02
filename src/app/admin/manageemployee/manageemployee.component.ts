@@ -54,6 +54,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   addUpdateClientForm: FormGroup = null;
   leavePlans: Array<any> = [];
   isCompaniesDetails: boolean = true;
+  minDate: any = null;
+  imageIndex: number = 0;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -80,6 +82,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       text: "Default Manager"
     });
     this.managerList.className = "autocomplete-height";
+    this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.model = this.calendar.getToday();
     let data = this.nav.getValue();
     this.employeeUid = 0;
@@ -102,8 +105,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   buildProfileImage(fileDetail: any) {
+    this.profileURL = "";
     this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
     this.employeeModal.FileId = fileDetail.FileId;
+    this.employeeModal.OldFileName = fileDetail.FileName;
   }
 
   buildPageData(response: ResponseModel) {
@@ -271,7 +276,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       OrganizationId: new FormControl(this.currentCompanyDetail.OrganizationId, [Validators.required]),
       CompanyId: new FormControl(this.currentCompanyDetail.CompanyId, [Validators.required]),
       CTC: new FormControl(this.employeeModal.CTC, [Validators.required]),
-      Gender: new FormControl(this.employeeModal.Gender ? 'true' : 'false')
+      Gender: new FormControl(this.employeeModal.Gender ? 'true' : 'false'),
+      OldFileName: new FormControl(this.employeeModal.OldFileName)
     });
   }
 
@@ -412,7 +418,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
 
-      formData.append(ProfileImage, file);
+      formData.append(`${ProfileImage}_${this.imageIndex}`, file);
       let url: string = "";
       if(this.isUpdate)
       url = `Employee/updateemployeedetail`;
@@ -605,8 +611,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       // });
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
+      this.imageIndex = new Date().getTime();
       this.fileDetail.push({
-        name: "profile",
+        name: $`profile_${this.imageIndex}`,
         file: file
       });
     }
@@ -685,4 +692,5 @@ export class EmployeeDetail {
   ClientJson: string = '';
   Gender: boolean = true;
   OrganizationId: number = 0;
+  OldFileName: string = null;
 }

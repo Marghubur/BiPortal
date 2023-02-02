@@ -1,16 +1,21 @@
 <div class="col-md-12 col-sm-12 main-container">
   <div class="x_panel">
-    <ng-container *ngIf="!isPageLoading">
-      <div class="x_panel x-panel-changed">
-        <div class="x_header">
-          <div class="x_header_title d-flex align-items-center justify-content-between">
-            <h2>Email Link Config Details<small>like page name, emails etc</small></h2>
-            <button class="btn btn-primary-c" [disabled]="isLoading || isAutoTrigger" (click)="sendEmail()">
-              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
-              {{ isLoading ? 'Sending ...' : 'Send Manually' }}
-            </button>
-          </div>
+    <div class="x_panel x-panel-changed">
+      <div class="x_header">
+        <div class="x_header_title d-flex align-items-center justify-content-between">
+          <h2>Email Link Config Details<small>like page name, emails etc</small></h2>
+          <button class="btn btn-primary-c" [disabled]="isLoading || isAutoTrigger || isPageLoading" (click)="sendEmail()">
+            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
+            {{ isLoading ? 'Sending ...' : 'Send Manually' }}
+          </button>
         </div>
+      </div>
+      <div class="px-1">
+        <div class="px-1">
+          <app-breadcrums></app-breadcrums>
+        </div>
+      </div>
+      <ng-container *ngIf="!isPageLoading">
         <form [formGroup]="emaillinkForm" *ngIf="emaillinkForm">
           <div class="col-md-12 row">
             <div class="mt-3 col-md-3">
@@ -113,23 +118,23 @@
             </div>
           </ng-container>
         </form>
-      </div>
-      <div class="text-end">
-        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="saveTemplate()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Save' }}
-        </button>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="isPageLoading">
-      <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-        <div class="col-md-3 modal-container f-12 text-center cog-wheel">
-          <img src="assets/images/cog.gif" alt="" />
-          <h6 class="modal-title title-message">
-            Please Wait ........
-          </h6>
+        <div class="text-end">
+          <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="saveTemplate()">
+            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Save' }}
+          </button>
         </div>
-      </div>
-    </ng-container>
+      </ng-container>
+      <ng-container *ngIf="isPageLoading">
+        <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+            <h6 class="modal-title title-message">
+              Please Wait ........
+            </h6>
+          </div>
+        </div>
+      </ng-container>
+    </div>
   </div>
 </div>

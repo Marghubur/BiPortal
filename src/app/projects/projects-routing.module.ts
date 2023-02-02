@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ManageProject, ProjectList, ProjectWiki } from 'src/providers/constants';
+import { ManageProject, ProjectList, ProjectWiki, UserProjectList } from 'src/providers/constants';
 import { ManageProjectComponent } from './manage-project/manage-project.component';
 import { ProjectsComponent } from './projects.component';
 import { WikiComponent } from './wiki/wiki.component';
@@ -8,6 +8,7 @@ import { WikiComponent } from './wiki/wiki.component';
 const routes: Routes = [
   { path: ProjectWiki, component: WikiComponent },
   { path: ProjectList, component: ProjectsComponent },
+  { path: UserProjectList, component: ProjectsComponent },
   { path: ManageProject, component: ManageProjectComponent }
 
 ];

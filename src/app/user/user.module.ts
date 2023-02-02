@@ -17,8 +17,8 @@ import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { HolidayComponent } from './holiday/holiday.component';
+import { ProjectsModule } from '../projects/projects.module';
 import { ServiceRequestComponent } from './service-request/service-request.component';
-
 
 @NgModule({
   declarations: [
@@ -41,6 +41,7 @@ import { ServiceRequestComponent } from './service-request/service-request.compo
     FormsModule,
     UserRoutingModule,
     UtilModule,
+    ProjectsModule,
     UserIncomeDeclarationModule
   ],
   providers: [

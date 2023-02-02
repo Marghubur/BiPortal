@@ -18,8 +18,10 @@
 
   <div class="x_panel pb-0 mb-0">
     <div class="x_header">
-      <h2>LEAVE TYPE: {{leaveTypeDeatils.PlanName | uppercase}}</h2>
-      <div class="clearfix"></div>
+      <div class="d-flex align-items-baseline">
+        <h5 class="c-header">LEAVE TYPE: </h5>
+        <h6 class="ps-1 c-header">{{leaveTypeDeatils.PlanName | uppercase}}</h6>
+      </div>
     </div>
     <div class="px-1">
       <app-breadcrums></app-breadcrums>
@@ -1690,7 +1692,7 @@
                                   <option value="2">Sr. HR Manager</option>
                                 </select>
                                 <div class="d-flex align-items-center mt-3"
-                                  [ngClass]="{'d-none': leaveApprovalForm.controls['ApprovalChain'].controls[i].controls.IsSkipToNextLevel.value != true}"
+                                  [ngClass]="{'d-none': leaveApprovalForm.get('ApprovalChain').controls.length == i+1}"
                                   data-name="skip-section">
                                   <div class="form-check">
                                     <input class="form-check-input" type="checkbox" formControlName="IsSkipToNextLevel"
@@ -1715,7 +1717,7 @@
                               </a>
                             </div>
                             <a href="javascript:void(0)"
-                              [ngClass]="{'d-none': leaveApprovalForm.controls['ApprovalChain'].controls[i].controls.IsSkipToNextLevel.value == true}"
+                              [ngClass]="{'d-none': leaveApprovalForm.get('ApprovalChain').controls.length == i, 'pe-none': leaveApprovalForm.controls['ApprovalChain'].controls[i].controls.ApprovalRoleTypeId.value <= 0}"
                               data-name="createApprovalChain" class="text-decoration-none mt-4"
                               (click)="createApprovalChain(i)"><i class="fa fa-plus pe-2 py-3"></i>Add New Level</a>
                           </div>
@@ -1726,7 +1728,7 @@
                           <input class="form-check-input" type="checkbox" formControlName="IsRequiredAllLevelApproval">
                           <label class="form-check-label ms-2">
                             Auto-approve (and skip) approver level, in case approver is not yet registered with HiringBell
-                            not yet assigned role (e.g. RM, Project Manager, Department Head/Business uunit Head etc.) on
+                            not yet assigned role (e.g. RM, Project Manager, Department Head/Business unit Head etc.) on
                             has been relieved.
                           </label>
                         </div>
@@ -1739,7 +1741,7 @@
                           <input class="form-check-input" type="checkbox"
                             formControlName="IsPauseForApprovalNotification">
                           <label class="form-check-label ms-2">
-                            Pause sending of email notification (to approvers) for each request that uis being raised or
+                            Pause sending of email notification (to approvers) for each request that is being raised or
                             approved. Approvers will be able to view these requests as part of the daily email digest.
                           </label>
                         </div>
@@ -1756,7 +1758,7 @@
                             name="IsReportingManageIsDefaultForAction"
                             formControlName="IsReportingManageIsDefaultForAction">
                           <label class="form-check-label ms-2">
-                            Doest reporting manage is default for approval.
+                            Does reporting manager is default for approval.
                           </label>
                         </div>
                         <div class="px-4">

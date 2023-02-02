@@ -12,9 +12,9 @@
             Compose
           </button>
         </div>
-        <ng-container *ngFor="let c of mailItems">
+        <ng-container *ngFor="let c of mailItems; let i = index;">
           <div class="d-flex flex-column justify-content-start" [ngClass]="{'selected': c.IsActive}">
-            <a href="javascript:void(0)" class="text-decoration-none">
+            <a href="javascript:void(0)" class="text-decoration-none" (click)="activeMenu(i)">
               <div class="d-flex justify-content-between p-2">
                 <div class="d-flex">
                   <div class="px-3 text-dark">
@@ -116,7 +116,7 @@
           </div>
         </ng-container>
       </div>
-      <ng-container *ngIf="inboxMail.length == 0 && !isPageReady">
+      <ng-container *ngIf="inboxMail.length == 0 && isPageReady">
         <div class="col-12 text-center p-4 m-5">
           NO EMAIL AVAILABLE
         </div>

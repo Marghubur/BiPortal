@@ -48,6 +48,9 @@
                 <canvas id="monthlyPerformance" width="100" height="35"></canvas>
               </div>
             </div>
+            <div class="monthly-record-status" *ngIf="!isMonthlyRecordFound">
+              NO RECORD FOUND
+            </div>
             <!-- <div class="col-md-4">
               <div class="my-4 takehome-box px-3 rounded py-2">
                 <h5>Take Home</h5>

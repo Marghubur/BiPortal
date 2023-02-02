@@ -18,14 +18,10 @@
   left: 0;
 }
 
-.takehome-box {
- border-left: 5px solid rgb(33, 85, 205);
-}
-
-.deduction-box {
- border-left: 5px solid rgb(168, 92, 249);
-}
-
-.grosspay-box {
- border-left: 5px solid rgb(98, 195, 243);
+.monthly-record-status {
+  position: absolute;
+  left: 40%;
+  font-weight: bold;
+  font-size: 20px;
+  color: #222;
 }

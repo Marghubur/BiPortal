@@ -47,6 +47,8 @@ export class IncometaxComponent implements OnInit {
     var month = 3;
     this.currentYear = dt.getFullYear();
     var years = dt.getFullYear();
+    if (new Date().getMonth() + 1 <= 4)
+      years = years -1;
     let i = 0;
     while( i < 12) {
       var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
