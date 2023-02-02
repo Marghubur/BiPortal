@@ -231,9 +231,9 @@
                                         formControlName="CurrentSalary">
                                     </div>
                                     <div class="col-md-6">
-                                      <select name="CurrencyType" class="form-control" readonly
+                                      <select name="CurrencyType" class="form-select" readonly
                                         formControlName="CurrencyType">
-                                        <option value="">Select Currenty</option>
+                                        <option value="" disabled>Select Currency</option>
                                         <option value="INR">Indian Rupees</option>
                                         <option value="USD">US Dollar</option>
                                       </select>
@@ -248,7 +248,7 @@
                                         <label class="form-label">Project duration in years</label>
                                         <select class="form-select" aria-label="Default select example"
                                           formControlName="Years" disabled>
-                                          <option value="1" selected>1</option>
+                                          <option value="1" selected disabled>1</option>
                                           <option value="2">2</option>
                                           <option value="3">3</option>
                                           <option value="4">4</option>
@@ -264,7 +264,7 @@
                                         <label class="form-label">Project duration in Months</label>
                                         <select class="form-select" aria-label="Default select example"
                                           formControlName="Months" disabled>
-                                          <option value="1" selected>1</option>
+                                          <option value="1" selected disabled>1</option>
                                           <option value="2">2</option>
                                           <option value="3">3</option>
                                           <option value="4">4</option>
@@ -357,7 +357,7 @@
                                 <label class="form-label">Course Type</label>
                                 <select class="form-select" aria-label="Default select example" disabled
                                   formControlName="Course_Type" (click)="editEmployment()">
-                                  <option value="fulltime" selected>Full Time</option>
+                                  <option value="fulltime" selected disabled>Full Time</option>
                                   <option value="parttime">Part Time</option>
                                   <option value="distance">Correspondence/Distance Learning</option>
                                 </select>
@@ -383,7 +383,7 @@
                                 <div class="col-md-6">
                                   <div class="mb-3">
                                     <label class="form-label">Grading Syatem </label>
-                                    <select name="Grading_System" class="form-control" formControlName="Grading_System"
+                                    <select name="Grading_System" class="form-select" formControlName="Grading_System"
                                       disabled>
                                       <option value="">Select grading system</option>
                                       <option value="Scale10GradingSystem">Scale 10 Grading System</option>
@@ -715,14 +715,14 @@
               </li>
 
               <li [ngbNavItem]="7">
-                <a ngbNavLink>Carrer Profile</a>
+                <a ngbNavLink>Career Profile</a>
                 <ng-template ngbNavContent>
                   <form [formGroup]="carrerProfileForm">
                     <div class="col-md-12">
                       <div class="x_panel">
                         <div class="x_header">
                           <div class="x_header_title">
-                            <h2>Carrer Profile</h2>
+                            <h2>Career Profile</h2>
                             <i class="fa fa-pencil ps-3 pt-2 text-primary fa-lg" (click)="editCarrerProfile()"></i>
                           </div>
                         </div>
@@ -766,9 +766,9 @@
                                       formControlName="ExpectedSalary">
                                   </div>
                                   <div class="col-md-6">
-                                    <select name="CurrencyType" class="form-control" formControlName="CurrencyType"
+                                    <select name="CurrencyType" class="form-select" formControlName="CurrencyType"
                                       disabled>
-                                      <option value="">Select Currenty</option>
+                                      <option value="">Select Currency</option>
                                       <option value="INR">Indian Rupees</option>
                                       <option value="USD">US Dollar</option>
                                     </select>
@@ -806,7 +806,7 @@
                         </ng-container>
                         <div class="col-md-12 profile-message" *ngIf="isCarrerProfileData">
                           <div>
-                            Please Add Carrer Profile Details
+                            Please Add Career Profile Details
                           </div>
                         </div>
                       </div>
@@ -881,9 +881,9 @@
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Marital Status </label>
-                            <select name="" id="" class="form-control" formControlName="MaritalStatus"
+                            <select name="" id="" class="form-select" formControlName="MaritalStatus"
                               name="MaritalStatus" disabled>
-                              <option value="" selected>Marital Status</option>
+                              <option value="" selected disabled>Marital Status</option>
                               <option value="Single">Single/Unmarried</option>
                               <option value="Married">Married</option>
                               <option value="Widowed">Widowed</option>
@@ -894,8 +894,8 @@
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Category</label>
-                            <select name="" id="" class="form-control" formControlName="Category" disabled>
-                              <option value="">Select Category</option>
+                            <select name="" id="" class="form-select" formControlName="Category" disabled>
+                              <option value="" disabled>Select Category</option>
                               <option value="General">General</option>
                               <option value="SC">SC</option>
                               <option value="ST">ST</option>
@@ -924,7 +924,7 @@
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Work Permit for USA</label>
-                            <select name="" id="" class="form-control" formControlName="PermitUSA" disabled>
+                            <select name="" id="" class="form-select" formControlName="PermitUSA" disabled>
                               <option value="HaveH1Visa">Have H1 Visa</option>
                               <option value="NeedH1Visa">Need H1 Visa</option>
                               <option value="TNPermitHolder">TN Permit Holder</option>
@@ -967,7 +967,7 @@
                               </div>
                               <div class="col-md-6 mb-3 pe-0">
                                 <label class="form-label">Proficiency</label>
-                                <select name="" id="" class="form-control" formControlName="ProficiencyLanguage" disabled>
+                                <select name="" id="" class="form-select" formControlName="ProficiencyLanguage" disabled>
                                   <option value="Beginner">Beginner</option>
                                   <option value="Proficient">Proficient</option>
                                   <option value="Expert">Expert</option>
@@ -977,7 +977,7 @@
                                     <input class="form-check-input" type="checkbox" formControlName="LanguageSpeak"
                                       disabled>
                                     <label class="form-check-label" for="LanguageSpeak">
-                                      Spaek
+                                      Speak
                                     </label>
                                   </div>
                                 </div>
@@ -1019,7 +1019,7 @@
         <div class="py-5 my-5">
           <h6 class="fw-bold fs-3 text-center text-dark">Profile Details are loading</h6>
           <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container f-12 text-center cog-wheel">
+            <div class="col-md-3 modal-container  text-center cog-wheel">
               <img src="assets/images/cog.gif" alt="" />
               <h6 class="modal-title title-message">
                 Please Wait ........
@@ -1193,8 +1193,8 @@
                       <input class="form-control" name="CurrentSalary" [(ngModel)]="editEmploymentModal.CurrentSalary">
                     </div>
                     <div class="col-md-6">
-                      <select name="CurrencyType" class="form-control" [(ngModel)]="editEmploymentModal.CurrencyType">
-                        <option value="">Select Currenty</option>
+                      <select name="CurrencyType" class="form-select" [(ngModel)]="editEmploymentModal.CurrencyType">
+                        <option value="" disabled>Select Currency</option>
                         <option value="INR">Indian Rupees</option>
                         <option value="USD">US Dollar</option>
                       </select>
@@ -1343,7 +1343,7 @@
                   <label class="form-label">Course Type</label>
                   <select class="form-select" aria-label="Default select example"
                     [(ngModel)]="editEducationModal.Course_Type">
-                    <option value="">Select Course Type</option>
+                    <option value="" disabled>Select Course Type</option>
                     <option value="fulltime" selected>Full Time</option>
                     <option value="parttime">Part Time</option>
                     <option value="distance">Correspondence/Distance Learning</option>
@@ -1370,9 +1370,9 @@
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">Grading Syatem </label>
-                      <select name="Grading_System" class="form-control"
+                      <select name="Grading_System" class="form-select"
                         [(ngModel)]="editEducationModal.Grading_System">
-                        <option value="">Select grading system</option>
+                        <option value="" disabled>Select grading system</option>
                         <option value="Scale10GradingSystem">Scale 10 Grading System</option>
                         <option value="Scale4GradingSystem">Scale 4 Grading System</option>
                         <option value="%Markof100Maximum">% Mark of 100 Maximum</option>
@@ -1418,8 +1418,8 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Project Duration</label>
-                <select class="form-control" name="ProjectDuration" [(ngModel)]="editProjectModal.ProjectDuration">
-                  <option value="">Select Project Duration</option>
+                <select class="form-select" name="ProjectDuration" [(ngModel)]="editProjectModal.ProjectDuration">
+                  <option value="" disabled>Select Project Duration</option>
                   <option value="1">1 month</option>
                   <option value="2">2 month</option>
                   <option value="3">3 month</option>
@@ -1435,8 +1435,8 @@
                 </select>
               </div>
               <div class="mb-3">
-                <label class="form-label">Technalogy Stack</label>
-                <input class="form-control" placeholder="Technalogy Stack" name="TechnalogyStack"
+                <label class="form-label">Technology Stack</label>
+                <input class="form-control" placeholder="Technology Stack" name="TechnalogyStack"
                   [(ngModel)]="editProjectModal.TechnalogyStack" />
               </div>
             </div>
@@ -1448,8 +1448,8 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Project Status</label>
-                <select class="form-control" name="ProjectStatus" [(ngModel)]="editProjectModal.ProjectStatus">
-                  <option value="">Select Project Status</option>
+                <select class="form-select" name="ProjectStatus" [(ngModel)]="editProjectModal.ProjectStatus">
+                  <option value="" disabled>Select Project Status</option>
                   <option value="Completed">Completed</option>
                   <option value="Pending">Pending</option>
                 </select>
@@ -1863,7 +1863,7 @@
   </div>
 </div>
 
-<!--Add/ Edit Carrer Profile Modal -->
+<!--Add/ Edit Career Profile Modal -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="CarrerProfileModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
@@ -1896,7 +1896,7 @@
                 <label class="form-label">Desired Job Type</label>
                 <select class="form-select" aria-label="Default select example"
                   [(ngModel)]="editCarrerProfileModal.DesiredTypePermanent">
-                  <option value="">Select Desire Job Type</option>
+                  <option value="" disabled>Select Desire Job Type</option>
                   <option value="1">Permanent</option>
                   <option value="2">Contractual</option>
                 </select>
@@ -1905,7 +1905,7 @@
                 <label class="form-label">Desired Emp Type</label>
                 <select class="form-select" aria-label="Default select example"
                   [(ngModel)]="editCarrerProfileModal.DesiredEmploymentType">
-                  <option value="">Select Desired Emp Type</option>
+                  <option value="" disabled>Select Desired Emp Type</option>
                   <option value="1">Full Time</option>
                   <option value="2">Part Time</option>
                 </select>
@@ -1918,8 +1918,8 @@
                   <input class="form-control" name="ExpectedSalary" [(ngModel)]="editCarrerProfileModal.ExpectedSalary">
                 </div>
                 <div class="col-md-6">
-                  <select name="CurrencyType" class="form-control" [(ngModel)]="editCarrerProfileModal.CurrencyType">
-                    <option value="">Select Currency</option>
+                  <select name="CurrencyType" class="form-select" [(ngModel)]="editCarrerProfileModal.CurrencyType">
+                    <option value="" disabled>Select Currency</option>
                     <option value="INR">Indian Rupees</option>
                     <option value="USD">US Dollar</option>
                   </select>
@@ -1941,7 +1941,7 @@
               <label class="form-label">Preferred Shift</label>
               <select class="form-select" aria-label="Default select example"
                 [(ngModel)]="editCarrerProfileModal.PreferredShift">
-                <option value="">Select Preferred Shift</option>
+                <option value="" disabled>Select Preferred Shift</option>
                 <option value="1">Day</option>
                 <option value="2">Night</option>
                 <option value="2">Flexible</option>
@@ -2033,9 +2033,9 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Marital Status </label>
-            <select class="form-control" [(ngModel)]="editPersonalDetailModal.MaritalStatus"
+            <select class="form-select" [(ngModel)]="editPersonalDetailModal.MaritalStatus"
               name="MaritalStatus">
-              <option value=null selected>Select Marital Status</option>
+              <option value=null selected disabled>Select Marital Status</option>
               <option value="Single">Single/Unmarried</option>
               <option value="Married">Married</option>
               <option value="Widowed">Widowed</option>
@@ -2046,8 +2046,8 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Category</label>
-            <select class="form-control" [(ngModel)]="editPersonalDetailModal.Category">
-              <option value=null>Select Category</option>
+            <select class="form-select" [(ngModel)]="editPersonalDetailModal.Category">
+              <option value=null disabled>Select Category</option>
               <option value="General">General</option>
               <option value="SC">SC</option>
               <option value="ST">ST</option>
@@ -2076,8 +2076,8 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Work Permit for USA</label>
-            <select name="" id="" class="form-control" [(ngModel)]="editPersonalDetailModal.PermitUSA">
-              <option value=null>Select Work Permit</option>
+            <select name="" id="" class="form-select" [(ngModel)]="editPersonalDetailModal.PermitUSA">
+              <option value=null disabled>Select Work Permit</option>
               <option value="HaveH1Visa">Have H1 Visa</option>
               <option value="NeedH1Visa">Need H1 Visa</option>
               <option value="TNPermitHolder">TN Permit Holder</option>
@@ -2117,8 +2117,8 @@
               </div>
               <div class="col-md-6 mb-3 pe-0">
                 <label class="form-label">Proficiency</label>
-                <select name="" id="" class="form-control" formControlName="ProficiencyLanguage">
-                  <option value="">Select option</option>
+                <select name="" id="" class="form-select" formControlName="ProficiencyLanguage">
+                  <option value="" disabled>Select option</option>
                   <option value="Beginner">Beginner</option>
                   <option value="Proficient">Proficient</option>
                   <option value="Expert">Expert</option>
@@ -2127,7 +2127,7 @@
                   <div class="form-check col">
                     <input class="form-check-input" type="checkbox" formControlName="LanguageSpeak" value="true">
                     <label class="form-check-label" for="LanguageSpeak">
-                      Spaek
+                      Speak
                     </label>
                   </div>
                 </div>
@@ -2167,7 +2167,7 @@
   *ngIf="!isLoading">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-body f-12 text-center cog-wheel">
+      <div class="modal-body  text-center cog-wheel">
         <img src="assets/images/cog.gif" alt="">
         <h6 class="modal-title">Please Wait ........</h6>
       </div>
