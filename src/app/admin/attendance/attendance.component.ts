@@ -148,6 +148,34 @@ export class AttendanceComponent implements OnInit {
   //   });
   // }
 
+  previousMonthAttendance(month: number, index: number) {
+    let startDate = new Date(new Date().getFullYear(), month, 1);
+    let endDate;
+    if (month == new Date().getMonth())
+      endDate = new Date();
+    else
+      endDate = new Date(new Date().getFullYear(), month+1, 0);
+
+    let data = {
+      EmployeeUid: Number(this.employeeId),
+      ClientId: Number(this.clientId),
+      UserTypeId : UserType.Employee,
+      AttendenceFromDay: startDate,
+      AttendenceToDay: endDate,
+      ForYear: new Date().getFullYear(),
+      ForMonth: month + 1,
+      CompanyId: this.userDetail.CompanyId
+    }
+    let radiobtn = document.querySelectorAll('input[name="btnradio"]');
+    if (radiobtn.length > 0) {
+      for (let i = 0; i < radiobtn.length; i++) {
+        radiobtn[i].removeAttribute('checked');
+      }
+      radiobtn[index].setAttribute('checked', '');
+    }
+    this.loadMappedData(data);
+  }
+
   findEmployeeCompany() {
     let companies: Array<any> = this.local.findRecord("Companies") as Array<any>;
     if (companies) {
@@ -191,7 +219,11 @@ export class AttendanceComponent implements OnInit {
       ForMonth: this.fromDate.getMonth() + 1,
       CompanyId: Number(this.clientId)
     }
+    this.loadMappedData(data);
 
+  }
+
+  loadMappedData(data: any) {
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
       if(response.ResponseBody.EmployeeDetail) {
         this.client = response.ResponseBody.EmployeeDetail;
