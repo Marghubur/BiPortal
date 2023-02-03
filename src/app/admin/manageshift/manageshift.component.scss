@@ -1,0 +1,37 @@
+.multi-select {
+  .contents {
+      border: 1px solid #d9d9d9;
+
+      .elem {
+          a {
+              display: flex;
+              justify-content: space-between;
+              padding: 2px 10px;
+          }
+
+
+          padding: 1px 0px;
+      }
+
+      .elem:hover {
+          background-color: wheat;
+      }
+  }
+
+  .selected-items {
+      min-height: 4vh;
+  }
+}
+
+.cell-wrapper {
+  padding-left: .6rem;
+  padding-right: .6rem;
+}
+
+.bg-ant {
+background-color: antiquewhite;
+}
+
+textarea {
+resize: none;
+}

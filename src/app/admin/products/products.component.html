@@ -20,8 +20,9 @@
         <ng-container *ngIf="isPageReady">
           <div class="x_content mt-4">
             <div class="text-end pb-2">
-              <a href="javascript:void(0)" (click)="addCatagoryPopUp()" class="text-decoration-none pe-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Add Catagory">
-                <i class="fa fa-crosshairs text-primary fa-lg"></i>
+              <a href="javascript:void(0)" (click)="addCatagoryPopUp()" class="text-decoration-none pe-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Add Category">
+                <i class="fa fa-plus text-primary fa-lg"></i>
+                <span class="ps-2">Add Category</span>
               </a>
             </div>
             <div class="t-table t-list t-border col-md-12">
@@ -273,8 +274,8 @@
               <input type="text" class="form-control" placeholder="Enter MRP" oninput="this.value = this.value.toUpperCase()" formControlName="MRP" [ngClass]="{'error-field': submitted && f.MRP.errors !== null && f.MRP.errors.required}">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Catagory Name</label>
-              <input type="text" class="form-control" placeholder="Enter Catagory Name" oninput="this.value = this.value.toUpperCase()" formControlName="CatagoryName" [ngClass]="{'error-field': submitted && f.CatagoryName.errors !== null && f.CatagoryName.errors.required}">
+              <label for="" class="form-label">Category Name</label>
+              <input type="text" class="form-control" placeholder="Enter Category Name" oninput="this.value = this.value.toUpperCase()" formControlName="CatagoryName" [ngClass]="{'error-field': submitted && f.CatagoryName.errors !== null && f.CatagoryName.errors.required}">
             </div>
 
           </div>
@@ -369,7 +370,7 @@
   <div class="modal-dialog p-5 modal-fullscreen modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addCatagoryModalLabel">Add/Update Catagory</h5>
+        <h5 class="modal-title" id="addCatagoryModalLabel">Add/Update Category</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -400,10 +401,10 @@
                       </div>
                       <div class="th fe-1">
                         <div class="cell-wrapper">
-                          <input class="form-control form-control-sm" autofocus placeholder="Search by Catagory Code" [(ngModel)]="catagoryDetail.CatagoryCode"
+                          <input class="form-control form-control-sm" autofocus placeholder="Search by Category Code" [(ngModel)]="catagoryDetail.CatagoryCode"
                            (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
                           <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryCodeAsc, 'CatagoryCode')">
-                            <a href="javascript:void(0)" class="pe-2">Catagory Code</a>
+                            <a href="javascript:void(0)" class="pe-2">Category Code</a>
                             <i class="fa fa-sort-amount-asc"
                               [ngClass]="{'d-none': orderByCatagoryCodeAsc == null || !orderByCatagoryCodeAsc }" aria-hidden="true"></i>
                             <i class="fa fa-sort-amount-desc"
@@ -413,10 +414,10 @@
                       </div>
                       <div class="th fe-3">
                         <div class="cell-wrapper">
-                          <input class="form-control form-control-sm" autofocus placeholder="Search by Catagory Description" [(ngModel)]="catagoryDetail.CatagoryDescription"
+                          <input class="form-control form-control-sm" autofocus placeholder="Search by Category Description" [(ngModel)]="catagoryDetail.CatagoryDescription"
                            (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
                           <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryDescriptionAsc, 'CatagoryDescription')">
-                            <a href="javascript:void(0)" class="pe-2">Catagory Description</a>
+                            <a href="javascript:void(0)" class="pe-2">Category Description</a>
                             <i class="fa fa-sort-amount-asc"
                               [ngClass]="{'d-none': orderByCatagoryDescriptionAsc == null || !orderByCatagoryDescriptionAsc }" aria-hidden="true"></i>
                             <i class="fa fa-sort-amount-desc"
@@ -485,12 +486,12 @@
                     <input type="text" class="form-control" placeholder="Enter Group Id" formControlName="GroupId">
                   </div>
                   <div class="col-md-6 mt-3">
-                    <label for="" class="form-label">Catagory Code</label>
-                    <input type="text" class="form-control" placeholder="Enter Catagory Code" formControlName="CatagoryCode" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryCode.errors !== null && m.CatagoryCode.errors.required}">
+                    <label for="" class="form-label">Category Name</label>
+                    <input type="text" class="form-control" placeholder="Enter Category Name" formControlName="CatagoryCode" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryCode.errors !== null && m.CatagoryCode.errors.required}">
                   </div>
                 </div>
                 <div class="col-md-12 mt-3">
-                  <label for="" class="form-label">Catagory Description</label>
+                  <label for="" class="form-label">Category Description</label>
                   <textarea name="" id="" cols="30" rows="10" class="form-control description-area" placeholder="Enter CatagoryDescription" formControlName="CatagoryDescription" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryDescription.errors !== null && m.CatagoryDescription.errors.required}"></textarea>
                 </div>
               </form>
