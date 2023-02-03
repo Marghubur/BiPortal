@@ -481,8 +481,8 @@ export class ManageComponent implements OnInit {
     this.SkillIndex = 0;
     this.ExptLanguage = '';
     this.ExptVersion = null;
-    this.ExptinYrs = null;
-    this.ExptinMonths = null;
+    this.ExptinYrs = 0;
+    this.ExptinMonths = 0;
     this.Exptdate = null;
     this.isEditItSkill = true;
   }
@@ -517,8 +517,8 @@ export class ManageComponent implements OnInit {
     this.userModal.Skills = skill.value;
     this.ExptLanguage = '';
     this.ExptVersion = null;
-    this.ExptinYrs = null;
-    this.ExptinMonths = null;
+    this.ExptinYrs = 0;
+    this.ExptinMonths = 0;
     this.Exptdate = null;
   }
 

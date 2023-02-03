@@ -25,13 +25,15 @@ export class HolidayComponent implements OnInit {
   currentCompany: any = null;
   fromModel: NgbDateStruct;
   toModel: NgbDateStruct;
-  years: Array<number> = [];
+  year: number = 0;
   holidayData: Filter = null;
   holidayDetail: CompanyHoliday= null;
   orderByDescriptionNoteAsc: boolean = null;
   orderByCountryAsc: boolean = null;
   orderByStartDateAsc: boolean = null;
   orderByEndDateAsc: boolean = null;
+  mindate: any = null;
+  maxdate: any = null;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -40,12 +42,11 @@ export class HolidayComponent implements OnInit {
 
   ngOnInit(): void {
     let data = this.local.findRecord("Companies");
+    this.year = new Date().getFullYear();
     this.holidayData = new Filter();
+    this.mindate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
+    this.maxdate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.holidayDetail = new CompanyHoliday();
-    for (let i = 0; i < 3; i++) {
-      let year = new Date().getFullYear();
-      this.years.push(year - i);
-    }
     if (!data) {
       return;
     } else {
@@ -156,6 +157,8 @@ export class HolidayComponent implements OnInit {
   }
 
   addHolidayPopup() {
+    this.fromModel = { day: new Date().getDate(), month:new Date().getMonth() + 1, year:new Date().getFullYear()};
+    this.toModel = { day: new Date().getDate(), month:new Date().getMonth() + 1, year:new Date().getFullYear()};
     this.selectedHoliday = new CompanyHoliday();
     this.initForm();
     $('#manageHolidayModal').modal('show');

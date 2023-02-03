@@ -113,6 +113,7 @@ export const OfferLetter = 'admin/offerletter';
 export const EmailConfiguration = 'admin/emailconfiguration';
 export const ServiceRequest = 'admin/servicerequest';
 export const Products = 'admin/products';
+export const ManageShift = 'admin/manageshift';
 
 
 // ********************** Admin route pages  *******************
