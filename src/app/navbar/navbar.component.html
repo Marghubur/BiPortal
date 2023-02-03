@@ -5,7 +5,7 @@
           alt="logo"></a>
     </div>
 
-    <div class="fe-2">
+    <div class="fe-2" *ngIf="isAdmin">
       <div class="d-flex justify-content-start">
         <div class="px-4 d-flex justify-content-start icon-action ms-3">
           <a href="javascript:void(0)" (click)="navLogoPage()">
@@ -46,7 +46,7 @@
               </ul>
             </div>
           </li>
-  
+
           <li class="d-none d-sm-block">
             <div class="btn-group">
               <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
@@ -64,7 +64,7 @@
               </ul>
             </div>
           </li>
-  
+
           <li>
             <a type="button" id="btn-user" class="btn btn-user position-relative" data-bs-toggle="dropdown"
               aria-expanded="false">
@@ -75,7 +75,7 @@
               </a>
               <img class="img-xs rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
             </a>
-  
+
             <div *ngIf="!IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown lpp" ngbDropdownMenu
               aria-labelledby="UserDropdown">
               <a class="dropdown-item p-over-header p-0 lpp__a">
@@ -91,7 +91,7 @@
                 Sign In
               </a>
             </div>
-  
+
             <div *ngIf="IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown adject-p-o lpp"
               ngbDropdownMenu aria-labelledby="UserDropdown">
               <a class="dropdown-item p-over-header p-0 lpp__a">
@@ -118,8 +118,8 @@
             </div>
           </li>
         </ul>
-  
-  
+
+
         <div class="menu-sm-burger" id="hamburger-item">
           <a href="javascript:void(0)" class="icon-deep" (click)="toggleMenu()">
             <i class="fa fa-bars" aria-hidden="true"></i>
