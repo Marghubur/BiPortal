@@ -291,7 +291,7 @@
                   </tr>
                 </thead>
                 <tbody formArrayName="timesheetArray">
-                  <tr *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11, 'highlighted-column': item.get('TimesheetStatus').value == -1}">
+                  <tr *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;">
                     <ng-container >
                       <ng-container [formGroupName]="i">
                         <td>{{item.get('PresentDate').value | date: 'EEE'}}</td>
@@ -321,7 +321,7 @@
                         </td>
                         <td>
                           <ng-container [ngSwitch]="item.get('TimesheetStatus').value">
-                            <span class="" *ngSwitchCase="8">
+                            <span class="" *ngSwitchCase="2">
                               <i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>
                               Pending
                             </span>

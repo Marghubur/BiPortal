@@ -151,6 +151,12 @@ export class ManageEmailtemplateComponent implements OnInit {
     })
   }
 
+  resetEmailTemp() {
+    this.emailTemplateDetail = new EmailTemplate();
+    this.emailTemplateDetail.BodyContent = null;
+    this.initForm();
+  }
+
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, ManageEmailTemplate);
   }

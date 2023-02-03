@@ -1,5 +1,4 @@
 import { AfterViewChecked, Component, ComponentRef, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { ErrorToast } from 'src/providers/common-service/common.service';
 declare var $: any;
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
