@@ -198,7 +198,7 @@
               <input type="text" placeholder="Company Name" readonly formControlName="CompanyName" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Event Name</label>
+              <label for="" class="form-label">Event Name *</label>
               <input type="text" placeholder="Event Name" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32" formControlName="EventName" [ngClass]="{'error-field': submitted && f.EventName.errors !== null && f.EventName.errors.required}" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
@@ -211,12 +211,12 @@
           </div>
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Start Date</label>
+              <label for="" class="form-label">Start Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
                   <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
                     <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="fromModel"
-                      (dateSelect)="onfromDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}" #fd="ngbDatepicker">
+                      (dateSelect)="onfromDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #fd="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="fd.toggle()" type="button"><i
                           class="fa fa-calendar" aria-hidden="true"></i>
@@ -227,12 +227,12 @@
               </form>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">End Date</label>
+              <label for="" class="form-label">End Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
                   <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
                     <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="toModel"
-                      (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}" #d="ngbDatepicker">
+                      (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #d="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
                           class="fa fa-calendar" aria-hidden="true"></i>
@@ -252,7 +252,7 @@
           </div>
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Description Name</label>
+              <label for="" class="form-label">Description Name *</label>
               <input type="text" class="form-control" [ngClass]="{'error-field': submitted && f.DescriptionNote.errors !== null && f.DescriptionNote.errors.required}" oninput="this.value = this.value.toUpperCase()"  formControlName="DescriptionNote" placeholder="Description Note">
             </div>
             <div class="col-md-4 mt-3">
@@ -262,21 +262,21 @@
               </select>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Country</label>
+              <label for="" class="form-label">Country *</label>
               <input type="text" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}" class="form-control" formControlName="Country" placeholder="Country">
             </div>
           </div>
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Year</label>
-              <select class="form-select" formControlName="Year" [ngClass]="{'error-field': submitted && f.Year.errors !== null && f.Year.errors.required}">
-                <option [value]="item" *ngFor="let item of years">{{item}}</option>
+              <select class="form-select" formControlName="Year" disabled="" [ngClass]="{'error-field': submitted && f.Year.errors !== null && f.Year.errors.required}">
+                <option [value]="year" >{{year}}</option>
               </select>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Is Public Holiday</label>
+              <label for="" class="form-label">Holiday Type</label>
               <select class="form-select" formControlName="IsPublicHoliday" [ngClass]="{'error-field': submitted && f.IsPublicHoliday.errors !== null && f.IsPublicHoliday.errors.required}">
-                <option value="true">Yes</option>
+                <option value="true">Is Public</option>
                 <option value="false">No</option>
               </select>
             </div>

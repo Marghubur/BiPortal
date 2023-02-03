@@ -211,9 +211,11 @@
                             <div [formGroupName]="index" class="col-md-12 row">
                               <div class="col-md-6">
                                 <div class="mb-3">
-                                  <label class="form-label">Organization <i
-                                      class="fa fa-pencil fa-lg text-primary ps-3 pt-2"
-                                      (click)="editEmployment(item)"></i></label>
+                                  <label class="form-label">Organization
+                                    <a href="javascript:void(0)" class="text-decoration-none" (click)="editEmployment(item)">
+                                      <i class="fa fa-pencil fa-lg text-primary ps-3 pt-2"></i>
+                                    </a>
+                                  </label>
                                   <input class="form-control" placeholder="Organization name" readonly name="Organization"
                                     formControlName="Organization" />
                                 </div>
@@ -344,8 +346,11 @@
 
                             <div class="col-md-6">
                               <div class="mb-3">
-                                <label class="form-label">Education <i class="fa fa-pencil text-primary fa-lg ps-3"
-                                    (click)="editEducation(education)"></i></label>
+                                <label class="form-label">Education
+                                  <a href="javascript:void(0)" class="text-decoration-none" (click)="editEducation(education)">
+                                    <i class="fa fa-pencil text-primary fa-lg ps-3"></i>
+                                  </a>
+                                </label>
                                 <input class="form-control" placeholder="Education" name="Degree_Name" readonly
                                   formControlName="Degree_Name" />
                               </div>
@@ -383,7 +388,7 @@
                                 </div>
                                 <div class="col-md-6">
                                   <div class="mb-3">
-                                    <label class="form-label">Grading Syatem </label>
+                                    <label class="form-label">Grading System </label>
                                     <select name="Grading_System" class="form-select" formControlName="Grading_System"
                                       disabled>
                                       <option value="" disabled>Select grading system</option>
@@ -418,7 +423,9 @@
                         <div class="x_header border-0">
                           <div class="x_header_title pt-3">
                             <h2 class="fw-bold">Key Skills</h2>
-                            <i class="fa fa-pencil ps-4 pt-2 text-primary fa-lg" (click)="editItSkillDetail()"></i>
+                            <a href="javascript:void(0)" class="text-decoration-none" (click)="editItSkillDetail()">
+                              <i class="fa fa-pencil ps-4 pt-2 text-primary fa-lg"></i>
+                            </a>
                           </div>
                         </div>
                         <ng-container formArrayName="TechnicalSkills" *ngIf="!isItSkillData">
@@ -724,7 +731,9 @@
                         <div class="x_header">
                           <div class="x_header_title">
                             <h2>Career Profile</h2>
-                            <i class="fa fa-pencil ps-3 pt-2 text-primary fa-lg" (click)="editCarrerProfile()"></i>
+                            <a href="javascript:void(0)" class="text-decoration-none" (click)="editCarrerProfile()">
+                              <i class="fa fa-pencil ps-3 pt-2 text-primary fa-lg" ></i>
+                            </a>
                           </div>
                         </div>
                         <ng-container formArrayName="CarrerProfile" *ngIf="!isCarrerProfileData">
@@ -825,7 +834,9 @@
                         <div class="x_header">
                           <div class="x_header_title">
                             <h2>Personal Details</h2>
-                            <i class="fa fa-pencil text-primary ps-3 pt-2 fa-lg" (click)="editPersonalDetail()"></i>
+                            <a href="javascript:void(0)" class="text-decoration-none" (click)="editPersonalDetail()">
+                              <i class="fa fa-pencil text-primary ps-3 pt-2 fa-lg" ></i>
+                            </a>
                           </div>
                         </div>
                         <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
@@ -1109,21 +1120,21 @@
           <div class="col-md-12 row my-4">
             <div class="col-md-3">
               <label class="form-label">Language</label>
-              <input type="text" class="form-control" placeholder="Enter your area of Expertise/Specialization" oninput="this.value = this.value.toUpperCase()"
+              <input type="text" class="form-control" maxlength="40" placeholder="Enter your area of Expertise/Specialization" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="ExptLanguage">
             </div>
             <div class="col-md-2">
               <label class="form-label">Version</label>
-              <input type="text" class="form-control" placeholder="Version" [(ngModel)]="ExptVersion" >
+              <input type="text" class="form-control" DecimalNumber="5" placeholder="Version" [(ngModel)]="ExptVersion" >
             </div>
             <div class="row col-md-4">
               <div class="col-md-6">
                 <label class="form-label">Exp in Yrs</label>
-                <input type="text" class="form-control" placeholder="Experience" [(ngModel)]="ExptinYrs" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                <input type="text" class="form-control" OnlyNumber="2" placeholder="Experience" [(ngModel)]="ExptinYrs" onkeypress="return event.charCode >=48 && event.charCode <=57">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Exp in Mo</label>
-                <input type="text" class="form-control" placeholder="Experience" [(ngModel)]="ExptinMonths" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                <input type="text" class="form-control" OnlyNumber="2" placeholder="Experience" [(ngModel)]="ExptinMonths" onkeypress="return event.charCode >=48 && event.charCode <=57">
               </div>
             </div>
             <div class="col-md-3">
@@ -1158,11 +1169,8 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="!isEdit">Add Employee
-        </h5>
-        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="isEdit">Edit -
-          {{editEmploymentModal.Designation}}
-        </h5>
+        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="!isEdit">Add Employee</h5>
+        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="isEdit">Edit Employee</h5>
         <a href="javasctript:void(0)" class="text-decoration-none text-danger fw-bold"
           (click)="deleteEmploymentConfirmation()" *ngIf="isEdit">DELETE</a>
         <div class="close-button">
@@ -1177,12 +1185,12 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Organization </label>
-                  <input class="form-control" placeholder="Organization name" name="Organization" oninput="this.value = this.value.toUpperCase()"
+                  <input class="form-control" placeholder="Organization name" maxlength="50" name="Organization" oninput="this.value = this.value.toUpperCase()"
                     [(ngModel)]="editEmploymentModal.Organization" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Designation </label>
-                  <input class="form-control" placeholder="Enter Designation" name="Designation" oninput="this.value = this.value.toUpperCase()"
+                  <input class="form-control" placeholder="Enter Designation" maxlength="50" name="Designation" oninput="this.value = this.value.toUpperCase()"
                     [(ngModel)]="editEmploymentModal.Designation" />
                 </div>
               </div>
@@ -1191,7 +1199,7 @@
                   <label class="form-label">Current Salary </label>
                   <div class="row">
                     <div class="col-md-6">
-                      <input class="form-control" name="CurrentSalary" [(ngModel)]="editEmploymentModal.CurrentSalary">
+                      <input class="form-control" name="CurrentSalary" OnlyNumber="9" [(ngModel)]="editEmploymentModal.CurrentSalary">
                     </div>
                     <div class="col-md-6">
                       <select name="CurrencyType" class="form-select" [(ngModel)]="editEmploymentModal.CurrencyType">
@@ -1249,7 +1257,6 @@
                   <h2>Project Description</h2>
                 </div>
               </div>
-
               <div>
                 <fieldset class="m-0 p-0 border-0">
                   <div class="mb-3">
@@ -1319,7 +1326,7 @@
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="!isEdit">Add Education
         </h5>
-        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="isEdit">Edit - {{editEducationModal.Degree_Name}}
+        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="isEdit">Edit Education
         </h5>
         <div class="close-button">
           <button type="button" [disabled]="isLoading" class="btn-close btn-sm" data-bs-dismiss="modal"
@@ -1334,12 +1341,12 @@
                 <div class="mb-3">
                   <label class="form-label">Education </label>
                   <input class="form-control" placeholder="Education" name="Degree_Name" oninput="this.value = this.value.toUpperCase()"
-                    [(ngModel)]="editEducationModal.Degree_Name" />
+                    [(ngModel)]="editEducationModal.Degree_Name" maxlength="80"/>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Specialization </label>
                   <input class="form-control " placeholder="Specialization" name="Specialization" oninput="this.value = this.value.toUpperCase()"
-                    [(ngModel)]="editEducationModal.Specialization" />
+                    [(ngModel)]="editEducationModal.Specialization" maxlength="80"/>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Course Type</label>
@@ -1355,13 +1362,13 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Course </label>
-                  <input class="form-control " placeholder="Course" name="Course" oninput="this.value = this.value.toUpperCase()"
+                  <input class="form-control " placeholder="Course" name="Course" oninput="this.value = this.value.toUpperCase()" maxlength="80"
                     [(ngModel)]="editEducationModal.Course" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">University </label>
                   <input class="form-control " placeholder="University Name" name="University_Name" oninput="this.value = this.value.toUpperCase()"
-                    [(ngModel)]="editEducationModal.University_Name" />
+                    [(ngModel)]="editEducationModal.University_Name" maxlength="80"/>
                 </div>
                 <div class="mb-3 row">
                   <div class="col-md-6">
@@ -1371,7 +1378,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label class="form-label">Grading Syatem </label>
+                      <label class="form-label">Grading System </label>
                       <select name="Grading_System" class="form-select"
                         [(ngModel)]="editEducationModal.Grading_System">
                         <option value="" disabled>Select grading system</option>
@@ -1415,7 +1422,7 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">Project Title *</label>
-                <input class="form-control" placeholder="Enter Project Title" oninput="this.value = this.value.toUpperCase()"
+                <input class="form-control" placeholder="Enter Project Title" maxlength="80" oninput="this.value = this.value.toUpperCase()"
                   [(ngModel)]="editProjectModal.ProjectTitle" name="ProjectTitle" />
               </div>
               <div class="mb-3">
@@ -1438,14 +1445,14 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Technology Stack</label>
-                <input class="form-control" placeholder="Technology Stack" name="TechnalogyStack" oninput="this.value = this.value.toUpperCase()"
+                <input class="form-control" placeholder="Technology Stack" maxlength="80" name="TechnalogyStack" oninput="this.value = this.value.toUpperCase()"
                   [(ngModel)]="editProjectModal.TechnalogyStack" />
               </div>
             </div>
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">Tag project to client.</label>
-                <input class="form-control " placeholder="Select Employment/Education" name="ClientName" oninput="this.value = this.value.toUpperCase()"
+                <input class="form-control " placeholder="Select Employment/Education" maxlength="80" name="ClientName" oninput="this.value = this.value.toUpperCase()"
                   [(ngModel)]="editProjectModal.ClientName" />
               </div>
               <div class="mb-3">
@@ -1458,7 +1465,7 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Roles and Responsibility *</label>
-                <input class="form-control" placeholder="Roles and Responsibility" name="RolesResponsibility" oninput="this.value = this.value.toUpperCase()"
+                <input class="form-control" placeholder="Roles and Responsibility" maxlength="80" name="RolesResponsibility" oninput="this.value = this.value.toUpperCase()"
                   [(ngModel)]="editProjectModal.RolesResponsibility" />
               </div>
             </div>
@@ -1466,7 +1473,7 @@
             <div class="col-md-12">
               <div class="mb-3">
                 <label class="form-label">Project Description</label>
-                <textarea name="ProjectDetails" row="10" placeholder="Type here ....." name="ProjectDetails"
+                <textarea name="ProjectDetails" row="10" placeholder="Type here ....." name="ProjectDetails" maxlength="4000"
                   class="form-control  Detail-Project-txtarea" [(ngModel)]="editProjectModal.ProjectDetails" oninput="this.value = this.value.toUpperCase()"></textarea>
               </div>
             </div>
@@ -1876,7 +1883,7 @@
             aria-label="Close"></button>
         </div>
       </div>
-      <p class="ps-3">This information will help the recruiters and Naukri know about your current job profile and also
+      <p class="ps-3">This information will help the recruiters tknow about your current job profile and also
         your
         desired job criteria. This will also help us personalize your job recommendations.</p>
       <div class="modal-body">
@@ -1884,12 +1891,12 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Industry</label>
-              <input class="form-control " placeholder="Industry" name="Industry" oninput="this.value = this.value.toUpperCase()"
+              <input class="form-control " maxlength="40" placeholder="Industry" name="Industry" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="editCarrerProfileModal.Industry" />
             </div>
             <div class="mb-3">
               <label class="form-label">Role Category</label>
-              <input class="form-control " placeholder="RoleCategory" name="RoleCategory" oninput="this.value = this.value.toUpperCase()"
+              <input class="form-control " maxlength="40" placeholder="RoleCategory" name="RoleCategory" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="editCarrerProfileModal.RoleCategory" />
             </div>
             <div class="row">
@@ -1916,7 +1923,7 @@
               <label class="form-label">Expected Salary </label>
               <div class="row">
                 <div class="col-md-6">
-                  <input class="form-control" name="ExpectedSalary" [(ngModel)]="editCarrerProfileModal.ExpectedSalary" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                  <input class="form-control" OnlyNumber="9" name="ExpectedSalary" [(ngModel)]="editCarrerProfileModal.ExpectedSalary" onkeypress="return event.charCode >=48 && event.charCode <=57">
                 </div>
                 <div class="col-md-6">
                   <select name="CurrencyType" class="form-select" [(ngModel)]="editCarrerProfileModal.CurrencyType">
@@ -1931,12 +1938,12 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Department</label>
-              <input class="form-control " placeholder="Department" name="Department" oninput="this.value = this.value.toUpperCase()"
+              <input class="form-control " maxlength="40" placeholder="Department" name="Department" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="editCarrerProfileModal.Department" />
             </div>
             <div class="mb-3">
               <label class="form-label">Job Role</label>
-              <input class="form-control " placeholder="Role" name="Role" [(ngModel)]="editCarrerProfileModal.Role" oninput="this.value = this.value.toUpperCase()"/>
+              <input class="form-control " maxlength="40" placeholder="Role" name="Role" [(ngModel)]="editCarrerProfileModal.Role" oninput="this.value = this.value.toUpperCase()"/>
             </div>
             <div class="mb-3">
               <label class="form-label">Preferred Shift</label>
@@ -1950,7 +1957,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Preferred Work Location (Max 3)</label>
-              <input class="form-control " placeholder="Preferred Work Location" name="PreferredWorkLocation" oninput="this.value = this.value.toUpperCase()"
+              <input class="form-control " maxlength="60" placeholder="Preferred Work Location" name="PreferredWorkLocation" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="editCarrerProfileModal.PreferredWorkLocation" />
             </div>
           </div>
@@ -2019,17 +2026,17 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Permanent Address </label>
-            <input class="form-control" placeholder="Full Address" name="Address" oninput="this.value = this.value.toUpperCase()"
+            <input class="form-control" maxlength="100" placeholder="Full Address" name="Address" oninput="this.value = this.value.toUpperCase()"
               [(ngModel)]="editPersonalDetailModal.Address" />
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Home Town</label>
-            <input class="form-control" placeholder="Home Town" name="HomeTown" oninput="this.value = this.value.toUpperCase()"
+            <input class="form-control" placeholder="Home Town" maxlength="40" name="HomeTown" oninput="this.value = this.value.toUpperCase()"
               [(ngModel)]="editPersonalDetailModal.HomeTown" />
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Pin Code</label>
-            <input class="form-control" placeholder="Pin Code" name="Pin Code" type="number" onkeypress="return event.charCode >=48 && event.charCode <=57"
+            <input class="form-control" placeholder="Pin Code" OnlyNumber="6" name="Pin Code" type="number" onkeypress="return event.charCode >=48 && event.charCode <=57"
               [(ngModel)]="editPersonalDetailModal.PinCode" />
           </div>
           <div class="col-md-6 mb-3">
@@ -2089,7 +2096,7 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Work Permit for Other Countries</label>
-            <input class="form-control" placeholder="You can choose 3 countries at max" name="PermitOtherCountry" oninput="this.value = this.value.toUpperCase()"
+            <input class="form-control" placeholder="You can choose 3 countries at max" maxlength="40" name="PermitOtherCountry" oninput="this.value = this.value.toUpperCase()"
               [(ngModel)]="editPersonalDetailModal.PermitOtherCountry" />
           </div>
         </div>
@@ -2100,7 +2107,7 @@
               [formGroupName]="e">
               <div class="col-md-6 mb-3 ps-0">
                 <label class="form-label">Language </label>
-                <input class="form-control" placeholder="Language" name="Language" formControlName="Language" oninput="this.value = this.value.toUpperCase()"/>
+                <input class="form-control" placeholder="Language" maxlength="20" name="Language" formControlName="Language" oninput="this.value = this.value.toUpperCase()"/>
                 <div class="row ps-3 mt-2">
                   <div class="form-check col">
                     <input class="form-check-input" type="checkbox" formControlName="LanguageRead" value="true">

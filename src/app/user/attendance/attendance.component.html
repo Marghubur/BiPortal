@@ -341,7 +341,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
         <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
       </div>
       <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
-      <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue"
+      <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" maxlength="100"
         [(ngModel)]="commentValue"></textarea>
       <div class="alert alert-danger" *ngIf="isComment">
         Comment is required.

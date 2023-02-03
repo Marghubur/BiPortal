@@ -26,8 +26,8 @@
               <div class="col-md-4 d-flex">
                 <div class="th f-small">
                   <div class="cell-wrapper">
-                    <select class="form-select table-filter-control form-select-sm" (keyup.enter)="filterRecords()"
-                      (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Month">
+                    <select class="form-select table-filter-control" (change)="filterRecords()"
+                      [(ngModel)]="employeeFile.Month">
                       <option value="0" selected disabled>Month</option>
                       <option value="1">Jan</option>
                       <option value="2">Feb</option>
@@ -46,8 +46,8 @@
                 </div>
                 <div class="th f-small">
                   <div class="cell-wrapper">
-                    <select class="form-select table-filter-control form-select-sm" (keyup.enter)="filterRecords()"
-                      (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Year">
+                    <select class="form-select table-filter-control" (change)="filterRecords()"
+                      [(ngModel)]="employeeFile.Year">
                       <option value="0" selected disabled>Year</option>
                       <option [value]="item" *ngFor="let item of allBillingYears">{{item}}</option>
                     </select>
@@ -114,8 +114,8 @@
               </div>
               <div class="th f-small">
                 <div class="cell-wrapper">
-                  <select class="form-select table-filter-control form-select-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Status">
+                  <select class="form-select table-filter-control" (change)="filterRecords()"
+                    [(ngModel)]="employeeFile.Status">
                     <option value="0" disabled>Status</option>
                     <option value="1">Completed</option>
                     <option value="2">Pending</option>
@@ -123,15 +123,15 @@
                     <option value="7">Raised</option>
                     <option value="5">Rejected</option>
                   </select>
-                  <div class="t-filter align-items-center justify-content-center">
-                    <a href="javascript:void()" class="pe-2">IsPaid</a>
+                  <div class="t-filter default-cursor align-items-center justify-content-center">
+                    <a href="javascript:void()" class="pe-2 default-cursor">IsPaid</a>
                   </div>
                 </div>
               </div>
               <div class="th fe-1">
                 <div class="cell-wrapper">
-                  <div class="t-filter">
-                    <a href="javascript:void()" class="pe-2">Paid On</a>
+                  <div class="t-filter default-cursor">
+                    <a class="pe-2 default-cursor">Paid On</a>
                   </div>
                 </div>
               </div>
@@ -183,8 +183,8 @@
                   <input class="form-control table-filter-control form-control-sm" readonly
                     (keyup.enter)="filterRecords()" (keydown.esc)="refreshFilter()"
                     [(ngModel)]="employeeFile.BilledAmount" placeholder="By Billed Amount">
-                  <div class="t-filter">
-                    <a href="javascript:void()" class="ps-2">Billed Amt</a>
+                  <div class="t-filter default-cursor">
+                    <a class="ps-2 default-cursor">Billed Amt</a>
                   </div>
                 </div>
               </div>
@@ -193,8 +193,8 @@
                   <input class="form-control table-filter-control form-control-sm" readonly
                     (keyup.enter)="filterRecords()" (keydown.esc)="refreshFilter()"
                     [(ngModel)]="employeeFile.ReceivedAmount" placeholder="By Received Amount">
-                  <div class="t-filter">
-                    <a href="javascript:void()" class="pe-2">Received</a>
+                  <div class="t-filter default-cursor">
+                    <a class="pe-2 default-cursor">Received</a>
                   </div>
                 </div>
               </div>
@@ -203,23 +203,23 @@
                   <input class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
                     readonly (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.TakeHome"
                     placeholder="By Take Home">
-                  <div class="t-filter">
-                    <a href="javascript:void()" class="pe-2">Take Home</a>
+                  <div class="t-filter default-cursor">
+                    <a class="pe-2 default-cursor">Take Home</a>
                   </div>
                 </div>
               </div>
               <div class="th f-small">
                 <div class="cell-wrapper">
-                  <select class="form-select table-filter-control form-select-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.GSTStatus">
+                  <select class="form-select table-filter-control" (change)="filterRecords()"
+                     [(ngModel)]="employeeFile.GSTStatus">
                     <option value="0" disabled>Status</option>
                     <option value="1">Completed</option>
                     <option value="2">Pending</option>
                     <option value="3">Canceled</option>
                     <option value="6">Raised</option>
                   </select>
-                  <div class="t-filter justify-content-center align-items-center">
-                    <a href="javascript:void()" class="pe-2">GST</a>
+                  <div class="t-filter default-cursor justify-content-center align-items-center">
+                    <a class="pe-2 default-cursor">GST</a>
                   </div>
                 </div>
               </div>
@@ -415,7 +415,7 @@
               <div class="col-4 form-group">
                 <label class="form-label">GST Status</label>
                 <select formControlName="Gststatus" name="Gststatus" class="form-select">
-                  <option value="0">Status Type</option>
+                  <option value="0" disabled>Status Type</option>
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
                   <option value="3">Canceled</option>
@@ -498,7 +498,7 @@
               <div class="col-6 form-group">
                 <label for="" class="form-label">File Status</label>
                 <select formControlName="StatusId" name="StatusId" class="form-select">
-                  <option value="0">File Status Type</option>
+                  <option value="0" disabled>File Status Type</option>
                   <option value="1">Completed</option>
                   <option value="2">Pending</option>
                   <option value="3">Canceled</option>
@@ -607,15 +607,18 @@
           <legend>Filter by billing detail.</legend>
           <p class="mark">Search bill by biling detail e.g. bill between numbers.</p>
           <div class="col-md-12 row">
-            <div class="col-12 d-flex mb-3">
-              <div class="ms-2 me-2">
-                <input type="radio" name="bydate" value="0" (click)="selectBillOption($event)"> Filter between dates
+            <div class="col-12 d-flex mb-3 align-items-center">
+              <div class="ms-2 me-3">
+                <input type="radio" name="bydate" value="0" (click)="selectBillOption($event)">
+                <a href="javascript:void(0)" (click)="selectBillOption($event)" class="text-decoration-none"> Filter between dates</a>
+              </div>
+              <div class="ms-2 me-3">
+                <input type="radio" name="bydate" value="1" (click)="selectBillOption($event)">
+                <a href="javascript:void(0)" (click)="selectBillOption($event)" class="text-decoration-none"> Before date</a>
               </div>
               <div class="ms-2 me-2">
-                <input type="radio" name="bydate" value="1" (click)="selectBillOption($event)"> Before date
-              </div>
-              <div class="ms-2 me-2">
-                <input type="radio" name="bydate" value="2" (click)="selectBillOption($event)"> After date
+                <input type="radio" name="bydate" value="2" (click)="selectBillOption($event)">
+                <a href="javascript:void(0)" (click)="selectBillOption($event)" class="text-decoration-none"> After date</a>
               </div>
             </div>
 

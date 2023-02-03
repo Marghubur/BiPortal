@@ -220,6 +220,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.isLoading = true;
     let errorCount = 0;
     if (this.documentForm.get("StatusId").value == 0) {
+      this.isLoading = false;
       this.isError = true;
       errorCount++;
     } else {
@@ -697,12 +698,22 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
 
     if (this.RaisedBilloption == "before") {
       fromDateValue = '0001-1-1'
+      if (this.fromDate == null) {
+        ErrorToast("Please select before date first")
+        this.isLoading = false;
+        return;
+      }
       toDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
       isDateFilterEnable = true;
     }
 
     if (this.RaisedBilloption == "after") {
        toDateValue= '2099-1-1'
+       if (this.toDate == null) {
+        ErrorToast("Please select to date first")
+        this.isLoading = false;
+        return;
+      }
        fromDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
       isDateFilterEnable = true;
     }
@@ -861,9 +872,13 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
 
   selectBillOption(e: any) {
     this.isReadonly = true;
-    this.RaisedBilloption = e.target.value;
-    if (this.RaisedBilloption == '0')
-      this.isReadonly = false;
+    if (e.target.value) {
+      this.RaisedBilloption = e.target.value;
+      if (this.RaisedBilloption == '0')
+        this.isReadonly = false;
+    }
+
+
   }
 
   EditCurrentDocument(userFile: any) {
