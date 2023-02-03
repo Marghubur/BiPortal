@@ -43,7 +43,8 @@ import { AdminResetPassword,
   EmailLinkConfig,
   ServiceRequest,
   Products,
-  ManageShift
+  ManageShift,
+  WorkFlow
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -89,6 +90,7 @@ import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.comp
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { ProductsComponent } from './products/products.component';
 import { ManageshiftComponent } from './manageshift/manageshift.component';
+import { WorkflowComponent } from './workflow/workflow.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -135,7 +137,8 @@ const routes: Routes = [
   { path: EmailConfiguration, component: EmailConfigComponent},
   { path: ServiceRequest, component: ServiceRequestComponent},
   { path: Products, component: ProductsComponent},
-  { path: ManageShift, component: ManageshiftComponent}
+  { path: ManageShift, component: ManageshiftComponent},
+  { path: WorkFlow, component: WorkflowComponent}
 ];
 
 @NgModule({

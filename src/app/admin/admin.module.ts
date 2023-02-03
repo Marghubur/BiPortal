@@ -56,6 +56,7 @@ import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.comp
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { ProductsComponent } from './products/products.component';
 import { ManageshiftComponent } from './manageshift/manageshift.component';
+import { WorkflowComponent } from './workflow/workflow.component';
 
 
 @NgModule({
@@ -106,7 +107,8 @@ import { ManageshiftComponent } from './manageshift/manageshift.component';
     EmaillinkconfigComponent,
     ServiceRequestComponent,
     ProductsComponent,
-    ManageshiftComponent
+    ManageshiftComponent,
+    WorkflowComponent
   ],
   imports: [
     CommonModule,

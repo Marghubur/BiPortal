@@ -32,6 +32,7 @@ export class HolidayComponent implements OnInit {
   orderByCountryAsc: boolean = null;
   orderByStartDateAsc: boolean = null;
   orderByEndDateAsc: boolean = null;
+  orderByFullDayAsc: boolean = null;
   mindate: any = null;
   maxdate: any = null;
 
@@ -44,8 +45,8 @@ export class HolidayComponent implements OnInit {
     let data = this.local.findRecord("Companies");
     this.year = new Date().getFullYear();
     this.holidayData = new Filter();
-    this.mindate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
-    this.maxdate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
+    this.mindate = {year: new Date().getFullYear(), month: 1, day: 1};
+    this.maxdate = {year: new Date().getFullYear(), month: 12, day: 31};
     this.holidayDetail = new CompanyHoliday();
     if (!data) {
       return;
@@ -103,14 +104,15 @@ export class HolidayComponent implements OnInit {
       StartDate: new FormControl(this.selectedHoliday.StartDate, [Validators.required]),
       EndDate: new FormControl(this.selectedHoliday.EndDate, [Validators.required]),
       EventName: new FormControl(this.selectedHoliday.EventName, [Validators.required]),
-      IsHoliday: new FormControl(this.selectedHoliday.IsHoliday, [Validators.required]),
+      IsHoliday: new FormControl(this.selectedHoliday.IsHoliday),
       IsHalfDay: new FormControl(this.selectedHoliday.IsHalfDay, [Validators.required]),
       DescriptionNote: new FormControl(this.selectedHoliday.DescriptionNote, [Validators.required]),
       ApplicableFor: new FormControl(this.selectedHoliday.ApplicableFor, [Validators.required]),
       Year: new FormControl(this.selectedHoliday.Year, [Validators.required]),
-      IsPublicHoliday: new FormControl(this.selectedHoliday.IsPublicHoliday, [Validators.required]),
+      IsPublicHoliday: new FormControl(this.selectedHoliday.IsPublicHoliday),
       Country: new FormControl(this.selectedHoliday.Country, [Validators.required]),
-      IsCompanyCustomHoliday: new FormControl(this.selectedHoliday.IsCompanyCustomHoliday, [Validators.required])
+      IsCompanyCustomHoliday: new FormControl(this.selectedHoliday.IsCompanyCustomHoliday),
+      HolidayType: new FormControl(this.selectedHoliday.HolidayType, [Validators.required])
     })
   }
 
@@ -119,6 +121,20 @@ export class HolidayComponent implements OnInit {
     this.submitted = true;
     let startDate = new Date(this.holidayForm.get('StartDate').value).setHours(0,0,0,0);
     let endDate = new Date(this.holidayForm.get('EndDate').value).setHours(0,0,0,0);
+    let holidaytype = this.holidayForm.get('IsPublicHoliday').value;
+    if (Number(holidaytype) == 1) {
+      this.holidayForm.get('IsPublicHoliday').setValue(true);
+      this.holidayForm.get('IsHoliday').setValue(false);
+      this.holidayForm.get('IsCompanyCustomHoliday').setValue(false);
+    } else if (Number(holidaytype) == 2) {
+      this.holidayForm.get('IsPublicHoliday').setValue(false);
+      this.holidayForm.get('IsHoliday').setValue(true);
+      this.holidayForm.get('IsCompanyCustomHoliday').setValue(false);
+    } else if (Number(holidaytype) == 3) {
+      this.holidayForm.get('IsPublicHoliday').setValue(false);
+      this.holidayForm.get('IsHoliday').setValue(false);
+      this.holidayForm.get('IsCompanyCustomHoliday').setValue(true);
+    }
     if (startDate > endDate) {
       this.isLoading = false;
       ErrorToast("End date must be greater than or equal to start date");
@@ -151,6 +167,13 @@ export class HolidayComponent implements OnInit {
       this.selectedHoliday = data;
       this.fromModel = { day: this.selectedHoliday.StartDate.getDate(), month:this.selectedHoliday.StartDate.getMonth() + 1, year:this.selectedHoliday.StartDate.getFullYear()};
       this.toModel = { day: this.selectedHoliday.EndDate.getDate(), month:this.selectedHoliday.EndDate.getMonth() + 1, year:this.selectedHoliday.EndDate.getFullYear()};
+      if (data.IsPublicHoliday) {
+        data.HolidayType = 1;
+      } else if (data.IsHoliday) {
+        data.HolidayType = 1;
+      } else if (data.IsCompanyCustomHoliday) {
+        data.HolidayType = 3;
+      }
       this.initForm();
       $('#manageHolidayModal').modal('show');
     }
@@ -261,21 +284,31 @@ export class HolidayComponent implements OnInit {
       this.orderByCountryAsc = null;
       this.orderByStartDateAsc = null;
       this.orderByEndDateAsc = null;
+      this.orderByFullDayAsc = null;
     } else if (FieldName == 'Country') {
       this.orderByCountryAsc = !flag;
       this.orderByStartDateAsc = null;
       this.orderByEndDateAsc = null;
       this.orderByDescriptionNoteAsc = null;
+      this.orderByFullDayAsc = null;
     } else if (FieldName == 'StartDate') {
       this.orderByCountryAsc = null;
       this.orderByStartDateAsc = !flag;
       this.orderByEndDateAsc = null;
       this.orderByDescriptionNoteAsc = null;
+      this.orderByFullDayAsc = null;
     } else if (FieldName == 'EndDate') {
       this.orderByCountryAsc = null;
       this.orderByStartDateAsc = null;
       this.orderByEndDateAsc = !flag;
       this.orderByDescriptionNoteAsc = null;
+      this.orderByFullDayAsc = null;
+    } else if (FieldName == 'IsHalfDay') {
+      this.orderByCountryAsc = null;
+      this.orderByStartDateAsc = null;
+      this.orderByEndDateAsc = null;
+      this.orderByDescriptionNoteAsc = null;
+      this.orderByFullDayAsc = !flag;
     }
 
     this.holidayData = new Filter();
@@ -307,4 +340,5 @@ export class CompanyHoliday {
   IsCompanyCustomHoliday: boolean = false;
   Total: number = 0;
   Index: number = 0;
+  HolidayType: number = 0;
 }

@@ -2,7 +2,7 @@ import { ApplicationStorage } from "./../../providers/ApplicationStorage";
 import { AjaxService } from "./../../providers/ajax.service";
 import { CommonService, Toast, UserDetail } from "./../../providers/common-service/common.service";
 import { AccessTokenExpiredOn, Blogs, BuildPdf, Company, CompanyLogo, CompanySettings, Documents, Employees, Login } from "./../../providers/constants";
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { UserService } from "src/providers/userService";
@@ -12,7 +12,7 @@ import { UserService } from "src/providers/userService";
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.scss"]
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, DoCheck {
   public sidebarOpened = false;
   User: string;
   NotificationBadge: number = 0;
@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit {
   userDetail: UserDetail = new UserDetail();
   Menu: Array<any> = [];
   TineMenu: boolean = false;
+  isAdmin: boolean = true;
 
   @Output() authentication = new EventEmitter();
 
@@ -45,6 +46,13 @@ export class NavbarComponent implements OnInit {
     private tokenHelper: JwtService,
     private user: UserService
   ) {
+  }
+  ngDoCheck(): void {
+    let data = this.local.findRecord("UserDetail");
+    if (data.UserTypeId == 1)
+      this.isAdmin = true;
+    else
+      this.isAdmin = false;
   }
 
   ngOnInit() {

@@ -72,8 +72,8 @@
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" autofocus
                         placeholder="Search by Total Days" readonly>
-                      <div class="t-filter">
-                        <a href="javascript:void()" class="pe-2">Total Days</a>
+                      <div class="t-filter default-cursor">
+                        <a href="javascript:void(0)" class="pe-2 default-cursor">Total Days</a>
                       </div>
                     </div>
                   </div>
@@ -84,7 +84,11 @@
                         <option value="false">Full Day</option>
                       </select>
                       <div class="t-filter">
-                        <a href="javascript:void()" class="pe-2">FullDay/HalfDay</a>
+                        <a href="javascript:void()" class="pe-2" (click)="arrangeDetails(orderByFullDayAsc, 'IsHalfDay')">FullDay/HalfDay</a>
+                        <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByFullDayAsc == null || !orderByFullDayAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByFullDayAsc == null || orderByFullDayAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -129,7 +133,7 @@
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
-                      <div class="cell-wrapper">
+                      <div class="cell-wrapper ">
                         {{holiday.TotalDays | number: '1.2-2'}}
                       </div>
                     </div>
@@ -202,10 +206,11 @@
               <input type="text" placeholder="Event Name" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32" formControlName="EventName" [ngClass]="{'error-field': submitted && f.EventName.errors !== null && f.EventName.errors.required}" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Is Holiday</label>
-              <select class="form-select" formControlName="IsHoliday" [ngClass]="{'error-field': submitted && f.IsHoliday.errors !== null && f.IsHoliday.errors.required}">
-                <option value="true">Yes</option>
-                <option value="false">No</option>
+              <label for="" class="form-label">Holiday Type</label>
+              <select class="form-select" formControlName="HolidayType" [ngClass]="{'error-field': submitted && f.IsPublicHoliday.errors !== null && f.IsPublicHoliday.errors.required}">
+                <option value="1">Is Public Holiday</option>
+                <option value="1">Holiday</option>
+                <option value="2">Custom Holiday</option>
               </select>
             </div>
           </div>
@@ -271,20 +276,6 @@
               <label for="" class="form-label">Year</label>
               <select class="form-select" formControlName="Year" disabled="" [ngClass]="{'error-field': submitted && f.Year.errors !== null && f.Year.errors.required}">
                 <option [value]="year" >{{year}}</option>
-              </select>
-            </div>
-            <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Holiday Type</label>
-              <select class="form-select" formControlName="IsPublicHoliday" [ngClass]="{'error-field': submitted && f.IsPublicHoliday.errors !== null && f.IsPublicHoliday.errors.required}">
-                <option value="true">Is Public</option>
-                <option value="false">No</option>
-              </select>
-            </div>
-            <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Is Company Custom Holiday</label>
-              <select class="form-select" formControlName="IsCompanyCustomHoliday" [ngClass]="{'error-field': submitted && f.IsCompanyCustomHoliday.errors !== null && f.IsCompanyCustomHoliday.errors.required}">
-                <option value="true">Yes</option>
-                <option value="false">No</option>
               </select>
             </div>
           </div>
