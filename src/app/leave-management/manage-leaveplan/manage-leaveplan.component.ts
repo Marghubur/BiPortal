@@ -770,8 +770,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
         index++;
       }
     }
-    document.querySelectorAll('[data-name="createApprovalChain"]')[item.length-1].classList.remove('d-none');
 
+    document.querySelectorAll('[data-name="createApprovalChain"]')[item.length-1].classList.remove('d-none');
     if (item.length == 0)
       this.createApprovalChain(0);
   }

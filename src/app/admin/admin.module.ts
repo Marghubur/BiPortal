@@ -57,6 +57,7 @@ import { ServiceRequestComponent } from './service-request/service-request.compo
 import { ProductsComponent } from './products/products.component';
 import { ManageshiftComponent } from './manageshift/manageshift.component';
 import { WorkflowComponent } from './workflow/workflow.component';
+import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.component';
 
 
 @NgModule({
@@ -108,7 +109,8 @@ import { WorkflowComponent } from './workflow/workflow.component';
     ServiceRequestComponent,
     ProductsComponent,
     ManageshiftComponent,
-    WorkflowComponent
+    WorkflowComponent,
+    ManageWorkFlowComponent
   ],
   imports: [
     CommonModule,
