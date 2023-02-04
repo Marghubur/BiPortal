@@ -115,6 +115,7 @@ export const ServiceRequest = 'admin/servicerequest';
 export const Products = 'admin/products';
 export const ManageShift = 'admin/manageshift';
 export const WorkFlow = 'admin/workflow';
+export const ManageWorkFlow = 'admin/manageworkflow';
 
 // ********************** Admin route pages  *******************
 
