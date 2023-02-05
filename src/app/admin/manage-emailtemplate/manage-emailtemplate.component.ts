@@ -176,4 +176,6 @@ export class EmailTemplate {
   FileId: number = 0;
   LogoPath: string = "";
   Description: string = null;
+  Total: number = 0;
+  Index: number = 0;
 }

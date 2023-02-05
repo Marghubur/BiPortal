@@ -20,8 +20,9 @@
         <ng-container *ngIf="isPageReady">
           <div class="x_content mt-4">
             <div class="text-end pb-2">
-              <a href="javascript:void(0)" (click)="addCatagoryPopUp()" class="text-decoration-none pe-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Add Catagory">
-                <i class="fa fa-crosshairs text-primary fa-lg"></i>
+              <a href="javascript:void(0)" (click)="addCatagoryPopUp()" class="text-decoration-none pe-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Add Category">
+                <i class="fa fa-plus text-primary fa-lg"></i>
+                <span class="ps-2">Add Category</span>
               </a>
             </div>
             <div class="t-table t-list t-border col-md-12">
@@ -30,7 +31,7 @@
                 <div class="tr">
                   <div class="th fe-index">
                     <div class="t-index">
-                      <a href="javascript:void(0)" class="ps-3">#</a>
+                      <a href="javascript:void(0)">#</a>
                     </div>
                   </div>
                   <div class="th fe-2">
@@ -38,7 +39,7 @@
                       <input class="form-control form-control-sm" autofocus placeholder="Search by Product Name" [(ngModel)]="productDetail.TitleName"
                       (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter"  (click)="arrangeDetails(orderByTitleNameAsc, 'TitleName')">
-                        <a href="javascript:void(0)" class="ps-3">Product Name</a>
+                        <a href="javascript:void(0)">Product Name</a>
                         <i class="fa fa-sort-amount-asc"
                           [ngClass]="{'d-none': orderByTitleNameAsc == null || !orderByTitleNameAsc }" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc"
@@ -140,7 +141,7 @@
                 <ng-container *ngIf="allProducts.length > 0">
                   <div class="tr py-2" *ngFor="let item of allProducts; let i = index;">
                     <div class="td align-middle fe-index">
-                      <div class="cell-wrapper">
+                      <div class="cell-wrapper text-center">
                         {{item.Index}}
                       </div>
                     </div>
@@ -273,16 +274,15 @@
               <input type="text" class="form-control" placeholder="Enter MRP" oninput="this.value = this.value.toUpperCase()" formControlName="MRP" [ngClass]="{'error-field': submitted && f.MRP.errors !== null && f.MRP.errors.required}">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Catagory Name</label>
-              <input type="text" class="form-control" placeholder="Enter Catagory Name" oninput="this.value = this.value.toUpperCase()" formControlName="CatagoryName" [ngClass]="{'error-field': submitted && f.CatagoryName.errors !== null && f.CatagoryName.errors.required}">
+              <label for="" class="form-label">Category Name</label>
+              <input type="text" class="form-control" placeholder="Enter Category Name" oninput="this.value = this.value.toUpperCase()" formControlName="CatagoryName" [ngClass]="{'error-field': submitted && f.CatagoryName.errors !== null && f.CatagoryName.errors.required}">
             </div>
-
-          </div>
-          <div class="row">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Serial No</label>
               <input type="text" class="form-control" placeholder="Enter Serial No" oninput="this.value = this.value.toUpperCase()" formControlName="SerialNo" [ngClass]="{'error-field': submitted && f.SerialNo.errors !== null && f.SerialNo.errors.required}">
             </div>
+          </div>
+          <div class="row">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Product Code</label>
               <input type="text" class="form-control" placeholder="Enter ProductCode" oninput="this.value = this.value.toUpperCase()" formControlName="ProductCode" [ngClass]="{'error-field': submitted && f.ProductCode.errors !== null && f.ProductCode.errors.required}">
@@ -304,7 +304,7 @@
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+        <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageProduct()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="currentProduct.ProductId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
@@ -347,7 +347,7 @@
         </ng-container>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+        <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
       </div>
     </div>
   </div>
@@ -369,7 +369,7 @@
   <div class="modal-dialog p-5 modal-fullscreen modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addCatagoryModalLabel">Add/Update Catagory</h5>
+        <h5 class="modal-title" id="addCatagoryModalLabel">Add/Update Category</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -382,7 +382,7 @@
                     <div class="tr">
                       <div class="th fe-index">
                         <div class="t-index">
-                          <a href="javascript:void(0)" class="ps-3">#</a>
+                          <a href="javascript:void(0)">#</a>
                         </div>
                       </div>
                       <div class="th fe-1">
@@ -390,7 +390,7 @@
                           <input class="form-control form-control-sm" autofocus placeholder="Search by Group Id" [(ngModel)]="catagoryDetail.GroupId"
                            (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
                           <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByGroupIdAsc, 'GroupId')">
-                            <a href="javascript:void(0)" class="ps-3">Group Id</a>
+                            <a href="javascript:void(0)">Group Id</a>
                             <i class="fa fa-sort-amount-asc"
                               [ngClass]="{'d-none': orderByGroupIdAsc == null || !orderByGroupIdAsc }" aria-hidden="true"></i>
                             <i class="fa fa-sort-amount-desc"
@@ -400,10 +400,10 @@
                       </div>
                       <div class="th fe-1">
                         <div class="cell-wrapper">
-                          <input class="form-control form-control-sm" autofocus placeholder="Search by Catagory Code" [(ngModel)]="catagoryDetail.CatagoryCode"
+                          <input class="form-control form-control-sm" autofocus placeholder="Search by Category Code" [(ngModel)]="catagoryDetail.CatagoryCode"
                            (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
                           <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryCodeAsc, 'CatagoryCode')">
-                            <a href="javascript:void(0)" class="pe-2">Catagory Code</a>
+                            <a href="javascript:void(0)" class="pe-2">Category Code</a>
                             <i class="fa fa-sort-amount-asc"
                               [ngClass]="{'d-none': orderByCatagoryCodeAsc == null || !orderByCatagoryCodeAsc }" aria-hidden="true"></i>
                             <i class="fa fa-sort-amount-desc"
@@ -413,10 +413,10 @@
                       </div>
                       <div class="th fe-3">
                         <div class="cell-wrapper">
-                          <input class="form-control form-control-sm" autofocus placeholder="Search by Catagory Description" [(ngModel)]="catagoryDetail.CatagoryDescription"
+                          <input class="form-control form-control-sm" autofocus placeholder="Search by Category Description" [(ngModel)]="catagoryDetail.CatagoryDescription"
                            (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
                           <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryDescriptionAsc, 'CatagoryDescription')">
-                            <a href="javascript:void(0)" class="pe-2">Catagory Description</a>
+                            <a href="javascript:void(0)" class="pe-2">Category Description</a>
                             <i class="fa fa-sort-amount-asc"
                               [ngClass]="{'d-none': orderByCatagoryDescriptionAsc == null || !orderByCatagoryDescriptionAsc }" aria-hidden="true"></i>
                             <i class="fa fa-sort-amount-desc"
@@ -426,6 +426,9 @@
                       </div>
                       <div class="th fe-index text-center">
                         <div class="cell-wrapper">
+                          <a href="javascript:void(0)" (click)="resetCatagoryFilter()" class="text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset filter">
+                            <i class="fa fa-refresh text-danger"></i>
+                          </a>
                           <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Action</a>
                           </div>
@@ -437,7 +440,7 @@
                     <ng-container *ngIf="allCatagory.length > 0">
                       <div class="tr py-2" *ngFor="let item of allCatagory; let i = index;">
                         <div class="td align-middle fe-index">
-                          <div class="cell-wrapper">
+                          <div class="cell-wrapper text-center">
                             {{item.Index}}
                           </div>
                         </div>
@@ -485,12 +488,12 @@
                     <input type="text" class="form-control" placeholder="Enter Group Id" formControlName="GroupId">
                   </div>
                   <div class="col-md-6 mt-3">
-                    <label for="" class="form-label">Catagory Code</label>
-                    <input type="text" class="form-control" placeholder="Enter Catagory Code" formControlName="CatagoryCode" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryCode.errors !== null && m.CatagoryCode.errors.required}">
+                    <label for="" class="form-label">Category Name</label>
+                    <input type="text" class="form-control" placeholder="Enter Category Name" formControlName="CatagoryCode" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryCode.errors !== null && m.CatagoryCode.errors.required}">
                   </div>
                 </div>
                 <div class="col-md-12 mt-3">
-                  <label for="" class="form-label">Catagory Description</label>
+                  <label for="" class="form-label">Category Description</label>
                   <textarea name="" id="" cols="30" rows="10" class="form-control description-area" placeholder="Enter CatagoryDescription" formControlName="CatagoryDescription" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryDescription.errors !== null && m.CatagoryDescription.errors.required}"></textarea>
                 </div>
               </form>
@@ -509,7 +512,7 @@
         </ng-container>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+        <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageCatagory()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="currentCatagory.CatagoryId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>

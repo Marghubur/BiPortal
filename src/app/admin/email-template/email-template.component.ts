@@ -21,6 +21,11 @@ export class EmailTemplateComponent implements OnInit {
   companyId: number = 0;
   modalData: IModalData = null;
   emailTemplateDetail: EmailTemplate = null;
+  templateDetail: EmailTemplate = null;
+  orderByTempNameAsc: boolean = null;
+  orderBySubjectTitleAsc: boolean = null;
+  orderBySignatureDetailAsc: boolean = null;
+  orderByContactNoAsc: boolean = null;
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
@@ -28,6 +33,9 @@ export class EmailTemplateComponent implements OnInit {
 
   ngOnInit(): void {
     let data = this.local.findRecord("Companies");
+    this.templateDetail = new EmailTemplate();
+    this.templateData = new Filter();
+    this.templateData.SearchString = `1=1 and CompanyId=${this.companyId}`;
     if (!data) {
       return;
     } else {
@@ -46,7 +54,6 @@ export class EmailTemplateComponent implements OnInit {
   loadData() {
     this.isRecordFound = false;
     this.isPageLoading = true;
-    this.templateData.SearchString = `1=1 and CompanyId=${this.companyId}`;
     this.http.post("Email/GetEmailTemplate", this.templateData).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.allEmailtemplate = res.ResponseBody;
@@ -98,5 +105,75 @@ export class EmailTemplateComponent implements OnInit {
     }).catch(e => {
       ErrorToast("Invalid template selected");
     })
+  }
+
+  filterRecords() {
+    let delimiter = "";
+    this.templateData.SearchString = `1=1`;
+    this.templateData.reset();
+
+    if(this.templateDetail.TemplateName !== null && this.templateDetail.TemplateName !== "") {
+      this.templateData.SearchString += ` and TemplateName like '%${this.templateDetail.TemplateName}%'`;
+        delimiter = "and";
+    }
+
+    if(this.templateDetail.SubjectLine !== null && this.templateDetail.SubjectLine !== "") {
+      this.templateData.SearchString += ` and SubjectLine like '%${this.templateDetail.SubjectLine}%'`;
+        delimiter = "and";
+    }
+
+    if(this.templateDetail.SignatureDetail !== null && this.templateDetail.SignatureDetail !== "") {
+      this.templateData.SearchString += ` and SignatureDetail like '%${this.templateDetail.SignatureDetail}%'`;
+        delimiter = "and";
+    }
+
+    if(this.templateDetail.ContactNo !== null && this.templateDetail.ContactNo !== "") {
+      this.templateData.SearchString += ` and ContactNo like '%${this.templateDetail.ContactNo}%'`;
+        delimiter = "and";
+    }
+
+    this.loadData();
+  }
+
+  arrangeDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'Asc';
+    } else {
+      Order = 'Desc';
+    }
+    if (FieldName == 'TemplateName') {
+      this.orderByTempNameAsc = !flag;
+      this.orderBySubjectTitleAsc = null;
+      this.orderBySignatureDetailAsc = null;
+      this.orderByContactNoAsc = null;
+    } else if (FieldName == 'SubjectLine') {
+      this.orderByTempNameAsc = null;
+      this.orderBySubjectTitleAsc = !flag;
+      this.orderBySignatureDetailAsc = null;
+      this.orderByContactNoAsc = null;
+    } else if (FieldName == 'SignatureDetail') {
+      this.orderByTempNameAsc = null;
+      this.orderBySubjectTitleAsc = null;
+      this.orderBySignatureDetailAsc = !flag;
+      this.orderByContactNoAsc = null;
+    } else if (FieldName == 'ContactNo') {
+      this.orderByTempNameAsc = null;
+      this.orderBySubjectTitleAsc = null;
+      this.orderBySignatureDetailAsc = null;
+      this.orderByContactNoAsc = !flag;
+    }
+
+    this.templateData = new Filter();
+    this.templateData.SearchString = `1=1 and CompanyId = ${this.companyId}`;
+    this.templateData.SortBy = FieldName +" "+ Order;
+    this.loadData()
+  }
+
+  resetFilter() {
+    this.templateData = new Filter();
+    this.templateData.SearchString = `1=1 and CompanyId = ${this.companyId}`;
+    this.templateDetail = new EmailTemplate();
+    this.loadData();
   }
 }

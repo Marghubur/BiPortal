@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class EditorComponent implements OnInit, AfterViewChecked {
   showingSourceCode: boolean = false;
-  isInEditMode: boolean = false;
+  isInEditMode: boolean = true;
   richTextField: any;
   imageURL: string = "";
   innerHtmlText: any = null;
@@ -42,7 +42,8 @@ export class EditorComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.richTextField = document.getElementById("richTextField");
-    this.enableEditMode();
+    this.toggleEdit();
+    //this.enableEditMode();
   }
 
 

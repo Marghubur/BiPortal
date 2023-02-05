@@ -198,17 +198,17 @@
                   <tr *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;">
                     <ng-container >
                       <ng-container [formGroupName]="i">
-                        <td>{{item.get('PresentDate').value | date: 'EEE'}}</td>
-                        <td>{{item.get('PresentDate').value | date}}</td>
-                        <td></td>
-                        <td>
+                        <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}">{{item.get('PresentDate').value | date: 'EEE'}}</td>
+                        <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}">{{item.get('PresentDate').value | date}}</td>
+                        <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}"></td>
+                        <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}">
                           <div class="center-badge d-flex justify-content-start">
-                            <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23" [readonly]="item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11, 'highlighted-column': item.get('TimesheetStatus').value == -1}"
+                            <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23" [readonly]="item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}"
                               [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
                               formControlName="UserHours"
                               onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                             <span>&nbsp;:</span>
-                            <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59" [readonly]="item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11, 'highlighted-column': item.get('TimesheetStatus').value == -1}"
+                            <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59" [readonly]="item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}"
                               (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
                               onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 
@@ -223,7 +223,7 @@
                             </div>
                           </div>
                         </td>
-                        <td>
+                        <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}">
                           <ng-container [ngSwitch]="item.get('TimesheetStatus').value">
                             <span class="" *ngSwitchCase="2">
                               <i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>
@@ -241,13 +241,11 @@
                               <i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i>
                               Approved
                             </span>
-                            <span class="text-danger" *ngSwitchCase="11">
+                            <span class="text-danger" *ngSwitchDefault>
                               <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                               Readonly
                             </span>
                           </ng-container>
-                        </td>
-                        <td>
                         </td>
                       </ng-container>
                     </ng-container>

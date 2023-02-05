@@ -18,10 +18,58 @@
               <div class="th fe-index">
                 <div class="t-index">#</div>
               </div>
-              <div class="th fe-2">Template Name</div>
-              <div class="th fe-2">Subject Title</div>
-              <div class="th fe-2">Signature Detail</div>
-              <div class="th fe-2">ContactNo</div>
+              <div class="th fe-2">
+                <div class="cell-wrapper">
+                  <input class="form-control form-control-sm" autofocus placeholder="Search by Template Name" [(ngModel)]="templateDetail.TemplateName" (keyup.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
+                  <div class="t-filter"  (click)="arrangeDetails(orderByTempNameAsc, 'TemplateName')">
+                    <a href="javascript:void(0)">Template Name</a>
+                    <i class="fa fa-sort-amount-asc"
+                      [ngClass]="{'d-none': orderByTempNameAsc == null || !orderByTempNameAsc }" aria-hidden="true"></i>
+                    <i class="fa fa-sort-amount-desc"
+                      [ngClass]="{'d-none': orderByTempNameAsc == null || orderByTempNameAsc }" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="th fe-2">
+                <div class="cell-wrapper">
+                  <input class="form-control form-control-sm" autofocus placeholder="Search by Subject Title" [(ngModel)]="templateDetail.SubjectLine" (keyup.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
+                  <div class="t-filter"  (click)="arrangeDetails(orderBySubjectTitleAsc, 'SubjectLine')">
+                    <a href="javascript:void(0)">Subject Title</a>
+                    <i class="fa fa-sort-amount-asc"
+                      [ngClass]="{'d-none': orderBySubjectTitleAsc == null || !orderBySubjectTitleAsc }" aria-hidden="true"></i>
+                    <i class="fa fa-sort-amount-desc"
+                      [ngClass]="{'d-none': orderBySubjectTitleAsc == null || orderBySubjectTitleAsc }" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="th fe-2">
+                <div class="cell-wrapper">
+                  <input class="form-control form-control-sm" autofocus placeholder="Search by Signature Detail" [(ngModel)]="templateDetail.SignatureDetail" (keyup.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
+                  <div class="t-filter"  (click)="arrangeDetails(orderBySignatureDetailAsc, 'SignatureDetail')">
+                    <a href="javascript:void(0)">Signature Detail</a>
+                    <i class="fa fa-sort-amount-asc"
+                      [ngClass]="{'d-none': orderBySignatureDetailAsc == null || !orderBySignatureDetailAsc }" aria-hidden="true"></i>
+                    <i class="fa fa-sort-amount-desc"
+                      [ngClass]="{'d-none': orderBySignatureDetailAsc == null || orderBySignatureDetailAsc }" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="th fe-2">
+                <div class="cell-wrapper">
+                  <input class="form-control form-control-sm" autofocus placeholder="Search by Contact No" [(ngModel)]="templateDetail.ContactNo" (keyup.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
+                  <div class="t-filter"  (click)="arrangeDetails(orderByContactNoAsc, 'ContactNo')">
+                    <a href="javascript:void(0)">Contact No</a>
+                    <i class="fa fa-sort-amount-asc"
+                      [ngClass]="{'d-none': orderByContactNoAsc == null || !orderByContactNoAsc }" aria-hidden="true"></i>
+                    <i class="fa fa-sort-amount-desc"
+                      [ngClass]="{'d-none': orderByContactNoAsc == null || orderByContactNoAsc }" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
               <div class="th fe-1 text-center">ACTIONS</div>
             </div>
           </div>
@@ -29,7 +77,7 @@
             <ng-container *ngIf="isRecordFound">
               <div class="tr py-2" *ngFor="let template of allEmailtemplate; let i = index;">
                 <div class="td align-middle text-center fe-index">
-                    {{i+1}}
+                    {{template.Index}}
                 </div>
                 <div class="td align-middle fe-2">
                     {{template.TemplateName}}
