@@ -44,7 +44,8 @@ import { AdminResetPassword,
   ServiceRequest,
   Products,
   ManageShift,
-  WorkFlow
+  WorkFlow,
+  ManageWorkFlow
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -91,6 +92,7 @@ import { ServiceRequestComponent } from './service-request/service-request.compo
 import { ProductsComponent } from './products/products.component';
 import { ManageshiftComponent } from './manageshift/manageshift.component';
 import { WorkflowComponent } from './workflow/workflow.component';
+import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -138,7 +140,8 @@ const routes: Routes = [
   { path: ServiceRequest, component: ServiceRequestComponent},
   { path: Products, component: ProductsComponent},
   { path: ManageShift, component: ManageshiftComponent},
-  { path: WorkFlow, component: WorkflowComponent}
+  { path: WorkFlow, component: WorkflowComponent },
+  { path: ManageWorkFlow, component: ManageWorkFlowComponent }
 ];
 
 @NgModule({
