@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { Toast } from 'src/providers/common-service/common.service';
 import { ManageWorkFlow } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
@@ -21,6 +18,8 @@ export class WorkflowComponent implements OnInit {
   filter: Filter = new Filter();
   isFileFound: boolean = false;
   workflowDetail: WorkFlow = null;
+  orderByTitleAsc: boolean = null;
+  orderByTitleDescAsc: boolean = null;
 
   constructor(private http: AjaxService,
               private nav: iNavigation) { }
@@ -94,6 +93,26 @@ export class WorkflowComponent implements OnInit {
 
   addWorkFlowPopUp() {
     this.nav.navigate(ManageWorkFlow, null);
+  }
+
+  arrangeDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'Asc';
+    } else {
+      Order = 'Desc';
+    }
+    if (FieldName == 'Title') {
+      this.orderByTitleAsc = !flag;
+      this.orderByTitleDescAsc = null;
+    } else if (FieldName == 'TitleDescription') {
+      this.orderByTitleAsc = null;
+      this.orderByTitleDescAsc = !flag;
+    }
+    this.filter = new Filter();
+    this.filter.SearchString = `1=1`;
+    this.filter.SortBy = FieldName +" "+ Order;
+    this.loadData()
   }
 
 }

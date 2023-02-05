@@ -30,8 +30,12 @@
                       <div class="cell-wrapper">
                         <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" [(ngModel)]="workflowDetail.Title"
                           (keydown.esc)="resetFilter()" placeholder="Search by Title">
-                        <div class="t-filter">
+                        <div class="t-filter" (click)="arrangeDetails(orderByTitleAsc, 'Title')">
                           <a href="javascript:void(0)" class="pe-2">Title</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByTitleAsc == null || !orderByTitleAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByTitleAsc == null || orderByTitleAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -39,8 +43,12 @@
                       <div class="cell-wrapper">
                         <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" [(ngModel)]="workflowDetail.TitleDescription"
                           (keydown.esc)="resetFilter()" placeholder="Search by Title Description">
-                        <div class="t-filter">
+                        <div class="t-filter" (click)="arrangeDetails(orderByTitleDescAsc, 'TitleDescription')">
                           <a href="javascript:void0()" class="pe-2">Description</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByTitleDescAsc == null || !orderByTitleDescAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByTitleDescAsc == null || orderByTitleDescAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -78,7 +86,7 @@
                             <div class="d-flex flex-row justify-content-evenly">
                                 <a href="javascript:void(0)" (click)="EditCurrent(item)" data-bs-toggle="tooltip"
                                 data-bs-placement="right" title="Edit current record">
-                                    <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"></i></span>
+                                    <span class="badge bg-dark"><i class="fa fa-edit" aria-hidden="true"></i></span>
                                 </a>
                             </div>
                         </div>
