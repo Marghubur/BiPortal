@@ -8,6 +8,7 @@ import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/co
 import { ManageWorkFlow } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
+declare var $: any;
 
 @Component({
   selector: 'app-workflow',
@@ -19,17 +20,17 @@ export class WorkflowComponent implements OnInit {
   approvalWorkFlowList: Array<any> = [];
   filter: Filter = new Filter();
   isFileFound: boolean = false;
+  workflowDetail: WorkFlow = null;
 
-  constructor(
-    private http: AjaxService,
-    private nav: iNavigation
-    ) { }
+  constructor(private http: AjaxService,
+              private nav: iNavigation) { }
 
   ngOnInit(): void {
     this.filter.SearchString = "1=1";
     this.filter.PageIndex = 1;
     this.filter.PageSize = 10;
     this.filter.TotalRecords = 0;
+    this.workflowDetail = new WorkFlow();
     this.loadData();
   }
 
@@ -38,7 +39,7 @@ export class WorkflowComponent implements OnInit {
       if(response.ResponseBody) {
         this.isFileFound = true;
         this.isReady = true;
-        this.approvalWorkFlowList = response.ResponseBody;
+        this.bindaData(response.ResponseBody);
         Toast("Records loaded successfully");
       } else {
         this.isFileFound = false;
@@ -47,15 +48,66 @@ export class WorkflowComponent implements OnInit {
     });
   }
 
-  resetFilter() {
-
+  bindaData(res: any) {
+    this.approvalWorkFlowList = res;
+    if (this.approvalWorkFlowList.length > 0)
+      this.filter.TotalRecords = this.approvalWorkFlowList[0].Total;
+    else
+      this.filter.TotalRecords = 0;
   }
 
-  filterRecords() { }
+  resetFilter() {
+    this.workflowDetail = new WorkFlow();
+    this.filter = new Filter();
+    this.loadData();
+  }
+
+  filterRecords() {
+    let searchQuery = "";
+    let delimiter = "";
+    this.filter.SearchString = ""
+    this.filter.reset();
+
+    if(this.workflowDetail.TitleDescription !== null && this.workflowDetail.TitleDescription !== "") {
+      this.filter.SearchString += `1=1 And TitleDescription like '%${this.workflowDetail.TitleDescription}%'`;
+        delimiter = "and";
+    }
+
+    if(this.workflowDetail.Title !== null && this.workflowDetail.Title !== "") {
+      this.filter.SearchString += `1=1 And Title like '%${this.workflowDetail.Title}%'`;
+        delimiter = "and";
+    }
+
+    this.loadData();
+  }
 
   EditCurrent(item: any) {
     this.nav.navigate(ManageWorkFlow, item);
   }
 
-  GetFilterResult(e: any){ }
+  GetFilterResult(e: any){
+    if(e != null) {
+      this.filter = e;
+      this.loadData();
+    }
+  }
+
+  addWorkFlowPopUp() {
+    this.nav.navigate(ManageWorkFlow, null);
+  }
+
+}
+
+class WorkFlow {
+  ApprovalChainDetailId: number = 0;
+  ApprovalWorkFlowId: number = 0;
+  Title: string = null;
+  TitleDescription: string = null;
+  Status: number = 0;
+  IsAutoExpiredEnabled: boolean = false;
+  AutoExpireAfterDays: number = null;
+  IsSilentListner: boolean = false;
+  ListnerDetail: string = null;
+  Index: number = 0;
+  Total: number = 0;
 }

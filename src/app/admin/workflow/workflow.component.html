@@ -28,23 +28,30 @@
                     </div>
                     <div class="th fe-2">
                       <div class="cell-wrapper">
-                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" placeholder="Search by MobileNumber">
+                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" [(ngModel)]="workflowDetail.Title"
+                          (keydown.esc)="resetFilter()" placeholder="Search by Title">
                         <div class="t-filter">
-                          <a href="javascript:void()" class="pe-2">Title</a>
+                          <a href="javascript:void(0)" class="pe-2">Title</a>
                         </div>
                       </div>
                     </div>
                     <div class="th fe-2">
                       <div class="cell-wrapper">
-                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" placeholder="Search by Email">
+                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" [(ngModel)]="workflowDetail.TitleDescription"
+                          (keydown.esc)="resetFilter()" placeholder="Search by Title Description">
                         <div class="t-filter">
-                          <a href="javascript:void()" class="pe-2">Description</a>
+                          <a href="javascript:void0()" class="pe-2">Description</a>
                         </div>
                       </div>
                     </div>
-                    <div class="th fe-1 text-center">ACTIONS</div>
+                    <div class="th fe-1 text-center">
+                      <div class="cell-wrapper">
+                        <button class="btn btn-primary-c" (click)="addWorkFlowPopUp()">Add Work Flow</button>
+                        <div class="t-filter default-cursor justify-content-center">
+                          <a href="javascript:void(0)" class="pe-2 default-cursor">ACTIONS</a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="t-body">
@@ -52,14 +59,14 @@
                     <div class="tr py-2" *ngFor="let item of approvalWorkFlowList; let i = index;">
                         <div class="td align-middle text-center fe-index">
                             <div class="cell-wrapper">
-                            {{i + 1}}
+                            {{item.Index}}
                             </div>
                         </div>
                         <div class="td align-middle fe-2">
                             <div class="cell-wrapper">
                                 <a href="javascript:void(0)" (click)="EditCurrent(item)">
                                     {{item.Title}}
-                                </a>                        
+                                </a>
                             </div>
                         </div>
                         <div class="td align-middle fe-2">
@@ -93,4 +100,3 @@
       </div>
     </div>
 </div>
-  
