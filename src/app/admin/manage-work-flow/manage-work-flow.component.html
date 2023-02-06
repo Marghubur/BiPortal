@@ -9,122 +9,138 @@
         <app-breadcrums></app-breadcrums>
       </div>
       <div class="x_content pb-0">
-        <div class="row mt-3">
-            <div class="card px-2 pt-2 mt-3 pb-3 ">
-                <h6>Approval Chain</h6>
-                <ng-container *ngIf="isReady">
-                    <div [formGroup]="workFlowForm" class="mt-4">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Title</label>
-                                <input type="text" class="form-control" placeholder="Enter approval work flow title" formControlName="Title">
-                            </div>
-                            <div class="form-group">
-                                <label>Title</label>
-                                <textarea name="titleDescription" class="form-control" placeholder="Enter description here" cols="30" rows="5" formControlName="TitleDescription">
-                                </textarea>
-                            </div>
-                        </div>
-                        <div class="px-5 pt-3 mt-3 bg-light" formArrayName="ApprovalChainDetails">
-                            <div *ngFor="let item of groupItem.controls; let i = index; let last = last;">
-                                <div class="d-flex mt-4" [formGroupName]="i">
-                                    <div class="col-auto me-3">
-                                    LEVEL {{i + 1}} <i class=" fa fa-circle text-primary ps-3"></i>
-                                    </div>
-                                    <div class="col-md-8 position-relative">
-                                        <div [ngClass]="{'block-tag': !last}">
-                                        </div>
-                                        <app-iautocomplete [data]="employeesAutoComplete" name="AssignieId" formControlName="AssignieId"
-                                            (OnSelect)="onEmloyeeChanged($event, i)" [ngModelOptions]="{standalone: true}">
-                                        </app-iautocomplete>
-                                        <div class="d-flex align-items-center mt-3" data-name="skip-section">
-                                            <div class="form-check">
-                                                <input class="form-check-input" formControlName="IsRequired" type="checkbox">
-                                                <label class="form-check-label">
-                                                    Required approval
-                                                </label>
-                                            </div>                                    
-                                        </div>
-                                        <div class="d-flex align-items-center mt-2" data-name="skip-section">
-                                            <div class="form-check">
-                                                <input class="form-check-input" formControlName="IsForwardEnabled" type="checkbox">
-                                                <label class="form-check-label">
-                                                    Forward when 
-                                                </label>
-                                            </div>
-                                            <div class="d-flex ms-2 align-items-center">
-                                                <div class="col-md-10">
-                                                    <select name="ForwardWhen" class="form-control form-select" formControlName="ForwardWhen">
-                                                        <option value="0">Select Reason</option>
-                                                        <option value="2">Pending</option>
-                                                        <option value="9">Approved</option>
-                                                        <option value="5">Rejected</option>
-                                                    </select>
-                                                </div>
-                                                <span class="px-2">after</span>
-                                            </div>
-                                            <div class="d-flex ms-2 align-items-center">
-                                                <div class="col-md-6">
-                                                    <input type="number" class="form-control form-control-sm" formControlName="ForwardAfterDays" 
-                                                        placeholder="No# of days" name="SkipToNextLevelAfterDays">
-                                                </div>
-                                                <span class="ps-2">days</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="javascript:void(0)" class="text-decoration-none text-secondary" (click)="removeCurrent(i, item.get('AssignieId').value)">
-                                        <i class="fa fa-trash ps-3 text-secondary fa-lg pt-2"></i>
-                                    </a>
-                                </div>
-                            </div>
+        <ng-container *ngIf="isPageReady">
+          <div class="row m-3 mb-5">
+              <div class="card px-4 pt-4 mt-3 pb-3 ">
+                  <h6>Approval Chain</h6>
+                  <ng-container *ngIf="isReady">
+                      <div [formGroup]="workFlowForm" class="mt-4">
+                          <div class="col-md-12">
+                              <div class="form-group">
+                                  <label>Title *</label>
+                                  <input type="text" class="form-control" maxlength="50" oninput="this.value = this.value.toUpperCase()" placeholder="Enter approval work flow title" formControlName="Title"
+                                  [ngClass]="{'error-field': submitted && f.Title.errors !== null && f.Title.errors.required}" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32">
+                              </div>
+                              <div class="form-group mt-3">
+                                  <label>Title Description *</label>
+                                  <textarea name="titleDescription" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Enter description here" cols="30" rows="5" formControlName="TitleDescription"
+                                  [ngClass]="{'error-field': submitted && f.TitleDescription.errors !== null && f.TitleDescription.errors.required}" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)">
+                                  </textarea>
+                              </div>
+                          </div>
+                          <div class="px-5 pt-3 mt-3 bg-light" formArrayName="ApprovalChainDetails">
+                              <div *ngFor="let item of groupItem.controls; let i = index; let last = last;">
+                                  <div class="d-flex mt-4" [formGroupName]="i">
+                                      <div class="col-auto me-3">
+                                      LEVEL {{i + 1}} <i class=" fa fa-circle text-primary ps-3"></i>
+                                      </div>
+                                      <div class="col-md-8 position-relative">
+                                          <div [ngClass]="{'block-tag': !last}">
+                                          </div>
+                                          <app-iautocomplete [data]="employeesAutoComplete" name="AssignieId" formControlName="AssignieId"
+                                              (OnSelect)="onEmloyeeChanged($event, i)" [ngModelOptions]="{standalone: true}">
+                                          </app-iautocomplete>
+                                          <div class="d-flex align-items-center mt-3" data-name="skip-section">
+                                              <div class="form-check">
+                                                  <input class="form-check-input" formControlName="IsRequired" type="checkbox">
+                                                  <label class="form-check-label">
+                                                      Required approval
+                                                  </label>
+                                              </div>
+                                          </div>
+                                          <div class="d-flex align-items-center mt-2" data-name="skip-section">
+                                              <div class="form-check">
+                                                  <input class="form-check-input" formControlName="IsForwardEnabled" type="checkbox" (click)="disableForwrdWhen($event, i)">
+                                                  <label class="form-check-label">
+                                                      Forward when
+                                                  </label>
+                                              </div>
+                                              <div class="d-flex ms-2 align-items-center">
+                                                  <div class="col-md-10">
+                                                      <select name="ForwardWhen" class="form-control form-select" formControlName="ForwardWhen" disabled [ngClass]="{'error-field': submitted && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardWhen.errors !== null && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardWhen.errors.required}">
+                                                          <option value="0" disabled>Select Reason</option>
+                                                          <option value="2">Pending</option>
+                                                          <option value="9">Approved</option>
+                                                          <option value="5">Rejected</option>
+                                                      </select>
+                                                  </div>
+                                                  <span class="px-2">after</span>
+                                              </div>
+                                              <div class="d-flex ms-2 align-items-center">
+                                                  <div class="col-md-6 ms-2">
+                                                      <input type="number" class="form-control form-control-sm" formControlName="ForwardAfterDays" maxlength="3" [ngClass]="{'error-field': submitted && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardAfterDays.errors !== null && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardAfterDays.errors.required}"
+                                                          placeholder="No# of days" name="SkipToNextLevelAfterDays" [readOnly]="workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.IsForwardEnabled.value == false">
+                                                  </div>
+                                                  <span class="ps-2">days</span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <a href="javascript:void(0)" class="text-decoration-none text-secondary" (click)="removeCurrent(i, item.get('AssignieId').value)">
+                                          <i class="fa fa-trash ps-3 text-secondary fa-lg pt-2"></i>
+                                      </a>
+                                  </div>
+                              </div>
 
-                            <ng-container *ngIf="isEnableAddNew">
-                                <a href="javascript:void(0)" class="text-decoration-none mt-4" (click)="addNewLevel()">
-                                    <i class="fa fa-plus pe-2 py-3"></i>
-                                    Add New Level
-                                </a>
-                            </ng-container>
-                            <ng-container *ngIf="!isEnableAddNew">
-                                <a href="javascript:void(0)" class="text-decoration-none text-muted mt-4" (click)="addNewLevel()">
-                                    <i class="fa fa-bars  pe-2 py-3" aria-hidden="true"></i>
-                                    Please use above dropdown to select employee.
-                                </a>
-                            </ng-container>
+                              <ng-container *ngIf="isEnableAddNew">
+                                  <a href="javascript:void(0)" class="text-decoration-none mt-4" (click)="addNewLevel()">
+                                      <i class="fa fa-plus pe-2 py-3"></i>
+                                      Add New Level
+                                  </a>
+                              </ng-container>
+                              <ng-container *ngIf="!isEnableAddNew">
+                                  <a href="javascript:void(0)" class="text-decoration-none text-muted mt-4" (click)="addNewLevel()">
+                                      <i class="fa fa-bars  pe-2 py-3" aria-hidden="true"></i>
+                                      Please use above dropdown to select employee.
+                                  </a>
+                              </ng-container>
 
-                            <ng-container *ngIf="isInProgress">
-                                <a href="javascript:void(0)" class="text-decoration-none text-muted mt-4">
-                                    <i class="fa fa-clock-o pe-2 py-3" aria-hidden="true"></i>
-                                    Please wait adding ...
-                                </a>
-                            </ng-container>
-                        </div>
+                              <ng-container *ngIf="isInProgress">
+                                  <a href="javascript:void(0)" class="text-decoration-none text-muted mt-4">
+                                      <i class="fa fa-clock-o pe-2 py-3" aria-hidden="true"></i>
+                                      Please wait adding ...
+                                  </a>
+                              </ng-container>
+                          </div>
 
-                        <div class="d-flex align-items-center mt-2" data-name="skip-section">
-                            <div class="form-check">
-                                <input class="form-check-input" formControlName="IsAutoExpiredEnabled" type="checkbox">
-                                <label class="form-check-label">
-                                    Enable to auto expire approval after
-                                </label>
-                            </div>
-                            <div class="d-flex ms-2 align-items-center">
-                                <div class="col-md-6">
-                                    <input type="number" class="form-control form-control-sm" formControlName="AutoExpireAfterDays" 
-                                        placeholder="No# of days" name="AutoExpireAfterDays">
-                                </div>
-                                <span class="ps-2">days</span>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
-                <div class="mt-4 d-flex justify-content-end">
-                    <button class="btn btn-primary-c" (click)="addApprovalWorkFlow()">
-                        <i class="fa fa-plus pe-2"></i>
-                        Add Work Flow
-                    </button>
-                </div>
+                          <div class="d-flex align-items-center mt-3" data-name="skip-section">
+                              <div class="form-check">
+                                  <input class="form-check-input" formControlName="IsAutoExpiredEnabled" type="checkbox"  (click)="enableAutoExpire($event)">
+                                  <label class="form-check-label">
+                                      Enable to auto expire approval after
+                                  </label>
+                              </div>
+                              <div class="d-flex ms-2 align-items-center">
+                                  <div class="col-md-6">
+                                      <input type="number" class="form-control form-control-sm" formControlName="AutoExpireAfterDays" [ngClass]="{'error-field': submitted && f.AutoExpireAfterDays.errors !== null && f.AutoExpireAfterDays.errors.required}"
+                                          placeholder="No# of days" maxlength="3" name="AutoExpireAfterDays" [readOnly]="workFlowForm.get('IsAutoExpiredEnabled').value == false">
+                                  </div>
+                                  <span class="ps-2">days</span>
+                              </div>
+                          </div>
+                      </div>
+                  </ng-container>
+                  <div class="mt-4 d-flex justify-content-end">
+                      <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addApprovalWorkFlow()">
+                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                        <span class="ps-2">{{ isLoading ? 'Wait' : 'Add Work Flow' }}</span>
+                      </button>
+                  </div>
+              </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!isPageReady">
+          <div class="py-5 my-5">
+            <h6 class="fw-bold fs-3 text-center text-dark">Work flow is loading</h6>
+            <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+              <div class="col-md-3 modal-container  text-center cog-wheel">
+                <img src="assets/images/cog.gif" alt="" />
+                <h6 class="modal-title title-message">
+                  Please Wait ........
+                </h6>
+              </div>
             </div>
-        </div>
+          </div>
+        </ng-container>
       </div>
     </div>
 </div>
-  

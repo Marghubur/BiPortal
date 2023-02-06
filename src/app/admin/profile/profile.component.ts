@@ -169,7 +169,7 @@ export class ManageComponent implements OnInit {
           this.userModal.PersonalDetail.PinCode = employee.Pincode;
           this.userModal.PersonalDetail.DOB = employee.DOB;
         }
-        let profile = res.ResponseBody.profileDetail;
+        let profile = res.ResponseBody.profileDetail[0];
         if (profile && profile.length > 0) {
           this.profile = profile.find(x => x.FileName == ProfileImage);
           if (this.profile) {
@@ -249,7 +249,7 @@ export class ManageComponent implements OnInit {
   buildPersonalDetailForm() {
     let date = new Date();
     if(this.userModal.PersonalDetail.DOB) {
-      let date = new Date(this.userModal.PersonalDetail.DOB);
+      date = new Date(this.userModal.PersonalDetail.DOB);
       if (date.getFullYear() == 1) {
         date = new Date();
       }
@@ -303,6 +303,11 @@ export class ManageComponent implements OnInit {
       ProficiencyLanguage: new FormControl(''),
       LanguageSpeak: new FormControl(false)
     });
+  }
+
+  addNewLanguage() {
+    let item = this.personalDetailForm.get('Languages') as FormArray;
+    item.push(this.addLanguages())
   }
 
   get langauge() {
@@ -1238,7 +1243,7 @@ export class ManageComponent implements OnInit {
         let educations = null;
         this.isUser = true;
         detail = res.ResponseBody.professionalUser;
-        this.profile = res.ResponseBody.profileDetail;
+        this.profile = res.ResponseBody.profileDetail[0];
         this.userModal = detail;
         if (this.profile != null)
           this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;

@@ -18,6 +18,7 @@ declare var $: any;
 })
 export class CompanyComponent implements OnInit {
   submitted: boolean = false;
+  companysubmitted: boolean = false;
   organizationAccountsForm: FormGroup = null;
   companyForm: FormGroup = null;
   CompanyAccountDetails: Array<any> = [];
@@ -37,6 +38,7 @@ export class CompanyComponent implements OnInit {
   currentCompany: any = null;
   fileDetail: Array<any> = [];
   profileURL: string = UserImage;
+  maxdate: any = null;
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -48,6 +50,7 @@ export class CompanyComponent implements OnInit {
 
   ngOnInit(): void {
     let data = this.local.findRecord("Companies");
+    this.maxdate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     if (!data) {
       return;
     } else {
@@ -128,10 +131,10 @@ export class CompanyComponent implements OnInit {
     this.organizationAccountsForm = this.fb.group({
       CompanyId: new FormControl(this.singleCompanyAccountInfo.CompanyId),
       AccountNo: new FormControl(this.singleCompanyAccountInfo.AccountNo, [Validators.required]),
-      BankName: new FormControl(this.singleCompanyAccountInfo.BankName),
-      Branch: new FormControl(this.singleCompanyAccountInfo.Branch),
+      BankName: new FormControl(this.singleCompanyAccountInfo.BankName, [Validators.required]),
+      Branch: new FormControl(this.singleCompanyAccountInfo.Branch, [Validators.required]),
       BranchCode: new FormControl(this.singleCompanyAccountInfo.BranchCode),
-      IFSC: new FormControl(this.singleCompanyAccountInfo.IFSC),
+      IFSC: new FormControl(this.singleCompanyAccountInfo.IFSC, [Validators.required]),
       IsPrimaryAccount: new FormControl (this.singleCompanyAccountInfo.IsPrimaryAccount ? 'true': 'false'),
       OrganizationId: new FormControl(this.singleCompanyAccountInfo.OrganizationId),
       BankAccountId: new FormControl(this.singleCompanyAccountInfo.BankAccountId),
@@ -148,11 +151,11 @@ export class CompanyComponent implements OnInit {
       CompanyName: new FormControl(this.currentCompany.CompanyName, [Validators.required]),
       CompanyDetail: new FormControl(this.currentCompany.CompanyDetail),
       SectorType: new FormControl(this.currentCompany.SectorType),
-      City: new FormControl(this.currentCompany.City),
-      State: new FormControl(this.currentCompany.State),
-      Country: new FormControl(this.currentCompany.Country),
-      FirstAddress: new FormControl(this.currentCompany.FirstAddress),
-      SecondAddress: new FormControl(this.currentCompany.SecondAddress),
+      City: new FormControl(this.currentCompany.City, [Validators.required]),
+      State: new FormControl(this.currentCompany.State, [Validators.required]),
+      Country: new FormControl(this.currentCompany.Country, [Validators.required]),
+      FirstAddress: new FormControl(this.currentCompany.FirstAddress, [Validators.required]),
+      SecondAddress: new FormControl(this.currentCompany.SecondAddress, [Validators.required]),
       ThirdAddress: new FormControl(this.currentCompany.ThirdAddress),
       ForthAddress: new FormControl(this.currentCompany.ForthAddress),
       FullAddress: new FormControl(this.currentCompany.FullAddress),
@@ -165,10 +168,10 @@ export class CompanyComponent implements OnInit {
       PrimaryPhoneNo: new FormControl(this.currentCompany.PrimaryPhoneNo, [Validators.required]),
       SecondaryPhoneNo: new FormControl(this.currentCompany.SecondaryPhoneNo),
       Fax: new FormControl(this.currentCompany.Fax),
-      Pincode: new FormControl(this.currentCompany.Pincode),
+      Pincode: new FormControl(this.currentCompany.Pincode, [Validators.required]),
       PANNo: new FormControl(this.currentCompany.PANNo),
       TradeLicenseNo: new FormControl(this.currentCompany.TradeLicenseNo),
-      GSTNo: new FormControl(this.currentCompany.GSTNo),
+      GSTNo: new FormControl(this.currentCompany.GSTNo, [Validators.required]),
       LegalEntity: new FormControl(this.currentCompany.LegalEntity),
       TypeOfBusiness: new FormControl(this.currentCompany.TypeOfBusiness),
       InCorporationDate: new FormControl(new Date(this.currentCompany.InCorporationDate)),
@@ -179,11 +182,19 @@ export class CompanyComponent implements OnInit {
     })
   }
 
+  get m() {
+    return this.companyForm.controls;
+  }
+
   submitChanges() {
-    this.submitted = true;
+    this.companysubmitted = true;
     this.isLoading = true;
     let errroCounter = 0;
-
+    if (this.companyForm.invalid) {
+      this.isLoading = false;
+      ErrorToast("Please fill all mandatory field");
+      return;
+    }
     if (this.companyForm.get("CompanyName").value === "" || this.companyForm.get("CompanyName").value === null)
       errroCounter++;
 
@@ -232,6 +243,12 @@ export class CompanyComponent implements OnInit {
     this.submitted = true;
     if (this.organizationAccountsForm.get("AccountNo").value === "" || this.organizationAccountsForm.get("AccountNo").value === null)
       errroCounter++;
+
+    if (this.organizationAccountsForm.invalid) {
+      this.isLoading = false;
+      ErrorToast("All read marked fields are mandatory.");
+      return;
+    }
 
     let request: organizationAccountModal = this.organizationAccountsForm.value;
     if (errroCounter === 0) {
@@ -283,7 +300,12 @@ export class CompanyComponent implements OnInit {
     $('#accountModal').modal('show');
   }
 
-  filterRecords() {
+  fireBrowserFile() {
+    $("#uploacompdocument").click();
+  }
+
+  filterRecords(e: any) {
+    e.stopPropagation();
     let searchQuery = "";
     let delimiter = "";
     this.companyData.SearchString = ""
@@ -391,10 +413,7 @@ export class CompanyComponent implements OnInit {
     }
   }
 
-  fireBrowserFile() {
-    this.submitted = true;
-    $("#uploadocument").click();
-  }
+
 
   get c() {
     return this.companyForm.controls;

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -38,9 +39,10 @@ export class AttendanceComponent implements OnInit {
   presentMonth: boolean = true;
   cachedData: any = null;
   currentAttendance: any = null;
-
-
-
+  employeesList: autoCompleteModal = new autoCompleteModal();
+  applicationData: any = null;
+  emails: Array<any> = [];
+  employees: Array<any> = [];
   //-------------------------- required code starts --------------------------
 
   commentValue: string = null;
@@ -66,6 +68,10 @@ export class AttendanceComponent implements OnInit {
 
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
+    this.employeesList.placeholder = "Employee";
+    this.employeesList.className = 'disable-field';
+    this.employeesList.isMultiSelect = true;
+    this.loadAutoComplete();
     this.isEmployeesReady = true;
     if(this.cachedData) {
       this.employeeId = this.cachedData.EmployeeUid;
@@ -251,7 +257,8 @@ export class AttendanceComponent implements OnInit {
       AttendanceDay: this.currentAttendance.AttendanceDay,
       AttendenceFromDay: this.today,
       AttendenceToDay: this.tomorrow,
-      UserComments: this.commentValue
+      UserComments: this.commentValue,
+      Emails: this.emails
     }
     if (this.commentValue == '') {
       this.isComment = true;
@@ -304,6 +311,38 @@ export class AttendanceComponent implements OnInit {
       case "leave-tab":
         this.nav.navigateRoot(UserLeave, this.cachedData);
       break;
+    }
+  }
+
+  loadAutoComplete() {
+    this.isEmployeesReady = false;
+    this.employeesList.data = [];
+    this.employeesList.placeholder = "Employee";
+    this.employeesList.data = GetEmployees();
+    this.applicationData = GetEmployees();
+    this.employeesList.className = "";
+    this.isEmployeesReady = true;
+  }
+
+  addEmployeeEmail() {
+    let employee = this.applicationData.find(x => x.value == this.employeeId);
+    this.emails.push(employee.email);
+    this.employees.push({
+      Id: employee.value,
+      Name: employee.text,
+      Email: employee.email
+    });
+    let index = this.employeesList.data.findIndex(x => x.value == this.employeeId);
+    this.employeesList.data.splice(index, 1);
+  }
+
+  removeEmail(index: number) {
+    if (index >-1) {
+      this.employeesList.data.push({
+        value: this.employees[index].Id,
+        text: this.employees[index].Name
+      });
+      this.employees.splice(index, 1);
     }
   }
 }

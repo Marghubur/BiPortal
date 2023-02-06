@@ -628,6 +628,8 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
           this.isFileFound = true;
         }
       } else {
+        $('#advancedSearchModal').modal('hide');
+        this.isLoading = false;
         ErrorToast("No file or folder found");
       }
       this.isEmpPageReady = true;
@@ -870,10 +872,19 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     $("#advancedSearchModal").modal('show')
   }
 
-  selectBillOption(e: any) {
+  selectBillOption(e: any, value?: number) {
     this.isReadonly = true;
     if (e.target.value) {
       this.RaisedBilloption = e.target.value;
+      if (this.RaisedBilloption == '0')
+        this.isReadonly = false;
+    } else {
+      let elem = document.querySelectorAll('input[name="bydate"]') ;
+      for (let i = 0; i < elem.length; i++) {
+        (elem[i] as HTMLInputElement).checked = false;
+      }
+      (elem[value] as HTMLInputElement).checked = true;
+      this.RaisedBilloption = value.toString();
       if (this.RaisedBilloption == '0')
         this.isReadonly = false;
     }

@@ -16,7 +16,7 @@ declare var $: any;
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit, AfterViewChecked {
-  isPageReady: boolean =true;
+  isPageReady: boolean =false;
   submitted: boolean = false;
   isLoading: boolean = false;
   baseUrl: string = "";

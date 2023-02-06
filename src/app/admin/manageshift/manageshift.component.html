@@ -4,7 +4,7 @@
       <div class="x_panel mt-2">
         <div class="x_header">
           <div class="x_header_title d-flex justify-content-between align-items-center">
-            <h2>Products<small>Details</small></h2>
+            <h2>Shift<small>Details</small></h2>
             <div class="d-flex align-items-center">
               <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
                   class="fa fa-paper-plane pe-1"></i> Email Link Config
@@ -13,13 +13,313 @@
             </div>
           </div>
         </div>
-
         <div class="px-1">
           <app-breadcrums></app-breadcrums>
         </div>
-        <ng-container >
-
+        <ng-container *ngIf="isPageReady">
+          <div class="x_content mt-4">
+            <div class="t-table t-list t-border col-md-12">
+              <div class="hide-bar"></div>
+              <div class="t-head">
+                <div class="tr">
+                  <div class="th fe-index">
+                    <div class="t-index">
+                      <a href="javascript:void(0)" class="ps-3">#</a>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Shift Title" [(ngModel)]="shiftDetail.ShiftTitle"
+                       oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByShiftTitleAsc, 'ShiftTitle')">
+                        <a href="javascript:void(0)" class="pe-2">Shift Title</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByShiftTitleAsc == null || !orderByShiftTitleAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByShiftTitleAsc == null || orderByShiftTitleAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Working days in week" [(ngModel)]="shiftDetail.TotalWorkingDays"
+                       oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByTotalWorkingDaysAsc, 'TotalWorkingDays')">
+                        <a href="javascript:void(0)" class="pe-2">Working Days(in week)</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || !orderByTotalWorkingDaysAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || orderByTotalWorkingDaysAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Start date" readonly
+                       oninput="this.value = this.value.toUpperCase()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
+                        <a href="javascript:void(0)" class="pe-2">Start Date</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by office time" [(ngModel)]="shiftDetail.OfficeTime"
+                       oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByOfficeTimeAsc, 'OfficeTime')">
+                        <a href="javascript:void(0)" class="pe-2">Office Time</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByOfficeTimeAsc == null || !orderByOfficeTimeAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByOfficeTimeAsc == null || orderByOfficeTimeAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by duration in min" [(ngModel)]="shiftDetail.Duration"
+                        oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByDurationAsc, 'Duration')">
+                        <a href="javascript:void(0)" class="pe-2">Duration (in min)</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByDurationAsc == null || !orderByDurationAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByDurationAsc == null || orderByDurationAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Status" readonly>
+                      <div class="t-filter" (click)="arrangeDetails(orderByStatusAsc, 'Status')">
+                        <a href="javascript:void(0)" class="pe-2">Status</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByStatusAsc == null || !orderByStatusAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByStatusAsc == null || orderByStatusAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by lunch duration" [(ngModel)]="shiftDetail.LunchDuration"
+                      (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByLunchDurationAsc, 'LunchDuration')">
+                        <a href="javascript:void(0)" class="pe-2">Lunch Dur (in min)</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByLunchDurationAsc == null || !orderByLunchDurationAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByLunchDurationAsc == null || orderByLunchDurationAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-index text-center">
+                    <div class="cell-wrapper">
+                      <div class="t-filter">
+                        <a href="javascript:void(0)" class="pe-2">Action</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="t-body">
+                <ng-container *ngIf="allShift.length > 0">
+                  <div class="tr py-2" *ngFor="let item of allShift; let i = index;">
+                    <div class="td align-middle fe-index">
+                      <div class="cell-wrapper text-center">
+                        {{item.Index}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{item.ShiftTitle}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{item.TotalWorkingDays}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{item.StartDate | date}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{item.OfficeTime}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{item.Duration}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{item.Status == 2 ? 'Pending' : item.Status == 5 ? 'Rejected' : item.Status == 3 ? 'Canceled' : 'Approved'}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{item.LunchDuration}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-index">
+                      <div class="d-flex flex-row justify-content-evenly">
+                        <a href="javascript:void(0)" class="text-decoration-none" (click)="editShiftPopUp(item)">
+                          <i class="fa fa-pencil pe-2"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="allShift.length == 0 && isPageReady">
+                  <div
+                    class="custom-height fw-bold fs-3 py-5 my-5 text-danger d-flex align-items-center justify-content-center">
+                    <p class="my-5 py-5">Record Not Found</p>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <app-pagination [pagination]="shiftData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+          </div>
         </ng-container>
+        <ng-container *ngIf="!isPageReady">
+          <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container  text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View File Modal -->
+<div class="modal fade view-popup" id="manageShiftModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="manageShiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="manageShiftModalLabel">View Files</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="shiftForm">
+          <div class="row">
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">Company Name</label>
+              <input type="text" readonly formControlName="CompanyName" class="form-control">
+            </div>
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">Department *</label>
+              <select class="form-select" formControlName="Department" [ngClass]="{'error-field': submitted && f.Department.errors !== null && f.Department.errors.required}">
+                <option value=null disabled>Select Department</option>
+                <option [value]="item.DepartmentId" *ngFor="let item of departments">{{item.DepartmentName}}</option>
+              </select>
+            </div>
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">Shift Title *</label>
+              <input type="text" maxlength="40" placeholder="Enter shift title" formControlName="ShiftTitle" [ngClass]="{'error-field': submitted && f.ShiftTitle.errors !== null && f.ShiftTitle.errors.required}" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">Office Time (in min) *</label>
+              <input type="text" OnlyNumber="3" placeholder="Enter office start time" formControlName="OfficeTime" [ngClass]="{'error-field': submitted && f.OfficeTime.errors !== null && f.OfficeTime.errors.required}" class="form-control">
+            </div>
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">Duration (in min) *</label>
+              <input type="text" OnlyNumber="3" placeholder="Enter office duiration" formControlName="Duration" [ngClass]="{'error-field': submitted && f.Duration.errors !== null && f.Duration.errors.required}" class="form-control">
+            </div>
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">Lunch Duration (in min) *</label>
+              <input type="text" OnlyNumber="3" placeholder="Enter lunch duiration" formControlName="LunchDuration" [ngClass]="{'error-field': submitted && f.LunchDuration.errors !== null && f.LunchDuration.errors.required}" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-12 mt-3">
+            <label for="" class="form-label">Description</label>
+            <textarea class="form-control" formControlName="Description" placeholder="Enter description" maxlength="100" cols="30" rows="5"></textarea>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">Total Working Days *</label>
+              <input type="text" OnlyNumber="1" placeholder="Enter total working days" formControlName="TotalWorkingDays" [ngClass]="{'error-field': submitted && f.TotalWorkingDays.errors !== null && f.TotalWorkingDays.errors.required}" class="form-control">
+            </div>
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">Start Date *</label>
+              <form class="form-inline">
+                <div class="form-group w-100">
+                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="frommodel"
+                      (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #d="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                          class="fa fa-calendar" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-4 mt-3">
+              <label for="" class="form-label">End Date *</label>
+              <form class="form-inline">
+                <div class="form-group w-100">
+                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tomodel"
+                      (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #td="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="td.toggle()" type="button"><i
+                          class="fa fa-calendar" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-12 mt-3">
+            <label for="" class="form-label">Days</label>
+            <div class="d-flex flex-wrap mt-3" *ngIf="selectedDays.length > 0">
+              <div *ngFor="let user of selectedDays">
+                <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
+                  {{user.day}}
+                </span>
+              </div>
+            </div>
+            <!-- For multiselect option -->
+            <div class="multi-select col-md-12" title="multi-select-box">
+              <div class="border selected-items" title="multi-select-box" (click)="enableDropdown()"></div>
+              <div class="contents d-none" title="multi-select-box" id="auto-hide-box">
+                <div class="elem" *ngFor="let day of days" title="multi-select-box">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="toggleDays(day.id, $event)" title="multi-select-box">
+                    <span title="multi-select-box">{{day.day}}</span>
+                    <i name="symbol" [ngClass]="{'v-hide': !day.isEnabled}" class="fa fa-check" title="multi-select-box"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- end -->
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0">
+        <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
+        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateUpdateRequest()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+          {{ isLoading ? 'Processing' : 'Submit' }}
+        </button>
       </div>
     </div>
   </div>

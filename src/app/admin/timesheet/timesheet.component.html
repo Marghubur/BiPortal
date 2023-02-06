@@ -43,7 +43,7 @@
     <ng-container *ngIf="isEmployeesReady">
       <ng-container [ngSwitch]="divisionCode">
         <ng-container *ngSwitchCase="2">
-          <div class="pt-4 timesheet-form">
+          <div class="x_panel pt-4 timesheet-form">
             <div class="x_header">
               <div class="x_header_title row">
                 <div class="text-dark text-dark d-flex flex-column justify-content-center">
@@ -69,102 +69,6 @@
         </ng-container>
 
         <ng-container *ngSwitchDefault>
-          <ng-container *ngIf="isTimesheetDataLoaded">
-            <div class="col-md-12 row mt-4 mb-4 ms-0">
-              <div class="col-md-4 ps-0">
-                <h6>Timesheet Stats</h6>
-                <div class="card px-3 py-2">
-                  <div class="d-flex justify-content-between">
-                    <h6 class="pt-3 ps-2">
-                      Last Week
-                    </h6>
-                    <div>
-                      <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
-                    </div>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between pe-2 pb-3 pt-3">
-                    <div class="col-md-4 d-flex align-items-center">
-                      <i class="fa fa-user-circle fa-3x text-success ps-2" aria-hidden="true"></i>
-                      <span class="fw-bold ps-2 last-week-team">Your</span>
-                    </div>
-                    <div class="col-md-4">
-                      <h6 class="last-week-team">AVG HRS / DAY</h6>
-                      <h6 class="pt-2"> 8h 0m</h6>
-                    </div>
-                    <div class="col-md-4">
-                      <h6 class="last-week-team">ON TIME ARRIVAL</h6>
-                      <h6 class=" pt-2">100%</h6>
-                    </div>
-                  </div>
-                  <div class="border-top d-flex align-items-center pb-1 pt-3">
-                    <div class="col-md-4 d-flex align-items-center">
-                      <span class="fa-stack fa-2x ps-2 text-dark">
-                        <i class="fa fa-circle fa-stack-2x"></i>
-                        <i class="fa fa-users fa-stack-1x fa-inverse"></i>
-                      </span>
-                      <span class="fw-bold ps-2 last-week-team">My Team</span>
-                    </div>
-                    <div class="col-md-4 pt-2">
-                      <h6>7h 24m</h6>
-                    </div>
-                    <div class="col-md-4 pt-2">
-                      <h6>81%</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <h6>Timings</h6>
-                <div class="card px-3 py-2">
-                  <div class="d-flex justify-content-between pb-5">
-                    <div class="d-flex pt-3 ps-2">
-                      <div class="text-inisde-circle" [ngClass]="{'active-circle': DayValue == 1}">M</div>
-                      <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 2}">T</div>
-                      <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 3}">W</div>
-                      <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 4}">T</div>
-                      <div class="text-inisde-circle ms-3" [ngClass]="{'active-circle': DayValue == 5}">F</div>
-                      <div class="text-inisde-circle ms-3 inactive-circle">S</div>
-                      <div class="text-inisde-circle ms-3 inactive-circle">S</div>
-                    </div>
-                    <div>
-                      <i class="fa fa-search fa-lg pe-3 pt-3" aria-hidden="true"></i>
-                      <i class="fa fa-qrcode fa-lg  pe-2 pt-3" aria-hidden="true"></i>
-                    </div>
-                  </div>
-                  <ng-container *ngIf="DayValue > 0 &&  DayValue <= 5">
-                    <h6 class="pt-5 ps-2">Today (10:00 AM - 8:00PM)</h6>
-                    <div class="progress ms-2 me-2 mt-1 mb-2">
-                      <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                      <div class="progress-bar bg-success" role="progressbar" style="width: 11.11%" aria-valuenow="1.11"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                      <div class="progress-bar bg-info" role="progressbar" style="width: 44.44%" aria-valuenow="44.44"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="d-flex justify-content-between ps-2 pe-2">
-                      <h6>Duration: 9h 0m</h6>
-                      <h6>Break: 60 Min</h6>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngIf="DayValue == 6 || DayValue ==  0">
-                    <h4 class="text-center pt-5 pb-5">Today is week-off</h4>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="col-md-4 pe-0">
-                <h6>Actions</h6>
-                <div class="card px-3 pt-3 pb-5">
-                  <div class="pb-4">
-                    <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
-                    <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate | date}}.
-                  </div>
-                  <h6 class=" text-center pb-5 pt-5">
-                    Work From Home
-                  </h6>
-                </div>
-              </div>
-            </div>
-          </ng-container>
           <ng-container [ngSwitch]="isFormReady">
             <div *ngSwitchCase="true">
               <div  class="x_panel pt-4 timesheet-form">
@@ -177,12 +81,12 @@
                       </div>
                     </div>
                   </div>
-                  <!--
+                  <div class="text-end">
                     <button type="button" class="btn btn-primary-c btn-sm" [disabled]="isBlocked" (click)="onSubmit()">
                       <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
                       {{ isLoading ? 'Saving' : 'Submit' }}
                     </button>
-                  </div> -->
+                  </div>
                 </div>
                 <div class="x_content mt-4">
                   <div>
@@ -196,7 +100,7 @@
                       <tbody >
                         <tr *ngFor="let item of currentMonthWeek; let i = index">
                           <td>
-                            <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="viewTimeSheet(i)">
+                            <a href="javascript:void(0)" class="text-dark" (click)="viewTimeSheet(i)">
                               <span class="fw-bold pe-1">Timesheet From</span>{{item.startWeek | date}} <span class="fw-bold px-1">to</span>{{item.endWeek | date}}
                             </a>
                           </td>
@@ -205,7 +109,10 @@
                             <span *ngIf="item.status == 9"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
                             <span *ngIf="item.status == 6 "><i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
                             <span *ngIf="item.status == 5 "><i class="fa fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Rejected</span>
-                            <span *ngIf="item.status == 0 " class="text-danger"><i class="fa fa-close pt-1 pb-1 pe-2" aria-hidden="true"></i> Read Only</span>
+                            <span class="text-danger"  *ngIf="item.status == -1">
+                              <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                              Readonly
+                            </span>
                           </td>
                         </tr>
                       </tbody>
@@ -236,12 +143,12 @@
             </div>
             <div *ngSwitchDefault class="">
               <div class="x_panel d-flex flex-direction-column justify-content-center">
-                <div class="x_content py-5">
-                  <p *ngIf="NoClient" class="h3 text-muted text-center my-5 py-5">
+                <div class="x_content">
+                  <p *ngIf="NoClient" class="h3 text-muted text-center">
                     Uhh!!! No client allocated on your name. Please contact your maanager.
                   </p>
-                  <p *ngIf="!NoClient" class="h3 text-muted text-center my-5 py-5">
-                    Please select Employee and Employer first.
+                  <p *ngIf="!NoClient" class="h3 text-muted text-center">
+                    Please select week date to get timesheet.
                   </p>
                 </div>
               </div>
@@ -297,20 +204,20 @@
                 </tr>
               </thead>
               <tbody formArrayName="timesheetArray">
-                <tr *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11, 'highlighted-column': item.get('TimesheetStatus').value == -1}">
+                <tr *ngFor="let item of timesheetForm.get('timesheetArray')['controls']; let i = index;">
                   <ng-container >
                     <ng-container [formGroupName]="i">
-                      <td>{{item.get('PresentDate').value | date: 'EEE'}}</td>
-                      <td>{{item.get('PresentDate').value | date}}</td>
-                      <td></td>
-                      <td>
+                      <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}">{{item.get('PresentDate').value | date: 'EEE'}}</td>
+                      <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}">{{item.get('PresentDate').value | date}}</td>
+                      <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}"></td>
+                      <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}">
                         <div class="center-badge d-flex justify-content-start">
-                          <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23" [readonly]="item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11, 'highlighted-column': item.get('TimesheetStatus').value == -1}"
+                          <input type="number" class="border-0 ms-1 text-start" placeholder="HH" min="0" max="23" [readonly]="item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}"
                             [attr.value]="weekDaysList[i] > 5 === 00" (keyup.enter)="manageHourField(i, $event)"
                             formControlName="UserHours"
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                           <span>&nbsp;:</span>
-                          <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59" [readonly]="item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11, 'highlighted-column': item.get('TimesheetStatus').value == -1}"
+                          <input type="number" class="border-0 text-end" placeholder="MM" min="0" max="59" [readonly]="item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1" [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}"
                             (keyup.enter)="manageMinField(i, $event)" formControlName="UserMin"
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 
@@ -325,9 +232,9 @@
                           </div>
                         </div>
                       </td>
-                      <td>
+                      <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}">
                         <ng-container [ngSwitch]="item.get('TimesheetStatus').value">
-                          <span class="" *ngSwitchCase="8">
+                          <span class="" *ngSwitchCase="2">
                             <i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Pending
                           </span>
@@ -343,18 +250,11 @@
                             <i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Approved
                           </span>
-                          <span class="text-danger" *ngSwitchCase="11">
-                            <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
-                            Readonly
-                          </span>
-                          <span class="text-danger" *ngSwitchCase="-1">
+                          <span class="text-danger" *ngSwitchDefault>
                             <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Readonly
                           </span>
                         </ng-container>
-                      </td>
-                      <td>
-
                       </td>
                     </ng-container>
                   </ng-container>

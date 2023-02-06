@@ -31,7 +31,7 @@
                         <div class="img-container-sq" (change)="uploadorganizationLogo($event)">
                           <div class="img-container__box">
                             <img [attr.src]="profileURL" alt="User">
-                            <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
+                            <input type="file" id="uploacompdocument" class="d-none" accept=".jpg, .jpeg, .png"
                               formControlName="LogoImgPath" />
                             <div class="img-container__btn mt-2">
                               <button class="btn btn-outline-success form-control"
@@ -80,18 +80,18 @@
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Alternate No.#</label>
-                        <input class="form-control" formControlName="SecondaryPhoneNo" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/>
+                        <input class="form-control" placeholder="Alternate number" formControlName="SecondaryPhoneNo" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">FAX No.#</label>
-                        <input class="form-control" formControlName="Fax" oninput="this.value = this.value.toUpperCase()"/>
+                        <input class="form-control" formControlName="Fax" placeholder="Fax number" maxlength="11" oninput="this.value = this.value.toUpperCase()"/>
                       </div>
                       <div class="col-md-3 mt-4">
-                        <label class="form-label">In Corporation Date</label>
+                        <label class="form-label">In Corporation Date *</label>
                         <form class="form-inline">
                           <div class="form-group w-100">
-                            <div class="input-group w-100">
-                              <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
+                            <div class="input-group w-100" [ngClass]="{'error-field': submitted && m['InCorporationDate'].errors !== null && m['InCorporationDate'].errors['required']}">
+                              <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxdate"
                                      name="dp" [(ngModel)]="corporationDateModal" ngbDatepicker #cd="ngbDatepicker">
                               <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
                             </div>
@@ -103,92 +103,165 @@
                     <div class="row col-md-12">
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Other Email 1</label>
-                        <input class="form-control" formControlName="FirstEmail"/>
+                        <input class="form-control" placeholder="Other Email 1" maxlength="50" formControlName="FirstEmail"/>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Other Email 2</label>
-                        <input class="form-control" formControlName="SecondEmail"/>
+                        <input class="form-control" placeholder="Other Email 2" maxlength="50" formControlName="SecondEmail"/>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Other Email 3</label>
-                        <input class="form-control" formControlName="ThirdEmail"/>
+                        <input class="form-control" placeholder="Other Email 3" maxlength="50" formControlName="ThirdEmail"/>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Other Email 4</label>
-                        <input class="form-control" formControlName="ForthEmail"/>
+                        <input class="form-control" placeholder="Other Email 4" maxlength="50" formControlName="ForthEmail"/>
                       </div>
                     </div>
 
                     <div class="row col-md-12">
                       <div class="col-md-3 mt-4">
-                        <label class="form-label">GSTIN No.#</label>
-                        <input class="form-control" formControlName="GSTNo" oninput="this.value = this.value.toUpperCase()"/>
+                        <label class="form-label">GSTIN No.# *</label>
+                        <input class="form-control" placeholder="GSTIN No" [ngClass]="{'error-field': companysubmitted && m['GSTNo'].errors !== null && m['GSTNo'].errors['required']}" formControlName="GSTNo" maxlength="15" oninput="this.value = this.value.toUpperCase()"
+                        onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">PAN No.#</label>
-                        <input class="form-control" formControlName="PANNo" oninput="this.value = this.value.toUpperCase()"/>
+                        <input class="form-control" formControlName="PANNo" placeholder="PAN No" maxlength="10" oninput="this.value = this.value.toUpperCase()"
+                        onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Trade License Number</label>
-                        <input class="form-control" formControlName="TradeLicenseNo" oninput="this.value = this.value.toUpperCase()"/>
+                        <input class="form-control" formControlName="TradeLicenseNo" placeholder="Trade license no" maxlength="25" oninput="this.value = this.value.toUpperCase()"
+                        onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Legal Name Of Company</label>
-                        <input class="form-control" formControlName="LegalEntity" oninput="this.value = this.value.toUpperCase()"/>
+                        <input class="form-control" formControlName="LegalEntity" placeholder="Leganl name of company" maxlength="50" oninput="this.value = this.value.toUpperCase()"
+                        onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
                       </div>
                     </div>
 
-                    <div class="row col-md-12 mb-3">
+                    <div class="row col-md-12">
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Sector Type</label>
-                        <input class="form-control" formControlName="SectorType" />
+                        <select formControlName="SectorType" class="form-select">
+                          <option value="0" disabled>Select Sector Type</option>
+                          <option value="1">Aerospace industry</option>
+                          <option value="2">Agricultural industry </option>
+                          <option value="3">Automotive industry</option>
+                          <option value="4">Basic metal industry </option>
+                          <option value="5">Chemical industry </option>
+                          <option value="6">Computer industry</option>
+                          <option value="7">Construction industry </option>
+                          <option value="8">Creative industry </option>
+                          <option value="9">Cultural industry</option>
+                          <option value="10">Defense industry</option>
+                          <option value="11">Education industry</option>
+                          <option value="12">Electric power industry</option>
+                          <option value="13">Electronics industry</option>
+                          <option value="14">Energy industry</option>
+                          <option value="15">Engineering industry </option>
+                          <option value="16">Entertainment industry</option>
+                          <option value="17">Farming industry</option>
+                          <option value="18">Fashion industry</option>
+                          <option value="19">Film industry</option>
+                          <option value="20">Financial services industry</option>
+                          <option value="21">Fishing industry</option>
+                          <option value="22">Food industry</option>
+                          <option value="23">Forestry industry</option>
+                          <option value="24">Gambling industry</option>
+                          <option value="25">Gas industry</option>
+                          <option value="26">Green industry</option>
+                          <option value="27">Health services industry </option>
+                          <option value="28">Hospitality industry</option>
+                          <option value="29">Hotels industry</option>
+                          <option value="30">Industrial robot industry</option>
+                          <option value="31">Information industry</option>
+                          <option value="32">Information technology industry</option>
+                          <option value="33">Infrastructure industry</option>
+                          <option value="34">Insurance industry </option>
+                          <option value="35">Leisure industry</option>
+                          <option value="36">Low technology industry</option>
+                          <option value="37">Manufacturing industry</option>
+                          <option value="38">Meat industry</option>
+                          <option value="39">Media industry</option>
+                          <option value="40">Merchandising industry</option>
+                          <option value="41">Mining industry </option>
+                          <option value="42">Music industry</option>
+                          <option value="43">News media industry </option>
+                          <option value="44">Oil and gas industry</option>
+                          <option value="45">Pharmaceutical industry</option>
+                          <option value="46">Professional industry</option>
+                          <option value="47">Publishing industry</option>
+                          <option value="48">Pulp and paper industry</option>
+                          <option value="49">Railway industry </option>
+                          <option value="50">Real estate industry </option>
+                          <option value="51">Retail industry </option>
+                          <option value="52">Scientific industry</option>
+                          <option value="53">Services industry</option>
+                          <option value="54">Software industry</option>
+                          <option value="54">Space industry</option>
+                          <option value="55">Sport industry</option>
+                          <option value="56">Steel industry</option>
+                          <option value="57">Technology industry</option>
+                          <option value="58">Telecommunications industry</option>
+                          <option value="59">Textile industry</option>
+                          <option value="60">Tobacco industry</option>
+                          <option value="61">Transport industry</option>
+                          <option value="62">Utility industry </option>
+                          <option value="63">Video game industry</option>
+                          <option value="64">Water industry</option>
+                          <option value="65">Wholesale industry</option>
+                          <option value="66">Wood industry</option>
+                        </select>
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Type Of Business</label>
-                        <input class="form-control" formControlName="TypeOfBusiness" oninput="this.value = this.value.toUpperCase()"/>
+                        <input class="form-control" placeholder="Type of business" formControlName="TypeOfBusiness" maxlength="50" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
                       </div>
                       <div class="col-md-3 mt-4">
-                        <label class="form-label">Country</label>
-                        <input placeholder="Country" class="form-control" name="Country"
-                          oninput="this.value = this.value.toUpperCase()" formControlName="Country" />
+                        <label class="form-label">Country *</label>
+                        <input placeholder="Country" class="form-control" name="Country" [ngClass]="{'error-field': companysubmitted && m['Country'].errors !== null && m['Country'].errors['required']}"
+                          oninput="this.value = this.value.toUpperCase()" maxlength="50" formControlName="Country" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
                       </div>
                       <div class="col-md-3 mt-4">
-                        <label class="form-label">State</label>
-                        <input placeholder="State" class="form-control" name="State"
-                          oninput="this.value = this.value.toUpperCase()" formControlName="State" />
+                        <label class="form-label">State *</label>
+                        <input placeholder="State" class="form-control" name="State" [ngClass]="{'error-field': companysubmitted && m['State'].errors !== null && m['State'].errors['required']}"
+                          oninput="this.value = this.value.toUpperCase()" maxlength="50" formControlName="State" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
                       </div>
                     </div>
                     <div class="row col-md-12">
                       <div class="col-md-3 mt-4">
-                        <label class="form-label">City</label>
-                        <input placeholder="City" class="form-control" name="City"
-                          oninput="this.value = this.value.toUpperCase()" formControlName="City" />
+                        <label class="form-label">City *</label>
+                        <input placeholder="City" class="form-control" name="City" [ngClass]="{'error-field': companysubmitted && m['City'].errors !== null && m['City'].errors['required']}"
+                          oninput="this.value = this.value.toUpperCase()" maxlength="50" formControlName="City" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
                       </div>
                       <div class="col-md-3 mt-4">
-                        <label class="form-label">Pincode</label>
+                        <label class="form-label">Pincode *</label>
                         <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                          formControlName="Pincode" />
+                          formControlName="Pincode" [ngClass]="{'error-field': companysubmitted && m['Pincode'].errors !== null && m['Pincode'].errors['required']}"/>
                       </div>
                       <div class="col-md-3 mt-4">
-                        <label class="form-label">Address Line 1</label>
-                        <input placeholder="Address Line 1" class="form-control" name="FirstAddress"
-                          oninput="this.value = this.value.toUpperCase()" formControlName="FirstAddress" />
+                        <label class="form-label">Address Line 1 *</label>
+                        <input placeholder="Address Line 1" maxlength="100" class="form-control" name="FirstAddress"
+                          oninput="this.value = this.value.toUpperCase()" formControlName="FirstAddress" [ngClass]="{'error-field': companysubmitted && m['FirstAddress'].errors !== null && m['FirstAddress'].errors['required']}"/>
                       </div>
                       <div class="col-md-3 mt-4">
-                        <label class="form-label">Address Line 2</label>
-                        <input placeholder="Address Line 2" class="form-control" name="SecondAddress"
-                          oninput="this.value = this.value.toUpperCase()" formControlName="SecondAddress" />
+                        <label class="form-label">Address Line 2 *</label>
+                        <input placeholder="Address Line 2"  maxlength="100" class="form-control" name="SecondAddress"
+                          oninput="this.value = this.value.toUpperCase()" formControlName="SecondAddress" [ngClass]="{'error-field': companysubmitted && m['SecondAddress'].errors !== null && m['SecondAddress'].errors['required']}"/>
                       </div>
                     </div>
                     <div class="row col-md-12 mb-3">
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Address Line 3</label>
-                        <input placeholder="Address Line 3" class="form-control" name="ThirdAddress"
+                        <input placeholder="Address Line 3" maxlength="100" class="form-control" name="ThirdAddress"
                           oninput="this.value = this.value.toUpperCase()" formControlName="ThirdAddress" />
                       </div>
                       <div class="col-md-3 mt-4">
                         <label class="form-label">Address Line 4</label>
-                        <input placeholder="Address Line 4" class="form-control" name="ForthAddress"
+                        <input placeholder="Address Line 4" maxlength="100" class="form-control" name="ForthAddress"
                           oninput="this.value = this.value.toUpperCase()" formControlName="ForthAddress" />
                       </div>
                       <div class="col-md-6 mt-4 d-flex flex-column justify-content-end">
@@ -215,7 +288,7 @@
                       <div class="th fe-5">
                         <div class="cell-wrapper">
                           <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"  oninput="this.value = this.value.toUpperCase()"
-                            (keyup.enter)="filterRecords()" autofocus [(ngModel)]="filterCompanyAccountInfo.BankName" name="BankName" autocomplete="off"
+                            (keyup.enter)="filterRecords($event)" autofocus [(ngModel)]="filterCompanyAccountInfo.BankName" name="BankName" autocomplete="off"
                             placeholder="Search by AccountNumber">
                           <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'BankName')">
                             <a href="javascript:void()" class="pe-2">Bank Name</a>
@@ -228,7 +301,7 @@
                       </div>
                       <div class="th fe-2">
                         <div class="cell-wrapper">
-                          <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" autocomplete="off"
+                          <input class="form-control  form-control-sm" (keyup.enter)="filterRecords($event)" autocomplete="off"
                             (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.AccountNo" name="AccountNo"
                             placeholder="Search by Account Number">
                           <div class="t-filter" (click)="arrangeDetails(orderByAccountAsc, 'AccountNo')">
@@ -242,7 +315,7 @@
                       </div>
                       <div class="th fe-2">
                         <div class="cell-wrapper">
-                          <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" name="BranchName"  oninput="this.value = this.value.toUpperCase()"
+                          <input class="form-control  form-control-sm" (keyup.enter)="filterRecords($event)" name="BranchName"  oninput="this.value = this.value.toUpperCase()"
                             (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.Branch" placeholder="Search by Branch Name" autocomplete="off">
                           <div class="t-filter" (click)="arrangeDetails(orderByBranchAsc, 'Branch')">
                             <a href="javascript:void()" class="pe-2">Branch Name</a>
@@ -255,7 +328,7 @@
                       </div>
                       <div class="th fe-2">
                         <div class="cell-wrapper">
-                          <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" name="IFSC"  oninput="this.value = this.value.toUpperCase()"
+                          <input class="form-control  form-control-sm" (keyup.enter)="filterRecords($event)" name="IFSC"  oninput="this.value = this.value.toUpperCase()"
                             (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.IFSC" placeholder="Search by IFSC Code" autocomplete="off">
                           <div class="t-filter" (click)="arrangeDetails(orderByIFSCAsc, 'IFSC')">
                             <a href="javascript:void()" class="pe-2">IFSC</a>
@@ -268,7 +341,7 @@
                       </div>
                       <div class="th fe-2 align-items-center justify-content-center">
                         <div class="cell-wrapper ">
-                          <button class="btn btn-outline-success" (click)="addAccountPopUp()"><i class="fa fa-plus-square-o pe-2"></i>Add Account</button>
+                          <button class="btn btn-outline-success" [disabled]="CompanyAccountDetails.length == 10" (click)="addAccountPopUp()"><i class="fa fa-plus-square-o pe-2"></i>Add Account</button>
                           <div class="text-center mt-3">ACTIONS</div>
                         </div>
                       </div>
@@ -322,6 +395,9 @@
                     </ng-container>
                   </div>
                 </div>
+                <div  class="alert alert-danger mt-3" *ngIf="CompanyAccountDetails.length == 10">
+                  <span class="fw-bold">Note: </span> You can't add more than 10 bank accounts
+                </div>
               </div>
             </ng-container>
           </div>
@@ -352,9 +428,9 @@
                 </div>
                 <div class="col-md-12 mb-3 mb-3 row">
                   <div class="col-md-4 my-2">
-                    <label class="form-label">Bank Name</label>
-                    <input placeholder="Bank Name" class="form-control" name="BankName"
-                      oninput="this.value = this.value.toUpperCase()" formControlName="BankName" />
+                    <label class="form-label">Bank Name *</label>
+                    <input placeholder="Bank Name" class="form-control" name="BankName" maxlength="40" [ngClass]="{'error-field': submitted && f.BankName.errors !== null && f.BankName.errors.required}"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="BankName"onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32" />
                   </div>
                   <div class="col-md-4 my-2">
                     <label class="form-label">Account No.# *</label>
@@ -363,14 +439,14 @@
                       formControlName="AccountNo" />
                   </div>
                   <div class="col-md-4 my-2">
-                    <label class="form-label">IFSC Code</label>
-                    <input placeholder="IFSC Code" class="form-control" name="IFSC"
-                      oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" />
+                    <label class="form-label">IFSC Code *</label>
+                    <input placeholder="IFSC Code" class="form-control" maxlength="11" name="IFSC" [ngClass]="{'error-field': submitted && f.IFSC.errors !== null && f.IFSC.errors.required}"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                   </div>
                   <div class="col-md-4 my-2">
-                    <label class="form-label">Branch Name</label>
-                    <input placeholder="Branch name" class="form-control" name="Branch"
-                      oninput="this.value = this.value.toUpperCase()" formControlName="Branch" />
+                    <label class="form-label">Branch Name *</label>
+                    <input placeholder="Branch name" class="form-control" name="Branch" [ngClass]="{'error-field': submitted && f.Branch.errors !== null && f.Branch.errors.required}" maxlength="40"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="Branch" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                   </div>
                   <div class="col-md-4 my-2">
                     <label class="form-label">Branch Code</label>
@@ -398,7 +474,7 @@
                       </div>
                     </form>
                   </div>
-                  <div class="col-md-4 my-2">
+                  <div class="col-md-4 my-2" *ngIf="singleCompanyAccountInfo.BankAccountId > 0">
                     <label class="form-label">Closing Date</label>
                     <form class="form-inline">
                       <div class="form-group w-100">

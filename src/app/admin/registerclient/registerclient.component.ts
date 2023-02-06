@@ -185,25 +185,25 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     if (!this.emailValidation(email, "Email"))
       return;
 
-    if (this.clientForm.get('OtherEmail_1').value || this.clientForm.get('OtherEmail_1').value != "") {
+    if (this.clientForm.get('OtherEmail_1').value && this.clientForm.get('OtherEmail_1').value != "") {
       email = this.clientForm.get('OtherEmail_1').value;
       if (!this.emailValidation(email, "OtherEmail_1"))
         return;
     }
 
-    if (this.clientForm.get('OtherEmail_2').value || this.clientForm.get('OtherEmail_2').value != "") {
+    if (this.clientForm.get('OtherEmail_2').value && this.clientForm.get('OtherEmail_2').value != "") {
       email = this.clientForm.get('OtherEmail_2').value;
       if (!this.emailValidation(email, "OtherEmail_2"))
         return;
     }
 
-    if (this.clientForm.get('OtherEmail_3').value || this.clientForm.get('OtherEmail_3').value != "") {
+    if (this.clientForm.get('OtherEmail_3').value && this.clientForm.get('OtherEmail_3').value != "") {
       email = this.clientForm.get('OtherEmail_3').value;
       if (!this.emailValidation(email, "OtherEmail_3"))
         return;
     }
 
-    if (this.clientForm.get('OtherEmail_4').value || this.clientForm.get('OtherEmail_4').value != "") {
+    if (this.clientForm.get('OtherEmail_4').value && this.clientForm.get('OtherEmail_4').value != "") {
       email = this.clientForm.get('OtherEmail_4').value;
       if (!this.emailValidation(email, "OtherEmail_4"))
         return;
@@ -273,7 +273,10 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.imageIndex = new Date().getTime();
-      this.resizeImage(file)
+      this.fileDetail.push({
+        name: $`profile_${this.imageIndex}`,
+        file: file
+      });
     }
   }
 
