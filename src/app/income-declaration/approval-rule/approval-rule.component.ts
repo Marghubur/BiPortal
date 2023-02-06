@@ -3,11 +3,11 @@ import { AdminDeclaration, AdminForm12B, AdminFreeTaxFilling, AdminPreferences, 
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
-  selector: 'app-taxsavinginvestment',
-  templateUrl: './taxsavinginvestment.component.html',
-  styleUrls: ['./taxsavinginvestment.component.scss']
+  selector: 'app-approval-rule',
+  templateUrl: './approval-rule.component.html',
+  styleUrls: ['./approval-rule.component.scss']
 })
-export class TaxsavinginvestmentComponent implements OnInit {
+export class ApprovalRuleComponent implements OnInit {
   cachedData: any = null;
 
   constructor(private nav: iNavigation) { }
@@ -45,9 +45,10 @@ export class TaxsavinginvestmentComponent implements OnInit {
       case "free-tax-tab":
         this.nav.navigateRoot(AdminFreeTaxFilling, this.cachedData);
         break;
-      case "tax-saving-tab":
+      case "approval-rule-tab":
         break;
     }
   }
 }
+
 

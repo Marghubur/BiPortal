@@ -3,9 +3,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { GetEmployees } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToFixed } from 'src/providers/common-service/common.service';
-import { AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary, AdminTaxcalculation } from 'src/providers/constants';
+import { AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSummary, AdminTaxcalculation } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -37,11 +37,24 @@ export class SalaryComponent implements OnInit {
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
+              private local: ApplicationStorage,
               private fb:FormBuilder) { }
 
   ngOnInit(): void {
+    this.dataSetup();
     this.currentYear = new Date().getFullYear();
     this.loadData();
+  }
+
+  dataSetup() {
+    this.EmployeeId = 0;
+    this.employeesList.data = GetEmployees();
+    this.employeesList.placeholder = "Employee";
+    this.employeesList.className = "";
+    let empId = Number(this.local.getByKey("EmployeeId"));
+    if (!isNaN(empId)){
+      this.EmployeeId = empId;
+    }
   }
 
   newIncomeTaxRegimePopUp() {
@@ -71,10 +84,10 @@ export class SalaryComponent implements OnInit {
     this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
       if(response.ResponseBody) {
         this.applicationData = response.ResponseBody;
-        this.employeesList.data = GetEmployees();
-        this.employeesList.placeholder = "Employee";
-        this.employeesList.className = "";
         this.isSalaryReady = true;
+        if (this.EmployeeId > 0) {
+          this.getSalaryBreakup(this.EmployeeId);
+        }
       }
     });
   }
@@ -106,7 +119,7 @@ export class SalaryComponent implements OnInit {
           TaxDetail: null
         };
       }
-      this.buildAndBindData(completeSalaryDetail);
+      this.buildAndBindData(completeSalaryDetail);      
     });
   }
 
