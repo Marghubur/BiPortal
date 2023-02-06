@@ -89,7 +89,7 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
 
   @Input()
   set data(dataModal: autoCompleteModal) {
-    if (dataModal !== null) {
+    if (dataModal) {
       this.placeholder = dataModal.placeholder;
       this.ClassName = dataModal.className;
       this.DropdownData = dataModal.data;
