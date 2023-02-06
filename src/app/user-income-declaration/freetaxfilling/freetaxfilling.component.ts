@@ -47,7 +47,7 @@ export class FreetaxfillingComponent implements OnInit {
         break;
       case "free-tax-tab":
         break;
-      case "tax-saving-tab":
+      case "approval-rule-tab":
         this.nav.navigateRoot(TaxSavingInvestment, this.cachedData);
         break;
     }
