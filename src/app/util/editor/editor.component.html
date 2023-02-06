@@ -104,11 +104,11 @@
         <input type="color" >
       </a>
     </div>
-    <div class="col-auto">
+    <!-- <div class="col-auto">
       <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Background Color" class="text-decoration-none" >
         <input type="color" >
       </a>
-    </div>
+    </div> -->
     <div class="col-auto">
       <select class="form-select border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Format Block" (change)="execCommandWithArg('formatBlock', $event);" >
           <option value="H1">H1</option>
@@ -146,8 +146,8 @@
     <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Table" (click)="tabelPopUp()"><i class="fa fa-table"></i></a>
     <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Select All" (click)="execCmd('selectAll');">Select All</a>
   </div>
-  <div class="col-md-12 mt-3">
-    <iframe id="richTextField" (dblclick)="toggleEdit()" [srcdoc]="innerHtmlText" class="h-75 rounded w-100"></iframe>
+  <div class="col-md-12 mt-3"  (click)="toggleEdit()" >
+    <iframe id="richTextField"[srcdoc]="innerHtmlText" class="h-75 rounded w-100"></iframe>
   </div>
 </div>
 

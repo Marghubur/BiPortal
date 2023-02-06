@@ -28,23 +28,38 @@
                     </div>
                     <div class="th fe-2">
                       <div class="cell-wrapper">
-                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" placeholder="Search by MobileNumber">
-                        <div class="t-filter">
-                          <a href="javascript:void()" class="pe-2">Title</a>
+                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" [(ngModel)]="workflowDetail.Title"
+                          (keydown.esc)="resetFilter()" placeholder="Search by Title">
+                        <div class="t-filter" (click)="arrangeDetails(orderByTitleAsc, 'Title')">
+                          <a href="javascript:void(0)" class="pe-2">Title</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByTitleAsc == null || !orderByTitleAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByTitleAsc == null || orderByTitleAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
                     <div class="th fe-2">
                       <div class="cell-wrapper">
-                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" placeholder="Search by Email">
-                        <div class="t-filter">
-                          <a href="javascript:void()" class="pe-2">Description</a>
+                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" [(ngModel)]="workflowDetail.TitleDescription"
+                          (keydown.esc)="resetFilter()" placeholder="Search by Title Description">
+                        <div class="t-filter" (click)="arrangeDetails(orderByTitleDescAsc, 'TitleDescription')">
+                          <a href="javascript:void0()" class="pe-2">Description</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByTitleDescAsc == null || !orderByTitleDescAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByTitleDescAsc == null || orderByTitleDescAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
-                    <div class="th fe-1 text-center">ACTIONS</div>
+                    <div class="th fe-1 text-center">
+                      <div class="cell-wrapper">
+                        <button class="btn btn-primary-c" (click)="addWorkFlowPopUp()">Add Work Flow</button>
+                        <div class="t-filter default-cursor justify-content-center">
+                          <a href="javascript:void(0)" class="pe-2 default-cursor">ACTIONS</a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="t-body">
@@ -52,14 +67,14 @@
                     <div class="tr py-2" *ngFor="let item of approvalWorkFlowList; let i = index;">
                         <div class="td align-middle text-center fe-index">
                             <div class="cell-wrapper">
-                            {{i + 1}}
+                            {{item.Index}}
                             </div>
                         </div>
                         <div class="td align-middle fe-2">
                             <div class="cell-wrapper">
                                 <a href="javascript:void(0)" (click)="EditCurrent(item)">
                                     {{item.Title}}
-                                </a>                        
+                                </a>
                             </div>
                         </div>
                         <div class="td align-middle fe-2">
@@ -71,7 +86,7 @@
                             <div class="d-flex flex-row justify-content-evenly">
                                 <a href="javascript:void(0)" (click)="EditCurrent(item)" data-bs-toggle="tooltip"
                                 data-bs-placement="right" title="Edit current record">
-                                    <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"></i></span>
+                                    <span class="badge bg-dark"><i class="fa fa-edit" aria-hidden="true"></i></span>
                                 </a>
                             </div>
                         </div>
@@ -93,4 +108,3 @@
       </div>
     </div>
 </div>
-  

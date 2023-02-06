@@ -22,14 +22,16 @@ export class ManageWorkFlowComponent implements OnInit {
   isInProgress: boolean = false;
   navRecord: any = null;
   approvalChainDetail: ApprovalWorkFlowChain = new ApprovalWorkFlowChain();
-  
-  constructor(
-    private fb: FormBuilder,
-    private http: AjaxService,
-    private nav: iNavigation
-    ) { }
+  submitted: boolean = false;
+  isLoading: boolean = false;
+  isPageReady: boolean = false;
+
+  constructor(private fb: FormBuilder,
+              private http: AjaxService,
+              private nav: iNavigation) { }
 
   ngOnInit(): void {
+    this.isPageReady = false;
     this.navRecord = this.nav.getValue();
     this.employees = GetEmployees();
     this.employeesAutoComplete.data = this.employees;
@@ -40,6 +42,7 @@ export class ManageWorkFlowComponent implements OnInit {
       this.loadRecord();
     } else {
       this.initForm();
+      this.isPageReady = true;
     }
   }
 
@@ -49,6 +52,7 @@ export class ManageWorkFlowComponent implements OnInit {
       if (response.ResponseBody) {
         this.approvalChainDetail = response.ResponseBody;
         this.initForm();
+        this.isPageReady = true;
       }
     });
   }
@@ -57,7 +61,7 @@ export class ManageWorkFlowComponent implements OnInit {
     this.workFlowForm = this.fb.group({
       ApprovalChainDetails: this.workFlowArray(),
       Title: new FormControl(this.approvalChainDetail.Title, [Validators.required]),
-      TitleDescription: new FormControl(this.approvalChainDetail.TitleDescription),
+      TitleDescription: new FormControl(this.approvalChainDetail.TitleDescription, [Validators.required]),
       IsAutoExpiredEnabled: new FormControl(this.approvalChainDetail.IsAutoExpiredEnabled),
       AutoExpireAfterDays: new FormControl(this.approvalChainDetail.AutoExpireAfterDays),
       IsSilentListner: new FormControl(this.approvalChainDetail.IsSilentListner),
@@ -68,7 +72,28 @@ export class ManageWorkFlowComponent implements OnInit {
 
   addApprovalWorkFlow() {
     this.isInProgress = true;
+    this.isLoading = true;
+    this.submitted = true;
     let request = this.workFlowForm.value;
+    if (request.ApprovalChainDetails.length > 0) {
+      for (let i = 0; i < request.ApprovalChainDetails.length; i++) {
+        if (request.ApprovalChainDetails[i].AssignieId == null || request.ApprovalChainDetails[i].AssignieId <=0) {
+          this.isLoading = false;
+          ErrorToast("Please add assigne first");
+          return;
+        }
+        if (request.ApprovalChainDetails[i].ForwardWhen == 0) {
+          this.isLoading = false;
+          ErrorToast(`Please select reason for level ${i + 1}`);
+          return;
+        }
+      }
+    }
+    if (this.workFlowForm.invalid) {
+      ErrorToast("Please fill all the manditory field");
+      this.isLoading = false;
+      return;
+    }
     if (request) {
       this.http.post("ApprovalChain/InsertApprovalChain", request).then((response: ResponseModel) => {
         if (response.ResponseBody) {
@@ -164,12 +189,49 @@ export class ManageWorkFlowComponent implements OnInit {
     this.updateListOnRemove(id);
     this.isReady = true;
   }
+
+  get f() {
+    return this.workFlowForm.controls;
+  }
+
+  enableAutoExpire(e: any) {
+    let value = e.target.checked;
+    if (!value) {
+      this.workFlowForm.get('AutoExpireAfterDays').setValue(0);
+      this.workFlowForm.controls.AutoExpireAfterDays.removeValidators([Validators.required]);
+      this.workFlowForm.controls.AutoExpireAfterDays.updateValueAndValidity();
+    } else {
+      this.workFlowForm.controls.AutoExpireAfterDays.setValidators([Validators.required]);
+      this.workFlowForm.controls.AutoExpireAfterDays.updateValueAndValidity();
+    }
+  }
+
+  disableForwrdWhen(e: any, i: number) {
+    let value = e.target.checked;
+    let formarray = this.workFlowForm.get("ApprovalChainDetails") as FormArray;
+    if (!value) {
+      formarray.controls[i].get('ForwardWhen').setValue(0);
+      formarray.controls[i].get('ForwardAfterDays').setValue(0);
+      document.querySelectorAll('select[name="ForwardWhen"]')[i].setAttribute('disabled', '');
+      formarray.controls[i].get('ForwardWhen').removeValidators([Validators.required]);
+      formarray.controls[i].get('ForwardWhen').updateValueAndValidity();
+      formarray.controls[i].get('ForwardAfterDays').removeValidators([Validators.required]);
+      formarray.controls[i].get('ForwardAfterDays').updateValueAndValidity();
+    } else {
+      document.querySelectorAll('select[name="ForwardWhen"]')[i].removeAttribute('disabled');
+      formarray.controls[i].get('ForwardWhen').setValidators([Validators.required]);
+      formarray.controls[i].get('ForwardWhen').updateValueAndValidity();
+      formarray.controls[i].get('ForwardAfterDays').setValidators([Validators.required]);
+      formarray.controls[i].get('ForwardAfterDays').updateValueAndValidity();
+
+    }
+  }
 }
 
 class ApprovalWorkFlowChain
 {
-     ApprovalChainDetailId: number = null;
-     ApprovalWorkFlowId: number = null;
+     ApprovalChainDetailId: number = 0;
+     ApprovalWorkFlowId: number = 0;
      Title: string = null;
      TitleDescription: string = null;
      Status: number = null;
@@ -181,8 +243,8 @@ class ApprovalWorkFlowChain
 }
 
 class ApprovalChainDetail {
-  ApprovalChainDetailId: number = null;
-  ApprovalWorkFlowId: number = null;
+  ApprovalChainDetailId: number = 0;
+  ApprovalWorkFlowId: number = 0;
   AssignieId: number = null;
   IsRequired: boolean = false;
   IsForwardEnabled: boolean = false;
