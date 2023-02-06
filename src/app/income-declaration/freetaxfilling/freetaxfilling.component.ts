@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminDeclaration, AdminForm12B, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminTaxSavingInvestment } from 'src/providers/constants';
+import { AdminDeclaration, AdminForm12B, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -48,8 +48,8 @@ export class FreetaxfillingComponent implements OnInit {
         break;
       case "free-tax-tab":
         break;
-      case "tax-saving-tab":
-        this.nav.navigateRoot(AdminTaxSavingInvestment, this.cachedData);
+      case "approval-rule-tab":
+        this.nav.navigateRoot(AdminDeclarationApprovalRule, this.cachedData);
         break;
     }
   }

@@ -225,7 +225,7 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
       case "free-tax-tab":
         this.nav.navigateRoot(FreeTaxFilling, this.cachedData);
         break;
-      case "tax-saving-tab":
+      case "approval-rule-tab":
         this.nav.navigateRoot(TaxSavingInvestment, this.cachedData);
         break;
     }
