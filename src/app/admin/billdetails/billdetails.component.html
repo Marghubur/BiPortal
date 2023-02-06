@@ -610,15 +610,15 @@
             <div class="col-12 d-flex mb-3 align-items-center">
               <div class="ms-2 me-3">
                 <input type="radio" name="bydate" value="0" (click)="selectBillOption($event)">
-                <a href="javascript:void(0)" (click)="selectBillOption($event)" class="text-decoration-none"> Filter between dates</a>
+                <a href="javascript:void(0)" (click)="selectBillOption($event, 0)" class="text-decoration-none"> Filter between dates</a>
               </div>
               <div class="ms-2 me-3">
                 <input type="radio" name="bydate" value="1" (click)="selectBillOption($event)">
-                <a href="javascript:void(0)" (click)="selectBillOption($event)" class="text-decoration-none"> Before date</a>
+                <a href="javascript:void(0)" (click)="selectBillOption($event, 1)" class="text-decoration-none"> Before date</a>
               </div>
               <div class="ms-2 me-2">
                 <input type="radio" name="bydate" value="2" (click)="selectBillOption($event)">
-                <a href="javascript:void(0)" (click)="selectBillOption($event)" class="text-decoration-none"> After date</a>
+                <a href="javascript:void(0)" (click)="selectBillOption($event, 2)" class="text-decoration-none"> After date</a>
               </div>
             </div>
 

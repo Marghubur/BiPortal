@@ -440,12 +440,12 @@
                   </div>
                   <div class="col-md-4 my-2">
                     <label class="form-label">IFSC Code *</label>
-                    <input placeholder="IFSC Code" class="form-control" maxlength="11" name="IFSC" [ngClass]="{'error-field': submitted && f.AccountNo.errors !== null && f.AccountNo.errors.required}"
+                    <input placeholder="IFSC Code" class="form-control" maxlength="11" name="IFSC" [ngClass]="{'error-field': submitted && f.IFSC.errors !== null && f.IFSC.errors.required}"
                       oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                   </div>
                   <div class="col-md-4 my-2">
                     <label class="form-label">Branch Name *</label>
-                    <input placeholder="Branch name" class="form-control" name="Branch" [ngClass]="{'error-field': submitted && f.AccountNo.errors !== null && f.AccountNo.errors.required}" maxlength="40"
+                    <input placeholder="Branch name" class="form-control" name="Branch" [ngClass]="{'error-field': submitted && f.Branch.errors !== null && f.Branch.errors.required}" maxlength="40"
                       oninput="this.value = this.value.toUpperCase()" formControlName="Branch" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                   </div>
                   <div class="col-md-4 my-2">

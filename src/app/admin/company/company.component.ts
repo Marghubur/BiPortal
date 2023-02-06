@@ -244,6 +244,12 @@ export class CompanyComponent implements OnInit {
     if (this.organizationAccountsForm.get("AccountNo").value === "" || this.organizationAccountsForm.get("AccountNo").value === null)
       errroCounter++;
 
+    if (this.organizationAccountsForm.invalid) {
+      this.isLoading = false;
+      ErrorToast("All read marked fields are mandatory.");
+      return;
+    }
+
     let request: organizationAccountModal = this.organizationAccountsForm.value;
     if (errroCounter === 0) {
       this.submitted = true;
