@@ -4,7 +4,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, ToLocateDate } from 'src/providers/common-service/common.service';
 import { AdminNotification, EmailLinkConfig } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
@@ -31,6 +31,16 @@ export class ManageshiftComponent implements OnInit {
   shiftData: Filter = null;
   selectedDays: Array<any> = [];
   isLoading: boolean = false;
+  departments: any = null;
+  allShift: Array<Shift> = [];
+  shiftDetail: Shift = new Shift();
+  orderByShiftTitleAsc: boolean = false;
+  orderByTotalWorkingDaysAsc: boolean = false;
+  orderByStartDateAsc: boolean = false;
+  orderByOfficeTimeAsc: boolean = false;
+  orderByDurationAsc: boolean = false;
+  orderByStatusAsc: boolean = false;
+  orderByLunchDurationAsc: boolean = false;
 
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
@@ -39,6 +49,13 @@ export class ManageshiftComponent implements OnInit {
 
   ngOnInit(): void {
     let data = this.local.findRecord("Companies");
+    let department = this.local.findRecord("Department");
+    if (department && department.length > 0)
+      this.departments= department;
+    else {
+      ErrorToast("Please login again");
+      return;
+    }
     this.days = [
       { day: 'Monday', id: 1, isEnabled: true },
       { day: 'Tuesday', id: 2, isEnabled: false  },
@@ -62,13 +79,10 @@ export class ManageshiftComponent implements OnInit {
       } else {
         this.companyId = this.currentCompany.CompanyId;
         this.shiftData.SearchString = `1=1 and CompanyId = ${this.companyId}`;
-        //this.loadData();
-        //this.initForm();
+        this.loadData();
+        this.initForm();
       }
     }
-    this.initForm();
-    $('#manageShiftModal').modal('show');
-
   }
 
   toggleDays(id: number, e: any) {
@@ -106,7 +120,23 @@ export class ManageshiftComponent implements OnInit {
   }
 
   loadData() {
+    this.isPageReady = false;
+    this.http.post("Shift/GetAllWorkShift", this.shiftData).then(res => {
+      if (res.ResponseBody) {
+        this.bindData(res.ResponseBody);
+        this.isPageReady = true;
+      }
+    }).catch(e => {
+      this.isPageReady = true;
+    })
+  }
 
+  bindData(res: any) {
+    this.allShift = res;
+    if (this.allShift.length > 0)
+      this.shiftData.TotalRecords = this.allShift[0].Total;
+    else
+      this.shiftData.TotalRecords = 0;
   }
 
   enableDropdown() {
@@ -166,14 +196,10 @@ export class ManageshiftComponent implements OnInit {
   CreateUpdateRequest() {
     this.isLoading = true;
     this.submitted = true;
-    if (this.shiftForm.invalid) {
-      this.isLoading = false;
-      ErrorToast("Please fill all the mandatory field");
-      return;
-    }
     if (this.selectedDays.length <=0) {
       this.isLoading = false;
       ErrorToast("Please add days first");
+      return;
     }
     if (this.selectedDays.length > 0) {
       for (let i = 0; i < this.selectedDays.length; i++) {
@@ -202,6 +228,12 @@ export class ManageshiftComponent implements OnInit {
         }
       }
     }
+    if (this.shiftForm.invalid) {
+      this.isLoading = false;
+      ErrorToast("Please fill all the mandatory field");
+      return;
+    }
+
     let value = this.shiftForm.value;
     this.http.post("", value).then(res => {
       if (res.ResponseBody) {
@@ -212,12 +244,141 @@ export class ManageshiftComponent implements OnInit {
       this.isLoading = false;
     })
   }
+
+  GetFilterResult(e: any) {
+    if(e != null) {
+      this.shiftData = e;
+      this.loadData();
+    }
+  }
+
+  resetFilter() {
+    this.shiftDetail = new Shift();
+    this.shiftData = new Filter();
+    this.loadData();
+  }
+
+  filterRecords() {
+    let searchQuery = "";
+    let delimiter = "";
+    this.shiftData.SearchString = ""
+    this.shiftData.reset();
+
+    if(this.shiftDetail.ShiftTitle !== null && this.shiftDetail.ShiftTitle !== "") {
+      this.shiftData.SearchString += `1=1 And ShiftTitle like '%${this.shiftDetail.ShiftTitle}%'`;
+        delimiter = "and";
+    }
+
+    if(this.shiftDetail.OfficeTime !== null && this.shiftDetail.OfficeTime !== "") {
+      this.shiftData.SearchString += `1=1 And OfficeTime like '%${this.shiftDetail.OfficeTime}%'`;
+        delimiter = "and";
+    }
+
+    if(this.shiftDetail.LunchDuration !== null && this.shiftDetail.LunchDuration !== 0) {
+      this.shiftData.SearchString += `1=1 And LunchDuration = ${this.shiftDetail.LunchDuration}`;
+        delimiter = "and";
+    }
+
+    if(this.shiftDetail.Duration !== null && this.shiftDetail.Duration !== 0) {
+      this.shiftData.SearchString += `1=1 And Duration = ${this.shiftDetail.Duration}`;
+        delimiter = "and";
+    }
+
+    if(this.shiftDetail.TotalWorkingDays !== null && this.shiftDetail.TotalWorkingDays !== 0) {
+      this.shiftData.SearchString += `1=1 And TotalWorkingDays = ${this.shiftDetail.TotalWorkingDays}`;
+        delimiter = "and";
+    }
+
+    this.loadData();
+  }
+
+  editShiftPopUp(item: Shift) {
+    if (item) {
+      this.currentShift = item;
+      this.currentShift.StartDate = ToLocateDate(this.currentShift.StartDate);
+      this.frommodel = { day: this.currentShift.StartDate.getDate(), month: this.currentShift.StartDate.getMonth() + 1, year: this.currentShift.StartDate.getFullYear()};
+      this.currentShift.EndDate = ToLocateDate(this.currentShift.EndDate);
+      this.tomodel = { day: this.currentShift.EndDate.getDate(), month: this.currentShift.EndDate.getMonth() + 1, year: this.currentShift.EndDate.getFullYear()};
+      this.initForm();
+      $('#manageShiftModal').modal('show');
+    }
+  }
+
+  arrangeDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'Asc';
+    } else {
+      Order = 'Desc';
+    }
+    if (FieldName == 'ShiftTitle') {
+      this.orderByShiftTitleAsc = !flag;
+      this.orderByTotalWorkingDaysAsc = null;
+      this.orderByStartDateAsc = null;
+      this.orderByOfficeTimeAsc = null;
+      this.orderByDurationAsc = null
+      this.orderByStatusAsc = null;;
+      this.orderByLunchDurationAsc = null;
+    } else if (FieldName == 'TotalWorkingDays') {
+      this.orderByShiftTitleAsc = null;
+      this.orderByTotalWorkingDaysAsc = !flag;
+      this.orderByStartDateAsc = null;
+      this.orderByOfficeTimeAsc = null;
+      this.orderByDurationAsc = null;
+      this.orderByStatusAsc = null;
+      this.orderByLunchDurationAsc = null;
+    } else if (FieldName == 'StartDate') {
+      this.orderByShiftTitleAsc = null;
+      this.orderByTotalWorkingDaysAsc = null;
+      this.orderByStartDateAsc = !flag;
+      this.orderByOfficeTimeAsc = null;
+      this.orderByDurationAsc = null;
+      this.orderByStatusAsc = null;
+      this.orderByLunchDurationAsc = null;
+    } else if (FieldName == 'OfficeTime') {
+      this.orderByShiftTitleAsc = null;
+      this.orderByTotalWorkingDaysAsc = null;
+      this.orderByStartDateAsc = null;
+      this.orderByOfficeTimeAsc = !flag;
+      this.orderByDurationAsc = null;
+      this.orderByStatusAsc = null;
+      this.orderByLunchDurationAsc = null;
+    } else if (FieldName == 'Duration') {
+      this.orderByShiftTitleAsc = null;
+      this.orderByTotalWorkingDaysAsc = null;
+      this.orderByStartDateAsc = null;
+      this.orderByOfficeTimeAsc = null;
+      this.orderByDurationAsc = !flag;
+      this.orderByStatusAsc = null;
+      this.orderByLunchDurationAsc = null;
+    } else if (FieldName == 'Status') {
+      this.orderByShiftTitleAsc = null;
+      this.orderByTotalWorkingDaysAsc = null;
+      this.orderByStartDateAsc = null;
+      this.orderByOfficeTimeAsc = null;
+      this.orderByDurationAsc = null;
+      this.orderByStatusAsc = !flag;
+      this.orderByLunchDurationAsc = null;
+    } else if (FieldName == 'LunchDuration') {
+      this.orderByShiftTitleAsc = null;
+      this.orderByTotalWorkingDaysAsc = null;
+      this.orderByStartDateAsc = null;
+      this.orderByOfficeTimeAsc = null;
+      this.orderByDurationAsc = null;
+      this.orderByStatusAsc = null;
+      this.orderByLunchDurationAsc = !flag;
+    }
+    this.shiftData = new Filter();
+    this.shiftData.SearchString = `1=1`;
+    this.shiftData.SortBy = FieldName +" "+ Order;
+    this.loadData()
+  }
 }
 
 class Shift {
   WorkShiftId: number = 0;
   CompanyId: number = 0;
-  Department: number = 0;
+  Department: number = null;
   WorkFlowCode: string = null;
   ShiftTitle: string = null;
   Description: string = null;
@@ -236,4 +397,6 @@ class Shift {
   LunchDuration: number = null;
   Status: number = 0;
   LastUpdatedOn: Date = null;
+  Index: number = 0;
+  Total: number = 0;
 }

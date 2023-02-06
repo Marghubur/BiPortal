@@ -618,7 +618,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.imageIndex = new Date().getTime();
-      this.resizeImage(file)
+      this.fileDetail.push({
+        name: $`profile_${this.imageIndex}`,
+        file: file
+      });
     }
   }
 
@@ -633,10 +636,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       canvas.height = img.height * 0.5;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       canvas.toBlob((blob) => {
-        this.fileDetail.push({
-          name: $`profile_${this.imageIndex}`,
-          file: blob
-        });
+
       });
     };
   }

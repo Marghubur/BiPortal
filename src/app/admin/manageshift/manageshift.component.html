@@ -27,69 +27,93 @@
                       <a href="javascript:void(0)" class="ps-3">#</a>
                     </div>
                   </div>
-                  <div class="th fe-2">
+                  <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Product Name"
-                       oninput="this.value = this.value.toUpperCase()">
-                      <div class="t-filter"  >
-                        <a href="javascript:void(0)" class="ps-3">Product Name</a>
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Shift Title" [(ngModel)]="shiftDetail.ShiftTitle"
+                       oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByShiftTitleAsc, 'ShiftTitle')">
+                        <a href="javascript:void(0)" class="pe-2">Shift Title</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByShiftTitleAsc == null || !orderByShiftTitleAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByShiftTitleAsc == null || orderByShiftTitleAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <select class="form-select">
-                        <option value=null>Select Stock Status</option>
-                        <option value="1">Pending</option>
-                        <option value="2">In Stock</option>
-                        <option value="3">Out of Stock</option>
-                      </select>
-                      <div class="t-filter"  >
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Working days in week" [(ngModel)]="shiftDetail.TotalWorkingDays"
+                       oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByTotalWorkingDaysAsc, 'TotalWorkingDays')">
+                        <a href="javascript:void(0)" class="pe-2">Working Days(in week)</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || !orderByTotalWorkingDaysAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || orderByTotalWorkingDaysAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Start date" readonly
+                       oninput="this.value = this.value.toUpperCase()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
+                        <a href="javascript:void(0)" class="pe-2">Start Date</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by office time" [(ngModel)]="shiftDetail.OfficeTime"
+                       oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByOfficeTimeAsc, 'OfficeTime')">
+                        <a href="javascript:void(0)" class="pe-2">Office Time</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByOfficeTimeAsc == null || !orderByOfficeTimeAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByOfficeTimeAsc == null || orderByOfficeTimeAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by duration in min" [(ngModel)]="shiftDetail.Duration"
+                        oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByDurationAsc, 'Duration')">
+                        <a href="javascript:void(0)" class="pe-2">Duration (in min)</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByDurationAsc == null || !orderByDurationAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByDurationAsc == null || orderByDurationAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Status" readonly>
+                      <div class="t-filter" (click)="arrangeDetails(orderByStatusAsc, 'Status')">
                         <a href="javascript:void(0)" class="pe-2">Status</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByStatusAsc == null || !orderByStatusAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByStatusAsc == null || orderByStatusAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Quantity"
-                       oninput="this.value = this.value.toUpperCase()">
-                      <div class="t-filter"  >
-                        <a href="javascript:void(0)" class="pe-2">Quantity</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="th fe-1">
-                    <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Model"
-                       oninput="this.value = this.value.toUpperCase()">
-                      <div class="t-filter"  >
-                        <a href="javascript:void(0)" class="pe-2">Model</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="th fe-1">
-                    <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Brand"
-                       oninput="this.value = this.value.toUpperCase()">
-                      <div class="t-filter"  >
-                        <a href="javascript:void(0)" class="pe-2">Brand</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="th fe-1">
-                    <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Price"
-                        oninput="this.value = this.value.toUpperCase()">
-                      <div class="t-filter"  >
-                        <a href="javascript:void(0)" class="pe-2">Purchase Price</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="th fe-1">
-                    <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Order Date" readonly>
-                      <div class="t-filter"  >
-                        <a href="javascript:void(0)" class="pe-2">Order Date</a>
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by lunch duration" [(ngModel)]="shiftDetail.LunchDuration"
+                      (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <div class="t-filter" (click)="arrangeDetails(orderByLunchDurationAsc, 'LunchDuration')">
+                        <a href="javascript:void(0)" class="pe-2">Lunch Dur (in min)</a>
+                           <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByLunchDurationAsc == null || !orderByLunchDurationAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByLunchDurationAsc == null || orderByLunchDurationAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -103,60 +127,58 @@
                 </div>
               </div>
               <div class="t-body">
-                <!-- <ng-container *ngIf="allProducts.length > 0">
-                  <div class="tr py-2" *ngFor="let item of allProducts; let i = index;">
+                <ng-container *ngIf="allShift.length > 0">
+                  <div class="tr py-2" *ngFor="let item of allShift; let i = index;">
                     <div class="td align-middle fe-index">
-                      <div class="cell-wrapper">
+                      <div class="cell-wrapper text-center">
                         {{item.Index}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-2">
+                    <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.TitleName}}
+                        {{item.ShiftTitle}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        <span class="badge bg-warning p-2 text-dark" *ngIf="item.StockStatus == 1">Pending</span>
-                        <span class="badge bg-success p-2" *ngIf="item.StockStatus == 2">In Stock</span>
-                        <span class="badge bg-danger p-2" *ngIf="item.StockStatus == 3">Out of Stock</span>
+                        {{item.TotalWorkingDays}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.Quantity}}
+                        {{item.StartDate | date}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.ModalNum}}
+                        {{item.OfficeTime}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.Brand}}
-                      </div>
-                    </div>
-                    <div class="td align-middle fefa-stack-1x">
-                      <div class="cell-wrapper">
-                        {{item.PurchasePrice}}
+                        {{item.Duration}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.OrderDate | date}}
+                        {{item.Status == 2 ? 'Pending' : item.Status == 5 ? 'Rejected' : item.Status == 3 ? 'Canceled' : 'Approved'}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{item.LunchDuration}}
                       </div>
                     </div>
                     <div class="td align-middle fe-index">
                       <div class="d-flex flex-row justify-content-evenly">
-                        <a href="javascript:void(0)" class="text-decoration-none" (click)="editProductPopUp(item)">
+                        <a href="javascript:void(0)" class="text-decoration-none" (click)="editShiftPopUp(item)">
                           <i class="fa fa-pencil pe-2"></i>
                         </a>
                       </div>
                     </div>
                   </div>
-                </ng-container> -->
-                <ng-container *ngIf=" isPageReady">
+                </ng-container>
+                <ng-container *ngIf="allShift.length == 0 && isPageReady">
                   <div
                     class="custom-height fw-bold fs-3 py-5 my-5 text-danger d-flex align-items-center justify-content-center">
                     <p class="my-5 py-5">Record Not Found</p>
@@ -165,9 +187,9 @@
               </div>
             </div>
           </div>
-          <!-- <div class="mt-3">
-            <app-pagination [pagination]="productData" (onPageChange)="GetFilterResult($event)"></app-pagination>
-          </div> -->
+          <div class="mt-3">
+            <app-pagination [pagination]="shiftData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+          </div>
         </ng-container>
         <ng-container *ngIf="!isPageReady">
           <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -203,7 +225,7 @@
               <label for="" class="form-label">Department *</label>
               <select class="form-select" formControlName="Department" [ngClass]="{'error-field': submitted && f.Department.errors !== null && f.Department.errors.required}">
                 <option value=null disabled>Select Department</option>
-                <option value=""></option>
+                <option [value]="item.DepartmentId" *ngFor="let item of departments">{{item.DepartmentName}}</option>
               </select>
             </div>
             <div class="col-md-4 mt-3">
