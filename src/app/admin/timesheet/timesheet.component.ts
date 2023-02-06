@@ -222,8 +222,8 @@ export class TimesheetComponent implements OnInit {
         TimesheetStatus: [status, Validators.required],
         TimesheetDisplayDay: [at.date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }), Validators.required],
         PresentDate: [at.date, Validators.required],
-        UserHours: [8, Validators.required],
-        UserMin: [0, Validators.required],
+        UserHours: ['00', Validators.required],
+        UserMin: ['00', Validators.required],
         UserComments: ['', Validators.required]
       });
     } else {
