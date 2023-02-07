@@ -12,7 +12,7 @@ body {
 }
 
 .card2 {
-  margin: 0px 40px
+  margin: 0px 30px
 }
 
 .logo {
@@ -95,16 +95,31 @@ body {
 
 input,
 textarea {
-  padding: 10px 12px 10px 12px;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-  margin-bottom: 5px;
-  margin-top: 2px;
-  width: 100%;
-  box-sizing: border-box;
-  color: #2C3E50;
-  font-size: 14px;
-  letter-spacing: 1px
+  // padding: 10px 12px 10px 12px;
+  // border: 1px solid lightgrey;
+  // border-radius: 2px;
+  // margin-bottom: 5px;
+  // margin-top: 2px;
+  // width: 100%;
+  // box-sizing: border-box;
+  // color: #2C3E50;
+  // font-size: 14px;
+  // letter-spacing: 1px
+  display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 input:focus,
@@ -230,4 +245,19 @@ a {
   flex-direction: column;
   justify-content: center;
   text-decoration: none;
+}
+
+.login-box {
+  padding: 2rem;
+}
+
+.divider-box {
+  margin: 40px 2rem;
+
+  .block-dv {
+    width: 4rem;
+    text-align: center;
+    top: -13px;
+    background: white;
+  }
 }
