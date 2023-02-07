@@ -38,7 +38,7 @@
             <label for="" class="form-label">Salutation</label>
             <input type="text" formControlName="Salutation" maxlength="40" class="form-control" placeholder="e.g Dear Sir/ Madam" [ngClass]="{'error-field': submitted && f.Salutation.errors !== null && f.Salutation.errors.required}">
           </div>
-          <app-editor [content]="emailTemplateDetail.BodyContent"></app-editor>
+          <app-editor [content]="emailTemplateDetail.BodyContent" [cleanUp]="eventsSubject.asObservable()"></app-editor>
         </div>
         <div class="row">
           <div class="col-md-6">

@@ -1,14 +1,15 @@
-import { AfterViewChecked, Component, ComponentRef, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewChecked, Component, ComponentRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 declare var $: any;
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit, AfterViewChecked {
+export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
   showingSourceCode: boolean = false;
   isInEditMode: boolean = true;
   richTextField: any;
@@ -17,6 +18,7 @@ export class EditorComponent implements OnInit, AfterViewChecked {
   doc: any = null;
   rows: number = 0;
   columns: number = 0;
+  private eventSubscription: Subscription;
 
   @ViewChild('textFrame', {static: false}) iframe: ElementRef;
 
@@ -30,6 +32,8 @@ export class EditorComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  @Input() cleanUp: Observable<void>;
+
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip({
       trigger: 'hover'
@@ -41,8 +45,21 @@ export class EditorComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    this.eventSubscription = this.cleanUp.subscribe(() => this.cleanUpIFrame())
     this.richTextField = document.getElementById("richTextField");
     this.toggleEdit();
+  }
+
+  ngOnDestroy() {
+    this.eventSubscription.unsubscribe();
+  }
+
+  cleanUpIFrame() {
+    if(!this.richTextField) {
+      this.richTextField = document.getElementById("richTextField");
+    }
+
+    this.richTextField.contentWindow.document.body.innerHTML = '';
   }
 
   execCmd (command) {
@@ -79,7 +96,6 @@ export class EditorComponent implements OnInit, AfterViewChecked {
       this.richTextField = document.getElementById("richTextField");
     }
 
-    this.richTextField.classList.remove("iframe-inactive");
     if(this.isInEditMode){
         this.richTextField.contentDocument.designMode = 'Off';
         this.isInEditMode = false;
