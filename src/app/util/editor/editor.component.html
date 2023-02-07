@@ -146,8 +146,8 @@
     <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Table" (click)="tabelPopUp()"><i class="fa fa-table"></i></a>
     <a class="text-decoration-none px-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Select All" (click)="execCmd('selectAll');">Select All</a>
   </div>
-  <div class="col-md-12 mt-3"  (click)="toggleEdit()" >
-    <iframe id="richTextField"[srcdoc]="innerHtmlText" class="h-75 rounded w-100"></iframe>
+  <div class="col-md-12 mt-3 iframe-wrapper-active" (click)="enableEditor($event)">
+    <iframe id="richTextField" [srcdoc]="innerHtmlText" class="iframe-inactive h-75 rounded w-100"></iframe>
   </div>
 </div>
 

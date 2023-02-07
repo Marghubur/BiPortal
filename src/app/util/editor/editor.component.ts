@@ -43,13 +43,6 @@ export class EditorComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
     this.richTextField = document.getElementById("richTextField");
     this.toggleEdit();
-    //this.enableEditMode();
-  }
-
-
-  enableEditMode (){
-    let iframe = this.richTextField.contentDocument || this.richTextField.contentWindow.document;
-    iframe.designMode  = 'On';
   }
 
   execCmd (command) {
@@ -72,8 +65,21 @@ export class EditorComponent implements OnInit, AfterViewChecked {
       }
   }
 
+  enableEditor(e: any) {
+    if(!this.richTextField) {
+      this.richTextField = document.getElementById("richTextField");
+    }
+
+    e.target.classList.remove('iframe-wrapper-active');
+    this.toggleEdit();
+  }
+
   toggleEdit() {
-    this.richTextField = document.getElementById("richTextField");
+    if(!this.richTextField) {
+      this.richTextField = document.getElementById("richTextField");
+    }
+
+    this.richTextField.classList.remove("iframe-inactive");
     if(this.isInEditMode){
         this.richTextField.contentDocument.designMode = 'Off';
         this.isInEditMode = false;
@@ -82,6 +88,7 @@ export class EditorComponent implements OnInit, AfterViewChecked {
         this.isInEditMode = true;
     }
   }
+
   toggleDarkLight() {
       var element = document.getElementById("richtextcontainer");
       element.classList.toggle("dark-mode");
