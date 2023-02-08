@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -27,6 +28,7 @@ export class ManageEmailtemplateComponent implements OnInit {
   companyFiles: Array<any> = [];
   basePath: string = null;
   defaultLogoId: string = null;
+  eventsSubject: Subject<void> = new Subject<void>();
 
   constructor(private http: AjaxService,
               private local: ApplicationStorage,
@@ -152,6 +154,7 @@ export class ManageEmailtemplateComponent implements OnInit {
   }
 
   resetEmailTemp() {
+    this.eventsSubject.next();
     this.emailTemplateDetail = new EmailTemplate();
     this.emailTemplateDetail.BodyContent = null;
     this.initForm();

@@ -1,16 +1,16 @@
 <div class="col-12 full-v main-container">
   <div class="col-12 row p-0 m-0">
     <div class="right-panel container col-md-12 p-0">
-      <div class="col-md-12 row m-0 pe-4">
-        <!-- Tabs navs -->
-        <h4 class="p-0">Project details page</h4>
-        <!-- Tabs navs -->
+      <div class="x_panel mt-2">
+        <div class="x_header">
+          <div class="x_header_title">
+              <h2>Manage project<small>Create or update project detail</small></h2>
+          </div>
+      </div>
+      <div class="px-1">
+          <app-breadcrums></app-breadcrums>
       </div>
 
-      <div class="x_panel mt-2">
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
-        </div>
         <ng-container *ngIf="isReady">
           <div class="x_content mt-4">
             <div [ngClass]="{'blur-section': !isCompaniesDetails}">

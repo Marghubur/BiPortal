@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { GetEmployees } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminIncomeTax, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -31,12 +31,14 @@ export class PayslipComponent implements OnInit {
   isLoading: boolean = true;
 
   constructor(private nav: iNavigation,
+    private local: ApplicationStorage,
               private http: AjaxService) { }
 
   ngOnInit(): void {
     var dt = new Date();
     this.currentYear = dt.getFullYear();
     this.basePath = this.http.GetImageBasePath();
+    this.EmployeeId = this.local.getByKey("EmployeeId");
     this.loadData();
   }
 
@@ -79,6 +81,7 @@ export class PayslipComponent implements OnInit {
         let employees = this.applicationData.Employees;
         this.employeesList.className = "";
         this.isPageReady = true;
+        this.getPayslipList(this.EmployeeId);
       }
     });
   }

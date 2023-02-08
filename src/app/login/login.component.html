@@ -2,7 +2,7 @@
   <div class="px-1 px-md-5 px-lg-1 px-xl-5 log-vh">
     <div class="border-0">
       <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-8">
           <div class="card1 pb-5">
             <div class="d-flex flex-row justify-content-center mt-5"> <img src="assets/images/logo.png" class="logo"
                 alt="logo"> </div>
@@ -19,68 +19,91 @@
             </div>
           </div>
         </div>
-        <div class="col-md-5 d-flex flex-column justify-content-center log-vh-95">
+        <div class="col-md-4 d-flex flex-column justify-content-center log-vh-95">
           <div class="d-flex flex-column justify-content-between">
             <ng-container *ngIf="isLoginPage && !isRegistrationDone">
               <ng-container *ngIf="isUserMode">
                 <div class="col-lg-12">
                   <div class="card2 card border-0 px-4 py-5">
-                    <div class="d-flex justify-content-between">
+                    <!-- <div class="d-flex justify-content-between">
                       <div class="login-box-header btn-primary-dark">
-                       <!-- <div class="active role-box" (click)="enableEmployee()"
+                       <div class="active role-box" (click)="enableEmployee()"
                           [ngClass]="{'active': userType == 'employee'}">
                           <label class="form-check-label">Employee</label>
                         </div>
                         <div class="role-box" (click)="enableSystem()" [ngClass]="{'active': userType == 'system'}">
                           <label class="form-check-label">System User</label>
-                        </div> -->
+                        </div>
                         <div class="text-center fw-bold fs-4">Login</div>
                       </div>
+                    </div> -->
+                    <div class="col-12 text-center">
+                      <h2 class="">
+                        <p class="text-primary-c fw-700">BottomHalf</p> </h2>
+                        <h4 class="text-muted">Welcome to the ORM</h4> 
+                      <p class="my-2">Your use credential detail like, email or mobile to login into the system.</p>
                     </div>
-                    <div class="mt-1">
-                      <div class="row m-0 p-0"> <label class="mb-1">
-                          <h6 class="mb-0 text-sm">Email Address</h6>
-                        </label> <input class="mb-4" id="EmailOrMobile" placeholder="Email or Mobile Number"
-                          name="UserId">
-                      </div>
-                      <div class="row m-0 p-0">
-                        <label class="mb-1">
-                          <h6 class="mb-0 text-sm">Password</h6>
-                        </label>
-                        <div class="position-relative p-0 mp-0">
-                          <input type="password" (keyup.enter)="UserLogin()" placeholder="Password" id="Password"
-                            name="Password">
-                          <ng-container *ngIf="isShowPassword">
-                            <a href="javascript:void(0)" class="view-c" (click)="hidePassword()">
-                              <i class="fa fa-eye"></i>
-                            </a>
-                          </ng-container>
-                          <ng-container *ngIf="!isShowPassword">
-                            <a href="javascript:void(0)" class="view-c" (click)="showPassword()">
-                              <i class="fa fa-eye-slash" aria-hidden="true"></i>
-                            </a>
-                          </ng-container>
+                    <div class="login-box">
+                      <div class="mt-1">
+                        <div class="row m-0 p-0"> <label class="mb-1">
+                            <h6 class="mb-0 text-sm">Email Address</h6>
+                          </label> <input class="mb-4" id="EmailOrMobile" placeholder="Email or Mobile Number"
+                            name="UserId">
                         </div>
-                      </div>
-                      <div class="d-flex pe-1 ps-3 pt-3 mb-4 col-md-12 justify-content-between">
-                        <div class="form-check d-flex">
-                          <input class="form-check-input form-check-inputbox" type="checkbox" id="gridCheck">
-                          <label class="form-check-label ps-2" for="gridCheck">
-                            I agree to our Terms of Service
+                        <div class="row m-0 p-0">
+                          <label class="mb-1">
+                            <h6 class="mb-0 text-sm">Password</h6>
                           </label>
+                          <div class="position-relative p-0 m-0 form-group">
+                            <input type="password" (keyup.enter)="UserLogin()" class="form-control" placeholder="Password" id="Password"
+                              name="Password">
+                            <ng-container *ngIf="isShowPassword">
+                              <a href="javascript:void(0)" class="view-c" (click)="hidePassword()">
+                                <i class="fa fa-eye"></i>
+                              </a>
+                            </ng-container>
+                            <ng-container *ngIf="!isShowPassword">
+                              <a href="javascript:void(0)" class="view-c" (click)="showPassword()">
+                                <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                              </a>
+                            </ng-container>
+                          </div>
                         </div>
-                        <a href="javascript:void(0)" (click)="forgotPasswordModal()" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+                        <div class="d-flex pt-3 mb-4 col-md-12 justify-content-between">
+                          <div class="form-check d-flex">
+                            <input class="form-check-input form-check-inputbox" type="checkbox" id="gridCheck">
+                            <label class="form-check-label ps-2" for="gridCheck">
+                              I agree to our Terms of Service
+                            </label>
+                          </div>
+                          <a href="javascript:void(0)" (click)="forgotPasswordModal()" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+                        </div>
+                        <div class="mb-3">
+                          <button type="button" (click)="UserLogin()" [disabled]="isLoading"
+                            class="btn btn-primary-dark text-center">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                            {{ isLoading ? 'Signing' : 'Sign In' }}</button>
+                        </div>
                       </div>
-                      <div class="row mb-3 px-3">
-                        <button type="button" (click)="UserLogin()" [disabled]="isLoading"
-                          class="btn btn-primary-dark text-center">
-                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
-                          {{ isLoading ? 'Signing' : 'Sign In' }}</button>
+                      <div class="position-relative border-top d-flex justify-content-center divider-box">
+                        <div class="block-dv position-absolute">Or</div>
+                      </div>
+                      <div class="row mb-4"> <small class="fw-bold register-msg">Don't have an account? <a
+                            class="text-danger" href="javascript:void(0)" (click)="changePopup('registrationPage')">
+                          Register</a></small> 
+                      </div>
+                      <div class="my-5">
+                        <b>Note:</b>
+                        <span>Login is only possible if you or your organization have been registered with us.</span>
+                        <p>If you want to explore more please visit us by clicking ont below link</p>
+                        <p class="text-primary-c fw-bold underline">BottomHalf Pvt. Ltv. Organization.</p>
+                      </div>
+                      <div class="col-12 mt-4">
+                        <p>By clicking login you are agree to our 
+                          <a href="javascript:void(0)" class="text-primary">Terms & Condition</a>
+                        </p>
                       </div>
                     </div>
-                    <div class="row mb-4 px-3"> <small class="fw-bold register-msg">Don't have an account? <a
-                          class="text-danger" href="javascript:void(0)" (click)="changePopup('registrationPage')">
-                          Register</a></small> </div>
                   </div>
                 </div>
               </ng-container>
