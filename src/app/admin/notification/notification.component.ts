@@ -245,6 +245,7 @@ export class NotificationComponent implements OnInit {
   }
 
   bindPageData(AnnouncementType: number, FileIds) {
+    this.selectedDepartment = [];
     if (AnnouncementType > 0) {
       if (AnnouncementType == 2) {
         for (let i = 0; i < this.departsments.length; i++) {

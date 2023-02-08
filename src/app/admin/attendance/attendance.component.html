@@ -21,7 +21,7 @@
         <div class="col-12 row m-0 p-0 mb-4 skeleton">
           <ng-container *ngIf="isEmployeesReady">
             <div class="col-md-8 row m-0 p-0 vhide">
-              <div class="col-md-4" *ngIf="!isRedirected">
+              <div class="col-md-4" >
                 <label class="form-label">Employee Name *</label>
                 <app-iautocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
                   [ngModelOptions]="{standalone: true}">

@@ -4,7 +4,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, ToLocateDate } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
 import { AdminNotification, EmailLinkConfig } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
@@ -34,13 +34,13 @@ export class ManageshiftComponent implements OnInit {
   departments: any = null;
   allShift: Array<Shift> = [];
   shiftDetail: Shift = new Shift();
-  orderByShiftTitleAsc: boolean = false;
-  orderByTotalWorkingDaysAsc: boolean = false;
-  orderByStartDateAsc: boolean = false;
-  orderByOfficeTimeAsc: boolean = false;
-  orderByDurationAsc: boolean = false;
-  orderByStatusAsc: boolean = false;
-  orderByLunchDurationAsc: boolean = false;
+  orderByShiftTitleAsc: boolean = null;
+  orderByTotalWorkingDaysAsc: boolean = null;
+  orderByStartDateAsc: boolean = null;
+  orderByOfficeTimeAsc: boolean = null;
+  orderByDurationAsc: boolean = null;
+  orderByStatusAsc: boolean = null;
+  orderByLunchDurationAsc: boolean = null;
 
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
@@ -159,7 +159,7 @@ export class ManageshiftComponent implements OnInit {
       CompanyId: new FormControl(this.companyId, [Validators.required]),
       CompanyName: new FormControl(this.currentCompany.CompanyName),
       Department: new FormControl(this.currentShift.Department, [Validators.required]),
-      WorkFlowCode: new FormControl(this.currentShift.WorkFlowCode, [Validators.required]),
+      WorkFlowCode: new FormControl('code', [Validators.required]),
       ShiftTitle: new FormControl(this.currentShift.ShiftTitle, [Validators.required]),
       Description: new FormControl(this.currentShift.Description),
       IsMon: new FormControl(this.currentShift.IsMon),
@@ -235,10 +235,12 @@ export class ManageshiftComponent implements OnInit {
     }
 
     let value = this.shiftForm.value;
-    this.http.post("", value).then(res => {
+    this.http.post("Shift/WorkShiftInsertUpdate", value).then(res => {
       if (res.ResponseBody) {
-      $('#manageShiftModal').modal('hide');
+        this.bindData(res.ResponseBody);
+        $('#manageShiftModal').modal('hide');
         this.isLoading = false;
+        Toast("Shift inserted/updated successfully")
       }
     }).catch(e => {
       this.isLoading = false;
@@ -379,7 +381,7 @@ class Shift {
   WorkShiftId: number = 0;
   CompanyId: number = 0;
   Department: number = null;
-  WorkFlowCode: string = null;
+  WorkFlowCode: string = 'code';
   ShiftTitle: string = null;
   Description: string = null;
   IsMon: boolean = false;
