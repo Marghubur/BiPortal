@@ -89,6 +89,23 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="x_panel">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Attendance<small>Setup rules.</small></h2>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mt-4">
+                    <label for="" class="form-label">Attendance appling back days limit</label>
+                    <input maxlength="2" type="number" class="form-control" placeholder="Enter attendance limit to apply in back date." onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="text-end mt-3">
             <button type="button" class="btn btn-primary-c" (click)="saveSetting()">
               <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
