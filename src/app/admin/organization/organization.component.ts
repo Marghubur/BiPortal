@@ -122,7 +122,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       FileId: new FormControl(this.organization.FileId),
       PANNo: new FormControl(this.organization.PANNo),
       TradeLicenseNo: new FormControl(this.organization.TradeLicenseNo),
-      GSTNO: new FormControl(this.organization.GSTNo),
+      GSTNo: new FormControl(this.organization.GSTNo),
       AccountNo: new FormControl(this.organization.AccountNo),
       BankName: new FormControl(this.organization.BankName),
       Branch: new FormControl(this.organization.Branch),

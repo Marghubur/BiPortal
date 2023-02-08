@@ -114,7 +114,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       City: new FormControl(this.clientModal.City, [Validators.required]),
       State: new FormControl(this.clientModal.State, [Validators.required]),
       Country: new FormControl(this.clientModal.Country, [Validators.required]),
-      GSTNO: new FormControl(this.clientModal.GSTNO, [Validators.required]),
+      GSTNo: new FormControl(this.clientModal.GSTNo, [Validators.required]),
       AccountNo: new FormControl(this.clientModal.AccountNo),
       BankName: new FormControl(this.clientModal.BankName),
       BranchName: new FormControl(this.clientModal.BranchName),
@@ -163,7 +163,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     if (this.clientForm.get("SecondAddress").value === "" || this.clientForm.get("SecondAddress").errors !== null)
       errroCounter++;
 
-    if (this.clientForm.get("GSTNO").value === "" || this.clientForm.get("GSTNO").errors !== null)
+    if (this.clientForm.get("GSTNo").value === "" || this.clientForm.get("GSTNo").errors !== null)
       errroCounter++;
 
     if (this.clientForm.get("Pincode").value === 0 || this.clientForm.get("Pincode").errors !== null)
@@ -324,7 +324,7 @@ class clientModal {
   City: string = null;
   State: string = null;
   Country: string = null;
-  GSTNO: string = null;
+  GSTNo: string = null;
   AccountNo: string = null;
   BankName: string = null;
   BranchName: string = null;

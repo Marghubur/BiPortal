@@ -199,7 +199,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     this.prepareTimesheet(data, employeeId);
     this.allTimesheet.map(item => {
       item.PresentDate = new Date(item.PresentDate);
-      if(item.TimesheetStatus == 8)
+      if(item.TimesheetStatus == 9)
         burnDays++;
     });
 
@@ -248,7 +248,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           this.pdfModal = new PdfModal();
           if (this.currentOrganization) {
             this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
-            this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
+            this.pdfModal.senderGSTNo = this.currentOrganization.GSTNo;
             this.pdfModal.senderFirstAddress = this.currentOrganization.FirstAddress;
             this.pdfModal.senderSecondAddress = this.currentOrganization.SecondAddress + " " + this.currentOrganization.ThirdAddress;
             this.pdfModal.senderPrimaryContactNo = this.currentOrganization.PrimaryPhoneNo;
@@ -368,7 +368,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         this.currentOrganization = this.applicationData.Organizations.find(x => x.IsPrimaryCompany === true);
         if (this.currentOrganization != null) {
           this.pdfModal.senderCompanyName = this.currentOrganization.CompanyName;
-          this.pdfModal.senderGSTNo = this.currentOrganization.GSTNO;
+          this.pdfModal.senderGSTNo = this.currentOrganization.GSTNo;
           this.pdfModal.senderFirstAddress = this.currentOrganization.FirstAddress;
           this.pdfModal.senderSecondAddress = this.currentOrganization.SecondAddress + " " + this.currentOrganization.ThirdAddress;
           this.pdfModal.senderPrimaryContactNo = this.currentOrganization.PrimaryPhoneNo;
@@ -570,9 +570,9 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       billForMonth: new FormControl(this.pdfModal.billForMonth, [Validators.required]),
       billYear: new FormControl(this.pdfModal.billYear, [Validators.required]),
       billNo: new FormControl(this.pdfModal.billNo),
-      cGST: new FormControl(this.pdfModal.cGST),
-      sGST: new FormControl(this.pdfModal.sGST),
-      iGST: new FormControl(this.pdfModal.iGST),
+      cGST: new FormControl(this.pdfModal.cGST, [Validators.required]),
+      sGST: new FormControl(this.pdfModal.sGST, [Validators.required]),
+      iGST: new FormControl(this.pdfModal.iGST, [Validators.required]),
       cGstAmount: new FormControl(this.pdfModal.cGSTAmount),
       sGstAmount: new FormControl(this.pdfModal.sGSTAmount),
       igstAmount: new FormControl(this.pdfModal.iGSTAmount),
@@ -672,7 +672,11 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
     this.allTimesheet.map(x => {
       x.EmployeeId = this.currentEmployee.EmployeeUid;
-      x.ClientId = this.pdfForm.get("receiverCompanyId").value
+      x.ClientId = this.pdfForm.get("receiverCompanyId").value;
+      x.Email = this.currentEmployee.Email;
+      x.Mobile = this.currentEmployee.Mobile;
+      x.EmployeeName = this.currentEmployee.FirstName +" "+ this.currentEmployee.LastName;
+      x.TotalMinutes = 480
     });
 
     formData.append('Comment', JSON.stringify(value));
@@ -719,7 +723,11 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     this.pdfForm.get('igstAmount').setValue(this.igstAmount);
 //    this.pdfForm.get('grandTotalAmount').setValue(this.grandTotalAmount);
     this.pdfForm.get("billingMonth").setValue(new Date(billingYear, this.originalBillingMonth - 1, 1));
-
+    if (this.pdfForm.invalid) {
+      this.isLoading = false;
+      ErrorToast("Please fill all mandatory fields");
+      return;
+    }
     if (errroCounter === 0) {
       this.pdfForm.get("daysAbsent").setValue(worksDays - burnDays);
       let request: PdfModal = this.pdfForm.value;
@@ -848,7 +856,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         }
         this.pdfForm.get('senderFirstAddress').setValue(client.FirstAddress);
         this.pdfForm.get('senderCompanyName').setValue(client.CompanyName);
-        this.pdfForm.get('senderGSTNo').setValue(client.GSTNO);
+        this.pdfForm.get('senderGSTNo').setValue(client.GSTNo);
         this.pdfForm.get('senderSecondAddress').setValue(client.SecondAddress + " " + lastAddress);
         this.pdfForm.get('senderThirdAddress').setValue(lastAddress);
         this.pdfForm.get('senderPrimaryContactNo').setValue(client.PrimaryPhoneNo);
@@ -906,8 +914,8 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           lastAddress = this.senderClient.ThirdAddress + "  Pin: " + this.senderClient.Pincode;
         }
         this.pdfForm.get('receiverFirstAddress').setValue(this.senderClient.FirstAddress);
-        this.pdfForm.get('receiverCompanyName').setValue(this.senderClient.Company);
-        this.pdfForm.get('receiverGSTNo').setValue(this.senderClient.GSTNO);
+        this.pdfForm.get('receiverCompanyName').setValue(this.senderClient.CompanyName);
+        this.pdfForm.get('receiverGSTNo').setValue(this.senderClient.GSTNo);
         this.pdfForm.get('receiverSecondAddress').setValue(this.senderClient.SecondAddress + " " + lastAddress);
         this.pdfForm.get('receiverThirdAddress').setValue(lastAddress);
         this.pdfForm.get('receiverPrimaryContactNo').setValue(this.senderClient.PrimaryPhoneNo);
@@ -1016,11 +1024,11 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     if (current) {
       if (current.TimesheetStatus == 4) {
         let value = this.allTimesheet.find(x => x.PresentDate == current.PresentDate);
-        value.TimesheetStatus = 8;
+        value.TimesheetStatus = 9;
         value.EmployeeId = this.currentEmployee.EmployeeUid;
         value.ClientId = this.currentOrganization.CompanyId;
         for (let i = 0; i < this.timesheetBreakup.length; i++) {
-          this.timesheetBreakup[i].find(x => x => x.PresentDate == current.PresentDate).TimesheetStatus = 8;
+          this.timesheetBreakup[i].find(x => x => x.PresentDate == current.PresentDate).TimesheetStatus = 9;
         }
       }
       else {
@@ -1041,7 +1049,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let end = item.at(-1).PresentDate.getDate();
     let data = this.allTimesheet.slice(init, end);
     if (e.target.checked == true) {
-      data.map(x => x.TimesheetStatus = 8);
+      data.map(x => x.TimesheetStatus = 9);
     }
     else {
       data.map(x => x.TimesheetStatus = 4);
@@ -1050,9 +1058,9 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
   selectUnselect(status: string) {
     if (status == 'select') {
-      this.allTimesheet.map(x => x.TimesheetStatus = 8);
+      this.allTimesheet.map(x => x.TimesheetStatus = 9);
       for (let i = 0; i < this.timesheetBreakup.length; i++) {
-        this.timesheetBreakup[i].Timesheet.map(x => x.TimesheetStatus = 8);
+        this.timesheetBreakup[i].Timesheet.map(x => x.TimesheetStatus = 9);
       }
       let elem = document.querySelectorAll('[data-checktype="weekly"]') ;
       for (let i = 0; i < elem.length; i++) {
@@ -1112,7 +1120,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let burnDays = 0;
     this.allTimesheet.map(item => {
       item.PresentDate = new Date(item.PresentDate);
-      if(item.TimesheetStatus == 8)
+      if(item.TimesheetStatus == 9)
         burnDays++;
     });
     if (burnDays >= 0)
@@ -1252,6 +1260,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, BuildPdf);
   }
+
 }
 
 class PdfModal {

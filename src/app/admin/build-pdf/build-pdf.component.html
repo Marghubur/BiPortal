@@ -37,7 +37,7 @@
                 <label class="form-label">Developer Name *</label>
                 <select name="developerId" class="form-control" formControlName="developerId"
                   (change)="findEmployee($event)"
-                  [ngClass]="{'error': submitted && f.developerName.errors !== null && f.developerName.errors?.required}">
+                  [ngClass]="{'error-field': submitted && f.developerName.errors !== null && f.developerName.errors?.required}">
                   <option value="0" disabled>Select Developer</option>
                   <option *ngFor="let emp of employees" value="{{emp.EmployeeUid}}">{{emp.FirstName}} {{emp.LastName}}
                   </option>
@@ -47,7 +47,7 @@
                 <label class="form-label">From Company *</label>
                 <select name="senderId" class="form-control" formControlName="senderId"
                   (change)="findSenderClientDetail($event)"
-                  [ngClass]="{'error': submitted && f.senderId.errors !== null && f.senderId.errors.required}">
+                  [ngClass]="{'error-field': submitted && f.senderId.errors !== null && f.senderId.errors.required}">
                   <option value="0" disabled>Sender Organization</option>
                   <option *ngFor="let client of applicationData.Organizations" value="{{client.CompanyId}}">
                     {{client.CompanyName}}
@@ -58,7 +58,7 @@
                 <label class="form-label">To Company *</label>
                 <select name="receiverCompanyId" class="form-control" formControlName="receiverCompanyId"
                   (change)="findReceiverClientDetail()"
-                  [ngClass]="{'error': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
+                  [ngClass]="{'error-field': submitted && f.receiverCompanyId.errors !== null && f.receiverCompanyId.errors.required}">
                   <option value="0" disabled>Client Organization</option>
                   <option *ngFor="let client of assignedClients" value="{{client.CompanyId}}">
                     {{client.CompanyName}}
@@ -116,10 +116,10 @@
                             <div class="td fe-1 align-middle text-center">
                               <div class="cell-wrapper edit-cellwrapper">
                                 {{item.PresentDate | date}}
-                                <ng-container *ngIf="item.TimesheetStatus == 8">
+                                <ng-container *ngIf="item.TimesheetStatus == 8 || item.TimesheetStatus == 9">
                                   <i class="ps-2 text-success fa fa-check"></i>
                                 </ng-container>
-                                <ng-container *ngIf="item.TimesheetStatus != 8">
+                                <ng-container *ngIf="item.TimesheetStatus != 8 && item.TimesheetStatus != 9">
                                   <i class="ps-2 text-danger fa fa-close"></i>
                                 </ng-container>
                               </div>
@@ -148,34 +148,34 @@
                         <div class="col-md-6 d-none">
                           <input placeholder="GSTIN NO#" class="form-control mt-3" name="senderGSTNo"
                             formControlName="senderGSTNo"
-                            [ngClass]="{'error': submitted && f.senderGSTNo.errors !=null && f.senderGSTNo.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.senderGSTNo.errors !=null && f.senderGSTNo.errors.required}" />
                         </div>
                         <div class="col-md-6 d-none">
                           <input placeholder="First Address" class="form-control mt-4" name="senderFirstAddress"
                             formControlName="senderFirstAddress"
-                            [ngClass]="{'error': submitted && f.senderFirstAddress.errors !=null && f.senderFirstAddress.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.senderFirstAddress.errors !=null && f.senderFirstAddress.errors.required}" />
                         </div>
                         <div class="col-md-6 d-none">
                           <input placeholder="Second Address" class="form-control mt-4" name="senderSecondAddress"
                             formControlName="senderSecondAddress"
-                            [ngClass]="{'error': submitted && f.senderSecondAddress.errors !=null && f.senderSecondAddress.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.senderSecondAddress.errors !=null && f.senderSecondAddress.errors.required}" />
                         </div>
                         <div class="col-md-6 d-none">
                           <input placeholder="Primary Contact No" class="form-control mt-4"
                             name="senderPrimaryContactNo" formControlName="senderPrimaryContactNo"
-                            [ngClass]="{'error': submitted && f.senderPrimaryContactNo.errors !=null && f.senderPrimaryContactNo.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.senderPrimaryContactNo.errors !=null && f.senderPrimaryContactNo.errors.required}" />
                         </div>
                         <div class="col-md-6 d-none">
                           <input placeholder="email Id" class="form-control mt-4" name="senderEmail"
                             formControlName="senderEmail"
-                            [ngClass]="{'error': submitted && f.senderEmail.errors !=null && f.senderEmail.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.senderEmail.errors !=null && f.senderEmail.errors.required}" />
                         </div>
 
                         <div class="col-md-12 mb-3 row">
                           <div class="col-md-6">
                             <label class="form-label">Header Title *</label>
                             <input inputtype="mandatory" class="form-control" placeholder="Header Title" maxlength="40"
-                              [ngClass]="{'error': submitted && f.header.errors !== null && f.header.errors.required}"
+                              [ngClass]="{'error-field': submitted && f.header.errors !== null && f.header.errors.required}"
                               name="header" formControlName="header" />
                           </div>
                           <div class="col-md-6 row m-0 p-0">
@@ -189,8 +189,8 @@
                             <div class="col-md-6">
                               <label class="form-label">Billing year*</label>
                               <input inputtype="mandatory" class="form-control" placeholder="Year" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                                [ngClass]="{'error': submitted && f.header.errors !== null && f.header.errors.required}" OnlyNumber="4"
-                                name="billYear" formControlName="billYear" />
+                                [ngClass]="{'error-field': submitted && f.header.errors !== null && f.header.errors.required}" OnlyNumber="4"
+                                name="billYear" formControlName="billYear" [readonly]="!editMode"/>
                             </div>
                           </div>
                         </div>
@@ -232,40 +232,40 @@
                         <div class="col-md-6 d-none">
                           <input placeholder="GSTIN NO#" class="form-control mt-3" name="receiverGSTNo"
                             formControlName="receiverGSTNo"
-                            [ngClass]="{'error': submitted && f.receiverGSTNo.errors !=null && f.receiverGSTNo.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.receiverGSTNo.errors !=null && f.receiverGSTNo.errors.required}" />
                         </div>
                         <div class="col-md-6 d-none">
                           <input placeholder="First Address" class="form-control mt-4" name="receiverFirstAddress"
                             formControlName="receiverFirstAddress"
-                            [ngClass]="{'error': submitted && f.receiverFirstAddress.errors !=null && f.receiverFirstAddress.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.receiverFirstAddress.errors !=null && f.receiverFirstAddress.errors.required}" />
                         </div>
                         <div class="col-md-6 d-none">
                           <input placeholder="Second Address" class="form-control mt-4" name="receiverSecondAddress"
                             formControlName="receiverSecondAddress"
-                            [ngClass]="{'error': submitted && f.receiverSecondAddress.errors !=null && f.receiverSecondAddress.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.receiverSecondAddress.errors !=null && f.receiverSecondAddress.errors.required}" />
                         </div>
                         <div class="col-md-6 d-none">
                           <input placeholder="Primary Contact No" class="form-control mt-4"
                             name="receiverPrimaryContactNo" formControlName="receiverPrimaryContactNo"
-                            [ngClass]="{'error': submitted && f.receiverPrimaryContactNo.errors !=null && f.receiverPrimaryContactNo.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.receiverPrimaryContactNo.errors !=null && f.receiverPrimaryContactNo.errors.required}" />
                         </div>
                         <div class="col-md-6 d-none">
                           <input placeholder="email Id" class="form-control mt-4" name="receiverEmail"
                             formControlName="receiverEmail"
-                            [ngClass]="{'error': submitted && f.receiverEmail.errors !=null && f.receiverEmail.errors.required}" />
+                            [ngClass]="{'error-field': submitted && f.receiverEmail.errors !=null && f.receiverEmail.errors.required}" />
                         </div>
 
                         <div class="col-md-12 mb-4 row">
                           <div class="col-md-3 ps-4 pe-0">
                             <label class="form-label">No. of days *</label>
                             <input type="text" class="form-control" placeholder="No. of working days" name="workingDay" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                              OnlyNumber="2" [readonly]="!isClientSelected" (keyup)="changeWorkingDays($event)"
+                              OnlyNumber="2" [readonly]="!isClientSelected || !editMode" (keyup)="changeWorkingDays($event)"
                               formControlName="workingDay" />
                           </div>
                           <div class="col-md-3 ps-4 pe-0">
                             <label class="form-label">Actual *</label>
-                            <select name="actualDaysBurned" class="form-control"
-                              [ngClass]="{'disable-field': !isClientSelected}" formControlName="actualDaysBurned"
+                            <select name="actualDaysBurned" class="form-select"
+                              [ngClass]="{'disable-field': !isClientSelected}" formControlName="actualDaysBurned" [disabled]="!editMode"
                               (change)="calculateAmount($event)">
                               <option value="0">0 Days</option>
                               <option *ngFor="let day of days" value="{{day}}">
@@ -288,15 +288,15 @@
                             <label class="form-label">Package *</label>
                             <input class="form-control" placeholder="Pacakage amount" name="packageAmount" maxlength="12"
                               formControlName="packageAmount" (keyup)="getFixedAmount($event)" [readonly]="!editMode" onkeypress="return (event.charCode >=48 && event.charCode <=57) || event.charCode == 46"
-                              [ngClass]="{'error': submitted && f.packageAmount.errors !== null && f.packageAmount.errors.required}" />
+                              [ngClass]="{'error-field': submitted && f.packageAmount.errors !== null && f.packageAmount.errors.required}" />
                           </div>
                         </div>
                         <div class="col-md-12 row m-0 ps-0 pe-0 pt-0">
                           <div class="col-md-4">
                             <label class="form-label">CGST</label>
-                            <input type="text" class="form-control" id="cgst" placeholder="CGST" name="cGST"
+                            <input type="number" class="form-control" id="cgst" placeholder="CGST" name="cGST"
                               formControlName="cGST" (keyup)="checkCGST($event)" DecimalNumber="5"
-                              [ngClass]="{'error': submitted && f.cGST.errors !== null && f.cGST.errors.required}"
+                              [ngClass]="{'error-field': submitted && f.cGST.errors !== null && f.cGST.errors.required}"
                               [readonly]="!isClientSelected" />
                             <blockquote class="blockquote gst-text">
                               <p class="text-success">CGST: {{cgstAmount}}</p>
@@ -304,9 +304,9 @@
                           </div>
                           <div class="col-md-4">
                             <label class="form-label">SGST</label>
-                            <input type="text" class="form-control" id="sgst" placeholder="SGST" name="sGST"
+                            <input type="number" class="form-control" id="sgst" placeholder="SGST" name="sGST"
                               formControlName="sGST" (keyup)="checkSGST($event)" DecimalNumber="5"
-                              [ngClass]="{'error': submitted && f.sGST.errors !== null && f.sGST.errors.required}"
+                              [ngClass]="{'error-field': submitted && f.sGST.errors !== null && f.sGST.errors.required}"
                               [readonly]="!isClientSelected" />
                             <blockquote class="blockquote gst-text">
                               <p class="text-success">SGST: {{sgstAmount}}</p>
@@ -314,9 +314,9 @@
                           </div>
                           <div class="col-md-4">
                             <label class="form-label">IGST</label>
-                            <input type="text" class="form-control" id="igst" placeholder="IGST" name="iGST"
-                              formControlName="iGST" (keyup)="checkIGST($event)" (keydown)="checkGST($event)" DecimalNumber="5"
-                              [ngClass]="{'error': submitted && f.iGST.errors !== null && f.iGST.errors.required}"
+                            <input type="number" class="form-control" id="igst" placeholder="IGST" name="iGST"
+                              formControlName="iGST" (keyup)="checkIGST($event)"  DecimalNumber="5"
+                              [ngClass]="{'error-field': submitted && f.iGST.errors !== null && f.iGST.errors.required}"
                               [readonly]="!isClientSelected" />
                             <blockquote class="blockquote gst-text">
                               <p class="text-success">IGST: {{igstAmount}}</p>
@@ -326,7 +326,7 @@
 
                         <!-- <label class="form-label">Sender address *</label> -->
                         <!-- <textarea placeholder="Company full address" class="form-control mt-3" rows="4" name="senderAddress"
-                          formControlName="senderAddress" [ngClass]="{'error': submitted && f.senderAddress.errors !== null && f.senderAddress.errors.required}" ></textarea> -->
+                          formControlName="senderAddress" [ngClass]="{'error-field': submitted && f.senderAddress.errors !== null && f.senderAddress.errors.required}" ></textarea> -->
                       </div>
                     </div>
                   </div>
@@ -564,10 +564,10 @@
                     <div class="td fe-1 align-middle text-center">
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
-                        <ng-container *ngIf="item.TimesheetStatus == 8">
+                        <ng-container *ngIf="item.TimesheetStatus == 8 || item.TimesheetStatus == 9">
                           <i class="ps-2 text-success fa fa-check"></i>
                         </ng-container>
-                        <ng-container *ngIf="item.TimesheetStatus != 8">
+                        <ng-container *ngIf="item.TimesheetStatus != 8 && item.TimesheetStatus != 9">
                           <i class="ps-2 text-danger fa fa-close"></i>
                         </ng-container>
                       </div>
