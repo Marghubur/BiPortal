@@ -70,7 +70,7 @@ export class ServiceRequestComponent implements OnInit {
     });
   }
 
-  initForm(service: any) {
+  initForm(service: Service) {
     this.requestForm = this.fb.group({
       ServiceRequestId: new FormControl(service.ServiceRequestId),
       CompanyId: new FormControl(service.CompanyId),
@@ -81,9 +81,6 @@ export class ServiceRequestComponent implements OnInit {
       Duration: new FormControl(service.Duration),
       FromDate: new FormControl(service.FromDate),
       ToDate: new FormControl(service.ToDate),
-      RequestedTo_1: new FormControl(service.RequestedTo_1),
-      RequestedTo_2: new FormControl(service.RequestedTo_2),
-      RequestedTo_3: new FormControl(service.RequestedTo_3),
       Reference: new FormControl(service.Reference),
       RequestStatus: new FormControl(service.RequestStatus),
       RequestedBy: new FormControl(service.RequestedBy),
@@ -211,4 +208,28 @@ export class ServiceRequestComponent implements OnInit {
   removeManager() {
 
   }
+
+  addService() {
+    let service = new Service();
+    this.initForm(service);
+    this.isFormReady = true;
+    $('#addupdateModal').modal('show');
+  }
+}
+
+class Service {
+  ServiceRequestId: number = 0;
+  CompanyId: number = 0;
+  RequestTypeId: string = null;
+  RequestTitle: string = null;
+  RequestDescription: string = null;
+  Quantity: number = 0;
+  Duration: number = 0;
+  FromDate: Date = null;
+  ToDate: Date = null;
+  Reference: string = null;
+  RequestStatus: number = 0;
+  RequestedBy: number = 0;
+  RequestedOn: Date = null;
+  UpdatedOn: Date = null;
 }

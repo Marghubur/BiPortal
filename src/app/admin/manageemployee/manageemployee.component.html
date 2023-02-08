@@ -112,6 +112,12 @@
                             </option>
                           </select>
                         </div>
+                        <div class="col-md-4">
+                          <label class="form-label">CTC *</label>
+                          <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC"
+                            OnlyNumber="12" (keyup)="ctcChangeAmount($event)" onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
+                        </div>
                       </div>
 
                       <div class="col-md-12 m-0 row">
@@ -139,7 +145,7 @@
                     <div class="x_panel x-panel-changed">
                       <div class="x_header">
                         <div class="x_header_title">
-                          <h2>Other Detail<small>Fill the other details</small></h2>
+                          <h2>Roles & Manage<small>add roles and mangers</small></h2>
                         </div>
                       </div>
                       <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
@@ -204,10 +210,10 @@
                           </select>
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label">CTC *</label>
-                          <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC"
-                            OnlyNumber="12" (keyup)="ctcChangeAmount($event)" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                            [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
+                          <label class="form-label">Shift Id *</label>
+                          <input class="form-control" placeholder="Shift Id" name="WorkShiftId" formControlName="WorkShiftId"
+                            OnlyNumber="12"  onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            [ngClass]="{'error-field': submitted && f.WorkShiftId.errors !== null && f.WorkShiftId.errors.required}" />
                         </div>
                       </div>
                     </div>
@@ -454,7 +460,7 @@
               <div class="form-group">
                 <label class="form-label">Client (Allocated)</label>
                 <div class="col-md-12">
-                  <select name="AllocatedClientId" class="form-control" formControlName=" ">
+                  <select name="AllocatedClientId" class="form-control" formControlName="AllocatedClientId">
                     <option value="0" disabled>Clients Name</option>
                     <option *ngFor="let client of clients" value="{{client.ClientId}}">
                       {{client.ClientName}}

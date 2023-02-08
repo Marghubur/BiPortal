@@ -287,7 +287,7 @@
                         <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-upload': !isLoading}"></i>
                         {{ isLoading ? 'Waiting...' : 'Upload selected File' }}
                       </button>
-                      <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
+                      <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
                         [disabled]="btnDisable">
                         <i class="fa fa-eraser pe-2"></i> Cancel
                       </button>

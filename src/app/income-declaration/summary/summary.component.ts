@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary } from 'src/providers/constants';
-import { BillDetails } from 'src/app/admin/files/files.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Declaration, Preferences, Salary } from 'src/providers/constants';
+import { AccessTokenExpiredOn, } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { BillDetails } from 'src/app/admin/billdetails/billdetails.component';
 declare var $: any;
 
 @Component({
