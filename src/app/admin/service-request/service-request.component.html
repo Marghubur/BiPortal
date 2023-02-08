@@ -12,12 +12,6 @@
                 </div>
                 <div class="x_content mt-4">
                     <div class="x_panel">
-                        <div class="x_header">
-                          <div class="x_header_title">
-                            <h2>Service request detail <small>Add or update details</small>
-                            </h2>
-                          </div>
-                        </div>
                         <div [ngSwitch]="isPageReady">
                             <div *ngSwitchCase="false">
                               <div class="mt-5">
@@ -77,7 +71,14 @@
                                                 </div>
                                               </div>
                                             </div>
-                                            <div class="th fe-1 text-center">ACTIONS</div>
+                                            <div class="th fe-1 text-center">
+                                              <div class="cell-wrapper">
+                                                <button class="btn btn-primary-c" (click)="addService()"><i class="fa fa-plus pe-2"></i> Add Service</button>
+                                                <div class="t-filter">
+                                                  ACTION
+                                                </div>
+                                              </div>
+                                            </div>
                                           </div>
                                         </div>
                                         <div class="t-body">
@@ -265,7 +266,7 @@
                                 </textarea>
                               </div>
                               <div class="d-flex flex-wrap mt-3">
-                                <div *ngFor="let item of selectedDays">
+                                <div *ngFor="let item of managers">
                                   <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
                                     {{item.text}}
                                   </span>
