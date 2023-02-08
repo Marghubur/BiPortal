@@ -72,6 +72,7 @@ export class CompanySettingsComponent implements OnInit {
       DeclarationStartMonth: new FormControl(this.companySetting.DeclarationStartMonth),
       DeclarationEndMonth: new FormControl(this.companySetting.DeclarationEndMonth),
       FinancialYear: new FormControl(this.companySetting.FinancialYear),
+      AttendanceSubmissionLimit: new FormControl(this.companySetting.AttendanceSubmissionLimit),
       DefaultManager: this.buildManager()
     })
   }
@@ -150,4 +151,5 @@ export class CompanySetting {
   DeclarationEndMonth: number = 0;
   FinancialYear: number = 0;
   DefaultManagers: string = "";
+  AttendanceSubmissionLimit: number = null;
 }

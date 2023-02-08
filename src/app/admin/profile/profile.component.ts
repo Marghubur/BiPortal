@@ -1063,7 +1063,10 @@ export class ManageComponent implements OnInit {
   editEmployment(emp: any) {
     this.isEdit = true;
     this.editEmploymentModal = emp.value;
-    this.remainingNumber = 4000 - this.editEmploymentModal.JobProfile.length;
+    if (this.editEmploymentModal.JobProfile)
+      this.remainingNumber = 4000 - this.editEmploymentModal.JobProfile.length;
+    else
+      this.remainingNumber = 4000;
     $('#EmploymentModal').modal('show');
   }
 

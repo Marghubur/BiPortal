@@ -44,7 +44,7 @@ export class AttendanceComponent implements OnInit {
   emails: Array<any> = [];
   employees: Array<any> = [];
   //-------------------------- required code starts --------------------------
-
+  sessionvalue: number = 1;
   commentValue: string = null;
   today: Date = null;
   tomorrow: Date = null;
@@ -112,6 +112,12 @@ export class AttendanceComponent implements OnInit {
           data[index].PresentDayStatus = 3;
           data[index].AttendenceStatus = 3;
         }
+        // let logon = data[index].LogOn.split(':');
+        // let logontime = 0;
+        // for (let i = 0; i < logon.length; i++) {
+        //   logontime += Number(logon[i]);
+        // }
+        // data[index].GrossHour = Number(data[index].LogOn) - (data[index].LunchBreanInMinutes/60)
         index++;
       }
 
@@ -158,6 +164,7 @@ export class AttendanceComponent implements OnInit {
 
       if (response.ResponseBody.AttendacneDetails) {
         this.bindAttendace(response.ResponseBody.AttendacneDetails);
+        console.log(response.ResponseBody.AttendacneDetails)
         //this.createPageData(response.ResponseBody.AttendacneDetails);
         this.isAttendanceDataLoaded = true;
       }
@@ -257,8 +264,20 @@ export class AttendanceComponent implements OnInit {
     $('#commentModal').modal('show');
   }
 
+  selectSession(e: any) {
+    this.sessionvalue= 0;
+    let value = e.target.value;
+    if (Number(value) > 0)
+      this.sessionvalue = value;
+  }
+
   submitAttendance() {
     this.isLoading = true;
+    let logon = "";
+    if (this.sessionvalue == 2 || this.sessionvalue == 3)
+      logon = "04:30"
+    else
+      logon = this.currentAttendance.LogOn
     let commment = {
       EmployeeUid: this.employeeId,
       UserTypeId: UserType.Employee,
@@ -266,10 +285,19 @@ export class AttendanceComponent implements OnInit {
       AttendenceFromDay: this.today,
       AttendenceToDay: this.tomorrow,
       UserComments: this.commentValue,
-      Emails: this.emails
+      Emails: this.emails,
+      SessionType: this.sessionvalue,
+      LogOn: logon,
+      LogOff: this.currentAttendance.LogOff,
+      LunchBreanInMinutes: this.currentAttendance.LunchBreanInMinutes
     }
     if (this.commentValue == '') {
       this.isComment = true;
+      this.isLoading = false;
+      return;
+    }
+    if (this.sessionvalue <= 0) {
+      ErrorToast("Please select session first");
       this.isLoading = false;
       return;
     }

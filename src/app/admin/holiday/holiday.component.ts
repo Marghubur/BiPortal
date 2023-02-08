@@ -340,5 +340,5 @@ export class CompanyHoliday {
   IsCompanyCustomHoliday: boolean = false;
   Total: number = 0;
   Index: number = 0;
-  HolidayType: number = 0;
+  HolidayType: number = 2;
 }

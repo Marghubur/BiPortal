@@ -216,12 +216,12 @@
                                       <i class="fa fa-pencil fa-lg text-primary ps-3 pt-2"></i>
                                     </a>
                                   </label>
-                                  <input class="form-control" placeholder="Organization name" readonly name="Organization"
+                                  <input class="form-control border-0" placeholder="Organization name" readonly name="Organization"
                                     formControlName="Organization" />
                                 </div>
                                 <div class="mb-3">
                                   <label class="form-label">Designation </label>
-                                  <input class="form-control" placeholder="Enter Designation" readonly name="Designation"
+                                  <input class="form-control border-0" placeholder="Enter Designation" readonly name="Designation"
                                     formControlName="Designation" />
                                 </div>
                               </div>
@@ -230,11 +230,11 @@
                                   <label class="form-label">Current Salary </label>
                                   <div class="row">
                                     <div class="col-md-6">
-                                      <input class="form-control" name="CurrentSalary" readonly
+                                      <input class="form-control border-0" name="CurrentSalary" readonly
                                         formControlName="CurrentSalary">
                                     </div>
                                     <div class="col-md-6">
-                                      <select name="CurrencyType" class="form-select" readonly
+                                      <select name="CurrencyType" class="form-select border-0" readonly
                                         formControlName="CurrencyType">
                                         <option value="" disabled>Select Currency</option>
                                         <option value="INR">Indian Rupees</option>
@@ -245,44 +245,42 @@
                                 </div>
 
                                 <div class="mb-3">
-                                  <fieldset>
-                                    <div class="row">
-                                      <div class="col">
-                                        <label class="form-label">Project duration in years</label>
-                                        <select class="form-select" aria-label="Default select example"
-                                          formControlName="Years" disabled>
-                                          <option value="1" selected>1</option>
-                                          <option value="2">2</option>
-                                          <option value="3">3</option>
-                                          <option value="4">4</option>
-                                          <option value="5">5</option>
-                                          <option value="6">6</option>
-                                          <option value="7">7</option>
-                                          <option value="8">8</option>
-                                          <option value="9">9</option>
-                                          <option value="10">10</option>
-                                        </select>
-                                      </div>
-                                      <div class="col">
-                                        <label class="form-label">Project duration in Months</label>
-                                        <select class="form-select" aria-label="Default select example"
-                                          formControlName="Months" disabled>
-                                          <option value="1" selected>1</option>
-                                          <option value="2">2</option>
-                                          <option value="3">3</option>
-                                          <option value="4">4</option>
-                                          <option value="5">5</option>
-                                          <option value="6">6</option>
-                                          <option value="7">7</option>
-                                          <option value="8">8</option>
-                                          <option value="9">9</option>
-                                          <option value="10">10</option>
-                                          <option value="11">11</option>
-                                          <option value="12">12</option>
-                                        </select>
-                                      </div>
+                                  <div class="row">
+                                    <div class="col">
+                                      <label class="form-label">Project duration in years</label>
+                                      <select class="form-select border-0" aria-label="Default select example"
+                                        formControlName="Years" disabled>
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                      </select>
                                     </div>
-                                  </fieldset>
+                                    <div class="col">
+                                      <label class="form-label">Project duration in Months</label>
+                                      <select class="form-select border-0" aria-label="Default select example"
+                                        formControlName="Months" disabled>
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                      </select>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
 
@@ -297,7 +295,7 @@
                                   <div class="mb-3">
                                     <label class="form-label">Describe your Job Profile</label>
                                     <textarea name="JobProfile" rows="5" placeholder="Type here ....." readonly
-                                      class="form-control" (keydown)="countNumberofCharacter($event)"
+                                      class="form-control border-0" (keydown)="countNumberofCharacter($event)"
                                       formControlName="JobProfile"></textarea>
                                   </div>
 
@@ -306,7 +304,7 @@
                                       employment</label>
                                     <textarea name="Experties" rows="5" maxlength="4000"
                                       placeholder="Enter your area of Experties/Specialization" readonly
-                                      class="form-control" formControlName="Experties"></textarea>
+                                      class="form-control border-0" formControlName="Experties"></textarea>
                                   </div>
                                 </fieldset>
                               </div>
@@ -1214,38 +1212,38 @@
                 <div class="mb-3">
                   <div class="row">
                     <div class="col">
-                      <label class="form-label">Project duration in yrs</label>
+                      <label class="form-label">Project duration</label>
                       <select class="form-select" aria-label="Default select example"
                         [(ngModel)]="editEmploymentModal.Years">
-                        <option value=0 selected>1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
+                        <option value="0" selected>0 year</option>
+                        <option value="1">1 year</option>
+                        <option value="2">2 years</option>
+                        <option value="3">3 years</option>
+                        <option value="4">4 years</option>
+                        <option value="5">5 years</option>
+                        <option value="6">6 years</option>
+                        <option value="7">7 years</option>
+                        <option value="8">8 years</option>
+                        <option value="9">9 years</option>
+                        <option value="10">10 years</option>
                       </select>
                     </div>
                     <div class="col">
-                      <label class="form-label">Project duration in Mo</label>
+                      <label class="form-label">Project duration</label>
                       <select class="form-select" aria-label="Default select example"
                         [(ngModel)]="editEmploymentModal.Months">
-                        <option value=0 selected>0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
+                        <option value=0 selected>0 month</option>
+                        <option value="1">1 month</option>
+                        <option value="2">2 months</option>
+                        <option value="3">3 months</option>
+                        <option value="4">4 months</option>
+                        <option value="5">5 months</option>
+                        <option value="6">6 months</option>
+                        <option value="7">7 months</option>
+                        <option value="8">8 months</option>
+                        <option value="9">9 months</option>
+                        <option value="10">10 months</option>
+                        <option value="11">11 months</option>
                       </select>
                     </div>
                   </div>

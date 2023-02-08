@@ -445,7 +445,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     if (res) {
       this.emailTemplate = res;
       if(this.emailTemplate) {
-        this.bodyContent = this.emailTemplate.BodyContent;
+        this.bodyContent = JSON.parse(this.emailTemplate.BodyContent);
         this.bodyContent = this.bodyContent
         .replaceAll("[[DEVELOPER-NAME]]", employee.FirstName + ' ' + employee.LastName)
         .replaceAll("[[YEAR]]", this.FileDetail.Year)
@@ -889,8 +889,6 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       if (this.RaisedBilloption == '0')
         this.isReadonly = false;
     }
-
-
   }
 
   EditCurrentDocument(userFile: any) {

@@ -283,7 +283,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       CompanyId: new FormControl(this.currentCompanyDetail.CompanyId, [Validators.required]),
       CTC: new FormControl(this.employeeModal.CTC, [Validators.required]),
       Gender: new FormControl(this.employeeModal.Gender ? 'true' : 'false'),
-      OldFileName: new FormControl(this.employeeModal.OldFileName)
+      OldFileName: new FormControl(this.employeeModal.OldFileName),
+      WorkShiftId: new FormControl(this.employeeModal.WorkShiftId, [Validators.required])
     });
   }
 
@@ -715,4 +716,5 @@ export class EmployeeDetail {
   Gender: boolean = true;
   OrganizationId: number = 0;
   OldFileName: string = null;
+  WorkShiftId: number = 0;
 }

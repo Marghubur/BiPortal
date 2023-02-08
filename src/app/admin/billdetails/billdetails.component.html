@@ -48,7 +48,7 @@
                   <div class="cell-wrapper">
                     <select class="form-select table-filter-control" (change)="filterRecords()"
                       [(ngModel)]="employeeFile.Year">
-                      <option value="0" selected disabled>Year</option>
+                      <option value="" selected disabled>Year</option>
                       <option [value]="item" *ngFor="let item of allBillingYears">{{item}}</option>
                     </select>
                   </div>

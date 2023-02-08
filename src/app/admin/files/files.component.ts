@@ -5,13 +5,14 @@ import { tableConfig } from 'src/providers/ajax.service';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { GetStatus, MonthName, Toast, WarningToast, ErrorToast, AddNumbers, ToFixed } from 'src/providers/common-service/common.service';
+import { MonthName, Toast, ErrorToast, AddNumbers, ToFixed } from 'src/providers/common-service/common.service';
 import { BuildPdf, ManageEmployee, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 import { Files } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import 'bootstrap';
+import { BillDetails } from '../billdetails/billdetails.component';
 declare var $: any;
 
 @Component({
@@ -74,6 +75,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   isGSTStatusModalReady: boolean = false;
   isError: boolean = false;
   maxDate: any = null;
+  allBillingYears: Array<any> = [];
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -112,11 +114,15 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.basePath = this.http.GetImageBasePath();
     this.currentEmployeeDetail = this.nav.getValue();
     this.employeeId = this.currentEmployeeDetail.EmployeeUid;
+    let year = new Date().getFullYear();
     this.autoCompleteModal = {
       data: [],
       placeholder: "Select Employee"
     }
-
+    for (let i = 0; i < 5; i++) {
+      let value = year - i;
+      this.allBillingYears.push(value);
+    }
     this.gstDetailForm = this.fb.group({
       GstId: new FormControl(0),
       Billno: new FormControl("", Validators.required),
@@ -573,11 +579,22 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.toDate = e; //`${e.year}-${e.month}-${e.day}`;
   }
 
-  selectBillOption(e: any) {
+  selectBillOption(e: any, value?: number) {
     this.isReadonly = true;
-    this.RaisedBilloption = e.target.value;
-    if (this.RaisedBilloption == '0')
-      this.isReadonly = false;
+    if (e.target.value) {
+      this.RaisedBilloption = e.target.value;
+      if (this.RaisedBilloption == '0')
+        this.isReadonly = false;
+    } else {
+      let elem = document.querySelectorAll('input[name="bydate"]') ;
+      for (let i = 0; i < elem.length; i++) {
+        (elem[i] as HTMLInputElement).checked = false;
+      }
+      (elem[value] as HTMLInputElement).checked = true;
+      this.RaisedBilloption = value.toString();
+      if (this.RaisedBilloption == '0')
+        this.isReadonly = false;
+    }
   }
 
   filterRecords() {
@@ -839,38 +856,4 @@ export class FilesComponent implements OnInit, AfterViewChecked {
       }
     }
   }
-}
-
-export class BillDetails {
-  Name: string = "";
-  BillNo: string = '';
-  CGST: number = 0;
-  ClientId: number =0;
-  ClientName: string = '';
-  FileExtension: string = '';
-  FileName: string = '';
-  FileOwnerId: number = 0;
-  FilePath: string = '';
-  FileUid: number = 0;
-  GeneratedOn: string = '';
-  IGST: number = 0;
-  Month: string = '';
-  PaidOn: string = '';
-  SGST: number =0;
-  SalaryAmount: number = null;
-  Status: string = '';
-  TDS: number = 0;
-  ReceivedAmount: number =null;
-  BilledAmount: number = null;
-  GSTAmount: number =null;
-  Total: number = 0;
-  GSTStatus: string = '';
-  fromModel: string = '';
-  toModel: string = '';
-  Employee: string = '';
-  TakeHome: number = null;
-  Absent: number = 0;
-  FromBillNo: number = null;
-  ToBillNo: number = null;
-  NoOfDays: number = 0;
 }
