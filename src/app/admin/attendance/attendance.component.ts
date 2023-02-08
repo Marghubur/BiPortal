@@ -94,10 +94,7 @@ export class AttendanceComponent implements OnInit {
     this.isFormReady = false;
     this.fromModel = null;
     this.toModel = null;
-    this.intervalId = setInterval(() => {
-      this.time = new Date();
-    }, 1000);
-
+    this.time = new Date();
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
     if(this.cachedData) {
@@ -189,6 +186,11 @@ export class AttendanceComponent implements OnInit {
       this.clientDetail.data.push({
         text: this.applicationData.Company.CompanyName,
         value: this.applicationData.Company.CompanyId,
+      });
+
+      this.employeesList.data.push({
+        text: this.userName,
+        value: this.employeeId,
       });
     } else {
       ErrorToast("No company found for current employee.");

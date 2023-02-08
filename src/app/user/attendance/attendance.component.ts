@@ -180,7 +180,7 @@ export class AttendanceComponent implements OnInit {
     let i = 1;
     if (year == new Date().getFullYear()) {
       //this.daysInMonth = new Date(year, month, dt.getDate()).getDate();
-      i = month;
+      i = month-1;
     }
     while( i <= new Date().getMonth()+1) {
       var mnth = Number((((i+1) > 9 ? "" : "0") + i));
@@ -195,7 +195,15 @@ export class AttendanceComponent implements OnInit {
   }
 
   previousMonthAttendance(month: number, index: number) {
+    let doj = new Date(this.userDetail.CreatedOn);
     let startDate = new Date(new Date().getFullYear(), month, 1);
+    if(doj.getFullYear() == new Date().getFullYear() && doj.getMonth() == new Date().getMonth()) {
+      WarningToast("You joining month is current month.")
+      return;
+    }
+    if (doj.getFullYear() == startDate.getFullYear() && doj.getMonth() == startDate.getMonth()) {
+      startDate = new Date(doj.getFullYear(), doj.getMonth(), doj.getDate());
+    }
     let endDate;
     if (month == new Date().getMonth())
       endDate = new Date();
