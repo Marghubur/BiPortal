@@ -614,19 +614,6 @@ export class LeaveComponent implements OnInit {
     this.graphInstances.push(myChart);
   }
 
-  activateMe(elemId: string) {
-    switch(elemId) {
-      case "attendance-tab":
-        this.nav.navigateRoot(UserAttendance, this.cachedData);
-      break;
-      case "timesheet-tab":
-        this.nav.navigateRoot(UserTimesheet, this.cachedData);
-      break;
-      case "leave-tab":
-      break;
-    }
-  }
-
   validateLeaveStatus(e: any) {
     if(e.target.value) {
       let value = parseInt(e.target.value);

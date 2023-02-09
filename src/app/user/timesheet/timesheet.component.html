@@ -1,22 +1,5 @@
 <div class="main-container">
-  <div class="col-md-12 bg-light mb-3">
-    <ul class="nav">
-      <li class="nav-item">
-        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page"
-          href="javascript:void(0)">ATTENDENCE</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-dark nav-active" id="timesheet-tab" (click)="activateMe('timesheet-tab')"
-          href="javascript:void(0)">TIMESHEET</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('leave-tab')"
-          href="javascript:void(0)">LEAVE</a>
-      </li>
-    </ul>
-  </div>
-
-  <form autocomplete="off">
+    <form autocomplete="off">
     <ng-container *ngIf="isEmployeesReady">
       <div class="col-12 row m-0 p-0 mb-4">
         <div class="col-md-4 p-0 m-0">

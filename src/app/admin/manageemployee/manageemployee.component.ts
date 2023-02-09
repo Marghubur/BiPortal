@@ -56,6 +56,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   isCompaniesDetails: boolean = true;
   minDate: any = null;
   imageIndex: number = 0;
+  isSubmitted: boolean = false;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -290,10 +291,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   bindClientDetails() {
     this.addUpdateClientForm = this.fb.group({
-      AllocatedClientId: new FormControl("0"),
-      ActualPackage: new FormControl(null),
-      FinalPackage: new FormControl(null),
-      TakeHomeByCandidate: new FormControl(null),
+      AllocatedClientId: new FormControl(0, [Validators.required]),
+      ActualPackage: new FormControl(null, [Validators.required]),
+      FinalPackage: new FormControl(null, [Validators.required]),
+      TakeHomeByCandidate: new FormControl(null, [Validators.required]),
       AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
     })
   }
@@ -460,10 +461,29 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.nav.navigate(Employees, null)
   }
 
+  get n() {
+    return this.addUpdateClientForm.controls;
+  }
+
   addDetail() {
     this.isAllocated = false;
+    this.isLoading = true;
+    this.isSubmitted = true;
+    let errroCounter = 0;
+    if (this.addUpdateClientForm.value.AllocatedClients.length)
+      this.isAllocated = true;
+    if (this.addUpdateClientForm.get('ActualPackage').errors !== null)
+      errroCounter++;
+
+    if (this.addUpdateClientForm.get('FinalPackage').errors !== null)
+      errroCounter++;
+
+    if (this.addUpdateClientForm.get('TakeHomeByCandidate').errors !== null)
+      errroCounter++;
+
     let clientId = Number(this.addUpdateClientForm.get("AllocatedClientId").value);
     if(isNaN(clientId) || clientId <= 0){
+      this.isLoading = false;
       ErrorToast("Invalid client selected");
       return;
     }
@@ -471,6 +491,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.activeAssignedClient.ClientUid = clientId;
     let actualPackage = Number(this.addUpdateClientForm.get("ActualPackage").value);
     if(isNaN(actualPackage)){
+      this.isLoading = false;
       ErrorToast("Invalid actual package supplied");
       return;
     }
@@ -478,6 +499,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.activeAssignedClient.ActualPackage = actualPackage;
     let finalPackage = Number(this.addUpdateClientForm.get("FinalPackage").value);
     if(isNaN(finalPackage)){
+      this.isLoading = false;
       ErrorToast("Invalid final package supplied");
       return;
     }
@@ -485,44 +507,56 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.activeAssignedClient.FinalPackage = finalPackage;
     let takeHomeByCandidate = Number(this.addUpdateClientForm.get("TakeHomeByCandidate").value);
     if(isNaN(takeHomeByCandidate)){
+      this.isLoading = false;
       ErrorToast("Invalid takehome package supplied");
       return;
     }
 
     this.activeAssignedClient.TakeHomeByCandidate = takeHomeByCandidate;
     if(finalPackage < actualPackage) {
+      this.isLoading = false;
       ErrorToast("Final package must be greater that or equal to Actual package.")
       return;
     }
 
     let employeeId = Number(this.employeeForm.get("EmployeeUid").value);
     if(isNaN(employeeId) || employeeId <= 0){
+      this.isLoading = false;
       ErrorToast("Invalid employee id selected");
       return;
     }
     this.activeAssignedClient.EmployeeUid = employeeId;
 
     if(actualPackage < takeHomeByCandidate) {
+      this.isLoading = false;
       ErrorToast("Actual package must be greater that or equal to TakeHome package.")
       return;
     }
 
-    this.http.post(`employee/UpdateEmployeeMappedClientDetail/${this.isUpdated}`, this.activeAssignedClient).then((response: ResponseModel) => {
-      if (response.ResponseBody.Table) {
-        this.allocatedClients = response.ResponseBody.Table;
-        if(this.allocatedClients.length > 0) {
-          let assignedClients: FormArray = this.addUpdateClientForm.get("AllocatedClients") as FormArray;
-          assignedClients.clear();
-          let apiClients: FormArray = this.fb.array(this.allocatedClients.map(x => this.buildAlocatedClients(x, (x.ClientUid == this.activeAssignedClient.ClientUid) ?? false)));
-          this.addUpdateClientForm.setControl("AllocatedClients", apiClients);
+    if (errroCounter === 0) {
+      this.http.post(`employee/UpdateEmployeeMappedClientDetail/${this.isUpdated}`, this.activeAssignedClient).then((response: ResponseModel) => {
+        if (response.ResponseBody.Table) {
+          this.allocatedClients = response.ResponseBody.Table;
+          if(this.allocatedClients.length > 0) {
+            let assignedClients: FormArray = this.addUpdateClientForm.get("AllocatedClients") as FormArray;
+            assignedClients.clear();
+            let apiClients: FormArray = this.fb.array(this.allocatedClients.map(x => this.buildAlocatedClients(x, (x.ClientUid == this.activeAssignedClient.ClientUid) ?? false)));
+            this.addUpdateClientForm.setControl("AllocatedClients", apiClients);
+          }
+          this.isLoading = false;
+          Toast("Organization added/updated successfully.");
+        } else {
+          this.isLoading = false;
+          ErrorToast("Fail to add");
         }
-        Toast("Organization added/updated successfully.");
-      } else {
-        ErrorToast("Fail to add");
-      }
-
+        this.isAllocated = true;
+      }).catch (e => {
+        this.isLoading = false;
+      })
+    } else {
       this.isAllocated = true;
-    });
+      ErrorToast("Please fill all the mandaroty field marked red");
+    }
   }
 
   bindCurrentClientDetail(client: any) {

@@ -890,17 +890,4 @@ export class TimesheetComponent implements OnInit {
       }
     }
   }
-
-  activateMe(elemId: string) {
-    switch(elemId) {
-      case "attendance-tab":
-        this.nav.navigate(Attendance, this.cachedData);
-      break;
-      case "timesheet-tab":
-        break;
-      case "leave-tab":
-        this.nav.navigate(Leave, this.cachedData);
-      break;
-    }
-  }
 }
