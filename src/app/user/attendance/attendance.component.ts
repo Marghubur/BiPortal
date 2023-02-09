@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
+import { AccessTokenExpiredOn, ItemStatus, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -27,11 +27,9 @@ export class AttendanceComponent implements OnInit {
   time = new Date();
   intervalId;
   DayValue: number = 0;
-  clientId: number = 0;
-  client: any = null;
+  employee: any = null;
   isLoading: boolean = false;
   billingHrs: string = '';
-  NoClient: boolean = false;
   isAttendanceDataLoaded: boolean = false;
   divisionCode: number = 0;
   daysInMonth: number = 0;
@@ -75,9 +73,8 @@ export class AttendanceComponent implements OnInit {
     this.isEmployeesReady = true;
     if(this.cachedData) {
       this.employeeId = this.cachedData.EmployeeUid;
-      this.clientId = this.cachedData.ClientUid;
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
-      this.loadMappedClients();
+      this.loadPageData();
     } else {
       let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
       this.userDetail = this.user.getInstance() as UserDetail;
@@ -91,7 +88,7 @@ export class AttendanceComponent implements OnInit {
         this.employeeId = this.userDetail.UserId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
         //$('#loader').modal('show');
-        this.loadMappedClients();
+        this.loadPageData();
       } else {
         Toast("Invalid user. Please login again.")
       }
@@ -127,7 +124,7 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
-  loadMappedClients() {
+  loadPageData() {
     this.isLoading = true;
     if(this.employeeId <= 0) {
       Toast("Invalid user selected.")
@@ -140,7 +137,6 @@ export class AttendanceComponent implements OnInit {
 
     let data = {
       EmployeeUid: Number(this.employeeId),
-      ClientId: Number(this.clientId),
       UserTypeId : UserType.Employee,
       AttendenceFromDay: this.fromDate,
       AttendenceToDay: this.toDate,
@@ -152,20 +148,19 @@ export class AttendanceComponent implements OnInit {
   }
 
   loadMappedData(data: any) {
+    this.isAttendanceDataLoaded = false;
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      if(response.ResponseBody.EmployeeDetail) {
-        this.client = response.ResponseBody.EmployeeDetail;
-        this.getMonths();
-      }
-      else {
-        this.NoClient = true;
-        this.isAttendanceDataLoaded = false;
+      if(!response.ResponseBody.EmployeeDetail) {
+        ErrorToast("Fail to get employee detail. Please contact to admin.")
+        this.isAttendanceDataLoaded = true;
+        this.isLoading = false;
+        return;
       }
 
+      this.employee = response.ResponseBody.EmployeeDetail;
+      this.getMonths();
       if (response.ResponseBody.AttendacneDetails) {
         this.bindAttendace(response.ResponseBody.AttendacneDetails);
-        console.log(response.ResponseBody.AttendacneDetails)
-        //this.createPageData(response.ResponseBody.AttendacneDetails);
         this.isAttendanceDataLoaded = true;
       }
 
@@ -177,11 +172,9 @@ export class AttendanceComponent implements OnInit {
     });
   }
 
-
-
   getMonths() {
     this.monthName = [];
-    var dt = new Date(this.client.CreatedOn);
+    var dt = new Date(this.employee.CreatedOn);
     var month = dt.getMonth()+1;
     var year = dt.getFullYear();
     let i = 1;
@@ -219,7 +212,6 @@ export class AttendanceComponent implements OnInit {
 
     let data = {
       EmployeeUid: Number(this.employeeId),
-      ClientId: Number(this.clientId),
       UserTypeId : UserType.Employee,
       AttendenceFromDay: startDate,
       AttendenceToDay: endDate,
@@ -302,14 +294,30 @@ export class AttendanceComponent implements OnInit {
   sendRequest() {
     this.isLoading = true;
     let request = this.getRequestBody();
+    let requestBody = null;
 
-    if (request == null)
+    if (request == null){
       return;
+    }
 
-    this.http.post("Attendance/RaiseMissingAttendanceRequest", request).then((response: ResponseModel) => {
+    requestBody = {
+      RequestedId: this.currentAttendance.AttendanceId,
+      EmployeeId: this.employeeId,
+      EmployeeName: `${this.employee.FirstName} ${this.employee.LastName}`,
+      Email: this.employee.Email,
+      Mobile: this.employee.Mobile,
+      EmployeeMessage: request.UserComments,
+      CurrentStatus: ItemStatus.Pending,
+      AttendanceDate: request.AttendanceDay,
+    }
+
+    this.http.post("Attendance/RaiseMissingAttendanceRequest", requestBody).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         Toast("Your request has been submitted successfully. Your manager will take action on it.");
+        this.isLoading = false;
       }
+
+      $('#commentModal').modal('hide');
     });
   }
 
