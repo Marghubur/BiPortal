@@ -7,7 +7,7 @@ import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStora
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, ItemStatus, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { UserService } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -51,6 +51,9 @@ export class AttendanceComponent implements OnInit {
   allDaysAttendance: Array<any> = [];
   reportingManagerId: number = 0;
   filterStatus: number = 0;
+  request: Filter = new Filter();
+  attendanceRequestDetail: Array<any> = [];
+  attendanceRquestPageIsReady: boolean = false;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -332,6 +335,25 @@ export class AttendanceComponent implements OnInit {
       }
 
       $('#commentModal').modal('hide');
+    });
+  }
+
+  loadAttendanceRequestDetail() {
+    this.attendanceRquestPageIsReady = false;
+    this.request.SearchString = "1=1";
+    this.request.SortBy = null;
+    this.request.PageIndex = 1;
+    this.request.PageSize = 10;
+    this.request.EmployeeId = this.employeeId;
+
+    this.http.post("Attendance/GetMissingAttendanceRequest", this.request).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        this.attendanceRequestDetail = response.ResponseBody;
+        Toast("Attendance request loaded successfully.");
+        this.isLoading = false;
+      }
+
+      this.attendanceRquestPageIsReady = true;
     });
   }
 
