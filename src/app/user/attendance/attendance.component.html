@@ -1,5 +1,5 @@
 <div class="main-container">
-  <form autocomplete="off">    
+  <form autocomplete="off">
     <ng-container>
       <div class="col-md-12 x_panel mt-3 bg-light overflow-hidden">
         <div class="x_header">
@@ -16,8 +16,24 @@
             <ng-template ngbNavContent>
               <div class="" *ngIf="!isLoading">
                 <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
-                  <span class="ps-4 fw-bold" *ngIf="presentMonth">Last {{currentDays.length}} days</span>
-                  <span class="ps-4 fw-bold" *ngIf="!presentMonth">{{changeMonth}}</span>
+                  <div class="col-md-4 d-flex align-items-center">
+                    <select (change)="filterByStatus($event)" class="form-select w-50">
+                      <option value="" selected disabled>Filte by status</option>
+                      <option value="1">All</option>
+                      <option value="0">Not Applied</option>
+                      <option value="2">Pending</option>
+                      <option value="3">Weekend</option>
+                      <option value="4">Holiday</option>
+                      <option value="9">Approved</option>
+                      <option value="5">Rejected</option>
+                      <option value="10">Blocked</option>
+                    </select>
+                    <button *ngIf="filterStatus == 10" class="btn btn-primary-c ms-2" (click)="requestPopUpo()">Request</button>
+                  </div>
+                  <div class="col-auto">
+                    <span class="ps-4 fw-bold" *ngIf="presentMonth">Last {{currentDays.length}} days</span>
+                    <span class="ps-4 fw-bold" *ngIf="!presentMonth">{{changeMonth}}</span>
+                  </div>
                   <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
                     <ng-container *ngFor="let month of monthName; let i = index">
                       <input type="radio" class="btn-check" name="btnradio"  (click)="previousMonthAttendance(month.value, i)" id="btnradio{{i}}" autocomplete="off">
@@ -384,3 +400,59 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
 </div>
 </div>
 <!-- End -->
+
+<!-- Request Attendance Modal Start-->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="requestModal" tabindex="-1"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-content">
+    <ng-container>
+      <div class="modal-header border-bottom-0" >
+        <h5 class="modal-title" id="exampleModalLabel">Attendance is block. Click to send request for unblock</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="col-md-12 px-4 d-block">
+        <p class="mt-2">You can't apply attendance more than 4 days. Please fill details and send the request to your manager for unblock this attendance</p>
+      </div>
+      <div class="modal-body px-4">
+        <div class="d-flex position-relative align-items-center">
+
+        </div>
+        <div class="col-md-12 mt-3">
+          <label for="" class="form-label">Reason</label>
+          <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" maxlength="100"
+            [(ngModel)]="commentValue"></textarea>
+          <div class="alert alert-danger" *ngIf="isComment">
+            Comment is required.
+          </div>
+        </div>
+        <div>
+          <ng-container *ngFor="let employee of employees; let i = index">
+            <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
+              {{employee.Name}}
+              <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none">
+                <i class="fa fa-close ps-2 text-dark"></i>
+              </a>
+            </span>
+          </ng-container>
+        </div>
+        <div class="mt-3" *ngIf="isEmployeesReady">
+          <label for="" class="form-label">Notify</label>
+          <app-iautocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
+            [ngModelOptions]="{standalone: true}">
+          </app-iautocomplete>
+        </div>
+        <p class="mb-0">These employees will be notified through email when you WFH request applied.</p>
+      </div>
+
+      <div class="modal-footer border-top-0 pe-4">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="sendRequest()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Send request' }}
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>
+</div>
