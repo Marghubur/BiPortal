@@ -185,7 +185,7 @@ export class ApprovalRequestComponent implements OnInit {
       this.attendance.map(item => {
         let detail:Array<any> = JSON.parse(item.AttendanceDetail);
         if(detail && detail.length > 0) {
-          if (this.itemStatus > 0)
+          if (this.itemStatus > 0 && this.itemStatus <4)
             detail = detail.filter(x => x.PresentDayStatus === this.itemStatus);
           else
             detail = detail.filter(x => x.PresentDayStatus === ItemStatus.Approved || x.PresentDayStatus === ItemStatus.Pending || x.PresentDayStatus === ItemStatus.Rejected);
@@ -209,7 +209,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.leaveDeatil = [];
     if (this.leave_request && this.leave_request.length > 0) {
       let detail = [];
-      if (this.itemStatus > 0)
+      if (this.itemStatus > 0 && this.itemStatus <4)
         detail = this.leave_request.filter(x => x.RequestStatusId === this.itemStatus);
       else
         detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
@@ -228,7 +228,7 @@ export class ApprovalRequestComponent implements OnInit {
           let increment = index + 7;
           let data = detail.slice(index, increment);
           data = data.filter(x => new Date(x.PresentDate).getMonth() == new Date().getMonth());
-          if (this.itemStatus > 0)
+          if (this.itemStatus > 0 && this.itemStatus < 4)
             data = data.filter(x => x.TimesheetStatus === this.itemStatus);
           else
             data = data.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Pending || x.TimesheetStatus === ItemStatus.Rejected);
