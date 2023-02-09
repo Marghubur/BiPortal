@@ -460,7 +460,7 @@
               <div class="form-group">
                 <label class="form-label">Client (Allocated)</label>
                 <div class="col-md-12">
-                  <select name="AllocatedClientId" class="form-control" formControlName="AllocatedClientId">
+                  <select name="AllocatedClientId" class="form-control" formControlName="AllocatedClientId" [ngClass]="{'error-field': isSubmitted && n.AllocatedClientId.errors !== null && n.AllocatedClientId.errors.required}">
                     <option value="0" disabled>Clients Name</option>
                     <option *ngFor="let client of clients" value="{{client.ClientId}}">
                       {{client.ClientName}}
@@ -473,17 +473,17 @@
                 <div class="form-group col-md-4 mb-3">
                   <label class="form-label">Actual / Mon</label>
                   <input class="form-control" placeholder="Actual Package" OnlyNumber="10" name="ActualPackage"
-                    formControlName="ActualPackage" />
+                    formControlName="ActualPackage"  [ngClass]="{'error-field': isSubmitted && n.ActualPackage.errors !== null && n.ActualPackage.errors.required}"/>
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <label class="form-label">Final / Mon</label>
-                  <input class="form-control" placeholder="Final Package" OnlyNumber="10" name="Final Package"
-                    formControlName="FinalPackage" />
+                  <input class="form-control" placeholder="Final Package" OnlyNumber="10" name="FinalPackage"
+                    formControlName="FinalPackage"  [ngClass]="{'error-field': isSubmitted && n.FinalPackage.errors !== null && n.FinalPackage.errors.required}"/>
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <label class="form-label">Take Home</label>
                   <input class="form-control" placeholder="Take Home" OnlyNumber="10"
-                    name="TakeHomeByCandidate" formControlName="TakeHomeByCandidate" />
+                    name="TakeHomeByCandidate" formControlName="TakeHomeByCandidate"  [ngClass]="{'error-field': isSubmitted && n.TakeHomeByCandidate.errors !== null && n.TakeHomeByCandidate.errors.required}"/>
                 </div>
               </div>
             </div>
@@ -493,11 +493,11 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-outline-success" (click)="addDetail()">
-          <i class="fa pe-3" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          <span *ngIf="isUpdated">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <span *ngIf="isUpdated" class="ps-2">
             Update changes
           </span>
-          <span *ngIf="!isUpdated">
+          <span *ngIf="!isUpdated" class="ps-2">
             Created
           </span>
         </button>

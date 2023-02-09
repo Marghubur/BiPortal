@@ -305,7 +305,9 @@ export class AttendanceComponent implements OnInit {
     let notify = [];
     if (this.employees.length > 0) {
       for (let i = 0; i < this.employees.length; i++) {
-        notify.push([this.employees[i].Id, this.employees[i].Email])
+        notify.push({
+          Id:this.employees[i].Id,
+          Email:this.employees[i].Email})
       }
     }
     requestBody = {

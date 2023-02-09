@@ -831,17 +831,4 @@ export class TimesheetComponent implements OnInit {
     }
     if (this.weekList.length > 0) this.divisionCode = 2;
   }
-
-  activateMe(elemId: string) {
-    switch(elemId) {
-      case "attendance-tab":
-        this.nav.navigateRoot(UserAttendance, this.cachedData);
-      break;
-      case "timesheet-tab":
-        break;
-      case "leave-tab":
-        this.nav.navigateRoot(UserLeave, this.cachedData);
-      break;
-    }
-  }
 }
