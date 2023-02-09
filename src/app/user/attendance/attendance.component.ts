@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
@@ -126,7 +127,6 @@ export class AttendanceComponent implements OnInit {
         index++;
       }
       this.allDaysAttendance = data;
-      console.log(this.allDaysAttendance)
       this.currentDays = data.reverse();
     } else {
       WarningToast("Unable to bind data. Please contact admin.");
@@ -302,12 +302,8 @@ export class AttendanceComponent implements OnInit {
 
   sendRequest() {
     this.isLoading = true;
-    let request = this.getRequestBody();
-    let requestBody = null;
+    let request = [];
 
-    if (request == null){
-      return;
-    }
     let notify = [];
     if (this.employees.length > 0) {
       for (let i = 0; i < this.employees.length; i++) {
@@ -316,26 +312,42 @@ export class AttendanceComponent implements OnInit {
           Email:this.employees[i].Email})
       }
     }
-    requestBody = {
-      RequestedId: this.currentAttendance.AttendanceId,
-      EmployeeId: this.employeeId,
-      EmployeeName: `${this.employee.FirstName} ${this.employee.LastName}`,
-      Email: this.employee.Email,
-      Mobile: this.employee.Mobile,
-      EmployeeMessage: request.UserComments,
-      CurrentStatus: ItemStatus.Pending,
-      AttendanceDate: request.AttendanceDay,
-      NotifyList: notify
+
+    this.currentDays.map(item => {
+      request.push({
+        RequestedId: this.currentAttendance.AttendanceId,
+        EmployeeId: this.employeeId,
+        EmployeeName: `${this.employee.FirstName} ${this.employee.LastName}`,
+        Email: this.employee.Email,
+        Mobile: this.employee.Mobile,
+        EmployeeMessage: "Missing attendance",
+        CurrentStatus: ItemStatus.Pending,
+        AttendanceDate: item.AttendanceDay,
+        NotifyList: notify
+      });
+    });
+
+    if (request == null || request.length == 0){
+      WarningToast("No attendance is available to apply.")
+      return;
     }
+
+    let requestBody = {
+      EmailBody: this.commentValue,
+      CompalintOrRequestList: request
+    };
 
     this.http.post("Attendance/RaiseMissingAttendanceRequest", requestBody).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         Toast("Your request has been submitted successfully. Your manager will take action on it.");
-        this.isLoading = false;
       }
-
-      $('#commentModal').modal('hide');
-    });
+      
+      this.isLoading = false;
+      $('#requestModal').modal('hide');
+    }).catch(e => {
+        this.isLoading = false;
+        $('#requestModal').modal('hide');
+    })
   }
 
   loadAttendanceRequestDetail() {
@@ -475,7 +487,22 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
-  requestPopUpo() {
-    $("#requestModal").modal('show');
+  requestPopUp() {
+    this.commentValue = "I missed to fill my attendance on following days:\n";
+    if (this.currentDays.length > 0) {
+      let text = "";
+      this.currentAttendance = this.currentDays[0];
+      this.currentDays.map(item => {        
+        text += `${new DatePipe('en-US').transform(item.AttendanceDay, 'd MMM yyyy')},  `
+      });
+
+      this.commentValue += `  Date(s):`;
+      this.commentValue += `  \n${text}`;
+      this.commentValue += "\n\nRequesting to please approved all the above mentioned attendance.";
+      this.commentValue += "\nRegards";
+      $("#requestModal").modal('show');
+    } else {
+      WarningToast("You don't have any missed attendance in present month.");
+    }
   }
 }
