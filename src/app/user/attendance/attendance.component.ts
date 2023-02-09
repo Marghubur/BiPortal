@@ -272,18 +272,12 @@ export class AttendanceComponent implements OnInit {
   }
 
   getRequestBody() {
-    let logon = "";
-    if (this.sessionvalue == 2 || this.sessionvalue == 3)
-      logon = "04:30"
-    else
-      logon = this.currentAttendance.LogOn
-
       if (this.commentValue == '') {
         this.isComment = true;
         this.isLoading = false;
         return null;
       }
-      
+
       if (this.sessionvalue <= 0) {
         ErrorToast("Please select session first");
         this.isLoading = false;
@@ -299,7 +293,7 @@ export class AttendanceComponent implements OnInit {
       UserComments: this.commentValue,
       EmailList: this.emails,
       SessionType: this.sessionvalue,
-      LogOn: logon,
+      LogOn: this.currentAttendance.LogOn,
       LogOff: this.currentAttendance.LogOff,
       LunchBreanInMinutes: this.currentAttendance.LunchBreanInMinutes
     }
@@ -308,7 +302,7 @@ export class AttendanceComponent implements OnInit {
   sendRequest() {
     this.isLoading = true;
     let request = this.getRequestBody();
-    
+
     if (request == null)
       return;
 
@@ -322,7 +316,7 @@ export class AttendanceComponent implements OnInit {
   submitAttendance() {
     this.isLoading = true;
     let request = this.getRequestBody();
-    
+
     if (request == null)
       return;
 
