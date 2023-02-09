@@ -372,19 +372,6 @@ export class AttendanceComponent implements OnInit {
     return false;
   }
 
-  activateMe(elemId: string) {
-    switch(elemId) {
-      case "attendance-tab":
-      break;
-      case "timesheet-tab":
-        this.nav.navigate(Timesheet, this.cachedData);
-      break;
-      case "leave-tab":
-        this.nav.navigate(Leave, this.cachedData);
-      break;
-    }
-  }
-
   findEmployee(e: any) {
     this.clientDetail = {
       data: [],
