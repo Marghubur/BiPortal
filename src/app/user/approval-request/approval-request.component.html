@@ -4,17 +4,15 @@
       <div class="x_header_title d-flex justify-content-between">
         <h2 class=" fw-bold text-dark">Request</h2>
         <div class="d-flex align-items-center">
-          <div class="col-md-4">
-            <label>2022&nbsp;&nbsp;/</label>
+          <div class="col-md-5">
+            <select class="form-select text-muted border-0" (change)="onYearChange($event)">
+              <option [value]="currentYear">{{currentYear}} &nbsp;&nbsp;</option>
+              <option [value]="currentYear - 1">{{currentYear - 1}} &nbsp;&nbsp;</option>
+            </select>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-8">
             <select class="form-select text-muted border-0">
-              <option value="1">January</option>
-              <option value="2">Febuary</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option selected value="9">September</option>
-              <option value="10">October</option>
+              <option [value]="item" *ngFor="let item of monthsName">{{item | date: 'MMMM'}}</option>
             </select>
           </div>
         </div>

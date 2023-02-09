@@ -271,37 +271,62 @@ export class AttendanceComponent implements OnInit {
       this.sessionvalue = value;
   }
 
-  submitAttendance() {
-    this.isLoading = true;
+  getRequestBody() {
     let logon = "";
     if (this.sessionvalue == 2 || this.sessionvalue == 3)
       logon = "04:30"
     else
       logon = this.currentAttendance.LogOn
-    let commment = {
+
+      if (this.commentValue == '') {
+        this.isComment = true;
+        this.isLoading = false;
+        return null;
+      }
+      
+      if (this.sessionvalue <= 0) {
+        ErrorToast("Please select session first");
+        this.isLoading = false;
+        return null;
+      }
+
+    return {
       EmployeeUid: this.employeeId,
       UserTypeId: UserType.Employee,
       AttendanceDay: this.currentAttendance.AttendanceDay,
       AttendenceFromDay: this.today,
       AttendenceToDay: this.tomorrow,
       UserComments: this.commentValue,
-      Emails: this.emails,
+      EmailList: this.emails,
       SessionType: this.sessionvalue,
       LogOn: logon,
       LogOff: this.currentAttendance.LogOff,
       LunchBreanInMinutes: this.currentAttendance.LunchBreanInMinutes
     }
-    if (this.commentValue == '') {
-      this.isComment = true;
-      this.isLoading = false;
+  }
+
+  sendRequest() {
+    this.isLoading = true;
+    let request = this.getRequestBody();
+    
+    if (request == null)
       return;
-    }
-    if (this.sessionvalue <= 0) {
-      ErrorToast("Please select session first");
-      this.isLoading = false;
+
+    this.http.post("Attendance/RaiseMissingAttendanceRequest", request).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        Toast("Your request has been submitted successfully. Your manager will take action on it.");
+      }
+    });
+  }
+
+  submitAttendance() {
+    this.isLoading = true;
+    let request = this.getRequestBody();
+    
+    if (request == null)
       return;
-    }
-    this.http.post('Attendance/SubmitAttendance', commment).then((response: ResponseModel) => {
+
+    this.http.post('Attendance/SubmitAttendance', request).then((response: ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody === "updated" || response.ResponseBody === "inserted") {
         let current = this.currentDays.find(x => x.AttendanceDay === this.currentAttendance.AttendanceDay);
         if(current) {

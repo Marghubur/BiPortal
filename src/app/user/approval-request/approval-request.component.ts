@@ -31,6 +31,8 @@ export class ApprovalRequestComponent implements OnInit {
   leaveDeatil: Array<any> = [];
   requestModal: number = 0;
   attendanceUrl: string = null;
+  currentYear: number = 0;
+  monthsName: Array<any> = [];
 
   constructor(
     private http: AjaxService,
@@ -46,13 +48,17 @@ export class ApprovalRequestComponent implements OnInit {
       value: 0,
       text: "Default Manager"
     });
+    this.currentYear = new Date().getFullYear();
+    for (let i = 0; i <= new Date().getMonth(); i++) {
+      this.monthsName.push(new Date(this.currentYear, i, 1))
+    }
     this.itemStatus = 2;
     this.loadData();
   }
 
   loadData() {
     this.isPageLoading = true;
-    this.http.get(`AttendanceRequest/GetManagerRequestedData/${this.currentUser.UserId}`).then(response => {
+    this.http.get(`AttendanceRequest/GetManagerRequestedData/${this.currentUser.UserId}/${this.itemStatus}`).then(response => {
       if(response.ResponseBody) {
         this.buildPage(response.ResponseBody);
         this.isPageLoading = false;
@@ -73,11 +79,13 @@ export class ApprovalRequestComponent implements OnInit {
       this.filterLeave();
     }
 
+    this.attendance = [];
     if (req.AttendaceTable) {
       this.attendance = req.AttendaceTable;
       this.filterAttendance();
     }
 
+    this.timesheet = [];
     if (req.TimesheetTable) {
       this.timesheet = req.TimesheetTable;
       this.weekDistributed();
@@ -156,17 +164,19 @@ export class ApprovalRequestComponent implements OnInit {
 
   filterRequest(e: any) {
     this.itemStatus = Number(e.target.value);
-    switch (this.active) {
-      case 1:
-        this.filterAttendance();
-        break;
-      case 2:
-        this.weekDistributed();
-        break;
-      case 3:
-        this.filterLeave();
-        break;
-    }
+    // switch (this.active) {
+    //   case 1:
+    //     this.filterAttendance();
+    //     break;
+    //   case 2:
+    //     this.weekDistributed();
+    //     break;
+    //   case 3:
+    //     this.filterLeave();
+    //     break;
+    // }
+
+    this.loadData();
   }
 
   filterAttendance() {
@@ -334,6 +344,22 @@ export class ApprovalRequestComponent implements OnInit {
       })
     } else {
       ErrorToast("Attendance detail not found. Please contact to admin.");
+    }
+  }
+
+  onYearChange(e: any) {
+    let value = Number(e.target.value);
+    if (value) {
+      this.monthsName = [];
+      if (value == new Date().getFullYear()) {
+        for (let i = 0; i <= new Date().getMonth(); i++) {
+          this.monthsName.push(new Date(value, i, 1))
+        }
+      } else {
+        for (let i = 0; i <= 11; i++) {
+          this.monthsName.push(new Date(value, i, 1))
+        }
+      }
     }
   }
 }
