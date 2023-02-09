@@ -1,49 +1,24 @@
 <div class="main-container">
-  <form autocomplete="off">
-    <ng-container *ngIf="isEmployeesReady">
-      <div class="col-md-12 bg-light mb-3">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link text-dark nav-active" id="attendance-tab" (click)="activateMe('attendance-tab')"
-              aria-current="page" href="javascript:void(0)">ATTENDENCE</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')"
-              href="javascript:void(0)">TIMESHEET</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('leave-tab')"
-              href="javascript:void(0)">LEAVE</a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- <div class="col-md-4 p-0 m-0 mb-4">
-        <label class="form-label">Select Employer</label>
-        <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
-        </app-iautocomplete>
-      </div> -->
-    </ng-container>
-
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
-    </div>
-
+  <form autocomplete="off">    
     <ng-container>
-      <h6 class="mt-3 text-dark">Logs & Requests</h6>
-      <div class="col-md-12 mt-3 bg-light overflow-hidden">
+      <div class="col-md-12 x_panel mt-3 bg-light overflow-hidden">
+        <div class="x_header">
+          <div class="x_header_title d-flex justify-content-between">
+            <h2 class=" fw-bold text-dark">Attendance</h2>
+          </div>
+        </div>
+        <div class="px-1">
+          <app-breadcrums></app-breadcrums>
+        </div>
         <nav ngbNav #nav="ngbNav" class="nav-tabs">
           <ng-container ngbNavItem>
             <a ngbNavLink class="text-dark">Attendance Log</a>
             <ng-template ngbNavContent>
-              <div class="x_panel" *ngIf="!isLoading">
+              <div class="" *ngIf="!isLoading">
                 <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
                   <span class="ps-4 fw-bold" *ngIf="presentMonth">Last {{currentDays.length}} days</span>
                   <span class="ps-4 fw-bold" *ngIf="!presentMonth">{{changeMonth}}</span>
                   <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
-                    <!-- <input type="radio" class="btn-check" name="btnradio" id="btnradio20" autocomplete="off" checked> -->
-                    <!-- <label class="btn btn-outline-primary month-btn" for="btnradio20">{{currentDays.length}}
-                      Days</label> -->
                     <ng-container *ngFor="let month of monthName; let i = index">
                       <input type="radio" class="btn-check" name="btnradio"  (click)="previousMonthAttendance(month.value, i)" id="btnradio{{i}}" autocomplete="off">
                       <label class="btn btn-outline-primary month-btn" for="btnradio{{i}}">{{month.name}}</label>
@@ -208,7 +183,7 @@
           </ng-container>
 
           <ng-container ngbNavItem>
-            <a ngbNavLink class="text-dark">Attendence Request</a>
+            <a ngbNavLink class="text-dark" (click)="loadAttendanceRequestDetail()">Missed Attendence & Status</a>
             <ng-template ngbNavContent>
               <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3">
                 <span class="ps-4">Work From Home / On Duty Request</span>
@@ -233,7 +208,7 @@
                 </div>
               </div>
               <div class="x_panel">
-                <table class="table table-hover">
+                <table class="table table-hover" *ngIf="attendanceRquestPageIsReady">
                   <thead>
                     <tr>
                       <th class="custom-th border-end" width="15%">DATE</th>
@@ -246,47 +221,59 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td class="align-middle border-end border-bottom">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <p>Apr 15, 2022</p>
-                          <div class="d-flex align-items-center flex-column">
-                            <i class="fa fa-home fa-lg"></i>
-                            <p>1 Day</p>
+                    <ng-container *ngIf="attendanceRequestDetail.length > 0">
+                      <tr *ngFor="let attr of attendanceRequestDetail">
+                        <td class="align-middle border-end border-bottom">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <p>{{attr.AttendanceDate | date}}</p>
+                            <div class="d-flex align-items-center flex-column">
+                              <i class="fa fa-home fa-lg"></i>
+                              <p>1 Day</p>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td class="align-middle border-end border-bottom">
-                        Work From Home
-                      </td>
-                      <td class="align-middle border-end border-bottom">
-                        Apr 17, 2022
-                        <p><small>by MD Istayaque</small></p>
-                      </td>
-                      <td class="align-middle border-end border-bottom">
-                        covid
-                      </td>
-                      <td class="align-middle border-end border-bottom">Approved</td>
-                      <td class="align-middle border-end border-bottom">
-                        <span>Ammanna Komp</span>
-                        <p><small>on 18-Apr-2022</small></p>
-                      </td>
-                      <td class="align-middle border-bottom">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <i class="fa fa-commenting pe-2" aria-hidden="true"></i>
-                          <div class="btn-group dropstart me-4">
-                            <button class="btn btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                              <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">View
-                                  Request</a></li>
-                            </ul>
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          Missing attendance
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          {{attr.RequestedOn}}
+                          <p><small>by {{attr.EmployeeName}}</small></p>
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          {{attr.EmployeeMessage}}
+                        </td>
+                        <td class="align-middle border-end border-bottom">{{attr.CurrentStatus}}</td>
+                        <td class="align-middle border-end border-bottom">
+                          <span>{{attr.ManagerName}}</span>
+                          <p><small>on {{attr.UpdatedOn}}</small></p>
+                        </td>
+                        <td class="align-middle border-bottom">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <i class="fa fa-commenting pe-2" aria-hidden="true"></i>
+                            <div class="btn-group dropstart me-4">
+                              <button class="btn btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">View
+                                    Request</a></li>
+                              </ul>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
+                    </ng-container>
+
+                    <ng-container *ngIf="attendanceRequestDetail.length == 0">
+                      <tr>
+                        <td class="align-middle border-end border-bottom" colspan="7">
+                          <div class="d-flex justify-content-center">
+                            <p>No pending attendance request available.</p>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
                   </tbody>
                 </table>
               </div>
