@@ -366,7 +366,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
         </div>
         <div class="mt-3" *ngIf="isEmployeesReady">
           <label for="" class="form-label">Notify</label>
-          <app-iautocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail()" [(ngModel)]="employeeId"
+          <app-iautocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
             [ngModelOptions]="{standalone: true}">
           </app-iautocomplete>
         </div>

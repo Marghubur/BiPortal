@@ -23,7 +23,7 @@ export class AttendanceComponent implements OnInit {
   fromDate: any = null;
   toDate: any = null;
   isEmployeesReady: boolean = false;
-  userDetail: UserDetail = new UserDetail();
+  userDetail: any = null;
   time = new Date();
   intervalId;
   DayValue: number = 0;
@@ -48,6 +48,7 @@ export class AttendanceComponent implements OnInit {
   tomorrow: Date = null;
   isComment: boolean = false;
   currentDays: Array<any> = [];
+  reportingManagerId: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -73,6 +74,7 @@ export class AttendanceComponent implements OnInit {
     this.isEmployeesReady = true;
     if(this.cachedData) {
       this.employeeId = this.cachedData.EmployeeUid;
+      this.reportingManagerId = this.cachedData.ReportingManagerId;
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.loadPageData();
     } else {
@@ -86,6 +88,7 @@ export class AttendanceComponent implements OnInit {
       if(Master !== null && Master !== "") {
         this.userDetail = Master["UserDetail"];
         this.employeeId = this.userDetail.UserId;
+        this.reportingManagerId = this.userDetail.ReportingManagerId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
         //$('#loader').modal('show');
         this.loadPageData();
@@ -299,7 +302,12 @@ export class AttendanceComponent implements OnInit {
     if (request == null){
       return;
     }
-
+    let notify = [];
+    if (this.employees.length > 0) {
+      for (let i = 0; i < this.employees.length; i++) {
+        notify.push([this.employees[i].Id, this.employees[i].Email])
+      }
+    }
     requestBody = {
       RequestedId: this.currentAttendance.AttendanceId,
       EmployeeId: this.employeeId,
@@ -309,6 +317,7 @@ export class AttendanceComponent implements OnInit {
       EmployeeMessage: request.UserComments,
       CurrentStatus: ItemStatus.Pending,
       AttendanceDate: request.AttendanceDay,
+      NotifyList: notify
     }
 
     this.http.post("Attendance/RaiseMissingAttendanceRequest", requestBody).then((response: ResponseModel) => {
@@ -387,15 +396,16 @@ export class AttendanceComponent implements OnInit {
     this.isEmployeesReady = true;
   }
 
-  addEmployeeEmail() {
-    let employee = this.applicationData.find(x => x.value == this.employeeId);
+  addEmployeeEmail(e: any) {
+    let value = e.value;
+    let employee = this.applicationData.find(x => x.value == value);
     this.emails.push(employee.email);
     this.employees.push({
       Id: employee.value,
       Name: employee.text,
       Email: employee.email
     });
-    let index = this.employeesList.data.findIndex(x => x.value == this.employeeId);
+    let index = this.employeesList.data.findIndex(x => x.value == value);
     this.employeesList.data.splice(index, 1);
   }
 
