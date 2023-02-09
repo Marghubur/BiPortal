@@ -23,7 +23,7 @@ export class AttendanceComponent implements OnInit {
   fromDate: any = null;
   toDate: any = null;
   isEmployeesReady: boolean = false;
-  userDetail: UserDetail = new UserDetail();
+  userDetail: any = null;
   time = new Date();
   intervalId;
   DayValue: number = 0;
@@ -48,6 +48,7 @@ export class AttendanceComponent implements OnInit {
   tomorrow: Date = null;
   isComment: boolean = false;
   currentDays: Array<any> = [];
+  reportingManagerId: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -73,6 +74,7 @@ export class AttendanceComponent implements OnInit {
     this.isEmployeesReady = true;
     if(this.cachedData) {
       this.employeeId = this.cachedData.EmployeeUid;
+      this.reportingManagerId = this.cachedData.ReportingManagerId;
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.loadPageData();
     } else {
@@ -86,6 +88,7 @@ export class AttendanceComponent implements OnInit {
       if(Master !== null && Master !== "") {
         this.userDetail = Master["UserDetail"];
         this.employeeId = this.userDetail.UserId;
+        this.reportingManagerId = this.userDetail.ReportingManagerId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
         //$('#loader').modal('show');
         this.loadPageData();
@@ -156,7 +159,7 @@ export class AttendanceComponent implements OnInit {
         this.isLoading = false;
         return;
       }
-      
+
       this.employee = response.ResponseBody.EmployeeDetail;
       this.getMonths();
       if (response.ResponseBody.AttendacneDetails) {
@@ -264,18 +267,12 @@ export class AttendanceComponent implements OnInit {
   }
 
   getRequestBody() {
-    let logon = "";
-    if (this.sessionvalue == 2 || this.sessionvalue == 3)
-      logon = "04:30"
-    else
-      logon = this.currentAttendance.LogOn
-
       if (this.commentValue == '') {
         this.isComment = true;
         this.isLoading = false;
         return null;
       }
-      
+
       if (this.sessionvalue <= 0) {
         ErrorToast("Please select session first");
         this.isLoading = false;
@@ -291,7 +288,7 @@ export class AttendanceComponent implements OnInit {
       UserComments: this.commentValue,
       EmailList: this.emails,
       SessionType: this.sessionvalue,
-      LogOn: logon,
+      LogOn: this.currentAttendance.LogOn,
       LogOff: this.currentAttendance.LogOff,
       LunchBreanInMinutes: this.currentAttendance.LunchBreanInMinutes
     }
@@ -304,17 +301,23 @@ export class AttendanceComponent implements OnInit {
 
     if (request == null){
       return;
-    } 
-    
+    }
+    let notify = [];
+    if (this.employees.length > 0) {
+      for (let i = 0; i < this.employees.length; i++) {
+        notify.push([this.employees[i].Id, this.employees[i].Email])
+      }
+    }
     requestBody = {
       RequestedId: this.currentAttendance.AttendanceId,
       EmployeeId: this.employeeId,
       EmployeeName: `${this.employee.FirstName} ${this.employee.LastName}`,
       Email: this.employee.Email,
-      Mobile: this.employee.Mobile,      
+      Mobile: this.employee.Mobile,
       EmployeeMessage: request.UserComments,
       CurrentStatus: ItemStatus.Pending,
       AttendanceDate: request.AttendanceDay,
+      NotifyList: notify
     }
 
     this.http.post("Attendance/RaiseMissingAttendanceRequest", requestBody).then((response: ResponseModel) => {
@@ -330,7 +333,7 @@ export class AttendanceComponent implements OnInit {
   submitAttendance() {
     this.isLoading = true;
     let request = this.getRequestBody();
-    
+
     if (request == null)
       return;
 
@@ -393,15 +396,16 @@ export class AttendanceComponent implements OnInit {
     this.isEmployeesReady = true;
   }
 
-  addEmployeeEmail() {
-    let employee = this.applicationData.find(x => x.value == this.employeeId);
+  addEmployeeEmail(e: any) {
+    let value = e.value;
+    let employee = this.applicationData.find(x => x.value == value);
     this.emails.push(employee.email);
     this.employees.push({
       Id: employee.value,
       Name: employee.text,
       Email: employee.email
     });
-    let index = this.employeesList.data.findIndex(x => x.value == this.employeeId);
+    let index = this.employeesList.data.findIndex(x => x.value == value);
     this.employeesList.data.splice(index, 1);
   }
 
