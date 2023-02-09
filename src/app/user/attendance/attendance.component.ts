@@ -48,7 +48,9 @@ export class AttendanceComponent implements OnInit {
   tomorrow: Date = null;
   isComment: boolean = false;
   currentDays: Array<any> = [];
+  allDaysAttendance: Array<any> = [];
   reportingManagerId: number = 0;
+  filterStatus: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -120,7 +122,8 @@ export class AttendanceComponent implements OnInit {
         // data[index].GrossHour = Number(data[index].LogOn) - (data[index].LunchBreanInMinutes/60)
         index++;
       }
-
+      this.allDaysAttendance = data;
+      console.log(this.allDaysAttendance)
       this.currentDays = data.reverse();
     } else {
       WarningToast("Unable to bind data. Please contact admin.");
@@ -375,19 +378,6 @@ export class AttendanceComponent implements OnInit {
     return false;
   }
 
-  activateMe(elemId: string) {
-    switch(elemId) {
-      case "attendance-tab":
-      break;
-      case "timesheet-tab":
-        this.nav.navigateRoot(UserTimesheet, this.cachedData);
-        break;
-      case "leave-tab":
-        this.nav.navigateRoot(UserLeave, this.cachedData);
-      break;
-    }
-  }
-
   loadAutoComplete() {
     this.isEmployeesReady = false;
     this.employeesList.data = [];
@@ -419,5 +409,51 @@ export class AttendanceComponent implements OnInit {
       });
       this.employees.splice(index, 1);
     }
+  }
+
+  filterByStatus(e: any) {
+    let value = Number(e.target.value);
+    let data;
+    if (value >=0) {
+      this.filterStatus = value;
+      this.currentDays = [];
+      switch (value) {
+        case 0:
+          data = this.allDaysAttendance.filter(x => x.IsOpen == true &&  x.PresentDayStatus == 0);
+          this.currentDays = data;
+          break;
+        case 1:
+          this.currentDays = this.allDaysAttendance;
+          break;
+        case 2:
+          data = this.allDaysAttendance.filter(x => x.PresentDayStatus == 2);
+          this.currentDays =data;
+          break;
+        case 3:
+          data = this.allDaysAttendance.filter(x => x.IsWeekend == true);
+          this.currentDays = data;
+          break;
+        case 4:
+          data = this.allDaysAttendance.filter(x => x.IsHoliday == true);
+          this.currentDays = data;
+          break;
+        case 5:
+          data = this.allDaysAttendance.filter(x => x.PresentDayStatus == 5);
+          this.currentDays = data;
+          break;
+        case 9:
+          data = this.allDaysAttendance.filter(x => x.PresentDayStatus == 9);
+          this.currentDays = data;
+          break;
+        case 10:
+          data = this.allDaysAttendance.filter(x => x.IsOpen == false &&  x.PresentDayStatus == 0);
+          this.currentDays = data;
+          break;
+      }
+    }
+  }
+
+  requestPopUpo() {
+    $("#requestModal").modal('show');
   }
 }
