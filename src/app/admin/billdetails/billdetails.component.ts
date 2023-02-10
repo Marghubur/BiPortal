@@ -547,6 +547,9 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   LoadFiles() {
     this.isEmpPageReady = false;
     this.isFileFound = false;
+    let empid = this.local.getByKey("EmployeeId");
+    if (empid > 0)
+      this.employeeId = empid;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       this.employeeDetails = [];
@@ -583,9 +586,6 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
         this.fileLoaded = true;
         this.userFiles = response.ResponseBody["Files"];
         let emp = response.ResponseBody["Employee"];
-        let empid = this.local.getByKey("EmployeeId");
-        if (empid > 0)
-          this.employeeId = empid;
         if (emp && emp.length > 0)
           this.employee = emp[0];
         this.fileLoaded = true;

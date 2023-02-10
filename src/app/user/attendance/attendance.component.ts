@@ -315,6 +315,13 @@ export class AttendanceComponent implements OnInit {
           Email:this.employees[i].Email})
       }
     }
+    let reportmanager = this.employeesList.data.find(x => x.value == this.reportingManagerId);
+    let mangeremail = notify.find(x => x.Email == reportmanager.email);
+    if (mangeremail == null) {
+      notify.push({
+        Id:reportmanager.value,
+        Email:reportmanager.email})
+    }
     let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     if (data && data == "") {
       this.isLoading = false;
