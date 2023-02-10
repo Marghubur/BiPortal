@@ -265,6 +265,105 @@
             </ng-container>
           </ng-template>
         </li>
+
+        <li ngbNavItem>
+          <a ngbNavLink class="text-muted" (click)="loadAttendanceRequestDetail()">Attendence Request</a>
+          <ng-template ngbNavContent>
+            <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3">
+              <span class="ps-4">Work From Home / On Duty Request</span>
+              <div>
+                <span class="pe-3">19 March 2022 - 02 May 2022</span>
+                <div class="btn-group dropstart me-4">
+                  <button class="btn btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Last 7
+                        days</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Last 14
+                        days</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Last 30
+                        days</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Custom
+                        Range</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="x_panel">
+              <table class="table table-hover" *ngIf="attendanceRquestPageIsReady">
+                <thead>
+                  <tr>
+                    <th class="custom-th border-end" width="15%">DATE</th>
+                    <th class="custom-th border-end" width="10%">REQUEST TYPE</th>
+                    <th class="custom-th border-end" width="10%">REQUEST ON</th>
+                    <th class="custom-th border-end" width="25%">NOTE</th>
+                    <th class="custom-th border-end" width="10%">STATUS</th>
+                    <th class="custom-th border-end" width="15%">ACTION TAKEN BY</th>
+                    <th class="custom-th" width="10%">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="attendanceRequestDetail.length > 0">
+                    <tr *ngFor="let attr of attendanceRequestDetail">
+                      <td class="align-middle border-end border-bottom">
+                        <div class="d-flex align-items-center justify-content-between">
+                          <p>{{attr.AttendanceDate | date}}</p>
+                          <div class="d-flex align-items-center flex-column">
+                            <i class="fa fa-home fa-lg"></i>
+                            <p>1 Day</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="align-middle border-end border-bottom">
+                        Missing attendance
+                      </td>
+                      <td class="align-middle border-end border-bottom">
+                        {{attr.RequestedOn | date}}
+                        <p><small>by {{attr.EmployeeName}}</small></p>
+                      </td>
+                      <td class="align-middle border-end border-bottom">
+                        {{attr.EmployeeMessage}}
+                      </td>
+                      <td class="align-middle border-end border-bottom">{{attr.CurrentStatus}}</td>
+                      <td class="align-middle border-end border-bottom">
+                        <span>{{attr.ManagerName}}</span>
+                        <p><small>on {{attr.UpdatedOn}}</small></p>
+                      </td>
+                      <td class="align-middle border-bottom">
+                        <div ngbDropdown class="d-inline-block">
+                          <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Apply"
+                            id="dropdownBasic1" ngbDropdownToggle>
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                          </button>
+                          <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <button ngbDropdownItem>
+                              <a class="dropdown-item" (click)="showApproveRequestModal(attr)" href="javascript:void(0)">Approve</a>
+                            </button>
+                            <button ngbDropdownItem (click)="showRejectRequestModal(attr)">
+                              <a class="dropdown-item" href="javascript:void(0)">Reject</a>
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+
+                  <ng-container *ngIf="attendanceRequestDetail.length == 0">
+                    <tr>
+                      <td class="align-middle border-end border-bottom" colspan="7">
+                        <div class="d-flex justify-content-center">
+                          <p>No pending attendance request available.</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+        </li>
       </ul>
 
       <div [ngbNavOutlet]="nav" class="mt-2"></div>
@@ -400,3 +499,38 @@
     </div>
   </div>
 </div>
+
+
+<!-- Employee Register or Update message modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="approval-attendance" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="p-2 modal-content" *ngIf="requestModalData != null">
+      <div class="modal-header border-bottom-0 pt-4">
+        <h5 class="modal-title">{{requestModalData.Title}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-dark d-flex align-items-center mb-0 pb-0">
+        <ng-container>
+          <div>
+            Please confirm ana approve request.
+          </div>
+        </ng-container>
+      </div>
+      <div *ngIf="requestModalData.IsApprove" class="modal-footer mt-0 border-top-0">
+        <!-- <a href="javascript:void(0)" (click)="ApproveRequest()" class="text-decoration-none text-dark fw-bold">Approve</a> -->
+        <button type="button" class="btn btn-success" (click)="ApproveRequest()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Approve' }}
+        </button>
+      </div>
+      <div *ngIf="requestModalData.IsReject" class="modal-footer mt-0 border-top-0">
+        <!-- <a href="javascript:void(0)" (click)="RejectRequest()" class="text-decoration-none text-dark fw-bold">Reject</a> -->
+        <button type="button" class="btn btn-danger" (click)="RejectRequest()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Reject' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- End -->
