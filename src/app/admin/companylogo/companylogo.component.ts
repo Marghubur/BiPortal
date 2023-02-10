@@ -19,7 +19,7 @@ export class CompanylogoComponent implements OnInit {
   currentCompany: any = null;
   fileList: Array<any> = [];
   basePath: string = "";
-  fileDescription: string = "";
+  fileDescription: string = null;
   fileRoles: Array<string> = ["Company Primary Logo", "Company Logo", "Other File"];
   fileRole: string = "";
   fileId: number = 0;
@@ -95,38 +95,49 @@ export class CompanylogoComponent implements OnInit {
 
   saveLogo() {
     this.isLoading = true;
+    let errorcounter = 0;
     if (this.FilesCollection.length < 0) {
       ErrorToast("Please add logo first.");
       this.isLoading = false;
       return;
     }
+    if (this.fileDescription == null || this.fileDescription == "") {
+      ErrorToast("File role is manditory");
+      this.fileDescription = null;
+      this.isLoading = false;
+      errorcounter++;
+    }
     if (this.fileRole == null || this.fileRole == "") {
       ErrorToast("File role is manditory");
       this.fileRole = null;
       this.isLoading = false;
-      return;
+      errorcounter++;
     }
-    let formData = new FormData();
-    formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
-    let files = {
-      FileId: this.fileId,
-      Email: this.currentCompany.Email,
-      CompanyId: this.currentCompany.CompanyId,
-      FileDescription: this.fileDescription,
-      FileRole: this.fileRole
-    };
+    if (errorcounter === 0) {
+      let formData = new FormData();
+      formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+      let files = {
+        FileId: this.fileId,
+        Email: this.currentCompany.Email,
+        CompanyId: this.currentCompany.CompanyId,
+        FileDescription: this.fileDescription,
+        FileRole: this.fileRole
+      };
+      formData.append('FileDetail', JSON.stringify(files));
+      this.http.post("company/addcompanyfiles", formData).then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          this.manangeCompanyFiles(res.ResponseBody);
+          $('#logoModal').modal('hide');
+          Toast('Logo uploaded successfully.');
+        }
+        this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    } else {
 
-    formData.append('FileDetail', JSON.stringify(files));
-    this.http.post("company/addcompanyfiles", formData).then((res:ResponseModel) => {
-      if (res.ResponseBody) {
-        this.manangeCompanyFiles(res.ResponseBody);
-        $('#logoModal').modal('hide');
-        Toast('Logo uploaded successfully.');
-      }
-      this.isLoading = false;
-    }).catch(e => {
-      this.isLoading = false;
-    })
+    }
+
   }
 
   editFile(item: any) {

@@ -93,7 +93,8 @@
 }
 iframe {
   background-color: var(--primary-color) !important;
-  min-height: 55vh;
+  max-height: 55vh;
+  min-height: 20vh;
   resize: none;
   outline: none;
   padding: 15px;
@@ -142,6 +143,13 @@ a:focus,a:hover {
   z-index: 99999 !important;
 
   iframe {
-    z-index: -1;
+    z-index: 0;
+  }
+
+  .iframe-wrapper-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
   }
 }
