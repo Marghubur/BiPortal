@@ -116,11 +116,11 @@
                             <div placement="top" ngbTooltip="Not Applied" aria-expanded="false"
                             *ngSwitchCase = "0">
                               <ng-container *ngIf="item.IsOpen">
-                                <i class="fa fa-clock-o pe-2 text-warning"></i> 
+                                <i class="fa fa-clock-o pe-2 text-warning"></i>
                                 <span>Not Applied</span>
                               </ng-container>
                               <ng-container *ngIf="!item.IsOpen">
-                                <i class="fa fa-ban pe-2 text-danger"></i> 
+                                <i class="fa fa-ban pe-2 text-danger"></i>
                                 <span>Blocked</span>
                               </ng-container>
                             </div>
@@ -422,7 +422,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
 <!-- Request Attendance Modal Start-->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="requestModal" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal-dialog modal-dialog-centered modal-xl">
   <div class="modal-content">
     <ng-container>
       <div class="modal-header border-bottom-0" >
@@ -434,16 +434,19 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
       </div>
       <div class="modal-body px-4">
         <div class="d-flex position-relative align-items-center">
-          <div class="position-relative mx-2 chip" *ngFor="let item of currentDays">
+          <div class="position-relative mx-2 chip" *ngFor="let item of currentDays; ;let i= index">
             <span class="px-3 badge">{{item.AttendanceDay | date: 'MMM d, EEE'}}</span>
-            <a href="javascript:void(0)" class="position-absolute">
+            <a href="javascript:void(0)" class="position-absolute" (click)="removeBlockDay(item, i)">
               <i class="fa fa-close"></i>
             </a>
           </div>
         </div>
         <div class="col-md-12 mt-3">
+          <app-editor [content]="EmailBody" [cleanUp]="eventsSubject.asObservable()"></app-editor>
+        </div>
+        <div class="col-md-12 mt-3">
           <label for="" class="form-label">Reason</label>
-          <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" maxlength="100"
+          <textarea class="comment-text-area form-control" rows="2" placeholder="Enter your comment" name="commentValue" maxlength="100"
             [(ngModel)]="commentValue"></textarea>
           <div class="alert alert-danger" *ngIf="isComment">
             Comment is required.

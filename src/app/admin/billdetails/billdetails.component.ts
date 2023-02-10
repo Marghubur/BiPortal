@@ -13,6 +13,7 @@ import { DocumentUser, Files } from '../documents/documents.component';
 import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 declare var $: any;
 
 @Component({
@@ -91,6 +92,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     private nav: iNavigation,
     private common: CommonService,
     private calendar: NgbCalendar,
+    private local: ApplicationStorage,
     private sanitizer: DomSanitizer
   ) {
     this.singleEmployee = new Filter();
@@ -135,6 +137,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       data: [],
       placeholder: "All result"
     }
+
     for (let i = 0; i < 5; i++) {
       let value = year - i;
       this.allBillingYears.push(value);
@@ -199,6 +202,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   }
 
   onEmloyeeChanged(_: any) {
+    this.local.setByKey("EmployeeId", this.employeeId);
     this.filterRecords();
   }
 
@@ -579,6 +583,9 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
         this.fileLoaded = true;
         this.userFiles = response.ResponseBody["Files"];
         let emp = response.ResponseBody["Employee"];
+        let empid = this.local.getByKey("EmployeeId");
+        if (empid > 0)
+          this.employeeId = empid;
         if (emp && emp.length > 0)
           this.employee = emp[0];
         this.fileLoaded = true;
