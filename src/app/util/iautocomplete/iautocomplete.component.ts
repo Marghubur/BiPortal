@@ -639,8 +639,9 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
 }
 
 export class pairData {
-  value: any = null
+  value: any = null;
   text: string = "";
+  email?: string = "";
 }
 
 export class autoCompleteModal {

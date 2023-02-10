@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -55,6 +56,8 @@ export class AttendanceComponent implements OnInit {
   request: Filter = new Filter();
   attendanceRequestDetail: Array<any> = [];
   attendanceRquestPageIsReady: boolean = false;
+  EmailBody: any = null;
+  eventsSubject: Subject<void> = new Subject<void>();
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -312,7 +315,18 @@ export class AttendanceComponent implements OnInit {
           Email:this.employees[i].Email})
       }
     }
-
+    let reportmanager = this.employeesList.data.find(x => x.value == this.reportingManagerId);
+    let mangeremail = notify.find(x => x.Email == reportmanager.email);
+    if (mangeremail == null) {
+      notify.push({
+        Id:reportmanager.value,
+        Email:reportmanager.email})
+    }
+    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    if (data && data == "") {
+      this.isLoading = false;
+      return;
+    }
     this.currentDays.map(item => {
       request.push({
         RequestedId: this.currentAttendance.AttendanceId,
@@ -320,7 +334,7 @@ export class AttendanceComponent implements OnInit {
         EmployeeName: `${this.employee.FirstName} ${this.employee.LastName}`,
         Email: this.employee.Email,
         Mobile: this.employee.Mobile,
-        EmployeeMessage: "Missing attendance",
+        EmployeeMessage: this.commentValue,
         CurrentStatus: ItemStatus.Pending,
         AttendanceDate: item.AttendanceDay,
         NotifyList: notify
@@ -333,7 +347,7 @@ export class AttendanceComponent implements OnInit {
     }
 
     let requestBody = {
-      EmailBody: this.commentValue,
+      EmailBody: data,
       CompalintOrRequestList: request
     };
 
@@ -341,7 +355,7 @@ export class AttendanceComponent implements OnInit {
       if (response.ResponseBody) {
         Toast("Your request has been submitted successfully. Your manager will take action on it.");
       }
-      
+
       this.isLoading = false;
       $('#requestModal').modal('hide');
     }).catch(e => {
@@ -352,6 +366,7 @@ export class AttendanceComponent implements OnInit {
 
   loadAttendanceRequestDetail() {
     this.attendanceRquestPageIsReady = false;
+    this.attendanceRequestDetail = [];
     this.request.SearchString = "1=1";
     this.request.SortBy = null;
     this.request.PageIndex = 1;
@@ -488,21 +503,27 @@ export class AttendanceComponent implements OnInit {
   }
 
   requestPopUp() {
-    this.commentValue = "I missed to fill my attendance on following days:\n";
+    this.EmailBody = "<div>I missed to fill my attendance on following days:</div><br>";
     if (this.currentDays.length > 0) {
       let text = "";
       this.currentAttendance = this.currentDays[0];
-      this.currentDays.map(item => {        
+      this.currentDays.map(item => {
         text += `${new DatePipe('en-US').transform(item.AttendanceDay, 'd MMM yyyy')},  `
       });
 
-      this.commentValue += `  Date(s):`;
-      this.commentValue += `  \n${text}`;
-      this.commentValue += "\n\nRequesting to please approved all the above mentioned attendance.";
-      this.commentValue += "\nRegards";
+      this.EmailBody += `  Date(s):`;
+      this.EmailBody += `  \n${text}`;
+      this.EmailBody += "<br><div>Requesting to please approved all the above mentioned attendance.</div><br><br>";
+      this.EmailBody += "<div>Regards</div>";
       $("#requestModal").modal('show');
     } else {
       WarningToast("You don't have any missed attendance in present month.");
+    }
+  }
+
+  removeBlockDay(index: number) {
+    if (index != -1) {
+      this.currentDays.splice(index, 1);
     }
   }
 }

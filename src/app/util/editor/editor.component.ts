@@ -87,7 +87,7 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.richTextField = document.getElementById("richTextField");
     }
 
-    e.target.classList.remove('iframe-wrapper-active');
+    e.target.classList.remove('iframe-wrapper-container');
     this.toggleEdit();
   }
 
