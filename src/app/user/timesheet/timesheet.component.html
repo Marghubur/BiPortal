@@ -1,37 +1,41 @@
 <div class="main-container">
-    <form autocomplete="off">
-    <ng-container *ngIf="isEmployeesReady">
-      <div class="col-12 row m-0 p-0 mb-4">
-        <div class="col-md-4 p-0 m-0">
-          <label class="form-label">Select Employer</label>
-          <app-iautocomplete [data]="clientDetail" (OnSelect)="presentWeek()"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
-          </app-iautocomplete>
+  <form autocomplete="off">
+    <div class="col-12 x_panel row m-0 p-0 mb-4">
+      <div class="x_header">
+        <div class="x_header_title">
+          <h2 class=" fw-bold text-dark">Attendance</h2>
         </div>
-        <div class="col-md-8 elem-row justify-content-end">
-          <!-- <div class="elem-row-item-base justify-content-end">
-            <a href="javascript:void(0)" class="p-2 badge bg-primary text-light head-badge" (click)="presentWeek()">
-              <i class="pe-1 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-calendar-o': !isLoading}"></i>
-              {{ isLoading ? 'Wait' : 'Present week'}}
-            </a>
-          </div> -->
-          <div class="elem-row-item-base justify-content-end ps-2">
-            <a href="javascript:void(0)" (click)="getAllPendingTimesheet()"
-              class="p-2 p-2 badge bg-success text-light head-badge fs-6">
-              <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
-              My pending timesheet
-            </a>
+      </div>
+      <div class="px-1 d-flex">
+        <div class="col-6">
+          <app-breadcrums></app-breadcrums>
+        </div>
+        <div class="col-6">
+          <div *ngIf="isFormReady" class="text-dark text-dark d-flex justify-content-end">
+            <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
+            <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
           </div>
         </div>
       </div>
-    </ng-container>
 
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
-    </div>
+      <div class="col-md-4" *ngIf="isEmployeesReady">
+        <label class="form-label">Select Employer</label>
+        <app-iautocomplete [data]="clientDetail" (OnSelect)="presentWeek()"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+        </app-iautocomplete>
+      </div>
+      <div class="col-md-8 elem-row justify-content-end">
+        <div class="elem-row-item-base justify-content-end ps-2">
+          <a href="javascript:void(0)" (click)="getAllPendingTimesheet()"
+            class="p-2 p-2 badge bg-success text-light head-badge fs-6">
+            <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
+            My pending timesheet
+          </a>
+        </div>
+      </div>  
 
-    <ng-container [ngSwitch]="divisionCode">
-      <ng-container *ngSwitchCase="2">
-        <div class="x_panel pt-4 timesheet-form">
+      <ng-container [ngSwitch]="divisionCode">
+        <ng-container *ngSwitchCase="2">
+        <div class="pt-4 timesheet-form">
           <div class="x_header">
             <div class="x_header_title row">
               <div class="text-dark text-dark d-flex flex-column justify-content-center">
@@ -59,17 +63,7 @@
       <ng-container *ngSwitchDefault>
         <ng-container [ngSwitch]="isFormReady">
           <div *ngSwitchCase="true">
-            <div  class="x_panel pt-4 timesheet-form">
-              <div class="d-flex flex-row justify-content-between">
-                <div class="d-flex">
-                  <div class="text-dark text-dark d-flex flex-column justify-content-center">
-                    <div>
-                      <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
-                      <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div  class="pt-4 timesheet-form">              
               <div class="x_content mt-4">
                 <div>
                   <table class="table-middle table table-hover">
@@ -137,7 +131,8 @@
           </div>
         </ng-container>
       </ng-container>
-    </ng-container>
+      </ng-container>
+    </div>
   </form>
 </div>
 

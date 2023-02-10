@@ -76,7 +76,7 @@ export class ApprovalRequestComponent implements OnInit {
 
     loadData() {
       this.isPageLoading = true;
-      this.http.get(`${this.requestUrl}/${this.currentUser.UserId}`).then(response => {
+      this.http.get(`${this.requestUrl}/${this.currentUser.UserId}/${ItemStatus.Pending}`).then(response => {
         if(response.ResponseBody) {
           this.buildPage(response.ResponseBody);
           this.isPageLoading = false;
@@ -159,7 +159,7 @@ export class ApprovalRequestComponent implements OnInit {
 
     filterRequest(e: any) {
       this.itemStatus = Number(e.target.value);
-      this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
+      this.requestUrl = `${this.attendanceController}/GetManagerRequestedData/${ItemStatus.Pending}`;
       switch (this.active) {
         case 1:
           this.filterAttendance();
