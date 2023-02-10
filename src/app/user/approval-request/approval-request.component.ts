@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus } from 'src/providers/constants';
-import { UserService } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -33,6 +33,11 @@ export class ApprovalRequestComponent implements OnInit {
   attendanceUrl: string = null;
   currentYear: number = 0;
   monthsName: Array<any> = [];
+  attendanceRquestPageIsReady: boolean = false;
+  request: Filter = new Filter();
+  attendanceRequestDetail: Array<any> = [];
+  requestModalData: any = null;
+  currentApprovalRequest: any = null;
 
   constructor(
     private http: AjaxService,
@@ -361,6 +366,91 @@ export class ApprovalRequestComponent implements OnInit {
         }
       }
     }
+  }
+
+  loadAttendanceRequestDetail() {
+    this.attendanceRquestPageIsReady = false;
+    this.request.SearchString = "";
+    this.request.SortBy = null;
+    this.request.PageIndex = 1;
+    this.request.PageSize = 10;
+
+    this.http.post("Attendance/GetMissingAttendanceApprovalRequest", this.request).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        this.attendanceRequestDetail = response.ResponseBody;
+        Toast("Attendance request loaded successfully.");
+        this.isLoading = false;
+      }
+
+      this.attendanceRquestPageIsReady = true;
+    });
+  }
+
+  UpdateAttendanceStatus() {
+    this.isLoading = true;
+    let request = {
+      ComplaintOrRequestId: this.currentApprovalRequest.ComplaintOrRequestId,
+      ManagerId: this.currentApprovalRequest.ManagerId,
+      RequestedId: this.currentApprovalRequest.RequestedId,
+      EmployeeMessage: this.currentApprovalRequest.EmployeeMessage,
+      AttendanceDate: this.currentApprovalRequest.AttendanceDate,
+      NotifyList: this.currentApprovalRequest.NotifyList,
+      EmployeeId: this.currentApprovalRequest.EmployeeId,
+      IsFullDay: true
+    };
+
+    this.attendanceRquestPageIsReady = false;
+    let requestBody = [request];
+
+    this.http.put(this.requestModalData.ApiUrl, requestBody).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        this.attendanceRequestDetail = response.ResponseBody;
+        Toast(`Attendance ${this.requestModalData.Status} successfully.`);
+        this.isLoading = false;
+      }
+
+      this.isLoading = false;
+      this.attendanceRquestPageIsReady = true;
+      $('#approval-attendance').modal('hide');
+    }).catch(e => {
+      this.isLoading = false;
+      this.attendanceRquestPageIsReady = true;
+      $('#approval-attendance').modal('hide');
+    });
+  }
+
+  ApproveRequest() {
+    this.UpdateAttendanceStatus();
+  }
+
+  RejectRequest() {
+    this.UpdateAttendanceStatus();
+  }
+
+  showApproveRequestModal(e: any) {
+    this.requestModalData = {
+      Title: "Approve request",
+      IsApprove: true,
+      IsReject: false,
+      Status: "Approved",
+      ApiUrl: "Attendance/ApproveRaisedAttendanceRequest"
+    };
+
+    this.currentApprovalRequest = e;
+    $('#approval-attendance').modal('show');
+  }
+
+  showRejectRequestModal(e: any) {
+    this.requestModalData = {
+      Title: "Reject request",
+      IsApprove: false,
+      IsReject: true,
+      Status: "Rejected",
+      ApiUrl: "Attendance/RejectRaisedAttendanceRequest"
+    };
+
+    this.currentApprovalRequest = e;
+    $('#approval-attendance').modal('show');
   }
 }
 
