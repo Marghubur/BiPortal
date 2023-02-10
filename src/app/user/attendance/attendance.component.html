@@ -295,6 +295,19 @@
                     </ng-container>
                   </tbody>
                 </table>
+                <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
+                  <div class="py-5 my-5">
+                    <h6 class="fw-bold fs-3 text-center text-dark">Missed attendance and status is loading</h6>
+                    <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                      <div class="col-md-3 modal-container  text-center cog-wheel">
+                        <img src="assets/images/cog.gif" alt="" />
+                        <h6 class="modal-title title-message">
+                          Please Wait ........
+                        </h6>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
               </div>
             </ng-template>
           </ng-container>
@@ -313,13 +326,12 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-content">
     <ng-container *ngIf="currentAttendance != null">
       <div class="modal-header border-bottom-0" >
-        <h5 class="modal-title" id="exampleModalLabel">{{currentAttendance.IsOpen == true ? 'Work From Home Request' : 'Attendance is block. Click to send request for unblock'}}</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Work From Home Request</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="col-md-12 px-4 d-block">
-        <p class="mt-2" *ngIf="currentAttendance.IsOpen == true">Enter your work from home reson and apply with one click.
+        <p class="mt-2">Enter your work from home reson and apply with one click.
           Select your manage or reporting person under Notify section to get approval.</p>
-        <p class="mt-2" *ngIf="currentAttendance.IsOpen == false">You can't apply attendance more than 4 days. Please fill details and send the request to your manager for unblock this attendance</p>
       </div>
       <div class="modal-body px-4">
         <div class="d-flex position-relative align-items-center">
@@ -333,25 +345,20 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
               <p class="mb-0 text-dark fs-5">{{tomorrow | date}}</p>
             </div>
           </div>
-          <div class="col-md-4 text-center fw-bold text-danger" *ngIf="currentAttendance.IsOpen == false">
-            Attendance is blocked.
-          </div>
         </div>
         <span class="px-3 py-2 day-wfh">1day WFH</span>
-        <ng-container *ngIf="currentAttendance.IsOpen == true">
-          <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
-          <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio10" autocomplete="off" checked
-              value="1">
-            <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
-            <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio11" autocomplete="off"
-              value="2">
-            <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
-            <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio12" autocomplete="off"
-              value="3">
-            <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
-          </div>
-        </ng-container>
+        <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
+        <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio10" autocomplete="off" checked
+            value="1">
+          <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
+          <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio11" autocomplete="off"
+            value="2">
+          <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
+          <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio12" autocomplete="off"
+            value="3">
+          <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
+        </div>
         <div class="col-md-12 mt-3">
           <label for="" class="form-label">Reason</label>
           <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" maxlength="100"
@@ -381,19 +388,10 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
 
       <div class="modal-footer border-top-0 pe-4">
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-
-        <ng-container *ngIf="currentAttendance.IsOpen">
-          <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitAttendance()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
-            {{ isLoading ? 'Wait' : 'Request' }}
-          </button>
-        </ng-container>
-        <ng-container *ngIf="!currentAttendance.IsOpen">
-          <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="sendRequest()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
-            {{ isLoading ? 'Wait' : 'Send request' }}
-          </button>
-        </ng-container>
+        <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitAttendance()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Request' }}
+        </button>
       </div>
     </ng-container>
   </div>

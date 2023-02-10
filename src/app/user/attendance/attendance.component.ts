@@ -340,6 +340,7 @@ export class AttendanceComponent implements OnInit {
 
   loadAttendanceRequestDetail() {
     this.attendanceRquestPageIsReady = false;
+    this.attendanceRequestDetail = [];
     this.request.SearchString = "1=1";
     this.request.SortBy = null;
     this.request.PageIndex = 1;
