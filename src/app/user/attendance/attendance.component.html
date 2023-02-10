@@ -188,6 +188,11 @@
                                 <i class="fa fa-clock-o zoom-2 text-warning" aria-hidden="true"></i>
                               </div>
                             </span>
+                            <span class="ms-2" *ngIf="item.PresentDayStatus == 12">
+                              <div placement="top" ngbTooltip="Pending" aria-expanded="false">
+                                <i class="fa fa- zoom-2 text-warning" aria-hidden="true"></i>
+                              </div>
+                            </span>
                           </div>
                         </td>
                       </tr>
@@ -281,10 +286,18 @@
                         <td class="align-middle border-end border-bottom">
                           {{attr.EmployeeMessage}}
                         </td>
-                        <td class="align-middle border-end border-bottom">{{attr.CurrentStatus}}</td>
+                        <td class="align-middle border-end border-bottom">
+                          <div [ngSwitch]="attr.CurrentStatus">
+                            <div *ngSwitchCase=2>Pending</div>
+                            <div *ngSwitchCase=3>Canceled</div>
+                            <div *ngSwitchCase=5>Rejected</div>
+                            <div *ngSwitchCase=8>Submitted</div>
+                            <div *ngSwitchCase=9>Approved</div>
+                          </div>
+                        </td>
                         <td class="align-middle border-end border-bottom">
                           <span>{{attr.ManagerName}}</span>
-                          <p><small>on {{attr.UpdatedOn}}</small></p>
+                          <p><small>on {{attr.UpdatedOn | date}}</small></p>
                         </td>
                         <td class="align-middle border-bottom">
                           <div class="d-flex justify-content-center align-items-center">
