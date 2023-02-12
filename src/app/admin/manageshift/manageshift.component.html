@@ -211,7 +211,7 @@
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="manageShiftModalLabel">View Files</h5>
+        <h5 class="modal-title" id="manageShiftModalLabel">{{currentShift.WorkShiftId > 0 ? 'Edit' : 'Add'}} shift deatil</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -236,7 +236,6 @@
           <div class="row">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Office Time (in min) *</label>
-              <!-- <input type="text" OnlyNumber="3" placeholder="Enter office start time" formControlName="OfficeTime" [ngClass]="{'error-field': submitted && f.OfficeTime.errors !== null && f.OfficeTime.errors.required}" class="form-control"> -->
               <app-bh-timepicker formControlName="OfficeTime"></app-bh-timepicker>
             </div>
             <div class="col-md-4 mt-3">
@@ -301,7 +300,7 @@
             </div> -->
             <!-- For multiselect option -->
             <div class="d-flex">
-              <div class="day-of-week" *ngFor="let day of days; let index = index;" [ngClass]="{'border-success': day.isEnabled}" 
+              <div class="day-of-week" *ngFor="let day of days; let index = index;" [ngClass]="{'border-success': day.isEnabled}"
                   (click)="toggleDays(day.id, $event)">
                 <a href="javascript:void(0)" [ngClass]="{'ms-0': index == 0}">
                   {{day.day}}
