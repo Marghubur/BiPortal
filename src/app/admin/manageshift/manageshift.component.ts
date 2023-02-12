@@ -152,10 +152,11 @@ export class ManageshiftComponent implements OnInit {
   }
 
   addShiftPopUp() {
+    this.submitted = false;
     this.apiUrl = "Shift/CreateWorkShift";
     this.currentShift = new Shift();
-    this.initForm();
     this.days.map(day => day.isEnabled = false);
+    this.initForm();
     $('#manageShiftModal').modal('show');
   }
 
@@ -238,7 +239,15 @@ export class ManageshiftComponent implements OnInit {
           break;
       }
     }
-      
+
+    let workingdays = this.shiftForm.get('TotalWorkingDays').value;
+    let selecteddays = this.days.filter(x => x.isEnabled == true);
+    if (workingdays != selecteddays.length) {
+      this.isLoading = false;
+      ErrorToast("Selected days and working days count doesn't match");
+      return;
+    }
+
     if (this.shiftForm.invalid) {
       this.isLoading = false;
       ErrorToast("Please fill all the mandatory field");

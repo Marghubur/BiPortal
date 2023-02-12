@@ -58,6 +58,8 @@ export class AttendanceComponent implements OnInit {
   attendanceRquestPageIsReady: boolean = false;
   EmailBody: any = null;
   eventsSubject: Subject<void> = new Subject<void>();
+  orderByAttendanceDateAsc: boolean = null;
+  orderByRequestedOnAsc: boolean = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -73,7 +75,8 @@ export class AttendanceComponent implements OnInit {
     this.intervalId = setInterval(() => {
       this.time = new Date();
     }, 1000);
-
+    this.request.SortBy = null;
+    this.request.PageIndex = 1;
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
     this.employeesList.placeholder = "Employee";
@@ -315,7 +318,7 @@ export class AttendanceComponent implements OnInit {
           Email:this.employees[i].Email})
       }
     }
-    let reportmanager = this.employeesList.data.find(x => x.value == this.reportingManagerId);
+    let reportmanager = this.employeesList.data.find(x => x.value == this.userDetail.ReportingManagerId);
     let mangeremail = notify.find(x => x.Email == reportmanager.email);
     if (mangeremail == null) {
       notify.push({
@@ -353,6 +356,15 @@ export class AttendanceComponent implements OnInit {
 
     this.http.post("Attendance/RaiseMissingAttendanceRequest", requestBody).then((response: ResponseModel) => {
       if (response.ResponseBody) {
+        if (this.currentDays.length > 1)
+          this.currentDays.map(x => x.PresentDayStatus = 12);
+        else {
+          let data = this.allDaysAttendance.find(x => new Date(x.AttendanceDay).getTime() == new Date(this.currentDays[0].AttendanceDay).getTime());
+          if (data) {
+            data.PresentDayStatus = 12;
+            this.currentDays = this.allDaysAttendance;
+          }
+        }
         Toast("Your request has been submitted successfully. Your manager will take action on it.");
       }
 
@@ -368,14 +380,15 @@ export class AttendanceComponent implements OnInit {
     this.attendanceRquestPageIsReady = false;
     this.attendanceRequestDetail = [];
     this.request.SearchString = "1=1";
-    this.request.SortBy = null;
-    this.request.PageIndex = 1;
     this.request.PageSize = 10;
     this.request.EmployeeId = this.employeeId;
-
     this.http.post("Attendance/GetMissingAttendanceRequest", this.request).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.attendanceRequestDetail = response.ResponseBody;
+        if (this.attendanceRequestDetail.length > 0)
+          this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
+        else
+          this.request.TotalRecords = 0;
         Toast("Attendance request loaded successfully.");
         this.isLoading = false;
       }
@@ -502,11 +515,16 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
-  requestPopUp() {
+  requestPopUp(item?: any) {
     this.EmailBody = "<div>I missed to fill my attendance on following days:</div><br>";
     if (this.currentDays.length > 0) {
       let text = "";
       this.currentAttendance = this.currentDays[0];
+      if (item) {
+        this.currentAttendance = item;
+        this.currentDays = [];
+        this.currentDays.push(item)
+      }
       this.currentDays.map(item => {
         text += `${new DatePipe('en-US').transform(item.AttendanceDay, 'd MMM yyyy')},  `
       });
@@ -525,5 +543,35 @@ export class AttendanceComponent implements OnInit {
     if (index != -1) {
       this.currentDays.splice(index, 1);
     }
+  }
+
+  arrangeDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'Asc';
+    } else {
+      Order = 'Desc';
+    }
+    if (FieldName == 'AttendanceDate') {
+      this.orderByAttendanceDateAsc = !flag;
+      this.orderByRequestedOnAsc = null;
+    }else if (FieldName == 'RequestedOn') {
+      this.orderByAttendanceDateAsc = null;
+      this.orderByRequestedOnAsc = !flag;
+    }
+    this.request.SortBy = FieldName +" "+ Order;
+    this.loadAttendanceRequestDetail()
+  }
+
+  GetFilterResult(e: Filter) {
+    if(e != null) {
+      this.request = e;
+      this.loadAttendanceRequestDetail();
+    }
+  }
+
+  onEmloyeeChanged(_: any) {
+    this.local.setByKey("EmployeeId", this.employeeId);
+    //this.filterRecords();
   }
 }

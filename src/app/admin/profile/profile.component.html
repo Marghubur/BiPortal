@@ -56,12 +56,12 @@
                           <div class="col-md-12 m-0 row">
                             <div class="col-md-6 mb-3">
                               <label class="form-label">Mobile Number </label>
-                              <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#" OnlyNumber="10" onkeypress="return event.charCode >=48 && event.charCode <=57"
+                              <input inputtype="mandatory" readonly class="form-control" placeholder="Mobile No.#" OnlyNumber="10" onkeypress="return event.charCode >=48 && event.charCode <=57"
                                 name="Mobile" formControlName="Mobile" />
                             </div>
                             <div class="col-md-6 mb-3">
                               <label class="form-label">Email Id </label>
-                              <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email" />
+                              <input class="form-control" readonly placeholder="Email Id" name="Email" formControlName="Email" />
                             </div>
                           </div>
                         </div>
@@ -1167,8 +1167,8 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-5 py-3 position-relative">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="!isEdit">Add Employee</h5>
-        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="isEdit">Edit Employee</h5>
+        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="!isEdit">Add Employeement</h5>
+        <h5 class="modal-title fw-bold" id=" exampleModalLabel" *ngIf="isEdit">Edit Employeement</h5>
         <a href="javasctript:void(0)" class="text-decoration-none text-danger fw-bold"
           (click)="deleteEmploymentConfirmation()" *ngIf="isEdit">DELETE</a>
         <div class="close-button">
@@ -2105,7 +2105,10 @@
               [formGroupName]="e">
               <div class="col-md-6 mb-3 ps-0">
                 <label class="form-label">Language </label>
-                <input class="form-control" placeholder="Language" maxlength="20" name="Language" formControlName="Language" oninput="this.value = this.value.toUpperCase()"/>
+                <select formControlName="Language" class="form-select">
+                  <option value="">Select Language</option>
+                  <option [value]="item" *ngFor="let item of lanugages">{{item}}</option>
+                </select>
                 <div class="row ps-3 mt-2">
                   <div class="form-check col">
                     <input class="form-check-input" type="checkbox" formControlName="LanguageRead" value="true">

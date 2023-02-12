@@ -18,7 +18,7 @@
                 <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
                   <div class="col-md-4 d-flex align-items-center">
                     <select (change)="filterByStatus($event)" class="form-select w-50">
-                      <option value="" selected disabled>Filte by status</option>
+                      <option value="" selected disabled>Filter by status</option>
                       <option value="1">All</option>
                       <option value="0">Not Applied</option>
                       <option value="2">Pending</option>
@@ -75,7 +75,7 @@
                             <ngb-progressbar *ngIf="item.PresentDayStatus == 12" type="info" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
                             <ngb-progressbar *ngIf="item.PresentDayStatus == 9" type="success" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
                             <ngb-progressbar *ngIf="item.PresentDayStatus == 2" type="warning" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
-                            <ngb-progressbar *ngIf="!item.IsOpen && item.PresentDayStatus == 0" type="danger" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
+                            <ngb-progressbar *ngIf="(!item.IsOpen && item.PresentDayStatus == 0) || item.PresentDayStatus == 5" type="danger" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
                             <ngb-progressbar *ngIf="item.IsOpen && item.PresentDayStatus == 0" type="primary" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
                             <ngb-progressbar *ngIf="item.PresentDayStatus == 3" type="warning" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
                           </p>
@@ -159,7 +159,7 @@
                                       (click)="applyWorkFromHome(item)">Apply WFH Request</a>
                                   </button>
                                   <button ngbDropdownItem *ngIf="!item.IsOpen">
-                                    <a class="dropdown-item" href="javascript:void(0)">
+                                    <a class="dropdown-item" href="javascript:void(0)" (click)="requestPopUp(item)">
                                       Attendance is block. Please raise request if not absent
                                     </a>
                                   </button>
@@ -186,6 +186,11 @@
                             <span class="ms-2" *ngIf="item.PresentDayStatus == 2">
                               <div placement="top" ngbTooltip="Pending" aria-expanded="false">
                                 <i class="fa fa-clock-o zoom-2 text-warning" aria-hidden="true"></i>
+                              </div>
+                            </span>
+                            <span class="ms-2" *ngIf="item.PresentDayStatus == 12">
+                              <div placement="left" ngbTooltip="Your request for blocked attendance is raised" aria-expanded="false">
+                                <i class="fa fa-commenting-o zoom-2 text-dark" aria-hidden="true"></i>
                               </div>
                             </span>
                           </div>
@@ -247,74 +252,83 @@
                 </div>
               </div>
               <div class="x_panel">
-                <table class="table table-hover" *ngIf="attendanceRquestPageIsReady">
-                  <thead>
-                    <tr>
-                      <th class="custom-th border-end" width="15%">DATE</th>
-                      <th class="custom-th border-end" width="10%">REQUEST TYPE</th>
-                      <th class="custom-th border-end" width="10%">REQUEST ON</th>
-                      <th class="custom-th border-end" width="25%">NOTE</th>
-                      <th class="custom-th border-end" width="10%">STATUS</th>
-                      <th class="custom-th border-end" width="15%">ACTION TAKEN BY</th>
-                      <th class="custom-th" width="10%">ACTIONS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <ng-container *ngIf="attendanceRequestDetail.length > 0">
-                      <tr *ngFor="let attr of attendanceRequestDetail">
-                        <td class="align-middle border-end border-bottom">
-                          <div class="d-flex align-items-center justify-content-between">
-                            <p>{{attr.AttendanceDate | date}}</p>
-                            <div class="d-flex align-items-center flex-column">
-                              <i class="fa fa-home fa-lg"></i>
-                              <p>1 Day</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td class="align-middle border-end border-bottom">
-                          Missing attendance
-                        </td>
-                        <td class="align-middle border-end border-bottom">
-                          {{attr.RequestedOn | date}}
-                          <p><small>by {{attr.EmployeeName}}</small></p>
-                        </td>
-                        <td class="align-middle border-end border-bottom">
-                          {{attr.EmployeeMessage}}
-                        </td>
-                        <td class="align-middle border-end border-bottom">{{attr.CurrentStatus}}</td>
-                        <td class="align-middle border-end border-bottom">
-                          <span>{{attr.ManagerName}}</span>
-                          <p><small>on {{attr.UpdatedOn}}</small></p>
-                        </td>
-                        <td class="align-middle border-bottom">
-                          <div class="d-flex justify-content-center align-items-center">
-                            <i class="fa fa-commenting pe-2" aria-hidden="true"></i>
-                            <div class="btn-group dropstart me-4">
-                              <button class="btn btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                              </button>
-                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">View
-                                    Request</a></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </ng-container>
-
-                    <ng-container *ngIf="attendanceRequestDetail.length == 0">
+                <ng-container *ngIf="attendanceRquestPageIsReady">
+                  <table class="table table-hover">
+                    <thead>
                       <tr>
-                        <td class="align-middle border-end border-bottom" colspan="7">
-                          <div class="d-flex justify-content-center">
-                            <p>No pending attendance request available.</p>
-                          </div>
-                        </td>
+                        <th class="custom-th border-end" width="10%">
+                          <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark" (click)="arrangeDetails(orderByAttendanceDateAsc, 'AttendanceDate')">DATE</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByAttendanceDateAsc == null || !orderByAttendanceDateAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByAttendanceDateAsc == null || orderByAttendanceDateAsc }" aria-hidden="true"></i>
+                        </th>
+                        <th class="custom-th border-end" width="10%">REQUEST TYPE</th>
+                        <th class="custom-th border-end" width="15%">
+                          <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark" (click)="arrangeDetails(orderByRequestedOnAsc, 'RequestedOn')">RequestedOn</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByRequestedOnAsc == null || !orderByRequestedOnAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByRequestedOnAsc == null || orderByRequestedOnAsc }" aria-hidden="true"></i>
+                        </th>
+                        <th class="custom-th border-end" width="25%">NOTE</th>
+                        <th class="custom-th border-end" width="10%">STATUS</th>
+                        <th class="custom-th " width="15%">ACTION TAKEN BY</th>
                       </tr>
-                    </ng-container>
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="attendanceRequestDetail.length > 0">
+                        <tr *ngFor="let attr of attendanceRequestDetail">
+                          <td class="align-middle border-end border-bottom">
+                            <div class="d-flex align-items-center justify-content-between">
+                              <p>{{attr.AttendanceDate | date}}</p>
+                              <div class="d-flex align-items-center flex-column">
+                                <i class="fa fa-home fa-lg"></i>
+                                <p>1 Day</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="align-middle border-end border-bottom">
+                            Missing attendance
+                          </td>
+                          <td class="align-middle border-end border-bottom">
+                            {{attr.RequestedOn | date}}
+                            <p><small>by {{attr.EmployeeName}}</small></p>
+                          </td>
+                          <td class="align-middle border-end border-bottom">
+                            {{attr.EmployeeMessage}}
+                          </td>
+                          <td class="align-middle border-end border-bottom">
+                            <div [ngSwitch]="attr.CurrentStatus">
+                              <div *ngSwitchCase=2>Pending</div>
+                              <div *ngSwitchCase=3>Canceled</div>
+                              <div *ngSwitchCase=5>Rejected</div>
+                              <div *ngSwitchCase=8>Submitted</div>
+                              <div *ngSwitchCase=9>Approved</div>
+                            </div>
+                          </td>
+                          <td class="align-middle border-end border-bottom">
+                            <span>{{attr.ManagerName}}</span>
+                            <p><small>on {{attr.UpdatedOn | date}}</small></p>
+                          </td>
+                        </tr>
+                      </ng-container>
+
+                      <ng-container *ngIf="attendanceRequestDetail.length == 0">
+                        <tr>
+                          <td class="align-middle border-bottom-0 py-5my-5" colspan="7">
+                            <div class="d-flex justify-content-center py-5 my-5">
+                              <p class="my-5 py-5">No pending attendance request available.</p>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                  <div class="mt-3">
+                    <app-pagination [pagination]="request" (onPageChange)="GetFilterResult($event)"></app-pagination>
+                  </div>
+                </ng-container>
                 <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
                   <div class="py-5 my-5">
                     <h6 class="fw-bold fs-3 text-center text-dark">Missed attendance and status is loading</h6>
