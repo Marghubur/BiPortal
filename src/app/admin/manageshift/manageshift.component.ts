@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
@@ -29,7 +28,6 @@ export class ManageshiftComponent implements OnInit {
   currentCompany: any = null;
   companyId: number = 0;
   shiftData: Filter = null;
-  selectedDays: Array<any> = [];
   isLoading: boolean = false;
   departments: any = null;
   allShift: Array<Shift> = [];
@@ -41,6 +39,8 @@ export class ManageshiftComponent implements OnInit {
   orderByDurationAsc: boolean = null;
   orderByStatusAsc: boolean = null;
   orderByLunchDurationAsc: boolean = null;
+  apiUrl: string = "";
+  initTime: "09:00";
 
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
@@ -56,8 +56,9 @@ export class ManageshiftComponent implements OnInit {
       ErrorToast("Please login again");
       return;
     }
+
     this.days = [
-      { day: 'Monday', id: 1, isEnabled: true },
+      { day: 'Monday', id: 1, isEnabled: false },
       { day: 'Tuesday', id: 2, isEnabled: false  },
       { day: 'Wednesday', id: 3, isEnabled: false  },
       { day: 'Thusday', id: 4, isEnabled: false  },
@@ -87,22 +88,29 @@ export class ManageshiftComponent implements OnInit {
 
   toggleDays(id: number, e: any) {
     let item = this.days.find(x => x.id == id);
-    let index = this.selectedDays.findIndex(x => x.id == id);
-    if(index == -1) {
-      this.selectedDays.push(item);
+    // let index = this.selectedDays.findIndex(x => x.id == id);
+    if(!item.isEnabled) {
+      e.currentTarget.querySelector('i[name="selection-on"]').classList.remove("d-none");
+      e.currentTarget.querySelector('i[name="selection-off"]').classList.add("d-none");
+      e.currentTarget.classList.add("border-success");
+      item.isEnabled = true;
     } else {
-      this.selectedDays.splice(index, 1);
+      e.currentTarget.querySelector('i[name="selection-on"]').classList.add("d-none");
+      e.currentTarget.querySelector('i[name="selection-off"]').classList.remove("d-none");
+      e.currentTarget.classList.remove("border-success");
+      item.isEnabled = false;
     }
-    let tag: any = e.target.querySelector('i').classList;
-    if(item && tag) {
-      if (tag.contains('v-hide')) {
-        tag.remove('v-hide');
-        item.isEnabled = true;
-      } else {
-        tag.add('v-hide');
-        item.isEnabled = false;
-      }
-    }
+
+    // let tag: any = e.target.querySelector('i').classList;
+    // if(item && tag) {
+    //   if (tag.contains('v-hide')) {
+    //     tag.remove('v-hide');
+    //     item.isEnabled = true;
+    //   } else {
+    //     tag.add('v-hide');
+    //     item.isEnabled = false;
+    //   }
+    // }
   }
 
   ngOnDestroy(): void {
@@ -110,14 +118,14 @@ export class ManageshiftComponent implements OnInit {
     console.log("Handler removed.");
   }
 
-  @HostListener('document:click', ['$event'])
-  CloseSuggestionBox(e: any) {
-    if (e.target.getAttribute('title') == "multi-select-box") {
-      // do nothing
-    } else {
-      document.getElementById('auto-hide-box').classList.add('d-none');
-    }
-  }
+  // @HostListener('document:click', ['$event'])
+  // CloseSuggestionBox(e: any) {
+  //   if (e.target.getAttribute('title') == "multi-select-box") {
+  //     // do nothing
+  //   } else {
+  //     document.getElementById('auto-hide-box').classList.add('d-none');
+  //   }
+  // }
 
   loadData() {
     this.isPageReady = false;
@@ -144,8 +152,10 @@ export class ManageshiftComponent implements OnInit {
   }
 
   addShiftPopUp() {
+    this.apiUrl = "Shift/CreateWorkShift";
     this.currentShift = new Shift();
     this.initForm();
+    this.days.map(day => day.isEnabled = false);
     $('#manageShiftModal').modal('show');
   }
 
@@ -196,38 +206,39 @@ export class ManageshiftComponent implements OnInit {
   CreateUpdateRequest() {
     this.isLoading = true;
     this.submitted = true;
-    if (this.selectedDays.length <=0) {
+    var index = this.days.findIndex(x => x.isEnabled == true);
+    if (index == -1) {
       this.isLoading = false;
       ErrorToast("Please add days first");
       return;
     }
-    if (this.selectedDays.length > 0) {
-      for (let i = 0; i < this.selectedDays.length; i++) {
-        switch (this.selectedDays[i].id) {
-          case 1:
-            this.shiftForm.get('IsMon').setValue(true);
-            break;
-          case 2:
-            this.shiftForm.get('IsTue').setValue(true);
-            break;
-          case 3:
-            this.shiftForm.get('IsWed').setValue(true);
-            break;
-          case 4:
-            this.shiftForm.get('IsThu').setValue(true);
-            break;
-          case 5:
-            this.shiftForm.get('IsFri').setValue(true);
-            break;
-          case 6:
-            this.shiftForm.get('IsSat').setValue(true);
-            break;
-          case 7:
-            this.shiftForm.get('IsSun').setValue(true);
-            break;
-        }
+
+    for (let i = 0; i < this.days.length; i++) {
+      switch (this.days[i].id) {
+        case 1:
+          this.shiftForm.get('IsMon').setValue(this.days[i].isEnabled);
+          break;
+        case 2:
+          this.shiftForm.get('IsTue').setValue(this.days[i].isEnabled);
+          break;
+        case 3:
+          this.shiftForm.get('IsWed').setValue(this.days[i].isEnabled);
+          break;
+        case 4:
+          this.shiftForm.get('IsThu').setValue(this.days[i].isEnabled);
+          break;
+        case 5:
+          this.shiftForm.get('IsFri').setValue(this.days[i].isEnabled);
+          break;
+        case 6:
+          this.shiftForm.get('IsSat').setValue(this.days[i].isEnabled);
+          break;
+        case 7:
+          this.shiftForm.get('IsSun').setValue(this.days[i].isEnabled);
+          break;
       }
     }
+      
     if (this.shiftForm.invalid) {
       this.isLoading = false;
       ErrorToast("Please fill all the mandatory field");
@@ -235,7 +246,7 @@ export class ManageshiftComponent implements OnInit {
     }
 
     let value = this.shiftForm.value;
-    this.http.post("Shift/WorkShiftInsertUpdate", value).then(res => {
+    this.http.post(this.apiUrl, value).then(res => {
       if (res.ResponseBody) {
         this.bindData(res.ResponseBody);
         $('#manageShiftModal').modal('hide');
@@ -296,12 +307,39 @@ export class ManageshiftComponent implements OnInit {
 
   editShiftPopUp(item: Shift) {
     if (item) {
+      this.apiUrl = "Shift/UpdateWorkShift";
       this.currentShift = item;
       this.currentShift.StartDate = ToLocateDate(this.currentShift.StartDate);
       this.frommodel = { day: this.currentShift.StartDate.getDate(), month: this.currentShift.StartDate.getMonth() + 1, year: this.currentShift.StartDate.getFullYear()};
       this.currentShift.EndDate = ToLocateDate(this.currentShift.EndDate);
       this.tomodel = { day: this.currentShift.EndDate.getDate(), month: this.currentShift.EndDate.getMonth() + 1, year: this.currentShift.EndDate.getFullYear()};
       this.initForm();
+      this.days.map(day => {
+        switch(day.id) {
+          case 1:
+            day.isEnabled = this.currentShift.IsMon;
+            break;
+          case 2:
+            day.isEnabled = this.currentShift.IsThu;
+            break;
+          case 3:
+            day.isEnabled = this.currentShift.IsWed;
+            break;
+          case 4:
+            day.isEnabled = this.currentShift.IsThu;
+            break;
+          case 5:
+            day.isEnabled = this.currentShift.IsFri;
+            break;
+          case 6:
+            day.isEnabled = this.currentShift.IsSat;
+            break;
+          case 7:
+            day.isEnabled = this.currentShift.IsSun;
+            break;
+        }
+      });
+
       $('#manageShiftModal').modal('show');
     }
   }
