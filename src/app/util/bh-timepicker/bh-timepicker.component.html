@@ -1,0 +1,150 @@
+<div name="bh-clock-parent">
+  <div class="col ibox-right p-0 d-flex border rounded" *ngIf="IsReady">
+    <input name="timing" (blur)="CloseComponent()" class="rounded-end form-control no-cursor border-0" (keydown)="$event.preventDefault()"
+      placeholder="HH:MM" [value]="SelectedTime" (input)="onChange($event.target.value)" />
+    <a href="javascript:void(0)" (click)="GetClock()" class="rounded-end a-btn">
+      <i class="fa fa-clock-o"></i>
+    </a>
+  </div>
+  <div name="bh-clock" class="bh-clock-component" tabindex="-1" (mousedown)="DisableClick()">
+    <div class="bh-clock bh-clock-component" *ngIf="EnableClock">
+      <i class="arrow-up bt-up bh-clock-component"></i>
+      <div class="clock-header bh-clock-component">
+        <span class="hrs bh-clock-component">{{Hour}}</span>
+        <span class="sep bh-clock-component">:</span>
+        <span class="min bh-clock-component">{{Minute}}</span>
+      </div>
+      <div class="circle bh-clock-component">
+        <div *ngIf="IsHour" class="bh-clock-component">
+          <div class="arc  bh-clock-component arc-1">
+            <span class="tick bh-clock-component" (click)="SelectedHour(13)">13</span>
+          </div>
+          <div class="arc  bh-clock-component arc-2">
+            <span class="tick bh-clock-component" (click)="SelectedHour(14)">14</span>
+          </div>
+          <div class="arc  bh-clock-component arc-3">
+            <span class="tick bh-clock-component" (click)="SelectedHour(15)">15</span>
+          </div>
+          <div class="arc  bh-clock-component arc-4">
+            <span class="tick bh-clock-component" (click)="SelectedHour(16)">16</span>
+          </div>
+          <div class="arc  bh-clock-component arc-5">
+            <span class="tick bh-clock-component" (click)="SelectedHour(17)">17</span>
+          </div>
+          <div class="arc  bh-clock-component arc-6">
+            <span class="tick bh-clock-component" (click)="SelectedHour(18)">18</span>
+          </div>
+          <div class="arc  bh-clock-component arc-7">
+            <span class="tick bh-clock-component" (click)="SelectedHour(19)">19</span>
+          </div>
+          <div class="arc  bh-clock-component arc-8">
+            <span class="tick bh-clock-component" (click)="SelectedHour(20)">20</span>
+          </div>
+          <div class="arc  bh-clock-component arc-9">
+            <span class="tick bh-clock-component" (click)="SelectedHour(21)">21</span>
+          </div>
+          <div class="arc  bh-clock-component arc-10">
+            <span class="tick bh-clock-component" (click)="SelectedHour(22)">22</span>
+          </div>
+          <div class="arc  bh-clock-component arc-11">
+            <span class="tick bh-clock-component" (click)="SelectedHour(23)">23</span>
+          </div>
+          <div class="arc  bh-clock-component arc-12">
+            <span class="tick bh-clock-component" (click)="SelectedHour(0)">00</span>
+          </div>
+          <div class="hrs-wing arc-wing arc-12 bh-clock-component">
+          </div>
+
+          <div class="arc-sec arc-1 bh-clock-component">
+            <span class="tick bh-clock-component" (click)="SelectedHour(1)">1</span>
+          </div>
+          <div class="arc-sec arc-2">
+            <span class="tick bh-clock-component" (click)="SelectedHour(2)">2</span>
+          </div>
+          <div class="arc-sec arc-3">
+            <span class="tick bh-clock-component" (click)="SelectedHour(3)">3</span>
+          </div>
+          <div class="arc-sec arc-4">
+            <span class="tick bh-clock-component" (click)="SelectedHour(4)">4</span>
+          </div>
+          <div class="arc-sec arc-5">
+            <span class="tick bh-clock-component" (click)="SelectedHour(5)">5</span>
+          </div>
+          <div class="arc-sec arc-6">
+            <span class="tick bh-clock-component" (click)="SelectedHour(6)">6</span>
+          </div>
+          <div class="arc-sec arc-7">
+            <span class="tick bh-clock-component" (click)="SelectedHour(7)">7</span>
+          </div>
+          <div class="arc-sec arc-8">
+            <span class="tick bh-clock-component" (click)="SelectedHour(8)">8</span>
+          </div>
+          <div class="arc-sec arc-9">
+            <span class="tick bh-clock-component" (click)="SelectedHour(9)">9</span>
+          </div>
+          <div class="arc-sec arc-10">
+            <span class="tick bh-clock-component" (click)="SelectedHour(10)">10</span>
+          </div>
+          <div class="arc-sec arc-11">
+            <span class="tick bh-clock-component" (click)="SelectedHour(11)">11</span>
+          </div>
+          <div class="arc-sec arc-12">
+            <span class="tick bh-clock-component tick-selected" (click)="SelectedHour(12)">12</span>
+          </div>
+          <div class="hrs-wing arc-wing arc-12">
+          </div>
+          <div class="center bh-clock-component">
+          </div>
+        </div>
+
+        <div *ngIf="!IsHour" name="min-sec" class="bh-clock-component">
+          <div class="arc  bh-clock-component arc-1">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(1)">05</span>
+          </div>
+          <div class="arc  bh-clock-component arc-2">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(2)">10</span>
+          </div>
+          <div class="arc  bh-clock-component arc-3">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(3)">15</span>
+          </div>
+          <div class="arc  bh-clock-component arc-4">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(4)">20</span>
+          </div>
+          <div class="arc  bh-clock-component arc-5">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(5)">25</span>
+          </div>
+          <div class="arc  bh-clock-component arc-6">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(6)">30</span>
+          </div>
+          <div class="arc  bh-clock-component arc-7">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(7)">35</span>
+          </div>
+          <div class="arc  bh-clock-component arc-8">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(8)">40</span>
+          </div>
+          <div class="arc  bh-clock-component arc-9">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(9)">45</span>
+          </div>
+          <div class="arc  bh-clock-component arc-10">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(10)">50</span>
+          </div>
+          <div class="arc  bh-clock-component arc-11">
+            <span class="tick bh-clock-component" (click)="SelectedMinute(11)">55</span>
+          </div>
+          <div class="arc  bh-clock-component arc-12">
+            <span class="tick-min tick-selected bh-clock-component" (click)="SelectedMinute(12)">00</span>
+          </div>
+          <div class="min-wing arc-wing arc-12 bh-clock-component" name="min-hand">
+          </div>
+          <div class="center bh-clock-component">
+          </div>
+        </div>
+      </div>
+      <div class="clock-footer bh-clock-component">
+        <a class="action" (click)="GetSelectedTime()">
+          Done
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

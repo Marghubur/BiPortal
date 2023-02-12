@@ -14,7 +14,7 @@ import { ImageLoaderComponent } from './image-loader/image-loader.component';
 import { EditorComponent } from './editor/editor.component';
 import { MessageModalComponent } from './message-modal/message-modal.component'
 import { FormsModule } from '@angular/forms';
-
+import { BhTimepickerComponent } from './bh-timepicker/bh-timepicker.component'
 
 @NgModule({
   declarations: [
@@ -28,7 +28,8 @@ import { FormsModule } from '@angular/forms';
     PreLoadTableComponent,
     ImageLoaderComponent,
     EditorComponent,
-    MessageModalComponent
+    MessageModalComponent,
+    BhTimepickerComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +46,8 @@ import { FormsModule } from '@angular/forms';
     PreLoadTableComponent,
     ImageLoaderComponent,
     EditorComponent,
-    MessageModalComponent
+    MessageModalComponent,
+    BhTimepickerComponent
   ]
 })
 export class UtilModule { }
