@@ -69,16 +69,20 @@
               </div>
 
               <div class="col-md-12 row">
-                <div class="col-md-4 mb-3"></div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">GSTIN No.# *</label>
                   <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No."
-                    name="GSTNo" formControlName="GSTNo" />
+                  name="GSTNo" formControlName="GSTNo" />
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Mobile No.# (optional)</label>
                   <input class="form-control" placeholder="Mobile No.#" name="MobileNo" formControlName="MobileNo" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                    OnlyNumber="10" />
+                  OnlyNumber="10" />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Select Shift *</label>                  
+                  <app-iautocomplete [data]="shiftDetail" formControlName="WorkShiftId">
+                  </app-iautocomplete>
                 </div>
               </div>
             </div>
