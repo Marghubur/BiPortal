@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ThemeService } from 'ng2-charts';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
+import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
@@ -13,13 +15,13 @@ declare var $: any;
   styleUrls: ['./approval-request.component.scss']
 })
 export class ApprovalRequestComponent implements OnInit {
-  active = 1;
+  active: number = 1;
   leave_request: any = null;
   requestState: string = '';
   isLoading: boolean = false;
   currentRequest: any = null;
   currentTimesheet: Array<any> = [];
-  managerList: autoCompleteModal = null;
+  employeeList: autoCompleteModal = null;
   editedMessage: string = '';
   itemStatus: number = 0;
   currentUser: any = null;
@@ -38,6 +40,12 @@ export class ApprovalRequestComponent implements OnInit {
   attendanceRequestDetail: Array<any> = [];
   requestModalData: any = null;
   currentApprovalRequest: any = null;
+  orderByAttendanceDateAsc: boolean = null;
+  orderByRequestedOnAsc: boolean = null;
+  applicationData: any = null;
+  employeeId: number = 0;
+  requestedOn: number = 0;
+  missAttendanceStatus: number = 0;
 
   constructor(
     private http: AjaxService,
@@ -46,13 +54,18 @@ export class ApprovalRequestComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.userService.getInstance();
-    this.managerList = new autoCompleteModal();
-    this.managerList.data = [];
-    this.managerList.placeholder = "Reporting Manager";
-    this.managerList.data.push({
+    this.employeeList = new autoCompleteModal();
+    this.employeeList.data = [];
+    this.employeeList.placeholder = "Employee List";
+    this.employeeList.data.push({
       value: 0,
-      text: "Default Manager"
+      text: "Default Employee"
     });
+    this.employeeList.isMultiSelect = false;
+    this.request.SortBy = null;
+    this.request.PageIndex = 1;
+    this.request.SearchString = "";
+    this.loadAutoComplete();
     this.currentYear = new Date().getFullYear();
     for (let i = 0; i <= new Date().getMonth(); i++) {
       this.monthsName.push(new Date(this.currentYear, i, 1))
@@ -74,6 +87,14 @@ export class ApprovalRequestComponent implements OnInit {
       this.isPageLoading = false;
       ErrorToast("Fail to fetch data. Please contact to admin.");
     });
+  }
+
+  loadAutoComplete() {
+    this.employeeList.data = [];
+    this.employeeList.placeholder = "Employee";
+    this.employeeList.data = GetEmployees();
+    this.applicationData = GetEmployees();
+    this.employeeList.className = "";
   }
 
   buildPage(req: any) {
@@ -98,7 +119,10 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   reloadPage() {
-    this.loadData();
+    if (this.active != 4)
+      this.loadData();
+    else
+      this.loadAttendanceRequestDetail();
   }
 
   openLeaveModal(state: string, request: any) {
@@ -370,14 +394,15 @@ export class ApprovalRequestComponent implements OnInit {
 
   loadAttendanceRequestDetail() {
     this.attendanceRquestPageIsReady = false;
-    this.request.SearchString = "";
-    this.request.SortBy = null;
-    this.request.PageIndex = 1;
     this.request.PageSize = 10;
 
     this.http.post("Attendance/GetMissingAttendanceApprovalRequest", this.request).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.attendanceRequestDetail = response.ResponseBody;
+        if (this.attendanceRequestDetail.length > 0)
+          this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
+        else
+          this.request.TotalRecords = 0;
         Toast("Attendance request loaded successfully.");
         this.isLoading = false;
       }
@@ -451,6 +476,59 @@ export class ApprovalRequestComponent implements OnInit {
 
     this.currentApprovalRequest = e;
     $('#approval-attendance').modal('show');
+  }
+
+  arrangeDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'Asc';
+    } else {
+      Order = 'Desc';
+    }
+    if (FieldName == 'AttendanceDate') {
+      this.orderByAttendanceDateAsc = !flag;
+      this.orderByRequestedOnAsc = null;
+    }else if (FieldName == 'RequestedOn') {
+      this.orderByAttendanceDateAsc = null;
+      this.orderByRequestedOnAsc = !flag;
+    }
+    this.request.SortBy = FieldName +" "+ Order;
+    this.loadAttendanceRequestDetail()
+  }
+
+  GetFilterResult(e: Filter) {
+    if(e != null) {
+      this.request = e;
+      this.loadAttendanceRequestDetail();
+    }
+  }
+
+  onEmloyeeChanged(e: any) {
+    this.request.EmployeeId = this.employeeId;
+    this.loadAttendanceRequestDetail();
+  }
+
+  filter(e: any, type: string) {
+    let value = Number(e.target.value);
+    if (value > 0) {
+      if (type == 'requestedon') {
+        let startdate = new Date();
+        let enddate = new Date();
+        enddate.setDate(enddate.getDate()- value);
+        this.request.SearchString = `1=1 and RequestedOn between '${enddate.getFullYear()}-${enddate.getMonth()+1}-${enddate.getDate()}' and '${startdate.getFullYear()}-${startdate.getMonth()+1}-${startdate.getDate()}'`;
+      } else if (type == 'status') {
+        this.request.SearchString = `1=1 and RequestTypeId = ${4} and ManagerId = ${this.currentUser.UserId} and CurrentStatus = ${value}`;
+      }
+      this.loadAttendanceRequestDetail();
+    }
+  }
+
+  resetFilter() {
+    this.employeeId =0;
+    this.missAttendanceStatus = 0;
+    this.requestedOn = 0;
+    this.request.SearchString = "";
+    this.loadAttendanceRequestDetail();
   }
 }
 

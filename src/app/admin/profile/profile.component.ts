@@ -102,7 +102,7 @@ export class ManageComponent implements OnInit {
   carrerProfileForm: FormGroup;
   personalDetailForm: FormGroup;
   keySkilldate:NgbDateStruct;
-
+  lanugages: Array<string> = ["Assamese", "Bengali", "Gujarati", "Hindi", "Kannada", "Kashmiri", "Konkani", "Malayalam", "Manipuri", "Marathi", "Nepali", "Oriya", "Punjabi", "Sanskrit", "Sindhi", "Tamil", "Telugu", "Urdu", "Bodo", "Santhali", "Maithili", "Dogri"].sort();
   @Output() authentication = new EventEmitter();
 
     constructor(private http: AjaxService,
@@ -169,7 +169,7 @@ export class ManageComponent implements OnInit {
           this.userModal.PersonalDetail.PinCode = employee.Pincode;
           this.userModal.PersonalDetail.DOB = employee.DOB;
         }
-        let profile = res.ResponseBody.profileDetail[0];
+        let profile = res.ResponseBody.profileDetail;
         if (profile && profile.length > 0) {
           this.profile = profile.find(x => x.FileName == ProfileImage);
           if (this.profile) {
@@ -307,6 +307,10 @@ export class ManageComponent implements OnInit {
 
   addNewLanguage() {
     let item = this.personalDetailForm.get('Languages') as FormArray;
+    if (item.length == 10) {
+      ErrorToast("You can't be added more than 10 language");
+      return;
+    }
     item.push(this.addLanguages())
   }
 
@@ -1015,8 +1019,8 @@ export class ManageComponent implements OnInit {
   createEmployment(record: Employment, index: number) {
     return this.fb.group({
       EmploymentIndex: new FormControl(index),
-      Organization: new FormControl(record.Organization),
-      Designation: new FormControl(record.Designation),
+      Organization: new FormControl(record.Organization, [Validators.required]),
+      Designation: new FormControl(record.Designation, [Validators.required]),
       EmploymentStatus: new FormControl(record.EmploymentStatus),
       Years: new FormControl(record.Years),
       Months: new FormControl(record.Months),
@@ -1484,7 +1488,6 @@ export class ManageComponent implements OnInit {
 
   showFile(userFile: any) {
     userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
-
   }
 }
 
