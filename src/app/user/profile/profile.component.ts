@@ -101,7 +101,7 @@ export class ProfileComponent implements OnInit {
   carrerProfileForm: FormGroup;
   personalDetailForm: FormGroup;
   keySkilldate:NgbDateStruct;
-
+  lanugages: Array<string> = ["Assamese", "Bengali", "Gujarati", "Hindi", "Kannada", "Kashmiri", "Konkani", "Malayalam", "Manipuri", "Marathi", "Nepali", "Oriya", "Punjabi", "Sanskrit", "Sindhi", "Tamil", "Telugu", "Urdu", "Bodo", "Santhali", "Maithili", "Dogri"].sort();
   @Output() authentication = new EventEmitter();
 
     constructor(private http: AjaxService,
@@ -115,7 +115,7 @@ export class ProfileComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.model = this.calendar.getToday();
+    //this.model = this.calendar.getToday();
     this.userModal = new ProfessionalUser();
     this.editEmploymentModal = new Employment();
     this.editEducationModal = new EducationalDetail();
@@ -251,11 +251,8 @@ export class ProfileComponent implements OnInit {
       if (date.getFullYear() == 1) {
         date = new Date();
       }
+    this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
     }
-
-    this.model.year = date.getFullYear();
-    this.model.month = date.getMonth() + 1;
-    this.model.day = date.getDate();
     this.personalDetailForm = this.fb.group({
       DOB: new FormControl(date),
       Gender: new FormControl(this.userModal.PersonalDetail.Gender ? 'male' : 'female'),
@@ -303,6 +300,32 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  addNewLanguage() {
+    let item = this.personalDetailForm.get('Languages') as FormArray;
+    let errorcount = 0;
+    let length = item.length;
+    if (item.length == 10) {
+      ErrorToast("You can't be added more than 10 language");
+      return;
+    }
+    if (item.value[length-1].Language == null || item.value[length-1].Language == "") {
+      let elem = document.getElementsByName("Language")[length-1].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+    }
+    if (item.value[length-1].ProficiencyLanguage == null || item.value[length-1].ProficiencyLanguage == "") {
+      let elem = document.getElementsByName("ProficiencyLanguage")[length-1].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+    }
+    if (errorcount === 0)
+      item.push(this.addLanguages())
+    else
+      ErrorToast("Please fill all the mandatory field");
+  }
+
   get langauge() {
     return this.personalDetailForm.get('Languages') as FormArray;
   }
@@ -317,21 +340,54 @@ export class ProfileComponent implements OnInit {
 
   submitPersonalDetails() {
     this.isLoading = true;
+    let errorcount = 0;
+    if (this.model == null) {
+      let elem = document.getElementsByName('dp')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+    }
     let languages = this.personalDetailForm.controls['Languages'].value;
-    this.userModal.PersonalDetail.DOB = this.personalDetailForm.value.DOB;
-    this.userModal.PersonalDetail.Gender = this.editPersonalDetailModal.Gender;
-    this.userModal.PersonalDetail.Address = this.editPersonalDetailModal.Address;
-    this.userModal.PersonalDetail.HomeTown = this.editPersonalDetailModal.HomeTown;
-    this.userModal.PersonalDetail.PinCode = this.editPersonalDetailModal.PinCode;
-    this.userModal.PersonalDetail.MaritalStatus = this.editPersonalDetailModal.MaritalStatus;
-    this.userModal.PersonalDetail.Category = this.editPersonalDetailModal.Category;
-    this.userModal.PersonalDetail.DifferentlyAbled = this.editPersonalDetailModal.DifferentlyAbled;
-    this.userModal.PersonalDetail.PermitUSA = this.editPersonalDetailModal.PermitUSA;
-    this.userModal.PersonalDetail.PermitOtherCountry = this.editPersonalDetailModal.PermitOtherCountry;
-    this.userModal.PersonalDetail.LanguageDetails = languages;
-    this.updateProfile();
-    $('#PersonalDetailModal').modal('hide');
-    this.isLoading = false;
+    languages = languages.filter(x => x.Language != "" && x.ProficiencyLanguage != "");
+
+    if (languages.length > 0) {
+      for (let i = 0; i < languages.length; i++) {
+        if (languages[i].LanguageRead || languages[i].LanguageWrite || languages[i].LanguageSpeak) {
+          if (languages[i].Language == null || languages[i].Language == "") {
+            let elem = document.getElementsByName("Language")[i].classList;
+            if (!elem.contains('error-field'))
+              elem.add('error-field');
+            errorcount++;
+          }
+          if (languages[i].ProficiencyLanguage == null || languages[i].ProficiencyLanguage == "") {
+            let elem = document.getElementsByName("ProficiencyLanguage")[i].classList;
+            if (!elem.contains('error-field'))
+              elem.add('error-field');
+            errorcount++;
+          }
+        }
+      }
+    }
+
+    if (errorcount === 0) {
+      this.userModal.PersonalDetail.DOB = this.personalDetailForm.value.DOB;
+      this.userModal.PersonalDetail.Gender = this.editPersonalDetailModal.Gender;
+      this.userModal.PersonalDetail.Address = this.editPersonalDetailModal.Address;
+      this.userModal.PersonalDetail.HomeTown = this.editPersonalDetailModal.HomeTown;
+      this.userModal.PersonalDetail.PinCode = this.editPersonalDetailModal.PinCode;
+      this.userModal.PersonalDetail.MaritalStatus = this.editPersonalDetailModal.MaritalStatus;
+      this.userModal.PersonalDetail.Category = this.editPersonalDetailModal.Category;
+      this.userModal.PersonalDetail.DifferentlyAbled = this.editPersonalDetailModal.DifferentlyAbled;
+      this.userModal.PersonalDetail.PermitUSA = this.editPersonalDetailModal.PermitUSA;
+      this.userModal.PersonalDetail.PermitOtherCountry = this.editPersonalDetailModal.PermitOtherCountry;
+      this.userModal.PersonalDetail.LanguageDetails = languages;
+      this.updateProfile();
+      $('#PersonalDetailModal').modal('hide');
+      this.isLoading = false;
+    } else {
+      this.isLoading = false;
+      ErrorToast("Please fill all the mandatory field");
+    }
   }
 
   //----------------- Personal Detail END'S ------------------------
@@ -367,6 +423,13 @@ export class ProfileComponent implements OnInit {
 
   editProjectDetail(current: FormGroup) {
     this.isEdit = true;
+    let elem = document.getElementsByName('ProjectTitle')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
+    elem = document.getElementsByName('ProjectDetails')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
     this.editProjectModal = current.value as Project;
     $("#editProjectModal").modal("show");
     this.isEditProject = true;
@@ -375,25 +438,45 @@ export class ProfileComponent implements OnInit {
   addOrUpdateProject() {
     this.isLoading = true;
     let currentProjectOnEdit;
-    let project = this.projectsForm.get('Projects') as FormArray;
-    if (this.isEdit == false) {
-      //this.editProjectModal = new Project();
-      let newProject = new Project();
-      currentProjectOnEdit = this.projectForm(newProject, project.length + 1);
-      project.push(currentProjectOnEdit);
-    } else {
-      currentProjectOnEdit = project.at(this.editProjectModal.ProjectIndex)
+    let errorcount = 0;
+    if (this.editProjectModal.ProjectTitle == null || this.editProjectModal.ProjectTitle == "") {
+      let elem = document.getElementsByName('ProjectTitle')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
     }
-    currentProjectOnEdit.get("ProjectTitle").setValue(this.editProjectModal.ProjectTitle);
-    currentProjectOnEdit.get("ProjectDuration").setValue(this.editProjectModal.ProjectDuration);
-    currentProjectOnEdit.get("TechnalogyStack").setValue(this.editProjectModal.TechnalogyStack);
-    currentProjectOnEdit.get("ClientName").setValue(this.editProjectModal.ClientName);
-    currentProjectOnEdit.get("ProjectStatus").setValue(this.editProjectModal.ProjectStatus);
-    currentProjectOnEdit.get("RolesResponsibility").setValue(this.editProjectModal.RolesResponsibility);
-    currentProjectOnEdit.get("ProjectDetails").setValue(this.editProjectModal.ProjectDetails);
-    this.submitProjectDetail();
-    this.isLoading = false;
-    $("#editProjectModal").modal('hide');
+
+    if (this.editProjectModal.ProjectDetails == null || this.editProjectModal.ProjectDetails == "") {
+      let elem = document.getElementsByName('ProjectDetails')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+    }
+
+    if (errorcount === 0) {
+      let project = this.projectsForm.get('Projects') as FormArray;
+      if (this.isEdit == false) {
+        //this.editProjectModal = new Project();
+        let newProject = new Project();
+        currentProjectOnEdit = this.projectForm(newProject, project.length + 1);
+        project.push(currentProjectOnEdit);
+      } else {
+        currentProjectOnEdit = project.at(this.editProjectModal.ProjectIndex)
+      }
+      currentProjectOnEdit.get("ProjectTitle").setValue(this.editProjectModal.ProjectTitle);
+      currentProjectOnEdit.get("ProjectDuration").setValue(this.editProjectModal.ProjectDuration);
+      currentProjectOnEdit.get("TechnalogyStack").setValue(this.editProjectModal.TechnalogyStack);
+      currentProjectOnEdit.get("ClientName").setValue(this.editProjectModal.ClientName);
+      currentProjectOnEdit.get("ProjectStatus").setValue(this.editProjectModal.ProjectStatus);
+      currentProjectOnEdit.get("RolesResponsibility").setValue(this.editProjectModal.RolesResponsibility);
+      currentProjectOnEdit.get("ProjectDetails").setValue(this.editProjectModal.ProjectDetails);
+      this.submitProjectDetail();
+      this.isLoading = false;
+      $("#editProjectModal").modal('hide');
+    }else {
+      this.isLoading = false;
+      ErrorToast("Please fill all the mandatory field");
+    }
   }
 
   get projects() {
@@ -404,8 +487,15 @@ export class ProfileComponent implements OnInit {
     this.isEdit = false;
     this.editProjectModal = new Project();
     //this.editProjectModal = this.currentProjectOnEdit.value as Project;
-    $("#editProjectModal").modal("show");
     this.isEditProject = true;
+    let elem = document.getElementsByName('ProjectTitle')[0].classList;
+    if (elem.contains('error-field'))
+    elem.remove('error-field');
+
+    elem = document.getElementsByName('ProjectDetails')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+    $("#editProjectModal").modal("show");
   }
 
   deleteProjectPopup(e: any) {
@@ -455,7 +545,6 @@ export class ProfileComponent implements OnInit {
   }
 
   editItSkillDetail() {
-    $("#itSkillModal").modal('show');
     this.SkillIndex = 0;
     this.ExptLanguage = '';
     this.ExptVersion = null;
@@ -463,29 +552,77 @@ export class ProfileComponent implements OnInit {
     this.ExptinMonths = null;
     this.Exptdate = null;
     this.isEditItSkill = true;
+    let elem = document.getElementsByName('ExptLanguage')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
+    elem = document.getElementsByName('ExptVersion')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
+    elem = document.getElementsByName('ExptinYrs')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
+    elem = document.getElementsByName('ExptinMonths')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
+    $("#itSkillModal").modal('show');
   }
 
   addItskill() {
     this.isLoading = true;
     let newSkill = new Skills();
-    if (this.ExptLanguage != '') {
-      let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
-      if (this.SkillIndex == 0)
-        this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
-      else
-        this.currentItSkillOnEdit = skill.at(this.SkillIndex);
-
-      this.currentItSkillOnEdit.get("Language").setValue(this.ExptLanguage);
-      this.currentItSkillOnEdit.get("Version").setValue(this.ExptVersion);
-      this.currentItSkillOnEdit.get("ExperienceInMonth").setValue(this.ExptinMonths);
-      this.currentItSkillOnEdit.get("ExperienceInYear").setValue(this.ExptinYrs);
-      this.currentItSkillOnEdit.get("LastUsed").setValue(this.Exptdate);
-      if (this.SkillIndex == 0)
-        skill.push(this.currentItSkillOnEdit);
+    let errorcount = 0;
+    this.isLoading = true;
+    if (this.ExptLanguage == null || this.ExptLanguage == "") {
+      let elem = document.getElementsByName('ExptLanguage')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
     }
-    this.submitSkillDetail();
-    this.isLoading = false;
-    $("#itSkillModal").modal('hide');
+    if (this.ExptVersion == null || this.ExptVersion == 0) {
+      let elem = document.getElementsByName('ExptVersion')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+    }
+    if (this.ExptinYrs == null || this.ExptinYrs == 0) {
+      let elem = document.getElementsByName('ExptinYrs')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+    }
+    if (this.ExptinMonths == null || this.ExptinMonths == 0) {
+      let elem = document.getElementsByName('ExptinMonths')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+    }
+    if (errorcount === 0) {
+      if (this.ExptLanguage != '') {
+        let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
+        if (this.SkillIndex == 0)
+          this.currentItSkillOnEdit = this.createTechnicalSkillsGroup(newSkill, skill.length + 1);
+        else
+          this.currentItSkillOnEdit = skill.at(this.SkillIndex);
+
+        this.currentItSkillOnEdit.get("Language").setValue(this.ExptLanguage);
+        this.currentItSkillOnEdit.get("Version").setValue(this.ExptVersion);
+        this.currentItSkillOnEdit.get("ExperienceInMonth").setValue(this.ExptinMonths);
+        this.currentItSkillOnEdit.get("ExperienceInYear").setValue(this.ExptinYrs);
+        this.currentItSkillOnEdit.get("LastUsed").setValue(this.Exptdate);
+        if (this.SkillIndex == 0)
+          skill.push(this.currentItSkillOnEdit);
+      }
+      this.submitSkillDetail();
+      this.isLoading = false;
+      $("#itSkillModal").modal('hide');
+    } else {
+      this.isLoading = false;
+      ErrorToast("Please fill all the mandatory field");
+    }
   }
 
   deleteItSkill(e: any) {
@@ -588,37 +725,63 @@ export class ProfileComponent implements OnInit {
     addOnlieProfiles() {
       this.siteURL = "";
       this.isSiteURLUpdate = false;
-      $("#onlineProfileModal").modal("show");
       this.isEditOnlineProfile = true;
+      let elem = document.getElementsByName('OnlineProfile')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#onlineProfileModal").modal("show");
     }
 
     submitOnlineProfile() {
-      if (this.siteURL != '') {
         this.isLoading = true;
-        let onlineProfile = this.accomplishmentsForm.get("OnlineProfiles") as FormArray;
-        this.siteURLForm = this.buildOnlieProfiles(this.siteURL);
-        onlineProfile.push(this.siteURLForm);
-        this.submitAccomplishmentDetail();
-        this.isLoading = false;
-      } else {
-        return ErrorToast("Please enter online profile")
-      }
+        let errorcount = 0;
+        if (this.siteURL == null || this.siteURL == "") {
+          let elem = document.getElementsByName('OnlineProfile')[0].classList;
+          if (!elem.contains('error-field'))
+            elem.add('error-field');
+          errorcount++;
+        }
+        if (errorcount === 0) {
+          let onlineProfile = this.accomplishmentsForm.get("OnlineProfiles") as FormArray;
+          this.siteURLForm = this.buildOnlieProfiles(this.siteURL);
+          onlineProfile.push(this.siteURLForm);
+          this.submitAccomplishmentDetail();
+          this.isLoading = false;
+        }else {
+          this.isLoading = false;
+          ErrorToast("Please fill all the mandatory field");
+        }
     }
 
     updateOnlineProfile() {
       this.isLoading = true;
-      this.siteURLForm.get("OnlineProfile").setValue(this.siteURL);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
-      this.isSiteURLUpdate = false;
+      let errorcount = 0;
+      if (this.siteURL == null || this.siteURL == "") {
+        let elem = document.getElementsByName('OnlineProfile')[0].classList;
+        if (!elem.contains('error-field'))
+          elem.add('error-field');
+        errorcount++;
+      }
+      if (errorcount === 0) {
+        this.siteURLForm.get("OnlineProfile").setValue(this.siteURL);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+        this.isSiteURLUpdate = false;
+      }else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     editOnlineProfile(current: FormGroup) {
       this.isSiteURLUpdate = true;
       this.siteURLForm = current;
       this.siteURL = current.value.OnlineProfile;
-      $("#onlineProfileModal").modal("show");
       this.isEditOnlineProfile = true;
+      let elem = document.getElementsByName('OnlineProfile')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#onlineProfileModal").modal("show");
     }
 
 
@@ -641,35 +804,63 @@ export class ProfileComponent implements OnInit {
     addCertifications() {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
-      $("#certificationModal").modal("show");
       this.isEditCertification = true;
+      let elem = document.getElementsByName('Certification')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#certificationModal").modal("show");
     }
 
     editCertification(current: FormGroup) {
       this.isSiteURLUpdate = true;
       this.siteURLForm = current;
       this.siteURL = current.value.Certification;
-      $("#certificationModal").modal("show");
       this.isEditCertification = true;
+      let elem = document.getElementsByName('Certification')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#certificationModal").modal("show");
     }
 
     submitCertification() {
-      if (this.siteURL == '')
-      return ErrorToast("Please enter certification")
       this.isLoading = true;
-      let certification = this.accomplishmentsForm.get("Certifications") as FormArray;
-      this.siteURLForm = this.buildCertifications(this.siteURL);
-      certification.push(this.siteURLForm);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
+      let errorcount = 0;
+      if (this.siteURL == null || this.siteURL == "") {
+        let elem = document.getElementsByName('Certification')[0].classList;
+        if (!elem.contains('error-field'))
+          elem.add('error-field');
+        errorcount++;
+      }
+      if (errorcount === 0) {
+        let certification = this.accomplishmentsForm.get("Certifications") as FormArray;
+        this.siteURLForm = this.buildCertifications(this.siteURL);
+        certification.push(this.siteURLForm);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+      } else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     updateCertification() {
       this.isLoading = true;
-      this.siteURLForm.get("Certification").setValue(this.siteURL);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
-      this.isSiteURLUpdate = false;
+      let errorcount = 0;
+      if (this.siteURL == null || this.siteURL == "") {
+        let elem = document.getElementsByName('Certification')[0].classList;
+        if (!elem.contains('error-field'))
+          elem.add('error-field');
+        errorcount++;
+      }
+      if (errorcount === 0) {
+        this.siteURLForm.get("Certification").setValue(this.siteURL);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+        this.isSiteURLUpdate = false;
+      } else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     deleteCertificationPopup(e: any) {
@@ -691,16 +882,22 @@ export class ProfileComponent implements OnInit {
     addWorkSamples() {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
-      $("#workSampleModal").modal("show");
       this.isEditWorkSample = true;
+      let elem = document.getElementsByName('WorkSample')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#workSampleModal").modal("show");
     }
 
     editWorkSample(current: FormGroup) {
       this.isSiteURLUpdate = true;
       this.siteURLForm = current;
       this.siteURL = current.value.WorkSample;
-      $("#workSampleModal").modal("show");
       this.isEditWorkSample = true;
+      let elem = document.getElementsByName('WorkSample')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#workSampleModal").modal("show");
     }
 
     deleteWorkSamplePopup(e: any) {
@@ -721,34 +918,64 @@ export class ProfileComponent implements OnInit {
 
     submitWorkSample() {
       this.isLoading = true;
-      let workSample = this.accomplishmentsForm.get("WorkSamples") as FormArray;
-      this.siteURLForm = this.buildWorkSamples(this.siteURL);
-      workSample.push(this.siteURLForm);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
+      let errorcount = 0;
+      if (this.siteURL == null || this.siteURL == "") {
+      let elem = document.getElementsByName('WorkSample')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+      }
+      if (errorcount === 0) {
+        let workSample = this.accomplishmentsForm.get("WorkSamples") as FormArray;
+        this.siteURLForm = this.buildWorkSamples(this.siteURL);
+        workSample.push(this.siteURLForm);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+      }else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     updateWorkSample() {
       this.isLoading = true;
-      this.siteURLForm.get("WorkSample").setValue(this.siteURL);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
-      this.isSiteURLUpdate = false;
+      let errorcount = 0;
+      if (this.siteURL == null || this.siteURL == "") {
+      let elem = document.getElementsByName('WorkSample')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+      }
+      if (errorcount === 0) {
+        this.siteURLForm.get("WorkSample").setValue(this.siteURL);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+        this.isSiteURLUpdate = false;
+      }else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     addResearchs() {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
-      $("#researchModal").modal("show");
       this.isEditResearch = true;
+      let elem = document.getElementsByName('Research')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#researchModal").modal("show");
     }
 
     editResaerch(current: FormGroup) {
       this.isSiteURLUpdate = true;
       this.siteURLForm = current;
       this.siteURL = current.value.Research;
-      $("#researchModal").modal("show");
       this.isEditResearch = true;
+      let elem = document.getElementsByName('Research')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#researchModal").modal("show");
     }
 
     deleteResearchPopup(e: any) {
@@ -768,37 +995,65 @@ export class ProfileComponent implements OnInit {
     }
 
     submitResearch() {
-      if (this.siteURL == '')
-        return ErrorToast("Please enter research/ journal")
       this.isLoading = true;
-      let research = this.accomplishmentsForm.get("Researchs") as FormArray;
-      this.siteURLForm = this.buildResearchs(this.siteURL);
-      research.push(this.siteURLForm);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
+      let errorcount = 0;
+      if (this.siteURL == null || this.siteURL == "") {
+        let elem = document.getElementsByName('Research')[0].classList;
+        if (!elem.contains('error-field'))
+          elem.add('error-field');
+        errorcount++;
+      }
+      if (errorcount === 0) {
+        let research = this.accomplishmentsForm.get("Researchs") as FormArray;
+        this.siteURLForm = this.buildResearchs(this.siteURL);
+        research.push(this.siteURLForm);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+      }else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     updateResearch() {
       this.isLoading = true;
-      this.siteURLForm.get("Research").setValue(this.siteURL);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
-      this.isSiteURLUpdate = false;
+      let errorcount = 0;
+      if (this.siteURL == null || this.siteURL == "") {
+        let elem = document.getElementsByName('Research')[0].classList;
+        if (!elem.contains('error-field'))
+          elem.add('error-field');
+        errorcount++;
+      }
+      if (errorcount === 0) {
+        this.siteURLForm.get("Research").setValue(this.siteURL);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+        this.isSiteURLUpdate = false;
+      }else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     addPresentations() {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
-      $("#presentationModal").modal("show");
       this.isEditPresentation = true;
+      let elem = document.getElementsByName('Presentation')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#presentationModal").modal("show");
     }
 
     editPresentation(current: FormGroup) {
       this.isSiteURLUpdate = true;
       this.siteURLForm = current;
       this.siteURL = current.value.Presentation;
-      $("#presentationModal").modal("show");
       this.isEditPresentation = true;
+      let elem = document.getElementsByName('Presentation')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#presentationModal").modal("show");
     }
 
     deletePresentationPopup(e: any) {
@@ -818,37 +1073,65 @@ export class ProfileComponent implements OnInit {
     }
 
     submitPresentation() {
-      if (this.siteURL == '')
-        return ErrorToast("Please enter presentation")
-        this.isLoading = true;
-      let presentation = this.accomplishmentsForm.get("Presentations") as FormArray;
-      this.siteURLForm = this.buildPresentations(this.siteURL);
-      presentation.push(this.siteURLForm);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
+      this.isLoading = true;
+      let errorcount =0;
+      if (this.siteURL == null || this.siteURL == "") {
+        let elem = document.getElementsByName('Presentation')[0].classList;
+        if (!elem.contains('error-field'))
+          elem.add('error-field');
+        errorcount++;
+      }
+      if (errorcount === 0) {
+        let presentation = this.accomplishmentsForm.get("Presentations") as FormArray;
+        this.siteURLForm = this.buildPresentations(this.siteURL);
+        presentation.push(this.siteURLForm);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+      } else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     updatePresentation() {
       this.isLoading = true;
-      this.siteURLForm.get("Presentation").setValue(this.siteURL);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
-      this.isSiteURLUpdate = false;
+      let errorcount =0;
+      if (this.siteURL == null || this.siteURL == "") {
+        let elem = document.getElementsByName('Presentation')[0].classList;
+        if (!elem.contains('error-field'))
+          elem.add('error-field');
+        errorcount++;
+      }
+      if (errorcount === 0) {
+        this.siteURLForm.get("Presentation").setValue(this.siteURL);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+        this.isSiteURLUpdate = false;
+      } else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     addPatents() {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
-      $("#patentModal").modal("show");
       this.isEditPatent = true;
+      let elem = document.getElementsByName('Patent')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#patentModal").modal("show");
     }
 
     editPatent(current: FormGroup) {
       this.isSiteURLUpdate = true;
       this.siteURLForm = current;
       this.siteURL = current.value.Patent;
-      $("#patentModal").modal("show");
       this.isEditPatent = true;
+      let elem = document.getElementsByName('Patent')[0].classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+      $("#patentModal").modal("show");
     }
 
     deletePatentPopup(e: any) {
@@ -868,22 +1151,44 @@ export class ProfileComponent implements OnInit {
     }
 
     submitPatent() {
-      if (this.siteURL == '')
-        return ErrorToast("Please enter patent")
       this.isLoading = true;
-      let patent = this.accomplishmentsForm.get("Patents") as FormArray;
-      this.siteURLForm = this.buildPatents(this.siteURL);
-      patent.push(this.siteURLForm);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
+      let errorcount =0;
+      if (this.siteURL == null || this.siteURL == "") {
+        let elem = document.getElementsByName('Patent')[0].classList;
+        if (!elem.contains('error-field'))
+          elem.add('error-field');
+        errorcount++;
+      }
+      if (errorcount === 0) {
+        let patent = this.accomplishmentsForm.get("Patents") as FormArray;
+        this.siteURLForm = this.buildPatents(this.siteURL);
+        patent.push(this.siteURLForm);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+      } else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     updatePatent() {
       this.isLoading = true;
-      this.siteURLForm.get("Patent").setValue(this.siteURL);
-      this.submitAccomplishmentDetail();
-      this.isLoading = false;
-      this.isSiteURLUpdate = false;
+      let errorcount =0;
+      if (this.siteURL == null || this.siteURL == "") {
+        let elem = document.getElementsByName('Patent')[0].classList;
+        if (!elem.contains('error-field'))
+          elem.add('error-field');
+        errorcount++;
+      }
+      if (errorcount === 0) {
+        this.siteURLForm.get("Patent").setValue(this.siteURL);
+        this.submitAccomplishmentDetail();
+        this.isLoading = false;
+        this.isSiteURLUpdate = false;
+      } else {
+        this.isLoading = false;
+        ErrorToast("Please fill all the mandatory field");
+      }
     }
 
     get onlieProfiles(): FormArray {
@@ -937,30 +1242,57 @@ export class ProfileComponent implements OnInit {
 
   addEducation() {
     this.isEdit = false;
+    let elem = document.getElementsByName('University_Name')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
+    elem = document.getElementsByName('Degree_Name')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
     this.editEducationModal = new EducationalDetail();
     $('#EducationModal').modal('show');
   }
 
   addNewEducation() {
     let currentEducation;
-    let education = this.educationForm.get("Educations") as FormArray;
-    if (this.isEdit == false) {
-      let newEducation = new EducationalDetail();
-      currentEducation = this.createEducationForm(newEducation, education.length + 1);
-      education.push(currentEducation);
-    } else {
-      currentEducation = education.at(this.editEducationModal.EducationIndex);
+    let errorcount = 0;
+    this.isLoading = true;
+    if (this.editEducationModal.University_Name == null || this.editEducationModal.University_Name == "") {
+      let elem = document.getElementsByName('University_Name')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
     }
-    currentEducation.get("Degree_Name").setValue(this.editEducationModal.Degree_Name);
-    currentEducation.get("Course").setValue(this.editEducationModal.Course);
-    currentEducation.get("Specialization").setValue(this.editEducationModal.Specialization);
-    currentEducation.get("University_Name").setValue(this.editEducationModal.University_Name);
-    currentEducation.get("Course_Type").setValue(this.editEducationModal.Course_Type);
-    currentEducation.get("Passout_Year").setValue(this.editEducationModal.Passout_Year);
-    currentEducation.get("Grading_System").setValue(this.editEducationModal.Grading_System);
-    this.submitEducationDetail();
-    this.isLoading = false;
-    $('#EducationModal').modal('hide');
+    if (this.editEducationModal.Degree_Name == null || this.editEducationModal.Degree_Name == "") {
+      let elem = document.getElementsByName('Degree_Name')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+    }
+    if (errorcount === 0) {
+      let education = this.educationForm.get("Educations") as FormArray;
+      if (this.isEdit == false) {
+        let newEducation = new EducationalDetail();
+        currentEducation = this.createEducationForm(newEducation, education.length + 1);
+        education.push(currentEducation);
+      } else {
+        currentEducation = education.at(this.editEducationModal.EducationIndex);
+      }
+      currentEducation.get("Degree_Name").setValue(this.editEducationModal.Degree_Name);
+      currentEducation.get("Course").setValue(this.editEducationModal.Course);
+      currentEducation.get("Specialization").setValue(this.editEducationModal.Specialization);
+      currentEducation.get("University_Name").setValue(this.editEducationModal.University_Name);
+      currentEducation.get("Course_Type").setValue(this.editEducationModal.Course_Type);
+      currentEducation.get("Passout_Year").setValue(this.editEducationModal.Passout_Year);
+      currentEducation.get("Grading_System").setValue(this.editEducationModal.Grading_System);
+      this.submitEducationDetail();
+      this.isLoading = false;
+      $('#EducationModal').modal('hide');
+    } else {
+      this.isLoading = false;
+      ErrorToast("Please fill all the mandatory field");
+    }
   }
 
   get education(): FormArray{
@@ -970,6 +1302,13 @@ export class ProfileComponent implements OnInit {
   editEducation(current: FormGroup) {
     this.isEdit = true;
     this.editEducationModal = current.value;
+    let elem = document.getElementsByName('University_Name')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
+    elem = document.getElementsByName('Degree_Name')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
     $('#EducationModal').modal('show');
   }
 
@@ -1006,37 +1345,76 @@ export class ProfileComponent implements OnInit {
 
   addEmployment() {
     this.isEdit = false;
+    let elem = document.getElementsByName('Designation')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
+    elem = document.getElementsByName('Organization')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
     this.editEmploymentModal = new Employment();
     $('#EmploymentModal').modal('show');
   }
 
   createNewEmployment() {
     let currentEmployment;
-    let employment = this.employmentForm.get("Employments") as FormArray;
-    if (this.isEdit == false) {
-       let newEmployment = new Employment();
-      currentEmployment = this.createEmployment(newEmployment, employment.length + 1);
-      employment.push(currentEmployment);
-    } else {
-      currentEmployment = employment.at(this.editEmploymentModal.EmploymentIndex);
+    let errorcount = 0;
+    this.isLoading = true;
+    if (this.editEmploymentModal.Designation == null || this.editEmploymentModal.Designation == "") {
+      let elem = document.getElementsByName('Designation')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
     }
-    currentEmployment.get("Organization").setValue(this.editEmploymentModal.Organization);
-    currentEmployment.get("Designation").setValue(this.editEmploymentModal.Designation);
-    currentEmployment.get("Years").setValue(this.editEmploymentModal.Years);
-    currentEmployment.get("Months").setValue(this.editEmploymentModal.Months);
-    currentEmployment.get("CurrentSalary").setValue(this.editEmploymentModal.CurrentSalary);
-    currentEmployment.get("CurrencyType").setValue(this.editEmploymentModal.CurrencyType);
-    currentEmployment.get("Experties").setValue(this.editEmploymentModal.Experties);
-    currentEmployment.get("JobProfile").setValue(this.editEmploymentModal.JobProfile);
-    this.submitEmploymentDetail();
-    this.isLoading = false;
-    $("#EmploymentModal").modal('hide');
+    if (this.editEmploymentModal.Organization == null || this.editEmploymentModal.Organization == "") {
+      let elem = document.getElementsByName('Organization')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
+    }
+    if (errorcount === 0) {
+      let employment = this.employmentForm.get("Employments") as FormArray;
+      if (this.isEdit == false) {
+         let newEmployment = new Employment();
+        currentEmployment = this.createEmployment(newEmployment, employment.length + 1);
+        employment.push(currentEmployment);
+      } else {
+        currentEmployment = employment.at(this.editEmploymentModal.EmploymentIndex);
+      }
+      currentEmployment.get("Organization").setValue(this.editEmploymentModal.Organization);
+      currentEmployment.get("Designation").setValue(this.editEmploymentModal.Designation);
+      currentEmployment.get("Years").setValue(this.editEmploymentModal.Years);
+      currentEmployment.get("Months").setValue(this.editEmploymentModal.Months);
+      currentEmployment.get("CurrentSalary").setValue(this.editEmploymentModal.CurrentSalary);
+      currentEmployment.get("CurrencyType").setValue(this.editEmploymentModal.CurrencyType);
+      currentEmployment.get("Experties").setValue(this.editEmploymentModal.Experties);
+      currentEmployment.get("JobProfile").setValue(this.editEmploymentModal.JobProfile);
+      this.submitEmploymentDetail();
+      this.isLoading = false;
+      $("#EmploymentModal").modal('hide');
+    } else {
+      ErrorToast("Please fill all the mandatory filled");
+      this.isLoading = false;
+    }
   }
 
   editEmployment(emp: any) {
     this.isEdit = true;
     this.editEmploymentModal = emp.value;
-    this.countNumberofCharacter(this.editEmploymentModal.JobProfile)
+    if (this.editEmploymentModal.JobProfile)
+      this.remainingNumber = 4000 - this.editEmploymentModal.JobProfile.length;
+    else
+      this.remainingNumber = 4000;
+
+    let elem = document.getElementsByName('Designation')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
+    elem = document.getElementsByName('Organization')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
+
     $('#EmploymentModal').modal('show');
   }
 
@@ -1057,6 +1435,15 @@ export class ProfileComponent implements OnInit {
 
   closeDeleteModal(){
     $("#deleteEmploymentModal").modal('hide');
+  }
+
+  checkInputValue(e: any) {
+    let value = e.target.value;
+    if (value != null && value != "") {
+      let elem = e.target.classList;
+      if (elem.contains('error-field'))
+        elem.remove('error-field');
+    }
   }
 
   //----------------- Employment END'S ------------------------
@@ -1090,27 +1477,39 @@ export class ProfileComponent implements OnInit {
 
   addCarrerProfile() {
     let currentCarrerProfile;
-    let carrerProfile = this.carrerProfileForm.get("CarrerProfile") as FormArray;
-    if (this.isEdit == false) {
-      let newCarrer = new Company();
-      currentCarrerProfile = this.createCarrerProfileForm(newCarrer, carrerProfile.length + 1);
-      carrerProfile.push(currentCarrerProfile)
-    } else {
-      currentCarrerProfile = carrerProfile.at(this.editCarrerProfileModal.CarrerIndex)
+    let errorcount = 0;
+    if (this.editCarrerProfileModal.Industry == null || this.editCarrerProfileModal.Industry == "") {
+      let elem = document.getElementsByName('Industry')[0].classList;
+      if (!elem.contains('error-field'))
+        elem.add('error-field');
+      errorcount++;
     }
-    currentCarrerProfile.get("Industry").setValue(this.editCarrerProfileModal.Industry);
-    currentCarrerProfile.get("Department").setValue(this.editCarrerProfileModal.Department);
-    currentCarrerProfile.get("RoleCategory").setValue(this.editCarrerProfileModal.RoleCategory);
-    currentCarrerProfile.get("Role").setValue(this.editCarrerProfileModal.Role);
-    currentCarrerProfile.get("DesiredTypePermanent").setValue(this.editCarrerProfileModal.DesiredTypePermanent);
-    currentCarrerProfile.get("DesiredEmploymentType").setValue(this.editCarrerProfileModal.DesiredEmploymentType);
-    currentCarrerProfile.get("PreferredShift").setValue(this.editCarrerProfileModal.PreferredShift);
-    currentCarrerProfile.get("PreferredWorkLocation").setValue(this.editCarrerProfileModal.PreferredWorkLocation);
-    currentCarrerProfile.get("ExpectedSalary").setValue(this.editCarrerProfileModal.ExpectedSalary);
-    currentCarrerProfile.get("CurrencyType").setValue(this.editCarrerProfileModal.CurrencyType);
-    this.submitCarrerProfileDetail();
-    this.isLoading = false;
-    $("#CarrerProfileModal").modal('hide');
+    if (errorcount === 0) {
+      let carrerProfile = this.carrerProfileForm.get("CarrerProfile") as FormArray;
+      if (this.isEdit == false) {
+        let newCarrer = new Company();
+        currentCarrerProfile = this.createCarrerProfileForm(newCarrer, carrerProfile.length + 1);
+        carrerProfile.push(currentCarrerProfile)
+      } else {
+        currentCarrerProfile = carrerProfile.at(this.editCarrerProfileModal.CarrerIndex)
+      }
+      currentCarrerProfile.get("Industry").setValue(this.editCarrerProfileModal.Industry);
+      currentCarrerProfile.get("Department").setValue(this.editCarrerProfileModal.Department);
+      currentCarrerProfile.get("RoleCategory").setValue(this.editCarrerProfileModal.RoleCategory);
+      currentCarrerProfile.get("Role").setValue(this.editCarrerProfileModal.Role);
+      currentCarrerProfile.get("DesiredTypePermanent").setValue(this.editCarrerProfileModal.DesiredTypePermanent);
+      currentCarrerProfile.get("DesiredEmploymentType").setValue(this.editCarrerProfileModal.DesiredEmploymentType);
+      currentCarrerProfile.get("PreferredShift").setValue(this.editCarrerProfileModal.PreferredShift);
+      currentCarrerProfile.get("PreferredWorkLocation").setValue(this.editCarrerProfileModal.PreferredWorkLocation);
+      currentCarrerProfile.get("ExpectedSalary").setValue(this.editCarrerProfileModal.ExpectedSalary);
+      currentCarrerProfile.get("CurrencyType").setValue(this.editCarrerProfileModal.CurrencyType);
+      this.submitCarrerProfileDetail();
+      this.isLoading = false;
+      $("#CarrerProfileModal").modal('hide');
+    } else {
+      this.isLoading = false;
+      ErrorToast("Please fill all the mandatory field");
+    }
   }
 
   get carrer(): FormArray {
@@ -1119,6 +1518,9 @@ export class ProfileComponent implements OnInit {
 
   editCarrerProfile() {
     this.isEdit = true;
+    let elem = document.getElementsByName('Industry')[0].classList;
+    if (elem.contains('error-field'))
+      elem.remove('error-field');
     this.editCarrerProfileModal = this.carrerProfileForm.value.CarrerProfile[0];
     if (this.editCarrerProfileModal == null) {
       this.isEdit = false;
@@ -1471,7 +1873,13 @@ export class ProfileComponent implements OnInit {
 
   showFile(userFile: any) {
     userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+  }
 
+  deleteLanguage(index: number) {
+    let item = this.personalDetailForm.get('Languages') as FormArray;
+    if (item.length > 1) {
+      item.removeAt(index);
+    }
   }
 }
 
