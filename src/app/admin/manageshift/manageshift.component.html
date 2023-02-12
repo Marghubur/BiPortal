@@ -236,7 +236,8 @@
           <div class="row">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Office Time (in min) *</label>
-              <input type="text" OnlyNumber="3" placeholder="Enter office start time" formControlName="OfficeTime" [ngClass]="{'error-field': submitted && f.OfficeTime.errors !== null && f.OfficeTime.errors.required}" class="form-control">
+              <!-- <input type="text" OnlyNumber="3" placeholder="Enter office start time" formControlName="OfficeTime" [ngClass]="{'error-field': submitted && f.OfficeTime.errors !== null && f.OfficeTime.errors.required}" class="form-control"> -->
+              <app-bh-timepicker formControlName="OfficeTime"></app-bh-timepicker>
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Duration (in min) *</label>
@@ -290,16 +291,26 @@
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label">Days</label>
-            <div class="d-flex flex-wrap mt-3" *ngIf="selectedDays.length > 0">
+            <label for="" class="form-label">Pick working days in a week:</label>
+            <!-- <div class="d-flex flex-wrap mt-3" *ngIf="selectedDays.length > 0">
               <div *ngFor="let user of selectedDays">
                 <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
                   {{user.day}}
                 </span>
               </div>
-            </div>
+            </div> -->
             <!-- For multiselect option -->
-            <div class="multi-select col-md-12" title="multi-select-box">
+            <div class="d-flex">
+              <div class="day-of-week" *ngFor="let day of days; let index = index;" [ngClass]="{'border-success': day.isEnabled}" 
+                  (click)="toggleDays(day.id, $event)">
+                <a href="javascript:void(0)" [ngClass]="{'ms-0': index == 0}">
+                  {{day.day}}
+                  <i class="fa fa-toggle-on ps-2 text-success" [ngClass]="{'d-none': !day.isEnabled}" name="selection-on"></i>
+                  <i class="fa fa-toggle-off ps-2 text-muted" [ngClass]="{'d-none': day.isEnabled}" name="selection-off" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+            <!-- <div class="multi-select col-md-12" title="multi-select-box">
               <div class="border selected-items" title="multi-select-box" (click)="enableDropdown()"></div>
               <div class="contents d-none" title="multi-select-box" id="auto-hide-box">
                 <div class="elem" *ngFor="let day of days" title="multi-select-box">
@@ -309,7 +320,7 @@
                   </a>
                 </div>
               </div>
-            </div>
+            </div> -->
             <!-- end -->
           </div>
         </form>

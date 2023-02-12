@@ -405,7 +405,7 @@ export class AttendanceComponent implements OnInit {
       return;
 
     this.http.post('Attendance/SubmitAttendance', request).then((response: ResponseModel) => {
-      if (response.ResponseBody && response.ResponseBody === "updated" || response.ResponseBody === "inserted") {
+      if (response.ResponseBody && (response.ResponseBody === "updated" || response.ResponseBody === "inserted")) {
         let current = this.currentDays.find(x => x.AttendanceDay === this.currentAttendance.AttendanceDay);
         if(current) {
           current.PresentDayStatus = 2;
@@ -414,7 +414,7 @@ export class AttendanceComponent implements OnInit {
         Toast("Wow!!!  Your attendance submitted successfully.");
       } else {
         this.isLoading = false;
-        ErrorToast(response.ResponseBody, 20);
+        ErrorToast("Fail to update. Please contact to admin.", 20);
       }
 
       $('#commentModal').modal('hide');
