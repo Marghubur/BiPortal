@@ -72,9 +72,7 @@ export class AttendanceComponent implements OnInit {
     this.today = new Date();
     this.tomorrow = new Date(new Date().setDate(this.today.getDate() + 1));
     this.isFormReady = false;
-    this.intervalId = setInterval(() => {
-      this.time = new Date();
-    }, 1000);
+    this.time = new Date();
     this.request.SortBy = null;
     this.request.PageIndex = 1;
     this.DayValue = this.time.getDay();
@@ -90,19 +88,11 @@ export class AttendanceComponent implements OnInit {
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.loadPageData();
     } else {
-      let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
       this.userDetail = this.user.getInstance() as UserDetail;
-      if(expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-      else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-      if(Master !== null && Master !== "") {
-        this.userDetail = Master["UserDetail"];
+      if(this.userDetail && this.userDetail !== null) {
         this.employeeId = this.userDetail.UserId;
         this.reportingManagerId = this.userDetail.ReportingManagerId;
         this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
-        //$('#loader').modal('show');
         this.loadPageData();
       } else {
         Toast("Invalid user. Please login again.")
@@ -189,7 +179,7 @@ export class AttendanceComponent implements OnInit {
 
   getMonths() {
     this.monthName = [];
-    var dt = new Date(this.employee.CreatedOn);
+    var dt = new Date();
     var month = dt.getMonth()+1;
     var year = dt.getFullYear();
     let i = 1;
