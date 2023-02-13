@@ -5,9 +5,8 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter, UserService } from 'src/providers/userService';
+import { UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -23,6 +22,8 @@ export class ManagetimesheetComponent implements OnInit {
   toDate: Date = null;
   weeklyTimesheetDetail: any = {};
   timesheetForm: FormGroup = null;
+  isSubmit: boolean = false;
+  companyName: string = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -87,19 +88,40 @@ export class ManagetimesheetComponent implements OnInit {
     });
   }
 
-  breakIntoHoursAndMinutes() {
+  breakIntoHoursAndMinutes(timeValue: number): string {
+    let totalTime: string = "";
+    try {
+      let hours = Math.trunc(timeValue/60);
+      if(hours < 10) {
+        totalTime = `0${hours}`;
+      } else {
+        totalTime = `${hours}`;
+      }
 
+      let minutes = timeValue % 60;
+      if(minutes < 10) {
+        totalTime += `:0${minutes}`;
+      } else {
+        totalTime += `:${minutes}`;
+      }
+    } catch(e) {
+      Toast("Invalid time used.");
+    }
+    return totalTime;
   }
 
-  combineIntoMinutes() {
-
+  combineIntoMinutes(hoursvalue: string, minvalue) {
+    let totalmin = (Number(hoursvalue) * 60) + (Number(minvalue))
+    return totalmin;
   }
 
   getWeekDayDetail(weekDetail: any): FormGroup {
-    let expectedHours = "08"; // weekDetail.ExpectedBurnedMinutes
-    let expectedMins = "00";
-    let actualHours = "08"; // weekDetail.ActualBurnedMinutes
-    let actualMins = "00";
+    let expectedTime = this.breakIntoHoursAndMinutes(weekDetail.ExpectedBurnedMinutes);
+    let expectedHours = expectedTime.split(':')[0];
+    let expectedMins = expectedTime.split(':')[1];
+    let actualTime = this.breakIntoHoursAndMinutes(weekDetail.ActualBurnedMinutes);
+    let actualHours = actualTime.split(':')[0];
+    let actualMins = actualTime.split(':')[1];
 
     return this.fb.group({
       WeekDay: new FormControl(weekDetail.WeekDay),
@@ -107,7 +129,9 @@ export class ManagetimesheetComponent implements OnInit {
       ExpectedMinutes: new FormControl(expectedMins),
       ActualHours: new FormControl(actualHours),
       ActualMinutes: new FormControl(actualMins),
-      PresentDate: new FormControl(weekDetail.PresentDate)
+      PresentDate: new FormControl(weekDetail.PresentDate),
+      ExpectedBurnedMinutes: new FormControl(weekDetail.ExpectedBurnedMinutes),
+      ActualBurnedMinutes: new FormControl(weekDetail.ActualBurnedMinutes)
     });
   }
 
@@ -130,5 +154,27 @@ export class ManagetimesheetComponent implements OnInit {
 
   get weeklydata(): FormArray {
     return this.timesheetForm.get("WeeklyTimesheetDetail") as FormArray;
+  }
+
+  saveTimesheet() {
+    this.isSubmit = false;
+    let value = this.timesheetForm.value;
+    for (let i = 0; i < value.WeeklyTimesheetDetail.length; i++) {
+      let expectedtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ExpectedHours, value.WeeklyTimesheetDetail[i].ExpectedMinutes);
+      value.WeeklyTimesheetDetail[i].ExpectedBurnedMinutes = expectedtime;
+      let actualtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ActualHours, value.WeeklyTimesheetDetail[i].ActualMinutes);
+      value.WeeklyTimesheetDetail[i].ActualBurnedMinutes = actualtime;
+    }
+  }
+
+  submitTimesheet() {
+    this.isSubmit = true;
+    let value = this.timesheetForm.value;
+    for (let i = 0; i < value.WeeklyTimesheetDetail.length; i++) {
+      let expectedtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ExpectedHours, value.WeeklyTimesheetDetail[i].ExpectedMinutes);
+      value.WeeklyTimesheetDetail[i].ExpectedBurnedMinutes = expectedtime;
+      let actualtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ActualHours, value.WeeklyTimesheetDetail[i].ActualMinutes);
+      value.WeeklyTimesheetDetail[i].ActualBurnedMinutes = actualtime;
+    }
   }
 }
