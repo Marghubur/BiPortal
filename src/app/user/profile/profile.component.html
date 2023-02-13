@@ -749,7 +749,7 @@
                               <div class="col-md-9">{{personalDetailForm.get("PermitOtherCountry").value}}</div>
                             </div>
                           </div>
-                          <ng-container *ngIf="langauge.controls.length > 0">
+                          <ng-container *ngIf="langauge.controls.length > 0 && langauge.controls[0].get('Language').value != null && langauge.controls[0].get('Language').value != ''">
                             <div class="mt-3 mb-3" formArrayName="Languages">
                               <h4 class="fw-bold">Language</h4>
                               <table class="table table-striped">

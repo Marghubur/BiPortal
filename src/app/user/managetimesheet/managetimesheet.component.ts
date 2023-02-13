@@ -71,5 +71,4 @@ export class ManagetimesheetComponent implements OnInit {
       }
     });
   }
-
 }
