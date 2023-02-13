@@ -1,6 +1,6 @@
 <div class="col-12 full-v main-container">
   <div class="col-12 row p-0 m-0">
-    <div class="right-panel container col-md-12 p-0">
+    <div class="right-panel container col-md-12 p-0 overflow-hidden">
       <div class="x_panel mt-2">
         <div class="x_header">
           <div class="x_header_title d-flex justify-content-between align-items-center">
@@ -22,11 +22,14 @@
               <button class="btn btn-danger ms-2">Cancel</button>
             </div>
             <div class="col ps-0">
-              <div ngbDropdown class="d-inline-block">
-                <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                  More Actions
+              <div ngbDropdown placement="bottom-start" class="d-inline-block">
+                <button type="button" class="btn btn-secondary" id="dropdownBasic12" ngbDropdownToggle>
+                  <a href="javascript:void(0)" class="text-decoration-none text-white" >
+                    More Actions
+                    <i class="fa fa-caret-down ps-2" data-name="dropdown-icon"></i>
+                  </a>
                 </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic12">
                   <button ngbDropdownItem>Action - 1</button>
                   <button ngbDropdownItem>Another Action</button>
                   <button ngbDropdownItem>Something else is here</button>
