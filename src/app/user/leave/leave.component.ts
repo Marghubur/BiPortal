@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, UserAttendance, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -24,7 +24,7 @@ export class LeaveComponent implements OnInit {
   model: NgbDateStruct;
   leaveDays: number = 1;
   leaveForm: FormGroup;
-  userDetail: UserDetail = new UserDetail();
+  userDetail: any = null;
   employeeId: number = 0;
   managerList: autoCompleteModal = null;
   leaveDetail: LeaveModal = null;
@@ -43,6 +43,7 @@ export class LeaveComponent implements OnInit {
   isEnabled: boolean = false;
   minDate: any;
   maxDate: any;
+  reportingManagerId: number = 0;
   isHalfDay: boolean = true;
   datePickerJson = {};
   json = {
@@ -85,18 +86,11 @@ export class LeaveComponent implements OnInit {
       text: "Default Manager"
     });
     this.managerList.className="";
-    if(this.cachedData) {
-
-    } else {
-      let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
+    this.loadAutoComplete();
+    if(!this.cachedData) {
       this.userDetail = this.user.getInstance() as UserDetail;
-      if(expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-      else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-      if(Master !== null && Master !== "") {
-        this.userDetail = Master["UserDetail"];
+      this.reportingManagerId = this.userDetail.ReportingManagerId;
+      if(this.userDetail && this.userDetail != null) {
         this.employeeId = this.userDetail.UserId;
         this.leaveDetail.EmployeeId = this.employeeId;
         this.loadData();
@@ -115,6 +109,14 @@ export class LeaveComponent implements OnInit {
     this.leaveForm.get('LeaveFromDay').setValue(this.leaveDetail.LeaveFromDay);
     this.leaveForm.get('LeaveToDay').setValue(this.leaveDetail.LeaveToDay);
     $('#leaveModal').modal('show');
+  }
+
+  loadAutoComplete() {
+    this.isPageReady = false;
+    this.managerList.data = [];
+    this.managerList.placeholder = "Employee";
+    this.managerList.data = GetEmployees();
+    this.managerList.className = "";
   }
 
   submitLeave() {
@@ -286,14 +288,6 @@ export class LeaveComponent implements OnInit {
         this.findHoliday(companyHoliday);
         this.findDisabledDate();
       }
-
-      this.managerList.data = [];
-      this.managerList.placeholder = "Reporting Manager";
-      this.managerList.data.push({
-        value: 0,
-        text: "Default Manager",
-      });
-
       this.isPageReady = true;
       this.DestroyGraphInstances();
       this.bindChartData();

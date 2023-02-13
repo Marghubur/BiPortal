@@ -320,8 +320,10 @@
                     <div class="col-md-12">
                       <div class="x_panel">
                         <div class="x_header border-0">
-                          <div class="x_header_title pt-3">
-                            <h2 class="fw-bold text-dark">Key Skills</h2>
+                          <div class="x_header_title pt-3 align-items-center justify-content-between">
+                            <h2 class="fw-bold text-dark">Key Skills
+                            </h2>
+                            <button class="btn btn-outline-primary float-end" (click)="editItSkillDetail()"><i class="fa fa-plus-circle pe-2"></i>Add Skill</button>
                           </div>
                         </div>
                         <table class="table table-striped table-striped">
@@ -749,7 +751,7 @@
                               <div class="col-md-9">{{personalDetailForm.get("PermitOtherCountry").value}}</div>
                             </div>
                           </div>
-                          <ng-container *ngIf="langauge.controls.length > 0">
+                          <ng-container *ngIf="langauge.controls.length > 0 && langauge.controls[0].get('Language').value != null && langauge.controls[0].get('Language').value != ''">
                             <div class="mt-3 mb-3" formArrayName="Languages">
                               <h4 class="fw-bold">Language</h4>
                               <table class="table table-striped">
@@ -1725,7 +1727,7 @@
                 <option value="" disabled disabled>Select Preferred Shift</option>
                 <option value="1">Day</option>
                 <option value="2">Night</option>
-                <option value="2">Flexible</option>
+                <option value="3">Flexible</option>
               </select>
             </div>
             <div class="mb-3">

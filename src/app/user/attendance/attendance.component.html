@@ -77,7 +77,7 @@
                             <ngb-progressbar *ngIf="item.PresentDayStatus == 2" type="warning" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
                             <ngb-progressbar *ngIf="(!item.IsOpen && item.PresentDayStatus == 0) || item.PresentDayStatus == 5" type="danger" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
                             <ngb-progressbar *ngIf="item.IsOpen && item.PresentDayStatus == 0" type="primary" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
-                            <ngb-progressbar *ngIf="item.PresentDayStatus == 3" type="warning" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
+                            <ngb-progressbar *ngIf="item.PresentDayStatus == 3 || item.PresentDayStatus == 4" type="warning" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
                           </p>
                         </td>
                         <td class="align-middle"><i class="fa fa-circle pe-3 text-info"></i> {{item.LogOff}} hrs</td>

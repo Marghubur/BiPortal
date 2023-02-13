@@ -418,11 +418,9 @@
           <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment" name="Reason"
             formControlName="Reason"
             [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
-          <div class="col-md-6 mt-4">
+          <div class="col-md-12 mt-4">
             <p class="mb-0 text-dark ps-2 fs-5 py-2">Reporting Manager</p>
-            <app-iautocomplete [data]="managerList" formControlName="AssignTo"
-              [ngClass]="{'error-field':submitted && f['AssignTo'].errors != null && f['AssignTo'].errors['required']}"
-              name="AssignTo">
+            <app-iautocomplete [data]="managerList" [(ngModel)]="reportingManagerId" [ngModelOptions]="{standalone: true}">
             </app-iautocomplete>
           </div>
           <p class="mb-0 py-2">These employees will be notified through email when you leave request is approved.</p>
