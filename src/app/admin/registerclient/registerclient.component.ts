@@ -5,6 +5,7 @@ import { CommonService, ErrorToast, Toast, WarningToast } from 'src/providers/co
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Clients, EmailLinkConfig, OrgLogo, ProfileImage, RegisterClient, UserType } from 'src/providers/constants';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 declare var $: any;
 
 @Component({
@@ -23,6 +24,9 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   fileDetail: Array<any> = [];
   UserTypeId: UserType= UserType.Client;
   imageIndex: number = 0;
+  shifts: Array<any> = [];
+  shiftDetail: autoCompleteModal = null;
+
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -35,11 +39,17 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.shiftDetail = new autoCompleteModal();
+    this.shiftDetail.data = [];
+    this.shiftDetail.placeholder = "Work Shift";
+    this.shiftDetail.className = "normal";
+
     let data = this.nav.getValue();
     this.clientModal = new clientModal();
     if(data) {
       if (data.client.length > 0)
         this.clientModal = data.client[0] as clientModal;
+
       this.clientModal.IsActive = true;
       this.isUpdating = true;
       this.loadData();
@@ -47,18 +57,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       this.clientModal = new clientModal;
       this.initForm();
       this.isLoaded = true;
-
     }
-    // if (data !== null && data !== "") {
-    //   this.clientModal = data as clientModal;
-    //   this.isUpdating = true;
-    //   this.loadData();
-    // } else {
-    //   this.clientModal = new clientModal;
-    //   this.initForm();
-    //   this.isLoaded = true;
-    // }
-
   }
 
   buildProfileImage(fileDetail: any) {
@@ -68,20 +67,36 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
+    this.isLoaded = false;
     this.http.get(`clients/GetClientById/${this.clientModal.ClientId}/${this.clientModal.IsActive}/${this.UserTypeId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         if (response.ResponseBody.client.length > 0)
           this.clientModal = response.ResponseBody.client[0] as clientModal;
+
         let profileDetail = response.ResponseBody.file;
+        this.shifts = response.ResponseBody.shifts;
+        if (this.shifts && this.shifts.length > 0) {
+          this.shifts.map(x => {
+            this.shiftDetail.data.push({
+              value: x.WorkShiftId,
+              text: x.ShiftTitle
+            });
+          });
+        } else {
+          this.shiftDetail.data.push({
+            value: 0,
+            text: "Regular shift"
+          });
+        }
+
         if(profileDetail.length > 0) {
           this.buildProfileImage(profileDetail[0]);
         }
-        this.initForm();
       } else {
         this.clientModal = new clientModal;
-        this.initForm();
       }
-
+      
+      this.initForm();
       this.isLoaded = true;
     }).catch(e => {
       this.isLoaded = true;
@@ -123,7 +138,8 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       AdminId: new FormControl(this.clientModal.AdminId),
       FileId: new FormControl(this.clientModal.FileId),
       ProfileImgPath: new FormControl(''),
-      OldFileName: new FormControl(this.clientModal.OldFileName)
+      OldFileName: new FormControl(this.clientModal.OldFileName),
+      WorkShiftId: new FormControl(this.clientModal.WorkShiftId, [Validators.required])
     });
   }
 
@@ -167,6 +183,9 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       errroCounter++;
 
     if (this.clientForm.get("Pincode").value === 0 || this.clientForm.get("Pincode").errors !== null)
+      errroCounter++;
+
+    if (this.clientForm.get("WorkShiftId").value === 0 || this.clientForm.get("WorkShiftId").errors !== null)
       errroCounter++;
 
     if (this.clientForm.get("FileId").value == null)
@@ -232,7 +251,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       });
     } else {
       this.isLoading = false;
-      ErrorToast("All read marked fields are mandatory.");
+      ErrorToast("All fields marked * are mandatory.");
     }
   }
 
@@ -305,6 +324,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
 }
 
 class clientModal {
+  WorkShiftId: number = 0;
   ClientId: number = 0;
   ClientName: string = null;
   MobileNo: string = null;

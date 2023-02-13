@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -15,12 +16,13 @@ declare var $: any;
   styleUrls: ['./managetimesheet.component.scss']
 })
 export class ManagetimesheetComponent implements OnInit {
-  singleEmployee: Filter = null;
-  clientDetail: autoCompleteModal = new autoCompleteModal();
   userDetail: UserDetail = null;
-  employeeId: number = 0;
-  clientId: number = 0;
-  isEmployeesReady: boolean = false;
+  pageData: any = null;
+  isLoading: boolean = false;
+  fromDate: Date = null;
+  toDate: Date = null;
+  weeklyTimesheetDetail: any = {};
+  timesheetForm: FormGroup = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -28,47 +30,105 @@ export class ManagetimesheetComponent implements OnInit {
     private local: ApplicationStorage,
     private user: UserService
   ) {
-    this.clientDetail.placeholder = "Select Client";
-    this.clientDetail.data.push({
-      value: '0',
-      text: 'Select Client'
-    });
+
   }
 
   ngOnInit(): void {
+    this.pageData = this.nav.getValue();
     this.userDetail = this.user.getInstance() as UserDetail;
-    this.loadMappedClients();
+    this.loadTimesheetData();
   }
 
-  loadMappedClients() {
-    this.isEmployeesReady = false;
-    this.http.get(`employee/LoadMappedClients/${this.userDetail.UserId}`).then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        let mappedClient = response.ResponseBody.AllocatedClients;
-        if(mappedClient != null && mappedClient.length > 0) {
-          let i = 0;
-          while(i < mappedClient.length) {
-            this.clientDetail.data.push({
-              text: mappedClient[i].ClientName,
-              value: mappedClient[i].ClientId,
-            });
-            i++;
-          }
+  loadTimesheetData() {
+    this.isLoading = true;
+    if(this.pageData.EmployeeId <= 0) {
+      Toast("Invalid user selected.")
+      return;
+    }
 
-          if(mappedClient.length == 1) {
-            this.clientId = mappedClient[0].ClientId;
-            this.clientDetail.className = 'disabled-input';
-          }
-          Toast("Client loaded successfully.");
-        } else {
-          ErrorToast("Unable to get client detail. Please contact admin.");
+    if(!this.pageData.TimesheetStartDate) {
+      Toast("Invalid from date seleted.")
+      return;
+    }
+
+    if(!this.pageData.TimesheetEndDate) {
+      Toast("Invalid to date seleted.")
+      return;
+    }
+
+    this.fromDate = new Date(this.pageData.TimesheetStartDate);
+    this.toDate = new Date(this.pageData.TimesheetEndDate);
+
+    let data = {
+      EmployeeId: this.pageData.EmployeeId,
+      ClientId: this.pageData.ClientId,
+      TimesheetStartDate: this.fromDate,
+      TimesheetStatus: this.pageData.TimesheetStatus,
+      ForYear: this.fromDate.getFullYear()
+    }
+
+    this.isLoading = true;
+    this.http.post("Timesheet/GetWeekTimesheetData", data).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.weeklyTimesheetDetail = response.ResponseBody;
+        if (!this.weeklyTimesheetDetail.TimesheetWeeklyData && this.weeklyTimesheetDetail.TimesheetWeeklyData.length == 0) {
+          ErrorToast("Invalid week detail received. Please contact to admin.");
+          return;
         }
 
-        this.isEmployeesReady = true;
-        $('#loader').modal('hide');
-      } else {
-        ErrorToast("Unable to get client detail. Please contact admin.");
+        this.initForm();
+        Toast("Timesheet data loaded successfully.")
       }
+
+      this.isLoading = false;
+    }).catch(err => {
+      this.isLoading = false;
+      ErrorToast(err.error.HttpStatusMessage);
     });
+  }
+
+  breakIntoHoursAndMinutes() {
+
+  }
+
+  combineIntoMinutes() {
+
+  }
+
+  getWeekDayDetail(weekDetail: any): FormGroup {
+    let expectedHours = "08"; // weekDetail.ExpectedBurnedMinutes
+    let expectedMins = "00";
+    let actualHours = "08"; // weekDetail.ActualBurnedMinutes
+    let actualMins = "00";
+
+    return this.fb.group({
+      WeekDay: new FormControl(weekDetail.WeekDay),
+      ExpectedHours: new FormControl(expectedHours),
+      ExpectedMinutes: new FormControl(expectedMins),
+      ActualHours: new FormControl(actualHours),
+      ActualMinutes: new FormControl(actualMins),
+      PresentDate: new FormControl(weekDetail.PresentDate)
+    });
+  }
+
+  getWeeklyTimesheet(): FormArray {
+    let array: FormArray = this.fb.array([]);
+    array.clear();
+    this.weeklyTimesheetDetail.TimesheetWeeklyData.map(e => {
+      array.push(this.getWeekDayDetail(e));
+    });
+
+    return array;
+  }
+
+  initForm() {
+    this.timesheetForm = this.fb.group({
+      UserComments: new FormControl(""),
+      WeeklyTimesheetDetail: this.getWeeklyTimesheet()
+    });
+  }
+
+  get weeklydata(): FormArray {
+    return this.timesheetForm.get("WeeklyTimesheetDetail") as FormArray;
   }
 }

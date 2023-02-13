@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, UserAttendance, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
+import { AccessTokenExpiredOn, ManageTimesheet, UserAttendance, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -449,21 +449,13 @@ export class TimesheetComponent implements OnInit {
     }
 
     this.http.post("Timesheet/GetTimesheetByUserId", data).then((response: ResponseModel) => {
-      if(response.ResponseBody.EmployeeDetail)
-        this.client = response.ResponseBody.EmployeeDetail;
-      else {
-        this.NoClient = true;
-        this.isTimesheetDataLoaded = false;
-      }
-
-      this.dailyTimesheetDetails = [];
-      if (response.ResponseBody.DailyTimesheetDetails) {
-        // let blockedtimesheet = response.ResponseBody.DailyTimesheetDetails.filter(x => x.IsOpen === false);
-        this.dailyTimesheetDetails = response.ResponseBody.DailyTimesheetDetails;
-        this.createPageData();
+      if (response.ResponseBody) {
+        this.dailyTimesheetDetails = response.ResponseBody;
+        // this.createPageData();
         this.isTimesheetDataLoaded = true;
       }
-
+      
+      this.isFormReady = true;
       this.divisionCode = 1;
       this.isLoading = false;
     }).catch(err => {
@@ -711,14 +703,19 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
-  viewTimeSheet(index: number) {
-    this.initForm(this.dailyTimesheetDetails, index);
-    this.viewTimesheetWeek = this.currentMonthWeek[index];
-    if (this.viewTimesheetWeek.status != 6)
-      this.isSubmitted = true;
-    else
-      this.isSubmitted = false;
-    $('#timesheetModal').modal('show')
+  viewTimeSheet(item: any) {
+    // this.initForm(this.dailyTimesheetDetails, index);
+    // this.viewTimesheetWeek = this.currentMonthWeek[index];
+    // if (this.viewTimesheetWeek.status != 6)
+    //   this.isSubmitted = true;
+    // else
+    //   this.isSubmitted = false;
+    // $('#timesheetModal').modal('show')
+    if(item) {
+      this.nav.navigate(ManageTimesheet, item);
+    } else {
+      WarningToast("Invalid timesheet selected. Please contact to admin.");
+    }
   }
 
   checkDateExists(currenDate: Date, existingDateList: Array<any>) {
