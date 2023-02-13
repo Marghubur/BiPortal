@@ -10,165 +10,179 @@
         <div class="px-1">
           <app-breadcrums></app-breadcrums>
         </div>
-        <div class="col-md-12 row justify-content-between align-items-center">
-          <div class="col-md-4 mt-3">
-            <label for="" class="form-label me-2 fw-bold fs-5">Developer Name:</label>
-            <label for="" class="form-label me-2 fw-bold fs-5">{{userDetail.FirstName}} {{userDetail.LastName}}</label>
-          </div>
-          <div class="col-auto mt-3 row">
-            <div class="col-auto">
-              <button class="btn btn-warning">Save</button>
-              <button class="btn btn-primary-c ms-2">Submit</button>
-              <button class="btn btn-danger ms-2">Cancel</button>
-            </div>
-            <div class="col ps-0">
-              <div ngbDropdown class="d-inline-block">
-                <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                  More Actions
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button ngbDropdownItem>Action - 1</button>
-                  <button ngbDropdownItem>Another Action</button>
-                  <button ngbDropdownItem>Something else is here</button>
+        <div class="col-12">
+          <ng-container *ngIf="isLoading">
+
+          </ng-container>
+          <ng-container *ngIf="!isLoading">
+            <form [formGroup]="timesheetForm">
+              <div class="col-md-12 row justify-content-between align-items-center">
+                <div class="col-md-4 mt-3">
+                  <label for="" class="form-label me-2 fw-bold fs-5">Developer Name:</label>
+                  <label for="" class="form-label me-2 fw-bold fs-5">{{userDetail.FirstName}} {{userDetail.LastName}}</label>
+                </div>
+                <div class="col-auto mt-3 row">
+                  <div class="col-auto">
+                    <button class="btn btn-warning">Save</button>
+                    <button class="btn btn-primary-c ms-2">Submit</button>
+                    <button class="btn btn-danger ms-2">Cancel</button>
+                  </div>
+                  <div class="col ps-0">
+                    <div ngbDropdown class="d-inline-block">
+                      <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                        More Actions
+                      </button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem>Action - 1</button>
+                        <button ngbDropdownItem>Another Action</button>
+                        <button ngbDropdownItem>Something else is here</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12 row">
-          <div class="col-md-6">
-            <div class="row mt-3">
-              <div class="col-md-3">
-                Select Placement
-              </div>
-              <div class="col-md-9">
-                <app-iautocomplete [data]="clientDetail"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
-                </app-iautocomplete>
-              </div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-3">
-                Comments
-              </div>
-              <div class="col-md-9">
-                <textarea placeholder="Additional Info" class="form-control" rows="3"></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            Date: Feb, 3rd 2023 to Feb 10th 2023
-          </div>
-        </div>
-        <div class="col-12 row m-0 mt-5">
-          <div class="x_panel x-panel-changed">
-            <div class="x_header">
-              <div class="x_header_title">
-                <h2>Timesheet Details</h2>
-              </div>
-            </div>
-            <div class="col-md-12 row justify-content-between align-items-center">
-              <div class="col-md-7 row mt-3">
-                <div class="col-md-2">
-                  <i class="fa fa-circle text-secondary pe-2"></i>
-                  WEEKENDS
+              <div class="col-md-12 row">
+                <div class="col-md-6">
+                  <div class="row mt-3">
+                    <div class="col-md-3">
+                      Select Placement
+                    </div>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-md-3">
+                      Comments
+                    </div>
+                    <div class="col-md-9">
+                      <textarea placeholder="Additional Info" formControlName="UserComments" class="form-control" rows="3"></textarea>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  <i class="fa fa-circle text-info pe-2"></i>
-                  SUBMITTED
-                </div>
-                <div class="col-md-2">
-                  <i class="fa fa-circle text-success pe-2"></i>
-                  APPROVED
-                </div>
-                <div class="col-md-2">
-                  <i class="fa fa-circle text-danger pe-2"></i>
-                  REJECTED
-                </div>
-                <div class="col-md-2">
-                  <i class="fa fa-circle text-primary pe-2"></i>
-                  LEAVE
+                <div class="col-md-6">
+                  Date: Feb, 3rd 2023 to Feb 10th 2023
                 </div>
               </div>
-              <div class="col-md-3 float-end text-end mt-3">
-                <button class="btn btn-primary-c btn-sm me-2">Fill from previous Timesheet</button>
-                <button class="btn btn-primary-c btn-sm">Clear Timesheet</button>
+              <div class="col-12 row m-0 mt-5">
+                <div class="x_panel x-panel-changed">
+                  <div class="x_header">
+                    <div class="x_header_title">
+                      <h2>Timesheet Details</h2>
+                    </div>
+                  </div>
+                  <div class="col-md-12 row justify-content-between align-items-center">
+                    <div class="col-md-7 row mt-3">
+                      <div class="col-md-2">
+                        <i class="fa fa-circle text-secondary pe-2"></i>
+                        WEEKENDS
+                      </div>
+                      <div class="col-md-2">
+                        <i class="fa fa-circle text-info pe-2"></i>
+                        SUBMITTED
+                      </div>
+                      <div class="col-md-2">
+                        <i class="fa fa-circle text-success pe-2"></i>
+                        APPROVED
+                      </div>
+                      <div class="col-md-2">
+                        <i class="fa fa-circle text-danger pe-2"></i>
+                        REJECTED
+                      </div>
+                      <div class="col-md-2">
+                        <i class="fa fa-circle text-primary pe-2"></i>
+                        LEAVE
+                      </div>
+                    </div>
+                    <div class="col-md-3 float-end text-end mt-3">
+                      <button class="btn btn-primary-c btn-sm me-2">Fill from previous Timesheet</button>
+                      <button class="btn btn-primary-c btn-sm">Clear Timesheet</button>
+                    </div>
+                  </div>
+                  <div class="col-md-12 row mt-3">
+                    <div class="col-md-1 border-end text-center">
+                      <span class="badge bg-primary text-center">TOTAL</span>
+                      <p class="fw-bold fs-5 mb-0 text-dark">40:00</p>
+                    </div>
+                    <div class="col-md-1 border-end text-center">
+                      <span class="badge bg-success text-center">BILLABLE</span>
+                      <p class="fw-bold fs-5 mb-0 text-dark">40:00</p>
+                    </div>
+                    <div class="col-md-1 border-end text-center">
+                      <span class="badge bg-warning text-center">STANDARD</span>
+                      <p class="fw-bold fs-5 mb-0 text-dark">40:00</p>
+                    </div>
+                  </div>
+                  <div class="col-md-12 mt-3" formArrayName="WeeklyTimesheetDetail">
+                    <table class="table table-bordered">
+                      <tbody>
+                        <tr>
+                          <th class="fw-bold fs-5 text-primary" width="18%">Week 1</th>
+                          <td class="text-primary text-center">Mon</td>
+                          <td class="text-primary text-center">Tue</td>
+                          <td class="text-primary text-center">Wed</td>
+                          <td class="text-primary text-center">Thu</td>
+                          <td class="text-primary text-center">Fri</td>
+                          <td class="table-active text-primary text-center">Sat</td>
+                          <td class="table-active text-primary text-center">Sun</td>
+                          <td rowspan="2" class="text-break table-active" width="10%">Total Hours Per item</td>
+                        </tr>
+                        <tr>
+                          <td class="table-active text-primary">Pay Classification</td>
+                          <ng-container *ngFor="let item of weeklydata.controls; let i = index" [formGroupName]="i">
+                            <td class="text-primary">
+                              <div class="d-flex justify-content-center">
+                                {{item.get("PresentDate").value | date}}
+                              </div>
+                            </td>
+                          </ng-container>
+                        </tr>
+                        <tr>
+                          <td>Standard Time</td>
+                          <ng-container *ngFor="let item of weeklydata.controls; let i = index" [formGroupName]="i">
+                            <td class="text-primary">
+                              <div class="d-flex justify-content-center">
+                                <input type="text" class="border-0 w-25 text-end" formControlName="ExpectedHours">
+                                <span>:</span>
+                                <input type="text" class="border-0 w-25" formControlName="ExpectedMinutes">
+                              </div>
+                            </td>
+                          </ng-container>
+                          <td class="table-active">40:00</td>
+                        </tr>
+                        <tr class="table-active">
+                          <td>Total Billable Hours</td>
+                          <ng-container *ngFor="let item of weeklydata.controls; let i = index" [formGroupName]="i">
+                            <td class="fw-bold">
+                              <div class="d-flex justify-content-center">
+                                {{item.get("ExpectedHours").value}}
+                                <span>:</span>
+                                {{item.get("ExpectedMinutes").value}}
+                              </div>
+                            </td>
+                          </ng-container>
+                          <td class="fw-bold">40:00</td>
+                        </tr>
+                        <tr class="table-active">
+                          <td>Total Hours</td>
+                          <ng-container *ngFor="let item of weeklydata.controls; let i = index" [formGroupName]="i">
+                            <td class="fw-bold">
+                              <div class="d-flex justify-content-center">
+                                {{item.get("ActualHours").value}}
+                                <span>:</span>
+                                {{item.get("ActualMinutes").value}}
+                              </div>
+                            </td>
+                          </ng-container>
+                          <td class="fw-bold">40:00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-md-12 row mt-3">
-              <div class="col-md-1 border-end text-center">
-                <span class="badge bg-primary text-center">TOTAL</span>
-                <p class="fw-bold fs-5 mb-0 text-dark">40:00</p>
-              </div>
-              <div class="col-md-1 border-end text-center">
-                <span class="badge bg-success text-center">BILLABLE</span>
-                <p class="fw-bold fs-5 mb-0 text-dark">40:00</p>
-              </div>
-              <div class="col-md-1 border-end text-center">
-                <span class="badge bg-warning text-center">STANDARD</span>
-                <p class="fw-bold fs-5 mb-0 text-dark">40:00</p>
-              </div>
-            </div>
-            <div class="col-md-12 mt-3">
-              <table class="table table-bordered">
-                <tbody>
-                  <tr >
-                    <th class="fw-bold fs-5 text-primary">Week 1</th>
-                    <td class="text-primary">Mon</td>
-                    <td class="text-primary">Tue</td>
-                    <td class="text-primary">Wed</td>
-                    <td class="text-primary">Thu</td>
-                    <td class="text-primary">Fri</td>
-                    <td class="table-active text-primary">Sat</td>
-                    <td class="table-active text-primary">Sun</td>
-                    <td rowspan="2" class="text-break table-active" width="7%">Total Hours Per item</td>
-                  </tr>
-                  <tr>
-                    <td class="table-active text-primary">Pay Classification</td>
-                    <td class="text-primary">06-Feb</td>
-                    <td class="text-primary">07-Feb</td>
-                    <td class="text-primary">08-Feb</td>
-                    <td class="text-primary">09-Feb</td>
-                    <td class="text-primary">0610-Feb</td>
-                    <td class="table-active text-primary">11-Feb</td>
-                    <td class="table-active text-primary">12-Feb</td>
-                  </tr>
-                  <tr>
-                    <td>Standard Time</td>
-                    <td>08:00</td>
-                    <td>08:00</td>
-                    <td>08:00</td>
-                    <td>08:00</td>
-                    <td>08:00</td>
-                    <td>08:00</td>
-                    <td>08:00</td>
-                    <td class="table-active">40:00</td>
-                  </tr>
-                  <tr class="table-active">
-                    <td>Total Billable Hours</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">40:00</td>
-                  </tr>
-                  <tr class="table-active">
-                    <td>Total Hours</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">08:00</td>
-                    <td class="fw-bold">40:00</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+            </form>
+          </ng-container>
         </div>
       </div>
     </div>

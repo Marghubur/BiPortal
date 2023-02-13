@@ -74,18 +74,19 @@
                       </tr>
                     </thead>
                     <tbody >
-                      <tr *ngFor="let item of currentMonthWeek; let i = index">
+                      <tr *ngFor="let item of dailyTimesheetDetails; let i = index">
                         <td>
-                          <a href="javascript:void(0)" class="text-dark" (click)="viewTimeSheet(i)">
-                            <span class="fw-bold pe-1">Timesheet From</span>{{item.startWeek | date}} <span class="fw-bold px-1">to</span>{{item.endWeek | date}}
+                          <a href="javascript:void(0)" class="text-dark" (click)="viewTimeSheet(item)">
+                            <span class="fw-bold pe-1">Timesheet From</span>{{item.TimesheetStartDate | date}} 
+                            <span class="fw-bold px-1">to</span>{{item.TimesheetEndDate | date}}
                           </a>
                         </td>
                         <td>
-                          <span *ngIf="item.status == 2"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Penidng</span>
-                          <span *ngIf="item.status == 9"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
-                          <span *ngIf="item.status == 6 "><i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
-                          <span *ngIf="item.status == 5 "><i class="fa fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Rejected</span>
-                          <span class="text-danger"  *ngIf="item.status == -1">
+                          <span *ngIf="item.TimesheetStatus == 2"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Penidng</span>
+                          <span *ngIf="item.TimesheetStatus == 9"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
+                          <span *ngIf="item.TimesheetStatus == 6 "><i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
+                          <span *ngIf="item.TimesheetStatus == 5 "><i class="fa fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Rejected</span>
+                          <span class="text-danger"  *ngIf="item.TimesheetStatus == -1">
                             <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Readonly
                           </span>
