@@ -23,15 +23,14 @@
                 </div>
                 <div class="col-auto mt-3 row">
                   <div class="col-auto">
-                    <button class="btn btn-warning">Save</button>
-                    <button class="btn btn-primary-c ms-2">Submit</button>
+                    <button class="btn btn-warning" (click)="saveTimesheet()">Save</button>
+                    <button class="btn btn-primary-c ms-2" (click)="submitTimesheet()">Submit</button>
                     <button class="btn btn-danger ms-2">Cancel</button>
                   </div>
                   <div class="col ps-0">
                     <div ngbDropdown class="d-inline-block">
                       <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                        More Actions
-                        <a href="javascript:void(0)" class="text-decoration-none text-white" >
+                        <a href="javascript:void(0)" class="text-decoration-none" >
                           More Actions
                           <i class="fa fa-caret-down ps-2" data-name="dropdown-icon"></i>
                         </a>
@@ -52,7 +51,7 @@
                       Select Placement
                     </div>
                     <div class="col-md-9">
-                      <input type="text" class="form-control">
+                      <input type="text" class="form-control" readonly>
                     </div>
                   </div>
                   <div class="row mt-3">
@@ -146,9 +145,9 @@
                           <ng-container *ngFor="let item of weeklydata.controls; let i = index" [formGroupName]="i">
                             <td class="text-primary">
                               <div class="d-flex justify-content-center">
-                                <input type="text" class="border-0 w-25 text-end" formControlName="ExpectedHours">
+                                <input type="text" class="border-0 w-25 text-end" formControlName="ActualHours">
                                 <span>:</span>
-                                <input type="text" class="border-0 w-25" formControlName="ExpectedMinutes">
+                                <input type="text" class="border-0 w-25" formControlName="ActualMinutes">
                               </div>
                             </td>
                           </ng-container>
