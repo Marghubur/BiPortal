@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -61,14 +60,9 @@ export class ManagetimesheetComponent implements OnInit {
     this.toDate = new Date(this.pageData.TimesheetEndDate);
 
     let data = {
-      EmployeeId: this.pageData.EmployeeId,
-      ClientId: this.pageData.ClientId,
-      TimesheetStartDate: this.fromDate,
-      TimesheetStatus: this.pageData.TimesheetStatus,
-      ForYear: this.fromDate.getFullYear()
+      TimesheetId: this.pageData.TimesheetId
     }
 
-    this.isLoading = true;
     this.http.post("Timesheet/GetWeekTimesheetData", data).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         this.weeklyTimesheetDetail = response.ResponseBody;
@@ -159,22 +153,52 @@ export class ManagetimesheetComponent implements OnInit {
   saveTimesheet() {
     this.isSubmit = false;
     let value = this.timesheetForm.value;
+    let totalExceptedMinutes = 0;
+    let totalActualMinutes = 0;
     for (let i = 0; i < value.WeeklyTimesheetDetail.length; i++) {
       let expectedtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ExpectedHours, value.WeeklyTimesheetDetail[i].ExpectedMinutes);
       value.WeeklyTimesheetDetail[i].ExpectedBurnedMinutes = expectedtime;
+      totalExceptedMinutes += expectedtime;
+
       let actualtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ActualHours, value.WeeklyTimesheetDetail[i].ActualMinutes);
       value.WeeklyTimesheetDetail[i].ActualBurnedMinutes = actualtime;
+      totalActualMinutes += actualtime;
     }
   }
 
   submitTimesheet() {
     this.isSubmit = true;
-    let value = this.timesheetForm.value;
-    for (let i = 0; i < value.WeeklyTimesheetDetail.length; i++) {
-      let expectedtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ExpectedHours, value.WeeklyTimesheetDetail[i].ExpectedMinutes);
-      value.WeeklyTimesheetDetail[i].ExpectedBurnedMinutes = expectedtime;
-      let actualtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ActualHours, value.WeeklyTimesheetDetail[i].ActualMinutes);
-      value.WeeklyTimesheetDetail[i].ActualBurnedMinutes = actualtime;
+    let formArray = this.weeklydata;
+    
+    let i = 0;
+    let form: FormGroup = null;
+    let timeInMinutes = 0;
+    while(i < formArray.length) {
+      form = formArray.controls[i] as FormGroup;
+      timeInMinutes = this.combineIntoMinutes(form.get("ExpectedHours").value, form.get("ExpectedMinutes").value);
+      form.get("ExpectedBurnedMinutes").setValue(timeInMinutes)
+
+      timeInMinutes = this.combineIntoMinutes(form.get("ActualHours").value, form.get("ActualMinutes").value);
+      form.get("ActualBurnedMinutes").setValue(timeInMinutes)
+      i++;
     }
+
+    this.sendData();
+  }
+
+  sendData() {
+    let data = this.timesheetForm.value;
+    this.weeklyTimesheetDetail.UserComments = data.UserComments;
+    this.weeklyTimesheetDetail.TimesheetWeeklyData = data.WeeklyTimesheetDetail;
+    this.weeklyTimesheetDetail.ExpectedBurnedMinutes = data.ExpectedBurnedMinutes;
+    this.weeklyTimesheetDetail.ActualBurnedMinutes = data.ActualBurnedMinutes;
+    this.http.post("Timesheet/SubmitTimesheet", this.weeklyTimesheetDetail).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+
+      }
+
+      Toast("Submitted successfully");
+    });
   }
 }
+
