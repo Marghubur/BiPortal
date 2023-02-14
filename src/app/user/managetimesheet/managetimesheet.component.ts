@@ -151,22 +151,14 @@ export class ManagetimesheetComponent implements OnInit {
   }
 
   saveTimesheet() {
-    this.isSubmit = false;
-    let value = this.timesheetForm.value;
-    let totalExceptedMinutes = 0;
-    let totalActualMinutes = 0;
-    for (let i = 0; i < value.WeeklyTimesheetDetail.length; i++) {
-      let expectedtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ExpectedHours, value.WeeklyTimesheetDetail[i].ExpectedMinutes);
-      value.WeeklyTimesheetDetail[i].ExpectedBurnedMinutes = expectedtime;
-      totalExceptedMinutes += expectedtime;
-
-      let actualtime = this.combineIntoMinutes(value.WeeklyTimesheetDetail[i].ActualHours, value.WeeklyTimesheetDetail[i].ActualMinutes);
-      value.WeeklyTimesheetDetail[i].ActualBurnedMinutes = actualtime;
-      totalActualMinutes += actualtime;
-    }
+    this.sendData("Timesheet/SaveTimesheet");
   }
 
   submitTimesheet() {
+    this.sendData("Timesheet/SubmitTimesheet");
+  }
+
+  sendData(url: string) {
     this.isSubmit = true;
     let formArray = this.weeklydata;
     
@@ -183,16 +175,12 @@ export class ManagetimesheetComponent implements OnInit {
       i++;
     }
 
-    this.sendData();
-  }
-
-  sendData() {
     let data = this.timesheetForm.value;
     this.weeklyTimesheetDetail.UserComments = data.UserComments;
     this.weeklyTimesheetDetail.TimesheetWeeklyData = data.WeeklyTimesheetDetail;
     this.weeklyTimesheetDetail.ExpectedBurnedMinutes = data.ExpectedBurnedMinutes;
     this.weeklyTimesheetDetail.ActualBurnedMinutes = data.ActualBurnedMinutes;
-    this.http.post("Timesheet/SubmitTimesheet", this.weeklyTimesheetDetail).then((response: ResponseModel) => {
+    this.http.post(url, this.weeklyTimesheetDetail).then((response: ResponseModel) => {
       if (response.ResponseBody) {
 
       }
