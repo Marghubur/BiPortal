@@ -19,6 +19,7 @@ export class UserService {
 
 export class Filter {
   EmployeeId: number = 0;
+  ClientId: number = 0;
   SearchString: string = "1=1";
   PageIndex: number = 1;
   StartIndex: number = 0;
