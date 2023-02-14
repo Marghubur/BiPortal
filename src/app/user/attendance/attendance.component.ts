@@ -234,15 +234,15 @@ export class AttendanceComponent implements OnInit {
     this.loadMappedData(data);
   }
 
-  getMonday(d: Date) {
-    if(d) {
-      d = new Date(d);
-      var day = d.getDay(),
-          diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-      return new Date(d.setDate(diff));
-    }
-    return null;
-  }
+  // getMonday(d: Date) {
+  //   if(d) {
+  //     d = new Date(d);
+  //     var day = d.getDay(),
+  //         diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+  //     return new Date(d.setDate(diff));
+  //   }
+  //   return null;
+  // }
 
   applyWorkFromHome(e: any) {
     this.currentAttendance = e;
@@ -309,6 +309,10 @@ export class AttendanceComponent implements OnInit {
       }
     }
     let reportmanager = this.employeesList.data.find(x => x.value == this.userDetail.ReportingManagerId);
+    if (reportmanager == null) {
+      ErrorToast("Your assign manger is not found. Please contact to admin");
+      return;
+    }
     let mangeremail = notify.find(x => x.Email == reportmanager.email);
     if (mangeremail == null) {
       notify.push({
@@ -328,7 +332,7 @@ export class AttendanceComponent implements OnInit {
         Email: this.employee.Email,
         Mobile: this.employee.Mobile,
         EmployeeMessage: this.commentValue,
-        CurrentStatus: ItemStatus.Pending,
+        CurrentStatus: this.currentAttendance.PresentDayStatus == 0 ? ItemStatus.Pending : this.currentAttendance.PresentDayStatus,
         AttendanceDate: item.AttendanceDay,
         NotifyList: notify
       });
@@ -415,20 +419,20 @@ export class AttendanceComponent implements OnInit {
 
   //-------------------------- required code ends --------------------------
 
-  checkDateExists(currenDate: Date, existingDateList: Array<any>) {
-    let i = 0;
-    let date = null;
-    while(i < existingDateList.length) {
-      date = new Date(existingDateList[i]["AttendanceDay"]);
-      if(currenDate.getFullYear() == date.getFullYear() &&
-         currenDate.getMonth() == date.getMonth() &&
-         currenDate.getDate() == date.getDate()) {
-           return true;
-         }
-      i++;
-    }
-    return false;
-  }
+  // checkDateExists(currenDate: Date, existingDateList: Array<any>) {
+  //   let i = 0;
+  //   let date = null;
+  //   while(i < existingDateList.length) {
+  //     date = new Date(existingDateList[i]["AttendanceDay"]);
+  //     if(currenDate.getFullYear() == date.getFullYear() &&
+  //        currenDate.getMonth() == date.getMonth() &&
+  //        currenDate.getDate() == date.getDate()) {
+  //          return true;
+  //        }
+  //     i++;
+  //   }
+  //   return false;
+  // }
 
   loadAutoComplete() {
     this.isEmployeesReady = false;
@@ -478,7 +482,7 @@ export class AttendanceComponent implements OnInit {
           this.currentDays = this.allDaysAttendance;
           break;
         case 2:
-          data = this.allDaysAttendance.filter(x => x.PresentDayStatus == 2);
+          data = this.allDaysAttendance.filter(x => x.PresentDayStatus == 2 || x.PresentDayStatus == 12);
           this.currentDays =data;
           break;
         case 3:

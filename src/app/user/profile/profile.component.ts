@@ -245,13 +245,13 @@ export class ProfileComponent implements OnInit {
   //----------------- Personal Detail form, group and add new ------------------------
 
   buildPersonalDetailForm() {
-    let date = new Date();
+    let date = null;
     if(this.userModal.PersonalDetail.DOB) {
-      let date = new Date(this.userModal.PersonalDetail.DOB);
+      date = new Date(this.userModal.PersonalDetail.DOB);
       if (date.getFullYear() == 1) {
         date = new Date();
       }
-    this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
     }
     this.personalDetailForm = this.fb.group({
       DOB: new FormControl(date),
@@ -369,6 +369,15 @@ export class ProfileComponent implements OnInit {
       }
     }
 
+    if (this.editPersonalDetailModal.Gender == null || this.editPersonalDetailModal.Gender == "") {
+      let elem = document.getElementsByName('Gender');
+      for (let i = 0; i < elem.length; i++) {
+        elem[i].classList
+        if (!elem[i].classList.contains('error-field'))
+          elem[i].classList.add('error-field');
+        errorcount++;
+      }
+    }
     if (errorcount === 0) {
       this.userModal.PersonalDetail.DOB = this.personalDetailForm.value.DOB;
       this.userModal.PersonalDetail.Gender = this.editPersonalDetailModal.Gender;
@@ -423,6 +432,7 @@ export class ProfileComponent implements OnInit {
 
   editProjectDetail(current: FormGroup) {
     this.isEdit = true;
+    $("#editProjectModal").modal("show");
     let elem = document.getElementsByName('ProjectTitle')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
@@ -431,7 +441,6 @@ export class ProfileComponent implements OnInit {
     if (elem.contains('error-field'))
       elem.remove('error-field');
     this.editProjectModal = current.value as Project;
-    $("#editProjectModal").modal("show");
     this.isEditProject = true;
   }
 
@@ -488,6 +497,7 @@ export class ProfileComponent implements OnInit {
     this.editProjectModal = new Project();
     //this.editProjectModal = this.currentProjectOnEdit.value as Project;
     this.isEditProject = true;
+    $("#editProjectModal").modal("show");
     let elem = document.getElementsByName('ProjectTitle')[0].classList;
     if (elem.contains('error-field'))
     elem.remove('error-field');
@@ -495,7 +505,6 @@ export class ProfileComponent implements OnInit {
     elem = document.getElementsByName('ProjectDetails')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
-    $("#editProjectModal").modal("show");
   }
 
   deleteProjectPopup(e: any) {
@@ -545,13 +554,14 @@ export class ProfileComponent implements OnInit {
   }
 
   editItSkillDetail() {
+    this.isEditItSkill = true;
     this.SkillIndex = 0;
     this.ExptLanguage = '';
     this.ExptVersion = null;
     this.ExptinYrs = null;
     this.ExptinMonths = null;
     this.Exptdate = null;
-    this.isEditItSkill = true;
+    $("#itSkillModal").modal('show');
     let elem = document.getElementsByName('ExptLanguage')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
@@ -568,7 +578,6 @@ export class ProfileComponent implements OnInit {
     if (elem.contains('error-field'))
       elem.remove('error-field');
 
-    $("#itSkillModal").modal('show');
   }
 
   addItskill() {
@@ -726,10 +735,10 @@ export class ProfileComponent implements OnInit {
       this.siteURL = "";
       this.isSiteURLUpdate = false;
       this.isEditOnlineProfile = true;
+      $("#onlineProfileModal").modal("show");
       let elem = document.getElementsByName('OnlineProfile')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#onlineProfileModal").modal("show");
     }
 
     submitOnlineProfile() {
@@ -778,10 +787,10 @@ export class ProfileComponent implements OnInit {
       this.siteURLForm = current;
       this.siteURL = current.value.OnlineProfile;
       this.isEditOnlineProfile = true;
+      $("#onlineProfileModal").modal("show");
       let elem = document.getElementsByName('OnlineProfile')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#onlineProfileModal").modal("show");
     }
 
 
@@ -805,10 +814,10 @@ export class ProfileComponent implements OnInit {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
       this.isEditCertification = true;
+      $("#certificationModal").modal("show");
       let elem = document.getElementsByName('Certification')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#certificationModal").modal("show");
     }
 
     editCertification(current: FormGroup) {
@@ -816,10 +825,10 @@ export class ProfileComponent implements OnInit {
       this.siteURLForm = current;
       this.siteURL = current.value.Certification;
       this.isEditCertification = true;
+      $("#certificationModal").modal("show");
       let elem = document.getElementsByName('Certification')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#certificationModal").modal("show");
     }
 
     submitCertification() {
@@ -883,10 +892,10 @@ export class ProfileComponent implements OnInit {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
       this.isEditWorkSample = true;
+      $("#workSampleModal").modal("show");
       let elem = document.getElementsByName('WorkSample')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#workSampleModal").modal("show");
     }
 
     editWorkSample(current: FormGroup) {
@@ -894,10 +903,10 @@ export class ProfileComponent implements OnInit {
       this.siteURLForm = current;
       this.siteURL = current.value.WorkSample;
       this.isEditWorkSample = true;
+      $("#workSampleModal").modal("show");
       let elem = document.getElementsByName('WorkSample')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#workSampleModal").modal("show");
     }
 
     deleteWorkSamplePopup(e: any) {
@@ -961,10 +970,10 @@ export class ProfileComponent implements OnInit {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
       this.isEditResearch = true;
+      $("#researchModal").modal("show");
       let elem = document.getElementsByName('Research')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#researchModal").modal("show");
     }
 
     editResaerch(current: FormGroup) {
@@ -972,10 +981,10 @@ export class ProfileComponent implements OnInit {
       this.siteURLForm = current;
       this.siteURL = current.value.Research;
       this.isEditResearch = true;
+      $("#researchModal").modal("show");
       let elem = document.getElementsByName('Research')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#researchModal").modal("show");
     }
 
     deleteResearchPopup(e: any) {
@@ -1039,10 +1048,10 @@ export class ProfileComponent implements OnInit {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
       this.isEditPresentation = true;
+      $("#presentationModal").modal("show");
       let elem = document.getElementsByName('Presentation')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#presentationModal").modal("show");
     }
 
     editPresentation(current: FormGroup) {
@@ -1050,10 +1059,10 @@ export class ProfileComponent implements OnInit {
       this.siteURLForm = current;
       this.siteURL = current.value.Presentation;
       this.isEditPresentation = true;
+      $("#presentationModal").modal("show");
       let elem = document.getElementsByName('Presentation')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#presentationModal").modal("show");
     }
 
     deletePresentationPopup(e: any) {
@@ -1117,10 +1126,10 @@ export class ProfileComponent implements OnInit {
       this.siteURL = '';
       this.isSiteURLUpdate = false;
       this.isEditPatent = true;
+      $("#patentModal").modal("show");
       let elem = document.getElementsByName('Patent')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#patentModal").modal("show");
     }
 
     editPatent(current: FormGroup) {
@@ -1128,10 +1137,10 @@ export class ProfileComponent implements OnInit {
       this.siteURLForm = current;
       this.siteURL = current.value.Patent;
       this.isEditPatent = true;
+      $("#patentModal").modal("show");
       let elem = document.getElementsByName('Patent')[0].classList;
       if (elem.contains('error-field'))
         elem.remove('error-field');
-      $("#patentModal").modal("show");
     }
 
     deletePatentPopup(e: any) {
@@ -1242,6 +1251,8 @@ export class ProfileComponent implements OnInit {
 
   addEducation() {
     this.isEdit = false;
+    this.editEducationModal = new EducationalDetail();
+    $('#EducationModal').modal('show');
     let elem = document.getElementsByName('University_Name')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
@@ -1250,8 +1261,6 @@ export class ProfileComponent implements OnInit {
     if (elem.contains('error-field'))
       elem.remove('error-field');
 
-    this.editEducationModal = new EducationalDetail();
-    $('#EducationModal').modal('show');
   }
 
   addNewEducation() {
@@ -1302,6 +1311,7 @@ export class ProfileComponent implements OnInit {
   editEducation(current: FormGroup) {
     this.isEdit = true;
     this.editEducationModal = current.value;
+    $('#EducationModal').modal('show');
     let elem = document.getElementsByName('University_Name')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
@@ -1309,7 +1319,6 @@ export class ProfileComponent implements OnInit {
     elem = document.getElementsByName('Degree_Name')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
-    $('#EducationModal').modal('show');
   }
 
   //----------------- Education END'S ------------------------
@@ -1345,6 +1354,8 @@ export class ProfileComponent implements OnInit {
 
   addEmployment() {
     this.isEdit = false;
+    this.editEmploymentModal = new Employment();
+    $('#EmploymentModal').modal('show');
     let elem = document.getElementsByName('Designation')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
@@ -1353,8 +1364,6 @@ export class ProfileComponent implements OnInit {
     if (elem.contains('error-field'))
       elem.remove('error-field');
 
-    this.editEmploymentModal = new Employment();
-    $('#EmploymentModal').modal('show');
   }
 
   createNewEmployment() {
@@ -1403,10 +1412,11 @@ export class ProfileComponent implements OnInit {
     this.isEdit = true;
     this.editEmploymentModal = emp.value;
     if (this.editEmploymentModal.JobProfile)
-      this.remainingNumber = 4000 - this.editEmploymentModal.JobProfile.length;
+    this.remainingNumber = 4000 - this.editEmploymentModal.JobProfile.length;
     else
-      this.remainingNumber = 4000;
+    this.remainingNumber = 4000;
 
+    $('#EmploymentModal').modal('show');
     let elem = document.getElementsByName('Designation')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
@@ -1414,8 +1424,6 @@ export class ProfileComponent implements OnInit {
     elem = document.getElementsByName('Organization')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
-
-    $('#EmploymentModal').modal('show');
   }
 
   deleteEmploymentConfirmation() {
@@ -2028,7 +2036,7 @@ class Accomplishment {
 
 class PersonalDetail {
   DOB: Date = null;
-  Gender: string = 'male';
+  Gender: string = null;
   Address: string = '';
   HomeTown: string = '';
   PinCode: number = 0;

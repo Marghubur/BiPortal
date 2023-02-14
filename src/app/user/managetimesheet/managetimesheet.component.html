@@ -11,7 +11,7 @@
           <app-breadcrums></app-breadcrums>
         </div>
         <div class="col-12">
-          <ng-container *ngIf="isLoading">
+          <ng-container *ngIf="isPageReady">
             <div class="py-5 my-5">
               <h6 class="fw-bold fs-3 text-center text-dark">Timesheet detail is loading</h6>
               <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -24,7 +24,7 @@
               </div>
             </div>
           </ng-container>
-          <ng-container *ngIf="!isLoading">
+          <ng-container *ngIf="!isPageReady">
             <form [formGroup]="timesheetForm">
               <div class="col-md-12 row justify-content-between align-items-center">
                 <div class="col-md-4 mt-3">
@@ -33,13 +33,22 @@
                 </div>
                 <div class="col-auto mt-3 row">
                   <div class="col-auto">
-                    <button class="btn btn-warning" [disabled]="pageData.TimesheetStatus == 8" (click)="saveTimesheet()">Save</button>
-                    <button class="btn btn-primary-c ms-2" [disabled]="pageData.TimesheetStatus == 8" (click)="submitTimesheet()">Submit</button>
-                    <button class="btn btn-danger ms-2" [disabled]="pageData.TimesheetStatus == 8">Cancel</button>
+                    <button type="button" class="btn btn-warning" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8" (click)="saveTimesheet()">
+                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                      {{ isLoading ? 'Wait' : 'Save' }}
+                    </button>
+                    <button type="button" class="btn btn-success ms-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8" (click)="submitTimesheet()">
+                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                      {{ isLoading ? 'Wait' : 'Submit' }}
+                    </button>
+                    <button type="button" class="btn btn-danger ms-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8">
+                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                      {{ isLoading ? 'Wait' : 'Cancel' }}
+                    </button>
                   </div>
                   <div class="col ps-0">
                     <div ngbDropdown class="d-inline-block">
-                      <button type="button" [disabled]="pageData.TimesheetStatus == 8" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                      <button type="button" [disabled]="weeklyTimesheetDetail.TimesheetStatus == 8 || isLoading" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
                         <a href="javascript:void(0)" class="text-decoration-none" >
                           More Actions
                           <i class="fa fa-caret-down ps-2" data-name="dropdown-icon"></i>
@@ -69,12 +78,12 @@
                       Comments
                     </div>
                     <div class="col-md-9">
-                      <textarea placeholder="Additional Info" formControlName="UserComments" class="form-control" rows="3"></textarea>
+                      <textarea placeholder="Additional Info" formControlName="UserComments" class="form-control" rows="3" maxlength="100"></textarea>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-6 d-flex align-items-center justify-content-center">
-                 <span class="fw-bold text-dark fs-5">Your timesheet is {{pageData.TimesheetStatus == 8 ? 'Submitted' : pageData.TimesheetStatus == 2 ? 'Pending' : pageData.TimesheetStatus == 5 ? 'Rejected' : pageData.TimesheetStatus == 9 ? 'Approved' : 'Saved'}}</span>
+                 <span class="fw-bold text-dark fs-5">Your timesheet is {{weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true ? 'Submitted' : weeklyTimesheetDetail.TimesheetStatus == 2 && weeklyTimesheetDetail.IsSaved == false? 'Pending' : weeklyTimesheetDetail.TimesheetStatus == 5 ? 'Rejected' : weeklyTimesheetDetail.TimesheetStatus == 9 ? 'Approved' : 'Saved'}}</span>
                 </div>
               </div>
               <div class="col-12 row m-0 mt-5">
@@ -108,8 +117,14 @@
                       </div>
                     </div>
                     <div class="col-md-3 float-end text-end mt-3">
-                      <button class="btn btn-primary-c btn-sm me-2" [disabled]="pageData.TimesheetStatus == 8">Fill from previous Timesheet</button>
-                      <button class="btn btn-primary-c btn-sm" [disabled]="pageData.TimesheetStatus == 8">Clear Timesheet</button>
+                      <button type="button" class="btn btn-primary-c btn-sm me-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8">
+                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                        {{ isLoading ? 'Wait' : 'Fill from previous Timesheet' }}
+                      </button>
+                      <button type="button" class="btn btn-primary-c btn-sm" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8">
+                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                        {{ isLoading ? 'Wait' : 'Clear Timesheet' }}
+                      </button>
                     </div>
                   </div>
                   <div class="col-md-12 row mt-3">
@@ -155,13 +170,13 @@
                           <ng-container *ngFor="let item of weeklydata.controls; let i = index" [formGroupName]="i">
                             <td class="text-primary">
                               <div class="d-flex justify-content-center">
-                                <input type="text" class="border-0 w-25 text-end" formControlName="ActualHours">
+                                <input type="text" class="border-0 w-25 text-end" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="ActualHours" (keyup)="manageHrsField(i, $event)">
                                 <span>:</span>
-                                <input type="text" class="border-0 w-25" formControlName="ActualMinutes">
+                                <input type="text" class="border-0 w-25" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="ActualMinutes" (keyup)="manageMinField(i, $event)">
                               </div>
                             </td>
                           </ng-container>
-                          <td class="table-active">40:00</td>
+                          <td class="table-active text-center">{{totalActualBurnHrs}}</td>
                         </tr>
                         <tr class="table-active">
                           <td>Total Billable Hours</td>
@@ -174,7 +189,7 @@
                               </div>
                             </td>
                           </ng-container>
-                          <td class="fw-bold">40:00</td>
+                          <td class="fw-bold text-center">{{totalExpectedBurnHrs}}</td>
                         </tr>
                         <tr class="table-active">
                           <td>Total Hours</td>
@@ -187,7 +202,7 @@
                               </div>
                             </td>
                           </ng-container>
-                          <td class="fw-bold">40:00</td>
+                          <td class="fw-bold text-center">{{totalActualBurnHrs}}</td>
                         </tr>
                       </tbody>
                     </table>
