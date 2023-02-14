@@ -31,7 +31,7 @@
             My pending timesheet
           </a>
         </div>
-      </div>  
+      </div>
 
       <ng-container [ngSwitch]="divisionCode">
         <ng-container *ngSwitchCase="2">
@@ -63,7 +63,7 @@
       <ng-container *ngSwitchDefault>
         <ng-container [ngSwitch]="isFormReady">
           <div *ngSwitchCase="true">
-            <div  class="pt-4 timesheet-form">              
+            <div  class="pt-4 timesheet-form">
               <div class="x_content mt-4">
                 <div>
                   <table class="table-middle table table-hover">
@@ -77,7 +77,7 @@
                       <tr *ngFor="let item of dailyTimesheetDetails; let i = index">
                         <td>
                           <a href="javascript:void(0)" class="text-dark" (click)="viewTimeSheet(item)">
-                            <span class="fw-bold pe-1">Timesheet From</span>{{item.TimesheetStartDate | date}} 
+                            <span class="fw-bold pe-1">Timesheet From</span>{{item.TimesheetStartDate | date}}
                             <span class="fw-bold px-1">to</span>{{item.TimesheetEndDate | date}}
                           </a>
                         </td>
@@ -138,7 +138,7 @@
 </div>
 
 <!-- View Timesheet Modal -->
-<div class="modal fade" id="timesheetModal" tabindex="-1" aria-labelledby="timesheetModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="timesheetModal" tabindex="-1" aria-labelledby="timesheetModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
@@ -249,4 +249,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
