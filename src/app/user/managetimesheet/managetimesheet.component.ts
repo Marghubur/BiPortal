@@ -162,14 +162,9 @@ export class ManagetimesheetComponent implements OnInit {
   saveTimesheet() {
     this.isSubmit = false;
     this.sendData("Timesheet/SaveTimesheet");
-    this.sendData("Timesheet/SaveTimesheet");
   }
 
   submitTimesheet() {
-    this.sendData("Timesheet/SubmitTimesheet");
-  }
-
-  sendData(url: string) {
     this.isSubmit = true;
     this.sendData("Timesheet/SubmitTimesheet");
   }
@@ -198,9 +193,6 @@ export class ManagetimesheetComponent implements OnInit {
     this.weeklyTimesheetDetail.TimesheetWeeklyData = data.WeeklyTimesheetDetail;
     this.weeklyTimesheetDetail.ExpectedBurnedMinutes = this.combineIntoMinutes(expectedTime[0], expectedTime[1]);
     this.weeklyTimesheetDetail.ActualBurnedMinutes = this.combineIntoMinutes(actualTime[0], actualTime[1]);
-    this.http.post(url, this.weeklyTimesheetDetail).then((response: ResponseModel) => {
-    this.weeklyTimesheetDetail.ExpectedBurnedMinutes = data.ExpectedBurnedMinutes;
-    this.weeklyTimesheetDetail.ActualBurnedMinutes = data.ActualBurnedMinutes;
     this.http.post(url, this.weeklyTimesheetDetail).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.buildPage(response.ResponseBody);
@@ -258,4 +250,3 @@ export class ManagetimesheetComponent implements OnInit {
     this.totalActualBurnHrs = this.breakIntoHoursAndMinutes((actualhrs*60)+actualmin);
   }
 }
-
