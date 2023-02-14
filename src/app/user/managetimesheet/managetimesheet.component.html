@@ -78,7 +78,7 @@
                       Comments
                     </div>
                     <div class="col-md-9">
-                      <textarea placeholder="Additional Info" formControlName="UserComments" class="form-control" rows="3" maxlength="100"></textarea>
+                      <textarea placeholder="Additional Info" [readOnly]="weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true" formControlName="UserComments" class="form-control" rows="3" maxlength="100"></textarea>
                     </div>
                   </div>
                 </div>
