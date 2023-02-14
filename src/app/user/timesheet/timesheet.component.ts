@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { ManageTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { UserService } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -14,6 +15,10 @@ declare var $: any;
   styleUrls: ['./timesheet.component.scss']
 })
 export class TimesheetComponent implements OnInit {
+  timesheetForm: FormGroup;
+  filter: Filter = new Filter();
+  timesheetData: Timesheet = new Timesheet();
+  date: any;
   isFormReady: boolean = false;
   employeeDetails: autoCompleteModal = new autoCompleteModal();
   employeeId: number = 0;
@@ -31,6 +36,7 @@ export class TimesheetComponent implements OnInit {
   PendingAttendacneMessage: string = 'Select above pending timesheet link to submit before end of the month.';
   isBlocked: boolean = false;
   dailyTimesheetDetails: Array<any> = [];
+  months: any = null;
   NoClient: boolean = false;
 
   constructor(private http: AjaxService,
@@ -51,6 +57,7 @@ export class TimesheetComponent implements OnInit {
     }
     this.isFormReady = false;
     let data = this.nav.getValue();
+    this.months=[0,1,2,3,4,5,6,7,8,9,10,11].map(x=>new Date(2000,x,2))
     if(data) {
       this.employeeId = data.EmployeeId;
       this.clientId = data.ClientUid;
@@ -148,14 +155,6 @@ export class TimesheetComponent implements OnInit {
     // } else {
     //   WarningToast("Please select employer first.");
     // }
-  }
-
-  viewTimeSheet(item: any) {
-    if(item) {
-      this.nav.navigate(ManageTimesheet, item);
-    } else {
-      WarningToast("Invalid timesheet selected. Please contact to admin.");
-    }
   }
 
   getUserTimesheetData() {
@@ -459,15 +458,20 @@ export class TimesheetComponent implements OnInit {
   //   this.countTotalTime();
   // }
 
-  // manageHourField(index: number, e: any, weekDaysList : Array<any>) {
-  //   // let hrs = this.timesheetForm.get("UserHours").value;
-  //   let hrs = parseInt(e.target.value);
-  //   let value: any = "";
-  //   if (hrs > 0 ) {
-  //     value = (hrs < 10 ? `0${hrs}` : hrs).toString();
-  //   } else {
-  //     value = "00";
-  //   }
+  viewTimeSheet(item: any) {
+    // this.initForm(this.dailyTimesheetDetails, index);
+    // this.viewTimesheetWeek = this.currentMonthWeek[index];
+    // if (this.viewTimesheetWeek.status != 6)
+    //   this.isSubmitted = true;
+    // else
+    //   this.isSubmitted = false;
+    // $('#timesheetModal').modal('show')
+    if(item && item.TimesheetId > 0) {
+      this.nav.navigate(ManageTimesheet, item);
+    } else {
+      WarningToast("Invalid timesheet selected. Please contact to admin.");
+    }
+  }
 
   //   let records = this.timesheetForm.get("timesheetArray")["controls"];
   //   if(records && records.length >= index) {
@@ -778,4 +782,48 @@ export class TimesheetComponent implements OnInit {
   //     Toast("Unable to get user data.");
   //   }
   // }
+
+  filterTimesheet() {
+    let searchQuery = "";
+    let delimiter = "";
+    this.filter.SearchString = ""
+    this.filter.reset();
+
+    if(this.timesheetData.ForYear !== null && this.timesheetData.ForYear > 0) {
+      this.filter.SearchString += `1=1 And ForYear = ${this.timesheetData.ForYear}`;
+        delimiter = "and";
+    }
+
+    if(this.timesheetData.TimesheetStatus !== null && this.timesheetData.TimesheetStatus > 0) {
+      this.filter.SearchString += `1=1 And TimesheetStatus = ${this.timesheetData.TimesheetStatus}`;
+        delimiter = "and";
+    }
+
+    if(this.timesheetData.Month !== null && this.timesheetData.Month > 0) {
+      this.filter.SearchString += `1=1 And TimesheetStartDate = '${2023}-${this.timesheetData.Month}-${1}'`;
+        delimiter = "and";
+    }
+
+    this.loadData();
+  }
+
+  loadData() {
+    this.http.post("Timesheet/GetTimesheetByFilter", this.filter).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.dailyTimesheetDetails = response.ResponseBody
+        Toast("Records loaded successfully");
+      } else {
+        Toast("Fail to load record. Please contact to admin.");
+      }
+    });
+  }
+}
+
+class Timesheet {
+  TimesheetStatus: number = 0;
+  ForYear: number = 0;
+  EmployeeId: number = 0;
+  ClientId: number = 0;
+  Month: number = 0
+  TimesheetStartDate: Date = null;
 }
