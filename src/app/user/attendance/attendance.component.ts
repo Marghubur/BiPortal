@@ -6,7 +6,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, ItemStatus, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -379,8 +379,9 @@ export class AttendanceComponent implements OnInit {
     this.http.post("Attendance/GetMissingAttendanceRequest", this.request).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.attendanceRequestDetail = response.ResponseBody;
-        if (this.attendanceRequestDetail.length > 0)
+        if (this.attendanceRequestDetail.length > 0) {
           this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
+        }
         else
           this.request.TotalRecords = 0;
         Toast("Attendance request loaded successfully.");
