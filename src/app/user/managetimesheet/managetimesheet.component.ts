@@ -16,6 +16,7 @@ declare var $: any;
 export class ManagetimesheetComponent implements OnInit {
   userDetail: UserDetail = null;
   pageData: any = null;
+  isPageReady: boolean = false;
   isLoading: boolean = false;
   fromDate: Date = null;
   toDate: Date = null;
@@ -23,11 +24,12 @@ export class ManagetimesheetComponent implements OnInit {
   timesheetForm: FormGroup = null;
   isSubmit: boolean = false;
   companyName: string = null;
+  totalExpectedBurnHrs: string = null;
+  totalActualBurnHrs: string = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
-    private local: ApplicationStorage,
     private user: UserService
   ) {
 
@@ -40,7 +42,7 @@ export class ManagetimesheetComponent implements OnInit {
   }
 
   loadTimesheetData() {
-    this.isLoading = true;
+    this.isPageReady = true;
     if(this.pageData.EmployeeId <= 0) {
       Toast("Invalid user selected.")
       return;
@@ -65,21 +67,28 @@ export class ManagetimesheetComponent implements OnInit {
 
     this.http.post("Timesheet/GetWeekTimesheetData", data).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        this.weeklyTimesheetDetail = response.ResponseBody;
-        if (!this.weeklyTimesheetDetail.TimesheetWeeklyData && this.weeklyTimesheetDetail.TimesheetWeeklyData.length == 0) {
-          ErrorToast("Invalid week detail received. Please contact to admin.");
-          return;
-        }
-
-        this.initForm();
+        this.buildPage(response.ResponseBody);
         Toast("Timesheet data loaded successfully.")
       }
 
-      this.isLoading = false;
+      this.isPageReady = false;
     }).catch(err => {
-      this.isLoading = false;
+      this.isPageReady = false;
       ErrorToast(err.error.HttpStatusMessage);
     });
+  }
+
+  buildPage(response: any) {
+    this.weeklyTimesheetDetail = response;
+    if (!this.weeklyTimesheetDetail.TimesheetWeeklyData && this.weeklyTimesheetDetail.TimesheetWeeklyData.length == 0) {
+      ErrorToast("Invalid week detail received. Please contact to admin.");
+      return;
+    }
+    let totalexpectedBurnHrs = this.weeklyTimesheetDetail.TimesheetWeeklyData.map(x => x.ExpectedBurnedMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
+    this.totalExpectedBurnHrs = this.breakIntoHoursAndMinutes(totalexpectedBurnHrs);
+    let totalactualBurnHrs = this.weeklyTimesheetDetail.TimesheetWeeklyData.map(x => x.ActualBurnedMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
+    this.totalActualBurnHrs = this.breakIntoHoursAndMinutes(totalactualBurnHrs);
+    this.initForm();
   }
 
   breakIntoHoursAndMinutes(timeValue: number): string {
@@ -141,7 +150,7 @@ export class ManagetimesheetComponent implements OnInit {
 
   initForm() {
     this.timesheetForm = this.fb.group({
-      UserComments: new FormControl(""),
+      UserComments: new FormControl(this.weeklyTimesheetDetail.UserComments),
       WeeklyTimesheetDetail: this.getWeeklyTimesheet()
     });
   }
@@ -151,17 +160,19 @@ export class ManagetimesheetComponent implements OnInit {
   }
 
   saveTimesheet() {
+    this.isSubmit = false;
     this.sendData("Timesheet/SaveTimesheet");
   }
 
   submitTimesheet() {
+    this.isSubmit = true;
     this.sendData("Timesheet/SubmitTimesheet");
   }
 
   sendData(url: string) {
-    this.isSubmit = true;
+    this.isLoading = true;
     let formArray = this.weeklydata;
-    
+
     let i = 0;
     let form: FormGroup = null;
     let timeInMinutes = 0;
@@ -176,17 +187,67 @@ export class ManagetimesheetComponent implements OnInit {
     }
 
     let data = this.timesheetForm.value;
+    let expectedTime = this.totalExpectedBurnHrs.split(':');
+    let actualTime = this.totalActualBurnHrs.split(':');
     this.weeklyTimesheetDetail.UserComments = data.UserComments;
     this.weeklyTimesheetDetail.TimesheetWeeklyData = data.WeeklyTimesheetDetail;
-    this.weeklyTimesheetDetail.ExpectedBurnedMinutes = data.ExpectedBurnedMinutes;
-    this.weeklyTimesheetDetail.ActualBurnedMinutes = data.ActualBurnedMinutes;
+    this.weeklyTimesheetDetail.ExpectedBurnedMinutes = this.combineIntoMinutes(expectedTime[0], expectedTime[1]);
+    this.weeklyTimesheetDetail.ActualBurnedMinutes = this.combineIntoMinutes(actualTime[0], actualTime[1]);
     this.http.post(url, this.weeklyTimesheetDetail).then((response: ResponseModel) => {
       if (response.ResponseBody) {
-
+        this.buildPage(response.ResponseBody);
       }
-
-      Toast("Submitted successfully");
+      this.isLoading = false;
+      Toast(`Timesheet ${this.isSubmit ? 'submitted' : 'saved'} successfully`);
+    }).catch(e => {
+      this.isLoading = false;
     });
+  }
+
+  manageMinField(index: number, e: any) {
+    let min = parseInt(e.target.value);
+    let value: any = "";
+    if (min > 0) {
+      if (min >= 60) {
+        ErrorToast("Please enter a valid minutes");
+        value = "00"
+      } else
+        value = (min < 10 ? `0${min}` : min).toString();
+    } else {
+      value = "00";
+    }
+    let records = this.timesheetForm.get("WeeklyTimesheetDetail")["controls"];
+    if(records && records.length >= index) {
+      records[index].get("ActualMinutes").setValue(value);
+    }
+    this.countTotalTime();
+  }
+
+  manageHrsField(index: number, e: any) {
+    let hrs = parseInt(e.target.value);
+
+    let value: any = "";
+    if (hrs > 0) {
+      if (hrs > 24) {
+        ErrorToast("Please enter a valid hours");
+        value = "00"
+      } else
+        value = (hrs < 10 ? `0${hrs}` : hrs).toString();
+    } else {
+      value = "00";
+    }
+    let records = this.timesheetForm.get("WeeklyTimesheetDetail")["controls"];
+    if(records && records.length >= index) {
+      records[index].get("ActualHours").setValue(value);
+    }
+    this.countTotalTime();
+  }
+
+  countTotalTime() {
+    let records = this.timesheetForm.get("WeeklyTimesheetDetail").value;
+    let actualhrs = records.map(x => Number(x.ActualHours)).reduce((acc, curr) => {return acc + curr;}, 0)
+    let actualmin = records.map(x => Number(x.ActualMinutes)).reduce((acc, curr) => {return acc + curr;}, 0)
+    this.totalActualBurnHrs = this.breakIntoHoursAndMinutes((actualhrs*60)+actualmin);
   }
 }
 

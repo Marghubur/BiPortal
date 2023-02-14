@@ -332,7 +332,7 @@ export class AttendanceComponent implements OnInit {
         Email: this.employee.Email,
         Mobile: this.employee.Mobile,
         EmployeeMessage: this.commentValue,
-        CurrentStatus: ItemStatus.Pending,
+        CurrentStatus: this.currentAttendance.PresentDayStatus == 0 ? ItemStatus.Pending : this.currentAttendance.PresentDayStatus,
         AttendanceDate: item.AttendanceDay,
         NotifyList: notify
       });
@@ -482,7 +482,7 @@ export class AttendanceComponent implements OnInit {
           this.currentDays = this.allDaysAttendance;
           break;
         case 2:
-          data = this.allDaysAttendance.filter(x => x.PresentDayStatus == 2);
+          data = this.allDaysAttendance.filter(x => x.PresentDayStatus == 2 || x.PresentDayStatus == 12);
           this.currentDays =data;
           break;
         case 3:
