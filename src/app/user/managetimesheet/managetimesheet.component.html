@@ -12,7 +12,17 @@
         </div>
         <div class="col-12">
           <ng-container *ngIf="isLoading">
-
+            <div class="py-5 my-5">
+              <h6 class="fw-bold fs-3 text-center text-dark">Timesheet detail is loading</h6>
+              <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                <div class="col-md-3 modal-container  text-center cog-wheel">
+                  <img src="assets/images/cog.gif" alt="" />
+                  <h6 class="modal-title title-message">
+                    Please Wait ........
+                  </h6>
+                </div>
+              </div>
+            </div>
           </ng-container>
           <ng-container *ngIf="!isLoading">
             <form [formGroup]="timesheetForm">
@@ -23,13 +33,13 @@
                 </div>
                 <div class="col-auto mt-3 row">
                   <div class="col-auto">
-                    <button class="btn btn-warning" (click)="saveTimesheet()">Save</button>
-                    <button class="btn btn-primary-c ms-2" (click)="submitTimesheet()">Submit</button>
-                    <button class="btn btn-danger ms-2">Cancel</button>
+                    <button class="btn btn-warning" [disabled]="pageData.TimesheetStatus == 8" (click)="saveTimesheet()">Save</button>
+                    <button class="btn btn-primary-c ms-2" [disabled]="pageData.TimesheetStatus == 8" (click)="submitTimesheet()">Submit</button>
+                    <button class="btn btn-danger ms-2" [disabled]="pageData.TimesheetStatus == 8">Cancel</button>
                   </div>
                   <div class="col ps-0">
                     <div ngbDropdown class="d-inline-block">
-                      <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                      <button type="button" [disabled]="pageData.TimesheetStatus == 8" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
                         <a href="javascript:void(0)" class="text-decoration-none" >
                           More Actions
                           <i class="fa fa-caret-down ps-2" data-name="dropdown-icon"></i>
@@ -63,8 +73,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  Date: Feb, 3rd 2023 to Feb 10th 2023
+                <div class="col-md-6 d-flex align-items-center justify-content-center">
+                 <span class="fw-bold text-dark fs-5">Your timesheet is {{pageData.TimesheetStatus == 8 ? 'Submitted' : pageData.TimesheetStatus == 2 ? 'Pending' : pageData.TimesheetStatus == 5 ? 'Rejected' : pageData.TimesheetStatus == 9 ? 'Approved' : 'Saved'}}</span>
                 </div>
               </div>
               <div class="col-12 row m-0 mt-5">
@@ -98,8 +108,8 @@
                       </div>
                     </div>
                     <div class="col-md-3 float-end text-end mt-3">
-                      <button class="btn btn-primary-c btn-sm me-2">Fill from previous Timesheet</button>
-                      <button class="btn btn-primary-c btn-sm">Clear Timesheet</button>
+                      <button class="btn btn-primary-c btn-sm me-2" [disabled]="pageData.TimesheetStatus == 8">Fill from previous Timesheet</button>
+                      <button class="btn btn-primary-c btn-sm" [disabled]="pageData.TimesheetStatus == 8">Clear Timesheet</button>
                     </div>
                   </div>
                   <div class="col-md-12 row mt-3">

@@ -18,6 +18,8 @@ declare var $: any;
 })
 export class TimesheetComponent implements OnInit {
   timesheetForm: FormGroup;
+  filter: Filter = new Filter();
+  timesheetData: Timesheet = new Timesheet();
   date: any;
   isFormReady: boolean = false;
   timesheetArray: FormArray;
@@ -57,6 +59,7 @@ export class TimesheetComponent implements OnInit {
   distributedWeek = [];
   currentMonthWeek: Array<any> = [];
   viewTimesheetWeek: any = null;
+  months: any = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -98,7 +101,7 @@ export class TimesheetComponent implements OnInit {
     this.intervalId = setInterval(() => {
       this.time = new Date();
     }, 1000);
-
+    this.months=[0,1,2,3,4,5,6,7,8,9,10,11].map(x=>new Date(2000,x,2))
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
     if(this.cachedData) {
@@ -711,7 +714,7 @@ export class TimesheetComponent implements OnInit {
     // else
     //   this.isSubmitted = false;
     // $('#timesheetModal').modal('show')
-    if(item) {
+    if(item && item.TimesheetId > 0) {
       this.nav.navigate(ManageTimesheet, item);
     } else {
       WarningToast("Invalid timesheet selected. Please contact to admin.");
@@ -827,4 +830,48 @@ export class TimesheetComponent implements OnInit {
     }
     if (this.weekList.length > 0) this.divisionCode = 2;
   }
+
+  filterTimesheet() {
+    let searchQuery = "";
+    let delimiter = "";
+    this.filter.SearchString = ""
+    this.filter.reset();
+
+    if(this.timesheetData.ForYear !== null && this.timesheetData.ForYear > 0) {
+      this.filter.SearchString += `1=1 And ForYear = ${this.timesheetData.ForYear}`;
+        delimiter = "and";
+    }
+
+    if(this.timesheetData.TimesheetStatus !== null && this.timesheetData.TimesheetStatus > 0) {
+      this.filter.SearchString += `1=1 And TimesheetStatus = ${this.timesheetData.TimesheetStatus}`;
+        delimiter = "and";
+    }
+
+    if(this.timesheetData.Month !== null && this.timesheetData.Month > 0) {
+      this.filter.SearchString += `1=1 And TimesheetStartDate = '${2023}-${this.timesheetData.Month}-${1}'`;
+        delimiter = "and";
+    }
+
+    this.loadData();
+  }
+
+  loadData() {
+    this.http.post("Timesheet/GetTimesheetByFilter", this.filter).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.dailyTimesheetDetails = response.ResponseBody
+        Toast("Records loaded successfully");
+      } else {
+        Toast("Fail to load record. Please contact to admin.");
+      }
+    });
+  }
+}
+
+class Timesheet {
+  TimesheetStatus: number = 0;
+  ForYear: number = 0;
+  EmployeeId: number = 0;
+  ClientId: number = 0;
+  Month: number = 0
+  TimesheetStartDate: Date = null;
 }
