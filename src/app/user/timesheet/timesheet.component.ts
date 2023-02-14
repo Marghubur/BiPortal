@@ -54,7 +54,6 @@ export class TimesheetComponent implements OnInit {
       data: [],
       placeholder: "Select Employee"
     }
-    this.isFormReady = false;
     let data = this.nav.getValue();
     this.months=[0,1,2,3,4,5,6,7,8,9,10,11].map(x=>new Date(2000,x,2))
     if(data) {
@@ -72,7 +71,7 @@ export class TimesheetComponent implements OnInit {
         return;
       }
     }
-    
+
     this.timesheetData = {
       EmployeeId: Number(this.employeeId),
       ClientId: Number(this.clientId),
@@ -121,7 +120,6 @@ export class TimesheetComponent implements OnInit {
 
   presentWeek() {
     if(this.clientId > 0) {
-      this.isLoading = true;
       let currentDate = new Date(new Date().setHours(0, 0, 0, 0));
       this.fromDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
       if(this.fromDate) {
@@ -140,71 +138,69 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
-  getPendingWeek(from: Date, to: Date) {
-    if(this.clientId > 0) {
-      this.isLoading = true;
-      if(from && to) {
-        this.fromDate = new Date(from);
-        this.toDate = new Date(to);
-        this.loadData();
-      }
-    } else {
-      WarningToast("Please select employer first.");
-    }
-  }
+  // getPendingWeek(from: Date, to: Date) {
+  //   if(this.clientId > 0) {
+  //     if(from && to) {
+  //       this.fromDate = new Date(from);
+  //       this.toDate = new Date(to);
+  //       this.loadData();
+  //     }
+  //   } else {
+  //     WarningToast("Please select employer first.");
+  //   }
+  // }
 
-  enablePermissionRequest() {
-    this.isLoading = true;
-    if(this.employeeId <= 0) {
-      Toast("Invalid user selected.")
-      return;
-    }
+  // enablePermissionRequest() {
+  //   if(this.employeeId <= 0) {
+  //     Toast("Invalid user selected.")
+  //     return;
+  //   }
 
-    if(!this.fromDate) {
-      Toast("Invalid from and to date seleted.")
-      return;
-    }
+  //   if(!this.fromDate) {
+  //     Toast("Invalid from and to date seleted.")
+  //     return;
+  //   }
 
-    if(!this.toDate) {
-      Toast("Invalid from and to date seleted.")
-      return;
-    }
+  //   if(!this.toDate) {
+  //     Toast("Invalid from and to date seleted.")
+  //     return;
+  //   }
 
-    let data: Timesheet = {
-      EmployeeId: Number(this.employeeId),
-      ClientId: Number(this.clientId),
-      TimesheetStartDate: this.fromDate,
-      TimesheetStatus: this.timesheetData.TimesheetStatus,
-      IsSaved: this.timesheetData.IsSaved,
-      IsSubmitted: this.timesheetData.IsSubmitted,
-      ForYear: this.fromDate.getFullYear(),
-      ForMonth: this.fromDate.getMonth() + 1
-    }
+  //   let data: Timesheet = {
+  //     EmployeeId: Number(this.employeeId),
+  //     ClientId: Number(this.clientId),
+  //     TimesheetStartDate: this.fromDate,
+  //     TimesheetStatus: this.timesheetData.TimesheetStatus,
+  //     IsSaved: this.timesheetData.IsSaved,
+  //     IsSubmitted: this.timesheetData.IsSubmitted,
+  //     ForYear: this.fromDate.getFullYear(),
+  //     ForMonth: this.fromDate.getMonth() + 1
+  //   }
 
-    this.http.post("timesheet/EnablePermission", data).then((response: ResponseModel) => {
-      if (response.ResponseBody)
-        Toast("Enable Permission");
-    })
-  }
+  //   this.http.post("timesheet/EnablePermission", data).then((response: ResponseModel) => {
+  //     if (response.ResponseBody)
+  //       Toast("Enable Permission");
+  //   })
+  // }
 
-  buildEmployeeDropdown(emp: Array<any>) {
-    if(emp) {
-      this.employeeDetails.data = [];
-      this.employeeDetails.data.push({
-        value: '0',
-        text: 'Select Employee'
-      });
+  // buildEmployeeDropdown(emp: Array<any>) {
+  //   if(emp) {
+  //     this.employeeDetails.data = [];
+  //     this.employeeDetails.data.push({
+  //       value: '0',
+  //       text: 'Select Employee'
+  //     });
 
-      let index = 0;
-      while(index < emp.length) {
-        this.employeeDetails.data.push({
-          value: emp[index]["EmployeeId"],
-          text: `${emp[index]["FirstName"]} ${emp[index]["LastName"]}`
-        });
-        index++;
-      }
-    }
-  }
+  //     let index = 0;
+  //     while(index < emp.length) {
+  //       this.employeeDetails.data.push({
+  //         value: emp[index]["EmployeeId"],
+  //         text: `${emp[index]["FirstName"]} ${emp[index]["LastName"]}`
+  //       });
+  //       index++;
+  //     }
+  //   }
+  // }
 
   viewTimeSheet(item: any) {
     if(item && item.TimesheetId > 0) {
@@ -214,23 +210,25 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
-  filterTimesheet() {    
+  filterTimesheet() {
     this.loadData();
   }
+  advanceFilterPopUp() {
+    $('#timesheetfilter').modal('show')
+  }
+
 
   loadData() {
-    this.isLoading = true;
+    this.isFormReady = false;
     this.http.post("Timesheet/GetTimesheetByFilter", this.timesheetData).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.dailyTimesheetDetails = response.ResponseBody;
         this.isTimesheetDataLoaded = true;
       }
-
       this.isFormReady = true;
-      this.divisionCode = 1;
-      this.isLoading = false;
     }).catch(err => {
-      this.isLoading = false;
+      this.isFormReady = true;
+
       WarningToast(err.error.HttpStatusMessage);
     });
   }

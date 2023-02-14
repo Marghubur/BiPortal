@@ -332,7 +332,7 @@ export class AttendanceComponent implements OnInit {
         Email: this.employee.Email,
         Mobile: this.employee.Mobile,
         EmployeeMessage: this.commentValue,
-        CurrentStatus: ItemStatus.Pending,
+        CurrentStatus: this.currentAttendance.PresentDayStatus == 0 ? ItemStatus.Pending : this.currentAttendance.PresentDayStatus,
         AttendanceDate: item.AttendanceDay,
         NotifyList: notify
       });

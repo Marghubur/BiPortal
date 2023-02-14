@@ -16,6 +16,7 @@ declare var $: any;
 export class ManagetimesheetComponent implements OnInit {
   userDetail: UserDetail = null;
   pageData: any = null;
+  isPageReady: boolean = false;
   isLoading: boolean = false;
   fromDate: Date = null;
   toDate: Date = null;
@@ -29,7 +30,6 @@ export class ManagetimesheetComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
-    private local: ApplicationStorage,
     private user: UserService
   ) {
 
@@ -42,7 +42,7 @@ export class ManagetimesheetComponent implements OnInit {
   }
 
   loadTimesheetData() {
-    this.isLoading = true;
+    this.isPageReady = true;
     if(this.pageData.EmployeeId <= 0) {
       Toast("Invalid user selected.")
       return;
@@ -67,24 +67,28 @@ export class ManagetimesheetComponent implements OnInit {
 
     this.http.post("Timesheet/GetWeekTimesheetData", data).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        this.weeklyTimesheetDetail = response.ResponseBody;
-        if (!this.weeklyTimesheetDetail.TimesheetWeeklyData && this.weeklyTimesheetDetail.TimesheetWeeklyData.length == 0) {
-          ErrorToast("Invalid week detail received. Please contact to admin.");
-          return;
-        }
-        let totalexpectedBurnHrs = this.weeklyTimesheetDetail.TimesheetWeeklyData.map(x => x.ExpectedBurnedMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
-        this.totalExpectedBurnHrs = this.breakIntoHoursAndMinutes(totalexpectedBurnHrs);
-        let totalactualBurnHrs = this.weeklyTimesheetDetail.TimesheetWeeklyData.map(x => x.ActualBurnedMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
-        this.totalActualBurnHrs = this.breakIntoHoursAndMinutes(totalactualBurnHrs);
-        this.initForm();
+        this.buildPage(response.ResponseBody);
         Toast("Timesheet data loaded successfully.")
       }
 
-      this.isLoading = false;
+      this.isPageReady = false;
     }).catch(err => {
-      this.isLoading = false;
+      this.isPageReady = false;
       ErrorToast(err.error.HttpStatusMessage);
     });
+  }
+
+  buildPage(response: any) {
+    this.weeklyTimesheetDetail = response;
+    if (!this.weeklyTimesheetDetail.TimesheetWeeklyData && this.weeklyTimesheetDetail.TimesheetWeeklyData.length == 0) {
+      ErrorToast("Invalid week detail received. Please contact to admin.");
+      return;
+    }
+    let totalexpectedBurnHrs = this.weeklyTimesheetDetail.TimesheetWeeklyData.map(x => x.ExpectedBurnedMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
+    this.totalExpectedBurnHrs = this.breakIntoHoursAndMinutes(totalexpectedBurnHrs);
+    let totalactualBurnHrs = this.weeklyTimesheetDetail.TimesheetWeeklyData.map(x => x.ActualBurnedMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
+    this.totalActualBurnHrs = this.breakIntoHoursAndMinutes(totalactualBurnHrs);
+    this.initForm();
   }
 
   breakIntoHoursAndMinutes(timeValue: number): string {
@@ -146,7 +150,7 @@ export class ManagetimesheetComponent implements OnInit {
 
   initForm() {
     this.timesheetForm = this.fb.group({
-      UserComments: new FormControl(""),
+      UserComments: new FormControl(this.weeklyTimesheetDetail.UserComments),
       WeeklyTimesheetDetail: this.getWeeklyTimesheet()
     });
   }
@@ -156,15 +160,17 @@ export class ManagetimesheetComponent implements OnInit {
   }
 
   saveTimesheet() {
+    this.isSubmit = false;
     this.sendData("Timesheet/SaveTimesheet");
   }
 
   submitTimesheet() {
+    this.isSubmit = true;
     this.sendData("Timesheet/SubmitTimesheet");
   }
 
   sendData(url: string) {
-    this.isSubmit = true;
+    this.isLoading = true;
     let formArray = this.weeklydata;
 
     let i = 0;
@@ -189,10 +195,12 @@ export class ManagetimesheetComponent implements OnInit {
     this.weeklyTimesheetDetail.ActualBurnedMinutes = this.combineIntoMinutes(actualTime[0], actualTime[1]);
     this.http.post(url, this.weeklyTimesheetDetail).then((response: ResponseModel) => {
       if (response.ResponseBody) {
-
+        this.buildPage(response.ResponseBody);
       }
-
-      Toast("Submitted successfully");
+      this.isLoading = false;
+      Toast(`Timesheet ${this.isSubmit ? 'submitted' : 'saved'} successfully`);
+    }).catch(e => {
+      this.isLoading = false;
     });
   }
 
@@ -240,10 +248,6 @@ export class ManagetimesheetComponent implements OnInit {
     let actualhrs = records.map(x => Number(x.ActualHours)).reduce((acc, curr) => {return acc + curr;}, 0)
     let actualmin = records.map(x => Number(x.ActualMinutes)).reduce((acc, curr) => {return acc + curr;}, 0)
     this.totalActualBurnHrs = this.breakIntoHoursAndMinutes((actualhrs*60)+actualmin);
-
-    // let totalexpectedBurnHrs = this.weeklyTimesheetDetail.TimesheetWeeklyData.map(x => x.ExpectedBurnedMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
-    // let totalactualBurnHrs = this.weeklyTimesheetDetail.TimesheetWeeklyData.map(x => x.ActualBurnedMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
-    // this.totalActualBurnHrs = this.breakIntoHoursAndMinutes(totalactualBurnHrs);
   }
 }
 
