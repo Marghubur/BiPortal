@@ -482,7 +482,7 @@ export class AttendanceComponent implements OnInit {
           this.currentDays = this.allDaysAttendance;
           break;
         case 2:
-          data = this.allDaysAttendance.filter(x => x.PresentDayStatus == 2);
+          data = this.allDaysAttendance.filter(x => x.PresentDayStatus == 2 || x.PresentDayStatus == 12);
           this.currentDays =data;
           break;
         case 3:
