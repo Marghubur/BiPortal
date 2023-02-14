@@ -4,7 +4,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -398,11 +398,7 @@ export class ApprovalRequestComponent implements OnInit {
 
     this.http.post("Attendance/GetMissingAttendanceApprovalRequest", this.request).then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        this.attendanceRequestDetail = response.ResponseBody;
-        if (this.attendanceRequestDetail.length > 0)
-          this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
-        else
-          this.request.TotalRecords = 0;
+        this.bindAttendanceRequestDetail(response.ResponseBody);
         Toast("Attendance request loaded successfully.");
         this.isLoading = false;
       }
@@ -429,7 +425,7 @@ export class ApprovalRequestComponent implements OnInit {
 
     this.http.put(this.requestModalData.ApiUrl, requestBody).then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        this.attendanceRequestDetail = response.ResponseBody;
+        this.bindAttendanceRequestDetail(response.ResponseBody);
         Toast(`Attendance ${this.requestModalData.Status} successfully.`);
         this.isLoading = false;
       }
@@ -442,6 +438,14 @@ export class ApprovalRequestComponent implements OnInit {
       this.attendanceRquestPageIsReady = true;
       $('#approval-attendance').modal('hide');
     });
+  }
+
+  bindAttendanceRequestDetail(response: any) {
+    this.attendanceRequestDetail = response;
+    if (this.attendanceRequestDetail.length > 0) {
+      this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
+    } else
+      this.request.TotalRecords = 0;
   }
 
   ApproveRequest() {
