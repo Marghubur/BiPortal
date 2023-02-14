@@ -3,15 +3,15 @@
     <div class="col-12 x_panel row m-0 p-0 mb-4">
       <div class="x_header">
         <div class="x_header_title">
-          <h2 class=" fw-bold text-dark">Attendance</h2>
+          <h2 class=" fw-bold text-dark">Timesheet</h2>
         </div>
       </div>
       <div class="px-1 d-flex">
         <div class="col-6">
           <app-breadcrums></app-breadcrums>
         </div>
-        <div class="col-6">
-          <div *ngIf="isFormReady" class="text-dark text-dark d-flex justify-content-end">
+        <div class="col-6" *ngIf="isFormReady">
+          <div  class="text-dark text-dark d-flex justify-content-end">
             <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
             <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
           </div>
