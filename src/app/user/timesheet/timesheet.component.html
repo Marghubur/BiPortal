@@ -3,15 +3,15 @@
     <div class="col-12 x_panel row m-0 p-0 mb-4">
       <div class="x_header">
         <div class="x_header_title">
-          <h2 class=" fw-bold text-dark">Attendance</h2>
+          <h2 class=" fw-bold text-dark">Timesheet</h2>
         </div>
       </div>
       <div class="px-1 d-flex">
         <div class="col-6">
           <app-breadcrums></app-breadcrums>
         </div>
-        <div class="col-6">
-          <div *ngIf="isFormReady" class="text-dark text-dark d-flex justify-content-end">
+        <div class="col-6" *ngIf="isFormReady">
+          <div  class="text-dark text-dark d-flex justify-content-end">
             <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
             <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
           </div>
@@ -60,7 +60,7 @@
               My pending timesheet
             </a>
           </div>
-        </div>  
+        </div>
       </div>
       <ng-container [ngSwitch]="divisionCode">
         <ng-container *ngSwitchCase="2">
@@ -92,7 +92,7 @@
         <ng-container *ngSwitchDefault>
           <ng-container [ngSwitch]="isFormReady">
             <div *ngSwitchCase="true">
-              <div  class="pt-4 timesheet-form">              
+              <div  class="pt-4 timesheet-form">
                 <div class="x_content mt-4">
                   <div>
                     <table class="table-middle table table-hover">
@@ -107,7 +107,7 @@
                           <tr *ngFor="let item of dailyTimesheetDetails; let i = index">
                             <td>
                               <a href="javascript:void(0)" class="text-dark" (click)="viewTimeSheet(item)">
-                                <span class="fw-bold pe-1">Timesheet From</span>{{item.TimesheetStartDate | date}} 
+                                <span class="fw-bold pe-1">Timesheet From</span>{{item.TimesheetStartDate | date}}
                                 <span class="fw-bold px-1">to</span>{{item.TimesheetEndDate | date}}
                               </a>
                             </td>
@@ -193,7 +193,7 @@
 </div>
 
 <!-- View Timesheet Modal -->
-<div class="modal fade" id="timesheetModal" tabindex="-1" aria-labelledby="timesheetModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="timesheetModal" tabindex="-1" aria-labelledby="timesheetModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
@@ -304,4 +304,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

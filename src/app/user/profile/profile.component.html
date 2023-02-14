@@ -466,7 +466,7 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</p>
-                            <ng-container *ngIf="userModal.Accomplishments.OnlineProfile != null">
+                            <ng-container *ngIf="userModal.Accomplishments.OnlineProfile != null && userModal.Accomplishments.OnlineProfile != ''">
                               <ng-container
                                 *ngFor="let item of accomplishmentsForm.controls.OnlineProfiles['controls'];let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
@@ -493,7 +493,7 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add link to your Projects (e.g. Github links etc.).</p>
-                            <ng-container *ngIf="userModal.Accomplishments.WorkSample != null">
+                            <ng-container *ngIf="userModal.Accomplishments.WorkSample != null && userModal.Accomplishments.WorkSample != ''">
                               <ng-container *ngFor="let item of workSamples.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-dark">
@@ -519,7 +519,7 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add links to your Online publications.</p>
-                            <ng-container *ngIf="userModal.Accomplishments.Research != null">
+                            <ng-container *ngIf="userModal.Accomplishments.Research != null && userModal.Accomplishments.Research != ''">
                               <ng-container *ngFor="let item of researchs.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-secondary">
@@ -545,7 +545,7 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add links to your Online presentations (e.g. Slideshare presentation links etc.).</p>
-                            <ng-container *ngIf="userModal.Accomplishments.Presentation != null">
+                            <ng-container *ngIf="userModal.Accomplishments.Presentation != null && userModal.Accomplishments.Presentation != ''">
                               <ng-container *ngFor="let item of presentations.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-primary-c">
@@ -571,7 +571,7 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add details of Patents you have filed.</p>
-                            <ng-container *ngIf="userModal.Accomplishments.Patent != null">
+                            <ng-container *ngIf="userModal.Accomplishments.Patent != null && userModal.Accomplishments.Patent != ''">
                               <ng-container *ngFor="let item of patents.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-success">
@@ -597,7 +597,7 @@
                                 <i class=" fa fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add details of Certifications you have achieved/completed</p>
-                            <ng-container *ngIf="userModal.Accomplishments.Certification != null">
+                            <ng-container *ngIf="userModal.Accomplishments.Certification != null && userModal.Accomplishments.Certification != ''">
                               <ng-container *ngFor="let item of certifications.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-warning">
@@ -629,11 +629,11 @@
                     <div class="col-md-12">
                       <div class="x_panel">
                         <div class="x_header">
-                          <div class="x_header_title">
+                          <div class="x_header_title align-items-center justify-content-between">
                             <h2 class="fw-bold text-dark">Career Profile</h2>
-                            <a href="javascript:void(0)" class="text-decoration-none" (click)="editCarrerProfile()">
-                              <i class="fa fa-pencil ps-3 pt-2 text-primary fa-lg" ></i>
-                            </a>
+                            <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn" (click)="editCarrerProfile()">
+                              <i class="fa fa-plus-circle"></i> ADD Career Profile
+                            </button>
                           </div>
                         </div>
                         <ng-container formArrayName="CarrerProfile" *ngIf="!isCarrerProfileData">
@@ -699,11 +699,11 @@
                     <div class="col-md-12">
                       <div class="x_panel">
                         <div class="x_header">
-                          <div class="x_header_title">
+                          <div class="x_header_title align-items-center justify-content-between">
                             <h2 class="fw-bold text-dark">Personal Details</h2>
-                            <a href="javascript:void(0)" class="text-decoration-none" (click)="editPersonalDetail()">
-                              <i class="fa fa-pencil text-primary ps-3 pt-2 fa-lg" ></i>
-                            </a>
+                            <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn" (click)="editPersonalDetail()">
+                              <i class="fa fa-plus-circle"></i> ADD Personal Details
+                            </button>
                           </div>
                         </div>
                         <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
@@ -849,7 +849,7 @@
 <!--Skill Add Edit Modal -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="itSkillModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content px-5 py-3 position-relative">
+    <div class="modal-content px-5 py-3 position-relative" *ngIf="isEditItSkill">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-bold" id=" exampleModalLabel">Key Skills</h5>
         <div class="close-button">
@@ -861,7 +861,7 @@
         Tell recruiters what you know or what you are known for e.g. Direct Marketing, Oracle, Java etc. We will send
         you job recommendations based on these skills. Each skill is separated by a comma.
       </p>
-      <div class="modal-body" *ngIf="isEditItSkill">
+      <div class="modal-body" >
         <h5>Skills</h5>
         <div class="card px-3">
           <div class="skill-popup-box ">
@@ -897,7 +897,7 @@
             </div>
             <div class="col-md-2">
               <label class="form-label">Version</label>
-              <input type="text" class="form-control" DecimalNumber="5" placeholder="Version" (keyup)="checkInputValue($event)" [(ngModel)]="ExptVersion" name="ExptVersion">
+              <input type="text" class="form-control" maxlength="8"onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46" placeholder="Version" (keyup)="checkInputValue($event)" [(ngModel)]="ExptVersion" name="ExptVersion">
             </div>
             <div class="row col-md-4">
               <div class="col-md-6">
@@ -1036,7 +1036,7 @@
                 <fieldset class="m-0 p-0 border-0">
                   <div class="mb-3">
                     <label class="form-label">Describe your Job Profile</label>
-                    <textarea name="JobProfile" rows="5" placeholder="Type here ....." class="form-control" maxlength="4000"
+                    <textarea name="JobProfile" rows="5" placeholder="Type here ....." class="form-control" maxlength="400"
                       (keydown)="countNumberofCharacter($event)" oninput="this.value = this.value.toUpperCase()"
                       [(ngModel)]="editEmploymentModal.JobProfile"></textarea>
                     <small class="float-end">{{remainingNumber}} Character(s) Left</small>
@@ -1045,7 +1045,7 @@
                   <div class="col-md-12 mb-3">
                     <label class="form-label">Top 5 key skills that you think are important for current
                       employment</label>
-                    <textarea name="Experties" rows="5" maxlength="4000"
+                    <textarea name="Experties" rows="5" maxlength="400"
                       placeholder="Enter your area of Experties/Specialization" class="form-control" oninput="this.value = this.value.toUpperCase()"
                       [(ngModel)]="editEmploymentModal.Experties"></textarea>
                   </div>
