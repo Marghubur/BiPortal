@@ -10,57 +10,54 @@
         <div class="col-6">
           <app-breadcrums></app-breadcrums>
         </div>
-        <div class="col-6" *ngIf="isFormReady">
-          <div  class="text-dark text-dark d-flex justify-content-end">
-            <span class="fw-bold">Timesheet: From&nbsp;</span> {{fromDate | date}}
-            <span class="fw-bold">&nbsp; to &nbsp; </span> {{toDate -1 | date}}.
+        <div class="col-6 d-flex justify-content-end">
+          <div class="col-md-3" *ngIf="isEmployeesReady">
+            <app-iautocomplete [data]="clientDetail" (OnSelect)="presentWeek()"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+            </app-iautocomplete>
           </div>
+          <div class="col-md-2">
+            <select class="form-select" [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">
+              <option value="" selected>Select by status</option>
+              <option value="2">Pending</option>
+              <option value="8">Submitted</option>
+              <option value="13">Save</option>
+              <option value="5">Rejected</option>
+              <option value="9">Approved</option>
+            </select>
+          </div>
+          <div class="col-md-1 d-flex flex-column justify-content-end">
+            <button class="btn  btn-primary-c" (click)="filterTimesheet()">
+              <i class="fa fa-filter"></i>
+            </button>
+          </div>
+          <!-- <div class="col-md-2 elem-row">
+            <div class="elem-row-item-base justify-content-end ps-2">
+              <a href="javascript:void(0)"
+                class="p-2 p-2 badge bg-success text-light head-badge fs-6">
+                <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
+                Advance filter
+              </a>
+            </div>
+          </div> -->
         </div>
       </div>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-md-3" *ngIf="isEmployeesReady">
-          <label class="form-label">Select Employer</label>
-          <app-iautocomplete [data]="clientDetail" (OnSelect)="presentWeek()"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
-          </app-iautocomplete>
-        </div>
-        <div class="col-md-2">
-          <label class="form-label">Month Name</label>
-          <select class="form-select" [(ngModel)]="timesheetData.Month" [ngModelOptions]="{standalone: true}">
+      <div class="row">
+        
+        <!-- <div class="col-md-2 d-flex flex-column justify-content-end">
+          <label class="form-label">Month</label>
+          <select class="form-select" [(ngModel)]="timesheetData.ForMonth" [ngModelOptions]="{standalone: true}">
             <option value="0" selected disabled>Select month</option>
             <option [value]="i+1" *ngFor="let month of months; let i = index">{{month | date : 'MMMM'}}</option>
           </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2 d-flex flex-column justify-content-end">
           <label class="form-label">Year</label>
           <select class="form-select" [(ngModel)]="timesheetData.ForYear" [ngModelOptions]="{standalone: true}">
             <option value="0" selected disabled>Select year</option>
             <option value="2023">2023</option>
           </select>
-        </div>
-        <div class="col-md-2">
-          <label class="form-label">Status</label>
-          <select class="form-select" [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">
-            <option value="0" selected disabled>Select status</option>
-            <option value="8">Submitted</option>
-            <option value="">Save</option>
-            <option value="5">Rejected</option>
-            <option value="9">Approved</option>
-          </select>
-        </div>
-        <div class="col-md-1">
-          <button class="btn  btn-primary-c" (click)="filterTimesheet()">
-            <i class="fa fa-filter"></i>
-          </button>
-        </div>
-        <div class="col-md-2 elem-row justify-content-end">
-          <div class="elem-row-item-base justify-content-end ps-2">
-            <a href="javascript:void(0)" (click)="getAllPendingTimesheet()"
-              class="p-2 p-2 badge bg-success text-light head-badge fs-6">
-              <i class="fa fa-calendar-times-o pe-1" aria-hidden="true"></i>
-              My pending timesheet
-            </a>
-          </div>
-        </div>
+        </div> -->
+        
       </div>
       <ng-container [ngSwitch]="divisionCode">
         <ng-container *ngSwitchCase="2">
