@@ -6,7 +6,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, ItemStatus, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -60,6 +60,7 @@ export class AttendanceComponent implements OnInit {
   eventsSubject: Subject<void> = new Subject<void>();
   orderByAttendanceDateAsc: boolean = null;
   orderByRequestedOnAsc: boolean = null;
+  filterAttendStatus: number = 1;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -350,15 +351,13 @@ export class AttendanceComponent implements OnInit {
 
     this.http.post("Attendance/RaiseMissingAttendanceRequest", requestBody).then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        if (this.currentDays.length > 1)
-          this.currentDays.map(x => x.PresentDayStatus = 12);
-        else {
-          let data = this.allDaysAttendance.find(x => new Date(x.AttendanceDay).getTime() == new Date(this.currentDays[0].AttendanceDay).getTime());
+        for (let i = 0; i < this.currentDays.length; i++) {
+          let data = this.allDaysAttendance.find(x => new Date(x.AttendanceDay).getTime() == new Date(this.currentDays[i].AttendanceDay).getTime());
           if (data) {
             data.PresentDayStatus = 12;
-            this.currentDays = this.allDaysAttendance;
           }
         }
+        this.filterByStatus();
         Toast("Your request has been submitted successfully. Your manager will take action on it.");
       }
 
@@ -379,8 +378,9 @@ export class AttendanceComponent implements OnInit {
     this.http.post("Attendance/GetMissingAttendanceRequest", this.request).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.attendanceRequestDetail = response.ResponseBody;
-        if (this.attendanceRequestDetail.length > 0)
+        if (this.attendanceRequestDetail.length > 0) {
           this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
+        }
         else
           this.request.TotalRecords = 0;
         Toast("Attendance request loaded successfully.");
@@ -467,8 +467,8 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
-  filterByStatus(e: any) {
-    let value = Number(e.target.value);
+  filterByStatus() {
+    let value = Number(this.filterAttendStatus);
     let data;
     if (value >=0) {
       this.filterStatus = value;
