@@ -106,6 +106,7 @@ export class ApprovalRequestComponent implements OnInit {
     }
 
     this.attendance = [];
+    this.attendanceDetail = [];
     if (req.AttendaceTable) {
       this.attendance = req.AttendaceTable;
       this.filterAttendance();
@@ -450,6 +451,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.attendanceRequestDetail = response;
     if (this.attendanceRequestDetail.length > 0) {
       this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
+      this.attendanceRequestDetail.map(x => x.AttendanceDate = new Date(x.AttendanceDate));
     } else
       this.request.TotalRecords = 0;
   }
