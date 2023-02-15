@@ -418,13 +418,11 @@ export class ApprovalRequestComponent implements OnInit {
     this.isLoading = true;
     let request = {
       ComplaintOrRequestId: this.currentApprovalRequest.ComplaintOrRequestId,
-      ManagerId: this.currentApprovalRequest.ManagerId,
-      RequestedId: this.currentApprovalRequest.RequestedId,
+      TargetId: this.currentApprovalRequest.TargetId,
+      TargetOffset: this.currentApprovalRequest.TargetOffset,
       EmployeeMessage: this.currentApprovalRequest.EmployeeMessage,
-      AttendanceDate: this.currentApprovalRequest.AttendanceDate,
       NotifyList: this.currentApprovalRequest.NotifyList,
-      EmployeeId: this.currentApprovalRequest.EmployeeId,
-      IsFullDay: true
+      EmployeeId: this.currentApprovalRequest.EmployeeId
     };
 
     this.attendanceRquestPageIsReady = false;
