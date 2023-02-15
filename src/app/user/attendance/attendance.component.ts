@@ -61,6 +61,7 @@ export class AttendanceComponent implements OnInit {
   orderByAttendanceDateAsc: boolean = null;
   orderByRequestedOnAsc: boolean = null;
   filterAttendStatus: number = 1;
+  AttendanceId: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -142,27 +143,26 @@ export class AttendanceComponent implements OnInit {
     this.toDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     let data = {
-      EmployeeUid: Number(this.employeeId),
-      UserTypeId : UserType.Employee,
-      AttendenceFromDay: this.fromDate,
-      AttendenceToDay: this.toDate,
+      EmployeeId: Number(this.employeeId),
+      AttendanceDay: this.fromDate,
       ForYear: this.fromDate.getFullYear(),
-      ForMonth: this.fromDate.getMonth() + 1,
-      CompanyId: this.userDetail.CompanyId
+      ForMonth: this.fromDate.getMonth() + 1
     }
+
     this.loadMappedData(data);
   }
 
   loadMappedData(data: any) {
     this.isAttendanceDataLoaded = false;
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-      if(!response.ResponseBody.EmployeeDetail) {
+      if(!response.ResponseBody.EmployeeDetail && response.ResponseBody.AttendanceId <= 0) {
         ErrorToast("Fail to get employee detail. Please contact to admin.")
         this.isAttendanceDataLoaded = true;
         this.isLoading = false;
         return;
       }
 
+      this.AttendanceId = response.ResponseBody.AttendanceId;
       this.employee = response.ResponseBody.EmployeeDetail;
       this.getMonths();
       if (response.ResponseBody.AttendacneDetails) {
@@ -217,14 +217,12 @@ export class AttendanceComponent implements OnInit {
       endDate = new Date(new Date().getFullYear(), month+1, 0);
 
     let data = {
-      EmployeeUid: Number(this.employeeId),
-      UserTypeId : UserType.Employee,
-      AttendenceFromDay: startDate,
-      AttendenceToDay: endDate,
+      EmployeeId: Number(this.employeeId),
+      AttendanceDay: startDate,
       ForYear: new Date().getFullYear(),
-      ForMonth: month + 1,
-      CompanyId: this.userDetail.CompanyId
+      ForMonth: month + 1
     }
+
     let radiobtn = document.querySelectorAll('input[name="btnradio"]');
     if (radiobtn.length > 0) {
       for (let i = 0; i < radiobtn.length; i++) {
@@ -232,6 +230,7 @@ export class AttendanceComponent implements OnInit {
       }
       radiobtn[index].setAttribute('checked', '');
     }
+
     this.loadMappedData(data);
   }
 
@@ -284,6 +283,8 @@ export class AttendanceComponent implements OnInit {
 
     return {
       EmployeeUid: this.employeeId,
+      AttendenceDetailId: this.currentAttendance.AttendenceDetailId,
+      AttendanceId: this.AttendanceId,
       UserTypeId: UserType.Employee,
       AttendanceDay: this.currentAttendance.AttendanceDay,
       AttendenceFromDay: this.today,
@@ -404,6 +405,7 @@ export class AttendanceComponent implements OnInit {
         if(current) {
           current.PresentDayStatus = 2;
         }
+
         this.isLoading = false;
         Toast("Wow!!!  Your attendance submitted successfully.");
       } else {
