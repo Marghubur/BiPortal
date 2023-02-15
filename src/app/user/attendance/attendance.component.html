@@ -17,8 +17,8 @@
               <div class="" *ngIf="!isLoading">
                 <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
                   <div class="col-md-4 d-flex align-items-center">
-                    <select (change)="filterByStatus($event)" class="form-select w-50">
-                      <option value="" selected disabled>Filter by status</option>
+                    <select (change)="filterByStatus()" class="form-select w-50" [(ngModel)]="filterAttendStatus" [ngModelOptions]="{standalone: true}">
+                      <option value=null selected disabled>Filter by status</option>
                       <option value="1">All</option>
                       <option value="0">Not Applied</option>
                       <option value="2">Pending</option>
@@ -30,7 +30,7 @@
                     </select>
                     <button *ngIf="filterStatus == 10" class="btn btn-primary-c ms-2" (click)="requestPopUp()">
                       <i class="fa fa-retweet pe-2" aria-hidden="true"></i>
-                      Rail a request
+                      Raise a request
                     </button>
                   </div>
                   <div class="col-auto">
@@ -441,7 +441,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
     <ng-container>
       <div class="modal-header border-bottom-0" >
         <h5 class="modal-title" id="exampleModalLabel">Attendance is block. Click to send request for unblock</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="filterByStatus()"></button>
       </div>
       <div class="col-md-12 px-4 d-block">
         <p class="mt-2">You can't apply attendance more than 4 days. Please fill details and send the request to your manager for unblock this attendance</p>
@@ -486,7 +486,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
       </div>
 
       <div class="modal-footer border-top-0 pe-4">
-        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="filterByStatus()">Cancel</button>
         <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="sendRequest()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Send request' }}
