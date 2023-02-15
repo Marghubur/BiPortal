@@ -251,7 +251,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.timesheetDetail = [];
     if(this.timesheet && this.timesheet.length > 0) {
       this.timesheet.map(item => {
-        let detail:Array<any> = JSON.parse(item.TimesheetMonthJson);
+        let detail:Array<any> = JSON.parse(item.TimesheetWeeklyJson);
         let index = 0;
         while (index <detail.length) {
           let increment = index + 7;
