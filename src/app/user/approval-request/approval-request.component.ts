@@ -359,15 +359,21 @@ export class ApprovalRequestComponent implements OnInit {
     this.isLoading = true;
     if (this.attendance) {
       this.buildAttendanceActionUrl()
-      this.http.put(this.attendanceUrl,this.currentRequest).then((response:ResponseModel) => {
-        if(response.ResponseBody) {
-          this.buildPage(response.ResponseBody);
-          this.isPageLoading = false;
-        } else {
+      this.http.put(this.attendanceUrl, this.currentRequest).then((response:ResponseModel) => {
+        try{
+          if(response.ResponseBody) {
+            this.buildPage(response.ResponseBody);
+            this.isPageLoading = false;
+          } else {
+            ErrorToast("Fail to fetch data. Please contact to admin.");
+          }
+
+          this.isLoading = false;
+          $('#leaveModal').modal('hide');
+        } catch (e) {
+          $('#leaveModal').modal('hide');
           ErrorToast("Fail to fetch data. Please contact to admin.");
-        }
-        this.isLoading = false;
-        $('#leaveModal').modal('hide');
+        };
       }).catch(e => {
         this.isLoading = false;
       })
