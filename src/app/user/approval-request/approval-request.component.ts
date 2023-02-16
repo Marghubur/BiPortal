@@ -3,7 +3,7 @@ import { ThemeService } from 'ng2-charts';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { GetEmployees } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
@@ -33,8 +33,6 @@ export class ApprovalRequestComponent implements OnInit {
   leaveDeatil: Array<any> = [];
   requestModal: number = 0;
   attendanceUrl: string = null;
-  currentYear: number = 0;
-  monthsName: Array<any> = [];
   attendanceRquestPageIsReady: boolean = false;
   request: Filter = new Filter();
   attendanceRequestDetail: Array<any> = [];
@@ -49,6 +47,7 @@ export class ApprovalRequestComponent implements OnInit {
 
   constructor(
     private http: AjaxService,
+    private local : ApplicationStorage,
     private userService: UserService
     ) { }
 
@@ -66,10 +65,6 @@ export class ApprovalRequestComponent implements OnInit {
     this.request.PageIndex = 1;
     this.request.SearchString = "";
     this.loadAutoComplete();
-    this.currentYear = new Date().getFullYear();
-    for (let i = 0; i <= new Date().getMonth(); i++) {
-      this.monthsName.push(new Date(this.currentYear, i, 1))
-    }
     this.itemStatus = 2;
     this.loadData();
   }
@@ -161,9 +156,6 @@ export class ApprovalRequestComponent implements OnInit {
       case 'Rejected':
         this.currentRequest.RequestStatusId = ItemStatus.Rejected;
         this.attendanceUrl = 'AttendanceRequest/RejectAction';
-        break;
-      case 'Othermember':
-        this.attendanceUrl = 'AttendanceRequest/ReAssigneToOtherManager';
         break;
     }
   }
@@ -291,9 +283,6 @@ export class ApprovalRequestComponent implements OnInit {
       case 'Rejected':
         statusId = ItemStatus.Rejected;
         break;
-      case 'Othermember':
-        statusId = ItemStatus.ReAssigned
-        break;
     }
     return statusId;
   }
@@ -308,9 +297,6 @@ export class ApprovalRequestComponent implements OnInit {
         break;
       case 'Rejected':
         endPoint = 'TimesheetRequest/RejectAction';
-        break;
-      case 'Othermember':
-        endPoint = 'TimesheetRequest/ReAssigneToOtherManager';
         break;
     }
 
@@ -336,9 +322,6 @@ export class ApprovalRequestComponent implements OnInit {
         break;
       case 'Rejected':
         endPoint = 'LeaveRequest/RejectAction';
-        break;
-      case 'Othermember':
-        endPoint = 'LeaveRequest/ReAssigneToOtherManager';
         break;
       default:
         throw 'Invalid option selected.';
@@ -389,22 +372,6 @@ export class ApprovalRequestComponent implements OnInit {
     }
   }
 
-  onYearChange(e: any) {
-    let value = Number(e.target.value);
-    if (value) {
-      this.monthsName = [];
-      if (value == new Date().getFullYear()) {
-        for (let i = 0; i <= new Date().getMonth(); i++) {
-          this.monthsName.push(new Date(value, i, 1))
-        }
-      } else {
-        for (let i = 0; i <= 11; i++) {
-          this.monthsName.push(new Date(value, i, 1))
-        }
-      }
-    }
-  }
-
   loadAttendanceRequestDetail() {
     this.attendanceRquestPageIsReady = false;
     this.request.PageSize = 10;
@@ -436,8 +403,13 @@ export class ApprovalRequestComponent implements OnInit {
 
     this.http.put(this.requestModalData.ApiUrl, requestBody).then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        this.bindAttendanceRequestDetail(response.ResponseBody);
         Toast(`Attendance ${this.requestModalData.Status} successfully.`);
+        let empid = this.local.getByKey('EmployeeId');
+        if (empid > 0) {
+          this.request.EmployeeId = empid;
+          this.loadAttendanceRequestDetail();
+        } else
+          this.bindAttendanceRequestDetail(response.ResponseBody);
         this.isLoading = false;
       }
 
@@ -456,6 +428,7 @@ export class ApprovalRequestComponent implements OnInit {
     if (this.attendanceRequestDetail.length > 0) {
       this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
       this.attendanceRequestDetail.map(x => x.AttendanceDate = new Date(x.AttendanceDate));
+
     } else
       this.request.TotalRecords = 0;
   }
@@ -521,6 +494,7 @@ export class ApprovalRequestComponent implements OnInit {
 
   onEmloyeeChanged(e: any) {
     this.request.EmployeeId = this.employeeId;
+    this.local.setByKey('EmployeeId', this.employeeId)
     this.loadAttendanceRequestDetail();
   }
 
@@ -531,7 +505,7 @@ export class ApprovalRequestComponent implements OnInit {
         let startdate = new Date();
         let enddate = new Date();
         enddate.setDate(enddate.getDate()- value);
-        this.request.SearchString = `1=1 and RequestedOn between '${enddate.getFullYear()}-${enddate.getMonth()+1}-${enddate.getDate()}' and '${startdate.getFullYear()}-${startdate.getMonth()+1}-${startdate.getDate()}'`;
+        this.request.SearchString = `1=1 and RequestedOn between "${enddate.getFullYear()}-${enddate.getMonth()+1}-${enddate.getDate()} 00:00:00" and "${startdate.getFullYear()}-${startdate.getMonth()+1}-${startdate.getDate()} 23:59:59"`;
       } else if (type == 'status') {
         this.request.SearchString = `1=1 and RequestTypeId = ${4} and ManagerId = ${this.currentUser.UserId} and CurrentStatus = ${value}`;
       }
