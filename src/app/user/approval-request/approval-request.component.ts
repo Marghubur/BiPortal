@@ -131,7 +131,6 @@ export class ApprovalRequestComponent implements OnInit {
     this.requestState = state;
     this.requestModal = 1; // leave
     this.currentRequest = request;
-    this.currentRequest["EmployeeName"] = request.FirstName + " " + request.LastName;
   }
 
   openTimesheetModal(state: string, request: any) {
@@ -146,7 +145,11 @@ export class ApprovalRequestComponent implements OnInit {
     this.requestModal = 3; // attendance
     this.currentRequest = request;
     this.currentRequest.RequestStatusId = request.PresentDayStatus;
-    this.currentRequest["EmployeeName"] = request.EmployeeName;
+    let attendance = this.attendance.find( x=> x.AttendanceId == request.AttendanceId);
+    this.currentRequest["EmployeeName"] = attendance.EmployeeName;
+    this.currentRequest["Email"] = attendance.Email;
+    this.currentRequest["Mobile"] = attendance.Mobile;
+
   }
 
   buildAttendanceActionUrl() {
@@ -227,6 +230,9 @@ export class ApprovalRequestComponent implements OnInit {
               } else {
                 detail[i].AttendanceId = item.AttendanceId;
               }
+              detail[i].EmployeeName = item.EmployeeName;
+              detail[i].Email = item.Email;
+              detail[i].Mobile = item.Mobile;
             }
             this.attendanceDetail.push(...detail);
           }

@@ -53,7 +53,7 @@
                       </p>
                       <span>
                         <span class="fw-bold">Message:</span>
-                        {{item.UserComments}}
+                        {{item.UserComments == "" ? 'NA' : item.UserComments}}
                       </span>
                     </div>
                     <div class="col-md-2">
@@ -450,7 +450,7 @@
         <div class="row py-3">
           <div class="col-md-6">
             <p class="mb-0 fw-bold fs-6">
-              Request by [{{attendance.EmployeeName}}]
+              Request by [{{currentRequest.EmployeeName}}]
             </p>
             <!-- <input type="text" class="form-control" name="message" [(ngModel)]="editedMessage" value="{{singleLeave.Message}}"> -->
             <span>{{currentRequest.Message}}</span>
@@ -461,8 +461,8 @@
           </div>
           <div class="col-md-3">
             {{currentRequest.EmployeeName}}
-            <p class="mb-0">{{attendance.Email}}</p>
-            <p class="mb-0">{{attendance.Mobile}}</p>
+            <p class="mb-0">{{currentRequest.Email}}</p>
+            <p class="mb-0">{{currentRequest.Mobile}}</p>
           </div>
           <div class="col-md-1">
             <ng-container [ngSwitch]="currentRequest.RequestStatusId">
