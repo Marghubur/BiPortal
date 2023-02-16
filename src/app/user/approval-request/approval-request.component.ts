@@ -251,23 +251,15 @@ export class ApprovalRequestComponent implements OnInit {
     if(this.timesheet && this.timesheet.length > 0) {
       this.timesheet.map(item => {
         let detail:Array<any> = JSON.parse(item.TimesheetWeeklyJson);
-        let index = 0;
-        while (index <detail.length) {
-          let increment = index + 7;
-          let data = detail.slice(index, increment);
-          data = data.filter(x => new Date(x.PresentDate).getMonth() == new Date().getMonth());
-          if (this.itemStatus > 0 && this.itemStatus < 4)
-            data = data.filter(x => x.TimesheetStatus === this.itemStatus);
-          else
-            data = data.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Pending || x.TimesheetStatus === ItemStatus.Rejected);
-          if (data.length > 0) {
-            for (let i = 0; i < data.length; i++) {
-              data[i].TimesheetId = item.TimesheetId;
-            }
-            this.timesheetDetail.push(data);
+        if (item.TimesheetStatus == 8) {
+          for (let i = 0; i < detail.length; i++) {
+            detail[i].EmployeeName = item.FirstName + " "+ item.LastName;
+            detail[i].Email = item.Email;
+            detail[i].Mobile = item.Mobile;
+            detail[i].PresentDate = detail[i].PresentDate;
+            detail[i].TimesheetStatus = item.TimesheetStatus;
           }
-          //let totalTimeBurned = data.map(x => x.TotalMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
-          index=(index+7);
+          this.timesheetDetail.push(detail);
         }
       });
 
