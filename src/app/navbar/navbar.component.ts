@@ -1,7 +1,7 @@
 import { ApplicationStorage } from "./../../providers/ApplicationStorage";
 import { AjaxService } from "./../../providers/ajax.service";
 import { CommonService, Toast, UserDetail } from "./../../providers/common-service/common.service";
-import { AccessTokenExpiredOn, Blogs, BuildPdf, Company, CompanyLogo, CompanySettings, Documents, Employees, Login } from "./../../providers/constants";
+import { AccessTokenExpiredOn, Blogs, BuildPdf, CompanyLogo, CompanySettings, Documents, Employees, Login } from "./../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
@@ -14,6 +14,7 @@ import { UserService } from "src/providers/userService";
 })
 export class NavbarComponent implements OnInit, DoCheck {
   public sidebarOpened = false;
+  public sizeOptions: Array<number> = [1,2, 3, 4, 5, 6, 7, 8, 9, 10];
   User: string;
   NotificationBadge: number = 0;
   InformationBadge: number = 0;
@@ -26,6 +27,7 @@ export class NavbarComponent implements OnInit, DoCheck {
   Menu: Array<any> = [];
   TineMenu: boolean = false;
   isAdmin: boolean = true;
+  root: any = null;
 
   @Output() authentication = new EventEmitter();
 
@@ -38,6 +40,7 @@ export class NavbarComponent implements OnInit, DoCheck {
       $doc.querySelector(".sidebar-offcanvas").classList.remove("active");
     }
   }
+
   constructor(
     private nav: iNavigation,
     private commonService: CommonService,
@@ -46,7 +49,9 @@ export class NavbarComponent implements OnInit, DoCheck {
     private tokenHelper: JwtService,
     private user: UserService
   ) {
+    this.root = document.body;
   }
+
   ngDoCheck(): void {
     let data = this.local.findRecord("UserDetail");
     if (data.UserTypeId == 1)
@@ -153,6 +158,20 @@ export class NavbarComponent implements OnInit, DoCheck {
       $e.classList.remove("d-block");
     }
     this.TineMenu = !this.TineMenu;
+  }
+
+  balanceZooming(e: any) {
+    let value = Number(e.target.value);
+    let size = this.commonService.GetDefaultFontSize();
+    size += value * 0.01;
+    this.root.setAttribute("style", `font-size: ${size}vw !important`);
+    // this.commonService.SetDefaultFontSize(size);
+  }
+
+  undozooming() {
+    let size = 0.80;
+    this.root.setAttribute("style", `font-size: ${size}vw !important`);
+    this.commonService.SetDefaultFontSize(size);
   }
 }
 

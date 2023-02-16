@@ -1,28 +1,13 @@
 <div class="col-md-12 col-sm-12 main-container">
-  <div class="col-md-12 bg-light mb-3">
-    <ul class="nav">
-      <li class="nav-item">
-        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page"
-          href="javascript:void(0)">ATTENDENCE</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')"
-          href="javascript:void(0)">TIMESHEET</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-dark nav-active" id="leave-tab" (click)="activateMe('leave-tab')"
-          href="javascript:void(0)">LEAVE</a>
-      </li>
-    </ul>
-  </div>
-
   <div class="x_panel">
     <div class="x_header">
-      <h2>Pending Leave requests</h2>
-      <div class="clearfix"></div>
-    </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Leave plans'" [subtitle]="'create and manage leaves'"></app-breadcrums>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="x_content" *ngIf="isLeavePageReady">
       <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
@@ -30,13 +15,6 @@
           <a ngbNavLink (click)="onTabChange(0)">Leave Plans</a>
           <ng-template ngbNavContent>
             <div class="d-flex flex-row justify-content-between col-md-12 my-3">
-              <div class="d-flex flex-row justify-content-center">
-                <h5 class="fs-4">Leave Plans</h5>
-                <p class="d-flex flex-column justify-content-center ms-4 mb-0">
-                  You can configure leave plans for various groups of employees.
-                  You can assign leave plans to employees later.
-                </p>
-              </div>
               <button [ngClass]="{ 'd-none': !menuItem.Config }" class="btn btn-primary-c"
                 (click)="bindLeaveTypeModal()">
                 <i class="fa fa-plus pe-2"></i>Assign Leave
@@ -55,7 +33,7 @@
                         'fa-plus': !isLoading,
                         'fa-spin fa-spinner': isLoading
                       }"></i>
-                    {{ isLoading ? "Wait" : "Add Leave Plan" }}
+                    {{ isLoading ? "Wait" : "Create Plan" }}
                   </button>
                 </div>
                 <div class="x_panel p-0">
@@ -80,7 +58,7 @@
                     <ng-container *ngIf="leavePlanList.length > 0">
                       <ng-container *ngFor="let item of leavePlanList; let i = index">
                         <li
-                          class="list-group-item border-0 border-bottom p-0 my-2 d-flex justify-content-between align-items-start">
+                          class="list-group-item border-0 border-bottom p-0 d-flex justify-content-between align-items-start">
                           <a href="javascript:void(0)" (click)="selectedPlan(i, item)"
                             class="d-block w-100 px-3 text-decoration-none text-dark"
                             [ngClass]="{ 'active-tab': i == 0 }">
