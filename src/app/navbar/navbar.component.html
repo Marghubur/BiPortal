@@ -31,6 +31,11 @@
         <ul class="navbar-nav navbar-nav-right">
           <li class="d-none d-sm-block">
             <div class="btn-group">
+              <select class="form-select" (change)="balanceZooming($event)">
+                <option value="0">Default</option>
+                <option [value]="i" *ngFor="let i of sizeOptions">{{i}}</option>
+              </select>
+
               <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-bell-o" aria-hidden="true"></i>
                 <span class="count badge-counter">{{NotificationBadge}}</span>

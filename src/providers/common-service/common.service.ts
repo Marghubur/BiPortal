@@ -1,6 +1,5 @@
 import { Home, UserType } from "./../constants";
-import { Injectable, ElementRef } from "@angular/core";
-import { ApplicationStorage } from "./../ApplicationStorage";
+import { Injectable } from "@angular/core";
 import * as $ from 'jquery';
 import { ResponseModel } from "src/auth/jwtService";
 
@@ -19,10 +18,21 @@ export class CommonService {
   private WindowHeight: number = 0;
   private WindowWidth: number = 0;
   private UserRole: UserType = UserType.Other;
+  private DefaultFontSize: number = 0.80;
 
   DefaultTimeout: number = 8 * 1000;
   $ButtonId: any = "";
   constructor() { }
+
+  public GetDefaultFontSize() {
+    return this.DefaultFontSize;
+  }
+
+  public SetDefaultFontSize(size: number) {
+    if(size > 0) {
+      this.DefaultFontSize = size;
+    }
+  }
 
   public UpdateRoleType(role: UserType) {
     this.UserRole = role;
