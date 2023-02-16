@@ -248,6 +248,7 @@ export class AttendanceComponent implements OnInit {
 
     this.currentAttendance.AttendanceDay = this.today;
     this.commentValue = this.currentAttendance.UserComments;
+    this.commentValue = "";
     $('#commentModal').modal('show');
   }
 
@@ -503,13 +504,14 @@ export class AttendanceComponent implements OnInit {
       this.EmailBody += `  \n${text}`;
       this.EmailBody += "<br><div>Requesting to please approved all the above mentioned attendance.</div><br><br>";
       this.EmailBody += "<div>Regards</div>";
+      this.commentValue = "";
       $("#requestModal").modal('show');
     } else {
       WarningToast("You don't have any missed attendance in present month.");
     }
   }
 
-  removeBlockDay(index: number) {
+  removeBlockDay(item:any, index: number) {
     if (index != -1) {
       this.currentDays.splice(index, 1);
     }
