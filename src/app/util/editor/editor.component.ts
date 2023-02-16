@@ -45,13 +45,17 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   ngOnInit() {
-    this.eventSubscription = this.cleanUp.subscribe(() => this.cleanUpIFrame())
+    if(this.cleanUp) {
+      this.eventSubscription = this.cleanUp.subscribe(() => this.cleanUpIFrame())
+    }
     this.richTextField = document.getElementById("richTextField");
     this.toggleEdit();
   }
 
   ngOnDestroy() {
-    this.eventSubscription.unsubscribe();
+    if(this.cleanUp) {
+      this.eventSubscription.unsubscribe();
+    }
   }
 
   cleanUpIFrame() {

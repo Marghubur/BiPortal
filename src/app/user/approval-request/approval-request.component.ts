@@ -218,7 +218,7 @@ export class ApprovalRequestComponent implements OnInit {
       this.attendance.map(item => {
         let detail:Array<any> = JSON.parse(item.AttendanceDetail);
         if(detail && detail.length > 0) {
-          if (this.itemStatus > 0 && this.itemStatus <4)
+          if (this.itemStatus > 0 && this.itemStatus != 4)
             detail = detail.filter(x => x.PresentDayStatus === this.itemStatus);
           else
             detail = detail.filter(x => x.PresentDayStatus === ItemStatus.Approved || x.PresentDayStatus === ItemStatus.Pending || x.PresentDayStatus === ItemStatus.Rejected);
@@ -424,13 +424,11 @@ export class ApprovalRequestComponent implements OnInit {
     this.isLoading = true;
     let request = {
       ComplaintOrRequestId: this.currentApprovalRequest.ComplaintOrRequestId,
-      ManagerId: this.currentApprovalRequest.ManagerId,
-      RequestedId: this.currentApprovalRequest.RequestedId,
+      TargetId: this.currentApprovalRequest.TargetId,
+      TargetOffset: this.currentApprovalRequest.TargetOffset,
       EmployeeMessage: this.currentApprovalRequest.EmployeeMessage,
-      AttendanceDate: this.currentApprovalRequest.AttendanceDate,
       NotifyList: this.currentApprovalRequest.NotifyList,
-      EmployeeId: this.currentApprovalRequest.EmployeeId,
-      IsFullDay: true
+      EmployeeId: this.currentApprovalRequest.EmployeeId
     };
 
     this.attendanceRquestPageIsReady = false;

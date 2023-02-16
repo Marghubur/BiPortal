@@ -6,8 +6,8 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, ItemStatus, UserLeave, UserTimesheet, UserType } from 'src/providers/constants';
+import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
+import { ItemStatus, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -328,14 +328,9 @@ export class AttendanceComponent implements OnInit {
     }
     this.currentDays.map(item => {
       request.push({
-        RequestedId: this.currentAttendance.AttendanceId,
-        EmployeeId: this.employeeId,
-        EmployeeName: `${this.employee.FirstName} ${this.employee.LastName}`,
-        Email: this.employee.Email,
-        Mobile: this.employee.Mobile,
-        EmployeeMessage: this.commentValue,
-        CurrentStatus: this.currentAttendance.PresentDayStatus == 0 ? ItemStatus.Pending : this.currentAttendance.PresentDayStatus,
+        TargetOffset: item.AttendenceDetailId,
         AttendanceDate: item.AttendanceDay,
+        EmployeeMessage: this.commentValue,
         NotifyList: notify
       });
     });
@@ -347,6 +342,7 @@ export class AttendanceComponent implements OnInit {
 
     let requestBody = {
       EmailBody: data,
+      AttendanceId: this.AttendanceId,
       CompalintOrRequestList: request
     };
 
