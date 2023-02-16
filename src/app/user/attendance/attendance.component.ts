@@ -203,7 +203,7 @@ export class AttendanceComponent implements OnInit {
   previousMonthAttendance(month: number, index: number) {
     let doj = new Date(this.userDetail.CreatedOn);
     let startDate = new Date(new Date().getFullYear(), month, 1);
-    if(doj.getFullYear() == new Date().getFullYear() && doj.getMonth() == new Date().getMonth()) {
+    if(doj.getFullYear() == new Date().getFullYear() && doj.getMonth() != startDate.getMonth()) {
       WarningToast("You joining month is current month.")
       return;
     }
@@ -233,16 +233,6 @@ export class AttendanceComponent implements OnInit {
 
     this.loadMappedData(data);
   }
-
-  // getMonday(d: Date) {
-  //   if(d) {
-  //     d = new Date(d);
-  //     var day = d.getDay(),
-  //         diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-  //     return new Date(d.setDate(diff));
-  //   }
-  //   return null;
-  // }
 
   applyWorkFromHome(e: any) {
     this.currentAttendance = e;
@@ -336,7 +326,8 @@ export class AttendanceComponent implements OnInit {
     });
 
     if (request == null || request.length == 0){
-      WarningToast("No attendance is available to apply.")
+      WarningToast("No attendance is available to apply.");
+      this.isLoading = false;
       return;
     }
 
@@ -396,10 +387,14 @@ export class AttendanceComponent implements OnInit {
       return;
 
     this.http.post('Attendance/SubmitAttendance', request).then((response: ResponseModel) => {
-      if (response.ResponseBody && (response.ResponseBody === "updated" || response.ResponseBody === "inserted")) {
+      if (response.ResponseBody) {
         let current = this.currentDays.find(x => x.AttendanceDay === this.currentAttendance.AttendanceDay);
+        let attendance = response.ResponseBody;
         if(current) {
-          current.PresentDayStatus = 2;
+          current.PresentDayStatus = attendance.PresentDayStatus;
+          current.SessionType = attendance.SessionType
+          current.LogOff = attendance.LogOff;
+          current.LogOn = attendance.LogOn;
         }
 
         this.isLoading = false;
@@ -414,23 +409,6 @@ export class AttendanceComponent implements OnInit {
       this.isLoading = false;
     })
   }
-
-  //-------------------------- required code ends --------------------------
-
-  // checkDateExists(currenDate: Date, existingDateList: Array<any>) {
-  //   let i = 0;
-  //   let date = null;
-  //   while(i < existingDateList.length) {
-  //     date = new Date(existingDateList[i]["AttendanceDay"]);
-  //     if(currenDate.getFullYear() == date.getFullYear() &&
-  //        currenDate.getMonth() == date.getMonth() &&
-  //        currenDate.getDate() == date.getDate()) {
-  //          return true;
-  //        }
-  //     i++;
-  //   }
-  //   return false;
-  // }
 
   loadAutoComplete() {
     this.isEmployeesReady = false;
