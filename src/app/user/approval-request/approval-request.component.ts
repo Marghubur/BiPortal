@@ -44,6 +44,7 @@ export class ApprovalRequestComponent implements OnInit {
   employeeId: number = 0;
   requestedOn: number = 0;
   missAttendanceStatus: number = 0;
+  timesheetId: number = 0;
 
   constructor(
     private http: AjaxService,
@@ -129,9 +130,10 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   openTimesheetModal(state: string, request: any) {
-    $('#timesheetModal').modal('show');
     this.requestState = state;
+    this.timesheetId = request[0].TimesheetId;
     this.currentTimesheet = request;
+    $('#timesheetModal').modal('show');
   }
 
   openAttendacneModal(state: string, request: any) {
@@ -258,6 +260,7 @@ export class ApprovalRequestComponent implements OnInit {
             detail[i].Mobile = item.Mobile;
             detail[i].PresentDate = detail[i].PresentDate;
             detail[i].TimesheetStatus = item.TimesheetStatus;
+            detail[i].TimesheetId = item.TimesheetId;
           }
           this.timesheetDetail.push(detail);
         }
@@ -292,7 +295,7 @@ export class ApprovalRequestComponent implements OnInit {
         break;
     }
 
-    this.http.put(endPoint, this.currentTimesheet).then((response:ResponseModel) => {
+    this.http.put(`${endPoint}/${this.timesheetId}`, null).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.buildPage(response.ResponseBody);
         $('#timesheetModal').modal('hide');
