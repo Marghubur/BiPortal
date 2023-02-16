@@ -114,11 +114,14 @@ input::-ms-input-placeholder {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  font-weight: 700;
+  color: darkgray;
 }
 
 .x_header h2 small {
   margin-left: 10px;
   font-size: 12px !important;
+  color: darkgray;
 }
 
 .x_header {

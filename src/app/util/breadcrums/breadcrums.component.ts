@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -8,7 +8,24 @@ import { iNavigation } from 'src/providers/iNavigation';
 })
 export class BreadcrumsComponent implements OnInit {
   routePath: Array<any> = [];
+  titleText: string = "";
+  subTitleText: string = "";
+
   constructor(private nav: iNavigation) { }
+
+  @Input() 
+  set title(text: string) {
+    if (text) {
+      this.titleText = text;
+    }
+  }
+
+  @Input() 
+  set subtitle(text: string) {
+    if (text) {
+      this.subTitleText = text;
+    }
+  }
 
   ngOnInit(): void {
     let value = this.nav.getRouteList();

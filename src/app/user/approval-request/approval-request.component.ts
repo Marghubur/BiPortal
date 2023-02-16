@@ -215,7 +215,7 @@ export class ApprovalRequestComponent implements OnInit {
       this.attendance.map(item => {
         let detail:Array<any> = JSON.parse(item.AttendanceDetail);
         if(detail && detail.length > 0) {
-          if (this.itemStatus > 0 && this.itemStatus <4)
+          if (this.itemStatus > 0 && this.itemStatus != 4)
             detail = detail.filter(x => x.PresentDayStatus === this.itemStatus);
           else
             detail = detail.filter(x => x.PresentDayStatus === ItemStatus.Approved || x.PresentDayStatus === ItemStatus.Pending || x.PresentDayStatus === ItemStatus.Rejected);

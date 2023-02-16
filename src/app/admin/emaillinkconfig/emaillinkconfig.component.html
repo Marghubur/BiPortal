@@ -2,17 +2,21 @@
   <div class="x_panel">
     <div class="x_panel x-panel-changed">
       <div class="x_header">
-        <div class="x_header_title d-flex align-items-center justify-content-between">
-          <h2>Email Link Config Details<small>like page name, emails etc</small></h2>
-          <button class="btn btn-primary-c" [disabled]="isLoading || isAutoTrigger || isPageLoading" (click)="sendEmail()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
-            {{ isLoading ? 'Sending ...' : 'Send Manually' }}
-          </button>
-        </div>
-      </div>
-      <div class="px-1">
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
+        <div class="d-flex justify-content-between">
+          <div class="col-8">
+            <div class="px-1">
+              <app-breadcrums [title]="'Configure email'" [subtitle]="'like page name, emails etc'"></app-breadcrums>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="x_header_title d-flex align-items-center justify-content-end">
+              <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+              <button class="btn btn-primary-c" [disabled]="isLoading || isAutoTrigger || isPageLoading" (click)="sendEmail()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
+                {{ isLoading ? 'Sending ...' : 'Send Manually' }}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <ng-container *ngIf="!isPageLoading">

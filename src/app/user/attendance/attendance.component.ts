@@ -330,6 +330,7 @@ export class AttendanceComponent implements OnInit {
       request.push({
         TargetOffset: item.AttendenceDetailId,
         AttendanceDate: item.AttendanceDay,
+        EmployeeMessage: this.commentValue,
         NotifyList: notify
       });
     });
