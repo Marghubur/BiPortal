@@ -7,9 +7,9 @@
             <app-breadcrums [title]="'Request'"></app-breadcrums>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-4" [ngClass]="{'d-none': active == 4}">
           <div class="x_header_title d-flex align-items-center justify-content-end">
-            <div class="d-flex" [hidden]="active == 4">
+            <div class="d-flex">
               <select class="form-select" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
                 <option selected value="2">Pending</option>
                 <option value="9">Approved</option>
