@@ -239,7 +239,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   onAssignDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.employeeForm.controls["AssigneDate"].setValue(date);
+    this.addUpdateClientForm.controls["AssigneDate"].setValue(date);
   }
 
   onJoiningDateSelection(e: NgbDateStruct) {
@@ -495,6 +495,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (this.addUpdateClientForm.get('AssigneDate').errors !== null)
       errroCounter++;
 
+    this.activeAssignedClient.AssigneDate = this.addUpdateClientForm.get('AssigneDate').value;
+
     let clientId = Number(this.addUpdateClientForm.get("AllocatedClientId").value);
     if(isNaN(clientId) || clientId <= 0){
       this.isLoading = false;
@@ -707,6 +709,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
 export class AssignedClients {
   IsActive: boolean = false;
+  AssigneDate: Date = new Date();
   IsActiveRow: boolean = false;
   ClientUid: number = 0;
   ClientName: string  = null;
