@@ -100,6 +100,10 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       errorCounter++;
     if (this.leaveTypeForm.get('PlanDescription').errors !== null)
       errorCounter++;
+
+    if (this.leaveTypeForm.invalid) {
+      errorCounter++;
+    }
     if(value && errorCounter === 0) {
       let Url: string = "";
       if(this.isUpdate) {
@@ -121,6 +125,9 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           this.isLoading = false;
         });
       }
+    } else {
+      this.isLoading = false;
+      ErrorToast("Please fill all the mandatory field");
     }
   }
 
@@ -271,8 +278,12 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   checkLeaveType(e: any) {
     if (e.target.name == 'IsSickLeave') {
       this.leaveTypeForm.get('IsStatutoryLeave').setValue(false);
+      this.leaveTypeForm.get('IsStatutoryLeave').removeValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsStatutoryLeave').updateValueAndValidity();
     } else {
       this.leaveTypeForm.get('IsSickLeave').setValue(false);
+      this.leaveTypeForm.get('IsSickLeave').removeValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsSickLeave').updateValueAndValidity();
     }
 
   }
@@ -395,8 +406,12 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       document.querySelector('[name="IsMale"]').setAttribute("disabled", '');
       let value = document.querySelector('[name="IsMale"]')as HTMLInputElement;
       value.checked = false;
+      this.leaveTypeForm.get('IsMale').removeValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsMale').updateValueAndValidity();
     } else {
       document.querySelector('[name="IsMale"]').removeAttribute("disabled");
+      this.leaveTypeForm.get('IsMale').addValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsMale').updateValueAndValidity();
     }
   }
 
@@ -406,8 +421,12 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       document.querySelector('[name="IsMarried"]').setAttribute("disabled", '');
       let value = document.querySelector('[name="IsMarried"]')as HTMLInputElement;
       value.checked = false;
+      this.leaveTypeForm.get('IsMarried').removeValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsMarried').updateValueAndValidity();
     } else {
       document.querySelector('[name="IsMarried"]').removeAttribute("disabled");
+      this.leaveTypeForm.get('IsMarried').addValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsMarried').updateValueAndValidity();
     }
   }
 
@@ -518,6 +537,23 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       }).catch(e => {
         this.isLoading = false;
       })
+    }
+  }
+
+  IsPaidLeaveEnable(e: any) {
+    let value = e.target.checked;
+    if (value) {
+      this.leaveTypeForm.get('IsSickLeave').setValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsStatutoryLeave').setValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsSickLeave').updateValueAndValidity();
+      this.leaveTypeForm.get('IsStatutoryLeave').updateValueAndValidity();
+    } else {
+      this.leaveTypeForm.get('IsSickLeave').setValue(false);
+      this.leaveTypeForm.get('IsStatutoryLeave').setValue(false);
+      this.leaveTypeForm.get('IsSickLeave').removeValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsStatutoryLeave').removeValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsSickLeave').updateValueAndValidity();
+      this.leaveTypeForm.get('IsStatutoryLeave').updateValueAndValidity();
     }
   }
 }

@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { CommonService, ErrorToast, PlaceEmpty, Toast, ToFixed, ToLocateDate } from 'src/providers/common-service/common.service';
+import { ErrorToast, PlaceEmpty, Toast, ToFixed, ToLocateDate } from 'src/providers/common-service/common.service';
 import { EmailLinkConfig, Employees, ManageEmployee, OrganizationSetting, ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
@@ -16,6 +16,7 @@ declare var $: any;
 })
 export class ManageemployeeComponent implements OnInit, OnDestroy {
   model: NgbDateStruct;
+  assignDateModel: NgbDateStruct;
   joiningDatemodel: NgbDateStruct;
   submitted: boolean = false;
   employeeForm: FormGroup = null;
@@ -55,6 +56,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   leavePlans: Array<any> = [];
   isCompaniesDetails: boolean = true;
   minDate: any = null;
+  assignMaxDate: any = null;
   imageIndex: number = 0;
   isSubmitted: boolean = false;
 
@@ -84,6 +86,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     });
     this.managerList.className = "autocomplete-height";
     this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
+    let assignmaxdate = new Date(new Date().setMonth(new Date().getMonth() + 12))
+    this.assignMaxDate = {year: assignmaxdate.getFullYear(), month: assignmaxdate.getMonth()+1, day: assignmaxdate.getDate()};
     this.model = this.calendar.getToday();
     let data = this.nav.getValue();
     this.employeeUid = 0;
@@ -233,6 +237,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.employeeForm.controls["DOB"].setValue(date);
   }
 
+  onAssignDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.employeeForm.controls["AssigneDate"].setValue(date);
+  }
+
   onJoiningDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month -1, e.day);
     this.employeeForm.get("DateOfJoining").setValue(date);
@@ -295,6 +304,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ActualPackage: new FormControl(null, [Validators.required]),
       FinalPackage: new FormControl(null, [Validators.required]),
       TakeHomeByCandidate: new FormControl(null, [Validators.required]),
+      AssigneDate: new FormControl(null, [Validators.required]),
       AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
     })
   }
@@ -472,6 +482,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     let errroCounter = 0;
     if (this.addUpdateClientForm.value.AllocatedClients.length)
       this.isAllocated = true;
+
     if (this.addUpdateClientForm.get('ActualPackage').errors !== null)
       errroCounter++;
 
@@ -479,6 +490,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       errroCounter++;
 
     if (this.addUpdateClientForm.get('TakeHomeByCandidate').errors !== null)
+      errroCounter++;
+
+    if (this.addUpdateClientForm.get('AssigneDate').errors !== null)
       errroCounter++;
 
     let clientId = Number(this.addUpdateClientForm.get("AllocatedClientId").value);

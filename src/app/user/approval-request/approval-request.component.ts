@@ -105,13 +105,16 @@ export class ApprovalRequestComponent implements OnInit {
     this.attendanceDetail = [];
     if (req.AttendaceTable) {
       this.attendance = req.AttendaceTable;
-      this.filterAttendance();
+      if (this.active == 1)
+        this.filterAttendance();
     }
 
     this.timesheet = [];
+    this.timesheetDetail = [];
     if (req.TimesheetTable) {
       this.timesheet = req.TimesheetTable;
-      this.weekDistributed();
+      if (this.active == 2)
+        this.weekDistributed();
     }
   }
 
@@ -249,23 +252,28 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   weekDistributed() {
-    this.timesheetDetail = [];
     if(this.timesheet && this.timesheet.length > 0) {
-      this.timesheet.map(item => {
+      let timesheetsData = [];
+      if (this.itemStatus == ItemStatus.Rejected || this.itemStatus == ItemStatus.Approved)
+        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus == this.itemStatus);
+      else if (this.itemStatus == ItemStatus.Pending)
+        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus == ItemStatus.Submitted);
+      else if (this.itemStatus == 4)
+        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Pending || x.TimesheetStatus === ItemStatus.Rejected);
+      if (timesheetsData.length > 0) {
+        this.timesheet.map(item => {
         let detail:Array<any> = JSON.parse(item.TimesheetWeeklyJson);
-        if (item.TimesheetStatus == 8) {
-          for (let i = 0; i < detail.length; i++) {
-            detail[i].EmployeeName = item.FirstName + " "+ item.LastName;
-            detail[i].Email = item.Email;
-            detail[i].Mobile = item.Mobile;
-            detail[i].PresentDate = detail[i].PresentDate;
-            detail[i].TimesheetStatus = item.TimesheetStatus;
-            detail[i].TimesheetId = item.TimesheetId;
-          }
-          this.timesheetDetail.push(detail);
+        for (let i = 0; i < detail.length; i++) {
+          detail[i].EmployeeName = item.FirstName + " "+ item.LastName;
+          detail[i].Email = item.Email;
+          detail[i].Mobile = item.Mobile;
+          detail[i].PresentDate = detail[i].PresentDate;
+          detail[i].TimesheetStatus = item.TimesheetStatus;
+          detail[i].TimesheetId = item.TimesheetId;
         }
-      });
-
+        this.timesheetDetail.push(detail);
+        });
+      }
     }
   }
 

@@ -456,15 +456,33 @@
             </div>
 
             <div class="col-md-7">
-              <div class="form-group">
-                <label class="form-label">Client (Allocated)</label>
-                <div class="col-md-12">
-                  <select name="AllocatedClientId" class="form-control" formControlName="AllocatedClientId" [ngClass]="{'error-field': isSubmitted && n.AllocatedClientId.errors !== null && n.AllocatedClientId.errors.required}">
-                    <option value="0" disabled>Clients Name</option>
-                    <option *ngFor="let client of clients" value="{{client.ClientId}}">
-                      {{client.ClientName}}
-                    </option>
-                  </select>
+              <div class="row">
+                <div class="form-group col-md-8">
+                  <label class="form-label">Client (Allocated)</label>
+                  <div class="col-md-12">
+                    <select name="AllocatedClientId" class="form-control" formControlName="AllocatedClientId" [ngClass]="{'error-field': isSubmitted && n.AllocatedClientId.errors !== null && n.AllocatedClientId.errors.required}">
+                      <option value="0" disabled>Clients Name</option>
+                      <option *ngFor="let client of clients" value="{{client.ClientId}}">
+                        {{client.ClientName}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="" class="form-label">Assign Date</label>
+                  <form class="form-inline">
+                    <div class="form-group w-100">
+                      <div class="input-group w-100" [ngClass]="{'error-field': isSubmitted && n.AssigneDate.errors !== null && n.AssigneDate.errors.required}">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="jp" [(ngModel)]="assignDateModel"
+                          (dateSelect)="onAssignDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="assignMaxDate" #jd="ngbDatepicker">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary calendar" (click)="jd.toggle()" type="button"><i
+                              class="fa fa-calendar" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
 
