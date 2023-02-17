@@ -405,7 +405,7 @@
               <label class="form-label">Leave Type</label>
               <select class="form-select mb-3" (change)="validateLeaveStatus($event)" aria-label=".form-select-lg example" formControlName="LeaveTypeId"
                 [ngClass]="{'error-field':submitted && f['LeaveTypeId'].errors != null && f['LeaveTypeId'].errors['required']}">
-                <option value="">Select leave type</option>
+                <option value="" disabled>Select leave type</option>
                 <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveTypes">
                   <div class="col-md-12">
                     {{l.PlanName}} [{{l.AvailableLeave | number: '1.2-2'}}]

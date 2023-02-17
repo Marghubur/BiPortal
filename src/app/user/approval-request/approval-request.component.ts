@@ -252,6 +252,7 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   weekDistributed() {
+    this.timesheetDetail = [];
     if(this.timesheet && this.timesheet.length > 0) {
       let timesheetsData = [];
       if (this.itemStatus == ItemStatus.Rejected || this.itemStatus == ItemStatus.Approved)
@@ -270,6 +271,7 @@ export class ApprovalRequestComponent implements OnInit {
           detail[i].PresentDate = detail[i].PresentDate;
           detail[i].TimesheetStatus = item.TimesheetStatus;
           detail[i].TimesheetId = item.TimesheetId;
+          detail[i].ClientName = item.ClientName;
         }
         this.timesheetDetail.push(detail);
         });
