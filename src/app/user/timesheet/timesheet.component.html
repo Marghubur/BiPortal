@@ -16,7 +16,7 @@
             </app-iautocomplete>
           </div>
           <div class="col-md-2">
-            <select class="form-select" (change)="filterTimesheet()" [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">
+            <select class="form-select" [disabled]="clientId == 0" (change)="filterTimesheet()" [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">
               <option value="" selected>Select by status</option>
               <option value="2">Pending</option>
               <option value="8">Submitted</option>
