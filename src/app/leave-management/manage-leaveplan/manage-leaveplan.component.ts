@@ -251,11 +251,25 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   empJoinMiddleDateValidation(e: any, i: number) {
     let data = this.leaveAccrualForm.get('JoiningMonthLeaveDistribution').value;
     this.inputDateValidation(e, data, i);
+    if (e.target.name == 'ToDate' && Number(e.target.value) == 31) {
+      let elem= document.querySelectorAll('a[data-name="add-remove-setion"]')[i];
+      elem.classList.add('d-none');
+    } else {
+      let elem= document.querySelectorAll('a[data-name="add-remove-setion"]')[i];
+      elem.classList.remove('d-none');
+    }
   }
 
   empLeaveMiddleDateValidation(e: any, i: number) {
     let data = this.leaveAccrualForm.get('ExitMonthLeaveDistribution').value;
     this.inputDateValidation(e, data, i);
+    if (e.target.name == 'ToDate' && Number(e.target.value) == 31) {
+      let elem= document.querySelectorAll('a[data-name="add-empMiddle-setion"]')[i];
+      elem.classList.add('d-none');
+    } else {
+      let elem= document.querySelectorAll('a[data-name="add-empMiddle-setion"]')[i];
+      elem.classList.remove('d-none');
+    }
   }
 
   inputDateValidation(e: any, data: any, i: number) {
@@ -288,14 +302,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       e.target.classList.add('error-field');
     else
       e.target.classList.remove('error-field');
-
-    if (name == 'ToDate' && value == 31) {
-      let elem= document.querySelectorAll('a[data-name="add-remove-setion"]')[i];
-      elem.classList.add('d-none');
-    } else {
-      let elem= document.querySelectorAll('a[data-name="add-remove-setion"]')[i];
-      elem.classList.remove('d-none');
-    }
   }
 
   fromandTodateValidation(data: any) {
@@ -507,16 +513,25 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     return this.leaveAccrualForm.get('JoiningMonthLeaveDistribution') as FormArray;
   }
 
-  addFormBetweenJoiningDate() {
+  addFormBetweenJoiningDate(i: number) {
     let item = this.leaveAccrualForm.get('JoiningMonthLeaveDistribution') as FormArray;
     item.push(this.createFormBetweenJoiningDate());
+    if (item.controls.length >= 0) {
+      let value = item.controls[i].get('ToDate').value;
+      item.controls[i+1].get('FromDate').setValue(Number(value)+1);
+    }
   }
 
   removeFormBetweenJoiningDate(i: number) {
     let item = this.leaveAccrualForm.get('JoiningMonthLeaveDistribution') as FormArray;
     item.removeAt(i);
     if (item.length === 0)
-      this.addFormBetweenJoiningDate();
+      this.addFormBetweenJoiningDate(0);
+
+    if (item.controls.length >= 0 && i > 0) {
+      let value = item.controls[i-1].get('ToDate').value;
+      item.controls[i].get('FromDate').setValue(Number(value)+1);
+    }
   }
 
   createFormLeaveProrate(): FormGroup {
@@ -556,16 +571,25 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     })
   }
 
-  addFormBetweenExitDate() {
+  addFormBetweenExitDate(i: number) {
     let item = this.leaveAccrualForm.get('ExitMonthLeaveDistribution') as FormArray;
     item.push(this.createFormBetweenExitDate());
+    if (item.controls.length >= 0) {
+      let value = item.controls[i].get('ToDate').value;
+      item.controls[i+1].get('FromDate').setValue(Number(value)+1);
+    }
   }
 
   removeFormBetweenExitDate(i: number) {
     let item = this.leaveAccrualForm.get('ExitMonthLeaveDistribution') as FormArray;
     item.removeAt(i);
     if (item.length == 0)
-      this.addFormBetweenExitDate();
+      this.addFormBetweenExitDate(0);
+
+    if (item.controls.length >= 0 && i > 0) {
+      let value = item.controls[i-1].get('ToDate').value;
+      item.controls[i].get('FromDate').setValue(Number(value)+1);
+    }
   }
 
   submitApplyForLeave() {
@@ -1150,18 +1174,15 @@ class LeaveAccrual {
   LeaveDistributionAppliedFrom: number = 0;
   IsLeavesProratedForJoinigMonth: boolean = true;
   LeaveDistributionSequence: string = null;
-
   IsLeavesProratedOnNotice: boolean = null;
   IsNotAllowProratedOnNotice: boolean = null;
   BreakMonthLeaveAllocationId: number = 0;
   IsNoLeaveOnNoticePeriod: boolean = null;
-
   IsVaryOnProbationOrExprience: boolean = false;;
   IsAccrualStartsAfterJoining: boolean = false;
   IsAccrualStartsAfterProbationEnds: boolean = false;
   AccrualDaysAfterJoining: number = 0;
   AccrualDaysAfterProbationEnds: number = 0;
-
   IsImpactedOnWorkDaysEveryMonth: boolean = null;
   WeekOffAsAbsentIfAttendaceLessThen: number = 0;
   HolidayAsAbsentIfAttendaceLessThen: number = 0;
@@ -1208,9 +1229,7 @@ class LeaveRestriction {
   LeaveLimitInProbation: number = 0;
   IsLeaveInNoticeExtendsNoticePeriod: boolean = false;
   NoOfTimesNoticePeriodExtended: number = 0;
-
   CanManageOverrideLeaveRestriction: boolean = false;
-
   GapBetweenTwoConsicutiveLeaveDates: number = 0;
   LimitOfMaximumLeavesInCalendarYear: number = 0;
   LimitOfMaximumLeavesInCalendarMonth: number = 0;
@@ -1218,7 +1237,6 @@ class LeaveRestriction {
   MinLeaveToApplyDependsOnAvailable: number = 0;
   AvailableLeaves: number = 0;
   RestrictFromDayOfEveryMonth: number = 0;
-
   IsCurrentPlanDepnedsOnOtherPlan: boolean = false;
   AssociatedPlanTypeId: number = 0;
   IsCheckOtherPlanTypeBalance: boolean = false;

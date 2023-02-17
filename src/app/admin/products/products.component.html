@@ -3,19 +3,21 @@
     <div class="right-panel container col-md-12 p-0">
       <div class="x_panel mt-2">
         <div class="x_header">
-          <div class="x_header_title d-flex justify-content-between align-items-center">
-            <h2>Products<small>Details</small></h2>
-            <div class="d-flex align-items-center">
-              <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Products'" [subtitle]="'Details'"></app-breadcrums>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="x_header_title d-flex align-items-center justify-content-end">
+                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
                   class="fa fa-paper-plane pe-1"></i> Email Link Config
-              </a>
-              <button class="btn btn-primary-c" (click)="addProductPopUp()"><i class="fa fa-plus pe-2"></i>Add Product</button>
+                </a>
+                <button class="btn btn-primary-c" (click)="addProductPopUp()"><i class="fa fa-plus pe-2"></i>Add Product</button>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
         </div>
         <ng-container *ngIf="isPageReady">
           <div class="x_content mt-4">
@@ -452,8 +454,8 @@
                             {{item.GroupId}}
                           </div>
                         </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
+                        <div class="td align-middle fe-1 text-truncate">
+                          <div class="cell-wrapper text-truncate">
                             {{item.CatagoryCode}}
                           </div>
                         </div>
