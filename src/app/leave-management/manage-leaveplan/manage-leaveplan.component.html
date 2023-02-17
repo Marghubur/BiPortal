@@ -270,6 +270,7 @@
                             <div class="d-flex align-items-center">
                               <div class="col-md-1 me-3">
                                 <select class="form-select" formControlName="LeaveDistributionSequence">
+                                  <option value=null disabled>Select Option</option>
                                   <option value="1">Monthly</option>
                                   <option value="2">Quarterly</option>
                                   <option value="3">Half Yearly</option>
@@ -351,24 +352,24 @@
                                   <div class="d-flex align-items-center">
                                     <label class="form-label me-3">If date of joining between</label>
                                     <div class="col-md-1">
-                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate" name="FromDate" (blur)="empJoinMiddleDateValidation($event)">
+                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate" name="FromDate" (blur)="empJoinMiddleDateValidation($event, i)">
                                     </div>
                                     <span class="px-2">to</span>
                                     <div class="col-md-1 mx-3">
-                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate" name="ToDate" (blur)="empJoinMiddleDateValidation($event)">
+                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate" name="ToDate" (blur)="empJoinMiddleDateValidation($event, i)">
                                     </div>
                                     <label class="form-label">of the month allocate</label>
                                     <div class="col-md-1 mx-3">
                                       <input type="text" class="form-control"
-                                            OnlyNumber="3"
+                                            DecimalNumber="3"
                                             formControlName="AllocatedLeave">
                                     </div>
                                     <label class="form-label">days(s) of leave.</label>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
-                                  <a href="javascript:void(0)" class="text-decoration-none text-secondary"
-                                    (click)="addFormBetweenJoiningDate()">
+                                  <a href="javascript:void(0)" class="text-decoration-none text-secondary" data-name="add-remove-setion"
+                                    (click)="addFormBetweenJoiningDate(i)">
                                     <i class="fa fa-plus-circle fa-lg"></i>
                                   </a>
                                   <a href="javascript:void(0)" class="text-decoration-none text-secondary"
@@ -431,24 +432,24 @@
                                   <div class="d-flex align-items-center">
                                     <label class="form-label me-3">If date of joining between</label>
                                     <div class="col-md-1">
-                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="FromDate" (blur)="empLeaveMiddleDateValidation($event)">
+                                      <input type="text" class="form-control" OnlyNumber="2" name="FromDate" formControlName="FromDate" (blur)="empLeaveMiddleDateValidation($event, i)">
                                     </div>
                                     <span class="px-2">to</span>
                                     <div class="col-md-1 mx-3">
-                                      <input type="text" class="form-control" OnlyNumber="2" formControlName="ToDate" (blur)="empLeaveMiddleDateValidation($event)">
+                                      <input type="text" class="form-control" OnlyNumber="2" name="ToDate" formControlName="ToDate" (blur)="empLeaveMiddleDateValidation($event, i)">
                                     </div>
                                     <label for="" class="form-label">of the month allocate</label>
                                     <div class="col-md-1 mx-3">
                                       <input type="text" class="form-control"
-                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.key <= '.'" OnlyNumber="3"
+                                           DecimalNumber="3"
                                             formControlName="AllocatedLeave">
                                     </div>
                                     <label for="" class="form-label">days(s) of leave.</label>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
-                                  <a href="javascript:void(0)" class="text-decoration-none text-secondary"
-                                    (click)="addFormBetweenExitDate()">
+                                  <a href="javascript:void(0)" class="text-decoration-none text-secondary" data-name="add-empMiddle-setion"
+                                    (click)="addFormBetweenExitDate(i)">
                                     <i class="fa fa-plus-circle fa-lg"></i>
                                   </a>
                                   <a href="javascript:void(0)" class="text-decoration-none text-secondary"
