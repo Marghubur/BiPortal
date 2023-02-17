@@ -435,8 +435,8 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
         <p class="mt-2">You can't apply attendance more than 4 days. Please fill details and send the request to your manager for unblock this attendance</p>
       </div>
       <div class="modal-body px-4">
-        <div class="d-flex position-relative align-items-center">
-          <div class="position-relative mx-2 chip" *ngFor="let item of currentDays; ;let i= index">
+        <div class="d-flex position-relative align-items-center col-md-12 flex-wrap">
+          <div class="position-relative m-2 chip" *ngFor="let item of currentDays; ;let i= index">
             <span class="px-3 badge">{{item.AttendanceDay | date: 'MMM d, EEE'}}</span>
             <a href="javascript:void(0)" class="position-absolute" (click)="removeBlockDay(item, i)">
               <i class="fa fa-close"></i>
