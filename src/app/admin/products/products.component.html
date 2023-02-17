@@ -145,8 +145,8 @@
                         {{item.Index}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-2">
-                      <div class="cell-wrapper">
+                    <div class="td align-middle fe-2 text-truncate">
+                      <div class="cell-wrapper text-truncate">
                         {{item.TitleName}}
                       </div>
                     </div>
@@ -162,13 +162,13 @@
                         {{item.Quantity}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-1">
-                      <div class="cell-wrapper">
+                    <div class="td align-middle fe-1 text-truncate">
+                      <div class="cell-wrapper text-truncate">
                         {{item.ModalNum}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-1">
-                      <div class="cell-wrapper">
+                    <div class="td align-middle fe-1 text-truncate">
+                      <div class="cell-wrapper text-truncate">
                         {{item.Brand}}
                       </div>
                     </div>
@@ -232,27 +232,27 @@
           <div class="row">
             <div class="col-md-8 mt-3">
               <label for="" class="form-label">Title Name</label>
-              <input type="text" class="form-control" placeholder="Enter Title Name" oninput="this.value = this.value.toUpperCase()" formControlName="TitleName" [ngClass]="{'error-field': submitted && f.TitleName.errors !== null && f.TitleName.errors.required}">
+              <input type="text" class="form-control" maxlength="40" placeholder="Enter Title Name" oninput="this.value = this.value.toUpperCase()" formControlName="TitleName" [ngClass]="{'error-field': submitted && f.TitleName.errors !== null && f.TitleName.errors.required}">
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Model</label>
-              <input type="text" class="form-control" placeholder="Enter Model" oninput="this.value = this.value.toUpperCase()" formControlName="ModalNum" [ngClass]="{'error-field': submitted && f.ModalNum.errors !== null && f.ModalNum.errors.required}">
+              <input type="text" class="form-control" maxlength="30" placeholder="Enter Model" oninput="this.value = this.value.toUpperCase()" formControlName="ModalNum" [ngClass]="{'error-field': submitted && f.ModalNum.errors !== null && f.ModalNum.errors.required}">
             </div>
           </div>
           <div class="row">
             <div class="col-md-8 mt-3">
               <label for="" class="form-label">Brand</label>
-              <input type="text" class="form-control" placeholder="Enter Brand" oninput="this.value = this.value.toUpperCase()" formControlName="Brand" [ngClass]="{'error-field': submitted && f.Brand.errors !== null && f.Brand.errors.required}">
+              <input type="text" class="form-control" maxlength="40" placeholder="Enter Brand" oninput="this.value = this.value.toUpperCase()" formControlName="Brand" [ngClass]="{'error-field': submitted && f.Brand.errors !== null && f.Brand.errors.required}">
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Quantity</label>
-              <input type="text" class="form-control" placeholder="Enter Quantity" oninput="this.value = this.value.toUpperCase()" formControlName="Quantity" [ngClass]="{'error-field': submitted && f.Quantity.errors !== null && f.Quantity.errors.required}">
+              <input type="text" class="form-control" OnlyNumber="3" placeholder="Enter Quantity"  formControlName="Quantity" [ngClass]="{'error-field': submitted && f.Quantity.errors !== null && f.Quantity.errors.required}">
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Purchase Price</label>
-              <input type="text" class="form-control" placeholder="Enter Purchase Price" oninput="this.value = this.value.toUpperCase()" formControlName="PurchasePrice" [ngClass]="{'error-field': submitted && f.PurchasePrice.errors !== null && f.PurchasePrice.errors.required}">
+              <input type="text" class="form-control" DecimalNumber="10" placeholder="Enter Purchase Price" formControlName="PurchasePrice" [ngClass]="{'error-field': submitted && f.PurchasePrice.errors !== null && f.PurchasePrice.errors.required}">
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">StockStatus</label>
@@ -265,27 +265,30 @@
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Site URL</label>
-              <input type="text" class="form-control" placeholder="Enter Site URL" oninput="this.value = this.value.toUpperCase()" formControlName="SiteUrl">
+              <input type="text" class="form-control" maxlength="1000" placeholder="Enter Site URL" oninput="this.value = this.value.toUpperCase()" formControlName="SiteUrl">
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">MRP</label>
-              <input type="text" class="form-control" placeholder="Enter MRP" oninput="this.value = this.value.toUpperCase()" formControlName="MRP" [ngClass]="{'error-field': submitted && f.MRP.errors !== null && f.MRP.errors.required}">
+              <input type="text"  DecimalNumber="10" class="form-control" placeholder="Enter MRP"  formControlName="MRP" [ngClass]="{'error-field': submitted && f.MRP.errors !== null && f.MRP.errors.required}">
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Category Name</label>
-              <input type="text" class="form-control" placeholder="Enter Category Name" oninput="this.value = this.value.toUpperCase()" formControlName="CatagoryName" [ngClass]="{'error-field': submitted && f.CatagoryName.errors !== null && f.CatagoryName.errors.required}">
+              <select class="form-select" formControlName="CatagoryName" [ngClass]="{'error-field': submitted && f.CatagoryName.errors !== null && f.CatagoryName.errors.required}">
+                <option value=null disabled>Select Category</option>
+                <option [value]="item.CatagoryCode" *ngFor="let item of allCatagories">{{item.CatagoryCode}}</option>
+              </select>
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Serial No</label>
-              <input type="text" class="form-control" placeholder="Enter Serial No" oninput="this.value = this.value.toUpperCase()" formControlName="SerialNo" [ngClass]="{'error-field': submitted && f.SerialNo.errors !== null && f.SerialNo.errors.required}">
+              <input type="text" class="form-control" placeholder="Enter Serial No" maxlength="30" oninput="this.value = this.value.toUpperCase()" formControlName="SerialNo" [ngClass]="{'error-field': submitted && f.SerialNo.errors !== null && f.SerialNo.errors.required}">
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Product Code</label>
-              <input type="text" class="form-control" placeholder="Enter ProductCode" oninput="this.value = this.value.toUpperCase()" formControlName="ProductCode" [ngClass]="{'error-field': submitted && f.ProductCode.errors !== null && f.ProductCode.errors.required}">
+              <input type="text" class="form-control" placeholder="Enter ProductCode" maxlength="45" oninput="this.value = this.value.toUpperCase()" formControlName="ProductCode" [ngClass]="{'error-field': submitted && f.ProductCode.errors !== null && f.ProductCode.errors.required}">
             </div>
           </div>
           <div>
@@ -485,16 +488,16 @@
                 <div class="row">
                   <div class="col-md-6 mt-3">
                     <label for="" class="form-label">Group Id</label>
-                    <input type="text" class="form-control" placeholder="Enter Group Id" formControlName="GroupId">
+                    <input type="text" OnlyNumber="3" class="form-control" placeholder="Enter Group Id" formControlName="GroupId">
                   </div>
                   <div class="col-md-6 mt-3">
                     <label for="" class="form-label">Category Name</label>
-                    <input type="text" class="form-control" placeholder="Enter Category Name" formControlName="CatagoryCode" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryCode.errors !== null && m.CatagoryCode.errors.required}">
+                    <input type="text" maxlength="40" class="form-control" placeholder="Enter Category Name" formControlName="CatagoryCode" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryCode.errors !== null && m.CatagoryCode.errors.required}">
                   </div>
                 </div>
                 <div class="col-md-12 mt-3">
                   <label for="" class="form-label">Category Description</label>
-                  <textarea name="" id="" cols="30" rows="10" class="form-control description-area" placeholder="Enter CatagoryDescription" formControlName="CatagoryDescription" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryDescription.errors !== null && m.CatagoryDescription.errors.required}"></textarea>
+                  <textarea maxlength="400" name="" id="" cols="30" rows="10" class="form-control description-area" placeholder="Enter CatagoryDescription" formControlName="CatagoryDescription" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryDescription.errors !== null && m.CatagoryDescription.errors.required}"></textarea>
                 </div>
               </form>
               </div>

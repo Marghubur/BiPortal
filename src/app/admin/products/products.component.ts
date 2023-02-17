@@ -42,6 +42,7 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
   orderByOrderDateAsc: boolean = null;
   catagoryForm: FormGroup;
   allCatagory: Array<Catagory> = [];
+  allCatagories: Array<Catagory> = [];
   isCatagoryPageReady: boolean = false;
   currentCatagory: Catagory = null;
   catagoryDetail: Catagory = null;
@@ -106,11 +107,12 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
   }
 
   bindData(res) {
-    this.allProducts = res;
+    this.allProducts = res.product;
     if (this.allProducts.length > 0)
       this.productData.TotalRecords= this.allProducts[0].Total;
     else
       this.productData.TotalRecords= 0;
+    this.allCatagories = res.productCatagory;
   }
 
   initForm() {
@@ -445,8 +447,16 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
     let value = this.catagoryForm.value;
     this.http.post("Product/AddUpdateProductCatagory", value).then(res => {
       if (res.ResponseBody) {
+        let catetory = this.allCatagories.find(x => x.CatagoryId == value.CatagoryId);
+        if (catetory == null) {
+          catetory = value;
+        } else {
+          this.allCatagories.push(value);
+        }
+        this.bindCatagoryData(res.ResponseBody);
+        this.currentCatagory = new Catagory();
+        this.initCatagoryForm();
         Toast("Product catagory insert/update successfully");
-        $('#addCatagoryModal').modal('hide');
         this.submitted = false;
         this.isLoading = false;
       }
