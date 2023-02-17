@@ -237,6 +237,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.employeeForm.controls["DOB"].setValue(date);
   }
 
+  onAssignDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.employeeForm.controls["AssigneDate"].setValue(date);
+  }
+
   onJoiningDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month -1, e.day);
     this.employeeForm.get("DateOfJoining").setValue(date);
@@ -299,6 +304,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ActualPackage: new FormControl(null, [Validators.required]),
       FinalPackage: new FormControl(null, [Validators.required]),
       TakeHomeByCandidate: new FormControl(null, [Validators.required]),
+      AssigneDate: new FormControl(null, [Validators.required]),
       AllocatedClients: new FormArray(this.allocatedClients.map(x => this.buildAlocatedClients(x, false)))
     })
   }
@@ -476,6 +482,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     let errroCounter = 0;
     if (this.addUpdateClientForm.value.AllocatedClients.length)
       this.isAllocated = true;
+
     if (this.addUpdateClientForm.get('ActualPackage').errors !== null)
       errroCounter++;
 
@@ -483,6 +490,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       errroCounter++;
 
     if (this.addUpdateClientForm.get('TakeHomeByCandidate').errors !== null)
+      errroCounter++;
+
+    if (this.addUpdateClientForm.get('AssigneDate').errors !== null)
       errroCounter++;
 
     let clientId = Number(this.addUpdateClientForm.get("AllocatedClientId").value);
