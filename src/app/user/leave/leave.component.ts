@@ -1,14 +1,15 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Chart, ChartData, ChartOptions } from 'chart.js';
+import { Chart } from 'chart.js';
 import { Subscription } from 'rxjs';
+import { Files } from 'src/app/admin/documents/documents.component';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, UserAttendance, UserTimesheet, UserType } from 'src/providers/constants';
+import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -45,6 +46,8 @@ export class LeaveComponent implements OnInit {
   maxDate: any;
   reportingManagerId: number = 0;
   isHalfDay: boolean = true;
+  FileDocumentList: Array<Files> = [];
+  FilesCollection: Array<any> = [];
   datePickerJson = {};
   json = {
     disable: [1,2],
@@ -168,8 +171,17 @@ export class LeaveComponent implements OnInit {
       if (this.leaveDays > 0){
         this.checkIsLeaveAvailabel();
       }
-
-      this.http.post('Leave/ApplyLeave', value).then ((res:ResponseModel) => {
+      let formData = new FormData();
+      if (this.FileDocumentList.length > 0) {
+        let i = 0;
+        while (i < this.FileDocumentList.length) {
+          formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
+          i++;
+        }
+      }
+      formData.append('leave', JSON.stringify(value));
+      formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
+      this.http.post('Leave/ApplyLeave', formData).then ((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.bindData(res);
           $('#leaveModal').modal('hide');
@@ -414,15 +426,6 @@ export class LeaveComponent implements OnInit {
   showLeaveDetails() {
     this.isLeaveDetails = !this.isLeaveDetails;
     this.isLeaveDataFilter = false;
-    // let elem = document.getElementById('leave-chart')
-    // if (this.isLeaveDetails == true) {
-    //   elem.setAttribute('hidden', null)
-    // }
-    // else {
-    //   if (elem.classList.contains('d-none') && this.leaveData.length >0)
-    //     document.getElementById('leave-chart').removeAttribute('hidden');
-    // }
-
   }
 
   PageChange(e: Filter) {
@@ -628,6 +631,38 @@ export class LeaveComponent implements OnInit {
         this.isHalfDay = false;
     } else
       ErrorToast("Invalid selection");
+  }
+
+  fireBrowse() {
+    $('#leaveAttachment').click();
+  }
+
+  uploadLeaveAttachment(fileInput: any) {
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    let selectedFile = fileInput.target.files;
+    if (selectedFile.length > 0) {
+      let index = 0;
+      let file = null;
+      while (index < selectedFile.length) {
+        file = <File>selectedFile[index];
+        let item: Files = new Files();
+        item.AlternateName = "Leave_Attachment";
+        item.FileName = file.name;
+        item.FileType = file.type;
+        item.FileSize = (Number(file.size) / 1024);
+        item.FileExtension = file.type;
+        item.DocumentId = 0;
+        item.ParentFolder = '';
+        item.Email = this.userDetail.Email;
+        item.UserId = this.employeeId;
+        this.FileDocumentList.push(item);
+        this.FilesCollection.push(file);
+        index++;
+      };
+    } else {
+      ErrorToast("You are not slected the file")
+    }
   }
 }
 

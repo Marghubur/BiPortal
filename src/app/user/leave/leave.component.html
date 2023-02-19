@@ -424,6 +424,11 @@
             </app-iautocomplete>
           </div>
           <p class="mb-0 py-2">These employees will be notified through email when you leave request is approved.</p>
+          <div>
+            <input type="file" id="leaveAttachment" (change)="uploadLeaveAttachment($event)" multiple class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf">
+            <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowse()"><i class="fa fa-paperclip pe-2"></i>Add Attachment</a>
+            <span class="fw-bold ps-2 text-dark" *ngIf="FileDocumentList.length > 0">{{FileDocumentList.length}} file selected</span>
+          </div>
         </div>
         <div class="modal-footer border-top-0 pe-4">
           <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
