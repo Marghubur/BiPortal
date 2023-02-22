@@ -366,7 +366,11 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   setUpLeaveConfig(currenType: any) {
-    this.nav.navigate(ManageLeavePlan, currenType);
+    let value = {
+      CurrentType: currenType,
+      LeavePlannType: this.planLeaveTypes
+    }
+    this.nav.navigate(ManageLeavePlan, value);
   }
 
   activateMe(elemId: string) {
