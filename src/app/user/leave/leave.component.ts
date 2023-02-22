@@ -45,7 +45,6 @@ export class LeaveComponent implements OnInit {
   minDate: any;
   maxDate: any;
   reportingManagerId: number = 0;
-  isHalfDay: boolean = true;
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
   datePickerJson = {};
@@ -54,6 +53,7 @@ export class LeaveComponent implements OnInit {
     disabledDates: [],
   };
   isDisabled;
+  currentLeaveType: any = null;
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -141,6 +141,14 @@ export class LeaveComponent implements OnInit {
         WarningToast("Please select start and end date first.");
         this.isLoading = false;
         return;
+      }
+
+      if (this.currentLeaveType.IsCommentsRequired) {
+        if (this.leaveForm.get('Reason').errors !== null) {
+          WarningToast("Reason is required. Please fill the reason.");
+          this.isLoading = false;
+          return;
+        }
       }
 
       if (this.leaveForm.get('LeaveToDay').errors !== null) {
@@ -266,7 +274,7 @@ export class LeaveComponent implements OnInit {
   }
 
   bindData(res: any) {
-    if(res.ResponseBody.LeavePlanTypes) {
+    if(res.ResponseBody.leaveTypeBriefs) {
       if(!res.ResponseBody.EmployeeLeaveDetail) {
         ErrorToast("Fail to get leave detail. Please contact to admin.");
         return;
@@ -278,13 +286,10 @@ export class LeaveComponent implements OnInit {
         this.leaveData = this.leaveData.sort((a, b) => Number(b.RequestedOn) - Number(a.RequestedOn));
       }
 
-      let plandetail = res.ResponseBody.LeavePlanTypes;
+      let plandetail = res.ResponseBody.leaveTypeBriefs;
       if(plandetail) {
         this.leaveTypes = plandetail;
-        if(!this.leaveTypes) {
-          ErrorToast("Invalid plan detail. Please contact to admin.");
-          return;
-        }
+        console.log(this.leaveTypes)
       } else {
         this.leaveTypes = [];
       }
@@ -433,14 +438,14 @@ export class LeaveComponent implements OnInit {
 
   LeaveChart(index: number, item: any) {
     this.chartDataset.push({
-      PlanName: item.PlanName,
-      AvailableLeaves: item.AvailableLeave,
-      AccrualedTillDate: item.AvailableLeave + item.ConsumedLeave,
-      MaxLeaveLimit: item.MaxLeaveLimit,
-      PlanDescription: item.PlanDescription,
-      LeavePlanCode: item.LeavePlanCode,
+      PlanName: item.LeavePlanTypeName,
+      AvailableLeaves: item.AvailableLeaves,
+      AccrualedTillDate: item.AvailableLeaves, //+ item.ConsumedLeave,
+      MaxLeaveLimit: item.TotalLeaveQuota,
+      // PlanDescription: item.PlanDescription,
+      // LeavePlanCode: item.LeavePlanCode,
       LeavePlanTypeId: item.LeavePlanTypeId,
-      ConsumedLeave: item.ConsumedLeave,
+      ConsumedLeave: 0,
       Config: null
     });
   }
@@ -463,20 +468,7 @@ export class LeaveComponent implements OnInit {
     this.http.post('Leave/GetAllLeavesByEmpId',this.employeeId)
     .then ((response:ResponseModel) => {
       if (response.ResponseBody) {
-        if(!response.ResponseBody.EmployeeLeaveDetail && !response.ResponseBody.LeavePlan) {
-          ErrorToast("Fail to get leave detail. Please contact to admin.");
-          return;
-        }
-
-        let leavePlan = response.ResponseBody.LeavePlan;
-        let leaveDetail = response.ResponseBody.EmployeeLeaveDetail;
-        if (leavePlan.AssociatedPlanTypes) {
-          let planDetail = JSON.parse(leavePlan.AssociatedPlanTypes);
-          if(!planDetail) {
-            ErrorToast("Invalid plan detail. Please contact to admin.");
-            return;
-          }
-        }
+        this.bindData(response);
 
         // for (let i = 0; i < this.leaveTypes.length; i++) {
         //   let value = this.leaveData.filter(x => x.LeaveType == this.leaveTypes[i].LeavePlanTypeId);
@@ -489,9 +481,9 @@ export class LeaveComponent implements OnInit {
         //   };
         // }
 
-        if(leaveDetail.length > 0)
-          this.employeeData.TotalRecords = leaveDetail[0].Total;
-        else
+        // if(leaveDetail.length > 0)
+        //   this.employeeData.TotalRecords = leaveDetail[0].Total;
+        // else
           this.employeeData.TotalRecords = 0;
         this.isLeaveDataFilter = true;
       }
@@ -636,21 +628,20 @@ export class LeaveComponent implements OnInit {
   validateLeaveStatus(e: any) {
     if(e.target.value) {
       let value = parseInt(e.target.value);
-      let leaveType = this.leaveTypes.find(i => i.LeavePlanTypeId == value);
-      if (leaveType) {
-        if (leaveType.AvailableLeave <= 0) {
-          ErrorToast(`You don't have enough [${leaveType.PlanName}] balance.`)
+      this.currentLeaveType = this.leaveTypes.find(i => i.LeavePlanTypeId == value);
+      if (this.currentLeaveType) {
+        if (this.currentLeaveType.AvailableLeaves <= 0) {
+          ErrorToast(`You don't have enough [${this.currentLeaveType.LeavePlanTypeName}] balance.`)
           this.isEnabled = false;
         } else {
           this.isEnabled = true;
-          this.leaveForm.get('LeavePlanName').setValue(leaveType.PlanName);
+          this.leaveForm.get('LeavePlanName').setValue(this.currentLeaveType.LeavePlanTypeName);
+          if (this.currentLeaveType.IsCommentsRequired) {
+            this.leaveForm.controls["Reason"].setValidators(Validators.required);
+            this.leaveForm.controls["Reason"].updateValueAndValidity();
+          }
         }
       }
-
-      if (JSON.parse(leaveType.PlanConfigurationDetail).leaveApplyDetail.IsAllowForHalfDay)
-        this.isHalfDay = true;
-      else
-        this.isHalfDay = false;
     } else
       ErrorToast("Invalid selection");
   }

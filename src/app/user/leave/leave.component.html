@@ -392,7 +392,7 @@
                   [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
                   value="fullday">
                 <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
-                <ng-container *ngIf="isHalfDay">
+                <ng-container *ngIf="currentLeaveType!= null && currentLeaveType.IsHalfDay">
                   <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off"
                     formControlName="Session"
                     [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
@@ -408,15 +408,15 @@
                 <option value="" disabled>Select leave type</option>
                 <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveTypes">
                   <div class="col-md-12">
-                    {{l.PlanName}} [{{l.AvailableLeave | number: '1.2-2'}}]
+                    {{l.LeavePlanTypeName}} [{{l.AvailableLeaves | number: '1.2-2'}}]
                   </div>
                 </option>
               </select>
             </div>
           </div>
-          <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
+          <label class="form-label mb-0 text-dark ps-2 fs-5">Reason <small *ngIf="currentLeaveType != null && currentLeaveType.IsCommentsRequired">(Required *)</small></label>
           <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment" name="Reason"
-            formControlName="Reason" ></textarea>
+            formControlName="Reason" [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
           <div class="col-md-12 mt-4">
             <p class="mb-0 text-dark ps-2 fs-5 py-2">Reporting Manager</p>
             <app-iautocomplete [data]="managerList" [(ngModel)]="reportingManagerId" [ngModelOptions]="{standalone: true}">
