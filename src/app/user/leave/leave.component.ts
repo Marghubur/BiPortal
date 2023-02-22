@@ -50,7 +50,7 @@ export class LeaveComponent implements OnInit {
   FilesCollection: Array<any> = [];
   datePickerJson = {};
   json = {
-    disable: [1,2],
+    disable: [],
     disabledDates: [],
   };
   isDisabled;
@@ -59,7 +59,6 @@ export class LeaveComponent implements OnInit {
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
-              private local: ApplicationStorage,
               private user: UserService,
               private config: NgbDatepickerConfig,
               private fb: FormBuilder,
@@ -125,12 +124,13 @@ export class LeaveComponent implements OnInit {
   submitLeave() {
     this.submitted = true;
     this.isLoading = true;
-    let errroCounter = 0;
     if (this.employeeId > 0) {
       let value: LeaveModal = this.leaveForm.value;
       value.UserTypeId = UserType.Employee;
       value.RequestType = 1;
-
+      let reportingmanager = this.managerList.data.find(x => x.value == this.reportingManagerId);
+      value.AssigneId = this.reportingManagerId;
+      value.AssigneeEmail = reportingmanager.email;
       if (this.leaveForm.get('EmployeeId').errors !== null) {
         WarningToast("Employee is not selected properly.");
         this.isLoading = false;
@@ -155,12 +155,6 @@ export class LeaveComponent implements OnInit {
         return;
       }
 
-      if (this.leaveForm.get('Reason').errors !== null) {
-        WarningToast("Please enter reason.");
-        this.isLoading = false;
-        return;
-      }
-
       let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate())) /(1000 * 60 * 60 * 24)) + 1;
       if (leaveDay <=0) {
         ErrorToast("Please select a valid end date");
@@ -170,6 +164,8 @@ export class LeaveComponent implements OnInit {
 
       if (this.leaveDays > 0){
         this.checkIsLeaveAvailabel();
+        if (!this.isLoading)
+          return;
       }
       let formData = new FormData();
       if (this.FileDocumentList.length > 0) {
@@ -184,6 +180,7 @@ export class LeaveComponent implements OnInit {
       this.http.post('Leave/ApplyLeave', formData).then ((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.bindData(res);
+          this.isEnabled = false;
           $('#leaveModal').modal('hide');
           Toast("Leave apply successfully.");
           this.submitted = false;
@@ -213,15 +210,12 @@ export class LeaveComponent implements OnInit {
   onDateSelection(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
     let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24)) + 1;
-    if (leaveDay > 0) {
+    if (leaveDay > 0)
       this.leaveDays = leaveDay;
-      this.checkIsLeaveAvailabel();
-    }
-    else {
+    else
       this.leaveDays = 0;
-      ErrorToast("Please select a valid end date");
-    }
-
+    this.maxDate = {year: e.year, month: e.month, day: e.day};
+    this.leaveDetail.LeaveFromDay = value;
     this.leaveDetail.LeaveFromDay = value;
     this.leaveForm.get('LeaveFromDay').setValue(value);
   }
@@ -231,8 +225,7 @@ export class LeaveComponent implements OnInit {
       LeaveFromDay: new FormControl(this.leaveDetail.LeaveFromDay, [Validators.required]),
       LeaveToDay: new FormControl(this.leaveDetail.LeaveToDay, [Validators.required]),
       Session: new FormControl(this.leaveDetail.Session, [Validators.required]),
-      Reason: new FormControl(this.leaveDetail.Reason, [Validators.required]),
-      AssignTo: new FormControl(this.leaveDetail.AssignTo, [Validators.required]),
+      Reason: new FormControl(this.leaveDetail.Reason),
       RequestType: new FormControl(this.leaveDetail.RequestType),
       LeaveTypeId: new FormControl('', [Validators.required]),
       UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
@@ -295,8 +288,12 @@ export class LeaveComponent implements OnInit {
       } else {
         this.leaveTypes = [];
       }
+
+      if (res.ResponseBody.ShiftDetail)
+        this.findWeekend(res.ResponseBody.ShiftDetail);
+
       let companyHoliday = res.ResponseBody.CompanyHoliday;
-      if (companyHoliday.length > 0) {
+      if (companyHoliday && companyHoliday.length > 0) {
         this.findHoliday(companyHoliday);
         this.findDisabledDate();
       }
@@ -347,13 +344,38 @@ export class LeaveComponent implements OnInit {
     }
   }
 
+  findWeekend(shiftDetail: any) {
+    if (!shiftDetail.IsSun)
+      this.json.disable.push(7);
+
+    if (!shiftDetail.IsMon)
+      this.json.disable.push(1);
+
+    if (!shiftDetail.IsTue)
+      this.json.disable.push(2);
+
+    if (!shiftDetail.IsWed)
+        this.json.disable.push(3);
+
+    if (!shiftDetail.IsThu)
+      this.json.disable.push(4);
+
+    if (!shiftDetail.IsFri)
+      this.json.disable.push(5);
+
+    if (!shiftDetail.IsSat)
+      this.json.disable.push(6);
+
+  }
+
   findDisabledDate() {
     if (this.json.disabledDates.length > 0) {
       this.isDisabled = (
         date: NgbDateStruct
       ) => {
         return this.json.disabledDates.find((x) =>
-          new NgbDate(x.year, x.month, x.day).equals(date)
+          new NgbDate(x.year, x.month, x.day).equals(date) ||
+          this.json.disable.includes(this.calendar.getWeekday(new NgbDate(date.year, date.month, date.day)))
         ) ? true : false;
       }
     }
@@ -671,7 +693,8 @@ class LeaveModal {
   LeaveToDay: Date = null;
   Session: string = 'fullday';
   Reason: string = null;
-  AssignTo: number = 0;
+  AssigneId: number = 0;
+  AssigneeEmail: string = null;
   ForYear: number = 0;
   RequestType: number = 0;
   LeaveTypeId: number = 0;

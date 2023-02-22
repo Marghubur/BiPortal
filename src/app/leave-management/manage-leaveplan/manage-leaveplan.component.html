@@ -1340,23 +1340,6 @@
                           <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.LimitOfMaximumLeavesInCalendarMonth.value <= 0}"></i>
                         </div>
                       </div>
-                      <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.LimitOfMaximumLeavesInEntireTenure.value > 0}">
-                        <div class="fe-1 d-flex align-items-center ps-3">
-                          <label class="form-check-label">
-                            Do not allow more than
-                          </label>
-                          <div class="col-md-2 mx-2">
-                            <input type="text" OnlyNumber="3" class="c-input"
-                              formControlName="LimitOfMaximumLeavesInEntireTenure">
-                          </div>
-                          <label for="" class="form-label">
-                            instance (leave request) in a entire tenure.
-                          </label>
-                        </div>
-                        <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.LimitOfMaximumLeavesInEntireTenure.value <= 0}"></i>
-                        </div>
-                      </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.MinLeaveToApplyDependsOnAvailable.value > 0 || leaveRestrictionForm.controls.AvailableLeaves.value > 0}">
                         <div class="fe-1 d-flex align-items-center ps-3">
                           <label class="form-check-label">
@@ -1399,8 +1382,7 @@
                     </div>
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Check all restrictions you'd like to apply to enforce in relation
-                        with
-                        other leave types?</h6>
+                        with other leave types?</h6>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.IsCurrentPlanDepnedsOnOtherPlan.value == true}">
                         <div class="fe-1 d-flex align-items-center ps-3">
                           <input class="form-check-input" type="checkbox"
@@ -1411,7 +1393,8 @@
                           <div class="col-md-1 mx-2">
                             <select class="form-select form-select-sm" formControlName="AssociatedPlanTypeId"
                               [disabled]="leaveRestrictionForm.controls.IsCurrentPlanDepnedsOnOtherPlan.value == false">
-                              <option value="0">Select</option>
+                              <option value="0" disabled>Select</option>
+                              <option [value]="item.LeavePlanTypeId" *ngFor="let item of leaveplantype">{{item.PlanName}}</option>
                             </select>
                           </div>
                         </div>
@@ -1428,7 +1411,8 @@
                           <div class="col-md-1 mx-2">
                             <select class="form-select form-select-sm" formControlName="DependentPlanTypeId"
                               [disabled]="leaveRestrictionForm.controls.IsCheckOtherPlanTypeBalance.value == false">
-                              <option value="0">Select</option>
+                              <option value="0" disabled>Select</option>
+                              <option [value]="item.LeavePlanTypeId" *ngFor="let item of leaveplantype">{{item.PlanName}}</option>
                             </select>
                           </div>
                         </div>
@@ -1675,54 +1659,103 @@
                           <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'false'}"></i>
                         </div>
                       </div>
-                      <div class="card px-2 pt-2 mt-3 pb-3 "
-                        [ngClass]="{'d-none': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'false'}"
-                        data-name="ApprovalChainContainer">
-                        <h6>Approval Chain</h6>
-                        <ng-container formArrayName="ApprovalChain">
-                          <div class="px-5 pt-3 mt-3 bg-light" [formGroupName]="i"
-                            *ngFor="let item of leaveApprovalForm.get('ApprovalChain').controls; let i = index">
-                            <div class="d-flex">
-                              <div class="col-auto me-3">
-                                LEVEL {{i+1}} <i class=" fa fa-circle text-primary ps-3"></i>
-                              </div>
-                              <div class="col-md-8">
-                                <select class="form-control" name="ApprovalRoleTypeId"
-                                  formControlName="ApprovalRoleTypeId">
-                                  <option value="1">Reporting Manager</option>
-                                  <option value="2">Sr. HR Manager</option>
-                                </select>
-                                <div class="d-flex align-items-center mt-3"
-                                  [ngClass]="{'d-none': leaveApprovalForm.get('ApprovalChain').controls.length == i+1}"
-                                  data-name="skip-section">
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" formControlName="IsSkipToNextLevel"
-                                      (click)="skipLeaveNextLevel($event, i)">
-                                    <label class="form-check-label">
-                                      Skip to next level after
-                                    </label>
-                                  </div>
-                                  <div class="d-flex ms-2 align-items-center">
-                                    <div class="col-md-3">
-                                      <input type="text" class="form-control" name="SkipToNextLevelAfterDays"
-                                        formControlName="SkipToNextLevelAfterDays"
-                                        [readonly]="leaveApprovalForm.controls['ApprovalChain'].controls[i].controls.SkipToNextLevelAfterDays.value <= 0">
+                      <div class="col-md-12 mt-3 p-3 card" data-name="ApprovalChainContainer" [ngClass]="{'d-none': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'false'}">
+                        <select class="form-select" (change)="changeWorkflow($event)" formControlName="ApprovalWorkFlowId">
+                          <option value=0 disabled selected>Select Approval Workflow</option>
+                          <option [value]="item.ApprovalWorkFlowId" *ngFor="let item of approvalWorkFlows">{{item.Title | titlecase}}</option>
+                        </select>
+                        <div class="mt-3 p-2 bg-light" *ngIf="selectedWorkflow != null">
+                          <span>Workflow Description: {{selectedWorkflow.TitleDescription | titlecase}}</span>
+                          <a href="javascript:void(0)" class="text-end text-decoration-none float-end" (click)="viewWorkflowChain()">
+                            <i class="fa fa-eye"></i>
+                          </a>
+                          <div class="row m-3" *ngIf="selectedWorkFlowDetail != null">
+                            <div class="card px-4 pt-4 mt-3 pb-3 ">
+                              <h6>Approval Chain</h6>
+                              <ng-container>
+                                <div class="mt-4">
+                                    <div class="col-md-12">
+                                      <div class="form-group">
+                                          <label>Title *</label>
+                                          <input type="text" class="form-control" placeholder="Enter approval work flow title" [value]="selectedWorkFlowDetail.Title" readonly>
+                                      </div>
+                                      <div class="form-group mt-3">
+                                          <label>Title Description *</label>
+                                          <textarea name="titleDescription" class="form-control" readonly placeholder="Enter description here" cols="30" rows="5" [value]="selectedWorkFlowDetail.TitleDescription">
+                                          </textarea>
+                                      </div>
                                     </div>
-                                    <span class="ps-2">days</span>
-                                  </div>
+                                    <div class="px-5 pt-3 mt-3 bg-light">
+                                      <div *ngFor="let item of selectedWorkFlowDetail.ApprovalChainDetails; let i = index; let last = last;">
+                                          <div class="d-flex mt-4">
+                                              <div class="col-auto me-3">
+                                              LEVEL {{i + 1}} <i class=" fa fa-circle text-primary ps-3"></i>
+                                              </div>
+                                              <div class="col-md-8 position-relative">
+                                                  <div [ngClass]="{'block-tag': !last}">
+                                                  </div>
+                                                  <app-iautocomplete [data]="employeesAutoComplete" name="AssignieId" [(ngModel)]="item.AssignieId"
+                                                    [ngModelOptions]="{standalone: true}">
+                                                  </app-iautocomplete>
+                                                  <div class="d-flex align-items-center mt-3" data-name="skip-section">
+                                                      <div class="form-check">
+                                                          <input class="form-check-input" [checked]="item.IsRequired" type="checkbox" disabled>
+                                                          <label class="form-check-label">
+                                                              Required approval
+                                                          </label>
+                                                      </div>
+                                                  </div>
+                                                  <div class="d-flex align-items-center mt-2" data-name="skip-section">
+                                                      <div class="form-check">
+                                                          <input class="form-check-input" [checked]="item.IsForwardEnabled" type="checkbox" disabled>
+                                                          <label class="form-check-label">
+                                                              Forward when
+                                                          </label>
+                                                      </div>
+                                                      <div class="d-flex ms-2 align-items-center">
+                                                          <div class="col-md-10">
+                                                              <select name="ForwardWhen" class="form-control form-select" [(ngModel)]="item.ForwardWhen" disabled [ngModelOptions]="{standalone: true}">
+                                                                  <option value="0" disabled>Select Reason</option>
+                                                                  <option value="2">Pending</option>
+                                                                  <option value="9">Approved</option>
+                                                                  <option value="5">Rejected</option>
+                                                              </select>
+                                                          </div>
+                                                          <span class="px-2">after</span>
+                                                      </div>
+                                                      <div class="d-flex ms-2 align-items-center">
+                                                          <div class="col-md-6 ms-2">
+                                                              <input type="number" class="form-control form-control-sm" [value]="item.ForwardAfterDays" maxlength="3" readonly
+                                                                  placeholder="No# of days" name="SkipToNextLevelAfterDays">
+                                                          </div>
+                                                          <span class="ps-2">days</span>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center mt-3" data-name="skip-section">
+                                        <div class="form-check">
+                                            <input class="form-check-input" [checked]="selectedWorkFlowDetail.IsAutoExpiredEnabled == true" type="checkbox"  disabled>
+                                            <label class="form-check-label">
+                                                Enable to auto expire approval after
+                                            </label>
+                                        </div>
+                                        <div class="d-flex ms-2 align-items-center">
+                                            <div class="col-md-6">
+                                                <input type="number" class="form-control form-control-sm" [value]="selectedWorkFlowDetail.AutoExpireAfterDays"
+                                                    placeholder="No# of days" maxlength="3" name="AutoExpireAfterDays" readonly>
+                                            </div>
+                                            <span class="ps-2">days</span>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                              <a href="javascript:void(0)" class="text-decoration-none text-secondary"
-                                (click)="removeApprovalChain(i)">
-                                <i class="fa fa-trash ps-3 text-secondary fa-lg"></i>
-                              </a>
+                              </ng-container>
                             </div>
-                            <a href="javascript:void(0)"
-                              [ngClass]="{'d-none': leaveApprovalForm.get('ApprovalChain').controls.length == i, 'pe-none': leaveApprovalForm.controls['ApprovalChain'].controls[i].controls.ApprovalRoleTypeId.value <= 0}"
-                              data-name="createApprovalChain" class="text-decoration-none mt-4"
-                              (click)="createApprovalChain(i)"><i class="fa fa-plus pe-2 py-3"></i>Add New Level</a>
-                          </div>
-                        </ng-container>
+                        </div>
+                        </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveApprovalForm.controls.IsRequiredAllLevelApproval.value == true}">
                         <div class="fe-1 d-flex align-items-center ps-3">
