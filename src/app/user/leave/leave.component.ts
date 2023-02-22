@@ -631,13 +631,18 @@ export class LeaveComponent implements OnInit {
       this.currentLeaveType = this.leaveTypes.find(i => i.LeavePlanTypeId == value);
       if (this.currentLeaveType) {
         if (this.currentLeaveType.AvailableLeaves <= 0) {
-          ErrorToast(`You don't have enough [${this.currentLeaveType.LeavePlanTypeName}] balance.`)
+          ErrorToast(`You don't have enough [${this.currentLeaveType.LeavePlanTypeName}] balance.`);
+          this.leaveForm.controls["Reason"].removeValidators(Validators.required);
+          this.leaveForm.controls["Reason"].updateValueAndValidity();
           this.isEnabled = false;
         } else {
           this.isEnabled = true;
           this.leaveForm.get('LeavePlanName').setValue(this.currentLeaveType.LeavePlanTypeName);
           if (this.currentLeaveType.IsCommentsRequired) {
             this.leaveForm.controls["Reason"].setValidators(Validators.required);
+            this.leaveForm.controls["Reason"].updateValueAndValidity();
+          } else {
+            this.leaveForm.controls["Reason"].removeValidators(Validators.required);
             this.leaveForm.controls["Reason"].updateValueAndValidity();
           }
         }
