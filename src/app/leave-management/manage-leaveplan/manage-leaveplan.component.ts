@@ -7,6 +7,8 @@ declare var $:any;
 import 'bootstrap'
 import { AjaxService } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { GetEmployees } from 'src/providers/ApplicationStorage';
 
 @Component({
   selector: 'app-manage-leaveplan',
@@ -42,6 +44,11 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   isConfigCompleted: boolean = false;
   allocateleave: number = 0;
   days:Array<number> = [];
+  leaveplantype: Array<any> = [];
+  approvalWorkFlows: Array<any> = [];
+  selectedWorkflow: any = null;
+  selectedWorkFlowDetail: any = null;
+  employeesAutoComplete: autoCompleteModal = new autoCompleteModal();
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -63,10 +70,14 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let data = this.nav.getValue();
     if(data != null) {
       this.isPageReady = true;
-      this.leaveTypeDeatils = data;
-      let id = data.LeavePlanTypeId;
+      this.leaveTypeDeatils = data.CurrentType;
+      this.leaveplantype = data.LeavePlannType;
+      let id = data.CurrentType.LeavePlanTypeId;
       this.leavePlanTypeId = Number(id);
-
+      let employees = GetEmployees();
+      this.employeesAutoComplete.data = employees;
+      this.employeesAutoComplete.placeholder = "Employee";
+      this.employeesAutoComplete.className = "disable-field";
       if (this.leaveTypeDeatils.LeavePlanId <=0) {
         ErrorToast("Please select a vlid leave plan first");
         return;
@@ -82,8 +93,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   loadPlanDetail() {
-    this.http.get(`ManageLeavePlan/GetLeavePlanTypeConfiguration/${this.leavePlanTypeId}`).then(response => {
-      this.bindPage(response.ResponseBody)
+    this.http.get(`ManageLeavePlan/GetLeavePlanTypeConfiguration/${this.leavePlanTypeId}`)
+    .then(response => {
+      if (response.ResponseBody) {
+        this.approvalWorkFlows = response.ResponseBody.approvalWorkFlowChain;
+        this.bindPage(response.ResponseBody.leavePlanConfiguration);
+      }
     });
   }
 
@@ -107,11 +122,14 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       if(data.leaveHolidaysAndWeekoff)
         this.holidayWeekOffs = data.leaveHolidaysAndWeekoff;
 
-      if(data.leaveApproval)
-          this.leaveApproval = data.leaveApproval;
+      if(data.leaveApproval) {
+        this.leaveApproval = data.leaveApproval;
+        this.selectedWorkflow = this.approvalWorkFlows.find(x => x.ApprovalWorkFlowId == this.leaveApproval.ApprovalWorkFlowId);
+      }
 
       if(data.leaveEndYearProcessing)
         this.yearEndProcess = data.leaveEndYearProcessing;
+
       this.monthlyLeave = this.leaveDetail.LeaveLimit/12;
       this.initLeaveAccrual();
       this.initManagementLeave();
@@ -690,7 +708,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       GapBetweenTwoConsicutiveLeaveDates: new FormControl(this.leaveRestriction.GapBetweenTwoConsicutiveLeaveDates),
       LimitOfMaximumLeavesInCalendarYear: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInCalendarYear),
       LimitOfMaximumLeavesInCalendarMonth: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInCalendarMonth),
-      LimitOfMaximumLeavesInEntireTenure: new FormControl(this.leaveRestriction.LimitOfMaximumLeavesInEntireTenure),
       MinLeaveToApplyDependsOnAvailable: new FormControl(this.leaveRestriction.MinLeaveToApplyDependsOnAvailable),
       AvailableLeaves: new FormControl(this.leaveRestriction.AvailableLeaves),
       RestrictFromDayOfEveryMonth: new FormControl(this.leaveRestriction.RestrictFromDayOfEveryMonth),
@@ -765,68 +782,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       IsRequiredAllLevelApproval: new FormControl(this.leaveApproval.IsRequiredAllLevelApproval),
       IsReportingManageIsDefaultForAction: new FormControl(this.leaveApproval.IsReportingManageIsDefaultForAction?'true' : 'false'),
       IsPauseForApprovalNotification: new FormControl(this.leaveApproval.IsPauseForApprovalNotification),
-      ApprovalChain: this.buildApprovalChain(),
+      ApprovalWorkFlowId: new FormControl(this.leaveApproval.ApprovalWorkFlowId)
     })
-  }
-
-  addApprovalChain(): FormGroup {
-    return this.fb.group({
-      ApprovalRoleTypeId: new FormControl(0),
-      IsSkipToNextLevel: new FormControl(false),
-      SkipToNextLevelAfterDays: new FormControl(0)
-    })
-  }
-
-  createApprovalChain(index: number) {
-    let item = this.leaveApprovalForm.get('ApprovalChain') as FormArray;
-    item.push(this.addApprovalChain());
-    document.querySelectorAll('[data-name="skip-section"]')[index].classList.remove('d-none');
-    document.querySelectorAll('[data-name="createApprovalChain"]')[index].classList.add('d-none');
-  }
-
-  removeApprovalChain(i: number) {
-    let item = this.leaveApprovalForm.get('ApprovalChain') as FormArray;
-    item.removeAt(i);
-    if (i > 0) {
-      let index = 0;
-      while (index < item.length) {
-        document.querySelectorAll('[data-name="createApprovalChain"]')[index].classList.add('d-none');
-        index++;
-      }
-    }
-
-    document.querySelectorAll('[data-name="createApprovalChain"]')[item.length-1].classList.remove('d-none');
-    if (item.length == 0)
-      this.createApprovalChain(0);
-  }
-
-  buildApprovalChain(): FormArray {
-    let data = this.leaveApproval.ApprovalChain;
-    let dataArray: FormArray = this.fb.array([]);
-
-    if(data != null && data.length > 0) {
-      let i = 0;
-      while(i < data.length) {
-        dataArray.push(this.fb.group({
-          ApprovalRoleTypeId: new FormControl(data[i].ApprovalRoleTypeId),
-          IsSkipToNextLevel: new FormControl(data[i].IsSkipToNextLevel),
-          SkipToNextLevelAfterDays: new FormControl(data[i].SkipToNextLevelAfterDays)
-        }));
-        i++;
-      }
-    } else {
-      dataArray.push(this.addApprovalChain());
-    }
-
-    return dataArray;
-  }
-
-  skipLeaveNextLevel(e: any, i: number) {
-    let value = e.target.checked;
-    if (value == true)
-      document.getElementsByName('SkipToNextLevelAfterDays')[i].removeAttribute('readonly');
-    else
-      document.getElementsByName('SkipToNextLevelAfterDays')[i].setAttribute('readonly', '');
   }
 
   submitLeaveApproval() {
@@ -851,8 +808,12 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     let value = e.target.value;
     if (value == 'true')
       document.querySelector('[data-name="ApprovalChainContainer"]').classList.remove('d-none');
-    else
+    else {
       document.querySelector('[data-name="ApprovalChainContainer"]').classList.add('d-none');
+      this.selectedWorkFlowDetail = null;
+      this.selectedWorkflow = null;
+      this.leaveApprovalForm.get("ApprovalWorkFlowId").setValue(0);
+    }
   }
 
   inityearEndProcess() {
@@ -1144,6 +1105,22 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   gotoLeave() {
     this,this.nav.navigate(Leave, null)
   }
+
+  changeWorkflow(e: any) {
+    let value = Number(e.target.value);
+    if (value > 0)
+      this.selectedWorkflow = this.approvalWorkFlows.find(x => x.ApprovalWorkFlowId == value);
+  }
+
+  viewWorkflowChain() {
+    this.http.get(`ApprovalChain/GetApprovalChainData/${this.selectedWorkflow.ApprovalWorkFlowId}`)
+    .then(res => {
+      if (res.ResponseBody) {
+        this.selectedWorkFlowDetail = res.ResponseBody;
+        console.log(this.selectedWorkFlowDetail)
+      }
+    })
+  }
 }
 
 class LeaveDetail {
@@ -1233,7 +1210,6 @@ class LeaveRestriction {
   GapBetweenTwoConsicutiveLeaveDates: number = 0;
   LimitOfMaximumLeavesInCalendarYear: number = 0;
   LimitOfMaximumLeavesInCalendarMonth: number = 0;
-  LimitOfMaximumLeavesInEntireTenure: number = 0;
   MinLeaveToApplyDependsOnAvailable: number = 0;
   AvailableLeaves: number = 0;
   RestrictFromDayOfEveryMonth: number = 0;
@@ -1269,6 +1245,7 @@ class LeaveApproval {
   IsRequiredAllLevelApproval: boolean = false;
   IsPauseForApprovalNotification: boolean = false;
   IsReportingManageIsDefaultForAction: boolean = false;
+  ApprovalWorkFlowId: number = 0;
 }
 
 class YearEndProcess {

@@ -416,8 +416,7 @@
           </div>
           <p class="mb-0 text-dark ps-2 fs-5">Reason</p>
           <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment" name="Reason"
-            formControlName="Reason"
-            [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
+            formControlName="Reason" ></textarea>
           <div class="col-md-12 mt-4">
             <p class="mb-0 text-dark ps-2 fs-5 py-2">Reporting Manager</p>
             <app-iautocomplete [data]="managerList" [(ngModel)]="reportingManagerId" [ngModelOptions]="{standalone: true}">
@@ -426,7 +425,9 @@
           <p class="mb-0 py-2">These employees will be notified through email when you leave request is approved.</p>
           <div>
             <input type="file" id="leaveAttachment" (change)="uploadLeaveAttachment($event)" multiple class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf">
-            <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowse()"><i class="fa fa-paperclip pe-2"></i>Add Attachment</a>
+            <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowse()">
+              <i class="fa fa-paperclip pe-2"></i>Add Attachment
+            </a>
             <span class="fw-bold ps-2 text-dark" *ngIf="FileDocumentList.length > 0">{{FileDocumentList.length}} file selected</span>
           </div>
         </div>
