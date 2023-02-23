@@ -390,13 +390,13 @@
                 <input type="radio" class="btn-check" name="Session" id="btnradio10" autocomplete="off" checked
                   formControlName="Session"
                   [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
-                  value="fullday">
+                  value="1">
                 <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
                 <ng-container *ngIf="currentLeaveType!= null && currentLeaveType.IsHalfDay">
                   <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off"
                     formControlName="Session"
                     [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
-                    value="halfday">
+                    value="4">
                   <label class="btn btn-outline-primary" for="btnradio11">Half Day</label>
                 </ng-container>
               </div>
