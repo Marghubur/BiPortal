@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart } from 'chart.js';
@@ -19,7 +19,7 @@ declare var $: any;
   templateUrl: './leave.component.html',
   styleUrls: ['./leave.component.scss']
 })
-export class LeaveComponent implements OnInit {
+export class LeaveComponent implements OnInit, AfterViewChecked {
   cachedData: any = null;
   isLoading: boolean = false;
   model: NgbDateStruct;
@@ -65,10 +65,20 @@ export class LeaveComponent implements OnInit {
               private elementRef: ElementRef,
               private calendar: NgbCalendar
               ) {
-    config.minDate = {year: 1970, month: 1, day: 1};
-    config.maxDate = {year: 2050, month: 12, day: 31};
+    config.minDate = {year: new Date().getFullYear(), month: 1, day: 1};
+    config.maxDate = {year: new Date().getFullYear(), month: 12, day: 31};
     config.outsideDays = 'hidden';
     this.findDisabledDate();
+  }
+
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('dispose');
+    });
   }
 
   ngOnInit(): void {
@@ -104,6 +114,7 @@ export class LeaveComponent implements OnInit {
   leavePopUp() {
     this.isPageReady = true;
     this.leaveDetail = new LeaveModal();
+    this.currentLeaveType = null;
     this.leaveRequestForm();
     this.leaveDetail.LeaveFromDay = new Date();
     this.leaveDetail.LeaveToDay = new Date();
@@ -124,9 +135,10 @@ export class LeaveComponent implements OnInit {
     this.submitted = true;
     this.isLoading = true;
     if (this.employeeId > 0) {
-      let value: LeaveModal = this.leaveForm.value;
+      let value = this.leaveForm.value;
       value.UserTypeId = UserType.Employee;
       value.RequestType = 1;
+      value.Session = Number(value.Session);
       let reportingmanager = this.managerList.data.find(x => x.value == this.reportingManagerId);
       value.AssigneId = this.reportingManagerId;
       value.AssigneeEmail = reportingmanager.email;
@@ -169,11 +181,12 @@ export class LeaveComponent implements OnInit {
         return;
       }
 
-      if (this.leaveDays > 0){
+      if (this.leaveDays > 0 && !value.IsProjectedFutureDateAllowed){
         this.checkIsLeaveAvailabel();
         if (!this.isLoading)
           return;
       }
+
       let formData = new FormData();
       if (this.FileDocumentList.length > 0) {
         let i = 0;
@@ -182,6 +195,7 @@ export class LeaveComponent implements OnInit {
           i++;
         }
       }
+
       formData.append('leave', JSON.stringify(value));
       formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
       this.http.post('Leave/ApplyLeave', formData).then ((res:ResponseModel) => {
@@ -205,9 +219,6 @@ export class LeaveComponent implements OnInit {
     if (value.setHours(0,0,0,0) >= this.leaveDetail.LeaveFromDay.setHours(0,0,0,0)) {
       this.leaveDetail.LeaveToDay = value;
       this.leaveDays = Math.floor((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate()) ) /(1000 * 60 * 60 * 24)) + 1;
-      if (this.leaveDays > 0)
-        this.checkIsLeaveAvailabel();
-
       this.leaveForm.get('LeaveToDay').setValue(value);
     }
     else
@@ -234,6 +245,7 @@ export class LeaveComponent implements OnInit {
       Session: new FormControl(this.leaveDetail.Session, [Validators.required]),
       Reason: new FormControl(this.leaveDetail.Reason),
       RequestType: new FormControl(this.leaveDetail.RequestType),
+      IsProjectedFutureDateAllowed: new FormControl(this.leaveDetail.IsProjectedFutureDateAllowed),
       LeaveTypeId: new FormControl('', [Validators.required]),
       UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
       EmployeeId: new FormControl(this.employeeId),
@@ -288,7 +300,6 @@ export class LeaveComponent implements OnInit {
       let plandetail = res.ResponseBody.LeaveTypeBriefs;
       if(plandetail) {
         this.leaveTypes = plandetail;
-        console.log(this.leaveTypes)
       } else {
         this.leaveTypes = [];
       }
@@ -436,15 +447,20 @@ export class LeaveComponent implements OnInit {
   }
 
   LeaveChart(index: number, item: any) {
+    let consumeLeave = 0;
+    let leavedata: any = this.leaveData.filter(x => x.LeaveTypeId == item.LeavePlanTypeId);
+    if (leavedata) {
+      consumeLeave = leavedata.map(x => x.NumOfDays).reduce((acc, curr) => {return acc + curr;}, 0)
+    }
     this.chartDataset.push({
       PlanName: item.LeavePlanTypeName,
       AvailableLeaves: item.AvailableLeaves,
-      AccrualedTillDate: item.AvailableLeaves, //+ item.ConsumedLeave,
+      AccrualedTillDate: item.AccruedSoFar,
       MaxLeaveLimit: item.TotalLeaveQuota,
       // PlanDescription: item.PlanDescription,
       // LeavePlanCode: item.LeavePlanCode,
       LeavePlanTypeId: item.LeavePlanTypeId,
-      ConsumedLeave: 0,
+      ConsumedLeave: consumeLeave,
       Config: null
     });
   }
@@ -686,7 +702,7 @@ export class LeaveComponent implements OnInit {
 class LeaveModal {
   LeaveFromDay: Date = null;
   LeaveToDay: Date = null;
-  Session: number = CommonFlags.FullDay;
+  Session: string = "1";
   Reason: string = null;
   AssigneId: number = 0;
   AssigneeEmail: string = null;
@@ -697,6 +713,7 @@ class LeaveModal {
   UserTypeId: number = 0;
   EmployeeId: number = 0;
   LeavePlanName: string = null;
+  IsProjectedFutureDateAllowed: boolean = false;
 }
 
 class LeaveDetails {
@@ -705,7 +722,7 @@ class LeaveDetails {
   ProjectId: number = 0;
   AssignTo: number = 0;
   LeaveTypeId: number = 0;
-  Session: number = CommonFlags.FullDay;
+  Session: string = "1";
   LeaveFromDay: Date = null;
   LeaveToDay: Date = null;
   LeaveStatus: number = 0;

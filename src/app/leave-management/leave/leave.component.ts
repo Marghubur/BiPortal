@@ -77,7 +77,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     this.isLeavePageReady = false;
     this.http.post("leave/GetLeavePlans", this.employeeFilter).then((result: ResponseModel) => {
       if(result.ResponseBody) {
-        this.leavePlanList = result.ResponseBody;
+        this.leavePlanList = result.ResponseBody.sort((a, b) => b.IsDefaultPlan - a.IsDefaultPlan);
         this.bindFirstPlanOnPage();
         this.isLeavePageReady = true;
         Toast("Leave plan loaded successfully.");
@@ -155,7 +155,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
           this.planLeaveTypes = [];
         }
       }
-
       this.isPageReady = true;
     } else {
       this.isPageReady = false;
