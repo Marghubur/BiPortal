@@ -9,7 +9,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { UserType } from 'src/providers/constants';
+import { CommonFlags, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -78,7 +78,6 @@ export class LeaveComponent implements OnInit {
     this.leaveDetail = new LeaveModal();
     this.leaveDetail.LeaveFromDay = new Date(this.model.year, this.model.month, this.model.day);
     this.leaveDetail.LeaveToDay = new Date(new Date().setDate( this.leaveDetail.LeaveFromDay.getDate() + 1));
-    this.leaveDetail.Session ='fullday';
     this.leaveDetail.LeaveTypeId = 0;
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
@@ -245,7 +244,7 @@ export class LeaveComponent implements OnInit {
   checkIsLeaveAvailabel() {
     let leavePlanTypeId = this.leaveForm.get('LeaveTypeId').value;
     let leave = this.leaveTypes.find(x => x.LeavePlanTypeId == leavePlanTypeId);
-    if (this.leaveDays > leave.AvailableLeave) {
+    if (this.leaveDays > leave.AvailableLeaves) {
       ErrorToast("Applying leave is greater than leave limit");
       this.isLoading = false;
       return;
@@ -274,7 +273,7 @@ export class LeaveComponent implements OnInit {
   }
 
   bindData(res: any) {
-    if(res.ResponseBody.leaveTypeBriefs) {
+    if(res.ResponseBody.LeaveTypeBriefs) {
       if(!res.ResponseBody.EmployeeLeaveDetail) {
         ErrorToast("Fail to get leave detail. Please contact to admin.");
         return;
@@ -286,7 +285,7 @@ export class LeaveComponent implements OnInit {
         this.leaveData = this.leaveData.sort((a, b) => Number(b.RequestedOn) - Number(a.RequestedOn));
       }
 
-      let plandetail = res.ResponseBody.leaveTypeBriefs;
+      let plandetail = res.ResponseBody.LeaveTypeBriefs;
       if(plandetail) {
         this.leaveTypes = plandetail;
         console.log(this.leaveTypes)
@@ -631,13 +630,18 @@ export class LeaveComponent implements OnInit {
       this.currentLeaveType = this.leaveTypes.find(i => i.LeavePlanTypeId == value);
       if (this.currentLeaveType) {
         if (this.currentLeaveType.AvailableLeaves <= 0) {
-          ErrorToast(`You don't have enough [${this.currentLeaveType.LeavePlanTypeName}] balance.`)
+          ErrorToast(`You don't have enough [${this.currentLeaveType.LeavePlanTypeName}] balance.`);
+          this.leaveForm.controls["Reason"].removeValidators(Validators.required);
+          this.leaveForm.controls["Reason"].updateValueAndValidity();
           this.isEnabled = false;
         } else {
           this.isEnabled = true;
           this.leaveForm.get('LeavePlanName').setValue(this.currentLeaveType.LeavePlanTypeName);
           if (this.currentLeaveType.IsCommentsRequired) {
             this.leaveForm.controls["Reason"].setValidators(Validators.required);
+            this.leaveForm.controls["Reason"].updateValueAndValidity();
+          } else {
+            this.leaveForm.controls["Reason"].removeValidators(Validators.required);
             this.leaveForm.controls["Reason"].updateValueAndValidity();
           }
         }
@@ -682,7 +686,7 @@ export class LeaveComponent implements OnInit {
 class LeaveModal {
   LeaveFromDay: Date = null;
   LeaveToDay: Date = null;
-  Session: string = 'fullday';
+  Session: number = CommonFlags.FullDay;
   Reason: string = null;
   AssigneId: number = 0;
   AssigneeEmail: string = null;
@@ -701,7 +705,7 @@ class LeaveDetails {
   ProjectId: number = 0;
   AssignTo: number = 0;
   LeaveTypeId: number = 0;
-  Session: string = '';
+  Session: number = CommonFlags.FullDay;
   LeaveFromDay: Date = null;
   LeaveToDay: Date = null;
   LeaveStatus: number = 0;

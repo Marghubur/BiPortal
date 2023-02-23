@@ -209,3 +209,11 @@ class FileRoleType
     CompanyLogo = "Company Logo";
     OtherFile = "Other File";
 }
+
+export enum CommonFlags
+{
+  FullDay = 1,
+  FirstHalf = 2,
+  SecondHalf = 3,
+  HalfDay = 4
+}

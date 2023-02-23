@@ -408,30 +408,22 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     this.leaveAccrualForm = this.fb.group({
       LeaveAccrualId: new FormControl(this.leaveAccrual.LeaveAccrualId),
       LeavePlanTypeId: new FormControl(this.leavePlanTypeId),
-
       CanApplyEntireLeave: new FormControl(this.leaveAccrual.CanApplyEntireLeave ?'true' : 'false'),
       IsLeaveAccruedPatternAvail: new FormControl(this.leaveAccrual.IsLeaveAccruedPatternAvail?'true' : 'false'),
       LeaveDistributionSequence: new FormControl(this.leaveAccrual.LeaveDistributionSequence),
       LeaveDistributionAppliedFrom: new FormControl(this.leaveAccrual.LeaveDistributionAppliedFrom),
-
-
       IsLeavesProratedForJoinigMonth: new FormControl(this.leaveAccrual.IsLeavesProratedForJoinigMonth ? 'true' : 'false'),
       JoiningMonthLeaveDistribution: this.buildFormArrayBetweenJoiningDate(),
-
       IsLeavesProratedOnNotice: new FormControl(this.leaveAccrual.IsLeavesProratedOnNotice?'true' : 'false'),
       ExitMonthLeaveDistribution: this.buildFormArrayBetweenProbationPeriod(),
       IsNotAllowProratedOnNotice: new FormControl(this.leaveAccrual.IsNotAllowProratedOnNotice ?'true' : 'false'),
       IsNoLeaveOnNoticePeriod: new FormControl(this.leaveAccrual.IsNoLeaveOnNoticePeriod?'true' : 'false'),
-
       IsVaryOnProbationOrExprience: new FormControl(this.leaveAccrual.IsVaryOnProbationOrExprience ?'true' : 'false'),
       IsAccrualStartsAfterJoining: new FormControl(this.leaveAccrual.IsAccrualStartsAfterJoining ?'true' : 'false'),
       IsAccrualStartsAfterProbationEnds: new FormControl(this.leaveAccrual.IsAccrualStartsAfterProbationEnds ?'true' : 'false'),
       AccrualDaysAfterJoining: new FormControl(this.leaveAccrual.AccrualDaysAfterJoining),
       AccrualDaysAfterProbationEnds: new FormControl(this.leaveAccrual.AccrualDaysAfterProbationEnds),
-      AccrualProrateDetail: this.buildAccruralRateOnExp(),
-
       IsImpactedOnWorkDaysEveryMonth: new FormControl(this.leaveAccrual.IsImpactedOnWorkDaysEveryMonth ?'true' : 'false'),
-
       WeekOffAsAbsentIfAttendaceLessThen: new FormControl(this.leaveAccrual.WeekOffAsAbsentIfAttendaceLessThen),
       HolidayAsAbsentIfAttendaceLessThen: new FormControl(this.leaveAccrual.HolidayAsAbsentIfAttendaceLessThen),
       CanApplyForFutureDate: new FormControl(this.leaveAccrual.CanApplyForFutureDate?'true' : 'false'),
@@ -442,60 +434,15 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       AllowOnlyIfAccrueBalanceIsAlleast: new FormControl(this.leaveAccrual.AllowOnlyIfAccrueBalanceIsAlleast),
       IsAccrueIfOnOtherLeave: new FormControl(this.leaveAccrual.IsAccrueIfOnOtherLeave),
       NotAllowIfAlreadyOnLeaveMoreThan: new FormControl(this.leaveAccrual.NotAllowIfAlreadyOnLeaveMoreThan),
-
       RoundOffLeaveBalance: new FormControl(this.leaveAccrual.RoundOffLeaveBalance ?'true' : 'false'),
       ToNearestHalfDay: new FormControl(this.leaveAccrual.ToNearestHalfDay ?'true' : 'false'),
       ToNearestFullDay: new FormControl(this.leaveAccrual.ToNearestFullDay ?'true' : 'false'),
       ToNextAvailableHalfDay: new FormControl(this.leaveAccrual.ToNextAvailableHalfDay ?'true' : 'false'),
       ToNextAvailableFullDay: new FormControl(this.leaveAccrual.ToNextAvailableFullDay ?'true' : 'false'),
       ToPreviousHalfDay: new FormControl(this.leaveAccrual.ToPreviousHalfDay ?'true' : 'false'),
-
       DoesLeaveExpireAfterSomeTime: new FormControl(this.leaveAccrual.DoesLeaveExpireAfterSomeTime?'true' : 'false'),
       AfterHowManyDays: new FormControl(this.leaveAccrual.AfterHowManyDays)
     });
-  }
-
-  buildAccruralRateOnExp(): FormArray {
-    let data = this.leaveAccrual.AccrualProrateDetail;
-    let dataArray: FormArray = this.fb.array([]);
-
-    if(data != null && data.length > 0) {
-      let i = 0;
-      while(i < data.length) {
-        dataArray.push(this.fb.group({
-          PeriodType: new FormControl(data[i].PeriodType),
-          YearsAfterJoining: new FormControl(data[i].YearsAfterJoining),
-          DaysMonthly: new FormControl(data[i].DaysMonthly),
-          DaysYearly: new FormControl(data[i].DaysYearly)
-        }));
-        i++;
-      }
-    } else {
-      dataArray.push(this.createAccruralRateOnExp());
-    }
-
-    return dataArray;
-  }
-
-  createAccruralRateOnExp(): FormGroup {
-    return this.fb.group({
-      PeriodType: new FormControl('After Probation'),
-      YearsAfterJoining: new FormControl(0),
-      DaysMonthly: new FormControl(0),
-      DaysYearly: new FormControl(0)
-    });
-  }
-
-  addAccruralRateOnExp() {
-    let item = this.leaveAccrualForm.get('AccrualProrateDetail') as FormArray;
-    item.push(this.createAccruralRateOnExp());
-  }
-
-  removeAccruralRateOnExp(i: number) {
-    let item = this.leaveAccrualForm.get('AccrualProrateDetail') as FormArray;
-    item.removeAt(i);
-    if (item.length == 0)
-      this.addAccruralRateOnExp();
   }
 
   buildFormArrayBetweenJoiningDate(): FormArray {
@@ -1147,7 +1094,6 @@ class LeaveAccrual {
   IsLeaveAccruedPatternAvail: boolean = null;
   JoiningMonthLeaveDistribution: any = {};
   ExitMonthLeaveDistribution: any = {};
-  AccrualProrateDetail: any = {};
   LeaveDistributionAppliedFrom: number = 0;
   IsLeavesProratedForJoinigMonth: boolean = true;
   LeaveDistributionSequence: string = null;

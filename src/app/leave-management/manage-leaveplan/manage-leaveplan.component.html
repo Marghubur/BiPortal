@@ -553,53 +553,6 @@
                           <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrualStartsAfterProbationEnds.value == 'false'}"></i>
                         </div>
                       </div>
-                      <ng-container formArrayName="AccrualProrateDetail">
-                        <div class="my-4" [formGroupName]="i"
-                          *ngFor="let item of leaveAccrualForm.get('AccrualProrateDetail').controls; let i = index">
-                          <div class="card bg-light p-3">
-                            <div class="row align-items-center">
-                              <div class="col-md-10">
-                                <h6 class="fw-bold text-dark">Define the accrual rates below based on employee
-                                  experience
-                                </h6>
-                                <div class="d-flex align-items-center">
-                                  <div class="form-group">
-                                    <select class="form-control" formControlName="PeriodType">
-                                      <option selected value="After Probation">After Probation</option>
-                                      <option value="After Joining">After Joining</option>
-                                    </select>
-                                  </div>
-                                  <div class="col-md-1">
-                                    <input type="text" class="form-control" OnlyNumber="2"
-                                      formControlName="YearsAfterJoining">
-                                  </div>
-                                  <span class="px-2">Year from joining</span>
-                                  <span class="ps-5">Accrue</span>
-                                  <div class="col-md-1 mx-3">
-                                    <input type="text" class="form-control" OnlyNumber="2"
-                                      formControlName="DaysMonthly">
-                                  </div>
-                                  <label for="" class="form-label">days Monthly</label>
-                                  <div class="col-md-1 mx-3">
-                                    <input type="text" class="form-control" OnlyNumber="2" formControlName="DaysYearly">
-                                  </div>
-                                  <label for="" class="form-label">days/year</label>
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <a href="javascript:void(0)" class="text-decoration-none text-secondary"
-                                  (click)="addAccruralRateOnExp()">
-                                  <i class="fa fa-plus-circle fa-lg"></i>
-                                </a>
-                                <a href="javascript:void(0)" class="text-decoration-none text-secondary"
-                                  (click)="removeAccruralRateOnExp(i)">
-                                  <i class="fa fa-minus-circle fa-lg ms-2"></i>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
                     </div>
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Is leave accrual impacted by employee's attendance/number of days
