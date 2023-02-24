@@ -126,10 +126,11 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   openLeaveModal(state: string, request: any) {
-    $('#leaveModal').modal('show');
     this.requestState = state;
     this.requestModal = 1; // leave
     this.currentRequest = request;
+    this.currentRequest.EmployeeName = request.FirstName + " " + request.LastName;
+    $('#leaveModal').modal('show');
   }
 
   openTimesheetModal(state: string, request: any) {
@@ -337,6 +338,7 @@ export class ApprovalRequestComponent implements OnInit {
       LeaveToDay: this.currentRequest.ToDate,
       EmployeeId: this.currentRequest.EmployeeId,
       LeaveRequestNotificationId : this.currentRequest.LeaveRequestNotificationId,
+      RecordId: this.currentRequest.RecordId
     }
     this.http.put(endPoint, currentResponse).then((response:ResponseModel) => {
       if (response.ResponseBody) {
