@@ -95,7 +95,7 @@ export class ApprovalRequestComponent implements OnInit {
 
   buildPage(req: any) {
     this.leave_request = [];
-
+    this.leaveDeatil = [];
     if(req.ApprovalRequest) {
       this.leave_request = req.ApprovalRequest;
       this.filterLeave();
