@@ -427,7 +427,7 @@
                                     <span class="pe-2 d-flex flex-column justify-content-center">
                                       <i class="fa fa-inr"></i>
                                     </span>
-                                    <input [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control">
+                                    <input [value]="r.DeclaredValue" name="DeclaratedValue" class="form-control" DecimalNumber="9">
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-1">
@@ -631,7 +631,7 @@
                                       <i class="fa fa-inr"></i>
                                     </span>
                                     <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue"
-                                      name="DeclaratedValue" class="form-control"
+                                      name="DeclaratedValue" class="form-control" DecimalNumber="9"
                                       (keyup)="checkMaxLimit($event, r.MaxLimit)">
                                   </div>
                                 </div>
@@ -841,7 +841,7 @@
                                       <i class="fa fa-inr"></i>
                                     </span>
                                     <input [ngClass]="{'error-field': isAmountExceed}" [value]="r.DeclaredValue"
-                                      name="DeclaratedValue" class="form-control"
+                                      name="DeclaratedValue" class="form-control" DecimalNumber="9"
                                       (keyup)="checkMaxLimit($event, r.MaxLimit)">
                                   </div>
                                 </div>

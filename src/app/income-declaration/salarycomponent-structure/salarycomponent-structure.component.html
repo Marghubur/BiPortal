@@ -1,12 +1,13 @@
 <div class="col-12 full-v main-container">
   <div class="x_panel mt-2">
     <div class="x_header">
-      <div class="x_header_title">
-        <h2> SALARY COMPONENT AND STRUCTURE</h2>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'SALARY COMPONENT AND STRUCTURE'"></app-breadcrums>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
     </div>
     <ng-container *ngIf="isPageReady">
       <div class="col-md-12 d-flex align-items-center justify-content-center">
@@ -317,7 +318,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitComponents()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Add' }}</span>
           </button>
       </div>
@@ -352,7 +353,7 @@
             </div>
             <div class="col-md-5 my-2">
               <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
-              <input type="text" class="form-control" formControlName="MaxLimit" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+              <input type="text" OnlyNumber="9" class="form-control" formControlName="MaxLimit" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div>
           </div>
           <div>
@@ -364,7 +365,7 @@
                       <input class="form-check-input me-1" type="checkbox" formControlName="TaxExempt">
                       This component is Tax exempt (not taxable). Income tax Section
                       <div class="col-md-2 d-inline-block ms-3">
-                        <input type="text" class="form-control form-control-sm" formControlName="Section">
+                        <input type="text" class="form-control form-control-sm" formControlName="Section" maxlength="12">
                       </div>
                       <i class="fa fa-exclamation-circle text-secondary ps-2"></i>
                     </div>

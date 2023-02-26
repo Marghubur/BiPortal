@@ -38,6 +38,7 @@ export class SettingsComponent implements OnInit {
   ptaxSlab: Array<PTax> = [];
   isEditable: boolean = false;
   currentPTax: PTax = new PTax();
+  maxDate: any = null;
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -52,6 +53,7 @@ export class SettingsComponent implements OnInit {
       LAH: false,
       EX: false
     }
+    this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.loadData();
   }
 
@@ -334,11 +336,13 @@ export class SettingsComponent implements OnInit {
 
   savePtaxSlab() {
     this.isLoading = true;
+    this.submitted = true;
     if (this.ptaxForm.invalid) {
       ErrorToast("Fill all mandatory column")
       this.isLoading = false;
       return;
     }
+
     let value = this.ptaxForm.value.PtaxSlabs
     this.http.post("TaxRegime/AddUpdatePTaxSlab", value).then(res => {
       if (res.ResponseBody) {

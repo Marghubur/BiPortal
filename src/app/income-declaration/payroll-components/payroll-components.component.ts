@@ -134,7 +134,7 @@ export class PayrollComponentsComponent implements OnInit {
       Section: new FormControl(this.CurrentRecurringComponent.Section),
       SectionMaxLimit: new FormControl(this.CurrentRecurringComponent.SectionMaxLimit),
       IsAdHoc: new FormControl(this.CurrentRecurringComponent.IsAdHoc),
-      ComponentCatagoryId: new FormControl(this.CurrentRecurringComponent.ComponentCatagoryId == 1? '1': this.CurrentRecurringComponent.ComponentCatagoryId == 6? '6': '')
+      ComponentCatagoryId: new FormControl(this.CurrentRecurringComponent.ComponentCatagoryId == 1? '1': this.CurrentRecurringComponent.ComponentCatagoryId == 6? '6': null, [Validators.required])
     });
   }
 
@@ -217,10 +217,21 @@ export class PayrollComponentsComponent implements OnInit {
 
     if (this.NewSalaryForm.get('ComponentName').errors !== null)
       errroCounter++;
+
     if (this.NewSalaryForm.get('ComponentTypeId').errors !== null)
       errroCounter++;
+
     if (this.NewSalaryForm.get('ComponentCatagoryId').errors !== null)
       errroCounter++;
+
+     if (this.NewSalaryForm.get('TaxExempt').value) {
+      if (this.NewSalaryForm.get('Section').errors !== null)
+        errroCounter++;
+
+      if (this.NewSalaryForm.get('SectionMaxLimit').errors !== null)
+        errroCounter++;
+     }
+
     if (errroCounter === 0) {
       let value:PayrollComponentsModal = this.NewSalaryForm.value;
       if (value) {
@@ -309,10 +320,20 @@ export class PayrollComponentsComponent implements OnInit {
 
   enableTaxExempt(e: any) {
     let value = e.target.checked;
-    if (value == true)
+    if (value == true) {
       this.isTaxExempt = true;
-    else
+      this.NewSalaryForm.controls['SectionMaxLimit'].setValidators(Validators.required);
+      this.NewSalaryForm.controls['SectionMaxLimit'].updateValueAndValidity();
+      this.NewSalaryForm.controls['Section'].setValidators(Validators.required);
+      this.NewSalaryForm.controls['Section'].updateValueAndValidity();
+    }
+    else {
       this.isTaxExempt = false;
+      this.NewSalaryForm.controls['SectionMaxLimit'].removeValidators(Validators.required);
+      this.NewSalaryForm.controls['SectionMaxLimit'].updateValueAndValidity();
+      this.NewSalaryForm.controls['Section'].removeValidators(Validators.required);
+      this.NewSalaryForm.controls['Section'].updateValueAndValidity();
+    }
   }
 
   filterRecords(e: any) {
@@ -490,7 +511,7 @@ export class PayrollComponentsComponent implements OnInit {
 
 export class PayrollComponentsModal {
   ComponentName: string = null;
-  ComponentTypeId: number = 0;
+  ComponentTypeId: number = null;
   TaxExempt: boolean = false;
   MaxLimit: number = 0;
   RequireDocs: boolean = false;
@@ -502,5 +523,5 @@ export class PayrollComponentsModal {
   ComponentFullName: string = '';
   AdHocId: number = 0;
   IsAdHoc: boolean = false;
-  ComponentCatagoryId: number = 0;
+  ComponentCatagoryId: number = null;
 }

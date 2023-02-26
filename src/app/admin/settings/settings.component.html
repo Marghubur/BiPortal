@@ -3,16 +3,13 @@
     <form>
       <div class="x_panel mh-auto">
         <div class="x_header">
-          <div class="x_header_title">
-            <h2>
-              Settings
-              <small>Application wise setting page.</small>
-              <i class="fa text-dark edit-icon ps-2"></i>
-            </h2>
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Settings'" [subtitle]="'Application wise setting page.'"></app-breadcrums>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
         </div>
         <ng-container *ngIf="isPageLoading">
           <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mt-4 mb-3">
@@ -427,24 +424,25 @@
                                           <ng-container formArrayName="PtaxSlabs">
                                             <tr *ngFor="let item of ptaxSalab.controls; let i = index" [formGroupName]="i">
                                               <td>
-                                                  <input type="text" [ngClass]="{'border-0': !isEditable}"  [readonly]="!isEditable" placeholder="State Name" class="form-control" formControlName="StateName"  oninput="this.value = this.value.toUpperCase()">
+                                                  <input type="text" maxlength="60" [ngClass]="{'border-0': !isEditable}"  [readonly]="!isEditable" placeholder="State Name" class="form-control" formControlName="StateName"  oninput="this.value = this.value.toUpperCase()"
+                                                  [ngClass]="{'error-field': submitted && ptaxForm.controls['PtaxSlabs'].controls[i].controls.StateName.errors !== null && ptaxForm.controls['PtaxSlabs'].controls[i].controls.StateName.errors.required}">
                                               </td>
                                               <td>
-                                                <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0">
+                                                <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'error-field': submitted && ptaxForm.controls['PtaxSlabs'].controls[i].controls.MinIncome.errors !== null && ptaxForm.controls['PtaxSlabs'].controls[i].controls.MinIncome.errors.required}">
                                                   <i class="fa fa-inr ps-3"></i>
-                                                  <input type="number" [readonly]="!isEditable" placeholder="Minimum income per month" class="form-control border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MinIncome">
+                                                  <input type="number" [readonly]="!isEditable" placeholder="Minimum income per month" class="form-control border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MinIncome" OnlyNumber="9">
                                                 </div>
                                                 </td>
                                               <td>
-                                                <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0">
+                                                <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'error-field': submitted && ptaxForm.controls['PtaxSlabs'].controls[i].controls.MaxIncome.errors !== null && ptaxForm.controls['PtaxSlabs'].controls[i].controls.MaxIncome.errors.required}">
                                                   <i class="fa fa-inr ps-3"></i>
-                                                  <input type="number" [readonly]="!isEditable" placeholder="Maximum income per month" class="form-control border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MaxIncome" (blur)="checkToAmount($event, i)">
+                                                  <input type="number" [readonly]="!isEditable" placeholder="Maximum income per month" class="form-control border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" OnlyNumber="9" formControlName="MaxIncome" (blur)="checkToAmount($event, i)">
                                                 </div>
                                               </td>
                                               <td>
-                                                <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0">
+                                                <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'error-field': submitted && ptaxForm.controls['PtaxSlabs'].controls[i].controls.TaxAmount.errors !== null && ptaxForm.controls['PtaxSlabs'].controls[i].controls.TaxAmount.errors.required}">
                                                   <i class="fa fa-inr ps-3"></i>
-                                                  <input type="number" [readonly]="!isEditable" placeholder="Tax Rate/Tax Amount (p.m.)" class="form-control border-0" formControlName="TaxAmount" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                                                  <input type="number" [readonly]="!isEditable" placeholder="Tax Rate/Tax Amount (p.m.)" class="form-control border-0" formControlName="TaxAmount" onkeypress="return event.charCode >=48 && event.charCode <=57" OnlyNumber="9">
                                                 </div>
                                               </td>
                                               <td>
@@ -587,7 +585,7 @@
                   <form class="row row-cols-sm-auto">
                     <div class="col-md-12">
                       <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
+                        <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
                           name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
                         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
                             class="fa fa-calendar"></i></button>

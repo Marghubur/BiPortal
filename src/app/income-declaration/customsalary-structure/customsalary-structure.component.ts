@@ -285,6 +285,7 @@ export class CustomsalaryStructureComponent implements OnInit {
         this.isLoading = false;
       })
     } else {
+      this.isLoading = false;
       ErrorToast("Please correct all the mandaroty field marded red");
     }
   }

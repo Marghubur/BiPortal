@@ -29,9 +29,10 @@ export class PayslipComponent implements OnInit {
   viewer: any = null;
   fileDetail: any = null;
   isLoading: boolean = true;
+  payslipYear: Array<number> =[];
 
   constructor(private nav: iNavigation,
-    private local: ApplicationStorage,
+              private local: ApplicationStorage,
               private http: AjaxService) { }
 
   ngOnInit(): void {
@@ -50,6 +51,9 @@ export class PayslipComponent implements OnInit {
       this.paySlipSchedule = [];
       let employee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
       this.joiningDate = new Date(employee.CreatedOn);
+      this.payslipYear.push(this.currentYear);
+      if (this.joiningDate.getFullYear() != this.currentYear)
+        this.payslipYear.push(this.currentYear-1)
       this.isEmployeeSelect = false;
       this.SectionIsReady= true;
       if (this.joiningDate.getMonth() == new Date().getMonth() && this.joiningDate.getFullYear() == new Date().getFullYear()) {
@@ -146,7 +150,7 @@ export class PayslipComponent implements OnInit {
 
   payslip() {
     var date = new Date();
-    let mnth= date.getMonth()+1;
+    let mnth= date.getMonth();
     let years = date.getFullYear();
     let i =0;
     if (this.joiningDate.getFullYear() == this.currentYear)
@@ -183,11 +187,14 @@ export class PayslipComponent implements OnInit {
       this.http.post("FileMaker/GeneratePayslip", value).then(res => {
         if (res.ResponseBody) {
           this.fileDetail = res.ResponseBody.FileDetail;
+          this.showFile(this.fileDetail);
           this.isReady = true;
           this.isLoading = false;
-          this.showFile(this.fileDetail);
           Toast("Payslip found");
         }
+      }).catch(e => {
+        this.isReady = true;
+        this.isLoading = false;
       })
     }
   }

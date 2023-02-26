@@ -3,19 +3,14 @@
     <form>
       <div class="x_panel">
         <div class="x_header">
-          <div class="x_header_title">
-            <h2>
-              PF & ESI
-              <small>Setup PF & ESI rules and value.</small>
-              <i class="fa text-dark edit-icon ps-2"></i>
-            </h2>
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'PF & ESI'" [subtitle]="'Setup PF & ESI rules and value.'"></app-breadcrums>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
-        </div>
-
         <div class="col-12 p-2 my-4 row">
           <ng-container *ngIf="IsReady">
             <p class="fs-5 fw-bold text-primary-dc">PROVIDENT FUND & ESI SETTING <button [disabled]="isLoading"
@@ -70,7 +65,7 @@
                                 <input type="checkbox" disabled class="form-check-input" (click)="enablePfAmount(isallowPFamount)" name="IsEmployerPFLimitContribution" formControlName="IsEmployerPFLimitContribution" disabled>
                                 <span class="ps-1">Limit employer's PF contribution amount maximum of</span>
                                 <div class="mx-4 col-md-2 d-inline-block">
-                                  <input class="form-control" [readonly]="!isallowPFamount" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" name="EmployerPFLimit" formControlName="EmployerPFLimit">
+                                  <input OnlyNumber="9" class="form-control" [readonly]="!isallowPFamount" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" name="EmployerPFLimit" formControlName="EmployerPFLimit">
                                 </div> Monthly
                               </li>
                             </ul>
@@ -120,20 +115,20 @@
                           Maximum monthly gross salary eligible for ESI
                           <i class="mx-4 fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Maximum monthly gross salary eligible for ESI"></i>
                           <div class="col-md-2 d-inline-block">
-                            <input class="form-control" formControlName="MaximumGrossForESI" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            <input OnlyNumber="9" class="form-control" formControlName="MaximumGrossForESI" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                           </div>
                         </li>
                         <li class="list-group-item">
                           ESI Employee Contribution is
                           <div class="mx-4 col-md-2 d-inline-block">
-                            <input class="form-control" formControlName="EsiEmployeeContribution" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            <input OnlyNumber="9" class="form-control" formControlName="EsiEmployeeContribution" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                           </div>
                           of gross Salary
                         </li>
                         <li class="list-group-item">
                           ESI Employer Contribution is
                           <div class="mx-4 col-md-2 d-inline-block">
-                            <input class="form-control" formControlName="EsiEmployerContribution" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            <input OnlyNumber="9" class="form-control" formControlName="EsiEmployerContribution" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                           </div>
                           of gross Salary
                         </li>

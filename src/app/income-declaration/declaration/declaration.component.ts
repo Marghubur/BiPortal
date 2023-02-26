@@ -825,6 +825,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   deleteRentDeclaration() {
     this.isLoading = true;
+    this.viewRentPropFile = [];
+    this.FileDocumentList = [];
+    this.houseRentDetailFile = [];
+    this.hraLetterList = [];
+    this.houseRentDetailLetterFile = [];
     this.http.delete(`Declaration/DeleteDeclaredHRA/${this.employeeDeclaration.EmployeeDeclarationId}`).then(res => {
       if (res.ResponseBody) {
         $('#deleteRentDeclrModal').modal('hide');
