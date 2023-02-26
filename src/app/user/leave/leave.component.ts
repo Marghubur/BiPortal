@@ -181,6 +181,12 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
         return;
       }
 
+      if (leaveDay > 1 && value.Session > 1) {
+        ErrorToast("You can't be applied more than one half day");
+        this.isLoading = false;
+        return;
+      }
+
       if (this.leaveDays > 0 && !value.IsProjectedFutureDateAllowed){
         this.checkIsLeaveAvailabel();
         if (!this.isLoading)

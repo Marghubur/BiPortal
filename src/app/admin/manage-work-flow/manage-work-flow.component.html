@@ -24,7 +24,7 @@
                               <div class="form-group mt-3">
                                   <label>Title Description *</label>
                                   <textarea name="titleDescription" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Enter description here" cols="30" rows="5" formControlName="TitleDescription"
-                                  [ngClass]="{'error-field': submitted && f.TitleDescription.errors !== null && f.TitleDescription.errors.required}" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)">
+                                  [ngClass]="{'error-field': submitted && f.TitleDescription.errors !== null && f.TitleDescription.errors.required}" >
                                   </textarea>
                               </div>
                           </div>

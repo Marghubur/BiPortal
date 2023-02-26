@@ -8,7 +8,6 @@ import 'bootstrap'
 import { AjaxService } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
-import { GetEmployees } from 'src/providers/ApplicationStorage';
 
 @Component({
   selector: 'app-manage-leaveplan',
@@ -49,6 +48,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   selectedWorkflow: any = null;
   selectedWorkFlowDetail: any = null;
   employeesAutoComplete: autoCompleteModal = new autoCompleteModal();
+  isWorkFlownChainShow: boolean = false;
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -74,8 +74,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       this.leaveplantype = data.LeavePlannType;
       let id = data.CurrentType.LeavePlanTypeId;
       this.leavePlanTypeId = Number(id);
-      let employees = GetEmployees();
-      this.employeesAutoComplete.data = employees;
       this.employeesAutoComplete.placeholder = "Employee";
       this.employeesAutoComplete.className = "disable-field";
       if (this.leaveTypeDeatils.LeavePlanId <=0) {
@@ -97,6 +95,13 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
     .then(response => {
       if (response.ResponseBody) {
         this.approvalWorkFlows = response.ResponseBody.approvalWorkFlowChain;
+        let empRole = response.ResponseBody.employeeRole;
+        for (let i = 0; i < empRole.length; i++) {
+          this.employeesAutoComplete.data.push({
+            value:empRole[i].RoleId,
+            text: empRole[i].RoleName
+          })
+        }
         this.bindPage(response.ResponseBody.leavePlanConfiguration);
       }
     });
@@ -1050,7 +1055,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   gotoLeave() {
-    this,this.nav.navigate(Leave, null)
+    this.nav.navigate(Leave, null)
   }
 
   changeWorkflow(e: any) {
@@ -1060,13 +1065,15 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   }
 
   viewWorkflowChain() {
-    this.http.get(`ApprovalChain/GetApprovalChainData/${this.selectedWorkflow.ApprovalWorkFlowId}`)
-    .then(res => {
-      if (res.ResponseBody) {
-        this.selectedWorkFlowDetail = res.ResponseBody;
-        console.log(this.selectedWorkFlowDetail)
-      }
-    })
+    this.isWorkFlownChainShow = !this.isWorkFlownChainShow;
+    if (this.isWorkFlownChainShow) {
+      this.http.get(`ApprovalChain/GetApprovalChainData/${this.selectedWorkflow.ApprovalWorkFlowId}`)
+      .then(res => {
+        if (res.ResponseBody) {
+          this.selectedWorkFlowDetail = res.ResponseBody;
+        }
+      })
+    }
   }
 }
 
