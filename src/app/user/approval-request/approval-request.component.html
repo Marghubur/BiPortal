@@ -180,6 +180,16 @@
                         <span class="fw-bold text-primary-c me-4">To: {{item.ToDate | date}}</span>
                         <span class="fw-bold text-primary-c">[{{item.FirstName}} {{item.LastName}}]</span>
                       </p>
+                      <div class="row my-2">
+                        <div class="col-md-4">
+                          <span class="fw-bold">No. of Days:</span>
+                          {{item.NumOfDays}}
+                        </div>
+                        <div class="col-md-4">
+                          <span class="fw-bold">Session: </span>
+                          {{item.NumOfDays > 0 ? 'Full day' : 'Half day'}}
+                        </div>
+                      </div>
                       <span>
                         <span class="fw-bold">Message:</span>
                         {{item.UserMessage}}

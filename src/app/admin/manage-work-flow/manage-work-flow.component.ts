@@ -33,24 +33,28 @@ export class ManageWorkFlowComponent implements OnInit {
   ngOnInit(): void {
     this.isPageReady = false;
     this.navRecord = this.nav.getValue();
-    this.employees = GetEmployees();
-    this.employeesAutoComplete.data = this.employees;
     this.employeesAutoComplete.placeholder = "Employee";
     this.employeesAutoComplete.className = "normal";
-
-    if(this.navRecord) {
-      this.loadRecord();
-    } else {
-      this.initForm();
-      this.isPageReady = true;
-    }
+    let approvalWorkFlowId = 0;
+    if (this.navRecord )
+      approvalWorkFlowId = this.navRecord.ApprovalWorkFlowId;
+    this.loadRecord(approvalWorkFlowId);
   }
 
-  loadRecord() {
-    this.http.get(`ApprovalChain/GetApprovalChainData/${this.navRecord.ApprovalWorkFlowId}`)
+  loadRecord(approvalWorkFlowId: number) {
+    this.http.get(`ApprovalChain/GetApprovalChainData/${approvalWorkFlowId}`)
     .then((response: ResponseModel) => {
       if (response.ResponseBody) {
-        this.approvalChainDetail = response.ResponseBody;
+        if (response.ResponseBody.approvalWorkFlowChain)
+          this.approvalChainDetail = response.ResponseBody.approvalWorkFlowChain;
+
+        let empRole = response.ResponseBody.employeeRole;
+        for (let i = 0; i < empRole.length; i++) {
+          this.employeesAutoComplete.data.push({
+            value:empRole[i].RoleId,
+            text: empRole[i].RoleName
+          })
+        }
         this.initForm();
         this.isPageReady = true;
       }
@@ -97,10 +101,15 @@ export class ManageWorkFlowComponent implements OnInit {
     if (request) {
       this.http.post("ApprovalChain/InsertApprovalChain", request).then((response: ResponseModel) => {
         if (response.ResponseBody) {
+          this.isLoading = false;
+          this.isInProgress = false;
           Toast("Inserted/Updated record successfully");
         } else {
           ErrorToast("Fail to insert or update record. Please contact to admin.");
         }
+      }).catch(e => {
+        this.isLoading = false;
+        ErrorToast("Invalid data pass. Please fill your form correctly.");
       });
     } else {
       this.isInProgress = false;
@@ -226,20 +235,35 @@ export class ManageWorkFlowComponent implements OnInit {
 
     }
   }
+
+  getEmployeeRole() {
+    this.http.get("Employee/GenerateEmployeeRole").then(res => {
+      if (res.ResponseBody) {
+        let empRole = res.ResponseBody;
+        empRole = empRole.filter(x => x.RoleId == 1 || x.RoleId == 2 || x.RoleId == 11|| x.RoleId == 12|| x.RoleId == 13|| x.RoleId == 16);
+        for (let i = 0; i < empRole.length; i++) {
+          this.employeesAutoComplete.data.push({
+            value:empRole[i].RoleId,
+            text: empRole[i].RoleName
+          })
+
+        }
+      }
+    })
+  }
 }
 
-class ApprovalWorkFlowChain
-{
-     ApprovalChainDetailId: number = 0;
-     ApprovalWorkFlowId: number = 0;
-     Title: string = null;
-     TitleDescription: string = null;
-     Status: number = null;
-     IsAutoExpiredEnabled: boolean = false;
-     AutoExpireAfterDays: number = null;
-     IsSilentListner: boolean = false;
-     ListnerDetail: string = '[]';
-     ApprovalChainDetails: Array<ApprovalChainDetail> = new Array<ApprovalChainDetail>();
+class ApprovalWorkFlowChain {
+  ApprovalChainDetailId: number = 0;
+  ApprovalWorkFlowId: number = 0;
+  Title: string = null;
+  TitleDescription: string = null;
+  Status: number = null;
+  IsAutoExpiredEnabled: boolean = false;
+  AutoExpireAfterDays: number = 0;
+  IsSilentListner: boolean = false;
+  ListnerDetail: string = '[]';
+  ApprovalChainDetails: Array<ApprovalChainDetail> = new Array<ApprovalChainDetail>();
 }
 
 class ApprovalChainDetail {
