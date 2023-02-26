@@ -338,7 +338,8 @@ export class ApprovalRequestComponent implements OnInit {
       LeaveToDay: this.currentRequest.ToDate,
       EmployeeId: this.currentRequest.EmployeeId,
       LeaveRequestNotificationId : this.currentRequest.LeaveRequestNotificationId,
-      RecordId: this.currentRequest.RecordId
+      RecordId: this.currentRequest.RecordId,
+      LeaveTypeId: this.currentRequest.LeaveTypeId
     }
     this.http.put(endPoint, currentResponse).then((response:ResponseModel) => {
       if (response.ResponseBody) {
