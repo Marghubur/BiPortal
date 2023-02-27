@@ -164,13 +164,15 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       IsNoLeaveAfterDate: new FormControl(this.leaveDetail.IsNoLeaveAfterDate),
       LeaveNotAllocatedIfJoinAfter: new FormControl(this.leaveDetail.LeaveNotAllocatedIfJoinAfter),
       CanCompoffAllocatedAutomatically: new FormControl(this.leaveDetail.CanCompoffAllocatedAutomatically? 'true':'false'),
-      CanCompoffCreditedByManager: new FormControl(this.leaveDetail.CanCompoffCreditedByManager? 'true':'false')
+      CanCompoffCreditedByManager: new FormControl(this.leaveDetail.CanCompoffCreditedByManager? 'true':'false'),
+      LeavePlanId: new FormControl(this.leaveTypeDeatils.LeavePlanId)
     })
   }
 
   initManagementLeave() {
     this.managementLeave = this.fb.group({
-      CanManagerAwardCausalLeave: new FormControl(this.managementLeaveDetail.CanManagerAwardCausalLeave? 'true':'false')
+      CanManagerAwardCausalLeave: new FormControl(this.managementLeaveDetail.CanManagerAwardCausalLeave? 'true':'false'),
+      LeavePlanId: new FormControl(this.leaveTypeDeatils.LeavePlanId)
     })
   }
 
@@ -446,7 +448,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       ToNextAvailableFullDay: new FormControl(this.leaveAccrual.ToNextAvailableFullDay ?'true' : 'false'),
       ToPreviousHalfDay: new FormControl(this.leaveAccrual.ToPreviousHalfDay ?'true' : 'false'),
       DoesLeaveExpireAfterSomeTime: new FormControl(this.leaveAccrual.DoesLeaveExpireAfterSomeTime?'true' : 'false'),
-      AfterHowManyDays: new FormControl(this.leaveAccrual.AfterHowManyDays)
+      AfterHowManyDays: new FormControl(this.leaveAccrual.AfterHowManyDays),
+      LeavePlanId: new FormControl(this.leaveTypeDeatils.LeavePlanId)
     });
   }
 
@@ -597,6 +600,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       CurrentLeaveRequiredComments: new FormControl(this.appplyingForLeave.CurrentLeaveRequiredComments ? 'true': 'false'),
       ProofRequiredIfDaysExceeds: new FormControl(this.appplyingForLeave.ProofRequiredIfDaysExceeds ? 'true': 'false'),
       NoOfDaysExceeded: new FormControl(this.appplyingForLeave.NoOfDaysExceeded),
+      LeavePlanId: new FormControl(this.leaveTypeDeatils.LeavePlanId),
       RuleForLeaveInNotice: this.buildRuleForLeaveInNotice()
     })
   }
@@ -654,7 +658,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       LeaveLimitInProbation: new FormControl(this.leaveRestriction.LeaveLimitInProbation),
       IsLeaveInNoticeExtendsNoticePeriod: new FormControl(this.leaveRestriction.IsLeaveInNoticeExtendsNoticePeriod ? 'true' : 'false'),
       NoOfTimesNoticePeriodExtended: new FormControl(this.leaveRestriction.NoOfTimesNoticePeriodExtended),
-
+      LeavePlanTypeId: new FormControl(this.leaveTypeDeatils.LeavePlanTypeId),
       CanManageOverrideLeaveRestriction: new FormControl(this.leaveRestriction.CanManageOverrideLeaveRestriction ? 'true' : 'false'),
 
       GapBetweenTwoConsicutiveLeaveDates: new FormControl(this.leaveRestriction.GapBetweenTwoConsicutiveLeaveDates),
@@ -704,6 +708,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       IfLeaveLieBetweenWeekOff:new FormControl(this.holidayWeekOffs.IfLeaveLieBetweenWeekOff ? 'true' : 'false'),
       IfWeekOffIsRightBeforLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforLeave ? 'true' : 'false'),
       IfWeekOffIsRightAfterLeave:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightAfterLeave ? 'true' : 'false'),
+      LeavePlanId: new FormControl(this.leaveTypeDeatils.LeavePlanId),
       IfWeekOffIsRightBeforeAfterOrInBetween:new FormControl(this.holidayWeekOffs.IfWeekOffIsRightBeforeAfterOrInBetween ? 'true' : 'false')
     })
   }
@@ -734,7 +739,8 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       IsRequiredAllLevelApproval: new FormControl(this.leaveApproval.IsRequiredAllLevelApproval),
       IsReportingManageIsDefaultForAction: new FormControl(this.leaveApproval.IsReportingManageIsDefaultForAction?'true' : 'false'),
       IsPauseForApprovalNotification: new FormControl(this.leaveApproval.IsPauseForApprovalNotification),
-      ApprovalWorkFlowId: new FormControl(this.leaveApproval.ApprovalWorkFlowId)
+      ApprovalWorkFlowId: new FormControl(this.leaveApproval.ApprovalWorkFlowId),
+      LeavePlanId: new FormControl(this.leaveTypeDeatils.LeavePlanId)
     })
   }
 
@@ -784,6 +790,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       DeductFromSalaryOnYearChange: new FormControl(this.yearEndProcess.DeductFromSalaryOnYearChange ? 'true' : 'false'),
       ResetBalanceToZero: new FormControl(this.yearEndProcess.ResetBalanceToZero ? 'true' : 'false'),
       CarryForwardToNextYear: new FormControl(this.yearEndProcess.CarryForwardToNextYear ? 'true' : 'false'),
+      LeavePlanId: new FormControl(this.leaveTypeDeatils.LeavePlanId),
       FixedPayNCarryForward: this.buildFixedNcarryForward(),
       PercentagePayNCarryForward: this.buildPercentageNcarryForward()
     })
