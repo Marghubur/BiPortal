@@ -142,6 +142,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
       let reportingmanager = this.managerList.data.find(x => x.value == this.reportingManagerId);
       value.AssigneId = this.reportingManagerId;
       value.AssigneeEmail = reportingmanager.email;
+      this.leaveForm.get('IsProjectedFutureDateAllowed').setValue(this.currentLeaveType.IsFutureDateAllowed);
       if (this.leaveForm.get('EmployeeId').errors !== null) {
         WarningToast("Employee is not selected properly.");
         this.isLoading = false;
