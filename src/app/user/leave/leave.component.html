@@ -413,11 +413,6 @@
               </select>
             </div>
           </div>
-          <div class="text-end" *ngIf="currentLeaveType != null && currentLeaveType.IsFutureDateAllowed">
-            <input type="checkbox" class="form-check-input" formControlName="IsProjectedFutureDateAllowed">
-            <label for="" class="form-label ps-2">Check for future projected date.</label>
-            <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Check for future projected date."></i>
-          </div>
           <label class="form-label mb-0 text-dark ps-2 fs-5">Reason <small *ngIf="currentLeaveType != null && currentLeaveType.IsCommentsRequired">(Required *)</small></label>
           <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment" name="Reason"
             formControlName="Reason" [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
