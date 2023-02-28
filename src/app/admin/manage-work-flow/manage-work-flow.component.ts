@@ -144,7 +144,8 @@ export class ManageWorkFlowComponent implements OnInit {
       IsRequired: new FormControl(record.IsRequired),
       IsForwardEnabled: new FormControl(record.IsForwardEnabled),
       ForwardWhen: new FormControl(record.ForwardWhen),
-      ForwardAfterDays: new FormControl(record.ForwardAfterDays)
+      ForwardAfterDays: new FormControl(record.ForwardAfterDays),
+      ApprovalChainDetailId :new FormControl(record.ApprovalChainDetailId)
     });
   }
 
