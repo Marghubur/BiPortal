@@ -388,7 +388,7 @@
         <form [formGroup]="leavePlanForm">
           <div>
             <label for="" class="form-label fw-bold">Plan Name</label>
-            <input type="text" placeholder="Leave Plan Name" class="form-control" formControlName="PlanName"
+            <input type="text" placeholder="Leave Plan Name" class="form-control" formControlName="PlanName" maxlength="50"
               oninput="this.value = this.value.toUpperCase()" [ngClass]="{
                 'error-field':
                   submit &&
@@ -398,7 +398,7 @@
           </div>
           <div class="mt-3">
             <label for="" class="form-label fw-bold">Plan Description</label>
-            <textarea placeholder="Enter your text" class="form-control" cols="30" rows="3"
+            <textarea placeholder="Enter your text" class="form-control" cols="30" rows="3" maxlength="200"
               oninput="this.value = this.value.toUpperCase()" formControlName="PlanDescription"></textarea>
           </div>
           <div class="row">
@@ -424,7 +424,7 @@
                             submit &&
                             f['PlanStartCalendarDate'].errors != null &&
                             f['PlanStartCalendarDate'].errors['required']
-                        }" #d="ngbDatepicker" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}" (dateSelect)="onDateSelection($event)" />
+                        }" #d="ngbDatepicker" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate" (dateSelect)="onDateSelection($event)" />
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
                         <i class="fa fa-calendar"></i>
                       </button>
@@ -603,7 +603,7 @@
           <div class="col-md-12 row">
             <div class="col-md-8">
               <label for="" class="form-label">Name</label>
-              <input type="text" placeholder="Leave Type Name" class="form-control" [ngClass]="{
+              <input type="text" maxlength="50" placeholder="Leave Type Name" class="form-control" [ngClass]="{
                   'error-field':
                     submit &&
                     LeaveTypeConntrol['PlanName'].errors !== null &&
@@ -612,7 +612,7 @@
             </div>
             <div class="col-md-4">
               <label for="" class="form-label">Code</label>
-              <input type="text" placeholder="Leave Code" class="form-control" [ngClass]="{
+              <input type="text" placeholder="Leave Code" class="form-control" maxlength="10" [ngClass]="{
                   'error-field':
                     submit &&
                     LeaveTypeConntrol['LeavePlanCode'].errors !== null &&
@@ -622,7 +622,7 @@
           </div>
           <div class="mt-3">
             <label for="" class="form-label">Description</label>
-            <textarea placeholder="Enter your text" class="form-control" cols="30" rows="3" [ngClass]="{'error-field':submit && LeaveTypeConntrol['PlanDescription'].errors !== null &&
+            <textarea placeholder="Enter your text" maxlength="200" class="form-control" cols="30" rows="3" [ngClass]="{'error-field':submit && LeaveTypeConntrol['PlanDescription'].errors !== null &&
               LeaveTypeConntrol['PlanDescription'].errors['required']}" oninput="this.value = this.value.toUpperCase()" formControlName="PlanDescription"></textarea>
           </div>
           <div class="form-check mt-3">
