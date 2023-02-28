@@ -24,7 +24,7 @@
                               <div class="form-group mt-3">
                                   <label>Title Description *</label>
                                   <textarea name="titleDescription" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Enter description here" cols="30" rows="5" formControlName="TitleDescription"
-                                  [ngClass]="{'error-field': submitted && f.TitleDescription.errors !== null && f.TitleDescription.errors.required}" >
+                                  maxlength="300" [ngClass]="{'error-field': submitted && f.TitleDescription.errors !== null && f.TitleDescription.errors.required}" >
                                   </textarea>
                               </div>
                           </div>
@@ -76,7 +76,7 @@
                                                 </div>
                                               </div>
                                               <div class="mt-2">
-                                                Leave is approved after {{workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardWhen.value}} {{i == 0 ? 'days after created' : 'days after reacted on'}}
+                                                Leave is approved after {{workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardAfterDays.value}} {{i == 0 ? 'days after created' : 'days after reacted on'}}
                                               </div>
                                           </fieldset>
                                       </div>

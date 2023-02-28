@@ -33,7 +33,7 @@ export class ManageWorkFlowComponent implements OnInit {
   ngOnInit(): void {
     this.isPageReady = false;
     this.navRecord = this.nav.getValue();
-    this.employeesAutoComplete.placeholder = "Employee";
+    this.employeesAutoComplete.placeholder = "Level";
     this.employeesAutoComplete.className = "normal";
     let approvalWorkFlowId = 0;
     if (this.navRecord )
