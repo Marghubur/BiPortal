@@ -1,12 +1,13 @@
 <div class="col-12 full-v main-container">
   <div class="x_panel mt-2">
     <div class="x_header">
-      <div class="x_header_title">
-        <h2> CUSTOM SALARY COMPONENT AND STRUCTURE</h2>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'CUSTOM SALARY COMPONENT AND STRUCTURE'"></app-breadcrums>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
     </div>
     <div class="col-md-12 px-4" *ngIf="isPageReady">
       <div class="d-flex my-3 ms-2 align-items-center">
@@ -31,7 +32,7 @@
             <div class="col-md-2 my-2" *ngFor="let item of salaryStructureType">
               <a href="javascript:void(0)" class="text-decoration-none" (click)="selectSalaryGroup(item)">
                 <div class="card py-4">
-                  <h5 class="text-center">{{item.GroupName}}</h5>
+                  <h5 class="text-center mt-2">{{item.GroupName}}</h5>
                   <p class="mb-0 text-truncate text-center">{{item.MinAmount}} - {{item.MaxAmount}}</p>
                   <div ngbDropdown class="d-inline-block menu-btn">
                     <button type="button" [disabled]="item.SalaryGroupId == 1" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
@@ -769,13 +770,13 @@
           <div class="col-md-12 row m-0 p-0">
             <div class="col-md-6 mt-2">
               <label for="" class="form-label">Group Name</label>
-              <input type="text" oninput="this.value = this.value.toUpperCase()"
+              <input type="text" oninput="this.value = this.value.toUpperCase()" maxlength="40"
                 [ngClass]="{'error-field': submitted && f.GroupName.errors !== null && f.GroupName.errors.required}"
                 placeholder="Enter Group Name" formControlName="GroupName" class="form-control">
             </div>
             <div class="col-md-12 mt-3">
               <label for="" class="form-label">Group Description</label>
-              <textarea type="text"
+              <textarea type="text" maxlength="100"
                 [ngClass]="{'error-field': submitted && f.GroupDescription.errors !== null && f.GroupDescription.errors.required}"
                 placeholder="Enter Group Description" formControlName="GroupDescription" oninput="this.value = this.value.toUpperCase()"
                 class="form-control"></textarea>

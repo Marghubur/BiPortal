@@ -1,14 +1,13 @@
 <div class="col-md-12 main-container">
   <div class="x_panel">
     <div class="x_header">
-      <div class="x_header_title">
-        <div class="col-md-3">
-          <h2>COMPANY INFORMATION</h2>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'COMPANY INFORMATION'"></app-breadcrums>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
     </div>
     <div class="my-3 px-5" *ngIf="isPageReady">
       <form [formGroup]="companyInformationForm">
@@ -78,7 +77,7 @@
                 </div>
                 <div class="col-md-6 my-2">
                   <label for="" class="form-label">TYPE OF BUSINESS</label>
-                  <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
+                  <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" maxlength="60"
                     oninput="this.value = this.value.toUpperCase()" placeholder="TYPE OF BUSINESS"
                     formControlName="TypeOfBusiness">
                 </div>
@@ -100,7 +99,7 @@
                 </div>
                 <div class="col-md-6 my-2">
                   <label for="" class="form-label">REGISTERED OFFICE ADDRESS</label>
-                  <input type="text" class="form-control" placeholder="REGISTERED OFFICE ADDRESS"
+                  <input type="text" class="form-control" placeholder="REGISTERED OFFICE ADDRESS" maxlength="100"
                     oninput="this.value = this.value.toUpperCase()" formControlName="FullAddress">
                 </div>
               </div>

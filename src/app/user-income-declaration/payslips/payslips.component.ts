@@ -25,30 +25,19 @@ export class PayslipsComponent implements OnInit {
   viewer: any = null;
   fileDetail: any = null;
   isLoading: boolean = false;
+  payslipYear: Array<number> =[];
 
   constructor(private nav: iNavigation,
               private user: UserService,
-              private local: ApplicationStorage,
               private http: AjaxService) { }
 
   ngOnInit(): void {
     var dt = new Date();
     this.currentYear = dt.getFullYear();
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.basePath = this.http.GetImageBasePath();
     this.userDetail = this.user.getInstance() as UserDetail;
-    if (expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-    else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-    let Master = this.local.get(null);
-    if (Master !== null && Master !== "") {
-      this.userDetail = Master["UserDetail"];
-      this.EmployeeId = this.userDetail.UserId;
-      this.loadData();
-    } else {
-      ErrorToast("Invalid user. Please login again.")
-    }
+    this.EmployeeId = this.userDetail.UserId;
+    this.loadData();
   }
 
   loadData() {
@@ -56,6 +45,9 @@ export class PayslipsComponent implements OnInit {
     if (this.EmployeeId > 0) {
       this.paySlipSchedule = [];
       this.joiningDate = new Date(this.userDetail.CreatedOn);
+      this.payslipYear.push(this.currentYear);
+      if (this.joiningDate.getFullYear() != this.currentYear)
+        this.payslipYear.push(this.currentYear-1)
       this.SectionIsReady= true;
       if (this.joiningDate.getMonth() == new Date().getMonth() && this.joiningDate.getFullYear() == new Date().getFullYear()) {
         WarningToast("Joining month of the employee is current month");
@@ -107,7 +99,7 @@ export class PayslipsComponent implements OnInit {
 
   payslip() {
     var date = new Date();
-    let mnth= date.getMonth()+1;
+    let mnth= date.getMonth();
     let years = date.getFullYear();
     let i =0;
     if (this.joiningDate.getFullYear() == this.currentYear)
@@ -144,17 +136,19 @@ export class PayslipsComponent implements OnInit {
       this.http.post("FileMaker/GeneratePayslip", value).then(res => {
         if (res.ResponseBody) {
           this.fileDetail = res.ResponseBody.FileDetail;
+          this.showFile(this.fileDetail);
           this.isReady = true;
           this.isLoading = false;
-          this.showFile(this.fileDetail);
           Toast("Payslip found");
         }
+      }).catch(e => {
+        this.isReady = true;
+        this.isLoading = false;
       })
     }
   }
 
   closePdfViewer() {
-    event.stopPropagation();
     this.paySlipDate = null;
     if (this.viewer != null) {
       this.viewer.classList.add('d-none');

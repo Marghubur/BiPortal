@@ -135,12 +135,16 @@ export class PayrollComponent implements OnInit {
     let errorCounter = 0;
     if (this.payrollForm.get('PayFrequency').errors !== null)
       errorCounter++;
+
     if (this.payrollForm.get('PayCycleMonth').errors !== null)
       errorCounter++;
+
     if (this.payrollForm.get('PayCalculationId').errors !== null)
       errorCounter++;
+
     if (this.payrollForm.get('PayCycleDayOfMonth').errors !== null)
       errorCounter++;
+
     if (value && errorCounter === 0) {
       this.http.post('Settings/InsertUpdatePayrollSetting', value).then((response:ResponseModel) => {
         if (response.ResponseBody) {
@@ -152,6 +156,9 @@ export class PayrollComponent implements OnInit {
       }).catch(e => {
         this.isLoading = false;
       })
+    } else {
+      this.isLoading = false;
+      $('#saveConfirmationModal').modal('hide');
     }
   }
 
@@ -165,10 +172,10 @@ class PayRoll {
   CompanyId: number = 1;
   PayrollCycleSettingId: number = 0;
   OrganizationId: number = 1;
-  PayFrequency: number = 0;
-  PayCycleMonth: number = 0;
-  PayCycleDayOfMonth: number = 0;
-  PayCalculationId: number = 0;
+  PayFrequency: string = null;
+  PayCycleMonth: number = null;
+  PayCycleDayOfMonth: number = null;
+  PayCalculationId: number = null;
   IsExcludeWeeklyOffs: boolean = false;
   IsExcludeHolidays: boolean = false;
 }
