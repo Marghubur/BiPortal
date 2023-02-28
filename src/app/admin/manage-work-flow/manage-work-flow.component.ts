@@ -140,7 +140,7 @@ export class ManageWorkFlowComponent implements OnInit {
   approvalChain(record: ApprovalChainDetail) {
     return this.fb.group({
       ApprovalWorkFlowId: new FormControl(record.ApprovalWorkFlowId),
-      AssignieId: new FormControl(record.AssignieId, [Validators.required]),
+      AssignieId: new FormControl(record.AssignieId),
       IsRequired: new FormControl(record.IsRequired),
       IsForwardEnabled: new FormControl(record.IsForwardEnabled),
       ForwardWhen: new FormControl(record.ForwardWhen),
@@ -219,15 +219,18 @@ export class ManageWorkFlowComponent implements OnInit {
     let value = e.target.checked;
     let formarray = this.workFlowForm.get("ApprovalChainDetails") as FormArray;
     if (!value) {
-      formarray.controls[i].get('ForwardWhen').setValue(0);
       formarray.controls[i].get('ForwardAfterDays').setValue(0);
-      document.querySelectorAll('select[name="ForwardWhen"]')[i].setAttribute('disabled', '');
       formarray.controls[i].get('ForwardWhen').removeValidators([Validators.required]);
       formarray.controls[i].get('ForwardWhen').updateValueAndValidity();
       formarray.controls[i].get('ForwardAfterDays').removeValidators([Validators.required]);
       formarray.controls[i].get('ForwardAfterDays').updateValueAndValidity();
+      if (formarray.controls[i].get('IsRequired').value == false) {
+        document.querySelectorAll('select[name="ForwardWhen"]')[i].setAttribute('disabled', '');
+        formarray.controls[i].get('ForwardWhen').setValue(0);
+      }
     } else {
-      document.querySelectorAll('select[name="ForwardWhen"]')[i].removeAttribute('disabled');
+      if (formarray.controls[i].get('IsRequired').value == false)
+        document.querySelectorAll('select[name="ForwardWhen"]')[i].removeAttribute('disabled');
       formarray.controls[i].get('ForwardWhen').setValidators([Validators.required]);
       formarray.controls[i].get('ForwardWhen').updateValueAndValidity();
       formarray.controls[i].get('ForwardAfterDays').setValidators([Validators.required]);
@@ -251,6 +254,18 @@ export class ManageWorkFlowComponent implements OnInit {
       }
     })
   }
+
+  requiredApprovalTrue(e: any, index: number) {
+    let value = e.target.checked;
+    let formarray = this.workFlowForm.get("ApprovalChainDetails") as FormArray;
+    if (value) {
+      formarray.controls[index].get('ForwardWhen').setValue(9);
+      document.querySelectorAll('select[name="ForwardWhen"]')[index].setAttribute('disabled', '');
+    } else {
+      if ( formarray.controls[index].get('IsForwardEnabled').value == true)
+        document.querySelectorAll('select[name="ForwardWhen"]')[index].removeAttribute('disabled');
+    }
+  }
 }
 
 class ApprovalWorkFlowChain {
@@ -273,6 +288,6 @@ class ApprovalChainDetail {
   IsRequired: boolean = false;
   IsForwardEnabled: boolean = false;
   ForwardWhen: number = 0;
-  ForwardAfterDays: number = null;
+  ForwardAfterDays: number = 0;
   ApprovalStatus: number = null;
 }

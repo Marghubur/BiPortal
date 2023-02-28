@@ -35,45 +35,50 @@
                                       LEVEL {{i + 1}} <i class=" fa fa-circle text-primary ps-3"></i>
                                       </div>
                                       <div class="col-md-8 position-relative">
-                                          <div [ngClass]="{'block-tag': !last}">
-                                          </div>
-                                          <app-iautocomplete [data]="employeesAutoComplete" name="AssignieId" formControlName="AssignieId"
-                                              (OnSelect)="onEmloyeeChanged($event, i)" [ngModelOptions]="{standalone: true}">
-                                          </app-iautocomplete>
-                                          <div class="d-flex align-items-center mt-3" data-name="skip-section">
-                                              <div class="form-check">
-                                                  <input class="form-check-input" formControlName="IsRequired" type="checkbox">
-                                                  <label class="form-check-label">
-                                                      Required approval
-                                                  </label>
+                                        <div [ngClass]="{'block-tag': !last}">
+                                        </div>
+                                        <app-iautocomplete [data]="employeesAutoComplete" name="AssignieId" formControlName="AssignieId"
+                                            (OnSelect)="onEmloyeeChanged($event, i)" [ngModelOptions]="{standalone: true}">
+                                        </app-iautocomplete>
+                                        <fieldset class="mt-2">
+                                            <div class="d-flex align-items-center" data-name="skip-section">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" formControlName="IsRequired" type="checkbox" (click)="requiredApprovalTrue($event, i)">
+                                                    <label class="form-check-label">
+                                                        Required approval
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mt-2" data-name="skip-section">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" formControlName="IsForwardEnabled" type="checkbox" (click)="disableForwrdWhen($event, i)">
+                                                    <label class="form-check-label">
+                                                        Forward when
+                                                    </label>
+                                                </div>
+                                                <div class="d-flex ms-2 align-items-center">
+                                                    <div class="col-md-10">
+                                                        <select name="ForwardWhen" disabled class="form-control form-select" formControlName="ForwardWhen" [ngClass]="{'error-field': submitted && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardWhen.errors !== null && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardWhen.errors.required}">
+                                                            <option value="0" disabled>Select Reason</option>
+                                                            <option value="2">Pending</option>
+                                                            <option value="9">Approved</option>
+                                                            <option value="5">Rejected</option>
+                                                        </select>
+                                                    </div>
+                                                    <span class="px-2">after</span>
+                                                </div>
+                                                <div class="d-flex ms-2 align-items-center">
+                                                    <div class="col-md-6 ms-2">
+                                                        <input type="number" class="form-control form-control-sm" formControlName="ForwardAfterDays" maxlength="3" [ngClass]="{'error-field': submitted && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardAfterDays.errors !== null && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardAfterDays.errors.required}"
+                                                            placeholder="No# of days" name="SkipToNextLevelAfterDays" [readOnly]="workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.IsForwardEnabled.value == false">
+                                                    </div>
+                                                    <span class="ps-2">days</span>
+                                                </div>
                                               </div>
-                                          </div>
-                                          <div class="d-flex align-items-center mt-2" data-name="skip-section">
-                                              <div class="form-check">
-                                                  <input class="form-check-input" formControlName="IsForwardEnabled" type="checkbox" (click)="disableForwrdWhen($event, i)">
-                                                  <label class="form-check-label">
-                                                      Forward when
-                                                  </label>
+                                              <div class="mt-2">
+                                                Leave is approved after {{workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardWhen.value}} {{i == 0 ? 'days after created' : 'days after reacted on'}}
                                               </div>
-                                              <div class="d-flex ms-2 align-items-center">
-                                                  <div class="col-md-10">
-                                                      <select name="ForwardWhen" class="form-control form-select" formControlName="ForwardWhen" disabled [ngClass]="{'error-field': submitted && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardWhen.errors !== null && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardWhen.errors.required}">
-                                                          <option value="0" disabled>Select Reason</option>
-                                                          <option value="2">Pending</option>
-                                                          <option value="9">Approved</option>
-                                                          <option value="5">Rejected</option>
-                                                      </select>
-                                                  </div>
-                                                  <span class="px-2">after</span>
-                                              </div>
-                                              <div class="d-flex ms-2 align-items-center">
-                                                  <div class="col-md-6 ms-2">
-                                                      <input type="number" class="form-control form-control-sm" formControlName="ForwardAfterDays" maxlength="3" [ngClass]="{'error-field': submitted && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardAfterDays.errors !== null && workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.ForwardAfterDays.errors.required}"
-                                                          placeholder="No# of days" name="SkipToNextLevelAfterDays" [readOnly]="workFlowForm.controls['ApprovalChainDetails'].controls[i].controls.IsForwardEnabled.value == false">
-                                                  </div>
-                                                  <span class="ps-2">days</span>
-                                              </div>
-                                          </div>
+                                          </fieldset>
                                       </div>
                                       <a href="javascript:void(0)" class="text-decoration-none text-secondary" (click)="removeCurrent(i, item.get('AssignieId').value)">
                                           <i class="fa fa-trash ps-3 text-secondary fa-lg pt-2"></i>

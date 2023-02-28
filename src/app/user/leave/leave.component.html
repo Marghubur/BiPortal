@@ -414,7 +414,7 @@
             </div>
           </div>
           <label class="form-label mb-0 text-dark ps-2 fs-5">Reason <small *ngIf="currentLeaveType != null && currentLeaveType.IsCommentsRequired">(Required *)</small></label>
-          <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment" name="Reason"
+          <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment" name="Reason" maxlength="100"
             formControlName="Reason" [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
           <div class="col-md-12 mt-4">
             <p class="mb-0 text-dark ps-2 fs-5 py-2">Reporting Manager</p>

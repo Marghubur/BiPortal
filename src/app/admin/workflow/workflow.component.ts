@@ -34,6 +34,7 @@ export class WorkflowComponent implements OnInit {
   }
 
   loadData() {
+    this.isReady = false;
     this.http.post("ApprovalChain/GetPageDate", this.filter).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         this.isFileFound = true;
