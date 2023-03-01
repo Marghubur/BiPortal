@@ -109,6 +109,7 @@ export class ManageWorkFlowComponent implements OnInit {
         }
       }).catch(e => {
         this.isLoading = false;
+        this.isInProgress = false;
         ErrorToast("Invalid data pass. Please fill your form correctly.");
       });
     } else {
