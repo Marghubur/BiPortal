@@ -80,7 +80,7 @@
                                               </div>
                                           </fieldset>
                                       </div>
-                                      <a href="javascript:void(0)" class="text-decoration-none text-secondary" (click)="removeCurrent(i, item.get('AssignieId').value)">
+                                      <a href="javascript:void(0)" class="text-decoration-none text-secondary" (click)="deleteChainPopUp(item)">
                                           <i class="fa fa-trash ps-3 text-secondary fa-lg pt-2"></i>
                                       </a>
                                   </div>
@@ -148,4 +148,26 @@
         </ng-container>
       </div>
     </div>
+</div>
+
+<!--Delete chain modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="delteChainModal" tabindex="-1" aria-labelledby="delteChainModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="delteChainModalLabel">Delete approval chain level</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <span class="fw-bold text-dark">Are you want to delete this level?</span>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-danger" [disabled]="isLoading" (click)="removeCurrent()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Wait' : 'Delete' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

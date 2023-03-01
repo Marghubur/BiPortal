@@ -3,9 +3,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-manage-work-flow',
@@ -25,6 +25,7 @@ export class ManageWorkFlowComponent implements OnInit {
   submitted: boolean = false;
   isLoading: boolean = false;
   isPageReady: boolean = false;
+  deleteAprrovalChain: any = null;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -55,7 +56,7 @@ export class ManageWorkFlowComponent implements OnInit {
             text: empRole[i].RoleName
           })
         }
-        this.initForm();
+          this.initForm();
         this.isPageReady = true;
       }
     });
@@ -134,8 +135,6 @@ export class ManageWorkFlowComponent implements OnInit {
     if(emp) {
       this.employeesAutoComplete.data.push(emp);
     }
-    this.isInProgress = false;
-    this.isEnableAddNew = true;
   }
 
   approvalChain(record: ApprovalChainDetail) {
@@ -192,13 +191,38 @@ export class ManageWorkFlowComponent implements OnInit {
     }
   }
 
-  removeCurrent(index: number, id: any) {
+deleteChainPopUp(item: any) {
+  this.deleteAprrovalChain = null;
+  this.deleteAprrovalChain = item.value;
+  $('#delteChainModal').modal('show');
+}
+
+  removeCurrent() {
+    this.isLoading = true;
     this.isReady = false;
     let array: FormArray = this.groupItem;
-    array.removeAt(index);
-    this.assignedEmployees = this.assignedEmployees.filter(x => x.index !== index);
-    this.updateListOnRemove(id);
-    this.isReady = true;
+    let id = this.deleteAprrovalChain.AssignieId;
+    let index = array.value.findIndex(x => x.AssignieId ==  this.deleteAprrovalChain.AssignieId);
+    if (this.deleteAprrovalChain.ApprovalChainDetailId > 0 && index != -1) {
+      this.http.delete(`ApprovalChain/DeleteApprovalChain/${this.deleteAprrovalChain.ApprovalChainDetailId}`).then(res => {
+        if (res.ResponseBody) {
+          array.removeAt(index);
+          this.assignedEmployees = this.assignedEmployees.filter(x => x.index !== index);
+          this.updateListOnRemove(id);
+          Toast("Approval chain deleted successsfully");
+          $('#delteChainModal').modal('hide');
+          this.isInProgress = false;
+          this.isEnableAddNew = true;
+          this.isReady = true;
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isInProgress = false;
+        this.isEnableAddNew = true;
+          this.isLoading = false;
+        this.isReady = true;
+      })
+    }
   }
 
   get f() {
