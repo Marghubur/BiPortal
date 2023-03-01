@@ -18,8 +18,6 @@ declare var $: any;
   styleUrls: ['./attendance.component.scss']
 })
 export class AttendanceComponent implements OnInit {
-  isFormReady: boolean = false;
-  attendanceArray: FormArray;
   employeeId: number = 0;
   userName: string = "";
   fromDate: any = null;
@@ -73,7 +71,6 @@ export class AttendanceComponent implements OnInit {
   ngOnInit(): void {
     this.today = new Date();
     this.tomorrow = new Date(new Date().setDate(this.today.getDate() + 1));
-    this.isFormReady = false;
     this.time = new Date();
     this.request.SortBy = null;
     this.request.PageIndex = 1;
@@ -256,17 +253,17 @@ export class AttendanceComponent implements OnInit {
   }
 
   getRequestBody() {
-      if (this.commentValue == '') {
-        this.isComment = true;
-        this.isLoading = false;
-        return null;
-      }
+    if (this.commentValue == '') {
+      this.isComment = true;
+      this.isLoading = false;
+      return null;
+    }
 
-      if (this.sessionvalue <= 0) {
-        ErrorToast("Please select session first");
-        this.isLoading = false;
-        return null;
-      }
+    if (this.sessionvalue <= 0) {
+      ErrorToast("Please select session first");
+      this.isLoading = false;
+      return null;
+    }
 
     return {
       EmployeeUid: this.employeeId,
