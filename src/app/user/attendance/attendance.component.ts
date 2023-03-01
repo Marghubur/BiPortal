@@ -203,10 +203,6 @@ export class AttendanceComponent implements OnInit {
   previousMonthAttendance(month: number, index: number) {
     let doj = new Date(this.userDetail.CreatedOn);
     let startDate = new Date(new Date().getFullYear(), month, 1);
-    if(doj.getFullYear() == new Date().getFullYear() && doj.getMonth() != startDate.getMonth()) {
-      WarningToast("You joining month is current month.")
-      return;
-    }
     if (doj.getFullYear() == startDate.getFullYear() && doj.getMonth() == startDate.getMonth()) {
       startDate = new Date(doj.getFullYear(), doj.getMonth(), doj.getDate());
     }
