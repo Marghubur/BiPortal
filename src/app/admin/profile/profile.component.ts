@@ -102,6 +102,7 @@ export class ManageComponent implements OnInit {
   carrerProfileForm: FormGroup;
   personalDetailForm: FormGroup;
   keySkilldate:NgbDateStruct;
+  imageIndex: number = 0;
   lanugages: Array<string> = ["Assamese", "Bengali", "Gujarati", "Hindi", "Kannada", "Kashmiri", "Konkani", "Malayalam", "Manipuri", "Marathi", "Nepali", "Oriya", "Punjabi", "Sanskrit", "Sindhi", "Tamil", "Telugu", "Urdu", "Bodo", "Santhali", "Maithili", "Dogri"].sort();
   @Output() authentication = new EventEmitter();
 
@@ -1651,19 +1652,19 @@ export class ManageComponent implements OnInit {
 
   uploadProfilePicture(event: any) {
     if (event.target.files) {
-      this.fileDetail = [];
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event: any) => {
         this.profileURL = event.target.result;
-      }
-      this.manageUserForm.patchValue({
-        ProfileImg: event.target.result,
-      });
+      };
+      // this.employeeForm.patchValue({
+      //   ProfileImgPath: event.target.result,
+      // });
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
+      this.imageIndex = new Date().getTime();
       this.fileDetail.push({
-        name: "profile",
+        name: $`profile_${this.imageIndex}`,
         file: file
       });
     }
@@ -1783,7 +1784,7 @@ export class ManageComponent implements OnInit {
 
     let i = 0;
     while(i < this.fileDetail.length) {
-      formData.append(this.fileDetail[i].name, this.fileDetail[i].file);
+      formData.append(`${ProfileImage}_${this.imageIndex}`, this.fileDetail[0].file);
       i++;
     }
     formData.append("userInfo", JSON.stringify(this.userModal));

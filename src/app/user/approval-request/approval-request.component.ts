@@ -3,7 +3,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -251,7 +251,11 @@ export class ApprovalRequestComponent implements OnInit {
       else
         detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
       if (detail && detail.length > 0)
-        this.leaveDeatil = detail;
+      this.leaveDeatil = detail;
+        this.leaveDeatil.forEach(x => {
+          x.FromDate = ToLocateDate(x.FromDate),
+          x.ToDate = ToLocateDate(x.ToDate);
+        });
     }
   }
 
