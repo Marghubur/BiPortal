@@ -46,6 +46,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
   reportingManagerId: number = 0;
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
+  viewer: any = null;
   datePickerJson = {};
   json = {
     disable: [],
@@ -53,6 +54,8 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
   };
   isDisabled;
   currentLeaveType: any = null;
+  basePath: string = "";
+  leaveAttachment: Array<any> = [];
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -90,6 +93,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
     this.leaveDetail.LeaveTypeId = 0;
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
+    this.basePath = this.http.GetImageBasePath();
     this.managerList.placeholder = "Reporting Manager";
     this.managerList.data.push({
       value: 0,
@@ -703,6 +707,36 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
       ErrorToast("You are not slected the file")
     }
   }
+
+  closePdfViewer() {
+    event.stopPropagation();
+    this.viewer.classList.add('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', '');
+  }
+
+  viewLeaveAttachmentModal(item: any) {
+    this.isLoading = true;
+    let fileIds = item;
+    this.http.get(`Leave/GetLeaveAttachment/${fileIds}`).then(res => {
+      if (res.ResponseBody.Table) {
+        this.leaveAttachment = res.ResponseBody.Table;
+        $("#leaveFileModal").modal('show');
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  viewFile(userFile: any) {
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}.${userFile.FileExtension}`;
+    this.viewer = document.getElementById("leavefile-container");
+    this.viewer.classList.remove('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+  }
+
+
 }
 
 class LeaveModal {
