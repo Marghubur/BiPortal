@@ -3,7 +3,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -539,17 +539,22 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   viewLeaveAttachmentModal(item: any) {
-    this.isLoading = true;
-    let fileIds = item;
-    this.http.get(`Leave/GetLeaveAttachment/${fileIds}`).then(res => {
-      if (res.ResponseBody.Table) {
-        this.leaveAttachment = res.ResponseBody.Table;
-        $("#managerleaveFileModal").modal('show');
+    if (item) {
+     this.isLoading = true;
+     this.http.post("Leave/GetLeaveAttachByManger", item).then(res => {
+       if (res.ResponseBody) {
+         this.leaveAttachment = res.ResponseBody.Table;
+         $("#managerleaveFileModal").modal('show');
+         this.isLoading = false;
+       } else {
         this.isLoading = false;
-      }
-    }).catch(e => {
-      this.isLoading = false;
-    })
+        WarningToast("No record found");
+       }
+     }).catch(e => {
+       this.isLoading = false;
+       WarningToast("No record found");
+     })
+   }
   }
 
   viewFile(userFile: any) {
