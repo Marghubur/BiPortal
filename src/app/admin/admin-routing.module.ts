@@ -45,7 +45,9 @@ import { AdminResetPassword,
   Products,
   ManageShift,
   WorkFlow,
-  ManageWorkFlow
+  ManageWorkFlow,
+  AdminManageTimesheet,
+  AdminLeave
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -93,6 +95,8 @@ import { ProductsComponent } from './products/products.component';
 import { ManageshiftComponent } from './manageshift/manageshift.component';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.component';
+import { ManagetimesheetComponent } from '../user/managetimesheet/managetimesheet.component';
+import { LeaveComponent } from '../user/leave/leave.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -141,7 +145,9 @@ const routes: Routes = [
   { path: Products, component: ProductsComponent},
   { path: ManageShift, component: ManageshiftComponent},
   { path: WorkFlow, component: WorkflowComponent },
-  { path: ManageWorkFlow, component: ManageWorkFlowComponent }
+  { path: ManageWorkFlow, component: ManageWorkFlowComponent },
+  { path: AdminManageTimesheet, component: ManagetimesheetComponent},
+  { path: AdminLeave, component: LeaveComponent}
 ];
 
 @NgModule({
