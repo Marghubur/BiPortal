@@ -3,13 +3,13 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddNumbers, CommonService, ErrorToast, Toast, ToFixed, WarningToast } from 'src/providers/common-service/common.service';
-import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
 import { Attendance, BuildPdf, EmailLinkConfig, ItemStatus, UserType } from 'src/providers/constants';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Filter } from 'src/providers/userService';
+import { ApplicationData, EmployeeDetail, PdfModal } from 'src/app/adminmodal/admin-modals';
 
 declare var $: any;
 
@@ -1260,62 +1260,4 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, BuildPdf);
   }
-
-}
-
-class PdfModal {
-  header: string = 'Staffing Bill';
-  UpdateSeqNo: number = 0;
-  IsCustomBill: boolean = false;
-  billForMonth: string = null;
-  billYear: number = null;
-  billNo: string = null;
-  dateOfBilling: Date = new Date();
-  daysAbsent: number = 0;
-  cGST: number = 0;
-  sGST: number = 0;
-  iGST: number = 0;
-  cGSTAmount: number = 0;
-  sGSTAmount: number = 0;
-  iGSTAmount: number = 0;
-  workingDay: number = 0;
-  isHalfDay: number = 0;
-  actualDaysBurned: number = 0;
-  packageAmount: number = 0;
-  grandTotalAmount: number = 0;
-  receiverFirstAddress: string = null;
-  receiverGSTNo: string = null;
-  receiverSecondAddress: string = null;
-  receiverPrimaryContactNo: string = null;
-  receiverEmail: string = null;
-  receiverCompanyName: string = null;
-  receiverCompanyId: number = null;
-  developerName: string = "NA";
-  developerId: number = 0;
-  senderCompanyName: string = null;
-  senderId: number = 0;
-  senderGSTNo: string = null;
-  senderFirstAddress: string = null;
-  senderSecondAddress: string = null;
-  senderPrimaryContactNo: string = null;
-  senderEmail: string = null;
-  ClientId: number = 0;
-  receiverThirdAddress: string = "";
-  senderThirdAddress: string = "";
-  receiverPincode: number = 0;
-  billingMonth: Date = null;
-  EmployeeId: number = 0;
-  billId: number = 0;
-  FileId: number = 0;
-  StatusId: number = 2;
-  PaidOn: Date = null;
-}
-
-export class ApplicationData {
-  FileDetail: any = null;
-  Employees: Array<any> = null;
-  Organizations: Array<any> = [];
-  TimesheetDetails: Array<any> = [];
-  MissingDate: Array<any> = [];
-  TimesheetDetail: any = null;
 }

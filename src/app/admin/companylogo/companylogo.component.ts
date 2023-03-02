@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Files } from 'src/app/commonmodal/common-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { Files } from '../documents/documents.component';
 declare var $: any;
 
 @Component({

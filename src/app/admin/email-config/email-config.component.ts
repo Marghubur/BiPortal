@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { EmailTemplate, EmpTempMapping } from 'src/app/adminmodal/admin-modals';
 import { IModalData } from 'src/app/util/message-modal/message-modal.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -8,7 +9,6 @@ import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { EmailConfiguration, EmailLinkConfig } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
-import { EmailTemplate } from '../manage-emailtemplate/manage-emailtemplate.component';
 declare var $: any;
 
 @Component({
@@ -222,14 +222,4 @@ export class EmailConfigComponent implements OnInit {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, EmailConfiguration);
   }
-}
-
-class EmpTempMapping {
-  EmailTempMappingId: number = 0;
-  TemplateId: number = 0;
-  Description: string = null;
-  EmailTemplateName: string = null;
-  TemplateName: string = "";
-  ActionType: string = "";
-  Total: number = 0;
 }

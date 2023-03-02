@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { CompanyGroup, PTax } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
@@ -380,23 +381,4 @@ export class SettingsComponent implements OnInit {
   closePTaxSetting() {
     this.isEditable = false;
   }
-}
-
-class CompanyGroup {
-  CompanyId: number = 0;
-  CompanyName: string = '';
-  CompanyDetail: string = '';
-  InCorporationDate: Date = null;
-  Email: string = '';
-  OrganizationId: number = 0;
-}
-
-class PTax {
-  StateName: string = null;
-  MinIncome: number = 0;
-  MaxIncome: number = 0;
-  TaxAmount: number = 0;
-  Gender: number = 0;
-  PtaxSlabId: number = 0;
-  CompanyId: number = 0;
 }

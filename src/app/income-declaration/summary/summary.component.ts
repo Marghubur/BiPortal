@@ -8,7 +8,7 @@ import { AccessTokenExpiredOn, } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
-import { BillDetails } from 'src/app/admin/billdetails/billdetails.component';
+import { BillDetails } from 'src/app/commonmodal/common-modals';
 declare var $: any;
 
 @Component({

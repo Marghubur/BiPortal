@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
+import { EmailTemplate } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -163,22 +164,4 @@ export class ManageEmailtemplateComponent implements OnInit {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, ManageEmailTemplate);
   }
-}
-
-export class EmailTemplate {
-  EmailTemplateId: number = 0;
-  TemplateName: string = null;
-  SubjectLine: string = null;
-  EmailTitle: string = null;
-  Salutation: string = null;
-  EmailClosingStatement: string = null;
-  BodyContent: string = null;
-  EmailNote: string = null;
-  SignatureDetail: string = null;
-  ContactNo: string = null;
-  FileId: number = 0;
-  LogoPath: string = "";
-  Description: string = null;
-  Total: number = 0;
-  Index: number = 0;
 }

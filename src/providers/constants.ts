@@ -142,6 +142,8 @@ export const ApprovalRequest = 'user/request';
 export const UserHoliday = 'user/planholidays';
 export const UserProjectList = 'user/project';
 export const ManageTimesheet = 'user/managetimesheet';
+export const UserDocuments = "user/documents";
+export const UserDocumentsPage = "user/documentspage/:path";
 
 // *************************** file name constancts  *************
 export const Doc = "doc";

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { AnnexureOfferLeter } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -157,14 +158,4 @@ export class OfferletterComponent implements OnInit {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, OfferLetter);
   }
-}
-
-
-class AnnexureOfferLeter {
-  AnnexureOfferLetterId: number= 0;
-  CompanyId: number= 0;
-  CompanyName: string= '';
-  TemplateName: string= null;
-  BodyContent: string= '';
-  FileId: number= 0;
 }

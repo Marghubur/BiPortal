@@ -10,6 +10,8 @@ import { environment } from "src/environments/environment";
 import { ActivatedRoute } from '@angular/router';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { DomSanitizer } from '@angular/platform-browser';
+import { DocumentDetail, DocumentUser } from 'src/app/adminmodal/admin-modals';
+import { Files } from 'src/app/commonmodal/common-modals';
 declare var $:any;
 
 @Component({
@@ -598,97 +600,5 @@ export class documentsComponent implements OnInit, OnDestroy {
     this.FilesCollection = [];
     this.isLargeFile = false;
   }
-}
-
-export class DocumentUser {
-  PageName: string = "";
-  Mobile: string = "";
-  Email: string = "";
-  UserTypeId: number = 0;
-  UserId: number = 0;
-  Name?: string = "";
-}
-
-export class OnlineDocModel {
-  constructor(data: any) {
-    this.DocumentId = data['DocumentId'];
-    this.Title = data['Title'];
-    this.Description = data['Description'];
-    this.UserId = data['UserId'];
-    this.DocPath = data['DocPath'];
-    this.CreatedOn = data['CreatedOn'];
-    this.UpdatedOn = data['UpdatedOn'];
-  }
-  DocumentId: number = 0;
-  Title: string = null;
-  Description: string = null;
-  UserId: string = null;
-  DocPath: string = null;
-  TotalRows: number = 0;
-  CreatedOn: string = null;
-  UpdatedOn: string = null;
-}
-
-export class PersonDetail {
-  EmployeeUid: number = 0;
-  FirstName: string = null;
-  LastName: string = null;
-  Mobile: string = null;
-  Email: string = null;
-  BranchName: string = null;
-  SecondaryMobile: string = null;
-  FatherName: string = null;
-  MotherName: string = null;
-  SpouseName: string = null;
-  State: string = null;
-  City: string = null;
-  Pincode: number = null;
-  Address: string = null;
-  PANNo: string = null;
-  AadharNo: string = null;
-  AccountNumber: string = null;
-  BankName: string = null;
-  IFSCCode: string = null;
-  Domain: string = null;
-  Specification: string = null;
-  ExprienceInYear: number = null;
-  LastCompanyName: string = null;
-  IsPermanent: boolean = false;
-  AllocatedClientId: number = null;
-  AllocatedClientName: string = null;
-  ActualPackage: number = null;
-  FinalPackage: number = null;
-  TakeHomeByCandidate: number = null;
-  Total: number = null;
-}
-
-export class Files {
-  IsFolder: boolean = false;
-  NoOfItems: number = 0;
-  ParentFolder: string = null;
-  LocalImgPath: string = "";
-  UserId: number = 0;
-  FileName: string = "";
-  AlternateName: string = null;
-  FileExtension: string = "";
-  FilePath: string = "";
-  FileUid: number = 0;
-  FileId: number = 0;
-  ProfileUid: string = "";
-  DocumentId: number = 0;
-  Mobile: string = "";
-  Email: string = "";
-  FileType: string = "";
-  FileSize: number = 0;
-  UserTypeId: number = 0;
-  SystemFileType?: FileSystemType = 1;
-}
-
-class DocumentDetail {
-  TotalFileCount?: number = 0;
-  FolderPath: string = "";
-  IsRootFolder: boolean = false;
-  FolderName: string = "";
-  ContentDetails: Array<Files> = [];
 }
 

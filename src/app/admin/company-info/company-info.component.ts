@@ -3,11 +3,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DateFormatter } from 'src/providers/DateFormatter';
-import { Files } from '../documents/documents.component';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
+import { CompanyInformationClass, organizationAccountModal } from 'src/app/adminmodal/admin-modals';
+import { Files } from 'src/app/commonmodal/common-modals';
 declare var $: any;
 
 @Component({
@@ -337,34 +338,4 @@ export class CompanyInfoComponent implements OnInit {
       ErrorToast("All read marked fields are mandatory.");
     }
   }
-}
-
-class CompanyInformationClass {
-  LegalEntity: string = '';
-  Signature: string = '';
-  LegalNameOfCompany: string = '';
-  TypeOfBusiness: string = '';
-  InCorporationDate: Date = null;
-  FullAddress: string = '';
-  CompanyId: number = 0;
-  CompanyName: string = '';
-  OrganizationId: number = 0;
-}
-
-
-export class organizationAccountModal {
-  OrganizationId: number = 0;
-  GSTNo: string = null;
-  AccountNo: string = null;
-  BankName: string = null;
-  Branch: string = null;
-  IFSC: string = null;
-  PANNo: string = null;
-  IsPrimaryAccount: boolean = false;
-  TradeLicenseNo: string = '';
-  BranchCode: string = '';
-  CompanyId: number = 0;
-  BankAccountId: number = 0;
-  OpeningDate: Date = null;
-  ClosingDate: Date = null;
 }

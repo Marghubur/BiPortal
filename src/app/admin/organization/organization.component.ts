@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { OrganizationModal } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { OrgLogo, ProfileImage, UserImage, UserType } from 'src/providers/constants';
+import { OrgLogo, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -243,56 +244,4 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
     this.organization.FileId = fileDetail.FileId;
   }
-
-}
-
-class OrganizationModal {
-  CompanyId: number = 0;
-  OrganizationId: number = 0;
-  BankAccountId: number = 0;
-  OrganizationName: string = null;
-  CompanyName: string = null;
-  CompanyDetail: string = null;
-  SectorType: number = 0;
-  City: string = null;
-  State: string = null;
-  Country: string = null;
-  FirstAddress: string = null;
-  SecondAddress: string = null;
-  ThirdAddress: string = null;
-  ForthAddress: string = null;
-  FullAddress: string = null;
-  MobileNo: string = null;
-  Email: string = null;
-  FirstEmail: string = null;
-  SecondEmail: string = null;
-  ThirdEmail: string = null;
-  ForthEmail: string = null;
-  PrimaryPhoneNo: string = null;
-  SecondaryPhoneNo: string = null;
-  Fax: string = null;
-  Pincode: number = 0;
-  FileId: number = 0;
-  PANNo: string = null;
-  TradeLicenseNo: string = null;
-  GSTNo: string = null;
-  AccountNo: string = null;
-  BankName: string = null;
-  Branch: string = null;
-  BranchCode: string = null;
-  OpeningDate: string = null;
-  ClosingDate: string = null;
-  IFSC: string = null;
-  LegalDocumentPath: string = null;
-  LegalEntity: string = null;
-  LegalNameOfCompany: string = null;
-  TypeOfBusiness: string = null;
-  InCorporationDate: string = null;
-  IsPrimaryCompany: boolean = false;
-  FixedComponentsId: string = null;
-  OrgMobileNo: string = null;
-  OrgEmail: string = null;
-  OrgPrimaryPhoneNo: string = null;
-  OrgSecondaryPhoneNo: string = null;
-  OrgFax: string = null;
 }

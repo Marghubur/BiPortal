@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WorkFlow } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
@@ -116,18 +117,4 @@ export class WorkflowComponent implements OnInit {
     this.loadData()
   }
 
-}
-
-class WorkFlow {
-  ApprovalChainDetailId: number = 0;
-  ApprovalWorkFlowId: number = 0;
-  Title: string = null;
-  TitleDescription: string = null;
-  Status: number = 0;
-  IsAutoExpiredEnabled: boolean = false;
-  AutoExpireAfterDays: number = null;
-  IsSilentListner: boolean = false;
-  ListnerDetail: string = null;
-  Index: number = 0;
-  Total: number = 0;
 }

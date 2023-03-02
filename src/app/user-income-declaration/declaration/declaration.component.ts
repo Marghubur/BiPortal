@@ -1,5 +1,4 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { Files } from 'src/app/admin/documents/documents.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -8,9 +7,9 @@ import { AccessTokenExpiredOn, Form12B, FreeTaxFilling, IncomeTax, Preferences, 
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
-import { MonthlyTax } from '../incometax/incometax.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HouseRentDetail } from 'src/app/income-declaration/declaration/declaration.component';
+import { Files } from 'src/app/commonmodal/common-modals';
 declare var $: any;
 
 @Component({

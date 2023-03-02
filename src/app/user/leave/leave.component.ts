@@ -3,13 +3,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbCalendar, NgbDate, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart } from 'chart.js';
 import { Subscription } from 'rxjs';
-import { Files } from 'src/app/admin/documents/documents.component';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { UserType } from 'src/providers/constants';
+import { FileSystemType, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -772,4 +771,26 @@ class LeaveDetails {
   Reason: string = '';
   RequestedOn: Date = null;
   NoOfDays: number = null;
+}
+
+export class Files {
+  IsFolder: boolean = false;
+  NoOfItems: number = 0;
+  ParentFolder: string = null;
+  LocalImgPath: string = "";
+  UserId: number = 0;
+  FileName: string = "";
+  AlternateName: string = null;
+  FileExtension: string = "";
+  FilePath: string = "";
+  FileUid: number = 0;
+  FileId: number = 0;
+  ProfileUid: string = "";
+  DocumentId: number = 0;
+  Mobile: string = "";
+  Email: string = "";
+  FileType: string = "";
+  FileSize: number = 0;
+  UserTypeId: number = 0;
+  SystemFileType?: FileSystemType = 1;
 }

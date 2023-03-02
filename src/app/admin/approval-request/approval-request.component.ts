@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApprovalRequest } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -344,25 +345,5 @@ export class ApprovalRequestComponent implements OnInit {
         ErrorToast("Attendance detail not found. Please contact to admin.");
       }
     }
-  }
-
-  export class ApprovalRequest {
-    ApprovalRequestId: number = null;
-    AttendanceId: number = 0;
-    UserName:string = '';
-    EmployeeName: string = '';
-    Message:string = '';
-    UserId:number = null;
-    UserTypeId: number = null;
-    RequestedOn:Date = null;
-    Email:string  = '';
-    Mobile:string = '';
-    FromDate:Date = null;
-    ToDate:Date = null;
-    AssigneeId:number = null;
-    ProjectId:number = null;
-    ProjectName:string = '';
-    RequestStatusId: number = 0;
-    RequestType: string = "";
-  }
+}
 

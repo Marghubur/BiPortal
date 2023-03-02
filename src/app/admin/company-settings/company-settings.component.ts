@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { CompanySetting } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -139,17 +140,4 @@ export class CompanySettingsComponent implements OnInit {
     else
       ErrorToast("Please select company first.");
   }
-}
-
-export class CompanySetting {
-  SettingId: number = 0;
-  CompanyId: number = 0;
-  ProbationPeriodInDays: number = 0;
-  NoticePeriodInDays: number = 0;
-  IsPrimary: boolean = true;
-  DeclarationStartMonth: number = 0;
-  DeclarationEndMonth: number = 0;
-  FinancialYear: number = 0;
-  DefaultManagers: string = "";
-  AttendanceSubmissionLimit: number = null;
 }

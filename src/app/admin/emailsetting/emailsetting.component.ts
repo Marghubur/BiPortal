@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { EmailSettings } from 'src/app/adminmodal/admin-modals';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
@@ -135,25 +136,4 @@ export class EmailsettingComponent implements OnInit {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, EmailSetting);
   }
-}
-
-class EmailSettings {
-  EmailSettingDetailId: number = 0;
-  CompanyId: number = 0;
-  OrganizationName: string = null;
-  CompanyName: string = null;
-  EmailAddress: string = null;
-  EmailHost: string = null;
-  PortNo: number = null;
-  EnableSsl: boolean = null;
-  DeliveryMethod: string = null;
-  UserDefaultCredentials: boolean = null;
-  Credentials: string = null;
-  LogoImgPath: string = null;
-  FileId: number = 0;
-  EmailName: string = null;
-  POP3EmailHost: string = null;
-  POP3PortNo: number = 0;
-  POP3EnableSsl: boolean = false;
-  IsPrimary: boolean = false;
 }

@@ -7,6 +7,7 @@ import { CommonService, Toast, UserDetail } from 'src/providers/common-service/c
 import { Attendance, DocumentsPage, Files, ManageEmployee } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
+import { employeeModel, OnlineDocModel } from 'src/app/adminmodal/admin-modals';
 declare var $: any;
 
 @Component({
@@ -135,7 +136,7 @@ export class RecentComponent implements OnInit {
         delimiter = "and";
     }
 
-    if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile !== 0) {
+    if(this.employeeDetails.Mobile !== null && this.employeeDetails.Mobile !== "") {
       this.employeeData.SearchString += ` ${delimiter} Mobile like '%${this.employeeDetails.Mobile}%' `;
         delimiter = "and";
     }
@@ -295,32 +296,3 @@ export class RecentComponent implements OnInit {
     }
   }
 }
-
-export class OnlineDocModel {
-  constructor(data: any) {
-    this.DocumentId = data['DocumentId'];
-    this.Title = data['Title'];
-    this.Description = data['Description'];
-    this.UserId = data['UserId'];
-    this.DocPath = data['DocPath'];
-    this.CreatedOn = data['CreatedOn'];
-    this.UpdatedOn = data['UpdatedOn'];
-  }
-  DocumentId: number = 0;
-  Title: string = null;
-  Description: string = null;
-  UserId: string = null;
-  DocPath: string = null;
-  TotalRows: number = 0;
-  CreatedOn: string = null;
-  UpdatedOn: string = null;
-}
-
-export class employeeModel {
-  Name: string = '';
-  LastName: string = '';
-  Mobile: number = null;
-  Email: string = '';
-  Total: number = 0;
-}
-

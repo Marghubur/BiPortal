@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BillDetails } from 'src/app/admin/billdetails/billdetails.component';
-import { Files } from 'src/app/admin/documents/documents.component';
+import { BillDetails } from 'src/app/commonmodal/common-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';

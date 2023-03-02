@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserProfile } from 'src/app/adminmodal/admin-modals';
+import { Files } from 'src/app/commonmodal/common-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -103,28 +105,4 @@ export class CreateResumeComponent implements OnInit {
     })
   }
 
-}
-
-class Files {
-  LocalImgPath: string = "";
-  FileName: string = "";
-  UserId: number = 0;
-  FileExtension: string = "";
-  FilePath: string = "";
-  FileUid: number = 0;
-  ProfileUid: string = "";
-  DocumentId: number = 0;
-  FileType: string = "";
-  FileSize: number = 0;
-}
-
-class UserProfile {
-  FirstName: string = '';
-  LastName: string = '';
-  Email: string = '';
-  Mobile: string = '';
-  UserId: number = 0;
-  FileId: number = 0;
-  FileName: string = '';
-  FilePath: string = '';
 }

@@ -7,13 +7,12 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { AddNumbers, CommonService, ErrorToast, GetStatus, MonthName, Toast, ToFixed, WarningToast } from 'src/providers/common-service/common.service';
 import { BuildPdf, Employees, ManageEmployee, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter, UserService } from 'src/providers/userService';
-import { ApplicationData } from '../build-pdf/build-pdf.component';
-import { DocumentUser, Files } from '../documents/documents.component';
-import { EmployeeDetail } from '../manageemployee/manageemployee.component';
+import { Filter } from 'src/providers/userService';
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ApplicationData, DocumentUser, EmployeeDetail } from 'src/app/adminmodal/admin-modals';
+import { BillDetails, Files } from 'src/app/commonmodal/common-modals';
 declare var $: any;
 
 @Component({
@@ -1017,39 +1016,4 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       ErrorToast("Unable to send email. Please contact to admin.");
     }
   }
-}
-
-export class BillDetails {
-  Name: string = "";
-  BillNo: string = '';
-  CGST: number = 0;
-  ClientId: number =0;
-  ClientName: string = '';
-  FileExtension: string = '';
-  FileName: string = '';
-  FileOwnerId: number = 0;
-  FilePath: string = '';
-  FileUid: number = 0;
-  GeneratedOn: string = '';
-  IGST: number = 0;
-  Month: string = '';
-  Year: string = '';
-  PaidOn: string = '';
-  SGST: number =0;
-  SalaryAmount: number = null;
-  Status: string = '';
-  TDS: number = 0;
-  ReceivedAmount: number =null;
-  BilledAmount: number = null;
-  GSTAmount: number =null;
-  Total: number = 0;
-  GSTStatus: string = '';
-  fromModel: string = '';
-  toModel: string = '';
-  Employee: string = '';
-  TakeHome: number = null;
-  Absent: number = 0;
-  FromBillNo: number = null;
-  ToBillNo: number = null;
-  NoOfDays: number = 0;
 }

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Notification } from 'src/app/adminmodal/admin-modals';
+import { Files } from 'src/app/commonmodal/common-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { environment } from 'src/environments/environment';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -10,7 +12,6 @@ import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/co
 import { AdminNotification, AImage, Doc, Docx, EmailLinkConfig, JImage, Pdf, PImage, Txt } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
-import { Files } from '../documents/documents.component';
 declare var $: any;
 
 @Component({
@@ -441,26 +442,4 @@ export class NotificationComponent implements OnInit {
   uploadedFilePopUp() {
     $('#viewFileModal').modal('show');
   }
-
-}
-
-class Notification {
-  NotificationId: number = 0;
-  Topic: string = null;
-  CompanyId: number = 0;
-  BriefDetail: string = null;
-  CompleteDetail: string = null;
-  Total: number = 0;
-  Index: number = 0;
-  CreatedOn: Date = null;
-  UpdatedOn: Date = null;
-  StartDate: Date = null;
-  EndDate: Date = null;
-  IsGeneralAnnouncement: boolean = false;
-  AnnouncementType: number = 0;
-  AnnouncementId: string = null;
-  Departments: Array<any> =null;
-  DepartmentId: number = 0;
-  IsExpired: boolean = false;
-  FileIds: Array<any>= [];
 }
