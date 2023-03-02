@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EmailTemplate } from 'src/app/adminmodal/admin-modals';
 import { IModalData } from 'src/app/util/message-modal/message-modal.component';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -6,7 +7,6 @@ import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { ManageEmailTemplate } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
-import { EmailTemplate } from '../manage-emailtemplate/manage-emailtemplate.component';
 
 @Component({
   selector: 'app-email-template',

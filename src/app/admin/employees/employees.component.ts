@@ -7,9 +7,9 @@ import { CommonService, ErrorToast, Toast, UserDetail } from 'src/providers/comm
 import { Attendance, Documents, DocumentsPage, EmployeePerformance, Employees, Files, ManageEmployee, Profile, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
-import { DocumentUser } from '../documents/documents.component';
 import 'bootstrap';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { DocumentUser, employeeModel, OnlineDocModel } from 'src/app/adminmodal/admin-modals';
 declare var $: any;
 
 @Component({
@@ -374,37 +374,3 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     this.nav.navigate(Documents, userDetail);
   }
 }
-
-export class OnlineDocModel {
-  constructor(data: any) {
-    this.DocumentId = data['DocumentId'];
-    this.Title = data['Title'];
-    this.Description = data['Description'];
-    this.UserId = data['UserId'];
-    this.DocPath = data['DocPath'];
-    this.CreatedOn = data['CreatedOn'];
-    this.UpdatedOn = data['UpdatedOn'];
-  }
-  DocumentId: number = 0;
-  Title: string = null;
-  Description: string = null;
-  UserId: string = null;
-  DocPath: string = null;
-  TotalRows: number = 0;
-  CreatedOn: string = null;
-  UpdatedOn: string = null;
-}
-
-export class employeeModel {
-  Name: string = '';
-  LastName: string = '';
-  Mobile: string = null;
-  Email: string = '';
-  Total: number = 0;
-  EmployeeUid: number = 0;
-  FirstName?: string = '';
-  ClientJson?: any = null;
-  IsActive?: boolean = null;
-}
-
-

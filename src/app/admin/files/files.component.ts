@@ -9,10 +9,9 @@ import { MonthName, Toast, ErrorToast, AddNumbers, ToFixed } from 'src/providers
 import { BuildPdf, ManageEmployee, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
-import { Files } from '../documents/documents.component';
-import { EmployeeDetail } from '../manageemployee/manageemployee.component';
 import 'bootstrap';
-import { BillDetails } from '../billdetails/billdetails.component';
+import { EmployeeDetail } from 'src/app/adminmodal/admin-modals';
+import { BillDetails, Files } from 'src/app/commonmodal/common-modals';
 declare var $: any;
 
 @Component({

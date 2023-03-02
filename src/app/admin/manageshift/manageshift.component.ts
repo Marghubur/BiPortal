@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Shift } from 'src/app/adminmodal/admin-modals';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
@@ -422,30 +423,4 @@ export class ManageshiftComponent implements OnInit {
     this.shiftData.SortBy = FieldName +" "+ Order;
     this.loadData()
   }
-}
-
-class Shift {
-  WorkShiftId: number = 0;
-  CompanyId: number = 0;
-  Department: number = null;
-  WorkFlowCode: string = 'code';
-  ShiftTitle: string = null;
-  Description: string = null;
-  IsMon: boolean = false;
-  IsTue: boolean = false;
-  IsThu: boolean = false;
-  IsWed: boolean = false;
-  IsFri: boolean = false;
-  IsSat: boolean = false;
-  IsSun: boolean = false;
-  TotalWorkingDays: number = null;
-  StartDate: Date = null;
-  EndDate: Date = null;
-  OfficeTime: string = null;
-  Duration: number = null;
-  LunchDuration: number = null;
-  Status: number = 0;
-  LastUpdatedOn: Date = null;
-  Index: number = 0;
-  Total: number = 0;
 }

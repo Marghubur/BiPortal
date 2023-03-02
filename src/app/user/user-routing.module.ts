@@ -27,8 +27,6 @@ const routes: Routes = [
   { path: ApprovalRequest, component: ApprovalRequestComponent},
   { path: UserHoliday, component: HolidayComponent},
   { path: ResetPassword, component: ResetpasswordComponent},
-  { path: UserDocuments, component: documentsComponent},
-  { path: UserDocumentsPage, component: documentspageComponent},
   { path: ManageTimesheet, component: ManagetimesheetComponent}
 ];
 

@@ -6,6 +6,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Clients, EmailLinkConfig, OrgLogo, ProfileImage, RegisterClient, UserType } from 'src/providers/constants';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { clientModal } from 'src/app/adminmodal/admin-modals';
 declare var $: any;
 
 @Component({
@@ -321,37 +322,4 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, RegisterClient);
   }
-}
-
-class clientModal {
-  WorkShiftId: number = 0;
-  ClientId: number = 0;
-  ClientName: string = null;
-  MobileNo: string = null;
-  PrimaryPhoneNo: string = null;
-  SecondaryPhoneNo: string = null;
-  Email: string = null;
-  OtherEmail_1: string = null;
-  OtherEmail_2: string = null;
-  OtherEmail_3: string = null;
-  OtherEmail_4: string = null;
-  Fax: string = null;
-  FirstAddress: string = null;
-  SecondAddress: string = null;
-  ThirdAddress: string = null;
-  ForthAddress: string = null;
-  Pincode: number = 0;
-  City: string = null;
-  State: string = null;
-  Country: string = null;
-  GSTNo: string = null;
-  AccountNo: string = null;
-  BankName: string = null;
-  BranchName: string = null;
-  IFSC: string = null;
-  PanNo: string = null;
-  AdminId: number = 0
-  IsActive: boolean = false;
-  FileId: number = 0;
-  OldFileName: string = null;
 }

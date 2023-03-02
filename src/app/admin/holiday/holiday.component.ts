@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { CompanyHoliday } from 'src/app/adminmodal/admin-modals';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
@@ -321,24 +322,4 @@ export class HolidayComponent implements OnInit {
     this.nav.navigate(EmailLinkConfig, Holiday);
   }
 
-}
-
-export class CompanyHoliday {
-  CompanyCalendarId: number = 0;
-  CompanyId: number = 0;
-  StartDate: Date = null;
-  EndDate: Date = null;
-  EventName: string = null;
-  IsHoliday: boolean = true;
-  IsHalfDay: boolean = false;
-  DescriptionNote: string = null;
-  ApplicableFor: number = 0;
-  Year: number = new Date().getFullYear();
-  IsPublicHoliday: boolean = false;
-  Country: string = null;
-  TotalDays: number = 0;
-  IsCompanyCustomHoliday: boolean = false;
-  Total: number = 0;
-  Index: number = 0;
-  HolidayType: number = 2;
 }

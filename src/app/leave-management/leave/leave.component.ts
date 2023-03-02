@@ -5,11 +5,11 @@ import { Attendance, ManageLeavePlan, ManageYearEnding, Timesheet } from 'src/pr
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Filter } from 'src/providers/userService';
-import { Files } from 'src/app/admin/documents/documents.component';
+import { Files } from 'src/app/commonmodal/common-modals'
 
 @Component({
   selector: 'app-leave',

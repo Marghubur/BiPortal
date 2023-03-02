@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EmailLink } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
-import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
@@ -265,28 +265,5 @@ export class EmaillinkconfigComponent implements OnInit {
     else
       this.isAutoTrigger = false;
   }
-}
-
-class EmailLink {
-  EmailTemplateId: number = 0;
-  TemplateName: string = null;
-  PageName: string = null;
-  PageDescription: string = null;
-  IsEmailGroupUsed: boolean = false;
-  EmailGroupId: number = null;
-  IsTriggeredAutomatically: boolean = false;
-  Emails: Array<string> = [];
-  SubjectLine: string = null;
-  EmailTitle: string = null;
-  Salutation: string = null;
-  EmailClosingStatement: string = null;
-  BodyContent: string = null;
-  EmailNote: string = null;
-  SignatureDetail: string = null;
-  ContactNo: string = null;
-  FileId: number = 0;
-  LogoPath: string = "";
-  Description: string = null;
-  EmailsJson: string = null;
 }
 

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ApprovalChainDetail, ApprovalWorkFlowChain } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -292,28 +293,4 @@ deleteChainPopUp(item: any) {
         document.querySelectorAll('select[name="ForwardWhen"]')[index].removeAttribute('disabled');
     }
   }
-}
-
-class ApprovalWorkFlowChain {
-  ApprovalChainDetailId: number = 0;
-  ApprovalWorkFlowId: number = 0;
-  Title: string = null;
-  TitleDescription: string = null;
-  Status: number = null;
-  IsAutoExpiredEnabled: boolean = false;
-  AutoExpireAfterDays: number = 0;
-  IsSilentListner: boolean = false;
-  ListnerDetail: string = '[]';
-  ApprovalChainDetails: Array<ApprovalChainDetail> = new Array<ApprovalChainDetail>();
-}
-
-class ApprovalChainDetail {
-  ApprovalChainDetailId: number = 0;
-  ApprovalWorkFlowId: number = 0;
-  AssignieId: number = null;
-  IsRequired: boolean = false;
-  IsForwardEnabled: boolean = false;
-  ForwardWhen: number = 0;
-  ForwardAfterDays: number = 0;
-  ApprovalStatus: number = null;
 }

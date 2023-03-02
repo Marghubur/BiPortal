@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { AssignedClients, EmployeeDetail } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -705,67 +706,4 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       }
     });
   }
-}
-
-export class AssignedClients {
-  IsActive: boolean = false;
-  AssigneDate: Date = new Date();
-  IsActiveRow: boolean = false;
-  ClientUid: number = 0;
-  ClientName: string  = null;
-  ActualPackage: number = 0.0;
-  FinalPackage: number = 0.0;
-  TakeHomeByCandidate: number = 0.0;
-  EmployeeUid: number = 0;
-  EmployeeMappedClientsUid: number = 0;
-  IsPermanent: boolean = false;
-}
-
-export class EmployeeDetail {
-  EmployeeUid: number = 0;
-  FileId: number = 0;
-  FirstName: string = null;
-  LastName: string = null;
-  Mobile: string = null;
-  Email: string = null;
-  BranchName: string = null;
-  SecondaryMobile: string = null;
-  LeavePlanId: number = 0;
-  FatherName: string = null;
-  CompanyId: number = null;
-  MotherName: string = null;
-  SpouseName: string = null;
-  State: string = null;
-  City: string = null;
-  Pincode: number = null;
-  Address: string = null;
-  PANNo: string = null;
-  AadharNo: string = null;
-  AccountNumber: string = null;
-  BankName: string = null;
-  IFSCCode: string = null;
-  Domain: string = null;
-  Specification: string = null;
-  ExprienceInYear: number = null;
-  LastCompanyName: string = null;
-  IsPermanent: boolean = false;
-  IsActive: boolean = false;
-  AllocatedClientId: number = null;
-  AllocatedClientName: string = null;
-  ActualPackage: number = null;
-  FinalPackage: number = null;
-  TakeHomeByCandidate: number = null;
-  DOB: any = null;
-  CreatedOn: Date = null;
-  ReportingManagerId: number = 0;
-  DesignationId: number = null;
-  AccessLevelId: number = 2;
-  UserTypeId: number = 2;
-  CTC: number = null;
-  AllocatedClients: Array<AssignedClients> = [];
-  ClientJson: string = '';
-  Gender: boolean = true;
-  OrganizationId: number = 0;
-  OldFileName: string = null;
-  WorkShiftId: number = 0;
 }

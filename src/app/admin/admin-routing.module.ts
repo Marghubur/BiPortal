@@ -62,7 +62,6 @@ import { ManageComponent } from './profile/profile.component';
 import { ManageemployeeComponent } from './manageemployee/manageemployee.component';
 import { RecentComponent } from './recent/recent.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';
-import { ResumeComponent } from './resume/resume.component';
 import { RolesComponent } from './roles/roles.component';
 import { CompaniesComponent} from './companies/companies.component';
 import { CreateResumeComponent } from './create-resume/create-resume.component';
@@ -109,7 +108,6 @@ const routes: Routes = [
   { path: RegisterClient, component: RegisterclientComponent },
   { path: BuildPdf, component: BuildPdfComponent },
   { path: Files, component: FilesComponent },
-  { path: Resume, component: ResumeComponent },
   { path: BillDetail, component: BilldetailsComponent},
   { path: Attendance, component: AttendanceComponent},
   { path: Profile, component: ManageComponent},
@@ -145,9 +143,7 @@ const routes: Routes = [
   { path: Products, component: ProductsComponent},
   { path: ManageShift, component: ManageshiftComponent},
   { path: WorkFlow, component: WorkflowComponent },
-  { path: ManageWorkFlow, component: ManageWorkFlowComponent },
-  { path: AdminManageTimesheet, component: ManagetimesheetComponent},
-  { path: AdminLeave, component: LeaveComponent}
+  { path: ManageWorkFlow, component: ManageWorkFlowComponent }
 ];
 
 @NgModule({

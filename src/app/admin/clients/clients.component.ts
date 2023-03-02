@@ -7,7 +7,7 @@ import { CommonService, UserDetail } from 'src/providers/common-service/common.s
 import { BillDetail, Clients, Documents, DocumentsPage, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
-import { DocumentUser } from '../documents/documents.component';
+import { clientModel, DocumentUser, OnlineDocModel } from 'src/app/adminmodal/admin-modals';
 declare var $:any;
 
 @Component({
@@ -313,33 +313,4 @@ export class ClientsComponent implements OnInit {
   navtoRegisterClient() {
     this.nav.navigate(RegisterClient, null);
   }
-}
-
-export class OnlineDocModel {
-  constructor(data: any) {
-    this.DocumentId = data['DocumentId'];
-    this.Title = data['Title'];
-    this.Description = data['Description'];
-    this.UserId = data['UserId'];
-    this.DocPath = data['DocPath'];
-    this.CreatedOn = data['CreatedOn'];
-    this.UpdatedOn = data['UpdatedOn'];
-  }
-  DocumentId: number = 0;
-  Title: string = null;
-  Description: string = null;
-  UserId: string = null;
-  DocPath: string = null;
-  TotalRows: number = 0;
-  CreatedOn: string = null;
-  UpdatedOn: string = null;
-}
-
-export class clientModel {
-  ClientName: string = '';
-  City: string = '';
-  PrimaryContactNo: number = null;
-  Email: string = '';
-  FirstAddress: string = '';
-  Total: number = 0;
 }
