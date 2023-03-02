@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ApprovalRequest, Notification, ResetPassword, Taxcalculation, UserAttendance, UserDashboard, UserLeave, UserProfilePage, UserTimesheet, UserHoliday, ManageTimesheet} from 'src/providers/constants';
+import { ApprovalRequest, Notification, ResetPassword, Taxcalculation, UserAttendance, UserDashboard, UserLeave, UserProfilePage, UserTimesheet, UserHoliday, ManageTimesheet, UserDocuments, UserDocumentsPage} from 'src/providers/constants';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
@@ -12,6 +12,8 @@ import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { HolidayComponent } from './holiday/holiday.component';
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
+import { documentsComponent } from '../admin/documents/documents.component';
+import { documentspageComponent } from '../admin/documentspage/documentspage.component';
 
 const routes: Routes = [
   { path: '', component: UserDashboardComponent},
@@ -25,6 +27,8 @@ const routes: Routes = [
   { path: ApprovalRequest, component: ApprovalRequestComponent},
   { path: UserHoliday, component: HolidayComponent},
   { path: ResetPassword, component: ResetpasswordComponent},
+  { path: UserDocuments, component: documentsComponent},
+  { path: UserDocumentsPage, component: documentspageComponent},
   { path: ManageTimesheet, component: ManagetimesheetComponent}
 ];
 
