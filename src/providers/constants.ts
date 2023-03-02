@@ -116,6 +116,7 @@ export const Products = 'admin/products';
 export const ManageShift = 'admin/manageshift';
 export const WorkFlow = 'admin/workflow';
 export const ManageWorkFlow = 'admin/manageworkflow';
+export const AdminManageTimesheet = 'admin/managetimesheet';
 
 // ********************** Admin route pages  *******************
 

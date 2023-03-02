@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { ItemStatus, ManageTimesheet, UserType } from 'src/providers/constants';
+import { ItemStatus, ManageTimesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -15,7 +14,6 @@ declare var $: any;
   styleUrls: ['./timesheet.component.scss']
 })
 export class TimesheetComponent implements OnInit {
-  timesheetForm: FormGroup;
   timesheetData: Timesheet = null;
   isFormReady: boolean = false;
   employeeDetails: autoCompleteModal = new autoCompleteModal();
@@ -30,9 +28,6 @@ export class TimesheetComponent implements OnInit {
   client: any = null;
   isLoading: boolean = false;
   isTimesheetDataLoaded: boolean = false;
-  divisionCode: number = 0;
-  PendingAttendacneMessage: string = 'Select above pending timesheet link to submit before end of the month.';
-  isBlocked: boolean = false;
   dailyTimesheetDetails: Array<any> = [];
   months: any = null;
   NoClient: boolean = false;
@@ -138,70 +133,6 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
-  // getPendingWeek(from: Date, to: Date) {
-  //   if(this.clientId > 0) {
-  //     if(from && to) {
-  //       this.fromDate = new Date(from);
-  //       this.toDate = new Date(to);
-  //       this.loadData();
-  //     }
-  //   } else {
-  //     WarningToast("Please select employer first.");
-  //   }
-  // }
-
-  // enablePermissionRequest() {
-  //   if(this.employeeId <= 0) {
-  //     Toast("Invalid user selected.")
-  //     return;
-  //   }
-
-  //   if(!this.fromDate) {
-  //     Toast("Invalid from and to date seleted.")
-  //     return;
-  //   }
-
-  //   if(!this.toDate) {
-  //     Toast("Invalid from and to date seleted.")
-  //     return;
-  //   }
-
-  //   let data: Timesheet = {
-  //     EmployeeId: Number(this.employeeId),
-  //     ClientId: Number(this.clientId),
-  //     TimesheetStartDate: this.fromDate,
-  //     TimesheetStatus: this.timesheetData.TimesheetStatus,
-  //     IsSaved: this.timesheetData.IsSaved,
-  //     IsSubmitted: this.timesheetData.IsSubmitted,
-  //     ForYear: this.fromDate.getFullYear(),
-  //     ForMonth: this.fromDate.getMonth() + 1
-  //   }
-
-  //   this.http.post("timesheet/EnablePermission", data).then((response: ResponseModel) => {
-  //     if (response.ResponseBody)
-  //       Toast("Enable Permission");
-  //   })
-  // }
-
-  // buildEmployeeDropdown(emp: Array<any>) {
-  //   if(emp) {
-  //     this.employeeDetails.data = [];
-  //     this.employeeDetails.data.push({
-  //       value: '0',
-  //       text: 'Select Employee'
-  //     });
-
-  //     let index = 0;
-  //     while(index < emp.length) {
-  //       this.employeeDetails.data.push({
-  //         value: emp[index]["EmployeeId"],
-  //         text: `${emp[index]["FirstName"]} ${emp[index]["LastName"]}`
-  //       });
-  //       index++;
-  //     }
-  //   }
-  // }
-
   viewTimeSheet(item: any) {
     if(item && item.TimesheetId > 0) {
       let client = this.clientDetail.data.find(x => x.value == item.ClientId);
@@ -215,6 +146,7 @@ export class TimesheetComponent implements OnInit {
   filterTimesheet() {
     this.loadData();
   }
+
   advanceFilterPopUp() {
     $('#timesheetfilter').modal('show')
   }
@@ -236,7 +168,7 @@ export class TimesheetComponent implements OnInit {
   }
 }
 
-interface Timesheet {
+export interface Timesheet {
   TimesheetStatus: number;
   IsSaved: boolean;
   IsSubmitted: boolean;

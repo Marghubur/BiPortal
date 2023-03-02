@@ -85,7 +85,6 @@ export class AttendanceComponent implements OnInit {
     var year = dt.getFullYear();
     this.daysInMonth = new Date(year, month + 1, 0).getDate();
     this.clientDetail = new autoCompleteModal('Select Organization');
-
     this.employeesList = new autoCompleteModal('Select Employee');
     this.fromModel = null;
     this.toModel = null;
@@ -101,16 +100,6 @@ export class AttendanceComponent implements OnInit {
     } else {
       this.isRedirected = false;
       this.userDetail = this.user.getInstance() as UserDetail;
-      if(this.userDetail == null) {
-        let Master = this.local.get(null);
-        if(Master !== null && Master !== "") {
-          this.userDetail = Master["UserDetail"];
-        } else {
-          Toast("Invalid user. Please login again.");
-          return;
-        }
-      }
-
       this.employeeId = 0;
       this.userName = "";
       this.loadData();
@@ -470,6 +459,7 @@ export class AttendanceComponent implements OnInit {
         this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
         this.isEmployeesReady = true;
+        this.isRedirected = true;
       }
     });
   }

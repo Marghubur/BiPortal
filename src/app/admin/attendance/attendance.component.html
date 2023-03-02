@@ -1,27 +1,27 @@
 <div class="main-container">
   <div class="x_panel">
     <form autocomplete="off">
-      <div [ngClass]="{'preload': !isEmployeesReady}">
-        <div class="col-12 row m-0 p-0 mb-4 skeleton">
-          <ng-container *ngIf="isEmployeesReady">
-            <div class="col-md-8 row m-0 p-0 vhide">
-              <div class="col-md-4" >
-                <label class="form-label">Employee Name *</label>
+      <div class="col-12 row m-0 p-0 mb-4">
+        <div class="x_header">
+          <div class="d-flex justify-content-between mt-3">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Attendance'"></app-breadcrums>
+              </div>
+            </div>
+            <div class="col-4 row align-items-center" *ngIf="isEmployeesReady">
+              <div class="col-md-6">
                 <app-iautocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
-                  [ngModelOptions]="{standalone: true}">
+                [ngModelOptions]="{standalone: true}">
                 </app-iautocomplete>
               </div>
-              <div class="col-md-4 p-0 m-0">
-                <label class="form-label">Select Compnay</label>
-                <app-iautocomplete [data]="clientDetail" (OnSelect)="loadAttendance()"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+              <div class="col-md-6 p-0 m-0">
+                <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
                 </app-iautocomplete>
               </div>
             </div>
-          </ng-container>
+          </div>
         </div>
-      </div>
-      <div *ngIf="isEmployeesReady">
-        <app-breadcrums></app-breadcrums>
       </div>
       <ng-container *ngIf="isLoading || !isEmployeesReady">
         <div class="py-5 my-5 x_panel">
