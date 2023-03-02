@@ -343,7 +343,6 @@
                           </div>
                         </div>
                         <div class="t-table t-list t-border col-md-12">
-                          <div class="hide-bar"></div>
                           <div class="t-head">
                             <div class="tr">
                               <div class="th fe-1">
@@ -384,7 +383,7 @@
                               <div class="th fe-1 text-center">ACTIONS</div>
                             </div>
                           </div>
-                          <div class="t-body" *ngIf="SectionIsReady">
+                          <div class="t-body m-vh-100" *ngIf="SectionIsReady">
                             <ng-container *ngFor="let r of ExemptionDeclaration; let i=index">
                               <div class="tr py-2" name="table-row"
                                 [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
@@ -530,7 +529,6 @@
                           </div>
                         </div>
                         <div class="t-table t-list t-border col-md-12">
-                          <div class="hide-bar"></div>
                           <div class="t-head">
                             <div class="tr">
                               <div class="th fe-1">
@@ -578,7 +576,7 @@
                               <div class="th fe-1">ACTIONS</div>
                             </div>
                           </div>
-                          <div class="t-body" *ngIf="SectionIsReady">
+                          <div class="t-body m-vh-100" *ngIf="SectionIsReady">
                             <ng-container *ngFor="let r of OtherDeclaration; let i=index">
                               <div class="tr py-2" name="table-row"
                                 [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
@@ -746,7 +744,6 @@
                           </div>
                         </div>
                         <div class="t-table t-list t-border col-md-12">
-                          <div class="hide-bar"></div>
                           <div class="t-head">
                             <div class="tr">
                               <div class="th fe-1">
@@ -794,7 +791,7 @@
                               <div class="th fe-1">ACTIONS</div>
                             </div>
                           </div>
-                          <div class="t-body" *ngIf="SectionIsReady">
+                          <div class="t-body m-vh-100" *ngIf="SectionIsReady">
                             <ng-container *ngFor="let r of TaxSavingAlloance; let i=index">
                               <div class="tr py-2" name="table-row"
                                 [ngClass]="{'activated-row fw-bold text-dark': r.DeclaredValue != 0}">
@@ -901,6 +898,7 @@
                       </ng-container>
                     </ng-template>
                   </li>
+
 
                   <li [ngbNavItem]="5">
                     <a ngbNavLink class="custom-text-color">House Property</a>

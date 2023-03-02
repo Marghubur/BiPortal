@@ -168,15 +168,15 @@
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-5 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifie</div>
-              <div class="col-md-1 fw-bold text-dark">Document</div>
+              <div class="col-md-2 fw-bold text-dark">Notifie</div>
+              <div class="col-md-2 fw-bold text-dark">Document</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
               <ng-container *ngIf="leaveDeatil.length > 0">
                 <ng-container *ngFor="let item of leaveDeatil">
                   <div class="row py-3 border-bottom px-3 leave-box">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <p class="mb-0 fs-6">
                         <span class="fw-bold text-primary-c me-2">From: {{item.FromDate | date}}</span>
                         <span class="fw-bold text-primary-c me-4">To: {{item.ToDate | date}}</span>
@@ -222,10 +222,15 @@
                         </span>
                       </p>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       {{item.FirstName}} {{item.Lastname}}
                       <p class="mb-0">{{item.Email}}</p>
                       <p class="mb-0">{{item.Mobile}}</p>
+                    </div>
+                    <div class="col-md-2">
+                      <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item)" class="text-decoration-none ps-4">
+                        View Attachment
+                      </a>
                     </div>
                     <div class="col-md-1">
                       <ng-container [ngSwitch]="item.RequestStatusId">
@@ -233,14 +238,6 @@
                         <p *ngSwitchCase="9">Approved</p>
                         <p *ngSwitchCase="5">Rejected</p>
                       </ng-container>
-                    </div>
-                    <div class="col-md-1">
-                      <ng-container *ngIf="item.FileIds != null && item.FileIds != '[]'">
-                        <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item.FileIds)" class="text-decoration-none ps-4">
-                          Attached Document
-                        </a>
-                      </ng-container>
-                      <ng-container *ngIf="item.FileIds == null || item.FileIds == '[]'">NA</ng-container>
                     </div>
                     <div class="d-flex my-1">
                       <a *ngIf="item.RequestStatusId!= 5" (click)="openLeaveModal('Rejected', item)" href="javascript:void(0)"
@@ -628,7 +625,7 @@
 <!-- End pdf view modal -->
 
 <!-- View Rent file -->
-<div class="modal fade delete-modal" id="managerleaveFileModal" tabindex="-1" aria-labelledby="managerleaveFileModalLabel" aria-hidden="true">
+<div class="modal fade delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" id="managerleaveFileModal" tabindex="-1" aria-labelledby="managerleaveFileModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
