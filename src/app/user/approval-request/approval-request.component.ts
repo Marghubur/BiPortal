@@ -433,10 +433,10 @@ export class ApprovalRequestComponent implements OnInit {
 
   bindAttendanceRequestDetail(response: any) {
     this.attendanceRequestDetail = response;
+    this.request = new Filter();
     if (this.attendanceRequestDetail.length > 0) {
       this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
       this.attendanceRequestDetail.map(x => x.AttendanceDate = new Date(x.AttendanceDate));
-
     } else
       this.request.TotalRecords = 0;
   }
