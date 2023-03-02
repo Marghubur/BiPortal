@@ -1,13 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { ItemStatus, UserType } from 'src/providers/constants';
+import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -25,11 +25,9 @@ export class AttendanceComponent implements OnInit {
   isEmployeesReady: boolean = false;
   userDetail: any = null;
   time = new Date();
-  intervalId;
   DayValue: number = 0;
   employee: any = null;
   isLoading: boolean = false;
-  billingHrs: string = '';
   isAttendanceDataLoaded: boolean = false;
   divisionCode: number = 0;
   daysInMonth: number = 0;
@@ -60,6 +58,7 @@ export class AttendanceComponent implements OnInit {
   orderByRequestedOnAsc: boolean = null;
   filterAttendStatus: number = 1;
   AttendanceId: number = 0;
+  requestedOn: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -79,6 +78,7 @@ export class AttendanceComponent implements OnInit {
     this.employeesList.placeholder = "Employee";
     this.employeesList.className = 'disable-field';
     this.employeesList.isMultiSelect = true;
+    this.request.SearchString = "1=1";
     this.loadAutoComplete();
     this.isEmployeesReady = true;
     if(this.cachedData) {
@@ -113,12 +113,6 @@ export class AttendanceComponent implements OnInit {
           data[index].PresentDayStatus = 3;
           data[index].AttendenceStatus = 3;
         }
-        // let logon = data[index].LogOn.split(':');
-        // let logontime = 0;
-        // for (let i = 0; i < logon.length; i++) {
-        //   logontime += Number(logon[i]);
-        // }
-        // data[index].GrossHour = Number(data[index].LogOn) - (data[index].LunchBreanInMinutes/60)
         index++;
       }
       this.allDaysAttendance = data;
@@ -354,7 +348,6 @@ export class AttendanceComponent implements OnInit {
   loadAttendanceRequestDetail() {
     this.attendanceRquestPageIsReady = false;
     this.attendanceRequestDetail = [];
-    this.request.SearchString = "1=1";
     this.request.PageSize = 10;
     this.request.EmployeeId = this.employeeId;
     this.http.post("Attendance/GetMissingAttendanceRequest", this.request).then((response: ResponseModel) => {
@@ -538,5 +531,25 @@ export class AttendanceComponent implements OnInit {
   onEmloyeeChanged(_: any) {
     this.local.setByKey("EmployeeId", this.employeeId);
     //this.filterRecords();
+  }
+
+  filter(e: any, type: string) {
+    let value = Number(e.target.value);
+    if (value > 0) {
+      if (type == 'requestedon') {
+        let startdate = new Date();
+        let enddate = new Date();
+        enddate.setDate(enddate.getDate()- value);
+        this.request.SearchString = `1=1 and RequestedOn between "${enddate.getFullYear()}-${enddate.getMonth()+1}-${enddate.getDate()} 00:00:00" and "${startdate.getFullYear()}-${startdate.getMonth()+1}-${startdate.getDate()} 23:59:59"`;
+      }
+      this.loadAttendanceRequestDetail();
+    }
+  }
+
+  resetFilter() {
+    this.employeeId =0;
+    this.requestedOn = 0;
+    this.request.SearchString = "";
+    this.loadAttendanceRequestDetail();
   }
 }

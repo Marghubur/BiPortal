@@ -31,6 +31,7 @@ export class TimesheetComponent implements OnInit {
   dailyTimesheetDetails: Array<any> = [];
   months: any = null;
   NoClient: boolean = false;
+  viewTimesheetWeek: any = null;
 
   constructor(private http: AjaxService,
     private nav: iNavigation,
@@ -154,6 +155,7 @@ export class TimesheetComponent implements OnInit {
 
   loadData() {
     this.isFormReady = false;
+    this.dailyTimesheetDetails = [];
     this.http.post("Timesheet/GetTimesheetByFilter", this.timesheetData).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.dailyTimesheetDetails = response.ResponseBody;
