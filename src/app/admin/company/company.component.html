@@ -3,17 +3,20 @@
     <form>
       <div class="x_panel mh-auto">
         <div class="x_header">
-          <div class="x_header_title d-flex align-items-center justify-content-between">
-            <h2>Company Detail
-              <small>Compnay details like: Company name, Bank account etc.</small>
-              <i class="fa text-dark edit-icon ps-2"></i>
-            </h2>
-            <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-              class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Company Detail'" [subtitle]="'Compnay details like: Company name, Bank account etc.'"></app-breadcrums>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="x_header_title d-flex align-items-center justify-content-end">
+                <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+                <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
+                  class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
         </div>
         <div [ngSwitch]="isLoaded">
           <div *ngSwitchCase="false">

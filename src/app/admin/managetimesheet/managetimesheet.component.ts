@@ -5,7 +5,6 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, GetWeekNumber, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
-declare var $: any;
 
 @Component({
   selector: 'app-managetimesheet',
@@ -28,12 +27,10 @@ export class ManagetimesheetComponent implements OnInit {
   weekNumber: string = null;
 
   constructor(private fb: FormBuilder,
-    private http: AjaxService,
-    private nav: iNavigation,
-    private user: UserService
-  ) {
-
-  }
+              private http: AjaxService,
+              private nav: iNavigation,
+              private user: UserService
+              ) {}
 
   ngOnInit(): void {
     this.pageData = this.nav.getValue();
@@ -250,4 +247,5 @@ export class ManagetimesheetComponent implements OnInit {
     let actualmin = records.map(x => Number(x.ActualMinutes)).reduce((acc, curr) => {return acc + curr;}, 0)
     this.totalActualBurnHrs = this.breakIntoHoursAndMinutes((actualhrs*60)+actualmin);
   }
+
 }

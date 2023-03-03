@@ -3,12 +3,16 @@
     <form [formGroup]="rolesForm">
       <div class="x_panel">
         <div class="x_header">
-          <div class="x_header_title">
-            <h2>Roles <small>Manage user roles.</small>
-              <i class="fa text-dark edit-icon ps-2"></i>
-            </h2>
-            <div class="d-flex align-items-center float-end">
-              <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Roles'" [subtitle]="'Manage user roles.'"></app-breadcrums>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="x_header_title d-flex align-items-center justify-content-end">
+                <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+                <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
                 class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
               <button class="btn btn-sm btn-outline-primary float-end ms-3" (click)="addRolePopUp()">
                 <i class="fa fa-plus-square-o pe-2" aria-hidden="true"></i>Add Role
@@ -20,13 +24,10 @@
                   aria-hidden="true"></i>
                 <span class="ps-2">{{ispermissionAdding ? 'Wait' : 'Save' }}</span>
               </button>
+              </div>
             </div>
           </div>
         </div>
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
-        </div>
-
         <div class="col-12 row m-0 pt-3">
           <div class="col-md-4">
             <label class="form-label">Existing Roles *</label>

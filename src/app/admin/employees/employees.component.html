@@ -43,14 +43,12 @@
   </div>
   <div class="x_panel">
     <div class="x_header">
-      <div class="x_header_title">
-        <h2>Employee detail <small>Add or update details</small>
-        </h2>
-      </div>
-    </div>
-    <div class="px-1">
-      <div class="px-1">
-        <app-breadcrums></app-breadcrums>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Employee detail'" [subtitle]="'Add or update details'"></app-breadcrums>
+          </div>
+        </div>
       </div>
     </div>
     <div [ngSwitch]="isEmpPageReady">

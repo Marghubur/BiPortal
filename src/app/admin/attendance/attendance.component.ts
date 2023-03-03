@@ -203,6 +203,7 @@ export class AttendanceComponent implements OnInit {
       this.isEmployeeSelected = true;
       this.divisionCode = 1;
       this.isLoading = false;
+      this.isEmployeesReady = true;
     }).catch(err => {
       this.isLoading = false;
       WarningToast(err.error.HttpStatusMessage);

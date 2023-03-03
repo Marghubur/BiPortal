@@ -223,6 +223,7 @@ export class TimesheetComponent implements OnInit {
         this.NoClient = false;
         if (clients.length  == 1) {
           this.clientId = clients[0].CompanyId;
+          className: "disabled-input";
           this.presentWeek();
         }
         else

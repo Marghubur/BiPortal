@@ -1,14 +1,13 @@
 <div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
   <div class="x_panel">
     <div class="x_header">
-      <div class="x_header_title row">
-        <div class="col-md-3">
-          <h2>Employees<small>bill details</small></h2>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Employees'" [subtitle]="'bill details'"></app-breadcrums>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
     </div>
     <ng-container>
       <div class="x_header">

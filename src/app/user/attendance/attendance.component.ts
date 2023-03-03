@@ -199,7 +199,7 @@ export class AttendanceComponent implements OnInit {
         WarningToast("You join in this current month");
         return;
       } else {
-        startDate = new Date(doj.getFullYear(), doj.getMonth(), doj.getDate());
+        startDate = new Date(doj.getFullYear(), doj.getMonth(), 1);
       }
     }
     let endDate;

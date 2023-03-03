@@ -1,14 +1,20 @@
 <div class="container-fluid main-container">
   <div class="x_panel mt-2">
     <div class="x_header">
-      <div class="x_header_title d-flex align-items-center justify-content-between">
-        <h2>Client<small>add or update client</small></h2>
-        <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-          class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Client'" [subtitle]="'add or update client'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
+            <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+            <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
+              class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
     </div>
     <div class="x_content mt-4" *ngIf="isLoaded">
       <form [formGroup]="clientForm" autocomplete="off" class="col-md-12 row">
@@ -80,7 +86,7 @@
                   OnlyNumber="10" />
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label class="form-label">Select Shift *</label>                  
+                  <label class="form-label">Select Shift *</label>
                   <app-iautocomplete [data]="shiftDetail" formControlName="WorkShiftId">
                   </app-iautocomplete>
                 </div>
