@@ -13,7 +13,7 @@ export class AssignedClients {
     EmployeeMappedClientsUid: number = 0;
     IsPermanent: boolean = false;
   }
-  
+
   export class EmployeeDetail {
     EmployeeUid: number = 0;
     FileId: number = 0;
@@ -130,7 +130,7 @@ export class AssignedClients {
     StatusId: number = 2;
     PaidOn: Date = null;
   }
-  
+
   export class ApplicationData {
     FileDetail: any = null;
     Employees: Array<any> = null;
@@ -139,7 +139,7 @@ export class AssignedClients {
     MissingDate: Array<any> = [];
     TimesheetDetail: any = null;
   }
-  
+
   export class clientModel {
     ClientName: string = '';
     City: string = '';
@@ -160,8 +160,8 @@ export class AssignedClients {
     CompanyName: string = '';
     OrganizationId: number = 0;
   }
-  
-  
+
+
 export class organizationAccountModal {
     OrganizationId: number = 0;
     GSTNo: string = null;
@@ -231,7 +231,7 @@ export class DocumentUser {
     CreatedOn: string = null;
     UpdatedOn: string = null;
   }
-  
+
   export class PersonDetail {
     EmployeeUid: number = 0;
     FirstName: string = null;
@@ -264,7 +264,7 @@ export class DocumentUser {
     TakeHomeByCandidate: number = null;
     Total: number = null;
   }
-  
+
   export class DocumentDetail {
     TotalFileCount?: number = 0;
     FolderPath: string = "";
@@ -377,7 +377,7 @@ export class DocumentUser {
     ListnerDetail: string = '[]';
     ApprovalChainDetails: Array<ApprovalChainDetail> = new Array<ApprovalChainDetail>();
   }
-  
+
   export class ApprovalChainDetail {
     ApprovalChainDetailId: number = 0;
     ApprovalWorkFlowId: number = 0;
@@ -514,7 +514,7 @@ export class DocumentUser {
     PurchasePrice: number = 0;
     FileIds: string = null;
   }
-  
+
   export class Catagory {
     Total: number = 0;
     Index: number = 0;
@@ -594,7 +594,7 @@ export class DocumentUser {
     Email: string = '';
     OrganizationId: number = 0;
   }
-  
+
   export class PTax {
     StateName: string = null;
     MinIncome: number = 0;
@@ -617,4 +617,38 @@ export class DocumentUser {
     ListnerDetail: string = null;
     Index: number = 0;
     Total: number = 0;
+  }
+
+  export class LeaveModal {
+    LeaveFromDay: Date = null;
+    LeaveToDay: Date = null;
+    Session: string = "1";
+    Reason: string = null;
+    AssigneId: number = 0;
+    AssigneeEmail: string = null;
+    ForYear: number = 0;
+    RequestType: number = 0;
+    LeaveTypeId: number = 0;
+    ForMonth: number = 0;
+    UserTypeId: number = 0;
+    EmployeeId: number = 0;
+    LeavePlanName: string = null;
+    IsProjectedFutureDateAllowed: boolean = false;
+  }
+
+  export class LeaveDetails {
+    EmployeeId:number = 0;
+    EmployeeName: string = '';
+    ProjectId: number = 0;
+    AssignTo: number = 0;
+    LeaveTypeId: number = 0;
+    Session: string = "1";
+    LeaveFromDay: Date = null;
+    LeaveToDay: Date = null;
+    LeaveStatus: number = 0;
+    RespondedBy: number = 0;
+    UpdatedOn: Date = null;
+    Reason: string = '';
+    RequestedOn: Date = null;
+    NoOfDays: number = null;
   }

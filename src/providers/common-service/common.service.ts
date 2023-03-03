@@ -2,6 +2,7 @@ import { Home, UserType } from "./../constants";
 import { Injectable } from "@angular/core";
 import * as $ from 'jquery';
 import { ResponseModel } from "src/auth/jwtService";
+import { DatePipe } from "@angular/common";
 
 const AllowedKey = [8, 9, 46];
 @Injectable({
@@ -548,6 +549,12 @@ export function MonthName(monthnumber: number): string {
     monthName = date.toLocaleString('default', { month: 'long' });
   }
   return monthName;
+}
+
+export function GetWeekNumber(currentDate: any): string {
+  const date = new Date(currentDate);
+  const datePipe = new DatePipe('en-US');
+  return datePipe.transform(date, 'w');
 }
 
 export function GetStatus(id: number): string {

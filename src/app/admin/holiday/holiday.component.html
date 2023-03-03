@@ -3,19 +3,22 @@
     <div class="right-panel container col-md-12 p-0">
       <div class="x_panel mt-2">
         <div class="x_header">
-          <div class="x_header_title d-flex justify-content-between align-items-center">
-            <h2>Holidays<small>Details</small></h2>
-            <div class="d-flex align-items-center">
-              <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
-                class="fa fa-paper-plane pe-1"></i> Email Link Config
-              </a>
-              <button class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa fa-plus-square pe-2"></i>Add Holiday</button>
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Holidays'" [subtitle]="'Details'"></app-breadcrums>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="x_header_title d-flex align-items-center justify-content-end">
+                <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
+                  class="fa fa-paper-plane pe-1"></i> Email Link Config
+                </a>
+                <button class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa fa-plus-square pe-2"></i>Add Holiday</button>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
         </div>
         <ng-container *ngIf="isPageReady">
           <div class="x_content mt-4">

@@ -143,7 +143,8 @@ const routes: Routes = [
   { path: Products, component: ProductsComponent},
   { path: ManageShift, component: ManageshiftComponent},
   { path: WorkFlow, component: WorkflowComponent },
-  { path: ManageWorkFlow, component: ManageWorkFlowComponent }
+  { path: ManageWorkFlow, component: ManageWorkFlowComponent },
+  { path: AdminManageTimesheet, component: ManagetimesheetComponent }
 ];
 
 @NgModule({

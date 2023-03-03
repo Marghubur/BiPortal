@@ -59,6 +59,7 @@ import { WorkflowComponent } from './workflow/workflow.component';
 import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.component';
 import { AdminmodalModule } from './../adminmodal/adminmodal.module'
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
+import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 
 @NgModule({
   declarations: [
@@ -109,7 +110,8 @@ import { CommonmodalModule } from '../commonmodal/commonmodal.module';
     ProductsComponent,
     ManageshiftComponent,
     WorkflowComponent,
-    ManageWorkFlowComponent
+    ManageWorkFlowComponent,
+    ManagetimesheetComponent
   ],
   imports: [
     CommonModule,

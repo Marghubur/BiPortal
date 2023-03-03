@@ -1,20 +1,22 @@
 <div class="container-fluid main-container" [ngClass]="{'preload': !pageDataIsReady}">
   <div class="x_panel">
     <div class="x_header">
-      <div class="x_header_title d-flex align-items-center justify-content-between">
-          <h2>Generate bill<small>generate bill in docx and pdf format.</small></h2>
-        <div class="d-flex align-items-center">
-          <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-            class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
-          <button class="btn btn-outline-success text-end" (click)="getNewForm()">New Bill</button>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Generate bill'" [subtitle]="'generate bill in docx and pdf format.'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
+            <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+            <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
+              class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+            <button class="btn btn-outline-success text-end" (click)="getNewForm()">New Bill</button>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
-    </div>
-
     <div [ngSwitch]="pageDataIsReady">
       <div class="data-loading-loader" *ngSwitchCase="false">
         <div class="py-5 my-5">
