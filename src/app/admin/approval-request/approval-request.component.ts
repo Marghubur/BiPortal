@@ -3,7 +3,7 @@ import { ApprovalRequest } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus } from 'src/providers/constants';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -45,305 +45,319 @@ export class ApprovalRequestComponent implements OnInit {
     private userService: UserService
     ) { }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+    this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
+    this.currentUser = this.userService.getInstance();
+    this.managerList = new autoCompleteModal();
+    this.managerList.data = [];
+    this.managerList.placeholder = "Reporting Manager";
+    this.managerList.data.push({
+      value: 0,
+      text: "Default Manager"
+    });
+    this.itemStatus = 2;
+    this.loadData();
+  }
+
+  updatePage(index: number) {
+    if(index == 1) {
       this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
-      this.currentUser = this.userService.getInstance();
-      this.managerList = new autoCompleteModal();
-      this.managerList.data = [];
-      this.managerList.placeholder = "Reporting Manager";
-      this.managerList.data.push({
-        value: 0,
-        text: "Default Manager"
-      });
-      this.itemStatus = 2;
+      this.filterText = "Assigned to me";
+      this.loadData();
+    } else {
+      this.requestUrl = `${this.attendanceController}/GetAllRequestedData`;
+      this.filterText = "All request(s)";
       this.loadData();
     }
+  }
 
-    updatePage(index: number) {
-      if(index == 1) {
-        this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
-        this.filterText = "Assigned to me";
-        this.loadData();
+  pagereload() {
+    this.loadData();
+  }
+
+  loadData() {
+    this.isPageLoading = true;
+    this.http.get(`${this.requestUrl}/${this.currentUser.UserId}/${ItemStatus.Pending}`).then(response => {
+      if(response.ResponseBody) {
+        this.buildPage(response.ResponseBody);
+        this.isPageLoading = false;
       } else {
-        this.requestUrl = `${this.attendanceController}/GetAllRequestedData`;
-        this.filterText = "All request(s)";
-        this.loadData();
+        ErrorToast("Fail to fetch data. Please contact to admin.");
+      }
+    }).catch(e => {
+      this.isPageLoading = false;
+      ErrorToast("Fail to fetch data. Please contact to admin.");
+    });
+  }
+
+  buildPage(req: any) {
+    this.leave_request = [];
+    this.leaveDeatil = [];
+    if(req.ApprovalRequest) {
+      this.leave_request = req.ApprovalRequest;
+      this.filterLeave();
+    }
+
+    this.attendance = [];
+    this.attendanceDetail = [];
+    if (req.AttendaceTable) {
+      this.attendance = req.AttendaceTable;
+      if (this.active == 1)
+        this.filterAttendance();
+    }
+
+    this.timesheet = [];
+    this.timesheetDetail = [];
+    if (req.TimesheetTable) {
+      this.timesheet = req.TimesheetTable;
+      if (this.active == 2)
+        this.weekDistributed();
+    }
+  }
+
+  openLeaveModal(state: string, request: any) {
+    $('#leaveModal').modal('show');
+    this.requestState = state;
+    this.requestModal = 1; // leave
+    this.currentRequest = request;
+    this.currentRequest["EmployeeName"] = request.FirstName + " " + request.LastName;
+  }
+
+  openTimesheetModal(state: string, request: any) {
+    $('#timesheetModal').modal('show');
+    this.requestState = state;
+    this.currentTimesheet = request;
+  }
+
+  openAttendacneModal(state: string, request: any) {
+    $('#leaveModal').modal('show');
+    this.requestState = state;
+    this.requestModal = 3; // leave
+    this.currentRequest = request;
+    this.currentRequest["EmployeeName"] = request.EmployeeName;
+  }
+
+  submitRequest() {
+    switch(this.requestModal) {
+      case 1: // leave
+        this.submitActionForLeave();
+      break;
+      case 3: // attendance
+        this.submitActionForAttendance();
+      break;
+    }
+  }
+
+  changeTab() {
+    this.itemStatus = ItemStatus.Pending;
+    switch (this.active) {
+      case 1:
+        this.filterAttendance();
+        break;
+      case 2:
+        this.weekDistributed();
+        break;
+      case 3:
+        this.filterLeave();
+        break;
+    }
+  }
+
+  filterRequest(e: any) {
+    this.itemStatus = Number(e.target.value);
+    this.requestUrl = `${this.attendanceController}/GetManagerRequestedData}`;
+    switch (this.active) {
+      case 1:
+        this.filterAttendance();
+        break;
+      case 2:
+        this.weekDistributed();
+        break;
+      case 3:
+        this.filterLeave();
+        break;
+    }
+    this.loadData();
+  }
+
+  filterAttendance() {
+    this.attendanceDetail = [];
+    if(this.attendance && this.attendance.length > 0) {
+      this.attendance.map(item => {
+        let detail:Array<any> = JSON.parse(item.AttendanceDetail);
+        if(detail && detail.length > 0) {
+          if (this.itemStatus > 0 && this.itemStatus != 4)
+            detail = detail.filter(x => x.PresentDayStatus === this.itemStatus);
+          else
+            detail = detail.filter(x => x.PresentDayStatus === ItemStatus.Approved || x.PresentDayStatus === ItemStatus.Pending || x.PresentDayStatus === ItemStatus.Rejected);
+          if(detail.length > 0) {
+            for (let i = 0; i < detail.length; i++) {
+              detail[i].AttendanceDay = new Date(detail[i].AttendanceDay);
+              if(detail[i].AttendanceDay.getDay() === 0 || detail[i].AttendanceDay.getDay() === 6) {
+                detail.splice(i, 1);
+              } else {
+                detail[i].AttendanceId = item.AttendanceId;
+              }
+              detail[i].EmployeeName = item.EmployeeName;
+              detail[i].Email = item.Email;
+              detail[i].Mobile = item.Mobile;
+            }
+            this.attendanceDetail.push(...detail);
+          }
+        }
+      });
+    }
+  }
+
+  filterLeave() {
+    this.leaveDeatil = [];
+    if (this.leave_request && this.leave_request.length > 0) {
+      let detail = [];
+      if (this.itemStatus > 0 && this.itemStatus <4)
+        detail = this.leave_request.filter(x => x.RequestStatusId === this.itemStatus);
+      else
+        detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
+      if (detail && detail.length > 0)
+      this.leaveDeatil = detail;
+        this.leaveDeatil.forEach(x => {
+          x.FromDate = ToLocateDate(x.FromDate),
+          x.ToDate = ToLocateDate(x.ToDate);
+        });
+    }
+  }
+
+  weekDistributed() {
+    this.timesheetDetail = [];
+    if(this.timesheet && this.timesheet.length > 0) {
+      let timesheetsData = [];
+      if (this.itemStatus == ItemStatus.Rejected || this.itemStatus == ItemStatus.Approved)
+        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus == this.itemStatus);
+      else if (this.itemStatus == ItemStatus.Pending)
+        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus == ItemStatus.Submitted);
+      else if (this.itemStatus == 4)
+        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Submitted || x.TimesheetStatus === ItemStatus.Rejected);
+      if (timesheetsData.length > 0) {
+        timesheetsData.map(item => {
+        let detail:Array<any> = JSON.parse(item.TimesheetWeeklyJson);
+        for (let i = 0; i < detail.length; i++) {
+          detail[i].EmployeeName = item.FirstName + " "+ item.LastName;
+          detail[i].Email = item.Email;
+          detail[i].Mobile = item.Mobile;
+          detail[i].PresentDate = detail[i].PresentDate;
+          detail[i].TimesheetStatus = item.TimesheetStatus;
+          detail[i].TimesheetId = item.TimesheetId;
+          detail[i].ClientName = item.ClientName;
+        }
+        this.timesheetDetail.push(detail);
+        });
       }
     }
+  }
 
-    pagereload() {
-      this.loadData();
+  getFilterType() {
+    this.filterId = 0;
+    switch(this.filterText) {
+      case 'Assigned to me':
+        this.filterId = 1;
+        break;
+    }
+  }
+
+  submitActionForLeave() {
+    this.isLoading = true;
+    let endPoint = '';
+
+    switch(this.requestState) {
+      case 'Approved':
+        endPoint = `${this.leaveController}/ApproveLeaveRequest`;
+        break;
+      case 'Rejected':
+        endPoint = `${this.leaveController}/RejectLeaveRequest`;
+        break;
+      case 'Othermember':
+        endPoint = `${this.leaveController}/ReAssigneLeaveRequest`;
+        break;
     }
 
-    loadData() {
-      this.isPageLoading = true;
-      this.http.get(`${this.requestUrl}/${this.currentUser.UserId}/${ItemStatus.Pending}`).then(response => {
+    let currentResponse = {
+      LeaveFromDay: this.currentRequest.FromDate,
+      LeaveToDay: this.currentRequest.ToDate,
+      EmployeeId: this.currentRequest.EmployeeId,
+      LeaveRequestNotificationId : this.currentRequest.LeaveRequestNotificationId,
+    }
+
+    this.http.put(`${endPoint}/${this.filterId}`, currentResponse).then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        this.buildPage(response.ResponseBody);
+        $('#leaveModal').modal('hide');
+        this.isLoading = false;
+        Toast("Submitted Successfully");
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  submitTimesheetRequest() {
+    this.isLoading = true;
+    let endPoint = '';
+
+    switch(this.requestState) {
+      case 'Approved':
+        endPoint = `${this.timesheetController}/ApproveTimesheetRequest`;
+        break;
+      case 'Rejected':
+        endPoint = `${this.timesheetController}/RejectTimesheetRequest`;
+        break;
+      case 'Othermember':
+        endPoint = `${this.timesheetController}/ReAssigneTimesheetRequest`;
+        break;
+    }
+
+    this.http.put(`${endPoint}/${this.filterId}`, this.currentTimesheet).then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        this.buildPage(response.ResponseBody);
+        $('#timesheetModal').modal('hide');
+        Toast("Submitted Successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  submitActionForAttendance() {
+    this.isLoading = true;
+    if (this.attendance) {
+      let endPoint = "";
+      switch(this.requestState) {
+        case 'Approved':
+          endPoint = `${this.attendanceController}/ApproveAttendanceRequest`;
+          break;
+        case 'Rejected':
+          endPoint = `${this.attendanceController}/RejectAttendanceRequest`;
+          break;
+        case 'Othermember':
+          endPoint = `${this.attendanceController}/ReAssigneAttendanceRequest`;
+          break;
+      }
+
+      this.http.put(`${endPoint}/${this.filterId}`,
+      this.currentRequest).then((response:ResponseModel) => {
         if(response.ResponseBody) {
           this.buildPage(response.ResponseBody);
           this.isPageLoading = false;
         } else {
           ErrorToast("Fail to fetch data. Please contact to admin.");
         }
-      }).catch(e => {
-        this.isPageLoading = false;
-        ErrorToast("Fail to fetch data. Please contact to admin.");
-      });
-    }
-
-    buildPage(req: any) {
-      this.request = [];
-      this.leave_request = [];
-
-      if(req.ApprovalRequest) {
-        this.leave_request = req.ApprovalRequest;
-        this.filterLeave();
-      }
-
-      if (req.AttendaceTable) {
-        this.attendance = req.AttendaceTable;
-        this.filterAttendance();
-      }
-
-      if (req.TimesheetTable) {
-        this.timesheet = req.TimesheetTable;
-        this.weekDistributed();
-      }
-    }
-
-    openLeaveModal(state: string, request: any) {
-      $('#leaveModal').modal('show');
-      this.requestState = state;
-      this.requestModal = 1; // leave
-      this.currentRequest = request;
-      this.currentRequest["EmployeeName"] = request.FirstName + " " + request.LastName;
-    }
-
-    openTimesheetModal(state: string, request: any) {
-      $('#timesheetModal').modal('show');
-      this.requestState = state;
-      this.currentTimesheet = request;
-    }
-
-    openAttendacneModal(state: string, request: any) {
-      $('#leaveModal').modal('show');
-      this.requestState = state;
-      this.requestModal = 3; // leave
-      this.currentRequest = request;
-      this.currentRequest["EmployeeName"] = request.EmployeeName;
-    }
-
-    submitRequest() {
-      switch(this.requestModal) {
-        case 1: // leave
-          this.submitActionForLeave();
-        break;
-        case 3: // attendance
-          this.submitActionForAttendance();
-        break;
-      }
-    }
-
-    changeTab() {
-      this.itemStatus = ItemStatus.Pending;
-      switch (this.active) {
-        case 1:
-          this.filterAttendance();
-          break;
-        case 2:
-          this.weekDistributed();
-          break;
-        case 3:
-          this.filterLeave();
-          break;
-      }
-    }
-
-    filterRequest(e: any) {
-      this.itemStatus = Number(e.target.value);
-      this.requestUrl = `${this.attendanceController}/GetManagerRequestedData/${ItemStatus.Pending}`;
-      switch (this.active) {
-        case 1:
-          this.filterAttendance();
-          break;
-        case 2:
-          this.weekDistributed();
-          break;
-        case 3:
-          this.filterLeave();
-          break;
-      }
-    }
-
-    filterAttendance() {
-      this.attendanceDetail = [];
-      if(this.attendance && this.attendance.length > 0) {
-        this.attendance.map(item => {
-          let detail:Array<any> = JSON.parse(item.AttendanceDetail);
-          if(detail && detail.length > 0) {
-            if (this.itemStatus > 0)
-              detail = detail.filter(x => x.PresentDayStatus === this.itemStatus);
-            else
-              detail = detail.filter(x => x.PresentDayStatus === ItemStatus.Approved || x.PresentDayStatus === ItemStatus.Pending || x.PresentDayStatus === ItemStatus.Rejected);
-            if(detail.length > 0) {
-              for (let i = 0; i < detail.length; i++) {
-                detail[i].AttendanceDay = new Date(detail[i].AttendanceDay);
-                if(detail[i].AttendanceDay.getDay() === 0 || detail[i].AttendanceDay.getDay() === 6) {
-                  detail.splice(i, 1);
-                } else {
-                  detail[i].AttendanceId = item.AttendanceId;
-                }
-              }
-              this.attendanceDetail.push(...detail);
-            }
-          }
-        });
-      }
-    }
-
-    filterLeave() {
-      this.leaveDeatil = [];
-      if (this.leave_request && this.leave_request.length > 0) {
-        let detail = [];
-        if (this.itemStatus > 0)
-          detail = this.leave_request.filter(x => x.RequestStatusId === this.itemStatus);
-        else
-          detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
-        if (detail && detail.length > 0)
-          this.leaveDeatil = detail;
-      }
-    }
-
-    weekDistributed() {
-      this.timesheetDetail = [];
-      if(this.timesheet && this.timesheet.length > 0) {
-        this.timesheet.map(item => {
-          let detail:Array<any> = JSON.parse(item.TimesheetMonthJson);
-          let index = 0;
-          while (index <detail.length) {
-            let increment = index + 7;
-            let data = detail.slice(index, increment);
-            data = data.filter(x => new Date(x.PresentDate).getMonth() == new Date().getMonth());
-            if (this.itemStatus > 0)
-              data = data.filter(x => x.TimesheetStatus === this.itemStatus);
-            else
-              data = data.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Pending || x.TimesheetStatus === ItemStatus.Rejected);
-            if (data.length > 0) {
-              for (let i = 0; i < data.length; i++) {
-                data[i].TimesheetId = item.TimesheetId;
-              }
-              this.timesheetDetail.push(data);
-            }
-            //let totalTimeBurned = data.map(x => x.TotalMinutes).reduce((acc, curr) => {return acc + curr;}, 0);
-            index=(index+7);
-          }
-        });
-      }
-    }
-
-    getFilterType() {
-      this.filterId = 0;
-      switch(this.filterText) {
-        case 'Assigned to me':
-          this.filterId = 1;
-          break;
-      }
-    }
-
-    submitActionForLeave() {
-      this.isLoading = true;
-      let endPoint = '';
-
-      switch(this.requestState) {
-        case 'Approved':
-          endPoint = `${this.leaveController}/ApproveLeaveRequest`;
-          break;
-        case 'Rejected':
-          endPoint = `${this.leaveController}/RejectLeaveRequest`;
-          break;
-        case 'Othermember':
-          endPoint = `${this.leaveController}/ReAssigneLeaveRequest`;
-          break;
-      }
-
-      let currentResponse = {
-        LeaveFromDay: this.currentRequest.FromDate,
-        LeaveToDay: this.currentRequest.ToDate,
-        EmployeeId: this.currentRequest.EmployeeId,
-        LeaveRequestNotificationId : this.currentRequest.LeaveRequestNotificationId,
-      }
-
-      this.http.put(`${endPoint}/${this.filterId}`, currentResponse).then((response:ResponseModel) => {
-        if (response.ResponseBody) {
-          this.buildPage(response.ResponseBody);
-          $('#leaveModal').modal('hide');
-          this.isLoading = false;
-          Toast("Submitted Successfully");
-        }
+        this.isLoading = false;
+        $('#leaveModal').modal('hide');
       }).catch(e => {
         this.isLoading = false;
       })
+    } else {
+      ErrorToast("Attendance detail not found. Please contact to admin.");
     }
-
-    submitTimesheetRequest() {
-      this.isLoading = true;
-      let endPoint = '';
-
-      switch(this.requestState) {
-        case 'Approved':
-          endPoint = `${this.timesheetController}/ApproveTimesheetRequest`;
-          break;
-        case 'Rejected':
-          endPoint = `${this.timesheetController}/RejectTimesheetRequest`;
-          break;
-        case 'Othermember':
-          endPoint = `${this.timesheetController}/ReAssigneTimesheetRequest`;
-          break;
-      }
-
-      this.http.put(`${endPoint}/${this.filterId}`, this.currentTimesheet).then((response:ResponseModel) => {
-        if (response.ResponseBody) {
-          this.buildPage(response.ResponseBody);
-          $('#timesheetModal').modal('hide');
-          Toast("Submitted Successfully");
-          this.isLoading = false;
-        }
-      }).catch(e => {
-        this.isLoading = false;
-      })
-    }
-
-    submitActionForAttendance() {
-      this.isLoading = true;
-      if (this.attendance) {
-        let endPoint = "";
-        switch(this.requestState) {
-          case 'Approved':
-            endPoint = `${this.attendanceController}/ApproveAttendanceRequest`;
-            break;
-          case 'Rejected':
-            endPoint = `${this.attendanceController}/RejectAttendanceRequest`;
-            break;
-          case 'Othermember':
-            endPoint = `${this.attendanceController}/ReAssigneAttendanceRequest`;
-            break;
-        }
-
-        this.http.put(`${endPoint}/${this.filterId}`,
-        this.currentRequest).then((response:ResponseModel) => {
-          if(response.ResponseBody) {
-            this.buildPage(response.ResponseBody);
-            this.isPageLoading = false;
-          } else {
-            ErrorToast("Fail to fetch data. Please contact to admin.");
-          }
-          this.isLoading = false;
-          $('#leaveModal').modal('hide');
-        }).catch(e => {
-          this.isLoading = false;
-        })
-      } else {
-        ErrorToast("Attendance detail not found. Please contact to admin.");
-      }
-    }
+  }
 }
 
