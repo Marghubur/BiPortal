@@ -135,10 +135,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
       this.allocatedClients = response.ResponseBody.AllocatedClients;
       if (this.allocatedClients.length > 0) {
-        for (let i = 0; i < this.allocatedClients.length; i++) {
-          let index = this.clients.findIndex( x=> x.ClientId == this.allocatedClients[i].ClientUid);
-          this.clients.splice(index, 1);
-        }
+        // for (let i = 0; i < this.allocatedClients.length; i++) {
+        //   let index = this.clients.findIndex( x=> x.ClientId == this.allocatedClients[i].ClientUid);
+        //   this.clients.splice(index, 1);
+        // }
       }
       let profileDetail = response.ResponseBody.FileDetail;
       if(profileDetail.length > 0) {
@@ -322,6 +322,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       EmployeeUid: new FormControl(this.employeeModal.EmployeeUid),
       EmployeeMappedClientsUid: new FormControl(client.EmployeeMappedClientsUid),
       IsPermanent: new FormControl(false),
+      AssigneDate: new FormControl(ToLocateDate(client.AssigneDate), [Validators.required]),
     });
   }
 
@@ -505,6 +506,16 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.isUpdated) {
+      let isExistClient = this.addUpdateClientForm.get("AllocatedClients").value.find(x => x.ClientUid == clientId);
+      if (isExistClient) {
+        this.isLoading = false;
+        ErrorToast("This client is already added");
+        return;
+      }
+    }
+
+
     this.activeAssignedClient.ClientUid = clientId;
     let actualPackage = Number(this.addUpdateClientForm.get("ActualPackage").value);
     if(isNaN(actualPackage)){
@@ -572,6 +583,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       })
     } else {
       this.isAllocated = true;
+      this.isLoading = false;
       ErrorToast("Please fill all the mandaroty field marked red");
     }
   }
@@ -583,6 +595,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.addUpdateClientForm.get("ActualPackage").setValue(this.activeAssignedClient.ActualPackage);
       this.addUpdateClientForm.get("FinalPackage").setValue(this.activeAssignedClient.FinalPackage);
       this.addUpdateClientForm.get("TakeHomeByCandidate").setValue(this.activeAssignedClient.TakeHomeByCandidate);
+      this.addUpdateClientForm.get("AssigneDate").setValue(this.activeAssignedClient.AssigneDate);
+      this.assignDateModel = { day: this.activeAssignedClient.AssigneDate.getDate(), month: this.activeAssignedClient.AssigneDate.getMonth() + 1, year: this.activeAssignedClient.AssigneDate.getFullYear()};
       this.isUpdated = true;
 
       if (this.activeAssignedClient) {
@@ -635,6 +649,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   addUpadteClientPopUp() {
+    this.bindClientDetails();
     $('#addUpdateClientModal').modal('show');
   }
 

@@ -54,7 +54,7 @@ export class AssignedClients {
     DesignationId: number | null = null;
     AccessLevelId: number = 2;
     UserTypeId: number = 2;
-    CTC: number | null = null;
+    CTC: number | null = 0;
     AllocatedClients: Array<AssignedClients> = [];
     ClientJson: string = '';
     Gender: boolean = true;
