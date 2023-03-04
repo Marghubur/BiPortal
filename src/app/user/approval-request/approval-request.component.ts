@@ -63,8 +63,8 @@ export class ApprovalRequestComponent implements OnInit {
       value: 0,
       text: "Default Employee"
     });
-    this.basePath = this.http.GetImageBasePath();
     this.employeeList.isMultiSelect = false;
+    this.basePath = this.http.GetImageBasePath();
     this.request.SortBy = null;
     this.request.PageIndex = 1;
     this.request.SearchString = "";
