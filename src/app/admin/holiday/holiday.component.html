@@ -271,7 +271,12 @@
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Country *</label>
-              <input type="text" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}" class="form-control" formControlName="Country" placeholder="Country">
+              <select formControlName="Country" class="form-select" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}" >
+                <option value=null selected>Select Country</option>
+                <option value="India">India</option>
+                <option value="SriLanka">Sri Lanka</option>
+                <option value="Afghanistan">Afghanistan</option>
+              </select>
             </div>
           </div>
           <div class="col-md-12 row">

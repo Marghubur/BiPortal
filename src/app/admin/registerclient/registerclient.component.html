@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="x_content mt-4" *ngIf="isLoaded">
-      <form [formGroup]="clientForm" autocomplete="off" class="col-md-12 row">
+      <form [formGroup]="clientForm" autocomplete="off" class="col-md-12 row" *ngIf="clientForm">
         <div class="mb-5">
           <div class="col-12 row m-0">
             <div class="col-md-4">
@@ -39,7 +39,7 @@
                 <div class="col-md-4">
                   <label class="form-label">Client/Organization Name *</label>
                   <input placeholder="Client or organization name" class="form-control" name="ClientName" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="ClientName" maxlength="150"
+                    formControlName="ClientName" maxlength="100"
                     [ngClass]="{'error-field': submitted && f.ClientName.errors !== null && f.ClientName.errors.required}" />
                 </div>
                 <div class="col-md-4">
@@ -59,7 +59,7 @@
               <div class="col-md-12 row">
                 <div class="col-md-4 mb-3">
                   <label class="form-label">PAN No.#</label>
-                  <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()" max="10"
+                  <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()" maxlength="10"
                     name="PanNo" formControlName="PanNo" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -77,7 +77,7 @@
               <div class="col-md-12 row">
                 <div class="col-md-4 mb-3">
                   <label class="form-label">GSTIN No.# *</label>
-                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No."
+                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No." maxlength="16"
                   name="GSTNo" formControlName="GSTNo" />
                 </div>
                 <div class="col-md-4 mb-3">
@@ -89,6 +89,7 @@
                   <label class="form-label">Select Shift *</label>
                   <app-iautocomplete [data]="shiftDetail" formControlName="WorkShiftId">
                   </app-iautocomplete>
+                  <!-- <input class="form-control" placeholder="Workshift Id" name="WorkShiftId" formControlName="WorkShiftId" OnlyNumber="1"> -->
                 </div>
               </div>
             </div>
