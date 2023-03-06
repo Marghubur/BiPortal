@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Company, EducationalDetail, Employment, Files, PersonalDetail, ProfessionalUser, Project, Skills } from 'src/app/user/profile/profile.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate, UserDetail } from 'src/providers/common-service/common.service';
 import { ProfileImage, UserImage, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
@@ -154,7 +154,7 @@ export class ManageComponent implements OnInit {
           this.userModal.PersonalDetail.Gender = employee.Gender;
           this.userModal.PersonalDetail.HomeTown = employee.City;
           this.userModal.PersonalDetail.PinCode = employee.Pincode;
-          this.userModal.PersonalDetail.DOB = employee.DOB;
+          this.userModal.PersonalDetail.DOB = ToLocateDate(employee.DOB);
         }
         let profile = res.ResponseBody.profileDetail;
         if (profile && profile.length > 0) {

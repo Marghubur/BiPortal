@@ -37,12 +37,13 @@ export class WorkflowComponent implements OnInit {
   loadData() {
     this.isReady = false;
     this.http.post("ApprovalChain/GetPageDate", this.filter).then((response: ResponseModel) => {
-      if(response.ResponseBody) {
+      if(response.ResponseBody && response.ResponseBody.length > 0) {
         this.isFileFound = true;
         this.isReady = true;
         this.bindaData(response.ResponseBody);
         Toast("Records loaded successfully");
       } else {
+        this.isReady = true;
         this.isFileFound = false;
         Toast("Fail to load record. Please contact to admin.");
       }

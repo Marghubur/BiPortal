@@ -43,7 +43,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     this.shiftDetail = new autoCompleteModal();
     this.shiftDetail.data = [];
     this.shiftDetail.placeholder = "Work Shift";
-    this.shiftDetail.className = "normal";
+    this.shiftDetail.className = "disable-field";
 
     let data = this.nav.getValue();
     this.clientModal = new clientModal();
@@ -56,7 +56,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       this.loadData();
     } else {
       this.clientModal = new clientModal;
-      this.initForm();
+      this.loadData();
       this.isLoaded = true;
     }
   }
@@ -73,8 +73,9 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       if(response.ResponseBody) {
         if (response.ResponseBody.client.length > 0)
           this.clientModal = response.ResponseBody.client[0] as clientModal;
+        else
+          this.clientModal = new clientModal;
 
-        let profileDetail = response.ResponseBody.file;
         this.shifts = response.ResponseBody.shifts;
         if (this.shifts && this.shifts.length > 0) {
           this.shifts.map(x => {
@@ -83,6 +84,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
               text: x.ShiftTitle
             });
           });
+          this.shiftDetail.className="";
         } else {
           this.shiftDetail.data.push({
             value: 0,
@@ -90,13 +92,14 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
           });
         }
 
-        if(profileDetail.length > 0) {
+        if(response.ResponseBody.file.length > 0) {
+          let profileDetail = response.ResponseBody.file;
           this.buildProfileImage(profileDetail[0]);
         }
       } else {
         this.clientModal = new clientModal;
       }
-      
+
       this.initForm();
       this.isLoaded = true;
     }).catch(e => {

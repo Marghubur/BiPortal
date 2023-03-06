@@ -212,9 +212,8 @@
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Shift Id *</label>
-                          <input class="form-control" placeholder="Shift Id" name="WorkShiftId" formControlName="WorkShiftId"
-                            OnlyNumber="12"  onkeypress="return event.charCode >=48 && event.charCode <=57"
-                            [ngClass]="{'error-field': submitted && f.WorkShiftId.errors !== null && f.WorkShiftId.errors.required}" />
+                          <app-iautocomplete [data]="shiftDetail" formControlName="WorkShiftId">
+                          </app-iautocomplete>
                         </div>
                       </div>
                     </div>

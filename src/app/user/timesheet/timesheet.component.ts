@@ -103,7 +103,7 @@ export class TimesheetComponent implements OnInit {
           }
           Toast("Client loaded successfully.");
         } else {
-          ErrorToast("Unable to get client detail. Please contact admin.");
+          WarningToast("Unable to get client detail. Please contact admin.");
         }
 
         this.isEmployeesReady = true;

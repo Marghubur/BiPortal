@@ -60,6 +60,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   assignMaxDate: any = null;
   imageIndex: number = 0;
   isSubmitted: boolean = false;
+  shiftDetail: autoCompleteModal = null;
+  shifts: Array<any> = [];
 
   get f() {
     let data = this.employeeForm.controls;
@@ -85,6 +87,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       value: 0,
       text: "Default Manager"
     });
+    this.shiftDetail = new autoCompleteModal();
+    this.shiftDetail.data = [];
+    this.shiftDetail.placeholder = "Work Shift";
+    this.shiftDetail.className = "disable-field";
     this.managerList.className = "autocomplete-height";
     this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     let assignmaxdate = new Date(new Date().setMonth(new Date().getMonth() + 12))
@@ -118,6 +124,23 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   buildPageData(response: ResponseModel) {
+    if (response.ResponseBody.WorkShift){
+      this.shifts = response.ResponseBody.WorkShift;
+        if (this.shifts && this.shifts.length > 0) {
+          this.shifts.map(x => {
+            this.shiftDetail.data.push({
+              value: x.WorkShiftId,
+              text: x.ShiftTitle
+            });
+          });
+          this.shiftDetail.className="";
+        } else {
+          this.shiftDetail.data.push({
+            value: 0,
+            text: "Regular shift"
+          });
+        }
+    }
     if (response.ResponseBody && response.ResponseBody.Employee != undefined) {
       this.clients = response.ResponseBody.Clients;
       if (response.ResponseBody.Employee.length > 0) {
