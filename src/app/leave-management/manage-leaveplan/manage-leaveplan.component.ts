@@ -1077,7 +1077,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       this.http.get(`ApprovalChain/GetApprovalChainData/${this.selectedWorkflow.ApprovalWorkFlowId}`)
       .then(res => {
         if (res.ResponseBody) {
-          this.selectedWorkFlowDetail = res.ResponseBody;
+          this.selectedWorkFlowDetail = res.ResponseBody.approvalWorkFlowChain;
         }
       })
     }

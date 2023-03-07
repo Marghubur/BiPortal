@@ -109,8 +109,13 @@ export class AttendanceComponent implements OnInit {
   previousMonthAttendance(month: number, index: number) {
     let doj = new Date(this.userDetail.CreatedOn);
     let startDate = new Date(new Date().getFullYear(), month, 1);
-    if (doj.getFullYear() == startDate.getFullYear() && doj.getMonth() == startDate.getMonth()) {
-      startDate = new Date(doj.getFullYear(), doj.getMonth(), doj.getDate());
+    if (doj.getFullYear() == new Date().getFullYear() && doj.getMonth() == new Date().getMonth()) {
+      if ((doj.getMonth()-1) == month) {
+        WarningToast("You join in this current month");
+        return;
+      } else {
+        startDate = new Date(doj.getFullYear(), doj.getMonth(), 1);
+      }
     }
     let endDate;
     if (month == new Date().getMonth())
