@@ -18,6 +18,7 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
   doc: any = null;
   rows: number = 0;
   columns: number = 0;
+  IsSideIcon: boolean = true;
   private eventSubscription: Subscription;
 
   @ViewChild('textFrame', {static: false}) iframe: ElementRef;

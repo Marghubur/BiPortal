@@ -46,21 +46,21 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-md-10 col-sm-9 outline-none" id="main-container"
+                        <!-- <div class="col-md-10 col-sm-9 outline-none" id="main-container"
                         (contextmenu)="manipulateSection($event)"
                         (click)="disabeSection()"
                         (focus)="deactivateTag()"
                         (keyup)="tractPressEvent($event)" tabindex="0">
-                          <div class="col-md-12 px-4 dv-space">
+                          <div class="col-md-12 px-4 dv-space"> -->
                             <!-- <input type="text" placeholder="Enter Title" class="form-control border-0 fw-bold fs-3" (keyup)="editProjectTitle($event)" [value]="projectDetail.Title"> -->
-                            <ng-container>
+                            <!-- <ng-container>
                               <form [formGroup]="wikiForm">
-                                <div>
-                                  <div class="d-flex justify-content-around icon-section rounded">
+                                <div> -->
+                                  <!-- <div class="d-flex justify-content-around icon-section rounded"> -->
                                     <!-- <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-dark" (click)="addsection()">
                                       <i class="fa fa-plus text-dark" ></i>
                                     </a> -->
-                                    <div ngbDropdown class="d-inline-block">
+                                    <!-- <div ngbDropdown class="d-inline-block">
                                       <a href="javascript:void(0)" id="dropdownBasic1" ngbDropdownToggle class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Font Size" class="fs-6 px-2">
                                         <i class="fa fa-font" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
                                       </a>
@@ -127,15 +127,15 @@
                                     <ng-container >
                                       <div class="col-md-12 mx-3">
                                         <h5 >
-                                          <div class="">
+                                          <div class=""> -->
                                             <!-- <div contenteditable="true" (keyup)="editSubSection($event)">
                                               {{wikiForm.get('WikiSection').value}}
                                             </div> -->
-                                            <div class="text-end">
+                                            <!-- <div class="text-end"> -->
                                               <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
                                                 <i class="fa fa-trash text-danger"></i>
                                               </a> -->
-                                              <a href="javascript:void(0)" class="text-decoration-none" (click)="enableSection()">
+                                              <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="enableSection()">
                                                 <i class="fa fa-pencil ps-3 blur-icon"></i>
                                               </a>
                                             </div>
@@ -150,10 +150,17 @@
                               </form>
                             </ng-container>
                           </div>
+                        </div> -->
+                        <div class="col-md-10 col-sm-9">
+                          <app-editor [content]="htmlText"></app-editor>
+                          <button class="btn btn-primary-c ms-3" [disabled]="isloading" (click)="saveProjectDetails()">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isloading, 'fa-file-o': !isloading}"></i>
+                            <span class="ps-2">{{ isloading ? 'Wait' : 'Save' }}</span>
+                          </button>
                         </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="projectDetail.SectionDescription == null || projectDetail.SectionDescription == ''">
+                <ng-container *ngIf="!isWikiAdded">
                   <div class="my-5 py-5 text-center">
                     <h3 class="mt-5 pt-5">Please add project name and project title</h3>
                     <button class="btn btn-primary-c my-4" (click)="addTitlePopUp()"><i class="fa fa-plus pe-2"></i> Add Project Title</button>

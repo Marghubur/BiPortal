@@ -1,12 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -39,7 +38,6 @@ export class AttendanceComponent implements OnInit {
   applicationData: any = null;
   emails: Array<any> = [];
   employees: Array<any> = [];
-  //-------------------------- required code starts --------------------------
   sessionvalue: number = 1;
   commentValue: string = null;
   today: Date = null;
@@ -59,9 +57,9 @@ export class AttendanceComponent implements OnInit {
   filterAttendStatus: number = 1;
   AttendanceId: number = 0;
   requestedOn: number = 0;
+  shiftDetail: any = null;
 
-  constructor(private fb: FormBuilder,
-    private http: AjaxService,
+  constructor(private http: AjaxService,
     private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService
@@ -87,7 +85,7 @@ export class AttendanceComponent implements OnInit {
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.loadPageData();
     } else {
-      this.userDetail = this.user.getInstance() as UserDetail;
+      this.userDetail = this.user.getInstance();
       if(this.userDetail && this.userDetail !== null) {
         this.employeeId = this.userDetail.UserId;
         this.reportingManagerId = this.userDetail.ReportingManagerId;
@@ -556,5 +554,42 @@ export class AttendanceComponent implements OnInit {
     this.requestedOn = 0;
     this.request.SearchString = "";
     this.loadAttendanceRequestDetail();
+  }
+
+  loadShiftDetail() {
+    this.isLoading = true;
+    this.http.get(`Shift/GetWorkShift/${this.userDetail.WorkShiftId}`).then(res => {
+      if (res.ResponseBody) {
+        this.shiftDetail = res.ResponseBody;
+        this.shiftDetail.OfficeEndTime =this.timeConvert(this.shiftDetail.Duration);
+        console.log(this.shiftDetail)
+        Toast("Shift detail loaded successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  timeConvert(number) {
+    var hrs = Math.floor(number/60).toString();
+    var mins = (number % 60).toString();
+    return this.getShiftOffTime(hrs + "." + mins);
+  }
+
+  getShiftOffTime(endTime: any) {
+    let startTime = this.shiftDetail.OfficeTime.replace(":", ".");
+    let arr = startTime.split('.');
+    let startmin = +arr[1];
+    let strathrs = +arr[0];
+    arr = endTime.split('.');
+    let endmin = +arr[1];
+    let endhrs = +arr[0];
+    let hrs = Math.floor((startmin+endmin)/60);
+    let min = Math.floor((startmin+endmin)%60);
+    let totalhrs = hrs+strathrs+endhrs < 24 ? hrs+strathrs+endhrs : (24-(hrs+strathrs+endhrs));
+    let totalmin = min+startmin+endmin;
+    let time =  ( (totalhrs < 10 ? "0" : "") + totalhrs.toString() + ":" +(totalmin < 10 ? "0" : "") + totalmin.toString());
+    return time;
   }
 }

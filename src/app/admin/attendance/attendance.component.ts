@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
@@ -65,9 +64,9 @@ export class AttendanceComponent implements OnInit {
   sessionvalue: number = 1;
   emails: Array<any> = [];
   employees: Array<any> = [];
+  shiftDetail: any = null;
 
-  constructor(private fb: FormBuilder,
-    private http: AjaxService,
+  constructor(private http: AjaxService,
     private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService
@@ -630,5 +629,42 @@ export class AttendanceComponent implements OnInit {
       this.clientId = this.currentEmployee.CompanyId;
       this.loadAttendanceData();
     }
+  }
+
+  loadShiftDetail() {
+    this.isLoading = true;
+    this.http.get(`Shift/GetWorkShift/${1}`).then(res => {
+      if (res.ResponseBody) {
+        this.shiftDetail = res.ResponseBody;
+        this.shiftDetail.OfficeEndTime =this.timeConvert(this.shiftDetail.Duration);
+        console.log(this.shiftDetail)
+        Toast("Shift detail loaded successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  timeConvert(number) {
+    var hrs = Math.floor(number/60).toString();
+    var mins = (number % 60).toString();
+    return this.getShiftOffTime(hrs + "." + mins);
+  }
+
+  getShiftOffTime(endTime: any) {
+    let startTime = this.shiftDetail.OfficeTime.replace(":", ".");
+    let arr = startTime.split('.');
+    let startmin = +arr[1];
+    let strathrs = +arr[0];
+    arr = endTime.split('.');
+    let endmin = +arr[1];
+    let endhrs = +arr[0];
+    let hrs = Math.floor((startmin+endmin)/60);
+    let min = Math.floor((startmin+endmin)%60);
+    let totalhrs = hrs+strathrs+endhrs < 24 ? hrs+strathrs+endhrs : (24-(hrs+strathrs+endhrs));
+    let totalmin = min+startmin+endmin;
+    let time =  ( (totalhrs < 10 ? "0" : "") + totalhrs.toString() + ":" +(totalmin < 10 ? "0" : "") + totalmin.toString());
+    return time;
   }
 }
