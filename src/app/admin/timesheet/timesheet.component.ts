@@ -182,7 +182,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   filterTimesheet() {
-    this.loadData();
+    this.loadTimesheets();
   }
 
   advanceFilterPopUp() {

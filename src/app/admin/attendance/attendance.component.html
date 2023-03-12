@@ -241,11 +241,129 @@
                   </ng-template>
                 </ng-container>
                 <ng-container ngbNavItem>
-                  <a ngbNavLink class="text-dark">Shift Schedule</a>
+                  <a ngbNavLink class="text-dark" (click)="loadShiftDetail()">Shift Detail</a>
                   <ng-template ngbNavContent>
-                    <div class="text-center bg-white">
-                      <img src="assets/images/uc.jpg" alt="" class="img-fluid">
-                    </div>
+                    <ng-container class="" *ngIf="isPageReady">
+                      <ng-container *ngIf="shiftDetail !== null">
+                        <div class="col-md-12">
+                          <div class="row">
+                            <div class="mt-3 col-md-4">
+                              <label for="" class="form-label">Shift Title</label>
+                              <input type="text" readonly value="{{shiftDetail.ShiftTitle}}" class="form-control">
+                            </div>
+                            <div class="mt-3 col-md-4">
+                              <label for="" class="form-label">Description</label>
+                              <input type="text" readonly value="{{shiftDetail.Description}}" class="form-control">
+                            </div>
+                            <div class="mt-3 col-md-4">
+                              <label for="" class="form-label">Total Working Days</label>
+                              <input type="text" readonly value="{{shiftDetail.TotalWorkingDays}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="mt-4">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>Week Days</th>
+                                  <th>Monday</th>
+                                  <th>Tuesday</th>
+                                  <th>Wednesday</th>
+                                  <th>Thursday</th>
+                                  <th>Friday</th>
+                                  <th>Saturday</th>
+                                  <th>Sunday</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td class="fw-bold text-primary">Office Time</td>
+                                  <td>
+                                    <div *ngIf="shiftDetail.IsMon">
+                                      <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    </div>
+                                    <div *ngIf="!shiftDetail.IsMon" class="text-danger fw-bold">Weekend</div>
+                                  </td>
+                                  <td>
+                                    <div *ngIf="shiftDetail.IsTue">
+                                      <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    </div>
+                                    <div *ngIf="!shiftDetail.IsTue" class="text-danger fw-bold">Weekend</div>
+                                  </td>
+                                  <td>
+                                    <div *ngIf="shiftDetail.IsWed">
+                                      <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    </div>
+                                    <div *ngIf="!shiftDetail.IsWed" class="text-danger fw-bold">Weekend</div>
+                                  </td>
+                                  <td>
+                                    <div *ngIf="shiftDetail.IsThu">
+                                      <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    </div>
+                                    <div *ngIf="!shiftDetail.IsThu" class="text-danger fw-bold">Weekend</div>
+                                  </td>
+                                  <td>
+                                    <div *ngIf="shiftDetail.IsFri">
+                                      <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    </div>
+                                    <div *ngIf="!shiftDetail.IsFri" class="text-danger fw-bold">Weekend</div>
+                                  </td>
+                                  <td>
+                                    <div *ngIf="shiftDetail.IsSat">
+                                      <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    </div>
+                                    <div *ngIf="!shiftDetail.IsSat" class="text-danger fw-bold">Weekend</div>
+                                  </td>
+                                  <td>
+                                    <div *ngIf="shiftDetail.IsSun">
+                                      <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    </div>
+                                    <div *ngIf="!shiftDetail.IsSun" class="text-danger fw-bold">Weekend</div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="fw-bold text-primary">Working Hours</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsMon}">{{shiftDetail.IsMon ? shiftDetail.Duration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsTue}">{{shiftDetail.IsTue ? shiftDetail.Duration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsWed}">{{shiftDetail.IsWed ? shiftDetail.Duration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsThu}">{{shiftDetail.IsThu ? shiftDetail.Duration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsFri}">{{shiftDetail.IsFri ? shiftDetail.Duration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSat}">{{shiftDetail.IsSat ? shiftDetail.Duration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSun}">{{shiftDetail.IsSun ? shiftDetail.Duration : '00:00'}} min</td>
+                                </tr>
+                                <tr>
+                                  <td class="fw-bold text-primary">Lunch Duration</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsMon}">{{shiftDetail.IsMon ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsTue}">{{shiftDetail.IsTue ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsWed}">{{shiftDetail.IsWed ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsThu}">{{shiftDetail.IsThu ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsFri}">{{shiftDetail.IsFri ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSat}">{{shiftDetail.IsSat ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                  <td [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSun}">{{shiftDetail.IsSun ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="shiftDetail == null">
+                        <div class="custom-height fw-bold fs-3 text-danger my-5 py-5 d-flex align-items-center justify-content-center">
+                          <p class="my-5 py-5">Record Not Found</p>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="!isPageReady">
+                      <div class="py-5 my-5">
+                        <h6 class="fw-bold fs-3 text-center text-dark">Shift details are loading</h6>
+                        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                          <div class="col-md-3 modal-container  text-center cog-wheel">
+                            <img src="assets/images/cog.gif" alt="" />
+                            <h6 class="modal-title title-message">
+                              Please Wait ........
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
                   </ng-template>
                 </ng-container>
 

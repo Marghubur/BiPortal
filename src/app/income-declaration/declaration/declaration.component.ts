@@ -77,11 +77,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   deleteType: string = '';
 
   constructor(private local: ApplicationStorage,
-    private user: UserService,
-    private fb: FormBuilder,
-    private nav: iNavigation,
-    private http: AjaxService
-    ) { }
+              private user: UserService,
+              private fb: FormBuilder,
+              private nav: iNavigation,
+              private http: AjaxService) { }
 
   ngOnInit(): void {
     this.rentalPage = 1;
@@ -96,19 +95,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     var year = dt.getFullYear();
     this.year = dt.getFullYear();
     this.basePath = this.http.GetImageBasePath();
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
-    if (expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-    else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-    let Master = this.local.get(null);
-    if (Master !== null && Master !== "") {
-      this.userDetail = Master["UserDetail"];
-    } else {
-      ErrorToast("Invalid user. Please login again.")
-    }
-
     let i = 0;
     if (new Date().getMonth() + 1 <= 4)
       year = year -1;

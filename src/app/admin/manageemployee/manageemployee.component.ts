@@ -430,6 +430,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (this.employeeForm.get('CompanyId').value == 0)
       errroCounter++;
 
+    if (this.employeeForm.get('DateOfJoining').value == null)
+      this.employeeForm.get('DateOfJoining').setValue(new Date());
+
     this.employeeModal = this.employeeForm.value;
     if (this.employeeModal.Pincode === null)
       this.employeeModal.Pincode = 0;

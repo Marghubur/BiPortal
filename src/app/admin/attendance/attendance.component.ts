@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
@@ -33,6 +32,7 @@ export class AttendanceComponent implements OnInit {
   clientDetail: autoCompleteModal = null;
   employeesList: autoCompleteModal = new autoCompleteModal();
   isLoading: boolean = false;
+  isPageReady: boolean = false;
   NoClient: boolean = false;
   isAttendanceDataLoaded: boolean = false;
   divisionCode: number = 0;
@@ -65,9 +65,9 @@ export class AttendanceComponent implements OnInit {
   sessionvalue: number = 1;
   emails: Array<any> = [];
   employees: Array<any> = [];
+  shiftDetail: any = null;
 
-  constructor(private fb: FormBuilder,
-    private http: AjaxService,
+  constructor(private http: AjaxService,
     private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService
@@ -109,8 +109,13 @@ export class AttendanceComponent implements OnInit {
   previousMonthAttendance(month: number, index: number) {
     let doj = new Date(this.userDetail.CreatedOn);
     let startDate = new Date(new Date().getFullYear(), month, 1);
-    if (doj.getFullYear() == startDate.getFullYear() && doj.getMonth() == startDate.getMonth()) {
-      startDate = new Date(doj.getFullYear(), doj.getMonth(), doj.getDate());
+    if (doj.getFullYear() == new Date().getFullYear() && doj.getMonth() == new Date().getMonth()) {
+      if ((doj.getMonth()-1) == month) {
+        WarningToast("You join in this current month");
+        return;
+      } else {
+        startDate = new Date(doj.getFullYear(), doj.getMonth(), 1);
+      }
     }
     let endDate;
     if (month == new Date().getMonth())
@@ -625,5 +630,41 @@ export class AttendanceComponent implements OnInit {
       this.clientId = this.currentEmployee.CompanyId;
       this.loadAttendanceData();
     }
+  }
+
+  loadShiftDetail() {
+    this.isPageReady = false;
+    this.http.get(`Shift/GetWorkShiftByEmpId/${this.employeeId}`).then(res => {
+      if (res.ResponseBody) {
+        this.shiftDetail = res.ResponseBody;
+        this.shiftDetail.OfficeEndTime =this.timeConvert(this.shiftDetail.Duration);
+        Toast("Shift detail loaded successfully");
+        this.isPageReady = true;
+      }
+    }).catch(e => {
+      this.isPageReady = true;
+    })
+  }
+
+  timeConvert(number) {
+    var hrs = Math.floor(number/60).toString();
+    var mins = (number % 60).toString();
+    return this.getShiftOffTime(hrs + "." + mins);
+  }
+
+  getShiftOffTime(endTime: any) {
+    let startTime = this.shiftDetail.OfficeTime.replace(":", ".");
+    let arr = startTime.split('.');
+    let startmin = +arr[1];
+    let strathrs = +arr[0];
+    arr = endTime.split('.');
+    let endmin = +arr[1];
+    let endhrs = +arr[0];
+    let hrs = Math.floor((startmin+endmin+this.shiftDetail.LunchDuration)/60);
+    let min = Math.floor((startmin+endmin+this.shiftDetail.LunchDuration)%60);
+    let totalhrs = hrs+strathrs+endhrs < 24 ? hrs+strathrs+endhrs : (24-(hrs+strathrs+endhrs));
+    let totalmin = min+startmin+endmin;
+    let time =  ( (totalhrs < 10 ? "0" : "") + totalhrs.toString() + ":" +(totalmin < 10 ? "0" : "") + totalmin.toString());
+    return time;
   }
 }

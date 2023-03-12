@@ -263,15 +263,15 @@
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">Topic</label>
-            <input type="text" placeholder="Enter Topic" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32" formControlName="Topic" [ngClass]="{'error-field': submitted && f.Topic.errors !== null && f.Topic.errors.required}" class="form-control">
+            <input type="text" placeholder="Enter Topic" maxlength="100" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32" formControlName="Topic" [ngClass]="{'error-field': submitted && f.Topic.errors !== null && f.Topic.errors.required}" class="form-control">
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">Brief Detail</label>
-            <input type="text" placeholder="Enter Brief Detail" oninput="this.value = this.value.toUpperCase()" formControlName="BriefDetail" [ngClass]="{'error-field': submitted && f.BriefDetail.errors !== null && f.BriefDetail.errors.required}" class="form-control">
+            <input type="text" placeholder="Enter Brief Detail" maxlength="250" oninput="this.value = this.value.toUpperCase()" formControlName="BriefDetail" [ngClass]="{'error-field': submitted && f.BriefDetail.errors !== null && f.BriefDetail.errors.required}" class="form-control">
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">Complete Detail</label>
-            <textarea type="text" placeholder="Enter Complete Detail" oninput="this.value = this.value.toUpperCase()" formControlName="CompleteDetail" [ngClass]="{'error-field': submitted && f.CompleteDetail.errors !== null && f.CompleteDetail.errors.required}" class="form-control detail-area"></textarea>
+            <textarea type="text" placeholder="Enter Complete Detail" maxlength="600" oninput="this.value = this.value.toUpperCase()" formControlName="CompleteDetail" [ngClass]="{'error-field': submitted && f.CompleteDetail.errors !== null && f.CompleteDetail.errors.required}" class="form-control detail-area"></textarea>
           </div>
           <div class="mt-3">
             <input type="file" id="uploaAnnouncedoc" class="d-none" multiple accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf" (change)="uploadAttachment($event)"/>

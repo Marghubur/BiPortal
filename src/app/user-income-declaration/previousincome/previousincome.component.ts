@@ -4,7 +4,8 @@ import { iNavigation } from 'src/providers/iNavigation';
 import 'bootstrap';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/providers/userService';
-import { UserDetail } from 'src/providers/common-service/common.service';
+import { ErrorToast, UserDetail } from 'src/providers/common-service/common.service';
+import { AjaxService } from 'src/providers/ajax.service';
 declare var $: any;
 
 @Component({
@@ -22,10 +23,12 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
   previousIncomForm: FormGroup;
   itemCount: number = 0;
   startingMonth: number = 4;
+  isPageReady: boolean = false;
 
   constructor(private nav: iNavigation,
-    private user: UserService,
-    private fb: FormBuilder) { }
+              private user: UserService,
+              private http: AjaxService,
+              private fb: FormBuilder) { }
 
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip();
@@ -34,7 +37,28 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.isRecordFound = false;
     this.userDetail = this.user.getInstance() as UserDetail;
-    this.getPreviousIncome();
+    this.loadData();
+  }
+
+  loadData() {
+    this.isPageReady = false;
+    if (this.userDetail.UserId <= 0) {
+      ErrorToast("Invalid employee. Please login again");
+      return;
+    }
+    this.http.get(`Declaration/GetPreviousEmployemnt/${this.userDetail.UserId}`).then(res => {
+      if (res.ResponseBody) {
+          this.previousEmploymentDetail = res.ResponseBody;
+          this.initForm();
+          this.isRecordFound = true;
+      } else {
+        this.getPreviousIncome();
+      }
+      console.log(res.ResponseBody);
+      this.isPageReady = true;
+      }).catch(e => {
+      this.isPageReady = true;
+    })
   }
 
   getPreviousIncome() {
@@ -60,30 +84,56 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
 
   buildOldTaxSlab(): FormArray {
     let dataArray: FormArray = this.fb.array([]);
-    let monthNumber = this.startingMonth;
-    let i = 0;
-    while(i <= this.itemCount) {
-      dataArray.push(this.fb.group({
-        Month: new FormControl(this.getMonthName(monthNumber)),
-        Year: new FormControl(this.currentYear),
-        Gross: new FormControl(0),
-        Basic: new FormControl(null),
-        HouseRent: new FormControl(null),
-        EmployeePR: new FormControl(0),
-        ESI: new FormControl(null),
-        LWF: new FormControl(null),
-        LWFEmp: new FormControl(null),
-        Professional: new FormControl(0),
-        IncomeTax: new FormControl(0),
-        OtherTax: new FormControl(0),
-        OtherTaxable: new FormControl(null)
-      }));
-      if (monthNumber > 11) {
-        monthNumber = 0;
-        this.currentYear = this.currentYear+1;
+    if (this.previousEmploymentDetail.length && this.previousEmploymentDetail.length > 0) {
+      let i = 0;
+      while(i < this.previousEmploymentDetail.length) {
+        dataArray.push(this.fb.group({
+          EmployeeId: new FormControl(this.previousEmploymentDetail[i].EmployeeId),
+          PreviousEmpDetailId: new FormControl(this.previousEmploymentDetail[i].PreviousEmpDetailId),
+          Month: new FormControl(this.previousEmploymentDetail[i].Month),
+          Year: new FormControl(this.previousEmploymentDetail[i].Year),
+          Gross: new FormControl(this.previousEmploymentDetail[i].Gross),
+          Basic: new FormControl(this.previousEmploymentDetail[i].Basic),
+          HouseRent: new FormControl(this.previousEmploymentDetail[i].HouseRent),
+          EmployeePR: new FormControl(this.previousEmploymentDetail[i].EmployeePR),
+          ESI: new FormControl(this.previousEmploymentDetail[i].ESI),
+          LWF: new FormControl(this.previousEmploymentDetail[i].LWF),
+          LWFEmp: new FormControl(this.previousEmploymentDetail[i].LWFEmp),
+          Professional: new FormControl(this.previousEmploymentDetail[i].Professional),
+          IncomeTax: new FormControl(this.previousEmploymentDetail[i].IncomeTax),
+          OtherTax: new FormControl(this.previousEmploymentDetail[i].OtherTax),
+          OtherTaxable: new FormControl(this.previousEmploymentDetail[i].OtherTaxable)
+        }));
+        i++;
       }
-      i++;
-      monthNumber++;
+    } else {
+      let monthNumber = this.startingMonth;
+      let i = 0;
+      while(i <= this.itemCount) {
+        dataArray.push(this.fb.group({
+          EmployeeId: new FormControl(this.userDetail.UserId),
+          PreviousEmpDetailId: new FormControl(0),
+          Month: new FormControl(this.getMonthName(monthNumber)),
+          Year: new FormControl(this.currentYear),
+          Gross: new FormControl(0),
+          Basic: new FormControl(0),
+          HouseRent: new FormControl(0),
+          EmployeePR: new FormControl(0),
+          ESI: new FormControl(0),
+          LWF: new FormControl(0),
+          LWFEmp: new FormControl(0),
+          Professional: new FormControl(0),
+          IncomeTax: new FormControl(0),
+          OtherTax: new FormControl(0),
+          OtherTaxable: new FormControl(0)
+        }));
+        if (monthNumber > 11) {
+          monthNumber = 0;
+          this.currentYear = this.currentYear+1;
+        }
+        i++;
+        monthNumber++;
+      }
     }
     this.total = dataArray.length;
     return dataArray;
@@ -138,14 +188,17 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
 class PreviousEmploymentDetail {
   Month: string = '';
   Gross: number = 0;
-  Basic: number = null;
-  HouseRent: number = null;
+  Basic: number = 0;
+  HouseRent: number = 0;
   EmployeePR: number = 0;
-  ESI: number = null;
-  LWF: number = null;
-  LWFEmp: number = null;
+  ESI: number = 0;
+  LWF: number = 0;
+  LWFEmp: number = 0;
   Professional: number = 0;
   IncomeTax: number = 0;
   OtherTax: number = 0;
-  OtherTaxable: number = null;
+  OtherTaxable: number = 0;
+  EmployeeId: number = 0;
+  PreviousEmpDetailId: number = 0;
+  Year: number = 0;
 }

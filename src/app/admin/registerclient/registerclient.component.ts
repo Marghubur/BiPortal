@@ -133,7 +133,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       City: new FormControl(this.clientModal.City, [Validators.required]),
       State: new FormControl(this.clientModal.State, [Validators.required]),
       Country: new FormControl(this.clientModal.Country, [Validators.required]),
-      GSTNo: new FormControl(this.clientModal.GSTNo),
+      GSTNo: new FormControl(this.clientModal.GSTNo, [Validators.required                  ]),
       AccountNo: new FormControl(this.clientModal.AccountNo),
       BankName: new FormControl(this.clientModal.BankName),
       BranchName: new FormControl(this.clientModal.BranchName),
