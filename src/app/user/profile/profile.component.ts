@@ -1770,6 +1770,7 @@ export class ProfileComponent implements OnInit {
   }
 
   submitManageUserForm() {
+    this.isLoading = true;
     let formData = new FormData();
     let userInfo = this.manageUserForm.value;
     this.userModal.FirstName = userInfo.FirstName;
@@ -1799,7 +1800,7 @@ export class ProfileComponent implements OnInit {
         }
         let profile = res.ResponseBody.profileDetail;
         if (profile && profile.length > 0) {
-          this.profile = profile.filter(x => x.FileName == ProfileImage);
+          this.profile = profile.filter(x => x.FileName.includes(ProfileImage));
           this.profileId = this.profile[0].FileId;
           this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
           let document = profile.filter(x => x.FileName == "resume");
@@ -1814,6 +1815,7 @@ export class ProfileComponent implements OnInit {
         this.UserId = this.userModal.EmployeeId;
         this.initForm();
         Toast("Data updated successfully.");
+        this.isLoading = false;
       }
 
       this.isFormReady = true;

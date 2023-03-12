@@ -32,6 +32,7 @@ export class AttendanceComponent implements OnInit {
   clientDetail: autoCompleteModal = null;
   employeesList: autoCompleteModal = new autoCompleteModal();
   isLoading: boolean = false;
+  isPageReady: boolean = false;
   NoClient: boolean = false;
   isAttendanceDataLoaded: boolean = false;
   divisionCode: number = 0;
@@ -632,17 +633,16 @@ export class AttendanceComponent implements OnInit {
   }
 
   loadShiftDetail() {
-    this.isLoading = true;
-    this.http.get(`Shift/GetWorkShift/${1}`).then(res => {
+    this.isPageReady = false;
+    this.http.get(`Shift/GetWorkShiftByEmpId/${this.employeeId}`).then(res => {
       if (res.ResponseBody) {
         this.shiftDetail = res.ResponseBody;
         this.shiftDetail.OfficeEndTime =this.timeConvert(this.shiftDetail.Duration);
-        console.log(this.shiftDetail)
         Toast("Shift detail loaded successfully");
-        this.isLoading = false;
+        this.isPageReady = true;
       }
     }).catch(e => {
-      this.isLoading = false;
+      this.isPageReady = true;
     })
   }
 
@@ -660,8 +660,8 @@ export class AttendanceComponent implements OnInit {
     arr = endTime.split('.');
     let endmin = +arr[1];
     let endhrs = +arr[0];
-    let hrs = Math.floor((startmin+endmin)/60);
-    let min = Math.floor((startmin+endmin)%60);
+    let hrs = Math.floor((startmin+endmin+this.shiftDetail.LunchDuration)/60);
+    let min = Math.floor((startmin+endmin+this.shiftDetail.LunchDuration)%60);
     let totalhrs = hrs+strathrs+endhrs < 24 ? hrs+strathrs+endhrs : (24-(hrs+strathrs+endhrs));
     let totalmin = min+startmin+endmin;
     let time =  ( (totalhrs < 10 ? "0" : "") + totalhrs.toString() + ":" +(totalmin < 10 ? "0" : "") + totalmin.toString());

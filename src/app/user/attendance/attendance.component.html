@@ -242,57 +242,43 @@
                             <td class="fw-bold text-primary">Office Time</td>
                             <td>
                               <div *ngIf="shiftDetail.IsMon">
-                                <span>{{shiftDetail.OfficeTime}}</span>
-                                <p class="mb-0 ps-2">to</p>
-                                <span>{{shiftDetail.OfficeEndTime}}</span>
+                                <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
                               </div>
                               <div *ngIf="!shiftDetail.IsMon" class="text-danger fw-bold">Weekend</div>
                             </td>
                             <td>
                               <div *ngIf="shiftDetail.IsTue">
-                                <span>{{shiftDetail.OfficeTime}}</span>
-                                <p class="mb-0 ps-2">to</p>
-                                <span>{{shiftDetail.OfficeEndTime}}</span>
+                                <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
                               </div>
                               <div *ngIf="!shiftDetail.IsTue" class="text-danger fw-bold">Weekend</div>
                             </td>
                             <td>
                               <div *ngIf="shiftDetail.IsWed">
-                                <span>{{shiftDetail.OfficeTime}}</span>
-                                <p class="mb-0 ps-2">to</p>
-                                <span>{{shiftDetail.OfficeEndTime}}</span>
+                                <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
                               </div>
                               <div *ngIf="!shiftDetail.IsWed" class="text-danger fw-bold">Weekend</div>
                             </td>
                             <td>
                               <div *ngIf="shiftDetail.IsThu">
-                                <span>{{shiftDetail.OfficeTime}}</span>
-                                <p class="mb-0 ps-2">to</p>
-                                <span>{{shiftDetail.OfficeEndTime}}</span>
+                                <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
                               </div>
                               <div *ngIf="!shiftDetail.IsThu" class="text-danger fw-bold">Weekend</div>
                             </td>
                             <td>
                               <div *ngIf="shiftDetail.IsFri">
-                                <span>{{shiftDetail.OfficeTime}}</span>
-                                <p class="mb-0 ps-2">to</p>
-                                <span>{{shiftDetail.OfficeEndTime}}</span>
+                                <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
                               </div>
                               <div *ngIf="!shiftDetail.IsFri" class="text-danger fw-bold">Weekend</div>
                             </td>
                             <td>
                               <div *ngIf="shiftDetail.IsSat">
-                                <span>{{shiftDetail.OfficeTime}}</span>
-                                <p class="mb-0 ps-2">to</p>
-                                <span>{{shiftDetail.OfficeEndTime}}</span>
+                                <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
                               </div>
                               <div *ngIf="!shiftDetail.IsSat" class="text-danger fw-bold">Weekend</div>
                             </td>
                             <td>
                               <div *ngIf="shiftDetail.IsSun">
-                                <span>{{shiftDetail.OfficeTime}}</span>
-                                <p class="mb-0 ps-2">to</p>
-                                <span>{{shiftDetail.OfficeEndTime}}</span>
+                                <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
                               </div>
                               <div *ngIf="!shiftDetail.IsSun" class="text-danger fw-bold">Weekend</div>
                             </td>
@@ -320,6 +306,11 @@
                         </tbody>
                       </table>
                     </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="shiftDetail == null">
+                  <div class="custom-height fw-bold fs-3 text-danger my-5 py-5 d-flex align-items-center justify-content-center">
+                    <p class="my-5 py-5">Record Not Found</p>
                   </div>
                 </ng-container>
               </ng-container>

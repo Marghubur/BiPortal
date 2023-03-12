@@ -336,7 +336,7 @@ export class ApprovalRequestComponent implements OnInit {
         break;
     }
 
-    this.http.put(`${endPoint}/${this.filterId}`, this.currentTimesheet).then((response:ResponseModel) => {
+    this.http.put(`${endPoint}/${this.currentTimesheet[0].TimesheetId}/${this.filterId}`, this.currentTimesheet).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.buildPage(response.ResponseBody);
         $('#timesheetModal').modal('hide');

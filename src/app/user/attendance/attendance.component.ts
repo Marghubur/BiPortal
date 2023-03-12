@@ -585,8 +585,8 @@ export class AttendanceComponent implements OnInit {
     arr = endTime.split('.');
     let endmin = +arr[1];
     let endhrs = +arr[0];
-    let hrs = Math.floor((startmin+endmin)/60);
-    let min = Math.floor((startmin+endmin)%60);
+    let hrs = Math.floor((startmin+endmin+this.shiftDetail.LunchDuration)/60);
+    let min = Math.floor((startmin+endmin+this.shiftDetail.LunchDuration)%60);
     let totalhrs = hrs+strathrs+endhrs < 24 ? hrs+strathrs+endhrs : (24-(hrs+strathrs+endhrs));
     let totalmin = min+startmin+endmin;
     let time =  ( (totalhrs < 10 ? "0" : "") + totalhrs.toString() + ":" +(totalmin < 10 ? "0" : "") + totalmin.toString());
