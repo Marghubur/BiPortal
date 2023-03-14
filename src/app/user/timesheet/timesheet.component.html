@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-md-4">
                   <select class="form-select" [disabled]="clientId == 0" (change)="filterTimesheet()" [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">
-                    <option value="" selected>Select by status</option>
+                    <option value="" selected disabled>Select by status</option>
                     <option value="2">Pending</option>
                     <option value="8">Submitted</option>
                     <option value="13">Save</option>

@@ -562,7 +562,6 @@ export class AttendanceComponent implements OnInit {
       if (res.ResponseBody) {
         this.shiftDetail = res.ResponseBody;
         this.shiftDetail.OfficeEndTime =this.timeConvert(this.shiftDetail.Duration);
-        console.log(this.shiftDetail)
         Toast("Shift detail loaded successfully");
         this.isLoading = false;
       }

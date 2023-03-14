@@ -60,7 +60,6 @@ export class PreviousincomeComponent implements OnInit {
         }else {
           this.getPreviousIncome();
         }
-        console.log(res.ResponseBody);
         this.isPageReady = true;
       }
     }).catch(e => {
@@ -158,7 +157,6 @@ export class PreviousincomeComponent implements OnInit {
   savePreviousIncome() {
     this.isLoading = true;
     let value = this.previousIncomForm.value.PreviousIncomes;
-    console.log(value);
     if (value) {
       this.http.post(`Declaration/PreviousEmployemnt/${this.employeeId}`, value).then(res => {
         if (res.ResponseBody) {

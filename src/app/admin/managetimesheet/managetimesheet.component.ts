@@ -248,4 +248,9 @@ export class ManagetimesheetComponent implements OnInit {
     this.totalActualBurnHrs = this.breakIntoHoursAndMinutes((actualhrs*60)+actualmin);
   }
 
+  clearTimesheet() {
+    if (this.weeklyTimesheetDetail)
+      this.buildPage(this.weeklyTimesheetDetail);
+  }
+
 }

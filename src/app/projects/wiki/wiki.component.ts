@@ -69,7 +69,6 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     else
       menuleft = e.pageX;
     this.popover.setAttribute('style', `left: ${menuleft}px; top: ${menutop}px`);
-    console.log(e.pageX, e.pageY);
     if (this.target == null) {
       let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
       if (target)

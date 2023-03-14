@@ -359,7 +359,6 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
 
   viewPdfFile(userFile: any) {
     this.isPdfGenerating = true;
-    console.log(userFile)
     this.regeneratebill(userFile);
     $('#pdfviewingModal').modal('show');
   }

@@ -117,12 +117,29 @@ export class IncometaxComponent implements OnInit {
         this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
 
         let annualSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        let i = 0;
+        let totalAmount = 0;
+        let finalAmount = 0;
+        let totalAmounts: Array<any> = [];
+        while(i < annualSalaryDetail.length) {
+          let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.find(x => x.ComponentId == "Gross");
+          // totalAmount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+          finalAmount += salaryComponent.FinalAmount;
+          totalAmounts.push({ FinalAmount: salaryComponent.FinalAmount });
+          i++;
+        }
+
+        this.salaryBreakup.push({
+          key: 'Total',
+          total: finalAmount,
+          value: totalAmounts
+        });
         if (annualSalaryDetail && annualSalaryDetail.length == 12) {
           annualSalaryDetail.map((com) => {
             com.SalaryBreakupDetails = com.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != 'CTC' && x.ComponentId != "PTAX" && x.ComponentId != "ESI")
           });
 
-          let i = 0;
+          i = 0;
           let value = "";
           let selectedComponent = [];
           let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName}) => { return { ComponentId, ComponentName } });
@@ -139,25 +156,7 @@ export class IncometaxComponent implements OnInit {
 
             i++;
           }
-
-          i = 0;
-          let totalAmount = 0;
-          let finalAmount = 0;
-          let totalAmounts: Array<any> = [];
-          while(i < annualSalaryDetail.length) {
-            let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.filter(x => x.ComponentId != "ECI" && x.ComponentId != "EPER-PF" && x.ComponentId != "GRA");
-            totalAmount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
-            finalAmount += totalAmount;
-            totalAmounts.push({ FinalAmount: totalAmount });
-            i++;
-          }
-
-          this.salaryBreakup.push({
-            key: 'Total',
-            total: finalAmount,
-            value: totalAmounts
-          });
-
+          this.salaryBreakup = this.salaryBreakup.sort((a, b) => a.key.localeCompare(b.key));
         } else {
           ErrorToast("Unable to get salary detail. Please contact to admin.");
           return;

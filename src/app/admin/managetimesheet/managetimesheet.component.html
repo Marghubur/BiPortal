@@ -120,7 +120,7 @@
                     <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Fill from previous Timesheet' }}
                   </button>
-                  <button type="button" class="btn btn-primary-c btn-sm" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
+                  <button type="button" (click)="clearTimesheet()" class="btn btn-primary-c btn-sm" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
                     <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Clear Timesheet' }}
                   </button>
@@ -129,15 +129,15 @@
               <div class="col-md-12 row mt-3">
                 <div class="col-md-1 border-end text-center">
                   <span class="badge bg-primary text-center">TOTAL</span>
-                  <p class="fw-bold fs-5 mb-0 text-dark">40:00</p>
+                  <p class="fw-bold fs-5 mb-0 text-dark">{{totalActualBurnHrs}}</p>
                 </div>
                 <div class="col-md-1 border-end text-center">
                   <span class="badge bg-success text-center">BILLABLE</span>
-                  <p class="fw-bold fs-5 mb-0 text-dark">40:00</p>
+                  <p class="fw-bold fs-5 mb-0 text-dark">{{totalExpectedBurnHrs}}</p>
                 </div>
                 <div class="col-md-1 border-end text-center">
                   <span class="badge bg-warning text-center">STANDARD</span>
-                  <p class="fw-bold fs-5 mb-0 text-dark">40:00</p>
+                  <p class="fw-bold fs-5 mb-0 text-dark">{{totalActualBurnHrs}}</p>
                 </div>
               </div>
               <div class="col-md-12 mt-3" formArrayName="WeeklyTimesheetDetail">

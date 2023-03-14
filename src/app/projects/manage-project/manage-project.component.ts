@@ -133,7 +133,6 @@ export class ManageProjectComponent implements OnInit {
     }).then(e => {
       this.isLoading = false;
     })
-    console.log(value);
     this.isLoading = false;
   }
 }

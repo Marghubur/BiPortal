@@ -110,15 +110,14 @@
 
                           <div class="d-flex align-items-center mt-3" data-name="skip-section">
                               <div class="form-check">
-                                  <input class="form-check-input" formControlName="IsAutoExpiredEnabled" type="checkbox"  (click)="enableAutoExpire($event)">
                                   <label class="form-check-label">
-                                      Enable to auto expire approval after
+                                      Auto expire approval after
                                   </label>
                               </div>
                               <div class="d-flex ms-2 align-items-center">
                                   <div class="col-md-6">
                                       <input type="number" class="form-control form-control-sm" formControlName="AutoExpireAfterDays" [ngClass]="{'error-field': submitted && f.AutoExpireAfterDays.errors !== null && f.AutoExpireAfterDays.errors.required}"
-                                          placeholder="No# of days" maxlength="3" name="AutoExpireAfterDays" [readOnly]="workFlowForm.get('IsAutoExpiredEnabled').value == false">
+                                          placeholder="No# of days" maxlength="3" name="AutoExpireAfterDays">
                                   </div>
                                   <span class="ps-2">days</span>
                               </div>

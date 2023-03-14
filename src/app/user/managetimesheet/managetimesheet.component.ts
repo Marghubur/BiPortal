@@ -26,6 +26,7 @@ export class ManagetimesheetComponent implements OnInit {
   totalExpectedBurnHrs: string = null;
   totalActualBurnHrs: string = null;
   weekNumber: string = null;
+  currentWeekTimesheet: any = {};
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -67,6 +68,7 @@ export class ManagetimesheetComponent implements OnInit {
 
     this.http.post("Timesheet/GetWeekTimesheetData", data).then((response: ResponseModel) => {
       if(response.ResponseBody) {
+        this.currentWeekTimesheet = response.ResponseBody;
         this.buildPage(response.ResponseBody);
         Toast("Timesheet data loaded successfully.")
       }
@@ -196,6 +198,7 @@ export class ManagetimesheetComponent implements OnInit {
     this.weeklyTimesheetDetail.ActualBurnedMinutes = this.combineIntoMinutes(actualTime[0], actualTime[1]);
     this.http.post(url, this.weeklyTimesheetDetail).then((response: ResponseModel) => {
       if (response.ResponseBody) {
+        this.currentWeekTimesheet = response.ResponseBody;
         this.buildPage(response.ResponseBody);
       }
       this.isLoading = false;
@@ -249,5 +252,10 @@ export class ManagetimesheetComponent implements OnInit {
     let actualhrs = records.map(x => Number(x.ActualHours)).reduce((acc, curr) => {return acc + curr;}, 0)
     let actualmin = records.map(x => Number(x.ActualMinutes)).reduce((acc, curr) => {return acc + curr;}, 0)
     this.totalActualBurnHrs = this.breakIntoHoursAndMinutes((actualhrs*60)+actualmin);
+  }
+
+  clearTimesheet() {
+    if (this.currentWeekTimesheet)
+      this.buildPage(this.currentWeekTimesheet);
   }
 }

@@ -50,7 +50,6 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   selectedEmployee(e: any) {
-    console.log(e);
     let index = this.managers.findIndex(x => x.value == e.value);
     if(index == -1) {
       this.managers.push(e);

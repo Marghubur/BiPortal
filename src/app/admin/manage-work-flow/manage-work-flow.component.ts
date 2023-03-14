@@ -68,8 +68,7 @@ export class ManageWorkFlowComponent implements OnInit {
       ApprovalChainDetails: this.workFlowArray(),
       Title: new FormControl(this.approvalChainDetail.Title, [Validators.required]),
       TitleDescription: new FormControl(this.approvalChainDetail.TitleDescription, [Validators.required]),
-      IsAutoExpiredEnabled: new FormControl(this.approvalChainDetail.IsAutoExpiredEnabled),
-      AutoExpireAfterDays: new FormControl(this.approvalChainDetail.AutoExpireAfterDays),
+      AutoExpireAfterDays: new FormControl(this.approvalChainDetail.AutoExpireAfterDays, [Validators.required]),
       IsSilentListner: new FormControl(this.approvalChainDetail.IsSilentListner),
       ListnerDetail: new FormControl(this.approvalChainDetail.ListnerDetail),
     });
@@ -228,18 +227,6 @@ deleteChainPopUp(item: any) {
 
   get f() {
     return this.workFlowForm.controls;
-  }
-
-  enableAutoExpire(e: any) {
-    let value = e.target.checked;
-    if (!value) {
-      this.workFlowForm.get('AutoExpireAfterDays').setValue(0);
-      this.workFlowForm.controls.AutoExpireAfterDays.removeValidators([Validators.required]);
-      this.workFlowForm.controls.AutoExpireAfterDays.updateValueAndValidity();
-    } else {
-      this.workFlowForm.controls.AutoExpireAfterDays.setValidators([Validators.required]);
-      this.workFlowForm.controls.AutoExpireAfterDays.updateValueAndValidity();
-    }
   }
 
   disableForwrdWhen(e: any, i: number) {

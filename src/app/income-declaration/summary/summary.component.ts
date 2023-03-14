@@ -32,13 +32,11 @@ export class SummaryComponent implements OnInit {
   isSummaryReady: boolean = false;
   employeesList: autoCompleteModal = new autoCompleteModal();
   applicationData: any = [];
-  isRecordFound: boolean = false;
+  recordFound: boolean = false;
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
-              private user: UserService,
-              private local: ApplicationStorage,
-  ) {
+              private user: UserService) {
       this.singleEmployee = new Filter();
       this.placeholderName = "Select Employee";
       this.employeeDetails = [{
@@ -52,23 +50,13 @@ export class SummaryComponent implements OnInit {
     this.currentMonth = date.getMonth();
     this.currentYear = date.getFullYear();
     this.monthName = this.convertNumberToMonth(this.currentYear, this.currentMonth);
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
-    if(expiredOn === null || expiredOn === "")
-    this.userDetail["TokenExpiryDuration"] = new Date();
-    else
-    this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-    let Master = this.local.get(null);
-    if(Master !== null && Master !== "") {
-      this.userDetail = Master["UserDetail"];
-      this.employeeId = this.userDetail.UserId;
-      this.loadData();
-      } else {
-        Toast("Invalid user. Please login again.")
-      }
+    this.userDetail = this.user.getInstance();
+    this.employeeId = this.userDetail.UserId;
+    this.loadData();
   }
 
   LoadFiles() {
-    this.isRecordFound = false;
+    this.recordFound = false;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       if (response.ResponseBody) {
@@ -76,7 +64,7 @@ export class SummaryComponent implements OnInit {
         this.userFiles = response.ResponseBody["Files"];
         if(this.userFiles !== null && this.userFiles.length > 0) {
           this.salarySummary = this.userFiles.filter(x => x.Month == this.currentMonth -1 && x.Status != 'Rejected')[0];
-          this.isRecordFound = true;
+          this.recordFound = true;
         }
       } else {
         ErrorToast("No file or folder found");
