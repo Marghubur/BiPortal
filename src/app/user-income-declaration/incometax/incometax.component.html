@@ -172,8 +172,8 @@
                               {{item.total | number: '1.2-2'}}
                             </div>
                           </div>
-                          <ng-container *ngFor="let elem of item.value">
-                            <div class="td fe-1">
+                          <ng-container *ngIf="item.value">
+                            <div class="td fe-1" *ngFor="let elem of item.value">
                               <div class="cell-wrapper">
                                 {{elem.FinalAmount | number: '1.2-2'}}
                               </div>
@@ -526,9 +526,6 @@
                       <div class="col d-flex align-items-center">
                         <div class="project-salary-indicator indicator"></div>
                         <p class="p-0 m-0 ps-2">Projected Income Tax</p>
-                      </div>
-                      <div class="col-auto">
-                        <button class="btn btn-primary" (click)="saveTaxDetail()">Save Tax Detail</button>
                       </div>
                     </div>
                   </div>

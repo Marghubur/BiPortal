@@ -36,28 +36,15 @@ export class MysalaryComponent implements OnInit {
   constructor(private nav: iNavigation,
               private user: UserService,
               private http: AjaxService,
-              private local: ApplicationStorage,
               private fb: FormBuilder) { }
 
   ngOnInit(): void {
     var dt = new Date();
     this.currentYear = dt.getFullYear();
-
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
-    if(expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-    else
-     this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-    if(Master !== null && Master !== "") {
-      this.userDetail = Master["UserDetail"];
-      this.currentEmployee = this.userDetail;
-      this.EmployeeId = this.userDetail.UserId;
-      this.loadData();
-    } else {
-      ErrorToast("Invalid user. Please login again.")
-    }
+    this.currentEmployee = this.userDetail;
+    this.EmployeeId = this.userDetail.UserId;
+    this.loadData();
   }
 
   newIncomeTaxRegimePopUp() {
@@ -282,8 +269,6 @@ export class MysalaryComponent implements OnInit {
 
 }
 
-
-
 class MyAnnualSalary {
   Annual: number = 0;
   Bonus: number = 0;
@@ -293,12 +278,6 @@ class MyAnnualSalary {
   PFperMonth: number = 0;
   Perks: number = 0;
   SalaryMonth: number = 0
-}
-
-class SalaryDeduction {
-  Deduction: string = '';
-  Monthly: number = 0;
-  Annually: number = 0;
 }
 
 class IncomeTaxSlab {

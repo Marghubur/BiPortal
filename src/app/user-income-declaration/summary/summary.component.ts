@@ -31,8 +31,7 @@ export class SummaryComponent implements OnInit {
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
-              private user: UserService,
-              private local: ApplicationStorage,
+              private user: UserService
   ) {
       this.singleEmployee = new Filter();
       this.placeholderName = "Select Employee";
@@ -47,19 +46,9 @@ export class SummaryComponent implements OnInit {
     this.currentMonth = date.getMonth();
     this.currentYear = date.getFullYear();
     this.monthName = this.convertNumberToMonth(this.currentYear, this.currentMonth);
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
-    if(expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-      else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-      if(Master !== null && Master !== "") {
-        this.userDetail = Master["UserDetail"];
-        this.employeeId = this.userDetail.UserId;
-        this.LoadFiles();
-      } else {
-        Toast("Invalid user. Please login again.")
-      }
+    this.userDetail = this.user.getInstance();
+    this.employeeId = this.userDetail.UserId;
+    this.LoadFiles();
   }
 
   LoadFiles() {

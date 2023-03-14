@@ -54,7 +54,6 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
       } else {
         this.getPreviousIncome();
       }
-      console.log(res.ResponseBody);
       this.isPageReady = true;
       }).catch(e => {
       this.isPageReady = true;

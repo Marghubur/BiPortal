@@ -26,7 +26,7 @@
       <ng-container>
         <div class="container-fluid pt-4 row">
           <div class="col-md-6 mt-4">
-            <div class="card">
+            <div class="card alert-card">
               <div class="card-header py-3 d-flex fs-5 text-dark align-items-center">
                 <div class="position-relative rupee-container me-3">
                   <i class="fa fa-inr position-absolute" aria-hidden="true"></i>
@@ -37,8 +37,8 @@
                   <span role="button" (click)="nextSummary()" class="px-2 py-1 bg-secondary rounded text-light ms-1"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
                 </div>
               </div>
-              <div class="ps-3 pt-4">
-                <ng-container *ngIf="isRecordFound">
+              <ng-container *ngIf="recordFound">
+                <div class="ps-3 pt-4">
                   <div class="row">
                     <div class="col-md-6">
                       <small class="fs-6">WORKING DAYS</small>
@@ -56,15 +56,15 @@
                       <a href="javascript:void(0)" class="text-decoration-none" (click)="viewPaySlip()">View Pay Slip</a>
                     </div>
                   </div>
-                </ng-container>
-                <ng-container *ngIf="!isRecordFound">
-                  <div class="py-4 my-2 d-flex align-items-center justify-content-center">
-                    <div class="fw- bold fs-5 pt-1 pb-4">
-                      No record found.
-                    </div>
-                  </div>
-                </ng-container>
-              </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!recordFound">
+                <div class="py-3 my-4 d-flex align-items-center justify-content-center">
+                  <span class="fw-bold text-dark fs-5">
+                    No record are available for this month. Please contact to admin.
+                  </span>
+                </div>
+              </ng-container>
             </div>
           </div>
           <div class="col-md-6 mt-4">

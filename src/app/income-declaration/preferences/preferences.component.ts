@@ -30,21 +30,6 @@ export class PreferencesComponent implements OnInit {
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    this.PanInformation = {
-      NameOnCard: "MD Istayaque",
-      PANNo: "ABPANF655A",
-      DOB: new Date(),
-      FatherName: "MD MUSTAQUE"
-    };
-
-    this.salaryDeposit = {
-      PaymentMode: 'Bank Transfer',
-      Bank: 'HDFC Bank',
-      ACNumber: 123456789123,
-      IFSCCode: "HDFC0000123",
-      NameOnAccount: 'MD ISTAYAQUE'
-    };
-
     this.satutoryInformation = {
       PFStatus: 'Enabled',
       PFNumber: 11,
