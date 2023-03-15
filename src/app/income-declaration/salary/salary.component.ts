@@ -119,7 +119,7 @@ export class SalaryComponent implements OnInit {
           TaxDetail: null
         };
       }
-      this.buildAndBindData(completeSalaryDetail);      
+      this.buildAndBindData(completeSalaryDetail);
     });
   }
 
@@ -130,6 +130,7 @@ export class SalaryComponent implements OnInit {
       this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
       if (singleDetail) {
         this.salaryComponents = singleDetail.SalaryBreakupDetails;
+        this.salaryComponents = this.salaryComponents.filter(x => x.IsIncludeInPayslip == true);
         let annual = 0;
         let other = 0;
         let salary = 0;

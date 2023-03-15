@@ -104,6 +104,7 @@ export class MysalaryComponent implements OnInit {
 
       if (singleDetail) {
         this.salaryComponents = singleDetail.SalaryBreakupDetails;
+        this.salaryComponents = this.salaryComponents.filter(x => x.IsIncludeInPayslip == true);
         let annual = 0;
         let other = 0;
         let salary = 0;

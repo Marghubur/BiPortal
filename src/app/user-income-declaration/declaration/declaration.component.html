@@ -60,9 +60,8 @@
               <div class="d-flex justify-content-between">
                 <h5 class="text-dark">Declaration</h5>
                 <div class="pt-3 pe-3">
-                  <select class="form-select">
-                    <option value="currentyear" selected>APR {{year}} - MAR {{year +1}}</option>
-                    <option value="previousyear">APR {{year - 1}} - MAR {{year}}</option>
+                  <select class="form-select" disabled>
+                    <option value="currentyear" selected disabled>APR {{employeeDeclaration.DeclarationFromYear}} - MAR {{employeeDeclaration.DeclarationFromYear +1}}</option>
                   </select>
                 </div>
               </div>
@@ -91,8 +90,7 @@
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Net Taxable Income</p>
                     <p class="text-dark fs-2 mb-0 ">
-                      <span class="" *ngIf="employeeDeclaration.TotalAmount > 200000">INR {{employeeDeclaration.TotalAmount | number : '1.2-2'}}</span>
-                      <span class="" *ngIf="employeeDeclaration.TotalAmount < 200000">INR 0</span>
+                      <span>INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TotalAmount | number : '1.2-2') : (employeeDeclaration.TotalAmountOnNewRegim | number : '1.2-2')}}</span>
                       <span class="float-end pe-2">
                         <a href="javascript:void(0)" (click)="gotoTaxSection()" class="text-decoration-none fs-6">
                           Income Tax Computitation
@@ -106,7 +104,7 @@
                     <p class="mb-0">Total Tax Payable <i class="fa fa-exclamation-circle float-end fa-lg pe-3"
                         data-bs-placement="right" data-toggle="tooltip"
                         title="Net tax amount {{taxAmount.TotalTaxPayable}} of after round Off is"></i></p>
-                    <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}</p>
+                    <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TaxNeedToPay | number : '1.2-2') : (employeeDeclaration.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</p>
                   </div>
                 </div>
                 <div class="col-md-3">
@@ -241,8 +239,7 @@
                           <div class="col-md-4">
                             <div class="card py-3 ps-3">
                               <p class="mb-0">TOTAL TAX PAYABLE</p>
-                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}
-                              </p>
+                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TaxNeedToPay | number : '1.2-2') : (employeeDeclaration.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</p>
                             </div>
                           </div>
                           <div class="col-md-4">
@@ -254,8 +251,8 @@
                           <div class="col-md-4">
                             <div class="card py-3 ps-3">
                               <p class="mb-0">REMAINING TAX AMOUNT</p>
-                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay -
-                                employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
+                              <p class="text-dark fs-2 mb-0" *ngIf="employeeDeclaration.EmployeeCurrentRegime == 1">INR {{employeeDeclaration.TaxNeedToPay - employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
+                              <p class="text-dark fs-2 mb-0" *ngIf="employeeDeclaration.EmployeeCurrentRegime != 1">INR {{employeeDeclaration.TaxNeedToPayOnNewRegim - employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
                             </div>
                           </div>
                         </div>

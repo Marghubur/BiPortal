@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Declaration, IncomeTax, Preferences, Salary, Summary } from 'src/providers/constants';
+import { Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
+import { Declaration, IncomeTax, Preferences, Salary, Summary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 

@@ -111,3 +111,7 @@ textarea {
 [contenteditable]:focus {
   outline: 0px solid transparent;
 }
+
+a {
+  color: var(--primary-dark);
+}

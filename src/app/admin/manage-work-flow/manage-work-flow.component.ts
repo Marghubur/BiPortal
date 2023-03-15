@@ -87,10 +87,12 @@ export class ManageWorkFlowComponent implements OnInit {
           ErrorToast("Please add assigne first");
           return;
         }
-        if (request.ApprovalChainDetails[i].ForwardWhen == 0) {
-          this.isLoading = false;
-          ErrorToast(`Please select reason for level ${i + 1}`);
-          return;
+        if (request.ApprovalChainDetails[i].IsForwardEnabled) {
+          if (request.ApprovalChainDetails[i].ForwardWhen == 0) {
+            this.isLoading = false;
+            ErrorToast(`Please select reason for level ${i + 1}`);
+            return;
+          }
         }
       }
     }
@@ -219,7 +221,7 @@ deleteChainPopUp(item: any) {
       }).catch(e => {
         this.isInProgress = false;
         this.isEnableAddNew = true;
-          this.isLoading = false;
+        this.isLoading = false;
         this.isReady = true;
       })
     }
