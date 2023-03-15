@@ -557,7 +557,7 @@ export class DocumentUser {
     City: string = null;
     State: string = null;
     Country: string = null;
-    GSTNo: string = null;
+    GSTNO: string = null;
     AccountNo: string = null;
     BankName: string = null;
     BranchName: string = null;
@@ -577,12 +577,12 @@ export class DocumentUser {
     RequestDescription: string = null;
     Quantity: number = 0;
     Duration: number = 0;
-    FromDate: Date = null;
-    ToDate: Date = null;
+    FromDate: Date = new Date();
+    ToDate: Date = new Date();
     Reference: string = null;
     RequestStatus: number = 0;
     RequestedBy: number = 0;
-    RequestedOn: Date = null;
+    RequestedOn: Date = new Date();
     UpdatedOn: Date = null;
   }
 

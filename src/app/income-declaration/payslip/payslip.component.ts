@@ -28,7 +28,7 @@ export class PayslipComponent implements OnInit {
   basePath: string = "";
   viewer: any = null;
   fileDetail: any = null;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
   payslipYear: Array<number> =[];
 
   constructor(private nav: iNavigation,
