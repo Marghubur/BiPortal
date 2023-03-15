@@ -39,8 +39,8 @@ export class PayslipComponent implements OnInit {
     var dt = new Date();
     this.currentYear = dt.getFullYear();
     this.basePath = this.http.GetImageBasePath();
-    this.EmployeeId = this.local.getByKey("EmployeeId");
     this.loadData();
+    this.EmployeeId = this.local.getByKey("EmployeeId");
   }
 
   getPayslipList(e: any) {

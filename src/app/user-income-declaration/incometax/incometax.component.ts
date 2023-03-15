@@ -95,6 +95,7 @@ export class IncometaxComponent implements OnInit {
       if (response.ResponseBody) {
         this.allDeclarationSalaryDetails = response.ResponseBody;
         this.allDeclarationSalaryDetails.IncomeTaxSlab = Object.entries(response.ResponseBody.IncomeTaxSlab).reverse();
+        this.allDeclarationSalaryDetails.NewRegimIncomeTaxSlab = Object.entries(response.ResponseBody.NewRegimIncomeTaxSlab).reverse();
         this.ExemptionDeclaration = response.ResponseBody.ExemptionDeclaration;
         if ((this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
           this.ExemptionDeclaration = [];
