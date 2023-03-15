@@ -183,7 +183,9 @@ export class SalarycomponentStructureComponent implements OnInit {
   inactiveComponent() {
     this.inactiveComponentDeatil.IsOpted = false;
     this.inactiveComponentDeatil.ComponentCatagoryId = 0;
-    this.http.put(`Settings/EnableSalaryComponentDetail/${this.inactiveComponentDeatil.ComponentId}`, this.inactiveComponentDeatil)
+    let inactiveComponent = [];
+    inactiveComponent.push(this.inactiveComponentDeatil);
+    this.http.post(`Settings/ActivateCurrentComponent`, inactiveComponent)
     .then(res => {
       if(res.ResponseBody) {
         this.bindData(res.ResponseBody);
