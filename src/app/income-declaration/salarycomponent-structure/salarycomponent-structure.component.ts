@@ -206,7 +206,7 @@ export class SalarycomponentStructureComponent implements OnInit {
     let value = this.editSalaryComponent.value;
 
     this.salaryComponentFields = [];
-    this.http.put(`Settings/EnableSalaryComponentDetail/${this.currentSalaryComponent.ComponentId}`, value)
+    this.http.put(`Settings/UpdateSalaryComponentDetail/${this.currentSalaryComponent.ComponentId}`, value)
     .then(res => {
       if(res.ResponseBody) {
         this.bindData(res.ResponseBody);

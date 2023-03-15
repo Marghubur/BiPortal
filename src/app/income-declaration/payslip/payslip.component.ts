@@ -82,7 +82,6 @@ export class PayslipComponent implements OnInit {
         this.applicationData = response.ResponseBody;
         this.employeesList.placeholder = "Employee";
         this.employeesList.data = GetEmployees();
-        let employees = this.applicationData.Employees;
         this.employeesList.className = "";
         this.isPageReady = true;
         this.getPayslipList(this.EmployeeId);

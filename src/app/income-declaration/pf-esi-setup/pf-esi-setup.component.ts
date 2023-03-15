@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
@@ -137,6 +137,15 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
   enablePfAmount(e: boolean) {
     this.isallowPFamount = !this.isallowPFamount;
   };
+
+  pfStatusChange(e: any) {
+    let value = e.target.value;
+    if (value) {
+
+    } else {
+
+    }
+  }
 }
 
 class pfesisetting {
