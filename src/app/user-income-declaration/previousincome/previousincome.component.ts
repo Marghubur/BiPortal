@@ -47,7 +47,7 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
       return;
     }
     this.http.get(`Declaration/GetPreviousEmployemnt/${this.userDetail.UserId}`).then(res => {
-      if (res.ResponseBody) {
+      if (res.ResponseBody.EmployeeDetail && res.ResponseBody.EmployeeDetail.length > 0) {
           this.previousEmploymentDetail = res.ResponseBody;
           this.initForm();
           this.isRecordFound = true;
