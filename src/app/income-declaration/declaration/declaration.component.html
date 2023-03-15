@@ -55,7 +55,7 @@
             <div class="container-fluid pt-4">
               <div class="d-flex justify-content-between">
                 <h5 class="text-dark">Declaration</h5>
-                <div class="pt-3 pe-3">
+                <div class="pt-3 pe-3" *ngIf="employeeDeclaration != null">
                   <select class="form-select" disabled>
                     <option value="currentyear" selected disabled>APR {{employeeDeclaration.DeclarationFromYear}} - MAR {{employeeDeclaration.DeclarationFromYear +1}}</option>
                   </select>

@@ -52,7 +52,7 @@
               <p class="fs-4 pt-3 ps-3">
                 Income Tax Computation <i class="fa fa-download ps-3"></i>
               </p>
-              <div class="pt-3 pe-3">
+              <div class="pt-3 pe-3" *ngIf="allDeclarationSalaryDetails != null">
                 <select class="form-select" disabled>
                   <option value="currentyear" selected disabled>APR {{allDeclarationSalaryDetails.DeclarationFromYear}} - MAR {{allDeclarationSalaryDetails.DeclarationFromYear +1}}</option>
                 </select>
