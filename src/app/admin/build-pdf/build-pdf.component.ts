@@ -345,15 +345,15 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           this.grandTotalAmount = editGrandTotalAmount;
         }
 
-        if (this.applicationData.TimesheetDetails) {
-          this.buildTimeSheet({
-            TimesheetDetails: this.applicationData.TimesheetDetails,
-            MissingDate: this.applicationData.MissingDate
-          }, this.existingData.FileOwnerId);
+        // if (this.applicationData.TimesheetDetails) {
+        //   this.buildTimeSheet({
+        //     TimesheetDetails: this.applicationData.TimesheetDetails,
+        //     MissingDate: this.applicationData.MissingDate
+        //   }, this.existingData.FileOwnerId);
 
-          this.isClientSelected = true;
-        }
-
+        //   this.isClientSelected = true;
+        // }
+        this.isClientSelected = true;
         this.pageDataIsReady = true;
       });
     }
@@ -738,7 +738,8 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       let modalStatus = this.validateBillRequest(request);
       this.billAllDetails = request;
       if(modalStatus == null) {
-        let timesheetForm: FormData = this.getTimeSheetData();
+        //let timesheetForm: FormData = this.getTimeSheetData();
+        let timesheetForm: FormData = new FormData();
         timesheetForm.append('BillRequestData', JSON.stringify(request));
 
         this.http.post(this.generateBillUrl, timesheetForm).then((response: ResponseModel) => {
@@ -869,7 +870,8 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let value = this.pdfForm.get('receiverCompanyId').value;
     if(value) {
       this.bindClientDetail(value);
-      this.getAttendance();
+      this.isClientSelected = true;
+      //this.getAttendance();
     }
     else {
       ErrorToast("Company not selected properly.");
