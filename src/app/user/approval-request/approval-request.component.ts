@@ -317,6 +317,7 @@ export class ApprovalRequestComponent implements OnInit {
 
     this.http.put(`${endPoint}/${this.timesheetId}`, null).then((response:ResponseModel) => {
       if (response.ResponseBody) {
+        this.itemStatus = ItemStatus.Pending;
         this.buildPage(response.ResponseBody);
         $('#timesheetModal').modal('hide');
         Toast("Submitted Successfully");
@@ -352,6 +353,7 @@ export class ApprovalRequestComponent implements OnInit {
     }
     this.http.put(endPoint, currentResponse).then((response:ResponseModel) => {
       if (response.ResponseBody) {
+        this.itemStatus = ItemStatus.Pending;
         this.buildPage(response.ResponseBody);
         $('#leaveModal').modal('hide');
         this.isLoading = false;
@@ -369,6 +371,7 @@ export class ApprovalRequestComponent implements OnInit {
       this.http.put(this.attendanceUrl, this.currentRequest).then((response:ResponseModel) => {
         try{
           if(response.ResponseBody) {
+            this.itemStatus = ItemStatus.Pending;
             this.buildPage(response.ResponseBody);
             this.isPageLoading = false;
           } else {
