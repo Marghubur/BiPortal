@@ -40,8 +40,8 @@
                   <div class="row py-3 border-bottom px-3 leave-box">
                     <div class="col-md-6">
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c me-2">Attendance Date: {{item.AttendanceDay | date}}</span>
                         <span class="fw-bold text-primary-c">[{{item.EmployeeName}}]</span>
+                        <span class="fw-bold text-primary-c me-2">Attendance Date: {{item.AttendanceDay | date}}</span>
                       </p>
                       <span>
                         <span class="fw-bold">Message:</span>
@@ -100,7 +100,7 @@
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifie</div>
+              <div class="col-md-3 fw-bold text-dark">Manager</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
@@ -109,19 +109,21 @@
                   <div class="row py-3 border-bottom px-3 leave-box">
                     <div class="col-md-6">
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c me-2">Timesheet From: {{item[0].PresentDate | date}}</span>
-                        <span class="fw-bold text-primary-c me-2">Timesheet To: {{item[item.length-1].PresentDate | date}}</span>
+                        <span class="fw-bold text-primary-dc">{{item[0].EmployeeName}}</span>
+                        <span class="ps-3 text-muted">[
+                          <small class="fade-label">Company: </small>
+                          <span class="text-muted fade-font">{{item[0].ClientName}}</span>
+                          ]</span>
                       </p>
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c">[{{item[0].EmployeeName}}]</span>
-                        <span class="fw-bold text-primary-c">[{{item[0].ClientName}}]</span>
+                        <span class="me-2">From: {{item[0].PresentDate | date}}</span>
+                        <span class="me-2">To: {{item[item.length-1].PresentDate | date}}</span>
                       </p>
                     </div>
                     <div class="col-md-2">
                       Timesheet approval Request
                     </div>
                     <div class="col-md-3">
-                      {{item[0].EmployeeName}}
                       <p class="mb-0">{{item[0].Email}}</p>
                       <p class="mb-0">{{item[0].Mobile}}</p>
                     </div>
@@ -270,7 +272,7 @@
         </li>
 
         <li [ngbNavItem]="4">
-          <a ngbNavLink class="text-muted" (click)="loadAttendanceRequestDetail()">Attendence Request</a>
+          <a ngbNavLink class="text-muted" (click)="loadAttendanceRequestDetail()">Request</a>
           <ng-template ngbNavContent>
             <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3">
               <span class="ps-4">Work From Home / On Duty Request</span>
