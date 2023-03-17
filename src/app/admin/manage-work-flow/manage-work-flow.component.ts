@@ -205,25 +205,24 @@ deleteChainPopUp(item: any) {
     let array: FormArray = this.groupItem;
     let id = this.deleteAprrovalChain.AssignieId;
     let index = array.value.findIndex(x => x.AssignieId ==  this.deleteAprrovalChain.AssignieId);
-    if (this.deleteAprrovalChain.ApprovalChainDetailId > 0 && index != -1) {
-      this.http.delete(`ApprovalChain/DeleteApprovalChain/${this.deleteAprrovalChain.ApprovalChainDetailId}`).then(res => {
-        if (res.ResponseBody) {
-          array.removeAt(index);
-          this.assignedEmployees = this.assignedEmployees.filter(x => x.index !== index);
-          this.updateListOnRemove(id);
-          Toast("Approval chain deleted successsfully");
-          $('#delteChainModal').modal('hide');
-          this.isInProgress = false;
+    if (index != -1) {
+      array.removeAt(index);
+      this.assignedEmployees = this.assignedEmployees.filter(x => x.index !== index);
+      this.updateListOnRemove(id);
+      if (this.deleteAprrovalChain.ApprovalChainDetailId > 0) {
+        this.http.delete(`ApprovalChain/DeleteApprovalChain/${this.deleteAprrovalChain.ApprovalChainDetailId}`).then(res => {
+          if (res.ResponseBody) {
+            Toast("Approval chain deleted successsfully");
+            this.isEnableAddNew = true;
+          }
+        }).catch(e => {
           this.isEnableAddNew = true;
-          this.isReady = true;
-          this.isLoading = false;
-        }
-      }).catch(e => {
-        this.isInProgress = false;
-        this.isEnableAddNew = true;
-        this.isLoading = false;
-        this.isReady = true;
-      })
+        })
+      }
+      $('#delteChainModal').modal('hide');
+      this.isReady = true;
+      this.isInProgress = false;
+      this.isLoading = false;
     }
   }
 

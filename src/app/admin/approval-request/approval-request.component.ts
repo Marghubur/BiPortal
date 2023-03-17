@@ -152,11 +152,15 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   openAttendacneModal(state: string, request: any) {
-    $('#leaveModal').modal('show');
     this.requestState = state;
-    this.requestModal = 3; // leave
+    this.requestModal = 3; // attendance
     this.currentRequest = request;
-    this.currentRequest["EmployeeName"] = request.EmployeeName;
+    this.currentRequest.RequestStatusId = request.PresentDayStatus;
+    let attendance = this.attendance.find( x=> x.AttendanceId == request.AttendanceId);
+    this.currentRequest["EmployeeName"] = attendance.EmployeeName;
+    this.currentRequest["Email"] = attendance.Email;
+    this.currentRequest["Mobile"] = attendance.Mobile;
+    $('#leaveModal').modal('show');
   }
 
   submitRequest() {
@@ -223,6 +227,9 @@ export class ApprovalRequestComponent implements OnInit {
               detail[i].EmployeeName = item.EmployeeName;
               detail[i].Email = item.Email;
               detail[i].Mobile = item.Mobile;
+              detail[i].ManagerName = item.ManagerName;
+              detail[i].ManagerEmail = item.ManagerEmail;
+              detail[i].ManagerMobile = item.ManagerMobile;
             }
             this.attendanceDetail.push(...detail);
           }
@@ -269,6 +276,9 @@ export class ApprovalRequestComponent implements OnInit {
           detail[i].TimesheetStatus = item.TimesheetStatus;
           detail[i].TimesheetId = item.TimesheetId;
           detail[i].ClientName = item.ClientName;
+          detail[i].ManagerName = item.ManagerName;
+          detail[i].ManagerEmail = item.ManagerEmail;
+          detail[i].ManagerMobile = item.ManagerMobile;
         }
         this.timesheetDetail.push(detail);
         });
@@ -401,7 +411,6 @@ export class ApprovalRequestComponent implements OnInit {
 
   bindAttendanceRequestDetail(response: any) {
     this.attendanceRequestDetail = response;
-    this.requestFilter = new Filter();
     if (this.attendanceRequestDetail.length > 0) {
       this.requestFilter.TotalRecords = this.attendanceRequestDetail[0].Total;
       this.attendanceRequestDetail.map(x => x.AttendanceDate = new Date(x.AttendanceDate));

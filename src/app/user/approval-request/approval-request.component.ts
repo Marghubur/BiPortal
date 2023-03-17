@@ -144,7 +144,6 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   openAttendacneModal(state: string, request: any) {
-    $('#leaveModal').modal('show');
     this.requestState = state;
     this.requestModal = 3; // attendance
     this.currentRequest = request;
@@ -153,7 +152,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.currentRequest["EmployeeName"] = attendance.EmployeeName;
     this.currentRequest["Email"] = attendance.Email;
     this.currentRequest["Mobile"] = attendance.Mobile;
-
+    $('#leaveModal').modal('show');
   }
 
   buildAttendanceActionUrl() {
@@ -234,12 +233,16 @@ export class ApprovalRequestComponent implements OnInit {
               detail[i].EmployeeName = item.EmployeeName;
               detail[i].Email = item.Email;
               detail[i].Mobile = item.Mobile;
+              detail[i].ManagerName = item.ManagerName;
+              detail[i].ManagerEmail = item.ManagerEmail;
+              detail[i].ManagerMobile = item.ManagerMobile;
             }
             this.attendanceDetail.push(...detail);
           }
         }
       });
     }
+
   }
 
   filterLeave() {
@@ -257,7 +260,7 @@ export class ApprovalRequestComponent implements OnInit {
             x.FromDate = ToLocateDate(x.FromDate),
             x.ToDate = ToLocateDate(x.ToDate);
           }
-        });
+      });
     }
   }
 
@@ -282,6 +285,9 @@ export class ApprovalRequestComponent implements OnInit {
           detail[i].TimesheetStatus = item.TimesheetStatus;
           detail[i].TimesheetId = item.TimesheetId;
           detail[i].ClientName = item.ClientName;
+          detail[i].ManagerName = item.ManagerName;
+          detail[i].ManagerEmail = item.ManagerEmail;
+          detail[i].ManagerMobile = item.ManagerMobile;
         }
         this.timesheetDetail.push(detail);
         });
@@ -445,7 +451,6 @@ export class ApprovalRequestComponent implements OnInit {
 
   bindAttendanceRequestDetail(response: any) {
     this.attendanceRequestDetail = response;
-    this.request = new Filter();
     if (this.attendanceRequestDetail.length > 0) {
       this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
       this.attendanceRequestDetail.map(x => x.AttendanceDate = new Date(x.AttendanceDate));

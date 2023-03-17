@@ -95,12 +95,6 @@ export class NotificationComponent implements OnInit {
   bindData(res : any) {
     this.allNotificationList = res;
     if (this.allNotificationList.length > 0) {
-      for (let i = 0; i < this.allNotificationList.length; i++) {
-        let enddate = ToLocateDate(this.allNotificationList[i].EndDate).setHours(0,0,0,0);
-        let now = new Date().setHours(0,0,0,0);
-        if (now > enddate)
-          this.allNotificationList[i].IsExpired = true;
-      }
       this.notificationData.TotalRecords= this.allNotificationList[0].Total;
     } else{
       this.notificationData.TotalRecords = 0;
@@ -294,8 +288,28 @@ export class NotificationComponent implements OnInit {
   viewNotificationPopup(data: Notification) {
     if (data) {
       this.currentNotification = data;
+      this.getNotificationFiles(data.FileIds);
       $('#viewNotificationModal').modal('show');
     }
+  }
+
+  getNotificationFiles(fileids: any) {
+    this.isLoading = true;
+    this.companyFile = [];
+    this.uploadedFile = [];
+    this.http.get(`Product/GetProductImages/${fileids}`).then(res => {
+      if (res.ResponseBody) {
+        this.companyFile = res.ResponseBody.Table;
+        if (this.companyFile.length > 0) {
+          this.companyFile.forEach(element => {
+            this.uploadedFile.push(element);
+          });
+        }
+      }
+      this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   arrangeDetails(flag: any, FieldName: string) {

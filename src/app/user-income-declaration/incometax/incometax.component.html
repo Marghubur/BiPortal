@@ -150,7 +150,7 @@
                           <div class="cell-wrapper">
                             <div class="d-flex align-items-center">
                               <span>{{item.month}} {{item.year}}</span>
-                              <div class="curent-employer-indicator indicator ms-1"></div>
+                              <div class="ms-1 indicator" [ngClass]="{'previous-employer-indicator': !item.isActive, 'curent-employer-indicator': item.isActive && !item.isProjected, 'project-salary-indicator': item.isActive && item.isProjected}"></div>
                             </div>
                           </div>
                         </div>
@@ -506,7 +506,7 @@
                         <div class="th" *ngFor="let item of taxCalender">
                           <div class="d-flex align-items-center">
                             <span>{{item.month}} {{item.year}}</span>
-                            <div class="curent-employer-indicator indicator ms-1"></div>
+                            <div class="ms-1 indicator" [ngClass]="{'previous-employer-indicator': !item.isActive, 'curent-employer-indicator': item.isActive && !item.isProjected, 'project-salary-indicator': item.isActive && item.isProjected}"></div>
                           </div>
                         </div>
                       </div>

@@ -279,7 +279,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
 
   loadData() {
     this.isPageReady = false;
-    let year = new Date().getFullYear();
     let value = {
       EmployeeId: this.employeeId
     }
@@ -335,7 +334,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
       this.LeaveChart(i, this.leaveTypes[i]);
       i++;
     }
-    this.LoadDoughnutchart();
     this.LeaveReportChart();
     this.MonthlyStatusChart();
     this.leaveRequestForm();
@@ -350,6 +348,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
         this.buildChartData(item.nativeElement.getContext('2d'), i);
       });
     });
+    this.LoadDoughnutchart();
   }
 
   findHoliday(allHoliday: Array<any>) {
@@ -563,6 +562,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
 
   LoadDoughnutchart() {
     let label = [];
+    let consumeChart = null;
     label = this.chartDataset.map(x => x.PlanName);
     let bgColor = ['#E14D2A', '#3F0071', 'blue'];
     let data = [];
@@ -572,7 +572,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
     }
     let elem: any = document.getElementById('consumeLeaveChart');
     let ctx = elem.getContext('2d');
-    let consumeChart = new Chart(ctx, {
+    consumeChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: label,
@@ -591,6 +591,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
         cutout: 40,
       }
     });
+    consumeChart.update();
     this.graphInstances.push(consumeChart);
   }
 

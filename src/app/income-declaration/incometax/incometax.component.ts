@@ -43,28 +43,7 @@ export class IncometaxComponent implements OnInit {
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    var dt = new Date();
-    var month = 3;
-    this.currentYear = dt.getFullYear();
-    var years = dt.getFullYear();
-    if (new Date().getMonth() + 1 <= 4)
-      years = years -1;
-    let i = 0;
-    while( i < 12) {
-      var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
-      if (month == 12) {
-        month = 1;
-        years ++
-      } else {
-        month ++;
-      }
-      this.taxCalender.push({
-        month: new Date(years, mnth, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
-        year: Number(years.toString().slice(-2))
-      });
-      i++;
-    }
-
+    this.currentYear = new Date().getFullYear();
     this.EmployeeId = this.nav.getValue();
     if(this.EmployeeId != null || this.EmployeeId > 0)
       this.loadData();
@@ -177,6 +156,22 @@ export class IncometaxComponent implements OnInit {
               this.totalOtherExemptAmount = this.allDeclarationSalaryDetails.Declarations[i].TotalAmountDeclared;
               break;
           }
+        }
+
+        let isProjected = false;
+        i = 0;
+        while( i < annualSalaryDetail.length) {
+          let date = new Date(annualSalaryDetail[i].MonthFirstDate);
+          if (date.getMonth() == new Date().getMonth())
+            isProjected = true;
+
+          this.taxCalender.push({
+            month: new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("en-us", { month: "short" }), // result: Aug
+            year: Number(date.getFullYear().toString().slice(-2)),
+            isActive: annualSalaryDetail[i].IsActive,
+            isProjected: isProjected
+          });
+          i++;
         }
 
         this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance) ;
