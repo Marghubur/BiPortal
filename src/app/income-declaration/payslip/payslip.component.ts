@@ -169,7 +169,7 @@ export class PayslipComponent implements OnInit {
     }
   }
 
-  getPaySlip(e: any, year: number) {
+  getPaySlip(e: any, year: number, event: any) {
     let date = e;
     this.isLoading = true;
     this.paySlipDate = null;
@@ -177,6 +177,13 @@ export class PayslipComponent implements OnInit {
       Month: new Date(year, e.getMonth(), 1).toLocaleString("en-us", { month: 'long'}),
       Year: e.getFullYear()
     };
+    var elem = document.querySelectorAll('a[data-name="payslipmonth"]');
+    if (elem.length > 0) {
+      for (let i = 0; i < elem.length; i++) {
+        elem[i].classList.remove('active-payslip-month');
+      }
+      event.target.classList.add('active-payslip-month')
+    }
     if (this.EmployeeId > 0) {
       let value = {
         Year: year,
