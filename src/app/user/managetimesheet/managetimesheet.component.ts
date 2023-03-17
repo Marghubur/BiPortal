@@ -137,7 +137,8 @@ export class ManagetimesheetComponent implements OnInit {
       ActualMinutes: new FormControl(actualMins),
       PresentDate: new FormControl(weekDetail.PresentDate),
       ExpectedBurnedMinutes: new FormControl(weekDetail.ExpectedBurnedMinutes),
-      ActualBurnedMinutes: new FormControl(weekDetail.ActualBurnedMinutes)
+      ActualBurnedMinutes: new FormControl(weekDetail.ActualBurnedMinutes),
+      IsWeekEnd: new FormControl(weekDetail.IsWeekEnd)
     });
   }
 

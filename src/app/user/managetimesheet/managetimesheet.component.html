@@ -145,13 +145,14 @@
                   <tbody>
                     <tr>
                       <th class="fw-bold fs-5 text-primary" width="18%">Week {{weekNumber}}</th>
-                      <td class="text-primary text-center">Mon</td>
-                      <td class="text-primary text-center">Tue</td>
-                      <td class="text-primary text-center">Wed</td>
-                      <td class="text-primary text-center">Thu</td>
-                      <td class="text-primary text-center">Fri</td>
-                      <td class="table-active text-primary text-center">Sat</td>
-                      <td class="table-active text-primary text-center">Sun</td>
+                      <ng-container *ngFor="let item of weeklydata.controls; let i = index" [formGroupName]="i">
+                        <td class="text-primary" [ngClass]="{'table-active': item.get('IsWeekEnd').value == false}">
+                          <div class="d-flex justify-content-center align-items-center">
+                            {{item.get("PresentDate").value | date: 'ccc'}}
+                            <i *ngIf="weeklyTimesheetDetail.TimesheetStatus != 2 || (item.get('IsWeekEnd').value == false && weeklyTimesheetDetail.TimesheetStatus == 2)" class="fa fa-circle ps-2" [ngClass]="{'text-secondary': item.get('IsWeekEnd').value == false, 'text-info': weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true && item.get('IsWeekEnd').value == true, 'text-danger':  weeklyTimesheetDetail.TimesheetStatus == 5  && item.get('IsWeekEnd').value == true, 'text-success':  weeklyTimesheetDetail.TimesheetStatus == 9  && item.get('IsWeekEnd').value == true}"></i>
+                          </div>
+                        </td>
+                      </ng-container>
                       <td rowspan="2" class="text-break table-active" width="10%">Total Hours Per item</td>
                     </tr>
                     <tr>
