@@ -5,8 +5,9 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
 
 @Component({
   selector: 'app-manage-project',
@@ -26,8 +27,7 @@ export class ManageProjectComponent implements OnInit {
   projectManagers: Array<any> = [];
   clients: Array<any> = [];
   architects: Array<any> = [];
-  applicationData: any = null;
-
+  projectId: number = 0;
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
               private local: ApplicationStorage,
@@ -35,17 +35,8 @@ export class ManageProjectComponent implements OnInit {
 
   ngOnInit(): void {
     let value = this.nav.getValue();
-    if (value) {
-      this.projectDetail = value;
-      let date = new Date(this.projectDetail.ProjectStartedOn);
-      this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-      date = new Date(this.projectDetail.ProjectEndedOn);
-      this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-      this.projectDetail.TeamMemberIds = JSON.parse(this.projectDetail.TeamMemberIds);
-    }
-    else
-      this.projectDetail = new ProjectModal();
-
+    if (value)
+      this.projectId = value.ProjectId;
     let data = this.local.findRecord("Companies");
     if (!data) {
       return;
@@ -57,17 +48,30 @@ export class ManageProjectComponent implements OnInit {
       }
     }
     this.loadData();
-    this.initForm();
   }
 
   loadData() {
-    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+    this.isReady = false;
+    this.http.get(`Project/GetProjectPageDetail/${this.projectId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        this.applicationData = response.ResponseBody;
+        if (response.ResponseBody.Project) {
+          this.projectDetail = response.ResponseBody.Project[0];
+          let date = new Date(this.projectDetail.ProjectStartedOn);
+          this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          date = new Date(this.projectDetail.ProjectEndedOn);
+          this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          this.projectDetail.TeamMemberIds = JSON.parse(this.projectDetail.TeamMemberIds);
+        } else {
+          this.projectDetail = new ProjectModal();
+        }
         this.projectManagers = response.ResponseBody.Employees.filter(x => x.DesignationId == 1);
         this.architects = response.ResponseBody.Employees.filter(x => x.DesignationId == 2);
         this.clients = response.ResponseBody.Clients;
+        this.initForm();
+        this.isReady = true;
       }
+    }).catch(e => {
+      this.isReady = true;
     });
   }
 

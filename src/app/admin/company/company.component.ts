@@ -77,8 +77,10 @@ export class CompanyComponent implements OnInit {
         let date;
         if (this.currentCompany.InCorporationDate == null || this.currentCompany.InCorporationDate != '0001-01-01T00:00:00')
           date = new Date(this.currentCompany.InCorporationDate);
-        else
+        else {
           date = new Date() ;
+          this.currentCompany.InCorporationDate = date;
+        }
 
         this.corporationDateModal = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         this.buildProfileImage(response.ResponseBody.Files);

@@ -80,7 +80,7 @@
                       <label class="form-label">Client Name</label>
                       <select class="form-select" formControlName="ClientId" >
                         <option value=0>Select Client</option>
-                        <option [value]="item.ClientId" *ngFor="let item of architects">{{item.ClientName}}</option>
+                        <option [value]="item.ClientId" *ngFor="let item of clients">{{item.ClientName}}</option>
                       </select>
                     </div>
                     <div class="col-md-4 mt-3">

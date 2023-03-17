@@ -47,43 +47,10 @@ export class IncometaxComponent implements OnInit {
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    var dt = new Date();
-    var month = 3;
-    this.currentYear = dt.getFullYear();
-    var years = dt.getFullYear();
-    if (new Date().getMonth() + 1 <= 4)
-      years = years -1;
-
-    let i = 0;
-    while( i < 12) {
-      var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
-      if (month == 12) {
-        month = 1;
-        years ++
-      } else {
-        month ++;
-      }
-      this.taxCalender.push({
-        month: new Date(years, mnth, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
-        year: Number(years.toString().slice(-2))
-      });
-      i++;
-    }
-
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
+    this.currentYear = new Date().getFullYear();
     this.userDetail = this.user.getInstance() as UserDetail;
-    if(expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-    else
-     this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-    if(Master !== null && Master !== "") {
-      this.userDetail = Master["UserDetail"];
-      this.EmployeeId = this.userDetail.UserId;
-      this.loadData();
-    } else {
-      ErrorToast("Invalid user. Please login again.")
-    }
+    this.EmployeeId = this.userDetail.UserId;
+    this.loadData();
   }
 
   loadData() {
@@ -181,11 +148,28 @@ export class IncometaxComponent implements OnInit {
               break;
           }
         }
+        let isProjected = false;
+        i = 0;
+        while( i < annualSalaryDetail.length) {
+          let date = new Date(annualSalaryDetail[i].MonthFirstDate);
+          if (date.getMonth() == new Date().getMonth())
+            isProjected = true;
+
+          this.taxCalender.push({
+            month: new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("en-us", { month: "short" }), // result: Aug
+            year: Number(date.getFullYear().toString().slice(-2)),
+            isActive: annualSalaryDetail[i].IsActive,
+            isProjected: isProjected
+          });
+          i++;
+        }
 
         this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance) ;
         this.totalAllowTaxExemptAmount = this.totalAllowTaxExemptAmount + hraAmount;
         this.isPageReady = true;
          this.isEmployeeSelect = true;
+        console.log(this.salaryBreakup);
+
         Toast("Details get successfully")
       }
     })

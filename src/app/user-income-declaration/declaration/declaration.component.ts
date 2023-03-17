@@ -75,44 +75,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.rentalPage = 1;
-    var dt = new Date();
-    var month = 3;
-    var year = dt.getFullYear();
-    this.year = dt.getFullYear();
+    this.year = new Date().getFullYear();
     this.basePath = this.http.GetImageBasePath();
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
-    if (expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-    else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-    let Master = this.local.get(null);
-    if (Master !== null && Master !== "") {
-      this.userDetail = Master["UserDetail"];
-      this.EmployeeId = this.userDetail.UserId;
-      this.getDeclaration()
-    } else {
-      ErrorToast("Invalid user. Please login again.")
-    }
-    //this.rentedResidence();
+    this.EmployeeId = this.userDetail.UserId;
+    this.getDeclaration()
 
-    let i = 0;
-    if (new Date().getMonth() + 1 <= 4)
-      year = year -1;
-    while (i < 12) {
-      var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
-      if (month == 12) {
-        month = 1;
-        year++
-      } else {
-        month++;
-      }
-      this.taxCalender.push({
-        month: new Date(year, mnth, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
-        year: Number(year.toString().slice(-2))
-      });
-      i++;
-    }
   }
 
   ngAfterViewChecked(): void {
@@ -157,13 +125,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].RejectedAmount;
           i++;
         }
-
-        this.taxAmount = {
-          NetTaxableAmount: 2050000,
-          TotalTaxPayable: 444600,
-          TaxAlreadyPaid: 37050,
-          RemainingTaxAMount: 444600 - 37050
-        };
     } else {
       this.taxAmount = {
         NetTaxableAmount: 0,
@@ -240,7 +201,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           } else {
             this.houseRentDetail = new HouseRentDetail();
           }
-
+          let isProjected = false;
+          let i = 0;
+          let annualSalaryDetail = JSON.parse(response.SalaryDetail.CompleteSalaryDetail);
+          while( i < annualSalaryDetail.length) {
+            let date = new Date(annualSalaryDetail[i].MonthFirstDate);
+            if (date.getMonth() == new Date().getMonth())
+              isProjected = true;
+            this.taxCalender = [];
+            this.taxCalender.push({
+              month: new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("en-us", { month: "short" }), // result: Aug
+              year: Number(date.getFullYear().toString().slice(-2)),
+              isActive: annualSalaryDetail[i].IsActive,
+              isProjected: isProjected
+            });
+            i++;
+          }
           this.calculateDeclarations();
 
           this.SectionIsReady = true;
