@@ -96,7 +96,7 @@
       <li [ngbNavItem]="2">
         <a ngbNavLink (click)="cancelEditSurcharge()">Surcharge</a>
         <ng-template ngbNavContent>
-          <div class="m-3 px-2" >
+          <div class="m-3 px-2" *ngIf="isRecordFound">
             <div class="text-end">
               <button class="btn btn-primary-c" *ngIf="!isEditable"  (click)="editSlab()"><i class="fa fa-pencil pe-2"></i> Edit Surcharge</button>
             </div>

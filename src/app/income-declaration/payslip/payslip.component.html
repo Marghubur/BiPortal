@@ -58,7 +58,7 @@
                     </select>
                   </div>
                   <div *ngIf="paySlipDate != null">
-                    <button class="btn btn-outline-success" (click)="downloadPdf()"><i class="fa fa-download pe-3"></i> {{paySlipDate.Month}} {{paySlipDate.Year}} Pay Slip</button>
+                    <button class="btn btn-outline-success" [disabled]="isLoading" (click)="downloadPdf()"><i class="fa fa-download pe-3"></i> {{paySlipDate.Month}} {{paySlipDate.Year}} Pay Slip</button>
                   </div>
                 </div>
                 <div class="row mx-3 my-3 box-height">
