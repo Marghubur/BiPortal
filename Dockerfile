@@ -2,8 +2,12 @@
 
 FROM node:14.16.1 as node
 WORKDIR /app
-COPY . .
+
+COPY package.json .
 RUN npm install
+
+COPY . .
+
 RUN npm run build -- --configuration production
 
 # STAGE 2
