@@ -134,12 +134,11 @@ export class ManageProjectComponent implements OnInit {
         let id = Number(res.ResponseBody);
         this.projectForm.get("ProjectId").setValue(id);
         Toast("Project created/updated successfully.");
+        this.isLoading = false;
       }
-      this.isLoading = false;
     }).then(e => {
       this.isLoading = false;
     })
-    this.isLoading = false;
   }
 }
 
