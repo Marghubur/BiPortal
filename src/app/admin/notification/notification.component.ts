@@ -165,7 +165,7 @@ export class NotificationComponent implements OnInit {
       return;
     }
     let value = this.notificationForm.value;
-    if (this.selectedDepartment!= null) {
+    if (this.selectedDepartment!= null && value.DepartmentId > 0) {
       let department = this.selectedDepartment.find(x => x.Id == value.DepartmentId);
       value.DepartmentsList =[{
         Id: department.Id,
@@ -275,7 +275,8 @@ export class NotificationComponent implements OnInit {
       this.uploadedFile = [];
       this.getDepartmentAndRole(data.AnnouncementType, data.FileIds);
       this.currentNotification = data;
-      this.currentNotification.DepartmentId = JSON.parse(data.Departments)[0].Id;
+      if (data.Departments && data.Departments != "[]")
+        this.currentNotification.DepartmentId = JSON.parse(data.Departments)[0].Id;
       this.currentNotification.StartDate = ToLocateDate(this.currentNotification.StartDate);
       this.startDateModel = { day: this.currentNotification.StartDate.getDate(), month: this.currentNotification.StartDate.getMonth() + 1, year: this.currentNotification.StartDate.getFullYear()};
       this.currentNotification.EndDate = ToLocateDate(this.currentNotification.EndDate);
@@ -370,6 +371,10 @@ export class NotificationComponent implements OnInit {
 
   onChangeAnnouncement(e: any) {
     let value = e.target.value;
+    if (value) {
+      this.notificationForm.controls["AnnouncementType"].setValue(0);
+      this.notificationForm.controls["DepartmentId"].setValue(0);
+    }
   }
 
   fireBrowserFile() {

@@ -169,7 +169,7 @@ export class PayslipComponent implements OnInit {
     }
   }
 
-  getPaySlip(e: any, year: number) {
+  getPaySlip(e: any, year: number, event: any) {
     let date = e;
     this.isLoading = true;
     this.paySlipDate = null;
@@ -177,6 +177,13 @@ export class PayslipComponent implements OnInit {
       Month: new Date(year, e.getMonth(), 1).toLocaleString("en-us", { month: 'long'}),
       Year: e.getFullYear()
     };
+    var elem = document.querySelectorAll('a[data-name="payslipmonth"]');
+    if (elem.length > 0) {
+      for (let i = 0; i < elem.length; i++) {
+        elem[i].classList.remove('active-payslip-month');
+      }
+      event.target.classList.add('active-payslip-month')
+    }
     if (this.EmployeeId > 0) {
       let value = {
         Year: year,
@@ -208,23 +215,16 @@ export class PayslipComponent implements OnInit {
   }
 
   downloadPdf() {
-    // The data for the PDF file
-    const data = this.fileDetail.FileName;
-    // Create a Blob object containing the PDF data
-    const blob = new Blob([data], { type: 'application/pdf' });
-
-    // Create an object URL for the Blob
-    const objectUrl = URL.createObjectURL(blob);
-
-    // Create a link element and trigger a download
-    const a = document.createElement('a');
-    a.href = objectUrl;
-    a.download = this.fileDetail.FileName;
-    document.body.appendChild(a);
-    a.click();
-
-    // Clean up
-    URL.revokeObjectURL(objectUrl);
-    a.remove();
+    if (this.fileDetail) {
+      let fileLocation = `${this.basePath}${this.fileDetail.FilePath}/${this.fileDetail.FileName}.pdf`;
+      let link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      link.setAttribute('type', 'hidden');
+      link.href = fileLocation;
+      link.download = `${this.fileDetail.FileName}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
   }
 }

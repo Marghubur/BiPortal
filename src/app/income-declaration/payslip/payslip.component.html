@@ -58,7 +58,7 @@
                     </select>
                   </div>
                   <div *ngIf="paySlipDate != null">
-                    <button class="btn btn-outline-success" (click)="downloadPdf()"><i class="fa fa-download pe-3"></i> {{paySlipDate.Month}} {{paySlipDate.Year}} Pay Slip</button>
+                    <button class="btn btn-outline-success" [disabled]="isLoading" (click)="downloadPdf()"><i class="fa fa-download pe-3"></i> {{paySlipDate.Month}} {{paySlipDate.Year}} Pay Slip</button>
                   </div>
                 </div>
                 <div class="row mx-3 my-3 box-height">
@@ -67,7 +67,7 @@
                       <p class="mb-0 py-2 ps-3">PAYSLIPS</p>
                       <ng-container *ngIf="paySlipSchedule.length > 0">
                         <div class="list-group" *ngFor="let item of paySlipSchedule">
-                          <a href="javascript:void(0)" (click)="getPaySlip(item.paySlipMonth, item.paySlipYear)" class="ps-3 list-group-item list-group-item-action py-1 fs-5 text-dark rounded-0">{{item.paySlipMonth | date: 'MMM'}} {{item.paySlipYear}}</a>
+                          <a href="javascript:void(0)" data-name="payslipmonth" (click)="getPaySlip(item.paySlipMonth, item.paySlipYear, $event)" class="ps-3 list-group-item list-group-item-action py-1 fs-5 text-dark rounded-0">{{item.paySlipMonth | date: 'MMM'}} {{item.paySlipYear}}</a>
                         </div>
                       </ng-container>
                     </div>

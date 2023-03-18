@@ -140,10 +140,59 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
 
   pfStatusChange(e: any) {
     let value = e.target.value;
-    if (value) {
-
+    let elem = document.querySelectorAll('input[ data-name="pf-setting" ]');
+    if (value == "true") {
+      if (elem.length > 0) {
+        for (let i = 0; i < elem.length; i++) {
+          elem[i].removeAttribute('disabled');
+        }
+      }
     } else {
+      if (elem.length > 0) {
+        for (let i = 0; i < elem.length; i++) {
+          elem[i].setAttribute('disabled', '');
+        }
+        this.pfesiSetting.IsPfAmountLimitStatutory = false;
+        this.pfesiSetting.IsPfCalculateInPercentage = false;
+        this.pfesiSetting.IsAllowOverridingPf = false;
+        this.pfesiSetting.IsPfEmployerContribution = false;
+        this.pfesiSetting.IsEmployerPFLimitContribution = false;
+        this.pfesiSetting.IsHidePfEmployer = false;
+        this.pfesiSetting.IsPayOtherCharges = false;
+        this.pfesiSetting.IsAllowVPF = false;
+        this.pfesiSetting.EmployerPFLimit = 0;
+        this.initForm();
+      }
+    }
+  }
 
+  esiStatusChange(e: any) {
+    let value = e.target.value;
+    let elem = document.querySelectorAll('input[ data-name="esi-setting" ]');
+    if (value == "true") {
+      if (elem.length > 0) {
+        for (let i = 0; i < elem.length; i++) {
+          elem[i].removeAttribute('disabled');
+        }
+      }
+    } else {
+      if (elem.length > 0) {
+        for (let i = 0; i < elem.length; i++) {
+          elem[i].setAttribute('disabled', '');
+        }
+        this.pfesiSetting.MaximumGrossForESI = 0;
+        this.pfesiSetting.EsiEmployeeContribution = 0;
+        this.pfesiSetting.EsiEmployerContribution = 0;
+        this.pfesiSetting.IsAllowOverridingEsi = false;
+        this.pfesiSetting.IsEsiEmployerContributionOutside = false;
+        this.pfesiSetting.IsHideEsiEmployer = false;
+        this.pfesiSetting.IsEsiExcludeEmployerShare = false;
+        this.pfesiSetting.IsEsiExcludeEmployeeGratuity = false;
+        this.pfesiSetting.IsRestrictEsi = false;
+        this.pfesiSetting.IsIncludeBonusEsiEligibility = false;
+        this.pfesiSetting.IsIncludeBonusEsiContribution = false;
+        this.initForm();
+      }
     }
   }
 }

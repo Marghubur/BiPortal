@@ -49,3 +49,10 @@
 .box-height {
   min-height: 53vh !important;
 }
+
+.active-payslip-month {
+  background: var(--primary);
+  color: #fff !important;
+  font-weight: 500;
+  border-radius: 5px !important;
+}
