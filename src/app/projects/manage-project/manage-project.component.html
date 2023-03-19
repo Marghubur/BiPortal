@@ -25,13 +25,13 @@
                 </div>
                 <div class="col-md-4 mt-3">
                   <label for="" class="form-label">Project Name</label>
-                  <input type="text" class="form-control" formControlName="ProjectName" placeholder="Project Name" [ngClass]="{'error-field': submitted && f.ProjectName.errors !== null && f.ProjectName.errors.required}">
+                  <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" maxlength="100" formControlName="ProjectName" placeholder="Project Name" [ngClass]="{'error-field': submitted && f.ProjectName.errors !== null && f.ProjectName.errors.required}">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-4 mt-3">
                   <label for="" class="form-label">Project Description</label>
-                  <textarea type="text" rows="2" formControlName="ProjectDescription" class="form-control" placeholder="Project Description" [ngClass]="{'error-field': submitted && f.ProjectDescription.errors !== null && f.ProjectDescription.errors.required}"></textarea>
+                  <textarea type="text" rows="2" maxlength="400" formControlName="ProjectDescription" class="form-control" placeholder="Project Description" [ngClass]="{'error-field': submitted && f.ProjectDescription.errors !== null && f.ProjectDescription.errors.required}"></textarea>
                 </div>
                 <div class="col-md-4 mt-3">
                   <label for="" class="form-label">Team Members</label>
@@ -39,38 +39,38 @@
                 </div>
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Homepage URL</label>
-                  <textarea type="text" rows="2" formControlName="HomePageUrl" class="form-control" placeholder="Home Page URL"></textarea>
+                  <textarea type="text" maxlength="150" rows="2" formControlName="HomePageUrl" class="form-control" placeholder="Home Page URL"></textarea>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Project Manager</label>
                   <select class="form-select" formControlName="ProjectManagerId">
-                    <option value="0">Select Project Manager</option>
+                    <option value="0" disabled>Select Project Manager</option>
                     <option [value]="item.EmployeeUid" *ngFor="let item of projectManagers">{{item.FirstName}} {{item.LastName}}</option>
                   </select>
                 </div>
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Architect</label>
                   <select class="form-select" formControlName="ArchitectId" >
-                    <option value=0>Select Architect</option>
+                    <option value=0 disabled>Select Architect</option>
                     <option [value]="item.EmployeeUid" *ngFor="let item of architects">{{item.FirstName}} {{item.LastName}}</option>
                   </select>
                 </div>
                 <div class="col-md-4 mt-3">
-                  <label class="form-label">IsClient Project</label>
-                  <select class="form-select" formControlName="IsClientProject">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
+                  <label class="form-label">Team Lead</label>
+                  <select class="form-select" formControlName="TeamLeadId" >
+                    <option value=0 disabled>Select Team Lead</option>
+                    <option [value]="item.EmployeeUid" *ngFor="let item of employees">{{item.FirstName}} {{item.LastName}}</option>
                   </select>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-4 mt-3">
-                  <label class="form-label">Client Name</label>
-                  <select class="form-select" formControlName="ClientId" >
-                    <option value=0>Select Client</option>
-                    <option [value]="item.ClientId" *ngFor="let item of clients">{{item.ClientName}}</option>
+                  <label class="form-label">IsClient Project</label>
+                  <select class="form-select" formControlName="IsClientProject">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
                   </select>
                 </div>
                 <div class="col-md-4 mt-3">
@@ -104,6 +104,15 @@
                       </div>
                     </div>
                   </form>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mt-3">
+                  <label class="form-label">Client Name</label>
+                  <select class="form-select" formControlName="ClientId" >
+                    <option value=0>Select Client</option>
+                    <option [value]="item.ClientId" *ngFor="let item of clients">{{item.ClientName}}</option>
+                  </select>
                 </div>
               </div>
               <div class="col-12 text-end m-0 pt-5">

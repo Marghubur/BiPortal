@@ -43,7 +43,7 @@
       <div [ngClass]="{'blur-section': !isPageReady}">
         <div class="blur-section__highlight mt-5 pt-5" [ngClass]="{'d-none': isPageReady}">
           <div class="blur-section__content mt-5 pt-5">
-            {{ 'Tax records not found'}}
+            {{ 'Please wait......'}}
           </div>
         </div>
         <div class="blur-this">
@@ -76,11 +76,6 @@
                       regime.</span>
                   </li>
                 </ul>
-              </div>
-            </div>
-            <div class="blur-section__highlight mt-5 pt-5" [ngClass]="{'d-none': isPageReady}">
-              <div class="blur-section__content mt-5 pt-5">
-                {{isEmployeeSelect? 'Please wait......': 'Please select Employee first'}}
               </div>
             </div>
             <ng-container *ngIf="isPageReady">
