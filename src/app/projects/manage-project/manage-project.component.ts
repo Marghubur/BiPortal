@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-manage-project',
@@ -27,6 +29,10 @@ export class ManageProjectComponent implements OnInit {
   architects: Array<any> = [];
   projectId: number = 0;
   employees: Array<any> = [];
+  projectManagerName: string = "";
+  architectName: string = "";
+  teamMembers: Array<any> = [];
+  employeesList: autoCompleteModal = null;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -35,6 +41,12 @@ export class ManageProjectComponent implements OnInit {
 
   ngOnInit(): void {
     let value = this.nav.getValue();
+    this.employeesList = new autoCompleteModal();
+    this.employeesList.data = [];
+    this.employeesList.placeholder = "Team Member";
+    this.employeesList.data = GetEmployees();
+    this.employeesList.className = "";
+    this.employeesList.isMultiSelect = true;
     if (value)
       this.projectId = value.ProjectId;
     let data = this.local.findRecord("Companies");
@@ -144,6 +156,35 @@ export class ManageProjectComponent implements OnInit {
       this.isLoading = false;
     })
   }
+
+  addMemberPopUp() {
+    let projectManagerid = this.projectForm.get('ProjectManagerId').value;
+    if (projectManagerid > 0){
+      let manager = this.employees.find(x => x.EmployeeUid == projectManagerid);
+      this.projectManagerName = manager.FirstName + " " + manager.LastName;
+    }
+    let architectid = this.projectForm.get('ArchitectId').value;
+    if (projectManagerid > 0){
+      let manager = this.employees.find(x => x.EmployeeUid == architectid);
+      this.architectName = manager.FirstName + " " + manager.LastName;
+    }
+    $("#teamMemberModal").modal('show');
+  }
+
+  selectedEmployee(e: any) {
+    let index = this.teamMembers.findIndex(x => x.EmployeeUid == e.value);
+    if(index == -1) {
+      let emp = this.employees.find(x => x.EmployeeUid == e.value);
+      this.teamMembers.push(emp);
+    } else {
+      this.teamMembers.splice(index, 1);
+    }
+  }
+
+  addTeamMember() {
+
+  }
+
 }
 
 export class ProjectModal {

@@ -258,7 +258,7 @@ deleteChainPopUp(item: any) {
     this.http.get("Employee/GenerateEmployeeRole").then(res => {
       if (res.ResponseBody) {
         let empRole = res.ResponseBody;
-        empRole = empRole.filter(x => x.RoleId == 1 || x.RoleId == 2 || x.RoleId == 11|| x.RoleId == 12|| x.RoleId == 13|| x.RoleId == 16);
+        empRole = empRole.filter(x => x.RoleId == 1 || x.RoleId == 2 || x.RoleId == 2|| x.RoleId == 19|| x.RoleId == 3|| x.RoleId == 5);
         for (let i = 0; i < empRole.length; i++) {
           this.employeesAutoComplete.data.push({
             value:empRole[i].RoleId,
