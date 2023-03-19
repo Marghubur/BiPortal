@@ -262,9 +262,9 @@ export class ApprovalRequestComponent implements OnInit {
       if (this.itemStatus == ItemStatus.Rejected || this.itemStatus == ItemStatus.Approved)
         timesheetsData = this.timesheet.filter(x => x.TimesheetStatus == this.itemStatus);
       else if (this.itemStatus == ItemStatus.Pending)
-        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus == ItemStatus.Submitted);
+        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus == ItemStatus.Pending);
       else if (this.itemStatus == 4)
-        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Submitted || x.TimesheetStatus === ItemStatus.Rejected);
+        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Pending || x.TimesheetStatus === ItemStatus.Rejected);
       if (timesheetsData.length > 0) {
         timesheetsData.map(item => {
         let detail:Array<any> = JSON.parse(item.TimesheetWeeklyJson);

@@ -90,7 +90,7 @@ export class ManageProjectComponent implements OnInit {
       HomePageUrl: new FormControl(this.projectDetail.HomePageUrl),
       ProjectManagerId: new FormControl(this.projectDetail.ProjectManagerId),
       ArchitectId: new FormControl(this.projectDetail.ArchitectId),
-      IsClientProject: new FormControl(this.projectDetail.IsClientProject),
+      IsClientProject: new FormControl(this.projectDetail.IsClientProject ? 'true' : 'false'),
       ClientId: new FormControl(this.projectDetail.ClientId),
       ProjectStartedOn: new FormControl(this.projectDetail.ProjectStartedOn),
       ProjectEndedOn: new FormControl(this.projectDetail.ProjectEndedOn)

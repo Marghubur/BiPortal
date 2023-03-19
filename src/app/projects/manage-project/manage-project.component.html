@@ -78,8 +78,8 @@
                   <div class="row">
                     <div class="col-md-4 mt-3">
                       <label class="form-label">Client Name</label>
-                      <select class="form-select" formControlName="ClientId" >
-                        <option value=0>Select Client</option>
+                      <select class="form-select" formControlName="ClientId" [disabled]="projectForm.controls.IsClientProject.value == 'false'">
+                        <option value=0 disabled>Select Client</option>
                         <option [value]="item.ClientId" *ngFor="let item of clients">{{item.ClientName}}</option>
                       </select>
                     </div>
