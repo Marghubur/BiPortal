@@ -26,6 +26,8 @@ export class ManageProjectComponent implements OnInit {
   clients: Array<any> = [];
   architects: Array<any> = [];
   projectId: number = 0;
+  employees: Array<any> = [];
+
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
               private local: ApplicationStorage,
@@ -62,6 +64,7 @@ export class ManageProjectComponent implements OnInit {
         } else {
           this.projectDetail = new ProjectModal();
         }
+        this.employees = response.ResponseBody.Employees;
         this.projectManagers = response.ResponseBody.Employees.filter(x => x.DesignationId == 1);
         this.architects = response.ResponseBody.Employees.filter(x => x.DesignationId == 2);
         this.clients = response.ResponseBody.Clients;
@@ -95,7 +98,8 @@ export class ManageProjectComponent implements OnInit {
       IsClientProject: new FormControl(isClientProject),
       ClientId: new FormControl(this.projectDetail.ClientId),
       ProjectStartedOn: new FormControl(this.projectDetail.ProjectStartedOn),
-      ProjectEndedOn: new FormControl(this.projectDetail.ProjectEndedOn)
+      ProjectEndedOn: new FormControl(this.projectDetail.ProjectEndedOn),
+      TeamLeadId: new FormControl(this.projectDetail.TeamLeadId)
     })
   }
 
@@ -154,4 +158,5 @@ export class ProjectModal {
   ClientId: number = 0;
   ProjectStartedOn: Date = null;
   ProjectEndedOn: Date = null;
+  TeamLeadId: number = 0;
 }
