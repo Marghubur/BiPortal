@@ -209,24 +209,30 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.salaryDetails = response.SalaryDetail;
           if(this.salaryDetails !== null) {
             this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
-            let isProjected = false;
             let i = 0;
             let annualSalaryDetail = JSON.parse(this.salaryDetails.CompleteSalaryDetail);
             this.taxCalender = [];
+            let typeId = 0;
             while( i < annualSalaryDetail.length) {
               let date = new Date(annualSalaryDetail[i].MonthFirstDate);
-              if (date.getMonth() == new Date().getMonth())
-                isProjected = true;
+              if(annualSalaryDetail[i].IsActive) {
+                if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
+                  typeId = 1;
+                } else {
+                  typeId = 2;
+                }
+              } else {
+                typeId = 0;
+              }
 
               this.taxCalender.push({
                 month: new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("en-us", { month: "short" }), // result: Aug
                 year: Number(date.getFullYear().toString().slice(-2)),
                 isActive: annualSalaryDetail[i].IsActive,
-                isProjected: isProjected
+                type: typeId
               });
               i++;
             }
-
           }
           if (response.HouseRentDetail && response.HouseRentDetail != '{}') {
             this.houseRentDetail = JSON.parse(response.HouseRentDetail);

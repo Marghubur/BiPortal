@@ -201,21 +201,20 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           } else {
             this.houseRentDetail = new HouseRentDetail();
           }
-          let isProjected = false;
           let i = 0;
           let annualSalaryDetail = JSON.parse(response.SalaryDetail.CompleteSalaryDetail);
           this.taxCalender = [];
 
           let typeId = 0;
           while( i < annualSalaryDetail.length) {
-            let date = new Date(annualSalaryDetail[i].MonthFirstDate);            
+            let date = new Date(annualSalaryDetail[i].MonthFirstDate);
             if(annualSalaryDetail[i].IsActive) {
               if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
                 typeId = 1;
               } else {
                 typeId = 2;
               }
-            } else {  
+            } else {
               typeId = 0;
             }
 
