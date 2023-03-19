@@ -26,6 +26,7 @@ export class OfferletterComponent implements OnInit {
   employeeForm: FormGroup;
   model: NgbDateStruct;
   submitted: boolean = false;
+  minDate: any = null;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -34,6 +35,7 @@ export class OfferletterComponent implements OnInit {
 
   ngOnInit(): void {
     let companies = this.local.findRecord("Companies");
+    this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     if (companies) {
       this.currentCompany = companies.find(x => x.IsPrimaryCompany == 1);
       if (!this.currentCompany) {

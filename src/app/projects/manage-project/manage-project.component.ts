@@ -140,7 +140,7 @@ export class ManageProjectComponent implements OnInit {
         Toast("Project created/updated successfully.");
         this.isLoading = false;
       }
-    }).then(e => {
+    }).catch(e => {
       this.isLoading = false;
     })
   }
