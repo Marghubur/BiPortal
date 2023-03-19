@@ -1,9 +1,8 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Form12B, FreeTaxFilling, IncomeTax, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
+import { Form12B, FreeTaxFilling, IncomeTax, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -65,9 +64,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   hraLetterCollection:Array<any> = [];
   houseRentDetailFile: Array<any> = [];
   houseRentDetailLetterFile: Array<any> = [];
+  currentMonth: string = "";
 
-  constructor(private local: ApplicationStorage,
-    private user: UserService,
+  constructor(private user: UserService,
     private fb: FormBuilder,
     private nav: iNavigation,
     private http: AjaxService
@@ -76,6 +75,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.rentalPage = 1;
     this.year = new Date().getFullYear();
+    this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toLocaleString("en-us", { month: "short" })
     this.basePath = this.http.GetImageBasePath();
     this.userDetail = this.user.getInstance() as UserDetail;
     this.EmployeeId = this.userDetail.UserId;
@@ -204,11 +204,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           let isProjected = false;
           let i = 0;
           let annualSalaryDetail = JSON.parse(response.SalaryDetail.CompleteSalaryDetail);
+          this.taxCalender = [];
           while( i < annualSalaryDetail.length) {
             let date = new Date(annualSalaryDetail[i].MonthFirstDate);
             if (date.getMonth() == new Date().getMonth())
               isProjected = true;
-            this.taxCalender = [];
+
             this.taxCalender.push({
               month: new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("en-us", { month: "short" }), // result: Aug
               year: Number(date.getFullYear().toString().slice(-2)),

@@ -41,8 +41,8 @@
                       <div class="x_header_title position-relative">
                         <div class="img-container-sq" (change)="uploadProfilePicture($event)">
                           <div class="img-container__box">
-                            <!-- <img [attr.src]="profileURL" alt="User"> -->
-                            <app-image-loader [autofit]="1" [url]="profileURL"></app-image-loader>
+                            <img [attr.src]="profileURL" alt="User">
+                            <!-- <app-image-loader [autofit]="1" [url]="profileURL"></app-image-loader> -->
                             <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
                               formControlName="ProfileImgPath" />
                             <div class="img-container__btn mt-2">
