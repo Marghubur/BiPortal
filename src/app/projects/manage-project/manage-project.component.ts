@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
-import { UserService } from 'src/providers/userService';
 
 @Component({
   selector: 'app-manage-project',
@@ -79,6 +77,10 @@ export class ManageProjectComponent implements OnInit {
     if(this.projectDetail.ProjectManagerId == null)
       this.projectDetail.ProjectManagerId = 0;
 
+    let isClientProject = false;
+    if(this.projectDetail.IsClientProject)
+      isClientProject = true;
+
     this.projectForm = this.fb.group({
       OrganizationName: new FormControl(this.currentCompany.OrganizationName),
       ProjectId: new FormControl(this.projectDetail.ProjectId),
@@ -90,7 +92,7 @@ export class ManageProjectComponent implements OnInit {
       HomePageUrl: new FormControl(this.projectDetail.HomePageUrl),
       ProjectManagerId: new FormControl(this.projectDetail.ProjectManagerId),
       ArchitectId: new FormControl(this.projectDetail.ArchitectId),
-      IsClientProject: new FormControl(this.projectDetail.IsClientProject ? 'true' : 'false'),
+      IsClientProject: new FormControl(isClientProject),
       ClientId: new FormControl(this.projectDetail.ClientId),
       ProjectStartedOn: new FormControl(this.projectDetail.ProjectStartedOn),
       ProjectEndedOn: new FormControl(this.projectDetail.ProjectEndedOn)
