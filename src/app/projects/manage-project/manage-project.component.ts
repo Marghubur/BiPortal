@@ -52,7 +52,7 @@ export class ManageProjectComponent implements OnInit {
     this.isReady = false;
     this.http.get(`Project/GetProjectPageDetail/${this.projectId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        if (response.ResponseBody.Project) {
+        if (response.ResponseBody.Project && response.ResponseBody.Project.length > 0) {
           this.projectDetail = response.ResponseBody.Project[0];
           let date = new Date(this.projectDetail.ProjectStartedOn);
           this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
@@ -134,12 +134,11 @@ export class ManageProjectComponent implements OnInit {
         let id = Number(res.ResponseBody);
         this.projectForm.get("ProjectId").setValue(id);
         Toast("Project created/updated successfully.");
+        this.isLoading = false;
       }
-      this.isLoading = false;
     }).then(e => {
       this.isLoading = false;
     })
-    this.isLoading = false;
   }
 }
 

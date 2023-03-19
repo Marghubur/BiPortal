@@ -75,6 +75,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   viewRentPropFile: Array<any> = [];
   viewAttachment: string = '';
   deleteType: string = '';
+  currentMonth: string = "";
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -85,6 +86,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.rentalPage = 1;
     this.monthlyTaxAmount = new MonthlyTax();
+    this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toLocaleString("en-us", { month: "short" })
     this.employeesList.placeholder = "Employee";
     this.employeesList.className = 'disable-field';
     this.isEmployeesReady = true;
@@ -186,9 +188,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.employeeEmail = response.Email;
 
         if(this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
-          // this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
-          // this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
-          // this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
           let rentDetail = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
           for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
             let component =  this.employeeDeclaration.Declarations[index].DeclarationName;

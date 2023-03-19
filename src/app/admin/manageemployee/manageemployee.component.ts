@@ -675,7 +675,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   addUpadteClientPopUp() {
-    this.submitted = false;
+    this.isSubmitted = false;
     this.bindClientDetails();
     $('#addUpdateClientModal').modal('show');
   }
