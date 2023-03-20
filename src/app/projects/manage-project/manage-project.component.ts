@@ -145,6 +145,9 @@ export class ManageProjectComponent implements OnInit {
     }
 
     let value = this.projectForm.value;
+    if (this.teamMembers.length > 0) {
+      value.TeamMembers = this.teamMembers;
+    }
     this.http.post("Project/AddUpdateProjectDetail", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         let id = Number(res.ResponseBody);
@@ -172,10 +175,18 @@ export class ManageProjectComponent implements OnInit {
   }
 
   selectedEmployee(e: any) {
-    let index = this.teamMembers.findIndex(x => x.EmployeeUid == e.value);
+    let index = this.teamMembers.findIndex(x => x.EmployeeId == e.value);
     if(index == -1) {
       let emp = this.employees.find(x => x.EmployeeUid == e.value);
-      this.teamMembers.push(emp);
+      this.teamMembers.push({
+        ProjectMemberDetailId : 0,
+        ProjectId : 0,
+        EmployeeId : emp.EmployeeUid,
+        DesignationId : emp.DesignationId,
+        FullName : emp.FirstName + " " + emp.LastName,
+        Email : emp.Email,
+        IsActive : emp.IsActive
+      });
     } else {
       this.teamMembers.splice(index, 1);
     }
