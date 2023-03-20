@@ -1,33 +1,6 @@
-.progress-step {
-  width: 2.2rem;
-  height: 2.2rem;
-  background-color: rgb(207, 207, 207);
-  cursor: pointer;
-}
-
-.step-count {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.progress-new-bar::before {
-  content: '';
-  position: absolute;
-  height: 3px;
-  top: 50%;
-  width: 99%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(157, 155, 155, 0.588);
-}
-
-.active {
-  background-color: #7200ff !important;
-}
-
-.step-info {
-  padding-top: 2.5rem !important;
+.active-tab {
+  background-color: #286090 !important;
+  color: white !important;
 }
 
 // .step-info-active {
