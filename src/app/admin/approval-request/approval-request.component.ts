@@ -248,10 +248,12 @@ export class ApprovalRequestComponent implements OnInit {
         detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
       if (detail && detail.length > 0)
       this.leaveDeatil = detail;
-        this.leaveDeatil.forEach(x => {
+      this.leaveDeatil.forEach(x => {
+        if (typeof x.FromDate === 'string') {
           x.FromDate = ToLocateDate(x.FromDate),
           x.ToDate = ToLocateDate(x.ToDate);
-        });
+        }
+      });
     }
   }
 
