@@ -190,6 +190,8 @@ export class CompanySetting {
     FinancialYear: number = 0;
     DefaultManagers: string = "";
     AttendanceSubmissionLimit: number = null;
+    LeaveAccrualRunCronDayOfMonth: number = 0;
+    EveryMonthLastDayOfDeclaration: number = 0;
 }
 
 export class UserProfile {

@@ -53,7 +53,7 @@
                 <span class="mb-0 ps-3">Here you can manage all hiringBell payslips for applicable years.</span>
                 <div class="d-flex px-3 justify-content-between">
                   <div class="col-md-2 pt-3 pe-3">
-                    <select class="form-select" (change)="allPaySlip($event.target.value)">
+                    <select class="form-select" (change)="changeYear($event.target.value)">
                       <option value="{{item}}" [selected]="i == 0" *ngFor="let item of payslipYear; let i = index;">Year {{item}}</option>
                     </select>
                   </div>
@@ -79,10 +79,13 @@
                           <iframe src="" width="100%" height="600px" style="border: none;"></iframe>
                         </div>
                       </div>
+                      <div *ngIf=" !isFileFound && isReady && !isLoading" class="my-5 py-5">
+                        <div class="py-5 text-center fw-bold fs-4 text-danger my-5">No Record Found</div>
+                      </div>
                     </ng-container>
                     <ng-container *ngIf="!isReady && !isLoading">
                       <ng-container *ngIf="paySlipSchedule.length > 0">
-                        <div class="d-flex align-items-center justify-content-center py-5 my-5">
+                        <div  *ngIf=" !isFileFound" class="d-flex align-items-center justify-content-center py-5 my-5">
                           <div class="py-5 my-5 fw-bold fs-5">
                             Please select Pay Slip month first.
                           </div>
