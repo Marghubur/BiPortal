@@ -496,6 +496,7 @@ export class DocumentUser {
     OrgPrimaryPhoneNo: string = null;
     OrgSecondaryPhoneNo: string = null;
     OrgFax: string = null;
+    Files: any = null;
   }
 
   export class Product {

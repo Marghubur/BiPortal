@@ -14,8 +14,6 @@
                 <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
                   class="fa fa-paper-plane pe-1"></i> Configure</a>
                   <ng-container *ngIf="isReady && employeeModal.EmployeeUid > 0">
-                    <a href="javascript:void(0)" (click)="reRunAccrual()" class="text-decoration-none fw-bold pe-4"><i class="fa fa-refresh" aria-hidden="true"></i>
-                      Run Accrual</a>
                     <a href="javascript:void(0)" [ngClass]="{'pe-none': !isCompaniesDetails, 'pe-none': employeeUid==0}" *ngIf="isReady" (click)="navToSalaryBreakup()" class="text-decoration-none fw-bold"><i
                       class="fa fa-money pe-1"></i> Breakup</a>
                   </ng-container>

@@ -44,7 +44,7 @@
     </div>
   </div>
   <div class="w-100 position-absolute bg-secondary" class="menu-footer btn-primary-c">
-    <a href="javascript:void(0)" (click)="organizationSetting()">
+    <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
       <i class="fa fa-cog" aria-hidden="true"></i>
     </a>
     <a href="javascript:void(0)">
