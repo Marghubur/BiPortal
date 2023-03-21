@@ -96,7 +96,7 @@ export class CompanyComponent implements OnInit {
 
   buildProfileImage(fileDetail: any) {
     if (fileDetail && fileDetail.length > 0) {
-      let logoFile = fileDetail.find(x => x.FileName == "CompanyLogo")
+      let logoFile = fileDetail.find(x => x.FileName == "CompanyProfile")
       if (logoFile) {
         this.profileURL = `${this.http.GetImageBasePath()}${logoFile.FilePath}/${logoFile.FileName}.${logoFile.FileExtension}`;
         this.currentCompany.FileId = logoFile.FileId;
@@ -216,7 +216,7 @@ export class CompanyComponent implements OnInit {
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
-      formData.append('CompanyLogo', file)
+      formData.append('CompanyProfile', file)
       this.http.post("Company/UpdateCompanyDetails", formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.currentCompany = response.ResponseBody;
@@ -409,7 +409,7 @@ export class CompanyComponent implements OnInit {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.fileDetail.push({
-        name: "CompanyLogo",
+        name: "CompanyProfile",
         file: file
       });
     }

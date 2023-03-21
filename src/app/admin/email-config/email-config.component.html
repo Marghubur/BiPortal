@@ -112,7 +112,7 @@
                 <form [formGroup]="emailTempMapForm" *ngIf="emailTempMapForm">
                     <div class="mt-3">
                         <label for="" class="form-label">Action Type</label>
-                        <input type="text" class="form-control" formControlName="EmailTemplateName" [ngClass]="{'error-field': submitted && f.EmailTemplateName.errors !== null && f.EmailTemplateName.errors.required}">
+                        <input type="text" maxlength="100" oninput="this.value = this.value.toUpperCase()" class="form-control" formControlName="EmailTemplateName" [ngClass]="{'error-field': submitted && f.EmailTemplateName.errors !== null && f.EmailTemplateName.errors.required}">
                     </div>
                     <div class="mt-3">
                         <label for="" class="form-label">Template Name</label>
