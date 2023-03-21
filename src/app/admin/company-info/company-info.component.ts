@@ -79,14 +79,14 @@ export class CompanyInfoComponent implements OnInit {
         this.fileDetail = [];
         if(response.ResponseBody.Files && response.ResponseBody.Files.length > 0) {
           this.fileDetail = response.ResponseBody.Files;
-
-          response.ResponseBody.Files.map(item => {
-            if(item.FileName.toLowerCase() == "signwithstamp") {
-              this.signURL = `${this.imageBasePath}/${item.FilePath}/${item.FileName}.${item.FileExtension}`;
-            } else if (item.FileName.toLowerCase() == "signwithoutStamp") {
-              this.signwithoutstamp = `${this.imageBasePath}/${item.FilePath}/${item.FileName}.${item.FileExtension}`;
+          for (let i = 0; i < this.fileDetail.length; i++) {
+            if(this.fileDetail[i].FileName.toLowerCase() == "signwithstamp") {
+              this.signURL = `${this.imageBasePath}/${this.fileDetail[i].FilePath}/${this.fileDetail[i].FileName}.${this.fileDetail[i].FileExtension}`;
+            } else if (this.fileDetail[i].FileName.toLowerCase() == "signwithoutstamp") {
+              this.signwithoutstamp = `${this.imageBasePath}/${this.fileDetail[i].FilePath}/${this.fileDetail[i].FileName}.${this.fileDetail[i].FileExtension}`;
             }
-          });
+          }
+
         }
 
         this.CompanyId = this.companyInformation.CompanyId;
