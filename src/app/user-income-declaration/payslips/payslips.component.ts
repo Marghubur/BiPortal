@@ -51,6 +51,7 @@ export class PayslipsComponent implements OnInit {
 
       if (joiningDate.getMonth() == new Date().getMonth() && joiningDate.getFullYear() == new Date().getFullYear()) {
         WarningToast("Joining month of the employee is current month");
+        this.SectionIsReady= true;
         return;
       }
 
@@ -71,6 +72,8 @@ export class PayslipsComponent implements OnInit {
           }
         }
         this.SectionIsReady= true;
+      }).catch(e => {
+        this.SectionIsReady = true;
       })
     }
   }
