@@ -135,12 +135,8 @@ a:focus,a:hover {
   --secondary-color: white !important;
 }
 
-#tableModal {
-  z-index: 2500 !important;
-}
-
 .iframe-wrapper-active {
-  z-index: 99999 !important;
+  z-index: 1040 !important;
 
   iframe {
     z-index: 0;

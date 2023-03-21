@@ -194,16 +194,22 @@ export enum UserType {
 
 export enum ItemStatus
 {
-    Completed = 1,
-    Pending = 2,
-    Canceled = 3,
-    NotGenerated = 4,
-    Rejected = 5,
-    Generated = 6,
-    Raised = 7,
-    Submitted = 8,
-    Approved = 9,
-    ReAssigned = 10
+  NotSubmitted = 0,
+  Completed = 1,
+  Pending = 2,
+  Canceled = 3,
+  NotGenerated = 4,
+  Rejected = 5,
+  Generated = 6,
+  Raised = 7,
+  Submitted = 8,
+  Approved = 9,
+  Present = 10,
+  Absent = 11,
+  MissingAttendanceRequest = 12,
+  Saved = 13,
+  AutoPromoted = 14,
+  FinalLevel = 15
 }
 
 class FileRoleType
