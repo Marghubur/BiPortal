@@ -233,7 +233,7 @@
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Shift Title *</label>
-              <input type="text" maxlength="40" placeholder="Enter shift title" formControlName="ShiftTitle" [ngClass]="{'error-field': submitted && f.ShiftTitle.errors !== null && f.ShiftTitle.errors.required}" class="form-control">
+              <input type="text" maxlength="40" oninput="this.value = this.value.toUpperCase()" placeholder="Enter shift title" formControlName="ShiftTitle" [ngClass]="{'error-field': submitted && f.ShiftTitle.errors !== null && f.ShiftTitle.errors.required}" class="form-control">
             </div>
           </div>
           <div class="row">
@@ -252,7 +252,7 @@
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">Description</label>
-            <textarea class="form-control" formControlName="Description" placeholder="Enter description" maxlength="100" cols="30" rows="5"></textarea>
+            <textarea class="form-control" oninput="this.value = this.value.toUpperCase()" formControlName="Description" placeholder="Enter description" maxlength="100" cols="30" rows="5"></textarea>
           </div>
           <div class="row">
             <div class="col-md-4 mt-3">

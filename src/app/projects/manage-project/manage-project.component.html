@@ -106,7 +106,7 @@
                   </form>
                 </div>
               </div>
-              <div class="col-md-12" *ngIf="teamMembers.length > 0">
+              <div class="col-md-12 mt-3" *ngIf="teamMembers.length > 0">
                 <table class="table table-striped table-hover">
                   <thead>
                     <tr>
@@ -168,15 +168,15 @@
           <div class="col-md-9">{{projectForm.controls.ProjectName.value}}</div>
         </div>
         <div class="row mt-3">
-          <div class="col-md-3">Project Manager Name: </div>
+          <div class="col-md-3">Manager Name: </div>
           <div class="col-md-9">{{projectManagerName}}</div>
         </div>
         <div class="row mt-3">
-          <div class="col-md-3">Project Architect Name: </div>
+          <div class="col-md-3">Architect Name: </div>
           <div class="col-md-9">{{architectName}}</div>
         </div>
         <div class="row mt-3">
-          <div class="col-md-3">Project Team Lead: </div>
+          <div class="col-md-3">Team Lead: </div>
           <div class="col-md-9">
             <select class="form-select" >
               <option value=0 disabled>Select Architect</option>

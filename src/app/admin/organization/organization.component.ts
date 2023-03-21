@@ -73,7 +73,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.closingDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         this.initForm();
         this.isLoaded = true;
-        let profileDetail = response.ResponseBody.Files;
+        let profileDetail = this.organization.Files;
         if(profileDetail && profileDetail.FileOwnerId == this.organization.OrganizationId && profileDetail.FileName == "OrganizationProfile") {
           this.buildProfileImage(profileDetail);
         }
