@@ -19,7 +19,16 @@
         <form [formGroup]="companySettingForm" *ngIf="companySettingForm">
           <div class="row">
             <div class="col-md-3 border p-0">
-              <div class="fw-bold py-5 px-3">Table Header</div>
+              <div class="fw-bold py-4 px-3">
+                <div class="row">
+                  <div class="px-3">
+                    <img src="assets/images/control_setting.png" class="img-control">
+                  </div>
+                  <div>
+                    Use below setting to configure company level options.
+                  </div>
+                </div>
+              </div>
               <ul class="list-group list-group">
                 <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 1)">
                   <li class="list-group-item border-0 active-tab" data-name="activetab"><i class="fa fa-cog pe-2"></i> Company Basic Setting</li>

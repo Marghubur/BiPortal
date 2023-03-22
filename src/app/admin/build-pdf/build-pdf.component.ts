@@ -157,48 +157,65 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
     this.http.post("Timesheet/GetEmployeeTimeSheet", timesheetStatusFor).then ((response: ResponseModel) => {
       if (response.ResponseBody) {
-          this.buildTimeSheet(response.ResponseBody, this.currentEmployee.EmployeeUid);
+          this.createEntireMonthTimesheet(response.ResponseBody, timesheetStatusFor);
+          this.buildTimeSheet();
       }
       this.isClientSelected = true;
     });
   }
 
-  prepareTimesheet(timesheetData: any, employeeId: number) {
-    let i = 0;
-    let missinngAtt = timesheetData.MissingDate;
-    let timesheetDetails = timesheetData.TimesheetDetails;
+  createEntireMonthTimesheet(timesheet: Array<any>, requestData: any) {
+    let firstDate = new Date(requestData.ForYear, requestData.ForMonth - 1, 1);
+    let lastDate = new Date(requestData.ForYear, requestData.ForMonth, 0);
+    let monthTimesheet = [];
 
-    if (!timesheetDetails) timesheetDetails = [];
+    if(!timesheet || timesheet.length == 0) {
+      while(firstDate.getTime() <= lastDate.getTime()) {
+        monthTimesheet.push({
+          TimesheetId: 0,
+          ClientId: requestData.ClientId,
+          EmployeeId: requestData.EmployeeId,
+          PresentDate: firstDate,
+          TimesheetStatus: ItemStatus.NotSubmitted
+        });
 
-    if (this.applicationData.TimesheetDetail)
-      this.timesheetId = this.applicationData.TimesheetDetail.TimesheetId;
+        firstDate = new Date(firstDate.setDate(1));
+      }
+    } else {
+      let i = 0;
+      while(i < lastDate.getDate()) {
+        let item = timesheet.find(x => new Date(x.PresentDate).getDate() == firstDate.getDate());
+        if(item) {
+          item.PresentDate = new Date(item.PresentDate);
+          monthTimesheet.push(item);
+        } else {
+          monthTimesheet.push({
+            TimesheetId: 0,
+            ClientId: requestData.ClientId,
+            EmployeeId: requestData.EmployeeId,
+            PresentDate: new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate()),
+            TimesheetStatus: ItemStatus.NotSubmitted
+          });
+        }
 
-    while(i < missinngAtt.length) {
-      timesheetDetails.push({
-        UserTypeId: UserType.Employee,
-        PresentDate: new Date(missinngAtt[i]),
-        EmployeeUid: employeeId,
-        TimesheetStatus: ItemStatus.NotGenerated
-      });
+        firstDate = new Date(firstDate.setDate(firstDate.getDate() + 1));
+        i++;
+      }
+     }
 
-      i++;
-    }
-
-    this.allTimesheet = timesheetDetails.sort((a,b) => Date.parse(a.PresentDate) - Date.parse(b.PresentDate));
+    this.allTimesheet = monthTimesheet.sort((a,b) => Date.parse(a.PresentDate) - Date.parse(b.PresentDate));
   }
 
-  buildTimeSheet(data: any, employeeId: number) {
+  buildTimeSheet() {
     let burnDays = 0;
     let isTimeSheetExists = true;
-    if(data.TimesheetDetails.length == 0) {
+    if(this.allTimesheet.length == 0) {
       if(!this.editMode)
         this.timesheetId = 0;
       isTimeSheetExists = false;
     }
 
-    this.prepareTimesheet(data, employeeId);
     this.allTimesheet.map(item => {
-      item.PresentDate = new Date(item.PresentDate);
       if(item.TimesheetStatus == 9)
         burnDays++;
     });
@@ -345,14 +362,11 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           this.grandTotalAmount = editGrandTotalAmount;
         }
 
-        // if (this.applicationData.TimesheetDetails) {
-        //   this.buildTimeSheet({
-        //     TimesheetDetails: this.applicationData.TimesheetDetails,
-        //     MissingDate: this.applicationData.MissingDate
-        //   }, this.existingData.FileOwnerId);
-
-        //   this.isClientSelected = true;
-        // }
+        if (this.applicationData.TimesheetDetails) {
+          this.createEntireMonthTimesheet(this.applicationData.TimesheetDetails, employeeBillDetail);
+          this.buildTimeSheet();
+          this.isClientSelected = true;
+        }
         this.isClientSelected = true;
         this.pageDataIsReady = true;
       });
@@ -738,8 +752,8 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
       let modalStatus = this.validateBillRequest(request);
       this.billAllDetails = request;
       if(modalStatus == null) {
-        //let timesheetForm: FormData = this.getTimeSheetData();
-        let timesheetForm: FormData = new FormData();
+        let timesheetForm: FormData = this.getTimeSheetData();
+        // let timesheetForm: FormData = new FormData();
         timesheetForm.append('BillRequestData', JSON.stringify(request));
 
         this.http.post(this.generateBillUrl, timesheetForm).then((response: ResponseModel) => {
@@ -871,7 +885,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     if(value) {
       this.bindClientDetail(value);
       this.isClientSelected = true;
-      //this.getAttendance();
+      this.getAttendance();
     }
     else {
       ErrorToast("Company not selected properly.");
@@ -1084,35 +1098,36 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   submitTimesheet() {
     this.isLoading = true;
     try {
-      // let value = (<HTMLInputElement>document.getElementById('commentsection')).value;
-      // let formData = new FormData();
-      // let firstDate = new Date(this.allTimesheet[0].PresentDate);
-      // let timeSheetDetail = {
-      //   EmployeeId: this.pdfForm.get("developerId").value,
-      //   UserTypeId: UserType.Employee,
-      //   ForMonth: firstDate.getMonth() + 1,
-      //   ForYear: firstDate.getFullYear(),
-      //   ClientId: this.pdfForm.get("receiverCompanyId").value
-      // };
+      let value = (<HTMLInputElement>document.getElementById('commentsection')).value;
+      let formData = new FormData();
+      let firstDate = new Date(this.allTimesheet[0].PresentDate);
+      let timeSheetDetail = {
+        EmployeeId: this.pdfForm.get("developerId").value,
+        UserTypeId: UserType.Employee,
+        ForMonth: firstDate.getMonth() + 1,
+        ForYear: firstDate.getFullYear(),
+        ClientId: this.pdfForm.get("receiverCompanyId").value
+      };
 
-      // this.allTimesheet.map(x => {
-      //   x.EmployeeId = this.currentEmployee.EmployeeUid;
-      //   x.ClientId = this.pdfForm.get("receiverCompanyId").value
-      // });
+      this.allTimesheet.map(x => {
+        x.EmployeeId = this.currentEmployee.EmployeeUid;
+        x.ClientId = this.pdfForm.get("receiverCompanyId").value
+      });
 
-      // formData.append('comment', JSON.stringify(value));
-      // formData.append('dailyTimesheetDetail', JSON.stringify(this.allTimesheet));
-      // formData.append('timesheet', JSON.stringify(timeSheetDetail));
-      // this.http.post('Timesheet/UpdateTimesheet', formData).then(res => {
-      //   if (res.ResponseBody) {
-      //     this.buildTimeSheet(res.ResponseBody, this.currentEmployee.EmployeeUid);
-      //     this.isLoading = false;
-      //     $('#timesheet-view').modal('hide');
-      //   } else
-      //     this.isLoading = false;
-      // }).catch(e => {
-      //   this.isLoading = false;
-      // })
+      formData.append('comment', JSON.stringify(value));
+      formData.append('dailyTimesheetDetail', JSON.stringify(this.allTimesheet));
+      formData.append('timesheet', JSON.stringify(timeSheetDetail));
+      this.http.post('Timesheet/UpdateTimesheet', formData).then(res => {
+        if (res.ResponseBody) {
+          this.createEntireMonthTimesheet(res.ResponseBody, timeSheetDetail);
+          this.buildTimeSheet();
+          this.isLoading = false;
+          $('#timesheet-view').modal('hide');
+        } else
+          this.isLoading = false;
+      }).catch(e => {
+        this.isLoading = false;
+      })
     } catch(e) {
       ErrorToast("Getting calculation error from client side. Please contact to admin.");
     }
