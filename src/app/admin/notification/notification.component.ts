@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Notification } from 'src/app/adminmodal/admin-modals';
+import { Files } from 'src/app/commonmodal/common-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { environment } from 'src/environments/environment';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -10,7 +12,6 @@ import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/co
 import { AdminNotification, AImage, Doc, Docx, EmailLinkConfig, JImage, Pdf, PImage, Txt } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
-import { Files } from '../documents/documents.component';
 declare var $: any;
 
 @Component({
@@ -94,12 +95,6 @@ export class NotificationComponent implements OnInit {
   bindData(res : any) {
     this.allNotificationList = res;
     if (this.allNotificationList.length > 0) {
-      for (let i = 0; i < this.allNotificationList.length; i++) {
-        let enddate = ToLocateDate(this.allNotificationList[i].EndDate).setHours(0,0,0,0);
-        let now = new Date().setHours(0,0,0,0);
-        if (now > enddate)
-          this.allNotificationList[i].IsExpired = true;
-      }
       this.notificationData.TotalRecords= this.allNotificationList[0].Total;
     } else{
       this.notificationData.TotalRecords = 0;
@@ -170,7 +165,7 @@ export class NotificationComponent implements OnInit {
       return;
     }
     let value = this.notificationForm.value;
-    if (this.selectedDepartment!= null) {
+    if (this.selectedDepartment!= null && value.DepartmentId > 0) {
       let department = this.selectedDepartment.find(x => x.Id == value.DepartmentId);
       value.DepartmentsList =[{
         Id: department.Id,
@@ -280,7 +275,8 @@ export class NotificationComponent implements OnInit {
       this.uploadedFile = [];
       this.getDepartmentAndRole(data.AnnouncementType, data.FileIds);
       this.currentNotification = data;
-      this.currentNotification.DepartmentId = JSON.parse(data.Departments)[0].Id;
+      if (data.Departments && data.Departments != "[]")
+        this.currentNotification.DepartmentId = JSON.parse(data.Departments)[0].Id;
       this.currentNotification.StartDate = ToLocateDate(this.currentNotification.StartDate);
       this.startDateModel = { day: this.currentNotification.StartDate.getDate(), month: this.currentNotification.StartDate.getMonth() + 1, year: this.currentNotification.StartDate.getFullYear()};
       this.currentNotification.EndDate = ToLocateDate(this.currentNotification.EndDate);
@@ -293,8 +289,28 @@ export class NotificationComponent implements OnInit {
   viewNotificationPopup(data: Notification) {
     if (data) {
       this.currentNotification = data;
+      this.getNotificationFiles(data.FileIds);
       $('#viewNotificationModal').modal('show');
     }
+  }
+
+  getNotificationFiles(fileids: any) {
+    this.isLoading = true;
+    this.companyFile = [];
+    this.uploadedFile = [];
+    this.http.get(`Product/GetProductImages/${fileids}`).then(res => {
+      if (res.ResponseBody) {
+        this.companyFile = res.ResponseBody.Table;
+        if (this.companyFile.length > 0) {
+          this.companyFile.forEach(element => {
+            this.uploadedFile.push(element);
+          });
+        }
+      }
+      this.isLoading = false;
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   arrangeDetails(flag: any, FieldName: string) {
@@ -355,6 +371,10 @@ export class NotificationComponent implements OnInit {
 
   onChangeAnnouncement(e: any) {
     let value = e.target.value;
+    if (value) {
+      this.notificationForm.controls["AnnouncementType"].setValue(0);
+      this.notificationForm.controls["DepartmentId"].setValue(0);
+    }
   }
 
   fireBrowserFile() {
@@ -441,26 +461,4 @@ export class NotificationComponent implements OnInit {
   uploadedFilePopUp() {
     $('#viewFileModal').modal('show');
   }
-
-}
-
-class Notification {
-  NotificationId: number = 0;
-  Topic: string = null;
-  CompanyId: number = 0;
-  BriefDetail: string = null;
-  CompleteDetail: string = null;
-  Total: number = 0;
-  Index: number = 0;
-  CreatedOn: Date = null;
-  UpdatedOn: Date = null;
-  StartDate: Date = null;
-  EndDate: Date = null;
-  IsGeneralAnnouncement: boolean = false;
-  AnnouncementType: number = 0;
-  AnnouncementId: string = null;
-  Departments: Array<any> =null;
-  DepartmentId: number = 0;
-  IsExpired: boolean = false;
-  FileIds: Array<any>= [];
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { organizationAccountModal } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -8,7 +9,6 @@ import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/c
 import { Company, EmailLinkConfig, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
-import { organizationAccountModal } from '../company-info/company-info.component';
 declare var $: any;
 
 @Component({
@@ -77,8 +77,10 @@ export class CompanyComponent implements OnInit {
         let date;
         if (this.currentCompany.InCorporationDate == null || this.currentCompany.InCorporationDate != '0001-01-01T00:00:00')
           date = new Date(this.currentCompany.InCorporationDate);
-        else
+        else {
           date = new Date() ;
+          this.currentCompany.InCorporationDate = date;
+        }
 
         this.corporationDateModal = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         this.buildProfileImage(response.ResponseBody.Files);
@@ -94,7 +96,7 @@ export class CompanyComponent implements OnInit {
 
   buildProfileImage(fileDetail: any) {
     if (fileDetail && fileDetail.length > 0) {
-      let logoFile = fileDetail.find(x => x.FileName == "CompanyLogo")
+      let logoFile = fileDetail.find(x => x.FileName == "CompanyProfile")
       if (logoFile) {
         this.profileURL = `${this.http.GetImageBasePath()}${logoFile.FilePath}/${logoFile.FileName}.${logoFile.FileExtension}`;
         this.currentCompany.FileId = logoFile.FileId;
@@ -214,7 +216,7 @@ export class CompanyComponent implements OnInit {
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
-      formData.append('CompanyLogo', file)
+      formData.append('CompanyProfile', file)
       this.http.post("Company/UpdateCompanyDetails", formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.currentCompany = response.ResponseBody;
@@ -407,7 +409,7 @@ export class CompanyComponent implements OnInit {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.fileDetail.push({
-        name: "CompanyLogo",
+        name: "CompanyProfile",
         file: file
       });
     }

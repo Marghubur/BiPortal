@@ -1,113 +1,181 @@
 <div class="col-md-12 main-container">
   <div class="x_panel">
     <div class="x_header">
-      <div class="x_header_title">
-        <h2>Company Setting<small>notice period, financiaal year etc</small></h2>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Company Setting'" [subtitle]="'notice period, financiaal year etc'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
+            <!-- <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa fa-plus pe-2"></i> Add Template</button> -->
+          </div>
+        </div>
       </div>
     </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
-    </div>
-    <div class="x_content mt-4">
+    <div class="x_content ms-2 mt-4">
       <ng-container *ngIf="isPageReady">
         <form [formGroup]="companySettingForm" *ngIf="companySettingForm">
           <div class="row">
-            <div class="col-md-6">
-              <div class="x_panel">
-                <div class="x_header">
-                  <div class="x_header_title">
-                    <h2>Company Setting<small>financial and notice period setting.</small></h2>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Company Name</label>
-                  <input type="text" class="form-control border-0" readonly [value]="currentCompany.CompanyName">
-                </div>
+            <div class="col-md-3 border p-0">
+              <div class="fw-bold py-4 px-3">
                 <div class="row">
-                  <div class="col-md-4 mt-4">
-                    <label for="" class="form-label">Probation Period In Days</label>
-                    <input maxlength="2" type="text" class="form-control" formControlName="ProbationPeriodInDays" placeholder="Enter probation period days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                  <div class="px-3">
+                    <img src="assets/images/control_setting.png" class="img-control">
                   </div>
-                  <div class="col-md-4 mt-4">
-                    <label for="" class="form-label">Notice Period In Days</label>
-                    <input maxlength="2" type="text" class="form-control" formControlName="NoticePeriodInDays" placeholder="Enter notice period in days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                  </div>
-                  <div class="col-md-4 mt-4">
-                    <label for="" class="form-label">Is Primary</label>
-                    <select class="form-select" formControlName="IsPrimary">
-                      <option value="true">Yes</option>
-                      <option value="false">No</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-4 mt-4">
-                    <label for="" class="form-label">Declaration Start Month</label>
-                    <input maxlength="2" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                  </div>
-                  <div class="col-md-4 mt-4">
-                    <label for="" class="form-label">Declaration End Month</label>
-                    <input maxlength="2" type="text" class="form-control" formControlName="DeclarationEndMonth" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                  </div>
-                  <div class="col-md-4 mt-4">
-                    <label for="" class="form-label">Financial Year</label>
-                    <input maxlength="4" type="text" class="form-control" formControlName="FinancialYear" placeholder="Enter financial year" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                  <div>
+                    Use below setting to configure company level options.
                   </div>
                 </div>
               </div>
-              <div class="x_panel">
-                <div class="x_header">
-                  <div class="x_header_title">
-                    <h2>Attendance<small>Setup rules.</small></h2>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6 mt-4">
-                    <label for="" class="form-label">Attendance appling back days limit</label>
-                    <input maxlength="2" type="number" class="form-control" formControlName="AttendanceSubmissionLimit" placeholder="Enter attendance limit to apply in back date." onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                  </div>
-                </div>
+              <ul class="list-group list-group">
+                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 1)">
+                  <li class="list-group-item border-0 active-tab" data-name="activetab"><i class="fa fa-cog pe-2"></i> Company Basic Setting</li>
+                </a>
+                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 2)">
+                  <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cog pe-2"></i> Company Setting</li>
+                </a>
+                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 3)">
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cog pe-2"></i> Declaration Setting</li>
+                  </a>
+                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 4)">
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cog pe-2"></i> Cron Setting</li>
+                  </a>
+                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 5)">
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cog pe-2"></i> Attendance Setting</li>
+                  </a>
+                </ul>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="x_panel">
-                <div class="x_header">
-                  <div class="x_header_title">
-                    <h2>Default Manager Setting<small>Multiple level setting.</small></h2>
-                  </div>
-                </div>
-                <div class="card">
-                  <label for="" class="form-label fw-bold ps-3 pt-3">Default Manager Chain</label>
-                  <label for="" class="form-label fw-bold ps-3">If the manager of an employee is not assign then the default manager should be</label>
-                  <div class="pt-1 pb-2">
-                    <ng-container formArrayName="DefaultManager" >
-                      <div class="d-flex bg-light ps-5 align-items-center py-2 my-2" *ngFor="let item of ManagerControl.controls; let i=index;" [formGroupName]="i">
-                        <label for="" class="form-label">LEVEL {{i+1}}</label>
-                        <i class="fa fa-circle text-primary ps-3 pe-4"></i>
-                        <select class="form-select w-75" formControlName="ManagerId">
-                          <option value="0">Select Level</option>
-                          <option [value]="item.RoleId" *ngFor="let item of roles">{{item.RoleName}}</option>
-                        </select>
-                        <a *ngIf="ManagerControl.controls.length == i+1 && i > 0" href="javascript:void(0)" class="text-decoration-none" (click)="removeManagerLevel(i)">
-                          <i class="fa fa-trash text-muted ps-3 fa-lg"></i>
-                        </a>
+              <div class="col-md-9">
+                <ng-container *ngIf="isReady">
+                  <div class="col-md-12" *ngIf="menuIndex == 1">
+                    <div class="x_panel">
+                      <div class="x_header">
+                        <div class="x_header_title">
+                          <h2>Company Basic Setting<small>Company basic setting.</small></h2>
+                        </div>
                       </div>
-                    </ng-container>
-                    <a href="javascript:void(0)" class="text-decoration-none ps-5 pt-3" (click)="addManagerLevel()">
-                      <i class="fa fa-plus pe-2"></i>
-                      Add New Level
-                    </a>
+                      <div class="row">
+                        <div class="col-md-4 mt-3">
+                          <label class="form-label">Company Name</label>
+                          <input type="text" class="form-control border-0" readonly [value]="currentCompany.CompanyName">
+                        </div>
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Is Primary</label>
+                          <select class="form-select" formControlName="IsPrimary">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                  <div class="col-md-12" *ngIf="menuIndex == 2">
+                    <div class="x_panel">
+                      <div class="x_header">
+                        <div class="x_header_title">
+                          <h2>Company Setting<small>Probation and notice period setting.</small></h2>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Probation Period In Days</label>
+                          <input maxlength="2" type="text" class="form-control" formControlName="ProbationPeriodInDays" placeholder="Enter probation period days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Notice Period In Days</label>
+                          <input maxlength="2" type="text" class="form-control" formControlName="NoticePeriodInDays" placeholder="Enter notice period in days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Is Primary</label>
+                          <select class="form-select" formControlName="IsPrimary">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12" *ngIf="menuIndex == 3">
+                    <div class="x_panel">
+                      <div class="x_header">
+                        <div class="x_header_title">
+                          <h2>Declaration Setting<small>Declaration start month, financial year etc setting.</small></h2>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Declaration Start Month</label>
+                          <input maxlength="2" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Declaration End Month</label>
+                          <input maxlength="2" type="text" class="form-control" formControlName="DeclarationEndMonth" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Financial Year</label>
+                          <input maxlength="4" type="text" class="form-control" formControlName="FinancialYear" placeholder="Enter financial year" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Last Day of Declaration</label>
+                          <input maxlength="4" type="text" class="form-control" formControlName="EveryMonthLastDayOfDeclaration" placeholder="Enter last day of declaration" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12" *ngIf="menuIndex == 4">
+                    <div class="x_panel">
+                      <div class="x_header">
+                        <div class="x_header_title">
+                          <h2>Cron Setting<small>Different cron setting.</small></h2>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Leave Accrual Run Cron Day of Month</label>
+                          <input maxlength="2" type="text" class="form-control" formControlName="LeaveAccrualRunCronDayOfMonth" placeholder="Leave Accrual Run Cron Day of Month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12" *ngIf="menuIndex == 5">
+                    <div class="x_panel">
+                      <div class="x_header">
+                        <div class="x_header_title">
+                          <h2>Attendance Setting<small>Setup rules.</small></h2>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 mt-3">
+                          <label for="" class="form-label">Attendance Appling Back Days Limit</label>
+                          <input maxlength="2" type="number" class="form-control" formControlName="AttendanceSubmissionLimit" placeholder="Enter attendance limit to apply in back date." onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!isReady">
+                  <div class="py-5 my-5">
+                    <h6 class="fw-bold fs-3 text-center text-dark">Company settings are loading</h6>
+                    <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                      <div class="col-md-3 modal-container  text-center cog-wheel">
+                        <img src="assets/images/cog.gif" alt="" />
+                        <h6 class="modal-title title-message">
+                          Please Wait ........
+                        </h6>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
               </div>
             </div>
-          </div>
-          <div class="text-end mt-3">
-            <button type="button" class="btn btn-primary-c" (click)="saveSetting()">
-              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
-              <span class="ps-2">{{ isLoading ? 'Wait' : 'Save setting' }}</span>
-            </button>
-          </div>
+            <div class="text-end mt-3">
+              <button type="button" class="btn btn-primary-c" (click)="saveSetting()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
+                <span class="ps-2">{{ isLoading ? 'Wait' : 'Save setting' }}</span>
+              </button>
+            </div>
         </form>
       </ng-container>
       <ng-container *ngIf="!isPageReady">

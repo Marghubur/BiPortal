@@ -24,10 +24,10 @@
                     <div class="fe-1 pe-3 fs-5 fw-bold">Provident fund status</div>
                     <div class="fe-1">
                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="btn-check" formControlName="PFEnable" value="true" name="PFEnable" id="btnradio1"
+                        <input type="radio" class="btn-check" formControlName="PFEnable" value="true" name="PFEnable" id="btnradio1" (click)="pfStatusChange($event)"
                           autocomplete="off" checked>
                         <label class="btn btn-outline-primary" for="btnradio1">On</label>
-                        <input type="radio" class="btn-check" formControlName="PFEnable" value="false" name="PFEnable" id="btnradio2"
+                        <input type="radio" class="btn-check" formControlName="PFEnable" value="false" name="PFEnable" id="btnradio2" (click)="pfStatusChange($event)"
                           autocomplete="off">
                         <label class="btn btn-outline-primary" for="btnradio2">Off</label>
                       </div>
@@ -40,17 +40,16 @@
                         <label class="fs-4 py-2">Statutory minimun monthly basic for PF Calculation</label>
                         <ul class="list-border-0 list-group">
                           <li class="list-group-item">
-                            <input class="form-check-input me-1" formControlName="IsPfAmountLimitStatutory" type="checkbox"
-                               aria-label="...">
+                            <input class="form-check-input me-1" data-name="pf-setting" [attr.disabled]="PFandESIForm.controls.PFEnable.value == false" formControlName="IsPfAmountLimitStatutory" type="checkbox" aria-label="...">
                             Limit PF amount to Statutory minimum Salary for all employees.
                           </li>
                           <li class="list-group-item pb-0">
-                            <input class="form-check-input me-1" formControlName="IsPfCalculateInPercentage" type="checkbox"
+                            <input class="form-check-input me-1" data-name="pf-setting"  formControlName="IsPfCalculateInPercentage" type="checkbox"
                              aria-label="..." (click)="enableChildList($event)">
                             Allow PF calculated as percentage of Basic Salary beyond Statutory Minimum.
                             <ul class="list-border-0 list-group">
                               <li class="list-group-item pt-3">
-                                <input type="checkbox" name="IsAllowOverridingPf"  disabled id="allowPFoverriding"
+                                <input type="checkbox" data-name="pf-setting"  name="IsAllowOverridingPf"  disabled id="allowPFoverriding"
                                   formControlName="IsAllowOverridingPf" class="form-check-input">
                                 Allow overriding of PF at salary structure level.
                               </li>
@@ -58,11 +57,11 @@
                           </li>
                           <li class="list-group-item pb-0">
                             <input class="form-check-input me-1" formControlName="IsPfEmployerContribution" (click)="allowPFContribution($event)"
-                              type="checkbox"  aria-label="...">
+                              type="checkbox" data-name="pf-setting"   aria-label="...">
                             Pay Employer Contribution of Provident Fund outside the Gross Salary of an Employee
                             <ul class="list-border-0 list-group">
                               <li class="list-group-item pt-3 d-flex align-items-center">
-                                <input type="checkbox" disabled class="form-check-input" (click)="enablePfAmount(isallowPFamount)" name="IsEmployerPFLimitContribution" formControlName="IsEmployerPFLimitContribution" disabled>
+                                <input type="checkbox" data-name="pf-setting"  disabled class="form-check-input" (click)="enablePfAmount(isallowPFamount)" name="IsEmployerPFLimitContribution" formControlName="IsEmployerPFLimitContribution" disabled>
                                 <span class="ps-1">Limit employer's PF contribution amount maximum of</span>
                                 <div class="mx-4 col-md-2 d-inline-block">
                                   <input OnlyNumber="9" class="form-control" [readonly]="!isallowPFamount" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" name="EmployerPFLimit" formControlName="EmployerPFLimit">
@@ -71,17 +70,17 @@
                             </ul>
                           </li>
                           <li class="list-group-item">
-                            <input class="form-check-input me-1" formControlName="IsHidePfEmployer" type="checkbox"
+                            <input class="form-check-input me-1" data-name="pf-setting"  formControlName="IsHidePfEmployer" type="checkbox"
                               value="" aria-label="...">
                             Hide PF Employer in Payslip (and exclude from gross earnings calculation in Payslip)
                           </li>
                           <li class="list-group-item">
-                            <input class="form-check-input me-1" formControlName="IsPayOtherCharges" type="checkbox"
+                            <input class="form-check-input me-1" data-name="pf-setting"  formControlName="IsPayOtherCharges" type="checkbox"
                               value="" aria-label="...">
                             Pay Other Chargs of Provident Fund outisde the Gross Salry of an Employee
                           </li>
                           <li class="list-group-item">
-                            <input class="form-check-input me-1" formControlName="IsAllowVPF" type="checkbox" value=""
+                            <input class="form-check-input me-1" data-name="pf-setting"  formControlName="IsAllowVPF" type="checkbox" value=""
                               aria-label="...">
                             Allow employees to contribute towards VPF
                           </li>
@@ -98,11 +97,11 @@
                     <div class="fe-1">
                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="btn-check" formControlName="EsiEnable" value="true" name="EsiEnable" id="btnradio3"
-                          autocomplete="off" checked>
+                          autocomplete="off" checked (click)="esiStatusChange($event)">
                         <label class="btn btn-outline-primary"  for="btnradio3">On</label>
 
                         <input type="radio" class="btn-check" formControlName="EsiEnable" value="false" name="EsiEnable" id="btnradio4"
-                          autocomplete="off">
+                          autocomplete="off" (click)="esiStatusChange($event)">
                         <label class="btn btn-outline-primary" for="btnradio4">Off</label>
                       </div>
                     </div>
@@ -133,49 +132,49 @@
                           of gross Salary
                         </li>
                         <li class="list-group-item">
-                          <input class="form-check-input me-1" formControlName="IsAllowOverridingEsi" type="checkbox"
+                          <input class="form-check-input me-1" formControlName="IsAllowOverridingEsi" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Allow overriding of ESI at salary structure level.
                           <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Allow overriding of ESI at salary structure level."></i>
                         </li>
                         <li class="list-group-item">
-                          <input class="form-check-input me-1" formControlName="IsEsiEmployerContributionOutside" type="checkbox"
+                          <input class="form-check-input me-1" formControlName="IsEsiEmployerContributionOutside" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Pay Employer Contribution of ESI outside the Gross Salary of an Employee
                           <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Pay Employer Contribution of ESI outside the Gross Salary of an Employee"></i>
                         </li>
                         <li class="list-group-item">
-                          <input class="form-check-input me-1" formControlName="IsHideEsiEmployer" type="checkbox"
+                          <input class="form-check-input me-1" formControlName="IsHideEsiEmployer" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Hide ESI Employer in Payslip (and exlude from gross earnings calculation in Payslip)
                           <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Hide ESI Employer in Payslip (and exlude from gross earnings calculation in Payslip)"></i>
                         </li>
                         <li class="list-group-item">
-                          <input class="form-check-input me-1" formControlName="IsEsiExcludeEmployerShare" type="checkbox"
+                          <input class="form-check-input me-1" formControlName="IsEsiExcludeEmployerShare" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Exclude employer's share from gross in ESI calculation
                           <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Exclude employer's share from gross in ESI calculation"></i>
                         </li>
                         <li class="list-group-item">
-                          <input class="form-check-input me-1" formControlName="IsEsiExcludeEmployeeGratuity" type="checkbox"
+                          <input class="form-check-input me-1" formControlName="IsEsiExcludeEmployeeGratuity" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Exclude Employee Gratuity contribution from gross in ESI calculation
                           <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Exclude Employee Gratuity contribution from gross in ESI calculation"></i>
                         </li>
                         <li class="list-group-item">
-                          <input class="form-check-input me-1" formControlName="IsRestrictEsi" type="checkbox" value=""
+                          <input class="form-check-input me-1" formControlName="IsRestrictEsi" type="checkbox" value="" data-name="esi-setting"
                             aria-label="...">
                           Restrict ESI Gross to Statutory Gross during the contribution period
                           <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict ESI Gross to Statutory Gross during the contribution period"></i>
                         </li>
                         <li class="list-group-item">
-                          <input class="form-check-input me-1" formControlName="IsIncludeBonusEsiEligibility"
+                          <input class="form-check-input me-1" formControlName="IsIncludeBonusEsiEligibility" data-name="esi-setting"
                             type="checkbox" value="" aria-label="...">
                           Include Bonuses and One-Time payments in gross for ESI eligibility calculation
                           <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Include Bonuses and One-Time payments in gross for ESI eligibility calculation"></i>
                         </li>
                         <li class="list-group-item">
-                          <input class="form-check-input me-1" formControlName="IsIncludeBonusEsiContribution"
+                          <input class="form-check-input me-1" formControlName="IsIncludeBonusEsiContribution" data-name="esi-setting"
                             type="checkbox" value="" aria-label="...">
                           Include Bonuses and One-Time payments in gross for ESI Contribution calculation
                           <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Include Bonuses and One-Time payments in gross for ESI Contribution calculation"></i>

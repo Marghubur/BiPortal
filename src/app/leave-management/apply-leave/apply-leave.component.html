@@ -1,0 +1,495 @@
+<div class="col-md-12 col-sm-12 main-container">
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Pending Leave requests'"></app-breadcrums>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="x_content" [hidden]="!isPageReady">
+      <ng-container>
+        <div class="row pt-3">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-body pb-0">
+                <div class="d-flex align-items-baseline justify-content-between">
+                  <div class="d-flex align-items-center pt-3 ps-3 pb-3">
+                    <div>
+                      <i class="fa fa-tasks fa-5x" aria-hidden="true"></i>
+                    </div>
+                    <ng-container>
+                      <div class="ps-4 pt-2 d-none">
+                        <h5>Nothing here.</h5>
+                        <p>Working hard yeah? Request time off on the right - ></p>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="leaveData.length > 0">
+                      <div class="ps-4">
+                        <h5>Last leave apply</h5>
+                        <div class="d-flex">
+                          <div class="me-4 pe-2">
+                            <small class="blinking">DATE</small>
+                            <p class="mb-0 blinking">{{leaveData[0].LeaveFromDay | date}} - {{leaveData[0].LeaveToDay |
+                              date}}</p>
+                          </div>
+                          <div class="me-4">
+                            <small class="blinking">REQUEST TYPE</small>
+                            <p class="blinking mb-0">
+                              {{leaveData[0].LeaveTypeName}}
+                            </p>
+                          </div>
+                          <div class="me-4">
+                            <small class="blinking">REQUESTED ON</small>
+                            <p class="mb-0 blinking">{{leaveData[0].RequestedOn | date}}</p>
+                          </div>
+                          <div>
+                            <small class="blinking">STATUS</small>
+                            <div [ngSwitch]="leaveData[0].LeaveStatus" class="blinking">
+                              <div *ngSwitchCase=2>Pending</div>
+                              <div *ngSwitchCase=9>Approved</div>
+                              <div *ngSwitchCase=8>Submitted</div>
+                              <div *ngSwitchCase=5>Rejected</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="leaveData.length <= 0">
+                      <div class="px-5 mx-5">
+                        <div class="text-dark px-5 mx-5 fw-bold">
+                          Wow!!! You have not requested any leave till now.
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <a href="javascript:void(0)" (click)="showLeaveDetails()"
+                    class="text-decoration-none text-end">{{!isLeaveDetails ? 'Show':'Hide'}} Leave Deatils</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body pb-0">
+                <div class="pb-1">
+                  <button class="btn btn-primary-c ms-2" type="button" (click)="leavePopUp()">Apply Leave</button>
+                </div>
+                <p class="ps-2 mb-2 mt-2">
+                  <a href="javascript:void(0)" class="text-decoration-none">Request Credit for Compensatory Off</a>
+                </p>
+                <p class="ps-2 mb-2 mt-2">
+                  <a href="javascript:void(0)" class="text-decoration-none">Leave Policy Explaination</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="leave-chart" [hidden]="leaveTypes.length <=0 || isLeaveDetails">
+          <h5 class="mt-3 pt-3 pb-3">My Leave Status</h5>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-body pb-0">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="pt-2 ps-2">
+                      Consumed Leave Types
+                    </h6>
+                    <div>
+                      <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="d-block py-3 mt-3 col-md-10">
+                    <canvas id="consumeLeaveChart" width="100" height="100"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-body pb-0">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="pt-2 ps-2">
+                      Last Week
+                    </h6>
+                    <div>
+                      <i class="fa fa-info-circle fa-lg p-3" (click)="loadData()" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="d-block mt-2">
+                    <canvas id="weeklyPatternChart" width="300" height="100"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-body pb-0">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="pt-2 ps-2">
+                      Monthly Status
+                    </h6>
+                    <div>
+                      <i class="fa fa-info-circle fa-lg p-3"  aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="d-block mt-2">
+                    <canvas id="MonthlyStatusChart" width="300" height="115"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h5 class="mt-3 pt-3 pb-3">Leave Balances</h5>
+          <div class="row" *ngIf="chartDataset.length > 0">
+            <div class="col-md-4 mt-4" *ngFor="let leave of chartDataset; let i = index;">
+              <div class="card">
+                <div class="card-body pb-0">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="pt-2">
+                      {{leave.PlanName}}
+                    </h6>
+                    <div>
+                      <i class="fa fa-refresh fa-lg p-3" aria-hidden="true"  (click)="loadData()"></i>
+                    </div>
+                  </div>
+                  <div class="d-block mt-2">
+                    <canvas width="200" height="200" id="convas{{i}}" #leaveChart>
+                      {{leave.Config}}
+                    </canvas>
+                  </div>
+                  <div class="row mt-3 border-top">
+                    <div class="col-md-6 border-end pt-3">
+                      <h6 class="custom-text-size">AVAILABLE</h6>
+                      <p>{{leave.AvailableLeaves}}</p>
+                    </div>
+                    <div class="col-md-6 pt-3">
+                      <h6 class="custom-text-size">CONSUMED</h6>
+                      <p>{{leave.ConsumedLeave}}</p>
+                    </div>
+                  </div>
+                  <div class="row border-top">
+                    <div class="col-md-4 border-end pt-3">
+                      <h6 class="custom-text-size">ACCRUED SO FAR</h6>
+                      <p>{{leave.AccrualedTillDate}}</p>
+                    </div>
+                    <div class="col-md-4 border-end pt-3">
+                      <h6 class="custom-text-size">CARRYOVER</h6>
+                      <p>0</p>
+                    </div>
+                    <div class="col-md-4 pt-3">
+                      <h6 class="custom-text-size">ANNUAL QUOTA</h6>
+                      <p>{{leave.MaxLeaveLimit}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [hidden]="!isLeaveDetails">
+          <div class="t-table t-list t-border col-md-12 mt-3">
+            <div class="hide-bar"></div>
+            <div class="t-head custom-bg text-dark">
+              <div class="tr">
+                <div class="th fe-2">
+                  <div class="cell-wrapper ps-3">
+                    FROM - TO DATES
+                  </div>
+                </div>
+                <div class="th">
+                  <div class="cell-wrapper">
+                    NO. OF DAYS
+                  </div>
+                </div>
+                <div class="th fe-2">
+                  <div class="cell-wrapper">
+                    REQUEST DETAIL
+                  </div>
+                </div>
+                <div class="th fe-2">
+                  <div class="cell-wrapper">
+                    NOTE
+                  </div>
+                </div>
+                <div class="th">
+                  <div class="cell-wrapper">
+                    STATUS
+                  </div>
+                </div>
+                <div class="th">
+                  <div class="cell-wrapper">
+                    REQUESTED ON
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="t-body custom-height text-dark">
+              <ng-container *ngIf="leaveData.length > 0">
+                <div class="tr py-2" *ngFor="let item of leaveData">
+                  <div class="td align-middle fe-2">
+                    <div class="cell-wrapper">
+                      <div class="d-flex flex-column justify-content-center">
+                        <div class="d-flex align-items-center justify-content-start">
+                          <div class="h-4 d-flex align-items-center justify-content-center flex-column px-4">
+                            <i class="fa fa-home fa-lg"></i>
+                            <p class="m-0">{{item.NumOfDays}} {{item.NumOfDays == 1? 'day':'days'}}</p>
+                          </div>
+                          <div class="text-center px-3">
+                            <p class="mb-0">{{item.LeaveFromDay | date}}</p>
+                          </div>
+                          <div class="text-center px-3">
+                            <p class="mb-0">{{item.LeaveToDay | date}}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item.FileIds)" *ngIf="item.FileIds != null && item.FileIds != '[]'" class="text-decoration-none ps-4">
+                        Attached Document
+                      </a>
+                    </div>
+                  </div>
+                  <div class="td align-middle">
+                    <div class="cell-wrapper">
+                      {{item.NumOfDays}}
+                    </div>
+                  </div>
+                  <div class="td align-middle fe-2">
+                    <div class="cell-wrapper">
+                      <p>
+                        <b>{{item.LeaveTypeName}}</b>
+                      </p>
+                      <div class="cell-wrapper">
+                        <span class="text-primary-c">{{item.RequestedOn | date}}</span>
+                        <p class="mb-0">BY:
+                          <span class="text-muted">
+                            {{item.EmployeeName}}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="td align-middle fe-2">
+                    <div class="cell-wrapper">
+                      {{item.Reason}}
+                    </div>
+                  </div>
+                  <div class="td align-middle">
+                    <div class="cell-wrapper">
+                      <div [ngSwitch]="item.LeaveStatus">
+                        <div *ngSwitchCase=2>Pending</div>
+                        <div *ngSwitchCase=9>Approved</div>
+                        <div *ngSwitchCase=8>Submitted</div>
+                        <div *ngSwitchCase=5>Rejected</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="td align-middle">
+                    <div class="cell-wrapper">
+                      {{item.RequestedOn | date}}
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="leaveData.length <=0">
+                <div class="custom-height py-5 my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                  <p class="my-5 py-5">Record Not Found</p>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="mt-3 ps-2" *ngIf="isLeaveDataFilter">
+            <app-pagination [pagination]="employeeData" (onPageChange)="PageChange($event)"></app-pagination>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <ng-container>
+      <div class="py-5 my-5" [hidden]="isPageReady">
+        <h6 class="fw-bold fs-3 text-center text-dark">Leave details are loading</h6>
+        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="col-md-3 modal-container  text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+            <h6 class="modal-title title-message">
+              Please Wait ........
+            </h6>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<!-- Apply Leave Modal Start-->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="leaveModal" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <form [formGroup]="leaveForm" *ngIf="leaveForm">
+      <div class="modal-content px-4 py-3" *ngIf="isPageReady">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="exampleModalLabel">Leave Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="col-md-12 px-4 d-block">
+          <p class="mt-2">Enter your leave reson and apply with one click.
+            Select your manage or reporting person under Notify section to get approval.</p>
+        </div>
+        <div class="modal-body px-4">
+          <div class="d-flex position-relative">
+            <div class="col-md-10 d-flex">
+              <div class="col-md-6 ps-2 py-3 border">
+                <div class="d-flex align-items-center float-start">
+                  <div class="mb-0 text-dark fs-5">
+                    <small>START DATE</small>
+                    <p class="mb-0">{{leaveDetail.LeaveFromDay | date}}</p>
+                    <form class="row row-cols-sm-auto">
+                      <div class="col-12">
+                        <div class="input-group">
+                          <input class="form-control d-none" placeholder="yyyy-mm-dd"   [markDisabled]="isDisabled"
+                            (dateSelect)="onDateSelection($event)" name="dp" [(ngModel)]="fromdateModal" ngbDatepicker
+                            #fromdate="ngbDatepicker">
+                          <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()" [disabled]="!isEnabled"
+                            type="button"></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="ms-3">
+                    <button class="btn btn-outline-secondary calendar" (click)="fromdate.toggle()" type="button" [disabled]="!isEnabled"><i
+                        class="fa fa-calendar"></i></button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 pe-3 py-3 border text-end">
+                <div class="d-flex align-items-center float-end">
+                  <div class="mb-0 text-dark fs-5">
+                    <small>END DATE</small>
+                    <p class="mb-0">{{leaveDetail.LeaveToDay | date}}</p>
+                    <form class="row row-cols-sm-auto">
+                      <div class="col-12">
+                        <div class="input-group">
+                          <input class="form-control d-none" placeholder="yyyy-mm-dd" [minDate]="maxDate"
+                            (dateSelect)="onDateSelect($event)" name="dp" [markDisabled]="isDisabled" [(ngModel)]="model" ngbDatepicker
+                            #d="ngbDatepicker">
+                          <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()" [disabled]="!isEnabled"
+                            type="button"></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="ms-3">
+                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button" [disabled]="!isEnabled"><i
+                        class="fa fa-calendar"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="px-3 py-2 day-wfh text-dark">{{leaveDays}} day leave</span>
+          <div class="row align-items-end">
+            <div class="col-md-6">
+              <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
+              <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="Session" id="btnradio10" autocomplete="off" checked
+                  formControlName="Session" [checked]="leaveForm.controls.Session.value == 1"
+                  [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
+                  value=1>
+                <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
+                <ng-container *ngIf="currentLeaveType!= null && currentLeaveType.IsHalfDay">
+                  <input type="radio" class="btn-check" name="Session" id="btnradio11" autocomplete="off"
+                    formControlName="Session" [checked]="leaveForm.controls.Session.value == 4"
+                    [ngClass]="{'error-field':submitted && f['Session'].errors != null && f['Session'].errors['required']}"
+                    value=4>
+                  <label class="btn btn-outline-primary" for="btnradio11">Half Day</label>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Leave Type</label>
+              <select class="form-select mb-3" (change)="validateLeaveStatus($event)" aria-label=".form-select-lg example" formControlName="LeaveTypeId"
+                [ngClass]="{'error-field':submitted && f['LeaveTypeId'].errors != null && f['LeaveTypeId'].errors['required']}">
+                <option value="" disabled>Select leave type</option>
+                <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveTypes">
+                  <div class="col-md-12">
+                    {{l.LeavePlanTypeName}} [{{l.AvailableLeaves | number: '1.2-2'}}]
+                  </div>
+                </option>
+              </select>
+            </div>
+          </div>
+          <label class="form-label mb-0 text-dark ps-2 fs-5">Reason <small *ngIf="currentLeaveType != null && currentLeaveType.IsCommentsRequired">(Required *)</small></label>
+          <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment" name="Reason" maxlength="100"
+            formControlName="Reason" [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
+          <div class="col-md-12 mt-4">
+            <p class="mb-0 text-dark ps-2 fs-5 py-2">Reporting Manager</p>
+            <app-iautocomplete [data]="managerList" [(ngModel)]="reportingManagerId" [ngModelOptions]="{standalone: true}">
+            </app-iautocomplete>
+          </div>
+          <p class="mb-0 py-2">These employees will be notified through email when you leave request is approved.</p>
+          <div>
+            <input type="file" id="leaveAttachment" (change)="uploadLeaveAttachment($event)" multiple class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf">
+            <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowse()">
+              <i class="fa fa-paperclip pe-2"></i>Add Attachment
+            </a>
+            <span class="fw-bold ps-2 text-dark" *ngIf="FileDocumentList.length > 0">{{FileDocumentList.length}} file selected</span>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 pe-4">
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary-c" [disabled]="isLoading || !isEnabled" (click)="submitLeave()">
+            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Request' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- End -->
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="leavefile-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
+<!-- End pdf view modal -->
+
+<!-- View Rent file -->
+<div class="modal fade delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" id="leaveFileModal" tabindex="-1" aria-labelledby="leaveFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="leaveFileModalLabel">Uploaded Leave Attachment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ng-container >
+          <table class="table">
+            <thead>
+              <tr>
+                <th width="8%">#</th>
+                <th>File Name</th>
+                <td width="20%">Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of leaveAttachment; let i = index">
+                <td class="counterCell">{{i+1}}</td>
+                <td>{{item.FileName}}.{{item.FileExtension}}</td>
+                <td>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->

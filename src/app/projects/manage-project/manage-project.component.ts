@@ -7,6 +7,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-manage-project',
@@ -26,7 +27,12 @@ export class ManageProjectComponent implements OnInit {
   projectManagers: Array<any> = [];
   clients: Array<any> = [];
   architects: Array<any> = [];
-  applicationData: any = null;
+  projectId: number = 0;
+  employees: Array<any> = [];
+  projectManagerName: string = "";
+  architectName: string = "";
+  teamMembers: Array<any> = [];
+  employeesList: autoCompleteModal = null;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -35,17 +41,14 @@ export class ManageProjectComponent implements OnInit {
 
   ngOnInit(): void {
     let value = this.nav.getValue();
-    if (value) {
-      this.projectDetail = value;
-      let date = new Date(this.projectDetail.ProjectStartedOn);
-      this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-      date = new Date(this.projectDetail.ProjectEndedOn);
-      this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-      this.projectDetail.TeamMemberIds = JSON.parse(this.projectDetail.TeamMemberIds);
-    }
-    else
-      this.projectDetail = new ProjectModal();
-
+    this.employeesList = new autoCompleteModal();
+    this.employeesList.data = [];
+    this.employeesList.placeholder = "Team Member";
+    this.employeesList.data = GetEmployees();
+    this.employeesList.className = "";
+    this.employeesList.isMultiSelect = true;
+    if (value)
+      this.projectId = value.ProjectId;
     let data = this.local.findRecord("Companies");
     if (!data) {
       return;
@@ -57,23 +60,41 @@ export class ManageProjectComponent implements OnInit {
       }
     }
     this.loadData();
-    this.initForm();
   }
 
   loadData() {
-    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
+    this.isReady = false;
+    this.http.get(`Project/GetProjectPageDetail/${this.projectId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        this.applicationData = response.ResponseBody;
+        if (response.ResponseBody.Project && response.ResponseBody.Project.length > 0) {
+          this.projectDetail = response.ResponseBody.Project[0];
+          let date = new Date(this.projectDetail.ProjectStartedOn);
+          this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          date = new Date(this.projectDetail.ProjectEndedOn);
+          this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          this.projectDetail.TeamMemberIds = JSON.parse(this.projectDetail.TeamMemberIds);
+        } else {
+          this.projectDetail = new ProjectModal();
+        }
+        this.employees = response.ResponseBody.Employees;
         this.projectManagers = response.ResponseBody.Employees.filter(x => x.DesignationId == 1);
         this.architects = response.ResponseBody.Employees.filter(x => x.DesignationId == 2);
         this.clients = response.ResponseBody.Clients;
+        this.initForm();
+        this.isReady = true;
       }
+    }).catch(e => {
+      this.isReady = true;
     });
   }
 
   initForm() {
     if(this.projectDetail.ProjectManagerId == null)
       this.projectDetail.ProjectManagerId = 0;
+
+    let isClientProject = false;
+    if(this.projectDetail.IsClientProject)
+      isClientProject = true;
 
     this.projectForm = this.fb.group({
       OrganizationName: new FormControl(this.currentCompany.OrganizationName),
@@ -86,10 +107,11 @@ export class ManageProjectComponent implements OnInit {
       HomePageUrl: new FormControl(this.projectDetail.HomePageUrl),
       ProjectManagerId: new FormControl(this.projectDetail.ProjectManagerId),
       ArchitectId: new FormControl(this.projectDetail.ArchitectId),
-      IsClientProject: new FormControl(this.projectDetail.IsClientProject),
+      IsClientProject: new FormControl(isClientProject),
       ClientId: new FormControl(this.projectDetail.ClientId),
       ProjectStartedOn: new FormControl(this.projectDetail.ProjectStartedOn),
-      ProjectEndedOn: new FormControl(this.projectDetail.ProjectEndedOn)
+      ProjectEndedOn: new FormControl(this.projectDetail.ProjectEndedOn),
+      TeamLeadId: new FormControl(this.projectDetail.TeamLeadId)
     })
   }
 
@@ -123,19 +145,57 @@ export class ManageProjectComponent implements OnInit {
     }
 
     let value = this.projectForm.value;
+    if (this.teamMembers.length > 0) {
+      value.TeamMembers = this.teamMembers;
+    }
     this.http.post("Project/AddUpdateProjectDetail", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         let id = Number(res.ResponseBody);
         this.projectForm.get("ProjectId").setValue(id);
         Toast("Project created/updated successfully.");
+        this.isLoading = false;
       }
-      this.isLoading = false;
-    }).then(e => {
+    }).catch(e => {
       this.isLoading = false;
     })
-    console.log(value);
-    this.isLoading = false;
   }
+
+  addMemberPopUp() {
+    let projectManagerid = this.projectForm.get('ProjectManagerId').value;
+    if (projectManagerid > 0){
+      let manager = this.employees.find(x => x.EmployeeUid == projectManagerid);
+      this.projectManagerName = manager.FirstName + " " + manager.LastName;
+    }
+    let architectid = this.projectForm.get('ArchitectId').value;
+    if (projectManagerid > 0){
+      let manager = this.employees.find(x => x.EmployeeUid == architectid);
+      this.architectName = manager.FirstName + " " + manager.LastName;
+    }
+    $("#teamMemberModal").modal('show');
+  }
+
+  selectedEmployee(e: any) {
+    let index = this.teamMembers.findIndex(x => x.EmployeeId == e.value);
+    if(index == -1) {
+      let emp = this.employees.find(x => x.EmployeeUid == e.value);
+      this.teamMembers.push({
+        ProjectMemberDetailId : 0,
+        ProjectId : 0,
+        EmployeeId : emp.EmployeeUid,
+        DesignationId : emp.DesignationId,
+        FullName : emp.FirstName + " " + emp.LastName,
+        Email : emp.Email,
+        IsActive : emp.IsActive
+      });
+    } else {
+      this.teamMembers.splice(index, 1);
+    }
+  }
+
+  addTeamMember() {
+
+  }
+
 }
 
 export class ProjectModal {
@@ -150,4 +210,5 @@ export class ProjectModal {
   ClientId: number = 0;
   ProjectStartedOn: Date = null;
   ProjectEndedOn: Date = null;
+  TeamLeadId: number = 0;
 }

@@ -1,18 +1,23 @@
 <div class="main-container">
   <div class="x_panel">
     <div class="x_header">
-      <div class="x_header_title">
-        <h2>Email Template <small>Template list</small></h2>
-        <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa fa-plus pe-2"></i> Add Template</button>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Email Template'" [subtitle]="'Template list'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
+            <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+            <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa fa-plus pe-2"></i> Add Template</button>
+          </div>
+        </div>
       </div>
-    </div>
-    <div>
-      <app-breadcrums></app-breadcrums>
     </div>
     <ng-container *ngIf="!isPageLoading">
       <div class="x_content">
         <div class="t-table t-list t-border mt-3 col-md-12">
-          <div class="hide-bar"></div>
           <div class="t-head">
             <div class="tr">
               <div class="th fe-index">

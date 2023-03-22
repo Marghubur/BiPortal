@@ -38,14 +38,6 @@
             <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('form-12-tab')"
               href="javascript:void(0)">Form 12 BB</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')"
-              href="javascript:void(0)">Free Tax Filling</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('approval-rule-tab')"
-              href="javascript:void(0)">Approval rule</a>
-          </li>
         </ul>
       </div>
       <ng-container>
@@ -53,10 +45,10 @@
           <h5 class="text-dark">Previous Employment Details</h5>
           <p class="mb-0">Previous Employment details are necessary Wen employee change their job, this declaration is
             required for income tax computation.</p>
-          <div class="t-table t-list t-border mb-3 col-md-12 bg-white" *ngIf="isRecordFound">
+          <div class="t-table t-list t-border my-3 col-md-12 bg-white" *ngIf="isRecordFound">
             <div class="t-head overflow-hidden custom-bg">
               <div class="tr bg-light py-3">
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Month">MON</div>
+                <div class="th ps-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Month">MON</div>
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Gross">GROSS</div>
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Basic">BASIC</div>
                 <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="House Rental Allowance">HR
@@ -75,27 +67,29 @@
                   OTHER TAXAB</div>
               </div>
             </div>
-            <div class="t-body border-bottom overflow-hidden">
-              <div class="tr py-3" *ngFor="let item of previousEmploymentDetail">
-                <div class="td ps-3">{{item.Month | slice: 0:3}} {{currentYear - 1}}</div>
-                <div class="td ps-3">{{item.Gross}}</div>
-                <div class="td ps-3">{{item.Basic}}</div>
-                <div class="td ps-3">{{item.HouseRent}}</div>
-                <div class="td ps-3">{{item.EmployeePR}}</div>
-                <div class="td ps-3">{{item.ESI}}</div>
-                <div class="td ps-3">{{item.LWF}}</div>
-                <div class="td ps-3">{{item.LWFEmp}}</div>
-                <div class="td ps-3">{{item.Professional}}</div>
-                <div class="td ps-3">{{item.IncomeTax}}</div>
-                <div class="td ps-3">{{item.OtherTax}}</div>
-                <div class="td ps-3">{{item.OtherTaxable}}</div>
-              </div>
+            <div class="t-body border-bottom overflow-hidden" [formGroup]="previousIncomForm">
+              <ng-container formArrayName="PreviousIncomes">
+                <div class="tr py-3" *ngFor="let item of previousIncome.controls; let i = index" [formGroupName]="i">
+                  <div class="td ps-3">{{item.get('Month').value}} {{item.get('Year').value}}</div>
+                  <div class="td ps-3">{{item.get('Gross').value}}</div>
+                  <div class="td ps-3">{{item.get('Basic').value}}</div>
+                  <div class="td ps-3">{{item.get('HouseRent').value}}</div>
+                  <div class="td ps-3">{{item.get('EmployeePR').value}}</div>
+                  <div class="td ps-3">{{item.get('ESI').value}}</div>
+                  <div class="td ps-3">{{item.get('LWF').value}}</div>
+                  <div class="td ps-3">{{item.get('LWFEmp').value}}</div>
+                  <div class="td ps-3">{{item.get('Professional').value}}</div>
+                  <div class="td ps-3">{{item.get('IncomeTax').value}}</div>
+                  <div class="td ps-3">{{item.get('OtherTax').value}}</div>
+                  <div class="td ps-3">{{item.get('OtherTaxable').value}}</div>
+                </div>
+              </ng-container>
               <div class="bg-light py-2">
                 <span class="ps-3">Total Items: {{total}}</span>
               </div>
             </div>
           </div>
-          <div class="d-flex align-items-center justify-content-center py-5 my-5">
+          <div class="d-flex align-items-center justify-content-center py-5 my-5" *ngIf="!isRecordFound">
             <div class="fw-bold fs-4 py-5 my-5">
               No previous employment details found.
             </div>

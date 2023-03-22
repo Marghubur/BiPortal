@@ -5,11 +5,11 @@ import { Attendance, ManageLeavePlan, ManageYearEnding, Timesheet } from 'src/pr
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Filter } from 'src/providers/userService';
-import { Files } from 'src/app/admin/documents/documents.component';
+import { Files } from 'src/app/commonmodal/common-modals'
 
 @Component({
   selector: 'app-leave',
@@ -36,7 +36,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   employeeFilter: Filter = new Filter();
   employees: Array<any> = [];
   isLeavePageReady: boolean = false;
-
+  maxDate: any = null;
   // -------------------Start--------------
   leavePlanForm: FormGroup;
   configPageNo: number = 1;
@@ -68,6 +68,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       Emp: false,
       YearEnding: false,
     };
+    this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.loadLeaveData();
     this.initLeaveTypeForm();
     this.initLeavePlanForm();
@@ -409,11 +410,11 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       document.querySelector('[name="IsMale"]').setAttribute("disabled", '');
       let value = document.querySelector('[name="IsMale"]')as HTMLInputElement;
       value.checked = false;
-      this.leaveTypeForm.get('IsMale').removeValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsMale').removeValidators(Validators.required);
       this.leaveTypeForm.get('IsMale').updateValueAndValidity();
     } else {
       document.querySelector('[name="IsMale"]').removeAttribute("disabled");
-      this.leaveTypeForm.get('IsMale').addValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsMale').addValidators(Validators.required);
       this.leaveTypeForm.get('IsMale').updateValueAndValidity();
     }
   }
@@ -424,11 +425,11 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       document.querySelector('[name="IsMarried"]').setAttribute("disabled", '');
       let value = document.querySelector('[name="IsMarried"]')as HTMLInputElement;
       value.checked = false;
-      this.leaveTypeForm.get('IsMarried').removeValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsMarried').removeValidators(Validators.required);
       this.leaveTypeForm.get('IsMarried').updateValueAndValidity();
     } else {
       document.querySelector('[name="IsMarried"]').removeAttribute("disabled");
-      this.leaveTypeForm.get('IsMarried').addValidators(Validators.requiredTrue);
+      this.leaveTypeForm.get('IsMarried').addValidators(Validators.required);
       this.leaveTypeForm.get('IsMarried').updateValueAndValidity();
     }
   }

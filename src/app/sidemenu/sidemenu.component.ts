@@ -26,6 +26,7 @@ export class SidemenuComponent implements OnInit {
   CatagoryPosition: number = 0;
   MenuName: string = '';
   admin: boolean = true;
+  isAdmin: boolean = false;
 
   @Output() authentication = new EventEmitter();
 
@@ -45,6 +46,14 @@ export class SidemenuComponent implements OnInit {
     private local: ApplicationStorage,
     private user: UserService
   ) {
+  }
+
+  ngDoCheck(): void {
+    let data = this.local.findRecord("UserDetail");
+    if (data.UserTypeId == 1)
+      this.isAdmin = true;
+    else
+      this.isAdmin = false;
   }
 
   ngOnInit() {

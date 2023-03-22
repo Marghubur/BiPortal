@@ -1,17 +1,23 @@
 <div class="container-fluid main-container">
   <div class="x_panel mt-2">
     <div class="x_header">
-      <div class="x_header_title d-flex align-items-center justify-content-between">
-        <h2>Client<small>add or update client</small></h2>
-        <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-          class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Client'" [subtitle]="'add or update client'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
+            <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+            <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
+              class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
-    </div>
     <div class="x_content mt-4" *ngIf="isLoaded">
-      <form [formGroup]="clientForm" autocomplete="off" class="col-md-12 row">
+      <form [formGroup]="clientForm" autocomplete="off" class="col-md-12 row" *ngIf="clientForm">
         <div class="mb-5">
           <div class="col-12 row m-0">
             <div class="col-md-4">
@@ -33,7 +39,7 @@
                 <div class="col-md-4">
                   <label class="form-label">Client/Organization Name *</label>
                   <input placeholder="Client or organization name" class="form-control" name="ClientName" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="ClientName" maxlength="150"
+                    formControlName="ClientName" maxlength="100"
                     [ngClass]="{'error-field': submitted && f.ClientName.errors !== null && f.ClientName.errors.required}" />
                 </div>
                 <div class="col-md-4">
@@ -53,7 +59,7 @@
               <div class="col-md-12 row">
                 <div class="col-md-4 mb-3">
                   <label class="form-label">PAN No.#</label>
-                  <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()" max="10"
+                  <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()" maxlength="10"
                     name="PanNo" formControlName="PanNo" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -71,8 +77,8 @@
               <div class="col-md-12 row">
                 <div class="col-md-4 mb-3">
                   <label class="form-label">GSTIN No.# *</label>
-                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No."
-                  name="GSTNo" formControlName="GSTNo" />
+                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No." maxlength="16"
+                  name="GSTNO" formControlName="GSTNO" [ngClass]="{'error-field': submitted && f.GSTNO.errors !== null && f.GSTNO.errors.required}"/>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Mobile No.# (optional)</label>
@@ -80,9 +86,10 @@
                   OnlyNumber="10" />
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label class="form-label">Select Shift *</label>                  
+                  <label class="form-label">Select Shift *</label>
                   <app-iautocomplete [data]="shiftDetail" formControlName="WorkShiftId">
                   </app-iautocomplete>
+                  <!-- <input class="form-control" placeholder="Workshift Id" name="WorkShiftId" formControlName="WorkShiftId" OnlyNumber="1"> -->
                 </div>
               </div>
             </div>

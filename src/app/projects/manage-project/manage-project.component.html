@@ -3,135 +3,140 @@
     <div class="right-panel container col-md-12 p-0">
       <div class="x_panel mt-2">
         <div class="x_header">
-          <div class="x_header_title">
-              <h2>Manage project<small>Create or update project detail</small></h2>
-          </div>
-      </div>
-      <div class="px-1">
-          <app-breadcrums></app-breadcrums>
-      </div>
-
-        <ng-container *ngIf="isReady">
-          <div class="x_content mt-4">
-            <div [ngClass]="{'blur-section': !isCompaniesDetails}">
-              <!-- <div class="blur-section__highlight" [ngClass]="{'d-none': isCompaniesDetails}">
-                <div class="blur-section__content">
-                  {{'Please add company first'}}
-                  <p class="mb-0 py-3">
-                    <button class="btn btn-primary fs-5 fw-bold" (click)="gotoCompany()"><i class="fa fa-cog pe-2"></i> Configure Company</button>
-                  </p>
-                </div>
-              </div> -->
-              <div class="blur-this">
-                <form [formGroup]="projectForm" autocomplete="off">
-                  <div class="row">
-                    <div class="col-md-4 mt-3">
-                      <label for="" class="form-label">Organization Name</label>
-                      <input type="text" class="form-control" readonly formControlName="OrganizationName" placeholder="Organization Name">
-                    </div>
-                    <div class="col-md-4 mt-3">
-                      <label for="" class="form-label">Company Name</label>
-                      <input type="text" class="form-control" readonly formControlName="CompanyName" placeholder="Company Name">
-                    </div>
-                    <div class="col-md-4 mt-3">
-                      <label for="" class="form-label">Project Name</label>
-                      <input type="text" class="form-control" formControlName="ProjectName" placeholder="Project Name" [ngClass]="{'error-field': submitted && f.ProjectName.errors !== null && f.ProjectName.errors.required}">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-4 mt-3">
-                      <label for="" class="form-label">Project Description</label>
-                      <textarea type="text" rows="2" formControlName="ProjectDescription" class="form-control" placeholder="Project Description" [ngClass]="{'error-field': submitted && f.ProjectDescription.errors !== null && f.ProjectDescription.errors.required}"></textarea>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                      <label for="" class="form-label">Team Members</label>
-                      <textarea type="text" rows="2"  formControlName="TeamMemberIds"class="form-control" placeholder="Team Members"></textarea>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                      <label class="form-label">Homepage URL</label>
-                      <textarea type="text" rows="2" formControlName="HomePageUrl" class="form-control" placeholder="Home Page URL"></textarea>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-4 mt-3">
-                      <label class="form-label">Project Manager</label>
-                      <select class="form-select" formControlName="ProjectManagerId">
-                        <option value="0">Select Project Manager</option>
-                        <option [value]="item.EmployeeUid" *ngFor="let item of projectManagers">{{item.FirstName}} {{item.LastName}}</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                      <label class="form-label">Architect</label>
-                      <select class="form-select" formControlName="ArchitectId" >
-                        <option value=0>Select Architect</option>
-                        <option [value]="item.EmployeeUid" *ngFor="let item of architects">{{item.FirstName}} {{item.LastName}}</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                      <label class="form-label">IsClient Project</label>
-                      <select class="form-select" formControlName="IsClientProject">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-4 mt-3">
-                      <label class="form-label">Client Name</label>
-                      <select class="form-select" formControlName="ClientId" >
-                        <option value=0>Select Client</option>
-                        <option [value]="item.ClientId" *ngFor="let item of architects">{{item.ClientName}}</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                      <label class="form-label">Project Started On</label>
-                      <form class="form-inline">
-                        <div class="form-group w-100">
-                          <div class="input-group w-100">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="startedOnModel" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
-                              (dateSelect)="onStartedDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
-                            <div class="input-group-append">
-                              <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                                  class="fa fa-calendar" aria-hidden="true"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                      <label class="form-label">Project Ended On</label>
-                      <form class="form-inline">
-                        <div class="form-group w-100">
-                          <div class="input-group w-100">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="endedOnModel" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
-                              (dateSelect)="onEndedDateSelection($event)" ngbDatepicker #ed="ngbDatepicker">
-                            <div class="input-group-append">
-                              <button class="btn btn-outline-secondary calendar" (click)="ed.toggle()" type="button"><i
-                                  class="fa fa-calendar" aria-hidden="true"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                  <div class="col-12 row m-0 pt-5">
-                    <div class="col-md-12 button groups text-end">
-                      <div class="btn-group">
-                        <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
-                      </div>
-                      <div class="btn-group ms-2">
-                        <button class="btn btn-success" [disabled]="isLoading" (click)="RegisterProject()">
-                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
-                          {{ isLoading ? 'Wait' : 'Register' }}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Manage project'" [subtitle]="'Create or update project detail'"></app-breadcrums>
               </div>
             </div>
+          </div>
+        </div>
+        <ng-container *ngIf="isReady">
+          <div class="x_content mt-4">
+            <form [formGroup]="projectForm" autocomplete="off">
+              <div class="row">
+                <div class="col-md-4 mt-3">
+                  <label for="" class="form-label">Organization Name</label>
+                  <input type="text" class="form-control" readonly formControlName="OrganizationName" placeholder="Organization Name">
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label for="" class="form-label">Company Name</label>
+                  <input type="text" class="form-control" readonly formControlName="CompanyName" placeholder="Company Name">
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label for="" class="form-label">Project Name</label>
+                  <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" maxlength="100" formControlName="ProjectName" placeholder="Project Name" [ngClass]="{'error-field': submitted && f.ProjectName.errors !== null && f.ProjectName.errors.required}">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mt-3">
+                  <label for="" class="form-label">Project Description</label>
+                  <textarea type="text" rows="2" maxlength="400" formControlName="ProjectDescription" class="form-control" placeholder="Project Description" [ngClass]="{'error-field': submitted && f.ProjectDescription.errors !== null && f.ProjectDescription.errors.required}"></textarea>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label for="" class="form-label">Team Members</label>
+                  <textarea type="text" rows="2"  formControlName="TeamMemberIds"class="form-control" placeholder="Team Members"></textarea>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label class="form-label">Homepage URL</label>
+                  <textarea type="text" maxlength="150" rows="2" formControlName="HomePageUrl" class="form-control" placeholder="Home Page URL"></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mt-3">
+                  <label class="form-label">Project Manager</label>
+                  <select class="form-select" formControlName="ProjectManagerId">
+                    <option value="0" disabled>Select Project Manager</option>
+                    <option [value]="item.EmployeeUid" *ngFor="let item of projectManagers">{{item.FirstName}} {{item.LastName}}</option>
+                  </select>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label class="form-label">Architect</label>
+                  <select class="form-select" formControlName="ArchitectId" >
+                    <option value=0 disabled>Select Architect</option>
+                    <option [value]="item.EmployeeUid" *ngFor="let item of architects">{{item.FirstName}} {{item.LastName}}</option>
+                  </select>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label class="form-label">IsClient Project</label>
+                  <select class="form-select" formControlName="IsClientProject">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mt-3">
+                  <label class="form-label">Client Name</label>
+                  <select class="form-select" formControlName="ClientId" >
+                    <option value=0>Select Client</option>
+                    <option [value]="item.ClientId" *ngFor="let item of clients">{{item.ClientName}}</option>
+                  </select>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label class="form-label">Project Started On</label>
+                  <form class="form-inline">
+                    <div class="form-group w-100">
+                      <div class="input-group w-100">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="startedOnModel" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
+                          (dateSelect)="onStartedDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                              class="fa fa-calendar" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label class="form-label">Project Ended On</label>
+                  <form class="form-inline">
+                    <div class="form-group w-100">
+                      <div class="input-group w-100">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="endedOnModel" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
+                          (dateSelect)="onEndedDateSelection($event)" ngbDatepicker #ed="ngbDatepicker">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary calendar" (click)="ed.toggle()" type="button"><i
+                              class="fa fa-calendar" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-12 mt-3" *ngIf="teamMembers.length > 0">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Designation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of teamMembers; let i = index;">
+                      <td>{{i+1}}</td>
+                      <td>{{item.FullName}}</td>
+                      <td>{{item.Email}}</td>
+                      <td>{{item.DesignationId}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-md-12 text-end py-2">
+                <a href="javascript:void(0)" (click)="addMemberPopUp()"><i class="fa fa-plus pe-1"></i>Add Team Members</a>
+              </div>
+              <div class="col-12 text-end m-0 pt-2">
+                <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+                <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="RegisterProject()">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                  {{ isLoading ? 'Wait' : 'Register' }}
+                </button>
+              </div>
+            </form>
           </div>
         </ng-container>
         <ng-container *ngIf="!isReady">
@@ -149,3 +154,58 @@
   </div>
 </div>
 
+<!--Manage Team Member Modal -->
+<div class="modal fade" id="teamMemberModal" tabindex="-1" aria-labelledby="teamMemberModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="teamMemberModalLabel">Manage Team Members</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="projectForm">
+        <div class="row mt-3">
+          <div class="col-md-3">Project Name: </div>
+          <div class="col-md-9">{{projectForm.controls.ProjectName.value}}</div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-3">Manager Name: </div>
+          <div class="col-md-9">{{projectManagerName}}</div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-3">Architect Name: </div>
+          <div class="col-md-9">{{architectName}}</div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-3">Team Lead: </div>
+          <div class="col-md-9">
+            <select class="form-select" >
+              <option value=0 disabled>Select Architect</option>
+              <option [value]="item.EmployeeUid" *ngFor="let item of employees">{{item.FirstName}} {{item.LastName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-3">
+          <label for="" class="form-label">Team Members</label>
+          <div class="d-flex flex-wrap mt-3 ">
+            <div *ngFor="let item of teamMembers">
+              <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
+                {{item.FullName}}
+              </span>
+            </div>
+          </div>
+          <div class="col-md-12 row my-4" *ngIf="isReady">
+            <app-iautocomplete [data]="employeesList" (OnSelect)="selectedEmployee($event)" [(ngModel)]="employeeIds" [ngModelOptions]="{standalone: true}">
+            </app-iautocomplete>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="addTeamMember()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Add Member' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

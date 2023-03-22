@@ -3,9 +3,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, ProfileImage, UserImage, UserType } from 'src/providers/constants';
+import { ErrorToast, Toast, ToLocateDate, UserDetail } from 'src/providers/common-service/common.service';
+import { ProfileImage, UserImage, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -101,13 +100,13 @@ export class ProfileComponent implements OnInit {
   carrerProfileForm: FormGroup;
   personalDetailForm: FormGroup;
   keySkilldate:NgbDateStruct;
+  imageIndex: number = 0;
   lanugages: Array<string> = ["Assamese", "Bengali", "Gujarati", "Hindi", "Kannada", "Kashmiri", "Konkani", "Malayalam", "Manipuri", "Marathi", "Nepali", "Oriya", "Punjabi", "Sanskrit", "Sindhi", "Tamil", "Telugu", "Urdu", "Bodo", "Santhali", "Maithili", "Dogri"].sort();
   @Output() authentication = new EventEmitter();
 
     constructor(private http: AjaxService,
     private fb: FormBuilder,
     private calendar: NgbCalendar,
-    private local: ApplicationStorage,
     private user: UserService,
     private nav: iNavigation
   ) { }
@@ -115,7 +114,6 @@ export class ProfileComponent implements OnInit {
 
 
   ngOnInit(): void {
-    //this.model = this.calendar.getToday();
     this.userModal = new ProfessionalUser();
     this.editEmploymentModal = new Employment();
     this.editEducationModal = new EducationalDetail();
@@ -123,21 +121,10 @@ export class ProfileComponent implements OnInit {
     this.editPersonalDetailModal = new PersonalDetail();
     this.editProjectModal = new Project();
     this.basePath = this.http.GetImageBasePath();
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     let data = this.nav.getValue();
     if (data == null) {
-      if(expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-      else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-      if(Master !== null && Master !== "") {
-        this.userDetail = Master["UserDetail"];
-        this.loadData()
-      } else {
-        Toast("Invalid user. Please login again.")
-      }
+      this.loadData()
     } else {
       this.userDetail = data;
       this.userDetail.UserId = data.EmployeeUid;
@@ -164,11 +151,11 @@ export class ProfileComponent implements OnInit {
           this.userModal.PersonalDetail.Gender = employee.Gender;
           this.userModal.PersonalDetail.HomeTown = employee.City;
           this.userModal.PersonalDetail.PinCode = employee.Pincode;
-          this.userModal.PersonalDetail.DOB = employee.DOB;
+          this.userModal.PersonalDetail.DOB = ToLocateDate(employee.DOB);
         }
         let profile = res.ResponseBody.profileDetail;
         if (profile && profile.length > 0) {
-          this.profile = profile.find(x => x.FileName == ProfileImage);
+          this.profile = profile.find(x => x.FileName.includes(ProfileImage));
           if (this.profile) {
             this.profileId = this.profile.FileId;
             this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
@@ -230,7 +217,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
     this.personalDetailForm.controls["DOB"].setValue(date);
@@ -240,7 +226,6 @@ export class ProfileComponent implements OnInit {
     let date = new Date(e.year, e.month - 1, e.day);
     this.Exptdate = date;
   }
-
 
   //----------------- Personal Detail form, group and add new ------------------------
 
@@ -401,9 +386,6 @@ export class ProfileComponent implements OnInit {
 
   //----------------- Personal Detail END'S ------------------------
 
-
-
-
   //----------------- Projects form, group and add new ------------------------
 
   buildProjectsForm() {
@@ -529,7 +511,6 @@ export class ProfileComponent implements OnInit {
   }
   //----------------- Projects END'S ------------------------
 
-
   //----------------- technical skills form, group and add new ------------------------
 
   buildSkillsForm() {
@@ -577,7 +558,6 @@ export class ProfileComponent implements OnInit {
     elem = document.getElementsByName('ExptinMonths')[0].classList;
     if (elem.contains('error-field'))
       elem.remove('error-field');
-
   }
 
   addItskill() {
@@ -658,17 +638,7 @@ export class ProfileComponent implements OnInit {
     this.isEditItSkill = true;
   }
 
-  // closeSkillModal() {
-  //   let value = this.editItSkillModal;
-  //   let skill = this.skillsForm.get("TechnicalSkills") as FormArray;
-  //   skill.removeAt(skill.value.findIndex(item => item.SkillIndex == value.SkillIndex));
-  //   this.userModal.Skills = skill.value;
-  //   $("#itSkillModal").modal("hide");
-  // }
   //----------------- technical skills END'S ------------------------
-
-
-
 
   //----------------- Accomplishments form, group and add new ------------------------
 
@@ -693,7 +663,6 @@ export class ProfileComponent implements OnInit {
         })
       }
     }
-
 
     buildOnlieProfiles(value: string) {
       return this.fb.group({
@@ -1456,9 +1425,6 @@ export class ProfileComponent implements OnInit {
 
   //----------------- Employment END'S ------------------------
 
-
-
-
   //----------------- Carreer Profile form, group and add new ------------------------
 
   createCarrerProfileForm(carrer: Company, index: number) {
@@ -1683,19 +1649,19 @@ export class ProfileComponent implements OnInit {
 
   uploadProfilePicture(event: any) {
     if (event.target.files) {
-      this.fileDetail = [];
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event: any) => {
         this.profileURL = event.target.result;
-      }
-      this.manageUserForm.patchValue({
-        ProfileImg: event.target.result,
-      });
+      };
+      // this.employeeForm.patchValue({
+      //   ProfileImgPath: event.target.result,
+      // });
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
+      this.imageIndex = new Date().getTime();
       this.fileDetail.push({
-        name: "profile",
+        name: $`profile_${this.imageIndex}`,
         file: file
       });
     }
@@ -1804,6 +1770,7 @@ export class ProfileComponent implements OnInit {
   }
 
   submitManageUserForm() {
+    this.isLoading = true;
     let formData = new FormData();
     let userInfo = this.manageUserForm.value;
     this.userModal.FirstName = userInfo.FirstName;
@@ -1815,7 +1782,7 @@ export class ProfileComponent implements OnInit {
 
     let i = 0;
     while(i < this.fileDetail.length) {
-      formData.append(this.fileDetail[i].name, this.fileDetail[i].file);
+      formData.append(`${ProfileImage}_${this.imageIndex}`, this.fileDetail[0].file);
       i++;
     }
     formData.append("userInfo", JSON.stringify(this.userModal));
@@ -1833,7 +1800,7 @@ export class ProfileComponent implements OnInit {
         }
         let profile = res.ResponseBody.profileDetail;
         if (profile && profile.length > 0) {
-          this.profile = profile.filter(x => x.FileName == ProfileImage);
+          this.profile = profile.filter(x => x.FileName.includes(ProfileImage));
           this.profileId = this.profile[0].FileId;
           this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
           let document = profile.filter(x => x.FileName == "resume");
@@ -1848,6 +1815,7 @@ export class ProfileComponent implements OnInit {
         this.UserId = this.userModal.EmployeeId;
         this.initForm();
         Toast("Data updated successfully.");
+        this.isLoading = false;
       }
 
       this.isFormReady = true;
@@ -1891,7 +1859,7 @@ export class ProfileComponent implements OnInit {
   }
 }
 
-class ProfessionalUser {
+export class ProfessionalUser {
   EmployeeId: number = 0;
   FileId: number = -1;
   FirstName: string = '';
@@ -1909,7 +1877,7 @@ class ProfessionalUser {
   Employments: Array<Employment> = [];
 }
 
-class Employment {
+export class Employment {
   EmploymentIndex: number = 0;
   Organization: string = null;
   Designation: string = null;
@@ -1922,7 +1890,7 @@ class Employment {
   JobProfile: string = null;
 }
 
-class Company {
+export class Company {
   Role: string = '';
   Industry: string = '';
   Company_Name: string = '';
@@ -1939,7 +1907,7 @@ class Company {
   CarrerIndex: number = 0;
 }
 
-class OtherDetail {
+export class OtherDetail {
   Sumary: string = '';
   Feedback: string = '';
   Pin_Code: number = 0;
@@ -1949,33 +1917,7 @@ class OtherDetail {
   Source_Of_Application: string = ''
 }
 
-class ActivityStatus {
-  Viewed: string = '';
-  Emailed: string = '';
-  Comment_1: string = '';
-  Comment_2: string = '';
-  Comment_3: string = '';
-  Comment_4: string = '';
-  Comment_5: string = '';
-  Viewed_By: string = '';
-  Emailed_By: string = '';
-  Comment_1_By: string = '';
-  Comment_2_By: string = '';
-  Comment_3_By: string = '';
-  Comment_4_By: string = '';
-  Comment_5_By: string = '';
-  Time_Of_Email: string = '';
-  Calling_Status: string = '';
-  Time_Comment_1_posted: string = '';
-  Time_Comment_2_posted: string = '';
-  Time_Comment_3_posted: string = '';
-  Time_Comment_4_posted: string = '';
-  Time_Comment_5_posted: string = '';
-  Calling_Status_updated_by: string = '';
-  Time_of_Calling_activity_update: string = '';
-}
-
-class EducationalDetail {
+export class EducationalDetail {
   EducationIndex: number = 0;
   Degree_Name: string = '';
   Passout_Year: Date = null;
@@ -1986,7 +1928,7 @@ class EducationalDetail {
   Course: string = '';
 }
 
-class Files {
+export class Files {
   LocalImgPath: string = "";
   FileName: string = "";
   UserId: number = 0;
@@ -2000,7 +1942,7 @@ class Files {
   FileId: number = 0;
 }
 
-class Skills {
+export class Skills {
   Language: string = '';
   Version: number = 0;
   LastUsed: Date = null;
@@ -2009,7 +1951,7 @@ class Skills {
   SkillIndex: number = 0;
 }
 
-class Project {
+export class Project {
   ProjectTitle: string = '';
   ProjectTag: string = '';
   ProjectWorkingYear: number = 0;
@@ -2025,7 +1967,7 @@ class Project {
   ProjectIndex: number = 0;
 }
 
-class Accomplishment {
+export class Accomplishment {
   OnlineProfile: Array<string> = [];
   WorkSample: Array<string> = [];
   Research: Array<string> = [];
@@ -2034,7 +1976,7 @@ class Accomplishment {
   Certification: Array<string> = [];
 }
 
-class PersonalDetail {
+export class PersonalDetail {
   DOB: Date = null;
   Gender: string = null;
   Address: string = '';
@@ -2048,7 +1990,7 @@ class PersonalDetail {
   LanguageDetails: LanguageDetail[] = [];
 }
 
-class LanguageDetail {
+export class LanguageDetail {
   Language: string = '';
   LanguageRead: boolean = null;
   LanguageWrite: boolean = null;

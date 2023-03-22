@@ -21,15 +21,16 @@ export class PayslipComponent implements OnInit {
   isPageReady: boolean = false;
   employeesList: autoCompleteModal = new autoCompleteModal();
   applicationData: any = [];
-  joiningDate: Date = null;
   paySlipDate: any = null;
   SectionIsReady: boolean = false;
   isEmployeeSelect: boolean = false;
   basePath: string = "";
   viewer: any = null;
   fileDetail: any = null;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
   payslipYear: Array<number> =[];
+  payslipschedule: Array<any> = [];
+  isFileFound: boolean = false;
 
   constructor(private nav: iNavigation,
               private local: ApplicationStorage,
@@ -39,8 +40,8 @@ export class PayslipComponent implements OnInit {
     var dt = new Date();
     this.currentYear = dt.getFullYear();
     this.basePath = this.http.GetImageBasePath();
-    this.EmployeeId = this.local.getByKey("EmployeeId");
     this.loadData();
+    this.EmployeeId = this.local.getByKey("EmployeeId");
   }
 
   getPayslipList(e: any) {
@@ -50,21 +51,42 @@ export class PayslipComponent implements OnInit {
     if (this.EmployeeId > 0) {
       this.paySlipSchedule = [];
       let employee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
-      this.joiningDate = new Date(employee.CreatedOn);
+      let joiningDate = new Date(employee.CreatedOn);
       this.payslipYear.push(this.currentYear);
-      if (this.joiningDate.getFullYear() != this.currentYear)
-        this.payslipYear.push(this.currentYear-1)
+      if (joiningDate.getFullYear() != this.currentYear)
+        this.payslipYear.push(this.currentYear-1);
+
       this.isEmployeeSelect = false;
       this.SectionIsReady= true;
-      if (this.joiningDate.getMonth() == new Date().getMonth() && this.joiningDate.getFullYear() == new Date().getFullYear()) {
+      if (joiningDate.getMonth() == new Date().getMonth() && joiningDate.getFullYear() == new Date().getFullYear()) {
         WarningToast("Joining month of the employee is current month");
         return;
       }
-      if (this.joiningDate.getFullYear() == this.currentYear)
-        this.allPaySlip(this.joiningDate.getFullYear());
-      else
-        this.allPaySlip(this.currentYear);
+
+      this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
+        if (res.ResponseBody) {
+          let annulSalaryBreakup = JSON.parse(res.ResponseBody.CompleteSalaryDetail);
+          if (annulSalaryBreakup.length > 0) {
+            for (let i = 0; i < annulSalaryBreakup.length; i++) {
+              if (annulSalaryBreakup[i].IsActive && annulSalaryBreakup[i].IsPayrollExecutedForThisMonth) {
+                let date = new Date(annulSalaryBreakup[i].MonthFirstDate);
+                this.payslipschedule.push({
+                  paySlipMonth: new Date(date.getFullYear(), date.getMonth(), 1), // result: Aug
+                  paySlipYear: Number(date.getFullYear()),
+                });
+              }
+            }
+            this.changeYear(this.currentYear);
+          }
+        }
+        this.SectionIsReady= true;
+      })
     }
+  }
+
+  changeYear(item: number) {
+    this.closePdfViewer();
+    this.paySlipSchedule = this.payslipschedule.filter(x => x.paySlipYear == item);
   }
 
   showFile(userFile: any) {
@@ -82,7 +104,6 @@ export class PayslipComponent implements OnInit {
         this.applicationData = response.ResponseBody;
         this.employeesList.placeholder = "Employee";
         this.employeesList.data = GetEmployees();
-        let employees = this.applicationData.Employees;
         this.employeesList.className = "";
         this.isPageReady = true;
         this.getPayslipList(this.EmployeeId);
@@ -119,65 +140,17 @@ export class PayslipComponent implements OnInit {
     }
   }
 
-  allPaySlip(e: any) {
-    this.closePdfViewer();
-    let yearValue = Number (e);
-    var date = new Date();
-    let years = date.getFullYear() - 1;
-    if (yearValue == new Date().getFullYear()) {
-      this.paySlipSchedule = [];
-      this.payslip();
-    } else if(this.joiningDate.getFullYear() == years) {
-      this.paySlipSchedule = [];
-      let mnth= 12;
-      let i =0;
-      if (this.joiningDate.getFullYear() == years)
-        i = this.joiningDate.getMonth();
-      while (i < 12) {
-        if (mnth == 1) {
-          mnth = 12;
-        } else {
-          mnth --;
-        }
-        this.paySlipSchedule.push({
-          paySlipMonth: new Date(years, mnth, 1),  //.toLocaleString("en-us", { month: 'short'}),
-          paySlipYear: years
-        })
-        i++;
-      }
-    }
-  }
-
-  payslip() {
-    var date = new Date();
-    let mnth= date.getMonth();
-    let years = date.getFullYear();
-    let i =0;
-    if (this.joiningDate.getFullYear() == this.currentYear)
-      i = this.joiningDate.getMonth();
-    while (i < date.getMonth()) {
-      if (mnth == 1) {
-        mnth = 0;
-        //years --
-      } else {
-        mnth --;
-      }
-      this.paySlipSchedule.push({
-        paySlipMonth: new Date(years, mnth, 1),    //.toLocaleString("en-us", { month: 'short'}),
-        paySlipYear: years
-      })
-      i++;
-    }
-  }
-
-  getPaySlip(e: any, year: number) {
+  getPaySlip(e: any, year: number, event: any) {
     let date = e;
     this.isLoading = true;
     this.paySlipDate = null;
-    this.paySlipDate = {
-      Month: new Date(year, e.getMonth(), 1).toLocaleString("en-us", { month: 'long'}),
-      Year: e.getFullYear()
-    };
+    var elem = document.querySelectorAll('a[data-name="payslipmonth"]');
+    if (elem.length > 0) {
+      for (let i = 0; i < elem.length; i++) {
+        elem[i].classList.remove('active-payslip-month');
+      }
+      event.target.classList.add('active-payslip-month')
+    }
     if (this.EmployeeId > 0) {
       let value = {
         Year: year,
@@ -186,6 +159,10 @@ export class PayslipComponent implements OnInit {
       }
       this.http.post("FileMaker/GeneratePayslip", value).then(res => {
         if (res.ResponseBody) {
+          this.paySlipDate = {
+            Month: new Date(year, e.getMonth(), 1).toLocaleString("en-us", { month: 'long'}),
+            Year: e.getFullYear()
+          };
           this.fileDetail = res.ResponseBody.FileDetail;
           this.showFile(this.fileDetail);
           this.isReady = true;
@@ -193,6 +170,8 @@ export class PayslipComponent implements OnInit {
           Toast("Payslip found");
         }
       }).catch(e => {
+        ErrorToast(e.error.HttpStatusMessage);
+        this.isFileFound = false;
         this.isReady = true;
         this.isLoading = false;
       })
@@ -209,23 +188,16 @@ export class PayslipComponent implements OnInit {
   }
 
   downloadPdf() {
-    // The data for the PDF file
-    const data = this.fileDetail.FileName;
-    // Create a Blob object containing the PDF data
-    const blob = new Blob([data], { type: 'application/pdf' });
-
-    // Create an object URL for the Blob
-    const objectUrl = URL.createObjectURL(blob);
-
-    // Create a link element and trigger a download
-    const a = document.createElement('a');
-    a.href = objectUrl;
-    a.download = this.fileDetail.FileName;
-    document.body.appendChild(a);
-    a.click();
-
-    // Clean up
-    URL.revokeObjectURL(objectUrl);
-    a.remove();
+    if (this.fileDetail) {
+      let fileLocation = `${this.basePath}${this.fileDetail.FilePath}/${this.fileDetail.FileName}.pdf`;
+      let link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      link.setAttribute('type', 'hidden');
+      link.href = fileLocation;
+      link.download = `${this.fileDetail.FileName}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
   }
 }

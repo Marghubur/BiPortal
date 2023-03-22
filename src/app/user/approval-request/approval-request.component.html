@@ -31,7 +31,7 @@
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifie</div>
+              <div class="col-md-3 fw-bold text-dark">Manager</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
@@ -40,8 +40,14 @@
                   <div class="row py-3 border-bottom px-3 leave-box">
                     <div class="col-md-6">
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c me-2">Attendance Date: {{item.AttendanceDay | date}}</span>
-                        <span class="fw-bold text-primary-c">[{{item.EmployeeName}}]</span>
+                        <span class="fw-bold text-primary-dc">{{item.EmployeeName}}</span>
+                        <span class="ps-3 text-muted">[
+                          <small class="fade-label">Session Type: </small>
+                          <span class="text-muted fade-font">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>
+                          ]</span>
+                      </p>
+                      <p class="mb-0 fs-6">
+                        <span class="me-2 fw-bold">Attendance Date: {{item.AttendanceDay | date}}</span>
                       </p>
                       <span>
                         <span class="fw-bold">Message:</span>
@@ -52,9 +58,9 @@
                       Attendance approval Request
                     </div>
                     <div class="col-md-3">
-                      {{item.EmployeeName}}
-                      <p class="mb-0">{{item.Email}}</p>
-                      <p class="mb-0">{{item.Mobile}}</p>
+                      {{item.ManagerName}}
+                      <p class="mb-0">{{item.ManagerEmail}}</p>
+                      <p class="mb-0">{{item.ManagerMobile}}</p>
                     </div>
                     <div class="col-md-1">
                       <ng-container [ngSwitch]="item.PresentDayStatus">
@@ -65,7 +71,7 @@
                     </div>
                     <div class="d-flex my-1">
                       <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)" href="javascript:void(0)"
-                        class="text-danger btn-sm fw-bold"><i class="fa pe-1"
+                        class="text-danger btn-sm fw-bold ps-0"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
                       <a *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
@@ -99,7 +105,7 @@
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifie</div>
+              <div class="col-md-3 fw-bold text-dark">Manager</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
@@ -108,21 +114,24 @@
                   <div class="row py-3 border-bottom px-3 leave-box">
                     <div class="col-md-6">
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c me-2">Timesheet From: {{item[0].PresentDate | date}}</span>
-                        <span class="fw-bold text-primary-c me-2">Timesheet To: {{item[item.length-1].PresentDate | date}}</span>
+                        <span class="fw-bold text-primary-dc">{{item[0].EmployeeName}}</span>
+                        <span class="ps-3 text-muted">[
+                          <small class="fade-label">Company: </small>
+                          <span class="text-muted fade-font">{{item[0].ClientName}}</span>
+                          ]</span>
                       </p>
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c">[{{item[0].EmployeeName}}]</span>
-                        <span class="fw-bold text-primary-c">[{{item[0].ClientName}}]</span>
+                        <span class="me-2">From: {{item[0].PresentDate | date}}</span>
+                        <span class="me-2">To: {{item[item.length-1].PresentDate | date}}</span>
                       </p>
                     </div>
                     <div class="col-md-2">
                       Timesheet approval Request
                     </div>
                     <div class="col-md-3">
-                      {{item[0].EmployeeName}}
-                      <p class="mb-0">{{item[0].Email}}</p>
-                      <p class="mb-0">{{item[0].Mobile}}</p>
+                      <p class="mb-0">{{item[0].ManagerName}}</p>
+                      <p class="mb-0">{{item[0].ManagerEmail}}</p>
+                      <p class="mb-0">{{item[0].ManagerMobile}}</p>
                     </div>
                     <div class="col-md-1">
                       <ng-container [ngSwitch]="item[0].TimesheetStatus">
@@ -165,20 +174,24 @@
           <a ngbNavLink (click)="changeTab()">Leave</a>
           <ng-template ngbNavContent>
             <div class="row bg-light py-3 border-bottom px-3">
-              <div class="col-md-6 fw-bold text-dark">Description</div>
+              <div class="col-md-5 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifie</div>
+              <div class="col-md-2 fw-bold text-dark">Manager</div>
+              <div class="col-md-2 fw-bold text-dark">Document</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
               <ng-container *ngIf="leaveDeatil.length > 0">
                 <ng-container *ngFor="let item of leaveDeatil">
                   <div class="row py-3 border-bottom px-3 leave-box">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c me-2">From: {{item.FromDate | date}}</span>
-                        <span class="fw-bold text-primary-c me-4">To: {{item.ToDate | date}}</span>
-                        <span class="fw-bold text-primary-c">[{{item.FirstName}} {{item.LastName}}]</span>
+                        <span class="fw-bold text-primary-dc">{{item.FirstName}} {{item.LastName}}</span>
+                        <span class="ps-3 text-muted">[
+                          <!-- <small class="fade-label">Company: </small> -->
+                          <span class="text-muted fade-font">From: {{item.FromDate | date}}</span>
+                          <span class="text-muted fade-font ps-1">To: {{item.ToDate | date}}</span>
+                          ]</span>
                       </p>
                       <div class="row my-2">
                         <div class="col-md-4">
@@ -208,22 +221,16 @@
                           </ng-container>
                         </span>
                       </p>
-                      <p class="mb-0">
-                        <span class="badge bg-success">
-                          Manager &nbsp;
-                          <ng-container *ngIf="item.AssigneeId == 0">
-                            NA
-                          </ng-container>
-                          <ng-container *ngIf="item.AssigneeId != 0">
-                            {{item.AssigneeId}}
-                          </ng-container>
-                        </span>
-                      </p>
                     </div>
-                    <div class="col-md-3">
-                      {{item.FirstName}} {{item.Lastname}}
-                      <p class="mb-0">{{item.Email}}</p>
-                      <p class="mb-0">{{item.Mobile}}</p>
+                    <div class="col-md-2">
+                      {{item.ManagerName}}
+                      <p class="mb-0">{{item.ManagerEmail}}</p>
+                      <p class="mb-0">{{item.ManagerMobile}}</p>
+                    </div>
+                    <div class="col-md-2">
+                      <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item)" class="">
+                        View Attachment
+                      </a>
                     </div>
                     <div class="col-md-1">
                       <ng-container [ngSwitch]="item.RequestStatusId">
@@ -234,7 +241,7 @@
                     </div>
                     <div class="d-flex my-1">
                       <a *ngIf="item.RequestStatusId!= 5" (click)="openLeaveModal('Rejected', item)" href="javascript:void(0)"
-                        class="text-danger btn-sm fw-bold"><i class="fa pe-1"
+                        class="text-danger btn-sm fw-bold ps-0"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
                       <a *ngIf="item.RequestStatusId != 9" (click)="openLeaveModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
@@ -263,7 +270,7 @@
         </li>
 
         <li [ngbNavItem]="4">
-          <a ngbNavLink class="text-muted" (click)="loadAttendanceRequestDetail()">Attendence Request</a>
+          <a ngbNavLink class="text-muted" (click)="loadAttendanceRequestDetail()">Request</a>
           <ng-template ngbNavContent>
             <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3">
               <span class="ps-4">Work From Home / On Duty Request</span>
@@ -367,7 +374,7 @@
                               id="dropdownBasic1" ngbDropdownToggle>
                               <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                             </button>
-                            <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <div class="dropdown-menu p-0" ngbDropdownMenu aria-labelledby="dropdownBasic1">
                               <button ngbDropdownItem>
                                 <a class="dropdown-item" (click)="showApproveRequestModal(attr)" href="javascript:void(0)">Approve</a>
                               </button>
@@ -478,7 +485,7 @@
 
 <!-- Timesheet Model -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="timesheetModal" tabindex="-1"
-  aria-labelledby="timesheetModalLabel" aria-hidden="true" *ngIf="currentTimesheet.length > 0">
+  aria-labelledby="timesheetModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0 pt-4">
@@ -496,7 +503,7 @@
           <div class="col-md-3 fw-bold text-dark">Notifie</div>
           <div class="col-md-1 fw-bold text-dark">State</div>
         </div>
-        <div class="row py-3">
+        <div class="row py-3" *ngIf="currentTimesheet.length > 0">
           <div class="col-md-6">
             <p class="mb-0 fw-bold fs-6">
               Request by [{{currentTimesheet[0].EmployeeName}}]
@@ -604,3 +611,50 @@
   </div>
 </div>
   <!-- End -->
+
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="managerleave-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
+<!-- End pdf view modal -->
+
+<!-- View Rent file -->
+<div class="modal fade delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" id="managerleaveFileModal" tabindex="-1" aria-labelledby="managerleaveFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="managerleaveFileModalLabel">Uploaded Leave Attachment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ng-container >
+          <table class="table">
+            <thead>
+              <tr>
+                <th width="8%">#</th>
+                <th>File Name</th>
+                <td width="20%">Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of leaveAttachment; let i = index">
+                <td class="counterCell">{{i+1}}</td>
+                <td>{{item.FileName}}.{{item.FileExtension}}</td>
+                <td>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->

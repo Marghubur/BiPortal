@@ -1,13 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { ItemStatus, UserType } from 'src/providers/constants';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -18,8 +17,6 @@ declare var $: any;
   styleUrls: ['./attendance.component.scss']
 })
 export class AttendanceComponent implements OnInit {
-  isFormReady: boolean = false;
-  attendanceArray: FormArray;
   employeeId: number = 0;
   userName: string = "";
   fromDate: any = null;
@@ -27,11 +24,9 @@ export class AttendanceComponent implements OnInit {
   isEmployeesReady: boolean = false;
   userDetail: any = null;
   time = new Date();
-  intervalId;
   DayValue: number = 0;
   employee: any = null;
   isLoading: boolean = false;
-  billingHrs: string = '';
   isAttendanceDataLoaded: boolean = false;
   divisionCode: number = 0;
   daysInMonth: number = 0;
@@ -43,7 +38,6 @@ export class AttendanceComponent implements OnInit {
   applicationData: any = null;
   emails: Array<any> = [];
   employees: Array<any> = [];
-  //-------------------------- required code starts --------------------------
   sessionvalue: number = 1;
   commentValue: string = null;
   today: Date = null;
@@ -62,9 +56,10 @@ export class AttendanceComponent implements OnInit {
   orderByRequestedOnAsc: boolean = null;
   filterAttendStatus: number = 1;
   AttendanceId: number = 0;
+  requestedOn: number = 0;
+  shiftDetail: any = null;
 
-  constructor(private fb: FormBuilder,
-    private http: AjaxService,
+  constructor(private http: AjaxService,
     private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService
@@ -73,7 +68,6 @@ export class AttendanceComponent implements OnInit {
   ngOnInit(): void {
     this.today = new Date();
     this.tomorrow = new Date(new Date().setDate(this.today.getDate() + 1));
-    this.isFormReady = false;
     this.time = new Date();
     this.request.SortBy = null;
     this.request.PageIndex = 1;
@@ -82,6 +76,7 @@ export class AttendanceComponent implements OnInit {
     this.employeesList.placeholder = "Employee";
     this.employeesList.className = 'disable-field';
     this.employeesList.isMultiSelect = true;
+    this.request.SearchString = "1=1";
     this.loadAutoComplete();
     this.isEmployeesReady = true;
     if(this.cachedData) {
@@ -90,7 +85,7 @@ export class AttendanceComponent implements OnInit {
       this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
       this.loadPageData();
     } else {
-      this.userDetail = this.user.getInstance() as UserDetail;
+      this.userDetail = this.user.getInstance();
       if(this.userDetail && this.userDetail !== null) {
         this.employeeId = this.userDetail.UserId;
         this.reportingManagerId = this.userDetail.ReportingManagerId;
@@ -116,12 +111,6 @@ export class AttendanceComponent implements OnInit {
           data[index].PresentDayStatus = 3;
           data[index].AttendenceStatus = 3;
         }
-        // let logon = data[index].LogOn.split(':');
-        // let logontime = 0;
-        // for (let i = 0; i < logon.length; i++) {
-        //   logontime += Number(logon[i]);
-        // }
-        // data[index].GrossHour = Number(data[index].LogOn) - (data[index].LunchBreanInMinutes/60)
         index++;
       }
       this.allDaysAttendance = data;
@@ -203,12 +192,13 @@ export class AttendanceComponent implements OnInit {
   previousMonthAttendance(month: number, index: number) {
     let doj = new Date(this.userDetail.CreatedOn);
     let startDate = new Date(new Date().getFullYear(), month, 1);
-    if(doj.getFullYear() == new Date().getFullYear() && doj.getMonth() != startDate.getMonth()) {
-      WarningToast("You joining month is current month.")
-      return;
-    }
-    if (doj.getFullYear() == startDate.getFullYear() && doj.getMonth() == startDate.getMonth()) {
-      startDate = new Date(doj.getFullYear(), doj.getMonth(), doj.getDate());
+    if (doj.getFullYear() == new Date().getFullYear() && doj.getMonth() == new Date().getMonth()) {
+      if ((doj.getMonth()-1) == month) {
+        WarningToast("You join in this current month");
+        return;
+      } else {
+        startDate = new Date(doj.getFullYear(), doj.getMonth(), 1);
+      }
     }
     let endDate;
     if (month == new Date().getMonth())
@@ -260,17 +250,17 @@ export class AttendanceComponent implements OnInit {
   }
 
   getRequestBody() {
-      if (this.commentValue == '') {
-        this.isComment = true;
-        this.isLoading = false;
-        return null;
-      }
+    if (this.commentValue == '') {
+      this.isComment = true;
+      this.isLoading = false;
+      return null;
+    }
 
-      if (this.sessionvalue <= 0) {
-        ErrorToast("Please select session first");
-        this.isLoading = false;
-        return null;
-      }
+    if (this.sessionvalue <= 0) {
+      ErrorToast("Please select session first");
+      this.isLoading = false;
+      return null;
+    }
 
     return {
       EmployeeUid: this.employeeId,
@@ -361,7 +351,6 @@ export class AttendanceComponent implements OnInit {
   loadAttendanceRequestDetail() {
     this.attendanceRquestPageIsReady = false;
     this.attendanceRequestDetail = [];
-    this.request.SearchString = "1=1";
     this.request.PageSize = 10;
     this.request.EmployeeId = this.employeeId;
     this.http.post("Attendance/GetMissingAttendanceRequest", this.request).then((response: ResponseModel) => {
@@ -545,5 +534,61 @@ export class AttendanceComponent implements OnInit {
   onEmloyeeChanged(_: any) {
     this.local.setByKey("EmployeeId", this.employeeId);
     //this.filterRecords();
+  }
+
+  filter(e: any, type: string) {
+    let value = Number(e.target.value);
+    if (value > 0) {
+      if (type == 'requestedon') {
+        let startdate = new Date();
+        let enddate = new Date();
+        enddate.setDate(enddate.getDate()- value);
+        this.request.SearchString = `1=1 and RequestedOn between "${enddate.getFullYear()}-${enddate.getMonth()+1}-${enddate.getDate()} 00:00:00" and "${startdate.getFullYear()}-${startdate.getMonth()+1}-${startdate.getDate()} 23:59:59"`;
+      }
+      this.loadAttendanceRequestDetail();
+    }
+  }
+
+  resetFilter() {
+    this.employeeId =0;
+    this.requestedOn = 0;
+    this.request.SearchString = "";
+    this.loadAttendanceRequestDetail();
+  }
+
+  loadShiftDetail() {
+    this.isLoading = true;
+    this.http.get(`Shift/GetWorkShift/${this.userDetail.WorkShiftId}`).then(res => {
+      if (res.ResponseBody) {
+        this.shiftDetail = res.ResponseBody;
+        this.shiftDetail.OfficeEndTime =this.timeConvert(this.shiftDetail.Duration);
+        Toast("Shift detail loaded successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  timeConvert(number) {
+    var hrs = Math.floor(number/60).toString();
+    var mins = (number % 60).toString();
+    return this.getShiftOffTime(hrs + "." + mins);
+  }
+
+  getShiftOffTime(endTime: any) {
+    let startTime = this.shiftDetail.OfficeTime.replace(":", ".");
+    let arr = startTime.split('.');
+    let startmin = +arr[1];
+    let strathrs = +arr[0];
+    arr = endTime.split('.');
+    let endmin = +arr[1];
+    let endhrs = +arr[0];
+    let hrs = Math.floor((startmin+endmin+this.shiftDetail.LunchDuration)/60);
+    let min = Math.floor((startmin+endmin+this.shiftDetail.LunchDuration)%60);
+    let totalhrs = hrs+strathrs+endhrs < 24 ? hrs+strathrs+endhrs : (24-(hrs+strathrs+endhrs));
+    let totalmin = min+startmin+endmin;
+    let time =  ( (totalhrs < 10 ? "0" : "") + totalhrs.toString() + ":" +(totalmin < 10 ? "0" : "") + totalmin.toString());
+    return time;
   }
 }

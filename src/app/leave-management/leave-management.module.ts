@@ -7,13 +7,16 @@ import {ManageLeaveplanComponent } from './manage-leaveplan/manage-leaveplan.com
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ManageYearEndingComponent } from './manage-year-ending/manage-year-ending.component';
+import { CommonmodalModule } from '../commonmodal/commonmodal.module';
+import { ApplyLeaveComponent } from './apply-leave/apply-leave.component'
 
 @NgModule({
   declarations: [
     LeaveComponent,
     ManageLeaveplanComponent,
     ManageYearEndingComponent,
-    ManageYearEndingComponent
+    ManageYearEndingComponent,
+    ApplyLeaveComponent
   ],
   imports: [
     CommonModule,
@@ -22,6 +25,7 @@ import { ManageYearEndingComponent } from './manage-year-ending/manage-year-endi
     ReactiveFormsModule,
     NgbModule,
     LeaveManagementRoutingModule,
+    CommonmodalModule
   ]
 })
 export class LeaveManagementModule { }

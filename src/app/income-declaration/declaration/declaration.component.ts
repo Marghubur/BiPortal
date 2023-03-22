@@ -1,5 +1,4 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { Files } from 'src/app/admin/documents/documents.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
@@ -11,6 +10,7 @@ import 'bootstrap';
 import { MonthlyTax } from '../incometax/incometax.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { Files } from 'src/app/commonmodal/common-modals';
 declare var $: any;
 
 @Component({
@@ -75,57 +75,26 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   viewRentPropFile: Array<any> = [];
   viewAttachment: string = '';
   deleteType: string = '';
+  currentMonth: string = "";
 
   constructor(private local: ApplicationStorage,
-    private user: UserService,
-    private fb: FormBuilder,
-    private nav: iNavigation,
-    private http: AjaxService
-    ) { }
+              private user: UserService,
+              private fb: FormBuilder,
+              private nav: iNavigation,
+              private http: AjaxService) { }
 
   ngOnInit(): void {
     this.rentalPage = 1;
     this.monthlyTaxAmount = new MonthlyTax();
+    this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toLocaleString("en-us", { month: "short" })
     this.employeesList.placeholder = "Employee";
     this.employeesList.className = 'disable-field';
     this.isEmployeesReady = true;
     this.EmployeeId = this.local.getByKey("EmployeeId");
+    this.year = new Date().getFullYear();
     this.loadData();
-    var dt = new Date();
-    var month = 3;
-    var year = dt.getFullYear();
-    this.year = dt.getFullYear();
     this.basePath = this.http.GetImageBasePath();
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
-    if (expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-    else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-    let Master = this.local.get(null);
-    if (Master !== null && Master !== "") {
-      this.userDetail = Master["UserDetail"];
-    } else {
-      ErrorToast("Invalid user. Please login again.")
-    }
-
-    let i = 0;
-    if (new Date().getMonth() + 1 <= 4)
-      year = year -1;
-    while (i < 12) {
-      var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
-      if (month == 12) {
-        month = 1;
-        year++
-      } else {
-        month++;
-      }
-      this.taxCalender.push({
-        month: new Date(year, mnth, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
-        year: Number(year.toString().slice(-2))
-      });
-      i++;
-    }
   }
 
   ngAfterViewChecked(): void {
@@ -170,13 +139,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.taxAmount.TotalTaxPayable += this.employeeDeclaration.Declarations[i].RejectedAmount;
           i++;
         }
-
-        this.taxAmount = {
-          NetTaxableAmount: 2050000,
-          TotalTaxPayable: 444600,
-          TaxAlreadyPaid: 37050,
-          RemainingTaxAMount: 444600 - 37050
-        };
     } else {
       this.taxAmount = {
         NetTaxableAmount: 0,
@@ -226,9 +188,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.employeeEmail = response.Email;
 
         if(this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
-          // this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
-          // this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
-          // this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
           let rentDetail = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
           for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
             let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
@@ -247,10 +206,34 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
                 break;
             }
           }
-
           this.salaryDetails = response.SalaryDetail;
-          if(this.salaryDetails !== null)
-          this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
+          if(this.salaryDetails !== null) {
+            this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
+            let i = 0;
+            let annualSalaryDetail = JSON.parse(this.salaryDetails.CompleteSalaryDetail);
+            this.taxCalender = [];
+            let typeId = 0;
+            while( i < annualSalaryDetail.length) {
+              let date = new Date(annualSalaryDetail[i].MonthFirstDate);
+              if(annualSalaryDetail[i].IsActive) {
+                if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
+                  typeId = 1;
+                } else {
+                  typeId = 2;
+                }
+              } else {
+                typeId = 0;
+              }
+
+              this.taxCalender.push({
+                month: new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("en-us", { month: "short" }), // result: Aug
+                year: Number(date.getFullYear().toString().slice(-2)),
+                isActive: annualSalaryDetail[i].IsActive,
+                type: typeId
+              });
+              i++;
+            }
+          }
           if (response.HouseRentDetail && response.HouseRentDetail != '{}') {
             this.houseRentDetail = JSON.parse(response.HouseRentDetail);
           } else {

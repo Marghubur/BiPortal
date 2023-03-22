@@ -1,5 +1,7 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Catagory, Product } from 'src/app/adminmodal/admin-modals';
+import { Files } from 'src/app/commonmodal/common-modals';
 import { environment } from 'src/environments/environment';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -7,7 +9,6 @@ import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { AdminNotification, AImage, EmailLinkConfig, JImage, PImage, Txt } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
-import { Files } from '../documents/documents.component';
 declare var $: any;
 
 @Component({
@@ -527,32 +528,4 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
     this.nav.navigate(EmailLinkConfig, AdminNotification);
   }
 
-}
-
-export class Product {
-  Total: number = 0;
-  Index: number = 0;
-  OrderDate: Date = null;
-  StockStatus: number = null;
-  Quantity: number = null;
-  ModalNum: string = null;
-  Brand: string = null;
-  ProductId: number = 0;
-  SiteUrl: string = null;
-  MRP: number = 0;
-  CatagoryName: string = null;
-  TitleName: string = null;
-  SerialNo: string =null;
-  ProductCode: string = null;
-  PurchasePrice: number = 0;
-  FileIds: string = null;
-}
-
-class Catagory {
-  Total: number = 0;
-  Index: number = 0;
-  CatagoryId: number = 0;
-  GroupId: number = 0;
-  CatagoryCode: string = null;
-  CatagoryDescription: string = null;
 }

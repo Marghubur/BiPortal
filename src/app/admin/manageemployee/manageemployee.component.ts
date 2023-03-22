@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { AssignedClients, EmployeeDetail } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -59,6 +60,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   assignMaxDate: any = null;
   imageIndex: number = 0;
   isSubmitted: boolean = false;
+  shiftDetail: autoCompleteModal = null;
+  shifts: Array<any> = [];
 
   get f() {
     let data = this.employeeForm.controls;
@@ -84,6 +87,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       value: 0,
       text: "Default Manager"
     });
+    this.shiftDetail = new autoCompleteModal();
+    this.shiftDetail.data = [];
+    this.shiftDetail.placeholder = "Work Shift";
+    this.shiftDetail.className = "disable-field";
     this.managerList.className = "autocomplete-height";
     this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     let assignmaxdate = new Date(new Date().setMonth(new Date().getMonth() + 12))
@@ -117,6 +124,23 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   buildPageData(response: ResponseModel) {
+    if (response.ResponseBody.WorkShift){
+      this.shifts = response.ResponseBody.WorkShift;
+        if (this.shifts && this.shifts.length > 0) {
+          this.shifts.map(x => {
+            this.shiftDetail.data.push({
+              value: x.WorkShiftId,
+              text: x.ShiftTitle
+            });
+          });
+          this.shiftDetail.className="";
+        } else {
+          this.shiftDetail.data.push({
+            value: 0,
+            text: "Regular shift"
+          });
+        }
+    }
     if (response.ResponseBody && response.ResponseBody.Employee != undefined) {
       this.clients = response.ResponseBody.Clients;
       if (response.ResponseBody.Employee.length > 0) {
@@ -134,10 +158,10 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
       this.allocatedClients = response.ResponseBody.AllocatedClients;
       if (this.allocatedClients.length > 0) {
-        for (let i = 0; i < this.allocatedClients.length; i++) {
-          let index = this.clients.findIndex( x=> x.ClientId == this.allocatedClients[i].ClientUid);
-          this.clients.splice(index, 1);
-        }
+        // for (let i = 0; i < this.allocatedClients.length; i++) {
+        //   let index = this.clients.findIndex( x=> x.ClientId == this.allocatedClients[i].ClientUid);
+        //   this.clients.splice(index, 1);
+        // }
       }
       let profileDetail = response.ResponseBody.FileDetail;
       if(profileDetail.length > 0) {
@@ -321,6 +345,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       EmployeeUid: new FormControl(this.employeeModal.EmployeeUid),
       EmployeeMappedClientsUid: new FormControl(client.EmployeeMappedClientsUid),
       IsPermanent: new FormControl(false),
+      AssigneDate: new FormControl(ToLocateDate(client.AssigneDate), [Validators.required]),
     });
   }
 
@@ -404,6 +429,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
     if (this.employeeForm.get('CompanyId').value == 0)
       errroCounter++;
+
+    if (this.employeeForm.get('DateOfJoining').value == null)
+      this.employeeForm.get('DateOfJoining').setValue(new Date());
 
     this.employeeModal = this.employeeForm.value;
     if (this.employeeModal.Pincode === null)
@@ -504,6 +532,16 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.isUpdated) {
+      let isExistClient = this.addUpdateClientForm.get("AllocatedClients").value.find(x => x.ClientUid == clientId);
+      if (isExistClient) {
+        this.isLoading = false;
+        ErrorToast("This client is already added");
+        return;
+      }
+    }
+
+
     this.activeAssignedClient.ClientUid = clientId;
     let actualPackage = Number(this.addUpdateClientForm.get("ActualPackage").value);
     if(isNaN(actualPackage)){
@@ -571,6 +609,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       })
     } else {
       this.isAllocated = true;
+      this.isLoading = false;
       ErrorToast("Please fill all the mandaroty field marked red");
     }
   }
@@ -582,6 +621,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.addUpdateClientForm.get("ActualPackage").setValue(this.activeAssignedClient.ActualPackage);
       this.addUpdateClientForm.get("FinalPackage").setValue(this.activeAssignedClient.FinalPackage);
       this.addUpdateClientForm.get("TakeHomeByCandidate").setValue(this.activeAssignedClient.TakeHomeByCandidate);
+      this.addUpdateClientForm.get("AssigneDate").setValue(this.activeAssignedClient.AssigneDate);
+      this.assignDateModel = { day: this.activeAssignedClient.AssigneDate.getDate(), month: this.activeAssignedClient.AssigneDate.getMonth() + 1, year: this.activeAssignedClient.AssigneDate.getFullYear()};
       this.isUpdated = true;
 
       if (this.activeAssignedClient) {
@@ -634,6 +675,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   addUpadteClientPopUp() {
+    this.isSubmitted = false;
+    this.bindClientDetails();
     $('#addUpdateClientModal').modal('show');
   }
 
@@ -695,77 +738,4 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, ManageEmployee);
   }
-
-  reRunAccrual() {
-    this.http.put(`Leave/UpdateAccrualForEmployee/${this.employeeUid}`, null).then((response: ResponseModel) => {
-      if (response.ResponseBody) {
-        Toast("Accrual for current employee run successfully.");
-      } else {
-        ErrorToast("Fail to run accrual cycle for current employee. Please contact to admin.");
-      }
-    });
-  }
-}
-
-export class AssignedClients {
-  IsActive: boolean = false;
-  AssigneDate: Date = new Date();
-  IsActiveRow: boolean = false;
-  ClientUid: number = 0;
-  ClientName: string  = null;
-  ActualPackage: number = 0.0;
-  FinalPackage: number = 0.0;
-  TakeHomeByCandidate: number = 0.0;
-  EmployeeUid: number = 0;
-  EmployeeMappedClientsUid: number = 0;
-  IsPermanent: boolean = false;
-}
-
-export class EmployeeDetail {
-  EmployeeUid: number = 0;
-  FileId: number = 0;
-  FirstName: string = null;
-  LastName: string = null;
-  Mobile: string = null;
-  Email: string = null;
-  BranchName: string = null;
-  SecondaryMobile: string = null;
-  LeavePlanId: number = 0;
-  FatherName: string = null;
-  CompanyId: number = null;
-  MotherName: string = null;
-  SpouseName: string = null;
-  State: string = null;
-  City: string = null;
-  Pincode: number = null;
-  Address: string = null;
-  PANNo: string = null;
-  AadharNo: string = null;
-  AccountNumber: string = null;
-  BankName: string = null;
-  IFSCCode: string = null;
-  Domain: string = null;
-  Specification: string = null;
-  ExprienceInYear: number = null;
-  LastCompanyName: string = null;
-  IsPermanent: boolean = false;
-  IsActive: boolean = false;
-  AllocatedClientId: number = null;
-  AllocatedClientName: string = null;
-  ActualPackage: number = null;
-  FinalPackage: number = null;
-  TakeHomeByCandidate: number = null;
-  DOB: any = null;
-  CreatedOn: Date = null;
-  ReportingManagerId: number = 0;
-  DesignationId: number = null;
-  AccessLevelId: number = 2;
-  UserTypeId: number = 2;
-  CTC: number = null;
-  AllocatedClients: Array<AssignedClients> = [];
-  ClientJson: string = '';
-  Gender: boolean = true;
-  OrganizationId: number = 0;
-  OldFileName: string = null;
-  WorkShiftId: number = 0;
 }

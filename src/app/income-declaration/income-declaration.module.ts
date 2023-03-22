@@ -21,6 +21,8 @@ import { TaxRegimeComponent } from './tax-regime/tax-regime.component';
 import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
 import { ApprovalRuleComponent } from './approval-rule/approval-rule.component';
+import { AdminmodalModule } from '../adminmodal/adminmodal.module';
+import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 
 
 @NgModule({
@@ -48,7 +50,9 @@ import { ApprovalRuleComponent } from './approval-rule/approval-rule.component';
     ReactiveFormsModule,
     FormsModule,
     UtilModule,
-    IncomeDeclarationRoutingModule
+    IncomeDeclarationRoutingModule,
+    AdminmodalModule,
+    CommonmodalModule
   ]
 })
 export class IncomeDeclarationModule { }

@@ -38,66 +38,99 @@
             <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('form-12-tab')"
               href="javascript:void(0)">Form 12 BB</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')"
-              href="javascript:void(0)">Free Tax Filling</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('approval-rule-tab')"
-              href="javascript:void(0)">Approval rule</a>
-          </li>
         </ul>
       </div>
-      <ng-container>
+      <ng-container *ngIf="isPageReady">
         <div class="container-fluid pt-4">
           <h5 class="text-dark">Previous Employment Details</h5>
           <p class="mb-0">Previous Employment details are necessary Wen employee change their job, this declaration is
             required for income tax computation.</p>
-          <div class="t-table t-list t-border mb-3 col-md-12 bg-white" *ngIf="isRecordFound">
+          <div class="t-table t-list t-border my-3 col-md-12 bg-white" *ngIf="isRecordFound">
             <div class="t-head overflow-hidden custom-bg">
               <div class="tr bg-light py-3">
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Month">MON</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Gross">GROSS</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Basic">BASIC</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="House Rental Allowance">HR
+                <div class="th px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Month">MON</div>
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Gross">GROSS</div>
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Basic">BASIC</div>
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="House Rental Allowance">HR
                 </div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Employee Provident Fund">
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Employee Provident Fund">
                   EMP PR</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="ESI">ESI</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="LWF">LWF</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="LWF Employer">LWF EMP</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Professtional Tax">PRO
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="ESI">ESI</div>
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="LWF">LWF</div>
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="LWF Employer">LWF EMP</div>
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Professtional Tax">PRO
                 </div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Income Tax">IT</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Tax Free Components">
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Income Tax">IT</div>
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Tax Free Components">
                   OTHER TAX</div>
-                <div class="th ps-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Taxable Components">
+                <div class="th pe-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Other Taxable Components">
                   OTHER TAXAB</div>
               </div>
             </div>
-            <div class="t-body border-bottom overflow-hidden">
-              <div class="tr py-3" *ngFor="let item of previousEmploymentDetail">
-                <div class="td ps-3">{{item.Month | slice: 0:3}} {{currentYear - 1}}</div>
-                <div class="td ps-3">{{item.Gross}}</div>
-                <div class="td ps-3">{{item.Basic}}</div>
-                <div class="td ps-3">{{item.HouseRent}}</div>
-                <div class="td ps-3">{{item.EmployeePR}}</div>
-                <div class="td ps-3">{{item.ESI}}</div>
-                <div class="td ps-3">{{item.LWF}}</div>
-                <div class="td ps-3">{{item.LWFEmp}}</div>
-                <div class="td ps-3">{{item.Professional}}</div>
-                <div class="td ps-3">{{item.IncomeTax}}</div>
-                <div class="td ps-3">{{item.OtherTax}}</div>
-                <div class="td ps-3">{{item.OtherTaxable}}</div>
-              </div>
-              <div class="bg-light py-2">
+            <div class="t-body border-bottom overflow-hidden" [formGroup]="previousIncomForm">
+              <ng-container formArrayName="PreviousIncomes">
+                <div class="tr py-3" *ngFor="let item of previousIncome.controls; let i = index" [formGroupName]="i">
+                  <div class="td ps-3">{{item.get('Month').value}} {{item.get('Year').value}}</div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="Gross">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="Basic">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="HouseRent">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="EmployeePR">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="ESI">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="LWF">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="LWFEmp">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="Professional">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="IncomeTax">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="OtherTax">
+                  </div>
+                  <div class="td me-2">
+                    <input type="text" class="form-control border-0" DecimalNumber="8" formControlName="OtherTaxable">
+                  </div>
+                </div>
+              </ng-container>
+              <div class="bg-light pt-2 pb-4">
                 <span class="ps-3">Total Items: {{total}}</span>
+                <button type="button" class="btn btn-primary-c me-2 float-end" (click)="savePreviousIncome()">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+                  {{ isLoading ? 'Wait' : 'Save' }}
+                </button>
               </div>
             </div>
           </div>
-          <div class="d-flex align-items-center justify-content-center py-5 my-5">
+          <div class="d-flex align-items-center justify-content-center py-5 my-5" *ngIf="!isRecordFound">
             <div class="fw-bold fs-4 py-5 my-5">
               No previous employment details found.
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!isPageReady">
+        <div class="py-5 my-5">
+          <h6 class="fw-bold fs-3 text-center text-dark">Previous Employment Details are loading</h6>
+          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container  text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
             </div>
           </div>
         </div>

@@ -3,13 +3,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbCalendar, NgbDate, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart } from 'chart.js';
 import { Subscription } from 'rxjs';
-import { Files } from 'src/app/admin/documents/documents.component';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
+import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { CommonFlags, UserType } from 'src/providers/constants';
+import { FileSystemType, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -47,6 +46,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
   reportingManagerId: number = 0;
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
+  viewer: any = null;
   datePickerJson = {};
   json = {
     disable: [],
@@ -54,6 +54,8 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
   };
   isDisabled;
   currentLeaveType: any = null;
+  basePath: string = "";
+  leaveAttachment: Array<any> = [];
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -91,6 +93,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
     this.leaveDetail.LeaveTypeId = 0;
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
+    this.basePath = this.http.GetImageBasePath();
     this.managerList.placeholder = "Reporting Manager";
     this.managerList.data.push({
       value: 0,
@@ -140,6 +143,13 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
       value.RequestType = 1;
       value.Session = Number(value.Session);
       let reportingmanager = this.managerList.data.find(x => x.value == this.reportingManagerId);
+      if(!reportingmanager) {
+        ErrorToast("Reporting manager is not selected. Please select one.");
+        this.submitted = false;
+        this.isLoading = false;
+        return;
+      }
+
       value.AssigneId = this.reportingManagerId;
       value.AssigneeEmail = reportingmanager.email;
       this.leaveForm.get('IsProjectedFutureDateAllowed').setValue(this.currentLeaveType.IsFutureDateAllowed);
@@ -276,7 +286,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
 
   loadData() {
     this.isPageReady = false;
-    let year = new Date().getFullYear();
     let value = {
       EmployeeId: this.employeeId
     }
@@ -332,7 +341,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
       this.LeaveChart(i, this.leaveTypes[i]);
       i++;
     }
-    this.LoadDoughnutchart();
     this.LeaveReportChart();
     this.MonthlyStatusChart();
     this.leaveRequestForm();
@@ -347,6 +355,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
         this.buildChartData(item.nativeElement.getContext('2d'), i);
       });
     });
+    this.LoadDoughnutchart();
   }
 
   findHoliday(allHoliday: Array<any>) {
@@ -560,6 +569,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
 
   LoadDoughnutchart() {
     let label = [];
+    let consumeChart = null;
     label = this.chartDataset.map(x => x.PlanName);
     let bgColor = ['#E14D2A', '#3F0071', 'blue'];
     let data = [];
@@ -569,7 +579,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
     }
     let elem: any = document.getElementById('consumeLeaveChart');
     let ctx = elem.getContext('2d');
-    let consumeChart = new Chart(ctx, {
+    consumeChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: label,
@@ -588,6 +598,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
         cutout: 40,
       }
     });
+    consumeChart.update();
     this.graphInstances.push(consumeChart);
   }
 
@@ -704,6 +715,36 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
       ErrorToast("You are not slected the file")
     }
   }
+
+  closePdfViewer() {
+    event.stopPropagation();
+    this.viewer.classList.add('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', '');
+  }
+
+  viewLeaveAttachmentModal(item: any) {
+    this.isLoading = true;
+    let fileIds = item;
+    this.http.get(`Leave/GetLeaveAttachment/${fileIds}`).then(res => {
+      if (res.ResponseBody.Table) {
+        this.leaveAttachment = res.ResponseBody.Table;
+        $("#leaveFileModal").modal('show');
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  viewFile(userFile: any) {
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}.${userFile.FileExtension}`;
+    this.viewer = document.getElementById("leavefile-container");
+    this.viewer.classList.remove('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+  }
+
+
 }
 
 class LeaveModal {
@@ -738,4 +779,26 @@ class LeaveDetails {
   Reason: string = '';
   RequestedOn: Date = null;
   NoOfDays: number = null;
+}
+
+export class Files {
+  IsFolder: boolean = false;
+  NoOfItems: number = 0;
+  ParentFolder: string = null;
+  LocalImgPath: string = "";
+  UserId: number = 0;
+  FileName: string = "";
+  AlternateName: string = null;
+  FileExtension: string = "";
+  FilePath: string = "";
+  FileUid: number = 0;
+  FileId: number = 0;
+  ProfileUid: string = "";
+  DocumentId: number = 0;
+  Mobile: string = "";
+  Email: string = "";
+  FileType: string = "";
+  FileSize: number = 0;
+  UserTypeId: number = 0;
+  SystemFileType?: FileSystemType = 1;
 }

@@ -6,6 +6,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Clients, EmailLinkConfig, OrgLogo, ProfileImage, RegisterClient, UserType } from 'src/providers/constants';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { clientModal } from 'src/app/adminmodal/admin-modals';
 declare var $: any;
 
 @Component({
@@ -42,7 +43,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     this.shiftDetail = new autoCompleteModal();
     this.shiftDetail.data = [];
     this.shiftDetail.placeholder = "Work Shift";
-    this.shiftDetail.className = "normal";
+    this.shiftDetail.className = "disable-field";
 
     let data = this.nav.getValue();
     this.clientModal = new clientModal();
@@ -55,7 +56,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       this.loadData();
     } else {
       this.clientModal = new clientModal;
-      this.initForm();
+      this.loadData();
       this.isLoaded = true;
     }
   }
@@ -72,8 +73,9 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       if(response.ResponseBody) {
         if (response.ResponseBody.client.length > 0)
           this.clientModal = response.ResponseBody.client[0] as clientModal;
+        else
+          this.clientModal = new clientModal;
 
-        let profileDetail = response.ResponseBody.file;
         this.shifts = response.ResponseBody.shifts;
         if (this.shifts && this.shifts.length > 0) {
           this.shifts.map(x => {
@@ -82,6 +84,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
               text: x.ShiftTitle
             });
           });
+          this.shiftDetail.className="";
         } else {
           this.shiftDetail.data.push({
             value: 0,
@@ -89,13 +92,14 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
           });
         }
 
-        if(profileDetail.length > 0) {
+        if(response.ResponseBody.file.length > 0) {
+          let profileDetail = response.ResponseBody.file;
           this.buildProfileImage(profileDetail[0]);
         }
       } else {
         this.clientModal = new clientModal;
       }
-      
+
       this.initForm();
       this.isLoaded = true;
     }).catch(e => {
@@ -129,7 +133,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       City: new FormControl(this.clientModal.City, [Validators.required]),
       State: new FormControl(this.clientModal.State, [Validators.required]),
       Country: new FormControl(this.clientModal.Country, [Validators.required]),
-      GSTNo: new FormControl(this.clientModal.GSTNo),
+      GSTNO: new FormControl(this.clientModal.GSTNO, [Validators.required]),
       AccountNo: new FormControl(this.clientModal.AccountNo),
       BankName: new FormControl(this.clientModal.BankName),
       BranchName: new FormControl(this.clientModal.BranchName),
@@ -179,7 +183,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     if (this.clientForm.get("SecondAddress").value === "" || this.clientForm.get("SecondAddress").errors !== null)
       errroCounter++;
 
-    if (this.clientForm.get("GSTNo").value === "" || this.clientForm.get("GSTNo").errors !== null)
+    if (this.clientForm.get("GSTNO").value === "" || this.clientForm.get("GSTNO").errors !== null)
       errroCounter++;
 
     if (this.clientForm.get("Pincode").value === 0 || this.clientForm.get("Pincode").errors !== null)
@@ -321,37 +325,4 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, RegisterClient);
   }
-}
-
-class clientModal {
-  WorkShiftId: number = 0;
-  ClientId: number = 0;
-  ClientName: string = null;
-  MobileNo: string = null;
-  PrimaryPhoneNo: string = null;
-  SecondaryPhoneNo: string = null;
-  Email: string = null;
-  OtherEmail_1: string = null;
-  OtherEmail_2: string = null;
-  OtherEmail_3: string = null;
-  OtherEmail_4: string = null;
-  Fax: string = null;
-  FirstAddress: string = null;
-  SecondAddress: string = null;
-  ThirdAddress: string = null;
-  ForthAddress: string = null;
-  Pincode: number = 0;
-  City: string = null;
-  State: string = null;
-  Country: string = null;
-  GSTNo: string = null;
-  AccountNo: string = null;
-  BankName: string = null;
-  BranchName: string = null;
-  IFSC: string = null;
-  PanNo: string = null;
-  AdminId: number = 0
-  IsActive: boolean = false;
-  FileId: number = 0;
-  OldFileName: string = null;
 }

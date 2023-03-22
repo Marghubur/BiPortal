@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { EmployeeDetail } from 'src/app/admin/manageemployee/manageemployee.component';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -7,6 +6,7 @@ import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { EmployeeDetail } from 'src/app/adminmodal/admin-modals';
 
 @Component({
   selector: 'app-preferences',
@@ -30,21 +30,6 @@ export class PreferencesComponent implements OnInit {
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    this.PanInformation = {
-      NameOnCard: "MD Istayaque",
-      PANNo: "ABPANF655A",
-      DOB: new Date(),
-      FatherName: "MD MUSTAQUE"
-    };
-
-    this.salaryDeposit = {
-      PaymentMode: 'Bank Transfer',
-      Bank: 'HDFC Bank',
-      ACNumber: 123456789123,
-      IFSCCode: "HDFC0000123",
-      NameOnAccount: 'MD ISTAYAQUE'
-    };
-
     this.satutoryInformation = {
       PFStatus: 'Enabled',
       PFNumber: 11,

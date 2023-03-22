@@ -116,7 +116,8 @@ export const Products = 'admin/products';
 export const ManageShift = 'admin/manageshift';
 export const WorkFlow = 'admin/workflow';
 export const ManageWorkFlow = 'admin/manageworkflow';
-
+export const AdminManageTimesheet = 'admin/managetimesheet';
+export const AdminLeave = 'admin/leave';
 // ********************** Admin route pages  *******************
 
 export const UserDashboard = "user/dashboard";
@@ -128,12 +129,12 @@ export const Declaration = "user/declaration";
 export const Salary = "user/salary";
 export const Preferences = "user/preferences";
 export const UserLeave = 'user/leave';
-export const PreviousIncome = 'user/previousincome';
-export const Form12B = 'user/form12b';
+export const PreviousIncome = 'user/declaration/previousincome';
+export const Form12B = 'user/declaration/form12b';
 export const FreeTaxFilling = 'user/freetaxfilling';
 export const TaxSavingInvestment = 'user/taxsavinginvestment';
-export const PaySlip = 'user/payslip';
-export const IncomeTax = 'user/incometax';
+export const PaySlip = 'user/salary/payslip';
+export const IncomeTax = 'user/salary/incometax';
 export const Taxcalculation = 'user/taxcalculation';
 export const ResetPassword = 'user/resetpassword';
 export const Notification = 'user/notification';
@@ -141,6 +142,8 @@ export const ApprovalRequest = 'user/request';
 export const UserHoliday = 'user/planholidays';
 export const UserProjectList = 'user/project';
 export const ManageTimesheet = 'user/managetimesheet';
+export const UserDocuments = "user/documents";
+export const UserDocumentsPage = "user/documentspage/:path";
 
 // *************************** file name constancts  *************
 export const Doc = "doc";
@@ -191,16 +194,22 @@ export enum UserType {
 
 export enum ItemStatus
 {
-    Completed = 1,
-    Pending = 2,
-    Canceled = 3,
-    NotGenerated = 4,
-    Rejected = 5,
-    Generated = 6,
-    Raised = 7,
-    Submitted = 8,
-    Approved = 9,
-    ReAssigned = 10
+  NotSubmitted = 0,
+  Completed = 1,
+  Pending = 2,
+  Canceled = 3,
+  NotGenerated = 4,
+  Rejected = 5,
+  Generated = 6,
+  Raised = 7,
+  Submitted = 8,
+  Approved = 9,
+  Present = 10,
+  Absent = 11,
+  MissingAttendanceRequest = 12,
+  Saved = 13,
+  AutoPromoted = 14,
+  FinalLevel = 15
 }
 
 class FileRoleType

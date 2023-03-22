@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ThemeService } from 'ng2-charts';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -45,6 +44,9 @@ export class ApprovalRequestComponent implements OnInit {
   requestedOn: number = 0;
   missAttendanceStatus: number = 0;
   timesheetId: number = 0;
+  viewer: any = null;
+  basePath: string = "";
+  leaveAttachment: Array<any> = [];
 
   constructor(
     private http: AjaxService,
@@ -62,6 +64,7 @@ export class ApprovalRequestComponent implements OnInit {
       text: "Default Employee"
     });
     this.employeeList.isMultiSelect = false;
+    this.basePath = this.http.GetImageBasePath();
     this.request.SortBy = null;
     this.request.PageIndex = 1;
     this.request.SearchString = "";
@@ -141,7 +144,6 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   openAttendacneModal(state: string, request: any) {
-    $('#leaveModal').modal('show');
     this.requestState = state;
     this.requestModal = 3; // attendance
     this.currentRequest = request;
@@ -150,7 +152,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.currentRequest["EmployeeName"] = attendance.EmployeeName;
     this.currentRequest["Email"] = attendance.Email;
     this.currentRequest["Mobile"] = attendance.Mobile;
-
+    $('#leaveModal').modal('show');
   }
 
   buildAttendanceActionUrl() {
@@ -231,12 +233,16 @@ export class ApprovalRequestComponent implements OnInit {
               detail[i].EmployeeName = item.EmployeeName;
               detail[i].Email = item.Email;
               detail[i].Mobile = item.Mobile;
+              detail[i].ManagerName = item.ManagerName;
+              detail[i].ManagerEmail = item.ManagerEmail;
+              detail[i].ManagerMobile = item.ManagerMobile;
             }
             this.attendanceDetail.push(...detail);
           }
         }
       });
     }
+
   }
 
   filterLeave() {
@@ -248,7 +254,13 @@ export class ApprovalRequestComponent implements OnInit {
       else
         detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
       if (detail && detail.length > 0)
-        this.leaveDeatil = detail;
+      this.leaveDeatil = detail;
+      this.leaveDeatil.forEach(x => {
+          if (typeof x.FromDate === 'string') {
+            x.FromDate = ToLocateDate(x.FromDate),
+            x.ToDate = ToLocateDate(x.ToDate);
+          }
+      });
     }
   }
 
@@ -273,6 +285,9 @@ export class ApprovalRequestComponent implements OnInit {
           detail[i].TimesheetStatus = item.TimesheetStatus;
           detail[i].TimesheetId = item.TimesheetId;
           detail[i].ClientName = item.ClientName;
+          detail[i].ManagerName = item.ManagerName;
+          detail[i].ManagerEmail = item.ManagerEmail;
+          detail[i].ManagerMobile = item.ManagerMobile;
         }
         this.timesheetDetail.push(detail);
         });
@@ -308,6 +323,7 @@ export class ApprovalRequestComponent implements OnInit {
 
     this.http.put(`${endPoint}/${this.timesheetId}`, null).then((response:ResponseModel) => {
       if (response.ResponseBody) {
+        this.itemStatus = ItemStatus.Pending;
         this.buildPage(response.ResponseBody);
         $('#timesheetModal').modal('hide');
         Toast("Submitted Successfully");
@@ -343,6 +359,7 @@ export class ApprovalRequestComponent implements OnInit {
     }
     this.http.put(endPoint, currentResponse).then((response:ResponseModel) => {
       if (response.ResponseBody) {
+        this.itemStatus = ItemStatus.Pending;
         this.buildPage(response.ResponseBody);
         $('#leaveModal').modal('hide');
         this.isLoading = false;
@@ -360,6 +377,7 @@ export class ApprovalRequestComponent implements OnInit {
       this.http.put(this.attendanceUrl, this.currentRequest).then((response:ResponseModel) => {
         try{
           if(response.ResponseBody) {
+            this.itemStatus = ItemStatus.Pending;
             this.buildPage(response.ResponseBody);
             this.isPageLoading = false;
           } else {
@@ -436,7 +454,6 @@ export class ApprovalRequestComponent implements OnInit {
     if (this.attendanceRequestDetail.length > 0) {
       this.request.TotalRecords = this.attendanceRequestDetail[0].Total;
       this.attendanceRequestDetail.map(x => x.AttendanceDate = new Date(x.AttendanceDate));
-
     } else
       this.request.TotalRecords = 0;
   }
@@ -527,6 +544,39 @@ export class ApprovalRequestComponent implements OnInit {
     this.requestedOn = 0;
     this.request.SearchString = "";
     this.loadAttendanceRequestDetail();
+  }
+
+  closePdfViewer() {
+    event.stopPropagation();
+    this.viewer.classList.add('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', '');
+  }
+
+  viewLeaveAttachmentModal(item: any) {
+    if (item) {
+     this.isLoading = true;
+     this.http.post("Leave/GetLeaveAttachByManger", item).then(res => {
+       if (res.ResponseBody) {
+         this.leaveAttachment = res.ResponseBody.Table;
+         $("#managerleaveFileModal").modal('show');
+         this.isLoading = false;
+       } else {
+        this.isLoading = false;
+        WarningToast("No record found");
+       }
+     }).catch(e => {
+       this.isLoading = false;
+       WarningToast("No record found");
+     })
+   }
+  }
+
+  viewFile(userFile: any) {
+    userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
+    let fileLocation = `${this.basePath}${userFile.FilePath}/${userFile.FileName}.${userFile.FileExtension}`;
+    this.viewer = document.getElementById("managerleave-container");
+    this.viewer.classList.remove('d-none');
+    this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
   }
 }
 

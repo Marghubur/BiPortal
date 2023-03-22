@@ -1,12 +1,13 @@
 <div class="col-12 full-v main-container">
   <div class="col-12 x_panel">
-    <div class="x_header mt-2">
-      <div class="x_header_title">
-        <h2>Tax Regime<small>add or update tax regime deatils</small></h2>
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Tax Regime'" [subtitle]="'add or update tax regime deatils'"></app-breadcrums>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="mb-2">
-      <app-breadcrums></app-breadcrums>
     </div>
     <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
       <li [ngbNavItem]="1">
@@ -95,7 +96,7 @@
       <li [ngbNavItem]="2">
         <a ngbNavLink (click)="cancelEditSurcharge()">Surcharge</a>
         <ng-template ngbNavContent>
-          <div class="m-3 px-2" >
+          <div class="m-3 px-2" *ngIf="isRecordFound">
             <div class="text-end">
               <button class="btn btn-primary-c" *ngIf="!isEditable"  (click)="editSlab()"><i class="fa fa-pencil pe-2"></i> Edit Surcharge</button>
             </div>

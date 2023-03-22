@@ -29,6 +29,9 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   activeEvent: any = null;
   targetElem: HTMLElement = null;
   pannelstyle: any = {};
+  htmlText: any = null;
+  isloading: boolean  = false;
+  isWikiAdded: boolean = false;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -66,7 +69,6 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     else
       menuleft = e.pageX;
     this.popover.setAttribute('style', `left: ${menuleft}px; top: ${menutop}px`);
-    console.log(e.pageX, e.pageY);
     if (this.target == null) {
       let target = <HTMLElement>document.getElementsByClassName("enable-section")[0];
       if (target)
@@ -99,11 +101,15 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   loadData() {
     this.isLoaded = false;
     this.editableFlag = false;
+    this.isWikiAdded = false;
     this.http.get(`Project/GetAllWiki/${this.projectId}`).then(res => {
       if (res.ResponseBody) {
         let data = res.ResponseBody;
-        if (data.DocumentationDetail != null && data.DocumentationDetail != '[]')
-          this.projectDetail.SectionDescription = res.ResponseBody.DocumentationDetail;
+        if (data.DocumentationDetail != null && data.DocumentationDetail != '[]') {
+          // this.projectDetail.SectionDescription = res.ResponseBody.DocumentationDetail;
+          this.htmlText = res.ResponseBody.DocumentationDetail;
+          this.isWikiAdded = true;
+        }
         else
           this.projectDetail.SectionDescription = null;
         this.projectDetail.Title = data.Title;
@@ -428,20 +434,35 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   saveProjectDetails(e: any) {
-    e.stopPropagation();
-    e.preventDefault();
-    this.editableFlag = false;
-    let tags = document.querySelector('div[name="content-container"]').innerHTML;
-    //let tags = document.getElementById('main-container').innerHTML;
-    this.projectDetail.SectionDescription= tags;
+    this.isloading = true;
+    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    this.projectDetail.SectionDescription= data;
     this.projectDetail.ProjectId = this.projectId;
     this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
-      if (res.ResponseBody)
+      if (res.ResponseBody) {
+        this.isloading = false;
         Toast("Project details inserted/ updated successfully");
+      }
     }).catch(e => {
+      this.isloading = false;
       Error(e);
     })
   }
+
+  // saveProjectDetails(e: any) {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+  //   this.editableFlag = false;
+  //   let tags = document.querySelector('div[name="content-container"]').innerHTML;
+  //   this.projectDetail.SectionDescription= tags;
+  //   this.projectDetail.ProjectId = this.projectId;
+  //   this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
+  //     if (res.ResponseBody)
+  //       Toast("Project details inserted/ updated successfully");
+  //   }).catch(e => {
+  //     Error(e);
+  //   })
+  // }
 
   enableSection() {
     this.target = (<HTMLElement> document.querySelector('div[name="content-container"]'));

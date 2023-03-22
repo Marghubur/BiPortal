@@ -26,6 +26,7 @@ export class RolesComponent implements OnInit {
   isLoading: boolean = false;
   ispermissionAdding: boolean = false;
   submitted: boolean = false;
+  isPageReady: boolean = false;
 
   constructor(private fb: FormBuilder,
               private nav: iNavigation,
@@ -85,6 +86,8 @@ export class RolesComponent implements OnInit {
   }
 
   loadMenu(e: any) {
+    this.isPageReady = false;
+    this.isRolesLoaded = true;
     this.Menu = [];
     let accessLevelId = Number(e.target.value);
     if (accessLevelId > 0) {
@@ -105,7 +108,7 @@ export class RolesComponent implements OnInit {
             }
 
             this.initForm(accessLevelId, menu);
-            this.isRolesLoaded = true;
+            this.isPageReady = true;
           }
         }
       })

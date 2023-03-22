@@ -13,9 +13,10 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Filter, UserService } from 'src/providers/userService';
 import { iNavigation } from 'src/providers/iNavigation';
-import { OnlineDocModel } from '../documents/documents.component';
 import { Subject } from 'rxjs';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { OnlineDocModel } from 'src/app/adminmodal/admin-modals';
+import { Files } from 'src/app/commonmodal/common-modals';
 
 @Component({
   selector: 'app-documentspage',
@@ -414,24 +415,4 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
       else
         $('#fileEditModal').modal('hide');
     }
-}
-
-export class Files {
-  FileName: string = "";
-  FileExtension: string = "";
-  FilePath: string = "";
-  FileUid?: number = 0;
-  TotalRecord?: number = 0;
-  DocumentId?: number = 0;
-  Status: string = "";
-  PaidOn: Date = null;
-  CreatedOn?: Date = null;
-  CreatedBy?: string = null;
-}
-
-class DataTablesResponse {
-  data: any[];
-  draw: number;
-  recordsFiltered: number;
-  recordsTotal: number;
 }

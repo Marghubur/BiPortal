@@ -43,28 +43,7 @@ export class IncometaxComponent implements OnInit {
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    var dt = new Date();
-    var month = 3;
-    this.currentYear = dt.getFullYear();
-    var years = dt.getFullYear();
-    if (new Date().getMonth() + 1 <= 4)
-      years = years -1;
-    let i = 0;
-    while( i < 12) {
-      var mnth = Number((((month + 1) < 9 ? "" : "0") + month));
-      if (month == 12) {
-        month = 1;
-        years ++
-      } else {
-        month ++;
-      }
-      this.taxCalender.push({
-        month: new Date(years, mnth, 1).toLocaleString("en-us", { month: "short" }), // result: Aug
-        year: Number(years.toString().slice(-2))
-      });
-      i++;
-    }
-
+    this.currentYear = new Date().getFullYear();
     this.EmployeeId = this.nav.getValue();
     if(this.EmployeeId != null || this.EmployeeId > 0)
       this.loadData();
@@ -90,7 +69,9 @@ export class IncometaxComponent implements OnInit {
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.allDeclarationSalaryDetails = response.ResponseBody;
+        console.log(response.ResponseBody)
         this.allDeclarationSalaryDetails.IncomeTaxSlab = Object.entries(response.ResponseBody.IncomeTaxSlab).reverse();
+        this.allDeclarationSalaryDetails.NewRegimIncomeTaxSlab = Object.entries(response.ResponseBody.NewRegimIncomeTaxSlab).reverse();
         this.ExemptionDeclaration = response.ResponseBody.ExemptionDeclaration;
         if ((this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
           this.ExemptionDeclaration = [];
@@ -113,12 +94,29 @@ export class IncometaxComponent implements OnInit {
         this.TaxDetails = JSON.parse(this.salaryDetail.TaxDetail);
 
         let annualSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+        let i = 0;
+        let totalAmount = 0;
+        let finalAmount = 0;
+        let totalAmounts: Array<any> = [];
+        while(i < annualSalaryDetail.length) {
+          let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.find(x => x.ComponentId == "Gross");
+          // totalAmount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+          finalAmount += salaryComponent.FinalAmount;
+          totalAmounts.push({ FinalAmount: salaryComponent.FinalAmount });
+          i++;
+        }
+
+        this.salaryBreakup.push({
+          key: 'Total',
+          total: finalAmount,
+          value: totalAmounts
+        });
         if (annualSalaryDetail && annualSalaryDetail.length == 12) {
           annualSalaryDetail.map((com) => {
             com.SalaryBreakupDetails = com.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != 'CTC' && x.ComponentId != "PTAX" && x.ComponentId != "ESI")
           });
 
-          let i = 0;
+          i = 0;
           let value = "";
           let selectedComponent = [];
           let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName}) => { return { ComponentId, ComponentName } });
@@ -135,25 +133,7 @@ export class IncometaxComponent implements OnInit {
 
             i++;
           }
-
-          i = 0;
-          let totalAmount = 0;
-          let finalAmount = 0;
-          let totalAmounts: Array<any> = [];
-          while(i < annualSalaryDetail.length) {
-            let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.filter(x => x.ComponentId != "ECI" && x.ComponentId != "EPER-PF" && x.ComponentId != "GRA");
-            totalAmount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
-            finalAmount += totalAmount;
-            totalAmounts.push({ FinalAmount: totalAmount });
-            i++;
-          }
-
-          this.salaryBreakup.push({
-            key: 'Total',
-            total: finalAmount,
-            value: totalAmounts
-          });
-
+          this.salaryBreakup = this.salaryBreakup.sort((a, b) => a.key.localeCompare(b.key));
         } else {
           ErrorToast("Unable to get salary detail. Please contact to admin.");
           return;
@@ -176,6 +156,29 @@ export class IncometaxComponent implements OnInit {
               this.totalOtherExemptAmount = this.allDeclarationSalaryDetails.Declarations[i].TotalAmountDeclared;
               break;
           }
+        }
+
+        i = 0;
+        let typeId = 0;
+        while( i < annualSalaryDetail.length) {
+          let date = new Date(annualSalaryDetail[i].MonthFirstDate);
+          if(annualSalaryDetail[i].IsActive) {
+            if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
+              typeId = 1;
+            } else {
+              typeId = 2;
+            }
+          } else {
+            typeId = 0;
+          }
+
+          this.taxCalender.push({
+            month: new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("en-us", { month: "short" }), // result: Aug
+            year: Number(date.getFullYear().toString().slice(-2)),
+            isActive: annualSalaryDetail[i].IsActive,
+            type: typeId
+          });
+          i++;
         }
 
         this.totalAllowTaxExemptAmount = this.componentTotalAmount(this.TaxSavingAlloance) ;

@@ -68,7 +68,6 @@ export class InitialpageComponent implements OnInit {
   registerAccount() {
     this.isLoading = true;
     this.submitted = true;
-    console.log(this.initialForm.value);
     if (this.initialForm.invalid) {
       this.isLoading = false;
       return;

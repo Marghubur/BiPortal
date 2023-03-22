@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { EmployeeDetail } from 'src/app/admin/manageemployee/manageemployee.component';
+import { EmployeeDetail } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, Declaration, Salary, Summary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
 
 @Component({
   selector: 'app-preferences',
@@ -26,39 +27,14 @@ export class PreferencesComponent implements OnInit {
   SectionIsReady: boolean = false;
   isEmployeeSelect: boolean = false;
 
-  constructor(private local: ApplicationStorage,
-              private http: AjaxService,
+  constructor(private http: AjaxService,
+              private user: UserService,
               private nav: iNavigation) { }
 
   ngOnInit(): void {
-    let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
-    if(expiredOn === null || expiredOn === "")
-      this.userDetail["TokenExpiryDuration"] = new Date();
-      else
-      this.userDetail["TokenExpiryDuration"] = new Date(expiredOn);
-      let Master = this.local.get(null);
-      if(Master !== null && Master !== "") {
-        this.userDetail = Master["UserDetail"];
-        this.EmployeeId = this.userDetail.UserId;
-        this.LoadData();
-      } else {
-        Toast("Invalid user. Please login again.")
-      }
-    this.PanInformation = {
-      NameOnCard: "MD Istayaque",
-      PANNo: "ABPANF655A",
-      DOB: new Date(),
-      FatherName: "MD MUSTAQUE"
-    };
-
-    this.salaryDeposit = {
-      PaymentMode: 'Bank Transfer',
-      Bank: 'HDFC Bank',
-      ACNumber: 123456789123,
-      IFSCCode: "HDFC0000123",
-      NameOnAccount: 'MD ISTAYAQUE'
-    };
-
+    this.userDetail = this.user.getInstance();
+    this.EmployeeId = this.userDetail.UserId;
+    this.LoadData();
     this.satutoryInformation = {
       PFStatus: 'Enabled',
       PFNumber: 11,

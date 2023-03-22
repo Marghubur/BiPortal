@@ -43,7 +43,7 @@
       <div [ngClass]="{'blur-section': !isPageReady}">
         <div class="blur-section__highlight mt-5 pt-5" [ngClass]="{'d-none': isPageReady}">
           <div class="blur-section__content mt-5 pt-5">
-            {{ 'Tax records not found'}}
+            {{ 'Please wait......'}}
           </div>
         </div>
         <div class="blur-this">
@@ -52,10 +52,9 @@
               <p class="fs-4 pt-3 ps-3">
                 Income Tax Computation <i class="fa fa-download ps-3"></i>
               </p>
-              <div class="pt-3 pe-3">
-                <select class="form-select">
-                  <option value="currentyear" selected>APR {{currentYear}} - MAR {{currentYear +1}}</option>
-                  <option value="previousyear">APR {{currentYear - 1}} - MAR {{currentYear}}</option>
+              <div class="pt-3 pe-3" *ngIf="allDeclarationSalaryDetails != null">
+                <select class="form-select" disabled>
+                  <option value="currentyear" selected disabled>APR {{allDeclarationSalaryDetails.DeclarationFromYear}} - MAR {{allDeclarationSalaryDetails.DeclarationFromYear +1}}</option>
                 </select>
               </div>
             </div>
@@ -79,11 +78,6 @@
                 </ul>
               </div>
             </div>
-            <div class="blur-section__highlight mt-5 pt-5" [ngClass]="{'d-none': isPageReady}">
-              <div class="blur-section__content mt-5 pt-5">
-                {{isEmployeeSelect? 'Please wait......': 'Please select Employee first'}}
-              </div>
-            </div>
             <ng-container *ngIf="isPageReady">
               <div class="card border-0 mb-3">
                 <ng-container>
@@ -101,20 +95,18 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr text-dark py-2">
                         <div class="th ps-2">
-                          <span *ngIf="salaryDetail.GrossIncome > 250000">{{salaryDetail.GrossIncome |
-                            number:'1.2-2'}}</span>
-                          <span *ngIf="salaryDetail.GrossIncome < 250000">0</span>
+                          <span>INR {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TotalAmount | number : '1.2-2') : (allDeclarationSalaryDetails.TotalAmountOnNewRegim | number : '1.2-2')}}</span>
                         </div>
                         <div class="th ps-2">
-                          <span *ngIf="salaryDetail.GrossIncome > 250000">{{allDeclarationSalaryDetails.TotalAmount |
-                            number:'1.2-2'}}</span>
-                          <span *ngIf="salaryDetail.GrossIncome < 250000">0</span>
+                          <span>INR {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TotalAmount | number : '1.2-2') : (allDeclarationSalaryDetails.TotalAmountOnNewRegim | number : '1.2-2')}}</span>
                         </div>
-                        <div class="th ps-2">{{allDeclarationSalaryDetails.SurChargesAndCess | number:'1.2-2'}}</div>
-                        <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay | number:'1.2-2'}}</div>
+                        <div class="th ps-2">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.SurChargesAndCess | number:'1.2-2') : (allDeclarationSalaryDetails.SurChargesAndCessOnNewRegim | number:'1.2-2')}}</div>
+                        <div class="th ps-2">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TaxNeedToPay | number : '1.2-2') : (allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</div>
                         <div class="th ps-2">{{allDeclarationSalaryDetails.TaxPaid | number:'1.2-2'}}</div>
-                        <div class="th ps-2">{{allDeclarationSalaryDetails.TaxNeedToPay -
-                          allDeclarationSalaryDetails.TaxPaid | number:'1.2-2'}}</div>
+                        <div class="th ps-2">
+                          <span *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime == 1">INR {{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid | number : '1.2-2'}}</span>
+                          <span *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime != 1">INR {{allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim - allDeclarationSalaryDetails.TaxPaid | number : '1.2-2'}}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -153,7 +145,11 @@
                           <div class="cell-wrapper">
                             <div class="d-flex align-items-center">
                               <span>{{item.month}} {{item.year}}</span>
-                              <div class="curent-employer-indicator indicator ms-1"></div>
+                              <div class="ms-1 indicator" [ngClass]="{
+                                'previous-employer-indicator': item.type == 0,
+                                'curent-employer-indicator': item.type == 1,
+                                'project-salary-indicator': item.type == 2}">
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -172,8 +168,8 @@
                               {{item.total | number: '1.2-2'}}
                             </div>
                           </div>
-                          <ng-container *ngFor="let elem of item.value">
-                            <div class="td fe-1">
+                          <ng-container *ngIf="item.value">
+                            <div class="td fe-1" *ngFor="let elem of item.value">
                               <div class="cell-wrapper">
                                 {{elem.FinalAmount | number: '1.2-2'}}
                               </div>
@@ -185,7 +181,7 @@
                   </div>
                 </ng-container>
 
-                <ng-container>
+                <ng-container *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime == 1">
                   <ng-container *ngIf="salaryDetail.GrossIncome > 0">
                     <div class="d-flex py-3 align-items-center">
                       <div class="pointable-text ms-2 px-2">B</div>
@@ -239,7 +235,7 @@
                       </div>
                     </div>
                   </ng-container>
-                  <ng-container *ngIf="Sec16TaxExemptAmount > 0">
+                  <ng-container *ngIf="Sec16TaxExemptAmount >= 0">
                     <h6 class="ms-5 py-3 text-dark">Less: Section 16 Tax Exemptions</h6>
                     <div class="t-table t-border t-list bg-white ms-5">
                       <div class="t-head overflow-hidden">
@@ -390,7 +386,7 @@
                     </div>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="allDeclarationSalaryDetails.IncomeTaxSlab.length > 0">
+                <ng-container *ngIf="allDeclarationSalaryDetails.IncomeTaxSlab.length > 0 || allDeclarationSalaryDetails.NewRegimIncomeTaxSlab.length > 0">
                   <div class="d-flex py-3 align-items-center">
                     <div class="pointable-text ms-2 px-2">P</div>
                     <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Tax Calculation</h5>
@@ -403,15 +399,24 @@
                       </div>
                     </div>
                     <div class="t-body overflow-hidden">
-                      <div class="tr tax-slab text-dark py-3"
-                        *ngFor="let item of allDeclarationSalaryDetails.IncomeTaxSlab">
-                        <div class="td ps-1">{{item[1].Description}}</div>
-                        <div class="td ps-1 text-end pe-3">{{item[1].Value | number:'1.2-2'}}</div>
-                      </div>
+                      <ng-container *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime == 1">
+                        <div class="tr tax-slab text-dark py-3"
+                          *ngFor="let item of allDeclarationSalaryDetails.IncomeTaxSlab">
+                          <div class="td ps-1">{{item[1].Description}}</div>
+                          <div class="td ps-1 text-end pe-3">{{item[1].Value | number:'1.2-2'}}</div>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime != 1">
+                        <div class="tr tax-slab text-dark py-3"
+                          *ngFor="let item of allDeclarationSalaryDetails.NewRegimIncomeTaxSlab">
+                          <div class="td ps-1">{{item[1].Description}}</div>
+                          <div class="td ps-1 text-end pe-3">{{item[1].Value | number:'1.2-2'}}</div>
+                        </div>
+                      </ng-container>
                     </div>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="allDeclarationSalaryDetails.SurChargesAndCess > 0">
+                <ng-container *ngIf="allDeclarationSalaryDetails.SurChargesAndCess >= 0 || allDeclarationSalaryDetails.SurChargesAndCessOnNewRegim >= 0">
                   <div class="d-flex py-3 align-items-center">
                     <div class="pointable-text ms-2 px-2">Q</div>
                     <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Surcharge & Cess</h5>
@@ -420,13 +425,11 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr py-3">
                         <div class="th ps-2">Health and Education Cess - 4% of Gross Income Tax and Surcharge</div>
-                        <div class="th pe-3 text-end">{{allDeclarationSalaryDetails.SurChargesAndCess | number:'1.2-2'}}
-                        </div>
+                        <div class="th pe-3 text-end">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.SurChargesAndCess | number:'1.2-2') : (allDeclarationSalaryDetails.SurChargesAndCessOnNewRegim | number:'1.2-2')}}</div>
                       </div>
                       <div class="tr border-bottom-0 py-3">
                         <div class="th ps-2 fw-bold">Total Surcharge & Cess</div>
-                        <div class="th pe-3 text-end fw-bold">{{allDeclarationSalaryDetails.SurChargesAndCess |
-                          number:'1.2-2'}}</div>
+                        <div class="th pe-3 text-end fw-bold">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.SurChargesAndCess | number:'1.2-2') : (allDeclarationSalaryDetails.SurChargesAndCessOnNewRegim | number:'1.2-2')}}</div>
                       </div>
                     </div>
                   </div>
@@ -452,14 +455,13 @@
                             </div>
                           </div>
                         </div>
-                        <div class="th pe-3 text-end">{{allDeclarationSalaryDetails.TaxNeedToPay | number:'1.2-2'}}
+                        <div class="th pe-3 text-end">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TaxNeedToPay | number:'1.2-2') : (allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim | number:'1.2-2')}}
                         </div>
                       </div>
                       <div class="tr border-bottom-0 py-3">
-                        <div class="th ps-2">Net tax amount of {{allDeclarationSalaryDetails.TaxNeedToPay |
-                          number:'1.2-2'}}
+                        <div class="th ps-2">Net tax amount of {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TaxNeedToPay | number:'1.2-2') : (allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim | number:'1.2-2')}}
                           after round Off is</div>
-                        <div class="th pe-3 text-end">{{allDeclarationSalaryDetails.TaxNeedToPay | number:'1.2-2'}}
+                        <div class="th pe-3 text-end">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TaxNeedToPay | number:'1.2-2') : (allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim | number:'1.2-2')}}
                         </div>
                       </div>
                     </div>
@@ -483,8 +485,10 @@
                     <div class="t-head overflow-hidden">
                       <div class="tr border-bottom-0 py-3">
                         <div class="th ps-2 fw-bold">Remaining Tax To Be Paid</div>
-                        <div class="th pe-3 fw-bold text-end">{{allDeclarationSalaryDetails.TaxNeedToPay -
-                          allDeclarationSalaryDetails.TaxPaid | number:'1.2-2'}}</div>
+                        <div class="th pe-3 fw-bold text-end">
+                          <span *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime == 1">{{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid | number : '1.2-2'}}</span>
+                          <span *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime != 1">{{allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim - allDeclarationSalaryDetails.TaxPaid | number : '1.2-2'}}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -501,7 +505,11 @@
                         <div class="th" *ngFor="let item of taxCalender">
                           <div class="d-flex align-items-center">
                             <span>{{item.month}} {{item.year}}</span>
-                            <div class="curent-employer-indicator indicator ms-1"></div>
+                            <div class="ms-1 indicator" [ngClass]="{
+                              'previous-employer-indicator': item.type == 0,
+                              'curent-employer-indicator': item.type == 1,
+                              'project-salary-indicator': item.type == 2}">
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -526,9 +534,6 @@
                       <div class="col d-flex align-items-center">
                         <div class="project-salary-indicator indicator"></div>
                         <p class="p-0 m-0 ps-2">Projected Income Tax</p>
-                      </div>
-                      <div class="col-auto">
-                        <button class="btn btn-primary" (click)="saveTaxDetail()">Save Tax Detail</button>
                       </div>
                     </div>
                   </div>

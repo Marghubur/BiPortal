@@ -5,23 +5,8 @@
         <div>
           <h2 class=" fw-bold text-dark">Request</h2>
         </div>
-        <div class="d-flex align-items-center">
-          <div class="">
-            <label>2022&nbsp;&nbsp;/</label>
-          </div>
-          <div class="">
-            <select class="form-select text-muted border-0">
-              <option value="1">January</option>
-              <option value="2">Febuary</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option selected value="9">September</option>
-              <option value="10">October</option>
-            </select>
-          </div>
-        </div>
         <div class="d-flex">
-          <select class="form-select border-0 text-muted" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
+          <select class="form-select border-0 text-muted" [ngClass]="{'d-none': active == 4}" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
             <option selected value="2">Pending</option>
             <option value="9">Approved</option>
             <option value="5">Rejected</option>
@@ -57,7 +42,7 @@
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifie</div>
+              <div class="col-md-3 fw-bold text-dark">Manager</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
@@ -66,21 +51,27 @@
                   <div class="row py-3 border-bottom px-3 leave-box">
                     <div class="col-md-6">
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c me-2">Attendance Date: {{item.AttendanceDay | date}}</span>
-                        <span class="fw-bold text-primary-c">[{{item.EmployeeName}}]</span>
+                        <span class="fw-bold text-primary-dc">{{item.EmployeeName}}</span>
+                        <span class="ps-3 text-muted">[
+                          <small class="fade-label">Session Type: </small>
+                          <span class="text-muted fade-font">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>
+                          ]</span>
+                      </p>
+                      <p class="mb-0 fs-6">
+                        <span class="me-2 fw-bold">Attendance Date: {{item.AttendanceDay | date}}</span>
                       </p>
                       <span>
                         <span class="fw-bold">Message:</span>
-                        {{item.UserComments}}
+                        {{item.UserComments == "" ? 'NA' : item.UserComments}}
                       </span>
                     </div>
                     <div class="col-md-2">
                       Attendance approval Request
                     </div>
                     <div class="col-md-3">
-                      {{item.EmployeeName}}
-                      <p class="mb-0">{{item.Email}}</p>
-                      <p class="mb-0">{{item.Mobile}}</p>
+                      {{item.ManagerName}}
+                      <p class="mb-0">{{item.ManagerEmail}}</p>
+                      <p class="mb-0">{{item.ManagerMobile}}</p>
                     </div>
                     <div class="col-md-1">
                       <ng-container [ngSwitch]="item.PresentDayStatus">
@@ -91,14 +82,11 @@
                     </div>
                     <div class="d-flex my-1">
                       <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)" href="javascript:void(0)"
-                        class="text-danger btn-sm fw-bold"><i class="fa pe-1"
+                        class="text-danger btn-sm fw-bold ps-0"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
                       <a *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a (click)="openAttendacneModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
-                          class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
-                        Re-Assigne</a>
                     </div>
                   </div>
                 </ng-container>
@@ -128,7 +116,7 @@
             <div class="row bg-light py-3 border-bottom px-3">
               <div class="col-md-6 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifie</div>
+              <div class="col-md-3 fw-bold text-dark">Manager</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
@@ -137,18 +125,24 @@
                   <div class="row py-3 border-bottom px-3 leave-box">
                     <div class="col-md-6">
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c me-2">Timesheet From: {{item[0].PresentDate | date}}</span>
-                        <span class="fw-bold text-primary-c me-2">Timesheet To: {{item[item.length-1].PresentDate | date}}</span>
-                        <span class="fw-bold text-primary-c">[{{item[0].EmployeeName}}]</span>
+                        <span class="fw-bold text-primary-dc">{{item[0].EmployeeName}}</span>
+                        <span class="ps-3 text-muted">[
+                          <small class="fade-label">Company: </small>
+                          <span class="text-muted fade-font">{{item[0].ClientName}}</span>
+                          ]</span>
+                      </p>
+                      <p class="mb-0 fs-6">
+                        <span class="me-2">From: {{item[0].PresentDate | date}}</span>
+                        <span class="me-2">To: {{item[item.length-1].PresentDate | date}}</span>
                       </p>
                     </div>
                     <div class="col-md-2">
                       Timesheet approval Request
                     </div>
                     <div class="col-md-3">
-                      {{item[0].EmployeeName}}
-                      <p class="mb-0">{{item[0].Email}}</p>
-                      <p class="mb-0">{{item[0].Mobile}}</p>
+                      <p class="mb-0">{{item[0].ManagerName}}</p>
+                      <p class="mb-0">{{item[0].ManagerEmail}}</p>
+                      <p class="mb-0">{{item[0].ManagerMobile}}</p>
                     </div>
                     <div class="col-md-1">
                       <ng-container [ngSwitch]="item[0].TimesheetStatus">
@@ -164,9 +158,6 @@
                       <a *ngIf="item[0].TimesheetStatus != 9" (click)="openTimesheetModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a (click)="openTimesheetModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
-                          class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
-                        Re-Assigne</a>
                     </div>
                   </div>
                 </ng-container>
@@ -194,21 +185,35 @@
           <a ngbNavLink (click)="changeTab()">Leave</a>
           <ng-template ngbNavContent>
             <div class="row bg-light py-3 border-bottom px-3">
-              <div class="col-md-6 fw-bold text-dark">Description</div>
+              <div class="col-md-5 fw-bold text-dark">Description</div>
               <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Notifie</div>
+              <div class="col-md-2 fw-bold text-dark">Manager</div>
+              <div class="col-md-2 fw-bold text-dark">Document</div>
               <div class="col-md-1 fw-bold text-dark">State</div>
             </div>
             <ng-container *ngIf="!isPageLoading">
               <ng-container *ngIf="leaveDeatil.length > 0">
                 <ng-container *ngFor="let item of leaveDeatil">
                   <div class="row py-3 border-bottom px-3 leave-box">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-c me-2">From: {{item.FromDate | date}}</span>
-                        <span class="fw-bold text-primary-c me-4">To: {{item.ToDate | date}}</span>
-                        <span class="fw-bold text-primary-c">[{{item.FirstName}} {{item.LastName}}]</span>
+                        <span class="fw-bold text-primary-dc">{{item.FirstName}} {{item.LastName}}</span>
+                        <span class="ps-3 text-muted">[
+                          <!-- <small class="fade-label">Company: </small> -->
+                          <span class="text-muted fade-font">From: {{item.FromDate | date}}</span>
+                          <span class="text-muted fade-font ps-1">To: {{item.ToDate | date}}</span>
+                          ]</span>
                       </p>
+                      <div class="row my-2">
+                        <div class="col-md-4">
+                          <span class="fw-bold">No. of Days:</span>
+                          {{item.NumOfDays}}
+                        </div>
+                        <div class="col-md-4">
+                          <span class="fw-bold">Session: </span>
+                          {{item.NumOfDays > 0 ? 'Full day' : 'Half day'}}
+                        </div>
+                      </div>
                       <span>
                         <span class="fw-bold">Message:</span>
                         {{item.UserMessage}}
@@ -227,22 +232,16 @@
                           </ng-container>
                         </span>
                       </p>
-                      <p class="mb-0">
-                        <span class="badge bg-success">
-                          Manager &nbsp;
-                          <ng-container *ngIf="item.AssigneeId == 0">
-                            NA
-                          </ng-container>
-                          <ng-container *ngIf="item.AssigneeId != 0">
-                            {{item.AssigneeId}}
-                          </ng-container>
-                        </span>
-                      </p>
                     </div>
-                    <div class="col-md-3">
-                      {{item.FirstName}} {{item.Lastname}}
-                      <p class="mb-0">{{item.Email}}</p>
-                      <p class="mb-0">{{item.Mobile}}</p>
+                    <div class="col-md-2">
+                      {{item.ManagerName}}
+                      <p class="mb-0">{{item.ManagerEmail}}</p>
+                      <p class="mb-0">{{item.ManagerMobile}}</p>
+                    </div>
+                    <div class="col-md-2">
+                      <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item)" class="">
+                        View Attachment
+                      </a>
                     </div>
                     <div class="col-md-1">
                       <ng-container [ngSwitch]="item.RequestStatusId">
@@ -252,15 +251,12 @@
                       </ng-container>
                     </div>
                     <div class="d-flex my-1">
-                      <a *ngIf="item.TimesheetStatus!= 5" (click)="openLeaveModal('Rejected', item)" href="javascript:void(0)"
-                        class="text-danger btn-sm fw-bold"><i class="fa pe-1"
+                      <a *ngIf="item.RequestStatusId!= 5" (click)="openLeaveModal('Rejected', item)" href="javascript:void(0)"
+                        class="text-danger btn-sm fw-bold ps-0"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
-                      <a *ngIf="item.TimesheetStatus != 9" (click)="openLeaveModal('Approved', item)" href="javascript:void(0)"
+                      <a *ngIf="item.RequestStatusId != 9" (click)="openLeaveModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
                           [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
-                      <a (click)="openLeaveModal('Othermember', item)" class="text-primary-c fw-bold ms-2 btn-sm" href="javascript:void(0)"><i
-                          class="fa pe-1" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-refresh': !isLoading}"></i>
-                        Re-Assigne</a>
                     </div>
                   </div>
                 </ng-container>
@@ -281,6 +277,156 @@
                 </div>
               </div>
             </ng-container>
+          </ng-template>
+        </li>
+
+        <li [ngbNavItem]="4">
+          <a ngbNavLink class="text-muted" (click)="loadAttendanceRequestDetail()">Request</a>
+          <ng-template ngbNavContent>
+            <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3">
+              <span class="ps-4">Work From Home / On Duty Request</span>
+            </div>
+            <div class="x_panel">
+              <ng-container *ngIf="attendanceRquestPageIsReady">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="row col-md-10">
+                    <div class="col-md-4 py-2">
+                      <label class="form-label">Filter by name</label>
+                      <app-iautocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                      </app-iautocomplete>
+                    </div>
+                    <div class="col-md-2 py-2">
+                      <label class="form-label">Filter by requested on </label>
+                      <select  class="form-select" (change)="filter($event, 'requestedon')" [(ngModel)]="requestedOn">
+                        <option value="0" disabled selected>Select days</option>
+                        <option value="7">Last 7 days</option>
+                        <option value="14">Last 14 days</option>
+                        <option value="30">Last 30 days</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 py-2">
+                      <label class="form-label">Filter by status</label>
+                      <select  class="form-select" (change)="filter($event, 'status')" [(ngModel)]="missAttendanceStatus">
+                        <option value="0" disabled selected>Select status</option>
+                        <option value="2">Pending</option>
+                        <option value="9">Approved</option>
+                        <option value="5">Reject</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-auto float-end">
+                    <button class="btn  btn-danger ms-2" (click)="resetFilter()" placement="top" ngbTooltip="Reset filter">
+                      <i class="fa fa-repeat"></i>
+                    </button>
+                  </div>
+                </div>
+                <table class="table table-hover mt-3" *ngIf="attendanceRquestPageIsReady">
+                  <thead>
+                    <tr>
+                      <th class="custom-th border-end" width="15%">
+                        <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark" (click)="arrangeDetails(orderByAttendanceDateAsc, 'AttendanceDate')">DATE</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByAttendanceDateAsc == null || !orderByAttendanceDateAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByAttendanceDateAsc == null || orderByAttendanceDateAsc }" aria-hidden="true"></i>
+                      </th>
+                      <th class="custom-th border-end" width="10%">REQUEST TYPE</th>
+                      <th class="custom-th border-end" width="15%">
+                        <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark" (click)="arrangeDetails(orderByRequestedOnAsc, 'RequestedOn')">Requested On</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByRequestedOnAsc == null || !orderByRequestedOnAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByRequestedOnAsc == null || orderByRequestedOnAsc }" aria-hidden="true"></i>
+                      </th>
+                      <th class="custom-th border-end" width="25%">NOTE</th>
+                      <th class="custom-th border-end" width="10%">STATUS</th>
+                      <th class="custom-th " width="15%">ACTION TAKEN BY</th>
+                      <th class="custom-th" width="5%">ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="attendanceRequestDetail.length > 0">
+                      <tr *ngFor="let attr of attendanceRequestDetail">
+                        <td class="align-middle border-end border-bottom">
+                          <div class="d-flex align-items-center justify-content-between">
+                            <p>{{attr.AttendanceDate | date}}</p>
+                            <div class="d-flex align-items-center flex-column">
+                              <i class="fa fa-home fa-lg"></i>
+                              <p>1 Day</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          Missing attendance
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          {{attr.RequestedOn | date}}
+                          <p><small>by {{attr.EmployeeName}}</small></p>
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          {{attr.EmployeeMessage}}
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          <div [ngSwitch]="attr.CurrentStatus">
+                            <div *ngSwitchCase=2>Pending</div>
+                            <div *ngSwitchCase=3>Canceled</div>
+                            <div *ngSwitchCase=5>Rejected</div>
+                            <div *ngSwitchCase=8>Submitted</div>
+                            <div *ngSwitchCase=9>Approved</div>
+                          </div>
+                        </td>
+                        <td class="align-middle border-end border-bottom">
+                          <span>{{attr.ManagerName}}</span>
+                          <p><small>on {{attr.UpdatedOn | date}}</small></p>
+                        </td>
+                        <td class="align-middle border-bottom">
+                          <div ngbDropdown class="d-inline-block">
+                            <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Apply"
+                              id="dropdownBasic1" ngbDropdownToggle>
+                              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                            </button>
+                            <div class="dropdown-menu p-0" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                              <button ngbDropdownItem>
+                                <a class="dropdown-item" (click)="showApproveRequestModal(attr)" href="javascript:void(0)">Approve</a>
+                              </button>
+                              <button ngbDropdownItem (click)="showRejectRequestModal(attr)">
+                                <a class="dropdown-item" href="javascript:void(0)">Reject</a>
+                              </button>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+
+                    <ng-container *ngIf="attendanceRequestDetail.length == 0">
+                      <tr>
+                        <td class="align-middle border-bottom-0 py-5my-5" colspan="7">
+                          <div class="d-flex justify-content-center py-5 my-5">
+                            <p class="my-5 py-5">No pending attendance request available.</p>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                <div class="mt-3">
+                  <app-pagination [pagination]="request" (onPageChange)="GetFilterResult($event)"></app-pagination>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
+                <div class="py-5 my-5">
+                  <h6 class="fw-bold fs-3 text-center text-dark">Missed attendance and status is loading</h6>
+                  <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                    <div class="col-md-3 modal-container  text-center cog-wheel">
+                      <img src="assets/images/cog.gif" alt="" />
+                      <h6 class="modal-title title-message">
+                        Please Wait ........
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
           </ng-template>
         </li>
       </ul>
@@ -318,10 +464,11 @@
               Request by [{{currentRequest.EmployeeName}}]
             </p>
             <!-- <input type="text" class="form-control" name="message" [(ngModel)]="editedMessage" value="{{singleLeave.Message}}"> -->
-            <span>{{currentRequest.Message}}</span>
+            <span>{{currentRequest.UserComments == "" ? 'NA' : currentRequest.UserComments}}</span>
+
           </div>
           <div class="col-md-2">
-            TimeSheet approval request
+            {{requestModal==3 ? 'Attendance' : 'Leave'}} {{requestState | lowercase}} request
             <p class="mb-0"><span class="badge bg-primary">{{currentRequest.ProjectName}}</span></p>
           </div>
           <div class="col-md-3">
@@ -330,9 +477,9 @@
             <p class="mb-0">{{currentRequest.Mobile}}</p>
           </div>
           <div class="col-md-1">
-            <ng-container [ngSwitch]="currentRequest.RequestStatusId">
+            <ng-container [ngSwitch]="currentRequest.PresentDayStatus">
               <p *ngSwitchCase="2">Pending</p>
-              <p *ngSwitchCase="9">Approvval</p>
+              <p *ngSwitchCase="9">Approved</p>
               <p *ngSwitchCase="5">Rejected</p>
             </ng-container>
           </div>
@@ -418,3 +565,120 @@
     </div>
   </div>
 </div>
+
+
+<!-- Employee Register or Update message modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="approval-attendance" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="p-2 modal-content" *ngIf="requestModalData != null">
+      <div class="modal-header border-bottom-0 pt-4">
+        <ng-container [ngSwitch]="requestModalData.Title">
+          <h5 *ngSwitchCase="'Reject request'" class="modal-title ps-4" id="timesheetModalLabel">Rejection Request modal</h5>
+          <h5 *ngSwitchCase="'Approve request'" class="modal-title ps-4" id="timesheetModalLabel">Approval request modal
+          </h5>
+        </ng-container>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-dark mb-0 pb-0">
+        <ng-container>
+          <div class="row bg-light py-3 border-bottom">
+            <div class="col-md-6 fw-bold text-dark">Description</div>
+            <div class="col-md-2 fw-bold text-dark">Type</div>
+            <div class="col-md-3 fw-bold text-dark">Notifie</div>
+            <div class="col-md-1 fw-bold text-dark">State</div>
+          </div>
+          <div class="row py-3">
+            <div class="col-md-6">
+              <p class="mb-0 fw-bold fs-6">
+                Request by [{{currentApprovalRequest.EmployeeName}}]
+              </p>
+              <p class="mb-0 fw-bold fs-6">
+                <span class="fw-bold text-primary-c me-2">Attendance Date: {{currentApprovalRequest.AttendanceDate | date}}</span>
+              </p>
+            </div>
+            <div class="col-md-2">
+              Blocked attendance approval request
+            </div>
+            <div class="col-md-3">
+              {{currentApprovalRequest.EmployeeName}}
+              <p class="mb-0">{{currentApprovalRequest.Email}}</p>
+              <p class="mb-0">{{currentApprovalRequest.Mobile}}</p>
+            </div>
+            <div class="col-md-1">
+              <ng-container [ngSwitch]="currentApprovalRequest.CurrentStatus">
+                <p *ngSwitchCase="2">Pending</p>
+                <p *ngSwitchCase="9">Approvval</p>
+                <p *ngSwitchCase="5">Rejected</p>
+              </ng-container>
+            </div>
+          </div>
+          <div class="fw-bold text-dark fs-5">
+            Please confirm and {{requestModalData.Title | lowercase}}.
+          </div>
+        </ng-container>
+      </div>
+      <div *ngIf="requestModalData.IsApprove" class="modal-footer mt-0 border-top-0">
+        <!-- <a href="javascript:void(0)" (click)="ApproveRequest()" class="text-decoration-none text-dark fw-bold">Approve</a> -->
+        <button type="button" class="btn btn-success" (click)="ApproveRequest()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Approve' }}
+        </button>
+      </div>
+      <div *ngIf="requestModalData.IsReject" class="modal-footer mt-0 border-top-0">
+        <!-- <a href="javascript:void(0)" (click)="RejectRequest()" class="text-decoration-none text-dark fw-bold">Reject</a> -->
+        <button type="button" class="btn btn-danger" (click)="RejectRequest()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Reject' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- End -->
+
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="managerleave-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
+<!-- End pdf view modal -->
+
+<!-- View Rent file -->
+<div class="modal fade delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" id="managerleaveFileModal" tabindex="-1" aria-labelledby="managerleaveFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="managerleaveFileModalLabel">Uploaded Leave Attachment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ng-container >
+          <table class="table">
+            <thead>
+              <tr>
+                <th width="8%">#</th>
+                <th>File Name</th>
+                <td width="20%">Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of leaveAttachment; let i = index">
+                <td class="counterCell">{{i+1}}</td>
+                <td>{{item.FileName}}.{{item.FileExtension}}</td>
+                <td>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->

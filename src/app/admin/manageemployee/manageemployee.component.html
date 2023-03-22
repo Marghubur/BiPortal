@@ -3,23 +3,23 @@
     <div class="right-panel container col-md-12 p-0">
       <div class="x_panel mt-2">
         <div class="x_header">
-          <div class="x_header_title d-flex justify-content-between align-items-center">
-            <h2>Employee<small>Details</small></h2>
-            <div class="d-flex align-items-center">
-              <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-                class="fa fa-paper-plane pe-1"></i> Configure</a>
-                <ng-container *ngIf="isReady && employeeModal.EmployeeUid > 0">
-                  <a href="javascript:void(0)" (click)="reRunAccrual()" class="text-decoration-none fw-bold pe-4"><i class="fa fa-refresh" aria-hidden="true"></i>
-                    Run Accrual</a>
-                  <a href="javascript:void(0)" [ngClass]="{'pe-none': !isCompaniesDetails, 'pe-none': employeeUid==0}" *ngIf="isReady" (click)="navToSalaryBreakup()" class="text-decoration-none fw-bold"><i
-                    class="fa fa-money pe-1"></i> Breakup</a>
-                </ng-container>
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Employee'" [subtitle]="'Details'"></app-breadcrums>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="x_header_title d-flex align-items-center justify-content-end">
+                <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
+                  class="fa fa-paper-plane pe-1"></i> Configure</a>
+                  <ng-container *ngIf="isReady && employeeModal.EmployeeUid > 0">
+                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isCompaniesDetails, 'pe-none': employeeUid==0}" *ngIf="isReady" (click)="navToSalaryBreakup()" class="text-decoration-none fw-bold"><i
+                      class="fa fa-money pe-1"></i> Breakup</a>
+                  </ng-container>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
         </div>
         <ng-container *ngIf="isReady">
           <div class="x_content mt-4">
@@ -39,8 +39,8 @@
                       <div class="x_header_title position-relative">
                         <div class="img-container-sq" (change)="uploadProfilePicture($event)">
                           <div class="img-container__box">
-                            <!-- <img [attr.src]="profileURL" alt="User"> -->
-                            <app-image-loader [autofit]="1" [url]="profileURL"></app-image-loader>
+                            <img [attr.src]="profileURL" alt="User">
+                            <!-- <app-image-loader [autofit]="1" [url]="profileURL"></app-image-loader> -->
                             <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
                               formControlName="ProfileImgPath" />
                             <div class="img-container__btn mt-2">
@@ -210,9 +210,8 @@
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Shift Id *</label>
-                          <input class="form-control" placeholder="Shift Id" name="WorkShiftId" formControlName="WorkShiftId"
-                            OnlyNumber="12"  onkeypress="return event.charCode >=48 && event.charCode <=57"
-                            [ngClass]="{'error-field': submitted && f.WorkShiftId.errors !== null && f.WorkShiftId.errors.required}" />
+                          <app-iautocomplete [data]="shiftDetail" formControlName="WorkShiftId">
+                          </app-iautocomplete>
                         </div>
                       </div>
                     </div>
@@ -405,7 +404,7 @@
 </div>
 
 <!-- Add or update client Modal -->
-<div class="modal addclinet-modal fade" id="addUpdateClientModal" aria-labelledby="addUpdateClientModalLabel"
+<div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addUpdateClientModal" aria-labelledby="addUpdateClientModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">

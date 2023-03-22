@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { CompanySetting } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -18,6 +19,9 @@ export class CompanySettingsComponent implements OnInit {
   isPageReady: boolean  = false;
   isLoading: boolean = false;
   roles: Array<any> = [];
+  menuIndex: number = 1;
+  isReady: boolean = false;
+
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
               private nav: iNavigation,
@@ -47,8 +51,10 @@ export class CompanySettingsComponent implements OnInit {
       if (res.ResponseBody) {
         this.buildPage(res.ResponseBody)
       }
+      this.isReady = true;
       this.isPageReady = true;
     }).then(e => {
+      this.isReady = true;
       this.isPageReady = true;
     })
   }
@@ -72,59 +78,16 @@ export class CompanySettingsComponent implements OnInit {
       DeclarationStartMonth: new FormControl(this.companySetting.DeclarationStartMonth),
       DeclarationEndMonth: new FormControl(this.companySetting.DeclarationEndMonth),
       FinancialYear: new FormControl(this.companySetting.FinancialYear),
+      LeaveAccrualRunCronDayOfMonth: new FormControl(this.companySetting.LeaveAccrualRunCronDayOfMonth),
+      EveryMonthLastDayOfDeclaration: new FormControl(this.companySetting.EveryMonthLastDayOfDeclaration),
       AttendanceSubmissionLimit: new FormControl(this.companySetting.AttendanceSubmissionLimit),
-      DefaultManager: this.buildManager()
     })
-  }
-
-  buildManager(): FormArray {
-    let data = [];
-    if (this.companySetting.DefaultManagers && this.companySetting.DefaultManagers != "")
-      data = JSON.parse(this.companySetting.DefaultManagers);
-    let dataArray = this.fb.array([]);
-    if (data.length > 0) {
-      let i = 0;
-      while(i < data.length) {
-        dataArray.push(
-          this.fb.group({
-            ManagerId: new FormControl(data[i])
-          })
-        )
-        i++;
-      }
-    } else {
-      dataArray.push(this.createDefaultManager())
-    }
-    return dataArray;
-  }
-
-  createDefaultManager(): FormGroup {
-    return this.fb.group({
-      ManagerId: new FormControl(0)
-    })
-  }
-
-  get ManagerControl() {
-    return this.companySettingForm.get('DefaultManager') as FormArray;
-  }
-
-  addManagerLevel() {
-    let item = this.companySettingForm.get('DefaultManager') as FormArray;
-    item.push(this.createDefaultManager());
-  }
-
-  removeManagerLevel(index: number) {
-    let item = this.companySettingForm.get('DefaultManager') as FormArray;
-    if (item.length > 1) {
-      item.removeAt(index);
-    }
   }
 
   saveSetting() {
     let value = this.companySettingForm.value;
     if (value.CompanyId > 0) {
       this.isLoading = true;
-      value.ManagerLevelId = value.DefaultManager.map( x=> x.ManagerId);
       this.http.put(`company/UpdateSetting/${value.CompanyId}`, value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.companySetting = res.ResponseBody;
@@ -139,17 +102,17 @@ export class CompanySettingsComponent implements OnInit {
     else
       ErrorToast("Please select company first.");
   }
-}
 
-export class CompanySetting {
-  SettingId: number = 0;
-  CompanyId: number = 0;
-  ProbationPeriodInDays: number = 0;
-  NoticePeriodInDays: number = 0;
-  IsPrimary: boolean = true;
-  DeclarationStartMonth: number = 0;
-  DeclarationEndMonth: number = 0;
-  FinancialYear: number = 0;
-  DefaultManagers: string = "";
-  AttendanceSubmissionLimit: number = null;
+  activeTab(e: any, index: number) {
+    this.isReady = false;
+    this.menuIndex = index;
+    let elem = document.querySelectorAll('li[data-name="activetab"]');
+    if (elem.length > 0) {
+      for (let i = 0; i < elem.length; i++) {
+        elem[i].classList.remove('active-tab');
+      }
+      e.target.classList.add('active-tab');
+    }
+    this.isReady = true;
+  }
 }

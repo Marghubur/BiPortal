@@ -1,73 +1,74 @@
 <div class="col-md-12 main-container">
-    <div class="x_panel">
-      <div class="x_header">
-        <div class="x_header_title row">
-          <div class="col-md-3">
-            <h2>Company Logo<small>Add or update logo and images</small></h2>
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Company Logo'" [subtitle]="'Add or update logo and images'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
+            <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+            <button class="btn btn-primary-c" (click)="logoPopUp()">Upload Logo</button>
           </div>
         </div>
       </div>
-      <div class="px-1">
-        <app-breadcrums></app-breadcrums>
-      </div>
-
-      <ng-container *ngIf="isPageReady">
-        <div class="d-flex justify-content-end">
-          <button class="btn btn-primary-c" (click)="logoPopUp()">Upload Logo</button>
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>File Description</th>
-                    <th>File Role</th>
-                    <th width="25%">Preview</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngIf="fileList.length != 0">
-                <tr *ngFor="let item of fileList; let index = index">
-                    <td>{{index + 1}}</td>
-                    <td>{{item.FileDescription}}</td>
-                    <td>{{item.FileRole}}</td>
-                    <td>
-                        <div>
-                            <img [src]="item.FilePath" alt="logo" class="logo-img">
-                        </div>
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)" class="text-decoration-none" (click)="editFile(item)">
-                        <i class="fa fa-edit px-2 text-primary fa-lg"></i>
-                      </a>
-                      <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteFile(item)">
-                        <i class="fa fa-lg text-danger" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash-o': !isLoading}" aria-hidden="true"></i>
-                      </a>
-                    </td>
-                </tr>
-              </ng-container>
-            </tbody>
-          </table>
-          <ng-container *ngIf="fileList.length == 0">
-            <div class="m-5 text-center fw-bold fs-5">
-                No available to list found. Please use above add button to add one.
-            </div>
-          </ng-container>
-      </ng-container>
-      <ng-container *ngIf="!isPageReady">
-        <div class="py-5 my-5 x_panel">
-          <h6 class="fw-bold fs-3 text-center text-dark">Company files and logo are loading</h6>
-          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container  text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
-          </div>
-        </div>
-      </ng-container>
     </div>
+    <ng-container *ngIf="isPageReady">
+      <table class="table">
+          <thead>
+              <tr>
+                  <th>#</th>
+                  <th>File Description</th>
+                  <th>File Role</th>
+                  <th width="25%">Preview</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="fileList.length != 0">
+              <tr *ngFor="let item of fileList; let index = index">
+                  <td>{{index + 1}}</td>
+                  <td>{{item.FileDescription}}</td>
+                  <td>{{item.FileRole}}</td>
+                  <td>
+                      <div>
+                          <img [src]="item.FilePath" alt="logo" class="logo-img">
+                      </div>
+                  </td>
+                  <td>
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="editFile(item)">
+                      <i class="fa fa-edit px-2 text-primary fa-lg"></i>
+                    </a>
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteFile(item)">
+                      <i class="fa fa-lg text-danger" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash-o': !isLoading}" aria-hidden="true"></i>
+                    </a>
+                  </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+        <ng-container *ngIf="fileList.length == 0">
+          <div class="m-5 text-center fw-bold fs-5">
+              No available to list found. Please use above add button to add one.
+          </div>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!isPageReady">
+      <div class="py-5 my-5 x_panel">
+        <h6 class="fw-bold fs-3 text-center text-dark">Company files and logo are loading</h6>
+        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+          <div class="col-md-3 modal-container  text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+            <h6 class="modal-title title-message">
+              Please Wait ........
+            </h6>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
 </div>
 
 <!--Sign Upload Modal -->

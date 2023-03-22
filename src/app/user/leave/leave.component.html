@@ -1,11 +1,13 @@
 <div class="col-md-12 col-sm-12 main-container">
   <div class="x_panel">
     <div class="x_header">
-      <h2>Pending Leave requests</h2>
-      <div class="clearfix"></div>
-    </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Pending Leave requests'"></app-breadcrums>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="x_content" [hidden]="!isPageReady">
       <ng-container>
@@ -85,101 +87,103 @@
             </div>
           </div>
         </div>
-        <div id="leave-chart" [hidden]="leaveTypes.length <=0 || isLeaveDetails">
-          <h5 class="mt-3 pt-3 pb-3">My Leave Status</h5>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="card">
-                <div class="card-body pb-0">
-                  <div class="d-flex justify-content-between">
-                    <h6 class="pt-2 ps-2">
-                      Consumed Leave Types
-                    </h6>
-                    <div>
-                      <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
+        <div [hidden]="leaveTypes.length <=0 || isLeaveDetails">
+          <div id="leave-chart">
+            <h5 class="mt-3 pt-3 pb-3">My Leave Status</h5>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body pb-0">
+                    <div class="d-flex justify-content-between">
+                      <h6 class="pt-2 ps-2">
+                        Consumed Leave Types
+                      </h6>
+                      <div>
+                        <i class="fa fa-info-circle fa-lg p-3" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="d-block py-3 mt-3 col-md-10">
+                      <canvas id="consumeLeaveChart" width="100" height="100"></canvas>
                     </div>
                   </div>
-                  <div class="d-block py-3 mt-3 col-md-10">
-                    <canvas id="consumeLeaveChart" width="100" height="100"></canvas>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body pb-0">
+                    <div class="d-flex justify-content-between">
+                      <h6 class="pt-2 ps-2">
+                        Last Week
+                      </h6>
+                      <div>
+                        <i class="fa fa-info-circle fa-lg p-3" (click)="loadData()" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="d-block mt-2">
+                      <canvas id="weeklyPatternChart" width="300" height="100"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body pb-0">
+                    <div class="d-flex justify-content-between">
+                      <h6 class="pt-2 ps-2">
+                        Monthly Status
+                      </h6>
+                      <div>
+                        <i class="fa fa-info-circle fa-lg p-3"  aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="d-block mt-2">
+                      <canvas id="MonthlyStatusChart" width="300" height="115"></canvas>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="card">
-                <div class="card-body pb-0">
-                  <div class="d-flex justify-content-between">
-                    <h6 class="pt-2 ps-2">
-                      Last Week
-                    </h6>
-                    <div>
-                      <i class="fa fa-info-circle fa-lg p-3" (click)="loadData()" aria-hidden="true"></i>
+            <h5 class="mt-3 pt-3 pb-3">Leave Balances</h5>
+            <div class="row" *ngIf="chartDataset.length > 0">
+              <div class="col-md-4 mt-4" *ngFor="let leave of chartDataset; let i = index;">
+                <div class="card">
+                  <div class="card-body pb-0">
+                    <div class="d-flex justify-content-between">
+                      <h6 class="pt-2">
+                        {{leave.PlanName}}
+                      </h6>
+                      <div>
+                        <i class="fa fa-refresh fa-lg p-3" aria-hidden="true"  (click)="loadData()"></i>
+                      </div>
                     </div>
-                  </div>
-                  <div class="d-block mt-2">
-                    <canvas id="weeklyPatternChart" width="300" height="100"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card">
-                <div class="card-body pb-0">
-                  <div class="d-flex justify-content-between">
-                    <h6 class="pt-2 ps-2">
-                      Monthly Status
-                    </h6>
-                    <div>
-                      <i class="fa fa-info-circle fa-lg p-3"  aria-hidden="true"></i>
+                    <div class="d-block mt-2">
+                      <canvas width="200" height="200" id="convas{{i}}" #leaveChart>
+                        {{leave.Config}}
+                      </canvas>
                     </div>
-                  </div>
-                  <div class="d-block mt-2">
-                    <canvas id="MonthlyStatusChart" width="300" height="115"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <h5 class="mt-3 pt-3 pb-3">Leave Balances</h5>
-          <div class="row" *ngIf="chartDataset.length > 0">
-            <div class="col-md-4 mt-4" *ngFor="let leave of chartDataset; let i = index;">
-              <div class="card">
-                <div class="card-body pb-0">
-                  <div class="d-flex justify-content-between">
-                    <h6 class="pt-2">
-                      {{leave.PlanName}}
-                    </h6>
-                    <div>
-                      <i class="fa fa-refresh fa-lg p-3" aria-hidden="true"  (click)="loadData()"></i>
+                    <div class="row mt-3 border-top">
+                      <div class="col-md-6 border-end pt-3">
+                        <h6 class="custom-text-size">AVAILABLE</h6>
+                        <p>{{leave.AvailableLeaves}}</p>
+                      </div>
+                      <div class="col-md-6 pt-3">
+                        <h6 class="custom-text-size">CONSUMED</h6>
+                        <p>{{leave.ConsumedLeave}}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div class="d-block mt-2">
-                    <canvas width="200" height="200" id="convas{{i}}" #leaveChart>
-                      {{leave.Config}}
-                    </canvas>
-                  </div>
-                  <div class="row mt-3 border-top">
-                    <div class="col-md-6 border-end pt-3">
-                      <h6 class="custom-text-size">AVAILABLE</h6>
-                      <p>{{leave.AvailableLeaves}}</p>
-                    </div>
-                    <div class="col-md-6 pt-3">
-                      <h6 class="custom-text-size">CONSUMED</h6>
-                      <p>{{leave.ConsumedLeave}}</p>
-                    </div>
-                  </div>
-                  <div class="row border-top">
-                    <div class="col-md-4 border-end pt-3">
-                      <h6 class="custom-text-size">ACCRUED SO FAR</h6>
-                      <p>{{leave.AccrualedTillDate}}</p>
-                    </div>
-                    <div class="col-md-4 border-end pt-3">
-                      <h6 class="custom-text-size">CARRYOVER</h6>
-                      <p>0</p>
-                    </div>
-                    <div class="col-md-4 pt-3">
-                      <h6 class="custom-text-size">ANNUAL QUOTA</h6>
-                      <p>{{leave.MaxLeaveLimit}}</p>
+                    <div class="row border-top">
+                      <div class="col-md-4 border-end pt-3">
+                        <h6 class="custom-text-size">ACCRUED SO FAR</h6>
+                        <p>{{leave.AccrualedTillDate}}</p>
+                      </div>
+                      <div class="col-md-4 border-end pt-3">
+                        <h6 class="custom-text-size">CARRYOVER</h6>
+                        <p>0</p>
+                      </div>
+                      <div class="col-md-4 pt-3">
+                        <h6 class="custom-text-size">ANNUAL QUOTA</h6>
+                        <p>{{leave.MaxLeaveLimit}}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -231,7 +235,7 @@
                     <div class="cell-wrapper">
                       <div class="d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center justify-content-start">
-                          <div class="h-4 d-flex align-items-center flex-column px-4">
+                          <div class="h-4 d-flex align-items-center justify-content-center flex-column px-4">
                             <i class="fa fa-home fa-lg"></i>
                             <p class="m-0">{{item.NumOfDays}} {{item.NumOfDays == 1? 'day':'days'}}</p>
                           </div>
@@ -243,6 +247,9 @@
                           </div>
                         </div>
                       </div>
+                      <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item.FileIds)" *ngIf="item.FileIds != null && item.FileIds != '[]'" class="text-decoration-none ps-4">
+                        Attached Document
+                      </a>
                     </div>
                   </div>
                   <div class="td align-middle">
@@ -252,9 +259,7 @@
                   </div>
                   <div class="td align-middle fe-2">
                     <div class="cell-wrapper">
-                      <p>
-                        <b>{{item.LeaveTypeName}}</b>
-                      </p>
+                      <b>{{item.LeaveTypeName}}</b>
                       <div class="cell-wrapper">
                         <span class="text-primary-c">{{item.RequestedOn | date}}</span>
                         <p class="mb-0">BY:
@@ -439,6 +444,52 @@
         </div>
       </div>
     </form>
+  </div>
+</div>
+<!-- End -->
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="leavefile-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
+<!-- End pdf view modal -->
+
+<!-- View Rent file -->
+<div class="modal fade delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" id="leaveFileModal" tabindex="-1" aria-labelledby="leaveFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="leaveFileModalLabel">Uploaded Leave Attachment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ng-container >
+          <table class="table">
+            <thead>
+              <tr>
+                <th width="8%">#</th>
+                <th>File Name</th>
+                <td width="20%">Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of leaveAttachment; let i = index">
+                <td class="counterCell">{{i+1}}</td>
+                <td>{{item.FileName}}.{{item.FileExtension}}</td>
+                <td>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+    </div>
   </div>
 </div>
 <!-- End -->

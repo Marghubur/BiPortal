@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { OrganizationModal } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { OrgLogo, ProfileImage, UserImage, UserType } from 'src/providers/constants';
+import { OrgLogo, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -54,30 +55,27 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     let date;
     this.http.get(`Company/GetOrganizationDetail`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
-        if (response.ResponseBody.OrganizationDetail) {
-          this.organization = response.ResponseBody.OrganizationDetail as OrganizationModal;
-          if (this.organization.InCorporationDate == null || this.organization.InCorporationDate == '0001-01-01T00:00:00')
-            date = new Date();
-          else
-            date = new Date(this.organization.InCorporationDate);
-          this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-          if (this.organization.OpeningDate != null)
-            date = new Date(this.organization.OpeningDate);
-          else
-            date = new Date();
-          this.openingDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-          if (this.organization.ClosingDate != null)
-            date = new Date(this.organization.ClosingDate);
-          else
-            date = new Date();
-          this.closingDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-          this.initForm();
-          this.isLoaded = true;
-        }
-        let profileDetail = response.ResponseBody.Files;
-        if(profileDetail.length > 0) {
-          let file = profileDetail.find(x => x.FileOwnerId == this.organization.OrganizationId && x.FileName == "OrganizationLogo");
-          this.buildProfileImage(file);
+        this.organization = response.ResponseBody;
+        if (this.organization.InCorporationDate == null || this.organization.InCorporationDate == '0001-01-01T00:00:00')
+          date = new Date();
+        else
+          date = new Date(this.organization.InCorporationDate);
+        this.model = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        if (this.organization.OpeningDate != null)
+          date = new Date(this.organization.OpeningDate);
+        else
+          date = new Date();
+        this.openingDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        if (this.organization.ClosingDate != null)
+          date = new Date(this.organization.ClosingDate);
+        else
+          date = new Date();
+        this.closingDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        this.initForm();
+        this.isLoaded = true;
+        let profileDetail = this.organization.Files;
+        if(profileDetail && profileDetail.FileOwnerId == this.organization.OrganizationId && profileDetail.FileName == "OrganizationProfile") {
+          this.buildProfileImage(profileDetail);
         }
       } else {
         this.organization = new OrganizationModal;
@@ -193,7 +191,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       let file = null;
       if(this.fileDetail.length > 0)
         file = this.fileDetail[0].file;
-      formData.append("OrganizationLogo", file)
+      formData.append("OrganizationProfile", file)
       this.http.post('Company/InsertUpdateOrganizationDetail', formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
           this.organization = response.ResponseBody as OrganizationModal;
@@ -233,7 +231,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       let selectedfile = event.target.files;
       let file = <File>selectedfile[0];
       this.fileDetail.push({
-        name: "organizationlogo",
+        name: "OrganizationProfile",
         file: file
       });
     }
@@ -243,56 +241,4 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
     this.organization.FileId = fileDetail.FileId;
   }
-
-}
-
-class OrganizationModal {
-  CompanyId: number = 0;
-  OrganizationId: number = 0;
-  BankAccountId: number = 0;
-  OrganizationName: string = null;
-  CompanyName: string = null;
-  CompanyDetail: string = null;
-  SectorType: number = 0;
-  City: string = null;
-  State: string = null;
-  Country: string = null;
-  FirstAddress: string = null;
-  SecondAddress: string = null;
-  ThirdAddress: string = null;
-  ForthAddress: string = null;
-  FullAddress: string = null;
-  MobileNo: string = null;
-  Email: string = null;
-  FirstEmail: string = null;
-  SecondEmail: string = null;
-  ThirdEmail: string = null;
-  ForthEmail: string = null;
-  PrimaryPhoneNo: string = null;
-  SecondaryPhoneNo: string = null;
-  Fax: string = null;
-  Pincode: number = 0;
-  FileId: number = 0;
-  PANNo: string = null;
-  TradeLicenseNo: string = null;
-  GSTNo: string = null;
-  AccountNo: string = null;
-  BankName: string = null;
-  Branch: string = null;
-  BranchCode: string = null;
-  OpeningDate: string = null;
-  ClosingDate: string = null;
-  IFSC: string = null;
-  LegalDocumentPath: string = null;
-  LegalEntity: string = null;
-  LegalNameOfCompany: string = null;
-  TypeOfBusiness: string = null;
-  InCorporationDate: string = null;
-  IsPrimaryCompany: boolean = false;
-  FixedComponentsId: string = null;
-  OrgMobileNo: string = null;
-  OrgEmail: string = null;
-  OrgPrimaryPhoneNo: string = null;
-  OrgSecondaryPhoneNo: string = null;
-  OrgFax: string = null;
 }

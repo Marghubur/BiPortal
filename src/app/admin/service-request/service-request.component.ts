@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Service } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -49,7 +50,6 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   selectedEmployee(e: any) {
-    console.log(e);
     let index = this.managers.findIndex(x => x.value == e.value);
     if(index == -1) {
       this.managers.push(e);
@@ -215,21 +215,4 @@ export class ServiceRequestComponent implements OnInit {
     this.isFormReady = true;
     $('#addupdateModal').modal('show');
   }
-}
-
-class Service {
-  ServiceRequestId: number = 0;
-  CompanyId: number = 0;
-  RequestTypeId: string = null;
-  RequestTitle: string = null;
-  RequestDescription: string = null;
-  Quantity: number = 0;
-  Duration: number = 0;
-  FromDate: Date = null;
-  ToDate: Date = null;
-  Reference: string = null;
-  RequestStatus: number = 0;
-  RequestedBy: number = 0;
-  RequestedOn: Date = null;
-  UpdatedOn: Date = null;
 }

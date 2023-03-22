@@ -15,7 +15,6 @@ import { EmployeesComponent } from './employees/employees.component';
 import { ClientsComponent } from './clients/clients.component';
 import { RegisterclientComponent } from './registerclient/registerclient.component';
 import { FilesComponent } from './files/files.component';
-import { ResumeComponent } from './resume/resume.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -58,7 +57,9 @@ import { ProductsComponent } from './products/products.component';
 import { ManageshiftComponent } from './manageshift/manageshift.component';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.component';
-
+import { AdminmodalModule } from './../adminmodal/adminmodal.module'
+import { CommonmodalModule } from '../commonmodal/commonmodal.module';
+import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,6 @@ import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.com
     ClientsComponent,
     RegisterclientComponent,
     FilesComponent,
-    ResumeComponent,
     BilldetailsComponent,
     HomeComponent,
     AttendanceComponent,
@@ -110,7 +110,8 @@ import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.com
     ProductsComponent,
     ManageshiftComponent,
     WorkflowComponent,
-    ManageWorkFlowComponent
+    ManageWorkFlowComponent,
+    ManagetimesheetComponent
   ],
   imports: [
     CommonModule,
@@ -121,7 +122,9 @@ import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.com
     UtilModule,
     ProjectsModule,
     LeaveManagementModule,
-    IncomeDeclarationModule
+    IncomeDeclarationModule,
+    AdminmodalModule,
+    CommonmodalModule
   ],
   providers: [
     CommonService,

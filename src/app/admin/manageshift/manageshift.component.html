@@ -3,18 +3,21 @@
     <div class="right-panel container col-md-12 p-0">
       <div class="x_panel mt-2">
         <div class="x_header">
-          <div class="x_header_title d-flex justify-content-between align-items-center">
-            <h2>Shift<small>Details</small></h2>
-            <div class="d-flex align-items-center">
-              <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Shift'" [subtitle]="'Details'"></app-breadcrums>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="x_header_title d-flex align-items-center justify-content-end">
+                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
                   class="fa fa-paper-plane pe-1"></i> Email Link Config
               </a>
               <button class="btn btn-primary-c" (click)="addShiftPopUp()"><i class="fa fa-plus pe-2"></i>Add Shift</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="px-1">
-          <app-breadcrums></app-breadcrums>
         </div>
         <ng-container *ngIf="isPageReady">
           <div class="x_content mt-4">
@@ -230,7 +233,7 @@
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">Shift Title *</label>
-              <input type="text" maxlength="40" placeholder="Enter shift title" formControlName="ShiftTitle" [ngClass]="{'error-field': submitted && f.ShiftTitle.errors !== null && f.ShiftTitle.errors.required}" class="form-control">
+              <input type="text" maxlength="40" oninput="this.value = this.value.toUpperCase()" placeholder="Enter shift title" formControlName="ShiftTitle" [ngClass]="{'error-field': submitted && f.ShiftTitle.errors !== null && f.ShiftTitle.errors.required}" class="form-control">
             </div>
           </div>
           <div class="row">
@@ -249,7 +252,7 @@
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">Description</label>
-            <textarea class="form-control" formControlName="Description" placeholder="Enter description" maxlength="100" cols="30" rows="5"></textarea>
+            <textarea class="form-control" oninput="this.value = this.value.toUpperCase()" formControlName="Description" placeholder="Enter description" maxlength="100" cols="30" rows="5"></textarea>
           </div>
           <div class="row">
             <div class="col-md-4 mt-3">

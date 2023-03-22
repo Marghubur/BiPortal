@@ -32,7 +32,7 @@
             <div class="col-md-2 my-2" *ngFor="let item of salaryStructureType">
               <a href="javascript:void(0)" class="text-decoration-none" (click)="selectSalaryGroup(item)">
                 <div class="card py-4">
-                  <h5 class="text-center mt-2">{{item.GroupName}}</h5>
+                  <h5 class="text-center mt-2 px-3">{{item.GroupName}}</h5>
                   <p class="mb-0 text-truncate text-center">{{item.MinAmount}} - {{item.MaxAmount}}</p>
                   <div ngbDropdown class="d-inline-block menu-btn">
                     <button type="button" [disabled]="item.SalaryGroupId == 1" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>

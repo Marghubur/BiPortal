@@ -49,24 +49,15 @@
                 <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('form-12-tab')"
                   href="javascript:void(0)">Form 12 BB</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('free-tax-tab')"
-                  href="javascript:void(0)">Free Tax Filling</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('approval-rule-tab')"
-                  href="javascript:void(0)">Approval Rule</a>
-              </li>
             </ul>
           </div>
           <ng-container>
             <div class="container-fluid pt-4">
               <div class="d-flex justify-content-between">
                 <h5 class="text-dark">Declaration</h5>
-                <div class="pt-3 pe-3">
-                  <select class="form-select">
-                    <option value="currentyear" selected>APR {{year}} - MAR {{year +1}}</option>
-                    <option value="previousyear">APR {{year - 1}} - MAR {{year}}</option>
+                <div class="pt-3 pe-3" *ngIf="employeeDeclaration != null">
+                  <select class="form-select" disabled>
+                    <option value="currentyear" selected disabled>APR {{employeeDeclaration.DeclarationFromYear}} - MAR {{employeeDeclaration.DeclarationFromYear +1}}</option>
                   </select>
                 </div>
               </div>
@@ -78,9 +69,8 @@
                 <ul class="ps-5 ms-3">
                   <li class="pt-3">'$' - Not considered for exemption if opted <form action="" method="post"></form> New tax regime (Section 115BAC).</li>
                   <li class="pt-3">You can declare your investment amount till <span class="fw-bold">20th of every
-                      month</span> until the cutoff date of <span class="fw-bold">May 20, {{year}}</span></li>
-                  <li class="pt-3">Last date for submitting your investment proofs is <span class="fw-bold">Dec 20,
-                      {{year}}</span></li>
+                      month</span> until the cutoff date of <span class="fw-bold">{{currentMonth}} 20, {{year}}</span></li>
+                  <li class="pt-3">Last date for submitting your investment proofs is <span class="fw-bold">Dec 20, {{employeeDeclaration.DeclarationFromYear}}</span></li>
                 </ul>
                 <div class="alert alert-warning mx-5">
                   Not submitting your investment proofs may lead to additional tax being deducted in the subsequent
@@ -95,8 +85,7 @@
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Net Taxable Income</p>
                     <p class="text-dark fs-2 mb-0 ">
-                      <span class="" *ngIf="employeeDeclaration.TotalAmount > 200000">INR {{employeeDeclaration.TotalAmount | number : '1.2-2'}}</span>
-                      <span class="" *ngIf="employeeDeclaration.TotalAmount < 200000">INR 0</span>
+                      <span>INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TotalAmount | number : '1.2-2') : (employeeDeclaration.TotalAmountOnNewRegim | number : '1.2-2')}}</span>
                       <span class="float-end pe-2">
                         <a href="javascript:void(0)" (click)="gotoTaxSection()" class="text-decoration-none fs-6">
                           Income Tax Computitation
@@ -110,7 +99,7 @@
                     <p class="mb-0">Total Tax Payable <i class="fa fa-exclamation-circle float-end fa-lg pe-3"
                         data-bs-placement="right" data-toggle="tooltip"
                         title="Net tax amount {{taxAmount.TotalTaxPayable}} of after round Off is"></i></p>
-                    <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}</p>
+                    <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TaxNeedToPay | number : '1.2-2') : (employeeDeclaration.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</p>
                   </div>
                 </div>
                 <div class="col-md-3">
@@ -256,8 +245,7 @@
                           <div class="col-md-4">
                             <div class="card py-3 ps-3">
                               <p class="mb-0">TOTAL TAX PAYABLE</p>
-                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay | number : '1.2-2'}}
-                              </p>
+                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TaxNeedToPay | number : '1.2-2') : (employeeDeclaration.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</p>
                             </div>
                           </div>
                           <div class="col-md-4">
@@ -269,8 +257,8 @@
                           <div class="col-md-4">
                             <div class="card py-3 ps-3">
                               <p class="mb-0">REMAINING TAX AMOUNT</p>
-                              <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.TaxNeedToPay -
-                                employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
+                              <p class="text-dark fs-2 mb-0" *ngIf="employeeDeclaration.EmployeeCurrentRegime == 1">INR {{employeeDeclaration.TaxNeedToPay - employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
+                              <p class="text-dark fs-2 mb-0" *ngIf="employeeDeclaration.EmployeeCurrentRegime != 1">INR {{employeeDeclaration.TaxNeedToPayOnNewRegim - employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
                             </div>
                           </div>
                         </div>
@@ -281,7 +269,11 @@
                               <div class="th" *ngFor="let item of taxCalender">
                                 <div class="d-flex align-items-center">
                                   <span>{{item.month}} {{item.year}}</span>
-                                  <div class="curent-employer-indicator indicator ms-1"></div>
+                                  <div class="ms-1 indicator" [ngClass]="{
+                                    'previous-employer-indicator': item.type == 0,
+                                    'curent-employer-indicator': item.type == 1,
+                                    'project-salary-indicator': item.type == 2}">
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1193,12 +1185,12 @@
             </div>
             <div class="col-md-12 mt-3">
               <label class="form-label">Address</label>
-              <textarea formControlName="Address" placeholder="Address" class="form-control" oninput="this.value = this.value.toUpperCase()"></textarea>
+              <textarea formControlName="Address" maxlength="100" placeholder="Address" class="form-control" oninput="this.value = this.value.toUpperCase()"></textarea>
             </div>
             <div class="row">
               <div class="col-md-6 mt-3">
                 <label class="form-label">City</label>
-                <input type="text" formControlName="City" placeholder="City" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                <input type="text" formControlName="City" maxlength="20" placeholder="City" class="form-control" oninput="this.value = this.value.toUpperCase()">
               </div>
               <div class="col-md-6 mt-3">
                 <label class="form-label">Monthly Rent</label>
@@ -1232,7 +1224,7 @@
             <h5>Owner Name</h5>
             <div class="col-md-6 mt-3">
               <label class="form-label">Owner Name</label>
-              <input type="text" class="form-control" placeholder="Owner Name" formControlName="OwnerName" oninput="this.value = this.value.toUpperCase()">
+              <input type="text" class="form-control" maxlength="40" placeholder="Owner Name" formControlName="OwnerName" oninput="this.value = this.value.toUpperCase()">
             </div>
             <div class="form-check d-flex align-items-center col-md-6 mt-3">
               <input class="form-check-input" type="checkbox" (click)="panFieldEnable($event)"
@@ -1240,8 +1232,8 @@
               <label class="form-check-label px-2">
                 PAN Number
               </label>
-              <div class="col-md-9">
-                <input type="text" class="form-control" placeholder="PAN Number" [readonly]="!isPanEnable" oninput="this.value = this.value.toUpperCase()"
+              <div class="col-md-8">
+                <input type="text" class="form-control" maxlength="10" placeholder="PAN Number" [readonly]="!isPanEnable" oninput="this.value = this.value.toUpperCase()"
                   formControlName="PANNo">
               </div>
             </div>
@@ -1253,7 +1245,7 @@
             </div>
             <div class="col-md-12 mt-3">
               <label class="form-label">Address</label>
-              <textarea type="text" formControlName="Address" placeholder="OwnerAddress" class="form-control"
+              <textarea type="text" formControlName="Address" placeholder="OwnerAddress" class="form-control" maxlength="100"
                 formControlName="OwnerAddress"></textarea>
             </div>
             <div class="form-check mt-3">
