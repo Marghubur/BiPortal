@@ -33,6 +33,7 @@ export class ManageProjectComponent implements OnInit {
   architectName: string = "";
   teamMembers: Array<any> = [];
   employeesList: autoCompleteModal = null;
+  teamLead: Array<any> = [];
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -44,7 +45,6 @@ export class ManageProjectComponent implements OnInit {
     this.employeesList = new autoCompleteModal();
     this.employeesList.data = [];
     this.employeesList.placeholder = "Team Member";
-    this.employeesList.data = GetEmployees();
     this.employeesList.className = "";
     this.employeesList.isMultiSelect = true;
     if (value)
@@ -77,9 +77,18 @@ export class ManageProjectComponent implements OnInit {
           this.projectDetail = new ProjectModal();
         }
         this.employees = response.ResponseBody.Employees;
-        this.projectManagers = response.ResponseBody.Employees.filter(x => x.DesignationId == 1);
-        this.architects = response.ResponseBody.Employees.filter(x => x.DesignationId == 2);
+        this.teamLead = response.ResponseBody.Employees.filter(x => x.DesignationId == 19);
+        this.projectManagers = response.ResponseBody.Employees.filter(x => x.DesignationId == 2);
+        this.architects = response.ResponseBody.Employees.filter(x => x.DesignationId == 3);
         this.clients = response.ResponseBody.Clients;
+        let teamember = response.ResponseBody.Employees.filter(x => x.DesignationId != 19 &&  x.DesignationId != 2 &&  x.DesignationId != 3 && x.DesignationId != 1);
+        teamember.forEach(element => {
+          this.employeesList.data.push({
+            value : element.EmployeeUid,
+            text : element.FirstName+ " "+ element.LastName,
+            email : element.Email
+          })
+        });
         if (response.ResponseBody.TeamMembers && response.ResponseBody.TeamMembers.length > 0) {
           this.teamMembers = response.ResponseBody.TeamMembers;
         }
@@ -90,6 +99,8 @@ export class ManageProjectComponent implements OnInit {
       this.isReady = true;
     });
   }
+
+
 
   initForm() {
     if(this.projectDetail.ProjectManagerId == null)
