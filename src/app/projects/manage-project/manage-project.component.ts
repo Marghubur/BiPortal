@@ -80,6 +80,9 @@ export class ManageProjectComponent implements OnInit {
         this.projectManagers = response.ResponseBody.Employees.filter(x => x.DesignationId == 1);
         this.architects = response.ResponseBody.Employees.filter(x => x.DesignationId == 2);
         this.clients = response.ResponseBody.Clients;
+        if (response.ResponseBody.TeamMembers && response.ResponseBody.TeamMembers.length > 0) {
+          this.teamMembers = response.ResponseBody.TeamMembers;
+        }
         this.initForm();
         this.isReady = true;
       }
@@ -185,15 +188,30 @@ export class ManageProjectComponent implements OnInit {
         DesignationId : emp.DesignationId,
         FullName : emp.FirstName + " " + emp.LastName,
         Email : emp.Email,
-        IsActive : emp.IsActive
+        IsActive : true
       });
     } else {
       this.teamMembers.splice(index, 1);
     }
   }
 
-  addTeamMember() {
+  closeAddMemberPopUp() {
+    $('#teamMemberModal').modal('hide');
+  }
 
+  deleteTeamMember(item: any) {
+    this.isLoading = true;
+    if (item) {
+      this.http.delete(`Project/DeleteTeamMember/${item.ProjectMemberDetailId}/${item.ProjectId}`).then(res => {
+        if (res.ResponseBody) {
+          this.teamMembers = res.ResponseBody;
+          Toast("Team member deleted successfully");
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
   }
 
 }

@@ -114,6 +114,7 @@
                       <th>Name</th>
                       <th>Email</th>
                       <th>Designation</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -121,7 +122,10 @@
                       <td>{{i+1}}</td>
                       <td>{{item.FullName}}</td>
                       <td>{{item.Email}}</td>
-                      <td>{{item.DesignationId}}</td>
+                      <td>{{item.DesignationId == 1 ? 'Admin' : item.DesignationId == 2 ? 'Team Members' : item.DesignationId == 3 }}</td>
+                      <td>
+                        <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteTeamMember(item)"><i class="fa fa-trash text-danger"></i></a>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -179,7 +183,7 @@
           <div class="col-md-3">Team Lead: </div>
           <div class="col-md-9">
             <select class="form-select" >
-              <option value=0 disabled>Select Architect</option>
+              <option value=0 disabled>Select Team Lead</option>
               <option [value]="item.EmployeeUid" *ngFor="let item of employees">{{item.FirstName}} {{item.LastName}}</option>
             </select>
           </div>
@@ -201,7 +205,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="addTeamMember()">
+        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="closeAddMemberPopUp()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add Member' }}
         </button>
