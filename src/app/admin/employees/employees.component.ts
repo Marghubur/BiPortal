@@ -4,7 +4,7 @@ import { tableConfig } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { Attendance, Documents, DocumentsPage, EmployeePerformance, Employees, Files, ManageEmployee, Profile, UserType } from 'src/providers/constants';
+import { Attendance, Documents, DocumentsPage, EmployeePerformance, Employees, Files, ManageEmployee, Profile } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import 'bootstrap';

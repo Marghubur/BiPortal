@@ -42,6 +42,7 @@ export class ManageshiftComponent implements OnInit {
   orderByLunchDurationAsc: boolean = null;
   apiUrl: string = "";
   initTime: "09:00";
+  minutes: Array<number> = [];
 
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
@@ -56,6 +57,9 @@ export class ManageshiftComponent implements OnInit {
     else {
       ErrorToast("Please login again");
       return;
+    }
+    for (let i = 1; i < 60; i++) {
+      this.minutes.push(i);
     }
 
     this.days = [
@@ -188,6 +192,8 @@ export class ManageshiftComponent implements OnInit {
       Duration: new FormControl(this.currentShift.Duration, [Validators.required]),
       LunchDuration: new FormControl(this.currentShift.LunchDuration, [Validators.required]),
       Status: new FormControl(this.currentShift.Status),
+      DurationHrs: new FormControl("0"),
+      DurationMinutes: new FormControl("0")
     })
   }
 
@@ -323,7 +329,15 @@ export class ManageshiftComponent implements OnInit {
       this.frommodel = { day: this.currentShift.StartDate.getDate(), month: this.currentShift.StartDate.getMonth() + 1, year: this.currentShift.StartDate.getFullYear()};
       this.currentShift.EndDate = ToLocateDate(this.currentShift.EndDate);
       this.tomodel = { day: this.currentShift.EndDate.getDate(), month: this.currentShift.EndDate.getMonth() + 1, year: this.currentShift.EndDate.getFullYear()};
+      let duration = item.Duration;
       this.initForm();
+      if (duration > 0) {
+        let min = duration % 60;
+          this.shiftForm.get('DurationMinutes').setValue(min);
+        let hrs = duration /60;
+        if (hrs > 0)
+          this.shiftForm.get('DurationHrs').setValue(Math.floor(hrs));
+      }
       this.days.map(day => {
         switch(day.id) {
           case 1:
@@ -422,5 +436,18 @@ export class ManageshiftComponent implements OnInit {
     this.shiftData.SearchString = `1=1`;
     this.shiftData.SortBy = FieldName +" "+ Order;
     this.loadData()
+  }
+
+  shiftDurationCalc() {
+    let hrs = Number(this.shiftForm.get('DurationHrs').value);
+    let min = Number(this.shiftForm.get('DurationMinutes').value);
+    let totalTime = 0;
+    if (hrs > 0)
+      totalTime += hrs * 60;
+
+    if (min > 0)
+      totalTime += min;
+
+    this.shiftForm.get('Duration').setValue(totalTime);
   }
 }

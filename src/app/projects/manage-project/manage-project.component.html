@@ -23,19 +23,15 @@
                   <label for="" class="form-label">Company Name</label>
                   <input type="text" class="form-control" readonly formControlName="CompanyName" placeholder="Company Name">
                 </div>
-                <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Project Name</label>
-                  <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" maxlength="100" formControlName="ProjectName" placeholder="Project Name" [ngClass]="{'error-field': submitted && f.ProjectName.errors !== null && f.ProjectName.errors.required}">
-                </div>
               </div>
               <div class="row">
                 <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Project Description</label>
-                  <textarea type="text" rows="2" maxlength="400" formControlName="ProjectDescription" class="form-control" placeholder="Project Description" [ngClass]="{'error-field': submitted && f.ProjectDescription.errors !== null && f.ProjectDescription.errors.required}"></textarea>
+                  <label for="" class="form-label">Project Name</label>
+                  <textarea type="text" rows="2" class="form-control" oninput="this.value = this.value.toUpperCase()" maxlength="100" formControlName="ProjectName" placeholder="Project Name" [ngClass]="{'error-field': submitted && f.ProjectName.errors !== null && f.ProjectName.errors.required}"></textarea>
                 </div>
                 <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Team Members</label>
-                  <textarea type="text" rows="2"  formControlName="TeamMemberIds"class="form-control" placeholder="Team Members"></textarea>
+                  <label for="" class="form-label">Project Description</label>
+                  <textarea type="text" rows="2" maxlength="400" formControlName="ProjectDescription" class="form-control" placeholder="Project Description"></textarea>
                 </div>
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Homepage URL</label>
@@ -46,13 +42,13 @@
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Project Manager</label>
                   <select class="form-select" formControlName="ProjectManagerId">
-                    <option value="0" disabled>Select Project Manager</option>
+                    <option value=0 disabled>Select Project Manager</option>
                     <option [value]="item.EmployeeUid" *ngFor="let item of projectManagers">{{item.FirstName}} {{item.LastName}}</option>
                   </select>
                 </div>
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Architect</label>
-                  <select class="form-select" formControlName="ArchitectId" >
+                  <select class="form-select" formControlName="ArchitectId">
                     <option value=0 disabled>Select Architect</option>
                     <option [value]="item.EmployeeUid" *ngFor="let item of architects">{{item.FirstName}} {{item.LastName}}</option>
                   </select>
@@ -68,7 +64,7 @@
               <div class="row">
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Client Name</label>
-                  <select class="form-select" formControlName="ClientId" >
+                  <select class="form-select" formControlName="ClientId">
                     <option value=0>Select Client</option>
                     <option [value]="item.ClientId" *ngFor="let item of clients">{{item.ClientName}}</option>
                   </select>
@@ -114,6 +110,7 @@
                       <th>Name</th>
                       <th>Email</th>
                       <th>Designation</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -121,7 +118,13 @@
                       <td>{{i+1}}</td>
                       <td>{{item.FullName}}</td>
                       <td>{{item.Email}}</td>
-                      <td>{{item.DesignationId}}</td>
+                      <td>{{item.DesignationId ==2 ? 'Project Manager' : item.DesignationId == 3 ? 'Project Architect' : item.DesignationId == 19 ? 'Team Lead' : 'Team Member'}}</td>
+                      <td>
+                        <a href="javascript:void(0)" class="text-decoration-none text-danger" [ngClass]="{'pe-none': item.DesignationId == 3 || item.DesignationId == 19 || item.DesignationId == 2}" (click)="deleteTeamMember(item)">
+                          <i class="fa" *ngIf="!isLoading" [ngClass]="{'fa-trash': item.DesignationId != 3 && item.DesignationId != 19 && item.DesignationId != 2, 'fa-ban' : item.DesignationId == 3 || item.DesignationId == 19 || item.DesignationId == 2}"></i>
+                          <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
+                        </a>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -178,9 +181,9 @@
         <div class="row mt-3">
           <div class="col-md-3">Team Lead: </div>
           <div class="col-md-9">
-            <select class="form-select" >
-              <option value=0 disabled>Select Architect</option>
-              <option [value]="item.EmployeeUid" *ngFor="let item of employees">{{item.FirstName}} {{item.LastName}}</option>
+            <select class="form-select" (change)="selectedTeamLead($event)" [(ngModel)]="teamLeadId">
+              <option value=0 disabled>Select Team Lead</option>
+              <option [value]="item.EmployeeUid" *ngFor="let item of teamLead">{{item.FirstName}} {{item.LastName}}</option>
             </select>
           </div>
         </div>
@@ -188,7 +191,7 @@
           <label for="" class="form-label">Team Members</label>
           <div class="d-flex flex-wrap mt-3 ">
             <div *ngFor="let item of teamMembers">
-              <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
+              <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngIf="item.DesignationId != 3 && item.DesignationId != 19 && item.DesignationId != 2">
                 {{item.FullName}}
               </span>
             </div>
@@ -201,7 +204,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="addTeamMember()">
+        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="closeAddMemberPopUp()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add Member' }}
         </button>

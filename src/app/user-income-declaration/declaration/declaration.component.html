@@ -95,7 +95,7 @@
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Total Tax Payable <i class="fa fa-exclamation-circle float-end fa-lg pe-3"
                         data-bs-placement="right" data-toggle="tooltip"
-                        title="Net tax amount {{taxAmount.TotalTaxPayable}} of after round Off is"></i></p>
+                        title="Net tax amount of after round Off is"></i></p>
                     <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TaxNeedToPay | number : '1.2-2') : (employeeDeclaration.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</p>
                   </div>
                 </div>
@@ -256,8 +256,8 @@
                                 <div class="d-flex align-items-center">
                                   <span>{{item.month}} {{item.year}}</span>
                                   <div class="ms-1 indicator" [ngClass]="{
-                                      'previous-employer-indicator': item.type == 0, 
-                                      'curent-employer-indicator': item.type == 1, 
+                                      'previous-employer-indicator': item.type == 0,
+                                      'curent-employer-indicator': item.type == 1,
                                       'project-salary-indicator': item.type == 2}">
                                   </div>
                                 </div>

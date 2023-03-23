@@ -455,6 +455,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   addSalaryGroupModal() {
     this.submitted = false;
+    this.isEditSalaryGroup = false;
     this.selectedSalaryStructure = new SalaryStructureType();
     this.salaryGroup();
     $('#addSalaryGroupModal').modal('show');
