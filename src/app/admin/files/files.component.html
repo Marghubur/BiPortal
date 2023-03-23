@@ -27,7 +27,7 @@
                   <div class="cell-wrapper">
                     <select class="form-select table-filter-control" (change)="filterRecords()"
                       [(ngModel)]="employeeFile.Month">
-                      <option value="0" selected disabled>Month</option>
+                      <option value="0" selected>All</option>
                       <option value="1">Jan</option>
                       <option value="2">Feb</option>
                       <option value="3">Mar</option>
@@ -468,7 +468,7 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
           <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
@@ -531,7 +531,7 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" (click)="closeWindow()">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="updateRecord()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}

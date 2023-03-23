@@ -374,13 +374,13 @@
                       <div class="tr py-3">
                         <div class="th fw-bold ps-3">Total Taxable Amount</div>
                         <div class="th fw-bold pe-3 text-end">
-                          {{getTotalTaxableAmount(1) | number:'1.2-2'}}
+                          {{getTotalTaxableAmount(1) > 0 ? (getTotalTaxableAmount(1) | number:'1.2-2') : '0.00'}}
                         </div>
                       </div>
                       <div class="tr py-3 border-bottom-0">
                         <div class="th ps-3">Net taxable income is</div>
                         <div class="th pe-3 text-end">
-                          {{getTotalTaxableAmount(1) | number:'1.2-2'}}
+                          {{getTotalTaxableAmount(1) > 0 ? (getTotalTaxableAmount(1) | number:'1.2-2') : '0.00'}}
                         </div>
                       </div>
                     </div>
