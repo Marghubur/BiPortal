@@ -114,6 +114,10 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
     else
       this.productData.TotalRecords= 0;
     this.allCatagories = res.productCatagory;
+    if (this.allCatagories.length > 0)
+      this.catagoryData.TotalRecords= this.allCatagories[0].Total;
+    else
+      this.catagoryData.TotalRecords= 0;
   }
 
   initForm() {
