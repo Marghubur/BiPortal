@@ -9,6 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ManageYearEndingComponent } from './manage-year-ending/manage-year-ending.component';
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { ApplyLeaveComponent } from './apply-leave/apply-leave.component'
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ApplyLeaveComponent } from './apply-leave/apply-leave.component'
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
+    NgChartsModule,
     LeaveManagementRoutingModule,
     CommonmodalModule
   ]
