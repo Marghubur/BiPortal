@@ -74,6 +74,7 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
     this.productDetail = new Product();
     this.productData = new Filter();
     this.catagoryData = new Filter();
+    this.catagoryData.PageSize = 5;
     this.currentCatagory = new Catagory();
     this.catagoryDetail = new Catagory();
     if (!data) {
@@ -114,10 +115,6 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
     else
       this.productData.TotalRecords= 0;
     this.allCatagories = res.productCatagory;
-    if (this.allCatagories.length > 0)
-      this.catagoryData.TotalRecords= this.allCatagories[0].Total;
-    else
-      this.catagoryData.TotalRecords= 0;
   }
 
   initForm() {
@@ -228,7 +225,7 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
   GetCatagoryFilterResult(e: Filter) {
     if(e != null) {
       this.catagoryData = e;
-      this.loadData();
+      this.loadCatagoryData();
     }
   }
 
@@ -524,6 +521,7 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
     }
 
     this.catagoryData = new Filter();
+    this.catagoryData.PageSize = 5;
     this.catagoryData.SortBy = FieldName +" "+ Order;
     this.loadCatagoryData()
   }

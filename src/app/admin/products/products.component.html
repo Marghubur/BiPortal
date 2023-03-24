@@ -371,7 +371,7 @@
 
 <!-- Add catagory Modal -->
 <div class="modal fade view-popup py-5" id="addCatagoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addCatagoryModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="addCatagoryModalLabel">Add/Update Category</h5>
@@ -393,7 +393,7 @@
             </div>
             <div class="col-md-12 mt-3">
               <label for="" class="form-label">Category Description</label>
-              <textarea maxlength="400" name="" id="" cols="30" rows="6" class="form-control description-area" placeholder="Enter CatagoryDescription" formControlName="CatagoryDescription" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryDescription.errors !== null && m.CatagoryDescription.errors.required}"></textarea>
+              <textarea maxlength="400" name="" id="" cols="30" rows="4" class="form-control description-area" placeholder="Enter CatagoryDescription" formControlName="CatagoryDescription" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryDescription.errors !== null && m.CatagoryDescription.errors.required}"></textarea>
             </div>
           </form>
           </div>
