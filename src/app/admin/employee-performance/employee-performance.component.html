@@ -5,6 +5,7 @@
         <h2 class="fw-bold text-dark">Welcome {{employeeDetails.FirstName}} !</h2>
       </div>
       <h6>Developer at {{allocatedClients.CompanyName}}</h6>
+      <!-- <button class="btn btn-primary-c" (click)="addObjectivePopUp()">Add Objective</button> -->
     </div>
     <div>
       <app-breadcrums></app-breadcrums>
@@ -138,3 +139,79 @@
     </ng-container>
   </div>
 </div>
+
+
+<!-- Add or update client Modal -->
+<div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addObjectiveModal" aria-labelledby="addObjectiveModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="addObjectiveModalLabel">Add/Update client allocation detail</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="objectForm">
+          <div class="mt-3">
+            <label for="" class="form-label">Objective</label>
+            <input type="text" placeholder="Ex: Provide an awesome customer experience" class="form-control">
+          </div>
+          <div class="mt-3">
+            <app-editor></app-editor>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="" class="form-label">Time Frame</label>
+
+            </div>
+            <div class="col-md-6">
+              <label for="" class="form-label">Who can see</label>
+              <div class="btn-group d-block" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio22" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="btnradio22">Manager</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio23" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio23">Everyone</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+              Include in review
+            </label>
+          </div>
+          <div class="mt-3">
+            <label for="" class="form-label">Tag</label>
+            <input type="text" placeholder="Add Tag/Search" class="form-control">
+          </div>
+          <div class="mt-3">
+            <label for="" class="form-label">Progress measured as</label>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+              <label class="form-check-label" for="inlineRadio1">Percent Complete</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+              <label class="form-check-label" for="inlineRadio2">Metric Unit</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+              <label class="form-check-label" for="inlineRadio2">Completed/ Not Completed</label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-outline-success">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <span class="ps-2">
+            Update changes
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Close Modal -->
