@@ -26,6 +26,7 @@ export class EmployeePerformanceComponent implements OnInit {
   monthlyWorkingHour: Array<number> = [];
   monthlyBurningHour: Array<number> =[];
   monthlyGapHour: Array<number> = [];
+  isPageReady: boolean = false;
 
   constructor(private nav:iNavigation,
               private http: AjaxService,
