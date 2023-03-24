@@ -20,6 +20,7 @@ import { HolidayComponent } from './holiday/holiday.component';
 import { ProjectsModule } from '../projects/projects.module';
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.comp
     UserRoutingModule,
     UtilModule,
     ProjectsModule,
+    NgChartsModule,
     UserIncomeDeclarationModule
   ],
   providers: [
