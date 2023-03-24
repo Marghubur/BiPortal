@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Chart } from 'chart.js';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -32,9 +32,11 @@ export class EmployeePerformanceComponent implements OnInit {
   isPageReady: boolean = false;
   isLoading: boolean = false;
   objectForm: FormGroup;
+  currentObject: Objective = new Objective();
 
   constructor(private nav:iNavigation,
               private http: AjaxService,
+              private fb: FormBuilder,
               private local: ApplicationStorage) { }
 
   ngOnInit(): void {
@@ -58,11 +60,24 @@ export class EmployeePerformanceComponent implements OnInit {
     //     month: this.performanceMonthsYears[0].months,
     //     year: this.performanceMonthsYears[0].years,
     //   }
+    this.initForm();
   }
 
-  // addObjectivePopUp() {
-  //   $('#addObjectiveModal').modal('show');
-  // }
+  initForm() {
+    this.objectForm = this.fb.group({
+      Objective: new FormControl(this.currentObject.Objective),
+      ObjSeeType: new FormControl(this.currentObject.ObjSeeType),
+      IsIncludeReview: new FormControl(this.currentObject.IsIncludeReview),
+      Tag: new FormControl(this.currentObject.Tag),
+      ProgressMeassureType: new FormControl(this.currentObject.ProgressMeassureType),
+      StartValue: new FormControl(this.currentObject.StartValue),
+      TargetValue: new FormControl(this.currentObject.TargetValue),
+    })
+  }
+
+  addObjectivePopUp() {
+    $('#addObjectiveModal').modal('show');
+  }
 
   // loadData(month: number, year: number) {
   //   this.isMonthlyRecordFound = false;
@@ -243,4 +258,14 @@ export class EmployeePerformanceComponent implements OnInit {
   //   }
   //   this.graphInstances = [];
   // }
+}
+
+class Objective {
+  Objective: string = null;
+  ObjSeeType: boolean = false;
+  IsIncludeReview: boolean = false;
+  Tag: string = null;
+  ProgressMeassureType: number = 0;
+  StartValue: number = 0;
+  TargetValue: number = 0;
 }
