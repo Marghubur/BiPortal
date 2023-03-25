@@ -25,3 +25,25 @@
   font-size: 20px;
   color: #222;
 }
+
+// ---------------------------------
+.t-body {
+  max-height: 49vh !important;
+}
+
+.cell-wrapper {
+  padding-left: .6rem;
+  padding-right: .6rem;
+}
+
+.hide-bar {
+  width: 17px !important;
+}
+
+.t-filter {
+  justify-content: flex-start !important;
+}
+
+.custom-height {
+  height: 43vh !important;
+}

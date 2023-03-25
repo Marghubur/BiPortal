@@ -10,7 +10,7 @@
     <div>
       <app-breadcrums></app-breadcrums>
     </div>
-    <ng-container *ngIf="isPageReady">
+    <!-- <ng-container *ngIf="isPageReady">
       <div class="d-flex py-4 px-3 my-3 IT-saving-msg">
         <i class="fa fa-user-circle fa-2x text-dark pe-4 pt-1"></i>
         <div class="col-md-12">
@@ -53,20 +53,6 @@
               <div class="monthly-record-status" *ngIf="!isMonthlyRecordFound">
                 NO RECORD FOUND
               </div>
-              <!-- <div class="col-md-4">
-                <div class="my-4 takehome-box px-3 rounded py-2">
-                  <h5>Take Home</h5>
-                  <h5>500</h5>
-                </div>
-                <div class="my-4 deduction-box px-3 rounded py-2">
-                  <h5>Deductions</h5>
-                  <h5>500</h5>
-                </div>
-                <div class="my-4 grosspay-box px-3 rounded py-2">
-                  <h5>Gross Pay</h5>
-                  <h5>500</h5>
-                </div>
-              </div> -->
             </div>
             <hr>
             <a href="javascript:void(0)" class="text-decoration-none text-center pt-2 pb-4 fw-bold fs-6"> View More Details <i class="fa fa-arrow-right"></i></a>
@@ -131,12 +117,141 @@
         </div>
         <h6 class="ps-3 fs-6 pb-3 text-dark"><i class="fa text-secondary fa-exclamation-circle fa-lg pe-2"></i>The Remaining tax amount will be deducted as <span class="fw-bold">&#8377;47840.00</span> / month in the next 10 month(s).</h6>
       </div>
-    </ng-container>
-    <ng-container *ngIf="!isPageReady">
-      <div class="text-center">
-        <img src="assets/images/uc.jpg" alt="" class="img-fluid">
+    </ng-container> -->
+    <div [ngSwitch]="isPageReady">
+      <div *ngSwitchCase="false">
+        <div class="mt-5">
+          <app-pre-load-table></app-pre-load-table>
+        </div>
       </div>
-    </ng-container>
+      <div *ngSwitchDefault>
+        <ng-container>
+          <div class="x_content">
+            <div class="t-table t-list t-border col-md-12">
+              <div class="hide-bar"></div>
+              <div class="t-head">
+                <div class="tr">
+                  <div class="th fe-index">
+                    <div class="t-filter t-index">
+                      <a href="javascript:void()" class="ps-3">#</a>
+                    </div>
+                  </div>
+                  <div class="th fe-5">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                        (keyup.enter)="filterRecords()" [(ngModel)]="objectDetail.Objective"
+                        placeholder="Search by Objective">
+                      <div class="t-filter" (click)="arrangeDetails(orderByObjectiveAsc, 'Objective')">
+                        <a href="javascript:void()" class="pe-2">Objectives</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" readonly
+                        placeholder="Search by Start Date">
+                      <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
+                        <a href="javascript:void()" class="pe-2">Start Date</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }"
+                          aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" readonly placeholder="Search by End Date">
+                      <div class="t-filter" (click)="arrangeDetails(orderByEndDateAsc, 'EndDate')">
+                        <a href="javascript:void()" class="pe-2">End Date</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByEndDateAsc == null || !orderByEndDateAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByEndDateAsc == null || orderByEndDateAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="objectDetail.TargetValue" placeholder="Search by Target Value">
+                      <div class="t-filter" (click)="arrangeDetails(orderBTargetValueAsc, 'TargetValue')">
+                        <a href="javascript:void()" class="pe-3">Target Value</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderBTargetValueAsc == null || !orderBTargetValueAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderBTargetValueAsc == null || orderBTargetValueAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1 text-center">
+                    <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
+                      <i class="fa fa-filter">
+                        <span>Filter</span>
+                      </i>
+                    </a>
+                    <div class="t-filter d-block text-center">
+                      <a href="javascript:void(0)">ACTIONS</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="t-body">
+                <ng-container *ngIf="isFileFound">
+                  <div class="tr py-2" *ngFor="let clients of clients">
+                    <div class="td align-middle text-center fe-index">{{clients.Index}}</div>
+                    <div class="td align-middle fe-3">
+                      <div class="cell-wrapper">
+                        {{clients.ClientName}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{clients.PrimaryPhoneNo}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{clients.Email}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{clients.City}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class=" d-flex flex-row justify-content-evenly">
+                        <a href="javascript:void(0)">
+                          <span class="badge bg-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                        </a>
+                        <a href="javascript:void(0)">
+                          <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <ng-container *ngIf="!isFileFound">
+                <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                  <p class="my-5 py-5">Record Not Found</p>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="mt-3">
+            <app-pagination [pagination]="objectiveData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+          </div>
+        </ng-container>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -147,24 +262,53 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addObjectiveModalLabel">Add/Update client allocation detail</h5>
+        <h5 class="modal-title" id="addObjectiveModalLabel">Add/Update Objective</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="objectForm">
-          <div class="mt-3">
+          <div class="">
             <label for="" class="form-label">Objective</label>
             <input type="text" placeholder="Ex: Provide an awesome customer experience" class="form-control" formControlName="Objective">
           </div>
           <div class="mt-3">
-            <app-editor></app-editor>
+            <label for="" class="form-label">Description</label>
+            <app-editor [height]="25" [content]="htmlText"></app-editor>
           </div>
           <div class="row">
-            <div class="col-md-6">
-              <label for="" class="form-label">Time Frame</label>
-              <input type="text" class="form-control">
+            <div class="col-md-4">
+              <label for="" class="form-label">Time Frame Start Date</label>
+              <form class="form-inline">
+                <div class="form-group w-100">
+                  <div class="input-group w-100">
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="startDate"
+                      (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 1}" #d="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                          class="fa fa-calendar" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <label for="" class="form-label">Time Frame End Date</label>
+              <form class="form-inline">
+                <div class="form-group w-100">
+                  <div class="input-group w-100" >
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="endDate"
+                      (dateSelect)="onEndDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 1}" #ed="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="ed.toggle()" type="button"><i
+                          class="fa fa-calendar" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-4">
               <label for="" class="form-label">Who can see</label>
               <div class="btn-group d-block" role="group" aria-label="Basic radio toggle button group">
                 <input type="radio" value="true" class="btn-check" formControlName="ObjSeeType" name="ObjSeeType" id="btnradio22" autocomplete="off">
@@ -213,7 +357,9 @@
               <ng-container *ngIf="objectForm.controls.ProgressMeassureType.value == '2'">
                 <div class="col-md-4 mt-3">
                   <label for="" class="form-label">Metric Units</label>
-                  <select name="" id=""></select>
+                  <select class="form-select" formControlName="MetricUnits">
+                    <option disabled value="0">Select</option>
+                  </select>
                 </div>
                 <div class="col-md-4 mt-3">
                   <label for="" class="form-label">Start Value</label>
@@ -223,10 +369,12 @@
                   <label for="" class="form-label">Target Value</label>
                   <input type="text" formControlName="TargetValue" class="form-control" placeholder="Target Value">
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-4 mt-3">
                   <label for="" class="form-label">How is progress calculated</label>
-                  <select class="form-select">
-
+                  <select class="form-select" formControlName="ProgressCalculatedAs">
+                    <select value=0 disabled>Select Option</select>
+                    <option value="1">Average of child KPI</option>
+                    <option value="2">Sum of chid KPI</option>
                   </select>
                 </div>
               </ng-container>
@@ -236,7 +384,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-outline-success">
+        <button class="btn btn-outline-success" (click)="addObjective()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
           <span class="ps-2">
            Add Objective

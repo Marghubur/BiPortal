@@ -19,6 +19,7 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
   rows: number = 0;
   columns: number = 0;
   IsSideIcon: boolean = true;
+  containerHeight: number = 0;
   private eventSubscription: Subscription;
 
   @ViewChild('textFrame', {static: false}) iframe: ElementRef;
@@ -31,6 +32,11 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
     if (textContent && textContent != "") {
       this.innerHtmlText = this.sanitizer.bypassSecurityTrustHtml(textContent);
     }
+  }
+
+  @Input()
+  set height(value: number) {
+    this.containerHeight = value;
   }
 
   @Input() cleanUp: Observable<void>;

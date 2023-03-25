@@ -148,7 +148,7 @@
   </div>
   <div class="col-md-12 mt-3 iframe-wrapper-active position-relative">
     <div class="iframe-wrapper-container"  (click)="enableEditor($event)"></div>
-    <iframe id="richTextField" [srcdoc]="innerHtmlText" class="h-75 rounded w-100"></iframe>
+    <iframe id="richTextField" [srcdoc]="innerHtmlText" class="rounded w-100" [ngStyle]="{'height': containerHeight+'vh'}"></iframe>
   </div>
 </div>
 
