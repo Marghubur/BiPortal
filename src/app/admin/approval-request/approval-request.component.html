@@ -2,8 +2,8 @@
   <div class="x_panel">
     <div class="x_header">
       <div class="x_header_title d-flex justify-content-between">
-        <div>
-          <h2 class=" fw-bold text-dark">Request</h2>
+        <div class="px-1">
+          <app-breadcrums [title]="'Request'" [subtitle]="'Request'"></app-breadcrums>
         </div>
         <div class="d-flex">
           <select class="form-select border-0 text-muted" [ngClass]="{'d-none': active == 4}" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
@@ -29,7 +29,6 @@
       </div>
     </div>
     <div class="position-relative">
-      <app-breadcrums></app-breadcrums>
       <a href="javascript:void(0)" (click)="pagereload()" class="page-reload-icon">
         <i class="fa fa-refresh"></i>
       </a>
@@ -38,25 +37,52 @@
       <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
         <li [ngbNavItem]="1">
           <a ngbNavLink (click)="changeTab()">Attendance</a>
-          <ng-template ngbNavContent>
-            <div class="row bg-light py-3 border-bottom px-3">
-              <div class="col-md-6 fw-bold text-dark">Description</div>
-              <div class="col-md-2 fw-bold text-dark">Type</div>
-              <div class="col-md-3 fw-bold text-dark">Manager</div>
-              <div class="col-md-1 fw-bold text-dark">State</div>
-            </div>
-            <ng-container *ngIf="!isPageLoading">
+          <ng-template ngbNavContent>            
+            <div class="p-4 bg-light" *ngIf="!isPageLoading">
               <ng-container *ngIf="attendanceDetail.length > 0">
                 <ng-container *ngFor="let item of attendanceDetail">
-                  <div class="row py-3 border-bottom px-3 leave-box">
-                    <div class="col-md-6">
+                  <div class="row p-3">
+                    <div class="col-md-6 fw-bold text-dark">Description</div>
+                  </div>
+                  <div class="row bg-white p-2 m-0 d-flex justify-content-between rounded leave-box">
+                    <div class="d-flex col-md-8">
+                      <a href="javascript:void(0)" class="me-3">
+                        <img class="grid-icon" src="assets/images/clock.png">
+                      </a>
+                      <a data-bs-toggle="collapse" href="#attendance" role="button" aria-expanded="false" aria-controls="attendance" class="me-3">
+                        <img class="grid-icon" src="assets/images/down-arrow.png">
+                      </a>
                       <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-dc">{{item.EmployeeName}}</span>
-                        <span class="ps-3 text-muted">[
-                          <small class="fade-label">Session Type: </small>
-                          <span class="text-muted fade-font">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>
-                          ]</span>
+                        <span class="fw-bold text-primary-dc">
+                          <u>{{item.EmployeeName}}</u>
+                        </span>                    
                       </p>
+                      <p class="ms-2 mb-0 fs-6">
+                        <span class="">Attendance Date >> </span>
+                        <span>{{item.AttendanceDay | date}}</span>
+                      </p>
+                    </div>
+                    <div class="col-4 d-flex flex-row-reverse">
+                      <a href="javascript:void(0)" class="ps-2">
+                        <i class="fa fa-user-circle-o"></i>
+                      </a>
+                      <div class="bg-success px-3 pb-1 rounded text-white">
+                        <small class="fade-label">Session Type: </small>
+                        <span class="fade-font">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>                          
+                      </div>
+                    </div>                
+                    
+                    <div class="d-none">
+                      <div class="col-md-2">
+                        Attendance approval Request
+                      </div>
+                      <div class="col-md-1">
+                        <ng-container [ngSwitch]="item.PresentDayStatus">
+                          <p *ngSwitchCase="2">Pending</p>
+                          <p *ngSwitchCase="9">Approved</p>
+                          <p *ngSwitchCase="5">Rejected</p>
+                        </ng-container>
+                      </div>
                       <p class="mb-0 fs-6">
                         <span class="me-2 fw-bold">Attendance Date: {{item.AttendanceDay | date}}</span>
                       </p>
@@ -64,29 +90,24 @@
                         <span class="fw-bold">Message:</span>
                         {{item.UserComments == "" ? 'NA' : item.UserComments}}
                       </span>
+                      <div class="col-md-3">
+                        {{item.ManagerName}}
+                        <p class="mb-0">{{item.ManagerEmail}}</p>
+                        <p class="mb-0">{{item.ManagerMobile}}</p>
+                      </div>
+                      <div class="d-flex my-1">
+                        <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)" href="javascript:void(0)"
+                          class="text-danger btn-sm fw-bold ps-0"><i class="fa pe-1"
+                            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
+                        <a *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)" href="javascript:void(0)"
+                          class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
+                            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
+                      </div>
                     </div>
-                    <div class="col-md-2">
-                      Attendance approval Request
-                    </div>
-                    <div class="col-md-3">
-                      {{item.ManagerName}}
-                      <p class="mb-0">{{item.ManagerEmail}}</p>
-                      <p class="mb-0">{{item.ManagerMobile}}</p>
-                    </div>
-                    <div class="col-md-1">
-                      <ng-container [ngSwitch]="item.PresentDayStatus">
-                        <p *ngSwitchCase="2">Pending</p>
-                        <p *ngSwitchCase="9">Approved</p>
-                        <p *ngSwitchCase="5">Rejected</p>
-                      </ng-container>
-                    </div>
-                    <div class="d-flex my-1">
-                      <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)" href="javascript:void(0)"
-                        class="text-danger btn-sm fw-bold ps-0"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
-                      <a *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)" href="javascript:void(0)"
-                        class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
+                    <div class="collapse mt-3" id="attendance">
+                      <div class="card card-body border-0">
+                        Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                      </div>
                     </div>
                   </div>
                 </ng-container>
@@ -96,7 +117,7 @@
                   No record found
                 </div>
               </ng-container>
-            </ng-container>
+            </div>
             <ng-container *ngIf="isPageLoading">
               <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
                 <div class="col-md-3 modal-container  text-center cog-wheel">
