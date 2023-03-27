@@ -40,6 +40,9 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   isFileFound: boolean = false;
   companyId: number = 0;
   companies: Array<any> = [];
+  currentCompny: any = null;
+  basePath: string = "";
+  downlodexcelFilePath: any = null;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -69,16 +72,11 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
       InActive: false,
       All: false
     };
+    this.basePath = this.http.GetImageBasePath();
+    this.currentCompny = this.local.findRecord("Companies")[0];
     this.employeeData = new Filter();
     this.employeeData.SearchString = "";
     this.employeeDetails = new employeeModel();
-    let Master = this.local.get(null);
-    if (Master !== null && Master !== "") {
-      this.companies = Master["Companies"];
-    } else {
-      ErrorToast("Invalid user. Please login again.")
-    }
-
     this.documentForm = this.fb.group({
       "Title": new FormControl(""),
       "Description": new FormControl(""),
@@ -372,5 +370,31 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     userDetail.UserId = user.EmployeeUid,
     userDetail.Name = user.FirstName +" "+ user.LastName
     this.nav.navigate(Documents, userDetail);
+  }
+
+  exportData(fileType: number) {
+    if (fileType > 0 && this.currentCompny.CompanyId > 0) {
+      this.isLoading = true
+      this.http.get(`Employee/ExportEmployee/${this.currentCompny.CompanyId}/${fileType}`).then(res => {
+        if (res.ResponseBody) {
+          console.log(res.ResponseBody);
+          let fileLocation = `${this.basePath}${res.ResponseBody}`;
+          this.downlodexcelFilePath = fileLocation;
+          $('#downloadexistingfiled').click();
+          let link = document.createElement('a');
+          link.setAttribute('target', '_blank');
+          link.setAttribute('type', 'hidden');
+          link.href = fileLocation;
+          link.download = `${res.ResponseBody}`;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          Toast("Employee exported successfully");
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
   }
 }

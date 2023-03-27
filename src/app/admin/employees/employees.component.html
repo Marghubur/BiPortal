@@ -50,10 +50,11 @@
           </div>
         </div>
         <div class="col-4 text-end">
-          <a href="javascript:void(0)" class="text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="right" title="export as pdf">
+          <a href="javascript:void(0)" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="export as pdf">
             <i class="fa fa-file-pdf-o fa-lg"></i>
           </a>
-          <a href="javascript:void(0)" class="text-decoration-none ms-3" data-bs-toggle="tooltip" data-bs-placement="right" title="export as excel">
+          <a href="{{downlodexcelFilePath}}" class="d-none" id="downloadexistingfiled"></a>
+          <a href="javascript:void(0)" class="text-success ms-3" (click)="exportData(2)" data-bs-toggle="tooltip" data-bs-placement="right" title="export as excel">
             <i class="fa fa-file-excel-o fa-lg"></i>
           </a>
         </div>
