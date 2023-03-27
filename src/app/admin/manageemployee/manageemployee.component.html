@@ -28,7 +28,7 @@
                 <div class="blur-section__content">
                   {{'Please add company first'}}
                   <p class="mb-0 py-3">
-                    <button class="btn btn-primary fs-5 fw-bold" (click)="gotoCompany()"><i class="fa fa-cog pe-2"></i> Configure Company</button>
+                    <button class="btn btn-primary-c fs-5 fw-bold" (click)="gotoCompany()"><i class="fa fa-cog pe-2"></i> Configure Company</button>
                   </p>
                 </div>
               </div>
@@ -167,6 +167,7 @@
                             <option value="12">Senior HR</option>
                             <option value="13">Direct HR</option>
                             <option value="14">Tester</option>
+                            <option value="19">Team Lead</option>
                             <option value="15">Other</option>
                           </select>
                         </div>
@@ -434,7 +435,7 @@
                                 <i class="fa fa-edit"></i>
                               </a>
                               <a (click)="deleteCurrentClient(client)" >
-                                <i class="ps-2 fa fa-trash"></i>
+                                <i class="ps-2 fa fa-trash text-danger"></i>
                               </a>
                             </div>
                           </div>

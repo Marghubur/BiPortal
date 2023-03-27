@@ -102,7 +102,8 @@
                     </div>
                   </div>
                   <div class="d-block py-3 mt-3 col-md-10">
-                    <canvas id="consumeLeaveChart" width="100" height="100"></canvas>
+                    <canvas baseChart [data]="chartData" type="doughnut" [options]="chartOptions">
+                    </canvas>
                   </div>
                 </div>
               </div>
@@ -422,7 +423,7 @@
           <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment" name="Reason" maxlength="100"
             formControlName="Reason" [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
           <div class="col-md-12 mt-4">
-            <p class="mb-0 text-dark ps-2 fs-5 py-2">Reporting Manager</p>
+            <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify To</p>
             <app-iautocomplete [data]="managerList" [(ngModel)]="reportingManagerId" [ngModelOptions]="{standalone: true}">
             </app-iautocomplete>
           </div>

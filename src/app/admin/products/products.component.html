@@ -371,7 +371,7 @@
 
 <!-- Add catagory Modal -->
 <div class="modal fade view-popup py-5" id="addCatagoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addCatagoryModalLabel" aria-hidden="true">
-  <div class="modal-dialog p-5 modal-fullscreen modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="addCatagoryModalLabel">Add/Update Category</h5>
@@ -379,131 +379,129 @@
       </div>
       <div class="modal-body">
         <ng-container *ngIf="isCatagoryPageReady">
+          <div class="col-md-12">
+            <form [formGroup]="catagoryForm" *ngIf="catagoryForm">
             <div class="row">
-              <div class="col-md-7">
-                <div class="t-table t-list t-border col-md-12">
-                  <div class="hide-bar"></div>
-                  <div class="t-head">
-                    <div class="tr">
-                      <div class="th fe-index">
-                        <div class="t-index">
-                          <a href="javascript:void(0)">#</a>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <input class="form-control form-control-sm" autofocus placeholder="Search by Group Id" [(ngModel)]="catagoryDetail.GroupId"
-                           (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
-                          <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByGroupIdAsc, 'GroupId')">
-                            <a href="javascript:void(0)">Group Id</a>
-                            <i class="fa fa-sort-amount-asc"
-                              [ngClass]="{'d-none': orderByGroupIdAsc == null || !orderByGroupIdAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
-                              [ngClass]="{'d-none': orderByGroupIdAsc == null || orderByGroupIdAsc }" aria-hidden="true"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <input class="form-control form-control-sm" autofocus placeholder="Search by Category Code" [(ngModel)]="catagoryDetail.CatagoryCode"
-                           (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
-                          <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryCodeAsc, 'CatagoryCode')">
-                            <a href="javascript:void(0)" class="pe-2">Category Code</a>
-                            <i class="fa fa-sort-amount-asc"
-                              [ngClass]="{'d-none': orderByCatagoryCodeAsc == null || !orderByCatagoryCodeAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
-                              [ngClass]="{'d-none': orderByCatagoryCodeAsc == null || orderByCatagoryCodeAsc }" aria-hidden="true"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-3">
-                        <div class="cell-wrapper">
-                          <input class="form-control form-control-sm" autofocus placeholder="Search by Category Description" [(ngModel)]="catagoryDetail.CatagoryDescription"
-                           (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
-                          <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryDescriptionAsc, 'CatagoryDescription')">
-                            <a href="javascript:void(0)" class="pe-2">Category Description</a>
-                            <i class="fa fa-sort-amount-asc"
-                              [ngClass]="{'d-none': orderByCatagoryDescriptionAsc == null || !orderByCatagoryDescriptionAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
-                              [ngClass]="{'d-none': orderByCatagoryDescriptionAsc == null || orderByCatagoryDescriptionAsc }" aria-hidden="true"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-index text-center">
-                        <div class="cell-wrapper">
-                          <a href="javascript:void(0)" (click)="resetCatagoryFilter()" class="text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset filter">
-                            <i class="fa fa-refresh text-danger"></i>
-                          </a>
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Action</a>
-                          </div>
-                        </div>
+              <div class="col-md-6 mt-2">
+                <label for="" class="form-label">Group Id</label>
+                <input type="text" OnlyNumber="3" class="form-control" placeholder="Enter Group Id" formControlName="GroupId">
+              </div>
+              <div class="col-md-6 mt-2">
+                <label for="" class="form-label">Category Name</label>
+                <input type="text" maxlength="40" class="form-control" placeholder="Enter Category Name" formControlName="CatagoryCode" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryCode.errors !== null && m.CatagoryCode.errors.required}">
+              </div>
+            </div>
+            <div class="col-md-12 mt-3">
+              <label for="" class="form-label">Category Description</label>
+              <textarea maxlength="400" name="" id="" cols="30" rows="4" class="form-control description-area" placeholder="Enter CatagoryDescription" formControlName="CatagoryDescription" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryDescription.errors !== null && m.CatagoryDescription.errors.required}"></textarea>
+            </div>
+          </form>
+          </div>
+          <div class="col-md-12 mt-3 product-table-container">
+            <div class="t-table t-list t-border col-md-12">
+              <div class="hide-bar"></div>
+              <div class="t-head">
+                <div class="tr">
+                  <div class="th fe-index">
+                    <div class="t-index">
+                      <a href="javascript:void(0)">#</a>
+                    </div>
+                  </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Group Id" [(ngModel)]="catagoryDetail.GroupId"
+                       (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
+                      <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByGroupIdAsc, 'GroupId')">
+                        <a href="javascript:void(0)">Group Id</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByGroupIdAsc == null || !orderByGroupIdAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByGroupIdAsc == null || orderByGroupIdAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
-                  <div class="t-body">
-                    <ng-container *ngIf="allCatagory.length > 0">
-                      <div class="tr py-2" *ngFor="let item of allCatagory; let i = index;">
-                        <div class="td align-middle fe-index">
-                          <div class="cell-wrapper text-center">
-                            {{item.Index}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.GroupId}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1 text-truncate">
-                          <div class="cell-wrapper text-truncate">
-                            {{item.CatagoryCode}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-3">
-                          <div class="cell-wrapper">
-                            {{item.CatagoryDescription}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-index">
-                          <div class="d-flex flex-row justify-content-evenly">
-                            <a href="javascript:void(0)" class="text-decoration-none" (click)="editCatagory(item)">
-                              <i class="fa fa-pencil pe-2"></i>
-                            </a>
-                          </div>
-                        </div>
+                  <div class="th fe-1">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Category Code" [(ngModel)]="catagoryDetail.CatagoryCode"
+                       (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
+                      <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryCodeAsc, 'CatagoryCode')">
+                        <a href="javascript:void(0)" class="pe-2">Category Code</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByCatagoryCodeAsc == null || !orderByCatagoryCodeAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByCatagoryCodeAsc == null || orderByCatagoryCodeAsc }" aria-hidden="true"></i>
                       </div>
-                    </ng-container>
-                    <ng-container *ngIf="allCatagory.length == 0 && isPageReady">
-                      <div
-                        class="custom-height fw-bold fs-3 py-5 my-5 text-danger d-flex align-items-center justify-content-center">
-                        <p class="my-5 py-5">Record Not Found</p>
-                      </div>
-                    </ng-container>
+                    </div>
                   </div>
-                </div>
-                <div class="mt-3">
-                  <app-pagination [pagination]="catagoryData" (onPageChange)="GetCatagoryFilterResult($event)"></app-pagination>
+                  <div class="th fe-3">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Category Description" [(ngModel)]="catagoryDetail.CatagoryDescription"
+                       (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
+                      <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryDescriptionAsc, 'CatagoryDescription')">
+                        <a href="javascript:void(0)" class="pe-2">Category Description</a>
+                        <i class="fa fa-sort-amount-asc"
+                          [ngClass]="{'d-none': orderByCatagoryDescriptionAsc == null || !orderByCatagoryDescriptionAsc }" aria-hidden="true"></i>
+                        <i class="fa fa-sort-amount-desc"
+                          [ngClass]="{'d-none': orderByCatagoryDescriptionAsc == null || orderByCatagoryDescriptionAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-index text-center">
+                    <div class="cell-wrapper">
+                      <a href="javascript:void(0)" (click)="resetCatagoryFilter()" class="text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset filter">
+                        <i class="fa fa-refresh text-danger"></i>
+                      </a>
+                      <div class="t-filter">
+                        <a href="javascript:void(0)" class="pe-2">Action</a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="col-md-5">
-                <form [formGroup]="catagoryForm" *ngIf="catagoryForm">
-                <div class="row">
-                  <div class="col-md-6 mt-3">
-                    <label for="" class="form-label">Group Id</label>
-                    <input type="text" OnlyNumber="3" class="form-control" placeholder="Enter Group Id" formControlName="GroupId">
+              <div class="t-body">
+                <ng-container *ngIf="allCatagory.length > 0">
+                  <div class="tr py-2" *ngFor="let item of allCatagory; let i = index;">
+                    <div class="td align-middle fe-index">
+                      <div class="cell-wrapper text-center">
+                        {{item.Index}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="cell-wrapper">
+                        {{item.GroupId}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1 text-truncate">
+                      <div class="cell-wrapper text-truncate">
+                        {{item.CatagoryCode}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-3">
+                      <div class="cell-wrapper">
+                        {{item.CatagoryDescription}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-index">
+                      <div class="d-flex flex-row justify-content-evenly">
+                        <a href="javascript:void(0)" class="text-decoration-none" (click)="editCatagory(item)">
+                          <i class="fa fa-pencil pe-2"></i>
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-md-6 mt-3">
-                    <label for="" class="form-label">Category Name</label>
-                    <input type="text" maxlength="40" class="form-control" placeholder="Enter Category Name" formControlName="CatagoryCode" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryCode.errors !== null && m.CatagoryCode.errors.required}">
+                </ng-container>
+                <ng-container *ngIf="allCatagory.length == 0 && isPageReady">
+                  <div
+                    class="custom-height fw-bold fs-3 py-5 my-5 text-danger d-flex align-items-center justify-content-center">
+                    <p class="my-5 py-5">Record Not Found</p>
                   </div>
-                </div>
-                <div class="col-md-12 mt-3">
-                  <label for="" class="form-label">Category Description</label>
-                  <textarea maxlength="400" name="" id="" cols="30" rows="10" class="form-control description-area" placeholder="Enter CatagoryDescription" formControlName="CatagoryDescription" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && m.CatagoryDescription.errors !== null && m.CatagoryDescription.errors.required}"></textarea>
-                </div>
-              </form>
+                </ng-container>
               </div>
             </div>
+            <div class="mt-3">
+              <app-pagination [pagination]="catagoryData" (onPageChange)="GetCatagoryFilterResult($event)"></app-pagination>
+            </div>
+          </div>
         </ng-container>
         <ng-container *ngIf="!isCatagoryPageReady">
           <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">

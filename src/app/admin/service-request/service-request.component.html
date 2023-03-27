@@ -31,13 +31,13 @@
                               <a href="javascript:void()" class="ps-3">#</a>
                             </div>
                           </div>
-                          <div class="th fe-5">
+                          <div class="th fe-1">
                             <div class="cell-wrapper">
-                              <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                              <input class="form-control form-control-sm" readonly (keydown.esc)="resetFilter()"
                                 (keyup.enter)="filterRecords()" autofocus
                                 placeholder="Search by Name" id="namefilter">
                               <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ColumnName')">
-                                <a href="javascript:void()" class="pe-2">Full Name</a>
+                                <a href="javascript:void()" class="pe-2">Request Type</a>
                                 <i class="fa fa-sort-amount-asc"
                                   [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
                                 <i class="fa fa-sort-amount-desc"
@@ -49,9 +49,9 @@
                             <div class="cell-wrapper">
                               <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
                                 (keydown.esc)="resetFilter()"
-                                placeholder="Search by MobileNumber">
+                                placeholder="Search by Title" readonly>
                               <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
-                                <a href="javascript:void()" class="pe-2">Mobile Number</a>
+                                <a href="javascript:void()" class="pe-2">Title</a>
                                 <i class="fa fa-sort-amount-asc"
                                   [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
                                 <i class="fa fa-sort-amount-desc"
@@ -59,12 +59,12 @@
                               </div>
                             </div>
                           </div>
-                          <div class="th fe-2">
+                          <div class="th fe-4">
                             <div class="cell-wrapper">
                               <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                                (keydown.esc)="resetFilter()" placeholder="Search by Email">
+                                (keydown.esc)="resetFilter()" placeholder="Search by Description" readonly>
                               <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
-                                <a href="javascript:void()" class="pe-2">Email Id</a>
+                                <a href="javascript:void()" class="pe-2">Description</a>
                                 <i class="fa fa-sort-amount-asc"
                                   [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
                                 <i class="fa fa-sort-amount-desc"
@@ -75,7 +75,7 @@
                           <div class="th fe-1 text-center">
                             <div class="cell-wrapper">
                               <button class="btn btn-primary-c" (click)="addService()"><i class="fa fa-plus pe-1"></i> Add Service</button>
-                              <div class="t-filter">
+                              <div class="t-filter align-items-center justify-content-center">
                                 ACTION
                               </div>
                             </div>
@@ -90,41 +90,19 @@
                                       {{index + 1}}
                                   </div>
                                 </div>
-                                <div class="td align-middle fe-5">
-                                  <div class="cell-wrapper">
-                                    <a href="javascript:void(0)" (click)="EditCurrent(service)">
-                                      {{service.RequestTitle}}
-                                    </a>
-                                    <div class="float-end">
-                                      <a href="javascript:void(0)"  data-bs-toggle="tooltip"
-                                        data-bs-placement="right" title="View Employee Performance"><span class="badge bg-secondary me-3"><i
-                                            class="fa fa-line-chart"></i></span></a>
-                                      <a href="javascript:void(0)" data-bs-toggle="tooltip"
-                                        data-bs-placement="right" title="View Profile"><span class="badge bg-dark me-3"><i
-                                            class="fa fa-user-circle-o user-edit-icon"></i></span></a>
-                                      <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o"
-                                          data-bs-toggle="tooltip" data-bs-placement="right">
-                                          </span>
-                                      </a>
-                                      <a href="javascript:void(0)" class="ms-3"
-                                        data-bs-toggle="tooltip" data-bs-placement="right" title="View Attendance">
-                                        <span class="text-sm-left text-muted">Attendance</span>
-                                        <span class="ms-2 badge bg-success">
-                                          <i class="fa fa-id-badge"></i>
-                                        </span>
-                                      </a>
-                                      <span class="badge bg-danger ms-3">3</span>
-                                    </div>
+                                <div class="td align-middle fe-1">
+                                  <div class="cell-wrapper ">
+                                    {{service.RequestTypeId}}
                                   </div>
                                 </div>
-                                <div class="td align-middle fe-2">
-                                  <div class="cell-wrapper">
-                                    Mobile
+                                <div class="td align-middle fe-2 text-truncate">
+                                  <div class="cell-wrapper text-truncate">
+                                    {{service.RequestTitle}}
                                   </div>
                                 </div>
-                                <div class="td align-middle fe-2">
-                                  <div class="cell-wrapper">
-                                    Email
+                                <div class="td align-middle fe-4 text-truncate">
+                                  <div class="cell-wrapper text-truncate">
+                                    {{service.RequestDescription}}
                                   </div>
                                 </div>
                                 <div class="td align-middle fe-1">

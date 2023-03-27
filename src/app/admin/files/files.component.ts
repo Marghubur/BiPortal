@@ -442,6 +442,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     }
     this.currentFileId = item.FileUid;
     this.employeeFile = item;
+    this.employeeFile.Month = "0";
     this.isError = false;
     this.updateBillPaidOn();
     $('#addupdateModal').modal('show');
@@ -804,6 +805,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     if(item) {
       this.isGSTStatusModalReady = true;
       this.employeeFile = item;
+      this.employeeFile.Month = "0";
       this.model = this.calendar.getToday();
       let selectedDate = new Date(this.model.year, this.model.month - 1, this.model.day);
       this.gstDetailForm.get("Paidon").setValue(selectedDate);

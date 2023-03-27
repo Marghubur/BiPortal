@@ -32,11 +32,11 @@
     </div>
     <!-- <hr> -->
     <div class="title_menu ms-3 mt-3">
-      <a [routerLink]="['/admin/email']" routerLinkActive="router-link-active"><i class="fa fa-envelope-o me-3 pb-3"
+      <a [routerLink]="['/admin/email']" class="text-dark" routerLinkActive="router-link-active"><i class="fa fa-envelope-o me-3 pb-3"
           aria-hidden="true"></i>Mail Box </a>
-      <a [routerLink]="['/user/resetpassword']" *ngIf="!admin" routerLinkActive="router-link-active"><i
+      <a [routerLink]="['/user/resetpassword']" *ngIf="!admin" class="text-dark" routerLinkActive="router-link-active"><i
           class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>Reset Password</a>
-      <a [routerLink]="['/admin/resetpassword']" *ngIf="admin" routerLinkActive="router-link-active"><i
+      <a [routerLink]="['/admin/resetpassword']" *ngIf="admin" class="text-dark" routerLinkActive="router-link-active"><i
           class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>Reset Password</a>
     </div>
     <div class="text-center w-75 ms-3 mt-3 pb-4">
@@ -45,13 +45,13 @@
   </div>
   <div class="w-100 position-absolute bg-secondary" class="menu-footer btn-primary-c">
     <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
-      <i class="fa fa-cog" aria-hidden="true"></i>
+      <i class="fa fa-cog text-light" aria-hidden="true"></i>
     </a>
     <a href="javascript:void(0)">
-      <i class="fa fa-info-circle" (click)="notification()" aria-hidden="true"></i>
+      <i class="fa fa-info-circle text-light" (click)="notification()" aria-hidden="true"></i>
     </a>
     <a href="javascript:void(0)" (click)="LogoutUser()">
-      <i class="fa fa-sign-out" aria-hidden="true"></i>
+      <i class="fa fa-sign-out text-light" aria-hidden="true"></i>
     </a>
   </div>
 

@@ -1,7 +1,7 @@
 import { AfterViewChecked, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Chart } from 'chart.js';
+import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
@@ -56,6 +56,27 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
   currentLeaveType: any = null;
   basePath: string = "";
   leaveAttachment: Array<any> = [];
+  chartData: ChartData<'doughnut'> = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+      }
+    ]
+  };
+
+  chartOptions: ChartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: '',
+      },
+      legend: {
+        display: false
+      },
+    },
+  };
 
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
@@ -107,6 +128,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
       if(this.userDetail && this.userDetail != null) {
         this.employeeId = this.userDetail.UserId;
         this.leaveDetail.EmployeeId = this.employeeId;
+        this.clearChart();
         this.loadData();
       } else {
         Toast("Invalid user. Please login again.")
@@ -355,7 +377,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
         this.buildChartData(item.nativeElement.getContext('2d'), i);
       });
     });
-    this.LoadDoughnutchart();
+    this.bindDonutChartData();
   }
 
   findHoliday(allHoliday: Array<any>) {
@@ -420,7 +442,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
         bgColor = ['red', '#379237'];
         break;
       case 1:
-        bgColor = ['red', '#379237'];
+        bgColor = ['red', '#379273'];
         break;
        case 2:
         bgColor = ['red', 'rgba(255, 159, 64, 0.2)'];
@@ -742,6 +764,80 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
     this.viewer = document.getElementById("leavefile-container");
     this.viewer.classList.remove('d-none');
     this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
+  }
+
+  bindDonutChartData() {
+    let bgColor = ['#379237', '#379273', 'rgba(255, 159, 64, 0.2)', 'rgba(153, 102, 255, 0.2)'];
+    let data = [];
+    for (let i = 0; i <  this.chartDataset.length; i++) {
+      let value = (this.chartDataset[i].ConsumedLeave/this.chartDataset[i].MaxLeaveLimit) *100;
+      data.push(value);
+    }
+    this.chartData = {
+      labels: this.chartDataset.map(x => x.PlanName),
+      datasets: [
+        {
+          data: data,
+          backgroundColor: bgColor,
+          borderWidth: 0,
+          hoverOffset: 4,
+          hoverBackgroundColor: bgColor,
+        }
+      ]
+    };
+
+    this.chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      // plugins: {
+      //   title: {
+      //     display: true,
+      //   },
+      //   legend: {
+      //     display: true
+      //   },
+      // },
+    }
+  }
+
+  changeLegends() {
+    this.chartOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+      // plugins: {
+      //   title: {
+      //     display: true,
+      //   },
+      //   legend: {
+      //     display: true
+      //   },
+      // },
+    };
+  }
+
+  clearChart() {
+    this.chartData = {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+        }
+      ],
+
+    };
+    this.chartOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+
+      // plugins: {
+      //   title: {
+      //     display: true,
+      //   },
+      //   legend: {
+      //     display: false
+      //   },
+      // },
+    };
   }
 
 
