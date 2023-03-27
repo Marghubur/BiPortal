@@ -42,6 +42,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   companies: Array<any> = [];
   currentCompny: any = null;
   basePath: string = "";
+  downlodexcelFilePath: any = null;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -378,6 +379,8 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
         if (res.ResponseBody) {
           console.log(res.ResponseBody);
           let fileLocation = `${this.basePath}${res.ResponseBody}`;
+          this.downlodexcelFilePath = fileLocation;
+          $('#downloadexistingfiled').click();
           let link = document.createElement('a');
           link.setAttribute('target', '_blank');
           link.setAttribute('type', 'hidden');
