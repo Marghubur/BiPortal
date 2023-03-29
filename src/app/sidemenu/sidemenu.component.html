@@ -34,10 +34,12 @@
     <div class="title_menu ms-3 mt-3">
       <a [routerLink]="['/admin/email']" class="text-dark" routerLinkActive="router-link-active"><i class="fa fa-envelope-o me-3 pb-3"
           aria-hidden="true"></i>Mail Box </a>
-      <a [routerLink]="['/user/resetpassword']" *ngIf="!admin" class="text-dark" routerLinkActive="router-link-active"><i
+      <a [routerLink]="['/user/resetpassword']" *ngIf="!isAdmin" class="text-dark" routerLinkActive="router-link-active"><i
           class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>Reset Password</a>
-      <a [routerLink]="['/admin/resetpassword']" *ngIf="admin" class="text-dark" routerLinkActive="router-link-active"><i
+      <a [routerLink]="['/admin/resetpassword']" *ngIf="isAdmin" class="text-dark" routerLinkActive="router-link-active"><i
           class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>Reset Password</a>
+      <a (click)="navToMasterDataPasge()" *ngIf="isAdmin" class="text-dark" routerLinkActive="router-link-active"><i
+          class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>Uploda Master Data</a>
     </div>
     <div class="text-center w-75 ms-3 mt-3 pb-4">
       You're in a team-managed project Learn more

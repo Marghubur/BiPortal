@@ -1,7 +1,7 @@
 import { ApplicationStorage } from "../../providers/ApplicationStorage";
 import { AjaxService } from "../../providers/ajax.service";
 import { CommonService, ErrorToast, Toast, UserDetail } from "../../providers/common-service/common.service";
-import { AccessTokenExpiredOn, AdminNotification, Blogs, BuildPdf, Documents, Employees, Login, OrganizationSetting } from "../../providers/constants";
+import { AccessTokenExpiredOn, AdminMasterData, AdminNotification, Blogs, BuildPdf, Documents, Employees, Login, OrganizationSetting } from "../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { UserService } from "src/providers/userService";
@@ -25,7 +25,6 @@ export class SidemenuComponent implements OnInit {
   Menu: Array<any> = [];
   CatagoryPosition: number = 0;
   MenuName: string = '';
-  admin: boolean = true;
   isAdmin: boolean = false;
 
   @Output() authentication = new EventEmitter();
@@ -48,17 +47,9 @@ export class SidemenuComponent implements OnInit {
   ) {
   }
 
-  ngDoCheck(): void {
-    let data = this.local.findRecord("UserDetail");
-    if (data.UserTypeId == 1)
-      this.isAdmin = true;
-    else
-      this.isAdmin = false;
-  }
-
   ngOnInit() {
     this.IsLoggedIn = false;
-    this.admin = true;
+    this.isAdmin = true;
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
     this.userDetail = this.user.getInstance() as UserDetail;
     if(expiredOn === null || expiredOn === "")
@@ -74,7 +65,7 @@ export class SidemenuComponent implements OnInit {
         this.IsLoggedIn = true;
         this.userDetail = Master["UserDetail"];
         if (this.userDetail.UserTypeId == 2) {
-          this.admin = false;
+          this.isAdmin = false;
         }
 
         let menuItem = this.nav.getRouteList();
@@ -179,6 +170,10 @@ export class SidemenuComponent implements OnInit {
       }
       i++;
     }
+  }
+
+  navToMasterDataPasge() {
+    this.nav.navigate(AdminMasterData, null)
   }
 
   LogoutUser() {
