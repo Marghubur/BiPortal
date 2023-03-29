@@ -32,7 +32,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   exemptions: Array<IncomeDeclaration> = [];
   otherExemptions: Array<IncomeDeclaration> = [];
   taxSavingAllowance: Array<IncomeDeclaration> = [];
-  cachedData: any = null;
   taxAmount: TaxAmount = new TaxAmount();
   myDeclaration: Array<MyDeclaration> = [];
   year: number = 0;
@@ -40,11 +39,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   monthlyTaxAmount: MonthlyTax;
   employeeDeclaration: any = {};
   exemptionComponent: Array<any> = [];
-  editException: boolean = false;
   EmployeeId: number = 0;
   EmployeeDeclarationId: number = 0;
   SectionIsReady: boolean = false;
-  presentRow: any = null;
   attachmentForDeclaration: string = '';
   employeeEmail: string = '';
   totalFileSize: number = 0;
@@ -73,9 +70,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   houseRentDetailFile: Array<any> = [];
   houseRentDetailLetterFile: Array<any> = [];
   viewRentPropFile: Array<any> = [];
-  viewAttachment: string = '';
   deleteType: string = '';
   currentMonth: string = "";
+  selectDeclaration: any = null;
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -252,20 +249,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  // addSubmittedFileIds(item: any):any {
-  //   let i = 0;
-  //   while(i < item.length) {
-  //     let currentDeclaration: any = this.declarationFiles.filter(x =>x.FileName.split('_')[0] == item[i].ComponentId);
-  //     if (currentDeclaration.length > 0)
-  //     item[i].UploadedFileIds = [];
-  //     for (let index = 0; index < currentDeclaration.length; index++) {
-  //       item[i].UploadedFileIds.push(currentDeclaration[index].FileId);
-  //     }
-  //     i++;
-  //   }
-  //   return item;
-  // }
-
   calculatedTotalUploadFile(item: any):number {
     let totalUploadedFile = 0;
     let elem = item.filter(x => x.UploadedFileIds != null && x.UploadedFileIds != '[]');
@@ -339,25 +322,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   editDeclaration(item: any, e: any) {
-    this.editException = true;
-    let current = e.target;
-    this.presentRow = current.closest('div[name="table-row"]');
-    this.presentRow.querySelector('div[name="view-control"]').classList.add('d-none');
-    this.presentRow.querySelector('div[name="edit-control"]').classList.remove('d-none');
-    this.presentRow.querySelector('i[name="edit-declaration"]').classList.add('d-none');
-    this.presentRow.querySelector('div[name="cancel-declaration"]').classList.remove('d-none');
-    this.presentRow.querySelector('a[name="upload-proof"]').classList.remove('pe-none', 'text-decoration-none', 'text-muted');
-    this.presentRow.querySelector('a[name="upload-proof"]').classList.add('pe-auto', 'fw-bold', 'text-primary-c');
-    this.presentRow.querySelector('input[name="DeclaratedValue"]').focus();
-    if(item.UploadedFileIds != null && item.UploadedFileIds != '[]') {
-      this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
-      let tag = document.createElement("i");
-      tag.classList.add("fa", "fa-check-circle", "text-success", "fa-lg", "pe-2");
-      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
-      tag = document.createElement("span");
-      var text = document.createTextNode("Changed");
-      tag.appendChild(text);
-      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
+    this.selectDeclaration = null;
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    if (item) {
+      this.selectDeclaration = item;
+      this.uploadDocument(item);
+      $("#manageDeclarationModal").modal('show');
     }
   }
 
@@ -412,7 +383,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     if (item) {
       this.attachmentForDeclaration = item.ComponentId ;
       this.isLargeFile = false;
-      this.viewAttachment = '';
       this.slectedDeclarationnFile = [];
       if(item.UploadedFileIds != null) {
         if (isNaN(item.UploadedFileIds[0]))
@@ -427,20 +397,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           });
         }
       }
-
-      if (this.FilesCollection.length > 0) {
-        this.FileDocumentList = [];
-        this.FilesCollection = [];
-        this.removeSelectedFile()
-      }
-      $("#addAttachmentModal").modal('show');
     }
   }
 
-
   UploadAttachment(fileInput: any) {
-    this.FileDocumentList = [];
-    this.FilesCollection = [];
     let selectedFile = fileInput.target.files;
     if (selectedFile.length > 0) {
       let index = 0;
@@ -490,32 +450,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   fireBrowser() {
     $("#modifyAttachment").click();
   }
-
-  // ModifyAttachment(fileInput: any, fileId: number) {
-  //   this.FileDocumentList = [];
-  //   this.FilesCollection = [];
-  //   let selectedFile = fileInput.target.files;
-  //   if (selectedFile) {
-  //     let file = null;
-  //     file = <File>selectedFile[0];
-  //     let item: Files = new Files();
-  //     item.FileName = this.attachmentForDeclaration;
-  //     item.FileType = file.type;
-  //     item.FileSize = (Number(file.size) / 1024);
-  //     item.FileExtension = file.type;
-  //     item.DocumentId = 0;
-  //     item.FileUid = fileId;
-  //     item.ParentFolder = '';
-  //     item.Email = this.employeeEmail;
-  //     item.UserId = this.EmployeeId;
-  //     this.FileDocumentList.push(item);
-  //     this.FilesCollection.push(file);
-  //     this.totalFileSize = 0;
-  //     this.totalFileSize += selectedFile[0].size / 1024;
-  //   } else {
-  //     ErrorToast("You are not slected the file")
-  //   }
-  // }
 
   viewFile(userFile: any) {
     userFile.FileName = userFile.FileName.replace(/\.[^/.]+$/, "");
@@ -607,73 +541,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  closeAttachmentModal() {
-    this.FileDocumentList = [];
-    this.FilesCollection = [];
-    $("#addAttachmentModal").modal('hide');
-  }
-
-  closeDeclaration(item: any, e: any) {
-    this.FileDocumentList = [];
-    this.FilesCollection = [];
-    this.editException = true;
-    let current = e.target;
-    let elem = current.closest('div[name="table-row"]')
-    elem.querySelector('div[name="view-control"]').classList.remove('d-none');
-    elem.querySelector('div[name="edit-control"]').classList.add('d-none');
-    elem.querySelector('i[name="edit-declaration"]').classList.remove('d-none');
-    elem.querySelector('div[name="cancel-declaration"]').classList.add('d-none');
-    elem.querySelector('a[name="upload-proof"]').classList.remove('pe-auto', 'fw-bold', 'text-primary-c');
-    elem.querySelector('a[name="upload-proof"]').classList.add('pe-none', 'text-decoration-none', 'text-muted');
-    if(item.UploadedFileIds <= 0) {
-      this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
-      let tag = document.createElement("i");
-      tag.classList.add("fa", "fa-paperclip", "pe-2");
-      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
-      tag = document.createElement("span");
-      var text = document.createTextNode("Not Upload");
-      tag.appendChild(text);
-      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
-    } else {
-      this.presentRow.querySelector('a[name="upload-proof"]').innerText = '';
-      let tag = document.createElement("i");
-      tag.classList.add("fa", "fa-check-circle", "text-success", "fa-lg", "pe-2");
-      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
-      tag = document.createElement("span");
-      var text = document.createTextNode("Uploaded");
-      tag.appendChild(text);
-      this.presentRow.querySelector('a[name="upload-proof"]').appendChild(tag);
-    }
-  }
-
   fireFileBrowser() {
     $("#uploadAttachment").click();
   }
 
-  removeSelectedFile() {
-    let elem = document.querySelectorAll('a[name="upload-proof"]');
-    for (let i = 0; i < elem.length; i++) {
-      (<HTMLElement> elem[i]).innerText = '';
-      let tag = document.createElement("i");
-      tag.classList.add("fa", "fa-paperclip", "pe-2");
-      elem[i].appendChild(tag);
-      tag = document.createElement("span");
-      var text = document.createTextNode("Not Upload");
-      tag.appendChild(text);
-      elem[i].appendChild(tag);
-    }
-  }
-
-  saveAttachment() {
-    let length = this.FilesCollection.length;
-    this.presentRow.querySelector('a[name="upload-proof"]').classList.add('text-decoration-none');
-    this.presentRow.querySelector('a[name="upload-proof"]').innerText = length + " " + "file selected";
-    $('#addAttachmentModal').modal('hide');
-  }
-
-  saveDeclaration(item: any, e: any) {
-    let declaredValue = this.presentRow.querySelector('input[name="DeclaratedValue"]').value;
-    declaredValue = Number(declaredValue);
+  saveDeclaration(item: any) {
+    let value = (document.querySelector('input[name="DeclaratedValue"]') as HTMLInputElement).value;
+    let declaredValue = Number(value);
     if (!isNaN(declaredValue) && declaredValue > 0 && this.isAmountExceed == false) {
       let value = {
         ComponentId: item.ComponentId,
@@ -697,8 +571,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
             this.bindData(response.ResponseBody);
+            $("#manageDeclarationModal").modal('hide');
             this.isLoading = false;
-            Toast("Declaration detail loaded successfully");
+            Toast("Declaration detail updated successfully");
           }
           this.isLoading = false;
         }).catch(e => {
@@ -839,13 +714,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigateRoot(AdminSalary, this.cachedData);
+        this.nav.navigateRoot(AdminSalary, null);
         break;
       case "summary-tab":
-        this.nav.navigateRoot(AdminSummary, this.cachedData);
+        this.nav.navigateRoot(AdminSummary, null);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(AdminPreferences, this.cachedData);
+        this.nav.navigateRoot(AdminPreferences, null);
         break;
     }
   }
@@ -855,16 +730,16 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       case "declaration-tab":
         break;
       case "previous-income-tab":
-        this.nav.navigateRoot(AdminPreviousIncome, this.cachedData);
+        this.nav.navigateRoot(AdminPreviousIncome, null);
         break;
       case "form-12-tab":
-        this.nav.navigateRoot(AdminForm12B, this.cachedData);
+        this.nav.navigateRoot(AdminForm12B, null);
         break;
       case "free-tax-tab":
-        this.nav.navigateRoot(AdminFreeTaxFilling, this.cachedData);
+        this.nav.navigateRoot(AdminFreeTaxFilling, null);
         break;
       case "approval-rule-tab":
-        this.nav.navigateRoot(AdminDeclarationApprovalRule, this.cachedData);
+        this.nav.navigateRoot(AdminDeclarationApprovalRule, null);
         break;
     }
   }

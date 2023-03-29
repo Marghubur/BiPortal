@@ -134,3 +134,11 @@
 textarea {
   resize: none;
 }
+
+.delete-popup {
+  z-index: 2200 !important;
+}
+
+.delete-modal {
+  background-color: #222222db !important;
+}
