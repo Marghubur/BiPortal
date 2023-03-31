@@ -160,9 +160,7 @@ export class MasterDataComponent implements OnInit {
         if (response.ResponseBody) {
           let data = response.ResponseBody;
           if (data.length > 0) {
-
             this.cleanFileHandler();
-            $('#excelSheetReaderModal').modal('show');
             Toast("Data Uploaded successfull");
             this.isLoading = false;
           }

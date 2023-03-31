@@ -1,17 +1,17 @@
 <div class="col-12 row p-0 m-0">
-  <div class="col-md-4">
+  <div class="col-md-2">
     Showing {{_pagination.StartIndex}} to {{_pagination.EndIndex}} of {{_pagination.TotalRecords}} record(s)
   </div>
-  <div class="col-md-8 text-end pe-1">
+  <div class="col-md-10 overflow-scroll mostly-customized-scrollbar text-end pe-1">
     <ng-container *ngIf="isPaginationUpdated">
       <nav aria-label="page navigation" class="d-inline-block">
         <ul class="pagination m-0">
-          <li class="page-item" (click)="onPreviousPage(activePage - 1)"><a class="page-link"
+          <li class="page-item pre-btn" (click)="onPreviousPage(activePage - 1)"><a class="page-link"
               href="javascript:void(0);">«
               Previous</a></li>
           <li class="page-item" [ngClass]="{'active': activePage === item}" *ngFor="let item of pages"
             (click)="onNextPage(item)"><a class="page-link" href="javascript:void(0);">{{item}}</a></li>
-          <li class="page-item" (click)="onNextPage(activePage + 1)"><a class="page-link"
+          <li class="page-item next-btn" (click)="onNextPage(activePage + 1)"><a class="page-link"
               href="javascript:void(0);">Next
               »</a></li>
         </ul>

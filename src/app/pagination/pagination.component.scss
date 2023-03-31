@@ -3,3 +3,27 @@
   background-color: var(--primary-dark)!important;
   border-color: #204d74!important;
 }
+
+.pre-btn {
+  min-width: 7rem !important;
+}
+
+.next-btn {
+  min-width: 5rem !important;
+}
+
+.mostly-customized-scrollbar {
+  display: block;
+  overflow: auto;
+}
+
+.mostly-customized-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: white; /* or add it to the track */
+}
+
+/* Add a thumb */
+.mostly-customized-scrollbar::-webkit-scrollbar-thumb {
+  background: #c3b6b6;
+}
