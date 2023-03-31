@@ -44,6 +44,8 @@ export class CustomsalaryStructureComponent implements OnInit {
   customSalaryStructureForm: FormGroup;
   currentGroup: any = null;
   compnayDetail: any = null;
+  salaryCompFilterData: string = null;
+
   constructor(
     private fb: FormBuilder,
     private http: AjaxService,
@@ -113,6 +115,7 @@ export class CustomsalaryStructureComponent implements OnInit {
       if (response.ResponseBody) {
         this.groupComponents = response.ResponseBody;
         this.groupAllComponents = response.ResponseBody;
+        this.salaryComponentFields = this.allComponentFields;
         Toast("Salary Group added suuccessfully.");
         this.componentsAvailable = true;
       } else {
@@ -373,9 +376,10 @@ export class CustomsalaryStructureComponent implements OnInit {
   addComponentModal() {
     let i = 0;
     this.salaryComponentFields = this.allComponentFields;
+    this.salaryCompFilterData = null;
     while (i < this.salaryComponentFields.length) {
       for (let index = 0; index < this.activeComponent.length; index++) {
-        let value = this.salaryComponentFields.filter(x => x.ComponentId == this.activeComponent[index]);
+        let value = this.salaryComponentFields.filter(x => x.ComponentId == this.activeComponent[index].ComponentId);
         if (value.length > 0) {
           value[0].IsActive = true;
         }
@@ -386,6 +390,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   selectSalaryGroup(item: SalaryStructureType) {
+    event.stopPropagation();
     if (item) {
       this.currentGroup = item;
       this.isSalaryGrpSelected = false;
@@ -396,6 +401,7 @@ export class CustomsalaryStructureComponent implements OnInit {
           this.activeComponent = value;
           this.groupComponents = value;
           this.groupAllComponents = value;
+          this.salaryCompFilterData = null;
           this.isSalaryGrpSelected = true;
           this.componentsAvailable = true;
           Toast("Salary group record found");
@@ -427,6 +433,10 @@ export class CustomsalaryStructureComponent implements OnInit {
       tag.innerText = '';
       this.componentFields.Formula = '';
     }
+    if (this.componentFields.IncludeInPayslip)
+      (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked = true;
+    else
+      (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked = false;
     tag.focus();
     this.submitted = false;
     $('#updateCalculationModal').modal('show');
@@ -469,7 +479,8 @@ export class CustomsalaryStructureComponent implements OnInit {
       value.CalculateInPercentage = true;
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
-
+    let isincludeInPayslip = (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked;
+    value.IncludeInPayslip = isincludeInPayslip;
     if (this.currentGroup.SalaryGroupId > 0) {
         this.http.put(`Settings/UpdateGroupSalaryComponentDetail/
             ${this.componentFields.ComponentId}/

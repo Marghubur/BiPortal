@@ -305,13 +305,13 @@
             <div class="row mx-2">
               <div class="col-md-6 mt-2">
                 <label for="" class="form-label">INCOME TAX SECTION</label>
-                <input type="text" [readonly]="!isTaxExempt" formControlName="Section" maxlength="12" [ngClass]="{'error-field': submitted && f.Section.errors !== null && f.Section.errors.required}"
+                <input type="text"  formControlName="Section" maxlength="12" [ngClass]="{'error-field': submitted && f.Section.errors !== null && f.Section.errors.required}"
                   oninput="this.value = this.value.toUpperCase()" placeholder="Enter Income Tax Section"
                   class="form-control">
               </div>
               <div class="col-md-6 mt-2">
                 <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
-                <input type="number" [readonly]="!isTaxExempt" formControlName="SectionMaxLimit" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                <input type="number"  formControlName="SectionMaxLimit" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                   placeholder="Section Maximum Limit" class="form-control" OnlyNumber="9" [ngClass]="{'error-field': submitted && f.SectionMaxLimit.errors !== null && f.SectionMaxLimit.errors.required}">
               </div>
             </div>
