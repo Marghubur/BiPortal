@@ -81,6 +81,9 @@ export class PayslipsComponent implements OnInit {
   changeYear(item: number) {
     this.closePdfViewer();
     this.paySlipSchedule = this.payslipschedule.filter(x => x.paySlipYear == item);
+    this.isReady = false;
+    this.isLoading = false;
+    this.isFileFound = false;
   }
 
   showFile(userFile: any) {

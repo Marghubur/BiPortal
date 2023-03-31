@@ -224,14 +224,6 @@ export class PayrollComponentsComponent implements OnInit {
     if (this.NewSalaryForm.get('ComponentCatagoryId').errors !== null)
       errroCounter++;
 
-     if (this.NewSalaryForm.get('TaxExempt').value) {
-      if (this.NewSalaryForm.get('Section').errors !== null)
-        errroCounter++;
-
-      if (this.NewSalaryForm.get('SectionMaxLimit').errors !== null)
-        errroCounter++;
-     }
-
     if (errroCounter === 0) {
       let value:PayrollComponentsModal = this.NewSalaryForm.value;
       if (value) {

@@ -23,7 +23,7 @@
           <button class="btn btn-outline-success ms-3" (click)="activePage(ActivatedPage+1)">{{ActivatedPage == 3 ?
             'Submit': 'Continue'}}</button> -->
           <a href="javascript:void(0)" (click)="navigateTo(payrollCompoent)" class="text-decoration-none fw-bold"><i
-              class="fa fa-plus pe-2"></i>Create New Coomponent</a>
+              class="fa fa-plus pe-2"></i>Create New Component</a>
         </div>
       </div>
       <ng-container *ngIf="ActivatedPage == 1">
@@ -44,7 +44,7 @@
                           Group</a>
                       </button>
                       <button ngbDropdownItem>
-                        <a class="dropdown-item" href="javascript:void(0)">Delete Salaary Group</a>
+                        <a class="dropdown-item" href="javascript:void(0)">Delete Salary Group</a>
                       </button>
                     </div>
                   </div>
@@ -116,6 +116,9 @@
                     ANNUAL CALCULATION
                   </div>
                   <div class="th text-truncate ps-3">
+                    INCLUDE IN PAYSLIP
+                  </div>
+                  <div class="th text-truncate ps-3">
                     ACTIONS
                   </div>
                 </div>
@@ -134,6 +137,9 @@
                     </div>
                     <div class="td ps-3 text-truncate">
                       <span class="badge bg-primary">{{item.Formula}}</span>
+                    </div>
+                    <div class="td ps-3 text-truncate">
+                      {{item.IncludeInPayslip ? 'Yes' : 'No'}}
                     </div>
                     <ng-container>
                       <div class="td ps-3">
@@ -311,7 +317,7 @@
 <!--Add Component Modal -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addComponentModal" tabindex="-1"
   aria-labelledby="addComponentModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="addComponentModalLabel">Add Salary Component</h5>
@@ -322,14 +328,14 @@
           <div class="form-group has-search">
             <span class="fa fa-search form-control-feedback"></span>
             <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Search"
-              (keyup.Tab)="resetSalaryFilter($event)" (keyup)="filterSalaryComponent($event)">
+              (keyup.Tab)="resetSalaryFilter($event)" [(ngModel)]="salaryCompFilterData" (keyup)="filterSalaryComponent($event)">
           </div>
         </div>
         <div class="t-table mt-5 t-list t-border col-md-12 my-3">
           <div class="hide-bar bg-light"></div>
           <div class="t-head bg-light fw-bold">
             <div class="tr">
-              <div class="th text-truncate ps-3">
+              <div class="th text-truncate ps-3 fe-3">
                 COMPONENT NAME
               </div>
               <div class="th text-truncate ps-3">
@@ -348,7 +354,7 @@
           </div>
           <div class="t-body custom-height">
             <div class="tr py-2" *ngFor="let item of salaryComponentFields">
-              <div class="td ps-3 text-truncate">
+              <div class="td ps-3 text-truncate fe-3">
                 {{item.ComponentId}} ({{item.ComponentFullName}})
               </div>
               <div class="td ps-3 text-truncate">
@@ -450,6 +456,10 @@
         </div>
         <div class="border-0 mt-2 form-control">
           <h6 class="form-label py-2 fw-bold">{{componentFields.Formula}}</h6>
+        </div>
+        <div class="col-md-12 mt-3">
+          <input type="checkbox" class="form-check-input me-1" name="include-in-payslip">
+                  Include component in Payslip (and included from gross earnings calculation in Payslip)
         </div>
         <div class="col-md-12 mt-2">
           <h6>Use proper mathamatics symbol for your formula</h6>
@@ -561,6 +571,7 @@
                     <div class="th fe-2 text-truncate ps-3">
                       ANNUAL CALCULATION
                     </div>
+
                     <div class="th text-truncate ps-3">
                       ACTIONS
                     </div>
@@ -864,7 +875,7 @@
                   </div>
                 </div>
               </div>
-              <p><span class="text-dark fw-bold">Note:</span> <span class="text-danger ps-2">If you remove this component then it will be removed permanently from this alary group.</span></p>
+              <p><span class="text-dark fw-bold">Note:</span> <span class="text-danger ps-2">If you remove this component then it will be removed permanently from this salary group.</span></p>
             </div>
           </div>
         </form>
