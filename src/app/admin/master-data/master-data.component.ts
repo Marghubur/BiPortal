@@ -52,6 +52,7 @@ export class MasterDataComponent implements OnInit {
             this.tableConfiguration.totalRecords = 1;
             this.tableConfiguration.header = excelData.value.Keys;
             this.tableConfiguration.data = rows.value.Data;
+            this.tableConfiguration.sampleData = this.tableConfiguration.data.slice(0, 10); 
             // this.uploadedCandidatesData.TotalRecords = 0;
             // if(this.tableConfiguration.data.length > 0) {
             //   this.uploadedCandidatesData.TotalRecords = this.tableConfiguration.data.length;
@@ -160,9 +161,7 @@ export class MasterDataComponent implements OnInit {
         if (response.ResponseBody) {
           let data = response.ResponseBody;
           if (data.length > 0) {
-
             this.cleanFileHandler();
-            $('#excelSheetReaderModal').modal('show');
             Toast("Data Uploaded successfull");
             this.isLoading = false;
           }
