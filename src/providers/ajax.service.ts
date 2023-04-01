@@ -228,6 +228,7 @@ export interface iconConfig {
 export class tableConfig {
   header: Array<ColumnMapping> = [];
   data: Array<any> = [];
+  sampleData: Array<any> = [];
   link: Array<iconConfig> = [];
   templates: Array<any> = [];
   totalRecords?: number = null;
