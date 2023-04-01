@@ -45,6 +45,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   currentGroup: any = null;
   compnayDetail: any = null;
   salaryCompFilterData: string = null;
+  selectedComponent: Array<any> = [];
 
   constructor(
     private fb: FormBuilder,
@@ -84,13 +85,22 @@ export class CustomsalaryStructureComponent implements OnInit {
     }
   }
 
+  closeAddCompPopUp() {
+    this.groupComponents = this.selectedComponent;
+    this.activeComponent = this.selectedComponent;
+  }
+
   selectToAddComponent(event: any, item: any) {
+    this.selectedComponent = [...this.activeComponent];
     if (event.target.checked == true) {
       let elem = this.activeComponent.find(x => x.ComponentId === item.ComponentId);
       if (elem != null)
         ErrorToast("Component already added. Please select another component.");
-      else
+      else {
+        if (!item.Formula || item.Formula == null)
+          item.Formula = "0";
         this.activeComponent.push(item);
+      }
     } else {
         let index = this.activeComponent.findIndex(x => x.ComponentId === item.ComponentId);
         if (index > -1)
@@ -343,15 +353,15 @@ export class CustomsalaryStructureComponent implements OnInit {
         case 'ctc':
           index = 0;
           break;
+        case 'basic':
+          index = 1;
+          break;
         case 'gross':
           index = 1;
           break;
         // case 'net':
         //   index = 2;
         //   break;
-        case 'basic':
-          index = 2;
-          break;
       }
 
       let elem = document.querySelectorAll('div[name="formulaComponent"] a');
@@ -479,6 +489,13 @@ export class CustomsalaryStructureComponent implements OnInit {
       value.CalculateInPercentage = true;
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
+    let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
+    if (isNaN(formula)) {
+      ErrorToast("Invalid formula entered");
+      this.isLoading = false;
+      return;
+    }
+
     let isincludeInPayslip = (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked;
     value.IncludeInPayslip = isincludeInPayslip;
     if (this.currentGroup.SalaryGroupId > 0) {
@@ -554,7 +571,171 @@ export class CustomsalaryStructureComponent implements OnInit {
     }).catch(e => {
       this.isLoading = false;
     })
+  }
 
+
+  calculateExpressionUsingInfixDS(expression: string): number {
+    if (expression.includes('[CTC]'))
+      expression = expression.replace('[CTC]', '100');
+    else if(expression.includes('[BASIC]'))
+      expression = expression.replace('[BASIC]', '100');
+
+    expression = `(${expression})`;
+    let operatorStact = [];
+    let expressionStact = [];
+    let index = 0;
+    let lastOp = '';
+    let ch = '';
+    while(index < expression.length) {
+      ch = expression[index];
+      if(ch.trim() == ''){
+        index++;
+        continue;
+      }
+      if(isNaN(Number(ch))) {
+        switch(ch) {
+          case '+':
+          case '-':
+          case '/':
+          case '%':
+          case '*':
+            if(operatorStact.length > 0) {
+              lastOp = operatorStact[operatorStact.length - 1];
+              if(lastOp == '+' || lastOp == '-' || lastOp == '/' || lastOp == '*' || lastOp == '%') {
+                lastOp = operatorStact.pop();
+                expressionStact.push(lastOp);
+              }
+            }
+            operatorStact.push(ch);
+            break;
+          case ')':
+            while(true) {
+              lastOp = operatorStact.pop();
+              if(lastOp == '(') {
+                //operatorStact.pop();
+                break;
+              }
+              expressionStact.push(lastOp);
+            }
+            break;
+          case '(':
+            operatorStact.push(ch);
+            break;
+          default:
+            ErrorToast("Invalid expression");
+            break;
+        }
+      } else {
+        let value = 0;
+        while(true) {
+          ch = expression[index];
+          if(ch.trim() == '') {
+            expressionStact.push(value);
+            break;
+          }
+
+          if(!isNaN(Number(ch))) {
+            value = Number(`${value}${ch}`);
+            index++;
+          } else {
+            index--;
+            expressionStact.push(value);
+            break;
+          }
+        }
+      }
+
+      index++;
+    }
+
+    return this.calculationUsingInfixExpression(expressionStact);
+  }
+
+  calculationUsingInfixExpression(expressionStact: Array<any>): number {
+    let i = 0;
+    let term = [];
+    while (i < expressionStact.length) {
+      if (!isNaN(expressionStact[i]) && !isNaN(expressionStact[i+1]) && isNaN(Number(expressionStact[i+2]))) {
+        let  finalvalue = 0;
+        switch (expressionStact[i+2]) {
+          case '+':
+            finalvalue = expressionStact[i] + expressionStact[i+1];
+            break;
+          case '*':
+            finalvalue = expressionStact[i] * expressionStact[i+1];
+            break;
+          case '-':
+            finalvalue = expressionStact[i] - expressionStact[i+1];
+            break;
+          case '%':
+            finalvalue = (expressionStact[i] * expressionStact[i+1]) / 100;
+            break;
+          }
+        if (isNaN(finalvalue)) {
+          ErrorToast("Invalid expression");
+          this.isLoading = false;
+          return;
+        }
+        term.push(finalvalue);
+        i = i+3;
+      }
+      else if(!isNaN(expressionStact[i]) && isNaN(Number(expressionStact[i+1]))) {
+        let  finalvalue = 0;
+        let lastterm = term.pop();
+        switch (expressionStact[i+1]) {
+          case '+':
+            finalvalue = lastterm + expressionStact[i];
+            break;
+          case '*':
+            finalvalue = lastterm * expressionStact[i];
+            break;
+          case '-':
+            finalvalue = lastterm - expressionStact[i];
+            break;
+          case '%':
+            finalvalue = (lastterm * expressionStact[i]) / 100;
+            break;
+          }
+          if (isNaN(finalvalue)) {
+            ErrorToast("Invalid expression");
+            this.isLoading = false;
+            return;
+          }
+        term.push(finalvalue);
+        i = i+2;
+      } else {
+        let  finalvalue = 0;
+        let lastterm = term.pop();
+        let previousterm = term.pop();
+        switch (expressionStact[i]) {
+          case '+':
+            finalvalue = previousterm + lastterm;
+            break;
+          case '*':
+            finalvalue = previousterm * lastterm;
+            break;
+          case '-':
+            finalvalue = previousterm - lastterm;
+            break;
+          case '%':
+            finalvalue = (previousterm * lastterm) / 100;
+            break;
+          }
+        if (isNaN(finalvalue)) {
+          ErrorToast("Invalid expression");
+          this.isLoading = false;
+          return;
+        }
+        term.push(finalvalue);
+        i++;
+      }
+    }
+    if (term.length === 1) {
+      return Math.trunc(term[0]);
+    } else {
+      term = [];
+      ErrorToast("Invalid expression");
+    }
   }
 }
 
