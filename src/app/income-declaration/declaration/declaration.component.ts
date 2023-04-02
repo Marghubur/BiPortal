@@ -178,9 +178,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
       if(response.SalaryComponentItems && response.SalaryComponentItems.length > 0) {
         this.employeeDeclaration = response;
-        this.ExemptionDeclaration = this.employeeDeclaration.ExemptionDeclaration;
-        this.OtherDeclaration = this.employeeDeclaration.OtherDeclaration;
-        this.TaxSavingAlloance = this.employeeDeclaration.TaxSavingAlloance;
+        this.ExemptionDeclaration = response.ExemptionDeclaration;
+        this.OtherDeclaration = response.OtherDeclaration;
+        this.TaxSavingAlloance = response.TaxSavingAlloance;
         this.EmployeeDeclarationId = response.EmployeeDeclarationId;
         this.employeeEmail = response.Email;
 
@@ -322,6 +322,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   editDeclaration(item: any, e: any) {
+    this.isAmountExceed = false;
     this.selectDeclaration = null;
     this.FileDocumentList = [];
     this.FilesCollection = [];
@@ -334,13 +335,17 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   checkMaxLimit(e: any, maxlimit: number) {
     let value = e.target.value;
-    if (value > maxlimit && maxlimit != -1) {
+    if (value > maxlimit && maxlimit > 0) {
       ErrorToast("Amount is exceed from maxlimit");
       this.isAmountExceed = true;
       return;
     } else {
       this.isAmountExceed = false;
     }
+  }
+
+   closeDeclarationModal() {
+    this.loadData();
   }
 
   deleteDeclaration() {
@@ -384,7 +389,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.attachmentForDeclaration = item.ComponentId ;
       this.isLargeFile = false;
       this.slectedDeclarationnFile = [];
-      if(item.UploadedFileIds != null) {
+      if(item.UploadedFileIds != null && item.UploadedFileIds.length > 0) {
         if (isNaN(item.UploadedFileIds[0]))
           item.UploadedFileIds = JSON.parse(item.UploadedFileIds)
         let fileIds = item.UploadedFileIds as Array<number>;

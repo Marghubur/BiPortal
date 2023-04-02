@@ -306,7 +306,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.rentResidenceForm.get('OwnerAddress').setValue(value);
   }
 
-  editDeclaration(item: any) {
+  editDeclaration(item: any, e: any) {
+    this.isAmountExceed = false;
     this.selectDeclaration = null;
     this.FileDocumentList = [];
     this.FilesCollection = [];
@@ -317,16 +318,19 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     }
   }
 
-
   checkMaxLimit(e: any, maxlimit: number) {
     let value = e.target.value;
-    if (value > maxlimit && maxlimit != -1) {
+    if (value > maxlimit && maxlimit > 0) {
       ErrorToast("Amount is exceed from maxlimit");
       this.isAmountExceed = true;
       return;
     } else {
       this.isAmountExceed = false;
     }
+  }
+
+   closeDeclarationModal() {
+    this.getDeclaration();
   }
 
   deleteDeclaration() {
