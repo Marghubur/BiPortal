@@ -1005,15 +1005,18 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="selectDeclaration != null">
-        <div class="row">
-          <div class="col-md-6">
+        <div class="row align-items-end">
+          <div class="col-md-5">
             <label for="" class="form-label">Max Limit</label>
             <input type="text" [value]="selectDeclaration.MaxLimit > 0 ? selectDeclaration.MaxLimit : 'No Limit'" class="form-control" readonly>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-5">
             <label for="" class="form-label">Declared Value</label>
             <input [ngClass]="{'error-field': isAmountExceed}" [(ngModel)]="selectDeclaration.DeclaredValue" name="DeclaratedValue" class="form-control" DecimalNumber="9"
               (keyup)="checkMaxLimit($event, selectDeclaration.MaxLimit)">
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-danger" (click)="removeDeclaration()">Remove</button>
           </div>
         </div>
         <h5 class="my-3">{{selectDeclaration.ComponentFullName}} Attachment</h5>
