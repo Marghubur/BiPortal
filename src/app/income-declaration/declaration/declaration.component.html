@@ -459,7 +459,7 @@
                                 <div class="td text-center fe-1" *ngIf="r.ComponentId != 'EPF' && r.ComponentId != 'VPF'">
                                   <a href="javascript:void(0)" (click)="editDeclaration(r)">
                                     <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                      ngbTooltip="Edit Declaration" (click)="editDeclaration(r)"></i>
+                                      ngbTooltip="Edit Declaration"></i>
                                   </a>
                                 </div>
                                 <div class="td text-center fe-1" *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
@@ -650,7 +650,7 @@
                                 <div class="td text-center fe-1">
                                   <a href="javascript:void(0)" (click)="editDeclaration(r)">
                                     <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                      ngbTooltip="Edit Declaration" (click)="editDeclaration(r)"></i>
+                                      ngbTooltip="Edit Declaration"></i>
                                   </a>
                                 </div>
                               </div>
@@ -838,7 +838,7 @@
                                 <div class="td text-center fe-1">
                                   <a href="javascript:void(0)" (click)="editDeclaration(r)">
                                     <i class="fa fa-pencil text-muted ps-3" name="edit-declaration" placement="top"
-                                      ngbTooltip="Edit Declaration" (click)="editDeclaration(r)"></i>
+                                      ngbTooltip="Edit Declaration"></i>
                                   </a>
                                 </div>
                               </div>
@@ -1024,8 +1024,8 @@
             <input type="text" [value]="selectDeclaration.MaxLimit > 0 ? selectDeclaration.MaxLimit : 'No Limit'" class="form-control" readonly>
           </div>
           <div class="col-md-6">
-            <label for="" class="form-label">Max Limit</label>
-            <input [ngClass]="{'error-field': isAmountExceed}" [value]="selectDeclaration.DeclaredValue" name="DeclaratedValue" class="form-control" DecimalNumber="9"
+            <label for="" class="form-label">Declared Value</label>
+            <input [ngClass]="{'error-field': isAmountExceed}" [(ngModel)]="selectDeclaration.DeclaredValue" name="DeclaratedValue" class="form-control" DecimalNumber="9"
               (keyup)="checkMaxLimit($event, selectDeclaration.MaxLimit)">
           </div>
         </div>
@@ -1107,7 +1107,7 @@
       <div class="modal-footer border-top-0 mb-2">
         <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
         <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="fireFileBrowser()"><i class="fa fa-paperclip pe-2"></i>Add Attachment</a>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeDeclarationModal()">Close</button>
         <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="saveDeclaration(selectDeclaration)" [disabled]="isLargeFile">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Save' }}

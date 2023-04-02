@@ -50,6 +50,7 @@ export class PayslipComponent implements OnInit {
     this.EmployeeId = e;
     if (this.EmployeeId > 0) {
       this.paySlipSchedule = [];
+      this.payslipYear = [];
       let employee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
       let joiningDate = new Date(employee.CreatedOn);
       this.payslipYear.push(this.currentYear);
@@ -108,8 +109,8 @@ export class PayslipComponent implements OnInit {
         this.employeesList.placeholder = "Employee";
         this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
-        this.isPageReady = true;
         this.getPayslipList(this.EmployeeId);
+        this.isPageReady = true;
       }
     });
   }

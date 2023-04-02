@@ -379,7 +379,7 @@
                 <span *ngIf="item.MaxLimit < 0">No Limit</span>
               </div>
               <div class="td ps-3">
-                <input class="form-check-input" [checked]="item.IsActive == true || item.IsOpted" [disabled]="item.IsOpted"
+                <input class="form-check-input" [checked]="item.IsActive || item.IsOpted" [disabled]="item.IsOpted"
                   (click)="selectToAddComponent($event, item)" type="checkbox" value="">
               </div>
             </div>
@@ -387,7 +387,7 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeAddCompPopUp()">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="addComponents()"><i class="fa fa-plus pe-2"></i>
           Add</button>
       </div>
@@ -426,13 +426,13 @@
                 </div>
                 <p class="mb-1">Formula will be applied on CTC</p>
               </a>
-              <a href="javascript:void(0)" (click)="formulaAppliedOn('gross')"
+              <!-- <a href="javascript:void(0)" (click)="formulaAppliedOn('gross')"
                 class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
                   <h5 class="mb-1">GROSS</h5>
                 </div>
                 <p class="mb-1">Formula will be applied on CTC</p>
-              </a>
+              </a> -->
               <!-- <a href="javascript:void(0)" (click)="formulaAppliedOn('net')"
                 class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">

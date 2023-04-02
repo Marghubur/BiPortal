@@ -44,6 +44,7 @@ export class PayslipsComponent implements OnInit {
     this.SectionIsReady= false;
     if (this.EmployeeId > 0) {
       this.paySlipSchedule = [];
+      this.payslipYear = [];
       let joiningDate = new Date(this.userDetail.CreatedOn);
       this.payslipYear.push(this.currentYear);
       if (joiningDate.getFullYear() != this.currentYear)
