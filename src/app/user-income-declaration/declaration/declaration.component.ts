@@ -555,7 +555,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   saveDeclaration(item: any) {
     let value = (document.querySelector('input[name="DeclaratedValue"]') as HTMLInputElement).value;
     let declaredValue = Number(value);
-    if (!isNaN(declaredValue) && declaredValue > 0 && this.isAmountExceed == false) {
+    if (!isNaN(declaredValue) && declaredValue >= 0 && this.isAmountExceed == false) {
       let value = {
         ComponentId: item.ComponentId,
         DeclaredValue: declaredValue,
@@ -692,6 +692,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   showrentedDetail() {
     this.isShowRentedDetail = !this.isShowRentedDetail;
+  }
+
+  removeDeclaration() {
+    this.selectDeclaration.DeclaredValue = 0;
+    this.slectedDeclarationnFile = [];
+    this.selectDeclaration.declarationFiles = [];
+    this.FilesCollection = [];
   }
 
   activateMe(ele: string) {
