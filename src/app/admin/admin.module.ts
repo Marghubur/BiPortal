@@ -42,6 +42,7 @@ import { HolidayComponent } from './holiday/holiday.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
 import { CompanyComponent } from './company/company.component';
 import { ProjectsModule } from '../projects/projects.module';
+import { CommoncomponentModule } from '../commoncomponent/commoncomponent.module';
 import { IncomeDeclarationModule } from '../income-declaration/income-declaration.module';
 import { LeaveManagementModule} from '../leave-management/leave-management.module';
 import { EmailTemplateComponent } from './email-template/email-template.component';
@@ -61,6 +62,7 @@ import { AdminmodalModule } from './../adminmodal/adminmodal.module'
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 import { MasterDataComponent } from './master-data/master-data.component';
+import { ConfigPerformanceComponent } from './config-performance/config-performance.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +115,8 @@ import { MasterDataComponent } from './master-data/master-data.component';
     WorkflowComponent,
     ManageWorkFlowComponent,
     ManagetimesheetComponent,
-    MasterDataComponent
+    MasterDataComponent,
+    ConfigPerformanceComponent
   ],
   imports: [
     CommonModule,
@@ -126,7 +129,8 @@ import { MasterDataComponent } from './master-data/master-data.component';
     LeaveManagementModule,
     IncomeDeclarationModule,
     AdminmodalModule,
-    CommonmodalModule
+    CommonmodalModule,
+    CommoncomponentModule
   ],
   providers: [
     CommonService,

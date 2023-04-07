@@ -119,7 +119,8 @@ export const ManageWorkFlow = 'admin/manageworkflow';
 export const AdminManageTimesheet = 'admin/managetimesheet';
 export const AdminLeave = 'admin/leave';
 export const AdminMasterData = 'admin/masterdata';
-
+export const ConfigPerformance = 'admin/configperformance';
+export const Performance = 'admin/performance';
 
 // ********************** Admin route pages  *******************
 
@@ -147,6 +148,7 @@ export const UserProjectList = 'user/project';
 export const ManageTimesheet = 'user/managetimesheet';
 export const UserDocuments = "user/documents";
 export const UserDocumentsPage = "user/documentspage/:path";
+export const EmpPerformance = 'user/performance';
 
 // *************************** file name constancts  *************
 export const Doc = "doc";

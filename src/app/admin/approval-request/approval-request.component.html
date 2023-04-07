@@ -6,12 +6,12 @@
           <app-breadcrums [title]="'Request'" [subtitle]="'Request'"></app-breadcrums>
         </div>
         <div class="d-flex">
-          <select class="form-select border-0 text-muted" [ngClass]="{'d-none': active == 4}" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
+          <!-- <select class="form-select border-0 text-muted" [ngClass]="{'d-none': active == 4}" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
             <option selected value="2">Pending</option>
             <option value="9">Approved</option>
             <option value="5">Rejected</option>
             <option value="0">All</option>
-          </select>
+          </select> -->
           <div class="row">
             <div class="col">
               <div ngbDropdown class="d-inline-block">
@@ -40,8 +40,40 @@
           <ng-template ngbNavContent>
             <ng-container *ngIf="!isPageLoading">
               <ng-container *ngIf="attendanceDetail.length > 0">
-                <div class="row p-3">
+                <div class="row py-3">
                   <div class="col-md-6 fw-bold text-dark">Description</div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="row col-md-10">
+                    <div class="col-md-4 py-2">
+                      <label class="form-label">Filter by name</label>
+                      <app-iautocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                      </app-iautocomplete>
+                    </div>
+                    <div class="col-md-2 py-2">
+                      <label class="form-label">Filter by requested on </label>
+                      <select  class="form-select" (change)="filter($event, 'requestedon')" [(ngModel)]="requestedOn">
+                        <option value="0" disabled selected>Select days</option>
+                        <option value="7">Last 7 days</option>
+                        <option value="14">Last 14 days</option>
+                        <option value="30">Last 30 days</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 py-2">
+                      <label class="form-label">Filter by status</label>
+                      <select  class="form-select" (change)="filter($event, 'status')" [(ngModel)]="missAttendanceStatus">
+                        <option value="0" disabled selected>Select status</option>
+                        <option value="2">Pending</option>
+                        <option value="9">Approved</option>
+                        <option value="5">Reject</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-auto float-end">
+                    <button class="btn  btn-danger ms-2" (click)="resetFilter()" placement="top" ngbTooltip="Reset filter">
+                      <i class="fa fa-repeat"></i>
+                    </button>
+                  </div>
                 </div>
                 <ng-container *ngFor="let item of attendanceDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
@@ -121,8 +153,40 @@
           <ng-template ngbNavContent>
             <ng-container *ngIf="!isPageLoading">
               <ng-container *ngIf="timesheetDetail.length > 0">
-                <div class="row p-3">
+                <div class="row py-3">
                   <div class="col-md-6 fw-bold text-dark">Description</div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="row col-md-10">
+                    <div class="col-md-4 py-2">
+                      <label class="form-label">Filter by name</label>
+                      <app-iautocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                      </app-iautocomplete>
+                    </div>
+                    <div class="col-md-2 py-2">
+                      <label class="form-label">Filter by requested on </label>
+                      <select  class="form-select" (change)="filter($event, 'requestedon')" [(ngModel)]="requestedOn">
+                        <option value="0" disabled selected>Select days</option>
+                        <option value="7">Last 7 days</option>
+                        <option value="14">Last 14 days</option>
+                        <option value="30">Last 30 days</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 py-2">
+                      <label class="form-label">Filter by status</label>
+                      <select  class="form-select" (change)="filter($event, 'status')" [(ngModel)]="missAttendanceStatus">
+                        <option value="0" disabled selected>Select status</option>
+                        <option value="2">Pending</option>
+                        <option value="9">Approved</option>
+                        <option value="5">Reject</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-auto float-end">
+                    <button class="btn  btn-danger ms-2" (click)="resetFilter()" placement="top" ngbTooltip="Reset filter">
+                      <i class="fa fa-repeat"></i>
+                    </button>
+                  </div>
                 </div>
                 <ng-container *ngFor="let item of timesheetDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
@@ -130,7 +194,7 @@
                       <a href="javascript:void(0)" class="me-3">
                         <img class="grid-icon" [src]="item[0].TimesheetStatus == 2 ? 'assets/images/clock.png' : item[0].TimesheetStatus == 9 ? 'assets/images/approve.png' : 'assets/images/rejected.png'">
                       </a>
-                      <a data-bs-toggle="collapse" [attr.href]="'#timesheet'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#timesheet'+i" class="me-3">
+                      <a data-bs-toggle="collapse" (click)="collpaseShowHide('timesheet'+i)"  [attr.href]="'#timesheet'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#timesheet'+i" class="me-3">
                         <img class="grid-icon" src="assets/images/down-arrow.png">
                       </a>
                       <p class="mb-0 fs-6">
@@ -154,7 +218,7 @@
                         <span class="fade-font">{{item[0].ClientName}}</span>
                       </div>
                     </div>
-                    <div class="collapse" [id]="'timesheet'+i">
+                    <div class="hide-collapse bg dark" [id]="'timesheet'+i">
                       <div class="card card-body border-0">
                         <div class="row align-items-center justify-content-between">
                           <div class="col-md-6 text-truncate">
@@ -204,8 +268,40 @@
           <ng-template ngbNavContent>
             <ng-container *ngIf="!isPageLoading">
               <ng-container *ngIf="leaveDeatil.length > 0">
-                <div class="row p-3">
+                <div class="row py-3">
                   <div class="col-md-6 fw-bold text-dark">Description</div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="row col-md-10">
+                    <div class="col-md-4 py-2">
+                      <label class="form-label">Filter by name</label>
+                      <app-iautocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                      </app-iautocomplete>
+                    </div>
+                    <div class="col-md-2 py-2">
+                      <label class="form-label">Filter by requested on </label>
+                      <select  class="form-select" (change)="filter($event, 'requestedon')" [(ngModel)]="requestedOn">
+                        <option value="0" disabled selected>Select days</option>
+                        <option value="7">Last 7 days</option>
+                        <option value="14">Last 14 days</option>
+                        <option value="30">Last 30 days</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 py-2">
+                      <label class="form-label">Filter by status</label>
+                      <select  class="form-select" (change)="filter($event, 'status')" [(ngModel)]="missAttendanceStatus">
+                        <option value="0" disabled selected>Select status</option>
+                        <option value="2">Pending</option>
+                        <option value="9">Approved</option>
+                        <option value="5">Reject</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-auto float-end">
+                    <button class="btn  btn-danger ms-2" (click)="resetFilter()" placement="top" ngbTooltip="Reset filter">
+                      <i class="fa fa-repeat"></i>
+                    </button>
+                  </div>
                 </div>
                 <ng-container *ngFor="let item of leaveDeatil; let i=index;">
                   <div class="row bg-white p-2 m-0 d-flex justify-content-between rounded leave-box">

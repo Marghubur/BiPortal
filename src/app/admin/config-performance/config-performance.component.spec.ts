@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SummaryComponent } from './summary.component';
+import { ConfigPerformanceComponent } from './config-performance.component';
 
-describe('SummaryComponent', () => {
-  let component: SummaryComponent;
-  let fixture: ComponentFixture<SummaryComponent>;
+describe('ConfigPerformanceComponent', () => {
+  let component: ConfigPerformanceComponent;
+  let fixture: ComponentFixture<ConfigPerformanceComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SummaryComponent ]
+      declarations: [ ConfigPerformanceComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SummaryComponent);
+    fixture = TestBed.createComponent(ConfigPerformanceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

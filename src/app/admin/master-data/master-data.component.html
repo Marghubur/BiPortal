@@ -34,14 +34,12 @@
                   </label>
                   <ul class="ms-5 mt-1">
                     <li class="mt-1">Table and excel header will be same.</li>
-                    <li class="mt-1">On top of every header one dropdown will be there for column mapping.</li>
-                    <li class="mt-1">Select dropdown to map your value with the application level header.</li>
                   </ul>
                   <button class="btn btn-primary-c" (click)="excelPopUp()">Upload Employee's Excel</button>
                 </div>
               </div>
               <div *ngIf="isAvailable">
-                <div class="overflow-scroll table-container">
+                <div class="overflow-scroll table-container mostly-customized-scrollbar">
                   <table class="table table-striped table-bordered table-hover">
                     <thead>
                       <tr>
@@ -211,8 +209,8 @@
             </div>
             <div class="mt-4">
               <button type="button" class="btn btn-primary-c" (click)="uploadExcel()" [disabled]="isDisable">
-                <i class="fa fa-upload"></i>
-                <span class="ps-2">Upload selected excel data</span>
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-upload': !isLoading}"></i>
+                <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
               </button>
               <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
                 [disabled]="isDisable">

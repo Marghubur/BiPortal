@@ -35,7 +35,7 @@ import { NgChartsModule } from 'ng2-charts';
     ApprovalRequestComponent,
     HolidayComponent,
     ServiceRequestComponent,
-    ManagetimesheetComponent
+    ManagetimesheetComponent,
   ],
   imports: [
     CommonModule,

@@ -48,7 +48,8 @@ import { AdminResetPassword,
   ManageWorkFlow,
   AdminManageTimesheet,
   AdminLeave,
-  AdminMasterData
+  AdminMasterData,
+  ConfigPerformance
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -97,6 +98,7 @@ import { WorkflowComponent } from './workflow/workflow.component';
 import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.component';
 import { ManagetimesheetComponent } from '../user/managetimesheet/managetimesheet.component';
 import { MasterDataComponent } from './master-data/master-data.component';
+import { ConfigPerformanceComponent } from './config-performance/config-performance.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -146,7 +148,8 @@ const routes: Routes = [
   { path: WorkFlow, component: WorkflowComponent },
   { path: ManageWorkFlow, component: ManageWorkFlowComponent },
   { path: AdminManageTimesheet, component: ManagetimesheetComponent },
-  { path: AdminMasterData, component: MasterDataComponent}
+  { path: AdminMasterData, component: MasterDataComponent},
+  {path: ConfigPerformance, component: ConfigPerformanceComponent}
 ];
 
 @NgModule({

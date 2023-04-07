@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SummaryComponent } from '../income-declaration/summary/summary.component';
 import { DeclarationComponent } from './declaration/declaration.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { PreviousincomeComponent } from './previousincome/previousincome.component';
@@ -37,7 +36,6 @@ import { CommonmodalModule } from '../commonmodal/commonmodal.module';
     PfEsiSetupComponent,
     PreferencesComponent,
     PreviousincomeComponent,
-    SummaryComponent,
     SalaryComponent,
     TaxRegimeComponent,
     CustomsalaryStructureComponent,

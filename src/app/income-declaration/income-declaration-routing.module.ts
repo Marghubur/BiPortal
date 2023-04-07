@@ -15,11 +15,9 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import { PreviousincomeComponent } from './previousincome/previousincome.component';
 import { SalaryComponent } from './salary/salary.component';
 import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
-import { SummaryComponent } from './summary/summary.component';
 import { TaxRegimeComponent } from './tax-regime/tax-regime.component';
 
 const routes: Routes = [
-  { path: AdminSummary, component: SummaryComponent},
   { path: AdminPreferences, component: PreferencesComponent},
   { path: AdminSalary, component: SalaryComponent},
   { path: AdminDeclaration, component: DeclarationComponent},

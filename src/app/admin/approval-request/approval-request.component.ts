@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ApprovalRequest } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
@@ -15,7 +15,7 @@ declare var $: any;
   styleUrls: ['./approval-request.component.scss']
 })
 export class ApprovalRequestComponent implements OnInit {
-  active = 1;
+  active = 2;
   request: Array<ApprovalRequest> = [];
   leave_request: Array<ApprovalRequest> = [];
   requestState: string = '';
@@ -585,6 +585,21 @@ export class ApprovalRequestComponent implements OnInit {
     this.requestedOn = 0;
     this.requestFilter.SearchString = "";
     this.loadAttendanceRequestDetail();
+  }
+
+  collpaseShowHide(e: any) {
+    if (e) {
+      let elem = document.getElementById(e);
+      let classContain = elem.classList.contains('hide-collapse');
+      if (classContain) {
+        elem.classList.remove('hide-collapse');
+        elem.classList.add('show-collapse');
+      }
+      else {
+        elem.classList.add('hide-collapse');
+        elem.classList.remove('show-collapse');
+      }
+    }
   }
 }
 

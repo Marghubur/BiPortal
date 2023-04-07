@@ -1,9 +1,22 @@
-.leave-box {
-  box-shadow: -2px 3px 6px -1px #d9d9d9;
+.progress {
+  height: 0.6rem !important;
 }
 
-.grid-icon {
-  width: 16px;
+textarea {
+  resize: none;
+}
+
+.bg-ant {
+  background-color: antiquewhite;
+}
+
+.rounded-icon {
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .hide-collapse {

@@ -61,3 +61,22 @@ export class Files {
     ToBillNo: number = null;
     NoOfDays: number = 0;
   }
+
+  export class Objective {
+    ObjectiveId: number = 0;
+    Objective: string = null;
+    ObjSeeType: boolean = false;
+    IsIncludeReview: boolean = false;
+    Tag: string = null;
+    ProgressMeassureType: number = 1;
+    StartValue: number = 0;
+    TargetValue: number = 0;
+    TimeFrameStart: Date = null;
+    TimeFrmaeEnd: Date = null;
+    ObjectiveType: string = null;
+    Description: string = null;
+    CurrentValue: number = 0;
+    CreatedOn: Date = null;
+    UpdatedOn: Date = null;
+    Status: number = 0;
+  }
