@@ -171,26 +171,26 @@
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="d-flex flex-row justify-content-evenly">
-                        <a href="javascript:void(0)" (click)="ViewFiles(user)" data-bs-toggle="tooltip"
+                        <a href="javascript:void(0)" (click)="ViewFiles(user)" [ngClass]="{'pe-none': isLoading}" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="View Files">
                           <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"></i></span>
                         </a>
-                        <a href="javascript:void(0)" (click)="AddEditDocuments(user)" data-bs-toggle="tooltip"
+                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="AddEditDocuments(user)" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="View Documents">
                           <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"></i></span>
                         </a>
-                        <a href="javascript:void(0)" (click)="CreatePopup(user)">
+                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="CreatePopup(user)">
                           <ng-container [ngSwitch]="user.IsActive">
                             <span *ngSwitchCase="true">
                               <span class="badge bg-danger" data-bs-toggle="tooltip"
                               data-bs-placement="right" title="Inactive employee">
-                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <i class="fa " [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash-o': !isLoading}" aria-hidden="true"></i>
                               </span>
                             </span>
                             <span *ngSwitchDefault>
                               <span class="badge bg-success" data-bs-toggle="tooltip"
                               data-bs-placement="right" title="Active Employee">
-                                <i class="fa fa-random" aria-hidden="true"></i>
+                                <i class="fa " [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-random': !isLoading}" aria-hidden="true" aria-hidden="true"></i>
                               </span>
                             </span>
                           </ng-container>
@@ -271,12 +271,14 @@
         </table>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" (click)="ClosePopup()" class="text-decoration-none text-danger btn-white pe-3"
+        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="ClosePopup()" class="text-decoration-none text-danger btn-white pe-3"
           data-dismiss="modal">Cancel</a>
-        <a href="javascript:void(0)" (click)="DeleteCurrent(singleEmployee)" *ngIf="singleEmployee?.IsActive == true"
-          class="text-decoration-none btn-white text-primary">Remove</a>
-        <a href="javascript:void(0)" (click)="DeactivatedEmployee(singleEmployee)"
-          *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary">Activate</a>
+        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeleteCurrent(singleEmployee)" *ngIf="singleEmployee?.IsActive == true"
+          class="text-decoration-none btn-white text-primary"><i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Remove' }}</a>
+        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeactivatedEmployee(singleEmployee)"
+          *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary"><i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Activate' }}</a>
       </div>
     </div>
   </div>

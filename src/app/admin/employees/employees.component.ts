@@ -226,50 +226,56 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
       InActive: false,
       All: false
     };
-    this.employeeData.SearchString = "";
-    this.employeeData.PageIndex = 1;
-    this.employeeData.PageSize = 10;
-    this.employeeData.StartIndex = 1;
-    this.employeeData.EndIndex = (this.employeeData.PageSize * this.employeeData.PageIndex);
+    this.employeeData = new Filter();
     this.companyId = 0;
-    this.LoadData();
     this.employeeDetails.Name="";
     this.employeeDetails.Mobile = null;
     this.employeeDetails.Email="";
     this.anyFilter = "";
+    this.LoadData();
   }
 
 
   DeleteCurrent(item: any) {
     if (item != null) {
+      this.isLoading = true;
       let empId = item.EmployeeUid;
       if (empId !== null && empId !== "") {
         item.IsActive = false;
         this.http.delete(`Employee/ActivateOrDeActiveEmployee/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
-            Toast("Employee Deleted successfully")
+            Toast("Employee Deleted successfully");
             this.LoadData();
+            this.isLoading = false;
+            this.ClosePopup();
           }
+        }).catch(err => {
+          this.isLoading = false;
+          this.ClosePopup();
         });
       }
     }
-    this.ClosePopup();
   }
 
   DeactivatedEmployee(item: any) {
     if (item != null) {
+      this.isLoading = true;
       let empId = item.EmployeeUid;
       if (empId !== null && empId !== "") {
         item.IsActive = true;
         this.http.delete(`Employee/ActivateOrDeActiveEmployee/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
-            Toast("Employee Activated successfully");
             this.LoadData();
+            this.isLoading = false;
+            this.ClosePopup();
+            Toast("Employee Activated successfully");
           }
+        }).catch(err => {
+          this.isLoading = false;
+          this.ClosePopup();
         });
       }
     }
-    this.ClosePopup();
   }
 
   CreatePopup(e: any) {

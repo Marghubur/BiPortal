@@ -32,7 +32,6 @@ export class AttendanceComponent implements OnInit {
   daysInMonth: number = 0;
   monthName: Array<any> = [];
   presentMonth: boolean = true;
-  cachedData: any = null;
   currentAttendance: any = null;
   employeesList: autoCompleteModal = new autoCompleteModal();
   applicationData: any = null;
@@ -58,6 +57,7 @@ export class AttendanceComponent implements OnInit {
   AttendanceId: number = 0;
   requestedOn: number = 0;
   shiftDetail: any = null;
+  activeMonth: number = 0;
 
   constructor(private http: AjaxService,
     private nav: iNavigation,
@@ -72,17 +72,17 @@ export class AttendanceComponent implements OnInit {
     this.request.SortBy = null;
     this.request.PageIndex = 1;
     this.DayValue = this.time.getDay();
-    this.cachedData = this.nav.getValue();
+    this.userDetail = this.nav.getValue();
     this.employeesList.placeholder = "Employee";
     this.employeesList.className = 'disable-field';
     this.employeesList.isMultiSelect = true;
     this.request.SearchString = "1=1";
     this.loadAutoComplete();
     this.isEmployeesReady = true;
-    if(this.cachedData) {
-      this.employeeId = this.cachedData.EmployeeUid;
-      this.reportingManagerId = this.cachedData.ReportingManagerId;
-      this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
+    if(this.userDetail) {
+      this.employeeId = this.userDetail.EmployeeUid;
+      this.reportingManagerId = this.userDetail.ReportingManagerId;
+      this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
       this.loadPageData();
     } else {
       this.userDetail = this.user.getInstance();
@@ -212,15 +212,7 @@ export class AttendanceComponent implements OnInit {
       ForYear: new Date().getFullYear(),
       ForMonth: month + 1
     }
-
-    let radiobtn = document.querySelectorAll('input[name="btnradio"]');
-    if (radiobtn.length > 0) {
-      for (let i = 0; i < radiobtn.length; i++) {
-        radiobtn[i].removeAttribute('checked');
-      }
-      radiobtn[index].setAttribute('checked', '');
-    }
-
+    this.activeMonth = index;
     this.loadMappedData(data);
   }
 
