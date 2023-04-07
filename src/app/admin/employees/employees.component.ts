@@ -240,10 +240,15 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     if (item != null) {
       this.isLoading = true;
       let empId = item.EmployeeUid;
-      if (empId !== null && empId !== "") {
-        item.IsActive = false;
+      if (empId !== null && empId > 0) {
+        if (empId == 1) {
+          this.isLoading = false;
+          ErrorToast("You can't delete the admin");
+          return;
+        }
         this.http.delete(`Employee/ActivateOrDeActiveEmployee/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
+            item.IsActive = false;
             Toast("Employee Deleted successfully");
             this.LoadData();
             this.isLoading = false;
@@ -262,10 +267,10 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
       this.isLoading = true;
       let empId = item.EmployeeUid;
       if (empId !== null && empId !== "") {
-        item.IsActive = true;
         this.http.delete(`Employee/ActivateOrDeActiveEmployee/${empId}/${item.IsActive}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
             this.LoadData();
+            item.IsActive = true;
             this.isLoading = false;
             this.ClosePopup();
             Toast("Employee Activated successfully");
