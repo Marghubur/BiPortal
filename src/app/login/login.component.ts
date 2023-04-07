@@ -79,6 +79,24 @@ export class LoginComponent implements OnInit {
       };
       let userId: any = document.getElementById("EmailOrMobile");
       let password: any = document.getElementById("Password");
+      if (!userId.value) {
+        this.isLoading = false;
+        ErrorToast("Please enter email or mobile");
+        return;
+      }
+
+      if (!password.value) {
+        this.isLoading = false;
+        ErrorToast("Please enter the password");
+        return;
+      }
+
+      let termAndService: any = (document.getElementById("gridCheck") as HTMLInputElement).checked;
+      if (!termAndService) {
+        this.isLoading = false;
+        ErrorToast("Please agree with our term and service");
+        return;
+      }
 
       if (userId.value !== "" && password.value !== "") {
         if(userId.value.indexOf("@") !== -1) {

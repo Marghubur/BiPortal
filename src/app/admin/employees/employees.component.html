@@ -124,10 +124,10 @@
               </div>
               <div class="t-body">
                 <ng-container *ngIf="isFileFound">
-                  <div class="tr py-2" *ngFor="let user of employeeDetail">
+                  <div class="tr py-2" *ngFor="let user of employeeDetail; let i = index;">
                     <div class="td align-middle text-center fe-index">
                       <div class="cell-wrapper">
-                        {{user.EmployeeUid}}
+                        {{i + 1}}
                       </div>
                     </div>
                     <div class="td align-middle fe-5">
