@@ -39,9 +39,6 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/popper.js/dist/umd/popper.min.js",
-              "node_modules/xlsx/dist/xlsx.full.min.js",
-              "node_modules/jszip/dist/jszip.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ],
             "vendorChunk": true,
@@ -70,7 +67,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",

@@ -1,6 +1,4 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { CommonRoutingModule } from './util-routing.module';
 import { UtilComponent } from './util.component';
 import { AllownumberDirective } from './directives/allownumber.directive';
@@ -15,6 +13,7 @@ import { EditorComponent } from './editor/editor.component';
 import { MessageModalComponent } from './message-modal/message-modal.component'
 import { FormsModule } from '@angular/forms';
 import { BhTimepickerComponent } from './bh-timepicker/bh-timepicker.component'
+import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -50,4 +49,8 @@ import { BhTimepickerComponent } from './bh-timepicker/bh-timepicker.component'
     BhTimepickerComponent
   ]
 })
-export class UtilModule { }
+export class UtilModule { 
+  constructor() {
+    console.log("Util module loaded");
+  }
+}

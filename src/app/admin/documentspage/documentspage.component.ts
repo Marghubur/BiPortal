@@ -1,4 +1,3 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
 declare var $ : any;
 import {
@@ -17,6 +16,7 @@ import { Subject } from 'rxjs';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { OnlineDocModel } from 'src/app/adminmodal/admin-modals';
 import { Files } from 'src/app/commonmodal/common-modals';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-documentspage',
@@ -65,7 +65,7 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
   }
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next();
+    this.dtTrigger.next(null);
   }
 
   BuildDocumentTable() {

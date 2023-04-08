@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UtilModule } from '../util/util.module';
 import { LeaveManagementRoutingModule } from './leave-management-routing.module';
@@ -10,6 +9,7 @@ import { ManageYearEndingComponent } from './manage-year-ending/manage-year-endi
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { ApplyLeaveComponent } from './apply-leave/apply-leave.component'
 import { NgChartsModule } from 'ng2-charts';
+import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -30,4 +30,8 @@ import { NgChartsModule } from 'ng2-charts';
     CommonmodalModule
   ]
 })
-export class LeaveManagementModule { }
+export class LeaveManagementModule { 
+  constructor() {
+    console.log("Leave management module loaded");
+  }
+}

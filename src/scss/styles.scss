@@ -162,91 +162,15 @@ textarea {
     box-shadow: none !important;
 }
 
-.card {
-  border: 1px solid rgba(0, 0, 0, 0.125) !important;
-}
+// .card {
+//   border: 1px solid rgba(0, 0, 0, 0.125) !important;
+// }
 
-.card-style {
-  border: 1px solid #f1f1f1;
-  border-radius: 4px;
-  box-shadow: 1px 5px 10px 0px #d9d9d9;
-}
-
-//*--------------------------  GET TYPING EFFECT ---------------------------------------*//
-
-#popmessanger {
-  position: absolute;
-  z-index: 999999;
-  font-size: 14px;
-}
-
-.typewriter-text {
-  display: inline-block;
-  overflow: hidden;
-  letter-spacing: 2px;
-  animation: typing 3s steps(var(--auto-play-frame-no), end),
-    blink 0.75s step-end infinite;
-  white-space: nowrap;
-  font-size: 16px;
-  font-weight: 700;
-  border-right: 4px solid orange;
-  box-sizing: border-box;
-  color: #fff;
-}
-
-@keyframes typing {
-  from {
-    width: 0%;
-  }
-
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes blink {
-  from,
-  to {
-    border-color: transparent;
-  }
-
-  50% {
-    border-color: orange;
-  }
-}
-
-.arrow {
-  text-align: center;
-  position: fixed;
-  z-index: 10000000 !important;
-}
-
-.arrow i {
-  font-size: 80px;
-  color: #eee;
-}
-
-.bounce {
-  -moz-animation: bounce 2s infinite;
-  -webkit-animation: bounce 2s infinite;
-  animation: bounce 2s infinite;
-}
-
-.highlight-box {
-  width: 100%;
-  position: relative;
-  height: 1px;
-  z-index: 99999999999;
-  background-color: transparent !important;
-  border: 2px solid white;
-  transition: all 1s ease;
-}
-
-//*--------------------------  GET TYPING EFFECT ---------------------------------------*//
-
-.high-z-index {
-  z-index: 1000000 !important;
-}
+// .card-style {
+//   border: 1px solid #f1f1f1;
+//   border-radius: 4px;
+//   box-shadow: 1px 5px 10px 0px #d9d9d9;
+// }
 
 .invalid-field {
   border: 1px solid red !important;
@@ -254,16 +178,6 @@ textarea {
 }
 
 // --------------------------- Table design header ---------------------------------------
-
-.img-lg {
-  width: 92px;
-  height: 92px;
-}
-
-.img-md {
-  width: 60px;
-  height: 60px;
-}
 
 .img-sm {
   width: 43px;
@@ -273,26 +187,6 @@ textarea {
 .img-xs {
   width: 37px;
   height: 37px;
-}
-
-.img-ss {
-  width: 26px;
-  height: 26px;
-}
-
-.panel {
-  position: relative;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px 17px;
-  box-shadow: 0px 0px 20px -15px #444;
-  display: inline-block;
-  background: #fff;
-  border: 1px solid #e6e9ed;
-  -webkit-column-break-inside: avoid;
-  -moz-column-break-inside: avoid;
-  opacity: 1;
-  transition: all 0.2s ease;
 }
 
 .spinner {

@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SummaryComponent } from '../income-declaration/summary/summary.component';
 import { DeclarationComponent } from './declaration/declaration.component';
@@ -23,6 +22,7 @@ import { SalarycomponentStructureComponent } from './salarycomponent-structure/s
 import { ApprovalRuleComponent } from './approval-rule/approval-rule.component';
 import { AdminmodalModule } from '../adminmodal/adminmodal.module';
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
+import { NgModule } from '@angular/core';
 
 
 @NgModule({
@@ -55,4 +55,8 @@ import { CommonmodalModule } from '../commonmodal/commonmodal.module';
     CommonmodalModule
   ]
 })
-export class IncomeDeclarationModule { }
+export class IncomeDeclarationModule {
+  constructor() {
+    console.log("Income Declaration module loaded");
+  }
+}
