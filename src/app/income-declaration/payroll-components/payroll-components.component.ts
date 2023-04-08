@@ -7,7 +7,7 @@ import { PayrollSettings } from 'src/providers/constants';
 import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
-import { read, utils } from 'xlsx';
+//import { read, utils } from 'xlsx';
 declare var $: any;
 
 @Component({
@@ -390,9 +390,9 @@ export class PayrollComponentsComponent implements OnInit {
       reader.readAsBinaryString(this.file);
       reader.onload = function () {
         let data = reader.result;
-        workbookkk = read(data, { type: "binary" });
+        // workbookkk = read(data, { type: "binary" });
         workbookkk.SheetNames.forEach(function (sheetName) {
-          XL_row_object = utils.sheet_to_json(workbookkk.Sheets[sheetName]);
+          XL_row_object = null; //utils.sheet_to_json(workbookkk.Sheets[sheetName]);
           let position = TempDictionary.hasKey(sheetName);
           if (
             position === -1 &&

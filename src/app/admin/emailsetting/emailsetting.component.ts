@@ -6,6 +6,7 @@ import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { EmailLinkConfig, EmailSetting, OrgLogo } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-emailsetting',
