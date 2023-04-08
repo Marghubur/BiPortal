@@ -3,7 +3,6 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FooterComponent } from './footer/footer.component';
 import { AppHttpIntercepter } from './../auth/app.intercepter';
 import { JwtService } from './../auth/jwtService';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,7 +21,6 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [
     AppComponent,
-    FooterComponent,
     ToastComponent,
     LoginComponent,
     InitialpageComponent,

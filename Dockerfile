@@ -1,6 +1,6 @@
 #   BUILD STAGE 1
 
-FROM node:14.16.1 as node
+FROM node:18.15.0 as node
 WORKDIR /app
 
 COPY package.json .
