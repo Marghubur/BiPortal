@@ -153,8 +153,8 @@
                 </div>
                 <div class="t-body">
                   <ng-container *ngIf="isFileFound">
-                    <div class="tr py-2" *ngFor="let clients of clients">
-                      <div class="td align-middle text-center fe-index">{{clients.Index}}</div>
+                    <div class="tr py-2" *ngFor="let clients of clients; let i = index;">
+                      <div class="td align-middle text-center fe-index">{{clientsData.StartIndex + i}}</div>
                       <div class="td align-middle fe-3">
                         <div class="cell-wrapper">
                           <a href="javascript:void(0)" (click)="EditCurrent(clients)" class="client-name-link">
