@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminResetPassword,
   Attendance,
@@ -97,6 +96,7 @@ import { WorkflowComponent } from './workflow/workflow.component';
 import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.component';
 import { ManagetimesheetComponent } from '../user/managetimesheet/managetimesheet.component';
 import { MasterDataComponent } from './master-data/master-data.component';
+import { NgModule } from '@angular/core';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },

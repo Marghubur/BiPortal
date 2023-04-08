@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService, tableConfig } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
-import { read, utils } from 'xlsx';
+// import { read, utils } from 'xlsx';
 declare var $: any;
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-master-data',
@@ -77,9 +77,9 @@ export class MasterDataComponent implements OnInit {
       reader.readAsBinaryString(this.file);
       reader.onload = function () {
         let data = reader.result;
-        workbookkk = read(data, { type: "binary" });
+        // workbookkk = read(data, { type: "binary" });
         workbookkk.SheetNames.forEach(function (sheetName) {
-          XL_row_object = utils.sheet_to_json(workbookkk.Sheets[sheetName]);
+          XL_row_object = null;// utils.sheet_to_json(workbookkk.Sheets[sheetName]);
           let position = TempDictionary.hasKey(sheetName);
           if (
             position === -1 &&

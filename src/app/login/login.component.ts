@@ -1,12 +1,10 @@
 import { ErrorToast, Toast } from "./../../providers/common-service/common.service";
 import { AjaxService } from "src/providers/ajax.service";
-import { Output } from "@angular/core";
-import { EventEmitter } from "@angular/core";
-import { Component, OnInit } from "@angular/core";
-declare var $: any;
 import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from './../../auth/jwtService'
 import { Dashboard, UserDashboard, UserType } from "src/providers/constants";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+declare var $: any;
 
 @Component({
   selector: "app-login",
