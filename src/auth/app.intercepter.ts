@@ -1,10 +1,9 @@
-import { Injectable } from "@angular/core";
 import { HttpHeaders, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
 import { JwtService } from "./jwtService";
+import { Observable } from "rxjs/internal/Observable";
+import { Injectable } from "@angular/core";
 
 @Injectable()
-
 export class AppHttpIntercepter implements HttpInterceptor {
 
     constructor(private tokenHelper: JwtService) { }

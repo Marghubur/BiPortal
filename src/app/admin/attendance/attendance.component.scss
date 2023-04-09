@@ -177,3 +177,9 @@
 .zoom-2 {
   zoom: 1.5;
 }
+
+.active-month {
+  background-color: var(--primary-dark)!important;
+  border-color: #204d74!important;
+  color: #fff !important;
+}

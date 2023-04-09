@@ -1,12 +1,10 @@
 import { ErrorToast, Toast } from "./../../providers/common-service/common.service";
 import { AjaxService } from "src/providers/ajax.service";
-import { Output } from "@angular/core";
-import { EventEmitter } from "@angular/core";
-import { Component, OnInit } from "@angular/core";
-declare var $: any;
 import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from './../../auth/jwtService'
 import { Dashboard, UserDashboard, UserType } from "src/providers/constants";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+declare var $: any;
 
 @Component({
   selector: "app-login",
@@ -79,6 +77,24 @@ export class LoginComponent implements OnInit {
       };
       let userId: any = document.getElementById("EmailOrMobile");
       let password: any = document.getElementById("Password");
+      if (!userId.value) {
+        this.isLoading = false;
+        ErrorToast("Please enter email or mobile");
+        return;
+      }
+
+      if (!password.value) {
+        this.isLoading = false;
+        ErrorToast("Please enter the password");
+        return;
+      }
+
+      let termAndService: any = (document.getElementById("gridCheck") as HTMLInputElement).checked;
+      if (!termAndService) {
+        this.isLoading = false;
+        ErrorToast("Please agree with our term and service");
+        return;
+      }
 
       if (userId.value !== "" && password.value !== "") {
         if(userId.value.indexOf("@") !== -1) {

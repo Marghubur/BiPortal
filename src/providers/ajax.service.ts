@@ -1,10 +1,9 @@
-import { Injectable } from "@angular/core";
 import {
   HttpClient,
   HttpResponse,
   HttpErrorResponse
 } from "@angular/common/http";
-import "rxjs/add/operator/map";
+import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { environment } from "src/environments/environment";

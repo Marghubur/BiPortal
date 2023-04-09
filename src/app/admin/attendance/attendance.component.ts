@@ -39,7 +39,6 @@ export class AttendanceComponent implements OnInit {
   daysInMonth: number = 0;
   monthName: Array<any> = [];
   presentMonth: boolean = true;
-  cachedData: any = null;
   isRedirected: boolean = false;
   currentEmployee: any = null;
   applicationData: any = [];
@@ -66,6 +65,7 @@ export class AttendanceComponent implements OnInit {
   emails: Array<any> = [];
   employees: Array<any> = [];
   shiftDetail: any = null;
+  activeMonth: number = 0;
 
   constructor(private http: AjaxService,
     private nav: iNavigation,
@@ -90,12 +90,12 @@ export class AttendanceComponent implements OnInit {
     this.toModel = null;
     this.time = new Date();
     this.DayValue = this.time.getDay();
-    this.cachedData = this.nav.getValue();
-    if(this.cachedData) {
+    this.userDetail = this.nav.getValue();
+    if(this.userDetail) {
       this.isRedirected = true;
-      this.employeeId = this.cachedData.EmployeeUid;
-      this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
-      this.clientId = this.cachedData.CompanyId;
+      this.employeeId = this.userDetail.EmployeeUid;
+      this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
+      this.clientId = this.userDetail.CompanyId;
       this.loadAttendanceData();
     } else {
       this.isRedirected = false;
@@ -130,13 +130,7 @@ export class AttendanceComponent implements OnInit {
       ForMonth: month + 1
     }
 
-    let radiobtn = document.querySelectorAll('input[name="btnradio"]');
-    if (radiobtn.length > 0) {
-      for (let i = 0; i < radiobtn.length; i++) {
-        radiobtn[i].removeAttribute('checked');
-      }
-      radiobtn[index].setAttribute('checked', '');
-    }
+    this.activeMonth = index;
 
     this.loadMappedData(data);
   }
@@ -207,6 +201,7 @@ export class AttendanceComponent implements OnInit {
       }
       this.isEmployeeSelected = true;
       this.divisionCode = 1;
+      Toast("Attendance record found");
       this.isLoading = false;
       this.isEmployeesReady = true;
     }).catch(err => {

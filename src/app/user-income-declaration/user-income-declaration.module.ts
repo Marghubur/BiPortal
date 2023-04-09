@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MysalaryComponent } from '../user-income-declaration/mysalary/mysalary.component';
 import { PayslipsComponent } from '../user-income-declaration/payslips/payslips.component';
@@ -14,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PreferencesComponent } from '../user-income-declaration/preferences/preferences.component';
 import { CommoncomponentModule } from '../commoncomponent/commoncomponent.module';
+import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -37,4 +37,8 @@ import { CommoncomponentModule } from '../commoncomponent/commoncomponent.module
     CommoncomponentModule
   ]
 })
-export class UserIncomeDeclarationModule { }
+export class UserIncomeDeclarationModule {
+  constructor() {
+    console.log("User income module loaded");
+  }
+}

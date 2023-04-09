@@ -1,5 +1,3 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { Attendance, Leave, Timesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -8,6 +6,8 @@ import 'bootstrap'
 import { AjaxService } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-manage-leaveplan',
@@ -798,7 +798,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   buildPercentageNcarryForward() {
     let data = this.yearEndProcess.PercentagePayNCarryForward;
-    let dataArray = this.fb.array([]);
+    let dataArray: any = this.fb.array([]);
     if(data != null && data.length > 0) {
       let i = 0;
       while(i < data.length) {
@@ -846,7 +846,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   buildFixedNcarryForward() {
     let data = this.yearEndProcess.FixedPayNCarryForward;
-    let dataArray = this.fb.array([]);
+    let dataArray: FormArray<any> = this.fb.array([]);
     if(data != null && data.length > 0) {
       let i = 0;
       while(i < data.length) {

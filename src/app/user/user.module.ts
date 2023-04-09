@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './user-routing.module';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
@@ -21,6 +20,7 @@ import { ProjectsModule } from '../projects/projects.module';
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 import { NgChartsModule } from 'ng2-charts';
+import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -52,4 +52,8 @@ import { NgChartsModule } from 'ng2-charts';
     CommonService
   ]
 })
-export class UserModule { }
+export class UserModule { 
+  constructor() {
+    console.log("User module loaded");
+  }
+}
