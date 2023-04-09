@@ -49,7 +49,7 @@
                           <label class="mb-1">
                             <h6 class="mb-0 text-sm">Email or Mobile</h6>
                           </label>
-                          <input class="mb-4" value="chanchala50003@bottomhalf.com" id="EmailOrMobile" placeholder="Email or Mobile Number"
+                          <input class="mb-4"  id="EmailOrMobile" placeholder="Email or Mobile Number"
                             name="UserId">
                         </div>
                         <div class="row m-0 p-0">
@@ -57,7 +57,7 @@
                             <h6 class="mb-0 text-sm">Password</h6>
                           </label>
                           <div class="position-relative p-0 m-0 form-group">
-                            <input type="password" (keyup.enter)="UserLogin()" class="form-control" value="welcome@$Bot_001" placeholder="Password" id="Password"
+                            <input type="password" (keyup.enter)="UserLogin()" class="form-control" placeholder="Password" id="Password"
                               name="Password">
                             <ng-container *ngIf="isShowPassword">
                               <a href="javascript:void(0)" class="view-c" (click)="hidePassword()">
