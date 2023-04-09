@@ -12,8 +12,6 @@ import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { HolidayComponent } from './holiday/holiday.component';
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
-import { documentsComponent } from '../admin/documents/documents.component';
-import { documentspageComponent } from '../admin/documentspage/documentspage.component';
 
 const routes: Routes = [
   { path: '', component: UserDashboardComponent},

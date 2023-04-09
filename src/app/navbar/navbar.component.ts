@@ -1,7 +1,7 @@
 import { ApplicationStorage } from "./../../providers/ApplicationStorage";
 import { AjaxService } from "./../../providers/ajax.service";
 import { CommonService, Toast, UserDetail } from "./../../providers/common-service/common.service";
-import { AccessTokenExpiredOn, Blogs, BuildPdf, CompanyLogo, CompanySettings, Documents, Employees, Login } from "./../../providers/constants";
+import { AccessTokenExpiredOn, AdminResetPassword, Blogs, BuildPdf, CompanyLogo, CompanySettings, Documents, Employees, Login, Profile } from "./../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
@@ -148,6 +148,14 @@ export class NavbarComponent implements OnInit, DoCheck {
 
   navCompanySetting() {
     this.nav.navigate(CompanySettings, null);
+  }
+
+  resetPassword() {
+    this.nav.navigate(AdminResetPassword, null);
+  }
+
+  mangeAccount() {
+    this.nav.navigate(Profile, null);
   }
 
   toggleMenu() {

@@ -105,7 +105,6 @@ export const ProjectList = 'admin/project';
 export const ManageProject = 'admin/manage-project';
 export const EmailTemplate = 'admin/emailtemplate';
 export const ManageEmailTemplate = 'admin/emailtemplate/manageemailtemplate';
-export const EmployeePerformance = 'admin/employees/employeeperformance';
 export const TaxRegime = 'admin/taxregime';
 export const CompanyLogo = 'admin/companylogo';
 export const Annexure = 'admin/annexure';
@@ -149,6 +148,7 @@ export const ManageTimesheet = 'user/managetimesheet';
 export const UserDocuments = "user/documents";
 export const UserDocumentsPage = "user/documentspage/:path";
 export const EmpPerformance = 'user/performance';
+export const EmpServiceRequest = 'user/servicerequest';
 
 // *************************** file name constancts  *************
 export const Doc = "doc";

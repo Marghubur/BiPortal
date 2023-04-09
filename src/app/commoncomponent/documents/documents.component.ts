@@ -5,7 +5,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { ADocx, AImage, APdf, Clients, Doc, DocImg, DocumentPath, DocumentPathName, Documents, Docx, Employees, Excel, ExcelImg, FileSystemType, Images, JImage, Pdf, PdfImg, PImage, Resume, Txt, TxtImg, UserPath, UserPathName, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 import { environment } from "src/environments/environment";
 import { ActivatedRoute } from '@angular/router';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -55,13 +55,23 @@ export class documentsComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
+    private user: UserService,
     private route: ActivatedRoute,
     private local: ApplicationStorage,
     private sanitizer: DomSanitizer
   ) {
     let data = this.nav.getValue();
     this.currentUser = data;
-    if(data) {
+    if (!this.currentUser) {
+      let userDetail: any = this.user.getInstance();
+      this.currentUser = new DocumentUser();
+      this.currentUser.Mobile = userDetail.Mobile;
+      this.currentUser.Email = userDetail.Email;
+      this.currentUser.PageName = Employees;
+      this.currentUser.UserId = userDetail.UserId,
+      this.currentUser.Name = userDetail.FirstName +" "+ userDetail.LastName
+    }
+    if(this.currentUser) {
       this.rootLocation = `${this.rootLocation}${environment.FolderDelimiter}${this.currentUser.Email.replace("@", "_").replace(/\./g, "_")}`;
     } else {
       ErrorToast("UnAuthorized access.")

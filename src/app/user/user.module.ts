@@ -21,6 +21,7 @@ import { ServiceRequestComponent } from './service-request/service-request.compo
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 import { NgChartsModule } from 'ng2-charts';
 import { NgModule } from '@angular/core';
+import { CommoncomponentModule } from '../commoncomponent/commoncomponent.module';
 
 @NgModule({
   declarations: [
@@ -46,13 +47,14 @@ import { NgModule } from '@angular/core';
     UtilModule,
     ProjectsModule,
     NgChartsModule,
-    UserIncomeDeclarationModule
+    UserIncomeDeclarationModule,
+    CommoncomponentModule
   ],
   providers: [
     CommonService
   ]
 })
-export class UserModule { 
+export class UserModule {
   constructor() {
     console.log("User module loaded");
   }

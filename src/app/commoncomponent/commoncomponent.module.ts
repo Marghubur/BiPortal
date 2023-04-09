@@ -7,10 +7,16 @@ import { UtilModule } from '../util/util.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
+import { documentspageComponent } from './documentspage/documentspage.component';
+import { documentsComponent } from './documents/documents.component';
+import { ServiceRequestComponent } from './service-request/service-request.component';
 
 @NgModule({
   declarations: [
-    PerformanceComponent
+    PerformanceComponent,
+    ServiceRequestComponent,
+    documentspageComponent,
+    documentsComponent
   ],
   imports: [
     CommonModule,

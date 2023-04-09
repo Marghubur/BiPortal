@@ -7,6 +7,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
+import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
 @Component({
@@ -48,6 +49,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
 
   constructor(private user: UserService,
               private http: AjaxService,
+              private nav:iNavigation,
               private fb: FormBuilder) { }
 
   ngDoCheck(): void {
@@ -78,9 +80,17 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
 
   ngOnInit(): void {
     this.isPageReady =false;
-    this.userDetail = this.user.getInstance();
-    if(this.userDetail && this.userDetail !== null) {
+    let data = this.nav.getValue();
+    if (data) {
+      this.userDetail = data;
+      this.employeeId = data.EmployeeUid;
+    }
+    else {
+      this.userDetail = this.user.getInstance();
       this.employeeId = this.userDetail.UserId;
+    }
+
+    if(this.userDetail && this.userDetail !== null) {
       this.designationId = this.userDetail.DesignationId;
       this.employeesList.data = [];
       this.employeesList.placeholder = "Employee";
@@ -99,7 +109,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     this.isPageReady = false;
     this.isPageLoading = true;
     this.http.get(`Objective/GetEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`).then(res => {
-      if (res.ResponseBody) {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.financialYear = res.ResponseBody[0].FinancialYear;
         let days = new Date(this.financialYear+1, res.ResponseBody[0].DeclarationEndMonth, 0).getDate();
         this.startDate = new Date(this.financialYear, res.ResponseBody[0].DeclarationStartMonth-1, 1);
@@ -110,8 +120,13 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
         this.objectives = res.ResponseBody;
         this.calculateRecord();
         this.getUserNameIcon();
+        Toast("Employee performance objective data loaded successsfully");
         this.isPageReady = true;
         this.isPageLoading = false;
+      } else {
+        ErrorToast("No objective details found. Please contact to admin.");
+        this.isPageLoading = false;
+        this.isPageReady = true;
       }
     }).catch(err => {
       ErrorToast("Fail to get objective detail. Please contact to admin.");
@@ -121,6 +136,11 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   }
 
   calculateRecord() {
+    this.onTrackRecord = 0;
+    this.needAttentionRecord = 0;
+    this.atRiskRecord = 0;
+    this.notStartedRecord = 0;
+    this.closedRecord = 0;
     let targetValue = this.objectives.map(x => x.TargetValue).reduce((a, b) => {return a+b}, 0);
     let currentValue = this.objectives.map(x => x.CurrentValue).reduce((a, b) => {return a+b}, 0);
     this.overallProgress = (currentValue/targetValue) * 100;
@@ -184,6 +204,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
         this.selectedObjective.CurrentValue = value.CurrentValue;
         this.selectedObjective.Status = value.Status;
         this.selectedObjective.PerformanceDetail = JSON.parse(value.PerformanceDetail);
+        this.calculateRecord();
         this.isLoading = false;
         $('#managePerformance').modal('hide');
         Toast("Employee performance objective updated successsfully");

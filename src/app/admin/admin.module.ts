@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
-import { documentspageComponent } from './documentspage/documentspage.component';
-import { documentsComponent } from './documents/documents.component';
 import { ManageemployeeComponent } from './manageemployee/manageemployee.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,18 +15,13 @@ import { RegisterclientComponent } from './registerclient/registerclient.compone
 import { FilesComponent } from './files/files.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
 import { HomeComponent } from './home/home.component';
-import { AttendanceComponent } from './attendance/attendance.component';
-import { ManageComponent } from './profile/profile.component';
 import { RecentComponent } from './recent/recent.component';
 import { RolesComponent } from './roles/roles.component';
 import { CreateResumeComponent } from './create-resume/create-resume.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { RecruiterComponent } from './recruiter/recruiter.component';
-import { TimesheetComponent } from './timesheet/timesheet.component';
 import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
-import { ApprovalRequestComponent } from './approval-request/approval-request.component';
-import { NotificationComponent } from './notification/notification.component';
 import { SettingsComponent } from './settings/settings.component';
 import { CompanySettingsComponent } from './company-settings/company-settings.component';
 import { ExpensesComponent } from './expenses/expenses.component';
@@ -38,7 +31,6 @@ import { DateFormatter } from 'src/providers/DateFormatter';
 import { SalaryBreakupComponent } from './salary-breakup/salary-breakup.component';
 import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
-import { HolidayComponent } from './holiday/holiday.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
 import { CompanyComponent } from './company/company.component';
 import { ProjectsModule } from '../projects/projects.module';
@@ -47,28 +39,18 @@ import { IncomeDeclarationModule } from '../income-declaration/income-declaratio
 import { LeaveManagementModule} from '../leave-management/leave-management.module';
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
-import { EmployeePerformanceComponent } from './employee-performance/employee-performance.component';
 import { CompanylogoComponent } from './companylogo/companylogo.component';
-import { AnnexureComponent } from './annexure/annexure.component';
-import { OfferletterComponent } from './offerletter/offerletter.component';
-import { EmailConfigComponent } from './email-config/email-config.component';
 import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.component';
-import { ServiceRequestComponent } from './service-request/service-request.component';
-import { ProductsComponent } from './products/products.component';
-import { ManageshiftComponent } from './manageshift/manageshift.component';
-import { WorkflowComponent } from './workflow/workflow.component';
-import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.component';
 import { AdminmodalModule } from './../adminmodal/adminmodal.module'
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
-import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 import { MasterDataComponent } from './master-data/master-data.component';
-import { ConfigPerformanceComponent } from './config-performance/config-performance.component';
+import { ConfigurationModule } from '../configuration/configuration.module';
+import { ManageModule } from '../manage/manage.module';
+import { TeamModule } from '../team/team.module';
 
 @NgModule({
   declarations: [
     AdminComponent,
-    documentspageComponent,
-    documentsComponent,
     ManageemployeeComponent,
     BuildPdfComponent,
     ReplaceEmpty,
@@ -78,19 +60,14 @@ import { ConfigPerformanceComponent } from './config-performance/config-performa
     FilesComponent,
     BilldetailsComponent,
     HomeComponent,
-    AttendanceComponent,
-    ManageComponent,
     RecentComponent,
     RolesComponent,
     CreateResumeComponent,
     RecruiterComponent,
     CompaniesComponent,
     HomeComponent,
-    TimesheetComponent,
     TaxcalculationComponent,
     ResetpasswordComponent,
-    ApprovalRequestComponent,
-    NotificationComponent,
     SettingsComponent,
     CompanySettingsComponent,
     ExpensesComponent,
@@ -98,25 +75,13 @@ import { ConfigPerformanceComponent } from './config-performance/config-performa
     SalaryBreakupComponent,
     EmailComponent,
     OrganizationComponent,
-    HolidayComponent,
     EmailsettingComponent,
     CompanyComponent,
     EmailTemplateComponent,
     ManageEmailtemplateComponent,
-    EmployeePerformanceComponent,
     CompanylogoComponent,
-    AnnexureComponent,
-    OfferletterComponent,
-    EmailConfigComponent,
     EmaillinkconfigComponent,
-    ServiceRequestComponent,
-    ProductsComponent,
-    ManageshiftComponent,
-    WorkflowComponent,
-    ManageWorkFlowComponent,
-    ManagetimesheetComponent,
     MasterDataComponent,
-    ConfigPerformanceComponent
   ],
   imports: [
     CommonModule,
@@ -130,7 +95,10 @@ import { ConfigPerformanceComponent } from './config-performance/config-performa
     IncomeDeclarationModule,
     AdminmodalModule,
     CommonmodalModule,
-    CommoncomponentModule
+    CommoncomponentModule,
+    ManageModule,
+    ConfigurationModule,
+    TeamModule
   ],
   providers: [
     CommonService,

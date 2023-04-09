@@ -23,7 +23,7 @@
                         <div class="col-auto bg-c text-white py-2">My Objective</div>
                         <div class="col-auto">Company Department Objectives</div>
                       </div>
-                      <div class="col-md-4 row pe-0">
+                      <div class="col-md-4 row pe-0 align-items-center justify-content-end">
                         <div class="col-md-4">
                           <select class="form-select">
                             <option value="0" selected disabled>Time Frame</option>
@@ -40,17 +40,17 @@
                             <option value="5">Closed</option>
                           </select>
                         </div>
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                           <select class="form-select">
                             <option value="0" selected disabled>Tags</option>
-                            <option value="">2022-2023</option>
+                            <option value="">2023-2024</option>
                           </select>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                     <div class="row bg-light mt-4 align-items-center justify-content-between">
-                      <div class="col-md-5">
-                        <div class="col-md-12 my-3"  *ngIf="objectives.length > 0">
+                      <div class="col-md-5" *ngIf="objectives.length > 0">
+                        <div class="col-md-12 my-3"  >
                           <i class="fa fa-calendar pe-2"></i>
                           <span class="fw-bold">{{financialYear}}-{{financialYear+1}}</span>
                           <span class="text-muted ps-2">{{startDate | date}}</span> -
@@ -160,7 +160,7 @@
                 </ng-template>
               </li>
 
-              <li [ngbNavItem]="2">
+              <!-- <li [ngbNavItem]="2">
                 <a ngbNavLink>1.1 Mettings</a>
                 <ng-template ngbNavContent>
                   <ng-container *ngIf="!isPageLoading">
@@ -187,9 +187,9 @@
                     </div>
                   </ng-container>
                 </ng-template>
-              </li>
+              </li> -->
 
-              <li [ngbNavItem]="3">
+              <!-- <li [ngbNavItem]="3">
                 <a ngbNavLink>Continous Feedback</a>
                 <ng-template ngbNavContent>
                   <ng-container *ngIf="!isPageLoading">
@@ -252,7 +252,7 @@
                     </div>
                   </ng-container>
                 </ng-template>
-              </li>
+              </li> -->
             </ul>
 
             <div [ngbNavOutlet]="nav" class="mt-2"></div>
@@ -622,7 +622,7 @@
         <h5 class="modal-title" id="performanceReviewLabel">Review Form - Performance Review cycle {{startDate | date}} - {{endDate | date}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" >
+      <!-- <div class="modal-body" >
         <div class="card shadow-sm rounded-0 p-3">
           <div class="d-flex">
             <div class="rounded-icon bg-c text-white">
@@ -664,7 +664,7 @@
             </div>
           </ng-container>
         </ng-container>
-      </div>
+      </div> -->
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" [disabled]="isLoading" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="manageMetting()" [disabled]="isLoading">
