@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
-import { ManageProject, ProjectWiki } from 'src/providers/constants';
+import { ManageProject, ProjectBaseRoute, ProjectWiki } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 import { ProjectModal } from './manage-project/manage-project.component';
@@ -28,11 +28,11 @@ export class ProjectsComponent implements OnInit {
   }
 
   addUpdateWiki(project: any) {
-    this.nav.navigate(ProjectWiki, project);
+    this.nav.navigate(ProjectBaseRoute + "/" + ProjectWiki, project);
   }
 
   addProject() {
-    this.nav.navigate(ManageProject, null);
+    this.nav.navigate(ProjectBaseRoute + "/" + ManageProject, null);
   }
 
   loadData() {

@@ -16,7 +16,6 @@ import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { HolidayComponent } from './holiday/holiday.component';
-import { ProjectsModule } from '../projects/projects.module';
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 import { NgChartsModule } from 'ng2-charts';
@@ -45,10 +44,7 @@ import { CommoncomponentModule } from '../commoncomponent/commoncomponent.module
     FormsModule,
     UserRoutingModule,
     UtilModule,
-    ProjectsModule,
-    NgChartsModule,
-    UserIncomeDeclarationModule,
-    CommoncomponentModule
+    NgChartsModule
   ],
   providers: [
     CommonService

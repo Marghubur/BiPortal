@@ -33,7 +33,6 @@ import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
 import { CompanyComponent } from './company/company.component';
-import { ProjectsModule } from '../projects/projects.module';
 import { CommoncomponentModule } from '../commoncomponent/commoncomponent.module';
 import { IncomeDeclarationModule } from '../income-declaration/income-declaration.module';
 import { LeaveManagementModule} from '../leave-management/leave-management.module';
@@ -44,9 +43,6 @@ import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.comp
 import { AdminmodalModule } from './../adminmodal/adminmodal.module'
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { MasterDataComponent } from './master-data/master-data.component';
-import { ConfigurationModule } from '../configuration/configuration.module';
-import { ManageModule } from '../manage/manage.module';
-import { TeamModule } from '../team/team.module';
 
 @NgModule({
   declarations: [
@@ -90,15 +86,8 @@ import { TeamModule } from '../team/team.module';
     ReactiveFormsModule,
     FormsModule,
     UtilModule,
-    ProjectsModule,
-    LeaveManagementModule,
-    IncomeDeclarationModule,
     AdminmodalModule,
     CommonmodalModule,
-    CommoncomponentModule,
-    ManageModule,
-    ConfigurationModule,
-    TeamModule
   ],
   providers: [
     CommonService,

@@ -3,7 +3,7 @@ import { WorkFlow } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
-import { ManageWorkFlow } from 'src/providers/constants';
+import { ConfigBaseRoute, ManageWorkFlow } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -84,7 +84,7 @@ export class WorkflowComponent implements OnInit {
   }
 
   EditCurrent(item: any) {
-    this.nav.navigate(ManageWorkFlow, item);
+    this.nav.navigate(ConfigBaseRoute+ "/"+ ManageWorkFlow, item);
   }
 
   GetFilterResult(e: any){
@@ -95,7 +95,7 @@ export class WorkflowComponent implements OnInit {
   }
 
   addWorkFlowPopUp() {
-    this.nav.navigate(ManageWorkFlow, null);
+    this.nav.navigate(ConfigBaseRoute+ "/" + ManageWorkFlow, null);
   }
 
   arrangeDetails(flag: any, FieldName: string) {

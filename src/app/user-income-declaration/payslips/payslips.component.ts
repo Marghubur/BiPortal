@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { Declaration, IncomeTax, Preferences, Salary, Summary } from 'src/providers/constants';
+import { Declaration, IncomeTax, Preferences, Salary, Summary, UserAccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 
@@ -159,15 +159,15 @@ export class PayslipsComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigateRoot(Declaration, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Declaration, this.cachedData);
         break;
       case "salary-tab":
         break;
       case "summary-tab":
-        this.nav.navigateRoot(Summary, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Summary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(Preferences, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Preferences, this.cachedData);
         break;
     }
   }
@@ -175,12 +175,12 @@ export class PayslipsComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "MySalary":
-        this.nav.navigateRoot(Salary, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Salary, this.cachedData);
         break;
       case "PaySlips":
         break;
       case "IncomeTax":
-        this.nav.navigateRoot(IncomeTax, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + IncomeTax, this.cachedData);
         break;
     }
   }

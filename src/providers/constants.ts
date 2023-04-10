@@ -43,13 +43,100 @@ export enum FileSystemType {
 export const Blogs = "api/blogs";
 export const Article = "api/blogs/article/:articleid";
 
+// ********************** Manage route pages  *******************
+
+export const ManageBaseRoute = "admin/manage/"
+export const Profile = 'profile';
+export const AdminLeave = 'leave';
+export const Holiday = 'planholidays';
+export const Attendance = 'attendance';
+export const Timesheet = 'timesheet';
+export const AdminManageTimesheet = 'managetimesheet';
+
+// ********************** Manage route ends  *******************
+
+
+// ********************** Configuration route pages  *******************
+
+export const ConfigBaseRoute = "admin/config"
+export const Annexure = 'annexure';
+export const OfferLetter = 'offerletter';
+export const EmailConfiguration = 'emailconfiguration';
+export const Products = 'products';
+export const ManageShift = 'manageshift';
+export const WorkFlow = 'workflow';
+export const ConfigPerformance = 'configperformance';
+export const ManageWorkFlow = 'workflow/manageworkflow';
+
+// ********************** Configuration route ends  *******************
+
+
+// ********************** Team route pages  *******************
+
+export const TeamBaseRoute = "admin/team"
+export const AdminNotification = 'notification';
+export const AdminApprovalRequest = 'request';
+
+// ********************** Team route ends  *******************
+
+
+// ********************** Project route pages  *******************
+
+export const ProjectBaseRoute = "admin/project"
+export const ProjectWiki = 'projectlist/wiki';
+export const ProjectList = 'projectlist';
+export const ManageProject = 'projectlist/manage-project';
+
+// ********************** Project route ends  *******************
+
+
+// ********************** Income Declaration route pages  *******************
+
+export const AccountsBaseRoute = "admin/accounts"
+export const AdminSummary = "summary";
+export const AdminDeclaration = "declaration";
+export const AdminSalary = "salary";
+export const AdminPreferences = "preferences";
+export const AdminPreviousIncome = 'declaration/previousincome';
+export const AdminForm12B = 'declaration/form12b';
+export const AdminFreeTaxFilling = 'declaration/freetaxfilling';
+export const AdminDeclarationApprovalRule = 'declaration/declarationapprovalrule';
+export const AdminIncomeTax = 'salary/incometax';
+export const AdminPaySlip = 'salary/payslip';
+export const Payroll = 'payrollsettings/payroll';
+export const PFESISetup = 'payrollsettings/pfesisetup';
+export const SalaryComponentStructure = 'payrollsettings/salarycomponentstructure';
+export const CustomSalaryStructure = 'payrollsettings/customsalarystructure';
+export const PayrollComponents = 'payrollcomponents';
+export const TaxRegime = 'taxregime';
+
+// ********************** Income Declaration route ends  *******************
+
+// ********************** Leave Management route pages  *******************
+
+export const LeaveBaseRoute = "admin/leave"
+export const Leave = 'leavesetting'
+export const ManageLeavePlan = 'leavesetting/manageleaveplan';
+export const ManageYearEnding = 'leavesetting/manageyearending';
+
+// ********************** Leave Management route ends  *******************
+
+
+// ********************** Project route pages  *******************
+
+export const CommonBaseRoute = "admin/common"
+export const Performance = 'performance';
+export const ServiceRequest = 'servicerequest';
+export const Documents = "documents";
+export const DocumentsPage = "documentspage/:path";
+
+// ********************** Project route ends  *******************
+
 
 // ********************** Admin route pages  *******************
 
 export const Employees = "admin/employees";
 export const Dashboard = "admin/dashboard";
-export const Documents = "admin/documents";
-export const DocumentsPage = "admin/documentspage/:path";
 export const BuildPdf = "admin/generatebill";
 export const ManageEmployee = 'admin/employees/manageemployee';
 export const Clients = 'admin/clients';
@@ -58,97 +145,59 @@ export const Files = 'admin/files';
 export const Resume = 'admin/resumes';
 export const SideMenu = 'admin/sidemenu';
 export const BillDetail = 'admin/billdetail';
-export const Profile = 'admin/profile';
 export const Recent = 'admin/recent';
 export const Roles = 'admin/roles';
 export const Companies = 'admin/Companies';
 export const CreateResume = 'admin/CreateResume';
 export const Recruiter = 'admin/Recruiter';
-export const Attendance = 'admin/attendance';
-export const Leave = 'admin/leavesetting'
-export const Timesheet = 'admin/timesheet';
-export const AdminSummary = "admin/summary";
-export const AdminDeclaration = "admin/declaration";
-export const AdminSalary = "admin/salary";
-export const AdminPreferences = "admin/preferences";
-export const AdminPreviousIncome = 'admin/declaration/previousincome';
-export const AdminForm12B = 'admin/declaration/form12b';
-export const AdminFreeTaxFilling = 'admin/declaration/freetaxfilling';
-export const AdminDeclarationApprovalRule = 'admin/declaration/declarationapprovalrule';
 export const AdminTaxcalculation = 'admin/taxcalculation';
-export const SalaryComponentStructure = 'admin/payrollsettings/salarycomponentstructure';
-export const CustomSalaryStructure = 'admin/payrollsettings/customsalarystructure';
 export const AdminResetPassword = 'admin/resetpassword';
-export const AdminIncomeTax = 'admin/salary/incometax';
-export const AdminPaySlip = 'admin/salary/payslip';
-export const AdminNotification = 'admin/notification';
-export const PayrollComponents = 'admin/payrollcomponents';
-export const AdminApprovalRequest = 'admin/request';
 export const PayrollSettings = 'admin/payrollsettings';
 export const CompanyInfo = 'admin/payrollsettings/company-info';
 export const CompanySettings = 'admin/payrollsettings/company-settings';
-export const Payroll = 'admin/payrollsettings/payroll';
-export const PFESISetup = 'admin/payrollsettings/pfesisetup';
 export const Expenses = 'admin/expenses';
-export const ManageLeavePlan = 'admin/leave/manageleaveplan';
-export const ManageYearEnding = 'admin/manageyearending';
 export const SalaryBreakup = 'admin/employees/alarybreakup';
 export const EmailService = 'admin/email';
 export const OrganizationSetting = 'admin/organization-setting';
-export const Holiday = 'admin/planholidays';
-export const Project = 'admin/project';
 export const EmailSetting = 'admin/emailsetting';
 export const EmailLinkConfig = 'admin/emaillinkconfig';
 export const Company = 'admin/companysettings';
-export const ProjectWiki = 'admin/project/wiki';
-export const ProjectList = 'admin/project';
-export const ManageProject = 'admin/manage-project';
 export const EmailTemplate = 'admin/emailtemplate';
 export const ManageEmailTemplate = 'admin/emailtemplate/manageemailtemplate';
-export const TaxRegime = 'admin/taxregime';
 export const CompanyLogo = 'admin/companylogo';
-export const Annexure = 'admin/annexure';
-export const OfferLetter = 'admin/offerletter';
-export const EmailConfiguration = 'admin/emailconfiguration';
-export const ServiceRequest = 'admin/servicerequest';
-export const Products = 'admin/products';
-export const ManageShift = 'admin/manageshift';
-export const WorkFlow = 'admin/workflow';
-export const ManageWorkFlow = 'admin/manageworkflow';
-export const AdminManageTimesheet = 'admin/managetimesheet';
-export const AdminLeave = 'admin/leave';
 export const AdminMasterData = 'admin/masterdata';
-export const ConfigPerformance = 'admin/configperformance';
-export const Performance = 'admin/performance';
 
 // ********************** Admin route pages  *******************
 
 export const UserDashboard = "user/dashboard";
-export const UserAttendance = "user/attendance";
-export const UserProfilePage = "user/profile";
-export const UserTimesheet = "user/timesheet";
+export const UserAttendance = "user/manage/attendance";
+export const UserProfilePage = "user/manage/profile";
+export const UserTimesheet = "user/manage/timesheet";
 export const Summary = "user/summary";
-export const Declaration = "user/declaration";
-export const Salary = "user/salary";
-export const Preferences = "user/preferences";
-export const UserLeave = 'user/leave';
-export const PreviousIncome = 'user/declaration/previousincome';
-export const Form12B = 'user/declaration/form12b';
-export const FreeTaxFilling = 'user/freetaxfilling';
+export const Declaration = "declaration";
+export const Salary = "salary";
+export const Preferences = "preferences";
+export const UserLeave = 'user/manage/leave';
+export const PreviousIncome = 'declaration/previousincome';
+export const Form12B = 'declaration/form12b';
+export const FreeTaxFilling = 'freetaxfilling';
 export const TaxSavingInvestment = 'user/taxsavinginvestment';
-export const PaySlip = 'user/salary/payslip';
-export const IncomeTax = 'user/salary/incometax';
+export const PaySlip = 'salary/payslip';
+export const IncomeTax = 'salary/incometax';
 export const Taxcalculation = 'user/taxcalculation';
 export const ResetPassword = 'user/resetpassword';
-export const Notification = 'user/notification';
-export const ApprovalRequest = 'user/request';
-export const UserHoliday = 'user/planholidays';
-export const UserProjectList = 'user/project';
-export const ManageTimesheet = 'user/managetimesheet';
-export const UserDocuments = "user/documents";
-export const UserDocumentsPage = "user/documentspage/:path";
-export const EmpPerformance = 'user/performance';
-export const EmpServiceRequest = 'user/servicerequest';
+export const Notification = 'user/team/notification';
+export const ApprovalRequest = 'user/team/request';
+export const UserHoliday = 'user/manage/planholidays';
+export const UserProjectBaseRout = "user/project"
+export const UserProjectList = 'projectlist';
+export const ManageTimesheet = 'user/manage/managetimesheet';
+export const UserDocuments = "documents";
+export const UserDocumentsPage = "documentspage/:path";
+export const EmpPerformance = 'performance';
+export const EmpServiceRequest = 'servicerequest';
+export const UserAccountsBaseRoute = "user/accounts"
+export const UserCommonBaseRoute = "user/common"
 
 // *************************** file name constancts  *************
 export const Doc = "doc";

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Declaration, FreeTaxFilling, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
+import { Declaration, FreeTaxFilling, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment, UserAccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -23,13 +23,13 @@ export class Form12BBComponent implements OnInit {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigateRoot(Salary, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Salary, this.cachedData);
         break;
       case "summary-tab":
-        this.nav.navigateRoot(Summary, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Summary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(Preferences, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" +  Preferences, this.cachedData);
         break;
     }
   }
@@ -37,10 +37,10 @@ export class Form12BBComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "declaration-tab":
-        this.nav.navigateRoot(Declaration, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Declaration, this.cachedData);
         break;
       case "previous-income-tab":
-        this.nav.navigateRoot(PreviousIncome, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + PreviousIncome, this.cachedData);
         break;
       case "form-12-tab":
         break;

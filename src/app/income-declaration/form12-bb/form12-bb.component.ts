@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminDeclaration, AdminFreeTaxFilling, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule } from 'src/providers/constants';
+import { AdminDeclaration, AdminFreeTaxFilling, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule, AccountsBaseRoute, Declaration } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -19,17 +19,17 @@ export class Form12BbComponent implements OnInit {
   }
 
   activateMe(ele: string) {
-    switch(ele) {
+    switch (ele) {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigateRoot(AdminSalary, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSalary, null);
         break;
       case "summary-tab":
-        this.nav.navigateRoot(AdminSummary, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSummary, null);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(AdminPreferences, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminPreferences, null);
         break;
     }
   }
@@ -37,18 +37,12 @@ export class Form12BbComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "declaration-tab":
-        this.nav.navigateRoot(AdminDeclaration, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminDeclaration, this.cachedData);
         break;
       case "previous-income-tab":
-        this.nav.navigateRoot(AdminPreviousIncome, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminPreviousIncome, this.cachedData);
         break;
       case "form-12-tab":
-        break;
-      case "free-tax-tab":
-        this.nav.navigateRoot(AdminFreeTaxFilling, this.cachedData);
-        break;
-      case "approval-rule-tab":
-        this.nav.navigateRoot(AdminDeclarationApprovalRule, this.cachedData);
         break;
     }
   }

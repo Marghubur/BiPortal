@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminDeclaration, AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule, CustomSalaryStructure, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure, TaxRegime } from 'src/providers/constants';
-import { ApprovalRuleComponent } from './approval-rule/approval-rule.component';
+import { AdminDeclaration, AdminForm12B, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminPreviousIncome, AdminSalary, CustomSalaryStructure, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure, TaxRegime } from 'src/providers/constants';
 import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 import { DeclarationComponent } from './declaration/declaration.component';
 import { Form12BbComponent } from './form12-bb/form12-bb.component';
-import { FreetaxfillingComponent } from './freetaxfilling/freetaxfilling.component';
 import { IncometaxComponent } from './incometax/incometax.component';
 import { PayrollComponentsComponent } from './payroll-components/payroll-components.component';
 import { PayrollComponent } from './payroll/payroll.component';
@@ -23,8 +21,6 @@ const routes: Routes = [
   { path: AdminDeclaration, component: DeclarationComponent},
   { path: AdminPreviousIncome, component: PreviousincomeComponent},
   { path: AdminForm12B, component: Form12BbComponent},
-  { path: AdminFreeTaxFilling, component: FreetaxfillingComponent},
-  { path: AdminDeclarationApprovalRule, component: ApprovalRuleComponent},
   { path: AdminIncomeTax, component: IncometaxComponent},
   { path: AdminPaySlip, component: PayslipComponent},
   { path: Payroll, component: PayrollComponent},

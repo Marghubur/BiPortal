@@ -7,7 +7,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
-import { Filter } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -31,11 +31,13 @@ export class ServiceRequestComponent implements OnInit {
   maxDate: any = null;
   frommodel: NgbDateStruct;
   tomodel: NgbDateStruct;
+  apiURL: string = "";
+  userDetail: any = null;
 
-  constructor(
-    private http: AjaxService,
-    private fb: FormBuilder
-    ) { }
+  constructor(private http: AjaxService,
+              private fb: FormBuilder,
+              private user: UserService
+            ) { }
 
   ngOnInit(): void {
     this.employeesList = new autoCompleteModal();
@@ -46,6 +48,12 @@ export class ServiceRequestComponent implements OnInit {
     this.employeesList.isMultiSelect = true;
     this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.requestFilter = new Filter();
+    this.userDetail = this.user.getInstance();
+    if (this.userDetail.UserTypeId == 1)
+      this.apiURL = "GetServiceRequest";
+    else
+      this.apiURL = "GetServiceRequestByEmpId";
+
     this.loadPageData()
   }
 
@@ -59,9 +67,17 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   loadPageData() {
-    this.http.post("ServiceRequest/GetServiceRequest", this.requestFilter).then((response: ResponseModel) => {
+    if (this.userDetail != 1)
+      this.requestFilter.SearchString = `1=1 and RequestedBy = ${this.userDetail.UserId}`;
+
+    this.http.post(`ServiceRequest/${this.apiURL}`, this.requestFilter).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.requestDetail = response.ResponseBody;
+        console.log(this.requestDetail);
+        if (this.requestDetail.length > 0)
+          this.requestFilter.TotalRecords = this.requestDetail[0].Total;
+        else
+          this.requestFilter.TotalRecords = 0;
         this.isPageReady = true;
         Toast("Request service data loaded successfully.")
       } else {
@@ -128,6 +144,10 @@ export class ServiceRequestComponent implements OnInit {
       this.http.post("ServiceRequest/AddUpdateServiceRequest", value).then(res => {
         if (res.ResponseBody) {
           this.requestDetail = res.ResponseBody;
+          if (this.requestDetail.length > 0)
+            this.requestFilter.TotalRecords = this.requestDetail[0].Total;
+          else
+            this.requestFilter.TotalRecords = 0;
           $('#addupdateModal').modal('hide');
           this.isLoading = false;
           this.isPageReady = true;

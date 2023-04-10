@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { Attendance, ManageLeavePlan, ManageYearEnding, Timesheet } from 'src/providers/constants';
+import { Attendance, LeaveBaseRoute, ManageLeavePlan, ManageYearEnding, Timesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
@@ -370,20 +370,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       CurrentType: currenType,
       LeavePlannType: this.planLeaveTypes
     }
-    this.nav.navigate(ManageLeavePlan, value);
-  }
-
-  activateMe(elemId: string) {
-    switch(elemId) {
-      case "attendance-tab":
-        this.nav.navigate(Attendance, this.cachedData);
-      break;
-      case "timesheet-tab":
-        this.nav.navigate(Timesheet, this.cachedData);
-      break;
-      case "leave-tab":
-      break;
-    }
+    this.nav.navigate(LeaveBaseRoute + "/" + ManageLeavePlan, value);
   }
 
   changeMenu(code: string) {
@@ -520,7 +507,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   yearEndSetting() {
-    this.nav.navigate(ManageYearEnding, null)
+    this.nav.navigate(LeaveBaseRoute + "/" + ManageYearEnding, null)
   }
 
   defaultPlanPopUp() {

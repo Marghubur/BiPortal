@@ -13,8 +13,7 @@ import { NgModule } from '@angular/core';
   declarations: [
     LeaveComponent,
     ManageLeaveplanComponent,
-    ManageYearEndingComponent,
-    ManageYearEndingComponent,
+    ManageYearEndingComponent
   ],
   imports: [
     CommonModule,

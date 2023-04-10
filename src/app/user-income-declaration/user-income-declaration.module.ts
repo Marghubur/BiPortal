@@ -5,8 +5,6 @@ import { IncometaxComponent } from '../user-income-declaration/incometax/incomet
 import { DeclarationComponent } from '../user-income-declaration/declaration/declaration.component';
 import { PreviousincomeComponent } from '../user-income-declaration/previousincome/previousincome.component';
 import { Form12BBComponent } from '../user-income-declaration/form12-bb/form12-bb.component';
-import { FreetaxfillingComponent } from '../user-income-declaration/freetaxfilling/freetaxfilling.component';
-import { TaxsavinginvestmentComponent } from '../user-income-declaration/taxsavinginvestment/taxsavinginvestment.component';
 import { UserIncomeDeclarationRoutingModule } from './user-income-declaration-routing.module';
 import { UtilModule } from '../util/util.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,8 +22,6 @@ import { NgModule } from '@angular/core';
     DeclarationComponent,
     PreviousincomeComponent,
     Form12BBComponent,
-    FreetaxfillingComponent,
-    TaxsavinginvestmentComponent,
   ],
   imports: [
     CommonModule,

@@ -2,7 +2,7 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { Form12B, FreeTaxFilling, IncomeTax, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
+import { Form12B, FreeTaxFilling, IncomeTax, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment, UserAccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -706,13 +706,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigateRoot(Salary, null);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Salary, null);
         break;
       case "summary-tab":
-        this.nav.navigateRoot(Summary, null);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Summary, null);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(Preferences, null);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Preferences, null);
         break;
     }
   }
@@ -722,16 +722,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       case "declaration-tab":
         break;
       case "previous-income-tab":
-        this.nav.navigateRoot(PreviousIncome, null);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + PreviousIncome, null);
         break;
       case "form-12-tab":
-        this.nav.navigateRoot(Form12B, null);
-        break;
-      case "free-tax-tab":
-        this.nav.navigateRoot(FreeTaxFilling, null);
-        break;
-      case "approval-rule-tab":
-        this.nav.navigateRoot(TaxSavingInvestment, null);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Form12B, null);
         break;
     }
   }
@@ -744,7 +738,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   gotoTaxSection() {
-    this.nav.navigateRoot(IncomeTax, null)
+    this.nav.navigateRoot(UserAccountsBaseRoute +"/" + IncomeTax, null)
   }
 }
 

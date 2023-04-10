@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, Declaration, Salary, Summary } from 'src/providers/constants';
+import { AccessTokenExpiredOn, Declaration, Salary, Summary, UserAccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 
@@ -72,13 +72,13 @@ export class PreferencesComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigateRoot(Declaration, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Declaration, this.cachedData);
       break;
       case "salary-tab":
-        this.nav.navigateRoot(Salary, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Salary, this.cachedData);
       break;
       case "summary-tab":
-        this.nav.navigateRoot(Summary, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Summary, this.cachedData);
       break;
       case "preference-tab":
         break;
