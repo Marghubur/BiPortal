@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, AdminSalary, Declaration, IncomeTax, PaySlip, Preferences, Salary, Summary, Taxcalculation } from 'src/providers/constants';
+import { AccessTokenExpiredOn, AdminSalary, Declaration, IncomeTax, PaySlip, Preferences, Salary, Summary, Taxcalculation, UserAccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -221,15 +221,15 @@ export class MysalaryComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigateRoot(Declaration, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Declaration, this.cachedData);
         break;
       case "salary-tab":
         break;
       case "summary-tab":
-        this.nav.navigateRoot(Summary, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Summary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(Preferences, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Preferences, this.cachedData);
         break;
     }
   }
@@ -239,10 +239,10 @@ export class MysalaryComponent implements OnInit {
       case "MySalary":
         break;
       case "PaySlips":
-        this.nav.navigateRoot(PaySlip, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + PaySlip, this.cachedData);
         break;
       case "IncomeTax":
-        this.nav.navigateRoot(IncomeTax, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + IncomeTax, this.cachedData);
         break;
     }
   }

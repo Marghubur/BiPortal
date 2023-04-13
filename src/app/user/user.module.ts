@@ -16,11 +16,11 @@ import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { HolidayComponent } from './holiday/holiday.component';
-import { ProjectsModule } from '../projects/projects.module';
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 import { NgChartsModule } from 'ng2-charts';
 import { NgModule } from '@angular/core';
+import { CommoncomponentModule } from '../commoncomponent/commoncomponent.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import { NgModule } from '@angular/core';
     ApprovalRequestComponent,
     HolidayComponent,
     ServiceRequestComponent,
-    ManagetimesheetComponent
+    ManagetimesheetComponent,
   ],
   imports: [
     CommonModule,
@@ -44,15 +44,13 @@ import { NgModule } from '@angular/core';
     FormsModule,
     UserRoutingModule,
     UtilModule,
-    ProjectsModule,
-    NgChartsModule,
-    UserIncomeDeclarationModule
+    NgChartsModule
   ],
   providers: [
     CommonService
   ]
 })
-export class UserModule { 
+export class UserModule {
   constructor() {
     console.log("User module loaded");
   }

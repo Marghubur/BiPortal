@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
+import { AccountsBaseRoute, AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary, Declaration } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -256,17 +256,17 @@ export class IncometaxComponent implements OnInit {
   }
 
   activateMe(ele: string) {
-    switch(ele) {
+    switch (ele) {
       case "declaration-tab":
-        this.nav.navigateRoot(AdminDeclaration, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminDeclaration, null);
         break;
       case "salary-tab":
         break;
       case "summary-tab":
-        this.nav.navigateRoot(AdminSummary, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSummary, null);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(AdminPreferences, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminPreferences, null);
         break;
     }
   }
@@ -274,10 +274,10 @@ export class IncometaxComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "MySalary":
-        this.nav.navigateRoot(AdminSalary, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSalary, this.cachedData);
         break;
       case "PaySlips":
-        this.nav.navigateRoot(AdminPaySlip, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminPaySlip, this.cachedData);
         break;
       case "IncomeTax":
         break;

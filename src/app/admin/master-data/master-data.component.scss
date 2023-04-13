@@ -41,3 +41,19 @@
 .table-container {
   height: 61vh !important;
 }
+
+.mostly-customized-scrollbar {
+  display: block;
+  overflow: auto;
+}
+
+.mostly-customized-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 9px;
+  background-color: white; /* or add it to the track */
+}
+
+/* Add a thumb */
+.mostly-customized-scrollbar::-webkit-scrollbar-thumb {
+  background: #c3b6b6;
+}

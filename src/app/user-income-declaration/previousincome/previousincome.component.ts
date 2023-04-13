@@ -1,5 +1,5 @@
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
-import { Declaration, Form12B, FreeTaxFilling, Preferences, Salary, Summary, TaxSavingInvestment } from 'src/providers/constants';
+import { Declaration, Form12B, FreeTaxFilling, Preferences, Salary, Summary, TaxSavingInvestment, UserAccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import 'bootstrap';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -152,13 +152,13 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigateRoot(Salary, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Salary, this.cachedData);
         break;
       case "summary-tab":
-        this.nav.navigateRoot(Summary, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Summary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(Preferences, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Preferences, this.cachedData);
         break;
     }
   }
@@ -166,18 +166,12 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
   activeTab(e: string) {
     switch(e) {
       case "declaration-tab":
-        this.nav.navigateRoot(Declaration, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Declaration, this.cachedData);
         break;
       case "previous-income-tab":
         break;
       case "form-12-tab":
-        this.nav.navigateRoot(Form12B, this.cachedData);
-        break;
-      case "free-tax-tab":
-        this.nav.navigateRoot(FreeTaxFilling, this.cachedData);
-        break;
-      case "approval-rule-tab":
-        this.nav.navigateRoot(TaxSavingInvestment, this.cachedData);
+        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Form12B, this.cachedData);
         break;
     }
   }

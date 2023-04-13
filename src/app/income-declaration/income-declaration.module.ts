@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { SummaryComponent } from '../income-declaration/summary/summary.component';
 import { DeclarationComponent } from './declaration/declaration.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { PreviousincomeComponent } from './previousincome/previousincome.component';
 import { Form12BbComponent } from '../income-declaration/form12-bb/form12-bb.component';
-import { FreetaxfillingComponent } from '../income-declaration/freetaxfilling/freetaxfilling.component';
 import { IncometaxComponent } from '../income-declaration/incometax/incometax.component';
 import { PayslipComponent } from '../income-declaration/payslip/payslip.component';
 import { PayrollComponent } from '../income-declaration/payroll/payroll.component';
@@ -19,7 +17,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaxRegimeComponent } from './tax-regime/tax-regime.component';
 import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
-import { ApprovalRuleComponent } from './approval-rule/approval-rule.component';
 import { AdminmodalModule } from '../adminmodal/adminmodal.module';
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { NgModule } from '@angular/core';
@@ -29,7 +26,6 @@ import { NgModule } from '@angular/core';
   declarations: [
     DeclarationComponent,
     Form12BbComponent,
-    FreetaxfillingComponent,
     IncometaxComponent,
     PayslipComponent,
     PayrollComponent,
@@ -37,12 +33,10 @@ import { NgModule } from '@angular/core';
     PfEsiSetupComponent,
     PreferencesComponent,
     PreviousincomeComponent,
-    SummaryComponent,
     SalaryComponent,
     TaxRegimeComponent,
     CustomsalaryStructureComponent,
     SalarycomponentStructureComponent,
-    ApprovalRuleComponent
   ],
   imports: [
     CommonModule,

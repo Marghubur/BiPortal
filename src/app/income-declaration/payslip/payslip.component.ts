@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { AdminDeclaration, AdminIncomeTax, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
+import { AccountsBaseRoute, AdminDeclaration, AdminIncomeTax, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -118,15 +118,15 @@ export class PayslipComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigateRoot(AdminDeclaration, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminDeclaration, this.cachedData);
         break;
       case "salary-tab":
         break;
       case "summary-tab":
-        this.nav.navigateRoot(AdminSummary, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminSummary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(AdminPreferences, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminPreferences, this.cachedData);
         break;
     }
   }
@@ -134,12 +134,12 @@ export class PayslipComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "MySalary":
-        this.nav.navigateRoot(AdminSalary, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminSalary, this.cachedData);
         break;
       case "PaySlips":
         break;
       case "IncomeTax":
-        this.nav.navigateRoot(AdminIncomeTax, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminIncomeTax, this.cachedData);
         break;
     }
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminDeclaration, AdminForm12B, AdminFreeTaxFilling, AdminPreferences, AdminSalary, AdminSummary, AdminDeclarationApprovalRule } from 'src/providers/constants';
+import { AdminDeclaration, AdminForm12B, AdminFreeTaxFilling, AdminPreferences, AdminSalary, AdminSummary, AdminDeclarationApprovalRule, AccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import 'bootstrap';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -174,13 +174,13 @@ export class PreviousincomeComponent implements OnInit {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigateRoot(AdminSalary, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminSalary, this.cachedData);
         break;
       case "summary-tab":
-        this.nav.navigateRoot(AdminSummary, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminSummary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(AdminPreferences, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminPreferences, this.cachedData);
         break;
     }
   }
@@ -188,18 +188,12 @@ export class PreviousincomeComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "declaration-tab":
-        this.nav.navigateRoot(AdminDeclaration, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminDeclaration, this.cachedData);
         break;
       case "previous-income-tab":
         break;
       case "form-12-tab":
-        this.nav.navigateRoot(AdminForm12B, this.cachedData);
-        break;
-      case "free-tax-tab":
-        this.nav.navigateRoot(AdminFreeTaxFilling, this.cachedData);
-        break;
-      case "approval-rule-tab":
-        this.nav.navigateRoot(AdminDeclarationApprovalRule, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminForm12B, this.cachedData);
         break;
     }
   }

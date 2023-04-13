@@ -5,7 +5,7 @@ import { CompanyGroup, PTax } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { CompanyInfo, CompanySettings, CustomSalaryStructure, OrganizationSetting, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
+import { AccountsBaseRoute, CompanyInfo, CompanySettings, CustomSalaryStructure, OrganizationSetting, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -65,22 +65,22 @@ export class SettingsComponent implements OnInit {
   redirectTo(pageName: string) {
     switch(pageName) {
       case PFESISetup:
-        this.nav.navigate(PFESISetup, this.currentCompnay.CompanyId);
+        this.nav.navigate(AccountsBaseRoute + "/" + PFESISetup, this.currentCompnay.CompanyId);
         break;
       case CompanyInfo:
         this.nav.navigate(CompanyInfo, this.currentCompnay);
         break;
       case Payroll:
-        this.nav.navigate(Payroll, this.currentCompnay);
+        this.nav.navigate(AccountsBaseRoute + "/" + Payroll, this.currentCompnay);
         break;
       case SalaryComponentStructure:
-        this.nav.navigate(SalaryComponentStructure, null)
+        this.nav.navigate(AccountsBaseRoute + "/" + SalaryComponentStructure, null)
         break;
       case CustomSalaryStructure:
-        this.nav.navigate(CustomSalaryStructure, this.currentCompnay);
+        this.nav.navigate(AccountsBaseRoute + "/" + CustomSalaryStructure, this.currentCompnay);
         break;
       case PayrollComponents:
-        this.nav.navigate(PayrollComponents, null);
+        this.nav.navigate(AccountsBaseRoute + "/" + PayrollComponents, null);
         break;
       case CompanySettings:
         this.nav.navigate(CompanySettings, this.currentCompnay);

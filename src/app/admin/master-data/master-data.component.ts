@@ -52,7 +52,7 @@ export class MasterDataComponent implements OnInit {
             this.tableConfiguration.totalRecords = 1;
             this.tableConfiguration.header = excelData.value.Keys;
             this.tableConfiguration.data = rows.value.Data;
-            this.tableConfiguration.sampleData = this.tableConfiguration.data.slice(0, 10); 
+            this.tableConfiguration.sampleData = this.tableConfiguration.data.slice(0, 10);
             // this.uploadedCandidatesData.TotalRecords = 0;
             // if(this.tableConfiguration.data.length > 0) {
             //   this.uploadedCandidatesData.TotalRecords = this.tableConfiguration.data.length;
@@ -145,8 +145,10 @@ export class MasterDataComponent implements OnInit {
   }
 
   uploadExcel() {
+    this.isLoading = true;
     this.isAvailable = true;
     $('#excelSheetReaderModal').modal('hide');
+    this.isLoading = false;
   }
 
   uploadExcelSheet($e: any) {

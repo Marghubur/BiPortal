@@ -10,16 +10,12 @@
           href="javascript:void(0)">SALARY</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('summary-tab')"
-          href="javascript:void(0)">SUMMARY</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')"
           href="javascript:void(0)">PREFERENCE</a>
       </li>
     </ul>
     <div class="col-md-3 pe-2 my-3" *ngIf="isSalaryReady">
-      <app-iautocomplete [data]="employeesList" (OnSelect)="getSalaryBreakup($event)" 
+      <app-iautocomplete [data]="employeesList" (OnSelect)="getSalaryBreakup($event)"
         [(ngModel)]="EmployeeId" [ngModelOptions]="{standalone: true}">
       </app-iautocomplete>
     </div>
