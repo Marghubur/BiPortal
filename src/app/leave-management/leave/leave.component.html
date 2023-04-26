@@ -14,7 +14,7 @@
         <li [ngbNavItem]="1">
           <a ngbNavLink (click)="onTabChange(0)">Leave Plans</a>
           <ng-template ngbNavContent>
-            <div class="d-flex flex-row justify-content-between col-md-12 my-3">
+            <div class="text-end col-md-12 my-3">
               <button [ngClass]="{ 'd-none': !menuItem.Config }" class="btn btn-primary-c"
                 (click)="bindLeaveTypeModal()">
                 <i class="fa fa-plus pe-2"></i>Assign Leave

@@ -64,14 +64,16 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
     let doj = new Date(this.userDetail.CreatedOn);
     let joiningMonth = doj.getMonth();
     this.currentYear = new Date().getFullYear()-1;
-    if (doj.getFullYear() == new Date().getFullYear()) {
-      this.itemCount = (12 - this.startingMonth) + joiningMonth;
+    if (doj.getFullYear() == new Date().getFullYear() && doj.getMonth()+1 != this.startingMonth) {
+      this.itemCount = joiningMonth - this.startingMonth;
       this.initForm();
       this.isRecordFound = true;
     } else if(doj.getFullYear() == (new Date().getFullYear()-1) && joiningMonth > this.startingMonth) {
       this.itemCount = joiningMonth - this.startingMonth;
       this.initForm();
       this.isRecordFound = true;
+    } else {
+      this.isRecordFound = false;
     }
   }
 
