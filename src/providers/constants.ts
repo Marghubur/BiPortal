@@ -45,7 +45,7 @@ export const Article = "api/blogs/article/:articleid";
 
 // ********************** Manage route pages  *******************
 
-export const ManageBaseRoute = "admin/manage/"
+export const ManageBaseRoute = "admin/manage"
 export const Profile = 'profile';
 export const AdminLeave = 'leave';
 export const Holiday = 'planholidays';
