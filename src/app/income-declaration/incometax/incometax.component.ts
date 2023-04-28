@@ -106,11 +106,6 @@ export class IncometaxComponent implements OnInit {
           i++;
         }
 
-        this.salaryBreakup.push({
-          key: 'Total',
-          total: finalAmount,
-          value: totalAmounts
-        });
         if (annualSalaryDetail && annualSalaryDetail.length == 12) {
           annualSalaryDetail.map((com) => {
             com.SalaryBreakupDetails = com.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != 'CTC' && x.ComponentId != "PTAX" && x.ComponentId != "ESI")
@@ -134,6 +129,11 @@ export class IncometaxComponent implements OnInit {
             i++;
           }
           this.salaryBreakup = this.salaryBreakup.sort((a, b) => a.key.localeCompare(b.key));
+          this.salaryBreakup.push({
+            key: 'Total',
+            total: finalAmount,
+            value: totalAmounts
+          });
         } else {
           ErrorToast("Unable to get salary detail. Please contact to admin.");
           return;

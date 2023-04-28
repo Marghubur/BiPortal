@@ -41,13 +41,13 @@
     </div>
     <div class="x_panel">
       <div class="x_header">
-        <div class="x_header_title">
-          <h2>Client detail <small>Add or update details</small>
-          </h2>
+        <div class="d-flex justify-content-between">
+          <div class="col-8">
+            <div class="px-1">
+              <app-breadcrums [title]="'Client detail'" [subtitle]="'Add or update details'"></app-breadcrums>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="px-1">
-        <app-breadcrums></app-breadcrums>
       </div>
       <div [ngSwitch]="isClientFound">
         <div *ngSwitchCase="false">

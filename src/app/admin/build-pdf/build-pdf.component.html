@@ -370,7 +370,7 @@
                   </div>
                   <div class="col-md-12 button groups text-end">
                     <div class="btn-group">
-                      <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+                      <button class="btn btn-outline-danger" [disabled]="isLoading" (click)="reset()">Reset</button>
                     </div>
                     <div class="btn-group ms-2">
                       <button class="btn btn-primary-c" [disabled]="isLoading" (click)="generate()">

@@ -39,6 +39,7 @@ export class PreviousincomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.isRecordFound = false;
+    this.currentYear = new Date().getFullYear();
     this.employeeId = this.local.getByKey("EmployeeId");
     this.loadData();
   }
@@ -71,14 +72,16 @@ export class PreviousincomeComponent implements OnInit {
     let doj = new Date(this.employeeDetail.CreatedOn);
     let joiningMonth = doj.getMonth();
     this.currentYear = new Date().getFullYear()-1;
-    if (doj.getFullYear() == new Date().getFullYear()) {
-      this.itemCount = (12 - this.startingMonth) + joiningMonth;
+    if (doj.getFullYear() == new Date().getFullYear() && doj.getMonth()+1 != this.startingMonth) {
+      this.itemCount = joiningMonth - this.startingMonth;
       this.initForm();
       this.isRecordFound = true;
     } else if(doj.getFullYear() == (new Date().getFullYear()-1) && joiningMonth > this.startingMonth) {
       this.itemCount = joiningMonth - this.startingMonth;
       this.initForm();
       this.isRecordFound = true;
+    } else {
+      this.isRecordFound = false;
     }
   }
 
