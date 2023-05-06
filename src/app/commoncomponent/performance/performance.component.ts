@@ -107,7 +107,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   loadData() {
     this.isPageReady = false;
     this.isPageLoading = true;
-    this.http.get(`Objective/GetEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, true).then(res => {
+    this.http.get(`performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.financialYear = res.ResponseBody[0].financialYear;
         let days = new Date(this.financialYear+1, res.ResponseBody[0].declarationEndMonth, 0).getDate();
