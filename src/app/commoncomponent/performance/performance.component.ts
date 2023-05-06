@@ -1,6 +1,6 @@
 import { AfterViewChecked, Component, DoCheck, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { iNavigation } from 'src/providers/iNavigation';
+import { Subject } from 'rxjs';
 declare var $: any;
 
 @Component({
@@ -46,6 +47,14 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   empId: number = 0;
   meetingDuration: string = "";
   userNameIcon: string = "";
+  allMeetings: Array<any> = [];
+  upcomingMeetings: Array<Meeting> = [];
+  pendingMeetings: Array<Meeting> = [];
+  completedMeetings: Array<Meeting> = [];
+  selectedMeeting: Meeting = new Meeting();
+  htmlText: any = null;
+  eventsSubject: Subject<void> = new Subject<void>();
+  activeMeetingTab: number = 1;
 
   constructor(private user: UserService,
               private http: AjaxService,
@@ -53,18 +62,8 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
               private fb: FormBuilder) { }
 
   ngDoCheck(): void {
-    if (this.meetingForm.controls.EndTime.value && this.meetingForm.controls.StartTime.value) {
-      let endtime = this.meetingForm.controls.EndTime.value.split(":");
-      let endhrs = Number(endtime[0]);
-      let endmin = Number(endtime[1]);
-      let endTime = (endhrs * 60) + endmin;
-      let starttime = this.meetingForm.controls.StartTime.value.split(":");
-      let starthrs = Number(starttime[0]);
-      let startmin = Number(starttime[1]);
-      let startTime = (starthrs * 60) + startmin;
-      if (endTime > startTime) {
-        this.meetingDuration = this.convertMinsToHrsMins(endTime-startTime) ;
-      }
+    if (this.meetingForm.controls.endTime.value && this.meetingForm.controls.startTime.value) {
+      this.meetingDuration = this.getMeetingDuration(this.meetingForm.controls.endTime.value, this.meetingForm.controls.startTime.value);
     }
   }
 
@@ -99,7 +98,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       this.employeesList.isMultiSelect = true;
       this.loadData();
       this.initForm();
-      this.initMettingForm();
+      this.initMeetingForm();
     } else {
       Toast("Invalid user. Please login again.")
     }
@@ -108,18 +107,18 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   loadData() {
     this.isPageReady = false;
     this.isPageLoading = true;
-    this.http.get(`Objective/GetEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`).then(res => {
+    this.http.get(`performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
-        this.financialYear = res.ResponseBody[0].FinancialYear;
-        let days = new Date(this.financialYear+1, res.ResponseBody[0].DeclarationEndMonth, 0).getDate();
-        this.startDate = new Date(this.financialYear, res.ResponseBody[0].DeclarationStartMonth-1, 1);
-        this.endDate = new Date(this.financialYear+1, res.ResponseBody[0].DeclarationEndMonth-1, days);
+        this.financialYear = res.ResponseBody[0].financialYear;
+        let days = new Date(this.financialYear+1, res.ResponseBody[0].declarationEndMonth, 0).getDate();
+        this.startDate = new Date(this.financialYear, res.ResponseBody[0].declarationStartMonth-1, 1);
+        this.endDate = new Date(this.financialYear+1, res.ResponseBody[0].declarationEndMonth-1, days);
         this.minDate = {year: this.startDate.getFullYear(), month: this.startDate.getMonth()+1, day: this.startDate.getDate()};
         this.maxDate = {year: this.endDate.getFullYear(), month:  this.endDate.getMonth()+1, day:  this.endDate.getDate()};
         this.allObjective = res.ResponseBody;;
         this.objectives = res.ResponseBody;
         this.calculateRecord();
-        this.getUserNameIcon();
+        this.getUserNameIcon(null);
         Toast("Employee performance objective data loaded successsfully");
         this.isPageReady = true;
         this.isPageLoading = false;
@@ -135,45 +134,61 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     })
   }
 
+  getMeetingDuration(endtimes: string, starttimes: string) {
+    let meetingDuration = "";
+    let endtime = endtimes.split(":");
+    let starttime = starttimes.split(":");
+    let endhrs = Number(endtime[0]);
+    let endmin = Number(endtime[1]);
+    let endTime = (endhrs * 60) + endmin;
+    let starthrs = Number(starttime[0]);
+    let startmin = Number(starttime[1]);
+    let startTime = (starthrs * 60) + startmin;
+    if (endTime > startTime) {
+      meetingDuration = this.convertMinsToHrsMins(endTime-startTime) ;
+    }
+    return meetingDuration;
+  }
+
   calculateRecord() {
     this.onTrackRecord = 0;
     this.needAttentionRecord = 0;
     this.atRiskRecord = 0;
     this.notStartedRecord = 0;
     this.closedRecord = 0;
-    let targetValue = this.objectives.map(x => x.TargetValue).reduce((a, b) => {return a+b}, 0);
-    let currentValue = this.objectives.map(x => x.CurrentValue).reduce((a, b) => {return a+b}, 0);
+    let targetValue = this.objectives.map(x => x.targetValue).reduce((a, b) => {return a+b}, 0);
+    let currentValue = this.objectives.map(x => x.currentValue).reduce((a, b) => {return a+b}, 0);
     this.overallProgress = (currentValue/targetValue) * 100;
-    let value = this.objectives.filter(x => x.Status == 1);
+    let value = this.objectives.filter(x => x.status == 1);
     if (value.length > 0)
       this.notStartedRecord = value.length;
 
-    value = this.objectives.filter(x => x.Status == 2);
+    value = this.objectives.filter(x => x.status == 2);
     if (value.length > 0)
       this.onTrackRecord = value.length;
 
-    value = this.objectives.filter(x => x.Status == 3);
+    value = this.objectives.filter(x => x.status == 3);
     if (value.length > 0)
       this.needAttentionRecord = value.length;
 
-    value = this.objectives.filter(x => x.Status == 4);
+    value = this.objectives.filter(x => x.status == 4);
     if (value.length > 0)
       this.atRiskRecord = value.length;
 
-    value = this.objectives.filter(x => x.Status == 5);
+    value = this.objectives.filter(x => x.status == 5);
     if (value.length > 0)
       this.closedRecord = value.length;
   }
 
   initForm() {
     this.performanceForm = this.fb.group({
-      ObjectiveId: new FormControl(this.selectedObjective != null ? this.selectedObjective.ObjectiveId : 0),
-      EmployeePerformanceId: new FormControl(this.selectedObjective != null ? this.selectedObjective.EmployeePerformanceId : 0, [Validators.required]),
-      EmployeeId: new FormControl(this.employeeId, [Validators.required]),
-      CompanyId: new FormControl(this.userDetail.CompanyId, [Validators.required]),
-      CurrentValue: new FormControl(null, [Validators.required]),
-      Status: new FormControl(null, [Validators.required]),
-      Comments: new FormControl(''),
+      objectiveId: new FormControl(this.selectedObjective != null ? this.selectedObjective.objectiveId : 0),
+      employeePerformanceId: new FormControl(this.selectedObjective != null ? this.selectedObjective.employeePerformanceId : 0, [Validators.required]),
+      employeeId: new FormControl(this.employeeId, [Validators.required]),
+      companyId: new FormControl(this.userDetail.CompanyId, [Validators.required]),
+      currentValue: new FormControl(null, [Validators.required]),
+      status: new FormControl(null, [Validators.required]),
+      comments: new FormControl(''),
     })
   }
 
@@ -196,14 +211,21 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       ErrorToast("Please correct all the mandaroty field marked red");
       return;
     }
-    let value = this.performanceForm.value;
-    this.http.post("Objective/UpdateEmployeeObjective", value).then(res => {
+
+    let performvalue = this.performanceForm.value;
+    performvalue.targetValue = this.selectedObjective.targetValue;
+    if (performvalue.currentValue > this.selectedObjective.targetValue) {
+      this.isLoading = false;
+      ErrorToast("New value is greater than targeted value");
+      return;
+    }
+    this.http.post("performance/updateEmployeeObjective", performvalue).then(res => {
       if (res.ResponseBody) {
         let value = res.ResponseBody;
-        this.selectedObjective.UpdatedOn = value.UpdatedOn;
-        this.selectedObjective.CurrentValue = value.CurrentValue;
-        this.selectedObjective.Status = value.Status;
-        this.selectedObjective.PerformanceDetail = JSON.parse(value.PerformanceDetail);
+        this.selectedObjective.updatedOn = value.updatedOn;
+        this.selectedObjective.currentValue = value.currentValue;
+        this.selectedObjective.status = value.status;
+        this.selectedObjective.performanceDetail = JSON.parse(value.performanceDetail);
         this.calculateRecord();
         this.isLoading = false;
         $('#managePerformance').modal('hide');
@@ -227,21 +249,19 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   filterRecord(e: any) {
     let value = Number(e.target.value);
     if (value > 0) {
-      this.objectives = this.allObjective.filter(x => x.Status == value);
+      this.objectives = this.allObjective.filter(x => x.status == value);
+    } else {
+      this.objectives = this.allObjective;
     }
   }
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.meetingForm.controls["MettingDate"].setValue(date);
-  }
-
-  addMeetingPopUp() {
-    $('#manageMetting').modal('show');
+    this.meetingForm.controls["meetingDate"].setValue(date);
   }
 
   onSelectEmp(e: any) {
-    let index = this.selectedEmployee.findIndex(x => x.EmployeeId == e.value);
+    let index = this.selectedEmployee.findIndex(x => x.value == e.value);
     if(index == -1) {
       let emp = this.employeesList.data.find(x => x.value == e.value);
       this.selectedEmployee.push(emp);
@@ -250,16 +270,17 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     }
   }
 
-  initMettingForm() {
+  initMeetingForm() {
     this.meetingForm = this.fb.group({
-      MettingId: new FormControl(0),
-      StartTime: new FormControl(null, [Validators.required]),
-      EndTime: new FormControl(null, [Validators.required]),
-      MettingDate: new FormControl(null, [Validators.required]),
-      MeetingTitle: new FormControl(null, [Validators.required]),
-      MeetingPlaforms: new FormControl(0),
-      MeetingFrequency: new FormControl(null),
-      TalkingPoints: new FormControl('')
+      meetingId: new FormControl(this.selectedMeeting.meetingId),
+      startTime: new FormControl(this.selectedMeeting.startTime, [Validators.required]),
+      endTime: new FormControl(this.selectedMeeting.endTime, [Validators.required]),
+      meetingDate: new FormControl(this.selectedMeeting.meetingDate, [Validators.required]),
+      meetingTitle: new FormControl(this.selectedMeeting.meetingTitle, [Validators.required]),
+      meetingPlaforms: new FormControl(this.selectedMeeting.meetingPlaforms),
+      meetingFrequency: new FormControl(this.selectedMeeting.meetingFrequency),
+      talkingPoints: new FormControl(''),
+      employeesMeeting: new FormControl('')
     })
   }
 
@@ -267,7 +288,14 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     return this.meetingForm.controls;
   }
 
-  manageMetting() {
+  addMeetingPopUp() {
+    this.resetMeeting();
+    this.selectedMeeting = new Meeting();
+    this.initMeetingForm();
+    $('#manageMeeting').modal('show');
+  }
+
+  manageMeeting() {
     this.isLoading = true;
     this.isSubmitted = true;
     if (this.meetingForm.invalid) {
@@ -276,12 +304,35 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       return;
     }
 
+    if (this.selectedEmployee.length <= 0) {
+      this.isLoading = false;
+      ErrorToast("Please employee to have a 1:1 meeting");
+      return;
+    }
+
     let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    if (!data) {
+      this.isLoading = false;
+      ErrorToast("Please enter talking points");
+      return;
+    }
+
+    this.meetingForm.get('talkingPoints').setValue(data);
     let value = this.meetingForm.value;
-    value.TalkingPoints = data;
     if (this.selectedEmployee.length > 0)
-      value.Employees = this.selectedEmployee.map(x => x.value);
-    console.log(value);
+      value.employeesMeeting = this.selectedEmployee.map(x => x.value);
+
+    this.http.post("meeting/manageMeeting", value).then(res => {
+      if (res.ResponseBody) {
+        this.allMeetings = res.ResponseBody;
+        this.bindMeetingData();
+        $("#manageMeeting").modal('hide');
+        this.isLoading = false;
+        Toast("Metting details insert/updated successfully");
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   convertMinsToHrsMins(totalMinutes) {
@@ -291,14 +342,122 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     return `${hours}h${minutes > 0 ? ` ${minutes}m` : ''}`;
   }
 
-  performanceReviewPopUp() {
-    //$('#performanceReview').modal('show');
+  getEmployeesMeeting() {
+    this.isPageReady = false;
+    this.isPageLoading = true;
+    this.http.get(`meeting/getMeetingByEmpId/${this.employeeId}`).then(res => {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
+        this.allMeetings = res.ResponseBody;
+        this.bindMeetingData();
+        Toast("Meeting data loaded successsfully");
+        this.isPageReady = true;
+        this.isPageLoading = false;
+      } else {
+        WarningToast("No meeting details found. Please contact to admin.");
+        this.isPageLoading = false;
+        this.isPageReady = true;
+      }
+    }).catch(err => {
+      ErrorToast("Fail to get meeting detail. Please contact to admin.");
+      this.isPageLoading = false;
+      this.isPageReady = true;
+    })
   }
 
-  getUserNameIcon() {
-    let first = this.userDetail.FirstName[0];
-    let last = this.userDetail.LastName[0];
-    this.userNameIcon = first+""+last;
+  bindMeetingData() {
+    this.selectedEmployee = [];
+    this.allMeetings.forEach(x => {
+      x.meetingDuration = this.getMeetingDuration(x.endTime, x.startTime);
+      x.employeesMeeting = JSON.parse(x.oneToOneEmpMeeting);
+      x.meetingWith = this.employeesList.data.find(i => i.value ==  x.employeesMeeting[0]).text;
+      if (x.employeesMeeting.length > 1)
+        x.extraMember = x.employeesMeeting.length - 1;
+      else
+        x.extraMember = 0;
+      
+      x.daysDiffer = this.daysDiffer(x.meetingDate)
+    });
+    this.upcomingMeetings = this.allMeetings.filter(x => x.status == 0);
+    this.pendingMeetings = this.allMeetings.filter(x => x.status == 2);
+    this.completedMeetings = this.allMeetings.filter(x => x.status == 1 || x.status == 3);
+    if (this.upcomingMeetings.length > 0 || this.pendingMeetings.length > 0) {
+      if (this.upcomingMeetings.length > 0)
+        this.selectedMeeting = this.upcomingMeetings[0];
+      else 
+        this.selectedMeeting = this.pendingMeetings[0];
+
+      this.htmlText = JSON.parse(this.selectedMeeting.talkingPoints);
+      this.selectedMeeting.createBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.createdBy).text;
+      this.selectedMeeting.employeesMeeting.forEach(y => {
+        let emp: any = this.employeesList.data.find(x => x.value == y);
+        emp.userNameIcon = this.getUserNameIcon(emp.text)
+        this.selectedEmployee.push(emp);
+      })
+    } else {
+      this.resetMeeting();
+    }
+  }
+
+  bindCompletedMeeting() {
+    if (this.completedMeetings.length > 0) {
+      this.selectedEmployee = [];
+      this.selectedMeeting = this.completedMeetings[0];
+      this.htmlText = JSON.parse(this.selectedMeeting.talkingPoints);
+      this.selectedMeeting.employeesMeeting = JSON.parse(this.selectedMeeting.oneToOneEmpMeeting);
+      this.selectedMeeting.createBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.createdBy).text;
+      this.selectedMeeting.employeesMeeting.forEach(y => {
+        let emp: any = this.employeesList.data.find(x => x.value == y);
+        emp.userNameIcon = this.getUserNameIcon(emp.text)
+        this.selectedEmployee.push(emp);
+      })
+    } else {
+      this.resetMeeting();
+    }
+  }
+
+  selectMeeting(item, e: any) {
+    if (item) {
+      this.selectedEmployee = [];
+      this.selectedMeeting = item;
+      this.htmlText = JSON.parse(this.selectedMeeting.talkingPoints);
+      this.selectedMeeting.employeesMeeting = JSON.parse(this.selectedMeeting.oneToOneEmpMeeting);
+      this.selectedMeeting.createBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.createdBy).text;
+      this.selectedMeeting.employeesMeeting.forEach(y => {
+        let emp: any = this.employeesList.data.find(x => x.value == y);
+        emp.userNameIcon = this.getUserNameIcon(emp.text)
+        this.selectedEmployee.push(emp);
+      })
+      let elem = document.getElementsByName("meetingevents");
+      elem.forEach(x => {
+        if (x.classList.contains('active'))
+          x.classList.remove('active');
+      });
+      e.target.closest('button').classList.add('active');
+    }
+  }
+
+  editMeetings() {
+    this.initMeetingForm();
+    this.selectedMeeting.meetingDate = new Date(this.selectedMeeting.meetingDate);
+    this.model = { day: this.selectedMeeting.meetingDate.getDate(), month: this.selectedMeeting.meetingDate.getMonth() + 1, year: this.selectedMeeting.meetingDate.getFullYear()};
+    $("#manageMeeting").modal('show');
+  }
+
+  performanceReviewPopUp() {
+    $('#performanceReview').modal('show');
+  }
+
+  getUserNameIcon(fullName: string) {
+    if (!fullName) {
+      let first = this.userDetail.FirstName[0];
+      let last = this.userDetail.LastName[0];
+      this.userNameIcon = first+""+last;
+    } else {
+      let names = fullName.split(" ");
+      let first = fullName[0];
+      let last = fullName[1];
+      return first+""+last;
+    }
   }
 
   collpaseShowHide(e: any) {
@@ -316,23 +475,148 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     }
   }
 
+  resetMeeting() {
+    this.eventsSubject.next();
+    this.selectedEmployee = [];
+    this.selectedMeeting = null;
+    this.meetingDuration = null;
+    this.model = null;
+    this.htmlText = null;
+  }
+
+  meetingTab(index: number) {
+    this.activeMeetingTab = index;
+    if (this.activeMeetingTab === 1)
+      this.bindMeetingData();
+    else
+      this.bindCompletedMeeting();
+  }
+
+  deleteMeetingPopUp() {
+    $("#deleteMeeting").modal('show');
+  }
+
+  completeMeetingPopUp() {
+    $("#completeMeeting").modal('show');
+  }
+
+  cancelMeetingPopUp() {
+    $("#cancelMeeting").modal('show');
+  }
+
+  completeMeeting() {
+    if (this.selectedMeeting) {
+      this.isLoading = true;
+      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.meetingId}/1`).then(res => {
+        if (res.ResponseBody) {
+          this.allMeetings = res.ResponseBody;
+          this.bindMeetingData();
+          $("#completeMeeting").modal('hide');
+          this.isLoading = false;
+          Toast("Metting completed successfully");
+        } else {
+          ErrorToast("Fail to metting completed ");
+        }
+      }).catch(e => {
+        this.isLoading = false;
+        ErrorToast("Fail to metting completed ");
+      })
+    } else {
+      ErrorToast("Please select meeting firsst")
+    }
+  }
+
+  cancelMeeting() {
+    if (this.selectedMeeting) {
+      this.isLoading = true;
+      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.meetingId}/3`).then(res => {
+        if (res.ResponseBody) {
+          this.allMeetings = res.ResponseBody;
+          this.bindMeetingData();
+          $("#cancelMeeting").modal('hide');
+          this.isLoading = false;
+          Toast("Meeting canceled successfully");
+        } else {
+          ErrorToast("Fail to canceled meeting status");
+        }
+      }).catch(e => {
+        this.isLoading = false;
+        ErrorToast("Fail to canceled meeting status");
+      })
+    } else {
+      ErrorToast("Please select meeting firsst")
+    }
+  }
+
+  deleteMeeting() {
+    if (this.selectedMeeting) {
+      this.isLoading = true;
+      this.http.delete(`meeting/deleteMeeting/${this.selectedMeeting.meetingId}`).then(res => {
+        if (res.ResponseBody) {
+          this.allMeetings = res.ResponseBody;
+          this.bindMeetingData();
+          $("#deleteMeeting").modal('hide');
+          this.isLoading = false;
+          Toast("Metting deleted successfully");
+        } else {
+          ErrorToast("Fail to delete meeting");
+        }
+      }).catch(e => {
+        this.isLoading = false;
+        ErrorToast("Fail to delete meeting");
+      })
+    } else {
+      ErrorToast("Please select meeting firsst")
+    }
+  }
+
+  daysDiffer(date: any) {
+    var diffTime = (new Date().getTime() - new Date(date).getTime());
+    var daysDiff = diffTime / (1000 * 3600 * 24);
+    let hrsDiff = diffTime / (1000 * 3600);
+    let minDiff = Math.abs(Math.round( diffTime/1000/60 ));
+    let diff = {
+      days: daysDiff > 0 ? daysDiff : 0,
+      hrs: hrsDiff > 0 ? hrsDiff : 0,
+      min: minDiff > 0 ? minDiff : 0
+    };
+    return diff;
+  }
+
 }
 
 class Objective {
-  ObjectiveId: number = 0;
-  Objective: string = null;
-  ObjSeeType: boolean = false;
-  ProgressMeassureType: number = 1;
-  EmployeePerformanceId: number = 0;
-  StartValue: number = 0;
-  TargetValue: number = 0;
-  TimeFrameStart: Date = null;
-  TimeFrmaeEnd: Date = null;
-  ObjectiveType: string = null;
-  Description: string = null;
-  CurrentValue: number = 0;
-  UpdatedOn: Date = null;
-  Status: number = 0;
-  Progress: number = 0;
-  PerformanceDetail: Array<any> = [];
+  objectiveId: number = 0;
+  objective: string = null;
+  objSeeType: boolean = false;
+  progressMeassureType: number = 1;
+  employeePerformanceId: number = 0;
+  startValue: number = 0;
+  targetValue: number = 0;
+  timeFrameStart: Date = null;
+  timeFrmaeEnd: Date = null;
+  objectiveType: string = null;
+  description: string = null;
+  currentValue: number = 0;
+  updatedOn: Date = null;
+  status: number = 0;
+  progress: number = 0;
+  performanceDetail: Array<any> = [];
+}
+
+class Meeting {
+  meetingId: number = 0;
+  startTime: string = null;
+  endTime: string = null;
+  meetingDate: Date = null;
+  meetingTitle: string = null;
+  meetingPlaforms: number = 0;
+  meetingFrequency: number = null;
+  talkingPoints: string = null;
+  employeesMeeting: Array<number> = [];
+  oneToOneEmpMeeting: string = null;
+  meetingDuration: string = null;
+  createBy: string = null;
+  status: number = 0;
+  createdBy: number = 0;
 }
