@@ -24,7 +24,7 @@ export class AjaxService {
   }
 
   public GetImageBasePath() {
-    let ImageBaseUrl = environment.baseUrl.replace("/api", "/Files");
+    let ImageBaseUrl = environment.baseDotNetUrl.replace("/api", "/Files");
     return ImageBaseUrl;
   }
 
@@ -33,133 +33,21 @@ export class AjaxService {
     return JsonData;
   }
 
-  get(Url: string, IsLoaderRequired: boolean = true): Promise<ResponseModel> {
-    return new Promise((resolve, reject) => {
-      if (IsLoaderRequired) {
-      } else {
-      }
-      return this.http
-        .get(environment.baseUrl + Url, {
-          observe: "response"
-        })
-        .subscribe(
-          (res: any) => {
-            if (this.tokenHelper.IsValidResponse(res.body)) {
-              resolve(res.body);
-            } else {
-              resolve(null);
-            }
-          },
-          (e: HttpErrorResponse) => {
-            this.tokenHelper.HandleResponseStatus(e);
-            reject(e.error);
-          });
-    });
+  private GetBaseUrl(isJavaFlagOn: boolean) {
+    if(isJavaFlagOn)
+      return environment.baseSpringUrl;
+    else
+      return environment.baseDotNetUrl;
   }
 
-  post(Url: string, Param: any): Promise<any> {
+  login(Url: string, Param: any, isJavaRoute: boolean = false): Promise<ResponseModel> {
+    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
     return new Promise((resolve, reject) => {
       this.http
-        .post(environment.baseUrl + Url, Param, {
+        .post(url, Param, {
           observe: "response"
-        })
-        .subscribe(
-          (res: HttpResponse<any>) => {
-            try {
-              if (!this.tokenHelper.IsValidResponse(res.body)) {
-                reject(null);
-              }
-            } catch (e) {
-              reject(null);
-            }
-            resolve(res.body);
-          },
-          (e: HttpErrorResponse) => {
-            this.tokenHelper.HandleResponseStatus(e);
-            reject(e.error);
-          }
-        );
-    });
-  }
-
-  put(Url: string, Param: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .put(environment.baseUrl + Url, Param, {
-          observe: "response"
-        })
-        .subscribe(
-          (res: HttpResponse<any>) => {
-            try {
-              if (!this.tokenHelper.IsValidResponse(res.body)) {
-                reject(null);
-              }
-            } catch (e) {
-              reject(e);
-            }
-            resolve(res.body);
-          },
-          (e: HttpErrorResponse) => {
-            this.tokenHelper.HandleResponseStatus(e);
-            reject(e.error);
-          }
-        );
-    });
-  }
-
-  postRequest(Url: string, Param: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(Url, Param, {
-          observe: "response"
-        })
-        .subscribe(
-          (res: HttpResponse<any>) => {
-            resolve(res.body);
-          },
-          (e: HttpErrorResponse) => {
-            this.tokenHelper.HandleResponseStatus(e);
-            reject(e.error);
-          }
-        );
-    });
-  }
-
-  delete(Url: string, Param?: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.http.delete(environment.baseUrl + Url, {
-        headers: {
-          observe: "response",
-        },
-        body: Param
-      })
-        .subscribe(
-          (res: any) => {
-            try {
-              if (!this.tokenHelper.IsValidResponse(res)) {
-                reject(null);
-              }
-            } catch (e) {
-              reject(e);
-            }
-            resolve(res);
-          },
-          (e: HttpErrorResponse) => {
-            this.tokenHelper.HandleResponseStatus(e);
-            reject(e.error);
-          }
-        );
-    });
-  }
-
-  login(Url: string, Param: any): Promise<ResponseModel> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(environment.baseUrl + Url, Param, {
-          observe: "response"
-        })
-        .subscribe(
-          (res: HttpResponse<any>) => {
+        }).subscribe({
+          next: (res: HttpResponse<any>) => {
             try {
               if (this.tokenHelper.IsValidResponse(res.body)) {
                 let loginData: ResponseModel = res.body;
@@ -173,24 +61,73 @@ export class AjaxService {
               }
             } catch (e) {
               reject(e);
-            }
+            } 0
           },
-          (e: HttpErrorResponse) => {
+          error: (e: HttpErrorResponse) => {
             this.tokenHelper.HandleResponseStatus(e);
             reject(e.error);
           }
-        );
+        });
     });
   }
 
-  upload(Url: string, Param: any): Promise<any> {
+  get(Url: string, isJavaRoute: boolean = false): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
-      this.http
-        .post(environment.baseUrl + Url, Param, {
+      let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+      return this.http
+        .get(url, {
           observe: "response"
         })
-        .subscribe(
-          (res: HttpResponse<any>) => {
+        .subscribe({
+          next: (res: any) => {
+            if (this.tokenHelper.IsValidResponse(res.body)) {
+              resolve(res.body);
+            } else {
+              resolve(null);
+            }
+          },
+          error: (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
+          }
+        });
+    });
+  }
+
+  post(Url: string, Param: any, isJavaRoute: boolean = false): Promise<any> {
+    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(url, Param, {
+          observe: "response"
+        }).subscribe({
+          next: (res: HttpResponse<any>) => {
+            try {
+              if (!this.tokenHelper.IsValidResponse(res.body)) {
+                reject(null);
+              }
+            } catch (e) {
+              reject(null);
+            }
+            resolve(res.body);
+          },
+          error: (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
+          }
+        });
+    });
+  }
+
+  put(Url: string, Param: any, isJavaRoute: boolean = false): Promise<any> {
+    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+    return new Promise((resolve, reject) => {
+      this.http
+        .put(url, Param, {
+          observe: "response"
+        })
+        .subscribe({
+          next: (res: HttpResponse<any>) => {
             try {
               if (!this.tokenHelper.IsValidResponse(res.body)) {
                 reject(null);
@@ -200,11 +137,64 @@ export class AjaxService {
             }
             resolve(res.body);
           },
-          (e: HttpErrorResponse) => {
+          error: (e: HttpErrorResponse) => {
             this.tokenHelper.HandleResponseStatus(e);
             reject(e.error);
           }
-        );
+        });
+    });
+  }
+
+  delete(Url: string, Param?: any, isJavaRoute: boolean = false): Promise<any> {
+    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+    return new Promise((resolve, reject) => {
+      this.http.delete(url, {
+        headers: {
+          observe: "response",
+        },
+        body: Param
+      }).subscribe({
+        next: (res: any) => {
+          try {
+            if (!this.tokenHelper.IsValidResponse(res)) {
+              reject(null);
+            }
+          } catch (e) {
+            reject(e);
+          }
+          resolve(res);
+        },
+        error: (e: HttpErrorResponse) => {
+          this.tokenHelper.HandleResponseStatus(e);
+          reject(e.error);
+        }
+      });
+    });
+  }
+
+  upload(Url: string, Param: any, isJavaRoute: boolean = false): Promise<any> {
+    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(url, Param, {
+          observe: "response"
+        })
+        .subscribe({
+          next: (res: HttpResponse<any>) => {
+            try {
+              if (!this.tokenHelper.IsValidResponse(res.body)) {
+                reject(null);
+              }
+            } catch (e) {
+              reject(e);
+            }
+            resolve(res.body);
+          },
+          error: (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
+          }
+        });
     });
   }
 }
