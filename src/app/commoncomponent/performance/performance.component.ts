@@ -353,7 +353,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
         this.isPageReady = true;
         this.isPageLoading = false;
       } else {
-        WarningToast("No meeting details found. Please contact to admin.");
+        WarningToast("No meeting details found. Please add metting.");
         this.isPageLoading = false;
         this.isPageReady = true;
       }
