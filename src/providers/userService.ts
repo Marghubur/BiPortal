@@ -32,6 +32,7 @@ export class Filter {
   ActivePageNumber: number = 1;
   isReUseSame: boolean = false;
   isActive?: boolean = true;
+  SortDirection: string = null;
 
   update(total: any) {
     if(!isNaN(Number(total))) {
@@ -46,5 +47,6 @@ export class Filter {
     this.StartIndex = 1;
     this.PageIndex = 1;
     this.ActivePageNumber = 1;
-}
+    this.SortDirection = null;
+  }
 }

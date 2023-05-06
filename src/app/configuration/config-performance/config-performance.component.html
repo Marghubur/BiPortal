@@ -33,7 +33,7 @@
                   <div class="th fe-5">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                        (keyup.enter)="filterRecords()" [(ngModel)]="objectDetail.Objective"
+                        (keyup.enter)="filterRecords()" [(ngModel)]="objectDetail.objective"
                         placeholder="Search by Objective">
                       <div class="t-filter" (click)="arrangeDetails(orderByObjectiveAsc, 'Objective')">
                         <a href="javascript:void()" class="pe-2">Objectives</a>
@@ -74,7 +74,7 @@
                   <div class="th fe-1">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="objectDetail.TargetValue" placeholder="Search by Target Value">
+                        (keydown.esc)="resetFilter()" [(ngModel)]="objectDetail.targetValue" placeholder="Search by Target Value">
                       <div class="t-filter" (click)="arrangeDetails(orderBTargetValueAsc, 'TargetValue')">
                         <a href="javascript:void()" class="pe-3">Target Value</a>
                         <i class="fa fa-sort-amount-asc"
@@ -100,22 +100,22 @@
                 <ng-container *ngIf="objectiveDetails.length > 0">
                   <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
                     <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                    <div class="td align-middle fe-5 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}">
-                      {{item.Objective}}: {{item.Description}}
+                    <div class="td align-middle fe-5 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
+                      {{item.objective}}: {{item.description}}
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.TimeFrameStart | date}}
+                        {{item.timeFrameStart | date}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.TimeFrmaeEnd | date}}
+                        {{item.timeFrmaeEnd | date}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.TargetValue}} {{item.ProgressMeassureType == 1? '%' : ''}}
+                        {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
                       </div>
                     </div>
                     <div class="td align-middle text-center fe-1">
@@ -159,8 +159,8 @@
         <form [formGroup]="objectForm" *ngIf="objectForm">
           <div class="">
             <label for="" class="form-label">Objective</label>
-            <input type="text" placeholder="Ex: Provide an awesome customer experience" class="form-control" formControlName="Objective" maxlength="100"
-            [ngClass]="{'error-field': submitted && f.Objective.errors !== null && f.Objective.errors.required}" oninput="this.value = this.value.toUpperCase()">
+            <input type="text" placeholder="Ex: Provide an awesome customer experience" class="form-control" formControlName="objective" maxlength="100"
+            [ngClass]="{'error-field': submitted && f.objective.errors !== null && f.objective.errors.required}" oninput="this.value = this.value.toUpperCase()">
           </div>
           <div class="mt-3">
             <label for="" class="form-label">Description</label>
@@ -171,7 +171,7 @@
               <label for="" class="form-label">Time Frame Start Date</label>
               <form class="form-inline">
                 <div class="form-group w-100">
-                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.TimeFrameStart.errors !== null && f.TimeFrameStart.errors.required}">
+                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.timeFrameStart.errors !== null && f.timeFrameStart.errors.required}">
                     <input class="form-control" [placement]="'bottom'" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="startDate"
                       (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 1}" #d="ngbDatepicker">
                     <div class="input-group-append">
@@ -187,7 +187,7 @@
               <label for="" class="form-label">Time Frame End Date</label>
               <form class="form-inline">
                 <div class="form-group w-100">
-                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.TimeFrmaeEnd.errors !== null && f.TimeFrmaeEnd.errors.required}">
+                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.timeFrmaeEnd.errors !== null && f.timeFrmaeEnd.errors.required}">
                     <input class="form-control" [placement]="'bottom'" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="endDate"
                       (dateSelect)="onEndDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 1}" #ed="ngbDatepicker">
                     <div class="input-group-append">
@@ -201,17 +201,17 @@
             </div>
             <div class="col-md-3">
               <label for="" class="form-label">Objective Type</label>
-              <input type="text" maxlength="100" placeholder="Objective Type" oninput="this.value = this.value.toUpperCase()" class="form-control" formControlName="ObjectiveType" [ngClass]="{'error-field': submitted && f.ObjectiveType.errors !== null && f.ObjectiveType.errors.required}">
+              <input type="text" maxlength="100" placeholder="Objective Type" oninput="this.value = this.value.toUpperCase()" class="form-control" formControlName="objectiveType" [ngClass]="{'error-field': submitted && f.objectiveType.errors !== null && f.objectiveType.errors.required}">
             </div>
             <div class="col-md-3">
               <label for="" class="form-label">Who can see</label>
               <div class="btn-group d-block" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" value="true" class="btn-check" formControlName="ObjSeeType" name="ObjSeeType" id="btnradio22" autocomplete="off"
-                 [ngClass]="{'error-field': submitted && f.ObjSeeType.errors !== null && f.ObjSeeType.errors.required}">
+                <input type="radio" value="true" class="btn-check" formControlName="objSeeType" name="objSeeType" id="btnradio22" autocomplete="off"
+                 [ngClass]="{'error-field': submitted && f.objSeeType.errors !== null && f.objSeeType.errors.required}">
                 <label class="btn btn-outline-primary" for="btnradio22">Manager</label>
 
-                <input type="radio" value="false" class="btn-check" formControlName="ObjSeeType" name="ObjSeeType" id="btnradio23" autocomplete="off"
-                 [ngClass]="{'error-field': submitted && f.ObjSeeType.errors !== null && f.ObjSeeType.errors.required}">
+                <input type="radio" value="false" class="btn-check" formControlName="objSeeType" name="objSeeType" id="btnradio23" autocomplete="off"
+                 [ngClass]="{'error-field': submitted && f.objSeeType.errors !== null && f.objSeeType.errors.required}">
                 <label class="btn btn-outline-primary" for="btnradio23">Everyone</label>
               </div>
             </div>
@@ -229,7 +229,7 @@
             </div>
           </div>
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" formControlName="IsIncludeReview" value="" id="flexCheckDefault">
+            <input class="form-check-input" type="checkbox" formControlName="isIncludeReview" value="" id="flexCheckDefault">
             <label class="form-check-label" for="flexCheckDefault">
               Include in review
             </label>
@@ -237,24 +237,24 @@
           <div class="mt-3">
             <label for="" class="form-label d-block">Progress measured as</label>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" formControlName="ProgressMeassureType" type="radio" name="ProgressMeassureType" id="inlineRadio1" value="1" (click)="changeProgressMeassur($event)"
-               [ngClass]="{'error-field': submitted && f.ProgressMeassureType.errors !== null && f.ProgressMeassureType.errors.required}">
+              <input class="form-check-input" formControlName="progressMeassureType" type="radio" name="progressMeassureType" id="inlineRadio1" value="1" (click)="changeProgressMeassur($event)"
+               [ngClass]="{'error-field': submitted && f.progressMeassureType.errors !== null && f.progressMeassureType.errors.required}">
               <label class="form-check-label" for="inlineRadio1">Percent Complete</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" formControlName="ProgressMeassureType" type="radio" name="ProgressMeassureType" id="inlineRadio2" value="3" (click)="changeProgressMeassur($event)"
-               [ngClass]="{'error-field': submitted && f.ProgressMeassureType.errors !== null && f.ProgressMeassureType.errors.required}">
+              <input class="form-check-input" formControlName="progressMeassureType" type="radio" name="progressMeassureType" id="inlineRadio2" value="3" (click)="changeProgressMeassur($event)"
+               [ngClass]="{'error-field': submitted && f.progressMeassureType.errors !== null && f.progressMeassureType.errors.required}">
               <label class="form-check-label" for="inlineRadio2">Completed/ Not Completed</label>
             </div>
             <div class="row">
-              <ng-container *ngIf="objectForm.controls.ProgressMeassureType.value == '1'">
+              <ng-container *ngIf="objectForm.controls.progressMeassureType.value == '1'">
                 <div class="col-md-6 mt-3">
                   <label for="" class="form-label">Start Value</label>
-                  <input type="text" [OnlyNumber]="3" formControlName="StartValue" class="form-control" placeholder="Start Value" [ngClass]="{'error-field': submitted && f.StartValue.errors !== null && f.StartValue.errors.required}">
+                  <input type="text" [OnlyNumber]="3" formControlName="startValue" class="form-control" placeholder="Start Value" [ngClass]="{'error-field': submitted && f.startValue.errors !== null && f.startValue.errors.required}">
                 </div>
                 <div class="col-md-6 mt-3">
                   <label for="" class="form-label">Target Value</label>
-                  <input type="text" [OnlyNumber]="3" formControlName="TargetValue" class="form-control" placeholder="Target Value" [ngClass]="{'error-field': submitted && f.TargetValue.errors !== null && f.TargetValue.errors.required}">
+                  <input type="text" [OnlyNumber]="3" formControlName="targetValue" class="form-control" placeholder="Target Value" [ngClass]="{'error-field': submitted && f.targetValue.errors !== null && f.targetValue.errors.required}">
                 </div>
               </ng-container>
             </div>
@@ -266,7 +266,7 @@
         <button class="btn btn-primary-c" (click)="addObjective()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
           <span class="ps-2">
-           {{currentObject.ObjectiveId == 0 ? 'Add' : 'Update'}} Objective
+           {{currentObject.objectiveId == 0 ? 'Add' : 'Update'}} Objective
           </span>
         </button>
       </div>
