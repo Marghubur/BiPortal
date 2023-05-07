@@ -1015,3 +1015,16 @@ a {
     border-bottom-color: #d9d9d9 !important;
   }
 }
+
+
+/*------------  card table rows and columns css ---------------------*/
+
+.arrow-down {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  i {
+    font-size: 20px;
+  }
+}
