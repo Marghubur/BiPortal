@@ -12,7 +12,7 @@ export const environment = {
   //  baseSpringUrl: "http://localhost:8090/api/eps/",
 
   baseDotNetUrl: "http://tracker.io/dn/api/",
-  baseSpringUrl: "http://tracker.io/sb/api/",
+  baseSpringUrl: "http://tracker.io/sb/api/eps/",
 
   FolderDelimiter: "\\"
 };
