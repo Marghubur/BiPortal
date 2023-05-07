@@ -111,7 +111,8 @@ export class PreviousincomeComponent implements OnInit {
           Professional: new FormControl(this.employeementDeatil[i].Professional),
           IncomeTax: new FormControl(this.employeementDeatil[i].IncomeTax),
           OtherTax: new FormControl(this.employeementDeatil[i].OtherTax),
-          OtherTaxable: new FormControl(this.employeementDeatil[i].OtherTaxable)
+          OtherTaxable: new FormControl(this.employeementDeatil[i].OtherTaxable),
+          MonthNumber: new FormControl(this.employeementDeatil[i].MonthNumber)
         }));
         i++;
       }
@@ -122,6 +123,7 @@ export class PreviousincomeComponent implements OnInit {
         dataArray.push(this.fb.group({
           EmployeeId: new FormControl(this.employeeId),
           PreviousEmpDetailId: new FormControl(0),
+          MonthNumber: new FormControl(monthNumber),
           Month: new FormControl(this.getMonthName(monthNumber)),
           Year: new FormControl(this.currentYear),
           Gross: new FormControl(0),
