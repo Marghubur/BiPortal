@@ -50,23 +50,25 @@
                       </div>
                     </div>
                     <div class="row bg-light mt-4 align-items-center justify-content-between">
-                      <div class="col-md-5" *ngIf="objectives.length > 0">
-                        <div class="col-md-12 my-3"  >
-                          <i class="fa fa-calendar pe-2"></i>
-                          <span class="fw-bold">{{financialYear}}-{{financialYear+1}}</span>
-                          <span class="text-muted ps-2">{{startDate | date}}</span> -
-                          <span class="text-muted">{{endDate | date}}</span>
-                          <i class="fa fa-repeat ps-4 pe-2"></i>
-                          <span class="text-primary-c">Update Progress</span>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="d-flex align-items-center justify-content-between">
-                            <p class="mb-0">OVERALL PROGRESS</p>
-                            <span class="fw-bold fs-4 text-success">{{overallProgress | number: '1.2-2'}}%</span>
+                      <div class="col-md-5" >
+                        <ng-container *ngIf="objectives.length > 0">
+                          <div class="col-md-12 my-3"  >
+                            <i class="fa fa-calendar pe-2"></i>
+                            <span class="fw-bold">{{financialYear}}-{{financialYear+1}}</span>
+                            <span class="text-muted ps-2">{{startDate | date}}</span> -
+                            <span class="text-muted">{{endDate | date}}</span>
+                            <i class="fa fa-repeat ps-4 pe-2"></i>
+                            <span class="text-primary-c">Update Progress</span>
                           </div>
-                          <p class="mb-0"><ngb-progressbar [showValue]="false" type="success" [value]="overallProgress"></ngb-progressbar></p>
-                          <p class="text-muted">Last updated - {{objectives[0].updatedOn | date}}</p>
-                        </div>
+                          <div class="col-md-6">
+                            <div class="d-flex align-items-center justify-content-between">
+                              <p class="mb-0">OVERALL PROGRESS</p>
+                              <span class="fw-bold fs-4 text-success">{{overallProgress | number: '1.2-2'}}%</span>
+                            </div>
+                            <p class="mb-0"><ngb-progressbar [showValue]="false" type="success" [value]="overallProgress"></ngb-progressbar></p>
+                            <p class="text-muted">Last updated - {{objectives[0].updatedOn | date}}</p>
+                          </div>
+                        </ng-container>
                       </div>
                       <div class="col-md-6 justify-content-end row align-items-center">
                         <div class="col-auto border-end pe-4">
