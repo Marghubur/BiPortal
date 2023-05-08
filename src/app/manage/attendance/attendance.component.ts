@@ -452,6 +452,7 @@ export class AttendanceComponent implements OnInit {
   loadData() {
     this.isEmployeesReady = false;
     let fileter = new Filter();
+    fileter.PageSize = 500;
     this.http.post(`employee/GetEmployees/`, fileter).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         this.applicationData["Employees"] = response.ResponseBody;
