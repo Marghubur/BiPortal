@@ -64,7 +64,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   buildProfileImage(fileDetail: any) {
     this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
     this.clientModal.FileId = fileDetail.FileId;
-    this.clientModal.OldFileName = fileDetail.FileName;
+    this.clientModal.OldFileName = `${fileDetail.FileName}.${fileDetail.FileExtension}`;
   }
 
   loadData() {
