@@ -107,11 +107,39 @@
                       <div class="row">
                         <div class="col-md-4 mt-3">
                           <label for="" class="form-label">Declaration Start Month</label>
-                          <input maxlength="2" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                          <select formControlName="DeclarationStartMonth" class="form-select" (change)="selectDeclartionStartMonth($event)">
+                            <option value="1">Jan</option>
+                            <option value="2">Feb</option>
+                            <option value="3">Mar</option>
+                            <option value="4">Apr</option>
+                            <option value="5">May</option>
+                            <option value="6">Jun</option>
+                            <option value="7">Jul</option>
+                            <option value="8">Aug</option>
+                            <option value="9">Sep</option>
+                            <option value="10">Oct</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Dec</option>
+                          </select>
+                          <!-- <input maxlength="2" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
                         </div>
                         <div class="col-md-4 mt-3">
                           <label for="" class="form-label">Declaration End Month</label>
-                          <input maxlength="2" type="text" class="form-control" formControlName="DeclarationEndMonth" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                          <select formControlName="DeclarationEndMonth" class="form-select" >
+                            <option value="1">Jan</option>
+                            <option value="2">Feb</option>
+                            <option value="3">Mar</option>
+                            <option value="4">Apr</option>
+                            <option value="5">May</option>
+                            <option value="6">Jun</option>
+                            <option value="7">Jul</option>
+                            <option value="8">Aug</option>
+                            <option value="9">Sep</option>
+                            <option value="10">Oct</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Dec</option>
+                          </select>
+                          <!-- <input maxlength="2" type="text" class="form-control" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
                         </div>
                         <div class="col-md-4 mt-3">
                           <label for="" class="form-label">Financial Year</label>

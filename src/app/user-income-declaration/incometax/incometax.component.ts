@@ -86,7 +86,6 @@ export class IncometaxComponent implements OnInit {
 
         let annualSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
         let i = 0;
-        let totalAmount = 0;
         let finalAmount = 0;
         let totalAmounts: Array<any> = [];
         while(i < annualSalaryDetail.length) {
@@ -110,13 +109,14 @@ export class IncometaxComponent implements OnInit {
           while(i < props.length) {
             value = props[i].ComponentId;
             selectedComponent = annualSalaryDetail.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));
-            this.salaryBreakup.push({
-              id: props[i].ComponentId,
-              key: props[i].ComponentName,
-              total: selectedComponent.reduce((acc, cur) => { return acc + cur.FinalAmount; }, 0),
-              value: selectedComponent
-            });
-
+            if (!selectedComponent.includes(undefined)) {
+              this.salaryBreakup.push({
+                id: props[i].ComponentId,
+                key: props[i].ComponentName,
+                total: selectedComponent.reduce((acc, cur) => { return acc + cur.FinalAmount; }, 0),
+                value: selectedComponent
+              });
+            }
             i++;
           }
           this.salaryBreakup = this.salaryBreakup.sort((a, b) => a.key.localeCompare(b.key));
@@ -219,14 +219,24 @@ export class IncometaxComponent implements OnInit {
   viewProTaxPopUp(amount: number) {
     this.proTaxDetails = [];
     var monthlyPTax = 0;
+    let emptyMonth = (12 - this.allDeclarationSalaryDetails.TotalMonths) - 1;
     if (amount > 0)
-      monthlyPTax = amount/12;
+      monthlyPTax = amount/this.allDeclarationSalaryDetails.TotalMonths;
+
     for (let i = 0; i < this.taxCalender.length; i++) {
-      this.proTaxDetails.push({
-        Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
-        Amount: monthlyPTax,
-        Source: 'Proceed'
-      })
+      if (i == emptyMonth) {
+        this.proTaxDetails.push({
+          Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
+          Amount: 0,
+          Source: 'Proceed'
+        })
+      } else {
+        this.proTaxDetails.push({
+          Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
+          Amount: monthlyPTax,
+          Source: 'Proceed'
+        })
+      }
     }
     $('#proTaxModal').modal('show');
   }
