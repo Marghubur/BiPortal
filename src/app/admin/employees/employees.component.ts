@@ -408,4 +408,11 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
       })
     }
   }
+
+  // empDeclaration() {
+  //   this.http.get("Declaration/EmptyEmpDeclaration").then(res => {
+  //     if (res.ResponseBody)
+  //       Toast(res.ResponseBody);
+  //   })
+  // }
 }
