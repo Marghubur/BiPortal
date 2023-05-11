@@ -40,7 +40,7 @@ export class ConfigPerformanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.objectiveData.SearchString = "1=1";
-    this.currentCompny = this.local.findRecord("Companies")[0];performance
+    this.currentCompny = this.local.findRecord("Companies")[0];
     this.empRoles = new autoCompleteModal();
     this.empRoles.data = [];
     this.empRoles.placeholder = "Role List";

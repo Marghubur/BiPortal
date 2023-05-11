@@ -26,6 +26,9 @@ export class ProcessingPayrollComponent implements OnInit {
   adhocPaymentDetail: Array<any> = [];
   expensesDetail: Array<any> = [];
   adhocDeductionDetail: Array<any> = [];
+  salaryProcessingDetail: Array<any> = [];
+  salaryPayoutDetail: Array<any> = [];
+  arraersDetail: Array<any> = [];
   isPageReady: boolean = false;
   leaveData: Filter = new Filter();
   attendanceData: Filter = new Filter();
@@ -42,6 +45,9 @@ export class ProcessingPayrollComponent implements OnInit {
   adhocPaymentData: Filter = new Filter();
   expensesData: Filter = new Filter();
   adhocDeductionData: Filter = new Filter();
+  salaryProcessingData: Filter = new Filter();
+  salaryPayoutData: Filter = new Filter();
+  arraersData: Filter = new Filter();
   activeIndex: number = 1;
 
   constructor() {}
@@ -213,28 +219,28 @@ export class ProcessingPayrollComponent implements OnInit {
     }
   }
 
-  // GetFilterSalaryRevisionResult(e: Filter) {
-  //   if(e != null) {
-  //     this.salaryRevisionData = e;
-  //     this.loadData();
-  //   }
-  // }
+  GetFilterExpenseResult(e: Filter) {
+    if(e != null) {
+      this.expensesData = e;
+      this.loadData();
+    }
+  }
 
-  // GetFilterOvertimeResult(e: Filter) {
-  //   if(e != null) {
-  //     this.overTimePaymentData = e;
-  //     this.loadData();
-  //   }
-  // }
+  GetFilterAdhocPaymentResult(e: Filter) {
+    if(e != null) {
+      this.adhocPaymentData = e;
+      this.loadData();
+    }
+  }
 
-  // GetFilterShiftResult(e: Filter) {
-  //   if(e != null) {
-  //     this.shiftAllowanceData = e;
-  //     this.loadData();
-  //   }
-  // }
+  GetFilterAdhocDeductionResult(e: Filter) {
+    if(e != null) {
+      this.adhocDeductionData = e;
+      this.loadData();
+    }
+  }
 
-  saveReimbursementAdhicDeduction() {
+  saveReimbursementAdhocDeduction() {
     if (this.activeIndex > 0 && this.activeIndex < 4) {
       this.activeIndex = this.activeIndex + 1;
     } else {
@@ -243,9 +249,98 @@ export class ProcessingPayrollComponent implements OnInit {
     }
   }
 
-  markReimbursementAdhicDeductionComplete() {
+  markReimburseAdhocDeductionComplete() {
     this.activeIndex = 1;
     $('#reimbursementAdhicDeduction').modal('hide');
   }
+
+  // ------------------------------Salaries and Arreaars
+  salariesArrearsPopUp() {
+    this.activeIndex = 1;
+    $('#salariesArrears').modal('show');
+  }
+
+  GetFilterSalaryProcessingResult(e: Filter) {
+    if(e != null) {
+      this.salaryProcessingData = e;
+      this.loadData();
+    }
+  }
+
+  GetFilterSalaryPayoutResult(e: Filter) {
+    if(e != null) {
+      this.salaryPayoutData = e;
+      this.loadData();
+    }
+  }
+
+  GetFilterArraersResult(e: Filter) {
+    if(e != null) {
+      this.arraersData = e;
+      this.loadData();
+    }
+  }
+
+  saveSalariesArrears() {
+    if (this.activeIndex > 0 && this.activeIndex < 3) {
+      this.activeIndex = this.activeIndex + 1;
+    } else {
+      this.activeIndex = 1;
+      $('#salariesArrears').modal('hide');
+    }
+  }
+
+  markSalariesArrearsComplete() {
+    this.activeIndex = 1;
+    $('#salariesArrears').modal('hide');
+  }
+
+  // ------------------------------Override (PT, TDS, ESI, LWF)
+  overridePtEsiTdsPopUp() {
+    this.activeIndex = 1;
+    $('#reimbursementAdhicDeduction').modal('show');
+  }
+
+  // GetFilterSalaryCompResult(e: Filter) {
+  //   if(e != null) {
+  //     this.salaryComponentsData = e;
+  //     this.loadData();
+  //   }
+  // }
+
+  // GetFilterExpenseResult(e: Filter) {
+  //   if(e != null) {
+  //     this.expensesData = e;
+  //     this.loadData();
+  //   }
+  // }
+
+  // GetFilterAdhocPaymentResult(e: Filter) {
+  //   if(e != null) {
+  //     this.adhocPaymentData = e;
+  //     this.loadData();
+  //   }
+  // }
+
+  // GetFilterAdhocDeductionResult(e: Filter) {
+  //   if(e != null) {
+  //     this.adhocDeductionData = e;
+  //     this.loadData();
+  //   }
+  // }
+
+  // saveReimbursementAdhocDeduction() {
+  //   if (this.activeIndex > 0 && this.activeIndex < 4) {
+  //     this.activeIndex = this.activeIndex + 1;
+  //   } else {
+  //     this.activeIndex = 1;
+  //     $('#reimbursementAdhicDeduction').modal('hide');
+  //   }
+  // }
+
+  // markReimburseAdhocDeductionComplete() {
+  //   this.activeIndex = 1;
+  //   $('#reimbursementAdhicDeduction').modal('hide');
+  // }
 
 }
