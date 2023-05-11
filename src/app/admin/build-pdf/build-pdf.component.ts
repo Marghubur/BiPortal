@@ -1256,10 +1256,10 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     while (i <= this.allTimesheet.length) {
       let weeks = this.allTimesheet.slice(start, end);
       let status = 0;
-      if (weeks.filter(x => x.TimesheetStatus == 4).length > 0)
-        status = 4;
-      else
+      if (weeks.filter(x => x.TimesheetStatus == 8 || x.TimesheetStatus == 9).length > 0)
         status = 8;
+      else
+        status = 4;
       this.timesheetBreakup.push({
         Timesheet: weeks,
         Status : status

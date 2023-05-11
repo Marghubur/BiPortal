@@ -234,6 +234,9 @@ a.text-underline {
   padding: 4px 8px;
   border-radius: 6px;
   color: #eee;
+  a {
+    color: #eee !important;
+  }
 }
 
 .span-clients:hover {
@@ -259,7 +262,9 @@ hr {
 .inactive-mode {
   border: 1px solid #d9d9d9 !important;
   background: #eee !important;
-  color: #bd9c9c !important;
+  a {
+    color: var(--primary) !important;
+  }
 }
 
 .img-container__box img {

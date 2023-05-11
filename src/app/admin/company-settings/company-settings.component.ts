@@ -84,6 +84,19 @@ export class CompanySettingsComponent implements OnInit {
     })
   }
 
+  selectDeclartionStartMonth(e: any) {
+    let value = Number(e.target.value);
+    if (value > 0) {
+      let month = 0;
+      if (value == 1)
+        month = 12;
+      else
+        month = value - 1;
+
+      this.companySettingForm.get('DeclarationEndMonth').setValue(month);
+    }
+  }
+
   saveSetting() {
     let value = this.companySettingForm.value;
     if (value.CompanyId > 0) {

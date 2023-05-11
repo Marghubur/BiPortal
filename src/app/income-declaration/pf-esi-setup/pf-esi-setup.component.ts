@@ -140,18 +140,23 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
 
   pfStatusChange(e: any) {
     let value = e.target.value;
-    let elem = document.querySelectorAll('input[ data-name="pf-setting" ]');
+    let elem = document.querySelectorAll('input[data-name="pf-setting"]');
     if (value == "true") {
       if (elem.length > 0) {
         for (let i = 0; i < elem.length; i++) {
-          elem[i].removeAttribute('disabled');
+          if (elem[i].attributes.getNamedItem('disabled') != null)
+            elem[i].removeAttribute('disabled');
         }
+        this.pfesiSetting.PFEnable = true;
+        this.PFandESIForm.get('PFEnable').setValue('true');
       }
     } else {
       if (elem.length > 0) {
         for (let i = 0; i < elem.length; i++) {
           elem[i].setAttribute('disabled', '');
         }
+        this.pfesiSetting.PFEnable = false;
+        this.PFandESIForm.get('PFEnable').setValue(false);
         this.pfesiSetting.IsPfAmountLimitStatutory = false;
         this.pfesiSetting.IsPfCalculateInPercentage = false;
         this.pfesiSetting.IsAllowOverridingPf = false;
@@ -174,12 +179,16 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
         for (let i = 0; i < elem.length; i++) {
           elem[i].removeAttribute('disabled');
         }
+        this.pfesiSetting.EsiEnable = true;
+        this.PFandESIForm.get('EsiEnable').setValue('true');
       }
     } else {
       if (elem.length > 0) {
         for (let i = 0; i < elem.length; i++) {
           elem[i].setAttribute('disabled', '');
         }
+        this.pfesiSetting.EsiEnable = false;
+        this.PFandESIForm.get('EsiEnable').setValue(false);
         this.pfesiSetting.MaximumGrossForESI = 0;
         this.pfesiSetting.EsiEmployeeContribution = 0;
         this.pfesiSetting.EsiEmployerContribution = 0;

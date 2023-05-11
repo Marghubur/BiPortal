@@ -123,7 +123,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
         this.isPageReady = true;
         this.isPageLoading = false;
       } else {
-        ErrorToast("No objective details found. Please contact to admin.");
+        WarningToast("No objective details found. Please contact to admin.");
         this.isPageLoading = false;
         this.isPageReady = true;
       }

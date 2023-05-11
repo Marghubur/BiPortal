@@ -94,7 +94,6 @@ export class IncometaxComponent implements OnInit {
 
         let annualSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
         let i = 0;
-        let totalAmount = 0;
         let finalAmount = 0;
         let totalAmounts: Array<any> = [];
         while(i < annualSalaryDetail.length) {
