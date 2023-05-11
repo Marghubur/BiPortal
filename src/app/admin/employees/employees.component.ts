@@ -330,7 +330,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
       if (EmpId !== null && EmpId !== "") {
         this.http.get(`Employee/GetEmployeeById/${EmpId}/${status}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
-            this.nav.navigate(ManageBaseRoute + Profile, response.ResponseBody);
+            this.nav.navigate(ManageBaseRoute + "/" + Profile, response.ResponseBody);
           }
         }).catch(e => {
           this.common.ShowToast("Got error to get data. Please contact to admin.");
@@ -359,7 +359,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
 
   goToAttendancePage(user: any) {
     if(user) {
-      this.nav.navigate(ManageBaseRoute + Attendance, user);
+      this.nav.navigate(ManageBaseRoute + "/" + Attendance, user);
     } else {
       Toast("Please select an employee")
     }
@@ -396,7 +396,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
           link.setAttribute('target', '_blank');
           link.setAttribute('type', 'hidden');
           link.href = fileLocation;
-          link.download = `${res.ResponseBody}`;
+          link.download = `${this.downlodexcelFilePath}`;
           document.body.appendChild(link);
           link.click();
           link.remove();
