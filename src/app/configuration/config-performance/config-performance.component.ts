@@ -76,11 +76,60 @@ export class ConfigPerformanceComponent implements OnInit {
 
     let roles = res.ResponseBody.value1;
     if (roles.length > 0) {
-      roles.forEach(x => {
-        this.empRoles.data.push({
-          value: x.roleId,
-          text: x.roleName
-        });
+      // roles.forEach(x => {
+      //   this.empRoles.data.push({
+      //     value: x.roleId,
+      //     text: x.roleName
+      //   });
+      // });
+      this.empRoles.data.push({
+        value: 1,
+        text: 'Project Manager'
+      },{
+        value: 2,
+        text: 'Architect'
+      },{
+        value: 3,
+        text: 'Networking'
+      },{
+        value: 4,
+        text: 'Full stack Developer'
+      },{
+        value: 5,
+        text: 'Backend (Server side) Developer'
+      },{
+        value: 6,
+        text: 'Database Developer'
+      },{
+        value: 7,
+        text: 'Frontend (UI) Developer'
+      },{
+        value: 8,
+        text: 'System Engineer'
+      },{
+        value: 9,
+        text: 'Associate Engineer'
+      },{
+        value: 10,
+        text: 'Test Lead'
+      },{
+        value: 11,
+        text: 'Admin'
+      },{
+        value: 12,
+        text: 'Senior HR'
+      },{
+        value: 13,
+        text: 'Direct HR'
+      },{
+        value: 14,
+        text: 'Tester'
+      },{
+        value: 19,
+        text: 'Team Lead'
+      },{
+        value: 15,
+        text: 'Other'
       });
       this.empRoles.className="";
     }

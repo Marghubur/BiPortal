@@ -29,6 +29,10 @@ export class ProcessingPayrollComponent implements OnInit {
   salaryProcessingDetail: Array<any> = [];
   salaryPayoutDetail: Array<any> = [];
   arraersDetail: Array<any> = [];
+  ptOverrideDetail: Array<any> = [];
+  esiOverrideDetail: Array<any> = [];
+  tdsOverrideDetail: Array<any> = [];
+  lwfOverrideDetail: Array<any> = [];
   isPageReady: boolean = false;
   leaveData: Filter = new Filter();
   attendanceData: Filter = new Filter();
@@ -48,6 +52,11 @@ export class ProcessingPayrollComponent implements OnInit {
   salaryProcessingData: Filter = new Filter();
   salaryPayoutData: Filter = new Filter();
   arraersData: Filter = new Filter();
+  ptOverrideData: Filter = new Filter();
+  esiOverrideData: Filter = new Filter();
+  tdsOverrideData: Filter = new Filter();
+  lwfOverrideData: Filter = new Filter();
+
   activeIndex: number = 1;
 
   constructor() {}
@@ -296,9 +305,9 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   // ------------------------------Override (PT, TDS, ESI, LWF)
-  overridePtEsiTdsPopUp() {
+  overridePopUp() {
     this.activeIndex = 1;
-    $('#reimbursementAdhicDeduction').modal('show');
+    $('#override').modal('show');
   }
 
   // GetFilterSalaryCompResult(e: Filter) {
@@ -329,18 +338,18 @@ export class ProcessingPayrollComponent implements OnInit {
   //   }
   // }
 
-  // saveReimbursementAdhocDeduction() {
-  //   if (this.activeIndex > 0 && this.activeIndex < 4) {
-  //     this.activeIndex = this.activeIndex + 1;
-  //   } else {
-  //     this.activeIndex = 1;
-  //     $('#reimbursementAdhicDeduction').modal('hide');
-  //   }
-  // }
+  saveOverride() {
+    if (this.activeIndex > 0 && this.activeIndex < 4) {
+      this.activeIndex = this.activeIndex + 1;
+    } else {
+      this.activeIndex = 1;
+      $('#override').modal('hide');
+    }
+  }
 
-  // markReimburseAdhocDeductionComplete() {
-  //   this.activeIndex = 1;
-  //   $('#reimbursementAdhicDeduction').modal('hide');
-  // }
+  markOverrideComplete() {
+    this.activeIndex = 1;
+    $('#override').modal('hide');
+  }
 
 }
