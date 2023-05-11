@@ -1,0 +1,56 @@
+.progress {
+    height: 0.65rem !important;
+}
+
+.rounded-items {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.t-body {
+    max-height: 49vh !important;
+}
+
+.cell-wrapper {
+    padding-left: .6rem;
+    padding-right: .6rem;
+}
+
+.hide-bar {
+    width: 17px !important;
+}
+
+.t-filter {
+    justify-content: flex-start !important;
+}
+
+.custom-height {
+    height: 43vh !important;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+.active-index {
+    background-color: var(--primary);
+    border: var(--primary);
+    color: #fff !important;
+}
