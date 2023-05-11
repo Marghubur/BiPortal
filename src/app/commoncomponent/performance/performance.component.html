@@ -118,7 +118,10 @@
                                     <i class="fa fa-user-o pe-2"></i>
                                   </div>
                                   <div class="col">
-                                    <div class="text-truncate col-md-11" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">{{item.description}}</div>
+                                    <div class="text-truncate row col-md-11" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
+                                      <div class="col-md-4 text-truncate">{{item.objective}}</div>
+                                      <div class="col-md-8 text-truncate">{{item.description}}</div>
+                                    </div>
                                     <small>0 Task <span class="px-2">|</span> <i class="fa fa-user-o pe-2"></i>{{userDetail.FirstName + " "+ userDetail.LastName}}</small>
                                   </div>
                                 </div>
