@@ -9,10 +9,10 @@ export const environment = {
   OAuthSecret: "7pxr3O8iM4SVSs8ozTC5tXts",
 
   baseDotNetUrl: "http://localhost:5000/api/",
-  //  baseSpringUrl: "http://localhost:8090/api/eps/",
+  baseSpringUrl: "http://localhost:8090/api/eps/",
 
   // baseDotNetUrl: "http://tracker.io/dn/api/",
-  baseSpringUrl: "http://tracker.io/sb/api/eps/",
+  // baseSpringUrl: "http://tracker.io/sb/api/eps/",
 
   FolderDelimiter: "\\"
 };
