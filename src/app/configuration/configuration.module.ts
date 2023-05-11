@@ -15,6 +15,7 @@ import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.com
 import { ManageshiftComponent } from './manageshift/manageshift.component';
 import { ProductsComponent } from './products/products.component';
 import { EmailConfigComponent } from './email-config/email-config.component';
+import { ProcessingPayrollComponent } from './processing-payroll/processing-payroll.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { EmailConfigComponent } from './email-config/email-config.component';
     ManageWorkFlowComponent,
     ManageshiftComponent,
     ProductsComponent,
-    EmailConfigComponent
+    EmailConfigComponent,
+    ProcessingPayrollComponent
   ],
   imports: [
     CommonModule,
