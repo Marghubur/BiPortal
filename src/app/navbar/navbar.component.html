@@ -31,8 +31,8 @@
         <ul class="navbar-nav navbar-nav-right">
           <li class="d-none d-sm-block">
             <div class="btn-group">
-              <select class="form-select" (change)="balanceZooming($event)">
-                <option value="0">Default</option>
+              <select class="form-select border-0" (change)="balanceZooming($event)">
+                <option value="0">Font size</option>
                 <option [value]="i" *ngFor="let i of sizeOptions">{{i}}</option>
               </select>
 

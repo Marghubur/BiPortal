@@ -339,7 +339,7 @@ class Objective {
   targetValue: number = 0;
   timeFrameStart: Date = null;
   timeFrmaeEnd: Date = null;
-  objectiveType: string = null;
+  objectiveType: string = "Individual";
   description: string = null;
   tagRole: Array<number> = [];
 }
