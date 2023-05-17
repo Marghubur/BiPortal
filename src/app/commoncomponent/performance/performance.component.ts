@@ -55,7 +55,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   htmlText: any = null;
   eventsSubject: Subject<void> = new Subject<void>();
   activeMeetingTab: number = 1;
-
+  
   constructor(private user: UserService,
               private http: AjaxService,
               private nav:iNavigation,
