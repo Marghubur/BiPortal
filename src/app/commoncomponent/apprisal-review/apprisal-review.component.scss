@@ -1,0 +1,254 @@
+.curren-bg {
+    background-color: #fff !important;
+  }
+  
+  .btn-lightorange {
+    background-color: var(--orange);
+    color: var(--light);
+  }
+  
+  .btn-lightdark {
+    background-color: #6d6d6d !important;
+    color: var(--light);
+  }
+  
+  .u-header {
+    z-index: 99999;
+    //min-height: 3.5rem;
+  }
+  
+  .btn-sm {
+    height: 32px;
+    line-height: 1.2;
+    font-size: 14px;
+  }
+  
+  .btn:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .btn-sp {
+    margin: 4px 6px;
+  }
+  
+  .a-tab {
+    padding-top: 10px !important;
+    display: inline-block;
+    height: inherit;
+    color: #a2a2a2;
+    padding: 0px 1rem;
+    text-decoration: none;
+  }
+  
+  .c-tab {
+    height: 40px;
+    position: relative;
+  }
+  
+  .tab-active {
+    border-bottom: 4px solid #eb7d25 !important;
+    color: #222;
+  }
+  
+  .a-tab:hover {
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .d-r {
+    direction: rtl;
+  }
+  
+  .f-title {
+    font-size: 1.2rem;
+  }
+  
+  .a-link {
+    display: block;
+    text-align: center;
+    color: darkblue;
+  
+    i {
+      font-size: 1rem;
+    }
+  }
+  
+  .create-link {
+    position: relative;
+    top: 10px;
+    right: 1rem;
+  }
+  
+  .create-link:hover {
+    cursor: pointer;
+  }
+  .table a {
+    cursor: pointer;
+    color: darkblue;
+    text-decoration: underline;
+  }
+  
+  // .x_content,
+  // .x_panel {
+  //   max-height: 65vh !important;
+  // }
+  
+  .col-title {
+    margin-top: 1rem;
+  }
+  
+  /* define height and width of scrollable area. Add 16px to width for scrollbar          */
+  div.tableContainer {
+    clear: both;
+    border: 1px solid #963;
+    height: 285px;
+    overflow: auto;
+    width: 900px;
+  }
+  
+  /* Reset overflow value to hidden for all non-IE browsers. */
+  html > body div.tableContainer {
+    overflow: hidden;
+    width: 900px;
+  }
+  
+  /* define width of table. IE browsers only                 */
+  div.tableContainer table {
+    float: left;
+    /* width: 740px */
+  }
+  
+  /* define width of table. Add 16px to width for scrollbar.           */
+  /* All other non-IE browsers.                                        */
+  html > body div.tableContainer table {
+    /* width: 756px */
+  }
+  
+  /* set table header to a fixed position. WinIE 6.x only                                       */
+  /* In WinIE 6.x, any element with a position property set to relative and is a child of       */
+  /* an element that has an overflow property set, the relative value translates into fixed.    */
+  /* Ex: parent element DIV with a class of tableContainer has an overflow property set to auto */
+  
+  thead.fixedHeader tr {
+    position: relative;
+  }
+  
+  /* set THEAD element to have block level attributes. All other non-IE browsers            */
+  /* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+  
+  /* make the TH elements pretty */
+  thead.fixedHeader th {
+    background: #c96;
+    border-left: 1px solid #eb8;
+    border-right: 1px solid #b74;
+    border-top: 1px solid #eb8;
+    font-weight: normal;
+    padding: 4px 3px;
+    text-align: left;
+  }
+  
+  tbody.scrollContent {
+    display: block;
+    height: 262px;
+    overflow: auto;
+    width: 100%;
+  }
+  
+  thead.fixedHeader {
+    display: table;
+    overflow: auto;
+    width: 100%;
+  }
+  
+  /* make TD elements pretty. Provide alternating classes for striping the table */
+  /* http://www.alistapart.com/articles/zebratables/                             */
+  tbody.scrollContent td,
+  tbody.scrollContent tr.normalRow td {
+    background: #fff;
+    border-bottom: none;
+    border-left: none;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ddd;
+    padding: 2px 3px 3px 4px;
+  }
+  
+  tbody.scrollContent tr.alternateRow td {
+    background: #eee;
+    border-bottom: none;
+    border-left: none;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ddd;
+    padding: 2px 3px 3px 4px;
+  }
+  
+  .user-edit-icon {
+    font-size: 13px !important;
+  }
+  
+  .t-body {
+    max-height: 49vh !important;
+  }
+  
+  .cell-wrapper {
+    padding-left: .6rem;
+    padding-right: .6rem;
+  }
+  
+  .t-table .t-head,
+  .t-body {
+    overflow-y: auto;
+  }
+  
+  .t-filter {
+    justify-content: flex-start !important;
+  }
+  
+  .custom-height {
+    height: 43vh !important;
+  }
+  
+  
+  .hide-bar {
+    height: 2.9rem !important;
+  }
+  
+  .uplod-message-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 19rem !important;
+  }
+  
+  .record-container {
+    max-height: 400px;
+    overflow: auto;
+  }
+  
+  .ifilezone {
+    background-image: url("/assets/img/drop-back.png") !important;
+    background-size: 100% 73%;
+    cursor: pointer;
+    border: 2px dashed #bbb;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    background-color: #f8f7f7;
+    min-height: 310px;
+    background-repeat: no-repeat;
+  }
+  
+  .filetitle {
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #d9d9d9;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .custom-bg {
+    background-color: #f6f6f6 !important;;
+  }
+  

@@ -794,7 +794,8 @@
         <h5 class="modal-title" id="performanceReviewLabel">Review Form - Performance Review cycle {{startDate | date}} - {{endDate | date}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <!-- <div class="modal-body" >
+
+      <div class="modal-body" >
         <div class="card shadow-sm rounded-0 p-3">
           <div class="d-flex">
             <div class="rounded-icon bg-c text-white">
@@ -813,30 +814,35 @@
         <p class="mb-0 text-muted"><small>PERFORMANCE RATING <i class="fa fa-exclamation-circle"></i></small></p>
         <h4 class="fw-bold mb-0">4.83</h4>
         <small>out of 5</small>
-        <div class="col-md-12 mt-3 bg-light py-2">
+        <div class="col-md-12 mt-3 bg-light py-2 mb-4">
           <span class="col-auto bg-c text-white p-2">Objectives</span>
         </div>
-        <ng-container *ngIf=" selectedObjective != null && selectedObjective.PerformanceDetail.length > 0">
-          <ng-container *ngFor="let item of selectedObjective.PerformanceDetail; let i=index;">
+        <ng-container *ngIf="objectives != null && objectives.length > 0">
+          <ng-container *ngFor="let item of objectives; let i=index;">
             <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
               <div class="d-flex col-md-12">
                 <a data-bs-toggle="collapse" (click)="collpaseShowHide('feedback'+i)"  [attr.href]="'#feedback'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#feedback'+i" class="me-3">
-                  <img class="grid-icon" src="assets/images/down-arrow.png">
+                  <!-- <img class="grid-icon" src="assets/images/down-arrow.png"> -->
+                  <i class="fa fa-quote-left" aria-hidden="true"></i>
                 </a>
                 <p class="mb-0 fs-6">
-                 {{item.Description}}
+                  <b>{{item.objective}}:</b> 
+                  <label class="d-block">{{item.description}}</label>
                 </p>
               </div>
-              <div class="hide-collapse bg dark" [id]="'feedback'+i">
+              <div class="bg dark" [id]="'feedback'+i">
                 <div class="card card-body border-0">
                   <small>Your feedback:</small>
-                  <textarea class="form-control" placeholder="your feedbcak" cols="30" rows="5"></textarea>
+                  <textarea class="form-control" placeholder="your feedbcak" cols="30" rows="5">
+                    {{item.comments}}
+                  </textarea>
                 </div>
               </div>
             </div>
           </ng-container>
         </ng-container>
-      </div> -->
+      </div>
+
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" [disabled]="isLoading" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="manageMeeting()" [disabled]="isLoading">

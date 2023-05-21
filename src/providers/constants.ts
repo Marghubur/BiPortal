@@ -127,6 +127,7 @@ export const ManageYearEnding = 'leavesetting/manageyearending';
 
 export const CommonBaseRoute = "admin/common"
 export const Performance = 'performance';
+export const ApprisalReview = 'apprisalreview';
 export const ServiceRequest = 'servicerequest';
 export const Documents = "documents";
 export const DocumentsPage = "documentspage/:path";
