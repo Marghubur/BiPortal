@@ -10,13 +10,15 @@ import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { documentspageComponent } from './documentspage/documentspage.component';
 import { documentsComponent } from './documents/documents.component';
 import { ServiceRequestComponent } from './service-request/service-request.component';
+import { ApprisalReviewComponent } from './apprisal-review/apprisal-review.component';
 
 @NgModule({
   declarations: [
     PerformanceComponent,
     ServiceRequestComponent,
     documentspageComponent,
-    documentsComponent
+    documentsComponent,
+    ApprisalReviewComponent
   ],
   imports: [
     CommonModule,
