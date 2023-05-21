@@ -202,6 +202,9 @@
             <div class="col-md-3">
               <label for="" class="form-label">Objective Type</label>
               <!-- <input type="text" maxlength="100" placeholder="Objective Type" oninput="this.value = this.value.toUpperCase()" class="form-control" formControlName="objectiveType" [ngClass]="{'error-field': submitted && f.objectiveType.errors !== null && f.objectiveType.errors.required}"> -->
+              <select name="objectiveType" formControlName="objectiveType" class="form-select" [ngClass]="{'error-field': submitted && f.objectiveType.errors !== null && f.objectiveType.errors.required}" disabled>
+                <option value="Individual" selected>Individual</option>
+              </select>
             </div>
             <!-- <div class="col-md-3">
               <label for="" class="form-label">Who can see</label>

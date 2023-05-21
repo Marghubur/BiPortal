@@ -24,13 +24,8 @@ export class AjaxService {
   }
 
   public GetImageBasePath() {
-    let ImageBaseUrl = environment.baseDotNetUrl;
-    if (ImageBaseUrl.includes("/dn/api"))
-      ImageBaseUrl = ImageBaseUrl.replace("/dn/api", "/Files");
-    else
-      ImageBaseUrl = ImageBaseUrl.replace("/api", "/Files");
-
-    // ImageBaseUrl = ImageBaseUrl.replace("/sb/api", "/Files");
+    let ImageBaseUrl = environment.baseDotNetUrl.replace("/api", "/Files");
+    ImageBaseUrl = ImageBaseUrl.replace("/api", "/Files");
     return ImageBaseUrl;
   }
 
