@@ -11,120 +11,280 @@
       </div>
       <div class="x_content">
         <ng-container *ngIf="isPageReady">
-            <div>
-                <a href="javaascript:void(0)" class="text-decoration-none" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
-                    <div class="d-flex align-items-center">
-                        <i class="fa fa-caret-down fa-lg pe-2" [ngClass]="{'fa-caret-down': !isCollapsed, 'fa-caret-right': isCollapsed}"></i>
-                        <h5 class="fw-bold me-3 mb-0">Run Payroll</h5>
-                        <div class="col-md-8">
-                            <p class="mb-0"><ngb-progressbar type="success" [value]="this.allRrunPayroll.completedValue"></ngb-progressbar></p>
+          <div class="row mb-3">
+            <div class="col-md-1" *ngFor="let item of payrollCalendar; let i=index;">
+              <a href="javascript:void(0)" class="text-decoration-none" (click)="selectPayrollMonth(item)">
+                <div class="card text-center pt-2 active-payroll" [ngClass]="{'active-payroll': selectedPayrollCalendar.Month == item.Month}" data-name="payroll-tab">
+                  <h5 class="text-center text-dark px-1">{{item.MonthName}} {{item.Year}}</h5>
+                  <small class="text-muted px-1 pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
+                  <small class="d-block text-center mb-0 pb-1" [ngClass]="{'text-bg-success ': item.Status == 2, 'text-bg-warning': item.Status == 3, 'bg-c text-white': item.Status == 4, 'text-secondary': item.Status == 1 || item.Status == 5}">
+                    <i class="fa fa-check-square-o" *ngIf="item.Status == 2"></i>
+                    <i class="fa fa-exclamation-triangle" *ngIf="item.Status == 3"></i>
+                    <i class="fa fa-arrow-circle-right" *ngIf="item.Status == 4"></i>
+                    {{item.Status == 1 ? 'NO DATA' : item.Status == 2 ? 'COMPLETED' : item.Status == 3 ? 'PENDING' : item.Status == 4 ? 'CURRENT' : 'UPCOMING'}}
+                  </small>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="d-flex align-items-center py-2">
+            <h5 class="fw-bold text-dark pe-2 mb-0">{{selectedPayrollCalendar.MonthName}} {{selectedPayrollCalendar.Year}}</h5>
+            <small class="text-muted">({{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.StartDate}} - {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.EndDate}}, {{selectedPayrollCalendar.EndDate}} days)</small>
+          </div>
+          <div class="row">
+            <div class="col-md-4 my-3">
+              <div class="card p-3">
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="mb-0 text-muted">TOTAL EMPLOYEES</p>
+                    <h5>2</h5>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="mb-0 text-muted">CALENDAR DAYS</p>
+                    <h5>{{selectedPayrollCalendar.EndDate}}</h5>
+                  </div>
+                </div>
+                <div>
+                  <p class="mb-0 text-muted">PAYROLL PROCESSED</p>
+                  <div class="d-flex align-items-center">
+                    <h5 class="mb-0">2/2</h5>
+                    <small class="text-muted ps-2">EMPLOYEES</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 my-3 d-flex align-items-center justify-content-between">
+              <div class="col-auto">
+                <p class="mb-0 text-muted">TOTAL PAYROLL COST</p>
+                <h5>INR 101950</h5>
+              </div>
+              <span>=</span>
+              <div class="col-auto">
+                <p class="mb-0 text-muted">EMPLOYEE DEPOSIT</p>
+                <h5>INR 87894</h5>
+              </div>
+              <span>+</span>
+              <div class="col-auto">
+                <p class="mb-0 text-muted">TOTAL DEDUCTIONS</p>
+                <h5>INR 10306</h5>
+              </div>
+              <span>+</span>
+              <div class="col-auto">
+                <p class="mb-0 text-muted">Total CONTRIBUTIONS</p>
+                <h5>INR 3750</h5>
+              </div>
+            </div>
+          </div>
+          <div>
+            <a href="javaascript:void(0)" class="text-decoration-none" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+              <div class="d-flex align-items-center">
+                <i class="fa fa-caret-down fa-lg pe-2" [ngClass]="{'fa-caret-down': !isCollapsed, 'fa-caret-right': isCollapsed}"></i>
+                <h5 class="fw-bold me-3 mb-0">Run Payroll</h5>
+                <ng-container *ngIf="!this.allRunPayroll.RunPayrollFinalize">
+                  <div class="col-md-8">
+                    <p class="mb-0"><ngb-progressbar type="success" [value]="this.allRunPayroll.completedValue"></ngb-progressbar></p>
+                  </div>
+                  <p class="fw-bold ms-3 mb-0">{{this.allRunPayroll.completedValue / 16.66 > 6 ? 6 : this.allRunPayroll.completedValue / 16.66}} to 6 steps completed</p>
+                </ng-container>
+                <ng-container *ngIf="this.allRunPayroll.RunPayrollFinalize">
+                  <span class="badge text-bg-primary text-normal">Finalize</span>
+                  <span class="ps-1">(On {{submittedPayrollDate | date}} by {{userName}})</span>
+                </ng-container>
+              </div>
+            </a>
+          </div>
+          <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+            <div class="row col-md-12">
+              <div class="col-md-4 mt-3">
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="leaveAttendanceWagesPopUp()">
+                  <div class="card ps-3">
+                    <div class="row py-4 px-2">
+                        <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
+                          <span><i class="fa fa-calendar fa-lg text-white"></i></span>
                         </div>
-                        <p class="fw-bold ms-3 mb-0">{{this.allRrunPayroll.completedValue / 16.66 > 6 ? 6 : this.allRrunPayroll.completedValue / 16.66}} to 6 steps completed</p>
+                        <div class="col-md-11">
+                          <h6 class="mb-0">Leave, Attendance & Daily Wages
+                            <i class="fa float-end" [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.LeaveAttendanceCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
+                          </h6>
+                          <p class="text-muted text-truncate mb-0">No Action Taken </p>
+                        </div>
                     </div>
+                  </div>
                 </a>
+              </div>
+              <div class="col-md-4 mt-3">
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="employeeChangesPopUp()">
+                  <div class="card ps-3">
+                    <div class="row py-4 px-2">
+                      <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
+                        <span><i class="fa fa-user-o fa-lg text-white"></i></span>
+                      </div>
+                      <div class="col-md-11">
+                        <h6 class="mb-0">New Joinee & Exits
+                          <i class="fa float-end" [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.EmployeeChangeseCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
+                        </h6>
+                        <p class="text-muted text-truncate mb-0">No Action Taken </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-4 mt-3">
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="bonusSalryOvertimePopUp()">
+                  <div class="card ps-3">
+                    <div class="row py-4 px-2">
+                      <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
+                        <span><i class="fa fa-birthday-cake fa-lg text-white"></i></span>
+                      </div>
+                      <div class="col-md-11">
+                        <h6 class="mb-0">Bonus, Salary Revision & Overtime
+                          <i class="fa float-end" [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.BonusSalaryOvertimeCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
+                        </h6>
+                        <p class="text-muted text-truncate mb-0">No Action Taken </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
             </div>
-            <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
-                <div class="row col-md-12">
-                  <div class="col-md-4 mt-3">
-                    <a href="javascript:void(0)" class="text-decoration-none" (click)="leaveAttendanceWagesPopUp()">
-                      <div class="card ps-3">
-                        <div class="row py-4 px-2">
-                            <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
-                              <span><i class="fa fa-calendar fa-lg text-white"></i></span>
+            <div class="row col-md-12">
+                <div class="col-md-4 mt-3">
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="reimbursementAdhocDeductPopUp()">
+                        <div class="card ps-3">
+                            <div class="row py-4 px-2">
+                                <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
+                                    <span><i class="fa fa-object-group fa-lg text-white"></i></span>
+                                </div>
+                                <div class="col-md-11">
+                                    <h6 class="mb-0">Reimbursement, Adhoc Payment, Deduction
+                                      <i class="fa float-end" [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.ReimbursementAdhicDeductCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
+                                    </h6>
+                                    <p class="text-muted text-truncate mb-0">No Action Taken</p>
+                                </div>
                             </div>
-                            <div class="col-md-11">
-                              <h6 class="mb-0">Leave, Attendance & Daily Wages <i *ngIf="this.allRrunPayroll.LeaveAttendanceCompleted == true" class="fa fa-check-square-o text-success float-end"></i></h6>
-                              <p class="text-muted text-truncate mb-0">No Action Taken </p>
-                            </div>
                         </div>
-                      </div>
                     </a>
-                  </div>
-                  <div class="col-md-4 mt-3">
-                    <a href="javascript:void(0)" class="text-decoration-none" (click)="employeeChangesPopUp()">
-                      <div class="card ps-3">
-                        <div class="row py-4 px-2">
-                          <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
-                            <span><i class="fa fa-user-o fa-lg text-white"></i></span>
-                          </div>
-                          <div class="col-md-11">
-                            <h6 class="mb-0">New Joinee & Exits <i *ngIf="this.allRrunPayroll.EmployeeChangeseCompleted == true" class="fa fa-check-square-o text-success float-end"></i></h6>
-                            <p class="text-muted text-truncate mb-0">No Action Taken </p>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="col-md-4 mt-3">
-                    <a href="javascript:void(0)" class="text-decoration-none" (click)="bonusSalryOvertimePopUp()">
-                      <div class="card ps-3">
-                        <div class="row py-4 px-2">
-                          <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
-                            <span><i class="fa fa-birthday-cake fa-lg text-white"></i></span>
-                          </div>
-                          <div class="col-md-11">
-                            <h6 class="mb-0">Bonus, Salary Revision & Overtime <i *ngIf="this.allRrunPayroll.BonusSalaryOvertimeCompleted == true" class="fa fa-check-square-o text-success float-end"></i></h6>
-                            <p class="text-muted text-truncate mb-0">No Action Taken </p>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
                 </div>
-                <div class="row col-md-12">
-                    <div class="col-md-4 mt-3">
-                        <a href="javascript:void(0)" class="text-decoration-none" (click)="reimbursementAdhocDeductPopUp()">
-                            <div class="card ps-3">
-                                <div class="row py-4 px-2">
-                                    <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
-                                        <span><i class="fa fa-object-group fa-lg text-white"></i></span>
-                                    </div>
-                                    <div class="col-md-11">
-                                        <h6 class="mb-0">Reimbursement, Adhoc Payment, Deduction <i *ngIf="this.allRrunPayroll.ReimbursementAdhicDeductCompleted == true" class="fa fa-check-square-o text-success float-end"></i></h6>
-                                        <p class="text-muted text-truncate mb-0">No Action Taken</p>
-                                    </div>
+                <div class="col-md-4 mt-3">
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="salariesArrearsPopUp()">
+                        <div class="card ps-3">
+                            <div class="row py-4 px-2">
+                                <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
+                                    <span><i class="fa fa-trophy fa-lg text-white"></i></span>
+                                </div>
+                                <div class="col-md-11">
+                                    <h6 class="mb-0">Salaries on Hold & Arrears
+                                      <i class="fa float-end" [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.SalaryHoldArrearsCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
+                                    </h6>
+                                    <p class="text-muted text-truncate mb-0">No Action Taken </p>
                                 </div>
                             </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                        <a href="javascript:void(0)" class="text-decoration-none" (click)="salariesArrearsPopUp()">
-                            <div class="card ps-3">
-                                <div class="row py-4 px-2">
-                                    <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
-                                        <span><i class="fa fa-trophy fa-lg text-white"></i></span>
-                                    </div>
-                                    <div class="col-md-11">
-                                        <h6 class="mb-0">Salaries on Hold & Arrears <i *ngIf="this.allRrunPayroll.SalaryHoldArrearsCompleted == true" class="fa fa-check-square-o text-success float-end"></i></h6>
-                                        <p class="text-muted text-truncate mb-0">No Action Taken </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                        <a href="javascript:void(0)" class="text-decoration-none" (click)="overridePopUp()">
-                            <div class="card ps-3">
-                                <div class="row py-4 px-2">
-                                    <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
-                                        <span><i class="fa fa-user-times fa-lg text-white"></i></span>
-                                    </div>
-                                    <div class="col-md-11">
-                                        <h6 class="mb-0">Override (PT, ESI, TDS, LWF) <i *ngIf="this.allRrunPayroll.OverrideCompleted == true" class="fa fa-check-square-o text-success float-end"></i></h6>
-                                        <p class="text-muted text-truncate mb-0">No Action Taken </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 </div>
-                <!-- <p class="text-muted text-end mt-3 me-4">Last Changes on By </p> -->
-                <div class="mt-3 me-4 text-end">
-                    <button class="btn btn-outline-primary" [disabled]="isLoading">Preview Run Payroll</button>
-                    <button class="btn btn-outline-primary ms-2" [disabled]="isLoading">Rreview all employees</button>
-                    <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="finalizePayrollPopUp()">Finalize Payroll</button>
+                <div class="col-md-4 mt-3">
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="overridePopUp()">
+                        <div class="card ps-3">
+                            <div class="row py-4 px-2">
+                                <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
+                                    <span><i class="fa fa-user-times fa-lg text-white"></i></span>
+                                </div>
+                                <div class="col-md-11">
+                                    <h6 class="mb-0">Override (PT, ESI, TDS, LWF)
+                                      <i class="fa float-end" [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.OverrideCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
+                                    </h6>
+                                    <p class="text-muted text-truncate mb-0">No Action Taken </p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
+            <!-- <p class="text-muted text-end mt-3 me-4">Last Changes on By </p> -->
+            <div class="mt-3 me-4 text-end">
+                <button class="btn btn-outline-primary" *ngIf="!this.allRunPayroll.RunPayrollFinalize" [disabled]="isLoading">Preview Run Payroll</button>
+                <button class="btn btn-outline-primary ms-2" [disabled]="isLoading">Rreview all employees</button>
+                <button class="btn btn-primary-c ms-2" *ngIf="!this.allRunPayroll.RunPayrollFinalize" [disabled]="isLoading" (click)="finalizePayrollPopUp()">Finalize Payroll</button>
+            </div>
+          </div>
+          <h5>Payroll Outcome</h5>
+          <div class="row mb-2">
+            <div class="col-md-2 py-2">
+              <a href="javascript:void(0)" class="text-decoration-none">
+                <i class="fa fa-list-alt"></i> View Pay Register
+              </a>
+            </div>
+            <div class="col-md-2 py-2">
+              <a href="javascript:void(0)" class="text-decoration-none">
+                <i class="fa fa-list"></i> Manage PaySlip
+              </a>
+            </div>
+          </div>
+          <p class="border-top pt-2">Employee Payables
+            <a href="javascript:void(0)" class="text-decoration-none float-end">Manage Payment</a>
+          </p>
+          <div class="row border-bottom pb-2">
+            <div class="col-md-1">
+              <small>BANK TRANSFER</small>
+              <h5>INR 120533</h5>
+            </div>
+            <div class="col-md-1">
+              <small>CHEQUES</small>
+              <h5>INR 0</h5>
+            </div>
+            <div class="col-md-1">
+              <small>CASH</small>
+              <h5>INR 0</h5>
+            </div>
+            <div class="col-md-1">
+              <small>TOTAL</small>
+              <h5>INR 120533</h5>
+            </div>
+          </div>
+          <p class="border-top pt-2">Income Tax TDS</p>
+          <div class="row border-bottom pb-2">
+            <div class="col-md-1">
+              <small>TDS PAYABLE</small>
+              <h5>INR 0</h5>
+            </div>
+            <div class="col-md-2">
+              <small>NUMBER OF EMPLOYEES</small>
+              <h5>0 Employees</h5>
+            </div>
+          </div>
+          <p class="border-top pt-2">PF
+            <a href="javascript:void(0)" class="text-decoration-none float-end">View Summary</a>
+          </p>
+          <div class="row border-bottom pb-2">
+            <div class="col-md-1">
+              <small>EMPLOYEE SHARE</small>
+              <h5>INR 1800</h5>
+            </div>
+            <div class="col-md-1">
+              <small>EMPLOYER SHARE</small>
+              <h5>INR 1800</h5>
+            </div>
+            <div class="col-md-1">
+              <small>OTHER CHARGES</small>
+              <h5>INR 150</h5>
+            </div>
+          </div>
+          <p class="border-top pt-2">Professional Tax
+            <a href="javascript:void(0)" class="text-decoration-none float-end">View Summary</a>
+          </p>
+          <div class="row border-bottom pb-2">
+            <div class="col-md-1">
+              <small>TAX PAYABLE</small>
+              <h5>INR 0</h5>
+            </div>
+            <div class="col-md-2">
+              <small>NUMBER OF EMPLOYEES</small>
+              <h5>0 Employees</h5>
+            </div>
+            <div class="col-md-1">
+              <small>STATES</small>
+            </div>
+          </div>
         </ng-container>
         <ng-container *ngIf="!isPageReady">
           <div class="py-5 my-5">
@@ -144,12 +304,12 @@
 </div>
 
 <!-- Leave, Attendance and Wages Modal -->
-<div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="leaveAttendanceWages" aria-labelledby="leaveAttendanceWagesLabel"
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="leaveAttendanceWages" aria-labelledby="leaveAttendanceWagesLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl ">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="leaveAttendanceWagesLabel">Leave, Attendance & Daily Wages, {{selectedPayrollDate | date}}</h5>
+        <h5 class="modal-title" id="leaveAttendanceWagesLabel">Leave, Attendance & Daily Wages: {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.Year}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -157,26 +317,26 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(1)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">LEAVE APPLIED</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">LEAVE APPLIED</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(2)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">NO ATTENDACE</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">NO ATTENDACE</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(3)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">LOP SUMMARY</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">LOP SUMMARY</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(4)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 4}">4</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">LOP REVERSAL</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 4}">4</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">LOP REVERSAL</div>
                     </a>
                 </div>
             </div>
@@ -254,7 +414,6 @@
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
                                 {{item.Date | date}} - {{item.Date | date}}
-                                <p class="mb-0">{{item.TotalDays}} days</p>
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
@@ -371,10 +530,19 @@
                                 {{item.LeaveType}}
                               </div>
                             </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" >
-                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                              </a>
+                            <div class="td fe-1">
+                              <div class="position-absolute table-containers">
+                                <div ngbDropdown class="d-inline-block">
+                                  <a href="javascript:void(0)" class="text-decoration-none" id="dropdownBasic1" ngbDropdownToggle>
+                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                  </a>
+                                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                    <button ngbDropdownItem>Cancel Penalty</button>
+                                    <button ngbDropdownItem>Change Leave Type</button>
+                                    <button ngbDropdownItem>Deduct Leave</button>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </ng-container>
@@ -602,27 +770,21 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <!-- <button class="btn btn-primary-c">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          <span class="ps-2">
-           {{currentObject.objectiveId == 0 ? 'Add' : 'Update'}} Objective
-          </span>
-        </button> -->
-        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backLeaveAttendaceWage()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Back</span>
+        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backActivePages()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+          <span class="ps-2">Back</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex >= 1 && activeIndex < 4" (click)="saveLeaveAttendaceWage()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           <span class="ps-2">Save & Continue</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 4" (click)="saveLeaveAttendaceWage()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Save & Close</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <span class="ps-2">Save & Close</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 4" (click)="markLeaveAttendaceWageComplete()">
-        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-        <span class="ps-2">Mark as Completed</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check-square-o': !isLoading}"></i>
+          <span class="ps-2">Mark as Completed</span>
         </button>
       </div>
     </div>
@@ -631,12 +793,12 @@
 <!-- Close Modal -->
 
 <!-- New Joinee & Exit Modal -->
-<div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="employeeChanges" aria-labelledby="employeeChangesLabel"
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="employeeChanges" aria-labelledby="employeeChangesLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl ">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="employeeChangesLabel">Employee Changes, {{selectedPayrollDate | date}}</h5>
+        <h5 class="modal-title" id="employeeChangesLabel">Employee Changes: {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.Year}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -644,20 +806,20 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(1)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">NEW JOINEES</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">NEW JOINEES</div>
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none flex-wrap" (click)="chnageActiveIndex(2)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">EMPLOYEE IN EXIT PROCESS</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">EMPLOYEE IN EXIT PROCESS</div>
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none flex-wrap" (click)="chnageActiveIndex(3)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">FULL & FINAL SETTLEMENT</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">FULL & FINAL SETTLEMENT</div>
                     </a>
                 </div>
             </div>
@@ -775,7 +937,7 @@
             </ng-container>
             <ng-container *ngIf="activeIndex == 2">
                 <h5>Employee in Exist Process</h5>
-                <div class="alert alert-info">Employee whose exit has been approved and are serving notice period wil be shown under 'Employee in Exit Process'. If there are any exit requests 
+                <div class="alert alert-info">Employee whose exit has been approved and are serving notice period wil be shown under 'Employee in Exit Process'. If there are any exit requests
                     that are yet to be approved but last working date fails under this month (based on the notice period assigned) will be shown under 'Pending Exit Requests.</div>
                 <div class="x_content">
                     <div class="t-table t-list t-border col-md-12">
@@ -833,30 +995,35 @@
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="exitEmpDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="tr py-2" *ngFor="let item of exitEmpDetail; let i=index;">
                             <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                              {{item.objective}}: {{item.description}}
+                            <div class="td align-middle fe-1 text-truncate">
+                              {{item.EmployeeName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrameStart | date}}
+                                {{item.DOJ | date}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrmaeEnd | date}}
+                                <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="item.Reason">
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                                <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="item.LastWorkingDay">
                               </div>
                             </div>
                             <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" >
-                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                              </a>
+                              <select class="form-select" [(ngModel)]="item.ExitRequestStatus">
+                                <option value="1">Pending</option>
+                                <option value="2">Approved</option>
+                                <option value="3">Rejected</option>
+                              </select>
+                            </div>
+                            <div class="td align-middle text-center fe-1">
+                              {{item.WaitingOn | date}}
                             </div>
                           </div>
                         </ng-container>
@@ -938,30 +1105,48 @@
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="settlementDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="tr py-2" *ngFor="let item of settlementDetail; let i=index;">
                             <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                              {{item.objective}}: {{item.description}}
+                            <div class="td align-middle fe-1 text-truncate">
+                              {{item.EmployeeName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrameStart | date}}
+                               <input type="text" placeholder="Reason" [(ngModel)]="item.Reason" class="form-control">
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrmaeEnd | date}}
+                                <input type="text" placeholder="Reason" [(ngModel)]="item.LastWorkingDay" class="form-control">
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                                <select class="form-select" [(ngModel)]="item.Status">
+                                  <option value="1">Pending</option>
+                                  <option value="2">Approved</option>
+                                  <option value="3">Rejected</option>
+                                </select>
                               </div>
                             </div>
                             <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" >
-                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                              </a>
+                              <div class="cell-wrapper">
+                                <input type="text" placeholder="Reason" [(ngModel)]="item.SettledAmount" class="form-control">
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <select class="form-select" [(ngModel)]="item.Action">
+                                  <option value="1">Pending</option>
+                                  <option value="2">Approved</option>
+                                  <option value="3">Rejected</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="td align-middle text-center fe-1">
+                              <div class="cell-wrapper">
+                                <input type="text" placeholder="Reason" [(ngModel)]="item.Comment" class="form-control">
+                              </div>
                             </div>
                           </div>
                         </ng-container>
@@ -980,27 +1165,21 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <!-- <button class="btn btn-primary-c">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          <span class="ps-2">
-           {{currentObject.objectiveId == 0 ? 'Add' : 'Update'}} Objective
-          </span>
-        </button> -->
-        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backLeaveAttendaceWage()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Back</span>
+        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backActivePages()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+          <span class="ps-2">Back</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex >= 1 && activeIndex < 3" (click)="saveEmpChange()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           <span class="ps-2">Save & Continue</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 3" (click)="saveEmpChange()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Save & Close</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <span class="ps-2">Save & Close</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 3" (click)="markEmpChangeComplete()">
-        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-        <span class="ps-2">Mark as Completed</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check-square-o': !isLoading}"></i>
+          <span class="ps-2">Mark as Completed</span>
         </button>
       </div>
     </div>
@@ -1009,12 +1188,12 @@
 <!-- Close Modal -->
 
 <!-- Bonus, Salary Revision and Overtime Modal -->
-<div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="bonusSalaryOvertime" aria-labelledby="bonusSalaryOvertimeLabel"
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="bonusSalaryOvertime" aria-labelledby="bonusSalaryOvertimeLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl ">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="bonusSalaryOvertimeLabel">Employee Salary Changes, {{selectedPayrollDate | date}}</h5>
+        <h5 class="modal-title" id="bonusSalaryOvertimeLabel">Employee Salary Changes: {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.Year}},</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -1022,26 +1201,26 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(1)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">BONUS</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">BONUS</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(2)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">Salary Revision</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">Salary Revision</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(3)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">OVERTIME PAYMENT</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">OVERTIME PAYMENT</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(4)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 4}">4</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">SHIFT ALLOWANCE</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 4}">4</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">SHIFT ALLOWANCE</div>
                     </a>
                 </div>
             </div>
@@ -1106,33 +1285,35 @@
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="bonusDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="tr py-2" *ngFor="let item of bonusDetail; let i=index;">
                             <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                              {{item.objective}}: {{item.description}}
+                            <div class="td align-middle fe-1 text-truncate">
+                              {{item.EmployeeName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrameStart | date}}
+                                {{item.PayoutDate | date}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrmaeEnd | date}}
+                                {{item.BonusType}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                                {{item.Amount}}
                               </div>
                             </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" (click)="editObjectivePopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Objective">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                              </a>
-                              <a href="javascript:void(0)" class="ms-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Objective">
-                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-                              </a>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                {{item.PayAction}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <input type="text" placeholder="Comment" class="form-control" [(ngModel)]="item.Comment">
+                              </div>
                             </div>
                           </div>
                         </ng-container>
@@ -1214,30 +1395,42 @@
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="salaryRevisionDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="tr py-2" *ngFor="let item of salaryRevisionDetail; let i=index;">
                             <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                              {{item.objective}}: {{item.description}}
+                            <div class="td align-middle fe-1 text-truncate" >
+                              {{item.EmployeeName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrameStart | date}}
+                                {{item.OldSalary}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrmaeEnd | date}}
+                                <input type="text" class="form-control" placeholder="New Salary" [(ngModel)]="item.NewSalary">
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                                {{item.Changes}}
                               </div>
                             </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" >
-                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                              </a>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <select class="form-select"  [(ngModel)]="item.RevisionAction">
+                                  <option value="1">Option</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <input type="text" class="form-control" placeholder="New Salary" [(ngModel)]="item.Comment">
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <input type="text" class="form-control" placeholder="New Salary" [(ngModel)]="item.Comment">
+                              </div>
                             </div>
                           </div>
                         </ng-container>
@@ -1314,30 +1507,37 @@
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="overTimePaymentDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="tr py-2" *ngFor="let item of overTimePaymentDetail; let i=index;">
                             <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                              {{item.objective}}: {{item.description}}
+                            <div class="td align-middle fe-1 text-truncate">
+                              {{item.EmployeeName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrameStart | date}}
+                                {{item.Month}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrmaeEnd | date}}
+                                {{item.CalculatedAmount | number: '1.2-2'}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                                <input type="text" class="form-control" placeholder="Adjust Amount" [(ngModel)]="item.AdjustedAmount">
                               </div>
                             </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" >
-                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                              </a>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <select class="form-select"  [(ngModel)]="item.PayAction">
+                                  <option value="1">Action</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                {{item.PayableAmount}}
+                              </div>
                             </div>
                           </div>
                         </ng-container>
@@ -1421,30 +1621,42 @@
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="shiftAllowanceDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="tr py-2" *ngFor="let item of shiftAllowanceDetail; let i=index;">
                             <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                              {{item.objective}}: {{item.description}}
+                            <div class="td align-middle fe-1 text-truncate">
+                              {{item.EmployeeName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrameStart | date}}
+                                {{item.Month}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrmaeEnd | date}}
+                                {{item.CalculatedAmount | number: '1.2-2'}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                                <input type="text" class="form-control" placeholder="Adjust Amount" [(ngModel)]="item.AdjustedAmount">
                               </div>
                             </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" >
-                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                              </a>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <select class="form-select"  [(ngModel)]="item.PayAction">
+                                  <option value="1">Action</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                {{item.PayableAmount}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <input type="text" class="form-control" placeholder="Adjust Amount" [(ngModel)]="item.Comment">
+                              </div>
                             </div>
                           </div>
                         </ng-container>
@@ -1463,27 +1675,21 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <!-- <button class="btn btn-primary-c">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          <span class="ps-2">
-           {{currentObject.objectiveId == 0 ? 'Add' : 'Update'}} Objective
-          </span>
-        </button> -->
-        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backLeaveAttendaceWage()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Back</span>
+        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backActivePages()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+          <span class="ps-2">Back</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex >= 1 && activeIndex < 4" (click)="saveBonusAlaryOvertime()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           <span class="ps-2">Save & Continue</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 4" (click)="saveBonusAlaryOvertime()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Save & Close</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <span class="ps-2">Save & Close</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 4" (click)="markBonusAlaryOvertimeComplete()">
-        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-        <span class="ps-2">Mark as Completed</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check-square-o': !isLoading}"></i>
+          <span class="ps-2">Mark as Completed</span>
         </button>
       </div>
     </div>
@@ -1492,39 +1698,39 @@
 <!-- Close Modal -->
 
 <!-- Reimbursement, Adhoc Payment and Deduction Modal -->
-<div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="reimbursementAdhicDeduction" aria-labelledby="reimbursementAdhicDeductionLabel"
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="reimbursementAdhicDeduction" aria-labelledby="reimbursementAdhicDeductionLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl ">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="reimbursementAdhicDeductionLabel">Reimbursement, Adhoc Payment, Deduction: {{selectedPayrollDate | date}}</h5>
+        <h5 class="modal-title" id="reimbursementAdhicDeductionLabel">Reimbursement, Adhoc Payment, Deduction: {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.Year}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
         <div class="col-md-12 py-3">
             <div class="row align-items-center justify-content-center">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(1)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">SALARY COMPONENT CLAIM</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">SALARY COMPONENT CLAIM</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(2)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">EXPENSES</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">EXPENSES</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(3)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">ADHOC PAYMENT</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">ADHOC PAYMENT</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(4)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 4}">4</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">ADHOC DEDUCTION</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 4}">4</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">ADHOC DEDUCTION</div>
                     </a>
                 </div>
             </div>
@@ -1592,7 +1798,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="th fe-1">
+                          <div class="th fe-index">
                             <div class="cell-wrapper">
                               <div class="t-filter">
                                 <a href="javascript:void(0)" class="pe-2">Action</a>
@@ -1603,31 +1809,43 @@
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="salaryComponentsDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="tr py-2" *ngFor="let item of salaryComponentsDetail; let i=index;">
                             <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                              {{item.objective}}: {{item.description}}
+                            <div class="td align-middle fe-1 text-truncate">
+                              {{item.EmployeeName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrameStart | date}}
+                                {{item.ComponentName | date}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrmaeEnd | date}}
+                                {{item.ComponentType}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                                {{item.ClaimAmount}}
                               </div>
                             </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" (click)="editObjectivePopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Objective">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                              </a>
-                              <a href="javascript:void(0)" class="ms-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Objective">
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                {{item.Status}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <input type="text" class="form-control" placeholder="Payable Amount" [(ngModel)]="item.PayableAmount">
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                {{item.ApprovedOn | date}}
+                              </div>
+                            </div>
+                            <div class="td align-middle text-center fe-index">
+                              <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Component">
                                 <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                               </a>
                             </div>
@@ -1714,7 +1932,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="th fe-1">
+                          <div class="th fe-index">
                             <div class="cell-wrapper">
                               <div class="t-filter">
                                 <a href="javascript:void(0)" class="pe-2">Action</a>
@@ -1725,29 +1943,49 @@
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="expensesDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="tr py-2" *ngFor="let item of expensesDetail; let i=index;">
                             <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                              {{item.objective}}: {{item.description}}
+                            <div class="td align-middle fe-1 text-truncate">
+                              {{item.EmployeeName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrameStart | date}}
+                                {{item.ClaimNumber}}
+                              </div>
+                            </div>
+                            <div class="td align-middle text-truncate fe-1">
+                              <div class="cell-wrapper text-truncate">
+                                {{item.ClaimTitleType}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrmaeEnd | date}}
+                                {{item.ExpenseCount}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                                <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="item.Amount">
                               </div>
                             </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" >
-                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                {{item.Status}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                <input type="text" class="form-control" placeholder="Payable Amount" [(ngModel)]="item.PayableAmount">
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper">
+                                {{item.ApprovedOn | date}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-index text-center ">
+                              <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Expense">
+                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                               </a>
                             </div>
                           </div>
@@ -1815,7 +2053,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="th fe-1">
+                      <div class="th fe-index">
                         <div class="cell-wrapper">
                           <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Action</a>
@@ -1826,29 +2064,29 @@
                   </div>
                   <div class="t-body">
                     <ng-container *ngIf="adhocPaymentDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                      <div class="tr py-2" *ngFor="let item of adhocPaymentDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                          {{item.objective}}: {{item.description}}
+                        <div class="td align-middle fe-1 text-truncate" >
+                          {{item.EmployeeName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrameStart | date}}
+                            {{item.AdhocPaymentType}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrmaeEnd | date}}
+                            <input type="text" class="form-control" [(ngModel)]="item.Amount" placeholder="Amount">
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                            <input type="text" class="form-control" [(ngModel)]="item.Comment" placeholder="Comment">
                           </div>
                         </div>
-                        <div class="td align-middle text-center fe-1">
-                          <a href="javascript:void(0)" >
-                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        <div class="td align-middle fe-index text-center ">
+                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Adhoc Payment">
+                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                           </a>
                         </div>
                       </div>
@@ -1916,7 +2154,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="th fe-1">
+                      <div class="th fe-index">
                         <div class="cell-wrapper">
                           <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Action</a>
@@ -1927,29 +2165,29 @@
                   </div>
                   <div class="t-body">
                     <ng-container *ngIf="adhocDeductionDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                      <div class="tr py-2" *ngFor="let item of adhocDeductionDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                          {{item.objective}}: {{item.description}}
+                        <div class="td align-middle fe-1 text-truncate" >
+                          {{item.EmployeeName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrameStart | date}}
+                            {{item.AdhocDeductionType}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrmaeEnd | date}}
+                            <input type="text" class="form-control" [(ngModel)]="item.Amount" placeholder="Amount">
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                            <input type="text" class="form-control" [(ngModel)]="item.Comment" placeholder="Comment">
                           </div>
                         </div>
-                        <div class="td align-middle text-center fe-1">
-                          <a href="javascript:void(0)" >
-                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        <div class="td align-middle fe-index text-center ">
+                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Adhoc Deduction">
+                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                           </a>
                         </div>
                       </div>
@@ -1969,27 +2207,21 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <!-- <button class="btn btn-primary-c">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          <span class="ps-2">
-           {{currentObject.objectiveId == 0 ? 'Add' : 'Update'}} Objective
-          </span>
-        </button> -->
-        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backLeaveAttendaceWage()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Back</span>
+        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backActivePages()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+          <span class="ps-2">Back</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex >= 1 && activeIndex < 4" (click)="saveReimbursementAdhocDeduction()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-          <span class="ps-2">Save & Continue</span>
+        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+        <span class="ps-2">Save & Continue</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 4" (click)="saveReimbursementAdhocDeduction()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Save & Close</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <span class="ps-2">Save & Close</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 4" (click)="markReimburseAdhocDeductionComplete()">
-        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-        <span class="ps-2">Mark as Completed</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check-square-o': !isLoading}"></i>
+          <span class="ps-2">Mark as Completed</span>
         </button>
       </div>
     </div>
@@ -1998,33 +2230,33 @@
 <!-- Close Modal -->
 
 <!-- Salaries on Hold and Arrears Modal -->
-<div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="salariesArrears" aria-labelledby="salariesArrearsLabel"
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="salariesArrears" aria-labelledby="salariesArrearsLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl ">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="salariesArrearsLabel">Salary on Hold & Arraers: {{selectedPayrollDate | date}}</h5>
+        <h5 class="modal-title" id="salariesArrearsLabel">Salary on Hold & Arraers: {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.Year}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
         <div class="col-md-12 py-3">
             <div class="row align-items-center justify-content-center">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(1)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">SALARY PROCESSING ON HOLD</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">SALARY PROCESSING ON HOLD</div>
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none flex-wrap" (click)="chnageActiveIndex(2)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">SALARY PAYOUT ON HOLD</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">SALARY PAYOUT ON HOLD</div>
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none flex-wrap" (click)="chnageActiveIndex(3)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">ARREARS</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">ARREARS</div>
                     </a>
                 </div>
             </div>
@@ -2089,7 +2321,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="th fe-1">
+                      <div class="th fe-index">
                         <div class="cell-wrapper">
                           <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Action</a>
@@ -2100,31 +2332,35 @@
                   </div>
                   <div class="t-body">
                     <ng-container *ngIf="salaryProcessingDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                      <div class="tr py-2" *ngFor="let item of salaryProcessingDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                          {{item.objective}}: {{item.description}}
+                        <div class="td align-middle fe-1 text-truncate" >
+                          {{item.EmployeeName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrameStart | date}}
+                            {{item.PayPeriod}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrmaeEnd | date}}
+                            <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="item.Amount">
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                            <select class="form-select"  [(ngModel)]="item.PayAction">
+                              <option value="1">Action</option>
+                            </select>
                           </div>
                         </div>
-                        <div class="td align-middle text-center fe-1">
-                          <a href="javascript:void(0)" (click)="editObjectivePopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Objective">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                          </a>
-                          <a href="javascript:void(0)" class="ms-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Objective">
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="item.Comment">
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-index text-center ">
+                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Salary Processing on Hold">
                             <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                           </a>
                         </div>
@@ -2196,7 +2432,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="th fe-1">
+                      <div class="th fe-index">
                         <div class="cell-wrapper">
                           <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Action</a>
@@ -2207,31 +2443,30 @@
                   </div>
                   <div class="t-body">
                     <ng-container *ngIf="salaryPayoutDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                      <div class="tr py-2" *ngFor="let item of salaryPayoutDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                          {{item.objective}}: {{item.description}}
+                        <div class="td align-middle fe-1 text-truncate" >
+                          {{item.EmployeeName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrameStart | date}}
+                            {{item.PayPeriod}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrmaeEnd | date}}
+                            <select class="form-select"  [(ngModel)]="item.PayAction">
+                              <option value="1">Action</option>
+                            </select>
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                            <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="item.Comment">
                           </div>
                         </div>
-                        <div class="td align-middle text-center fe-1">
-                          <a href="javascript:void(0)" (click)="editObjectivePopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Objective">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                          </a>
-                          <a href="javascript:void(0)" class="ms-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Objective">
+                        <div class="td align-middle fe-index text-center ">
+                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Salary Payout on Hold">
                             <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                           </a>
                         </div>
@@ -2294,30 +2529,25 @@
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="arraersDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="tr py-2" *ngFor="let item of arraersDetail; let i=index;">
                             <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                              {{item.objective}}: {{item.description}}
+                            <div class="td align-middle fe-1 text-truncate" >
+                              {{item.EmployeeName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrameStart | date}}
+                                {{item.DOJ | date}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.timeFrmaeEnd | date}}
+                                <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="item.TotalArrearAmount">
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                                <input type="text" class="form-control" placeholder="Reason" [(ngModel)]="item.Reason">
                               </div>
-                            </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" >
-                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                              </a>
                             </div>
                           </div>
                         </ng-container>
@@ -2336,27 +2566,21 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <!-- <button class="btn btn-primary-c">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          <span class="ps-2">
-           {{currentObject.objectiveId == 0 ? 'Add' : 'Update'}} Objective
-          </span>
-        </button> -->
-        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backLeaveAttendaceWage()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Back</span>
+        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backActivePages()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+          <span class="ps-2">Back</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex >= 1 && activeIndex < 3" (click)="saveSalariesArrears()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           <span class="ps-2">Save & Continue</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 3" (click)="saveSalariesArrears()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Save & Close</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <span class="ps-2">Save & Close</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 3" (click)="markSalariesArrearsComplete()">
-        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-        <span class="ps-2">Mark as Completed</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check-square-o': !isLoading}"></i>
+          <span class="ps-2">Mark as Completed</span>
         </button>
       </div>
     </div>
@@ -2364,13 +2588,13 @@
 </div>
 <!-- Close Modal -->
 
-<!-- Reimbursement, Adhoc Payment and Deduction Modal -->
-<div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="override" aria-labelledby="overrideLabel"
+<!-- Override (PT, ESI, TDS, LWF) Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="override" aria-labelledby="overrideLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl ">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="overrideLabel">Override (PT, ESI, TDS, LWF): {{selectedPayrollDate | date}}</h5>
+        <h5 class="modal-title" id="overrideLabel">Override (PT, ESI, TDS, LWF): {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.Year}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -2378,26 +2602,26 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(1)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">PT OVERRIDE</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 1}">1</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 1}">PT OVERRIDE</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(2)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">ESI OVERRIDE</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">ESI OVERRIDE</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(3)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">TDS OVVERRIDE</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">TDS OVVERRIDE</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(4)">
-                        <div class="col-auto rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 4}">4</div>
-                        <div class="col-auto" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">LWF OVERRIDE</div>
+                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 4}">4</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">LWF OVERRIDE</div>
                     </a>
                 </div>
             </div>
@@ -2436,13 +2660,6 @@
                       <div class="th fe-1">
                         <div class="cell-wrapper">
                           <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employee Name</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Gross Salary</a>
                           </div>
                         </div>
@@ -2475,7 +2692,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="th fe-1">
+                      <div class="th fe-index">
                         <div class="cell-wrapper">
                           <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Action</a>
@@ -2486,31 +2703,38 @@
                   </div>
                   <div class="t-body">
                     <ng-container *ngIf="ptOverrideDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                      <div class="tr py-2" *ngFor="let item of ptOverrideDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                          {{item.objective}}: {{item.description}}
+                        <div class="td align-middle fe-1 text-truncate">
+                          {{item.EmployeeName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrameStart | date}}
+                            {{item.GrossSalary | number: '1.2-2'}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrmaeEnd | date}}
+                            {{item.RegularPT | number: '1.2-2'}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                            <input type="text" placeholder="PT Override Amount" class="form-control" [(ngModel)]="item.PTOverRideAmount">
                           </div>
                         </div>
-                        <div class="td align-middle text-center fe-1">
-                          <a href="javascript:void(0)" (click)="editObjectivePopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Objective">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                          </a>
-                          <a href="javascript:void(0)" class="ms-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Objective">
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            {{item.PTOverRideMonth}}
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            <input type="text" placeholder="PT Override Amount" class="form-control" [(ngModel)]="item.Comment">
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-index text-center ">
+                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete PT Override">
                             <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                           </a>
                         </div>
@@ -2554,7 +2778,7 @@
                       <div class="th fe-1">
                         <div class="cell-wrapper">
                           <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employee Name</a>
+                            <a href="javascript:void(0)" class="pe-2">Employee</a>
                           </div>
                         </div>
                       </div>
@@ -2618,29 +2842,49 @@
                   </div>
                   <div class="t-body">
                     <ng-container *ngIf="esiOverrideDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                      <div class="tr py-2" *ngFor="let item of esiOverrideDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                          {{item.objective}}: {{item.description}}
+                        <div class="td align-middle fe-1 text-truncate">
+                          {{item.EmployeeName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrameStart | date}}
+                            {{item.GrossSalary | number: '1.2-2'}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrmaeEnd | date}}
+                            {{item.ESIEmployee | number: '1.2-2'}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                            <input type="text" placeholder="ESI employee Override Amount" class="form-control" [(ngModel)]="item.EmployeeOverride">
                           </div>
                         </div>
-                        <div class="td align-middle text-center fe-1">
-                          <a href="javascript:void(0)" >
-                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            {{item.ESIEmployer | number: '1.2-2'}}
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            <input type="text" placeholder="ESI employee Override Amount" class="form-control" [(ngModel)]="item.EmployerOverride">
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            {{item.OverRideMonth}}
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            <input type="text" placeholder="PT Override Amount" class="form-control" [(ngModel)]="item.Comment">
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-index text-center ">
+                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete ESI Override">
+                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                           </a>
                         </div>
                       </div>
@@ -2722,7 +2966,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="th fe-1">
+                      <div class="th fe-index">
                         <div class="cell-wrapper">
                           <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Action</a>
@@ -2733,29 +2977,39 @@
                   </div>
                   <div class="t-body">
                     <ng-container *ngIf="tdsOverrideDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                      <div class="tr py-2" *ngFor="let item of tdsOverrideDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                          {{item.objective}}: {{item.description}}
+                        <div class="td align-middle fe-1 text-truncate">
+                          {{item.EmployeeName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrameStart | date}}
+                            {{item.GrossSalary | number: '1.2-2'}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrmaeEnd | date}}
+                            {{item.RegularTDS | number: '1.2-2'}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                            <input type="text" placeholder="PT Override Amount" class="form-control" [(ngModel)]="item.TDSOverRideAmount">
                           </div>
                         </div>
-                        <div class="td align-middle text-center fe-1">
-                          <a href="javascript:void(0)" >
-                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            {{item.TDSOverRideMonth}}
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            <input type="text" placeholder="PT Override Amount" class="form-control" [(ngModel)]="item.Comment">
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-index text-center ">
+                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete TDS Override">
+                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                           </a>
                         </div>
                       </div>
@@ -2862,29 +3116,49 @@
                   </div>
                   <div class="t-body">
                     <ng-container *ngIf="lwfOverrideDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                      <div class="tr py-2" *ngFor="let item of lwfOverrideDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                          {{item.objective}}: {{item.description}}
+                        <div class="td align-middle fe-1 text-truncate">
+                          {{item.EmployeeName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrameStart | date}}
+                            {{item.GrossSalary | number: '1.2-2'}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.timeFrmaeEnd | date}}
+                            {{item.LWFEmployee | number: '1.2-2'}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.targetValue}} {{item.progressMeassureType == 1? '%' : ''}}
+                            <input type="text" placeholder="ESI employee Override Amount" class="form-control" [(ngModel)]="item.EmployeeOverride">
                           </div>
                         </div>
-                        <div class="td align-middle text-center fe-1">
-                          <a href="javascript:void(0)" >
-                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            {{item.LWFEmployer | number: '1.2-2'}}
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            <input type="text" placeholder="ESI employee Override Amount" class="form-control" [(ngModel)]="item.EmployerOverride">
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            {{item.OverRideMonth}}
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-1">
+                          <div class="cell-wrapper">
+                            <input type="text" placeholder="PT Override Amount" class="form-control" [(ngModel)]="item.Comment">
+                          </div>
+                        </div>
+                        <div class="td align-middle fe-index text-center ">
+                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete ESI Override">
+                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                           </a>
                         </div>
                       </div>
@@ -2904,27 +3178,21 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <!-- <button class="btn btn-primary-c">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          <span class="ps-2">
-           {{currentObject.objectiveId == 0 ? 'Add' : 'Update'}} Objective
-          </span>
-        </button> -->
-        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backLeaveAttendaceWage()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Back</span>
+        <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex > 1" (click)="backActivePages()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+          <span class="ps-2">Back</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex >= 1 && activeIndex < 4" (click)="saveOverride()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           <span class="ps-2">Save & Continue</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 4" (click)="saveOverride()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-            <span class="ps-2">Save & Close</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <span class="ps-2">Save & Close</span>
         </button>
         <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="activeIndex == 4" (click)="markOverrideComplete()">
-        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
-        <span class="ps-2">Mark as Completed</span>
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check-square-o': !isLoading}"></i>
+          <span class="ps-2">Mark as Completed</span>
         </button>
       </div>
     </div>

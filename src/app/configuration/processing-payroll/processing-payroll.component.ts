@@ -13,7 +13,7 @@ declare var $: any;
 export class ProcessingPayrollComponent implements OnInit {
   isCollapsed: boolean = false;
   isLoading: boolean = false;
-  selectedPayrollDate: Date = new Date();
+  submittedPayrollDate: Date = new Date();
   appliedLeaveDetail: Array<any> = [];
   attendanceDetail: Array<any> = [];
   lossPayDetail: Array<any> = [];
@@ -60,11 +60,13 @@ export class ProcessingPayrollComponent implements OnInit {
   tdsOverrideData: Filter = new Filter();
   lwfOverrideData: Filter = new Filter();
   activeIndex: number = 1;
+  payrollCalendar: Array<any> = [];
+  selectedPayrollCalendar: any = null;
   // --------------------
   userDetail: any = null;
   runpayroll: string = "RunPayRoll";
   userName: string = null;
-  allRrunPayroll: RunPayroll = null
+  allRunPayroll: RunPayroll = null
 
   constructor(private http: AjaxService,
               private user: UserService,
@@ -76,6 +78,7 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   loadData() {
+    let startMonth = 4;
     this.userDetail = this.user.getInstance();
     this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
     let runPayroll = new RunPayroll();
@@ -83,12 +86,64 @@ export class ProcessingPayrollComponent implements OnInit {
     runPayroll.NoAttendance = new NoAttendance();
     runPayroll.LOPSummary = new LOPSummary();
     runPayroll.NewJoinee = new NewJoinee();
+    runPayroll.EmployeeExit = new EmployeeExit();
+    runPayroll.FinalSettlement = new FinalSettlement();
+    runPayroll.Bonus = new Bonus();
+    runPayroll.SalaryRevision = new SalaryRevision ();
+    runPayroll.OverTime = new OverTime();
+    runPayroll.ShiftAllowance = new ShiftAllowance();
+    runPayroll.SalaryComponents = new SalaryComponents();
+    runPayroll.Expense = new Expense();
+    runPayroll.AdhocPayment = new AdhocPayment();
+    runPayroll.AdhocDeduction = new AdhocDeduction();
+    runPayroll.SalaryProcessing = new SalaryProcessing();
+    runPayroll.SalaryPayout = new Salaryout();
+    runPayroll.Arrear = new Arrear();
+    runPayroll.PTOverRide = new PTOverRide();
+    runPayroll.ESIOverRide = new ESIOverRide();
+    runPayroll.TDSOverRide = new TDSOverRide();
+    runPayroll.LWFOverRide = new LWFOverRide();
     localStorage.setItem(this.runpayroll, JSON.stringify(runPayroll));
-    this.allRrunPayroll = JSON.parse(localStorage.getItem(this.runpayroll));
-    this.appliedLeaveDetail.push(this.allRrunPayroll.AppliedLeave);
-    this.attendanceDetail.push(this.allRrunPayroll.NoAttendance);
-    this.lossPayDetail.push(this.allRrunPayroll.LOPSummary);
-    this.newJoineeDetail.push(this.allRrunPayroll.NewJoinee);
+    this.allRunPayroll = JSON.parse(localStorage.getItem(this.runpayroll));
+    this.appliedLeaveDetail.push(this.allRunPayroll.AppliedLeave);
+    this.attendanceDetail.push(this.allRunPayroll.NoAttendance);
+    this.lossPayDetail.push(this.allRunPayroll.LOPSummary);
+    this.newJoineeDetail.push(this.allRunPayroll.NewJoinee);
+    this.exitEmpDetail.push(this.allRunPayroll.EmployeeExit);
+    this.settlementDetail.push(this.allRunPayroll.FinalSettlement);
+    this.bonusDetail.push(this.allRunPayroll.Bonus);
+    this.salaryRevisionDetail.push(this.allRunPayroll.SalaryRevision);
+    this.overTimePaymentDetail.push(this.allRunPayroll.OverTime);
+    this.shiftAllowanceDetail.push(this.allRunPayroll.ShiftAllowance);
+    this.salaryComponentsDetail.push(this.allRunPayroll.SalaryComponents);
+    this.expensesDetail.push(this.allRunPayroll.Expense);
+    this.adhocPaymentDetail.push(this.allRunPayroll.AdhocPayment);
+    this.adhocDeductionDetail.push(this.allRunPayroll.AdhocDeduction);
+    this.salaryProcessingDetail.push(this.allRunPayroll.SalaryProcessing);
+    this.salaryPayoutDetail.push(this.allRunPayroll.SalaryPayout);
+    this.arraersDetail.push(this.allRunPayroll.Arrear);
+    this.ptOverrideDetail.push(this.allRunPayroll.PTOverRide);
+    this.esiOverrideDetail.push(this.allRunPayroll.ESIOverRide);
+    this.tdsOverrideDetail.push(this.allRunPayroll.TDSOverRide);
+    this.lwfOverrideDetail.push(this.allRunPayroll.LWFOverRide);
+    let year = 2023;
+    for (let i = 0; i < 12; i++) {
+      if (startMonth > 12) {
+        startMonth = 1;
+        year = year + 1;
+      }
+      this.payrollCalendar.push({
+        MonthName: new Date(2022, startMonth-1, 1).toLocaleString('default', { month: 'short' }),
+        Month: startMonth-1,
+        Year: year,
+        StartDate: new Date(2024, startMonth-1, 1).getDate(),
+        EndDate: new Date(2024, startMonth , 0).getDate(),
+        Status: 1
+      });
+      startMonth = startMonth +1;
+    }
+    this.selectedPayrollCalendar = this.payrollCalendar.find(x => x.Month == new Date().getMonth());
+    this.selectedPayrollCalendar.Status = 4;
     this.isPageReady = true;
   }
 
@@ -129,7 +184,7 @@ export class ProcessingPayrollComponent implements OnInit {
     this.activeIndex = index;
   }
 
-  backLeaveAttendaceWage() {
+  backActivePages() {
     if (this.activeIndex > 1)
       this.activeIndex = this.activeIndex - 1;
   }
@@ -147,8 +202,8 @@ export class ProcessingPayrollComponent implements OnInit {
 
   markLeaveAttendaceWageComplete() {
     this.activeIndex = 1;
-    this.allRrunPayroll.LeaveAttendanceCompleted = true;
-    this.allRrunPayroll.completedValue = this.allRrunPayroll.completedValue + 16.66;
+    this.allRunPayroll.LeaveAttendanceCompleted = true;
+    this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
     this.setLocalStoreValue();
     $('#leaveAttendanceWages').modal('hide');
   }
@@ -193,8 +248,8 @@ export class ProcessingPayrollComponent implements OnInit {
 
   markEmpChangeComplete() {
     this.activeIndex = 1;
-    this.allRrunPayroll.EmployeeChangeseCompleted = true;
-    this.allRrunPayroll.completedValue = this.allRrunPayroll.completedValue + 16.66;
+    this.allRunPayroll.EmployeeChangeseCompleted = true;
+    this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
     this.setLocalStoreValue();
     $('#employeeChanges').modal('hide');
   }
@@ -244,8 +299,8 @@ export class ProcessingPayrollComponent implements OnInit {
 
   markBonusAlaryOvertimeComplete() {
     this.activeIndex = 1;
-    this.allRrunPayroll.BonusSalaryOvertimeCompleted = true;
-    this.allRrunPayroll.completedValue = this.allRrunPayroll.completedValue + 16.66;
+    this.allRunPayroll.BonusSalaryOvertimeCompleted = true;
+    this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
     this.setLocalStoreValue();
     $('#bonusSalaryOvertime').modal('hide');
   }
@@ -295,8 +350,8 @@ export class ProcessingPayrollComponent implements OnInit {
 
   markReimburseAdhocDeductionComplete() {
     this.activeIndex = 1;
-    this.allRrunPayroll.ReimbursementAdhicDeductCompleted = true;
-    this.allRrunPayroll.completedValue = this.allRrunPayroll.completedValue + 16.66;
+    this.allRunPayroll.ReimbursementAdhicDeductCompleted = true;
+    this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
     this.setLocalStoreValue();
     $('#reimbursementAdhicDeduction').modal('hide');
   }
@@ -339,8 +394,8 @@ export class ProcessingPayrollComponent implements OnInit {
 
   markSalariesArrearsComplete() {
     this.activeIndex = 1;
-    this.allRrunPayroll.SalaryHoldArrearsCompleted = true;
-    this.allRrunPayroll.completedValue = this.allRrunPayroll.completedValue + 16.66;
+    this.allRunPayroll.SalaryHoldArrearsCompleted = true;
+    this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
     this.setLocalStoreValue();
     $('#salariesArrears').modal('hide');
   }
@@ -390,8 +445,8 @@ export class ProcessingPayrollComponent implements OnInit {
 
   markOverrideComplete() {
     this.activeIndex = 1;
-    this.allRrunPayroll.OverrideCompleted = true;
-    this.allRrunPayroll.completedValue = 100;
+    this.allRunPayroll.OverrideCompleted = true;
+    this.allRunPayroll.completedValue = 100;
     this.setLocalStoreValue();
     $('#override').modal('hide');
   }
@@ -406,18 +461,24 @@ export class ProcessingPayrollComponent implements OnInit {
     $('#confirmPayrollFinalize').modal('show');
   }
 
+  selectPayrollMonth(item: any) {
+    if (item) {
+      this.selectedPayrollCalendar = item;
+    }
+  }
+
   approveLeave(item: AppliedLeave) {
-    this.allRrunPayroll.AppliedLeave.Status = 9;
-    this.allRrunPayroll.AppliedLeave.Approver = this.userName;
+    this.allRunPayroll.AppliedLeave.Status = 9;
+    this.allRunPayroll.AppliedLeave.Approver = this.userName;
   }
 
   rejectLeave(item: AppliedLeave) {
-    this.allRrunPayroll.AppliedLeave.Status = 5;
-    this.allRrunPayroll.AppliedLeave.Approver = this.userName;
+    this.allRunPayroll.AppliedLeave.Status = 5;
+    this.allRunPayroll.AppliedLeave.Approver = this.userName;
   }
 
   setLocalStoreValue() {
-    localStorage.setItem(this.runpayroll, JSON.stringify(this.allRrunPayroll));
+    localStorage.setItem(this.runpayroll, JSON.stringify(this.allRunPayroll));
   }
 
 }
@@ -459,11 +520,199 @@ class NewJoinee{
   Comment: string = null;
 }
 
+class EmployeeExit{
+  ExitId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  DOJ: Date = new Date(2023, 4, 4);
+  Reason: string = null;
+  LastWorkingDay: Date = new Date();
+  ExitRequestStatus: number = 1;
+  WaitingOn: Date = new Date();
+}
+
+class FinalSettlement{
+  SettlementId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  Reason: string = null;
+  LastWorkingDay: Date = new Date();
+  Status: number = 1;
+  SettledAmount: number = 0;
+  Action: number = 1;
+  Comment: string = null;
+}
+
+class Bonus {
+  BonusId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  PayoutDate: Date = new Date();
+  BonusType: string = null;
+  Amount: number = 0;
+  PayAction: number = 1;
+  Comment: string = null;
+}
+
+class SalaryRevision {
+  SalaryRevisionId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  OldSalary: number = 0;
+  NewSalary: number = 0;
+  Changes: number = 0;
+  GrossPayMonth: number = 0;
+  RevisionAction: number = 1;
+  Comment: string = null;
+}
+
+class OverTime {
+  SalaryRevisionId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  Month: number = 0;
+  CalculatedAmount: number = 0;
+  AdjustedAmount: number = 0;
+  PayAction: number = 1;
+  PayableAmount: number = 0;
+}
+
+class ShiftAllowance {
+  SalaryRevisionId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  Month: number = 0;
+  CalculatedAmount: number = 0;
+  AdjustedAmount: number = 0;
+  PayableAmount: number = 0;
+  PayAction: number = 1;
+  Comment: string = null;
+}
+
+class SalaryComponents {
+  SalaryRevisionId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  ComponentName: number = 0;
+  ComponentType: number = 0;
+  ClaimAmount: number = 0;
+  Status: number = 0;
+  PayableAmount: number = 1;
+  ApprovedOn: Date = new Date();
+}
+
+class Expense {
+  ExpenseId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  ClaimNumber: number = 0;
+  ClaimTitleType: string = null;
+  ExpenseCount: number = 0;
+  Amount: number = 0;
+  Status: number = 1;
+  PayableAmount: number = 0;
+  ApprovedOn: Date = new Date();
+}
+
+class AdhocPayment {
+  AdhocPaymentId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  AdhocPaymentType: string = null;
+  Amount: number = 0;
+  Comment: string = null;
+}
+
+class AdhocDeduction {
+  AdhocDeductionId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  AdhocDeductionType: string = null;
+  Amount: number = 0;
+  Comment: string = null;
+}
+
+class SalaryProcessing {
+  SalaryProcessingId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  PayPeriod: string = null;
+  Amount: number = 0;
+  PayAction: number = 1;
+  Comment: string = null;
+}
+
+class Salaryout {
+  SalaryoutId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  PayPeriod: string = null;
+  PayAction: number = 1;
+  Comment: string = null;
+}
+
+class Arrear {
+  ArrearId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  DOJ: Date = new Date();
+  TotalArrearAmount: number = 0;
+  Reason: string = null;
+}
+
+class PTOverRide {
+  PTOverRideId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  GrossSalary: number = 0;
+  RegularPT: number = 0;
+  PTOverRideAmount: number = 0;
+  PTOverRideMonth: number = 0;
+  Comment: string = null
+}
+
+class ESIOverRide {
+  ESIOverRideId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  GrossSalary: number = 0;
+  ESIEmployee: number = 0;
+  EmployeeOverride: number = 0;
+  ESIEmployer: number = 0;
+  EmployerOverride: number = 0;
+  OverRideMonth: number = 0;
+  Comment: string = null
+}
+
+class TDSOverRide {
+  TDSOverRideId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  GrossSalary: number = 0;
+  RegularTDS: number = 0;
+  TDSOverRideAmount: number = 0;
+  TDSOverRideMonth: number = 0;
+  Comment: string = null
+}
+
+class LWFOverRide {
+  LWFOverRideId: number = 1;
+  EmployeeName: string = "Sarfaraz Nawaz";
+  GrossSalary: number = 0;
+  LWFEmployee: number = 0;
+  EmployeeOverride: number = 0;
+  LWFEmployer: number = 0;
+  EmployerOverride: number = 0;
+  OverRideMonth: number = 0;
+  Comment: string = null
+}
+
 class RunPayroll {
   AppliedLeave: AppliedLeave;
   NoAttendance: NoAttendance;
   LOPSummary: LOPSummary;
   NewJoinee: NewJoinee;
+  EmployeeExit: EmployeeExit;
+  FinalSettlement: FinalSettlement;
+  Bonus: Bonus;
+  SalaryRevision: SalaryRevision;
+  OverTime: OverTime;
+  ShiftAllowance: ShiftAllowance;
+  SalaryComponents: SalaryComponents;
+  Expense: Expense;
+  AdhocPayment: AdhocPayment;
+  AdhocDeduction: AdhocDeduction;
+  SalaryProcessing: SalaryProcessing;
+  SalaryPayout: Salaryout;
+  Arrear: Arrear;
+  PTOverRide: PTOverRide;
+  ESIOverRide: ESIOverRide;
+  TDSOverRide: TDSOverRide;
+  LWFOverRide: LWFOverRide;
   LeaveAttendanceCompleted: boolean = false;
   EmployeeChangeseCompleted: boolean = false;
   BonusSalaryOvertimeCompleted: boolean = false;
@@ -471,4 +720,5 @@ class RunPayroll {
   SalaryHoldArrearsCompleted: boolean = false;
   OverrideCompleted: boolean = false;
   completedValue: number = 0;
+  RunPayrollFinalize: boolean = false;
 }

@@ -467,12 +467,14 @@
           <div class="row">
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
-              <input type="text" formControlName="ComponentName" oninput="this.value = this.value.toUpperCase()"
+              <input type="text" formControlName="ComponentId" oninput="this.value = this.value.toUpperCase()"
+                [ngClass]="{'error-field': submitted && b.ComponentId.errors !== null && b.ComponentId.errors.required}"
                 placeholder="Component Name" class="form-control">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
               <input type="text" formControlName="ComponentFullName" oninput="this.value = this.value.toUpperCase()"
+                [ngClass]="{'error-field': submitted && b.ComponentFullName.errors !== null && b.ComponentFullName.errors.required}"
                 placeholder="Component Full Name" class="form-control">
             </div>
           </div>
