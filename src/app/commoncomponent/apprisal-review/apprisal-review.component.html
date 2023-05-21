@@ -1,0 +1,211 @@
+<div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
+    <div class="x_panel">
+      <div class="x_header">
+        <div class="d-flex justify-content-between">
+          <div class="col-8">
+            <div class="px-1">
+              <app-breadcrums [title]="'Employee detail'" [subtitle]="'Add or update details'"></app-breadcrums>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div [ngSwitch]="isEmpPageReady">
+        <div *ngSwitchCase="false">
+          <div class="mt-5">
+            <app-pre-load-table></app-pre-load-table>
+          </div>
+        </div>
+        <div *ngSwitchDefault>
+          <ng-container>
+            <div class="x_content">
+              <div class="t-table t-list t-border col-md-12">
+                <div class="hide-bar"></div>
+                <div class="t-head">
+                  <div class="tr">
+                    <div class="th fe-index">
+                      <div class="t-index">
+                        <a href="javascript:void()" class="ps-3">#</a>
+                      </div>
+                    </div>
+                    <div class="th fe-3">
+                      <div class="cell-wrapper">
+                        <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                          (keyup.enter)="filterRecords()" autofocus [(ngModel)]="employeeDetails.Name"
+                          placeholder="Search by Name" id="namefilter">
+                        <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
+                          <a href="javascript:void()" class="pe-2">Full Name</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="th fe-2">
+                        <div class="cell-wrapper">
+                          <input class="form-control form-control-sm" (keydown.esc)="resetFilter()" readonly
+                            (keyup.enter)="filterRecords()" autofocus [(ngModel)]="employeeDetails.Name"
+                            placeholder="Search by Name" id="namefilter">
+                          <div class="t-filter">
+                            <a href="javascript:void()" class="pe-2">Description</a>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="th fe-2">
+                      <div class="cell-wrapper">
+                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                          (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
+                          placeholder="Search by MobileNumber">
+                        <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
+                          <a href="javascript:void()" class="pe-2">Mobile Number</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="th fe-2">
+                      <div class="cell-wrapper">
+                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                          (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
+                        <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
+                          <a href="javascript:void()" class="pe-2">Email Id</a>
+                          <i class="fa fa-sort-amount-asc"
+                            [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
+                          <i class="fa fa-sort-amount-desc"
+                            [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="th fe-1 text-center">ACTIONS</div>
+                  </div>
+                </div>
+                <div class="t-body">
+                  <ng-container *ngIf="isFileFound">
+                    <div class="tr py-2" *ngFor="let user of employeeDetail; let i = index;">
+                      <div class="td align-middle text-center fe-index">
+                        <div class="cell-wrapper">
+                          {{employeeData.StartIndex + i}}
+                        </div>
+                      </div>
+                      <div class="td align-middle fe-3">
+                        <div class="cell-wrapper">
+                          <a href="javascript:void(0)" (click)="EditCurrent(user)">{{user.FirstName}}
+                            {{user.LastName}} 
+                            <small class="text-muted text-decoration-none ps-2"> 
+                              [EmpId: {{user.EmployeeUid}}]
+                            </small>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="td align-middle text-truncate fe-2">
+                        <div class="cell-wrapper text-truncate">
+                          user.Provide an awesome customer experience sdsdshd sdhskdh sdskadjask dfdfsd dfdf sds ghgh cvvc cvvcvc
+                        </div>
+                      </div>
+                      <div class="td align-middle fe-2">
+                        <div class="cell-wrapper">
+                          {{user.Mobile}}
+                        </div>
+                      </div>
+                      <div class="td align-middle fe-2">
+                        <div class="cell-wrapper">
+                          {{user.Email}}
+                        </div>
+                      </div>
+                      <div class="td align-middle fe-1">
+                        <div class="d-flex flex-row justify-content-evenly">
+                          <a href="javascript:void(0)" (click)="ViewFiles(user)" [ngClass]="{'pe-none': isLoading}" data-bs-toggle="tooltip"
+                          data-bs-placement="right" title="View Files">
+                            <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                          </a>
+                          <!-- <a href="javascript:void(0)">
+                              <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
+                                  *ngIf="isActiveEmployee == 0" (click)="CreatePopup(user)"></i></span>
+                            </a> -->
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="!isFileFound">
+                    <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5 py-5">Record Not Found</p>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <app-pagination [pagination]="employeeData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- add update detail modal -->
+  
+  <!-- Active and Deactive  Model -->
+  <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="deleteEmployee" tabindex="-1"
+    role="dialog" aria-labelledby="deleteTitleTitle" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle"
+            *ngIf="singleEmployee?.IsActive== true">
+            Are
+            you want to delete the
+            Employee
+          </h5>
+          <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle"
+            *ngIf="singleEmployee?.IsActive== false">
+            Are
+            you want to active the
+            Employee
+          </h5>
+        </div>
+        <div class="modal-body">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">
+                  <div class="col-title">
+                    Full Name
+                  </div>
+                </th>
+                <th scope="col">
+                  <div class="col-title">
+                    Mobile No.#
+                  </div>
+                </th>
+                <th scope="col">
+                  <div class="col-title">
+                    Email
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{singleEmployee?.FirstName}} {{singleEmployee?.LastName}}</td>
+                <td>{{singleEmployee?.Mobile}}</td>
+                <td>{{singleEmployee?.Email}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer border-top-0">
+          <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="ClosePopup()" class="text-decoration-none text-danger btn-white pe-3"
+            data-dismiss="modal">Cancel</a>
+          <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeleteCurrent(singleEmployee)" *ngIf="singleEmployee?.IsActive == true"
+            class="text-decoration-none btn-white text-primary"><i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Remove' }}</a>
+          <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeactivatedEmployee(singleEmployee)"
+            *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary"><i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Activate' }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
