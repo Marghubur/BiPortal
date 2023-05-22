@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -145,10 +146,8 @@ export class ProcessingPayrollComponent implements OnInit {
   leaveAttendanceWagesPopUp() {
     this.activeIndex = 1;
     this.isLoading = true;
-    // this.http.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true).then(res => {
-    this.http.get('runpayroll/getLeaveAndLOP/2023/4', true).then(res => {
+    this.http.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true).then(res => {
       if (res.ResponseBody) {
-        console.log(res.ResponseBody);
         if (res.ResponseBody[0].length > 0)
           this.appliedLeaveDetail = res.ResponseBody[0];
 
@@ -496,18 +495,40 @@ export class ProcessingPayrollComponent implements OnInit {
     }
   }
 
-  approveLeave(item: any) {
-    // this.allRunPayroll.AppliedLeave.Status = 9;
-    // this.allRunPayroll.AppliedLeave.Approver = this.userName;
-  }
-
-  rejectLeave(item: any) {
-    // this.allRunPayroll.AppliedLeave.Status = 5;
-    // this.allRunPayroll.AppliedLeave.Approver = this.userName;
-  }
-
   setLocalStoreValue() {
     localStorage.setItem(this.runpayroll, JSON.stringify(this.allRunPayroll));
+  }
+
+  submitActionForLeave(item: any, requestState) {
+    this.isLoading = true;
+    let endPoint = '';
+
+    switch(requestState) {
+      case 'Approved':
+        endPoint = `LeaveRequest/ApproveLeaveRequest`;
+        break;
+      case 'Rejected':
+        endPoint = `LeaveRequest/RejectLeaveRequest`;
+        break;
+    }
+
+    let currentResponse = {
+      LeaveFromDay: item.FromDate,
+      LeaveToDay: item.ToDate,
+      EmployeeId: item.EmployeeId,
+      LeaveRequestNotificationId : item.LeaveRequestNotificationId,
+      RecordId: item.RecordId,
+      LeaveTypeId: item.LeaveTypeId
+    }
+
+    this.http.put(`${endPoint}`, currentResponse).then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+
+        Toast("Submitted Successfully");
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
 }

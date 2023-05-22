@@ -401,28 +401,28 @@
                       <div class="t-body">
                         <ng-container *ngIf="appliedLeaveDetail.length > 0">
                           <div class="tr py-2" *ngFor="let item of appliedLeaveDetail; let i=index;">
-                            <div class="td align-middle text-center fe-index">{{i+1}}</div>
+                            <div class="td align-middle ps-2 fe-index">{{i+1}}</div>
                             <div class="td align-middle fe-1 text-truncate">
-                              {{item.EmployeeName}}
+                              {{item.FirstName}} {{item.LastName}}
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.Date | date}} - {{item.Date | date}}
+                                {{item.FromDate | date}} - {{item.ToDate | date}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.TotalDays}}
+                                {{item.NumOfDays}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.LeaveType}}
+                                {{item.PlanName}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.Status == 2 ? 'Pending' : item.Status == 5 ? 'Rejected' : 'Approvved'}}
+                                {{item.RequestStatusId == 2 ? 'Pending' : item.RequestStatusId == 5 ? 'Rejected' : 'Approved'}}
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
@@ -431,12 +431,12 @@
                               </div>
                             </div>
                             <div class="td align-middle text-center fe-1">
-                              <ng-container *ngIf="item.Status != 9">
-                                <a href="javascript:void(0)" (click)="approveLeave(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Approve Leave">
+                              <ng-container *ngIf="item.RequestStatusId != 9">
+                                <a href="javascript:void(0)" (click)="submitActionForLeave(item, 'Approved')" data-bs-toggle="tooltip" data-bs-placement="right" title="Approve Leave">
                                   <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                 </a>
                                 <a href="javascript:void(0)" class="ms-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Reject Leave">
-                                  <i class="fa fa-close text-danger" (click)="rejectLeave(item)" aria-hidden="true"></i>
+                                  <i class="fa fa-close text-danger" (click)="submitActionForLeave(item, 'Rejected')" aria-hidden="true"></i>
                                 </a>
                               </ng-container>
                             </div>
