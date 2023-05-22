@@ -55,7 +55,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   htmlText: any = null;
   eventsSubject: Subject<void> = new Subject<void>();
   activeMeetingTab: number = 1;
-  
+
   constructor(private user: UserService,
               private http: AjaxService,
               private nav:iNavigation,
@@ -107,7 +107,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   loadData() {
     this.isPageReady = false;
     this.isPageLoading = true;
-    this.http.get(`performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, true).then(res => {
+    this.http.get(`eps/performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, true).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.financialYear = res.ResponseBody[0].financialYear;
         let days = new Date(this.financialYear+1, res.ResponseBody[0].declarationEndMonth, 0).getDate();
@@ -219,7 +219,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       ErrorToast("New value is greater than targeted value");
       return;
     }
-    this.http.post("performance/updateEmployeeObjective", performvalue, true).then(res => {
+    this.http.post("eps/performance/updateEmployeeObjective", performvalue, true).then(res => {
       if (res.ResponseBody) {
         let value = res.ResponseBody;
         this.selectedObjective.updatedOn = value.updatedOn;
@@ -322,7 +322,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     if (this.selectedEmployee.length > 0)
       value.employeesMeeting = this.selectedEmployee.map(x => x.value);
 
-    this.http.post("meeting/manageMeeting", value, true).then(res => {
+    this.http.post("eps/meeting/manageMeeting", value, true).then(res => {
       if (res.ResponseBody) {
         this.allMeetings = res.ResponseBody;
         this.bindMeetingData();
@@ -345,7 +345,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   getEmployeesMeeting() {
     this.isPageReady = false;
     this.isPageLoading = true;
-    this.http.get(`meeting/getMeetingByEmpId/${this.employeeId}`, true).then(res => {
+    this.http.get(`eps/meeting/getMeetingByEmpId/${this.employeeId}`, true).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.allMeetings = res.ResponseBody;
         this.bindMeetingData();
@@ -374,7 +374,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
         x.extraMember = x.employeesMeeting.length - 1;
       else
         x.extraMember = 0;
-      
+
       x.daysDiffer = this.daysDiffer(x.meetingDate)
     });
     this.upcomingMeetings = this.allMeetings.filter(x => x.status == 0);
@@ -383,7 +383,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     if (this.upcomingMeetings.length > 0 || this.pendingMeetings.length > 0) {
       if (this.upcomingMeetings.length > 0)
         this.selectedMeeting = this.upcomingMeetings[0];
-      else 
+      else
         this.selectedMeeting = this.pendingMeetings[0];
 
       this.htmlText = JSON.parse(this.selectedMeeting.talkingPoints);
@@ -507,7 +507,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   completeMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.meetingId}/1`, true).then(res => {
+      this.http.get(`eps/meeting/updateMeetingStatus/${this.selectedMeeting.meetingId}/1`, true).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -529,7 +529,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   cancelMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.meetingId}/3`, true).then(res => {
+      this.http.get(`eps/meeting/updateMeetingStatus/${this.selectedMeeting.meetingId}/3`, true).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -551,7 +551,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   deleteMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.delete(`meeting/deleteMeeting/${this.selectedMeeting.meetingId}`, true).then(res => {
+      this.http.delete(`eps/meeting/deleteMeeting/${this.selectedMeeting.meetingId}`, true).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();

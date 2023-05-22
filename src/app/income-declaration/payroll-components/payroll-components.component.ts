@@ -80,9 +80,9 @@ export class PayrollComponentsComponent implements OnInit {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
         this.AllComponents = response.ResponseBody;
         this.RecurringComponent = this.AllComponents.filter (x => x.IsAdHoc == false);
-        //this.AdhocAllowance =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 1);
-        //this.AdhocBonus =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 2);
-        //this.AdhocDeduction =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 3);
+        this.AdhocAllowance =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 1);
+        this.AdhocBonus =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 2);
+        this.AdhocDeduction =  this.AllComponents.filter (x => x.IsAdHoc == true && x.AdHocId == 3);
         this.initForm();
         Toast("Record found");
         this.isReady = true;

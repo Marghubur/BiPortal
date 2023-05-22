@@ -324,19 +324,13 @@
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(2)">
                         <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 2}">2</div>
-                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 2}">NO ATTENDACE</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">LOP ADJUSTMENT</div>
                     </a>
                 </div>
                 <div class="col-md-2">
                     <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(3)">
                         <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 3}">3</div>
-                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 3}">LOP SUMMARY</div>
-                    </a>
-                </div>
-                <div class="col-md-2">
-                    <a href="javascript:void(0)" class="row align-items-center text-decoration-none" (click)="chnageActiveIndex(4)">
-                        <div class="col-md-1 rounded-items border border-primary text-primary" [ngClass]="{'active-index': activeIndex == 4}">4</div>
-                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">LOP REVERSAL</div>
+                        <div class="col-md-10" [ngClass]="{'text-primary-c fw-bold': activeIndex == 4}">LOP DETAILS</div>
                     </a>
                 </div>
             </div>
@@ -461,108 +455,10 @@
                 </div> -->
             </ng-container>
             <ng-container *ngIf="activeIndex == 2">
-                <h5>No Attendance</h5>
-                <div class="alert alert-info">Employee with 'No Attendance' on any day of the month can be seen below. Admin can take relevant action for such no attendance days.</div>
-                <div class="x_content">
-                    <div class="t-table t-list t-border col-md-12">
-                      <div class="hide-bar"></div>
-                      <div class="t-head">
-                        <div class="tr">
-                          <div class="th fe-index">
-                            <div class="t-filter t-index">
-                              <a href="javascript:void(0)" class="ps-3">#</a>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void(0)" class="pe-2">Employee</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void(0)" class="pe-2">Date</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void(0)" class="pe-2">Total Days</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void(0)" class="pe-2">Leave Type</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1 text-center">
-                            <div class="t-filter d-block text-center">
-                              <a href="javascript:void(0)">ACTIONS</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="t-body">
-                        <ng-container *ngIf="attendanceDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of attendanceDetail; let i=index;">
-                            <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                            <div class="td align-middle fe-1 text-truncate">
-                              {{item.EmployeeName}}
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                {{item.Date | date}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                {{item.TotalDays}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                {{item.LeaveType}}
-                              </div>
-                            </div>
-                            <div class="td fe-1">
-                              <div class="position-absolute table-containers">
-                                <div ngbDropdown class="d-inline-block">
-                                  <a href="javascript:void(0)" class="text-decoration-none" id="dropdownBasic1" ngbDropdownToggle>
-                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                  </a>
-                                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                                    <button ngbDropdownItem>Cancel Penalty</button>
-                                    <button ngbDropdownItem>Change Leave Type</button>
-                                    <button ngbDropdownItem>Deduct Leave</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </ng-container>
-                      </div>
-                      <ng-container *ngIf="attendanceDetail.length == 0">
-                        <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                          <p class="my-5 py-5">Record Not Found</p>
-                        </div>
-                      </ng-container>
-                    </div>
-                </div>
-                <!-- <div class="mt-3" *ngIf="isPageReady">
-                    <app-pagination [pagination]="attendanceData" (onPageChange)="GetFilterAttendanceResult($event)"></app-pagination>
-                </div> -->
-            </ng-container>
-            <ng-container *ngIf="activeIndex == 3">
                 <h5>Loss of Pay</h5>
                 <div class="alert alert-info">All employees 'LOP' summaries for this month will be displayed below. Admin can override LOP days if required.</div>
                 <div class="x_content">
-                    <!-- <div class="d-flex mb-3 align-items-center justify-content-between">
+                    <div class="d-flex mb-3 align-items-center justify-content-between">
                       <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa fa-plus pe-1"></i> Add Employee</button>
                       <div class="col-md-3 float-end">
                           <div class="form-group has-search">
@@ -571,7 +467,7 @@
                               placeholder="Search Component">
                           </div>
                       </div>
-                    </div> -->
+                    </div>
                     <div class="t-table t-list t-border col-md-12">
                       <div class="hide-bar"></div>
                       <div class="t-head">
@@ -616,12 +512,19 @@
                               </div>
                             </div>
                           </div>
+                          <div class="th fe-index">
+                            <div class="cell-wrapper">
+                              <div class="t-filter">
+                                <a href="javascript:void(0)" class="">Action</a>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div class="t-body">
                         <ng-container *ngIf="lossPayDetail.length > 0">
                           <div class="tr py-2" *ngFor="let item of lossPayDetail; let i=index;">
-                            <div class="td align-middle text-center fe-index">{{i+1}}</div>
+                            <div class="td align-middle fe-index ps-2">{{i+1}}</div>
                             <div class="td align-middle fe-1 text-truncate">
                               {{item.EmployeeName}}
                             </div>
@@ -632,17 +535,24 @@
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                <input type="text" class="form-control" [(ngModel)]="item.LOPAdjust">
+                                {{item.LOPAdjust}} days <span *ngIf="item.LeaveDeduct > 0">+ {{item.LeaveDeduct}} leave adjustment</span>
                               </div>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
-                                {{item.LOPAdjust > 0 ? item.LOPAdjust : item.ActualLOP}} days
+                                {{(item.LOPAdjust +item.LeaveDeduct)  > 0 ? (item.LOPAdjust +item.LeaveDeduct) : item.ActualLOP}} days
                               </div>
                             </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                <input type="text" class="form-control" [(ngModel)]="item.Comment">
+                            <div class="td align-middle text-truncate fe-1">
+                              <div class="cell-wrapper text-truncate">
+                                {{item.Comment}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-index">
+                              <div class="cell-wrapper text-center">
+                                <a href="javascript:void(0)" class="text-decoration-none" (click)="lopAdjustmentPopUp(item)">
+                                  <i class="fa fa-pencil-square-o"></i>
+                                </a>
                               </div>
                             </div>
                           </div>
@@ -659,11 +569,11 @@
                   <app-pagination [pagination]="lossPayData" (onPageChange)="GetFilterLosspayResult($event)"></app-pagination>
                 </div> -->
             </ng-container>
-            <ng-container *ngIf="activeIndex == 4">
-                <h5>Loss of Pay Reversal</h5>
+            <ng-container *ngIf="activeIndex == 3">
+                <h5>Loss of Pay Details</h5>
                 <div class="alert alert-info">In case of past months' LOP reversal', admin can add employees along with number of LOP days to be reversed.</div>
                 <div class="x_content">
-                    <!-- <div class="d-flex mb-3 align-items-center justify-content-between">
+                    <div class="d-flex mb-3 align-items-center justify-content-between">
                         <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa fa-plus pe-1"></i> Add Employee</button>
                         <div class="col-md-3 float-end">
                             <div class="form-group has-search">
@@ -672,7 +582,7 @@
                                 placeholder="Search Component">
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="t-table t-list t-border col-md-12">
                       <div class="hide-bar"></div>
                       <div class="t-head">
@@ -714,13 +624,6 @@
                             <div class="cell-wrapper">
                               <div class="t-filter">
                                 <a href="javascript:void(0)" class="pe-2">Comment</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <div class="t-filter">
-                                <a href="javascript:void(0)" class="pe-2">Action</a>
                               </div>
                             </div>
                           </div>
@@ -1954,7 +1857,7 @@
                               </div>
                             </div>
                             <div class="td align-middle text-truncate fe-1">
-                              <div class="cell-wrapper text-truncate">
+                              <div class="cell-wrapper">
                                 {{item.ClaimTitleType}}
                               </div>
                             </div>
@@ -3200,7 +3103,7 @@
 </div>
 <!-- Close Modal -->
 
-<!-- Modal -->
+<!-- Conform Payroll Modal -->
 <div class="modal fade" id="confirmPayrollFinalize" tabindex="-1" aria-labelledby="confirmPayrollFinalizeLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content px-4">
@@ -3220,3 +3123,72 @@
     </div>
   </div>
 </div>
+<!-- End -->
+
+<!--LOP Adjustment Modal -->
+<div class="modal fade" id="lopAdjustment" tabindex="-1" aria-labelledby="lopAdjustmentLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="lopAdjustmentLabel">LOP Adjustment</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedLOP != null">
+        <div class="col-md-12 row">
+          <div class="col-md-6">
+            <label for="" class="form-label">Actual LOP</label>
+            <p class="mb-0">{{selectedLOP.ActualLOP}} days</p>
+          </div>
+          <div class="col-md-6">
+            <label for="" class="form-label">LOP Adjustment</label>
+            <select class="form-select" [(ngModel)]="selectedLOP.LOPAdjust">
+              <option value="0">No Adjustment</option>
+              <option [value]="item" *ngFor="let item of days">{{item}}</option>
+            </select>
+          </div>
+        </div>
+        <ng-container *ngIf="selectedLOP.LOPAdjust < selectedLOP.ActualLOP">
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" (click)="adjustMoreLOP($event)">
+              <label class="form-check-label">
+                Do you want to adjust more LOP
+              </label>
+            </div>
+            <div class="col-md-12 d-none" data-name="deducetedLeaveContainer">
+              <fieldset class="mt-3">
+                <legend>Deducted Leave</legend>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label class="form-label">Leave Type</label>
+                    <select class="form-select">
+                      <option value=""></option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="" class="form-label">Leaves to be deducted</label>
+                    <select class="form-select" [(ngModel)]="selectedLOP.LeaveDeduct">
+                      <option value="0">0</option>
+                      <ng-container *ngFor="let item of days; let i= index;">
+                        <option [value]="item" *ngIf="i < (selectedLOP.ActualLOP - selectedLOP.LOPAdjust)">{{item}}</option>
+                      </ng-container>
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </ng-container>
+        <div class="mt-3">
+          <label for="" class="form-label">Comment</label>
+          <textarea rows="3" placeholder="Comments" class="form-control" [(ngModel)]="selectedLOP.Comment"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-c" (click)="saveAjustmentLeave()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->

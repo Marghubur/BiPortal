@@ -40,6 +40,7 @@ export class SalaryComponent implements OnInit {
   minDate: any = null;
   bonusForm: FormGroup;
   employeeName: string = null;
+  bonusComponent: Array<any> = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -253,9 +254,83 @@ export class SalaryComponent implements OnInit {
     })
   }
 
+  salaryStructureHistory() {
+    $('#slaryStructureHistory').modal('show');
+  }
+
+  gotoTaxCalculation() {
+    $('#newIncomeTaxRegime').modal('hide');
+    this.nav.navigateRoot(AdminTaxcalculation, null);
+  }
+
+  viewSalary() {
+    this.isSalaryDetail = !this.isSalaryDetail;
+  }
+
+  salaryBreakupPopup() {
+    $('#fullSalaryDetail').modal('show');
+  }
+
+  closeSalaryDetails() {
+    this.submitted = false;
+    $('#fullSalaryDetail').modal('hide');
+  }
+
+  onDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.bonusForm.controls["PayOutDate"].setValue(date);
+  }
+
+  initBonusForm() {
+    this.bonusForm = this.fb.group({
+      BonusId: new FormControl(1),
+      ComponentId: new FormControl(null, [Validators.required]),
+      Amount: new FormControl(null, [Validators.required]),
+      PayOutDate: new FormControl(null, [Validators.required]),
+      Status: new FormControl(2, [Validators.required]),
+      Note: new FormControl('')
+    })
+  }
+
+  get f() {
+    return this.bonusForm.controls;
+  }
+
+  addBonus() {
+    this.isLoading = true;
+    this.submitted = true;
+    if (this.bonusForm.invalid) {
+      ErrorToast("Please fill all the manditory fields");
+      this.isLoading = false;
+      return;
+    }
+    let value = this.bonusForm.value;
+    this.http.post("", value).then(res => {
+      if (res.ResponseBody) {
+        Toast("Bonus added successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  getBonusComponent() {
+    this.isLoading = true;
+    this.http.get('SalaryComponent/GetBonusComponents').then(res => {
+      if (res.ResponseBody) {
+        this.bonusComponent = res.ResponseBody;
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
   addBonusPopUp() {
     let user = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
     this.employeeName = user.FirstName + " " + user.LastName;
+    this.getBonusComponent();
     $('#addBonus').modal('show');
   }
 
@@ -287,71 +362,7 @@ export class SalaryComponent implements OnInit {
         break;
     }
   }
-
-  salaryStructureHistory() {
-    $('#slaryStructureHistory').modal('show');
-  }
-
-  gotoTaxCalculation() {
-    $('#newIncomeTaxRegime').modal('hide');
-    this.nav.navigateRoot(AdminTaxcalculation, null);
-  }
-
-  viewSalary() {
-    this.isSalaryDetail = !this.isSalaryDetail;
-  }
-
-  salaryBreakupPopup() {
-    $('#fullSalaryDetail').modal('show');
-  }
-
-  closeSalaryDetails() {
-    this.submitted = false;
-    $('#fullSalaryDetail').modal('hide');
-  }
-
-  onDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.bonusForm.controls["PayOutDate"].setValue(date);
-  }
-
-  initBonusForm() {
-    this.bonusForm = this.fb.group({
-      BonusId: new FormControl(1),
-      Bonus: new FormControl(null, [Validators.required]),
-      Amount: new FormControl(null, [Validators.required]),
-      PayOutDate: new FormControl(null, [Validators.required]),
-      Status: new FormControl(2, [Validators.required]),
-      Note: new FormControl('')
-    })
-  }
-
-  get f() {
-    return this.bonusForm.controls;
-  }
-
-  addBonus() {
-    this.isLoading = true;
-    this.submitted = true;
-    if (this.bonusForm.invalid) {
-      ErrorToast("Please fill all the manditory fields");
-      this.isLoading = false;
-      return;
-    }
-    let value = this.bonusForm.value;
-    this.http.post("", value).then(res => {
-      if (res.ResponseBody) {
-        Toast("Bonus added successfully");
-        this.isLoading = false;
-      }
-    }).catch(e => {
-      this.isLoading = false;
-    })
-  }
-
 }
-
-
 
 class MyAnnualSalary {
   Annual: number = 0;

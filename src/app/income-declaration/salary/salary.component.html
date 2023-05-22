@@ -443,8 +443,9 @@
         <form [formGroup]="bonusForm">
           <div>
             <label for="" class="form-label">BONUS</label>
-            <select class="form-select" formControlName="Bonus" [ngClass]="{'error-field': submitted && f.Bonus.errors !== null && f.Bonus.errors.required}">
-              <option value="0" disabled selected>Select Bonus</option>
+            <select class="form-select" formControlName="ComponentId" [ngClass]="{'error-field': submitted && f.ComponentId.errors !== null && f.ComponentId.errors.required}">
+              <option value=null disabled selected>Select Bonus Component</option>
+              <option [value]="item.ComponentId" *ngFor="let item of bonusComponent">{{item.ComponentFullName}} ({{item.ComponentId}})</option>
             </select>
           </div>
           <div class="mt-3">

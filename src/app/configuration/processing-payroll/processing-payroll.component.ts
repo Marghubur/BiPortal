@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { AjaxService } from 'src/providers/ajax.service';
+import { Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -15,7 +16,6 @@ export class ProcessingPayrollComponent implements OnInit {
   isLoading: boolean = false;
   submittedPayrollDate: Date = new Date();
   appliedLeaveDetail: Array<any> = [];
-  attendanceDetail: Array<any> = [];
   lossPayDetail: Array<any> = [];
   reverseLossPayDetail: Array<any> = [];
   newJoineeDetail: Array<any> = [];
@@ -38,7 +38,6 @@ export class ProcessingPayrollComponent implements OnInit {
   lwfOverrideDetail: Array<any> = [];
   isPageReady: boolean = false;
   leaveData: Filter = new Filter();
-  attendanceData: Filter = new Filter();
   lossPayData: Filter = new Filter();
   reverseLossPayData: Filter = new Filter();
   newJoineeData: Filter = new Filter();
@@ -62,11 +61,13 @@ export class ProcessingPayrollComponent implements OnInit {
   activeIndex: number = 1;
   payrollCalendar: Array<any> = [];
   selectedPayrollCalendar: any = null;
+  selectedLOP: any = null;
   // --------------------
   userDetail: any = null;
   runpayroll: string = "RunPayRoll";
   userName: string = null;
   allRunPayroll: RunPayroll = null
+  days: Array<number> = [];
 
   constructor(private http: AjaxService,
               private user: UserService,
@@ -82,9 +83,6 @@ export class ProcessingPayrollComponent implements OnInit {
     this.userDetail = this.user.getInstance();
     this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
     let runPayroll = new RunPayroll();
-    runPayroll.AppliedLeave = new AppliedLeave();
-    runPayroll.NoAttendance = new NoAttendance();
-    runPayroll.LOPSummary = new LOPSummary();
     runPayroll.NewJoinee = new NewJoinee();
     runPayroll.EmployeeExit = new EmployeeExit();
     runPayroll.FinalSettlement = new FinalSettlement();
@@ -105,9 +103,6 @@ export class ProcessingPayrollComponent implements OnInit {
     runPayroll.LWFOverRide = new LWFOverRide();
     localStorage.setItem(this.runpayroll, JSON.stringify(runPayroll));
     this.allRunPayroll = JSON.parse(localStorage.getItem(this.runpayroll));
-    this.appliedLeaveDetail.push(this.allRunPayroll.AppliedLeave);
-    this.attendanceDetail.push(this.allRunPayroll.NoAttendance);
-    this.lossPayDetail.push(this.allRunPayroll.LOPSummary);
     this.newJoineeDetail.push(this.allRunPayroll.NewJoinee);
     this.exitEmpDetail.push(this.allRunPayroll.EmployeeExit);
     this.settlementDetail.push(this.allRunPayroll.FinalSettlement);
@@ -149,19 +144,29 @@ export class ProcessingPayrollComponent implements OnInit {
 
   leaveAttendanceWagesPopUp() {
     this.activeIndex = 1;
-    $('#leaveAttendanceWages').modal('show');
+    this.isLoading = true;
+    // this.http.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true).then(res => {
+    this.http.get('runpayroll/getLeaveAndLOP/2023/4', true).then(res => {
+      if (res.ResponseBody) {
+        console.log(res.ResponseBody);
+        if (res.ResponseBody[0].length > 0)
+          this.appliedLeaveDetail = res.ResponseBody[0];
+
+        if (res.ResponseBody[1].length > 0)
+          this.lossPayDetail = res.ResponseBody[1];
+
+        $('#leaveAttendanceWages').modal('show');
+        Toast("Record found");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   GetFilterLeaveResult(e: Filter) {
     if(e != null) {
       this.leaveData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterAttendanceResult(e: Filter) {
-    if(e != null) {
-      this.attendanceData = e;
       this.loadData();
     }
   }
@@ -190,7 +195,7 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   saveLeaveAttendaceWage() {
-    if (this.activeIndex > 0 && this.activeIndex < 4) {
+    if (this.activeIndex > 0 && this.activeIndex < 3) {
       this.setLocalStoreValue();
       this.activeIndex = this.activeIndex + 1;
     } else {
@@ -206,6 +211,30 @@ export class ProcessingPayrollComponent implements OnInit {
     this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
     this.setLocalStoreValue();
     $('#leaveAttendanceWages').modal('hide');
+  }
+
+  lopAdjustmentPopUp(item: any) {
+    this.selectedLOP = item;
+    for (let i = 1; i <= this.selectedPayrollCalendar.EndDate; i++) {
+      this.days.push(i);
+    }
+    $('#lopAdjustment').modal('show');
+  }
+
+  adjustMoreLOP(e: any) {
+    let value = e.target.checked;
+    let elem = document.querySelector('div[data-name="deducetedLeaveContainer"]');
+    if (value == true) {
+      elem.classList.remove('d-none');
+    } else {
+      elem.classList.add('d-none');
+    }
+  }
+
+  saveAjustmentLeave() {
+    this.selectedLOP.LOPAdjust = Number(this.selectedLOP.LOPAdjust);
+    this.selectedLOP.LeaveDeduct = Number(this.selectedLOP.LeaveDeduct);
+    $('#lopAdjustment').modal('hide');
   }
 
   // ------------------------------Employee Changes
@@ -467,14 +496,14 @@ export class ProcessingPayrollComponent implements OnInit {
     }
   }
 
-  approveLeave(item: AppliedLeave) {
-    this.allRunPayroll.AppliedLeave.Status = 9;
-    this.allRunPayroll.AppliedLeave.Approver = this.userName;
+  approveLeave(item: any) {
+    // this.allRunPayroll.AppliedLeave.Status = 9;
+    // this.allRunPayroll.AppliedLeave.Approver = this.userName;
   }
 
-  rejectLeave(item: AppliedLeave) {
-    this.allRunPayroll.AppliedLeave.Status = 5;
-    this.allRunPayroll.AppliedLeave.Approver = this.userName;
+  rejectLeave(item: any) {
+    // this.allRunPayroll.AppliedLeave.Status = 5;
+    // this.allRunPayroll.AppliedLeave.Approver = this.userName;
   }
 
   setLocalStoreValue() {
@@ -483,32 +512,6 @@ export class ProcessingPayrollComponent implements OnInit {
 
 }
 
-
-class AppliedLeave{
-  AppliedLeaveId: number = 1;
-  EmployeeName: string = "Marghub";
-  Date: Date = new Date(2023, 6, 4);
-  TotalDays: number = 1;
-  LeaveType: string = 'Unpaid Leave';
-  Status: number = 2;
-  Approver: string =  ""
-}
-
-class NoAttendance{
-  NoAttendanceId: number = 1;
-  EmployeeName: string = "Marghub";
-  Date: Date = new Date(2023, 3, 4);
-  TotalDays: number = 1;
-  LeaveType: string = 'Unpaid Leave';
-}
-
-class LOPSummary{
-  LOPSummaryId: number = 1;
-  EmployeeName: string = "Raj Kumar";
-  ActualLOP: number = 21;
-  LOPAdjust: number = 0;
-  Comment: string = '';
-}
 
 class NewJoinee{
   JoineeId: number = 1;
@@ -692,9 +695,6 @@ class LWFOverRide {
 }
 
 class RunPayroll {
-  AppliedLeave: AppliedLeave;
-  NoAttendance: NoAttendance;
-  LOPSummary: LOPSummary;
   NewJoinee: NewJoinee;
   EmployeeExit: EmployeeExit;
   FinalSettlement: FinalSettlement;
