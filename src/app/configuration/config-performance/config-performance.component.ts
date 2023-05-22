@@ -54,7 +54,7 @@ export class ConfigPerformanceComponent implements OnInit {
     if (this.currentCompny.CompanyId > 0) {
       this.objectiveData.CompanyId = this.currentCompny.CompanyId;
       this.objectiveData.SearchString = "";
-      this.http.post("performance/getPerformanceObjective", this.objectiveData, true).then(res => {
+      this.http.post("eps/performance/getPerformanceObjective", this.objectiveData, true).then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
           this.isPageReady = true;
@@ -205,7 +205,7 @@ export class ConfigPerformanceComponent implements OnInit {
         value.description = data;
 
       value.tagRole = this.tagsRole.map(x => x.value);
-      this.http.post("performance/objectiveInsertUpdate", value, true).then(res => {
+      this.http.post("eps/performance/objectiveInsertUpdate", value, true).then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
           $('#addObjectiveModal').modal('hide');

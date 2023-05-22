@@ -137,17 +137,18 @@ export class ApprisalReviewComponent implements OnInit, AfterViewChecked {
 
     this.http.post("filter/pagination", this.employeeData, true).then((response: ResponseModel) => {
       this.employeeDetail = response.ResponseBody;
-      let i =0;
-      while (i < this.employeeDetail.length) {
-        let value  = JSON.parse(this.employeeDetail[i].ClientJson);
-        if (value == null)
-          this.employeeDetail[i].ClientJson = [];
-        else
-          this.employeeDetail[i].ClientJson = value;
-        i++;
-      }
+      // let i =0;
+      // while (i < this.employeeDetail.length) {
+      //   let value  = JSON.parse(this.employeeDetail[i].ClientJson);
+      //   if (value == null)
+      //     this.employeeDetail[i].ClientJson = [];
+      //   else
+      //     this.employeeDetail[i].ClientJson = value;
+      //   i++;
+      // }
       if (this.employeeDetail.length > 0) {
-        this.employeeData.TotalRecords = this.employeeDetail[0].Total;
+        // this.employeeData.TotalRecords = this.employeeDetail[0].Total;
+        this.employeeData.TotalRecords = this.employeeDetail.length;
         this.isEmpPageReady = true;
         this.isFileFound = true;
       } else {
@@ -415,5 +416,5 @@ export class ApprisalReviewComponent implements OnInit, AfterViewChecked {
   //       Toast(res.ResponseBody);
   //   })
   // }
-  
+
 }

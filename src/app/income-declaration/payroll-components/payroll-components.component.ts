@@ -153,11 +153,10 @@ export class PayrollComponentsComponent implements OnInit {
 
   initbonusForm() {
     this.BonusForm = this.fb.group({
-      ComponentName: new FormControl(''),
-      ComponentDescription: new FormControl(''),
+      ComponentId: new FormControl('', [Validators.required]),
+      ComponentDescription: new FormControl('', [Validators.required]),
       ComponentFullName: new FormControl(''),
-      IsAdHoc: new FormControl(true),
-      AdHocId: new FormControl(2)
+      AdHocId: new FormControl(0)
     });
   }
 
@@ -292,9 +291,14 @@ export class PayrollComponentsComponent implements OnInit {
 
   addNewBonus() {
     this.isLoading = true;
-    let value: PayrollComponentsModal = this.BonusForm.value;
-    value.AdHocId = 2;
-    value.IsAdHoc = true;
+    this.submitted = true;
+    if (this.BonusForm.invalid) {
+      ErrorToast("Please fill all the manditory fields");
+      this.isLoading = false;
+      return;
+    }
+    let value = this.BonusForm.value;
+    value.AdHocId = 0;
     if (value) {
       this.http.post("SalaryComponent/AddBonusComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody.length > 0) {
@@ -498,6 +502,10 @@ export class PayrollComponentsComponent implements OnInit {
       this.isLoading = false;
       WarningToast("Please upload atleast one record");
     }
+  }
+
+  get b() {
+    return this.BonusForm.controls;
   }
 }
 

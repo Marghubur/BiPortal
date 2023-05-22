@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -34,6 +35,12 @@ export class SalaryComponent implements OnInit {
   taxRegimeDetails: any = [];
   taxSlab: Array<any> = [];
   currentEmployee: any = null;
+  model: NgbDateStruct;
+  submitted: boolean = false;
+  minDate: any = null;
+  bonusForm: FormGroup;
+  employeeName: string = null;
+  bonusComponent: Array<any> = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -43,7 +50,9 @@ export class SalaryComponent implements OnInit {
   ngOnInit(): void {
     this.dataSetup();
     this.currentYear = new Date().getFullYear();
+    this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.loadData();
+    this.initBonusForm();
   }
 
   dataSetup() {
@@ -245,6 +254,86 @@ export class SalaryComponent implements OnInit {
     })
   }
 
+  salaryStructureHistory() {
+    $('#slaryStructureHistory').modal('show');
+  }
+
+  gotoTaxCalculation() {
+    $('#newIncomeTaxRegime').modal('hide');
+    this.nav.navigateRoot(AdminTaxcalculation, null);
+  }
+
+  viewSalary() {
+    this.isSalaryDetail = !this.isSalaryDetail;
+  }
+
+  salaryBreakupPopup() {
+    $('#fullSalaryDetail').modal('show');
+  }
+
+  closeSalaryDetails() {
+    this.submitted = false;
+    $('#fullSalaryDetail').modal('hide');
+  }
+
+  onDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.bonusForm.controls["PayOutDate"].setValue(date);
+  }
+
+  initBonusForm() {
+    this.bonusForm = this.fb.group({
+      BonusId: new FormControl(1),
+      ComponentId: new FormControl(null, [Validators.required]),
+      Amount: new FormControl(null, [Validators.required]),
+      PayOutDate: new FormControl(null, [Validators.required]),
+      Status: new FormControl(2, [Validators.required]),
+      Note: new FormControl('')
+    })
+  }
+
+  get f() {
+    return this.bonusForm.controls;
+  }
+
+  addBonus() {
+    this.isLoading = true;
+    this.submitted = true;
+    if (this.bonusForm.invalid) {
+      ErrorToast("Please fill all the manditory fields");
+      this.isLoading = false;
+      return;
+    }
+    let value = this.bonusForm.value;
+    this.http.post("", value).then(res => {
+      if (res.ResponseBody) {
+        Toast("Bonus added successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  getBonusComponent() {
+    this.isLoading = true;
+    this.http.get('SalaryComponent/GetBonusComponents').then(res => {
+      if (res.ResponseBody) {
+        this.bonusComponent = res.ResponseBody;
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  addBonusPopUp() {
+    let user = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
+    this.employeeName = user.FirstName + " " + user.LastName;
+    this.getBonusComponent();
+    $('#addBonus').modal('show');
+  }
+
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
@@ -273,30 +362,7 @@ export class SalaryComponent implements OnInit {
         break;
     }
   }
-
-  salaryStructureHistory() {
-    $('#slaryStructureHistory').modal('show');
-  }
-
-  gotoTaxCalculation() {
-    $('#newIncomeTaxRegime').modal('hide');
-    this.nav.navigateRoot(AdminTaxcalculation, null);
-  }
-
-  viewSalary() {
-    this.isSalaryDetail = !this.isSalaryDetail;
-  }
-
-  salaryBreakupPopup() {
-    $('#fullSalaryDetail').modal('show');
-  }
-
-  closeSalaryDetails() {
-    $('#fullSalaryDetail').modal('hide');
-  }
 }
-
-
 
 class MyAnnualSalary {
   Annual: number = 0;
