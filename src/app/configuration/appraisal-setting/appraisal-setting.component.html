@@ -33,7 +33,7 @@
                   <div class="th fe-2">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                        (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ApprisalName"
+                        (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.objectiveCatagoryType"
                         placeholder="Search by Apprisal Name">
                       <div class="t-filter" (click)="arrangeDetails(orderByApprisalNameAsc, 'ApprisalName')">
                         <a href="javascript:void()" class="pe-2">Appraisal Name</a>
@@ -44,13 +44,13 @@
                       </div>
                     </div>
                   </div>
-                  <div class="th fe-2">
+                  <div class="th fe-4">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                      (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ApprisalCyclePeriod"
+                      (keyup.enter)="filterRecords()"
                         placeholder="Search by Apprisal Cycle Period">
                       <div class="t-filter" (click)="arrangeDetails(orderByCyclePeriodAsc, 'ApprisalCyclePeriod')">
-                        <a href="javascript:void()" class="pe-2">Appraisal Cycle Period</a>
+                        <a href="javascript:void()" class="pe-2">Description</a>
                         <i class="fa fa-sort-amount-asc"
                         [ngClass]="{'d-none': orderByCyclePeriodAsc == null || !orderByCyclePeriodAsc }" aria-hidden="true"></i>
                       <i class="fa fa-sort-amount-desc"
@@ -58,12 +58,12 @@
                       </div>
                     </div>
                   </div>
-                  <div class="th fe-4">
+                  <div class="th fe-2">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" placeholder="Search by Description"
-                      (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.Description">
+                      (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()">
                       <div class="t-filter" (click)="arrangeDetails(orderByDescriptionAsc, 'Description')">
-                        <a href="javascript:void()" class="pe-2">Description</a>
+                        <a href="javascript:void()" class="pe-2">From Date</a>
                         <i class="fa fa-sort-amount-asc"
                           [ngClass]="{'d-none': orderByDescriptionAsc == null || !orderByDescriptionAsc }" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc"
@@ -88,16 +88,16 @@
                   <div class="tr py-2" *ngFor="let item of apprisalCycleDetail; let i=index;">
                     <div class="td align-middle text-center fe-index">{{i+1}}</div>
                     <div class="td align-middle fe-2 text-truncate">
-                      {{item.ApprisalName}}
-                    </div>
-                    <div class="td align-middle fe-2">
-                      <div class="cell-wrapper">
-                        {{item.ApprisalCyclePeriod | date}}
-                      </div>
+                      {{item.objectiveCatagoryType}}
                     </div>
                     <div class="td align-middle text-truncate fe-4">
                       <div class="cell-wrapper text-truncate">
-                        {{item.Description | date}}
+                        {{item.typeDescription}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{item.fromDate | date}}
                       </div>
                     </div>
                     <div class="td align-middle text-center fe-1">
@@ -224,7 +224,7 @@
         <button class="btn btn-primary-c" (click)="addApprisalCycle()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
           <span class="ps-2">
-           {{currentApprisalCycle.ApprisalCycleId == 0 ? 'Add' : 'Update'}} Apprisal
+           {{currentApprisalCycle.objectiveCatagoryType == null ? 'Add' : 'Update'}} Apprisal
           </span>
         </button>
       </div>
