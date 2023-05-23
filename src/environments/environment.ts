@@ -8,11 +8,11 @@ export const environment = {
   OAuthClientId: "1084985264281-ehe21udg412eesl9p6uhksoh3s2r8d0c.apps.googleusercontent.com",
   OAuthSecret: "7pxr3O8iM4SVSs8ozTC5tXts",
 
-  // baseDotNetUrl: "http://localhost:5000/api/",
-  // baseSpringUrl: "http://localhost:8090/api/",
+  baseDotNetUrl: "http://localhost:5000/api/",
+  baseSpringUrl: "http://localhost:8090/api/",
 
-  baseDotNetUrl: "http://tracker.io/dn/api/",
-  baseSpringUrl: "http://tracker.io/sb/api/eps/",
+  // baseDotNetUrl: "http://tracker.io/dn/api/",
+  // baseSpringUrl: "http://tracker.io/sb/api/eps/",
 
   FolderDelimiter: "\\"
 };
