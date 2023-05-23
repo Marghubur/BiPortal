@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Filter } from 'src/providers/userService';
@@ -42,11 +43,10 @@ export class AppraisalSettingComponent implements OnInit {
 
   initForm() {
     this.appraisalForm = this.fb.group({
-      ApprisalCycleId: new FormControl(this.currentApprisalCycle.ApprisalCycleId),
-      ApprisalName: new FormControl(this.currentApprisalCycle.ApprisalName, [Validators.required]),
-      FromDate: new FormControl(this.currentApprisalCycle.FromDate, [Validators.required]),
-      ToDate: new FormControl(this.currentApprisalCycle.ToDate, [Validators.required]),
-      Description: new FormControl(this.currentApprisalCycle.Description, [Validators.required])
+      objectiveCatagoryType: new FormControl(this.currentApprisalCycle.objectiveCatagoryType),
+      typeDescription: new FormControl(this.currentApprisalCycle.typeDescription, [Validators.required]),
+      fromDate: new FormControl(this.currentApprisalCycle.fromDate, [Validators.required]),
+      toDate: new FormControl(this.currentApprisalCycle.toDate, [Validators.required]),
     })
   }
 
@@ -62,6 +62,13 @@ export class AppraisalSettingComponent implements OnInit {
 
   loadData() {
     this.isPageReady = true;
+    this.http.post("eps/apprisalcatagory/get", this.apprisalData, true).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        this.apprisalCycleDetail = response.ResponseBody;
+      } else {
+        Toast("No record found. Please create one.")
+      }
+    });
   }
 
   resetFilter() {
@@ -71,26 +78,17 @@ export class AppraisalSettingComponent implements OnInit {
     this.apprisalData.StartIndex = 1;
     this.apprisalData.EndIndex = (this.apprisalData.PageSize * this.apprisalData.PageIndex);
     this.loadData();
-    this.apprisalDetail.ApprisalCycleId = 0;
-    this.apprisalDetail.ApprisalName=null;
-    this.apprisalDetail.Description=null;
+    this.apprisalDetail.objectiveCatagoryType = '';
+    this.apprisalDetail.typeDescription = null;
   }
 
   filterRecords() {
     let searchQuery = "";
     let delimiter = "";
     this.apprisalData.reset();
-    if(this.apprisalDetail.ApprisalName !== null && this.apprisalDetail.ApprisalName !== "") {
-      searchQuery += ` ApprisalName like '%${this.apprisalDetail.ApprisalName}%'`;
-    }
-
-    // if(this.apprisalDetail.ApprisalCyclePeriod !== null) {
-    //   searchQuery += ` ${delimiter} ApprisalCyclePeriod like '%${this.apprisalDetail.ApprisalCyclePeriod}%' `;
-    //     delimiter = "and";
-    // }
-    if(this.apprisalDetail.Description !== null ) {
-      searchQuery += ` ${delimiter} Description like '${this.apprisalDetail.Description}%' `;
-        delimiter = "and";
+    if(this.apprisalDetail.objectiveCatagoryType !== null && 
+      this.apprisalDetail.objectiveCatagoryType !== "") {
+      searchQuery += ` ObjectiveCatagoryType like '%${this.apprisalDetail.objectiveCatagoryType}%'`;
     }
 
     if(searchQuery !== "") {
@@ -198,9 +196,8 @@ export class AppraisalSettingComponent implements OnInit {
 }
 
 class ApprisalCycle {
-  ApprisalCycleId: number = 0;
-  ApprisalName: string = null;
-  FromDate: Date = null;
-  ToDate: Date = null;
-  Description: string = null;
+  objectiveCatagoryType: string = null;
+  typeDescription: string = null;
+  fromDate: Date = null;
+  toDate: Date = null;
 }
