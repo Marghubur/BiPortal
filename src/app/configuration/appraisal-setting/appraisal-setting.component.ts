@@ -44,7 +44,8 @@ export class AppraisalSettingComponent implements OnInit {
     this.appraisalForm = this.fb.group({
       ApprisalCycleId: new FormControl(this.currentApprisalCycle.ApprisalCycleId),
       ApprisalName: new FormControl(this.currentApprisalCycle.ApprisalName, [Validators.required]),
-      ApprisalCyclePeriod: new FormControl(this.currentApprisalCycle.ApprisalCyclePeriod, [Validators.required]),
+      FromDate: new FormControl(this.currentApprisalCycle.FromDate, [Validators.required]),
+      ToDate: new FormControl(this.currentApprisalCycle.ToDate, [Validators.required]),
       Description: new FormControl(this.currentApprisalCycle.Description, [Validators.required])
     })
   }
@@ -70,7 +71,6 @@ export class AppraisalSettingComponent implements OnInit {
     this.apprisalData.StartIndex = 1;
     this.apprisalData.EndIndex = (this.apprisalData.PageSize * this.apprisalData.PageIndex);
     this.loadData();
-    this.apprisalDetail.ApprisalCyclePeriod=null;
     this.apprisalDetail.ApprisalCycleId = 0;
     this.apprisalDetail.ApprisalName=null;
     this.apprisalDetail.Description=null;
@@ -84,10 +84,10 @@ export class AppraisalSettingComponent implements OnInit {
       searchQuery += ` ApprisalName like '%${this.apprisalDetail.ApprisalName}%'`;
     }
 
-    if(this.apprisalDetail.ApprisalCyclePeriod !== null) {
-      searchQuery += ` ${delimiter} ApprisalCyclePeriod like '%${this.apprisalDetail.ApprisalCyclePeriod}%' `;
-        delimiter = "and";
-    }
+    // if(this.apprisalDetail.ApprisalCyclePeriod !== null) {
+    //   searchQuery += ` ${delimiter} ApprisalCyclePeriod like '%${this.apprisalDetail.ApprisalCyclePeriod}%' `;
+    //     delimiter = "and";
+    // }
     if(this.apprisalDetail.Description !== null ) {
       searchQuery += ` ${delimiter} Description like '${this.apprisalDetail.Description}%' `;
         delimiter = "and";
@@ -157,11 +157,19 @@ export class AppraisalSettingComponent implements OnInit {
 		if (!this.fromDate && !this.toDate) {
 			this.fromDate = date;
 		} else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
-			this.toDate = date;
+      this.toDate = date;
 		} else {
-			this.toDate = null;
+      this.toDate = null;
 			this.fromDate = date;
 		}
+    if (this.toDate) {
+      let todate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+      this.appraisalForm.get('ToDate').setValue(todate);
+    }
+    if (this.fromDate) {
+      let fromdate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      this.appraisalForm.get('FromDate').setValue(fromdate);
+    }
 	}
 
 	isHovered(date: NgbDate) {
@@ -192,6 +200,7 @@ export class AppraisalSettingComponent implements OnInit {
 class ApprisalCycle {
   ApprisalCycleId: number = 0;
   ApprisalName: string = null;
-  ApprisalCyclePeriod: string = null;
+  FromDate: Date = null;
+  ToDate: Date = null;
   Description: string = null;
 }
