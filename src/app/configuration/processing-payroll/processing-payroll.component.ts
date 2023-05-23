@@ -505,10 +505,10 @@ export class ProcessingPayrollComponent implements OnInit {
 
     switch(requestState) {
       case 'Approved':
-        endPoint = `LeaveRequest/ApproveLeaveRequest`;
+        endPoint = `runpayroll/leaveApproval`;
         break;
       case 'Rejected':
-        endPoint = `LeaveRequest/RejectLeaveRequest`;
+        endPoint = `runpayroll/RejectLeaveRequest`;
         break;
     }
 
@@ -521,7 +521,7 @@ export class ProcessingPayrollComponent implements OnInit {
       LeaveTypeId: item.LeaveTypeId
     }
 
-    this.http.put(`${endPoint}`, currentResponse).then((response:ResponseModel) => {
+    this.http.post(`${endPoint}`, currentResponse, true).then((response:ResponseModel) => {
       if (response.ResponseBody) {
 
         Toast("Submitted Successfully");

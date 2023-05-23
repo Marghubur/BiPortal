@@ -68,6 +68,7 @@ export const WorkFlow = 'workflow';
 export const ConfigPerformance = 'configperformance';
 export const ManageWorkFlow = 'workflow/manageworkflow';
 export const ProcessingPayroll = 'processingpayroll';
+export const ApprisalSetting = 'apprisalsetting';
 
 // ********************** Configuration route ends  *******************
 
