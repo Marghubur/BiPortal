@@ -68,7 +68,6 @@ export const WorkFlow = 'workflow';
 export const ConfigPerformance = 'configperformance';
 export const ManageWorkFlow = 'workflow/manageworkflow';
 export const ProcessingPayroll = 'processingpayroll';
-export const Appraisal = 'appraisal';
 
 // ********************** Configuration route ends  *******************
 
@@ -78,6 +77,7 @@ export const Appraisal = 'appraisal';
 export const TeamBaseRoute = "admin/team"
 export const AdminNotification = 'notification';
 export const AdminApprovalRequest = 'request';
+export const Appraisal = 'appraisal';
 
 // ********************** Team route ends  *******************
 

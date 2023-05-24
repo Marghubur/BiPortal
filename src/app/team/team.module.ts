@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { TeamRoutingModule } from './team-routing.module';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
+import { AppraisalSettingComponent } from './appraisal-setting/appraisal-setting.component';
 import { NotificationComponent } from './notification/notification.component';
 import { UtilModule } from '../util/util.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +15,7 @@ import { CommonmodalModule } from '../commonmodal/commonmodal.module';
   declarations: [
     ApprovalRequestComponent,
     NotificationComponent,
+    AppraisalSettingComponent
   ],
   imports: [
     CommonModule,

@@ -10,7 +10,6 @@ import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.com
 import { ManageshiftComponent } from './manageshift/manageshift.component';
 import { ProductsComponent } from './products/products.component';
 import { ProcessingPayrollComponent } from './processing-payroll/processing-payroll.component';
-import { AppraisalSettingComponent } from './appraisal-setting/appraisal-setting.component';
 
 const routes: Routes = [
   { path: OfferLetter, component: OfferletterComponent},
@@ -21,8 +20,7 @@ const routes: Routes = [
   { path: ManageShift, component: ManageshiftComponent},
   { path: Products, component: ProductsComponent},
   { path: EmailConfiguration, component: EmailConfigComponent},
-  { path: ProcessingPayroll, component: ProcessingPayrollComponent},
-  { path: Appraisal, component: AppraisalSettingComponent}
+  { path: ProcessingPayroll, component: ProcessingPayrollComponent}
 ];
 
 @NgModule({
