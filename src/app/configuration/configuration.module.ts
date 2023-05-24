@@ -16,7 +16,6 @@ import { ManageshiftComponent } from './manageshift/manageshift.component';
 import { ProductsComponent } from './products/products.component';
 import { EmailConfigComponent } from './email-config/email-config.component';
 import { ProcessingPayrollComponent } from './processing-payroll/processing-payroll.component';
-import { AppraisalSettingComponent } from './appraisal-setting/appraisal-setting.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +27,7 @@ import { AppraisalSettingComponent } from './appraisal-setting/appraisal-setting
     ManageshiftComponent,
     ProductsComponent,
     EmailConfigComponent,
-    ProcessingPayrollComponent,
-    AppraisalSettingComponent
+    ProcessingPayrollComponent
   ],
   imports: [
     CommonModule,

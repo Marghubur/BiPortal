@@ -58,6 +58,14 @@ export class AppraisalSettingComponent implements OnInit {
   addAprisalCyclePopUp() {
     this.isSubmitted = false;
     this.currentApprisalCycle = new ApprisalCycle();
+    let date = new Date();
+    this.fromDate.day= date.getDate()
+    this.fromDate.month= date.getMonth() + 1;
+    this.fromDate.year= date.getFullYear();
+    date.setDate(date.getDate() +10 );
+    this.toDate.day= date.getDate()
+    this.toDate.month= date.getMonth() + 1;
+    this.toDate.year= date.getFullYear();
     this.initForm();
     $('#manageApprisal').modal('show');
   }
