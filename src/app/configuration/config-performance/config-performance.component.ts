@@ -5,6 +5,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
+import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
 
@@ -33,18 +34,19 @@ export class ConfigPerformanceComponent implements OnInit {
   empRoles:autoCompleteModal = null;
   roleId: number = 0;
   tagsRole: Array<any> = [];
-
+  selectedAppraisalCycle: any = null;
   constructor(private http: AjaxService,
               private fb: FormBuilder,
-              private local: ApplicationStorage) { }
+              private local: ApplicationStorage,
+              private nav: iNavigation) { }
 
   ngOnInit(): void {
-    this.objectiveData.SearchString = "1=1";
     this.currentCompny = this.local.findRecord("Companies")[0];
     this.empRoles = new autoCompleteModal();
     this.empRoles.data = [];
     this.empRoles.placeholder = "Role List";
     this.empRoles.isMultiSelect = true;
+    this.selectedAppraisalCycle = this.nav.getValue();
     this.loadData();
     this.initForm();
   }
@@ -52,8 +54,6 @@ export class ConfigPerformanceComponent implements OnInit {
   loadData() {
     this.isPageReady = false;
     if (this.currentCompny.CompanyId > 0) {
-      this.objectiveData.CompanyId = this.currentCompny.CompanyId;
-      this.objectiveData.SearchString = "";
       this.http.post("eps/performance/getPerformanceObjective", this.objectiveData, true).then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
@@ -69,7 +69,7 @@ export class ConfigPerformanceComponent implements OnInit {
   bindData(res: any) {
     if (res.ResponseBody.value0.length > 0) {
       this.objectiveDetails = res.ResponseBody.value0;
-      this.objectiveData.TotalRecords = this.objectiveDetails[0].total;
+      this.objectiveData.TotalRecords = this.objectiveDetails[0].Total;
     }
     else
       this.objectiveData.TotalRecords = 0;
@@ -137,19 +137,19 @@ export class ConfigPerformanceComponent implements OnInit {
 
   initForm() {
     this.objectForm = this.fb.group({
-      objectiveId: new FormControl(this.currentObject.objectiveId),
-      objective: new FormControl(this.currentObject.objective, [Validators.required]),
-      canManagerSee: new FormControl(this.currentObject.canManagerSee ? 'true' :'false', [Validators.required]),
-      isIncludeReview: new FormControl(this.currentObject.isIncludeReview),
-      tag: new FormControl(this.currentObject.tag),
-      companyId: new FormControl(this.currentCompny.CompanyId),
-      progressMeassureType: new FormControl(this.currentObject.progressMeassureType == 1 ? '1' : this.currentObject.progressMeassureType == 2 ? '2' : '3'),
-      startValue: new FormControl(this.currentObject.startValue, [Validators.required]),
-      targetValue: new FormControl(this.currentObject.targetValue, [Validators.required]),
-      description: new FormControl(''),
-      timeFrameStart: new FormControl(this.currentObject.timeFrameStart, [Validators.required]),
-      timeFrmaeEnd: new FormControl(this.currentObject.timeFrmaeEnd, [Validators.required]),
-      objectiveTypeId: new FormControl(this.currentObject.objectiveTypeId, [Validators.required])
+      ObjectiveId: new FormControl(this.currentObject.ObjectiveId),
+      Objective: new FormControl(this.currentObject.Objective, [Validators.required]),
+      CanManagerSee: new FormControl(this.currentObject.CanManagerSee ? 'true' :'false', [Validators.required]),
+      IsIncludeReview: new FormControl(this.currentObject.IsIncludeReview),
+      Tag: new FormControl(this.currentObject.Tag),
+      CompanyId: new FormControl(this.currentCompny.CompanyId),
+      ProgressMeassureType: new FormControl(this.currentObject.ProgressMeassureType == 1 ? '1' : this.currentObject.ProgressMeassureType == 2 ? '2' : '3'),
+      StartValue: new FormControl(this.currentObject.StartValue, [Validators.required]),
+      TargetValue: new FormControl(this.currentObject.TargetValue, [Validators.required]),
+      Description: new FormControl(''),
+      TimeFrameStart: new FormControl(this.currentObject.TimeFrameStart, [Validators.required]),
+      TimeFrmaeEnd: new FormControl(this.currentObject.TimeFrmaeEnd, [Validators.required]),
+      ObjectiveTypeId: new FormControl(this.currentObject.ObjectiveTypeId, [Validators.required])
     })
   }
 
@@ -165,34 +165,34 @@ export class ConfigPerformanceComponent implements OnInit {
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.objectForm.controls["timeFrameStart"].setValue(date);
+    this.objectForm.controls["TimeFrameStart"].setValue(date);
   }
 
   onEndDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.objectForm.controls["timeFrmaeEnd"].setValue(date);
+    this.objectForm.controls["TimeFrmaeEnd"].setValue(date);
   }
 
   addObjective() {
     this.isLoading = true;
     this.submitted = true;
     let errroCounter = 0;
-    if (this.objectForm.get('objective').errors !== null)
+    if (this.objectForm.get('Objective').errors !== null)
       errroCounter++;
 
-    if (this.objectForm.get('canManagerSee').errors !== null)
+    if (this.objectForm.get('CanManagerSee').errors !== null)
       errroCounter++;
 
-    if (this.objectForm.get('startValue').errors !== null)
+    if (this.objectForm.get('StartValue').errors !== null)
       errroCounter++;
 
-    if (this.objectForm.get('timeFrmaeEnd').errors !== null)
+    if (this.objectForm.get('TimeFrmaeEnd').errors !== null)
       errroCounter++;
 
-    if (this.objectForm.get('timeFrameStart').errors !== null)
+    if (this.objectForm.get('TimeFrameStart').errors !== null)
       errroCounter++;
 
-    if (this.objectForm.get('targetValue').errors !== null)
+    if (this.objectForm.get('TargetValue').errors !== null)
       errroCounter++;
 
     if (this.tagsRole.length == 0)
@@ -228,22 +228,23 @@ export class ConfigPerformanceComponent implements OnInit {
     this.objectiveData.StartIndex = 1;
     this.objectiveData.EndIndex = (this.objectiveData.PageSize * this.objectiveData.PageIndex);
     this.loadData();
-    this.objectDetail.objective="";
-    this.objectDetail.targetValue = 0;
-    this.objectDetail.timeFrameStart=new Date();
-    this.objectDetail.timeFrmaeEnd=new Date();
+    this.objectDetail.Objective="";
+    this.objectDetail.TargetValue = 0;
+    this.objectDetail.TimeFrameStart=new Date();
+    this.objectDetail.TimeFrmaeEnd=new Date();
   }
 
   filterRecords() {
     let searchQuery = "";
     let delimiter = "";
     this.objectiveData.reset();
-    searchQuery += ` Objective like '%${this.objectDetail.objective}%'`;
-    if(this.objectDetail.objective !== null && this.objectDetail.objective !== "") {
-        searchQuery += `${this.objectDetail.objective}`;
+    if(this.objectDetail.Objective !== null && this.objectDetail.Objective !== "") {
+      searchQuery += ` ${delimiter} Objective like '%${this.objectDetail.Objective}%' `;
+        delimiter = "and";
     }
-    else {
-      searchQuery += `${this.objectDetail.targetValue}`;
+    if(this.objectDetail.TargetValue !== null && this.objectDetail.TargetValue > 0) {
+      searchQuery += ` ${delimiter} TargetValue like '%${this.objectDetail.TargetValue}%' `;
+        delimiter = "and";
     }
     // if(this.objectDetail.timeFrameStart !== null) {
     //   searchQuery += ` ${delimiter} TimeFrameStart like '%${this.objectDetail.timeFrameStart}%' `;
@@ -278,9 +279,7 @@ export class ConfigPerformanceComponent implements OnInit {
       this.orderBTargetValueAsc = !flag;
 
     this.objectiveData = new Filter();
-    this.objectiveData.SearchString = "";
-    this.objectiveData.SortBy = FieldName;
-    this.objectiveData.SortDirection = Order;
+    this.objectiveData.SortBy = FieldName + " " + Order;
     this.loadData()
   }
 
@@ -294,21 +293,21 @@ export class ConfigPerformanceComponent implements OnInit {
   changeProgressMeassur(e: any) {
     let value = Number(e.target.value);
     if (value == 1) {
-      this.objectForm.get('targetValue').setValue(0);
-      this.objectForm.get('startValue').setValue(0);
+      this.objectForm.get('TargetValue').setValue(0);
+      this.objectForm.get('StartValue').setValue(0);
     }
   }
 
   editObjectivePopUp(item: Objective) {
     if (item) {
       this.currentObject = item;
-      this.currentObject.timeFrameStart = ToLocateDate(item.timeFrameStart);
-      this.startDate = { day: this.currentObject.timeFrameStart.getDate(), month: this.currentObject.timeFrameStart.getMonth() + 1, year: this.currentObject.timeFrameStart.getFullYear()};
-      this.currentObject.timeFrmaeEnd = ToLocateDate(this.currentObject.timeFrmaeEnd);
-      this.endDate = { day: this.currentObject.timeFrmaeEnd.getDate(), month: this.currentObject.timeFrmaeEnd.getMonth() + 1, year: this.currentObject.timeFrmaeEnd.getFullYear()};
-      this.htmlText = item.description;
+      this.currentObject.TimeFrameStart = ToLocateDate(item.TimeFrameStart);
+      this.startDate = { day: this.currentObject.TimeFrameStart.getDate(), month: this.currentObject.TimeFrameStart.getMonth() + 1, year: this.currentObject.TimeFrameStart.getFullYear()};
+      this.currentObject.TimeFrmaeEnd = ToLocateDate(this.currentObject.TimeFrmaeEnd);
+      this.endDate = { day: this.currentObject.TimeFrmaeEnd.getDate(), month: this.currentObject.TimeFrmaeEnd.getMonth() + 1, year: this.currentObject.TimeFrmaeEnd.getFullYear()};
+      this.htmlText = item.Description;
       this.tagsRole = [];
-      item.tagRole.forEach(y => {
+      item.TagRole.forEach(y => {
         let roles = this.empRoles.data.find(x => x.value == y);
         this.tagsRole.push(roles);
       })
@@ -329,17 +328,17 @@ export class ConfigPerformanceComponent implements OnInit {
 }
 
 class Objective {
-  objectiveId: number = 0;
-  objective: string = null;
-  canManagerSee: boolean = false;
-  isIncludeReview: boolean = false;
-  tag: string = null;
-  progressMeassureType: number = 1;
-  startValue: number = 0;
-  targetValue: number = 0;
-  timeFrameStart: Date = null;
-  timeFrmaeEnd: Date = null;
-  objectiveTypeId: number = 0;
-  description: string = null;
-  tagRole: Array<number> = [];
+  ObjectiveId: number = 0;
+  Objective: string = null;
+  CanManagerSee: boolean = false;
+  IsIncludeReview: boolean = false;
+  Tag: string = null;
+  ProgressMeassureType: number = 1;
+  StartValue: number = 0;
+  TargetValue: number = 0;
+  TimeFrameStart: Date = null;
+  TimeFrmaeEnd: Date = null;
+  ObjectiveTypeId: number = 0;
+  Description: string = null;
+  TagRole: Array<number> = [];
 }
