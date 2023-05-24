@@ -88,7 +88,9 @@
                   <div class="tr py-2" *ngFor="let item of apprisalCycleDetail;">
                     <div class="td align-middle text-center fe-index">{{item.Index}}</div>
                     <div class="td align-middle fe-2 text-truncate">
-                      {{item.ObjectiveCatagoryType}}
+                      <a href="javascript:voi(0)" (click)="navigateToObjective(item)">
+                        {{item.ObjectiveCatagoryType}}
+                      </a>
                     </div>
                     <div class="td align-middle text-truncate fe-4">
                       <div class="cell-wrapper text-truncate">

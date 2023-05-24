@@ -4,6 +4,8 @@ import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-b
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, ToLocateDate, Toast } from 'src/providers/common-service/common.service';
+import { ConfigBaseRoute, ConfigPerformance } from 'src/providers/constants';
+import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
 
@@ -31,6 +33,7 @@ export class AppraisalSettingComponent implements OnInit {
   constructor(private http: AjaxService,
               private fb: FormBuilder,
               private calendar: NgbCalendar,
+              private nav: iNavigation,
               public formatter: NgbDateParserFormatter) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
@@ -254,6 +257,10 @@ export class AppraisalSettingComponent implements OnInit {
 		const parsed = this.formatter.parse(input);
 		return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
 	}
+
+  navigateToObjective(item: ApprisalCycle) {
+    this.nav.navigate(ConfigBaseRoute + "/" + ConfigPerformance, item)
+  }
 }
 
 class ApprisalCycle {
