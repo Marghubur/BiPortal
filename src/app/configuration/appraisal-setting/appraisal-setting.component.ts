@@ -43,11 +43,11 @@ export class AppraisalSettingComponent implements OnInit {
 
   initForm() {
     this.appraisalForm = this.fb.group({
-      objectiveCatagoryId: new FormControl(this.currentApprisalCycle.objectiveCatagoryId),
-      objectiveCatagoryType: new FormControl(this.currentApprisalCycle.objectiveCatagoryType),
-      typeDescription: new FormControl(this.currentApprisalCycle.typeDescription, [Validators.required]),
-      fromDate: new FormControl(this.currentApprisalCycle.fromDate, [Validators.required]),
-      toDate: new FormControl(this.currentApprisalCycle.toDate, [Validators.required]),
+      ObjectiveCatagoryId: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryId),
+      ObjectiveCatagoryType: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryType),
+      TypeDescription: new FormControl(this.currentApprisalCycle.TypeDescription, [Validators.required]),
+      FromDate: new FormControl(this.currentApprisalCycle.FromDate, [Validators.required]),
+      ToDate: new FormControl(this.currentApprisalCycle.ToDate, [Validators.required]),
     })
   }
 
@@ -58,6 +58,7 @@ export class AppraisalSettingComponent implements OnInit {
   addAprisalCyclePopUp() {
     this.isSubmitted = false;
     this.currentApprisalCycle = new ApprisalCycle();
+    this.initForm();
     $('#manageApprisal').modal('show');
   }
 
@@ -67,7 +68,7 @@ export class AppraisalSettingComponent implements OnInit {
       if (response.ResponseBody) {
         this.apprisalCycleDetail = response.ResponseBody;
         if (this.apprisalCycleDetail.length > 0)
-          this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].total;
+          this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].Total;
         else
           this.apprisalData.TotalRecords = 0;
 
@@ -85,8 +86,8 @@ export class AppraisalSettingComponent implements OnInit {
     this.apprisalData.PageSize = 10;
     this.apprisalData.StartIndex = 1;
     this.apprisalData.EndIndex = (this.apprisalData.PageSize * this.apprisalData.PageIndex);
-    this.apprisalDetail.objectiveCatagoryType = null;
-    this.apprisalDetail.typeDescription = null;
+    this.apprisalDetail.ObjectiveCatagoryType = null;
+    this.apprisalDetail.TypeDescription = null;
     this.loadData();
   }
 
@@ -94,14 +95,14 @@ export class AppraisalSettingComponent implements OnInit {
     let searchQuery = "";
     let delimiter = "";
     this.apprisalData.reset();
-    if(this.apprisalDetail.objectiveCatagoryType !== null &&
-      this.apprisalDetail.objectiveCatagoryType !== "") {
-      searchQuery += ` ObjectiveCatagoryType like '%${this.apprisalDetail.objectiveCatagoryType}%'`;
+    if(this.apprisalDetail.ObjectiveCatagoryType !== null &&
+      this.apprisalDetail.ObjectiveCatagoryType !== "") {
+      searchQuery += ` ObjectiveCatagoryType like '%${this.apprisalDetail.ObjectiveCatagoryType}%'`;
       delimiter = "and";
     }
 
-    if(this.apprisalDetail.typeDescription !== null) {
-      searchQuery += ` ${delimiter} TypeDescription like '%${this.apprisalDetail.typeDescription}%' `;
+    if(this.apprisalDetail.TypeDescription !== null) {
+      searchQuery += ` ${delimiter} TypeDescription like '%${this.apprisalDetail.TypeDescription}%' `;
       delimiter = "and";
     }
 
@@ -133,11 +134,11 @@ export class AppraisalSettingComponent implements OnInit {
 
   editApprisalPopUp(item: ApprisalCycle) {
     this.currentApprisalCycle = item;
-    let date = new Date(this.currentApprisalCycle.fromDate);
+    let date = new Date(this.currentApprisalCycle.FromDate);
     this.fromDate.day= date.getDate()
     this.fromDate.month= date.getMonth() + 1;
     this.fromDate.year= date.getFullYear();
-    date = new Date(this.currentApprisalCycle.toDate);
+    date = new Date(this.currentApprisalCycle.ToDate);
     this.toDate.day= date.getDate()
     this.toDate.month= date.getMonth() + 1;
     this.toDate.year= date.getFullYear();
@@ -161,14 +162,14 @@ export class AppraisalSettingComponent implements OnInit {
       return;
     }
     let value = this.appraisalForm.value;
-    this.http.post("eps/apprisalcatagory/addApprisalType", value, true).then(res => {
+    this.http.post("eps/apprisalcatagory/addAppraisalType", value, true).then(res => {
       if (res.ResponseBody) {
         this.apprisalCycleDetail = res.ResponseBody;
         if (this.apprisalCycleDetail.length > 0)
-          this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].total;
+          this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].Total;
         else
           this.apprisalData.TotalRecords = 0;
-
+        $('#manageApprisal').modal('hide');
         Toast("Apprisal cycle inserted successfully");
         this.isLoading = false;
       }
@@ -186,14 +187,15 @@ export class AppraisalSettingComponent implements OnInit {
       return;
     }
     let value = this.appraisalForm.value;
-    this.http.put(`eps/apprisalcatagory/updateApprisalType/${this.currentApprisalCycle.objectiveCatagoryId}`, value, true).then(res => {
+    this.http.put(`eps/apprisalcatagory/updateAppraisalType/${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, true).then(res => {
       if (res.ResponseBody) {
         this.apprisalCycleDetail = res.ResponseBody;
         if (this.apprisalCycleDetail.length > 0)
-          this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].total;
+          this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].Total;
         else
           this.apprisalData.TotalRecords = 0;
 
+        $('#manageApprisal').modal('hide');
         Toast("Apprisal cycle inserted successfully");
         this.isLoading = false;
       }
@@ -213,11 +215,11 @@ export class AppraisalSettingComponent implements OnInit {
 		}
     if (this.toDate) {
       let todate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
-      this.appraisalForm.get('toDate').setValue(todate);
+      this.appraisalForm.get('ToDate').setValue(todate);
     }
     if (this.fromDate) {
       let fromdate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
-      this.appraisalForm.get('fromDate').setValue(fromdate);
+      this.appraisalForm.get('FromDate').setValue(fromdate);
     }
 	}
 
@@ -247,10 +249,11 @@ export class AppraisalSettingComponent implements OnInit {
 }
 
 class ApprisalCycle {
-  objectiveCatagoryType: string = null;
-  typeDescription: string = null;
-  fromDate: Date = null;
-  toDate: Date = null;
-  total: number = 0;
-  objectiveCatagoryId: number = 0;
+  ObjectiveCatagoryType: string = null;
+  TypeDescription: string = null;
+  FromDate: Date = null;
+  ToDate: Date = null;
+  Total: number = 0;
+  ObjectiveCatagoryId: number = 0;
+  Index: number = 0;
 }
