@@ -5,6 +5,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
+import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
 
@@ -33,18 +34,19 @@ export class ConfigPerformanceComponent implements OnInit {
   empRoles:autoCompleteModal = null;
   roleId: number = 0;
   tagsRole: Array<any> = [];
-
+  selectedAppraisalCycle: any = null;
   constructor(private http: AjaxService,
               private fb: FormBuilder,
-              private local: ApplicationStorage) { }
+              private local: ApplicationStorage,
+              private nav: iNavigation) { }
 
   ngOnInit(): void {
-    this.objectiveData.SearchString = "1=1";
     this.currentCompny = this.local.findRecord("Companies")[0];
     this.empRoles = new autoCompleteModal();
     this.empRoles.data = [];
     this.empRoles.placeholder = "Role List";
     this.empRoles.isMultiSelect = true;
+    this.selectedAppraisalCycle = this.nav.getValue();
     this.loadData();
     this.initForm();
   }
@@ -52,8 +54,6 @@ export class ConfigPerformanceComponent implements OnInit {
   loadData() {
     this.isPageReady = false;
     if (this.currentCompny.CompanyId > 0) {
-      this.objectiveData.CompanyId = this.currentCompny.CompanyId;
-      this.objectiveData.SearchString = "";
       this.http.post("eps/performance/getPerformanceObjective", this.objectiveData, true).then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
