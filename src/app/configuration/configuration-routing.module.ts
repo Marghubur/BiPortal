@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Annexure, ApprisalSetting, ConfigPerformance, EmailConfiguration, ManageShift, ManageWorkFlow, OfferLetter, ProcessingPayroll, Products, WorkFlow } from 'src/providers/constants';
+import { Annexure, Appraisal, ConfigPerformance, EmailConfiguration, ManageShift, ManageWorkFlow, OfferLetter, ProcessingPayroll, Products, WorkFlow } from 'src/providers/constants';
 import { OfferletterComponent } from './offerletter/offerletter.component';
 import { AnnexureComponent } from './annexure/annexure.component';
 import { ConfigPerformanceComponent } from './config-performance/config-performance.component';
@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: Products, component: ProductsComponent},
   { path: EmailConfiguration, component: EmailConfigComponent},
   { path: ProcessingPayroll, component: ProcessingPayrollComponent},
-  { path: ApprisalSetting, component: AppraisalSettingComponent}
+  { path: Appraisal, component: AppraisalSettingComponent}
 ];
 
 @NgModule({

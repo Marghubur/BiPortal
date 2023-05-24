@@ -139,7 +139,7 @@ export class ConfigPerformanceComponent implements OnInit {
     this.objectForm = this.fb.group({
       objectiveId: new FormControl(this.currentObject.objectiveId),
       objective: new FormControl(this.currentObject.objective, [Validators.required]),
-      objSeeType: new FormControl(this.currentObject.objSeeType ? 'true' :'false', [Validators.required]),
+      canManagerSee: new FormControl(this.currentObject.canManagerSee ? 'true' :'false', [Validators.required]),
       isIncludeReview: new FormControl(this.currentObject.isIncludeReview),
       tag: new FormControl(this.currentObject.tag),
       companyId: new FormControl(this.currentCompny.CompanyId),
@@ -149,7 +149,7 @@ export class ConfigPerformanceComponent implements OnInit {
       description: new FormControl(''),
       timeFrameStart: new FormControl(this.currentObject.timeFrameStart, [Validators.required]),
       timeFrmaeEnd: new FormControl(this.currentObject.timeFrmaeEnd, [Validators.required]),
-      objectiveType: new FormControl(this.currentObject.objectiveType, [Validators.required])
+      objectiveTypeId: new FormControl(this.currentObject.objectiveTypeId, [Validators.required])
     })
   }
 
@@ -180,7 +180,7 @@ export class ConfigPerformanceComponent implements OnInit {
     if (this.objectForm.get('objective').errors !== null)
       errroCounter++;
 
-    if (this.objectForm.get('objSeeType').errors !== null)
+    if (this.objectForm.get('canManagerSee').errors !== null)
       errroCounter++;
 
     if (this.objectForm.get('startValue').errors !== null)
@@ -331,7 +331,7 @@ export class ConfigPerformanceComponent implements OnInit {
 class Objective {
   objectiveId: number = 0;
   objective: string = null;
-  objSeeType: boolean = false;
+  canManagerSee: boolean = false;
   isIncludeReview: boolean = false;
   tag: string = null;
   progressMeassureType: number = 1;
@@ -339,7 +339,7 @@ class Objective {
   targetValue: number = 0;
   timeFrameStart: Date = null;
   timeFrmaeEnd: Date = null;
-  objectiveType: string = "Individual";
+  objectiveTypeId: number = 0;
   description: string = null;
   tagRole: Array<number> = [];
 }
