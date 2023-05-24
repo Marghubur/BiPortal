@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, ToLocateDate, Toast } from 'src/providers/common-service/common.service';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
 
@@ -17,9 +17,9 @@ export class AppraisalSettingComponent implements OnInit {
   appraisalForm: FormGroup;
   isLoading: boolean = false;
   isSubmitted: boolean = false;
-  orderByDescriptionAsc: boolean = null;
   orderByCyclePeriodAsc: boolean = null;
-  orderByApprisalNameAsc: boolean = null;
+  orderByTypeDescriptionAsc: boolean = null;
+  orderByObjectiveCatagoryTypeAsc: boolean = null;
   apprisalData: Filter = new Filter();
   apprisalDetail: ApprisalCycle = new ApprisalCycle();
   apprisalCycleDetail: Array<ApprisalCycle> = [];
@@ -43,6 +43,7 @@ export class AppraisalSettingComponent implements OnInit {
 
   initForm() {
     this.appraisalForm = this.fb.group({
+      objectiveCatagoryId: new FormControl(this.currentApprisalCycle.objectiveCatagoryId),
       objectiveCatagoryType: new FormControl(this.currentApprisalCycle.objectiveCatagoryType),
       typeDescription: new FormControl(this.currentApprisalCycle.typeDescription, [Validators.required]),
       fromDate: new FormControl(this.currentApprisalCycle.fromDate, [Validators.required]),
@@ -61,12 +62,19 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   loadData() {
-    this.isPageReady = true;
+    this.isPageReady = false;
     this.http.post("eps/apprisalcatagory/get", this.apprisalData, true).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.apprisalCycleDetail = response.ResponseBody;
+        if (this.apprisalCycleDetail.length > 0)
+          this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].total;
+        else
+          this.apprisalData.TotalRecords = 0;
+
+        this.isPageReady = true;
       } else {
-        Toast("No record found. Please create one.")
+        Toast("No record found. Please create one.");
+        this.isPageReady = true;
       }
     });
   }
@@ -77,18 +85,24 @@ export class AppraisalSettingComponent implements OnInit {
     this.apprisalData.PageSize = 10;
     this.apprisalData.StartIndex = 1;
     this.apprisalData.EndIndex = (this.apprisalData.PageSize * this.apprisalData.PageIndex);
-    this.loadData();
-    this.apprisalDetail.objectiveCatagoryType = '';
+    this.apprisalDetail.objectiveCatagoryType = null;
     this.apprisalDetail.typeDescription = null;
+    this.loadData();
   }
 
   filterRecords() {
     let searchQuery = "";
     let delimiter = "";
     this.apprisalData.reset();
-    if(this.apprisalDetail.objectiveCatagoryType !== null && 
+    if(this.apprisalDetail.objectiveCatagoryType !== null &&
       this.apprisalDetail.objectiveCatagoryType !== "") {
       searchQuery += ` ObjectiveCatagoryType like '%${this.apprisalDetail.objectiveCatagoryType}%'`;
+      delimiter = "and";
+    }
+
+    if(this.apprisalDetail.typeDescription !== null) {
+      searchQuery += ` ${delimiter} TypeDescription like '%${this.apprisalDetail.typeDescription}%' `;
+      delimiter = "and";
     }
 
     if(searchQuery !== "") {
@@ -105,22 +119,28 @@ export class AppraisalSettingComponent implements OnInit {
     } else {
       Order = 'DESC';
     }
-    if (FieldName == 'ApprisalName')
-      this.orderByApprisalNameAsc = !flag;
-    if (FieldName == 'ApprisalCyclePeriod')
+    if (FieldName == 'ObjectiveCatagoryType')
+      this.orderByObjectiveCatagoryTypeAsc = !flag;
+    if (FieldName == 'TypeDescription')
+      this.orderByTypeDescriptionAsc = !flag;
+    if (FieldName == 'FromDate')
       this.orderByCyclePeriodAsc = !flag;
-    if (FieldName == 'Description')
-      this.orderByDescriptionAsc = !flag;
 
     this.apprisalData = new Filter();
-    this.apprisalData.SearchString = "";
-    this.apprisalData.SortBy = FieldName;
-    this.apprisalData.SortDirection = Order;
+    this.apprisalData.SortBy = FieldName +" "+ Order;
     this.loadData()
   }
 
   editApprisalPopUp(item: ApprisalCycle) {
     this.currentApprisalCycle = item;
+    let date = new Date(this.currentApprisalCycle.fromDate);
+    this.fromDate.day= date.getDate()
+    this.fromDate.month= date.getMonth() + 1;
+    this.fromDate.year= date.getFullYear();
+    date = new Date(this.currentApprisalCycle.toDate);
+    this.toDate.day= date.getDate()
+    this.toDate.month= date.getMonth() + 1;
+    this.toDate.year= date.getFullYear();
     this.initForm();
     $('#manageApprisal').modal('show');
   }
@@ -141,9 +161,40 @@ export class AppraisalSettingComponent implements OnInit {
       return;
     }
     let value = this.appraisalForm.value;
-    this.http.post("", value).then(res => {
+    this.http.post("eps/apprisalcatagory/addApprisalType", value, true).then(res => {
       if (res.ResponseBody) {
-        Toast("Apprisal cycle insert/update successfully");
+        this.apprisalCycleDetail = res.ResponseBody;
+        if (this.apprisalCycleDetail.length > 0)
+          this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].total;
+        else
+          this.apprisalData.TotalRecords = 0;
+
+        Toast("Apprisal cycle inserted successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  updateApprisalCycle() {
+    this.isLoading = true;
+    this.isSubmitted = true;
+    if (this.appraisalForm.invalid) {
+      this.isLoading = false;
+      ErrorToast("Please correct all the mandaroty field marked red");
+      return;
+    }
+    let value = this.appraisalForm.value;
+    this.http.put(`eps/apprisalcatagory/updateApprisalType/${this.currentApprisalCycle.objectiveCatagoryId}`, value, true).then(res => {
+      if (res.ResponseBody) {
+        this.apprisalCycleDetail = res.ResponseBody;
+        if (this.apprisalCycleDetail.length > 0)
+          this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].total;
+        else
+          this.apprisalData.TotalRecords = 0;
+
+        Toast("Apprisal cycle inserted successfully");
         this.isLoading = false;
       }
     }).catch(e => {
@@ -162,11 +213,11 @@ export class AppraisalSettingComponent implements OnInit {
 		}
     if (this.toDate) {
       let todate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
-      this.appraisalForm.get('ToDate').setValue(todate);
+      this.appraisalForm.get('toDate').setValue(todate);
     }
     if (this.fromDate) {
       let fromdate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
-      this.appraisalForm.get('FromDate').setValue(fromdate);
+      this.appraisalForm.get('fromDate').setValue(fromdate);
     }
 	}
 
@@ -200,4 +251,6 @@ class ApprisalCycle {
   typeDescription: string = null;
   fromDate: Date = null;
   toDate: Date = null;
+  total: number = 0;
+  objectiveCatagoryId: number = 0;
 }
