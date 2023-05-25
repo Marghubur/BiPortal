@@ -8,6 +8,7 @@ import { ConfigBaseRoute, ConfigPerformance } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-appraisal-setting',
@@ -260,6 +261,17 @@ export class AppraisalSettingComponent implements OnInit {
 
   navigateToObjective(item: ApprisalCycle) {
     this.nav.navigate(ConfigBaseRoute + "/" + ConfigPerformance, item)
+  }
+
+  showOffCanvas() {
+    var offcanvasRight = document.getElementById('offcanvasRight')
+    var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight)
+
+    bsOffcanvas.show();
+  }
+
+  hideOffCanvas() {
+    
   }
 }
 
