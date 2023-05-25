@@ -93,7 +93,8 @@
                           {{item.ObjectiveCatagoryType}}
                         </a>
                       </div>
-                      <a href="javascript:void(0)" class="text-success pe-3">
+                      <a href="javascript:void(0)" (click)="showOffCanvas()" class="text-success pe-3" 
+                        type="button">
                         <i class="fa fa-play" aria-hidden="true"></i>
                       </a>
                     </div>
@@ -241,3 +242,13 @@
   </div>
 </div>
 <!-- Close Modal -->
+
+<div class="offcanvas offcanvas-end offcanvas-size-xl" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    
+  </div>
+</div>
