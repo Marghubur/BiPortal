@@ -30,6 +30,7 @@ export class AppraisalSettingComponent implements OnInit {
   hoveredDate: NgbDate | null = null;
 	fromDate: NgbDate | null;
 	toDate: NgbDate | null;
+  projectDetails: Array<any> = [];
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -43,6 +44,59 @@ export class AppraisalSettingComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.initForm();
+    this.projectDetails = [{
+      ProjectId: 1,
+      ProjectName: 'HiringBell Project',
+      ProjectDescription: "Create a website or edit the one you have and host it on Github pages. Hosting is free, without ads, and super fast. The editor is simple and optimized for mobile phones.",
+      ProjectStartedOn: new Date(),
+      ProjectMembers: [{
+        EmployeeId: 1,
+        FullName: 'Sarfaraz Nawaz',
+        Designation: 'Fullstack Developer',
+        AssignedOn: new Date
+      }, {
+        EmployeeId: 2,
+        FullName: 'Vivek Kumar',
+        Designation: 'Frontend Developer',
+        AssignedOn: new Date
+      }, {
+        EmployeeId: 3,
+        FullName: 'Rohit Kumar',
+        Designation: 'Datebase Developer',
+        AssignedOn: new Date
+      }, {
+        EmployeeId: 3,
+        FullName: 'Zeeshan Ali',
+        Designation: 'UI/UX Developer',
+        AssignedOn: new Date
+      }]
+    }, {
+      ProjectId: 2,
+      ProjectName: 'SchoolInMind',
+      ProjectDescription: "Increase velocity and reduce technical debt through code review by world-class engineers backed by automation. PullRequest provides code review with inline comments directly on your pull requests in GitHub.",
+      ProjectStartedOn: new Date(),
+      ProjectMembers: [{
+        EmployeeId: 1,
+        FullName: 'Sarfaraz Nawaz',
+        Designation: 'Fullstack Developer',
+        AssignedOn: new Date
+      }, {
+        EmployeeId: 2,
+        FullName: 'Vivek Kumar',
+        Designation: 'Frontend Developer',
+        AssignedOn: new Date
+      }, {
+        EmployeeId: 3,
+        FullName: 'Rohit Kumar',
+        Designation: 'Datebase Developer',
+        AssignedOn: new Date
+      }, {
+        EmployeeId: 3,
+        FullName: 'Zeeshan Ali',
+        Designation: 'UI/UX Developer',
+        AssignedOn: new Date
+      }]
+    }]
   }
 
   initForm() {
@@ -263,15 +317,49 @@ export class AppraisalSettingComponent implements OnInit {
     this.nav.navigate(ConfigBaseRoute + "/" + ConfigPerformance, item)
   }
 
-  showOffCanvas() {
-    var offcanvasRight = document.getElementById('offcanvasRight')
-    var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight)
-
-    bsOffcanvas.show();
+  showOffCanvas(item: any) {
+    if (item) {
+      this.currentApprisalCycle = item;
+      var offcanvasRight = document.getElementById('offcanvasRight');
+      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
+      bsOffcanvas.show();
+    }
   }
 
   hideOffCanvas() {
-    
+
+    $('#offcanvasRight').offcanvas('hide');
+  }
+
+  activeDeactiveAll(e: any, id: number) {
+    let value = e.target.checked;
+    let name = `activeMember${id}`;
+    let elem = document.querySelectorAll(`input[name=${name}]`);
+    for (let i = 0; i < elem.length; i++) {
+      if (value) {
+        (elem[i]  as HTMLInputElement).checked = true;
+      } else {
+        (elem[i]  as HTMLInputElement).checked = false;
+      }
+    }
+  }
+
+  checkActiveMember( id: number) {
+    let name = `activeMember${id}`;
+    let elem = document.querySelectorAll(`input[name=${name}]`);
+    let status = 0;
+    for (let i = 0; i < elem.length; i++) {
+      if ((elem[i]  as HTMLInputElement).checked) {
+        status++;
+      } else {
+        status--;
+      }
+    }
+    name = `activeAllMember${id}`;
+    if (status == elem.length)
+      (document.querySelector(`input[name=${name}]`) as HTMLInputElement).checked = true;
+    else
+      (document.querySelector(`input[name=${name}]`) as HTMLInputElement).checked = false;
   }
 }
 

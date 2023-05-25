@@ -93,7 +93,7 @@
                           {{item.ObjectiveCatagoryType}}
                         </a>
                       </div>
-                      <a href="javascript:void(0)" (click)="showOffCanvas()" class="text-success pe-3" 
+                      <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-success pe-3"
                         type="button">
                         <i class="fa fa-play" aria-hidden="true"></i>
                       </a>
@@ -245,10 +245,52 @@
 
 <div class="offcanvas offcanvas-end offcanvas-size-xl" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+    <h5 id="offcanvasRightLabel">{{currentApprisalCycle.ObjectiveCatagoryType}}</h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    
+    <div class="accordion" id="accordionAppraisal">
+      <div class="accordion-item">
+        <ng-container *ngFor="let item of projectDetails; let i=index;">
+          <h2 class="accordion-header" [attr.id]="'heading' + i">
+            <button class="accordion-button" [ngClass]="{'collapsed': i != 0}" type="button" data-bs-toggle="collapse" aria-expanded="false" [attr.data-bs-target]="'#collapsetwo' +i"  [aria-controls]="'collapsetwo' + i">
+              {{item.ProjectName}}
+            </button>
+          </h2>
+          <div [attr.id]="'collapsetwo' + i" class="accordion-collapse collapse" [ngClass]="{'show': i == 0}"  [aria-labelledby]="'heading' + i" data-bs-parent="#accordionAppraisal">
+            <div class="accordion-body">
+              <p class="card-text">{{item.ProjectDescription}}</p>
+              <h6>Team Members:</h6>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>
+                      <input name="activeAllMember{{item.ProjectId}}" (click)="activeDeactiveAll($event, item.ProjectId)" class="form-check-input" type="checkbox">
+                    </th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Assigned On</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let member of item.ProjectMembers">
+                    <td>
+                      <input (click)="checkActiveMember(item.ProjectId)" name="activeMember{{item.ProjectId}}" class="form-check-input" type="checkbox">
+                    </td>
+                    <td>{{member.FullName}}</td>
+                    <td>{{member.Designation}}</td>
+                    <td>{{member.AssignedOn | date}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="text-end mt-3">
+      <button class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+      <button class="btn btn-primary-c ms-2">Save</button>
+    </div>
   </div>
 </div>
