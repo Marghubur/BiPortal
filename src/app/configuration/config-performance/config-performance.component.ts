@@ -35,6 +35,7 @@ export class ConfigPerformanceComponent implements OnInit {
   roleId: number = 0;
   tagsRole: Array<any> = [];
   selectedAppraisalCycle: any = null;
+
   constructor(private http: AjaxService,
               private fb: FormBuilder,
               private local: ApplicationStorage,
@@ -47,6 +48,10 @@ export class ConfigPerformanceComponent implements OnInit {
     this.empRoles.placeholder = "Role List";
     this.empRoles.isMultiSelect = true;
     this.selectedAppraisalCycle = this.nav.getValue();
+    if (this.selectedAppraisalCycle == null || this.selectedAppraisalCycle.ObjectiveCatagoryId <= 0) {
+      ErrorToast("Please select a valid Appraisal cycle first");
+      return;
+    }
     this.loadData();
     this.initForm();
   }
@@ -54,7 +59,8 @@ export class ConfigPerformanceComponent implements OnInit {
   loadData() {
     this.isPageReady = false;
     if (this.currentCompny.CompanyId > 0) {
-      this.http.get(`eps/objective/get/${this.selectedAppraisalCycle.ObjectiveCatagoryId}`, true)
+      this.objectiveData.SearchString += ` And ObjectiveTypeId = ${this.selectedAppraisalCycle.ObjectiveCatagoryId} And CompanyId = ${this.currentCompny.CompanyId}`;
+      this.http.post("eps/performance/getPerformanceObjective", this.objectiveData, true)
       .then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
@@ -68,9 +74,11 @@ export class ConfigPerformanceComponent implements OnInit {
   }
 
   bindData(res: any) {
-    if (res.ResponseBody.length > 0) {
-      this.objectiveDetails = res.ResponseBody;
-      this.objectiveData.TotalRecords = 0; //this.objectiveDetails[0].Total;
+    if (res.ResponseBody.value0.length > 0) {
+      this.objectiveDetails = [];
+      this.objectiveDetails = res.ResponseBody.value0;
+      this.objectiveData = new Filter();
+      this.objectiveData.TotalRecords = this.objectiveDetails[0].Total;
     }
     else
       this.objectiveData.TotalRecords = 0;
@@ -150,7 +158,8 @@ export class ConfigPerformanceComponent implements OnInit {
       Description: new FormControl(''),
       TimeFrameStart: new FormControl(this.currentObject.TimeFrameStart, [Validators.required]),
       TimeFrmaeEnd: new FormControl(this.currentObject.TimeFrmaeEnd, [Validators.required]),
-      ObjectiveTypeId: new FormControl(this.currentObject.ObjectiveTypeId, [Validators.required])
+      ObjectiveTypeId: new FormControl(this.currentObject.ObjectiveTypeId, [Validators.required]),
+      TagRole: new FormControl()
     })
   }
 
@@ -159,6 +168,7 @@ export class ConfigPerformanceComponent implements OnInit {
   }
 
   addObjectivePopUp() {
+    this.submitted = false;
     this.currentObject = new Objective();
     this.initForm();
     $('#addObjectiveModal').modal('show');
@@ -199,13 +209,13 @@ export class ConfigPerformanceComponent implements OnInit {
     if (this.tagsRole.length == 0)
       errroCounter++;
 
+      this.objectForm.get("TagRole").setValue(this.tagsRole.map(x => x.value))
     let value = this.objectForm.value;
-    if (errroCounter === 0 && value.companyId > 0) {
+    if (errroCounter === 0 && value.CompanyId > 0) {
       let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
       if (data)
-        value.description = data;
+        value.Description = data;
 
-      value.tagRole = this.tagsRole.map(x => x.value);
       this.http.post("eps/performance/objectiveInsertUpdate", value, true).then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
@@ -313,6 +323,7 @@ export class ConfigPerformanceComponent implements OnInit {
         this.tagsRole.push(roles);
       })
       this.initForm();
+      this.submitted = false;
       $('#addObjectiveModal').modal('show');
     }
   }

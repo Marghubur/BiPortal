@@ -30,7 +30,7 @@
                       <a href="javascript:void()" class="ps-3">#</a>
                     </div>
                   </div>
-                  <div class="th fe-5">
+                  <div class="th fe-2">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
                         (keyup.enter)="filterRecords()" [(ngModel)]="objectDetail.Objective"
@@ -99,9 +99,10 @@
               <div class="t-body">
                 <ng-container *ngIf="objectiveDetails.length > 0">
                   <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
-                    <div class="td align-middle text-center fe-index">{{item.Index}}</div>
-                    <div class="td align-middle fe-5 text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}">
-                      {{item.Objective}}: {{item.Description}}
+                    <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
+                    <div class="td align-middle fe-2 text-truncate d-flex align-items-center">
+                      <div class="col-md-7 text-truncate">{{item.Objective}}</div>
+                      <i class=" ps-2 fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
