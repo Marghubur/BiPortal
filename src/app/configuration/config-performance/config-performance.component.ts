@@ -54,7 +54,8 @@ export class ConfigPerformanceComponent implements OnInit {
   loadData() {
     this.isPageReady = false;
     if (this.currentCompny.CompanyId > 0) {
-      this.http.post("eps/performance/getPerformanceObjective", this.objectiveData, true).then(res => {
+      this.http.get(`eps/objective/get/${this.selectedAppraisalCycle.ObjectiveCatagoryId}`, true)
+      .then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
           this.isPageReady = true;
@@ -67,9 +68,9 @@ export class ConfigPerformanceComponent implements OnInit {
   }
 
   bindData(res: any) {
-    if (res.ResponseBody.value0.length > 0) {
-      this.objectiveDetails = res.ResponseBody.value0;
-      this.objectiveData.TotalRecords = this.objectiveDetails[0].Total;
+    if (res.ResponseBody.length > 0) {
+      this.objectiveDetails = res.ResponseBody;
+      this.objectiveData.TotalRecords = 0; //this.objectiveDetails[0].Total;
     }
     else
       this.objectiveData.TotalRecords = 0;
