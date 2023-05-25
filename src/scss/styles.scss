@@ -1028,3 +1028,18 @@ a {
     font-size: 20px;
   }
 }
+
+/*---------------  OffCanvas -----------------------------*/
+
+.offcanvas-size-xl {
+  --bs-offcanvas-width: min(95vw, 700px) !important;
+}
+.offcanvas-size-xxl {
+  --bs-offcanvas-width: min(95vw, 90vw) !important;
+}
+.offcanvas-size-md { /* add Responsivenes to default offcanvas */
+  --bs-offcanvas-width: min(95vw, 400px) !important;
+}
+.offcanvas-size-sm {
+  --bs-offcanvas-width: min(95vw, 250px) !important;
+}
