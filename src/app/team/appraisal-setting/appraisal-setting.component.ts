@@ -328,6 +328,7 @@ export class AppraisalSettingComponent implements OnInit {
 
   hideOffCanvas() {
 
+    $('#offcanvasRight').offcanvas('hide');
   }
 
   activeDeactiveAll(e: any, id: number) {

@@ -286,38 +286,11 @@
             </div>
           </div>
         </ng-container>
-        </div>
       </div>
-      <!-- <div class="col-md-6" *ngFor="let item of projectDetails">
-        <div class="card">
-          <h5 class="card-header text-truncate" data-bs-toggle="tooltip" data-bs-placement="right" [title]="item.ProjectName">{{item.ProjectName}}</h5>
-          <div class="card-body">
-            <p class="card-text">{{item.ProjectDescription}}</p>
-            <h6>Team Members:</h6>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>
-                    <input (click)="activeDeactiveAll($event, item.ProjectId)" class="form-check-input" type="checkbox">
-                  </th>
-                  <th>Name</th>
-                  <th>Designation</th>
-                  <th>Assigned On</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let member of item.ProjectMembers">
-                  <td>
-                    <input (click)="checkActiveMember($event, item.ProjectId)" name="activeMember{{item.ProjectId}}" class="form-check-input" type="checkbox">
-                  </td>
-                  <td>{{member.FullName}}</td>
-                  <td>{{member.Designation}}</td>
-                  <td>{{member.AssignedOn | date}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div> -->
+    </div>
+    <div class="text-end mt-3">
+      <button class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+      <button class="btn btn-primary-c ms-2">Save</button>
+    </div>
   </div>
 </div>
