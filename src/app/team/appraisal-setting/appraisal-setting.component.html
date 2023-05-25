@@ -87,9 +87,14 @@
                 <ng-container *ngIf="apprisalCycleDetail.length > 0">
                   <div class="tr py-2" *ngFor="let item of apprisalCycleDetail;">
                     <div class="td align-middle text-center fe-index">{{item.Index}}</div>
-                    <div class="td align-middle fe-2 text-truncate">
-                      <a href="javascript:voi(0)" (click)="navigateToObjective(item)">
-                        {{item.ObjectiveCatagoryType}}
+                    <div class="td align-middle d-flex justify-content-between fe-2">
+                      <div class="text-truncate">
+                        <a href="javascript:void(0)" (click)="navigateToObjective(item)">
+                          {{item.ObjectiveCatagoryType}}
+                        </a>
+                      </div>
+                      <a href="javascript:void(0)" class="text-success pe-3">
+                        <i class="fa fa-play" aria-hidden="true"></i>
                       </a>
                     </div>
                     <div class="td align-middle text-truncate fe-4">
