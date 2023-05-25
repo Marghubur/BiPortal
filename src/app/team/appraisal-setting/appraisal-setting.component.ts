@@ -31,6 +31,7 @@ export class AppraisalSettingComponent implements OnInit {
 	fromDate: NgbDate | null;
 	toDate: NgbDate | null;
   projectDetails: Array<any> = [];
+  assignedEmployee: Array<any> = [];
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -65,7 +66,7 @@ export class AppraisalSettingComponent implements OnInit {
         Designation: 'Datebase Developer',
         AssignedOn: new Date
       }, {
-        EmployeeId: 3,
+        EmployeeId: 4,
         FullName: 'Zeeshan Ali',
         Designation: 'UI/UX Developer',
         AssignedOn: new Date
@@ -91,7 +92,7 @@ export class AppraisalSettingComponent implements OnInit {
         Designation: 'Datebase Developer',
         AssignedOn: new Date
       }, {
-        EmployeeId: 3,
+        EmployeeId: 4,
         FullName: 'Zeeshan Ali',
         Designation: 'UI/UX Developer',
         AssignedOn: new Date
@@ -331,9 +332,9 @@ export class AppraisalSettingComponent implements OnInit {
     $('#offcanvasRight').offcanvas('hide');
   }
 
-  activeDeactiveAll(e: any, id: number) {
+  activeDeactiveAll(e: any, item: any) {
     let value = e.target.checked;
-    let name = `activeMember${id}`;
+    let name = `activeMember${item.ProjectId}`;
     let elem = document.querySelectorAll(`input[name=${name}]`);
     for (let i = 0; i < elem.length; i++) {
       if (value) {
@@ -342,10 +343,28 @@ export class AppraisalSettingComponent implements OnInit {
         (elem[i]  as HTMLInputElement).checked = false;
       }
     }
+    if (item.ProjectMembers && item.ProjectMembers.length > 0) {
+      for (let j = 0; j < item.ProjectMembers.length; j++) {
+        if (value) {
+          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item.ProjectMembers[j].EmployeeId && x.ProjectId == item.ProjectId);
+          if (index < 0) {
+            this.assignedEmployee.push({
+              ProjectId: item.ProjectId,
+              EmployeeId: item.ProjectMembers[j].EmployeeId
+            });
+          }
+        } else {
+          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item.ProjectMembers[j].EmployeeId && x.ProjectId == item.ProjectId);
+          if (index > -1) {
+            this.assignedEmployee.splice(index, 1);
+          }
+        }
+      }
+    }
   }
 
-  checkActiveMember( id: number) {
-    let name = `activeMember${id}`;
+  checkActiveMember(e: any, projectId: number, employeeId: number) {
+    let name = `activeMember${projectId}`;
     let elem = document.querySelectorAll(`input[name=${name}]`);
     let status = 0;
     for (let i = 0; i < elem.length; i++) {
@@ -355,11 +374,45 @@ export class AppraisalSettingComponent implements OnInit {
         status--;
       }
     }
-    name = `activeAllMember${id}`;
+    name = `activeAllMember${projectId}`;
     if (status == elem.length)
       (document.querySelector(`input[name=${name}]`) as HTMLInputElement).checked = true;
     else
       (document.querySelector(`input[name=${name}]`) as HTMLInputElement).checked = false;
+
+    let value = e.target.checked;
+    if (value) {
+      let index = this.assignedEmployee.findIndex(x => x.EmployeeId == employeeId && x.ProjectId == projectId);
+      if (index < 0) {
+        this.assignedEmployee.push({
+          ProjectId: projectId,
+          EmployeeId: employeeId
+        })
+      }
+    } else {
+      let index = this.assignedEmployee.findIndex(x => x.EmployeeId == employeeId && x.ProjectId == projectId);
+      if (index >= 0) {
+        this.assignedEmployee.splice(index, 1);
+      }
+    }
+  }
+
+  saveAppraisal() {
+    this.isLoading = true;
+    if (this.assignedEmployee.length <=0) {
+      this.isLoading = false;
+      ErrorToast("Please select employee first");
+      return;
+    }
+    // this.http.post("", this.assignedEmployee).then(res => {
+    //   if (res.ResponseBody) {
+    //     this.isLoading = false;
+    //     Toast("Appraisal cycle updated successfully");
+    //   }
+    // }).catch(e => {
+    //   this.isLoading = false;
+    // })
+    console.log(this.assignedEmployee);
   }
 }
 
