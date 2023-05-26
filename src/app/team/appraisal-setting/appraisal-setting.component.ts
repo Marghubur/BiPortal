@@ -3,10 +3,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, ToLocateDate, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, ToLocateDate, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ConfigBaseRoute, ConfigPerformance } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 declare var bootstrap: any;
 
@@ -32,72 +32,26 @@ export class AppraisalSettingComponent implements OnInit {
 	toDate: NgbDate | null;
   projectDetails: Array<any> = [];
   assignedEmployee: Array<any> = [];
+  userDetail: any = null;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
               private calendar: NgbCalendar,
               private nav: iNavigation,
-              public formatter: NgbDateParserFormatter) {
+              public formatter: NgbDateParserFormatter,
+              private user: UserService) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
 
   ngOnInit(): void {
+    this.userDetail = this.user.getInstance();
+    if (this.userDetail.UserId <= 0) {
+      ErrorToast("Invalid user. Please login again;")
+      return;
+    }
     this.loadData();
     this.initForm();
-    this.projectDetails = [{
-      ProjectId: 1,
-      ProjectName: 'HiringBell Project',
-      ProjectDescription: "Create a website or edit the one you have and host it on Github pages. Hosting is free, without ads, and super fast. The editor is simple and optimized for mobile phones.",
-      ProjectStartedOn: new Date(),
-      ProjectMembers: [{
-        EmployeeId: 1,
-        FullName: 'Sarfaraz Nawaz',
-        Designation: 'Fullstack Developer',
-        AssignedOn: new Date
-      }, {
-        EmployeeId: 2,
-        FullName: 'Vivek Kumar',
-        Designation: 'Frontend Developer',
-        AssignedOn: new Date
-      }, {
-        EmployeeId: 3,
-        FullName: 'Rohit Kumar',
-        Designation: 'Datebase Developer',
-        AssignedOn: new Date
-      }, {
-        EmployeeId: 4,
-        FullName: 'Zeeshan Ali',
-        Designation: 'UI/UX Developer',
-        AssignedOn: new Date
-      }]
-    }, {
-      ProjectId: 2,
-      ProjectName: 'SchoolInMind',
-      ProjectDescription: "Increase velocity and reduce technical debt through code review by world-class engineers backed by automation. PullRequest provides code review with inline comments directly on your pull requests in GitHub.",
-      ProjectStartedOn: new Date(),
-      ProjectMembers: [{
-        EmployeeId: 1,
-        FullName: 'Sarfaraz Nawaz',
-        Designation: 'Fullstack Developer',
-        AssignedOn: new Date
-      }, {
-        EmployeeId: 2,
-        FullName: 'Vivek Kumar',
-        Designation: 'Frontend Developer',
-        AssignedOn: new Date
-      }, {
-        EmployeeId: 3,
-        FullName: 'Rohit Kumar',
-        Designation: 'Datebase Developer',
-        AssignedOn: new Date
-      }, {
-        EmployeeId: 4,
-        FullName: 'Zeeshan Ali',
-        Designation: 'UI/UX Developer',
-        AssignedOn: new Date
-      }]
-    }]
   }
 
   initForm() {
@@ -321,20 +275,17 @@ export class AppraisalSettingComponent implements OnInit {
   showOffCanvas(item: any) {
     if (item) {
       this.currentApprisalCycle = item;
-      var offcanvasRight = document.getElementById('offcanvasRight');
-      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
-      bsOffcanvas.show();
+      this.getProjects();
     }
   }
 
   hideOffCanvas() {
-
     $('#offcanvasRight').offcanvas('hide');
   }
 
   activeDeactiveAll(e: any, item: any) {
     let value = e.target.checked;
-    let name = `activeMember${item.ProjectId}`;
+    let name = `activeMember${item[0].ProjectId}`;
     let elem = document.querySelectorAll(`input[name=${name}]`);
     for (let i = 0; i < elem.length; i++) {
       if (value) {
@@ -343,18 +294,18 @@ export class AppraisalSettingComponent implements OnInit {
         (elem[i]  as HTMLInputElement).checked = false;
       }
     }
-    if (item.ProjectMembers && item.ProjectMembers.length > 0) {
-      for (let j = 0; j < item.ProjectMembers.length; j++) {
+    if (item && item.length > 0) {
+      for (let j = 0; j < item.length; j++) {
         if (value) {
-          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item.ProjectMembers[j].EmployeeId && x.ProjectId == item.ProjectId);
+          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item[j].EmployeeId && x.ProjectId == item[j].ProjectId);
           if (index < 0) {
             this.assignedEmployee.push({
               ProjectId: item.ProjectId,
-              EmployeeId: item.ProjectMembers[j].EmployeeId
+              EmployeeId: item[j].EmployeeId
             });
           }
         } else {
-          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item.ProjectMembers[j].EmployeeId && x.ProjectId == item.ProjectId);
+          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item[j].EmployeeId && x.ProjectId == item[j].ProjectId);
           if (index > -1) {
             this.assignedEmployee.splice(index, 1);
           }
@@ -413,6 +364,38 @@ export class AppraisalSettingComponent implements OnInit {
     //   this.isLoading = false;
     // })
     console.log(this.assignedEmployee);
+  }
+
+  getProjects() {
+    this.isLoading = true;
+    this.projectDetails = [];
+    this.http.get(`ps/projects/get/8`, true).then(res => {
+      if (res.ResponseBody) {
+        let result = res.ResponseBody.reduce((a, b) => {
+          a[b.ProjectId] = a[b.ProjectId] || [];
+          a[b.ProjectId].push(b);
+          return a;
+        }, Object.create(null));
+        
+        let keys = Object.keys(result);
+        let i = 0;
+        while(i < keys.length) {
+          this.projectDetails.push(result[keys[i]]);
+          i++;
+        }
+
+        this.isLoading = false;
+        Toast("Project details found");
+      } else {
+        WarningToast("Please add project and their team members first");
+        this.isLoading = false;
+      }
+      var offcanvasRight = document.getElementById('offcanvasRight');
+      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
+      bsOffcanvas.show();
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 }
 

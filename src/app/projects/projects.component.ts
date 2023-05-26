@@ -54,7 +54,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   editProjectDetail(item: ProjectModal) {
-    this.nav.navigate(ManageProject, item);
+    this.nav.navigate(ProjectBaseRoute + "/" + ManageProject, item);
   }
 
   GetFilterResult(e: any) {
