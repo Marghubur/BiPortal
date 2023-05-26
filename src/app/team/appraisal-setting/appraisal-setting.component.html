@@ -205,14 +205,14 @@
                 <div class="input-group">
                   <input
                     #dpToDate
-                    class="form-control"
+                    class="form-control" readonly
                     placeholder="yyyy-mm-dd"
                     name="dpToDate"
                     [ngClass]="{'error-field': isSubmitted && f.ToDate.errors !== null && f.ToDate.errors.required}"
                     [value]="formatter.format(toDate)"
                     (input)="toDate = validateInput(toDate, dpToDate.value)"
                   />
-                  <button class="btn btn-outline-secondary" (click)="datepicker.toggle()" type="button">
+                  <button class="btn btn-outline-secondary" disabled (click)="datepicker.toggle()" type="button">
                     <i class="fa fa-calendar"></i>
                   </button>
                 </div>
@@ -254,7 +254,7 @@
         <ng-container *ngFor="let item of projectDetails; let i=index;">
           <h2 class="accordion-header" [attr.id]="'heading' + i">
             <button class="accordion-button" [ngClass]="{'collapsed': i != 0}" type="button" data-bs-toggle="collapse" aria-expanded="false" [attr.data-bs-target]="'#collapsetwo' +i"  [aria-controls]="'collapsetwo' + i">
-              {{item.ProjectName}}
+              <h5>{{item.ProjectName}}</h5>
             </button>
           </h2>
           <div [attr.id]="'collapsetwo' + i" class="accordion-collapse collapse" [ngClass]="{'show': i == 0}"  [aria-labelledby]="'heading' + i" data-bs-parent="#accordionAppraisal">
