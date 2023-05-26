@@ -369,7 +369,7 @@ export class AppraisalSettingComponent implements OnInit {
   getProjects() {
     this.isLoading = true;
     this.projectDetails = [];
-    this.http.get(`ps/projects/get/8`, true).then(res => {
+    this.http.get(`ps/projects/get/${this.userDetail.UserId}`, true).then(res => {
       if (res.ResponseBody) {
         let result = res.ResponseBody.reduce((a, b) => {
           a[b.ProjectId] = a[b.ProjectId] || [];
