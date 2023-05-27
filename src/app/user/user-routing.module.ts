@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ApprovalRequest, Notification, ResetPassword, Taxcalculation, UserAttendance, UserDashboard, UserLeave, UserProfilePage, UserTimesheet, UserHoliday, ManageTimesheet, UserDocuments, UserDocumentsPage, UserProjectBaseRout, UserAccountsBaseRoute, UserCommonBaseRoute} from 'src/providers/constants';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
@@ -14,22 +13,18 @@ import { HolidayComponent } from './holiday/holiday.component';
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 
 const routes: Routes = [
-  { path: '', component: UserDashboardComponent},
-  { path: UserDashboard, component: UserDashboardComponent},
-  { path: UserAttendance, component: AttendanceComponent},
-  { path: UserLeave, component: LeaveComponent},
-  { path: UserTimesheet, component: TimesheetComponent},
-  { path: UserProfilePage, component: ProfileComponent},
-  { path: Taxcalculation, component: TaxcalculationComponent},
-  { path: Notification, component: NotificationComponent},
-  { path: ApprovalRequest, component: ApprovalRequestComponent},
-  { path: UserHoliday, component: HolidayComponent},
-  { path: ResetPassword, component: ResetpasswordComponent},
-  { path: ManageTimesheet, component: ManagetimesheetComponent},
-  { path: UserProjectBaseRout, loadChildren: () => import('../projects/projects.module').then(m => m.ProjectsModule)},
-  { path: UserAccountsBaseRoute, loadChildren: () => import('../user-income-declaration/user-income-declaration.module').then(m => m.UserIncomeDeclarationModule)},
-  { path: UserCommonBaseRoute, loadChildren: () => import('../commoncomponent/commoncomponent.module').then(m => m.CommoncomponentModule)}
-
+  // { path: '', component: UserDashboardComponent},
+  // { path: UserDashboard, component: UserDashboardComponent},
+  // { path: UserAttendance, component: AttendanceComponent},
+  // { path: UserLeave, component: LeaveComponent},
+  // { path: UserTimesheet, component: TimesheetComponent},
+  // { path: UserProfilePage, component: ProfileComponent},
+  // { path: Taxcalculation, component: TaxcalculationComponent},
+  // { path: Notification, component: NotificationComponent},
+  // { path: ApprovalRequest, component: ApprovalRequestComponent},
+  // { path: UserHoliday, component: HolidayComponent},
+  // { path: ResetPassword, component: ResetpasswordComponent},
+  // { path: ManageTimesheet, component: ManagetimesheetComponent}
 ];
 
 @NgModule({

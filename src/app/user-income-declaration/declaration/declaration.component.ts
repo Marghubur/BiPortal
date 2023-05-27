@@ -77,7 +77,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.userDetail = this.user.getInstance() as UserDetail;
     this.EmployeeId = this.userDetail.UserId;
     this.getDeclaration()
-
   }
 
   ngAfterViewChecked(): void {
@@ -168,10 +167,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.employeeEmail = response.Email;
 
         if(this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
-          // this.ExemptionDeclaration = this.addSubmittedFileIds(this.ExemptionDeclaration);
-          // this.OtherDeclaration = this.addSubmittedFileIds(this.OtherDeclaration);
-          // this.TaxSavingAlloance = this.addSubmittedFileIds(this.TaxSavingAlloance);
-          let rentDetail = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
+            let rentDetail = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
           for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
             let component =  this.employeeDeclaration.Declarations[index].DeclarationName;
             switch (component) {

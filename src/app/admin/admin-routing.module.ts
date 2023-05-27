@@ -100,13 +100,13 @@ const routes: Routes = [
   { path: ManageEmailTemplate, component: ManageEmailtemplateComponent},
   { path: CompanyLogo, component: CompanylogoComponent},
   { path: AdminMasterData, component: MasterDataComponent},
-  { path: TeamBaseRoute, loadChildren: () => import('../team/team.module').then(m => m.TeamModule)},
-  { path: ConfigBaseRoute, loadChildren: () => import('../configuration/configuration.module').then(m => m.ConfigurationModule)},
-  { path: ManageBaseRoute, loadChildren: () => import('../manage/manage.module').then(m => m.ManageModule)},
-  { path: ProjectBaseRoute, loadChildren: () => import('../projects/projects.module').then(m => m.ProjectsModule)},
-  { path: AccountsBaseRoute, loadChildren: () => import('../income-declaration/income-declaration.module').then(m => m.IncomeDeclarationModule)},
-  { path: LeaveBaseRoute, loadChildren: () => import('../leave-management/leave-management.module').then(m => m.LeaveManagementModule)},
-  { path: CommonBaseRoute, loadChildren: () => import('../commoncomponent/commoncomponent.module').then(m => m.CommoncomponentModule)}
+  // { path: TeamBaseRoute, loadChildren: () => import('../team/team.module').then(m => m.TeamModule)},
+  // { path: ConfigBaseRoute, loadChildren: () => import('../configuration/configuration.module').then(m => m.ConfigurationModule)},
+  // { path: ManageBaseRoute, loadChildren: () => import('../manage/manage.module').then(m => m.ManageModule)},
+  // { path: ProjectBaseRoute, loadChildren: () => import('../projects/projects.module').then(m => m.ProjectsModule)},
+  // { path: AccountsBaseRoute, loadChildren: () => import('../income-declaration/income-declaration.module').then(m => m.IncomeDeclarationModule)},
+  // { path: LeaveBaseRoute, loadChildren: () => import('../leave-management/leave-management.module').then(m => m.LeaveManagementModule)},
+  // { path: CommonBaseRoute, loadChildren: () => import('../commoncomponent/commoncomponent.module').then(m => m.CommoncomponentModule)}
 ];
 
 @NgModule({

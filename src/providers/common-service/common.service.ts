@@ -597,7 +597,7 @@ export class UserDetail {
   Mobile: string = null;
   Password: string = null;
   RefreshToken: string = null;
-  RoleId: number = null;
+  RoleId: number = 0;
   State: string = null;
   Token: string = null;
   TokenExpiryDuration: Date = null;
