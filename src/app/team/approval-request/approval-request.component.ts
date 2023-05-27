@@ -1,11 +1,11 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApprovalRequest } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, WarningToast } from 'src/providers/common-service/common.service';
-import { ItemStatus } from 'src/providers/constants';
+import { ItemStatus, UserType } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -54,6 +54,8 @@ export class ApprovalRequestComponent implements OnInit {
   orderByRequestedOnAsc: boolean = null;
   requestedOn: number = 0;
   missAttendanceStatus: number = 0;
+  isAdmin: boolean = false;
+  timesheetId: number = 0;
 
   constructor(
     private http: AjaxService,
@@ -76,8 +78,13 @@ export class ApprovalRequestComponent implements OnInit {
     this.requestFilter.SortBy = null;
     this.requestFilter.PageIndex = 1;
     this.requestFilter.SearchString = "";
+    if (this.currentUser.RoleId == UserType.Admin)
+      this.isAdmin = true;
+    else
+      this.isAdmin = false;
+
     this.loadAutoComplete();
-    this.itemStatus = 2;
+    this.itemStatus = 1;
     this.loadData();
   }
 
@@ -138,17 +145,18 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   openLeaveModal(state: string, request: any) {
-    $('#leaveModal').modal('show');
     this.requestState = state;
     this.requestModal = 1; // leave
     this.currentRequest = request;
     this.currentRequest["EmployeeName"] = request.FirstName + " " + request.LastName;
+    $('#leaveModal').modal('show');
   }
 
   openTimesheetModal(state: string, request: any) {
-    $('#timesheetModal').modal('show');
     this.requestState = state;
+    this.timesheetId = request[0].TimesheetId;
     this.currentTimesheet = request;
+    $('#timesheetModal').modal('show');
   }
 
   openAttendacneModal(state: string, request: any) {
@@ -192,18 +200,18 @@ export class ApprovalRequestComponent implements OnInit {
   filterRequest(e: any) {
     this.itemStatus = Number(e.target.value);
     this.requestUrl = `${this.attendanceController}/GetManagerRequestedData}`;
-    switch (this.active) {
-      case 1:
-        this.filterAttendance();
-        break;
-      case 2:
-        this.weekDistributed();
-        break;
-      case 3:
-        this.filterLeave();
-        break;
-    }
-    //this.loadData();
+    // switch (this.active) {
+    //   case 1:
+    //     this.filterAttendance();
+    //     break;
+    //   case 2:
+    //     this.weekDistributed();
+    //     break;
+    //   case 3:
+    //     this.filterLeave();
+    //     break;
+    // }
+    this.loadData();
   }
 
   filterAttendance() {
@@ -600,6 +608,13 @@ export class ApprovalRequestComponent implements OnInit {
         elem.classList.remove('show-collapse');
       }
     }
+  }
+
+  reloadPage() {
+    if (this.active != 4)
+      this.loadData();
+    else
+      this.loadAttendanceRequestDetail();
   }
 }
 

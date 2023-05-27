@@ -4,10 +4,10 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyHoliday } from 'src/app/adminmodal/admin-modals';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
-import { EmailLinkConfig, Holiday } from 'src/providers/constants';
+import { ErrorToast, Toast, ToLocateDate, UserDetail } from 'src/providers/common-service/common.service';
+import { EmailLinkConfig, Holiday, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -36,10 +36,12 @@ export class HolidayComponent implements OnInit {
   orderByFullDayAsc: boolean = null;
   mindate: any = null;
   maxdate: any = null;
+  isAdmin: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
               private local: ApplicationStorage,
+              private user: UserService,
               private nav: iNavigation) { }
 
   ngOnInit(): void {
@@ -49,6 +51,12 @@ export class HolidayComponent implements OnInit {
     this.mindate = {year: new Date().getFullYear(), month: 1, day: 1};
     this.maxdate = {year: new Date().getFullYear(), month: 12, day: 31};
     this.holidayDetail = new CompanyHoliday();
+    let userDetail = this.user.getInstance() as UserDetail;
+    if (userDetail.RoleId == UserType.Admin)
+      this.isAdmin = true;
+    else
+      this.isAdmin = false;
+
     if (!data) {
       return;
     } else {

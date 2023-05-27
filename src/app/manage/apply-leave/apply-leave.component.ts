@@ -130,6 +130,7 @@ export class ApplyLeaveComponent implements OnInit {
       if(this.userDetail && this.userDetail != null) {
         this.employeeId = this.userDetail.UserId;
         this.leaveDetail.EmployeeId = this.employeeId;
+        this.clearChart();
         this.loadData();
       } else {
         Toast("Invalid user. Please login again.")
@@ -166,10 +167,15 @@ export class ApplyLeaveComponent implements OnInit {
       value.RequestType = 1;
       value.Session = Number(value.Session);
       let reportingmanager = this.managerList.data.find(x => x.value == this.reportingManagerId);
-      if (reportingmanager) {
-        value.AssigneId = this.reportingManagerId;
-        value.AssigneeEmail = reportingmanager.email;
+      if(!reportingmanager) {
+        ErrorToast("Reporting manager is not selected. Please select one.");
+        this.submitted = false;
+        this.isLoading = false;
+        return;
       }
+
+      value.AssigneId = this.reportingManagerId;
+      value.AssigneeEmail = reportingmanager.email;
       this.leaveForm.get('IsProjectedFutureDateAllowed').setValue(this.currentLeaveType.IsFutureDateAllowed);
       if (this.leaveForm.get('EmployeeId').errors !== null) {
         WarningToast("Employee is not selected properly.");
@@ -304,7 +310,6 @@ export class ApplyLeaveComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    let year = new Date().getFullYear();
     let value = {
       EmployeeId: this.employeeId
     }
@@ -360,7 +365,6 @@ export class ApplyLeaveComponent implements OnInit {
       this.LeaveChart(i, this.leaveTypes[i]);
       i++;
     }
-    this.bindDonutChartData();
     this.LeaveReportChart();
     this.MonthlyStatusChart();
     this.leaveRequestForm();
@@ -375,6 +379,7 @@ export class ApplyLeaveComponent implements OnInit {
         this.buildChartData(item.nativeElement.getContext('2d'), i);
       });
     });
+    this.bindDonutChartData();
   }
 
   findHoliday(allHoliday: Array<any>) {
@@ -588,6 +593,7 @@ export class ApplyLeaveComponent implements OnInit {
 
   LoadDoughnutchart() {
     let label = [];
+    let consumeChart = null;
     label = this.chartDataset.map(x => x.PlanName);
     let bgColor = ['#E14D2A', '#3F0071', 'blue'];
     let data = [];
@@ -597,7 +603,7 @@ export class ApplyLeaveComponent implements OnInit {
     }
     let elem: any = document.getElementById('consumeLeaveChart');
     let ctx = elem.getContext('2d');
-    let consumeChart = new Chart(ctx, {
+    consumeChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: label,
@@ -616,6 +622,7 @@ export class ApplyLeaveComponent implements OnInit {
         cutout: 40,
       }
     });
+    consumeChart.update();
     this.graphInstances.push(consumeChart);
   }
 
@@ -834,5 +841,4 @@ export class ApplyLeaveComponent implements OnInit {
       // },
     };
   }
-
 }
