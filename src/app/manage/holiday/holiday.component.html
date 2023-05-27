@@ -15,7 +15,7 @@
                 <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
                   class="fa fa-paper-plane pe-1"></i> Email Link Config
                 </a>
-                <button class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa fa-plus-square pe-2"></i>Add Holiday</button>
+                <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa fa-plus-square pe-2"></i>Add Holiday</button>
               </div>
             </div>
           </div>
@@ -109,7 +109,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="th fe-index text-center">ACTIONS</div>
+                  <div class="th fe-index text-center" *ngIf="isAdmin">ACTIONS</div>
                 </div>
               </div>
               <div class="t-body">
@@ -150,7 +150,7 @@
                         {{holiday.Country}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-index">
+                    <div class="td align-middle fe-index"  *ngIf="isAdmin">
                       <div class="d-flex flex-row justify-content-evenly">
                         <a href="javascript:void(0)" (click)="editHoliday(holiday)">
                           <i class="fa fa-edit text-primary" aria-hidden="true"></i>

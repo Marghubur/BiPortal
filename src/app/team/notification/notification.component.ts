@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
-import { AdminNotification, AImage, Doc, Docx, EmailLinkConfig, JImage, Pdf, PImage, Txt } from 'src/providers/constants';
+import { AdminNotification, AImage, Doc, Docx, EmailLinkConfig, JImage, Pdf, PImage, Txt, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -47,6 +47,7 @@ export class NotificationComponent implements OnInit {
   baseUrl: string = "";
   viewer: any = null;
   renderedDocxFile: any = null;
+  isAdmin: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -61,6 +62,11 @@ export class NotificationComponent implements OnInit {
     this.notificationData = new Filter();
     this.notifiCationDetail = new  Notification();
     this.baseUrl = this.http.GetImageBasePath();
+    if (this.userDetail.RoleId == UserType.Admin)
+      this.isAdmin = true;
+    else
+      this.isAdmin = false;
+
     if (!data) {
       return;
     } else {

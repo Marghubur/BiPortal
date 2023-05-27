@@ -90,16 +90,17 @@ export class AttendanceComponent implements OnInit {
     this.toModel = null;
     this.time = new Date();
     this.DayValue = this.time.getDay();
+    let user = this.user.getInstance() as UserDetail;
     this.userDetail = this.nav.getValue();
-    if(this.userDetail) {
+    if(this.userDetail || user.RoleId != UserType.Admin) {
       this.isRedirected = true;
-      this.employeeId = this.userDetail.EmployeeUid;
-      this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
-      this.clientId = this.userDetail.CompanyId;
+      this.employeeId = this.userDetail != null ? this.userDetail.EmployeeUid : user.UserId;
+      this.userName = this.userDetail != null ? this.userDetail.FirstName + " " + this.userDetail.LastName : user.FirstName + " " + user.LastName;
+      this.clientId = this.userDetail != null ? this.userDetail.CompanyId : user.CompanyId;
       this.loadAttendanceData();
     } else {
       this.isRedirected = false;
-      this.userDetail = this.user.getInstance() as UserDetail;
+      this.userDetail = user;
       this.employeeId = 0;
       this.userName = "";
       this.loadData();

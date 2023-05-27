@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Company, EducationalDetail, Employment, Files, PersonalDetail, ProfessionalUser, Project, Skills } from 'src/app/user/profile/profile.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, ToLocateDate, UserDetail } from 'src/providers/common-service/common.service';
@@ -1860,4 +1859,143 @@ export class ManageComponent implements OnInit {
       item.removeAt(index);
     }
   }
+}
+
+export class ProfessionalUser {
+  EmployeeId: number = 0;
+  FileId: number = -1;
+  FirstName: string = '';
+  LastName: string = '';
+  ResumeHeadline: string = '';
+  Email: string= '';
+  Mobile: string = null;
+  Skills: Skills[] = [];
+  Companies: Company[] = [];
+  OtherDetails: OtherDetail = null;
+  EducationalDetails: EducationalDetail[] = [];
+  Projects: Project[] = [];
+  Accomplishments: Accomplishment = null;
+  PersonalDetail: PersonalDetail = new PersonalDetail();
+  Employments: Array<Employment> = [];
+}
+
+export class Employment {
+  EmploymentIndex: number = 0;
+  Organization: string = null;
+  Designation: string = null;
+  EmploymentStatus: string = null;
+  Years: number = 0;
+  Months: number = 0;
+  CurrentSalary: number = 0;
+  CurrencyType: string = '';
+  Experties: string = null;
+  JobProfile: string = null;
+}
+
+export class Company {
+  Role: string = '';
+  Industry: string = '';
+  Company_Name: string = '';
+  Functional_Area: string = '';
+  Department: string = '';
+  DesiredTypePermanent: string = '';
+  DesiredEmploymentType: string = '';
+  PreferredShift: string = '';
+  PreferredWorkLocation: string = '';
+  ExpectedSalary: string = '';
+  RoleCategory: string = '';
+  Designation: string = '';
+  CurrencyType: string = '';
+  CarrerIndex: number = 0;
+}
+
+export class OtherDetail {
+  Sumary: string = '';
+  Feedback: string = '';
+  Pin_Code: number = 0;
+  Resume_Headline: string= '';
+  Latest_Star_Rating: number = 0;
+  Work_Permit_For_USA: string = '';
+  Source_Of_Application: string = ''
+}
+
+export class EducationalDetail {
+  EducationIndex: number = 0;
+  Degree_Name: string = '';
+  Passout_Year: Date = null;
+  Specialization: string = '';
+  University_Name: string = '';
+  Course_Type: string = '';
+  Grading_System: string = '';
+  Course: string = '';
+}
+
+export class Files {
+  LocalImgPath: string = "";
+  FileName: string = "";
+  UserId: number = 0;
+  FileExtension: string = "";
+  FilePath: string = "";
+  FileUid: number = 0;
+  ProfileUid: string = "";
+  DocumentId: number = 0;
+  FileType: string = "";
+  FileSize: number = 0;
+  FileId: number = 0;
+}
+
+export class Skills {
+  Language: string = '';
+  Version: number = 0;
+  LastUsed: Date = null;
+  ExperienceInYear: number = 0;
+  ExperienceInMonth: number = 0;
+  SkillIndex: number = 0;
+}
+
+export class Project {
+  ProjectTitle: string = '';
+  ProjectTag: string = '';
+  ProjectWorkingYear: number = 0;
+  ProjectWorkingMonth: number = 0;
+  ProjectWorkedYear: number = 0;
+  ProjectWorkedMonth: number = 0;
+  ProjectStatus: string = '';
+  ClientName: string = '';
+  ProjectDetails: string = '';
+  RolesResponsibility: string = '';
+  TechnalogyStack: string = '';
+  ProjectDuration: string = '';
+  ProjectIndex: number = 0;
+}
+
+export class Accomplishment {
+  OnlineProfile: Array<string> = [];
+  WorkSample: Array<string> = [];
+  Research: Array<string> = [];
+  Presentation: Array<string> = [];
+  Patent: Array<string> = [];
+  Certification: Array<string> = [];
+}
+
+export class PersonalDetail {
+  DOB: Date = null;
+  Gender: string = null;
+  Address: string = '';
+  HomeTown: string = '';
+  PinCode: number = 0;
+  MaritalStatus: string = '';
+  Category: string = '';
+  DifferentlyAbled: string = '';
+  PermitUSA: string = '';
+  PermitOtherCountry: string = '';
+  LanguageDetails: LanguageDetail[] = [];
+}
+
+export class LanguageDetail {
+  Language: string = '';
+  LanguageRead: boolean = null;
+  LanguageWrite: boolean = null;
+  ProficiencyLanguage: string = '';
+  LanguageSpeak: boolean = null;
 }
