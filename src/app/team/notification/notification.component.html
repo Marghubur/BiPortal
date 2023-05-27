@@ -9,7 +9,7 @@
                 <app-breadcrums [title]="'Notification'" [subtitle]="'Details'"></app-breadcrums>
               </div>
             </div>
-            <div class="col-4">
+            <div class="col-4" *ngIf="isAdmin">
               <div class="x_header_title d-flex align-items-center justify-content-end">
                 <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
                   class="fa fa-paper-plane pe-1"></i> Email Link Config
@@ -104,7 +104,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="th fe-index text-center">ACTIONS</div>
+                  <div class="th fe-index text-center" *ngIf="isAdmin">ACTIONS</div>
                 </div>
               </div>
               <div class="t-body">
@@ -145,7 +145,7 @@
                         {{item.IsExpired == true ? 'Expired': 'Not Expired'}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-index">
+                    <div class="td align-middle fe-index" *ngIf="isAdmin">
                       <div class="d-flex flex-row justify-content-evenly">
                         <a href="javascript:void(0)" (click)="editNotificationPopup(item)">
                           <i class="fa fa-edit text-primary" aria-hidden="true"></i>

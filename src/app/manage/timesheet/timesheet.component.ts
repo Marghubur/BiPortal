@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AdminManageTimesheet, ItemStatus} from 'src/providers/constants';
+import { AdminManageTimesheet, ItemStatus, UserType} from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -83,22 +83,22 @@ export class TimesheetComponent implements OnInit {
       ForYear: dt.getFullYear(),
       ForMonth: dt.getMonth() + 1
     }
-
+    this.userDetail = this.user.getInstance() as UserDetail;
     this.DayValue = this.time.getDay();
     this.cachedData = this.nav.getValue();
-    if(this.cachedData) {
-      this.employeeId = this.cachedData.EmployeeUid;
-      this.clientId = this.cachedData.ClientUid;
-      this.userName = this.cachedData.FirstName + " " + this.cachedData.LastName;
+    if(this.cachedData ||  this.userDetail.RoleId != UserType.Admin) {
+      this.employeeId = this.cachedData != null ? this.cachedData.EmployeeUid :  this.userDetail.UserId;
+      this.clientId = this.cachedData != null ? this.cachedData.ClientUid : 0;
+      this.userName = this.cachedData != null ? this.cachedData.FirstName + " " + this.cachedData.LastName :  this.userDetail.FirstName + " " +  this.userDetail.LastName;
       this.isEmployeesReady = true;
     } else {
-      this.userDetail = this.user.getInstance() as UserDetail;
       this.employeeId = this.userDetail.UserId;
       this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
       //$('#loader').modal('show');
       this.employeeId =0;
     }
     this.loadData();
+
   }
 
   loadData() {
@@ -108,9 +108,13 @@ export class TimesheetComponent implements OnInit {
         this.applicationData = response.ResponseBody;
         this.employeesList.data = [];
         this.employeesList.placeholder = "Employee";
-        let employees = this.applicationData.Employees;
         this.employeesList.data = GetEmployees();
-        this.employeesList.className = "";
+        if (this.userDetail.RoleId != UserType.Admin) {
+          this.employeesList.className = "disabled-input";
+          this.findEmployee(this.userDetail.UserId);
+        } else {
+          this.employeesList.className = "";
+        }
         this.isEmployeesReady = true;
       }
     });
@@ -210,25 +214,28 @@ export class TimesheetComponent implements OnInit {
           className: "",
           placeholder: "Select Organization"
         }
-
-        let i = 0;
-        while(i < clients.length) {
-          this.clientDetail.data.push({
-            text: clients[i].CompanyName,
-            value: clients[i].CompanyId,
-          });
-          i++;
-        }
         this.isFormReady = false;
         this.NoClient = false;
         if (clients.length  == 1) {
           this.clientId = clients[0].CompanyId;
-          className: "disabled-input";
+          this.clientDetail.data.push({
+            text: clients[0].CompanyName,
+            value: clients[0].CompanyId,
+          });
+          this.clientDetail.className= "disabled-input";
           this.presentWeek();
         }
-        else
+        else {
+          let i = 0;
+          while(i < clients.length) {
+            this.clientDetail.data.push({
+              text: clients[i].CompanyName,
+              value: clients[i].CompanyId,
+            });
+            i++;
+          }
           this.clientId = 0;
-
+        }
       } else {
         this.isFormReady = false;
         this.NoClient = true;

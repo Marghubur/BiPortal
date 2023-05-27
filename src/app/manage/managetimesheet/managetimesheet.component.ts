@@ -25,12 +25,13 @@ export class ManagetimesheetComponent implements OnInit {
   totalExpectedBurnHrs: string = null;
   totalActualBurnHrs: string = null;
   weekNumber: string = null;
+  currentWeekTimesheet: any = {};
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
               private nav: iNavigation,
               private user: UserService
-              ) {}
+  ) {}
 
   ngOnInit(): void {
     this.pageData = this.nav.getValue();
@@ -64,6 +65,7 @@ export class ManagetimesheetComponent implements OnInit {
 
     this.http.post("Timesheet/GetWeekTimesheetData", data).then((response: ResponseModel) => {
       if(response.ResponseBody) {
+        this.currentWeekTimesheet = response.ResponseBody;
         this.buildPage(response.ResponseBody);
         Toast("Timesheet data loaded successfully.")
       }
@@ -132,7 +134,8 @@ export class ManagetimesheetComponent implements OnInit {
       ActualMinutes: new FormControl(actualMins),
       PresentDate: new FormControl(weekDetail.PresentDate),
       ExpectedBurnedMinutes: new FormControl(weekDetail.ExpectedBurnedMinutes),
-      ActualBurnedMinutes: new FormControl(weekDetail.ActualBurnedMinutes)
+      ActualBurnedMinutes: new FormControl(weekDetail.ActualBurnedMinutes),
+      IsWeekEnd: new FormControl(weekDetail.IsWeekEnd)
     });
   }
 
@@ -193,6 +196,7 @@ export class ManagetimesheetComponent implements OnInit {
     this.weeklyTimesheetDetail.ActualBurnedMinutes = this.combineIntoMinutes(actualTime[0], actualTime[1]);
     this.http.post(url, this.weeklyTimesheetDetail).then((response: ResponseModel) => {
       if (response.ResponseBody) {
+        this.currentWeekTimesheet = response.ResponseBody;
         this.buildPage(response.ResponseBody);
       }
       this.isLoading = false;
@@ -249,8 +253,8 @@ export class ManagetimesheetComponent implements OnInit {
   }
 
   clearTimesheet() {
-    if (this.weeklyTimesheetDetail)
-      this.buildPage(this.weeklyTimesheetDetail);
+    if (this.currentWeekTimesheet)
+      this.buildPage(this.currentWeekTimesheet);
   }
 
 }

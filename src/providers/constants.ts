@@ -78,6 +78,7 @@ export const TeamBaseRoute = "ems/team"
 export const AdminNotification = 'notification';
 export const AdminApprovalRequest = 'request';
 export const Appraisal = 'appraisal';
+export const ApprisalReview = 'apprisalreview';
 
 // ********************** Team route ends  *******************
 
@@ -128,7 +129,6 @@ export const ManageYearEnding = 'leavesetting/manageyearending';
 
 export const CommonBaseRoute = "ems/common"
 export const Performance = 'performance';
-export const ApprisalReview = 'apprisalreview';
 export const ServiceRequest = 'servicerequest';
 export const Documents = "documents";
 export const DocumentsPage = "documentspage/:path";
