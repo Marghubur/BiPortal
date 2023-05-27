@@ -4,7 +4,7 @@ import { DocumentUser, OnlineDocModel, employeeModel } from 'src/app/adminmodal/
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { AjaxService, tableConfig } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { Attendance, CommonBaseRoute, Documents, DocumentsPage, Employees, Files, ManageBaseRoute, ManageEmployee, Profile } from 'src/providers/constants';
+import { Attendance, Performance, Documents, DocumentsPage, Employees, Files, ManageEmployee, Profile } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 
@@ -331,7 +331,7 @@ export class ApprisalReviewComponent implements OnInit, AfterViewChecked {
       if (EmpId !== null && EmpId !== "") {
         this.http.get(`Employee/GetEmployeeById/${EmpId}/${status}`).then((response: ResponseModel) => {
           if (response.ResponseBody !== null) {
-            this.nav.navigate(ManageBaseRoute + "/" + Profile, response.ResponseBody);
+            this.nav.navigate(Profile, response.ResponseBody);
           }
         }).catch(e => {
           this.common.ShowToast("Got error to get data. Please contact to admin.");
@@ -355,12 +355,12 @@ export class ApprisalReviewComponent implements OnInit, AfterViewChecked {
 
 
   openDocument(path: OnlineDocModel) {
-    this.nav.navigate(CommonBaseRoute + "/" + DocumentsPage, path);
+    this.nav.navigate(DocumentsPage, path);
   }
 
   goToAttendancePage(user: any) {
     if(user) {
-      this.nav.navigate(ManageBaseRoute + "/" + Attendance, user);
+      this.nav.navigate(Attendance, user);
     } else {
       Toast("Please select an employee")
     }
@@ -368,7 +368,7 @@ export class ApprisalReviewComponent implements OnInit, AfterViewChecked {
 
   goToPerformancePage(user: any) {
     if(user) {
-      this.nav.navigate(CommonBaseRoute + "/" +Performance, user);
+      this.nav.navigate(Performance, user);
     } else {
       Toast("Please select an employee")
     }
@@ -381,7 +381,7 @@ export class ApprisalReviewComponent implements OnInit, AfterViewChecked {
     userDetail.PageName = Employees;
     userDetail.UserId = user.EmployeeUid,
     userDetail.Name = user.FirstName +" "+ user.LastName
-    this.nav.navigate(CommonBaseRoute + "/" + Documents, userDetail);
+    this.nav.navigate(Documents, userDetail);
   }
 
   exportData(fileType: number) {
