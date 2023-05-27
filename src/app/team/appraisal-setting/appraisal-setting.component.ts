@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, ToLocateDate, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { ConfigBaseRoute, ConfigPerformance } from 'src/providers/constants';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { ConfigPerformance } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -269,7 +269,7 @@ export class AppraisalSettingComponent implements OnInit {
 	}
 
   navigateToObjective(item: ApprisalCycle) {
-    this.nav.navigate(ConfigBaseRoute + "/" + ConfigPerformance, item)
+    this.nav.navigate(ConfigPerformance, item)
   }
 
   showOffCanvas(item: any) {
@@ -376,7 +376,7 @@ export class AppraisalSettingComponent implements OnInit {
           a[b.ProjectId].push(b);
           return a;
         }, Object.create(null));
-        
+
         let keys = Object.keys(result);
         let i = 0;
         while(i < keys.length) {
