@@ -5,9 +5,10 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, ToFixed } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
 import { AccountsBaseRoute, AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSummary, AdminTaxcalculation } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -41,18 +42,37 @@ export class SalaryComponent implements OnInit {
   bonusForm: FormGroup;
   employeeName: string = null;
   bonusComponent: Array<any> = [];
+  userDetail: UserDetail = new UserDetail();
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
+              private user: UserService,
               private local: ApplicationStorage,
               private fb:FormBuilder) { }
 
   ngOnInit(): void {
     this.dataSetup();
+    this.userDetail = this.user.getInstance() as UserDetail;
+    this.currentEmployee = this.userDetail;
+    this.EmployeeId = this.userDetail.UserId;
     this.currentYear = new Date().getFullYear();
+    this.initBonusForm();
+
+    if (this.userDetail.RoleId == 1) {
+      this.loadSalaryModule();
+    } else {
+      this.loadUserSalaryModule();
+    }
+  }
+
+
+  loadSalaryModule(): void {
     this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.loadData();
-    this.initBonusForm();
+  }
+
+  loadUserSalaryModule() {
+      this.getSalaryBreakup(this.EmployeeId);
   }
 
   dataSetup() {
@@ -70,7 +90,6 @@ export class SalaryComponent implements OnInit {
     this.http.get("TaxRegime/GetAllRegime").then(res => {
       if (res.ResponseBody) {
         this.taxRegimeDetails = res.ResponseBody;
-        this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
         let empRegime = this.currentEmployee.EmployeeCurrentRegime;
         if (empRegime == 0 || empRegime == null)
           this.active = this.taxRegimeDetails.taxRegimeDesc.find(x => x.IsDefaultRegime == 1).TaxRegimeDescId;
@@ -136,7 +155,6 @@ export class SalaryComponent implements OnInit {
     if (completeSalaryDetail && completeSalaryDetail.length > 0) {
       let presentMonth = new Date().getMonth() + 1;
       let singleDetail = completeSalaryDetail.find(x => x.MonthNumber == presentMonth);
-      this.currentEmployee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
       if (singleDetail) {
         this.salaryComponents = singleDetail.SalaryBreakupDetails;
         this.salaryComponents = this.salaryComponents.filter(x => x.IsIncludeInPayslip == true);
@@ -156,7 +174,7 @@ export class SalaryComponent implements OnInit {
           Bonus: 0,
           Other: other,
           Total: annual + other,
-          Effective: this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId).UpdatedOn,
+          Effective: this.currentEmployee.UpdatedOn,
           PFperMonth: other/12,
           Perks: 0,
           SalaryMonth: salary
@@ -328,7 +346,7 @@ export class SalaryComponent implements OnInit {
   }
 
   addBonusPopUp() {
-    let user = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
+    let user = this.currentEmployee;
     this.employeeName = user.FirstName + " " + user.LastName;
     this.getBonusComponent();
     $('#addBonus').modal('show');

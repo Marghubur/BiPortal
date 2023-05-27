@@ -3,9 +3,10 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccountsBaseRoute, AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary, Declaration } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -38,17 +39,33 @@ export class IncometaxComponent implements OnInit {
   applicationData: any = [];
   isEmployeesReady:boolean = false;
   isEmployeeSelect: boolean = false;
+  userDetail: UserDetail = new UserDetail();
 
   constructor(private nav: iNavigation,
-              private http: AjaxService) { }
+    private user: UserService,
+    private http: AjaxService) { }
 
   ngOnInit(): void {
     this.currentYear = new Date().getFullYear();
-    this.EmployeeId = this.nav.getValue();
+    this.userDetail = this.user.getInstance() as UserDetail;
+    this.EmployeeId = this.userDetail.UserId;
+
+    if (this.userDetail.RoleId == 1) {
+      this.loadTaxModule();
+    } else {
+      this.loadUserTaxModule();
+    }
+  }
+
+  loadTaxModule(): void {
     if(this.EmployeeId != null || this.EmployeeId > 0)
       this.loadData();
     else
       this.getEmployees();
+  }
+
+  loadUserTaxModule() {
+    this.loadData();
   }
 
   getIncomeTaxDetail(id: any) {
@@ -267,15 +284,15 @@ export class IncometaxComponent implements OnInit {
   activateMe(ele: string) {
     switch (ele) {
       case "declaration-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminDeclaration, null);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminDeclaration, null);
         break;
       case "salary-tab":
         break;
       case "summary-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSummary, null);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminSummary, null);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminPreferences, null);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminPreferences, null);
         break;
     }
   }
@@ -283,10 +300,10 @@ export class IncometaxComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "MySalary":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSalary, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminSalary, this.cachedData);
         break;
       case "PaySlips":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminPaySlip, this.cachedData);
+        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminPaySlip, this.cachedData);
         break;
       case "IncomeTax":
         break;

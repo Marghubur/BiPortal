@@ -3,10 +3,11 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccountsBaseRoute, AdminDeclaration, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { EmployeeDetail } from 'src/app/adminmodal/admin-modals';
+import { UserService } from 'src/providers/userService';
 
 @Component({
   selector: 'app-preferences',
@@ -25,8 +26,10 @@ export class PreferencesComponent implements OnInit {
   EmployeeId: number = 0;
   SectionIsReady: boolean = false;
   isEmployeeSelect: boolean = false;
+  userDetail: UserDetail = new UserDetail();
 
   constructor(private nav: iNavigation,
+              private user: UserService,
               private http: AjaxService) { }
 
   ngOnInit(): void {
@@ -41,7 +44,23 @@ export class PreferencesComponent implements OnInit {
       RegisteredLocation: 'Telangana',
       LWFStatus: "Disabled"
     }
+                
+    this.userDetail = this.user.getInstance();
+    this.EmployeeId = this.userDetail.UserId;
+
+    if (this.userDetail.RoleId == 1) {
+      this.loadPreferences();
+    } else {
+      this.loadUserPreferences();
+    }
+  }
+
+  loadPreferences(): void {
     this.getEmployees();
+  }
+
+  loadUserPreferences(): void {
+    this.LoadData();
   }
 
   getPreference(id: any) {
@@ -82,10 +101,10 @@ export class PreferencesComponent implements OnInit {
         this.applicationData = response.ResponseBody;
         this.employeesList.data = [];
         this.employeesList.placeholder = "Employee";
-        let employees = this.applicationData.Employees;
         this.employeesList.data = GetEmployees();
         this.employeesList.className = "";
 
+        this.LoadData();
         this.isPreferenceReady = true;
       }
     });

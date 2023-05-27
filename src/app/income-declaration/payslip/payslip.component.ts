@@ -3,9 +3,10 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AccountsBaseRoute, AdminDeclaration, AdminIncomeTax, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
 
 @Component({
   selector: 'app-payslip',
@@ -31,17 +32,33 @@ export class PayslipComponent implements OnInit {
   payslipYear: Array<number> =[];
   payslipschedule: Array<any> = [];
   isFileFound: boolean = false;
+  userDetail: UserDetail = new UserDetail();
 
   constructor(private nav: iNavigation,
               private local: ApplicationStorage,
+              private user: UserService,
               private http: AjaxService) { }
 
   ngOnInit(): void {
     var dt = new Date();
     this.currentYear = dt.getFullYear();
     this.basePath = this.http.GetImageBasePath();
+    this.userDetail = this.user.getInstance() as UserDetail;
+    this.EmployeeId = this.userDetail.UserId;
+
+    if (this.userDetail.RoleId == 1) {
+      this.loadPayslipModule();
+    } else {
+      this.loadUserPayslipModule();
+    }
+  }
+
+  loadPayslipModule(): void {
     this.loadData();
-    this.EmployeeId = this.local.getByKey("EmployeeId");
+  }
+
+  loadUserPayslipModule(): void {
+    this.getPayslipList(this.EmployeeId);
   }
 
   getPayslipList(e: any) {
@@ -51,8 +68,7 @@ export class PayslipComponent implements OnInit {
     if (this.EmployeeId > 0) {
       this.paySlipSchedule = [];
       this.payslipYear = [];
-      let employee = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
-      let joiningDate = new Date(employee.CreatedOn);
+      let joiningDate = new Date(this.userDetail.CreatedOn);
       this.payslipYear.push(this.currentYear);
       if (joiningDate.getFullYear() != this.currentYear)
         this.payslipYear.push(this.currentYear-1);

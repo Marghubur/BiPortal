@@ -82,16 +82,30 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.rentalPage = 1;
-    this.monthlyTaxAmount = new MonthlyTax();
     this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toLocaleString("en-us", { month: "short" })
+    this.userDetail = this.user.getInstance() as UserDetail;
+    this.EmployeeId = this.userDetail.UserId;
+    this.year = new Date().getFullYear();
+    this.basePath = this.http.GetImageBasePath();
+
+    if (this.userDetail.RoleId == 1) {
+      this.loadAdminModule();
+    } else {
+      this.loadUserModule();
+    }
+  }
+
+  loadAdminModule(): void {
+    this.monthlyTaxAmount = new MonthlyTax();
     this.employeesList.placeholder = "Employee";
     this.employeesList.className = 'disable-field';
     this.isEmployeesReady = true;
-    this.EmployeeId = this.local.getByKey("EmployeeId");
-    this.year = new Date().getFullYear();
     this.loadData();
-    this.basePath = this.http.GetImageBasePath();
     this.userDetail = this.user.getInstance() as UserDetail;
+  }
+
+  loadUserModule(): void {
+    this.getDeclaration(Number(this.EmployeeId));
   }
 
   ngAfterViewChecked(): void {
@@ -203,6 +217,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
                 break;
             }
           }
+
           this.salaryDetails = response.SalaryDetail;
           if(this.salaryDetails !== null) {
             this.TaxDetails = JSON.parse(this.salaryDetails.TaxDetail);
@@ -403,6 +418,22 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         }
       }
     }
+  }
+
+  cleanAttachment(index: number) {
+    this.FileDocumentList.splice(index, 1);
+    this.FilesCollection.splice(index, 1);
+    this.slectedDeclarationnFile.splice(index, 1);
+    this.totalFileSize = 0;
+      let i = 0;
+      while (i < this.FilesCollection.length) {
+        this.totalFileSize += this.FilesCollection[i].size / 1024;
+        i++;
+      }
+      if (this.totalFileSize > 2048) {
+        this.isLargeFile = true;
+        this.fileDetail = [];
+      }
   }
 
   UploadAttachment(fileInput: any) {
