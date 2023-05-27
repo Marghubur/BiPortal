@@ -194,7 +194,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       this.projectManagerName = manager.FirstName + " " + manager.LastName;
     }
     let architectid = this.projectForm.get('ArchitectId').value;
-    if (projectManagerid > 0){
+    if (architectid > 0){
       let manager = this.employees.find(x => x.EmployeeUid == architectid);
       this.architectName = manager.FirstName + " " + manager.LastName;
     }

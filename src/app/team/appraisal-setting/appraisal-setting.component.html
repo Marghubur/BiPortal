@@ -205,14 +205,14 @@
                 <div class="input-group">
                   <input
                     #dpToDate
-                    class="form-control"
+                    class="form-control" readonly
                     placeholder="yyyy-mm-dd"
                     name="dpToDate"
                     [ngClass]="{'error-field': isSubmitted && f.ToDate.errors !== null && f.ToDate.errors.required}"
                     [value]="formatter.format(toDate)"
                     (input)="toDate = validateInput(toDate, dpToDate.value)"
                   />
-                  <button class="btn btn-outline-secondary" (click)="datepicker.toggle()" type="button">
+                  <button class="btn btn-outline-secondary" disabled (click)="datepicker.toggle()" type="button">
                     <i class="fa fa-calendar"></i>
                   </button>
                 </div>
@@ -259,35 +259,37 @@
         <ng-container *ngFor="let item of projectDetails; let i=index;">
           <h2 class="accordion-header" [attr.id]="'heading' + i">
             <button class="accordion-button" [ngClass]="{'collapsed': i != 0}" type="button" data-bs-toggle="collapse" aria-expanded="false" [attr.data-bs-target]="'#collapsetwo' +i"  [aria-controls]="'collapsetwo' + i">
-              {{item.ProjectName}}
+              <h5>{{item[i].ProjectName}}</h5>
             </button>
           </h2>
           <div [attr.id]="'collapsetwo' + i" class="accordion-collapse collapse" [ngClass]="{'show': i == 0}"  [aria-labelledby]="'heading' + i" data-bs-parent="#accordionAppraisal">
             <div class="accordion-body">
-              <p class="card-text">{{item.ProjectDescription}}</p>
-              <h6>Team Members:</h6>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>
-                      <input name="activeAllMember{{item.ProjectId}}" (click)="activeDeactiveAll($event, item)" class="form-check-input" type="checkbox">
-                    </th>
-                    <th>Name</th>
-                    <th>Designation</th>
-                    <th>Assigned On</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let member of item.ProjectMembers">
-                    <td>
-                      <input (click)="checkActiveMember($event, item.ProjectId, member.EmployeeId)" name="activeMember{{item.ProjectId}}" class="form-check-input" type="checkbox">
-                    </td>
-                    <td>{{member.FullName}}</td>
-                    <td>{{member.Designation}}</td>
-                    <td>{{member.AssignedOn | date}}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <p class="card-text">{{item[i].ProjectDescription}}</p>
+              <ng-container *ngIf="projectDetails.length > 0">
+                <h6>Team Members:</h6>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>
+                        <input name="activeAllMember{{item[i].ProjectId}}" (click)="activeDeactiveAll($event, item)" class="form-check-input" type="checkbox">
+                      </th>
+                      <th>Name</th>
+                      <th>Designation</th>
+                      <th>Assigned On</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let member of projectDetails[i]">
+                      <td>
+                        <input (click)="checkActiveMember($event, member.ProjectId, member.EmployeeId)" name="activeMember{{member.ProjectId}}" class="form-check-input" type="checkbox">
+                      </td>
+                      <td>{{member.FullName}}</td>
+                      <td>{{member.DesignationId}}</td>
+                      <td>{{member.AssignedOn | date}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ng-container>
             </div>
           </div>
         </ng-container>
