@@ -45,7 +45,7 @@ export const Article = "api/blogs/article/:articleid";
 
 // ********************** Manage route pages  *******************
 
-export const ManageBaseRoute = "admin/manage"
+export const ManageBaseRoute = "ems/manage"
 export const Profile = 'profile';
 export const AdminLeave = 'leave';
 export const Holiday = 'planholidays';
@@ -58,7 +58,7 @@ export const AdminManageTimesheet = 'managetimesheet';
 
 // ********************** Configuration route pages  *******************
 
-export const ConfigBaseRoute = "admin/config"
+export const ConfigBaseRoute = "ems/config"
 export const Annexure = 'annexure';
 export const OfferLetter = 'offerletter';
 export const EmailConfiguration = 'emailconfiguration';
@@ -74,7 +74,7 @@ export const ProcessingPayroll = 'processingpayroll';
 
 // ********************** Team route pages  *******************
 
-export const TeamBaseRoute = "admin/team"
+export const TeamBaseRoute = "ems/team"
 export const AdminNotification = 'notification';
 export const AdminApprovalRequest = 'request';
 export const Appraisal = 'appraisal';
@@ -84,7 +84,7 @@ export const Appraisal = 'appraisal';
 
 // ********************** Project route pages  *******************
 
-export const ProjectBaseRoute = "admin/project"
+export const ProjectBaseRoute = "ems/project"
 export const ProjectWiki = 'projectlist/wiki';
 export const ProjectList = 'projectlist';
 export const ManageProject = 'projectlist/manage-project';
@@ -94,7 +94,7 @@ export const ManageProject = 'projectlist/manage-project';
 
 // ********************** Income Declaration route pages  *******************
 
-export const AccountsBaseRoute = "admin/accounts"
+export const AccountsBaseRoute = "ems/accounts"
 export const AdminSummary = "summary";
 export const AdminDeclaration = "declaration";
 export const AdminSalary = "salary";
@@ -116,7 +116,7 @@ export const TaxRegime = 'taxregime';
 
 // ********************** Leave Management route pages  *******************
 
-export const LeaveBaseRoute = "admin/leave"
+export const LeaveBaseRoute = "ems/leave"
 export const Leave = 'leavesetting'
 export const ManageLeavePlan = 'leavesetting/manageleaveplan';
 export const ManageYearEnding = 'leavesetting/manageyearending';
@@ -126,7 +126,7 @@ export const ManageYearEnding = 'leavesetting/manageyearending';
 
 // ********************** Project route pages  *******************
 
-export const CommonBaseRoute = "admin/common"
+export const CommonBaseRoute = "ems/common"
 export const Performance = 'performance';
 export const ApprisalReview = 'apprisalreview';
 export const ServiceRequest = 'servicerequest';
@@ -138,41 +138,41 @@ export const DocumentsPage = "documentspage/:path";
 
 // ********************** Admin route pages  *******************
 
-export const Employees = "admin/employees";
-export const Dashboard = "admin/dashboard";
-export const BuildPdf = "admin/generatebill";
-export const ManageEmployee = 'admin/employees/manageemployee';
-export const Clients = 'admin/clients';
-export const RegisterClient = 'admin/clients/registerclient';
-export const Files = 'admin/files';
-export const Resume = 'admin/resumes';
-export const SideMenu = 'admin/sidemenu';
-export const BillDetail = 'admin/billdetail';
-export const Recent = 'admin/recent';
-export const Roles = 'admin/roles';
-export const Companies = 'admin/Companies';
-export const CreateResume = 'admin/CreateResume';
-export const Recruiter = 'admin/Recruiter';
-export const AdminTaxcalculation = 'admin/taxcalculation';
-export const AdminResetPassword = 'admin/resetpassword';
-export const PayrollSettings = 'admin/payrollsettings';
-export const CompanyInfo = 'admin/payrollsettings/company-info';
-export const CompanySettings = 'admin/payrollsettings/company-settings';
-export const Expenses = 'admin/expenses';
-export const SalaryBreakup = 'admin/employees/alarybreakup';
-export const EmailService = 'admin/email';
-export const OrganizationSetting = 'admin/organization-setting';
-export const EmailSetting = 'admin/emailsetting';
-export const EmailLinkConfig = 'admin/emaillinkconfig';
-export const Company = 'admin/companysettings';
-export const EmailTemplate = 'admin/emailtemplate';
-export const ManageEmailTemplate = 'admin/emailtemplate/manageemailtemplate';
-export const CompanyLogo = 'admin/companylogo';
-export const AdminMasterData = 'admin/masterdata';
+export const Employees = "ems/administration/employees";
+export const Dashboard = "ems/administration/dashboard";
+export const BuildPdf = "ems/administration/generatebill";
+export const ManageEmployee = 'ems/administration/employees/manageemployee';
+export const Clients = 'ems/administration/clients';
+export const RegisterClient = 'ems/administration/clients/registerclient';
+export const Files = 'ems/administration/files';
+export const Resume = 'ems/administration/resumes';
+export const SideMenu = 'ems/administration/sidemenu';
+export const BillDetail = 'ems/administration/billdetail';
+export const Recent = 'ems/administration/recent';
+export const Roles = 'ems/settings/roles';
+export const Companies = 'ems/administration/Companies';
+export const CreateResume = 'ems/administration/CreateResume';
+export const Recruiter = 'ems/administration/Recruiter';
+export const AdminTaxcalculation = 'ems/administration/taxcalculation';
+export const AdminResetPassword = 'ems/administration/resetpassword';
+export const PayrollSettings = 'ems/settings/payrollsettings';
+export const CompanyInfo = 'ems/settings/payrollsettings/company-info';
+export const CompanySettings = 'ems/settings/payrollsettings/company-settings';
+export const Expenses = 'ems/administration/expenses';
+export const SalaryBreakup = 'ems/administration/employees/alarybreakup';
+export const EmailService = 'ems/administration/email';
+export const OrganizationSetting = 'ems/administration/organization-setting';
+export const EmailSetting = 'ems/settings/emailsetting';
+export const EmailLinkConfig = 'ems/settings/emaillinkconfig';
+export const Company = 'ems/settings/companysettings';
+export const EmailTemplate = 'ems/administration/emailtemplate';
+export const ManageEmailTemplate = 'ems/administration/emailtemplate/manageemailtemplate';
+export const CompanyLogo = 'ems/administration/companylogo';
+export const AdminMasterData = 'ems/administration/masterdata';
 
 // ********************** Admin route pages  *******************
 
-export const UserDashboard = "user/dashboard";
+export const UserDashboard = "ems/home/dashboard";
 export const UserAttendance = "user/manage/attendance";
 export const UserProfilePage = "user/manage/profile";
 export const UserTimesheet = "user/manage/timesheet";
