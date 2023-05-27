@@ -75,10 +75,12 @@ export const ProcessingPayroll = 'processingpayroll';
 // ********************** Team route pages  *******************
 
 export const TeamBaseRoute = "ems/team"
-export const AdminNotification = 'notification';
-export const AdminApprovalRequest = 'request';
-export const Appraisal = 'appraisal';
-export const ApprisalReview = 'apprisalreview';
+export const AdminNotification = `${TeamBaseRoute}/notification`;
+export const AdminApprovalRequest = `${TeamBaseRoute}/request`;
+export const Appraisal = `${TeamBaseRoute}/appraisal`;
+export const ApprisalReview = `${TeamBaseRoute}/apprisalreview`;
+export const ServiceRequest = `${TeamBaseRoute}/servicerequest`;
+export const Performance = `${TeamBaseRoute}/performance`;
 
 // ********************** Team route ends  *******************
 
@@ -86,9 +88,9 @@ export const ApprisalReview = 'apprisalreview';
 // ********************** Project route pages  *******************
 
 export const ProjectBaseRoute = "ems/project"
-export const ProjectWiki = 'projectlist/wiki';
-export const ProjectList = 'projectlist';
-export const ManageProject = 'projectlist/manage-project';
+export const ProjectWiki = `${ProjectBaseRoute}/projectlist/wiki`;
+export const ProjectList = `${ProjectBaseRoute}/projectlist`;
+export const ManageProject = `${ProjectBaseRoute}/projectlist/manage-project`;
 
 // ********************** Project route ends  *******************
 
@@ -96,31 +98,31 @@ export const ManageProject = 'projectlist/manage-project';
 // ********************** Income Declaration route pages  *******************
 
 export const AccountsBaseRoute = "ems/accounts"
-export const AdminSummary = "summary";
-export const AdminDeclaration = "declaration";
-export const AdminSalary = "salary";
-export const AdminPreferences = "preferences";
-export const AdminPreviousIncome = 'declaration/previousincome';
-export const AdminForm12B = 'declaration/form12b';
-export const AdminFreeTaxFilling = 'declaration/freetaxfilling';
-export const AdminDeclarationApprovalRule = 'declaration/declarationapprovalrule';
-export const AdminIncomeTax = 'salary/incometax';
-export const AdminPaySlip = 'salary/payslip';
-export const Payroll = 'payrollsettings/payroll';
-export const PFESISetup = 'payrollsettings/pfesisetup';
-export const SalaryComponentStructure = 'payrollsettings/salarycomponentstructure';
-export const CustomSalaryStructure = 'payrollsettings/customsalarystructure';
-export const PayrollComponents = 'payrollcomponents';
-export const TaxRegime = 'taxregime';
+export const AdminSummary = `${AccountsBaseRoute}/summary`;
+export const AdminDeclaration = `${AccountsBaseRoute}/declaration`;
+export const AdminSalary = `${AccountsBaseRoute}/salary`;
+export const AdminPreferences = `${AccountsBaseRoute}/preferences`;
+export const AdminPreviousIncome = `${AccountsBaseRoute}/declaration/previousincome`;
+export const AdminForm12B = `${AccountsBaseRoute}/declaration/form12b`;
+export const AdminFreeTaxFilling = `${AccountsBaseRoute}/declaration/freetaxfilling`;
+export const AdminDeclarationApprovalRule = `${AccountsBaseRoute}/declaration/declarationapprovalrule`;
+export const AdminIncomeTax = `${AccountsBaseRoute}/salary/incometax`;
+export const AdminPaySlip = `${AccountsBaseRoute}/salary/payslip`;
+export const Payroll = `${AccountsBaseRoute}/payrollsettings/payroll`;
+export const PFESISetup = `${AccountsBaseRoute}/payrollsettings/pfesisetup`;
+export const SalaryComponentStructure = `${AccountsBaseRoute}/payrollsettings/salarycomponentstructure`;
+export const CustomSalaryStructure = `${AccountsBaseRoute}/payrollsettings/customsalarystructure`;
+export const PayrollComponents = `${AccountsBaseRoute}/payrollcomponents`;
+export const TaxRegime = `${AccountsBaseRoute}/taxregime`;
 
 // ********************** Income Declaration route ends  *******************
 
 // ********************** Leave Management route pages  *******************
 
 export const LeaveBaseRoute = "ems/leave"
-export const Leave = 'leavesetting'
-export const ManageLeavePlan = 'leavesetting/manageleaveplan';
-export const ManageYearEnding = 'leavesetting/manageyearending';
+export const Leave = `${LeaveBaseRoute}/leavesetting`
+export const ManageLeavePlan = `${LeaveBaseRoute}/leavesetting/manageleaveplan`;
+export const ManageYearEnding = `${LeaveBaseRoute}/leavesetting/manageyearending`;
 
 // ********************** Leave Management route ends  *******************
 
@@ -128,10 +130,8 @@ export const ManageYearEnding = 'leavesetting/manageyearending';
 // ********************** Project route pages  *******************
 
 export const CommonBaseRoute = "ems/common"
-export const Performance = 'performance';
-export const ServiceRequest = 'servicerequest';
-export const Documents = "documents";
-export const DocumentsPage = "documentspage/:path";
+export const Documents = `${CommonBaseRoute}/documents`;
+export const DocumentsPage = `${CommonBaseRoute}/documentspage/:path`;
 
 // ********************** Project route ends  *******************
 

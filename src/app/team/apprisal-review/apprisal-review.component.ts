@@ -135,7 +135,7 @@ export class ApprisalReviewComponent implements OnInit, AfterViewChecked {
         this.employeeData.isActive = false;
     }
 
-    this.http.post("filter/pagination", this.employeeData, true).then((response: ResponseModel) => {
+    this.http.post("ef/filter/pagination", this.employeeData, true).then((response: ResponseModel) => {
       this.employeeDetail = response.ResponseBody;
       // let i =0;
       // while (i < this.employeeDetail.length) {
