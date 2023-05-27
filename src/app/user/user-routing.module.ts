@@ -11,10 +11,11 @@ import { NotificationComponent } from './notification/notification.component';
 import { ApprovalRequestComponent } from './approval-request/approval-request.component';
 import { HolidayComponent } from './holiday/holiday.component';
 import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
+import { UserDashboard } from 'src/providers/constants';
 
 const routes: Routes = [
-  // { path: '', component: UserDashboardComponent},
-  // { path: UserDashboard, component: UserDashboardComponent},
+  { path: '', component: UserDashboardComponent},
+  { path: UserDashboard, component: UserDashboardComponent},
   // { path: UserAttendance, component: AttendanceComponent},
   // { path: UserLeave, component: LeaveComponent},
   // { path: UserTimesheet, component: TimesheetComponent},

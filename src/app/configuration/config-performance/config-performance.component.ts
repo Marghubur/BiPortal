@@ -49,17 +49,18 @@ export class ConfigPerformanceComponent implements OnInit {
     this.empRoles.isMultiSelect = true;
     this.selectedAppraisalCycle = this.nav.getValue();
     if (this.selectedAppraisalCycle == null || this.selectedAppraisalCycle.ObjectiveCatagoryId <= 0) {
-      ErrorToast("Please select a valid Appraisal cycle first");
-      return;
+      this.objectiveData.SearchString += ` And CompanyId = ${this.currentCompny.CompanyId}`;      
+    } else {
+      this.objectiveData.SearchString += ` And ObjectiveTypeId = ${this.selectedAppraisalCycle.ObjectiveCatagoryId} And CompanyId = ${this.currentCompny.CompanyId}`;
     }
+
     this.loadData();
     this.initForm();
   }
 
   loadData() {
     this.isPageReady = false;
-    if (this.currentCompny.CompanyId > 0) {
-      this.objectiveData.SearchString += ` And ObjectiveTypeId = ${this.selectedAppraisalCycle.ObjectiveCatagoryId} And CompanyId = ${this.currentCompny.CompanyId}`;
+    if (this.currentCompny.CompanyId > 0) {      
       this.http.post("eps/performance/getPerformanceObjective", this.objectiveData, true)
       .then(res => {
         if (res.ResponseBody) {
@@ -216,6 +217,7 @@ export class ConfigPerformanceComponent implements OnInit {
       if (data)
         value.Description = data;
 
+      value.CanManagerSee = value.CanManagerSee == "true" ? true : false; 
       this.http.post("eps/performance/objectiveInsertUpdate", value, true).then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
