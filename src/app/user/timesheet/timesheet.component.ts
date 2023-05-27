@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Timesheet } from 'src/app/manage/timesheet/timesheet.component';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -168,15 +169,4 @@ export class TimesheetComponent implements OnInit {
       WarningToast(err.error.HttpStatusMessage);
     });
   }
-}
-
-export interface Timesheet {
-  TimesheetStatus: number;
-  IsSaved: boolean;
-  IsSubmitted: boolean;
-  ForYear: number;
-  EmployeeId: number;
-  ClientId: number;
-  ForMonth: number;
-  TimesheetStartDate: Date;
 }

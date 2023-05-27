@@ -46,12 +46,12 @@ export const Article = "api/blogs/article/:articleid";
 // ********************** Manage route pages  *******************
 
 export const ManageBaseRoute = "ems/manage"
-export const Profile = 'profile';
-export const AdminLeave = 'leave';
-export const Holiday = 'planholidays';
-export const Attendance = 'attendance';
-export const Timesheet = 'timesheet';
-export const AdminManageTimesheet = 'managetimesheet';
+export const Profile = `${ManageBaseRoute}/profile`;
+export const AdminLeave = `${ManageBaseRoute}/leave`;
+export const Holiday = `${ManageBaseRoute}/planholidays`;
+export const Attendance = `${ManageBaseRoute}/attendance`;
+export const Timesheet = `${ManageBaseRoute}/timesheet`;
+export const AdminManageTimesheet = `${ManageBaseRoute}/managetimesheet`;
 
 // ********************** Manage route ends  *******************
 
@@ -59,15 +59,15 @@ export const AdminManageTimesheet = 'managetimesheet';
 // ********************** Configuration route pages  *******************
 
 export const ConfigBaseRoute = "ems/config"
-export const Annexure = 'annexure';
-export const OfferLetter = 'offerletter';
-export const EmailConfiguration = 'emailconfiguration';
-export const Products = 'products';
-export const ManageShift = 'manageshift';
-export const WorkFlow = 'workflow';
-export const ConfigPerformance = 'configperformance';
-export const ManageWorkFlow = 'workflow/manageworkflow';
-export const ProcessingPayroll = 'processingpayroll';
+export const Annexure = `${ConfigBaseRoute}/annexure`;
+export const OfferLetter = `${ConfigBaseRoute}/offerletter`;
+export const EmailConfiguration = `${ConfigBaseRoute}/emailconfiguration`;
+export const Products = `${ConfigBaseRoute}/products`;
+export const ManageShift = `${ConfigBaseRoute}/manageshift`;
+export const WorkFlow = `${ConfigBaseRoute}/workflow`;
+export const ConfigPerformance = `${ConfigBaseRoute}/configperformance`;
+export const ManageWorkFlow = `${ConfigBaseRoute}/workflow/manageworkflow`;
+export const ProcessingPayroll = `${ConfigBaseRoute}/processingpayroll`;
 
 // ********************** Configuration route ends  *******************
 

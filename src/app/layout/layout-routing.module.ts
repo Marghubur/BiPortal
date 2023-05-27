@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
-import { ProjectBaseRoute, TeamBaseRoute } from 'src/providers/constants';
+import { AccountsBaseRoute, CommonBaseRoute, ConfigBaseRoute, LeaveBaseRoute, ManageBaseRoute, ProjectBaseRoute, TeamBaseRoute } from 'src/providers/constants';
 
 const routes: Routes = [
   {
@@ -17,20 +17,6 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('../admin/admin.module')
     .then(m => m.AdminModule)
-  },
-  {
-    matcher: (url) => {
-      if(url[0].path.split(/\/(.*)/s)[0] == 'user') {
-        return {
-          consumed: url
-        };
-      }
-      return null;
-    },
-    path: '',
-    component: LayoutComponent,
-    loadChildren: () => import('../user/user.module')
-    .then(m => m.UserModule)
   },
   {
     matcher: (url) => {
@@ -62,7 +48,21 @@ const routes: Routes = [
   },
   {
     matcher: (url) => {
-      if(url[0].path.split(/\/(.*)/s)[0] == 'ems/manage') {
+      if(url[0].path.split(/\/(.*)/s)[0] == ConfigBaseRoute) {
+        return {
+          consumed: url
+        };
+      }
+      return null;
+    },
+    path: '',
+    component: LayoutComponent,
+    loadChildren: () => import('../configuration/configuration.module')
+    .then(m => m.ConfigurationModule)
+  },
+  {
+    matcher: (url) => {
+      if(url[0].path.split(/\/(.*)/s)[0] == ManageBaseRoute) {
         return {
           consumed: url
         };
@@ -73,6 +73,48 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('../manage/manage.module')
     .then(m => m.ManageModule)
+  },
+  {
+    matcher: (url) => {
+      if(url[0].path.split(/\/(.*)/s)[0] == AccountsBaseRoute) {
+        return {
+          consumed: url
+        };
+      }
+      return null;
+    },
+    path: '',
+    component: LayoutComponent,
+    loadChildren: () => import('../income-declaration/income-declaration.module')
+    .then(m => m.IncomeDeclarationModule)
+  },
+  {
+    matcher: (url) => {
+      if(url[0].path.split(/\/(.*)/s)[0] == LeaveBaseRoute) {
+        return {
+          consumed: url
+        };
+      }
+      return null;
+    },
+    path: '',
+    component: LayoutComponent,
+    loadChildren: () => import('../leave-management/leave-management.module')
+    .then(m => m.LeaveManagementModule)
+  },
+  {
+    matcher: (url) => {
+      if(url[0].path.split(/\/(.*)/s)[0] == CommonBaseRoute) {
+        return {
+          consumed: url
+        };
+      }
+      return null;
+    },
+    path: '',
+    component: LayoutComponent,
+    loadChildren: () => import('../commoncomponent/commoncomponent.module')
+    .then(m => m.CommoncomponentModule)
   },
 ];
 
