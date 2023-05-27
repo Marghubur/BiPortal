@@ -32,11 +32,9 @@
     </div>
     <!-- <hr> -->
     <div class="title_menu ms-3 mt-3">
-      <a [routerLink]="['/admin/email']" class="text-dark" routerLinkActive="router-link-active"><i class="fa fa-envelope-o me-3 pb-3"
+      <a [routerLink]="['/ems/administration/email']" class="text-dark" routerLinkActive="router-link-active"><i class="fa fa-envelope-o me-3 pb-3"
           aria-hidden="true"></i>Mail Box </a>
-      <a [routerLink]="['/user/resetpassword']" *ngIf="!isAdmin" class="text-dark" routerLinkActive="router-link-active"><i
-          class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>Reset Password</a>
-      <a [routerLink]="['/admin/resetpassword']" *ngIf="isAdmin" class="text-dark" routerLinkActive="router-link-active"><i
+      <a [routerLink]="['/ems/administration/resetpassword']" class="text-dark" routerLinkActive="router-link-active"><i
           class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>Reset Password</a>
       <a (click)="navToMasterDataPasge()" *ngIf="isAdmin" class="text-dark" href="javascript:void(0)" routerLinkActive="router-link-active"><i
           class="fa fa-upload me-3 pb-3" aria-hidden="true"></i>Uploda Master Data</a>

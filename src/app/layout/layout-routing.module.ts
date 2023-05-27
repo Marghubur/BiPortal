@@ -5,7 +5,7 @@ import { LayoutComponent } from './layout/layout.component';
 const routes: Routes = [
   {
     matcher: (url) => {
-      if(url[0].path.split(/\/(.*)/s)[0] == 'admin') {
+      if(url[0].path.split(/\/(.*)/s)[0] == 'ems/admin') {
         return {
           consumed: url
         };
@@ -30,6 +30,20 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('../user/user.module')
     .then(m => m.UserModule)
+  },
+  {
+    matcher: (url) => {
+      if(url[0].path.split(/\/(.*)/s)[0] == 'ems/manage') {
+        return {
+          consumed: url
+        };
+      }
+      return null;
+    },
+    path: '',
+    component: LayoutComponent,
+    loadChildren: () => import('../manage/manage.module')
+    .then(m => m.ManageModule)
   },
 ];
 
