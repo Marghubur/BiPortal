@@ -139,7 +139,7 @@
 <!-- Add or update apprisal Modal -->
 <div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="manageApprisal" aria-labelledby="manageApprisalModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="manageApprisalModalLabel">Add/Update Apprisal Cycle</h5>
@@ -153,71 +153,81 @@
             oninput="this.value = this.value.toUpperCase()" maxlength="40"
             [ngClass]="{'error-field': isSubmitted && f.ObjectiveCatagoryType.errors !== null && f.ObjectiveCatagoryType.errors.required}">
           </div>
-          <div class="mt-3">
-            <label for="" class="form-label">Apprisal Cycle Period</label>
-            <form class="row row-cols-sm-auto">
-              <div class="col-12">
-                <div class="dp-hidden position-absolute">
+          <div class="row">
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">Apprisal Cycle Period</label>
+              <form class="row row-cols-sm-auto">
+                <div class="col-12">
+                  <div class="dp-hidden position-absolute">
+                    <div class="input-group">
+                      <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker" [autoClose]="'outside'"
+                        (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!" tabindex="-1"/>
+                      <ng-template #t let-date let-focused="focused">
+                        <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)"
+                          (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                          {{ date.day }}
+                        </span>
+                      </ng-template>
+                    </div>
+                  </div>
                   <div class="input-group">
-                    <input
-                      name="datepicker"
-                      class="form-control"
-                      ngbDatepicker
-                      #datepicker="ngbDatepicker"
-                      [autoClose]="'outside'"
-                      (dateSelect)="onDateSelection($event)"
-                      [displayMonths]="2"
-                      [dayTemplate]="t"
-                      outsideDays="hidden"
-                      [startDate]="fromDate!"
-                      tabindex="-1"
-                    />
-                    <ng-template #t let-date let-focused="focused">
-                      <span
-                        class="custom-day"
-                        [class.focused]="focused"
-                        [class.range]="isRange(date)"
-                        [class.faded]="isHovered(date) || isInside(date)"
-                        (mouseenter)="hoveredDate = date"
-                        (mouseleave)="hoveredDate = null"
-                      >
-                        {{ date.day }}
-                      </span>
-                    </ng-template>
+                    <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd"
+                      name="dpFromDate" readonly [ngClass]="{'error-field': isSubmitted && f.FromDate.errors !== null && f.FromDate.errors.required}"
+                      [value]="appraisalCyclePeriod" (input)="fromDate = validateInput(fromDate, dpFromDate.value)"/>
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
                   </div>
                 </div>
-                <div class="input-group">
-                  <input
-                    #dpFromDate
-                    class="form-control"
-                    placeholder="yyyy-mm-dd"
-                    name="dpFromDate"
-                    [ngClass]="{'error-field': isSubmitted && f.FromDate.errors !== null && f.FromDate.errors.required}"
-                    [value]="formatter.format(fromDate)"
-                    (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
-                  />
-                  <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()" type="button">
-                    <i class="fa fa-calendar"></i>
-                  </button>
+                <div class="col-12 d-none">
+                  <div class="input-group">
+                    <input #dpToDate class="form-control" readonly placeholder="yyyy-mm-dd" name="dpToDate"
+                      [ngClass]="{'error-field': isSubmitted && f.ToDate.errors !== null && f.ToDate.errors.required}"
+                      [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)"/>
+                    <button class="btn btn-outline-secondary" disabled (click)="datepicker.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div>
                 </div>
+              </form>
+            </div>
+            <div class="col-md-4">
+              <label for="" class="form-label">Self Appraisal</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+                <label class="form-check-label">
+                  Enable
+                </label>
               </div>
-              <div class="col-12">
-                <div class="input-group">
-                  <input
-                    #dpToDate
-                    class="form-control" readonly
-                    placeholder="yyyy-mm-dd"
-                    name="dpToDate"
-                    [ngClass]="{'error-field': isSubmitted && f.ToDate.errors !== null && f.ToDate.errors.required}"
-                    [value]="formatter.format(toDate)"
-                    (input)="toDate = validateInput(toDate, dpToDate.value)"
-                  />
-                  <button class="btn btn-outline-secondary" disabled (click)="datepicker.toggle()" type="button">
-                    <i class="fa fa-calendar"></i>
-                  </button>
+            </div>
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">Apprisal Cycle Period</label>
+              <form class="row row-cols-sm-auto">
+                <div class="col-12">
+                  <div class="dp-hidden position-absolute">
+                    <div class="input-group">
+                      <input name="selfdatepicker" class="form-control" ngbDatepicker #selfdatepicker="ngbDatepicker" [autoClose]="'outside'"
+                        (dateSelect)="onSelfAppraisalDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="selfAppraisalFromDate!"
+                        tabindex="-1"/>
+                      <ng-template #t let-date let-focused="focused">
+                        <span class="custom-day" [class.focused]="focused" [class.range]="isSelfRange(date)" [class.faded]="isSelfHovered(date) || isSelfInside(date)"
+                          (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                          {{ date.day }}
+                        </span>
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd"
+                      name="dpFromDate" readonly [ngClass]="{'error-field': isSubmitted && f.FromDate.errors !== null && f.FromDate.errors.required}"
+                      [value]="appraisalCyclePeriod" (input)="selfAppraisalFromDate = validateInput(selfAppraisalFromDate, dpFromDate.value)"/>
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
           <div class="mt-3">
             <label for="" class="form-label">Description</label>

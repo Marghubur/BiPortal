@@ -30,9 +30,12 @@ export class AppraisalSettingComponent implements OnInit {
   hoveredDate: NgbDate | null = null;
 	fromDate: NgbDate | null;
 	toDate: NgbDate | null;
+  selfAppraisalFromDate: NgbDate | null;;
+  selfAppraisalToDate: NgbDate | null;;
   projectDetails: Array<any> = [];
   assignedEmployee: Array<any> = [];
   userDetail: any = null;
+  appraisalCyclePeriod: string = null;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -164,6 +167,7 @@ export class AppraisalSettingComponent implements OnInit {
     this.toDate.month= date.getMonth() + 1;
     this.toDate.year= date.getFullYear();
     this.initForm();
+    this.appraisalCyclePeriod = new Date(this.appraisalForm.get('FromDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('ToDate').value).toLocaleDateString();
     $('#manageApprisal').modal('show');
   }
 
@@ -242,6 +246,7 @@ export class AppraisalSettingComponent implements OnInit {
       let fromdate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
       this.appraisalForm.get('FromDate').setValue(fromdate);
     }
+    this.appraisalCyclePeriod = this.appraisalForm.get('FromDate').value.toLocaleDateString() +" - "+ this.appraisalForm.get('ToDate').value.toLocaleDateString();
 	}
 
 	isHovered(date: NgbDate) {
@@ -397,6 +402,50 @@ export class AppraisalSettingComponent implements OnInit {
       this.isLoading = false;
     })
   }
+
+  onSelfAppraisalDateSelection(date: NgbDate) {
+		if (!this.selfAppraisalFromDate && !this.selfAppraisalToDate) {
+			this.selfAppraisalFromDate = date;
+		} else if (this.selfAppraisalFromDate && !this.selfAppraisalToDate && date && date.after(this.selfAppraisalFromDate)) {
+      this.selfAppraisalToDate = date;
+		} else {
+      this.selfAppraisalToDate = null;
+			this.selfAppraisalFromDate = date;
+		}
+    if (this.selfAppraisalToDate) {
+      let todate = new Date(this.selfAppraisalToDate.year, this.selfAppraisalToDate.month - 1, this.selfAppraisalToDate.day);
+      this.appraisalForm.get('ToDate').setValue(todate);
+    }
+    if (this.selfAppraisalFromDate) {
+      let fromdate = new Date(this.selfAppraisalFromDate.year, this.selfAppraisalFromDate.month - 1, this.selfAppraisalFromDate.day);
+      this.appraisalForm.get('FromDate').setValue(fromdate);
+    }
+    this.appraisalCyclePeriod = this.appraisalForm.get('FromDate').value.toLocaleDateString() +" - "+ this.appraisalForm.get('ToDate').value.toLocaleDateString();
+	}
+
+	isSelfHovered(date: NgbDate) {
+		return (
+			this.selfAppraisalFromDate && !this.selfAppraisalToDate && this.hoveredDate && date.after(this.selfAppraisalFromDate) && date.before(this.hoveredDate)
+		);
+	}
+
+	isSelfInside(date: NgbDate) {
+		return this.selfAppraisalToDate && date.after(this.selfAppraisalFromDate) && date.before(this.selfAppraisalToDate);
+	}
+
+	isSelfRange(date: NgbDate) {
+		return (
+			date.equals(this.selfAppraisalFromDate) ||
+			(this.selfAppraisalToDate && date.equals(this.selfAppraisalToDate)) ||
+			this.isInside(date) ||
+			this.isHovered(date)
+		);
+	}
+
+	validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
+		const parsed = this.formatter.parse(input);
+		return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+	}
 }
 
 class ApprisalCycle {
