@@ -441,11 +441,6 @@ export class AppraisalSettingComponent implements OnInit {
 			this.isHovered(date)
 		);
 	}
-
-	validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
-		const parsed = this.formatter.parse(input);
-		return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
-	}
 }
 
 class ApprisalCycle {
