@@ -36,6 +36,9 @@ export class AppraisalSettingComponent implements OnInit {
   assignedEmployee: Array<any> = [];
   userDetail: any = null;
   appraisalCyclePeriod: string = null;
+  isViewInList: boolean = true;
+  isObjectiveFound: boolean = true;
+  aurrentAppraisalObjective: Array<any> = [];
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -448,6 +451,24 @@ export class AppraisalSettingComponent implements OnInit {
     var offcanvasRight = document.getElementById('offcanvasRight');
     var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
     bsOffcanvas.hide();
+  }
+
+  selectedAppraisal(index: number, item: any) {
+    this.isObjectiveFound = false;
+    this.currentApprisalCycle = item;
+    if(index >= 0 &&  item.ObjectiveCatagoryId > 0) {
+      let result = document.querySelectorAll('.list-group-item > a');
+      let i = 0;
+      while (i < result.length) {
+        result[i].classList.remove('active-tab');
+        i++;
+      }
+
+      result[index].classList.add('active-tab');
+      this.isObjectiveFound = true;
+    } else {
+      ErrorToast("Please select a company.")
+    }
   }
 }
 
