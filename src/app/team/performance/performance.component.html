@@ -55,8 +55,8 @@
                           <div class="col-md-12 my-3"  >
                             <i class="fa fa-calendar pe-2"></i>
                             <span class="fw-bold">{{financialYear}}-{{financialYear+1}}</span>
-                            <span class="text-muted ps-2">{{startDate | date}}</span> -
-                            <span class="text-muted">{{endDate | date}}</span>
+                            <span class="text-muted ps-2">12th May, 2023</span> -
+                            <span class="text-muted">12th May, 2023</span>
                             <i class="fa fa-repeat ps-4 pe-2"></i>
                             <span class="text-primary-c">Update Progress</span>
                           </div>
@@ -102,31 +102,31 @@
                       <table class="table">
                         <thead>
                           <tr>
-                            <th width="20%">OBJECTIVES</th>
+                            <th width="30%">OBJECTIVES</th>
                             <th>START DATE - END DATE</th>
                             <th>OBJECTIVE PROGRESS</th>
                             <th>TARGET VALUE</th>
-                            <th>ACTION</th>
+                            <th width="4%">ACTION</th>
                           </tr>
                         </thead>
                         <tbody>
                           <ng-container *ngIf="objectives.length > 0">
                             <tr *ngFor="let item of objectives">
-                              <td >
+                              <td>
                                 <div class="d-flex">
                                   <div class="col-auto">
                                     <i class="fa fa-user-o pe-2"></i>
                                   </div>
-                                  <div class="col">
-                                    <div class="text-truncate row col-md-11" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.description}}">
-                                      <div class="col-md-4 text-truncate">{{item.objective}}</div>
-                                      <div class="col-md-8 text-truncate">{{item.description}}</div>
+                                  <div class="col-12">
+                                    <div class="text-truncate col-md-11" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}">
+                                      <div class="col-md-10 text-truncate">{{item.Objective}}</div>
+                                      <small class="col-md-12 text-truncate text-muted">{{item.Description}}</small>
                                     </div>
                                     <small>0 Task <span class="px-2">|</span> <i class="fa fa-user-o pe-2"></i>{{userDetail.FirstName + " "+ userDetail.LastName}}</small>
                                   </div>
                                 </div>
                               </td>
-                              <td class="align-middle">{{item.timeFrameStart | date}} - {{item.timeFrmaeEnd | date}}</td>
+                              <td class="align-middle">12th May, 2023 - 12th May, 2024</td>
                               <td class="align-middle">
                                 <div class="d-flex align-items-center justify-content-between">
                                   <h6>{{item.currentValue}} {{item.progressMeassureType == 1 ? '%' : ''}}</h6>
@@ -391,7 +391,7 @@
                       <div class="col-md-11 ms-3">
                         <div class="card shadow-sm px-2 py-3">
                           <div class="d-flex align-items-center">
-                            <h6 class="fw-bold mb-0">Performance Review cycle {{startDate | date}} - {{endDate | date}}</h6>
+                            <h6 class="fw-bold mb-0">Performance Review cycle 12th May, 2023 - 12th May, 2023</h6>
                             <span class="badge bg-warning ms-2">ON GOING</span>
                           </div>
                           <p>{{objectives[0].UpdatedOn | date}}</p>
@@ -791,7 +791,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="performanceReviewLabel">Review Form - Performance Review cycle {{startDate | date}} - {{endDate | date}}</h5>
+        <h5 class="modal-title" id="performanceReviewLabel">Review Form - Performance Review cycle 12th May, 2023 - 12th May, 2023</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
