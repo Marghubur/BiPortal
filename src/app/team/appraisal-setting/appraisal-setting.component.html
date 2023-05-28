@@ -19,7 +19,144 @@
         </div>
       </div>
       <div *ngSwitchDefault>
-        <ng-container>
+        <div class="text-end pe-2">
+          <a href="javascript:void(0)" class="text-decoration-none" (click)="isViewInList = !isViewInList">
+            <i class="fa fa-bars"></i>
+          </a>
+        </div>
+        <ng-container *ngIf="!isViewInList">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="d-flex align-items-center border">
+                <i class="fa fa-search pe-2 ps-3"></i>
+                <input type="text" placeholder="Search" class="form-control border-0" />
+              </div>
+              <div class="d-flex align-items-center justify-content-between my-2">
+                <h6 class="pt-3 pb-2 ps-2">APPRAISAL GROUP</h6>
+                <button class="btn btn-primary-c float-end" (click)="addAprisalCyclePopUp()">
+                  <i class="fa px-2" [ngClass]="{
+                      'fa-plus': !isLoading,
+                      'fa-spin fa-spinner': isLoading
+                    }"></i>
+                  {{ isLoading ? "Wait" : "Add Aprisal Cycle" }}
+                </button>
+              </div>
+              <div class="x_panel p-0">
+                <ul class="list-group side-group">
+                  <ng-container *ngIf="apprisalCycleDetail.length === 0">
+                    <li>
+                      <div class="text-center mt-5 px-4">
+                        <h5>No Appraisal Group found.</h5>
+                        <p>
+                          User below button or above add button to add one.
+                        </p>
+                        <button class="btn btn-success mt-4" (click)="addAprisalCyclePopUp()">
+                          <i class="fa pe-2" [ngClass]="{
+                              'fa-spin fa-spinner': isLoading,
+                              'fa-plus': !isLoading
+                            }"></i>
+                            {{ isLoading ? "Wait" : "Add Aprisal Cycle" }}
+                        </button>
+                      </div>
+                    </li>
+                  </ng-container>
+                  <ng-container *ngIf="apprisalCycleDetail.length > 0">
+                    <ng-container *ngFor="let item of apprisalCycleDetail; let i = index">
+                      <li
+                        class="list-group-item border-0 border-bottom p-0 d-flex justify-content-between align-items-start">
+                        <a href="javascript:void(0)" (click)="selectedAppraisal(i, item)"
+                          class="d-block w-100 px-3 text-decoration-none text-dark"
+                          [ngClass]="{ 'active-tab': i == 0 }">
+                          <div class="d-flex flex-row w-100 justify-content-between mt-4">
+                            <div class="ms-2 col-md-8 me-auto">
+                              <div class="fw-bold fs-6">
+                                {{ item.ObjectiveCatagoryType }}
+                              </div>
+                              <p class="mb-0">{{item.TypeDescription}}</p>
+                            </div>
+                            <div class="col-md-3 d-flex flex-column align-items-end">
+                              <a href="javascript:void(0)" (click)="editApprisalPopUp(item)"><i
+                                  class="fa fa-pencil fa-lg text-white"></i></a>
+                              <a href="javascript:void(0)"><i class="fa fa-trash fa-lg text-white pt-3"></i></a>
+                            </div>
+                          </div>
+                          <p class="mb-0 text-dark ps-2 pb-2 pt-2">
+                            {{item.FromDate | date}} - {{item.ToDate | date}}
+                          </p>
+                        </a>
+                      </li>
+                    </ng-container>
+                  </ng-container>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-9">
+              <ng-container *ngIf="isObjectiveFound">
+                <div class="t-table t-list t-border col-md-12">
+                  <div class="hide-bar"></div>
+                  <div class="t-head">
+                    <div class="tr py-2 fw-bold ps-2">
+                      <div class="td fe-4">
+                        <div class="cell-wrapper">Objectives</div>
+                      </div>
+                      <div class="td fe-2">
+                        <div class="cell-wrapper">Target Value</div>
+                      </div>
+                      <div class="td fe-index">
+                        <div class="cell-wrapper">ACTIONS</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="t-body custom-height">
+                    <ng-container *ngIf="aurrentAppraisalObjective.length > 0">
+                      <div *ngFor="let item of aurrentAppraisalObjective" class="tr align-items-center py-2 ps-2">
+                        <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
+                          <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
+                          <i class=" ps-2 fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
+                        </div>>
+                        <div class="td fe-2">
+                          <div class="cell-wrapper">
+                            {{item.TargetValue}} {{item.ProgressMeassureType == 1? '%' : ''}}
+                          </div>
+                        </div>
+                        <div class="td fe-index">
+                          <div class="cell-wrapper">
+                            <a href="javascript:void(0)" class="text-decoration-none text-danger"><i
+                                class="fa fa-trash fa-lg ms-3"></i></a>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="aurrentAppraisalObjective.length == 0">
+                      <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
+                        No Objective were found. Please add one
+                        by using
+                        <b class="text-primary-c">Add Objective</b>
+                        button.
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!isObjectiveFound">
+                <div class="data-loading-loader">
+                  <div class="py-5 my-5">
+                    <h6 class="fw-bold fs-3 text-center text-dark">Objective are loading</h6>
+                    <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                      <div class="col-md-12 modal-container  text-center cog-wheel">
+                        <img src="assets/images/cog.gif" alt="" />
+                        <h6 class="modal-title title-message">
+                          Please Wait ........
+                        </h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="isViewInList">
           <div class="x_content">
             <div class="t-table t-list t-border col-md-12">
               <div class="hide-bar"></div>
@@ -139,7 +276,7 @@
 <!-- Add or update apprisal Modal -->
 <div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="manageApprisal" aria-labelledby="manageApprisalModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="manageApprisalModalLabel">Add/Update Apprisal Cycle</h5>
@@ -153,71 +290,81 @@
             oninput="this.value = this.value.toUpperCase()" maxlength="40"
             [ngClass]="{'error-field': isSubmitted && f.ObjectiveCatagoryType.errors !== null && f.ObjectiveCatagoryType.errors.required}">
           </div>
-          <div class="mt-3">
-            <label for="" class="form-label">Apprisal Cycle Period</label>
-            <form class="row row-cols-sm-auto">
-              <div class="col-12">
-                <div class="dp-hidden position-absolute">
+          <div class="row">
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">Apprisal Cycle Period</label>
+              <form class="row row-cols-sm-auto">
+                <div class="col-12">
+                  <div class="dp-hidden position-absolute">
+                    <div class="input-group">
+                      <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker" [autoClose]="'outside'"
+                        (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!" tabindex="-1"/>
+                      <ng-template #t let-date let-focused="focused">
+                        <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)"
+                          (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                          {{ date.day }}
+                        </span>
+                      </ng-template>
+                    </div>
+                  </div>
                   <div class="input-group">
-                    <input
-                      name="datepicker"
-                      class="form-control"
-                      ngbDatepicker
-                      #datepicker="ngbDatepicker"
-                      [autoClose]="'outside'"
-                      (dateSelect)="onDateSelection($event)"
-                      [displayMonths]="2"
-                      [dayTemplate]="t"
-                      outsideDays="hidden"
-                      [startDate]="fromDate!"
-                      tabindex="-1"
-                    />
-                    <ng-template #t let-date let-focused="focused">
-                      <span
-                        class="custom-day"
-                        [class.focused]="focused"
-                        [class.range]="isRange(date)"
-                        [class.faded]="isHovered(date) || isInside(date)"
-                        (mouseenter)="hoveredDate = date"
-                        (mouseleave)="hoveredDate = null"
-                      >
-                        {{ date.day }}
-                      </span>
-                    </ng-template>
+                    <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd"
+                      name="dpFromDate" readonly [ngClass]="{'error-field': isSubmitted && f.FromDate.errors !== null && f.FromDate.errors.required}"
+                      [value]="appraisalCyclePeriod" (input)="fromDate = validateInput(fromDate, dpFromDate.value)"/>
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
                   </div>
                 </div>
-                <div class="input-group">
-                  <input
-                    #dpFromDate
-                    class="form-control"
-                    placeholder="yyyy-mm-dd"
-                    name="dpFromDate"
-                    [ngClass]="{'error-field': isSubmitted && f.FromDate.errors !== null && f.FromDate.errors.required}"
-                    [value]="formatter.format(fromDate)"
-                    (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
-                  />
-                  <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()" type="button">
-                    <i class="fa fa-calendar"></i>
-                  </button>
+                <div class="col-12 d-none">
+                  <div class="input-group">
+                    <input #dpToDate class="form-control" readonly placeholder="yyyy-mm-dd" name="dpToDate"
+                      [ngClass]="{'error-field': isSubmitted && f.ToDate.errors !== null && f.ToDate.errors.required}"
+                      [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)"/>
+                    <button class="btn btn-outline-secondary" disabled (click)="datepicker.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div>
                 </div>
+              </form>
+            </div>
+            <div class="col-md-4">
+              <label for="" class="form-label">Self Appraisal</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+                <label class="form-check-label">
+                  Enable
+                </label>
               </div>
-              <div class="col-12">
-                <div class="input-group">
-                  <input
-                    #dpToDate
-                    class="form-control" readonly
-                    placeholder="yyyy-mm-dd"
-                    name="dpToDate"
-                    [ngClass]="{'error-field': isSubmitted && f.ToDate.errors !== null && f.ToDate.errors.required}"
-                    [value]="formatter.format(toDate)"
-                    (input)="toDate = validateInput(toDate, dpToDate.value)"
-                  />
-                  <button class="btn btn-outline-secondary" disabled (click)="datepicker.toggle()" type="button">
-                    <i class="fa fa-calendar"></i>
-                  </button>
+            </div>
+            <div class="mt-3 col-md-4">
+              <label for="" class="form-label">Apprisal Cycle Period</label>
+              <form class="row row-cols-sm-auto">
+                <div class="col-12">
+                  <div class="dp-hidden position-absolute">
+                    <div class="input-group">
+                      <input name="selfdatepicker" class="form-control" ngbDatepicker #selfdatepicker="ngbDatepicker" [autoClose]="'outside'"
+                        (dateSelect)="onSelfAppraisalDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="selfAppraisalFromDate!"
+                        tabindex="-1"/>
+                      <ng-template #t let-date let-focused="focused">
+                        <span class="custom-day" [class.focused]="focused" [class.range]="isSelfRange(date)" [class.faded]="isSelfHovered(date) || isSelfInside(date)"
+                          (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                          {{ date.day }}
+                        </span>
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd"
+                      name="dpFromDate" readonly [ngClass]="{'error-field': isSubmitted && f.FromDate.errors !== null && f.FromDate.errors.required}"
+                      [value]="appraisalCyclePeriod" (input)="selfAppraisalFromDate = validateInput(selfAppraisalFromDate, dpFromDate.value)"/>
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
           <div class="mt-3">
             <label for="" class="form-label">Description</label>

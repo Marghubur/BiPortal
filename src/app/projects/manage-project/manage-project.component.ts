@@ -156,11 +156,31 @@ export class ManageProjectComponent implements OnInit, DoCheck {
     let errroCounter = 0;
     if(this.projectForm.get("ProjectName").value == null || this.projectForm.get("ProjectName").value == "")
         errroCounter++;
-
+    let teammember = this.teamMembers.filter(x => x.DesignationId != 2 && x.DesignationId != 3);
+    if (teammember.length > 0) {
+      let notSelectedGrade = teammember.filter(x => x.Grade == null || x.Grade == "");
+      if (notSelectedGrade.length > 0) {
+        ErrorToast("Please add employee's grade first");
+        this.isLoading = false;
+        return;
+      }
+      let membertype = teammember.filter(x => x.MemberType == null || x.MemberType == 0);
+      if (membertype.length > 0) {
+        this.isLoading = false;
+        ErrorToast("Please add type of the employee first");
+        return;
+      }
+    }
     if (errroCounter === 0) {
       let value = this.projectForm.value;
       if (this.teamMembers.length > 0) {
         value.TeamMembers = this.teamMembers;
+        let member = value.TeamMembers.filter(x => x.MemberType == null)
+        if (member.length > 0) {
+          member.forEach(y => {
+            y.MemberType = 0;
+          });
+        }
       }
       this.http.post("Project/AddUpdateProjectDetail", value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
@@ -198,8 +218,11 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       let manager = this.employees.find(x => x.EmployeeUid == architectid);
       this.architectName = manager.FirstName + " " + manager.LastName;
     }
-    if (this.teamMembers.length > 0)
-      this.teamLeadId = this.teamMembers.find(x => x.DesignationId == 19).EmployeeId;
+    if (this.teamMembers.length > 0) {
+      let emp = this.teamMembers.find(x => x.DesignationId == 19);
+      if (emp)
+        this.teamLeadId =  emp.EmployeeId;
+    }
     $("#teamMemberModal").modal('show');
   }
 
@@ -214,6 +237,8 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         DesignationId : emp.DesignationId,
         FullName : emp.FirstName + " " + emp.LastName,
         Email : emp.Email,
+        MemberType: 0, // 1 = Team Lead, 2 = Team Member
+        Grade: null,
         IsActive : true
       });
     } else {
@@ -221,24 +246,24 @@ export class ManageProjectComponent implements OnInit, DoCheck {
     }
   }
 
-  selectedTeamLead(e: any) {
-    let value = Number(e.target.value);
-    let index = this.teamMembers.findIndex(x => x.EmployeeId == value);
-    if(index == -1) {
-      let emp = this.employees.find(x => x.EmployeeUid == value);
-      this.teamMembers.push({
-        ProjectMemberDetailId : 0,
-        ProjectId : 0,
-        EmployeeId : emp.EmployeeUid,
-        DesignationId : emp.DesignationId,
-        FullName : emp.FirstName + " " + emp.LastName,
-        Email : emp.Email,
-        IsActive : true
-      });
-    } else {
-      this.teamMembers.splice(index, 1);
-    }
-  }
+  // selectedTeamLead(e: any) {
+  //   let value = Number(e.target.value);
+  //   let index = this.teamMembers.findIndex(x => x.EmployeeId == value);
+  //   if(index == -1) {
+  //     let emp = this.employees.find(x => x.EmployeeUid == value);
+  //     this.teamMembers.push({
+  //       ProjectMemberDetailId : 0,
+  //       ProjectId : 0,
+  //       EmployeeId : emp.EmployeeUid,
+  //       DesignationId : emp.DesignationId,
+  //       FullName : emp.FirstName + " " + emp.LastName,
+  //       Email : emp.Email,
+  //       IsActive : true
+  //     });
+  //   } else {
+  //     this.teamMembers.splice(index, 1);
+  //   }
+  // }
 
   closeAddMemberPopUp() {
     $('#teamMemberModal').modal('hide');

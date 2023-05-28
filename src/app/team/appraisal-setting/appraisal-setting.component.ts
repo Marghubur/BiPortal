@@ -30,9 +30,15 @@ export class AppraisalSettingComponent implements OnInit {
   hoveredDate: NgbDate | null = null;
 	fromDate: NgbDate | null;
 	toDate: NgbDate | null;
+  selfAppraisalFromDate: NgbDate | null;;
+  selfAppraisalToDate: NgbDate | null;;
   projectDetails: Array<any> = [];
   assignedEmployee: Array<any> = [];
   userDetail: any = null;
+  appraisalCyclePeriod: string = null;
+  isViewInList: boolean = true;
+  isObjectiveFound: boolean = true;
+  aurrentAppraisalObjective: Array<any> = [];
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -164,6 +170,7 @@ export class AppraisalSettingComponent implements OnInit {
     this.toDate.month= date.getMonth() + 1;
     this.toDate.year= date.getFullYear();
     this.initForm();
+    this.appraisalCyclePeriod = new Date(this.appraisalForm.get('FromDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('ToDate').value).toLocaleDateString();
     $('#manageApprisal').modal('show');
   }
 
@@ -242,6 +249,7 @@ export class AppraisalSettingComponent implements OnInit {
       let fromdate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
       this.appraisalForm.get('FromDate').setValue(fromdate);
     }
+    this.appraisalCyclePeriod = this.appraisalForm.get('FromDate').value.toLocaleDateString() +" - "+ this.appraisalForm.get('ToDate').value.toLocaleDateString();
 	}
 
 	isHovered(date: NgbDate) {
@@ -357,7 +365,7 @@ export class AppraisalSettingComponent implements OnInit {
     }
 
     this.currentApprisalCycle.Status = "Started";
-    this.http.put(`eps/apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`, 
+    this.http.put(`eps/apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,
     this.currentApprisalCycle, true).then(res => {
       if (res.ResponseBody) {
         this.isLoading = false;
@@ -401,10 +409,66 @@ export class AppraisalSettingComponent implements OnInit {
     })
   }
 
+  onSelfAppraisalDateSelection(date: NgbDate) {
+		if (!this.selfAppraisalFromDate && !this.selfAppraisalToDate) {
+			this.selfAppraisalFromDate = date;
+		} else if (this.selfAppraisalFromDate && !this.selfAppraisalToDate && date && date.after(this.selfAppraisalFromDate)) {
+      this.selfAppraisalToDate = date;
+		} else {
+      this.selfAppraisalToDate = null;
+			this.selfAppraisalFromDate = date;
+		}
+    if (this.selfAppraisalToDate) {
+      let todate = new Date(this.selfAppraisalToDate.year, this.selfAppraisalToDate.month - 1, this.selfAppraisalToDate.day);
+      this.appraisalForm.get('ToDate').setValue(todate);
+    }
+    if (this.selfAppraisalFromDate) {
+      let fromdate = new Date(this.selfAppraisalFromDate.year, this.selfAppraisalFromDate.month - 1, this.selfAppraisalFromDate.day);
+      this.appraisalForm.get('FromDate').setValue(fromdate);
+    }
+    this.appraisalCyclePeriod = this.appraisalForm.get('FromDate').value.toLocaleDateString() +" - "+ this.appraisalForm.get('ToDate').value.toLocaleDateString();
+	}
+
+	isSelfHovered(date: NgbDate) {
+		return (
+			this.selfAppraisalFromDate && !this.selfAppraisalToDate && this.hoveredDate && date.after(this.selfAppraisalFromDate) && date.before(this.hoveredDate)
+		);
+	}
+
+	isSelfInside(date: NgbDate) {
+		return this.selfAppraisalToDate && date.after(this.selfAppraisalFromDate) && date.before(this.selfAppraisalToDate);
+	}
+
+	isSelfRange(date: NgbDate) {
+		return (
+			date.equals(this.selfAppraisalFromDate) ||
+			(this.selfAppraisalToDate && date.equals(this.selfAppraisalToDate)) ||
+			this.isInside(date) ||
+			this.isHovered(date)
+		);
+	}
   closeCanvasRight() {
     var offcanvasRight = document.getElementById('offcanvasRight');
     var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
     bsOffcanvas.hide();
+  }
+
+  selectedAppraisal(index: number, item: any) {
+    this.isObjectiveFound = false;
+    this.currentApprisalCycle = item;
+    if(index >= 0 &&  item.ObjectiveCatagoryId > 0) {
+      let result = document.querySelectorAll('.list-group-item > a');
+      let i = 0;
+      while (i < result.length) {
+        result[i].classList.remove('active-tab');
+        i++;
+      }
+
+      result[index].classList.add('active-tab');
+      this.isObjectiveFound = true;
+    } else {
+      ErrorToast("Please select a company.")
+    }
   }
 }
 
