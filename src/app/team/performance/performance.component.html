@@ -187,7 +187,7 @@
                       <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="btn-check" (click)="meetingTab(1)" name="meetingbtn" id="schedulrmeeting" autocomplete="off" checked>
                         <label class="btn btn-outline-primary" for="schedulrmeeting">Scheduled meetings</label>
-                      
+
                         <input type="radio" class="btn-check" (click)="meetingTab(2)" name="meetingbtn" id="completedmeeting" autocomplete="off">
                         <label class="btn btn-outline-primary" for="completedmeeting">Completed meetings</label>
                       </div>
@@ -226,7 +226,7 @@
                                   </div>
                                   <div class="card-body p-0">
                                     <div class="list-group">
-                                      <button type="button" name="meetingevents" [ngClass]="{'active': (pendingMeetings== null || pendingMeetings.length == 0) && i== 0, 'border-top' : i >= 1}" 
+                                      <button type="button" name="meetingevents" [ngClass]="{'active': (pendingMeetings== null || pendingMeetings.length == 0) && i== 0, 'border-top' : i >= 1}"
                                       (click)="selectMeeting(item, $event)" *ngFor="let item of pendingMeetings; let i=index;" class="py-3 rounded-0 list-group-item border-0 list-group-item-action" aria-current="true">
                                         <h6 class="text-truncate">{{item.meetingTitle}}</h6>
                                         <p class="mb-0 text-muted">with {{item.meetingWith}} <span *ngIf="item.extraMember > 0"> & {{item.extraMember}} more</span></p>
@@ -243,7 +243,7 @@
                                   </div>
                                   <div class="card-body p-0">
                                     <div class="list-group">
-                                      <button type="button" name="meetingevents" (click)="selectMeeting(item, $event)" *ngFor="let item of completedMeetings; let i=index;" 
+                                      <button type="button" name="meetingevents" (click)="selectMeeting(item, $event)" *ngFor="let item of completedMeetings; let i=index;"
                                       [ngClass]="{'active': i == 0, 'border-top' : i >= 1}" class="py-3 list-group-item rounded-0 border-0 list-group-item-action" aria-current="true">
                                         <h6 class="text-truncate">{{item.meetingTitle}}</h6>
                                         <p class="mb-0 text-muted">with {{item.meetingWith}} <span *ngIf="item.extraMember > 0"> & {{item.extraMember}} more</span></p>
@@ -454,16 +454,16 @@
             <i class="fa fa-bullseye fa-lg" aria-hidden="true"></i>
           </div>
           <div class="col-md-8 ps-0">
-            <h6 class="text-truncate">{{selectedObjective.description}}</h6>
+            <h6 class="">{{selectedObjective.Description}}</h6>
             <small>
               <i class="fa fa-user pe-1"></i><span>{{userDetail.FirstName + " " + userDetail.LastName}}</span>
-              <i class="fa fa-eye pe-1 ps-3"></i> <span>{{selectedObjective.objSeeType == true ? 'Manager' : 'Everyone'}}</span>
+              <i class="fa fa-eye pe-1 ps-3"></i> <span>{{selectedObjective.ObjSeeType == true ? 'Manager' : 'Everyone'}}</span>
             </small>
           </div>
-          <div class="col-md-3 text-end">
+          <!-- <div class="col-md-3 text-end">
             <h6 class="text-end"><i class="fa fa-calendar-o pe-1"></i> {{selectedObjective.timeFrameStart | date: 'y'}} - {{selectedObjective.timeFrmaeEnd | date:'y'}}</h6>
             <small>{{selectedObjective.timeFrameStart | date}} - {{selectedObjective.timeFrmaeEnd | date}}</small>
-          </div>
+          </div> -->
         </div>
         <div class="p border-bottom mt-4">Details</div>
         <div class="row">
@@ -472,9 +472,9 @@
               <div class="col-md-5">
                 <div class="d-flex align-items-center justify-content-between">
                   <small>OVERALL PROGRESS</small>
-                  <h6>{{selectedObjective.currentValue}} {{selectedObjective.progressMeassureType == 1 ? '%' : ''}}</h6>
+                  <h6>{{selectedObjective.CurrentValue}} {{selectedObjective.ProgressMeassureType == 1 ? '%' : ''}}</h6>
                 </div>
-                <p class="mb-0"><ngb-progressbar [showValue]="false" [type]="selectedObjective.status == 2 ? 'success' : selectedObjective.status == 1 ? 'secondary' : selectedObjective.status == 3 ? 'warning' : selectedObjective.status == 4 ? 'danger' : 'dark'" [value]="selectedObjective.currentValue"></ngb-progressbar></p>
+                <p class="mb-0"><ngb-progressbar [showValue]="false" [type]="selectedObjective.Status == 2 ? 'success' : selectedObjective.Status == 1 ? 'secondary' : selectedObjective.Status == 3 ? 'warning' : selectedObjective.Status == 4 ? 'danger' : 'dark'" [value]="selectedObjective.CurrentValue"></ngb-progressbar></p>
               </div>
               <div class="col-auto">
                 <button class="btn btn-sm btn-primary-c" (click)="updateEmpObjectivePopUp()">
@@ -488,22 +488,22 @@
             <div class=" mt-3 col-md-7 row align-items-center justify-content-between">
               <div class="col-auto">
                 <small>INITIAL VALUE</small>
-                <h6>{{selectedObjective.startValue}} {{selectedObjective.progressMeassureType == 1 ? '%' : ''}}</h6>
+                <h6>{{selectedObjective.StartValue}} {{selectedObjective.ProgressMeassureType == 1 ? '%' : ''}}</h6>
               </div>
               <div class="col-auto">
                 <small>TARGET</small>
-                <h6>{{selectedObjective.targetValue}} {{selectedObjective.progressMeassureType == 1 ? '%' : ''}}</h6>
+                <h6>{{selectedObjective.TargetValue}} {{selectedObjective.ProgressMeassureType == 1 ? '%' : ''}}</h6>
               </div>
               <div class="col-auto">
                 <small>CURRENT</small>
-                <h6>{{selectedObjective.currentValue}} {{selectedObjective.progressMeassureType == 1 ? '%' : ''}}</h6>
+                <h6>{{selectedObjective.CurrentValue}} {{selectedObjective.ProgressMeassureType == 1 ? '%' : ''}}</h6>
               </div>
             </div>
           </div>
           <div class="col-md-6">
             <h6 class="mt-3">Activity</h6>
-            <ng-container *ngIf="selectedObjective.performanceDetail != null && selectedObjective.performanceDetail.length > 0">
-              <ng-container *ngFor="let item of selectedObjective.performanceDetail; let i = index;">
+            <ng-container *ngIf="selectedObjective.PerformanceDetail != null && selectedObjective.PerformanceDetail.length > 0">
+              <ng-container *ngFor="let item of selectedObjective.PerformanceDetail; let i = index;">
                 <div class="row mt-3">
                   <div class="col-auto"><i class="fa fa-map-marker"></i></div>
                   <div class="col-md-11">
@@ -512,7 +512,7 @@
                         <small>{{userDetail.FirstName + " " + userDetail.LastName}} updated progress on objective</small>
                       </div>
                       <div class="col-auto">
-                        <small>{{item.updatedOn | date:'medium' }}</small>
+                        <small>{{item.UpdatedOn | date:'medium' }}</small>
                       </div>
                     </div>
                     <div class="row">
@@ -520,45 +520,45 @@
                         <i class="fa fa-bullseye fa-lg" aria-hidden="true"></i>
                       </div>
                       <div class="col-md-11 ps-0 text-break">
-                        {{selectedObjective.description}}
+                        {{selectedObjective.Description}}
                       </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                       <p class="mb-0">
-                        <small>Updated to {{item.currentValue}}%</small>
-                        <ng-container *ngIf="i+1 == selectedObjective.performanceDetail.length">
-                          <small class="text-success ps-2">{{item.currentValue - selectedObjective.startValue > 0 ? '+' : ''}}{{item.currentValue - selectedObjective.startValue}}%</small>
+                        <small>Updated to {{item.CurrentValue}}%</small>
+                        <ng-container *ngIf="i+1 == selectedObjective.PerformanceDetail.length">
+                          <small class="text-success ps-2">{{item.currentValue - selectedObjective.startValue > 0 ? '+' : ''}}{{item.currentValue - SelectedObjective.startValue}}%</small>
                         </ng-container>
                         <small *ngIf="i+1 != selectedObjective.performanceDetail.length" class="text-success ps-2">
-                          {{item.currentValue - selectedObjective.performanceDetail[i+1].currentValue > 0 ? '+' : ''}} {{item.currentValue - selectedObjective.performanceDetail[i+1].currentValue}}%
+                          {{item.CurrentValue - selectedObjective.PerformanceDetail[i+1].CurrentValue > 0 ? '+' : ''}} {{item.CurrentValue - selectedObjective.PerformanceDetail[i+1].CurrentValue}}%
                         </small>
                       </p>
                       <p class="mb-0">
-                        <ng-container *ngIf="item.status == 1">
+                        <ng-container *ngIf="item.Status == 1">
                           <small>
                             <i class="fa fa-circle text-secondary pe-2"></i>
                             <span>Not strated</span>
                           </small>
                         </ng-container>
-                        <ng-container *ngIf="item.status == 2">
+                        <ng-container *ngIf="item.Status == 2">
                           <small>
                             <i class="fa fa-circle text-success pe-2"></i>
                             <span>On track</span>
                           </small>
                         </ng-container>
-                        <ng-container *ngIf="item.status == 3">
+                        <ng-container *ngIf="item.Status == 3">
                           <small>
                             <i class="fa fa-circle text-warning pe-2"></i>
                             <span>Needs attention</span>
                           </small>
                         </ng-container>
-                        <ng-container *ngIf="item.status == 4">
+                        <ng-container *ngIf="item.Status == 4">
                           <small>
                             <i class="fa fa-circle text-danger pe-2"></i>
                             <span>At risk</span>
                           </small>
                         </ng-container>
-                        <ng-container *ngIf="item.status == 5">
+                        <ng-container *ngIf="item.Status == 5">
                           <small>
                             <i class="fa fa-circle text-dark pe-2"></i>
                             <span>Closed</span>
@@ -591,9 +591,9 @@
             <i class="fa fa-bullseye fa-lg" aria-hidden="true"></i>
           </div>
           <div class="col-md-11 ps-0">
-            <h6 class="text-truncate">{{selectedObjective.description}}</h6>
-            <small>Initail: {{selectedObjective.startValue | number: '1.2-2'}} %</small>
-            <small class="ps-4">Target: {{selectedObjective.targetValue | number: '1.2-2'}} %</small>
+            <h6>{{selectedObjective.Description}}</h6>
+            <small>Initail: {{selectedObjective.StartValue | number: '1.2-2'}} %</small>
+            <small class="ps-4">Target: {{selectedObjective.TargetValue | number: '1.2-2'}} %</small>
           </div>
         </div>
         <form [formGroup]="performanceForm">
@@ -601,15 +601,15 @@
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">New Value</label>
               <div class="input-group">
-                <input formControlName="currentValue" type="text" placeholder="Enter the latest value" class="form-control" aria-describedby="inputGroupPrepend"
-                [ngClass]="{'error-field': isSubmitted && n.currentValue.errors !== null && n.currentValue.errors.required}" DecimalNumber="6">
+                <input formControlName="CurrentValue" type="text" placeholder="Enter the latest value" class="form-control" aria-describedby="inputGroupPrepend"
+                [ngClass]="{'error-field': isSubmitted && n.CurrentValue.errors !== null && n.CurrentValue.errors.required}" DecimalNumber="6">
                 <span class="input-group-text" id="inputGroupPrepend">%</span>
               </div>
-              <small>Current Value: {{selectedObjective.currentValue | number: '1.2-2'}}</small>
+              <small>Current Value: {{selectedObjective.CurrentValue | number: '1.2-2'}}</small>
             </div>
             <div class="col-md-4 mt-3">
               <label for="" class="form-label">New Status</label>
-              <select formControlName="status" class="form-select" [ngClass]="{'error-field': isSubmitted && n.status.errors !== null && n.status.errors.required}">
+              <select formControlName="Status" class="form-select" [ngClass]="{'error-field': isSubmitted && n.Status.errors !== null && n.Status.errors.required}">
                 <option value="null" selected disabled>Select Status</option>
                 <option value="1">Not Started</option>
                 <option value="2">On track</option>
@@ -621,47 +621,47 @@
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">Note</label>
-            <textarea formControlName="comments" cols="30" oninput="this.value = this.value.toUpperCase()" rows="5" class="form-control" placeholder="Add comments"></textarea>
+            <textarea formControlName="Comments" cols="30" oninput="this.value = this.value.toUpperCase()" rows="5" class="form-control" placeholder="Add comments"></textarea>
           </div>
           <ng-container *ngIf="selectedObjective.performanceDetail != null && selectedObjective.performanceDetail.length > 0">
             <div class="card p-3 mt-4 bg-light">
               <h6 class="fw-bold">Last progress update</h6>
-              <p class="mb-0 fw-bold">{{userDetail.FirstName + " " + userDetail.LastName}} on {{selectedObjective.performanceDetail[0].updatedOn | date:'medium' }}</p>
+              <p class="mb-0 fw-bold">{{userDetail.FirstName + " " + userDetail.LastName}} on {{selectedObjective.PerformanceDetail[0].updatedOn | date:'medium' }}</p>
               <div class="d-flex align-items-center">
-                <span>Updated to {{selectedObjective.performanceDetail[0].currentValue}}%</span>
-                <ng-container *ngIf="selectedObjective.performanceDetail.length == 1">
-                  <small class="text-success ps-2">{{selectedObjective.performanceDetail[0].currentValue - selectedObjective.startValue > 0 ? '+' : ''}}{{selectedObjective.performanceDetail[0].currentValue - selectedObjective.startValue}}%</small>
+                <span>Updated to {{selectedObjective.PerformanceDetail[0].CurrentValue}}%</span>
+                <ng-container *ngIf="selectedObjective.PerformanceDetail.length == 1">
+                  <small class="text-success ps-2">{{selectedObjective.PerformanceDetail[0].CurrentValue - selectedObjective.StartValue > 0 ? '+' : ''}}{{selectedObjective.PerformanceDetail[0].CurrentValue - selectedObjective.StartValue}}%</small>
                 </ng-container>
-                <small *ngIf="selectedObjective.performanceDetail.length > 1" class="text-success ps-2">
-                  {{selectedObjective.performanceDetail[0].currentValue - selectedObjective.performanceDetail[1].currentValue > 0 ? '+' : ''}} {{selectedObjective.performanceDetail[0].currentValue - selectedObjective.performanceDetail[1].currentValue}}%
+                <small *ngIf="selectedObjective.PerformanceDetail.length > 1" class="text-success ps-2">
+                  {{selectedObjective.PerformanceDetail[0].CurrentValue - selectedObjective.PerformanceDetail[1].CurrentValue > 0 ? '+' : ''}} {{selectedObjective.PerformanceDetail[0].CurrentValue - selectedObjective.performanceDetail[1].CurrentValue}}%
                 </small>
-                <span class="ps-4">(target {{selectedObjective.targetValue}})</span>
+                <span class="ps-4">(target {{selectedObjective.TargetValue}})</span>
                 <span class="ps-4">
-                  <ng-container *ngIf="selectedObjective.performanceDetail[0].status == 1">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 1">
                     <small>
                       <i class="fa fa-circle text-secondary pe-2"></i>
                       <span>Not strated</span>
                     </small>
                   </ng-container>
-                  <ng-container *ngIf="selectedObjective.performanceDetail[0].status == 2">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 2">
                     <small>
                       <i class="fa fa-circle text-success pe-2"></i>
                       <span>On track</span>
                     </small>
                   </ng-container>
-                  <ng-container *ngIf="selectedObjective.performanceDetail[0].status == 3">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 3">
                     <small>
                       <i class="fa fa-circle text-warning pe-2"></i>
                       <span>Needs attention</span>
                     </small>
                   </ng-container>
-                  <ng-container *ngIf="selectedObjective.performanceDetail[0].status == 4">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 4">
                     <small>
                       <i class="fa fa-circle text-danger pe-2"></i>
                       <span>At risk</span>
                     </small>
                   </ng-container>
-                  <ng-container *ngIf="selectedObjective.performanceDetail[0].status == 5">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 5">
                     <small>
                       <i class="fa fa-circle text-dark pe-2"></i>
                       <span>Closed</span>
@@ -826,7 +826,7 @@
                   <i class="fa fa-quote-left" aria-hidden="true"></i>
                 </a>
                 <p class="mb-0 fs-6">
-                  <b>{{item.objective}}:</b> 
+                  <b>{{item.objective}}:</b>
                   <label class="d-block">{{item.description}}</label>
                 </p>
               </div>

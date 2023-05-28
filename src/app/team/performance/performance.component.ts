@@ -156,39 +156,39 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     this.atRiskRecord = 0;
     this.notStartedRecord = 0;
     this.closedRecord = 0;
-    let targetValue = this.objectives.map(x => x.targetValue).reduce((a, b) => {return a+b}, 0);
-    let currentValue = this.objectives.map(x => x.currentValue).reduce((a, b) => {return a+b}, 0);
+    let targetValue = this.objectives.map(x => x.TargetValue).reduce((a, b) => {return a+b}, 0);
+    let currentValue = this.objectives.map(x => x.CurrentValue).reduce((a, b) => {return a+b}, 0);
     this.overallProgress = (currentValue/targetValue) * 100;
-    let value = this.objectives.filter(x => x.status == 1);
+    let value = this.objectives.filter(x => x.Status == 1);
     if (value.length > 0)
       this.notStartedRecord = value.length;
 
-    value = this.objectives.filter(x => x.status == 2);
+    value = this.objectives.filter(x => x.Status == 2);
     if (value.length > 0)
       this.onTrackRecord = value.length;
 
-    value = this.objectives.filter(x => x.status == 3);
+    value = this.objectives.filter(x => x.Status == 3);
     if (value.length > 0)
       this.needAttentionRecord = value.length;
 
-    value = this.objectives.filter(x => x.status == 4);
+    value = this.objectives.filter(x => x.Status == 4);
     if (value.length > 0)
       this.atRiskRecord = value.length;
 
-    value = this.objectives.filter(x => x.status == 5);
+    value = this.objectives.filter(x => x.Status == 5);
     if (value.length > 0)
       this.closedRecord = value.length;
   }
 
   initForm() {
     this.performanceForm = this.fb.group({
-      objectiveId: new FormControl(this.selectedObjective != null ? this.selectedObjective.objectiveId : 0),
-      employeePerformanceId: new FormControl(this.selectedObjective != null ? this.selectedObjective.employeePerformanceId : 0, [Validators.required]),
-      employeeId: new FormControl(this.employeeId, [Validators.required]),
-      companyId: new FormControl(this.userDetail.CompanyId, [Validators.required]),
-      currentValue: new FormControl(null, [Validators.required]),
-      status: new FormControl(null, [Validators.required]),
-      comments: new FormControl(''),
+      ObjectiveId: new FormControl(this.selectedObjective != null ? this.selectedObjective.ObjectiveId : 0),
+      EmployeePerformanceId: new FormControl(this.selectedObjective != null ? this.selectedObjective.EmployeePerformanceId : 0, [Validators.required]),
+      EmployeeId: new FormControl(this.employeeId, [Validators.required]),
+      CompanyId: new FormControl(this.userDetail.CompanyId, [Validators.required]),
+      CurrentValue: new FormControl(null, [Validators.required]),
+      Status: new FormControl(null, [Validators.required]),
+      Comments: new FormControl(''),
     })
   }
 
@@ -213,8 +213,8 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     }
 
     let performvalue = this.performanceForm.value;
-    performvalue.targetValue = this.selectedObjective.targetValue;
-    if (performvalue.currentValue > this.selectedObjective.targetValue) {
+    performvalue.targetValue = this.selectedObjective.TargetValue;
+    if (performvalue.currentValue > this.selectedObjective.TargetValue) {
       this.isLoading = false;
       ErrorToast("New value is greater than targeted value");
       return;
@@ -222,10 +222,10 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     this.http.post("eps/performance/updateEmployeeObjective", performvalue, true).then(res => {
       if (res.ResponseBody) {
         let value = res.ResponseBody;
-        this.selectedObjective.updatedOn = value.updatedOn;
-        this.selectedObjective.currentValue = value.currentValue;
-        this.selectedObjective.status = value.status;
-        this.selectedObjective.performanceDetail = JSON.parse(value.performanceDetail);
+        this.selectedObjective.UpdatedOn = value.updatedOn;
+        this.selectedObjective.CurrentValue = value.currentValue;
+        this.selectedObjective.Status = value.status;
+        this.selectedObjective.PerformanceDetail = JSON.parse(value.performanceDetail);
         this.calculateRecord();
         this.isLoading = false;
         $('#managePerformance').modal('hide');
@@ -586,22 +586,22 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
 }
 
 class Objective {
-  objectiveId: number = 0;
-  objective: string = null;
-  objSeeType: boolean = false;
-  progressMeassureType: number = 1;
-  employeePerformanceId: number = 0;
-  startValue: number = 0;
-  targetValue: number = 0;
-  timeFrameStart: Date = null;
-  timeFrmaeEnd: Date = null;
-  objectiveType: string = null;
-  description: string = null;
-  currentValue: number = 0;
-  updatedOn: Date = null;
-  status: number = 0;
-  progress: number = 0;
-  performanceDetail: Array<any> = [];
+  ObjectiveId: number = 0;
+  Objective: string = null;
+  ObjSeeType: boolean = false;
+  ProgressMeassureType: number = 1;
+  EmployeePerformanceId: number = 0;
+  StartValue: number = 0;
+  TargetValue: number = 0;
+  TimeFrameStart: Date = null;
+  TimeFrmaeEnd: Date = null;
+  ObjectiveType: string = null;
+  Description: string = null;
+  CurrentValue: number = 0;
+  UpdatedOn: Date = null;
+  Status: number = 0;
+  Progress: number = 0;
+  PerformanceDetail: Array<any> = [];
 }
 
 class Meeting {
