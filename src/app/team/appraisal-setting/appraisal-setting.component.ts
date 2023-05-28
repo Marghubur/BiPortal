@@ -37,8 +37,8 @@ export class AppraisalSettingComponent implements OnInit {
   userDetail: any = null;
   appraisalCyclePeriod: string = null;
   isViewInList: boolean = true;
-  isObjectiveFound: boolean = true;
-  aurrentAppraisalObjective: Array<any> = [];
+  isObjectiveFound: boolean = false;
+  currentAppraisalObjective: Array<any> = [];
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -465,9 +465,11 @@ export class AppraisalSettingComponent implements OnInit {
       }
 
       result[index].classList.add('active-tab');
-      this.isObjectiveFound = true;
+      if (this.currentAppraisalObjective.length > 0)
+        this.isObjectiveFound = true;
+
     } else {
-      ErrorToast("Please select a company.")
+      ErrorToast("Please select a appraisal group.")
     }
   }
 }
