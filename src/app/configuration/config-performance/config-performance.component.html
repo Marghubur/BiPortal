@@ -30,7 +30,7 @@
                       <a href="javascript:void()" class="ps-3">#</a>
                     </div>
                   </div>
-                  <div class="th fe-2">
+                  <div class="th fe-4">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
                         (keyup.enter)="filterRecords()" [(ngModel)]="objectDetail.Objective"
@@ -41,33 +41,6 @@
                           [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }" aria-hidden="true"></i>
                         <i class="fa fa-sort-amount-desc"
                           [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }" aria-hidden="true"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="th fe-1">
-                    <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" readonly
-                        placeholder="Search by Start Date">
-                      <div class="t-filter" >
-                        <a href="javascript:void()" class="pe-2">Start Date</a>
-                        <i class="fa fa-sort-amount-asc"
-                          [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }"
-                          aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
-                          [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }"
-                          aria-hidden="true"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="th fe-1">
-                    <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" readonly placeholder="Search by End Date">
-                      <div class="t-filter" >
-                        <a href="javascript:void()" class="pe-2">End Date</a>
-                        <i class="fa fa-sort-amount-asc"
-                          [ngClass]="{'d-none': orderByEndDateAsc == null || !orderByEndDateAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
-                          [ngClass]="{'d-none': orderByEndDateAsc == null || orderByEndDateAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -100,19 +73,9 @@
                 <ng-container *ngIf="objectiveDetails.length > 0">
                   <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
                     <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
-                    <div class="td align-middle fe-2 text-truncate d-flex align-items-center">
-                      <div class="col-md-7 text-truncate">{{item.Objective}}</div>
+                    <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
+                      <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
                       <i class=" ps-2 fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
-                    </div>
-                    <div class="td align-middle fe-1">
-                      <div class="cell-wrapper">
-                        {{item.TimeFrameStart | date}}
-                      </div>
-                    </div>
-                    <div class="td align-middle fe-1">
-                      <div class="cell-wrapper">
-                        {{item.TimeFrmaeEnd | date}}
-                      </div>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
@@ -167,71 +130,18 @@
             <label for="" class="form-label">Description</label>
             <app-editor [height]="15" [content]="htmlText"></app-editor>
           </div>
-          <div class="row">
-            <div class="col-md-3">
-              <label for="" class="form-label">Time Frame Start Date</label>
-              <form class="form-inline">
-                <div class="form-group w-100">
-                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.TimeFrameStart.errors !== null && f.TimeFrameStart.errors.required}">
-                    <input class="form-control" [placement]="'bottom'" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="startDate"
-                      (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 1}" #d="ngbDatepicker">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                          class="fa fa-calendar" aria-hidden="true"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="col-md-3">
-              <label for="" class="form-label">Time Frame End Date</label>
-              <form class="form-inline">
-                <div class="form-group w-100">
-                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.TimeFrmaeEnd.errors !== null && f.TimeFrmaeEnd.errors.required}">
-                    <input class="form-control" [placement]="'bottom'" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="endDate"
-                      (dateSelect)="onEndDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 1}" #ed="ngbDatepicker">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary calendar" (click)="ed.toggle()" type="button"><i
-                          class="fa fa-calendar" aria-hidden="true"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="col-md-3">
-              <label for="" class="form-label">Objective Type</label>
-              <!-- <input type="text" maxlength="100" placeholder="Objective Type" oninput="this.value = this.value.toUpperCase()" class="form-control" formControlName="objectiveTypeId" [ngClass]="{'error-field': submitted && f.objectiveTypeId.errors !== null && f.objectiveTypeId.errors.required}"> -->
-              <select name="objectiveTypeId" formControlName="ObjectiveTypeId" class="form-select" [ngClass]="{'error-field': submitted && f.ObjectiveTypeId.errors !== null && f.ObjectiveTypeId.errors.required}" disabled>
-                <option value="1" selected>Individual</option>
-              </select>
-            </div>
-            <!-- <div class="col-md-3">
-              <label for="" class="form-label">Who can see</label>
-              <div class="btn-group d-block" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" value="true" class="btn-check" formControlName="canManagerSee" name="canManagerSee" id="btnradio22" autocomplete="off"
-                 [ngClass]="{'error-field': submitted && f.canManagerSee.errors !== null && f.canManagerSee.errors.required}">
-                <label class="btn btn-outline-primary" for="btnradio22">Manager</label>
+          <!-- <div class="col-md-3">
+            <label for="" class="form-label">Who can see</label>
+            <div class="btn-group d-block" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" value="true" class="btn-check" formControlName="canManagerSee" name="canManagerSee" id="btnradio22" autocomplete="off"
+                [ngClass]="{'error-field': submitted && f.canManagerSee.errors !== null && f.canManagerSee.errors.required}">
+              <label class="btn btn-outline-primary" for="btnradio22">Manager</label>
 
-                <input type="radio" value="false" class="btn-check" formControlName="canManagerSee" name="canManagerSee" id="btnradio23" autocomplete="off"
-                 [ngClass]="{'error-field': submitted && f.canManagerSee.errors !== null && f.canManagerSee.errors.required}">
-                <label class="btn btn-outline-primary" for="btnradio23">Everyone</label>
-              </div>
-            </div> -->
-          </div>
-          <div class="row" *ngIf="isPageReady">
-            <div class="mt-3 col-md-4">
-              <label for="" class="form-label">Tag</label>
-              <app-iautocomplete [data]="empRoles" [ngModelOptions]="{standalone: true}" [(ngModel)]="roleId" (OnSelect)="onRoleChanged($event)" (keydown.esc)="resetFilter()">
-              </app-iautocomplete>
+              <input type="radio" value="false" class="btn-check" formControlName="canManagerSee" name="canManagerSee" id="btnradio23" autocomplete="off"
+                [ngClass]="{'error-field': submitted && f.canManagerSee.errors !== null && f.canManagerSee.errors.required}">
+              <label class="btn btn-outline-primary" for="btnradio23">Everyone</label>
             </div>
-            <div class="mt-3 col-md-8">
-              <div class="d-flex align-items-center flex-wrap">
-                <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngFor="let item of tagsRole;">{{item.text}}</span>
-              </div>
-            </div>
-          </div>
+          </div> -->
           <!-- <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" formControlName="isIncludeReview" value="" id="flexCheckDefault">
             <label class="form-check-label" for="flexCheckDefault">
