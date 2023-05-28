@@ -353,22 +353,25 @@ export class AppraisalSettingComponent implements OnInit {
     }
   }
 
-  saveAppraisal() {
+  startCycle() {
     this.isLoading = true;
     if (this.assignedEmployee.length <=0) {
       this.isLoading = false;
       ErrorToast("Please select employee first");
       return;
     }
-    // this.http.post("", this.assignedEmployee).then(res => {
-    //   if (res.ResponseBody) {
-    //     this.isLoading = false;
-    //     Toast("Appraisal cycle updated successfully");
-    //   }
-    // }).catch(e => {
-    //   this.isLoading = false;
-    // })
-    console.log(this.assignedEmployee);
+
+    this.currentApprisalCycle.Status = "Started";
+    this.http.put(`eps/apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,
+    this.currentApprisalCycle, true).then(res => {
+      if (res.ResponseBody) {
+        this.isLoading = false;
+        this.closeCanvasRight();
+        Toast("Appraisal cycle started successfully");
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   getProjects() {
@@ -441,6 +444,11 @@ export class AppraisalSettingComponent implements OnInit {
 			this.isHovered(date)
 		);
 	}
+  closeCanvasRight() {
+    var offcanvasRight = document.getElementById('offcanvasRight');
+    var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
+    bsOffcanvas.hide();
+  }
 }
 
 class ApprisalCycle {
@@ -451,4 +459,5 @@ class ApprisalCycle {
   Total: number = 0;
   ObjectiveCatagoryId: number = 0;
   Index: number = 0;
+  Status: String = null;
 }
