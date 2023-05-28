@@ -111,8 +111,8 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.financialYear = res.ResponseBody[0].financialYear;
         let days = new Date(this.financialYear+1, res.ResponseBody[0].declarationEndMonth, 0).getDate();
-        this.startDate = new Date(this.financialYear, res.ResponseBody[0].declarationStartMonth-1, 1);
-        this.endDate = new Date(this.financialYear+1, res.ResponseBody[0].declarationEndMonth-1, days);
+        this.startDate = new Date();
+        this.endDate = new Date();
         this.minDate = {year: this.startDate.getFullYear(), month: this.startDate.getMonth()+1, day: this.startDate.getDate()};
         this.maxDate = {year: this.endDate.getFullYear(), month:  this.endDate.getMonth()+1, day:  this.endDate.getDate()};
         this.allObjective = res.ResponseBody;;
