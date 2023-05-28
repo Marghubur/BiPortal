@@ -65,22 +65,22 @@ export class SettingsComponent implements OnInit {
   redirectTo(pageName: string) {
     switch(pageName) {
       case PFESISetup:
-        this.nav.navigate(AccountsBaseRoute + "/" + PFESISetup, this.currentCompnay.CompanyId);
+        this.nav.navigate(PFESISetup, this.currentCompnay.CompanyId);
         break;
       case CompanyInfo:
         this.nav.navigate(CompanyInfo, this.currentCompnay);
         break;
       case Payroll:
-        this.nav.navigate(AccountsBaseRoute + "/" + Payroll, this.currentCompnay);
+        this.nav.navigate(Payroll, this.currentCompnay);
         break;
       case SalaryComponentStructure:
-        this.nav.navigate(AccountsBaseRoute + "/" + SalaryComponentStructure, null)
+        this.nav.navigate(SalaryComponentStructure, null)
         break;
       case CustomSalaryStructure:
-        this.nav.navigate(AccountsBaseRoute + "/" + CustomSalaryStructure, this.currentCompnay);
+        this.nav.navigate(CustomSalaryStructure, this.currentCompnay);
         break;
       case PayrollComponents:
-        this.nav.navigate(AccountsBaseRoute + "/" + PayrollComponents, null);
+        this.nav.navigate(PayrollComponents, null);
         break;
       case CompanySettings:
         this.nav.navigate(CompanySettings, this.currentCompnay);
