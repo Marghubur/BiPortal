@@ -678,10 +678,15 @@ export class AppraisalSettingComponent implements OnInit {
 
   addAppraisalObjective() {
     this.isLoading = true;
-    if (this.selectedObjective && this.selectedObjective.length > 0) {
-      console.log(this.selectedObjective);
-      console.log(this.currentApprisalCycle);
-      this.isLoading = false;
+    if (this.selectedObjective && this.selectedObjective.length > 0 && this.currentApprisalCycle && this.currentApprisalCycle.ObjectiveCatagoryId > 0) {
+      this.currentApprisalCycle.ObjectiveIds = this.selectedObjective.map(x => x.ObjectiveId);
+      this.http.put(`eps/apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,this.currentApprisalCycle, true).then(res => {
+        if (res.ResponseBody) {
+          Toast("Objective added/updated in appraisal category successfully");
+          $('#addAppraisalObjective').modal('show');
+          this.isLoading = false;
+        }
+      })
     } else {
       ErrorToast("Please select objective first");
       this.isLoading = false;
@@ -690,9 +695,9 @@ export class AppraisalSettingComponent implements OnInit {
 
   listview() {
     this.isViewInList = !this.isViewInList;
-    if (this.isViewInList) {
+    if (!this.isViewInList) {
       if (this.apprisalCycleDetail.length > 0)
-        this.currentApprisalCycle = this.apprisalCycleDetail[0];
+      this.currentApprisalCycle = this.apprisalCycleDetail[0];
     }
   }
 
@@ -707,6 +712,7 @@ class ApprisalCycle {
   ObjectiveCatagoryId: number = 0;
   Index: number = 0;
   Status: String = null;
+  ObjectiveIds: Array<number> = [];
 }
 
 class Objective {
