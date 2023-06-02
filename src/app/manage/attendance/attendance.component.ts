@@ -92,12 +92,12 @@ export class AttendanceComponent implements OnInit {
     this.DayValue = this.time.getDay();
     let user = this.user.getInstance() as UserDetail;
     this.userDetail = this.nav.getValue();
+    this.loadAutoComplete();
     if(this.userDetail || user.RoleId != UserType.Admin) {
       this.isRedirected = true;
       this.employeeId = this.userDetail != null ? this.userDetail.EmployeeUid : user.UserId;
       this.userName = this.userDetail != null ? this.userDetail.FirstName + " " + this.userDetail.LastName : user.FirstName + " " + user.LastName;
       this.clientId = this.userDetail != null ? this.userDetail.CompanyId : user.CompanyId;
-      this.loadAutoComplete();
       if (this.userDetail == null)
         this.userDetail = user;
       this.loadAttendanceData();
@@ -453,14 +453,17 @@ export class AttendanceComponent implements OnInit {
   loadAutoComplete() {
     this.isEmployeesReady = false;
     let fileter = new Filter();
-    fileter.PageSize = 500;
-    this.applicationData["Employees"] = GetEmployees();
-    this.employeesList.data = [];
-    this.employeesList.placeholder = "Employee";
-    this.employeesList.data = GetEmployees();
-    this.employeesList.className = "";
-    this.isEmployeesReady = true;
-    this.isRedirected = true;
+    this.http.post(`employee/GetEmployees/`, fileter).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.applicationData["Employees"] = response.ResponseBody;
+        this.employeesList.data = [];
+        this.employeesList.placeholder = "Employee";
+        this.employeesList.data = GetEmployees();
+        this.employeesList.className = "";
+        this.isEmployeesReady = true;
+        this.isRedirected = true;
+      }
+    });
   }
 
   addEmployeeEmail(e: any) {
