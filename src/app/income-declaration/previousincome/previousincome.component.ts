@@ -86,12 +86,23 @@ export class PreviousincomeComponent implements OnInit {
   getPreviousIncome() {
     let doj = new Date(this.userDetail.CreatedOn);
     let joiningMonth = doj.getMonth();
-    this.currentYear = new Date().getFullYear()-1;
-    if (doj.getFullYear() == new Date().getFullYear() && doj.getMonth()+1 != this.startingMonth) {
-      this.itemCount = joiningMonth - this.startingMonth;
-      this.initForm();
-      this.isRecordFound = true;
-    } else if(doj.getFullYear() == (new Date().getFullYear()-1) && joiningMonth > this.startingMonth) {
+    let date = new Date();
+    this.currentYear = date.getFullYear();
+    if (doj.getFullYear() == date.getFullYear() && joiningMonth+1 != this.startingMonth ) {
+      if (joiningMonth > this.startingMonth) {
+        this.itemCount = joiningMonth - this.startingMonth;
+        this.initForm();
+        this.isRecordFound = true;
+      } else {
+        if (date.getMonth() < this.startingMonth) {
+          this.currentYear--;
+          this.itemCount = (12 - this.startingMonth) + joiningMonth;
+          this.initForm();
+          this.isRecordFound = true;
+        }
+      }
+    } else if(doj.getFullYear() == (date.getFullYear()-1) && joiningMonth > this.startingMonth) {
+      this.currentYear--;
       this.itemCount = joiningMonth - this.startingMonth;
       this.initForm();
       this.isRecordFound = true;
