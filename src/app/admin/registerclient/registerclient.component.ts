@@ -62,9 +62,14 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   }
 
   buildProfileImage(fileDetail: any) {
-    this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
-    this.clientModal.FileId = fileDetail.FileId;
-    this.clientModal.OldFileName = `${fileDetail.FileName}.${fileDetail.FileExtension}`;
+    if (fileDetail.FileName.includes(".")) {
+      this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}`;
+      this.clientModal.OldFileName = `${fileDetail.FileName}`;
+    } else {
+      this.profileURL = `${this.http.GetImageBasePath()}${fileDetail.FilePath}/${fileDetail.FileName}.${fileDetail.FileExtension}`;
+      this.clientModal.OldFileName = `${fileDetail.FileName}.${fileDetail.FileExtension}`;
+    }
+      this.clientModal.FileId = fileDetail.FileId;
   }
 
   loadData() {
@@ -242,14 +247,16 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
       formData.append(`${ProfileImage}_${this.imageIndex}`, file)
       this.http.post(`Clients/RegisterClient/${this.isUpdating}`, formData).then((response: ResponseModel) => {
         if (response.ResponseBody !== null) {
-          this.clientModal = response.ResponseBody as clientModal;
+          this.clientModal = response.ResponseBody;
+          this.clientModal.GSTNO = response.ResponseBody.GSTNo;
           this.initForm();
           Toast("Client Inserted/Updated successfully");
            $('#messageModal').modal('show');
+           this.isLoading = false;
         } else {
           ErrorToast("Failed to generated, Please contact to admin.");
+          this.isLoading = false;
         }
-        this.isLoading = false;
       }).catch(e => {
         this.isLoading = false;
       });

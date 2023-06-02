@@ -171,6 +171,7 @@ export class EmailConfigComponent implements OnInit {
       this.isLoading = false;
       $('#emailConfigModal').modal('hide');
     }).catch(e => {
+      this.isLoading = false;
       this.isPageLoading = false;
       ErrorToast("Fail to load email template mapping data");
       $('#emailConfigModal').modal('hide');

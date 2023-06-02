@@ -83,6 +83,7 @@
                   <div class="th fe-1">
                     <div class="cell-wrapper">
                       <select class="form-select" (change)="filterRecords()" [(ngModel)]="holidayDetail.IsHalfDay">
+                        <option value=null disabled selected>Select</option>
                         <option value="true">Half Day</option>
                         <option value="false">Full Day</option>
                       </select>
@@ -109,7 +110,14 @@
                       </div>
                     </div>
                   </div>
-                  <div class="th fe-index text-center" *ngIf="isAdmin">ACTIONS</div>
+                  <div class="th fe-index text-center" *ngIf="isAdmin">
+                    <div class="cell-wrapper">
+                      <button class="btn btn-danger" (click)="resetFilter()"><i class="fa fa-repeat"></i></button>
+                      <div class="t-filter" (click)="arrangeDetails(orderByCountryAsc, 'Country')">
+                        ACTION
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="t-body">

@@ -3,7 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { AccountsBaseRoute, PayrollComponents } from 'src/providers/constants';
+import { PayrollComponents } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { SalaryComponentFields } from '../salarycomponent-structure/salarycomponent-structure.component';
 declare var $: any;
@@ -518,7 +518,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   navigateTo(name: string) {
     if (name == PayrollComponents)
-      this.nav.navigate(AccountsBaseRoute + "/" +PayrollComponents, null);
+      this.nav.navigate(PayrollComponents, null);
   }
 
   filterRecords(e: any) {

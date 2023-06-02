@@ -44,27 +44,27 @@
         <div class="row">
           <div class="col-md-6">
             <div class="mt-3 col-md-8">
-              <input type="text" formControlName="EmailNote" maxlength="40" class="form-control border-0 border-bottom" placeholder="Note: Will be appended with body content (Optional)">
+              <input type="text" formControlName="EmailNote" maxlength="40" class="form-control rounded-0 border-0 border-bottom" placeholder="Note: Will be appended with body content (Optional)">
             </div>
             <div class="mt-3 col-md-8">
-              <input type="text" formControlName="EmailClosingStatement" maxlength="40" class="form-control border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.EmailClosingStatement.errors !== null && f.EmailClosingStatement.errors.required}" placeholder="Thanks & Regards or Define custom">
+              <input type="text" formControlName="EmailClosingStatement" maxlength="40" class="form-control rounded-0 border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.EmailClosingStatement.errors !== null && f.EmailClosingStatement.errors.required}" placeholder="Thanks & Regards or Define custom">
             </div>
             <div class="mt-3 col-md-8">
-              <input type="text" formControlName="SignatureDetail" maxlength="40" class="form-control border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.SignatureDetail.errors !== null && f.SignatureDetail.errors.required}" placeholder="Name or Signature">
+              <input type="text" formControlName="SignatureDetail" maxlength="40" class="form-control rounded-0 border-0 border-bottom" [ngClass]="{'custom-error-field': submitted && f.SignatureDetail.errors !== null && f.SignatureDetail.errors.required}" placeholder="Name or Signature">
             </div>
             <div class="mt-3 col-md-8">
-              <input type="text" formControlName="ContactNo" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control border-0 border-bottom" placeholder="+91-000000000 (Optional)">
+              <input type="text" formControlName="ContactNo" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control border-0 rounded-0 border-bottom" placeholder="+91-000000000 (Optional)">
             </div>
           </div>
           <div class="mt-3 col-md-6">
             <label for="" class="form-label">Select logo</label>
             <div class="col-auto col-md-6">
               <select class="form-select" (change)="loadImageLocally($event)" formControlName="FileId">
-                <option value="" disabled>Select image</option>
+                <option value="0" disabled>Select image</option>
                 <option [attr.value]="img.FileId" *ngFor="let img of companyFiles">{{img.FileName}}</option>
               </select>
             </div>
-            <div class="mt-3 col-md-6 ">
+            <div class="mt-3 col-md-6 " *ngIf="logoUrl != ''">
               <img [attr.src]="logoUrl" class="small-img-preview" alt="">
             </div>
           </div>

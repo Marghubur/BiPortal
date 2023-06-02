@@ -76,6 +76,7 @@ export class ClientsComponent implements OnInit {
     userDetail.Name = client.ClientName;
     userDetail.Email = client.Email;
     userDetail.Mobile = client.PrimaryPhoneNo;
+    userDetail.UserTypeId = UserType.Client;
     this.nav.navigate(Documents, userDetail);
   }
 

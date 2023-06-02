@@ -3,7 +3,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule, AccountsBaseRoute } from 'src/providers/constants';
+import { AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -433,6 +433,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       if (this.totalFileSize > 2048) {
         this.isLargeFile = true;
         this.fileDetail = [];
+      } else {
+        this.isLargeFile = false;
       }
   }
 
@@ -757,13 +759,13 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSalary, null);
+        this.nav.navigateRoot(AdminSalary, null);
         break;
       case "summary-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSummary, null);
+        this.nav.navigateRoot(AdminSummary, null);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminPreferences, null);
+        this.nav.navigateRoot(AdminPreferences, null);
         break;
     }
   }
@@ -773,16 +775,16 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       case "declaration-tab":
         break;
       case "previous-income-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminPreviousIncome, null);
+        this.nav.navigateRoot(AdminPreviousIncome, null);
         break;
       case "form-12-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminForm12B, null);
+        this.nav.navigateRoot(AdminForm12B, null);
         break;
       case "free-tax-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminFreeTaxFilling, null);
+        this.nav.navigateRoot(AdminFreeTaxFilling, null);
         break;
       case "approval-rule-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminDeclarationApprovalRule, null);
+        this.nav.navigateRoot(AdminDeclarationApprovalRule, null);
         break;
     }
   }
@@ -795,7 +797,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   gotoTaxSection() {
-    this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminIncomeTax, this.EmployeeId)
+    this.nav.navigateRoot(AdminIncomeTax, this.EmployeeId)
   }
 }
 

@@ -160,8 +160,11 @@ export class ManageComponent implements OnInit {
           this.profile = profile.find(x => x.FileName.includes(ProfileImage));
           if (this.profile) {
             this.profileId = this.profile.FileId;
-            this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
-          }
+            if (this.profile.FileName.includes("."))
+              this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}`;
+            else
+              this.profileURL = `${this.http.GetImageBasePath()}${this.profile.FilePath}/${this.profile.FileName}.${this.profile.FileExtension}`;
+            }
           let document = profile.filter(x => x.FileName == "resume");
           if (document.length > 0) {
             this.documentId = document[0].FileId;
@@ -1804,7 +1807,11 @@ export class ManageComponent implements OnInit {
         if (profile && profile.length > 0) {
           this.profile = profile.filter(x => x.FileName.includes(ProfileImage));
           this.profileId = this.profile[0].FileId;
-          this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
+          if (this.profile[0].FileName.includes('.'))
+            this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}`;
+          else
+            this.profileURL = `${this.http.GetImageBasePath()}${this.profile[0].FilePath}/${this.profile[0].FileName}.${this.profile[0].FileExtension}`;
+
           let document = profile.filter(x => x.FileName == "resume");
           if (document.length > 0) {
             this.documentId = document[0].FileId;

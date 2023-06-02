@@ -341,14 +341,14 @@
           <div class="d-flex position-relative">
             <div class="col-md-10 d-flex">
               <div class="col-md-6 ps-2 py-3 border">
-                <div class="d-flex align-items-center float-start">
+                <div class="d-flex col-md-8 align-items-center float-start">
                   <div class="mb-0 text-dark fs-5">
                     <small>START DATE</small>
-                    <p class="mb-0">{{leaveDetail.LeaveFromDay | date}}</p>
+                    <!-- <p class="mb-0">{{leaveDetail.LeaveFromDay | date}}</p> -->
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control d-none" placeholder="yyyy-mm-dd"   [markDisabled]="isDisabled"
+                          <input class="form-control ms-0 fs-5 ps-0 pt-0 border-0" placeholder="yyyy-mm-dd"   [markDisabled]="isDisabled"
                             (dateSelect)="onDateSelection($event)" name="dp" [(ngModel)]="fromdateModal" ngbDatepicker
                             #fromdate="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()" [disabled]="!isEnabled"
@@ -367,11 +367,11 @@
                 <div class="d-flex align-items-center float-end">
                   <div class="mb-0 text-dark fs-5">
                     <small>END DATE</small>
-                    <p class="mb-0">{{leaveDetail.LeaveToDay | date}}</p>
+                    <!-- <p class="mb-0">{{leaveDetail.LeaveToDay | date}}</p> -->
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control d-none" placeholder="yyyy-mm-dd" [minDate]="maxDate"
+                          <input class="form-control pe-0 text-end fs-5 pt-0 border-0" placeholder="yyyy-mm-dd" [minDate]="maxDate"
                             (dateSelect)="onDateSelect($event)" name="dp" [markDisabled]="isDisabled" [(ngModel)]="model" ngbDatepicker
                             #d="ngbDatepicker">
                           <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()" [disabled]="!isEnabled"

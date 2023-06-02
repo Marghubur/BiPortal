@@ -4,7 +4,7 @@ import { tableConfig } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { Attendance, Documents, DocumentsPage, Performance, Employees, Files, ManageEmployee, Profile } from 'src/providers/constants';
+import { Attendance, Documents, DocumentsPage, Performance, Employees, Files, ManageEmployee, Profile, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -379,7 +379,8 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     userDetail.Email = user.Email;
     userDetail.PageName = Employees;
     userDetail.UserId = user.EmployeeUid,
-    userDetail.Name = user.FirstName +" "+ user.LastName
+    userDetail.Name = user.FirstName +" "+ user.LastName;
+    userDetail.UserTypeId = UserType.Employee;
     this.nav.navigate(Documents, userDetail);
   }
 

@@ -265,11 +265,13 @@ export class NotificationComponent implements OnInit {
         }
       }
     }
-    let fileid = JSON.parse(FileIds);
-    if (fileid.length > 0) {
-      for (let i = 0; i < fileid.length; i++) {
-        let file = this.companyFile.find(x => x.CompanyFileId == fileid[i])
-        this.uploadedFile.push(file);
+    if (FileIds != "") {
+      let fileid = JSON.parse(FileIds);
+      if (fileid.length > 0) {
+        for (let i = 0; i < fileid.length; i++) {
+          let file = this.companyFile.find(x => x.CompanyFileId == fileid[i])
+          this.uploadedFile.push(file);
+        }
       }
     }
   }
@@ -416,7 +418,7 @@ export class NotificationComponent implements OnInit {
   }
 
   viewFile(file: Files) {
-    switch(file.FileExtension) {
+    switch(file.FileExtension.toLowerCase()) {
       case Pdf:
         this.viewer = document.getElementById("viewfile-container");
         this.viewer.classList.remove('d-none');

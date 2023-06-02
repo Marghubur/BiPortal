@@ -81,9 +81,9 @@ export class CompanyInfoComponent implements OnInit {
           this.fileDetail = response.ResponseBody.Files;
           for (let i = 0; i < this.fileDetail.length; i++) {
             if(this.fileDetail[i].FileName.toLowerCase() == "signwithstamp") {
-              this.signURL = `${this.imageBasePath}/${this.fileDetail[i].FilePath}/${this.fileDetail[i].FileName}.${this.fileDetail[i].FileExtension}`;
+              this.signURL = `${this.imageBasePath}${this.fileDetail[i].FilePath}/${this.fileDetail[i].FileName}.${this.fileDetail[i].FileExtension}`;
             } else if (this.fileDetail[i].FileName.toLowerCase() == "signwithoutstamp") {
-              this.signwithoutstamp = `${this.imageBasePath}/${this.fileDetail[i].FilePath}/${this.fileDetail[i].FileName}.${this.fileDetail[i].FileExtension}`;
+              this.signwithoutstamp = `${this.imageBasePath}${this.fileDetail[i].FilePath}/${this.fileDetail[i].FileName}.${this.fileDetail[i].FileExtension}`;
             }
           }
 

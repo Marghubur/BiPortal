@@ -183,3 +183,20 @@
   border-color: #204d74!important;
   color: #fff !important;
 }
+
+.bg-ant {
+  background-color: antiquewhite;
+}
+
+.chip {
+  span {
+    background: antiquewhite;
+    color: black;
+  }
+
+  a {
+    top: -8px;
+    color: #444;
+    right: -3px;
+  }
+}

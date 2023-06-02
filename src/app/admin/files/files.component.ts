@@ -75,6 +75,8 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   isError: boolean = false;
   maxDate: any = null;
   allBillingYears: Array<any> = [];
+  isModalReady: boolean = false;
+  orderByYearAsc: boolean = null;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
@@ -104,6 +106,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.fromModel = null;
     this.toModel = null;
     this.model = null;
+    this.RaisedBilloption = '';
     this.employeeData = new Filter();
     this.employeeFile = new BillDetails();
     this.employeeFile.Status = "0";
@@ -122,6 +125,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
       let value = year - i;
       this.allBillingYears.push(value);
     }
+    this.employeeFile.Year = year.toString();
     this.gstDetailForm = this.fb.group({
       GstId: new FormControl(0),
       Billno: new FormControl("", Validators.required),
@@ -161,6 +165,8 @@ export class FilesComponent implements OnInit, AfterViewChecked {
       this.orderByMonthAsc = !flag;
     if (FieldName == 'GSTStatus')
       this.orderByGSTStatusAsc = !flag;
+    if (FieldName == 'BillYear')
+      this.orderByYearAsc = !flag;
     this.singleEmployee = new Filter();
     this.singleEmployee.SortBy = FieldName +" "+ Order;
     this.LoadFiles()
@@ -195,6 +201,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.isLoading = true;
     let errorCount = 0;
     if (this.documentForm.get("StatusId").value == 0) {
+      this.isLoading = false;
       this.isError = true;
       errorCount++;
     } else {
@@ -209,13 +216,14 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     if (errorCount === 0) {
       this.http.post(`OnlineDocument/UpdateRecord/${this.currentFileId}`, this.documentForm.value).then(response => {
         if (response.ResponseBody) {
+          this.refreshFilter();
           Toast(response.ResponseBody);
           this.isLoading = false;
         }
         this.closeWindow();
       }).catch(e => {
         this.isLoading = false;
-      });
+      })
     } else {
       ErrorToast("Status is mandatory fields.");
     }
@@ -285,8 +293,8 @@ export class FilesComponent implements OnInit, AfterViewChecked {
       this.http.upload(`Bill/UpdateGstStatus/${this.currentRecordBillNo}`, formData).then(response => {
         if (response.ResponseBody) {
           this.closeWindow();
-          this.isLoading = false;
           Toast(response.ResponseBody);
+          this.isLoading = false;
         }
       }).catch(e => {
         this.isLoading = false;
@@ -301,22 +309,18 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     let newData = data[0];
     this.http.post(`OnlineDocument/EditFile`, newData).then(response => {
       Toast("File Reterive");
-    }).catch(e => {
-      ErrorToast("Fail to edit.");
-     });
+    }).catch(e => { console.log(e) });
   }
 
-  deleteFile(FileUid: string) {
-    let data = this.userFiles.filter(a => a.FileUid === FileUid);
-    let newData = data[0];
-    this.http.get(`OnlineDocument/DeleteData/${this.currentEmployeeDetail.EmployeeUid}`).then(response => {
-      Toast("File Reterive");
-    }).catch(e => {
-      ErrorToast("Fail to delete.");
-    });
-  }
+  // deleteFile(FileUid: string) {
+  //   let data = this.userFiles.filter(a => a.FileUid === FileUid);
+  //   let newData = data[0];
+  //   this.http.get(`OnlineDocument/DeleteData/${this.currentEmployeeDetail.EmployeeUid}`).then(response => {
+  //     this.common.ShowToast("File Reterive");
+  //   }).catch(e => { console.log(e) });
+  // }
 
-  ClickEvents(e: any) {
+  CClickEvents(e: any) {
     if (e.fn)
       e.fn(e.item, this);
   }
@@ -329,8 +333,8 @@ export class FilesComponent implements OnInit, AfterViewChecked {
 
   viewPdfFile(userFile: any) {
     this.isPdfGenerating = true;
-    $('#pdfviewingModal').modal('show');
     this.regeneratebill(userFile);
+    $('#pdfviewingModal').modal('show');
   }
 
   showFile(userFile: any) {
@@ -352,10 +356,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     let employeeBillDetail = {
       "EmployeeId": userFile.FileOwnerId,
       "ClientId": userFile.ClientId,
-      "FileId": fileId,
-      "FilePath": userFile.FilePath,
-      "FileName": userFile.FileName,
-      "FileExtension": userFile.FileExtension
+      "FileId": fileId
     };
     this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
       let fileDetail: any = null;
@@ -366,7 +367,11 @@ export class FilesComponent implements OnInit, AfterViewChecked {
         else
           this.showFile(userFile);
       }
-    })
+
+      $('#pdfviewingModal').modal('hide');
+    }).catch(err => {
+      $('#pdfviewingModal').modal('hide');
+    });
   }
 
   getFileExtension(value: any) {
@@ -381,44 +386,8 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     $('#downloadPopUp').modal('show')
   }
 
-  downloadPdfDocx() {
-    this.downlodFilePath = "";
-    let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
-
-    let fileId = Number(this.FileDetail.FileUid);
-    if(isNaN(fileId)) {
-      ErrorToast("Invalid file id supplied.");
-      return;
-    }
-
-    let employeeBillDetail = {
-      "EmployeeId": this.FileDetail.FileOwnerId,
-      "ClientId": this.FileDetail.ClientId,
-      "FileId": fileId,
-      "FilePath": this.FileDetail.FilePath,
-      "FileName": this.FileDetail.FileName,
-      "FileExtension": this.FileDetail.FileExtension
-    };
-
-    this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
-      if (response.ResponseBody) {
-        if(updateFilePath !== "") {
-          this.downlodFilePath = updateFilePath;
-          $('#downloadexistingfile').click();
-          this.viewer = document.getElementById("file-container");
-          this.viewer.classList.remove('d-none');
-          this.viewer.querySelector('iframe').setAttribute('src', this.downlodFilePath);
-          var ext =this.downlodFilePath.split(".");
-          if (ext[1] == "docx")
-            this.viewer.classList.add("d-none");
-        }
-        $('#downloadPopUp').modal('hide')
-      }
-      //this.closeWindow();
-
-    }).catch(e => {
-      console.log(JSON.stringify(e));
-    });
+  closePopUp() {
+    $('#sendfileModal').modal('hide');
   }
 
   UpdateCurrent(item: any) {
@@ -444,6 +413,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.employeeFile = item;
     this.employeeFile.Month = "0";
     this.isError = false;
+    this.isModalReady = true;
     this.updateBillPaidOn();
     $('#addupdateModal').modal('show');
     }
@@ -481,6 +451,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.isFileFound = false;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
+      this.employeeDetails = [];
       this.TotalGSTAmount = 0;
       this.TotalReceivedAmount = 0;
       this.TotalBilledAmount = 0;
@@ -543,6 +514,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
             bills.FileUid = this.userFiles[i].FileUid;
             bills.GeneratedOn = this.userFiles[i].GeneratedOn;
             bills.Month = MonthName(this.userFiles[i].Month);
+            bills.Year = this.userFiles[i].Year;
             bills.PaidOn = this.userFiles[i].PaidOn;
             bills.Status = this.userFiles[i].BillStatusId;
             bills.SalaryAmount = ToFixed(this.userFiles[i].SalaryAmount, 2);
@@ -563,6 +535,8 @@ export class FilesComponent implements OnInit, AfterViewChecked {
           this.isFileFound = true;
         }
       } else {
+        $('#advancedSearchModal').modal('hide');
+        this.isLoading = false;
         ErrorToast("No file or folder found");
       }
       this.isEmpPageReady = true;
@@ -627,12 +601,12 @@ export class FilesComponent implements OnInit, AfterViewChecked {
 
     if (this.fromDate !== null) {
       if (this.toDate == null && this.RaisedBilloption == 'between') {
-        ErrorToast("Please selete to date to get the result.")
+        ErrorToast("Please select to date to get the result.")
         return;
       }
       isDateFilterEnable = true;
     } else if(this.fromDate == null && this.toDate !== null) {
-      ErrorToast("Please selete from date to get the result.")
+      ErrorToast("Please select from date to get the result.")
       isDateFilterEnable = true;
       return;
     }
@@ -651,12 +625,22 @@ export class FilesComponent implements OnInit, AfterViewChecked {
 
     if (this.RaisedBilloption == "before") {
       fromDateValue = '0001-1-1'
+      if (this.fromDate == null) {
+        ErrorToast("Please select before date first")
+        this.isLoading = false;
+        return;
+      }
       toDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
       isDateFilterEnable = true;
     }
 
     if (this.RaisedBilloption == "after") {
        toDateValue= '2099-1-1'
+       if (this.fromDate == null) {
+        ErrorToast("Please select to date first")
+        this.isLoading = false;
+        return;
+      }
        fromDateValue = `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`;
       isDateFilterEnable = true;
     }
@@ -675,7 +659,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     }
 
     if(this.employeeFile.ClientName !== null && this.employeeFile.ClientName !== "") {
-      searchQuery += ` c.ClientName like '${this.employeeFile.ClientName}%' `;
+      searchQuery += ` ${delimiter} c.ClientName like '${this.employeeFile.ClientName}%' `;
       delimiter = "and";
     }
 
@@ -700,7 +684,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     }
 
     if(this.employeeFile.GSTStatus !== '0' && this.employeeFile.GSTStatus !== "") {
-      searchQuery += ` ${delimiter} GSTStatus = '${this.employeeFile.GSTStatus}' `;
+      searchQuery += ` ${delimiter} GstStatus = '${this.employeeFile.GSTStatus}' `;
       delimiter = "and";
     }
 
@@ -730,6 +714,12 @@ export class FilesComponent implements OnInit, AfterViewChecked {
       delimiter = "and";
     }
 
+    if(this.employeeFile.Year !== null && this.employeeFile.Year !== "0") {
+      let YearValue = Number(this.employeeFile.Year);
+      searchQuery += ` ${delimiter} BillYear = '${YearValue}' `;
+      delimiter = "and";
+    }
+
     if(isDateFilterEnable) {
       searchQuery += ` ${delimiter} b.BillUpdatedOn between '${fromDateValue}' and '${toDateValue}'`;
       delimiter = "and";
@@ -755,15 +745,20 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.employeeFile.FromBillNo = null;
     this.employeeFile.ToBillNo = null;
     this.employeeFile.TakeHome = null;
+    this.employeeFile.Year = (new Date().getFullYear()).toString();
     this.toModel = null;
-    this.RaisedBilloption = '';
+    this.RaisedBilloption = null;
     this.fromModel = null;
     this.toDate = null;
     this.fromDate = null;
-    this.employeeId = this.currentEmployeeDetail.EmployeeUid;
+    this.employeeId = 0;
     this.isReadonly = true;
     $('#checkall').prop('checked', false);
     this.singleEmployee = new Filter();
+    this.autoCompleteModal = {
+      data: [],
+      placeholder: "All result"
+    };
     this.LoadFiles();
   }
 
@@ -771,6 +766,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.employeeFile.ClientName="";
     this.employeeFile.BillNo = "";
     this.employeeFile.Status='0';
+    this.employeeFile.Year = (new Date().getFullYear()).toString();
     this.employeeFile.GSTAmount=null;
     this.employeeFile.GSTStatus='0';
     this.employeeFile.SalaryAmount = null;
@@ -781,14 +777,18 @@ export class FilesComponent implements OnInit, AfterViewChecked {
     this.employeeFile.ToBillNo = null;
     this.employeeFile.TakeHome = null;
     this.toModel = null;
-    this.RaisedBilloption = '';
     this.fromModel = null;
     this.toDate = null;
     this.fromDate = null;
-    this.employeeId = this.currentEmployeeDetail.EmployeeUid;
+    this.employeeId = 0;
     this.isReadonly = true;
     $('#checkall').prop('checked', false);
     this.singleEmployee = new Filter();
+    this.autoCompleteModal = {
+      data: [],
+      placeholder: "All result"
+    };
+    let value = (document.querySelectorAll('input[name="bydate"]') );
   }
 
   EditCurrentDocument(userFile: any) {
@@ -856,5 +856,40 @@ export class FilesComponent implements OnInit, AfterViewChecked {
         })
       }
     }
+  }
+
+  downloadPdfDocx() {
+    this.downlodFilePath = "";
+    let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
+
+    let fileId = Number(this.FileDetail.FileUid);
+    if(isNaN(fileId)) {
+      ErrorToast("Invalid file id supplied.");
+      return;
+    }
+
+    let employeeBillDetail = {
+      "EmployeeId": this.FileDetail.FileOwnerId,
+      "ClientId": this.FileDetail.ClientId,
+      "FileId": fileId
+    };
+
+    this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        if(updateFilePath !== "") {
+          this.downlodFilePath = updateFilePath;
+          $('#downloadexistingfile').click();
+          this.viewer = document.getElementById("file-container");
+          this.viewer.classList.remove('d-none');
+          this.viewer.querySelector('iframe').setAttribute('src', this.downlodFilePath);
+          var ext =this.downlodFilePath.split(".");
+          if (ext[1] == "docx")
+            this.viewer.classList.add("d-none");
+        }
+      }
+      this.closeWindow();
+    }).catch(e => {
+      console.log(JSON.stringify(e));
+    });
   }
 }

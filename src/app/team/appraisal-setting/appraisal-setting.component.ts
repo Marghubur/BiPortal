@@ -34,7 +34,7 @@ export class AppraisalSettingComponent implements OnInit {
   selfAppraisalFromDate: NgbDate | null;;
   selfAppraisalToDate: NgbDate | null;;
   projectDetails: Array<any> = [];
-  assignedEmployee: Array<any> = [];
+  selectedProject: any = null;
   userDetail: any = null;
   appraisalCyclePeriod: string = null;
   isViewInList: boolean = true;
@@ -51,6 +51,7 @@ export class AppraisalSettingComponent implements OnInit {
   currentObject: Objective = new Objective();
   htmlText: any = null;
   selectedObjective: Array<any> = [];
+  isProjectDetailReady: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -79,10 +80,12 @@ export class AppraisalSettingComponent implements OnInit {
   initForm() {
     this.appraisalForm = this.fb.group({
       ObjectiveCatagoryId: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryId),
-      ObjectiveCatagoryType: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryType),
+      ObjectiveCatagoryType: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryType, [Validators.required]),
       TypeDescription: new FormControl(this.currentApprisalCycle.TypeDescription, [Validators.required]),
       FromDate: new FormControl(this.currentApprisalCycle.FromDate, [Validators.required]),
       ToDate: new FormControl(this.currentApprisalCycle.ToDate, [Validators.required]),
+      IsTagByRole: new FormControl(this.currentApprisalCycle.IsTagByRole),
+      IsTagByDepartment: new FormControl(this.currentApprisalCycle.IsTagByDepartment)
     })
   }
 
@@ -297,7 +300,11 @@ export class AppraisalSettingComponent implements OnInit {
 
   showOffCanvas(item: any) {
     if (item) {
+      this.isProjectDetailReady = false;
       this.currentApprisalCycle = item;
+      var offcanvasRight = document.getElementById('offcanvasRight');
+      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
+      bsOffcanvas.show();
       this.getProjects();
     }
   }
@@ -306,79 +313,8 @@ export class AppraisalSettingComponent implements OnInit {
     $('#offcanvasRight').offcanvas('hide');
   }
 
-  activeDeactiveAll(e: any, item: any) {
-    let value = e.target.checked;
-    let name = `activeMember${item[0].ProjectId}`;
-    let elem = document.querySelectorAll(`input[name=${name}]`);
-    for (let i = 0; i < elem.length; i++) {
-      if (value) {
-        (elem[i]  as HTMLInputElement).checked = true;
-      } else {
-        (elem[i]  as HTMLInputElement).checked = false;
-      }
-    }
-    if (item && item.length > 0) {
-      for (let j = 0; j < item.length; j++) {
-        if (value) {
-          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item[j].EmployeeId && x.ProjectId == item[j].ProjectId);
-          if (index < 0) {
-            this.assignedEmployee.push({
-              ProjectId: item.ProjectId,
-              EmployeeId: item[j].EmployeeId
-            });
-          }
-        } else {
-          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item[j].EmployeeId && x.ProjectId == item[j].ProjectId);
-          if (index > -1) {
-            this.assignedEmployee.splice(index, 1);
-          }
-        }
-      }
-    }
-  }
-
-  checkActiveMember(e: any, projectId: number, employeeId: number) {
-    let name = `activeMember${projectId}`;
-    let elem = document.querySelectorAll(`input[name=${name}]`);
-    let status = 0;
-    for (let i = 0; i < elem.length; i++) {
-      if ((elem[i]  as HTMLInputElement).checked) {
-        status++;
-      } else {
-        status--;
-      }
-    }
-    name = `activeAllMember${projectId}`;
-    if (status == elem.length)
-      (document.querySelector(`input[name=${name}]`) as HTMLInputElement).checked = true;
-    else
-      (document.querySelector(`input[name=${name}]`) as HTMLInputElement).checked = false;
-
-    let value = e.target.checked;
-    if (value) {
-      let index = this.assignedEmployee.findIndex(x => x.EmployeeId == employeeId && x.ProjectId == projectId);
-      if (index < 0) {
-        this.assignedEmployee.push({
-          ProjectId: projectId,
-          EmployeeId: employeeId
-        })
-      }
-    } else {
-      let index = this.assignedEmployee.findIndex(x => x.EmployeeId == employeeId && x.ProjectId == projectId);
-      if (index >= 0) {
-        this.assignedEmployee.splice(index, 1);
-      }
-    }
-  }
-
   startCycle() {
     this.isLoading = true;
-    if (this.assignedEmployee.length <=0) {
-      this.isLoading = false;
-      ErrorToast("Please select employee first");
-      return;
-    }
-
     this.currentApprisalCycle.Status = "Started";
     this.http.put(`eps/apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,
     this.currentApprisalCycle, true).then(res => {
@@ -393,10 +329,10 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   getProjects() {
-    this.isLoading = true;
     this.projectDetails = [];
+    this.selectedProject = null;
     this.http.get(`ps/projects/get/${this.userDetail.UserId}`, true).then(res => {
-      if (res.ResponseBody) {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
         let result = res.ResponseBody.reduce((a, b) => {
           a[b.ProjectId] = a[b.ProjectId] || [];
           a[b.ProjectId].push(b);
@@ -406,22 +342,30 @@ export class AppraisalSettingComponent implements OnInit {
         let keys = Object.keys(result);
         let i = 0;
         while(i < keys.length) {
-          this.projectDetails.push(result[keys[i]]);
+          this.projectDetails.push({
+            ProjectId:result[keys[0]][0].ProjectId,
+            ProjectName:result[keys[0]][0].ProjectName,
+            ProjectDescription:result[keys[0]][0].ProjectDescription,
+            ProjectMembers: result[keys[i]]
+          });
           i++;
         }
-
-        this.isLoading = false;
+        this.selectedProject = this.projectDetails[0];
+        this.isProjectDetailReady = true;
         Toast("Project details found");
       } else {
         WarningToast("Please add project and their team members first");
-        this.isLoading = false;
+        this.isProjectDetailReady = true;
       }
-      var offcanvasRight = document.getElementById('offcanvasRight');
-      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
-      bsOffcanvas.show();
     }).catch(e => {
-      this.isLoading = false;
+      this.isProjectDetailReady = true;
     })
+  }
+
+  changeProject(item: any) {
+    if (item) {
+      this.selectedProject = this.projectDetails.find(x => x.ProjectId == item.ProjectId);
+    }
   }
 
   onSelfAppraisalDateSelection(date: NgbDate) {
@@ -433,14 +377,17 @@ export class AppraisalSettingComponent implements OnInit {
       this.selfAppraisalToDate = null;
 			this.selfAppraisalFromDate = date;
 		}
+
     if (this.selfAppraisalToDate) {
       let todate = new Date(this.selfAppraisalToDate.year, this.selfAppraisalToDate.month - 1, this.selfAppraisalToDate.day);
       this.appraisalForm.get('ToDate').setValue(todate);
     }
+
     if (this.selfAppraisalFromDate) {
       let fromdate = new Date(this.selfAppraisalFromDate.year, this.selfAppraisalFromDate.month - 1, this.selfAppraisalFromDate.day);
       this.appraisalForm.get('FromDate').setValue(fromdate);
     }
+
     this.appraisalCyclePeriod = this.appraisalForm.get('FromDate').value.toLocaleDateString() +" - "+ this.appraisalForm.get('ToDate').value.toLocaleDateString();
 	}
 
@@ -462,6 +409,7 @@ export class AppraisalSettingComponent implements OnInit {
 			this.isHovered(date)
 		);
 	}
+
   closeCanvasRight() {
     var offcanvasRight = document.getElementById('offcanvasRight');
     var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
@@ -480,12 +428,21 @@ export class AppraisalSettingComponent implements OnInit {
       }
 
       result[index].classList.add('active-tab');
-      if (this.currentAppraisalObjective.length > 0)
-        this.isObjectiveFound = true;
+      this.getObjectiveByObjtiveId();
 
     } else {
       ErrorToast("Please select a appraisal group.")
     }
+  }
+
+  getObjectiveByObjtiveId() {
+    this.isObjectiveFound = false;
+    this.http.get(`eps/apprisalcatagory/getObjectiveByCategoryId/${this.currentApprisalCycle.ObjectiveCatagoryId}`, true).then(res => {
+      if (res.ResponseBody) {
+        this.currentAppraisalObjective = res.ResponseBody;
+        this.isObjectiveFound = true;
+      }
+    })
   }
 
   loadAllObjective() {
@@ -494,6 +451,7 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   getAllPerformanceObjective() {
+    this.objectiveDetails = [];
     if (this.currentCompny.CompanyId > 0) {
       this.http.post("eps/performance/getPerformanceObjective", this.objectiveData, true)
       .then(res => {
@@ -510,9 +468,17 @@ export class AppraisalSettingComponent implements OnInit {
 
   bindData(res: any) {
     if (res.ResponseBody.length > 0) {
-      this.objectiveDetails = [];
       this.objectiveDetails = res.ResponseBody;
       this.objectiveData.TotalRecords = this.objectiveDetails[0].Total;
+      if (this.currentAppraisalObjective && this.currentAppraisalObjective.length > 0) {
+        this.objectiveDetails.forEach(x => {
+          let value = this.currentAppraisalObjective.find(i => i.ObjectiveId == x.ObjectiveId);
+          if (value)
+            x.IsAdded = true;
+          else
+            x.IsAdded = false;
+        });
+      }
     }
     else
       this.objectiveData.TotalRecords = 0;
@@ -660,6 +626,7 @@ export class AppraisalSettingComponent implements OnInit {
 
   manageAppraisalObjectivePopUp() {
     this.getAllPerformanceObjective();
+    this.selectedObjective = [...this.currentAppraisalObjective]
     $('#addAppraisalObjective').modal('show');
   }
 
@@ -682,10 +649,13 @@ export class AppraisalSettingComponent implements OnInit {
       this.currentApprisalCycle.ObjectiveIds = this.selectedObjective.map(x => x.ObjectiveId);
       this.http.put(`eps/apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,this.currentApprisalCycle, true).then(res => {
         if (res.ResponseBody) {
+          this.getObjectiveByObjtiveId();
           Toast("Objective added/updated in appraisal category successfully");
-          $('#addAppraisalObjective').modal('show');
+          $('#addAppraisalObjective').modal('hide');
           this.isLoading = false;
         }
+      }).catch(e => {
+        this.isLoading = false;
       })
     } else {
       ErrorToast("Please select objective first");
@@ -694,10 +664,12 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   listview() {
+    this.isObjectiveFound = false;
     this.isViewInList = !this.isViewInList;
     if (!this.isViewInList) {
       if (this.apprisalCycleDetail.length > 0)
       this.currentApprisalCycle = this.apprisalCycleDetail[0];
+      this.getObjectiveByObjtiveId();
     }
   }
 
@@ -713,6 +685,8 @@ class ApprisalCycle {
   Index: number = 0;
   Status: String = null;
   ObjectiveIds: Array<number> = [];
+  IsTagByRole: boolean = false;
+  IsTagByDepartment: boolean = false;
 }
 
 class Objective {

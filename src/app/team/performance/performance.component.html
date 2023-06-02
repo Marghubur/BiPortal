@@ -21,7 +21,6 @@
                     <div class="col-md-12 row mt-3 align-items-center justify-content-between bg-light">
                       <div class="row col-md-4 align-items-center">
                         <div class="col-auto bg-c text-white py-2">My Objective</div>
-                        <div class="col-auto">Company Department Objectives</div>
                       </div>
                       <div class="col-md-4 row pe-0 align-items-center justify-content-end">
                         <div class="col-md-4">
@@ -54,9 +53,9 @@
                         <ng-container *ngIf="objectives.length > 0">
                           <div class="col-md-12 my-3"  >
                             <i class="fa fa-calendar pe-2"></i>
-                            <span class="fw-bold">{{financialYear}}-{{financialYear+1}}</span>
-                            <span class="text-muted ps-2">12th May, 2023</span> -
-                            <span class="text-muted">12th May, 2023</span>
+                            <span class="fw-bold">{{objectives[0].FromDate | date:"yyyy"}}-{{objectives[0].ToDate | date:"yyyy"}}</span>
+                            <span class="text-muted ps-2">{{objectives[0].FromDate | date}}</span> -
+                            <span class="text-muted">{{objectives[0].ToDate | date}}</span>
                             <i class="fa fa-repeat ps-4 pe-2"></i>
                             <span class="text-primary-c">Update Progress</span>
                           </div>
@@ -66,7 +65,7 @@
                               <span class="fw-bold fs-4 text-success">{{overallProgress | number: '1.2-2'}}%</span>
                             </div>
                             <p class="mb-0"><ngb-progressbar [showValue]="false" type="success" [value]="overallProgress"></ngb-progressbar></p>
-                            <p class="text-muted">Last updated - {{objectives[0].updatedOn | date}}</p>
+                            <p class="text-muted">Last updated - {{objectives[0].UpdatedOn | date}}</p>
                           </div>
                         </ng-container>
                       </div>
@@ -105,7 +104,7 @@
                             <th width="30%">OBJECTIVES</th>
                             <th>START DATE - END DATE</th>
                             <th>OBJECTIVE PROGRESS</th>
-                            <th>TARGET VALUE</th>
+                            <th width="10%">TARGET VALUE</th>
                             <th width="4%">ACTION</th>
                           </tr>
                         </thead>
@@ -126,17 +125,21 @@
                                   </div>
                                 </div>
                               </td>
-                              <td class="align-middle">12th May, 2023 - 12th May, 2024</td>
+                              <td class="align-middle">{{objectives[0].FromDate | date}}-{{objectives[0].ToDate | date}}</td>
                               <td class="align-middle">
                                 <div class="d-flex align-items-center justify-content-between">
-                                  <h6>{{item.currentValue}} {{item.progressMeassureType == 1 ? '%' : ''}}</h6>
+                                  <h6>{{item.CurrentValue}} {{item.ProgressMeassureType == 1 ? '%' : ''}}</h6>
                                   <small>Last Updated on {{item.UpdatedOn | date}}</small>
                                 </div>
-                                <p class="mb-0"><ngb-progressbar [showValue]="false" [type]="item.status == 2 ? 'success' : item.status == 1 ? 'secondary' : item.status == 3 ? 'warning' : item.status == 4 ? 'danger' : 'dark'" [value]="item.currentValue"></ngb-progressbar></p>
+                                <p class="mb-0"><ngb-progressbar [showValue]="false" [type]="item.Status == 2 ? 'success' : item.Status == 1 ? 'secondary' : item.Status == 3 ? 'warning' : item.Status == 4 ? 'danger' : 'dark'" [value]="item.CurrentValue * 100 / item.TargetValue"></ngb-progressbar></p>
                               </td>
-                              <td class="align-middle">{{item.targetValue}} {{item.progressMeassureType == 1 ? '%' : ''}}</td>
-                              <td class="align-middle">
-                                <a href="javascript:void(0)" (click)="editPerformance(item)"><i class="fa fa-pencil"></i></a>
+                              <td class="align-middle text-center">{{item.TargetValue}} {{item.ProgressMeassureType == 1 ? '%' : ''}}</td>
+                              <td class="align-middle" >
+                                <a *ngIf="item.PerformanceStatus == 2 || item.PerformanceStatus == 0" href="javascript:void(0)" (click)="editPerformance(item)"><i class="fa fa-pencil"></i></a>
+                                <span class="badge rounded-pill" *ngIf="item.PerformanceStatus != 2 && item.PerformanceStatus != 0"
+                                [ngClass]="{'text-bg-danger': item.PerformanceStatus == 5, 'text-bg-info': item.PerformanceStatus == 8, 'text-bg-Success': item.PerformanceStatus == 9}">
+                                  {{item.PerformanceStatus == 5 ? 'Rejected' : item.PerformanceStatus == 8 ? 'Submitted' : 'Approved'}}
+                                </span>
                               </td>
                             </tr>
                           </ng-container>
@@ -375,12 +378,11 @@
                 </ng-template>
               </li>
               <li [ngbNavItem]="4">
-                <a ngbNavLink>Reviews</a>
+                <a ngbNavLink (click)="loadReviewDetail()">Reviews</a>
                 <ng-template ngbNavContent>
                   <ng-container *ngIf="!isPageLoading">
-                    <div class="col-md-12 row mt-3 align-items-center bg-light">
+                    <div class="col-md-12 row mt-3 bg-light">
                       <div class="col-auto bg-c text-white py-2">My Performance Reviews</div>
-                      <div class="col-auto">Reviews Given to Other</div>
                     </div>
                     <h5 class="mt-3 fw-bold">My Performance Reviews</h5>
                     <small class="text-muted">The following are the performance reviews in which I was reviewed.</small>
@@ -390,22 +392,59 @@
                       </div>
                       <div class="col-md-11 ms-3">
                         <div class="card shadow-sm px-2 py-3">
-                          <div class="d-flex align-items-center">
-                            <h6 class="fw-bold mb-0">Performance Review cycle 12th May, 2023 - 12th May, 2023</h6>
-                            <span class="badge bg-warning ms-2">ON GOING</span>
+                          <div class="row">
+                            <div class="d-flex align-items-center col-md-6">
+                              <h6 class="fw-bold mb-0">Performance Review cycle {{objectives[0].FromDate | date}} - {{objectives[0].FromDate | date}}</h6>
+                              <span class="badge bg-warning ms-2">{{objectives[0].PerformanceStatus == 2 ? 'Pending' : objectives[0].PerformanceStatus == 5 ? 'Rejected' : objectives[0].PerformanceStatus == 8 ? 'Submitted' : 'Approved'}}</span>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="d-flex align-items-center">
+                                <div class="rounded-icon bg-c text-white">
+                                  {{userNameIcon}}
+                                </div>
+                                <div class="ms-3 d-flex align-items-center">
+                                  <h6 class="mb-0">{{userDetail.FirstName}} {{userDetail.LastName}}</h6>
+                                  <small class="ps-2"> | Emp No.: {{employeeId}}</small>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                           <p>{{objectives[0].UpdatedOn | date}}</p>
-                          <div class="row align-items-center justify-content-between">
-                            <div class="col-md-2">
-                              <small>CURRENT STATUS <i class="fa fa-exclamation-circle ps-1"></i></small>
-                              <p class="mb-0"><small>Awaiting For Release</small></p>
-                            </div>
-                            <div class="col-md-2">
-                              <button class="btn btn-primary-c" (click)="performanceReviewPopUp()">View Submitted Form</button>
-                            </div>
-                          </div>
                         </div>
                       </div>
+                    </div>
+                    <div class="mt-3">
+                      <ng-container *ngIf="objectives != null && objectives.length > 0">
+                        <ng-container *ngFor="let item of objectives; let i=index;">
+                          <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
+                            <div class="d-flex col-md-12">
+                              <a data-bs-toggle="collapse" (click)="collpaseShowHide('feedback'+i)"  [attr.href]="'#feedback'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#feedback'+i" class="me-3">
+                                <i class="fa fa-quote-left" aria-hidden="true"></i>
+                              </a>
+                              <p class="mb-0 fs-6">
+                                <b>{{item.Objective}}:</b>
+                                <label class="d-block">{{item.Description}}</label>
+                              </p>
+                            </div>
+                            <h6 class="mt-1 mb-0 text-dark ms-3 ps-4"><small>PERFORMANCE RATING </small> {{item.Rating}} out of 5</h6>
+                            <div class="bg dark ps-4" [id]="'feedback'+i">
+                              <div class="card card-body border-0">
+                                <small>Your feedback:</small>
+                                <p class="mb-0">{{item.Comments != null ? item.Comments : "No Feedback"}}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                    <div class="text-end">
+                      <button type="button" class="btn btn-danger me-2" [disabled]="isLoading" data-bs-dismiss="modal"><i class="pe-1 fa fa-close"></i> Close</button>
+                      <button class="btn btn-primary-c" (click)="submitObjective()" [disabled]="isLoading || (objectives[0].PerformanceStatus != 2 && objectives[0].PerformanceStatus != 0)">
+                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+                        <span class="ps-2">
+                          Submit Objective
+                        </span>
+                      </button>
                     </div>
                   </ng-container>
                   <ng-container *ngIf="isPageLoading">
@@ -460,10 +499,10 @@
               <i class="fa fa-eye pe-1 ps-3"></i> <span>{{selectedObjective.ObjSeeType == true ? 'Manager' : 'Everyone'}}</span>
             </small>
           </div>
-          <!-- <div class="col-md-3 text-end">
-            <h6 class="text-end"><i class="fa fa-calendar-o pe-1"></i> {{selectedObjective.timeFrameStart | date: 'y'}} - {{selectedObjective.timeFrmaeEnd | date:'y'}}</h6>
-            <small>{{selectedObjective.timeFrameStart | date}} - {{selectedObjective.timeFrmaeEnd | date}}</small>
-          </div> -->
+          <div class="col-md-3 text-end" *ngIf="objectives != null && objectives.length > 0">
+            <h6 class="text-end"><i class="fa fa-calendar-o pe-1"></i> {{objectives[0].FromDate | date: 'y'}} - {{objectives[0].ToDate | date:'y'}}</h6>
+            <small>{{objectives[0].FromDate | date}} - {{objectives[0].ToDate | date}}</small>
+          </div>
         </div>
         <div class="p border-bottom mt-4">Details</div>
         <div class="row">
@@ -472,9 +511,9 @@
               <div class="col-md-5">
                 <div class="d-flex align-items-center justify-content-between">
                   <small>OVERALL PROGRESS</small>
-                  <h6>{{selectedObjective.CurrentValue}} {{selectedObjective.ProgressMeassureType == 1 ? '%' : ''}}</h6>
+                  <h6>{{selectedObjective.CurrentValue * 100 / selectedObjective.TargetValue}} {{selectedObjective.ProgressMeassureType == 1 ? '%' : ''}}</h6>
                 </div>
-                <p class="mb-0"><ngb-progressbar [showValue]="false" [type]="selectedObjective.Status == 2 ? 'success' : selectedObjective.Status == 1 ? 'secondary' : selectedObjective.Status == 3 ? 'warning' : selectedObjective.Status == 4 ? 'danger' : 'dark'" [value]="selectedObjective.CurrentValue"></ngb-progressbar></p>
+                <p class="mb-0"><ngb-progressbar [showValue]="false" [type]="selectedObjective.Status == 2 ? 'success' : selectedObjective.Status == 1 ? 'secondary' : selectedObjective.Status == 3 ? 'warning' : selectedObjective.Status == 4 ? 'danger' : 'dark'" [value]="selectedObjective.CurrentValue * 100 / selectedObjective.TargetValue"></ngb-progressbar></p>
               </div>
               <div class="col-auto">
                 <button class="btn btn-sm btn-primary-c" (click)="updateEmpObjectivePopUp()">
@@ -512,7 +551,7 @@
                         <small>{{userDetail.FirstName + " " + userDetail.LastName}} updated progress on objective</small>
                       </div>
                       <div class="col-auto">
-                        <small>{{item.UpdatedOn | date:'medium' }}</small>
+                        <small>{{item.updatedOn | date:'medium' }}</small>
                       </div>
                     </div>
                     <div class="row">
@@ -527,38 +566,38 @@
                       <p class="mb-0">
                         <small>Updated to {{item.CurrentValue}}%</small>
                         <ng-container *ngIf="i+1 == selectedObjective.PerformanceDetail.length">
-                          <small class="text-success ps-2">{{item.currentValue - selectedObjective.startValue > 0 ? '+' : ''}}{{item.currentValue - SelectedObjective.startValue}}%</small>
+                          <small class="text-success ps-2">{{item.currentValue - selectedObjective.StartValue > 0 ? '+' : ''}}{{item.currentValue - selectedObjective.StartValue}}%</small>
                         </ng-container>
-                        <small *ngIf="i+1 != selectedObjective.performanceDetail.length" class="text-success ps-2">
-                          {{item.CurrentValue - selectedObjective.PerformanceDetail[i+1].CurrentValue > 0 ? '+' : ''}} {{item.CurrentValue - selectedObjective.PerformanceDetail[i+1].CurrentValue}}%
+                        <small *ngIf="i+1 != selectedObjective.PerformanceDetail.length" class="text-success ps-2">
+                          {{item.currentValue - selectedObjective.PerformanceDetail[i+1].currentValue > 0 ? '+' : ''}} {{item.currentValue - selectedObjective.PerformanceDetail[i+1].currentValue}}%
                         </small>
                       </p>
                       <p class="mb-0">
-                        <ng-container *ngIf="item.Status == 1">
+                        <ng-container *ngIf="item.status == 1">
                           <small>
                             <i class="fa fa-circle text-secondary pe-2"></i>
                             <span>Not strated</span>
                           </small>
                         </ng-container>
-                        <ng-container *ngIf="item.Status == 2">
+                        <ng-container *ngIf="item.status == 2">
                           <small>
                             <i class="fa fa-circle text-success pe-2"></i>
                             <span>On track</span>
                           </small>
                         </ng-container>
-                        <ng-container *ngIf="item.Status == 3">
+                        <ng-container *ngIf="item.status == 3">
                           <small>
                             <i class="fa fa-circle text-warning pe-2"></i>
                             <span>Needs attention</span>
                           </small>
                         </ng-container>
-                        <ng-container *ngIf="item.Status == 4">
+                        <ng-container *ngIf="item.status == 4">
                           <small>
                             <i class="fa fa-circle text-danger pe-2"></i>
                             <span>At risk</span>
                           </small>
                         </ng-container>
-                        <ng-container *ngIf="item.Status == 5">
+                        <ng-container *ngIf="item.status == 5">
                           <small>
                             <i class="fa fa-circle text-dark pe-2"></i>
                             <span>Closed</span>
@@ -620,48 +659,53 @@
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label">Note</label>
-            <textarea formControlName="Comments" cols="30" oninput="this.value = this.value.toUpperCase()" rows="5" class="form-control" placeholder="Add comments"></textarea>
+            <label for="" class="form-label">Feedback</label>
+            <textarea formControlName="Comments" cols="30" oninput="this.value = this.value.toUpperCase()" rows="5" class="form-control" placeholder="Feedback"
+            [ngClass]="{'error-field': isSubmitted && n.Comments.errors !== null && n.Comments.errors.required}"></textarea>
           </div>
-          <ng-container *ngIf="selectedObjective.performanceDetail != null && selectedObjective.performanceDetail.length > 0">
+          <div class="col-md-12 mt-3">
+            <label for="" class="form-label pe-2">Rating</label>
+            <ngb-rating [(rate)]="currentRate" [max]="5"></ngb-rating>
+          </div>
+          <ng-container *ngIf="selectedObjective.PerformanceDetail != null && selectedObjective.PerformanceDetail.length > 0">
             <div class="card p-3 mt-4 bg-light">
               <h6 class="fw-bold">Last progress update</h6>
               <p class="mb-0 fw-bold">{{userDetail.FirstName + " " + userDetail.LastName}} on {{selectedObjective.PerformanceDetail[0].updatedOn | date:'medium' }}</p>
               <div class="d-flex align-items-center">
-                <span>Updated to {{selectedObjective.PerformanceDetail[0].CurrentValue}}%</span>
+                <span>Updated to {{selectedObjective.PerformanceDetail[0].currentValue}}%</span>
                 <ng-container *ngIf="selectedObjective.PerformanceDetail.length == 1">
-                  <small class="text-success ps-2">{{selectedObjective.PerformanceDetail[0].CurrentValue - selectedObjective.StartValue > 0 ? '+' : ''}}{{selectedObjective.PerformanceDetail[0].CurrentValue - selectedObjective.StartValue}}%</small>
+                  <small class="text-success ps-2">{{selectedObjective.PerformanceDetail[0].currentValue - selectedObjective.StartValue > 0 ? '+' : ''}}{{selectedObjective.PerformanceDetail[0].currentValue - selectedObjective.StartValue}}%</small>
                 </ng-container>
                 <small *ngIf="selectedObjective.PerformanceDetail.length > 1" class="text-success ps-2">
-                  {{selectedObjective.PerformanceDetail[0].CurrentValue - selectedObjective.PerformanceDetail[1].CurrentValue > 0 ? '+' : ''}} {{selectedObjective.PerformanceDetail[0].CurrentValue - selectedObjective.performanceDetail[1].CurrentValue}}%
+                  {{selectedObjective.PerformanceDetail[0].currentValue - selectedObjective.PerformanceDetail[1].currentValue > 0 ? '+' : ''}} {{selectedObjective.PerformanceDetail[0].currentValue - selectedObjective.PerformanceDetail[1].currentValue}}%
                 </small>
                 <span class="ps-4">(target {{selectedObjective.TargetValue}})</span>
                 <span class="ps-4">
-                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 1">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].status == 1">
                     <small>
                       <i class="fa fa-circle text-secondary pe-2"></i>
                       <span>Not strated</span>
                     </small>
                   </ng-container>
-                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 2">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].status == 2">
                     <small>
                       <i class="fa fa-circle text-success pe-2"></i>
                       <span>On track</span>
                     </small>
                   </ng-container>
-                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 3">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].status == 3">
                     <small>
                       <i class="fa fa-circle text-warning pe-2"></i>
                       <span>Needs attention</span>
                     </small>
                   </ng-container>
-                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 4">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].status == 4">
                     <small>
                       <i class="fa fa-circle text-danger pe-2"></i>
                       <span>At risk</span>
                     </small>
                   </ng-container>
-                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].Status == 5">
+                  <ng-container *ngIf="selectedObjective.PerformanceDetail[0].status == 5">
                     <small>
                       <i class="fa fa-circle text-dark pe-2"></i>
                       <span>Closed</span>
@@ -779,76 +823,6 @@
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
           <span class="ps-2">
             {{selectedMeeting.meetingId <= 0 ? 'Add' : 'Update'}} Meeting
-          </span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- manage performance review -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="performanceReview" tabindex="-1" aria-labelledby="performanceReviewLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content px-4">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="performanceReviewLabel">Review Form - Performance Review cycle 12th May, 2023 - 12th May, 2023</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body" >
-        <div class="card shadow-sm rounded-0 p-3">
-          <div class="d-flex">
-            <div class="rounded-icon bg-c text-white">
-              {{userNameIcon}}
-            </div>
-            <div class="ms-3">
-              <h6 class="mb-0">{{userDetail.FirstName}} {{userDetail.LastName}}</h6>
-              <small> | Emp No.: {{employeeId}}</small>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex align-items-center mt-3">
-          <h5>Overall Summary</h5>
-          <i class="fa fa-print ps-3 fa-lg"></i>
-        </div>
-        <p class="mb-0 text-muted"><small>PERFORMANCE RATING <i class="fa fa-exclamation-circle"></i></small></p>
-        <h4 class="fw-bold mb-0">4.83</h4>
-        <small>out of 5</small>
-        <div class="col-md-12 mt-3 bg-light py-2 mb-4">
-          <span class="col-auto bg-c text-white p-2">Objectives</span>
-        </div>
-        <ng-container *ngIf="objectives != null && objectives.length > 0">
-          <ng-container *ngFor="let item of objectives; let i=index;">
-            <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
-              <div class="d-flex col-md-12">
-                <a data-bs-toggle="collapse" (click)="collpaseShowHide('feedback'+i)"  [attr.href]="'#feedback'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#feedback'+i" class="me-3">
-                  <!-- <img class="grid-icon" src="assets/images/down-arrow.png"> -->
-                  <i class="fa fa-quote-left" aria-hidden="true"></i>
-                </a>
-                <p class="mb-0 fs-6">
-                  <b>{{item.objective}}:</b>
-                  <label class="d-block">{{item.description}}</label>
-                </p>
-              </div>
-              <div class="bg dark" [id]="'feedback'+i">
-                <div class="card card-body border-0">
-                  <small>Your feedback:</small>
-                  <textarea class="form-control" placeholder="your feedbcak" cols="30" rows="5">
-                    {{item.comments}}
-                  </textarea>
-                </div>
-              </div>
-            </div>
-          </ng-container>
-        </ng-container>
-      </div>
-
-      <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" [disabled]="isLoading" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary-c" (click)="manageMeeting()" [disabled]="isLoading">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
-          <span class="ps-2">
-            Update Objective
           </span>
         </button>
       </div>

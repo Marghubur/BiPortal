@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccountsBaseRoute, AdminDeclaration, AdminSalary, AdminSummary } from 'src/providers/constants';
+import { AdminDeclaration, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { EmployeeDetail } from 'src/app/adminmodal/admin-modals';
 import { UserService } from 'src/providers/userService';
@@ -44,7 +44,7 @@ export class PreferencesComponent implements OnInit {
       RegisteredLocation: 'Telangana',
       LWFStatus: "Disabled"
     }
-                
+
     this.userDetail = this.user.getInstance();
     this.EmployeeId = this.userDetail.UserId;
 
@@ -113,13 +113,13 @@ export class PreferencesComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminDeclaration, this.cachedData);
+        this.nav.navigateRoot(AdminDeclaration, this.cachedData);
       break;
       case "salary-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminSalary, this.cachedData);
+        this.nav.navigateRoot(AdminSalary, this.cachedData);
       break;
       case "summary-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminSummary, this.cachedData);
+        this.nav.navigateRoot(AdminSummary, this.cachedData);
       break;
       case "preference-tab":
         break;

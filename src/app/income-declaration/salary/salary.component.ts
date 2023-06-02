@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
-import { AccountsBaseRoute, AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSummary, AdminTaxcalculation } from 'src/providers/constants';
+import { AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSummary, AdminTaxcalculation } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -355,15 +355,15 @@ export class SalaryComponent implements OnInit {
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminDeclaration, this.cachedData);
+        this.nav.navigateRoot(AdminDeclaration, this.cachedData);
         break;
       case "salary-tab":
         break;
       case "summary-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminSummary, this.cachedData);
+        this.nav.navigateRoot(AdminSummary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminPreferences, this.cachedData);
+        this.nav.navigateRoot(AdminPreferences, this.cachedData);
         break;
     }
   }
@@ -373,10 +373,10 @@ export class SalaryComponent implements OnInit {
       case "MySalary":
         break;
       case "PaySlips":
-        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminPaySlip, this.cachedData);
+        this.nav.navigateRoot(AdminPaySlip, this.cachedData);
         break;
       case "IncomeTax":
-        this.nav.navigateRoot(AccountsBaseRoute + "/"+ AdminIncomeTax, this.cachedData);
+        this.nav.navigateRoot(AdminIncomeTax, this.cachedData);
         break;
     }
   }

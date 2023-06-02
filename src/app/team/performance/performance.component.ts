@@ -24,10 +24,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   employeeId: number = 0;
   designationId: number = 0;
   objectives: Array<Objective> = [];
-  financialYear: number = 0;
-  startDate: Date = null;
-  endDate: Date = null;
-  selectedObjective: Objective = null;
+  selectedObjective: Objective = new Objective();
   isLoading: boolean = false;
   performanceForm: FormGroup;
   isSubmitted: boolean = false;
@@ -55,6 +52,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   htmlText: any = null;
   eventsSubject: Subject<void> = new Subject<void>();
   activeMeetingTab: number = 1;
+  currentRate = 0;
 
   constructor(private user: UserService,
               private http: AjaxService,
@@ -109,13 +107,10 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     this.isPageLoading = true;
     this.http.get(`eps/performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, true).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
-        this.financialYear = res.ResponseBody[0].financialYear;
-        let days = new Date(this.financialYear+1, res.ResponseBody[0].declarationEndMonth, 0).getDate();
-        this.startDate = new Date();
-        this.endDate = new Date();
-        this.minDate = {year: this.startDate.getFullYear(), month: this.startDate.getMonth()+1, day: this.startDate.getDate()};
-        this.maxDate = {year: this.endDate.getFullYear(), month:  this.endDate.getMonth()+1, day:  this.endDate.getDate()};
-        this.allObjective = res.ResponseBody;;
+        let date = new Date();
+        this.minDate = {year: date.getFullYear(), month: date.getMonth()+1, day: date.getDate()};
+        this.maxDate = {year: date.getFullYear()+1, month:  date.getMonth()+1, day:  date.getDate()};
+        this.allObjective = res.ResponseBody;
         this.objectives = res.ResponseBody;
         this.calculateRecord();
         this.getUserNameIcon(null);
@@ -183,12 +178,14 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   initForm() {
     this.performanceForm = this.fb.group({
       ObjectiveId: new FormControl(this.selectedObjective != null ? this.selectedObjective.ObjectiveId : 0),
-      EmployeePerformanceId: new FormControl(this.selectedObjective != null ? this.selectedObjective.EmployeePerformanceId : 0, [Validators.required]),
+      EmployeePerformanceId: new FormControl((this.selectedObjective != null && this.selectedObjective.EmployeePerformanceId != null) ? this.selectedObjective.EmployeePerformanceId : 0, [Validators.required]),
       EmployeeId: new FormControl(this.employeeId, [Validators.required]),
       CompanyId: new FormControl(this.userDetail.CompanyId, [Validators.required]),
-      CurrentValue: new FormControl(null, [Validators.required]),
+      CurrentValue: new FormControl(0, [Validators.required]),
       Status: new FormControl(null, [Validators.required]),
-      Comments: new FormControl(''),
+      Comments: new FormControl(null, [Validators.required]),
+      TargetValue: new FormControl(this.selectedObjective != null ? this.selectedObjective.TargetValue : 0),
+      Rating: new FormControl(this.selectedObjective.Rating, [Validators.required])
     })
   }
 
@@ -199,6 +196,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   editPerformance(item: Objective) {
     if (item) {
       this.selectedObjective = item;
+      this.currentRate = item.Rating;
       $('#editPerformance').modal('show');
     }
   }
@@ -206,6 +204,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   updateEmpObjective() {
     this.isLoading = true;
     this.isSubmitted = true;
+    this.performanceForm.get("Rating").setValue(this.currentRate);
     if (this.performanceForm.invalid) {
       this.isLoading = false;
       ErrorToast("Please correct all the mandaroty field marked red");
@@ -213,8 +212,8 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     }
 
     let performvalue = this.performanceForm.value;
-    performvalue.targetValue = this.selectedObjective.TargetValue;
-    if (performvalue.currentValue > this.selectedObjective.TargetValue) {
+    performvalue.TargetValue = this.selectedObjective.TargetValue;
+    if (performvalue.CurrentValue > this.selectedObjective.TargetValue) {
       this.isLoading = false;
       ErrorToast("New value is greater than targeted value");
       return;
@@ -222,10 +221,10 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     this.http.post("eps/performance/updateEmployeeObjective", performvalue, true).then(res => {
       if (res.ResponseBody) {
         let value = res.ResponseBody;
-        this.selectedObjective.UpdatedOn = value.updatedOn;
-        this.selectedObjective.CurrentValue = value.currentValue;
-        this.selectedObjective.Status = value.status;
-        this.selectedObjective.PerformanceDetail = JSON.parse(value.performanceDetail);
+        this.selectedObjective.UpdatedOn = value.UpdatedOn;
+        this.selectedObjective.CurrentValue = value.CurrentValue;
+        this.selectedObjective.Status = value.Status;
+        this.selectedObjective.PerformanceDetail = JSON.parse(value.PerformanceDetail);
         this.calculateRecord();
         this.isLoading = false;
         $('#managePerformance').modal('hide');
@@ -249,7 +248,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   filterRecord(e: any) {
     let value = Number(e.target.value);
     if (value > 0) {
-      this.objectives = this.allObjective.filter(x => x.status == value);
+      this.objectives = this.allObjective.filter(x => x.Status == value);
     } else {
       this.objectives = this.allObjective;
     }
@@ -443,10 +442,6 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     $("#manageMeeting").modal('show');
   }
 
-  performanceReviewPopUp() {
-    $('#performanceReview').modal('show');
-  }
-
   getUserNameIcon(fullName: string) {
     if (!fullName) {
       let first = this.userDetail.FirstName[0];
@@ -583,6 +578,59 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     return diff;
   }
 
+  submitObjective() {
+    this.isLoading = true;
+    if (this.objectives && this.objectives.length > 0) {
+      let errorCount = 0;
+      this.objectives.forEach(x => {
+        if (x.Rating <= 0) {
+          ErrorToast(`Please add rating in ${x.Objective} objective`);
+          this.isLoading = false;
+          errorCount++;
+          return;
+        }
+        if (x.Comments == null || x.Comments == "") {
+          ErrorToast(`Please add racommentting in ${x.Objective} obective`);
+          this.isLoading = false;
+          errorCount++;
+          return;
+        }
+      })
+      if (errorCount === 0) {
+        this.http.get(`eps/performance/submitEmployeeObjective/${this.employeeId}`, true).then(res => {
+          if (res.ResponseBody) {
+            Toast("Objective submitted successfully");
+            this.isLoading = false;
+          }
+        }).then(e => {
+          this.isLoading = false;
+        })
+      } else {
+        this.isLoading = false;
+      }
+    } else {
+      this.isLoading = false;
+    }
+  }
+
+  loadReviewDetail() {
+    this.isPageLoading = true;
+    this.http.get(`eps/performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, true).then(res => {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
+        this.objectives = res.ResponseBody;
+        this.getUserNameIcon(null);
+        Toast("Employee performance objective data loaded successsfully");
+        this.isPageLoading = false;
+      } else {
+        WarningToast("No objective details found. Please contact to admin.");
+        this.isPageLoading = false;
+      }
+    }).catch(err => {
+      ErrorToast("Fail to get objective detail. Please contact to admin.");
+      this.isPageLoading = false;
+    })
+  }
+
 }
 
 class Objective {
@@ -593,15 +641,13 @@ class Objective {
   EmployeePerformanceId: number = 0;
   StartValue: number = 0;
   TargetValue: number = 0;
-  TimeFrameStart: Date = null;
-  TimeFrmaeEnd: Date = null;
-  ObjectiveType: string = null;
   Description: string = null;
   CurrentValue: number = 0;
   UpdatedOn: Date = null;
   Status: number = 0;
-  Progress: number = 0;
   PerformanceDetail: Array<any> = [];
+  Rating: number = 0;
+  Comments: string = null;
 }
 
 class Meeting {

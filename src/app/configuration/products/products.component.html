@@ -525,3 +525,36 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- Pdf viewer modal -->
+<div class="d-none file-container" id="viewfile-container" (click)="closePdfViewer()">
+  <div class="text-end">
+    <a (click)="closePdfViewer()" class="close_view">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+  <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
+</div>
+
+<!--Doc View Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="showDocxFile" role="dialog"
+  aria-labelledby="showDocxFile" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title font-weight-bold text-dark" id="exampleModalLongTitle">Docx Viewer</h5>
+        <button type="button" class="btn-close" (click)="CloseDocxViewer()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-12 overflow-auto">
+          <iframe [srcdoc]="renderedDocxFile" style="width: 100%; height: 74vh;"></iframe>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <a href="javascript:void(0)" (click)="CloseDocxViewer()" class="text-decoration-none btn-white pe-3">Close</a>
+      </div>
+    </div>
+  </div>
+</div>

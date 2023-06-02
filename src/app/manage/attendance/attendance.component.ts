@@ -97,13 +97,15 @@ export class AttendanceComponent implements OnInit {
       this.employeeId = this.userDetail != null ? this.userDetail.EmployeeUid : user.UserId;
       this.userName = this.userDetail != null ? this.userDetail.FirstName + " " + this.userDetail.LastName : user.FirstName + " " + user.LastName;
       this.clientId = this.userDetail != null ? this.userDetail.CompanyId : user.CompanyId;
+      this.loadAutoComplete();
+      if (this.userDetail == null)
+        this.userDetail = user;
       this.loadAttendanceData();
     } else {
       this.isRedirected = false;
       this.userDetail = user;
       this.employeeId = 0;
       this.userName = "";
-      this.loadData();
     }
   }
 
@@ -130,11 +132,10 @@ export class AttendanceComponent implements OnInit {
       ForYear: new Date().getFullYear(),
       ForMonth: month + 1
     }
-
     this.activeMonth = index;
-
     this.loadMappedData(data);
   }
+
 
   findEmployeeCompany() {
     let companies: Array<any> = this.local.findRecord("Companies") as Array<any>;
@@ -284,7 +285,6 @@ export class AttendanceComponent implements OnInit {
     );
 
     this.tomorrow = this.today;
-
     this.currentAttendance.AttendanceDay = this.today;
     this.commentValue = this.currentAttendance.UserComments;
     this.commentValue = "";
@@ -450,21 +450,17 @@ export class AttendanceComponent implements OnInit {
     });
   }
 
-  loadData() {
+  loadAutoComplete() {
     this.isEmployeesReady = false;
     let fileter = new Filter();
     fileter.PageSize = 500;
-    this.http.post(`employee/GetEmployees/`, fileter).then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        this.applicationData["Employees"] = response.ResponseBody;
-        this.employeesList.data = [];
-        this.employeesList.placeholder = "Employee";
-        this.employeesList.data = GetEmployees();
-        this.employeesList.className = "";
-        this.isEmployeesReady = true;
-        this.isRedirected = true;
-      }
-    });
+    this.applicationData["Employees"] = GetEmployees();
+    this.employeesList.data = [];
+    this.employeesList.placeholder = "Employee";
+    this.employeesList.data = GetEmployees();
+    this.employeesList.className = "";
+    this.isEmployeesReady = true;
+    this.isRedirected = true;
   }
 
   addEmployeeEmail(e: any) {

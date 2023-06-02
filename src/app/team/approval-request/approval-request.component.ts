@@ -15,7 +15,7 @@ declare var $: any;
   styleUrls: ['./approval-request.component.scss']
 })
 export class ApprovalRequestComponent implements OnInit {
-  active = 2;
+  active = 1;
   request: Array<ApprovalRequest> = [];
   leave_request: Array<ApprovalRequest> = [];
   requestState: string = '';
@@ -84,7 +84,7 @@ export class ApprovalRequestComponent implements OnInit {
       this.isAdmin = false;
 
     this.loadAutoComplete();
-    this.itemStatus = 1;
+    this.itemStatus = 2;
     this.loadData();
   }
 
